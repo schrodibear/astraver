@@ -58,35 +58,35 @@ tag S1 = {
 
 type S1 = [S1]
 
-unit f(S[0] v_s)
-  requires (C_22 : ((C_23 : (v_s.i >= 0)) &&
-                     ((C_25 : (\offset_min(v_s.a) <= 0)) &&
-                       (C_26 : (\offset_max(v_s.a) >= (v_s.i - 1))))));
+unit f(S[0] v_s_0)
+  requires (C_22 : ((C_23 : (v_s_0.i >= 0)) &&
+                     ((C_25 : (\offset_min(v_s_0.a) <= 0)) &&
+                       (C_26 : (\offset_max(v_s_0.a) >= (v_s_0.i - 1))))));
 behavior default:
   assumes true;
   ensures (C_27 : true);
 {  
-   (var S[0] s);
+   (var S[0] s_0);
    
    (var int32 j);
    
-   {  (C_2 : (s = (C_1 : (new S[1]))));
-      (C_5 : ((C_4 : s.i) = (C_3 : v_s.i)));
+   {  (C_2 : (s_0 = (C_1 : (new S[1]))));
+      (C_5 : ((C_4 : s_0.i) = (C_3 : v_s_0.i)));
       (C_6 : (j = 0));
       
       {  
          loop 
          behavior default:
-           invariant (C_8 : (((C_10 : (0 <= j)) && (C_11 : (j <= v_s.i))) &&
+           invariant (C_8 : (((C_10 : (0 <= j)) && (C_11 : (j <= v_s_0.i))) &&
                               (C_12 : (\forall int32 k;
                                         (((0 <= k) && (k < j)) ==>
-                                          ((v_s.a + k).int_M == 0))))));
-         variant (C_7 : (v_s.i - j));
+                                          ((v_s_0.a + k).int_M == 0))))));
+         variant (C_7 : (v_s_0.i - j));
          while (true)
          {  
-            {  (if (j < (C_13 : s.i)) then () else 
+            {  (if (j < (C_13 : s_0.i)) then () else 
                (goto while_0_break));
-               (C_16 : ((C_15 : ((C_14 : s.a) + j).int_M) = 0));
+               (C_16 : ((C_15 : ((C_14 : s_0.a) + j).int_M) = 0));
                (C_19 : (j = (C_18 : ((C_17 : (j + 1)) :> int32))))
             }
          };
@@ -95,12 +95,12 @@ behavior default:
       
       {  
          (assert for default: (C_20 : (\forall int32 k_0;
-                                        (((0 <= k_0) && (k_0 < v_s.i)) ==>
-                                          ((v_s.a + k_0).int_M == 0)))));
+                                        (((0 <= k_0) && (k_0 < v_s_0.i)) ==>
+                                          ((v_s_0.a + k_0).int_M == 0)))));
          ()
       };
       
-      {  (C_21 : (free(s)));
+      {  (C_21 : (free(s_0)));
          
          (return ())
       }
@@ -157,23 +157,23 @@ behavior default:
    }
 }
 
-unit f1(S1[0] v_s_0)
-  requires (C_81 : ((C_82 : (v_s_0.i1 >= 0)) &&
-                     ((C_84 : (\offset_min(v_s_0.a1) <= 0)) &&
-                       (C_85 : (\offset_max(v_s_0.a1) >= (v_s_0.i1 - 1))))));
+unit f1(S1[0] v_s)
+  requires (C_81 : ((C_82 : (v_s.i1 >= 0)) &&
+                     ((C_84 : (\offset_min(v_s.a1) <= 0)) &&
+                       (C_85 : (\offset_max(v_s.a1) >= (v_s.i1 - 1))))));
 behavior default:
   assumes true;
   ensures (C_86 : true);
 {  
-   (var S1[0] s_0);
+   (var S1[0] s);
    
    (var int32 j_1);
    
-   {  (C_56 : (s_0 = (C_55 : (new S1[1]))));
+   {  (C_56 : (s = (C_55 : (new S1[1]))));
       
-      {  (C_59 : ((C_58 : s_0.i1) = (C_57 : v_s_0.i1)));
-         (C_64 : ((C_63 : ((C_62 : s_0.a1) + 0).int_M) = (C_61 : ((C_60 : v_s_0.a1) +
-                                                                   0).int_M)))
+      {  (C_59 : ((C_58 : s.i1) = (C_57 : v_s.i1)));
+         (C_64 : ((C_63 : ((C_62 : s.a1) + 0).int_M) = (C_61 : ((C_60 : v_s.a1) +
+                                                                 0).int_M)))
       };
       (C_65 : (j_1 = 0));
       
@@ -181,16 +181,16 @@ behavior default:
          loop 
          behavior default:
            invariant (C_67 : (((C_69 : (0 <= j_1)) &&
-                                (C_70 : (j_1 <= v_s_0.i1))) &&
+                                (C_70 : (j_1 <= v_s.i1))) &&
                                (C_71 : (\forall int32 k_3;
                                          (((0 <= k_3) && (k_3 < j_1)) ==>
-                                           ((v_s_0.a1 + k_3).int_M == 0))))));
-         variant (C_66 : (v_s_0.i1 - j_1));
+                                           ((v_s.a1 + k_3).int_M == 0))))));
+         variant (C_66 : (v_s.i1 - j_1));
          while (true)
          {  
-            {  (if (j_1 < (C_72 : s_0.i1)) then () else 
+            {  (if (j_1 < (C_72 : s.i1)) then () else 
                (goto while_2_break));
-               (C_75 : ((C_74 : ((C_73 : s_0.a1) + j_1).int_M) = 0));
+               (C_75 : ((C_74 : ((C_73 : s.a1) + j_1).int_M) = 0));
                (C_78 : (j_1 = (C_77 : ((C_76 : (j_1 + 1)) :> int32))))
             }
          };
@@ -199,12 +199,12 @@ behavior default:
       
       {  
          (assert for default: (C_79 : (\forall int32 k_4;
-                                        (((0 <= k_4) && (k_4 < v_s_0.i1)) ==>
-                                          ((v_s_0.a1 + k_4).int_M == 0)))));
+                                        (((0 <= k_4) && (k_4 < v_s.i1)) ==>
+                                          ((v_s.a1 + k_4).int_M == 0)))));
          ()
       };
       
-      {  (C_80 : (free(s_0)));
+      {  (C_80 : (free(s)));
          
          (return ())
       }
@@ -1063,12 +1063,12 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- v_s:S pointer ->
-  int_P_v_s_1_alloc_table:int_P alloc_table ->
-   S_v_s_1_alloc_table:S alloc_table ->
-    S_a_v_s_1:(S, int_P pointer) memory ->
-     S_i_v_s_1:(S, int32) memory ->
-      int_P_int_M_v_s_1:(int_P, int32) memory -> { } unit { true }
+ v_s_0:S pointer ->
+  int_P_v_s_0_1_alloc_table:int_P alloc_table ->
+   S_v_s_0_1_alloc_table:S alloc_table ->
+    S_a_v_s_0_1:(S, int_P pointer) memory ->
+     S_i_v_s_0_1:(S, int32) memory ->
+      int_P_int_M_v_s_0_1:(int_P, int32) memory -> { } unit { true }
 
 parameter f0 :
  v_s_1:S0 pointer ->
@@ -1099,50 +1099,49 @@ parameter f0_requires :
        unit { true }
 
 parameter f1 :
- v_s_0:S1 pointer ->
-  int_P_v_s_0_3_alloc_table:int_P alloc_table ->
-   S1_v_s_0_3_alloc_table:S1 alloc_table ->
-    S1_a1_v_s_0_3:(S1, int_P pointer) memory ->
-     S1_i1_v_s_0_3:(S1, int32) memory ->
-      int_P_int_M_v_s_0_3:(int_P, int32) memory -> { } unit { true }
+ v_s:S1 pointer ->
+  int_P_v_s_3_alloc_table:int_P alloc_table ->
+   S1_v_s_3_alloc_table:S1 alloc_table ->
+    S1_a1_v_s_3:(S1, int_P pointer) memory ->
+     S1_i1_v_s_3:(S1, int32) memory ->
+      int_P_int_M_v_s_3:(int_P, int32) memory -> { } unit { true }
 
 parameter f1_requires :
- v_s_0:S1 pointer ->
-  int_P_v_s_0_3_alloc_table:int_P alloc_table ->
-   S1_v_s_0_3_alloc_table:S1 alloc_table ->
-    S1_a1_v_s_0_3:(S1, int_P pointer) memory ->
-     S1_i1_v_s_0_3:(S1, int32) memory ->
-      int_P_int_M_v_s_0_3:(int_P, int32) memory ->
+ v_s:S1 pointer ->
+  int_P_v_s_3_alloc_table:int_P alloc_table ->
+   S1_v_s_3_alloc_table:S1 alloc_table ->
+    S1_a1_v_s_3:(S1, int_P pointer) memory ->
+     S1_i1_v_s_3:(S1, int32) memory ->
+      int_P_int_M_v_s_3:(int_P, int32) memory ->
        { (JC_76:
-         ((JC_73:
-          ge_int(integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)), (0)))
+         ((JC_73: ge_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (0)))
          and ((JC_74:
-              le_int(offset_min(int_P_v_s_0_3_alloc_table,
-                     select(S1_a1_v_s_0_3, v_s_0)),
+              le_int(offset_min(int_P_v_s_3_alloc_table,
+                     select(S1_a1_v_s_3, v_s)),
               (0)))
              and (JC_75:
-                 ge_int(offset_max(int_P_v_s_0_3_alloc_table,
-                        select(S1_a1_v_s_0_3, v_s_0)),
-                 sub_int(integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)), (1)))))))}
+                 ge_int(offset_max(int_P_v_s_3_alloc_table,
+                        select(S1_a1_v_s_3, v_s)),
+                 sub_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (1)))))))}
        unit { true }
 
 parameter f_requires :
- v_s:S pointer ->
-  int_P_v_s_1_alloc_table:int_P alloc_table ->
-   S_v_s_1_alloc_table:S alloc_table ->
-    S_a_v_s_1:(S, int_P pointer) memory ->
-     S_i_v_s_1:(S, int32) memory ->
-      int_P_int_M_v_s_1:(int_P, int32) memory ->
+ v_s_0:S pointer ->
+  int_P_v_s_0_1_alloc_table:int_P alloc_table ->
+   S_v_s_0_1_alloc_table:S alloc_table ->
+    S_a_v_s_0_1:(S, int_P pointer) memory ->
+     S_i_v_s_0_1:(S, int32) memory ->
+      int_P_int_M_v_s_0_1:(int_P, int32) memory ->
        { (JC_4:
-         ((JC_1: ge_int(integer_of_int32(select(S_i_v_s_1, v_s)), (0)))
+         ((JC_1: ge_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (0)))
          and ((JC_2:
-              le_int(offset_min(int_P_v_s_1_alloc_table,
-                     select(S_a_v_s_1, v_s)),
+              le_int(offset_min(int_P_v_s_0_1_alloc_table,
+                     select(S_a_v_s_0_1, v_s_0)),
               (0)))
              and (JC_3:
-                 ge_int(offset_max(int_P_v_s_1_alloc_table,
-                        select(S_a_v_s_1, v_s)),
-                 sub_int(integer_of_int32(select(S_i_v_s_1, v_s)), (1)))))))}
+                 ge_int(offset_max(int_P_v_s_0_1_alloc_table,
+                        select(S_a_v_s_0_1, v_s_0)),
+                 sub_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (1)))))))}
        unit { true }
 
 parameter int32_of_integer_ :
@@ -1485,56 +1484,54 @@ let f0_safety =
   { true }
 
 let f1_ensures_default =
- fun (v_s_0 : S1 pointer) (S1_v_s_0_3_alloc_table : S1 alloc_table) (int_P_v_s_0_3_alloc_table : int_P alloc_table) (int_P_int_M_v_s_0_3 : (int_P, int32) memory) (S1_i1_v_s_0_3 : (S1, int32) memory) (S1_a1_v_s_0_3 : (S1, int_P pointer) memory) ->
+ fun (v_s : S1 pointer) (S1_v_s_3_alloc_table : S1 alloc_table) (int_P_v_s_3_alloc_table : int_P alloc_table) (int_P_int_M_v_s_3 : (int_P, int32) memory) (S1_i1_v_s_3 : (S1, int32) memory) (S1_a1_v_s_3 : (S1, int_P pointer) memory) ->
   { ((true = true)
-    and (valid_struct_S1(v_s_0, (0), (0), S1_v_s_0_3_alloc_table,
-         int_P_v_s_0_3_alloc_table, S1_a1_v_s_0_3)
+    and (valid_struct_S1(v_s, (0), (0), S1_v_s_3_alloc_table,
+         int_P_v_s_3_alloc_table, S1_a1_v_s_3)
         and (JC_81:
-            ((JC_78:
-             ge_int(integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)), (0)))
+            ((JC_78: ge_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (0)))
             and ((JC_79:
-                 le_int(offset_min(int_P_v_s_0_3_alloc_table,
-                        select(S1_a1_v_s_0_3, v_s_0)),
+                 le_int(offset_min(int_P_v_s_3_alloc_table,
+                        select(S1_a1_v_s_3, v_s)),
                  (0)))
                 and (JC_80:
-                    ge_int(offset_max(int_P_v_s_0_3_alloc_table,
-                           select(S1_a1_v_s_0_3, v_s_0)),
-                    sub_int(integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)),
-                    (1))))))))) }
+                    ge_int(offset_max(int_P_v_s_3_alloc_table,
+                           select(S1_a1_v_s_3, v_s)),
+                    sub_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (1))))))))) }
   (init:
   try
    begin
-     (let S1_a1_s_0_8 = ref (any_memory void) in
-     (let S1_i1_s_0_8 = ref (any_memory void) in
-     (let int_P_int_M_s_0_8 = ref (any_memory void) in
-     (let S1_s_0_8_tag_table = ref (any_tag_table void) in
-     (let int_P_s_0_8_tag_table = ref (any_tag_table void) in
-     (let int_P_s_0_8_alloc_table = ref (any_alloc_table void) in
-     (let S1_s_0_8_alloc_table = ref (any_alloc_table void) in
-     (let s_0 = ref (any_pointer void) in
+     (let S1_a1_s_8 = ref (any_memory void) in
+     (let S1_i1_s_8 = ref (any_memory void) in
+     (let int_P_int_M_s_8 = ref (any_memory void) in
+     (let S1_s_8_tag_table = ref (any_tag_table void) in
+     (let int_P_s_8_tag_table = ref (any_tag_table void) in
+     (let int_P_s_8_alloc_table = ref (any_alloc_table void) in
+     (let S1_s_8_alloc_table = ref (any_alloc_table void) in
+     (let s = ref (any_pointer void) in
      (let j_1 = ref (any_int32 void) in
      (C_56:
      begin
-       (let jessie_122 = (s_0 := (C_55:
-                                 (JC_100:
-                                 (((((alloc_struct_S1 (1)) S1_s_0_8_alloc_table) int_P_s_0_8_alloc_table) S1_s_0_8_tag_table) !S1_a1_s_0_8)))) in
+       (let jessie_122 = (s := (C_55:
+                               (JC_100:
+                               (((((alloc_struct_S1 (1)) S1_s_8_alloc_table) int_P_s_8_alloc_table) S1_s_8_tag_table) !S1_a1_s_8)))) in
        void);
       (let jessie_134 = (C_59:
                         begin
                           (let jessie_128 = (let jessie_124 = (C_57:
-                                                              ((safe_acc_ S1_i1_v_s_0_3) v_s_0)) in
-                                            (let jessie_127 = !s_0 in
-                                            (((safe_upd_ S1_i1_s_0_8) jessie_127) jessie_124))) in
+                                                              ((safe_acc_ S1_i1_v_s_3) v_s)) in
+                                            (let jessie_127 = !s in
+                                            (((safe_upd_ S1_i1_s_8) jessie_127) jessie_124))) in
                           void);
                          (C_64:
                          (let jessie_130 = (C_61:
-                                           ((safe_acc_ int_P_int_M_v_s_0_3) 
+                                           ((safe_acc_ int_P_int_M_v_s_3) 
                                             ((shift (C_60:
-                                                    ((safe_acc_ S1_a1_v_s_0_3) v_s_0))) (0)))) in
+                                                    ((safe_acc_ S1_a1_v_s_3) v_s))) (0)))) in
                          (let jessie_133 = ((shift (C_62:
-                                                   ((safe_acc_ !S1_a1_s_0_8) !s_0))) (0)) in
+                                                   ((safe_acc_ !S1_a1_s_8) !s))) (0)) in
                          begin
-                           (((safe_upd_ int_P_int_M_s_0_8) jessie_133) jessie_130);
+                           (((safe_upd_ int_P_int_M_s_8) jessie_133) jessie_130);
                           jessie_130
                          end)))
                         end) in
@@ -1551,17 +1548,17 @@ let f1_ensures_default =
                                 ((JC_101: le_int((0), integer_of_int32(j_1)))
                                 and ((JC_102:
                                      le_int(integer_of_int32(j_1),
-                                     integer_of_int32(select(S1_i1_v_s_0_3,
-                                                      v_s_0))))
+                                     integer_of_int32(select(S1_i1_v_s_3,
+                                                      v_s))))
                                     and (JC_103:
                                         (forall k_3:int32.
                                          ((le_int((0), integer_of_int32(k_3))
                                           and lt_int(integer_of_int32(k_3),
                                               integer_of_int32(j_1))) ->
-                                          eq_int(integer_of_int32(select(int_P_int_M_v_s_0_3,
+                                          eq_int(integer_of_int32(select(int_P_int_M_v_s_3,
                                                                   shift(
-                                                                  select(S1_a1_v_s_0_3,
-                                                                  v_s_0),
+                                                                  select(S1_a1_v_s_3,
+                                                                  v_s),
                                                                   integer_of_int32(k_3)))),
                                           (0))))))))
                                }
@@ -1574,7 +1571,7 @@ let f1_ensures_default =
                                                      (if ((lt_int_ (integer_of_int32 !j_1)) 
                                                           (integer_of_int32 
                                                            (C_72:
-                                                           ((safe_acc_ !S1_i1_s_0_8) !s_0))))
+                                                           ((safe_acc_ !S1_i1_s_8) !s))))
                                                      then void
                                                      else
                                                       (let jessie_137 = 
@@ -1589,9 +1586,9 @@ let f1_ensures_default =
                                                       (safe_int32_of_integer_ (0)) in
                                                       (let jessie_142 = 
                                                       ((shift (C_73:
-                                                              ((safe_acc_ !S1_a1_s_0_8) !s_0))) 
+                                                              ((safe_acc_ !S1_a1_s_8) !s))) 
                                                        (integer_of_int32 !j_1)) in
-                                                      (((safe_upd_ int_P_int_M_s_0_8) jessie_142) jessie_139))) in
+                                                      (((safe_upd_ int_P_int_M_s_8) jessie_142) jessie_139))) in
                                                       void);
                                                      (C_78:
                                                      begin
@@ -1626,16 +1623,16 @@ let f1_ensures_default =
          (forall k_4:int32.
           ((le_int((0), integer_of_int32(k_4))
            and lt_int(integer_of_int32(k_4),
-               integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_v_s_0_3,
-                                   shift(select(S1_a1_v_s_0_3, v_s_0),
+               integer_of_int32(select(S1_i1_v_s_3, v_s)))) ->
+           eq_int(integer_of_int32(select(int_P_int_M_v_s_3,
+                                   shift(select(S1_a1_v_s_3, v_s),
                                    integer_of_int32(k_4)))),
            (0))))) };
        void);
        void;
        (C_80:
        begin
-         ((safe_free_parameter S1_s_0_8_alloc_table) !s_0); (raise Return)
+         ((safe_free_parameter S1_s_8_alloc_table) !s); (raise Return)
        end)
       end)
      end))))))))));
@@ -1647,59 +1644,59 @@ let f1_ensures_default =
   { (JC_83: true) }
 
 let f1_safety =
- fun (v_s_0 : S1 pointer) (S1_v_s_0_3_alloc_table : S1 alloc_table) (int_P_v_s_0_3_alloc_table : int_P alloc_table) (int_P_int_M_v_s_0_3 : (int_P, int32) memory) (S1_i1_v_s_0_3 : (S1, int32) memory) (S1_a1_v_s_0_3 : (S1, int_P pointer) memory) ->
-  { (valid_struct_S1(v_s_0, (0), (0), S1_v_s_0_3_alloc_table,
-     int_P_v_s_0_3_alloc_table, S1_a1_v_s_0_3)
+ fun (v_s : S1 pointer) (S1_v_s_3_alloc_table : S1 alloc_table) (int_P_v_s_3_alloc_table : int_P alloc_table) (int_P_int_M_v_s_3 : (int_P, int32) memory) (S1_i1_v_s_3 : (S1, int32) memory) (S1_a1_v_s_3 : (S1, int_P pointer) memory) ->
+  { (valid_struct_S1(v_s, (0), (0), S1_v_s_3_alloc_table,
+     int_P_v_s_3_alloc_table, S1_a1_v_s_3)
     and (JC_81:
-        ((JC_78: ge_int(integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)), (0)))
+        ((JC_78: ge_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (0)))
         and ((JC_79:
-             le_int(offset_min(int_P_v_s_0_3_alloc_table,
-                    select(S1_a1_v_s_0_3, v_s_0)),
+             le_int(offset_min(int_P_v_s_3_alloc_table,
+                    select(S1_a1_v_s_3, v_s)),
              (0)))
             and (JC_80:
-                ge_int(offset_max(int_P_v_s_0_3_alloc_table,
-                       select(S1_a1_v_s_0_3, v_s_0)),
-                sub_int(integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)), (1)))))))) }
+                ge_int(offset_max(int_P_v_s_3_alloc_table,
+                       select(S1_a1_v_s_3, v_s)),
+                sub_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (1)))))))) }
   (init:
   try
    begin
-     (let S1_a1_s_0_8 = ref (any_memory void) in
-     (let S1_i1_s_0_8 = ref (any_memory void) in
-     (let int_P_int_M_s_0_8 = ref (any_memory void) in
-     (let S1_s_0_8_tag_table = ref (any_tag_table void) in
-     (let int_P_s_0_8_tag_table = ref (any_tag_table void) in
-     (let int_P_s_0_8_alloc_table = ref (any_alloc_table void) in
-     (let S1_s_0_8_alloc_table = ref (any_alloc_table void) in
-     (let s_0 = ref (any_pointer void) in
+     (let S1_a1_s_8 = ref (any_memory void) in
+     (let S1_i1_s_8 = ref (any_memory void) in
+     (let int_P_int_M_s_8 = ref (any_memory void) in
+     (let S1_s_8_tag_table = ref (any_tag_table void) in
+     (let int_P_s_8_tag_table = ref (any_tag_table void) in
+     (let int_P_s_8_alloc_table = ref (any_alloc_table void) in
+     (let S1_s_8_alloc_table = ref (any_alloc_table void) in
+     (let s = ref (any_pointer void) in
      (let j_1 = ref (any_int32 void) in
      (C_56:
      begin
-       (let jessie_95 = (s_0 := (let jessie_94 = (C_55:
-                                                 (JC_87:
-                                                 (((((alloc_struct_S1_requires (1)) S1_s_0_8_alloc_table) int_P_s_0_8_alloc_table) S1_s_0_8_tag_table) !S1_a1_s_0_8))) in
-                                (JC_88:
-                                (assert
-                                { ge_int(offset_max(S1_s_0_8_alloc_table,
-                                         jessie_94),
-                                  (0)) };
-                                jessie_94)))) in
+       (let jessie_95 = (s := (let jessie_94 = (C_55:
+                                               (JC_87:
+                                               (((((alloc_struct_S1_requires (1)) S1_s_8_alloc_table) int_P_s_8_alloc_table) S1_s_8_tag_table) !S1_a1_s_8))) in
+                              (JC_88:
+                              (assert
+                              { ge_int(offset_max(S1_s_8_alloc_table,
+                                       jessie_94),
+                                (0)) };
+                              jessie_94)))) in
        void);
       (let jessie_107 = (C_59:
                         begin
                           (let jessie_101 = (let jessie_97 = (C_57:
-                                                             ((safe_acc_ S1_i1_v_s_0_3) v_s_0)) in
-                                            (let jessie_100 = !s_0 in
-                                            (((safe_upd_ S1_i1_s_0_8) jessie_100) jessie_97))) in
+                                                             ((safe_acc_ S1_i1_v_s_3) v_s)) in
+                                            (let jessie_100 = !s in
+                                            (((safe_upd_ S1_i1_s_8) jessie_100) jessie_97))) in
                           void);
                          (C_64:
                          (let jessie_103 = (C_61:
-                                           ((safe_acc_ int_P_int_M_v_s_0_3) 
+                                           ((safe_acc_ int_P_int_M_v_s_3) 
                                             ((shift (C_60:
-                                                    ((safe_acc_ S1_a1_v_s_0_3) v_s_0))) (0)))) in
+                                                    ((safe_acc_ S1_a1_v_s_3) v_s))) (0)))) in
                          (let jessie_106 = ((shift (C_62:
-                                                   ((safe_acc_ !S1_a1_s_0_8) !s_0))) (0)) in
+                                                   ((safe_acc_ !S1_a1_s_8) !s))) (0)) in
                          begin
-                           (((safe_upd_ int_P_int_M_s_0_8) jessie_106) jessie_103);
+                           (((safe_upd_ int_P_int_M_s_8) jessie_106) jessie_103);
                           jessie_103
                          end)))
                         end) in
@@ -1713,8 +1710,8 @@ let f1_safety =
                             while true do
                             { invariant (JC_94: true)
                               variant (JC_98 : sub_int(integer_of_int32(
-                                                       select(S1_i1_v_s_0_3,
-                                                       v_s_0)),
+                                                       select(S1_i1_v_s_3,
+                                                       v_s)),
                                                integer_of_int32(j_1))) }
                              begin
                                [ { } unit reads j_1
@@ -1723,8 +1720,8 @@ let f1_safety =
                                     le_int((0), integer_of_int32(j_1)))
                                    and ((JC_90:
                                         le_int(integer_of_int32(j_1),
-                                        integer_of_int32(select(S1_i1_v_s_0_3,
-                                                         v_s_0))))
+                                        integer_of_int32(select(S1_i1_v_s_3,
+                                                         v_s))))
                                        and (JC_91:
                                            (forall k_3:int32.
                                             ((le_int((0),
@@ -1732,9 +1729,9 @@ let f1_safety =
                                              and lt_int(integer_of_int32(k_3),
                                                  integer_of_int32(j_1))) ->
                                              eq_int(integer_of_int32(
-                                                    select(int_P_int_M_v_s_0_3,
-                                                    shift(select(S1_a1_v_s_0_3,
-                                                          v_s_0),
+                                                    select(int_P_int_M_v_s_3,
+                                                    shift(select(S1_a1_v_s_3,
+                                                          v_s),
                                                     integer_of_int32(k_3)))),
                                              (0)))))))) } ];
                               try
@@ -1744,7 +1741,7 @@ let f1_safety =
                                                      (if ((lt_int_ (integer_of_int32 !j_1)) 
                                                           (integer_of_int32 
                                                            (C_72:
-                                                           ((safe_acc_ !S1_i1_s_0_8) !s_0))))
+                                                           ((safe_acc_ !S1_i1_s_8) !s))))
                                                      then void
                                                      else
                                                       (let jessie_110 = 
@@ -1759,13 +1756,13 @@ let f1_safety =
                                                       (safe_int32_of_integer_ (0)) in
                                                       (let jessie_113 = 
                                                       (C_73:
-                                                      ((safe_acc_ !S1_a1_s_0_8) !s_0)) in
+                                                      ((safe_acc_ !S1_a1_s_8) !s)) in
                                                       (let jessie_114 = 
                                                       (integer_of_int32 !j_1) in
                                                       (let jessie_115 = 
                                                       ((shift jessie_113) jessie_114) in
                                                       (JC_96:
-                                                      (((((offset_upd_ !int_P_s_0_8_alloc_table) int_P_int_M_s_0_8) jessie_113) jessie_114) jessie_112)))))) in
+                                                      (((((offset_upd_ !int_P_s_8_alloc_table) int_P_int_M_s_8) jessie_113) jessie_114) jessie_112)))))) in
                                                       void);
                                                      (C_78:
                                                      begin
@@ -1801,16 +1798,14 @@ let f1_safety =
            (forall k_4:int32.
             ((le_int((0), integer_of_int32(k_4))
              and lt_int(integer_of_int32(k_4),
-                 integer_of_int32(select(S1_i1_v_s_0_3, v_s_0)))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_v_s_0_3,
-                                     shift(select(S1_a1_v_s_0_3, v_s_0),
+                 integer_of_int32(select(S1_i1_v_s_3, v_s)))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_v_s_3,
+                                     shift(select(S1_a1_v_s_3, v_s),
                                      integer_of_int32(k_4)))),
              (0))))) } ];
        void;
        (C_80:
-       begin
-         ((free_parameter S1_s_0_8_alloc_table) !s_0); (raise Return)
-       end)
+       begin   ((free_parameter S1_s_8_alloc_table) !s); (raise Return) end)
       end)
      end))))))))));
     (raise Return)
@@ -1821,43 +1816,46 @@ let f1_safety =
   { true }
 
 let f_ensures_default =
- fun (v_s : S pointer) (S_v_s_1_alloc_table : S alloc_table) (int_P_v_s_1_alloc_table : int_P alloc_table) (int_P_int_M_v_s_1 : (int_P, int32) memory) (S_i_v_s_1 : (S, int32) memory) (S_a_v_s_1 : (S, int_P pointer) memory) ->
+ fun (v_s_0 : S pointer) (S_v_s_0_1_alloc_table : S alloc_table) (int_P_v_s_0_1_alloc_table : int_P alloc_table) (int_P_int_M_v_s_0_1 : (int_P, int32) memory) (S_i_v_s_0_1 : (S, int32) memory) (S_a_v_s_0_1 : (S, int_P pointer) memory) ->
   { ((true = true)
-    and (valid_struct_S(v_s, (0), (0), S_v_s_1_alloc_table,
-         int_P_v_s_1_alloc_table, S_a_v_s_1)
+    and (valid_struct_S(v_s_0, (0), (0), S_v_s_0_1_alloc_table,
+         int_P_v_s_0_1_alloc_table, S_a_v_s_0_1)
         and (JC_9:
-            ((JC_6: ge_int(integer_of_int32(select(S_i_v_s_1, v_s)), (0)))
+            ((JC_6:
+             ge_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (0)))
             and ((JC_7:
-                 le_int(offset_min(int_P_v_s_1_alloc_table,
-                        select(S_a_v_s_1, v_s)),
+                 le_int(offset_min(int_P_v_s_0_1_alloc_table,
+                        select(S_a_v_s_0_1, v_s_0)),
                  (0)))
                 and (JC_8:
-                    ge_int(offset_max(int_P_v_s_1_alloc_table,
-                           select(S_a_v_s_1, v_s)),
-                    sub_int(integer_of_int32(select(S_i_v_s_1, v_s)), (1))))))))) }
+                    ge_int(offset_max(int_P_v_s_0_1_alloc_table,
+                           select(S_a_v_s_0_1, v_s_0)),
+                    sub_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)),
+                    (1))))))))) }
   (init:
   try
    begin
-     (let S_a_s_4 = ref (any_memory void) in
-     (let S_i_s_4 = ref (any_memory void) in
-     (let int_P_int_M_s_4 = ref (any_memory void) in
-     (let S_s_4_tag_table = ref (any_tag_table void) in
-     (let int_P_s_4_tag_table = ref (any_tag_table void) in
-     (let int_P_s_4_alloc_table = ref (any_alloc_table void) in
-     (let S_s_4_alloc_table = ref (any_alloc_table void) in
-     (let s = ref (any_pointer void) in
+     (let S_a_s_0_4 = ref (any_memory void) in
+     (let S_i_s_0_4 = ref (any_memory void) in
+     (let int_P_int_M_s_0_4 = ref (any_memory void) in
+     (let S_s_0_4_tag_table = ref (any_tag_table void) in
+     (let int_P_s_0_4_tag_table = ref (any_tag_table void) in
+     (let int_P_s_0_4_alloc_table = ref (any_alloc_table void) in
+     (let S_s_0_4_alloc_table = ref (any_alloc_table void) in
+     (let s_0 = ref (any_pointer void) in
      (let j = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_32 = (s := (C_1:
-                              (JC_28:
-                              (((((alloc_struct_S (1)) S_s_4_alloc_table) int_P_s_4_alloc_table) S_s_4_tag_table) !S_a_s_4)))) in
+       (let jessie_32 = (s_0 := (C_1:
+                                (JC_28:
+                                (((((alloc_struct_S (1)) S_s_0_4_alloc_table) int_P_s_0_4_alloc_table) S_s_0_4_tag_table) !S_a_s_0_4)))) in
        void);
       (C_5:
       begin
-        (let jessie_38 = (let jessie_34 = (C_3: ((safe_acc_ S_i_v_s_1) v_s)) in
-                         (let jessie_37 = !s in
-                         (((safe_upd_ S_i_s_4) jessie_37) jessie_34))) in
+        (let jessie_38 = (let jessie_34 = (C_3:
+                                          ((safe_acc_ S_i_v_s_0_1) v_s_0)) in
+                         (let jessie_37 = !s_0 in
+                         (((safe_upd_ S_i_s_0_4) jessie_37) jessie_34))) in
         void);
        (C_6:
        begin
@@ -1871,16 +1869,17 @@ let f_ensures_default =
                                 ((JC_29: le_int((0), integer_of_int32(j)))
                                 and ((JC_30:
                                      le_int(integer_of_int32(j),
-                                     integer_of_int32(select(S_i_v_s_1, v_s))))
+                                     integer_of_int32(select(S_i_v_s_0_1,
+                                                      v_s_0))))
                                     and (JC_31:
                                         (forall k:int32.
                                          ((le_int((0), integer_of_int32(k))
                                           and lt_int(integer_of_int32(k),
                                               integer_of_int32(j))) ->
-                                          eq_int(integer_of_int32(select(int_P_int_M_v_s_1,
+                                          eq_int(integer_of_int32(select(int_P_int_M_v_s_0_1,
                                                                   shift(
-                                                                  select(S_a_v_s_1,
-                                                                  v_s),
+                                                                  select(S_a_v_s_0_1,
+                                                                  v_s_0),
                                                                   integer_of_int32(k)))),
                                           (0))))))))
                                }
@@ -1895,7 +1894,7 @@ let f_ensures_default =
                                                                     (integer_of_int32 !j)) 
                                                                     (integer_of_int32 
                                                                     (C_13:
-                                                                    ((safe_acc_ !S_i_s_4) !s))))
+                                                                    ((safe_acc_ !S_i_s_0_4) !s_0))))
                                                                     then void
                                                                     else
                                                                     (let jessie_41 = 
@@ -1912,9 +1911,9 @@ let f_ensures_default =
                                                                     (let jessie_46 = 
                                                                     ((shift 
                                                                     (C_14:
-                                                                    ((safe_acc_ !S_a_s_4) !s))) 
+                                                                    ((safe_acc_ !S_a_s_0_4) !s_0))) 
                                                                     (integer_of_int32 !j)) in
-                                                                    (((safe_upd_ int_P_int_M_s_4) jessie_46) jessie_43))) in
+                                                                    (((safe_upd_ int_P_int_M_s_0_4) jessie_46) jessie_43))) in
                                                                     void);
                                                                     (C_19:
                                                                     begin
@@ -1951,16 +1950,16 @@ let f_ensures_default =
           (forall k_0:int32.
            ((le_int((0), integer_of_int32(k_0))
             and lt_int(integer_of_int32(k_0),
-                integer_of_int32(select(S_i_v_s_1, v_s)))) ->
-            eq_int(integer_of_int32(select(int_P_int_M_v_s_1,
-                                    shift(select(S_a_v_s_1, v_s),
+                integer_of_int32(select(S_i_v_s_0_1, v_s_0)))) ->
+            eq_int(integer_of_int32(select(int_P_int_M_v_s_0_1,
+                                    shift(select(S_a_v_s_0_1, v_s_0),
                                     integer_of_int32(k_0)))),
             (0))))) };
         void);
         void;
         (C_21:
         begin
-          ((safe_free_parameter S_s_4_alloc_table) !s); (raise Return)
+          ((safe_free_parameter S_s_0_4_alloc_table) !s_0); (raise Return)
         end)
        end)
       end)
@@ -1973,48 +1972,49 @@ let f_ensures_default =
   { (JC_11: true) }
 
 let f_safety =
- fun (v_s : S pointer) (S_v_s_1_alloc_table : S alloc_table) (int_P_v_s_1_alloc_table : int_P alloc_table) (int_P_int_M_v_s_1 : (int_P, int32) memory) (S_i_v_s_1 : (S, int32) memory) (S_a_v_s_1 : (S, int_P pointer) memory) ->
-  { (valid_struct_S(v_s, (0), (0), S_v_s_1_alloc_table,
-     int_P_v_s_1_alloc_table, S_a_v_s_1)
+ fun (v_s_0 : S pointer) (S_v_s_0_1_alloc_table : S alloc_table) (int_P_v_s_0_1_alloc_table : int_P alloc_table) (int_P_int_M_v_s_0_1 : (int_P, int32) memory) (S_i_v_s_0_1 : (S, int32) memory) (S_a_v_s_0_1 : (S, int_P pointer) memory) ->
+  { (valid_struct_S(v_s_0, (0), (0), S_v_s_0_1_alloc_table,
+     int_P_v_s_0_1_alloc_table, S_a_v_s_0_1)
     and (JC_9:
-        ((JC_6: ge_int(integer_of_int32(select(S_i_v_s_1, v_s)), (0)))
+        ((JC_6: ge_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (0)))
         and ((JC_7:
-             le_int(offset_min(int_P_v_s_1_alloc_table,
-                    select(S_a_v_s_1, v_s)),
+             le_int(offset_min(int_P_v_s_0_1_alloc_table,
+                    select(S_a_v_s_0_1, v_s_0)),
              (0)))
             and (JC_8:
-                ge_int(offset_max(int_P_v_s_1_alloc_table,
-                       select(S_a_v_s_1, v_s)),
-                sub_int(integer_of_int32(select(S_i_v_s_1, v_s)), (1)))))))) }
+                ge_int(offset_max(int_P_v_s_0_1_alloc_table,
+                       select(S_a_v_s_0_1, v_s_0)),
+                sub_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (1)))))))) }
   (init:
   try
    begin
-     (let S_a_s_4 = ref (any_memory void) in
-     (let S_i_s_4 = ref (any_memory void) in
-     (let int_P_int_M_s_4 = ref (any_memory void) in
-     (let S_s_4_tag_table = ref (any_tag_table void) in
-     (let int_P_s_4_tag_table = ref (any_tag_table void) in
-     (let int_P_s_4_alloc_table = ref (any_alloc_table void) in
-     (let S_s_4_alloc_table = ref (any_alloc_table void) in
-     (let s = ref (any_pointer void) in
+     (let S_a_s_0_4 = ref (any_memory void) in
+     (let S_i_s_0_4 = ref (any_memory void) in
+     (let int_P_int_M_s_0_4 = ref (any_memory void) in
+     (let S_s_0_4_tag_table = ref (any_tag_table void) in
+     (let int_P_s_0_4_tag_table = ref (any_tag_table void) in
+     (let int_P_s_0_4_alloc_table = ref (any_alloc_table void) in
+     (let S_s_0_4_alloc_table = ref (any_alloc_table void) in
+     (let s_0 = ref (any_pointer void) in
      (let j = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_11 = (s := (let jessie_10 = (C_1:
-                                               (JC_15:
-                                               (((((alloc_struct_S_requires (1)) S_s_4_alloc_table) int_P_s_4_alloc_table) S_s_4_tag_table) !S_a_s_4))) in
-                              (JC_16:
-                              (assert
-                              { ge_int(offset_max(S_s_4_alloc_table,
-                                       jessie_10),
-                                (0)) };
-                              jessie_10)))) in
+       (let jessie_11 = (s_0 := (let jessie_10 = (C_1:
+                                                 (JC_15:
+                                                 (((((alloc_struct_S_requires (1)) S_s_0_4_alloc_table) int_P_s_0_4_alloc_table) S_s_0_4_tag_table) !S_a_s_0_4))) in
+                                (JC_16:
+                                (assert
+                                { ge_int(offset_max(S_s_0_4_alloc_table,
+                                         jessie_10),
+                                  (0)) };
+                                jessie_10)))) in
        void);
       (C_5:
       begin
-        (let jessie_17 = (let jessie_13 = (C_3: ((safe_acc_ S_i_v_s_1) v_s)) in
-                         (let jessie_16 = !s in
-                         (((safe_upd_ S_i_s_4) jessie_16) jessie_13))) in
+        (let jessie_17 = (let jessie_13 = (C_3:
+                                          ((safe_acc_ S_i_v_s_0_1) v_s_0)) in
+                         (let jessie_16 = !s_0 in
+                         (((safe_upd_ S_i_s_0_4) jessie_16) jessie_13))) in
         void);
        (C_6:
        begin
@@ -2025,7 +2025,8 @@ let f_safety =
                             while true do
                             { invariant (JC_22: true)
                               variant (JC_26 : sub_int(integer_of_int32(
-                                                       select(S_i_v_s_1, v_s)),
+                                                       select(S_i_v_s_0_1,
+                                                       v_s_0)),
                                                integer_of_int32(j))) }
                              begin
                                [ { } unit reads j
@@ -2033,8 +2034,8 @@ let f_safety =
                                    ((JC_17: le_int((0), integer_of_int32(j)))
                                    and ((JC_18:
                                         le_int(integer_of_int32(j),
-                                        integer_of_int32(select(S_i_v_s_1,
-                                                         v_s))))
+                                        integer_of_int32(select(S_i_v_s_0_1,
+                                                         v_s_0))))
                                        and (JC_19:
                                            (forall k:int32.
                                             ((le_int((0),
@@ -2042,9 +2043,9 @@ let f_safety =
                                              and lt_int(integer_of_int32(k),
                                                  integer_of_int32(j))) ->
                                              eq_int(integer_of_int32(
-                                                    select(int_P_int_M_v_s_1,
-                                                    shift(select(S_a_v_s_1,
-                                                          v_s),
+                                                    select(int_P_int_M_v_s_0_1,
+                                                    shift(select(S_a_v_s_0_1,
+                                                          v_s_0),
                                                     integer_of_int32(k)))),
                                              (0)))))))) } ];
                               try
@@ -2056,7 +2057,7 @@ let f_safety =
                                                                     (integer_of_int32 !j)) 
                                                                     (integer_of_int32 
                                                                     (C_13:
-                                                                    ((safe_acc_ !S_i_s_4) !s))))
+                                                                    ((safe_acc_ !S_i_s_0_4) !s_0))))
                                                                     then void
                                                                     else
                                                                     (let jessie_20 = 
@@ -2072,13 +2073,13 @@ let f_safety =
                                                                     (safe_int32_of_integer_ (0)) in
                                                                     (let jessie_23 = 
                                                                     (C_14:
-                                                                    ((safe_acc_ !S_a_s_4) !s)) in
+                                                                    ((safe_acc_ !S_a_s_0_4) !s_0)) in
                                                                     (let jessie_24 = 
                                                                     (integer_of_int32 !j) in
                                                                     (let jessie_25 = 
                                                                     ((shift jessie_23) jessie_24) in
                                                                     (JC_24:
-                                                                    (((((offset_upd_ !int_P_s_4_alloc_table) int_P_int_M_s_4) jessie_23) jessie_24) jessie_22)))))) in
+                                                                    (((((offset_upd_ !int_P_s_0_4_alloc_table) int_P_int_M_s_0_4) jessie_23) jessie_24) jessie_22)))))) in
                                                                     void);
                                                                     (C_19:
                                                                     begin
@@ -2116,14 +2117,16 @@ let f_safety =
             (forall k_0:int32.
              ((le_int((0), integer_of_int32(k_0))
               and lt_int(integer_of_int32(k_0),
-                  integer_of_int32(select(S_i_v_s_1, v_s)))) ->
-              eq_int(integer_of_int32(select(int_P_int_M_v_s_1,
-                                      shift(select(S_a_v_s_1, v_s),
+                  integer_of_int32(select(S_i_v_s_0_1, v_s_0)))) ->
+              eq_int(integer_of_int32(select(int_P_int_M_v_s_0_1,
+                                      shift(select(S_a_v_s_0_1, v_s_0),
                                       integer_of_int32(k_0)))),
               (0))))) } ];
         void;
         (C_21:
-        begin   ((free_parameter S_s_4_alloc_table) !s); (raise Return) end)
+        begin
+          ((free_parameter S_s_0_4_alloc_table) !s_0); (raise Return)
+        end)
        end)
       end)
      end))))))))));

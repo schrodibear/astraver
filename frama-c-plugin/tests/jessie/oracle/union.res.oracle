@@ -108,21 +108,21 @@ tag s2P = {
   _S2[0] s2M: 64;
 }
 
-_Integer2[..] endianness(_Integer2[..] i)
-  requires (C_17 : ((C_18 : (\offset_min(i) <= 0)) &&
-                     (C_19 : (\offset_max(i) >= 0))));
+_Integer2[..] endianness(_Integer2[..] i_0)
+  requires (C_17 : ((C_18 : (\offset_min(i_0) <= 0)) &&
+                     (C_19 : (\offset_max(i_0) >= 0))));
 behavior default:
   assumes true;
-  ensures (C_20 : ((i :> xP[0]).xM == (\result :> xP[0]).xM));
+  ensures (C_20 : ((i_0 :> xP[0]).xM == (\result :> xP[0]).xM));
 {  
    (var _Integer2[..] j);
    
    {  (C_2 : (j = (C_1 : (new _Integer2[1]))));
       (C_9 : ((C_8 : (C_7 : (C_6 : (j :> cP[0])).cM).c1) = (C_5 : (C_4 : 
-                                                                  (C_3 : (i :> cP[0])).cM).c1)));
+                                                                  (C_3 : (i_0 :> cP[0])).cM).c1)));
       (C_16 : ((C_15 : (C_14 : (C_13 : (j :> cP[0])).cM).c2) = (C_12 : 
                                                                (C_11 : 
-                                                               (C_10 : (i :> cP[0])).cM).c2)));
+                                                               (C_10 : (i_0 :> cP[0])).cM).c2)));
       
       (return j)
    }
@@ -182,24 +182,24 @@ behavior default:
    }
 }
 
-_Integer[..] endianness3(_Integer[..] i_0)
-  requires (C_154 : ((C_155 : (\offset_min(i_0) <= 0)) &&
-                      (C_156 : (\offset_max(i_0) >= 0))));
+_Integer[..] endianness3(_Integer[..] i)
+  requires (C_154 : ((C_155 : (\offset_min(i) <= 0)) &&
+                      (C_156 : (\offset_max(i) >= 0))));
 behavior default:
   assumes true;
-  ensures (C_157 : ((i_0 :> x_0P[0]).x_0M == (\result :> x_0P[0]).x_0M));
+  ensures (C_157 : ((i :> x_0P[0]).x_0M == (\result :> x_0P[0]).x_0M));
 {  
    (var _Integer[..] j_1);
    
    {  (C_125 : (j_1 = (C_124 : (new _Integer[1]))));
       (C_132 : ((C_131 : (C_130 : (C_129 : (j_1 :> c_0P[0])).c_0M).c1_0) = 
-      (C_128 : (C_127 : (C_126 : (i_0 :> c_0P[0])).c_0M).c1_0)));
+      (C_128 : (C_127 : (C_126 : (i :> c_0P[0])).c_0M).c1_0)));
       (C_139 : ((C_138 : (C_137 : (C_136 : (j_1 :> c_0P[0])).c_0M).c2_0) = 
-      (C_135 : (C_134 : (C_133 : (i_0 :> c_0P[0])).c_0M).c2_0)));
+      (C_135 : (C_134 : (C_133 : (i :> c_0P[0])).c_0M).c2_0)));
       (C_146 : ((C_145 : (C_144 : (C_143 : (j_1 :> c_0P[0])).c_0M).c3) = 
-      (C_142 : (C_141 : (C_140 : (i_0 :> c_0P[0])).c_0M).c3)));
+      (C_142 : (C_141 : (C_140 : (i :> c_0P[0])).c_0M).c3)));
       (C_153 : ((C_152 : (C_151 : (C_150 : (j_1 :> c_0P[0])).c_0M).c4) = 
-      (C_149 : (C_148 : (C_147 : (i_0 :> c_0P[0])).c_0M).c4)));
+      (C_149 : (C_148 : (C_147 : (i :> c_0P[0])).c_0M).c4)));
       
       (return j_1)
    }
@@ -1456,19 +1456,19 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter endianness :
- i:_Integer2 pointer ->
+ i_0:_Integer2 pointer ->
   _Integer2_result_2_alloc_table:_Integer2 alloc_table ref ->
    _Integer2_result_2_tag_table:_Integer2 tag_table ref ->
     _Integer2_fields_result_2:(_Integer2, bitvector) memory ref ->
-     _Integer2_i_1_alloc_table:_Integer2 alloc_table ->
-      _Integer2_fields_i_1:(_Integer2, bitvector) memory ->
+     _Integer2_i_0_1_alloc_table:_Integer2 alloc_table ->
+      _Integer2_fields_i_0_1:(_Integer2, bitvector) memory ->
        { } _Integer2 pointer
        reads _Integer2_fields_result_2,_Integer2_result_2_alloc_table
        writes _Integer2_fields_result_2,_Integer2_result_2_alloc_table,_Integer2_result_2_tag_table
        { ((true = true) ->
           (JC_10:
-          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_1,
-                                                                   i),
+          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
+                                                                   i_0),
                                                      (0), (2)))),
           integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
                                                             result),
@@ -1513,64 +1513,64 @@ parameter endianness2_requires :
                                               (0), (4))))))) }
 
 parameter endianness3 :
- i_0:_Integer pointer ->
+ i:_Integer pointer ->
   _Integer_result_8_alloc_table:_Integer alloc_table ref ->
    _Integer_result_8_tag_table:_Integer tag_table ref ->
     _Integer_fields_result_8:(_Integer, bitvector) memory ref ->
-     _Integer_i_0_7_alloc_table:_Integer alloc_table ->
-      _Integer_fields_i_0_7:(_Integer, bitvector) memory ->
+     _Integer_i_7_alloc_table:_Integer alloc_table ->
+      _Integer_fields_i_7:(_Integer, bitvector) memory ->
        { } _Integer pointer
        reads _Integer_fields_result_8,_Integer_result_8_alloc_table
        writes _Integer_fields_result_8,_Integer_result_8_alloc_table,_Integer_result_8_tag_table
        { ((true = true) ->
           (JC_47:
-          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_0_7,
-                                                                   i_0),
+          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
+                                                                   i),
                                                      (0), (4)))),
           integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
                                                             result),
                                               (0), (4))))))) }
 
 parameter endianness3_requires :
- i_0:_Integer pointer ->
+ i:_Integer pointer ->
   _Integer_result_8_alloc_table:_Integer alloc_table ref ->
    _Integer_result_8_tag_table:_Integer tag_table ref ->
     _Integer_fields_result_8:(_Integer, bitvector) memory ref ->
-     _Integer_i_0_7_alloc_table:_Integer alloc_table ->
-      _Integer_fields_i_0_7:(_Integer, bitvector) memory ->
+     _Integer_i_7_alloc_table:_Integer alloc_table ->
+      _Integer_fields_i_7:(_Integer, bitvector) memory ->
        { (JC_40:
-         ((JC_38: le_int(offset_min(_Integer_i_0_7_alloc_table, i_0), (0)))
-         and (JC_39:
-             ge_int(offset_max(_Integer_i_0_7_alloc_table, i_0), (0)))))}
+         ((JC_38: le_int(offset_min(_Integer_i_7_alloc_table, i), (0)))
+         and (JC_39: ge_int(offset_max(_Integer_i_7_alloc_table, i), (0)))))}
        _Integer pointer
        reads _Integer_fields_result_8,_Integer_result_8_alloc_table
        writes _Integer_fields_result_8,_Integer_result_8_alloc_table,_Integer_result_8_tag_table
        { ((true = true) ->
           (JC_47:
-          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_0_7,
-                                                                   i_0),
+          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
+                                                                   i),
                                                      (0), (4)))),
           integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
                                                             result),
                                               (0), (4))))))) }
 
 parameter endianness_requires :
- i:_Integer2 pointer ->
+ i_0:_Integer2 pointer ->
   _Integer2_result_2_alloc_table:_Integer2 alloc_table ref ->
    _Integer2_result_2_tag_table:_Integer2 tag_table ref ->
     _Integer2_fields_result_2:(_Integer2, bitvector) memory ref ->
-     _Integer2_i_1_alloc_table:_Integer2 alloc_table ->
-      _Integer2_fields_i_1:(_Integer2, bitvector) memory ->
+     _Integer2_i_0_1_alloc_table:_Integer2 alloc_table ->
+      _Integer2_fields_i_0_1:(_Integer2, bitvector) memory ->
        { (JC_3:
-         ((JC_1: le_int(offset_min(_Integer2_i_1_alloc_table, i), (0)))
-         and (JC_2: ge_int(offset_max(_Integer2_i_1_alloc_table, i), (0)))))}
+         ((JC_1: le_int(offset_min(_Integer2_i_0_1_alloc_table, i_0), (0)))
+         and (JC_2:
+             ge_int(offset_max(_Integer2_i_0_1_alloc_table, i_0), (0)))))}
        _Integer2 pointer
        reads _Integer2_fields_result_2,_Integer2_result_2_alloc_table
        writes _Integer2_fields_result_2,_Integer2_result_2_alloc_table,_Integer2_result_2_tag_table
        { ((true = true) ->
           (JC_10:
-          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_1,
-                                                                   i),
+          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
+                                                                   i_0),
                                                      (0), (2)))),
           integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
                                                             result),
@@ -2236,11 +2236,11 @@ let endianness2_safety =
   { true }
 
 let endianness3_ensures_default =
- fun (i_0 : _Integer pointer) (_Integer_result_8_alloc_table : _Integer alloc_table ref) (_Integer_result_8_tag_table : _Integer tag_table ref) (_Integer_fields_result_8 : (_Integer, bitvector) memory ref) (_Integer_i_0_7_alloc_table : _Integer alloc_table) (_Integer_fields_i_0_7 : (_Integer, bitvector) memory) ->
+ fun (i : _Integer pointer) (_Integer_result_8_alloc_table : _Integer alloc_table ref) (_Integer_result_8_tag_table : _Integer tag_table ref) (_Integer_fields_result_8 : (_Integer, bitvector) memory ref) (_Integer_i_7_alloc_table : _Integer alloc_table) (_Integer_fields_i_7 : (_Integer, bitvector) memory) ->
   { ((true = true)
     and (JC_44:
-        ((JC_42: le_int(offset_min(_Integer_i_0_7_alloc_table, i_0), (0)))
-        and (JC_43: ge_int(offset_max(_Integer_i_0_7_alloc_table, i_0), (0)))))) }
+        ((JC_42: le_int(offset_min(_Integer_i_7_alloc_table, i), (0)))
+        and (JC_43: ge_int(offset_max(_Integer_i_7_alloc_table, i), (0)))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2256,9 +2256,9 @@ let endianness3_ensures_default =
       begin
         (let jessie_321 = (let jessie_315 = (C_128:
                                             (int8_of_bitvector (((extract_bytes 
-                                                                  ((safe_acc_ _Integer_fields_i_0_7) 
+                                                                  ((safe_acc_ _Integer_fields_i_7) 
                                                                    (C_126:
-                                                                   i_0))) (0)) (1)))) in
+                                                                   i))) (0)) (1)))) in
                           (let jessie_316 = (C_129: !j_1) in
                           (let jessie_317 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
                                                                (C_129:
@@ -2271,9 +2271,9 @@ let endianness3_ensures_default =
        begin
          (let jessie_329 = (let jessie_323 = (C_135:
                                              (int8_of_bitvector (((extract_bytes 
-                                                                   ((safe_acc_ _Integer_fields_i_0_7) 
+                                                                   ((safe_acc_ _Integer_fields_i_7) 
                                                                     (C_133:
-                                                                    i_0))) (1)) (1)))) in
+                                                                    i))) (1)) (1)))) in
                            (let jessie_324 = (C_136: !j_1) in
                            (let jessie_325 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
                                                                 (C_136:
@@ -2286,9 +2286,9 @@ let endianness3_ensures_default =
         begin
           (let jessie_337 = (let jessie_331 = (C_142:
                                               (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_i_0_7) 
+                                                                    ((safe_acc_ _Integer_fields_i_7) 
                                                                     (C_140:
-                                                                    i_0))) (2)) (1)))) in
+                                                                    i))) (2)) (1)))) in
                             (let jessie_332 = (C_143: !j_1) in
                             (let jessie_333 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
                                                                  (C_143:
@@ -2301,9 +2301,9 @@ let endianness3_ensures_default =
          begin
            (let jessie_345 = (let jessie_339 = (C_149:
                                                (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_i_0_7) 
+                                                                    ((safe_acc_ _Integer_fields_i_7) 
                                                                     (C_147:
-                                                                    i_0))) (3)) (1)))) in
+                                                                    i))) (3)) (1)))) in
                              (let jessie_340 = (C_150: !j_1) in
                              (let jessie_341 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
                                                                   (C_150:
@@ -2325,18 +2325,18 @@ let endianness3_ensures_default =
    Return ->
    !return end))
   { (JC_46:
-    eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_0_7,
-                                                             i_0),
+    eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
+                                                             i),
                                                (0), (4)))),
     integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
                                                       result),
                                         (0), (4)))))) }
 
 let endianness3_safety =
- fun (i_0 : _Integer pointer) (_Integer_result_8_alloc_table : _Integer alloc_table ref) (_Integer_result_8_tag_table : _Integer tag_table ref) (_Integer_fields_result_8 : (_Integer, bitvector) memory ref) (_Integer_i_0_7_alloc_table : _Integer alloc_table) (_Integer_fields_i_0_7 : (_Integer, bitvector) memory) ->
+ fun (i : _Integer pointer) (_Integer_result_8_alloc_table : _Integer alloc_table ref) (_Integer_result_8_tag_table : _Integer tag_table ref) (_Integer_fields_result_8 : (_Integer, bitvector) memory ref) (_Integer_i_7_alloc_table : _Integer alloc_table) (_Integer_fields_i_7 : (_Integer, bitvector) memory) ->
   { (JC_44:
-    ((JC_42: le_int(offset_min(_Integer_i_0_7_alloc_table, i_0), (0)))
-    and (JC_43: ge_int(offset_max(_Integer_i_0_7_alloc_table, i_0), (0))))) }
+    ((JC_42: le_int(offset_min(_Integer_i_7_alloc_table, i), (0)))
+    and (JC_43: ge_int(offset_max(_Integer_i_7_alloc_table, i), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2353,9 +2353,9 @@ let endianness3_safety =
         (let jessie_286 = (let jessie_280 = (C_128:
                                             (int8_of_bitvector (((extract_bytes 
                                                                   (JC_51:
-                                                                  (((acc_ _Integer_i_0_7_alloc_table) _Integer_fields_i_0_7) 
+                                                                  (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
                                                                    (C_126:
-                                                                   i_0)))) (0)) (1)))) in
+                                                                   i)))) (0)) (1)))) in
                           (let jessie_281 = (C_129: !j_1) in
                           (let jessie_282 = ((((replace_bytes (JC_52:
                                                               (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
@@ -2371,9 +2371,9 @@ let endianness3_safety =
          (let jessie_294 = (let jessie_288 = (C_135:
                                              (int8_of_bitvector (((extract_bytes 
                                                                    (JC_54:
-                                                                   (((acc_ _Integer_i_0_7_alloc_table) _Integer_fields_i_0_7) 
+                                                                   (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
                                                                     (C_133:
-                                                                    i_0)))) (1)) (1)))) in
+                                                                    i)))) (1)) (1)))) in
                            (let jessie_289 = (C_136: !j_1) in
                            (let jessie_290 = ((((replace_bytes (JC_55:
                                                                (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
@@ -2389,9 +2389,9 @@ let endianness3_safety =
           (let jessie_302 = (let jessie_296 = (C_142:
                                               (int8_of_bitvector (((extract_bytes 
                                                                     (JC_57:
-                                                                    (((acc_ _Integer_i_0_7_alloc_table) _Integer_fields_i_0_7) 
+                                                                    (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
                                                                     (C_140:
-                                                                    i_0)))) (2)) (1)))) in
+                                                                    i)))) (2)) (1)))) in
                             (let jessie_297 = (C_143: !j_1) in
                             (let jessie_298 = ((((replace_bytes (JC_58:
                                                                 (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
@@ -2407,9 +2407,9 @@ let endianness3_safety =
            (let jessie_310 = (let jessie_304 = (C_149:
                                                (int8_of_bitvector (((extract_bytes 
                                                                     (JC_60:
-                                                                    (((acc_ _Integer_i_0_7_alloc_table) _Integer_fields_i_0_7) 
+                                                                    (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
                                                                     (C_147:
-                                                                    i_0)))) (3)) (1)))) in
+                                                                    i)))) (3)) (1)))) in
                              (let jessie_305 = (C_150: !j_1) in
                              (let jessie_306 = ((((replace_bytes (JC_61:
                                                                  (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
@@ -2435,11 +2435,11 @@ let endianness3_safety =
   { true }
 
 let endianness_ensures_default =
- fun (i : _Integer2 pointer) (_Integer2_result_2_alloc_table : _Integer2 alloc_table ref) (_Integer2_result_2_tag_table : _Integer2 tag_table ref) (_Integer2_fields_result_2 : (_Integer2, bitvector) memory ref) (_Integer2_i_1_alloc_table : _Integer2 alloc_table) (_Integer2_fields_i_1 : (_Integer2, bitvector) memory) ->
+ fun (i_0 : _Integer2 pointer) (_Integer2_result_2_alloc_table : _Integer2 alloc_table ref) (_Integer2_result_2_tag_table : _Integer2 tag_table ref) (_Integer2_fields_result_2 : (_Integer2, bitvector) memory ref) (_Integer2_i_0_1_alloc_table : _Integer2 alloc_table) (_Integer2_fields_i_0_1 : (_Integer2, bitvector) memory) ->
   { ((true = true)
     and (JC_7:
-        ((JC_5: le_int(offset_min(_Integer2_i_1_alloc_table, i), (0)))
-        and (JC_6: ge_int(offset_max(_Integer2_i_1_alloc_table, i), (0)))))) }
+        ((JC_5: le_int(offset_min(_Integer2_i_0_1_alloc_table, i_0), (0)))
+        and (JC_6: ge_int(offset_max(_Integer2_i_0_1_alloc_table, i_0), (0)))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2455,9 +2455,9 @@ let endianness_ensures_default =
       begin
         (let jessie_29 = (let jessie_23 = (C_5:
                                           (int8_of_bitvector (((extract_bytes 
-                                                                ((safe_acc_ _Integer2_fields_i_1) 
+                                                                ((safe_acc_ _Integer2_fields_i_0_1) 
                                                                  (C_3:
-                                                                 i))) (0)) (1)))) in
+                                                                 i_0))) (0)) (1)))) in
                          (let jessie_24 = (C_6: !j) in
                          (let jessie_25 = ((((replace_bytes ((safe_acc_ !_Integer2_fields_result_2) 
                                                              (C_6:
@@ -2470,9 +2470,9 @@ let endianness_ensures_default =
        begin
          (let jessie_37 = (let jessie_31 = (C_12:
                                            (int8_of_bitvector (((extract_bytes 
-                                                                 ((safe_acc_ _Integer2_fields_i_1) 
+                                                                 ((safe_acc_ _Integer2_fields_i_0_1) 
                                                                   (C_10:
-                                                                  i))) (1)) (1)))) in
+                                                                  i_0))) (1)) (1)))) in
                           (let jessie_32 = (C_13: !j) in
                           (let jessie_33 = ((((replace_bytes ((safe_acc_ !_Integer2_fields_result_2) 
                                                               (C_13:
@@ -2492,18 +2492,18 @@ let endianness_ensures_default =
    Return ->
    !return end))
   { (JC_9:
-    eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_1,
-                                                             i),
+    eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
+                                                             i_0),
                                                (0), (2)))),
     integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
                                                       result),
                                         (0), (2)))))) }
 
 let endianness_safety =
- fun (i : _Integer2 pointer) (_Integer2_result_2_alloc_table : _Integer2 alloc_table ref) (_Integer2_result_2_tag_table : _Integer2 tag_table ref) (_Integer2_fields_result_2 : (_Integer2, bitvector) memory ref) (_Integer2_i_1_alloc_table : _Integer2 alloc_table) (_Integer2_fields_i_1 : (_Integer2, bitvector) memory) ->
+ fun (i_0 : _Integer2 pointer) (_Integer2_result_2_alloc_table : _Integer2 alloc_table ref) (_Integer2_result_2_tag_table : _Integer2 tag_table ref) (_Integer2_fields_result_2 : (_Integer2, bitvector) memory ref) (_Integer2_i_0_1_alloc_table : _Integer2 alloc_table) (_Integer2_fields_i_0_1 : (_Integer2, bitvector) memory) ->
   { (JC_7:
-    ((JC_5: le_int(offset_min(_Integer2_i_1_alloc_table, i), (0)))
-    and (JC_6: ge_int(offset_max(_Integer2_i_1_alloc_table, i), (0))))) }
+    ((JC_5: le_int(offset_min(_Integer2_i_0_1_alloc_table, i_0), (0)))
+    and (JC_6: ge_int(offset_max(_Integer2_i_0_1_alloc_table, i_0), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2520,9 +2520,9 @@ let endianness_safety =
         (let jessie_10 = (let jessie_4 = (C_5:
                                          (int8_of_bitvector (((extract_bytes 
                                                                (JC_14:
-                                                               (((acc_ _Integer2_i_1_alloc_table) _Integer2_fields_i_1) 
+                                                               (((acc_ _Integer2_i_0_1_alloc_table) _Integer2_fields_i_0_1) 
                                                                 (C_3:
-                                                                i)))) (0)) (1)))) in
+                                                                i_0)))) (0)) (1)))) in
                          (let jessie_5 = (C_6: !j) in
                          (let jessie_6 = ((((replace_bytes (JC_15:
                                                            (((acc_ !_Integer2_result_2_alloc_table) !_Integer2_fields_result_2) 
@@ -2538,9 +2538,9 @@ let endianness_safety =
          (let jessie_18 = (let jessie_12 = (C_12:
                                            (int8_of_bitvector (((extract_bytes 
                                                                  (JC_17:
-                                                                 (((acc_ _Integer2_i_1_alloc_table) _Integer2_fields_i_1) 
+                                                                 (((acc_ _Integer2_i_0_1_alloc_table) _Integer2_fields_i_0_1) 
                                                                   (C_10:
-                                                                  i)))) (1)) (1)))) in
+                                                                  i_0)))) (1)) (1)))) in
                           (let jessie_13 = (C_13: !j) in
                           (let jessie_14 = ((((replace_bytes (JC_18:
                                                              (((acc_ !_Integer2_result_2_alloc_table) !_Integer2_fields_result_2) 

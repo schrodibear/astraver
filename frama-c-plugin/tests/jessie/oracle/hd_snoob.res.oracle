@@ -454,7 +454,7 @@ behavior default:
   ensures (C_3 : true);
 ;
 
-int32 ntz(uint32 x_1)
+int32 ntz(uint32 x_6)
 behavior default:
   assumes true;
   ensures (C_44 : true);
@@ -463,36 +463,36 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (if (x_1 == 0) then 
+   {  (if (x_6 == 0) then 
       {  (C_4 : (__retres = 32));
          
          (goto return_label)
       } else ());
       (C_5 : (n = 1));
-      (if ((C_13 : ((C_12 : (x_1 & 65535)) :> uint32)) == 0) then 
+      (if ((C_13 : ((C_12 : (x_6 & 65535)) :> uint32)) == 0) then 
       {  (C_8 : (n = (C_7 : ((C_6 : (n + 16)) :> int32))));
-         (C_11 : (x_1 = (C_10 : ((C_9 : (x_1 / 65536)) :> uint32))))
+         (C_11 : (x_6 = (C_10 : ((C_9 : (x_6 / 65536)) :> uint32))))
       } else ());
-      (if ((C_21 : ((C_20 : (x_1 & 255)) :> uint32)) == 0) then 
+      (if ((C_21 : ((C_20 : (x_6 & 255)) :> uint32)) == 0) then 
       {  (C_16 : (n = (C_15 : ((C_14 : (n + 8)) :> int32))));
-         (C_19 : (x_1 = (C_18 : ((C_17 : (x_1 / 256)) :> uint32))))
+         (C_19 : (x_6 = (C_18 : ((C_17 : (x_6 / 256)) :> uint32))))
       } else ());
-      (if ((C_29 : ((C_28 : (x_1 & 15)) :> uint32)) == 0) then 
+      (if ((C_29 : ((C_28 : (x_6 & 15)) :> uint32)) == 0) then 
       {  (C_24 : (n = (C_23 : ((C_22 : (n + 4)) :> int32))));
-         (C_27 : (x_1 = (C_26 : ((C_25 : (x_1 / 16)) :> uint32))))
+         (C_27 : (x_6 = (C_26 : ((C_25 : (x_6 / 16)) :> uint32))))
       } else ());
-      (if ((C_37 : ((C_36 : (x_1 & 3)) :> uint32)) == 0) then 
+      (if ((C_37 : ((C_36 : (x_6 & 3)) :> uint32)) == 0) then 
       {  (C_32 : (n = (C_31 : ((C_30 : (n + 2)) :> int32))));
-         (C_35 : (x_1 = (C_34 : ((C_33 : (x_1 / 4)) :> uint32))))
+         (C_35 : (x_6 = (C_34 : ((C_33 : (x_6 / 4)) :> uint32))))
       } else ());
       (C_43 : (__retres = (C_42 : ((C_41 : ((C_40 : (n :> uint32)) -
-                                             (C_39 : ((C_38 : (x_1 & 1)) :> uint32)))) :> int32))));
+                                             (C_39 : ((C_38 : (x_6 & 1)) :> uint32)))) :> int32))));
       (return_label : 
       (return __retres))
    }
 }
 
-int32 nlz(uint32 x_3)
+int32 nlz(uint32 x)
 behavior default:
   assumes true;
   ensures (C_75 : true);
@@ -501,68 +501,68 @@ behavior default:
    
    (var int32 __retres_0);
    
-   {  (if (x_3 == 0) then 
+   {  (if (x == 0) then 
       {  (C_45 : (__retres_0 = 32));
          
          (goto return_label)
       } else ());
       (C_46 : (n_0 = 0));
-      (if (x_3 <= 65535) then 
+      (if (x <= 65535) then 
       {  (C_49 : (n_0 = (C_48 : ((C_47 : (n_0 + 16)) :> int32))));
-         (C_52 : (x_3 = (C_51 : ((C_50 : (x_3 * 65536)) :> uint32))))
+         (C_52 : (x = (C_51 : ((C_50 : (x * 65536)) :> uint32))))
       } else ());
-      (if (x_3 <= 16777215) then 
+      (if (x <= 16777215) then 
       {  (C_55 : (n_0 = (C_54 : ((C_53 : (n_0 + 8)) :> int32))));
-         (C_58 : (x_3 = (C_57 : ((C_56 : (x_3 * 256)) :> uint32))))
+         (C_58 : (x = (C_57 : ((C_56 : (x * 256)) :> uint32))))
       } else ());
-      (if (x_3 <= 268435455) then 
+      (if (x <= 268435455) then 
       {  (C_61 : (n_0 = (C_60 : ((C_59 : (n_0 + 4)) :> int32))));
-         (C_64 : (x_3 = (C_63 : ((C_62 : (x_3 * 16)) :> uint32))))
+         (C_64 : (x = (C_63 : ((C_62 : (x * 16)) :> uint32))))
       } else ());
-      (if (x_3 <= 1073741823) then 
+      (if (x <= 1073741823) then 
       {  (C_67 : (n_0 = (C_66 : ((C_65 : (n_0 + 2)) :> int32))));
-         (C_70 : (x_3 = (C_69 : ((C_68 : (x_3 * 4)) :> uint32))))
+         (C_70 : (x = (C_69 : ((C_68 : (x * 4)) :> uint32))))
       } else ());
-      (if (x_3 <= 2147483647) then (C_73 : (n_0 = (C_72 : ((C_71 : (n_0 + 1)) :> int32)))) else ());
+      (if (x <= 2147483647) then (C_73 : (n_0 = (C_72 : ((C_71 : (n_0 + 1)) :> int32)))) else ());
       (C_74 : (__retres_0 = n_0));
       (return_label : 
       (return __retres_0))
    }
 }
 
-int32 pop(uint32 x_7)
+int32 pop(uint32 x_3)
 behavior default:
   assumes true;
   ensures (C_112 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_82 : (x_7 = (C_81 : ((C_80 : (x_7 -
+   {  (C_82 : (x_3 = (C_81 : ((C_80 : (x_3 -
                                         (C_79 : ((C_78 : ((C_77 : ((C_76 : 
-                                                                   (x_7 /
+                                                                   (x_3 /
                                                                     2)) :> uint32)) &
                                                            1431655765)) :> uint32)))) :> uint32))));
-      (C_91 : (x_7 = (C_90 : ((C_89 : ((C_88 : ((C_87 : (x_7 & 858993459)) :> uint32)) +
+      (C_91 : (x_3 = (C_90 : ((C_89 : ((C_88 : ((C_87 : (x_3 & 858993459)) :> uint32)) +
                                         (C_86 : ((C_85 : ((C_84 : ((C_83 : 
-                                                                   (x_7 /
+                                                                   (x_3 /
                                                                     4)) :> uint32)) &
                                                            858993459)) :> uint32)))) :> uint32))));
-      (C_98 : (x_7 = (C_97 : ((C_96 : ((C_95 : ((C_94 : (x_7 +
+      (C_98 : (x_3 = (C_97 : ((C_96 : ((C_95 : ((C_94 : (x_3 +
                                                           (C_93 : ((C_92 : 
-                                                                   (x_7 /
+                                                                   (x_3 /
                                                                     16)) :> uint32)))) :> uint32)) &
                                         252645135)) :> uint32))));
-      (C_103 : (x_7 = (C_102 : ((C_101 : (x_7 +
-                                           (C_100 : ((C_99 : (x_7 * 256)) :> uint32)))) :> uint32))));
-      (C_108 : (x_7 = (C_107 : ((C_106 : (x_7 +
-                                           (C_105 : ((C_104 : (x_7 * 65536)) :> uint32)))) :> uint32))));
-      (C_111 : (__retres_1 = (C_110 : ((C_109 : (x_7 / 16777216)) :> int32))));
+      (C_103 : (x_3 = (C_102 : ((C_101 : (x_3 +
+                                           (C_100 : ((C_99 : (x_3 * 256)) :> uint32)))) :> uint32))));
+      (C_108 : (x_3 = (C_107 : ((C_106 : (x_3 +
+                                           (C_105 : ((C_104 : (x_3 * 65536)) :> uint32)))) :> uint32))));
+      (C_111 : (__retres_1 = (C_110 : ((C_109 : (x_3 / 16777216)) :> int32))));
       
       (return __retres_1)
    }
 }
 
-uint32 snoob(uint32 x_0)
+uint32 snoob(uint32 x_5)
 behavior default:
   assumes true;
   ensures (C_132 : true);
@@ -575,10 +575,10 @@ behavior default:
    
    (var uint32 __retres_2);
    
-   {  (C_117 : (smallest = (C_116 : ((C_115 : (x_0 &
-                                                (C_114 : ((C_113 : (- x_0)) :> uint32)))) :> uint32))));
-      (C_120 : (ripple = (C_119 : ((C_118 : (x_0 + smallest)) :> uint32))));
-      (C_123 : (ones = (C_122 : ((C_121 : (x_0 ^ ripple)) :> uint32))));
+   {  (C_117 : (smallest = (C_116 : ((C_115 : (x_5 &
+                                                (C_114 : ((C_113 : (- x_5)) :> uint32)))) :> uint32))));
+      (C_120 : (ripple = (C_119 : ((C_118 : (x_5 + smallest)) :> uint32))));
+      (C_123 : (ones = (C_122 : ((C_121 : (x_5 ^ ripple)) :> uint32))));
       (C_128 : (ones = (C_127 : ((C_126 : ((C_125 : ((C_124 : (ones / 4)) :> uint32)) /
                                             smallest)) :> uint32))));
       (C_131 : (__retres_2 = (C_130 : ((C_129 : (ripple | ones)) :> uint32))));
@@ -587,7 +587,7 @@ behavior default:
    }
 }
 
-uint32 snoob1(uint32 x_4)
+uint32 snoob1(uint32 x_0)
 behavior default:
   assumes true;
   ensures (C_155 : true);
@@ -602,12 +602,12 @@ behavior default:
    
    (var uint32 __retres_3);
    
-   {  (C_137 : (smallest_0 = (C_136 : ((C_135 : (x_4 &
-                                                  (C_134 : ((C_133 : (- x_4)) :> uint32)))) :> uint32))));
-      (C_140 : (ripple_0 = (C_139 : ((C_138 : (x_4 + smallest_0)) :> uint32))));
-      (C_143 : (ones_0 = (C_142 : ((C_141 : (x_4 ^ ripple_0)) :> uint32))));
+   {  (C_137 : (smallest_0 = (C_136 : ((C_135 : (x_0 &
+                                                  (C_134 : ((C_133 : (- x_0)) :> uint32)))) :> uint32))));
+      (C_140 : (ripple_0 = (C_139 : ((C_138 : (x_0 + smallest_0)) :> uint32))));
+      (C_143 : (ones_0 = (C_142 : ((C_141 : (x_0 ^ ripple_0)) :> uint32))));
       
-      {  (C_145 : (tmp = (C_144 : ntz(x_4))));
+      {  (C_145 : (tmp = (C_144 : ntz(x_0))));
          
          {  
             (assert for default: (C_146 : ((2 + tmp) < 32)));
@@ -623,7 +623,7 @@ behavior default:
    }
 }
 
-uint32 snoob2(uint32 x)
+uint32 snoob2(uint32 x_4)
 behavior default:
   assumes true;
   ensures (C_178 : true);
@@ -638,10 +638,10 @@ behavior default:
    
    (var uint32 __retres_4);
    
-   {  (C_160 : (smallest_1 = (C_159 : ((C_158 : (x &
-                                                  (C_157 : ((C_156 : (- x)) :> uint32)))) :> uint32))));
-      (C_163 : (ripple_1 = (C_162 : ((C_161 : (x + smallest_1)) :> uint32))));
-      (C_166 : (ones_1 = (C_165 : ((C_164 : (x ^ ripple_1)) :> uint32))));
+   {  (C_160 : (smallest_1 = (C_159 : ((C_158 : (x_4 &
+                                                  (C_157 : ((C_156 : (- x_4)) :> uint32)))) :> uint32))));
+      (C_163 : (ripple_1 = (C_162 : ((C_161 : (x_4 + smallest_1)) :> uint32))));
+      (C_166 : (ones_1 = (C_165 : ((C_164 : (x_4 ^ ripple_1)) :> uint32))));
       
       {  (C_168 : (tmp_0 = (C_167 : nlz(smallest_1))));
          
@@ -659,7 +659,7 @@ behavior default:
    }
 }
 
-uint32 snoob3(uint32 x_5)
+uint32 snoob3(uint32 x_1)
 behavior default:
   assumes true;
   ensures (C_205 : true);
@@ -674,10 +674,10 @@ behavior default:
    
    (var uint32 __retres_5);
    
-   {  (C_183 : (smallest_2 = (C_182 : ((C_181 : (x_5 &
-                                                  (C_180 : ((C_179 : (- x_5)) :> uint32)))) :> uint32))));
-      (C_186 : (ripple_2 = (C_185 : ((C_184 : (x_5 + smallest_2)) :> uint32))));
-      (C_189 : (ones_2 = (C_188 : ((C_187 : (x_5 ^ ripple_2)) :> uint32))));
+   {  (C_183 : (smallest_2 = (C_182 : ((C_181 : (x_1 &
+                                                  (C_180 : ((C_179 : (- x_1)) :> uint32)))) :> uint32))));
+      (C_186 : (ripple_2 = (C_185 : ((C_184 : (x_1 + smallest_2)) :> uint32))));
+      (C_189 : (ones_2 = (C_188 : ((C_187 : (x_1 ^ ripple_2)) :> uint32))));
       
       {  (C_191 : (tmp_1 = (C_190 : pop(ones_2))));
          
@@ -702,7 +702,7 @@ behavior default:
    }
 }
 
-uint32 next_set_of_n_elements(uint32 x_2)
+uint32 next_set_of_n_elements(uint32 x_7)
 behavior default:
   assumes true;
   ensures (C_230 : true);
@@ -717,14 +717,14 @@ behavior default:
    
    (var uint32 __retres_6);
    
-   {  (if (x_2 == 0) then 
+   {  (if (x_7 == 0) then 
       {  (C_206 : (__retres_6 = 0));
          
          (goto return_label)
       } else ());
-      (C_211 : (smallest_3 = (C_210 : ((C_209 : (x_2 &
-                                                  (C_208 : ((C_207 : (- x_2)) :> uint32)))) :> uint32))));
-      (C_214 : (ripple_3 = (C_213 : ((C_212 : (x_2 + smallest_3)) :> uint32))));
+      (C_211 : (smallest_3 = (C_210 : ((C_209 : (x_7 &
+                                                  (C_208 : ((C_207 : (- x_7)) :> uint32)))) :> uint32))));
+      (C_214 : (ripple_3 = (C_213 : ((C_212 : (x_7 + smallest_3)) :> uint32))));
       (C_219 : (new_smallest = (C_218 : ((C_217 : (ripple_3 &
                                                     (C_216 : ((C_215 : 
                                                               (- ripple_3)) :> uint32)))) :> uint32))));
@@ -740,7 +740,7 @@ behavior default:
    }
 }
 
-int32 snoob4(int32 x_6)
+int32 snoob4(int32 x_2)
 behavior default:
   assumes true;
   ensures (C_254 : true);
@@ -749,27 +749,27 @@ behavior default:
    
    (var int32 __retres_7);
    
-   {  (C_237 : (y = (C_236 : ((C_235 : (x_6 +
-                                         (C_234 : ((C_233 : (x_6 &
+   {  (C_237 : (y = (C_236 : ((C_235 : (x_2 +
+                                         (C_234 : ((C_233 : (x_2 &
                                                               (C_232 : (
                                                               (C_231 : 
-                                                              (- x_6)) :> int32)))) :> int32)))) :> int32))));
-      (C_242 : (x_6 = (C_241 : ((C_240 : (x_6 &
+                                                              (- x_2)) :> int32)))) :> int32)))) :> int32))));
+      (C_242 : (x_2 = (C_241 : ((C_240 : (x_2 &
                                            (C_239 : ((C_238 : (~ y)) :> int32)))) :> int32))));
       
       {  
          loop 
          while (true)
          {  
-            {  (if ((C_244 : ((C_243 : (x_6 & 1)) :> int32)) == 0) then () else 
+            {  (if ((C_244 : ((C_243 : (x_2 & 1)) :> int32)) == 0) then () else 
                (goto while_0_break));
-               (C_247 : (x_6 = (C_246 : ((C_245 : (x_6 / 2)) :> int32))))
+               (C_247 : (x_2 = (C_246 : ((C_245 : (x_2 / 2)) :> int32))))
             }
          };
          (while_0_break : ())
       };
-      (C_250 : (x_6 = (C_249 : ((C_248 : (x_6 / 2)) :> int32))));
-      (C_253 : (__retres_7 = (C_252 : ((C_251 : (y | x_6)) :> int32))));
+      (C_250 : (x_2 = (C_249 : ((C_248 : (x_2 / 2)) :> int32))));
+      (C_253 : (__retres_7 = (C_252 : ((C_251 : (y | x_2)) :> int32))));
       
       (return __retres_7)
    }
@@ -2219,7 +2219,7 @@ parameter main_requires :
                                  valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter next_set_of_n_elements :
- x_2:uint32 ->
+ x_7:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_654:
@@ -2245,7 +2245,7 @@ parameter next_set_of_n_elements :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter next_set_of_n_elements_requires :
- x_2:uint32 ->
+ x_7:uint32 ->
   { (JC_623:
     ((JC_615:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2292,7 +2292,7 @@ parameter next_set_of_n_elements_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter nlz :
- x_3:uint32 ->
+ x:uint32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_333:
@@ -2318,7 +2318,7 @@ parameter nlz :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter nlz_requires :
- x_3:uint32 ->
+ x:uint32 ->
   { (JC_302:
     ((JC_294:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2365,7 +2365,7 @@ parameter nlz_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter ntz :
- x_1:uint32 ->
+ x_6:uint32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_270:
@@ -2391,7 +2391,7 @@ parameter ntz :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter ntz_requires :
- x_1:uint32 ->
+ x_6:uint32 ->
   { (JC_239:
     ((JC_231:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2438,7 +2438,7 @@ parameter ntz_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter pop :
- x_7:uint32 ->
+ x_3:uint32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_382:
@@ -2464,7 +2464,7 @@ parameter pop :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter pop_requires :
- x_7:uint32 ->
+ x_3:uint32 ->
   { (JC_351:
     ((JC_343:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2596,7 +2596,7 @@ parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
 parameter snoob :
- x_0:uint32 ->
+ x_5:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_445:
@@ -2622,7 +2622,7 @@ parameter snoob :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob1 :
- x_4:uint32 ->
+ x_0:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_496:
@@ -2648,7 +2648,7 @@ parameter snoob1 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob1_requires :
- x_4:uint32 ->
+ x_0:uint32 ->
   { (JC_465:
     ((JC_457:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2695,7 +2695,7 @@ parameter snoob1_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob2 :
- x:uint32 ->
+ x_4:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_547:
@@ -2721,7 +2721,7 @@ parameter snoob2 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob2_requires :
- x:uint32 ->
+ x_4:uint32 ->
   { (JC_516:
     ((JC_508:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2768,7 +2768,7 @@ parameter snoob2_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob3 :
- x_5:uint32 ->
+ x_1:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_598:
@@ -2794,7 +2794,7 @@ parameter snoob3 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob3_requires :
- x_5:uint32 ->
+ x_1:uint32 ->
   { (JC_567:
     ((JC_559:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2841,7 +2841,7 @@ parameter snoob3_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob4 :
- x_6:int32 ->
+ x_2:int32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_707:
@@ -2867,7 +2867,7 @@ parameter snoob4 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob4_requires :
- x_6:int32 ->
+ x_2:int32 ->
   { (JC_676:
     ((JC_668:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2914,7 +2914,7 @@ parameter snoob4_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob_requires :
- x_0:uint32 ->
+ x_5:uint32 ->
   { (JC_414:
     ((JC_406:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3048,7 +3048,7 @@ parameter uint32_of_integer_ :
   { eq_int(integer_of_uint32(result), x) }
 
 let next_set_of_n_elements_ensures_default =
- fun (x_2 : uint32) ->
+ fun (x_7 : uint32) ->
   { ((true = true)
     and (JC_633:
         ((JC_625:
@@ -3082,7 +3082,7 @@ let next_set_of_n_elements_ensures_default =
      (let __retres_6 = ref (any_uint32 void) in
      try
       (let jessie_271 = begin
-                          (if ((eq_int_ (integer_of_uint32 x_2)) (0))
+                          (if ((eq_int_ (integer_of_uint32 x_7)) (0))
                           then
                            (let jessie_260 = (C_206:
                                              begin
@@ -3099,13 +3099,13 @@ let next_set_of_n_elements_ensures_default =
                                                             (safe_uint32_of_integer_ 
                                                              (C_209:
                                                              ((bw_and 
-                                                               (integer_of_uint32 x_2)) 
+                                                               (integer_of_uint32 x_7)) 
                                                               (integer_of_uint32 
                                                                (C_208:
                                                                (safe_uint32_of_integer_ 
                                                                 (C_207:
                                                                 (neg_int 
-                                                                 (integer_of_uint32 x_2))))))))))) in
+                                                                 (integer_of_uint32 x_7))))))))))) in
                            void);
                           (C_214:
                           begin
@@ -3113,7 +3113,7 @@ let next_set_of_n_elements_ensures_default =
                                                            (safe_uint32_of_integer_ 
                                                             (C_212:
                                                             ((add_int 
-                                                              (integer_of_uint32 x_2)) 
+                                                              (integer_of_uint32 x_7)) 
                                                              (integer_of_uint32 !smallest_3)))))) in
                             void);
                            (C_219:
@@ -3179,7 +3179,7 @@ let next_set_of_n_elements_ensures_default =
   { (JC_635: true) }
 
 let next_set_of_n_elements_safety =
- fun (x_2 : uint32) ->
+ fun (x_7 : uint32) ->
   { (JC_633:
     ((JC_625:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3212,7 +3212,7 @@ let next_set_of_n_elements_safety =
      (let __retres_6 = ref (any_uint32 void) in
      try
       (let jessie_256 = begin
-                          (if ((eq_int_ (integer_of_uint32 x_2)) (0))
+                          (if ((eq_int_ (integer_of_uint32 x_7)) (0))
                           then
                            (let jessie_245 = (C_206:
                                              begin
@@ -3230,14 +3230,14 @@ let next_set_of_n_elements_safety =
                                                             (uint32_of_integer_ 
                                                              (C_209:
                                                              ((bw_and 
-                                                               (integer_of_uint32 x_2)) 
+                                                               (integer_of_uint32 x_7)) 
                                                               (integer_of_uint32 
                                                                (C_208:
                                                                (JC_655:
                                                                (uint32_of_integer_ 
                                                                 (C_207:
                                                                 (neg_int 
-                                                                 (integer_of_uint32 x_2))))))))))))) in
+                                                                 (integer_of_uint32 x_7))))))))))))) in
                            void);
                           (C_214:
                           begin
@@ -3246,7 +3246,7 @@ let next_set_of_n_elements_safety =
                                                            (uint32_of_integer_ 
                                                             (C_212:
                                                             ((add_int 
-                                                              (integer_of_uint32 x_2)) 
+                                                              (integer_of_uint32 x_7)) 
                                                              (integer_of_uint32 !smallest_3))))))) in
                             void);
                            (C_219:
@@ -3338,7 +3338,7 @@ let next_set_of_n_elements_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let nlz_ensures_default =
- fun (x_3 : uint32) ->
+ fun (x : uint32) ->
   { ((true = true)
     and (JC_312:
         ((JC_304:
@@ -3361,7 +3361,7 @@ let nlz_ensures_default =
                                  char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                                 and (JC_311:
                                     valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table))))))))))) }
-  (let mutable_x_3 = ref x_3 in
+  (let mutable_x = ref x in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -3370,7 +3370,7 @@ let nlz_ensures_default =
      (let __retres_0 = ref (any_int32 void) in
      try
       (let jessie_109 = begin
-                          (if ((eq_int_ (integer_of_uint32 !mutable_x_3)) (0))
+                          (if ((eq_int_ (integer_of_uint32 !mutable_x)) (0))
                           then
                            (let jessie_86 = (C_45:
                                             begin
@@ -3385,7 +3385,7 @@ let nlz_ensures_default =
                          begin
                            (let jessie_88 = (n_0_0 := (safe_int32_of_integer_ (0))) in
                            void);
-                          (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (65535))
+                          (if ((le_int_ (integer_of_uint32 !mutable_x)) (65535))
                           then
                            (let jessie_92 = (C_49:
                                             begin
@@ -3398,17 +3398,17 @@ let nlz_ensures_default =
                                               void);
                                              (C_52:
                                              begin
-                                               (mutable_x_3 := (C_51:
-                                                               (safe_uint32_of_integer_ 
-                                                                (C_50:
-                                                                ((mul_int 
-                                                                  (integer_of_uint32 !mutable_x_3)) (65536))))));
-                                              !mutable_x_3
+                                               (mutable_x := (C_51:
+                                                             (safe_uint32_of_integer_ 
+                                                              (C_50:
+                                                              ((mul_int 
+                                                                (integer_of_uint32 !mutable_x)) (65536))))));
+                                              !mutable_x
                                              end)
                                             end) in
                            void)
                           else void);
-                          (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (16777215))
+                          (if ((le_int_ (integer_of_uint32 !mutable_x)) (16777215))
                           then
                            (let jessie_96 = (C_55:
                                             begin
@@ -3421,17 +3421,17 @@ let nlz_ensures_default =
                                               void);
                                              (C_58:
                                              begin
-                                               (mutable_x_3 := (C_57:
-                                                               (safe_uint32_of_integer_ 
-                                                                (C_56:
-                                                                ((mul_int 
-                                                                  (integer_of_uint32 !mutable_x_3)) (256))))));
-                                              !mutable_x_3
+                                               (mutable_x := (C_57:
+                                                             (safe_uint32_of_integer_ 
+                                                              (C_56:
+                                                              ((mul_int 
+                                                                (integer_of_uint32 !mutable_x)) (256))))));
+                                              !mutable_x
                                              end)
                                             end) in
                            void)
                           else void);
-                          (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (268435455))
+                          (if ((le_int_ (integer_of_uint32 !mutable_x)) (268435455))
                           then
                            (let jessie_100 = (C_61:
                                              begin
@@ -3444,17 +3444,17 @@ let nlz_ensures_default =
                                                void);
                                               (C_64:
                                               begin
-                                                (mutable_x_3 := (C_63:
-                                                                (safe_uint32_of_integer_ 
-                                                                 (C_62:
-                                                                 ((mul_int 
-                                                                   (integer_of_uint32 !mutable_x_3)) (16))))));
-                                               !mutable_x_3
+                                                (mutable_x := (C_63:
+                                                              (safe_uint32_of_integer_ 
+                                                               (C_62:
+                                                               ((mul_int 
+                                                                 (integer_of_uint32 !mutable_x)) (16))))));
+                                               !mutable_x
                                               end)
                                              end) in
                            void)
                           else void);
-                          (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (1073741823))
+                          (if ((le_int_ (integer_of_uint32 !mutable_x)) (1073741823))
                           then
                            (let jessie_104 = (C_67:
                                              begin
@@ -3467,17 +3467,17 @@ let nlz_ensures_default =
                                                void);
                                               (C_70:
                                               begin
-                                                (mutable_x_3 := (C_69:
-                                                                (safe_uint32_of_integer_ 
-                                                                 (C_68:
-                                                                 ((mul_int 
-                                                                   (integer_of_uint32 !mutable_x_3)) (4))))));
-                                               !mutable_x_3
+                                                (mutable_x := (C_69:
+                                                              (safe_uint32_of_integer_ 
+                                                               (C_68:
+                                                               ((mul_int 
+                                                                 (integer_of_uint32 !mutable_x)) (4))))));
+                                               !mutable_x
                                               end)
                                              end) in
                            void)
                           else void);
-                          (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (2147483647))
+                          (if ((le_int_ (integer_of_uint32 !mutable_x)) (2147483647))
                           then
                            (C_73:
                            (let jessie_106 = (n_0_0 := (C_72:
@@ -3505,7 +3505,7 @@ let nlz_ensures_default =
   { (JC_314: true) }
 
 let nlz_safety =
- fun (x_3 : uint32) ->
+ fun (x : uint32) ->
   { (JC_312:
     ((JC_304:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3527,7 +3527,7 @@ let nlz_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_311:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_3 = ref x_3 in
+  (let mutable_x = ref x in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -3536,7 +3536,7 @@ let nlz_safety =
      (let __retres_0 = ref (any_int32 void) in
      try
       (let jessie_82 = begin
-                         (if ((eq_int_ (integer_of_uint32 !mutable_x_3)) (0))
+                         (if ((eq_int_ (integer_of_uint32 !mutable_x)) (0))
                          then
                           (let jessie_59 = (C_45:
                                            begin
@@ -3551,7 +3551,7 @@ let nlz_safety =
                         begin
                           (let jessie_61 = (n_0_0 := (safe_int32_of_integer_ (0))) in
                           void);
-                         (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (65535))
+                         (if ((le_int_ (integer_of_uint32 !mutable_x)) (65535))
                          then
                           (let jessie_65 = (C_49:
                                            begin
@@ -3565,18 +3565,18 @@ let nlz_safety =
                                              void);
                                             (C_52:
                                             begin
-                                              (mutable_x_3 := (C_51:
-                                                              (JC_335:
-                                                              (uint32_of_integer_ 
-                                                               (C_50:
-                                                               ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_3)) (65536)))))));
-                                             !mutable_x_3
+                                              (mutable_x := (C_51:
+                                                            (JC_335:
+                                                            (uint32_of_integer_ 
+                                                             (C_50:
+                                                             ((mul_int 
+                                                               (integer_of_uint32 !mutable_x)) (65536)))))));
+                                             !mutable_x
                                             end)
                                            end) in
                           void)
                          else void);
-                         (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (16777215))
+                         (if ((le_int_ (integer_of_uint32 !mutable_x)) (16777215))
                          then
                           (let jessie_69 = (C_55:
                                            begin
@@ -3590,18 +3590,18 @@ let nlz_safety =
                                              void);
                                             (C_58:
                                             begin
-                                              (mutable_x_3 := (C_57:
-                                                              (JC_337:
-                                                              (uint32_of_integer_ 
-                                                               (C_56:
-                                                               ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_3)) (256)))))));
-                                             !mutable_x_3
+                                              (mutable_x := (C_57:
+                                                            (JC_337:
+                                                            (uint32_of_integer_ 
+                                                             (C_56:
+                                                             ((mul_int 
+                                                               (integer_of_uint32 !mutable_x)) (256)))))));
+                                             !mutable_x
                                             end)
                                            end) in
                           void)
                          else void);
-                         (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (268435455))
+                         (if ((le_int_ (integer_of_uint32 !mutable_x)) (268435455))
                          then
                           (let jessie_73 = (C_61:
                                            begin
@@ -3615,18 +3615,18 @@ let nlz_safety =
                                              void);
                                             (C_64:
                                             begin
-                                              (mutable_x_3 := (C_63:
-                                                              (JC_339:
-                                                              (uint32_of_integer_ 
-                                                               (C_62:
-                                                               ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_3)) (16)))))));
-                                             !mutable_x_3
+                                              (mutable_x := (C_63:
+                                                            (JC_339:
+                                                            (uint32_of_integer_ 
+                                                             (C_62:
+                                                             ((mul_int 
+                                                               (integer_of_uint32 !mutable_x)) (16)))))));
+                                             !mutable_x
                                             end)
                                            end) in
                           void)
                          else void);
-                         (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (1073741823))
+                         (if ((le_int_ (integer_of_uint32 !mutable_x)) (1073741823))
                          then
                           (let jessie_77 = (C_67:
                                            begin
@@ -3640,18 +3640,18 @@ let nlz_safety =
                                              void);
                                             (C_70:
                                             begin
-                                              (mutable_x_3 := (C_69:
-                                                              (JC_341:
-                                                              (uint32_of_integer_ 
-                                                               (C_68:
-                                                               ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_3)) (4)))))));
-                                             !mutable_x_3
+                                              (mutable_x := (C_69:
+                                                            (JC_341:
+                                                            (uint32_of_integer_ 
+                                                             (C_68:
+                                                             ((mul_int 
+                                                               (integer_of_uint32 !mutable_x)) (4)))))));
+                                             !mutable_x
                                             end)
                                            end) in
                           void)
                          else void);
-                         (if ((le_int_ (integer_of_uint32 !mutable_x_3)) (2147483647))
+                         (if ((le_int_ (integer_of_uint32 !mutable_x)) (2147483647))
                          then
                           (C_73:
                           (let jessie_79 = (n_0_0 := (C_72:
@@ -3700,7 +3700,7 @@ let nlz_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let ntz_ensures_default =
- fun (x_1 : uint32) ->
+ fun (x_6 : uint32) ->
   { ((true = true)
     and (JC_249:
         ((JC_241:
@@ -3723,7 +3723,7 @@ let ntz_ensures_default =
                                  char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                                 and (JC_248:
                                     valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table))))))))))) }
-  (let mutable_x_1 = ref x_1 in
+  (let mutable_x_6 = ref x_6 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -3732,7 +3732,7 @@ let ntz_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_55 = begin
-                         (if ((eq_int_ (integer_of_uint32 !mutable_x_1)) (0))
+                         (if ((eq_int_ (integer_of_uint32 !mutable_x_6)) (0))
                          then
                           (let jessie_34 = (C_4:
                                            begin
@@ -3750,7 +3750,7 @@ let ntz_ensures_default =
                          (if ((eq_int_ (integer_of_uint32 (C_13:
                                                           (safe_uint32_of_integer_ 
                                                            (C_12:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (65535))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (65535))))))) (0))
                          then
                           (let jessie_40 = (C_8:
                                            begin
@@ -3763,13 +3763,13 @@ let ntz_ensures_default =
                                              void);
                                             (C_11:
                                             begin
-                                              (mutable_x_1 := (C_10:
+                                              (mutable_x_6 := (C_10:
                                                               (safe_uint32_of_integer_ 
                                                                (C_9:
                                                                (JC_290:
                                                                ((div_int 
-                                                                 (integer_of_uint32 !mutable_x_1)) (65536)))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (65536)))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -3777,7 +3777,7 @@ let ntz_ensures_default =
                          (if ((eq_int_ (integer_of_uint32 (C_21:
                                                           (safe_uint32_of_integer_ 
                                                            (C_20:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (255))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (255))))))) (0))
                          then
                           (let jessie_44 = (C_16:
                                            begin
@@ -3790,13 +3790,13 @@ let ntz_ensures_default =
                                              void);
                                             (C_19:
                                             begin
-                                              (mutable_x_1 := (C_18:
+                                              (mutable_x_6 := (C_18:
                                                               (safe_uint32_of_integer_ 
                                                                (C_17:
                                                                (JC_291:
                                                                ((div_int 
-                                                                 (integer_of_uint32 !mutable_x_1)) (256)))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (256)))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -3804,7 +3804,7 @@ let ntz_ensures_default =
                          (if ((eq_int_ (integer_of_uint32 (C_29:
                                                           (safe_uint32_of_integer_ 
                                                            (C_28:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (15))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (15))))))) (0))
                          then
                           (let jessie_48 = (C_24:
                                            begin
@@ -3817,13 +3817,13 @@ let ntz_ensures_default =
                                              void);
                                             (C_27:
                                             begin
-                                              (mutable_x_1 := (C_26:
+                                              (mutable_x_6 := (C_26:
                                                               (safe_uint32_of_integer_ 
                                                                (C_25:
                                                                (JC_292:
                                                                ((div_int 
-                                                                 (integer_of_uint32 !mutable_x_1)) (16)))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (16)))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -3831,7 +3831,7 @@ let ntz_ensures_default =
                          (if ((eq_int_ (integer_of_uint32 (C_37:
                                                           (safe_uint32_of_integer_ 
                                                            (C_36:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (3))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (3))))))) (0))
                          then
                           (let jessie_52 = (C_32:
                                            begin
@@ -3844,13 +3844,13 @@ let ntz_ensures_default =
                                              void);
                                             (C_35:
                                             begin
-                                              (mutable_x_1 := (C_34:
+                                              (mutable_x_6 := (C_34:
                                                               (safe_uint32_of_integer_ 
                                                                (C_33:
                                                                (JC_293:
                                                                ((div_int 
-                                                                 (integer_of_uint32 !mutable_x_1)) (4)))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (4)))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -3869,7 +3869,7 @@ let ntz_ensures_default =
                                                             (safe_uint32_of_integer_ 
                                                              (C_38:
                                                              ((bw_and 
-                                                               (integer_of_uint32 !mutable_x_1)) (1))))))))))) in
+                                                               (integer_of_uint32 !mutable_x_6)) (1))))))))))) in
                            void);
                           (raise (Return_label_exc void))
                          end)
@@ -3887,7 +3887,7 @@ let ntz_ensures_default =
   { (JC_251: true) }
 
 let ntz_safety =
- fun (x_1 : uint32) ->
+ fun (x_6 : uint32) ->
   { (JC_249:
     ((JC_241:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3909,7 +3909,7 @@ let ntz_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_248:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_1 = ref x_1 in
+  (let mutable_x_6 = ref x_6 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -3918,7 +3918,7 @@ let ntz_safety =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_30 = begin
-                         (if ((eq_int_ (integer_of_uint32 !mutable_x_1)) (0))
+                         (if ((eq_int_ (integer_of_uint32 !mutable_x_6)) (0))
                          then
                           (let jessie_9 = (C_4:
                                           begin
@@ -3937,7 +3937,7 @@ let ntz_safety =
                                                           (JC_271:
                                                           (uint32_of_integer_ 
                                                            (C_12:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (65535)))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (65535)))))))) (0))
                          then
                           (let jessie_15 = (C_8:
                                            begin
@@ -3951,14 +3951,14 @@ let ntz_safety =
                                              void);
                                             (C_11:
                                             begin
-                                              (mutable_x_1 := (C_10:
+                                              (mutable_x_6 := (C_10:
                                                               (JC_274:
                                                               (uint32_of_integer_ 
                                                                (C_9:
                                                                (JC_273:
                                                                ((div_int_ 
-                                                                 (integer_of_uint32 !mutable_x_1)) (65536))))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (65536))))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -3967,7 +3967,7 @@ let ntz_safety =
                                                           (JC_275:
                                                           (uint32_of_integer_ 
                                                            (C_20:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (255)))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (255)))))))) (0))
                          then
                           (let jessie_19 = (C_16:
                                            begin
@@ -3981,14 +3981,14 @@ let ntz_safety =
                                              void);
                                             (C_19:
                                             begin
-                                              (mutable_x_1 := (C_18:
+                                              (mutable_x_6 := (C_18:
                                                               (JC_278:
                                                               (uint32_of_integer_ 
                                                                (C_17:
                                                                (JC_277:
                                                                ((div_int_ 
-                                                                 (integer_of_uint32 !mutable_x_1)) (256))))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (256))))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -3997,7 +3997,7 @@ let ntz_safety =
                                                           (JC_279:
                                                           (uint32_of_integer_ 
                                                            (C_28:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (15)))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (15)))))))) (0))
                          then
                           (let jessie_23 = (C_24:
                                            begin
@@ -4011,14 +4011,14 @@ let ntz_safety =
                                              void);
                                             (C_27:
                                             begin
-                                              (mutable_x_1 := (C_26:
+                                              (mutable_x_6 := (C_26:
                                                               (JC_282:
                                                               (uint32_of_integer_ 
                                                                (C_25:
                                                                (JC_281:
                                                                ((div_int_ 
-                                                                 (integer_of_uint32 !mutable_x_1)) (16))))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (16))))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -4027,7 +4027,7 @@ let ntz_safety =
                                                           (JC_283:
                                                           (uint32_of_integer_ 
                                                            (C_36:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_1)) (3)))))))) (0))
+                                                           ((bw_and (integer_of_uint32 !mutable_x_6)) (3)))))))) (0))
                          then
                           (let jessie_27 = (C_32:
                                            begin
@@ -4041,14 +4041,14 @@ let ntz_safety =
                                              void);
                                             (C_35:
                                             begin
-                                              (mutable_x_1 := (C_34:
+                                              (mutable_x_6 := (C_34:
                                                               (JC_286:
                                                               (uint32_of_integer_ 
                                                                (C_33:
                                                                (JC_285:
                                                                ((div_int_ 
-                                                                 (integer_of_uint32 !mutable_x_1)) (4))))))));
-                                             !mutable_x_1
+                                                                 (integer_of_uint32 !mutable_x_6)) (4))))))));
+                                             !mutable_x_6
                                             end)
                                            end) in
                           void)
@@ -4070,7 +4070,7 @@ let ntz_safety =
                                                             (uint32_of_integer_ 
                                                              (C_38:
                                                              ((bw_and 
-                                                               (integer_of_uint32 !mutable_x_1)) (1))))))))))))) in
+                                                               (integer_of_uint32 !mutable_x_6)) (1))))))))))))) in
                            void);
                           (raise (Return_label_exc void))
                          end)
@@ -4108,7 +4108,7 @@ let ntz_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let pop_ensures_default =
- fun (x_7 : uint32) ->
+ fun (x_3 : uint32) ->
   { ((true = true)
     and (JC_361:
         ((JC_353:
@@ -4131,7 +4131,7 @@ let pop_ensures_default =
                                  char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                                 and (JC_360:
                                     valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table))))))))))) }
-  (let mutable_x_7 = ref x_7 in
+  (let mutable_x_3 = ref x_3 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4139,10 +4139,10 @@ let pop_ensures_default =
      (let __retres_1 = ref (any_int32 void) in
      (C_82:
      begin
-       (let jessie_125 = (mutable_x_7 := (C_81:
+       (let jessie_125 = (mutable_x_3 := (C_81:
                                          (safe_uint32_of_integer_ (C_80:
                                                                   ((sub_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) 
+                                                                    (integer_of_uint32 !mutable_x_3)) 
                                                                    (integer_of_uint32 
                                                                     (C_79:
                                                                     (safe_uint32_of_integer_ 
@@ -4154,11 +4154,11 @@ let pop_ensures_default =
                                                                     (C_76:
                                                                     (JC_402:
                                                                     ((div_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (2)))))))) (1431655765))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (2)))))))) (1431655765))))))))))) in
        void);
       (C_91:
       begin
-        (let jessie_127 = (mutable_x_7 := (C_90:
+        (let jessie_127 = (mutable_x_3 := (C_90:
                                           (safe_uint32_of_integer_ (C_89:
                                                                    ((add_int 
                                                                     (integer_of_uint32 
@@ -4166,7 +4166,7 @@ let pop_ensures_default =
                                                                     (safe_uint32_of_integer_ 
                                                                     (C_87:
                                                                     ((bw_and 
-                                                                    (integer_of_uint32 !mutable_x_7)) (858993459))))))) 
+                                                                    (integer_of_uint32 !mutable_x_3)) (858993459))))))) 
                                                                     (integer_of_uint32 
                                                                     (C_86:
                                                                     (safe_uint32_of_integer_ 
@@ -4178,11 +4178,11 @@ let pop_ensures_default =
                                                                     (C_83:
                                                                     (JC_403:
                                                                     ((div_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (4)))))))) (858993459))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (4)))))))) (858993459))))))))))) in
         void);
        (C_98:
        begin
-         (let jessie_129 = (mutable_x_7 := (C_97:
+         (let jessie_129 = (mutable_x_3 := (C_97:
                                            (safe_uint32_of_integer_ (C_96:
                                                                     ((bw_and 
                                                                     (integer_of_uint32 
@@ -4190,38 +4190,38 @@ let pop_ensures_default =
                                                                     (safe_uint32_of_integer_ 
                                                                     (C_94:
                                                                     ((add_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) 
+                                                                    (integer_of_uint32 !mutable_x_3)) 
                                                                     (integer_of_uint32 
                                                                     (C_93:
                                                                     (safe_uint32_of_integer_ 
                                                                     (C_92:
                                                                     (JC_404:
                                                                     ((div_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (16))))))))))))) (252645135)))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (16))))))))))))) (252645135)))))) in
          void);
         (C_103:
         begin
-          (let jessie_131 = (mutable_x_7 := (C_102:
+          (let jessie_131 = (mutable_x_3 := (C_102:
                                             (safe_uint32_of_integer_ 
                                              (C_101:
-                                             ((add_int (integer_of_uint32 !mutable_x_7)) 
+                                             ((add_int (integer_of_uint32 !mutable_x_3)) 
                                               (integer_of_uint32 (C_100:
                                                                  (safe_uint32_of_integer_ 
                                                                   (C_99:
                                                                   ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (256))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (256))))))))))) in
           void);
          (C_108:
          begin
-           (let jessie_133 = (mutable_x_7 := (C_107:
+           (let jessie_133 = (mutable_x_3 := (C_107:
                                              (safe_uint32_of_integer_ 
                                               (C_106:
-                                              ((add_int (integer_of_uint32 !mutable_x_7)) 
+                                              ((add_int (integer_of_uint32 !mutable_x_3)) 
                                                (integer_of_uint32 (C_105:
                                                                   (safe_uint32_of_integer_ 
                                                                    (C_104:
                                                                    ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (65536))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (65536))))))))))) in
            void);
           (C_111:
           begin
@@ -4229,7 +4229,7 @@ let pop_ensures_default =
                                              (safe_int32_of_integer_ 
                                               (C_109:
                                               (JC_405:
-                                              ((div_int (integer_of_uint32 !mutable_x_7)) (16777216))))))) in
+                                              ((div_int (integer_of_uint32 !mutable_x_3)) (16777216))))))) in
             void);
            (return := !__retres_1);
            (raise Return)
@@ -4247,7 +4247,7 @@ let pop_ensures_default =
   { (JC_363: true) }
 
 let pop_safety =
- fun (x_7 : uint32) ->
+ fun (x_3 : uint32) ->
   { (JC_361:
     ((JC_353:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4269,7 +4269,7 @@ let pop_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_360:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_7 = ref x_7 in
+  (let mutable_x_3 = ref x_3 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4277,11 +4277,11 @@ let pop_safety =
      (let __retres_1 = ref (any_int32 void) in
      (C_82:
      begin
-       (let jessie_112 = (mutable_x_7 := (C_81:
+       (let jessie_112 = (mutable_x_3 := (C_81:
                                          (JC_386:
                                          (uint32_of_integer_ (C_80:
                                                              ((sub_int 
-                                                               (integer_of_uint32 !mutable_x_7)) 
+                                                               (integer_of_uint32 !mutable_x_3)) 
                                                               (integer_of_uint32 
                                                                (C_79:
                                                                (JC_385:
@@ -4295,11 +4295,11 @@ let pop_safety =
                                                                     (C_76:
                                                                     (JC_383:
                                                                     ((div_int_ 
-                                                                    (integer_of_uint32 !mutable_x_7)) (2))))))))) (1431655765))))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (2))))))))) (1431655765))))))))))))) in
        void);
       (C_91:
       begin
-        (let jessie_114 = (mutable_x_7 := (C_90:
+        (let jessie_114 = (mutable_x_3 := (C_90:
                                           (JC_391:
                                           (uint32_of_integer_ (C_89:
                                                               ((add_int 
@@ -4309,7 +4309,7 @@ let pop_safety =
                                                                  (uint32_of_integer_ 
                                                                   (C_87:
                                                                   ((bw_and 
-                                                                    (integer_of_uint32 !mutable_x_7)) (858993459)))))))) 
+                                                                    (integer_of_uint32 !mutable_x_3)) (858993459)))))))) 
                                                                (integer_of_uint32 
                                                                 (C_86:
                                                                 (JC_390:
@@ -4323,11 +4323,11 @@ let pop_safety =
                                                                     (C_83:
                                                                     (JC_388:
                                                                     ((div_int_ 
-                                                                    (integer_of_uint32 !mutable_x_7)) (4))))))))) (858993459))))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (4))))))))) (858993459))))))))))))) in
         void);
        (C_98:
        begin
-         (let jessie_116 = (mutable_x_7 := (C_97:
+         (let jessie_116 = (mutable_x_3 := (C_97:
                                            (JC_395:
                                            (uint32_of_integer_ (C_96:
                                                                ((bw_and 
@@ -4337,7 +4337,7 @@ let pop_safety =
                                                                   (uint32_of_integer_ 
                                                                    (C_94:
                                                                    ((add_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) 
+                                                                    (integer_of_uint32 !mutable_x_3)) 
                                                                     (integer_of_uint32 
                                                                     (C_93:
                                                                     (JC_393:
@@ -4345,37 +4345,37 @@ let pop_safety =
                                                                     (C_92:
                                                                     (JC_392:
                                                                     ((div_int_ 
-                                                                    (integer_of_uint32 !mutable_x_7)) (16))))))))))))))) (252645135))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (16))))))))))))))) (252645135))))))) in
          void);
         (C_103:
         begin
-          (let jessie_118 = (mutable_x_7 := (C_102:
+          (let jessie_118 = (mutable_x_3 := (C_102:
                                             (JC_397:
                                             (uint32_of_integer_ (C_101:
                                                                 ((add_int 
-                                                                  (integer_of_uint32 !mutable_x_7)) 
+                                                                  (integer_of_uint32 !mutable_x_3)) 
                                                                  (integer_of_uint32 
                                                                   (C_100:
                                                                   (JC_396:
                                                                   (uint32_of_integer_ 
                                                                    (C_99:
                                                                    ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (256))))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (256))))))))))))) in
           void);
          (C_108:
          begin
-           (let jessie_120 = (mutable_x_7 := (C_107:
+           (let jessie_120 = (mutable_x_3 := (C_107:
                                              (JC_399:
                                              (uint32_of_integer_ (C_106:
                                                                  ((add_int 
-                                                                   (integer_of_uint32 !mutable_x_7)) 
+                                                                   (integer_of_uint32 !mutable_x_3)) 
                                                                   (integer_of_uint32 
                                                                    (C_105:
                                                                    (JC_398:
                                                                    (uint32_of_integer_ 
                                                                     (C_104:
                                                                     ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_7)) (65536))))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_3)) (65536))))))))))))) in
            void);
           (C_111:
           begin
@@ -4384,7 +4384,7 @@ let pop_safety =
                                              (int32_of_integer_ (C_109:
                                                                 (JC_400:
                                                                 ((div_int_ 
-                                                                  (integer_of_uint32 !mutable_x_7)) (16777216)))))))) in
+                                                                  (integer_of_uint32 !mutable_x_3)) (16777216)))))))) in
             void);
            (return := !__retres_1);
            (raise Return)
@@ -4422,7 +4422,7 @@ let pop_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob1_ensures_default =
- fun (x_4 : uint32) ->
+ fun (x_0 : uint32) ->
   { ((true = true)
     and (JC_475:
         ((JC_467:
@@ -4459,20 +4459,20 @@ let snoob1_ensures_default =
        (let jessie_174 = (smallest_0 := (C_136:
                                         (safe_uint32_of_integer_ (C_135:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 x_4)) 
+                                                                   (integer_of_uint32 x_0)) 
                                                                   (integer_of_uint32 
                                                                    (C_134:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_133:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x_4))))))))))) in
+                                                                    (integer_of_uint32 x_0))))))))))) in
        void);
       (C_140:
       begin
         (let jessie_176 = (ripple_0 := (C_139:
                                        (safe_uint32_of_integer_ (C_138:
                                                                 ((add_int 
-                                                                  (integer_of_uint32 x_4)) 
+                                                                  (integer_of_uint32 x_0)) 
                                                                  (integer_of_uint32 !smallest_0)))))) in
         void);
        (C_143:
@@ -4480,13 +4480,13 @@ let snoob1_ensures_default =
          (let jessie_178 = (ones_0 := (C_142:
                                       (safe_uint32_of_integer_ (C_141:
                                                                ((bw_xor 
-                                                                 (integer_of_uint32 x_4)) 
+                                                                 (integer_of_uint32 x_0)) 
                                                                 (integer_of_uint32 !ripple_0)))))) in
          void);
         (let jessie_183 = (C_145:
                           begin
                             (let jessie_181 = (tmp := (C_144:
-                                                      (let jessie_180 = x_4 in
+                                                      (let jessie_180 = x_0 in
                                                       (JC_506:
                                                       (ntz jessie_180))))) in
                             void);
@@ -4533,7 +4533,7 @@ let snoob1_ensures_default =
   { (JC_477: true) }
 
 let snoob1_safety =
- fun (x_4 : uint32) ->
+ fun (x_0 : uint32) ->
   { (JC_475:
     ((JC_467:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4570,14 +4570,14 @@ let snoob1_safety =
                                         (JC_498:
                                         (uint32_of_integer_ (C_135:
                                                             ((bw_and 
-                                                              (integer_of_uint32 x_4)) 
+                                                              (integer_of_uint32 x_0)) 
                                                              (integer_of_uint32 
                                                               (C_134:
                                                               (JC_497:
                                                               (uint32_of_integer_ 
                                                                (C_133:
                                                                (neg_int 
-                                                                (integer_of_uint32 x_4))))))))))))) in
+                                                                (integer_of_uint32 x_0))))))))))))) in
        void);
       (C_140:
       begin
@@ -4585,7 +4585,7 @@ let snoob1_safety =
                                        (JC_499:
                                        (uint32_of_integer_ (C_138:
                                                            ((add_int 
-                                                             (integer_of_uint32 x_4)) 
+                                                             (integer_of_uint32 x_0)) 
                                                             (integer_of_uint32 !smallest_0))))))) in
         void);
        (C_143:
@@ -4593,13 +4593,13 @@ let snoob1_safety =
          (let jessie_164 = (ones_0 := (C_142:
                                       (JC_500:
                                       (uint32_of_integer_ (C_141:
-                                                          ((bw_xor (integer_of_uint32 x_4)) 
+                                                          ((bw_xor (integer_of_uint32 x_0)) 
                                                            (integer_of_uint32 !ripple_0))))))) in
          void);
         (let jessie_169 = (C_145:
                           begin
                             (let jessie_167 = (tmp := (C_144:
-                                                      (let jessie_166 = x_4 in
+                                                      (let jessie_166 = x_0 in
                                                       (JC_501:
                                                       (ntz_requires jessie_166))))) in
                             void);
@@ -4667,7 +4667,7 @@ let snoob1_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob2_ensures_default =
- fun (x : uint32) ->
+ fun (x_4 : uint32) ->
   { ((true = true)
     and (JC_526:
         ((JC_518:
@@ -4704,20 +4704,20 @@ let snoob2_ensures_default =
        (let jessie_202 = (smallest_1 := (C_159:
                                         (safe_uint32_of_integer_ (C_158:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 x)) 
+                                                                   (integer_of_uint32 x_4)) 
                                                                   (integer_of_uint32 
                                                                    (C_157:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_156:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x))))))))))) in
+                                                                    (integer_of_uint32 x_4))))))))))) in
        void);
       (C_163:
       begin
         (let jessie_204 = (ripple_1 := (C_162:
                                        (safe_uint32_of_integer_ (C_161:
                                                                 ((add_int 
-                                                                  (integer_of_uint32 x)) 
+                                                                  (integer_of_uint32 x_4)) 
                                                                  (integer_of_uint32 !smallest_1)))))) in
         void);
        (C_166:
@@ -4725,7 +4725,7 @@ let snoob2_ensures_default =
          (let jessie_206 = (ones_1 := (C_165:
                                       (safe_uint32_of_integer_ (C_164:
                                                                ((bw_xor 
-                                                                 (integer_of_uint32 x)) 
+                                                                 (integer_of_uint32 x_4)) 
                                                                 (integer_of_uint32 !ripple_1)))))) in
          void);
         (let jessie_211 = (C_168:
@@ -4778,7 +4778,7 @@ let snoob2_ensures_default =
   { (JC_528: true) }
 
 let snoob2_safety =
- fun (x : uint32) ->
+ fun (x_4 : uint32) ->
   { (JC_526:
     ((JC_518:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4815,14 +4815,14 @@ let snoob2_safety =
                                         (JC_549:
                                         (uint32_of_integer_ (C_158:
                                                             ((bw_and 
-                                                              (integer_of_uint32 x)) 
+                                                              (integer_of_uint32 x_4)) 
                                                              (integer_of_uint32 
                                                               (C_157:
                                                               (JC_548:
                                                               (uint32_of_integer_ 
                                                                (C_156:
                                                                (neg_int 
-                                                                (integer_of_uint32 x))))))))))))) in
+                                                                (integer_of_uint32 x_4))))))))))))) in
        void);
       (C_163:
       begin
@@ -4830,7 +4830,7 @@ let snoob2_safety =
                                        (JC_550:
                                        (uint32_of_integer_ (C_161:
                                                            ((add_int 
-                                                             (integer_of_uint32 x)) 
+                                                             (integer_of_uint32 x_4)) 
                                                             (integer_of_uint32 !smallest_1))))))) in
         void);
        (C_166:
@@ -4838,7 +4838,7 @@ let snoob2_safety =
          (let jessie_192 = (ones_1 := (C_165:
                                       (JC_551:
                                       (uint32_of_integer_ (C_164:
-                                                          ((bw_xor (integer_of_uint32 x)) 
+                                                          ((bw_xor (integer_of_uint32 x_4)) 
                                                            (integer_of_uint32 !ripple_1))))))) in
          void);
         (let jessie_197 = (C_168:
@@ -4912,7 +4912,7 @@ let snoob2_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob3_ensures_default =
- fun (x_5 : uint32) ->
+ fun (x_1 : uint32) ->
   { ((true = true)
     and (JC_577:
         ((JC_569:
@@ -4949,20 +4949,20 @@ let snoob3_ensures_default =
        (let jessie_230 = (smallest_2 := (C_182:
                                         (safe_uint32_of_integer_ (C_181:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 x_5)) 
+                                                                   (integer_of_uint32 x_1)) 
                                                                   (integer_of_uint32 
                                                                    (C_180:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_179:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x_5))))))))))) in
+                                                                    (integer_of_uint32 x_1))))))))))) in
        void);
       (C_186:
       begin
         (let jessie_232 = (ripple_2 := (C_185:
                                        (safe_uint32_of_integer_ (C_184:
                                                                 ((add_int 
-                                                                  (integer_of_uint32 x_5)) 
+                                                                  (integer_of_uint32 x_1)) 
                                                                  (integer_of_uint32 !smallest_2)))))) in
         void);
        (C_189:
@@ -4970,7 +4970,7 @@ let snoob3_ensures_default =
          (let jessie_234 = (ones_2 := (C_188:
                                       (safe_uint32_of_integer_ (C_187:
                                                                ((bw_xor 
-                                                                 (integer_of_uint32 x_5)) 
+                                                                 (integer_of_uint32 x_1)) 
                                                                 (integer_of_uint32 !ripple_2)))))) in
          void);
         (let jessie_239 = (C_191:
@@ -5038,7 +5038,7 @@ let snoob3_ensures_default =
   { (JC_579: true) }
 
 let snoob3_safety =
- fun (x_5 : uint32) ->
+ fun (x_1 : uint32) ->
   { (JC_577:
     ((JC_569:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5075,14 +5075,14 @@ let snoob3_safety =
                                         (JC_600:
                                         (uint32_of_integer_ (C_181:
                                                             ((bw_and 
-                                                              (integer_of_uint32 x_5)) 
+                                                              (integer_of_uint32 x_1)) 
                                                              (integer_of_uint32 
                                                               (C_180:
                                                               (JC_599:
                                                               (uint32_of_integer_ 
                                                                (C_179:
                                                                (neg_int 
-                                                                (integer_of_uint32 x_5))))))))))))) in
+                                                                (integer_of_uint32 x_1))))))))))))) in
        void);
       (C_186:
       begin
@@ -5090,7 +5090,7 @@ let snoob3_safety =
                                        (JC_601:
                                        (uint32_of_integer_ (C_184:
                                                            ((add_int 
-                                                             (integer_of_uint32 x_5)) 
+                                                             (integer_of_uint32 x_1)) 
                                                             (integer_of_uint32 !smallest_2))))))) in
         void);
        (C_189:
@@ -5098,7 +5098,7 @@ let snoob3_safety =
          (let jessie_220 = (ones_2 := (C_188:
                                       (JC_602:
                                       (uint32_of_integer_ (C_187:
-                                                          ((bw_xor (integer_of_uint32 x_5)) 
+                                                          ((bw_xor (integer_of_uint32 x_1)) 
                                                            (integer_of_uint32 !ripple_2))))))) in
          void);
         (let jessie_225 = (C_191:
@@ -5187,7 +5187,7 @@ let snoob3_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob4_ensures_default =
- fun (x_6 : int32) ->
+ fun (x_2 : int32) ->
   { ((true = true)
     and (JC_686:
         ((JC_678:
@@ -5210,7 +5210,7 @@ let snoob4_ensures_default =
                                  char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                                 and (JC_685:
                                     valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table))))))))))) }
-  (let mutable_x_6 = ref x_6 in
+  (let mutable_x_2 = ref x_2 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5221,25 +5221,25 @@ let snoob4_ensures_default =
      begin
        (let jessie_288 = (y := (C_236:
                                (safe_int32_of_integer_ (C_235:
-                                                       ((add_int (integer_of_int32 !mutable_x_6)) 
+                                                       ((add_int (integer_of_int32 !mutable_x_2)) 
                                                         (integer_of_int32 
                                                          (C_234:
                                                          (safe_int32_of_integer_ 
                                                           (C_233:
-                                                          ((bw_and (integer_of_int32 !mutable_x_6)) 
+                                                          ((bw_and (integer_of_int32 !mutable_x_2)) 
                                                            (integer_of_int32 
                                                             (C_232:
                                                             (safe_int32_of_integer_ 
                                                              (C_231:
                                                              (neg_int 
-                                                              (integer_of_int32 !mutable_x_6)))))))))))))))) in
+                                                              (integer_of_int32 !mutable_x_2)))))))))))))))) in
        void);
       (C_242:
       begin
-        (let jessie_290 = (mutable_x_6 := (C_241:
+        (let jessie_290 = (mutable_x_2 := (C_241:
                                           (safe_int32_of_integer_ (C_240:
                                                                   ((bw_and 
-                                                                    (integer_of_int32 !mutable_x_6)) 
+                                                                    (integer_of_int32 !mutable_x_2)) 
                                                                    (integer_of_int32 
                                                                     (C_239:
                                                                     (safe_int32_of_integer_ 
@@ -5263,7 +5263,7 @@ let snoob4_ensures_default =
                                                                     (safe_int32_of_integer_ 
                                                                     (C_243:
                                                                     ((bw_and 
-                                                                    (integer_of_int32 !mutable_x_6)) (1))))))) (0))
+                                                                    (integer_of_int32 !mutable_x_2)) (1))))))) (0))
                                                      then void
                                                      else
                                                       (let jessie_291 = 
@@ -5273,13 +5273,13 @@ let snoob4_ensures_default =
                                                       void));
                                                     (C_247:
                                                     begin
-                                                      (mutable_x_6 := 
+                                                      (mutable_x_2 := 
                                                        (C_246:
                                                        (safe_int32_of_integer_ 
                                                         (C_245:
                                                         (JC_725:
-                                                        ((div_int (integer_of_int32 !mutable_x_6)) (2)))))));
-                                                     !mutable_x_6
+                                                        ((div_int (integer_of_int32 !mutable_x_2)) (2)))))));
+                                                     !mutable_x_2
                                                     end)
                                                    end in
                                                    void);
@@ -5301,11 +5301,11 @@ let snoob4_ensures_default =
         (while_0_break: void) end;
        (C_250:
        begin
-         (let jessie_297 = (mutable_x_6 := (C_249:
+         (let jessie_297 = (mutable_x_2 := (C_249:
                                            (safe_int32_of_integer_ (C_248:
                                                                    (JC_726:
                                                                    ((div_int 
-                                                                    (integer_of_int32 !mutable_x_6)) (2))))))) in
+                                                                    (integer_of_int32 !mutable_x_2)) (2))))))) in
          void);
         (C_253:
         begin
@@ -5313,7 +5313,7 @@ let snoob4_ensures_default =
                                            (safe_int32_of_integer_ (C_251:
                                                                    ((bw_or 
                                                                     (integer_of_int32 !y)) 
-                                                                    (integer_of_int32 !mutable_x_6)))))) in
+                                                                    (integer_of_int32 !mutable_x_2)))))) in
           void);
          (return := !__retres_7);
          (raise Return)
@@ -5329,7 +5329,7 @@ let snoob4_ensures_default =
   { (JC_688: true) }
 
 let snoob4_safety =
- fun (x_6 : int32) ->
+ fun (x_2 : int32) ->
   { (JC_686:
     ((JC_678:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5351,7 +5351,7 @@ let snoob4_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_685:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_6 = ref x_6 in
+  (let mutable_x_2 = ref x_2 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5363,27 +5363,27 @@ let snoob4_safety =
        (let jessie_274 = (y := (C_236:
                                (JC_710:
                                (int32_of_integer_ (C_235:
-                                                  ((add_int (integer_of_int32 !mutable_x_6)) 
+                                                  ((add_int (integer_of_int32 !mutable_x_2)) 
                                                    (integer_of_int32 
                                                     (C_234:
                                                     (JC_709:
                                                     (int32_of_integer_ 
                                                      (C_233:
-                                                     ((bw_and (integer_of_int32 !mutable_x_6)) 
+                                                     ((bw_and (integer_of_int32 !mutable_x_2)) 
                                                       (integer_of_int32 
                                                        (C_232:
                                                        (JC_708:
                                                        (int32_of_integer_ 
                                                         (C_231:
-                                                        (neg_int (integer_of_int32 !mutable_x_6))))))))))))))))))) in
+                                                        (neg_int (integer_of_int32 !mutable_x_2))))))))))))))))))) in
        void);
       (C_242:
       begin
-        (let jessie_276 = (mutable_x_6 := (C_241:
+        (let jessie_276 = (mutable_x_2 := (C_241:
                                           (JC_712:
                                           (int32_of_integer_ (C_240:
                                                              ((bw_and 
-                                                               (integer_of_int32 !mutable_x_6)) 
+                                                               (integer_of_int32 !mutable_x_2)) 
                                                               (integer_of_int32 
                                                                (C_239:
                                                                (JC_711:
@@ -5409,7 +5409,7 @@ let snoob4_safety =
                                                                     (int32_of_integer_ 
                                                                     (C_243:
                                                                     ((bw_and 
-                                                                    (integer_of_int32 !mutable_x_6)) (1)))))))) (0))
+                                                                    (integer_of_int32 !mutable_x_2)) (1)))))))) (0))
                                                      then void
                                                      else
                                                       (let jessie_277 = 
@@ -5419,14 +5419,14 @@ let snoob4_safety =
                                                       void));
                                                     (C_247:
                                                     begin
-                                                      (mutable_x_6 := 
+                                                      (mutable_x_2 := 
                                                        (C_246:
                                                        (JC_718:
                                                        (int32_of_integer_ 
                                                         (C_245:
                                                         (JC_717:
-                                                        ((div_int_ (integer_of_int32 !mutable_x_6)) (2))))))));
-                                                     !mutable_x_6
+                                                        ((div_int_ (integer_of_int32 !mutable_x_2)) (2))))))));
+                                                     !mutable_x_2
                                                     end)
                                                    end in
                                                    void);
@@ -5448,12 +5448,12 @@ let snoob4_safety =
         (while_0_break: void) end;
        (C_250:
        begin
-         (let jessie_283 = (mutable_x_6 := (C_249:
+         (let jessie_283 = (mutable_x_2 := (C_249:
                                            (JC_720:
                                            (int32_of_integer_ (C_248:
                                                               (JC_719:
                                                               ((div_int_ 
-                                                                (integer_of_int32 !mutable_x_6)) (2)))))))) in
+                                                                (integer_of_int32 !mutable_x_2)) (2)))))))) in
          void);
         (C_253:
         begin
@@ -5462,7 +5462,7 @@ let snoob4_safety =
                                            (int32_of_integer_ (C_251:
                                                               ((bw_or 
                                                                 (integer_of_int32 !y)) 
-                                                               (integer_of_int32 !mutable_x_6))))))) in
+                                                               (integer_of_int32 !mutable_x_2))))))) in
           void);
          (return := !__retres_7);
          (raise Return)
@@ -5498,7 +5498,7 @@ let snoob4_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob_ensures_default =
- fun (x_0 : uint32) ->
+ fun (x_5 : uint32) ->
   { ((true = true)
     and (JC_424:
         ((JC_416:
@@ -5534,20 +5534,20 @@ let snoob_ensures_default =
        (let jessie_149 = (smallest := (C_116:
                                       (safe_uint32_of_integer_ (C_115:
                                                                ((bw_and 
-                                                                 (integer_of_uint32 x_0)) 
+                                                                 (integer_of_uint32 x_5)) 
                                                                 (integer_of_uint32 
                                                                  (C_114:
                                                                  (safe_uint32_of_integer_ 
                                                                   (C_113:
                                                                   (neg_int 
-                                                                   (integer_of_uint32 x_0))))))))))) in
+                                                                   (integer_of_uint32 x_5))))))))))) in
        void);
       (C_120:
       begin
         (let jessie_151 = (ripple := (C_119:
                                      (safe_uint32_of_integer_ (C_118:
                                                               ((add_int 
-                                                                (integer_of_uint32 x_0)) 
+                                                                (integer_of_uint32 x_5)) 
                                                                (integer_of_uint32 !smallest)))))) in
         void);
        (C_123:
@@ -5555,7 +5555,7 @@ let snoob_ensures_default =
          (let jessie_153 = (ones := (C_122:
                                     (safe_uint32_of_integer_ (C_121:
                                                              ((bw_xor 
-                                                               (integer_of_uint32 x_0)) 
+                                                               (integer_of_uint32 x_5)) 
                                                               (integer_of_uint32 !ripple)))))) in
          void);
         (C_128:
@@ -5596,7 +5596,7 @@ let snoob_ensures_default =
   { (JC_426: true) }
 
 let snoob_safety =
- fun (x_0 : uint32) ->
+ fun (x_5 : uint32) ->
   { (JC_424:
     ((JC_416:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5631,21 +5631,21 @@ let snoob_safety =
        (let jessie_138 = (smallest := (C_116:
                                       (JC_447:
                                       (uint32_of_integer_ (C_115:
-                                                          ((bw_and (integer_of_uint32 x_0)) 
+                                                          ((bw_and (integer_of_uint32 x_5)) 
                                                            (integer_of_uint32 
                                                             (C_114:
                                                             (JC_446:
                                                             (uint32_of_integer_ 
                                                              (C_113:
                                                              (neg_int 
-                                                              (integer_of_uint32 x_0))))))))))))) in
+                                                              (integer_of_uint32 x_5))))))))))))) in
        void);
       (C_120:
       begin
         (let jessie_140 = (ripple := (C_119:
                                      (JC_448:
                                      (uint32_of_integer_ (C_118:
-                                                         ((add_int (integer_of_uint32 x_0)) 
+                                                         ((add_int (integer_of_uint32 x_5)) 
                                                           (integer_of_uint32 !smallest))))))) in
         void);
        (C_123:
@@ -5653,7 +5653,7 @@ let snoob_safety =
          (let jessie_142 = (ones := (C_122:
                                     (JC_449:
                                     (uint32_of_integer_ (C_121:
-                                                        ((bw_xor (integer_of_uint32 x_0)) 
+                                                        ((bw_xor (integer_of_uint32 x_5)) 
                                                          (integer_of_uint32 !ripple))))))) in
          void);
         (C_128:

@@ -191,18 +191,18 @@ lemma div2_5 :
       ((0 <= k_1) ==>
         ((k_1 != ((i_14 - 1) / 2)) ==> (((2 * k_1) + 2) != i_14))))))
 
-unit sift_down(int_P[..] a, uint32 low, uint32 high, int32 v)
+unit sift_down(int_P[..] a_0, uint32 low, uint32 high, int32 v)
   requires (C_42 : ((((C_45 : (0 <= low)) && (C_46 : (low <= high))) &&
-                      ((C_48 : (\offset_min(a) <= low)) &&
-                        (C_49 : (\offset_max(a) >= high)))) &&
-                     (C_50 : H{Here}(a, (low + 1), high))));
+                      ((C_48 : (\offset_min(a_0) <= low)) &&
+                        (C_49 : (\offset_max(a_0) >= high)))) &&
+                     (C_50 : H{Here}(a_0, (low + 1), high))));
 behavior default:
   assumes true;
-  assigns (a + [low..high]).int_M;
-  ensures (C_51 : ((C_52 : Permut(contents{Here}(a),
-                                  \old(update(contents{Here}(a), low, v)),
+  assigns (a_0 + [low..high]).int_M;
+  ensures (C_51 : ((C_52 : Permut(contents{Here}(a_0),
+                                  \old(update(contents{Here}(a_0), low, v)),
                                   low, high)) &&
-                    (C_53 : H{Here}(a, low, high))));
+                    (C_53 : H{Here}(a_0, low, high))));
 {  
    (var uint32 i);
    
@@ -214,19 +214,19 @@ behavior default:
          loop 
          behavior default:
            invariant (C_3 : ((((((C_8 : (low <= i)) && (C_9 : (i <= high))) &&
-                                 (C_10 : Permut(contents{Here}(a),
-                                                \at(contents{Pre}(a),Pre),
+                                 (C_10 : Permut(contents{Here}(a_0),
+                                                \at(contents{Pre}(a_0),Pre),
                                                 low, high))) &&
                                 (C_11 : (\forall int32 k_2;
                                           (((low < k_2) && (k_2 <= high)) ==>
-                                            Hnode{Here}(a, k_2, high))))) &&
+                                            Hnode{Here}(a_0, k_2, high))))) &&
                                (C_12 : ((low < i) ==>
-                                         Hnode{Here}(a, low, high)))) &&
+                                         Hnode{Here}(a_0, low, high)))) &&
                               (C_13 : ((low <= ((i - 1) / 2)) ==>
-                                        ((a + ((i - 1) / 2)).int_M >= v)))));
+                                        ((a_0 + ((i - 1) / 2)).int_M >= v)))));
          behavior default:
            
-           assigns (a + [low..high]).int_M;
+           assigns (a_0 + [low..high]).int_M;
          variant (C_2 : (high - i));
          while (true)
          {  
@@ -239,21 +239,21 @@ behavior default:
                (if (child <= high) then () else 
                (goto while_0_break));
                (if ((C_29 : ((C_28 : (child + 1)) :> uint32)) <= high) then 
-               (if ((C_27 : (C_26 : (a +
+               (if ((C_27 : (C_26 : (a_0 +
                                       (C_25 : ((C_24 : (child + 1)) :> uint32)))).int_M) >=
-                     (C_23 : (C_22 : (a + child)).int_M)) then (C_21 : (child = 
-                                                               (C_20 : (
-                                                               (C_19 : 
-                                                               (child +
-                                                                 1)) :> uint32)))) else ()) else ());
-               (if (v >= (C_31 : (C_30 : (a + child)).int_M)) then 
+                     (C_23 : (C_22 : (a_0 + child)).int_M)) then (C_21 : (child = 
+                                                                 (C_20 : (
+                                                                 (C_19 : 
+                                                                 (child +
+                                                                   1)) :> uint32)))) else ()) else ());
+               (if (v >= (C_31 : (C_30 : (a_0 + child)).int_M)) then 
                (goto while_0_break) else ());
-               (C_36 : ((C_35 : (C_34 : (a + i)).int_M) = (C_33 : (C_32 : 
-                                                                  (a +
+               (C_36 : ((C_35 : (C_34 : (a_0 + i)).int_M) = (C_33 : (C_32 : 
+                                                                    (a_0 +
                                                                     child)).int_M)));
                
                {  
-                  (assert for default: (C_37 : Hnode{Here}(a, i, high)));
+                  (assert for default: (C_37 : Hnode{Here}(a_0, i, high)));
                   ()
                };
                (C_38 : (i = child))
@@ -261,21 +261,21 @@ behavior default:
          };
          (while_0_break : ())
       };
-      (C_41 : ((C_40 : (C_39 : (a + i)).int_M) = v));
+      (C_41 : ((C_40 : (C_39 : (a_0 + i)).int_M) = v));
       
       (return ())
    }
 }
 
-unit heapsort(int_P[..] a_0, uint32 n)
+unit heapsort(int_P[..] a, uint32 n)
   requires (C_106 : ((C_107 : (0 <= n)) &&
-                      ((C_109 : (\offset_min(a_0) <= 0)) &&
-                        (C_110 : (\offset_max(a_0) >= (n - 1))))));
+                      ((C_109 : (\offset_min(a) <= 0)) &&
+                        (C_110 : (\offset_max(a) >= (n - 1))))));
 behavior default:
   assumes true;
-  ensures (C_111 : ((C_112 : Permut(contents{Here}(a_0),
-                                    \old(contents{Here}(a_0)), 0, (n - 1))) &&
-                     (C_113 : Sorted{Here}(a_0, 0, (n - 1)))));
+  ensures (C_111 : ((C_112 : Permut(contents{Here}(a),
+                                    \old(contents{Here}(a)), 0, (n - 1))) &&
+                     (C_113 : Sorted{Here}(a, 0, (n - 1)))));
 {  
    (var uint32 i_0);
    
@@ -289,19 +289,18 @@ behavior default:
          loop 
          behavior default:
            invariant (C_58 : ((((C_61 : (0 <= i_0)) && (C_62 : (i_0 < n))) &&
-                                (C_63 : Permut(contents{Here}(a_0),
-                                               \at(contents{Pre}(a_0),Pre),
-                                               0, (n - 1)))) &&
-                               (C_64 : H{Here}(a_0, i_0, (n - 1)))));
+                                (C_63 : Permut(contents{Here}(a),
+                                               \at(contents{Pre}(a),Pre), 0,
+                                               (n - 1)))) &&
+                               (C_64 : H{Here}(a, i_0, (n - 1)))));
          variant (C_57 : i_0);
          while (true)
          {  
             {  (if (i_0 >= 1) then () else 
                (goto while_1_break));
-               (C_73 : sift_down(a_0,
-                                 (C_66 : ((C_65 : (i_0 - 1)) :> uint32)),
+               (C_73 : sift_down(a, (C_66 : ((C_65 : (i_0 - 1)) :> uint32)),
                                  (C_68 : ((C_67 : (n - 1)) :> uint32)),
-                                 (C_72 : (C_71 : (a_0 +
+                                 (C_72 : (C_71 : (a +
                                                    (C_70 : ((C_69 : (i_0 - 1)) :> uint32)))).int_M)));
                (C_76 : (i_0 = (C_75 : ((C_74 : (i_0 - 1)) :> uint32))))
             }
@@ -314,29 +313,29 @@ behavior default:
          loop 
          behavior default:
            invariant (C_81 : ((((((C_86 : (0 <= i_0)) && (C_87 : (i_0 < n))) &&
-                                  (C_88 : Permut(contents{Here}(a_0),
-                                                 \at(contents{Pre}(a_0),Pre),
+                                  (C_88 : Permut(contents{Here}(a),
+                                                 \at(contents{Pre}(a),Pre),
                                                  0, (n - 1)))) &&
-                                 (C_89 : H{Here}(a_0, 0, i_0))) &&
-                                (C_90 : Sorted{Here}(a_0, (i_0 + 1), (n - 1)))) &&
+                                 (C_89 : H{Here}(a, 0, i_0))) &&
+                                (C_90 : Sorted{Here}(a, (i_0 + 1), (n - 1)))) &&
                                (C_91 : (\forall int32 k1;
                                          (\forall int32 k2;
                                            (((0 <= k1) && (k1 <= i_0)) ==>
                                              (((i_0 < k2) && (k2 < n)) ==>
-                                               ((a_0 + k1).int_M <=
-                                                 (a_0 + k2).int_M))))))));
+                                               ((a + k1).int_M <=
+                                                 (a + k2).int_M))))))));
          variant (C_80 : i_0);
          while (true)
          {  
             {  (if (i_0 >= 1) then () else 
                (goto while_2_break));
                
-               {  (C_94 : (tmp = (C_93 : (C_92 : (a_0 + i_0)).int_M)));
-                  (C_99 : ((C_98 : (C_97 : (a_0 + i_0)).int_M) = (C_96 : 
-                                                                 (C_95 : 
-                                                                 (a_0 +
-                                                                   0)).int_M)));
-                  (C_102 : sift_down(a_0, 0,
+               {  (C_94 : (tmp = (C_93 : (C_92 : (a + i_0)).int_M)));
+                  (C_99 : ((C_98 : (C_97 : (a + i_0)).int_M) = (C_96 : 
+                                                               (C_95 : 
+                                                               (a +
+                                                                 0)).int_M)));
+                  (C_102 : sift_down(a, 0,
                                      (C_101 : ((C_100 : (i_0 - 1)) :> uint32)),
                                      tmp))
                };
@@ -1074,42 +1073,42 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter any_uint32 : unit -> { } uint32 { true }
 
 parameter heapsort :
- a_0_0:int_P pointer ->
+ a_1:int_P pointer ->
   n:uint32 ->
-   int_P_int_M_a_0_6:(int_P, int32) memory ref ->
-    int_P_a_0_6_alloc_table:int_P alloc_table ->
-     { } unit reads int_P_int_M_a_0_6 writes int_P_int_M_a_0_6
+   int_P_int_M_a_6:(int_P, int32) memory ref ->
+    int_P_a_6_alloc_table:int_P alloc_table ->
+     { } unit reads int_P_int_M_a_6 writes int_P_int_M_a_6
      { ((true = true) ->
         (JC_76:
         ((JC_74:
-         Permut(contents(a_0_0, int_P_int_M_a_0_6),
-         contents(a_0_0@, int_P_int_M_a_0_6), (0),
+         Permut(contents(a_1, int_P_int_M_a_6),
+         contents(a_1@, int_P_int_M_a_6), (0),
          sub_int(integer_of_uint32(n), (1))))
         and (JC_75:
-            Sorted(a_0_0, (0), sub_int(integer_of_uint32(n), (1)),
-            int_P_int_M_a_0_6))))) }
+            Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+            int_P_int_M_a_6))))) }
 
 parameter heapsort_requires :
- a_0_0:int_P pointer ->
+ a_1:int_P pointer ->
   n:uint32 ->
-   int_P_int_M_a_0_6:(int_P, int32) memory ref ->
-    int_P_a_0_6_alloc_table:int_P alloc_table ->
+   int_P_int_M_a_6:(int_P, int32) memory ref ->
+    int_P_a_6_alloc_table:int_P alloc_table ->
      { (JC_64:
        ((JC_61: le_int((0), integer_of_uint32(n)))
-       and ((JC_62: le_int(offset_min(int_P_a_0_6_alloc_table, a_0_0), (0)))
+       and ((JC_62: le_int(offset_min(int_P_a_6_alloc_table, a_1), (0)))
            and (JC_63:
-               ge_int(offset_max(int_P_a_0_6_alloc_table, a_0_0),
+               ge_int(offset_max(int_P_a_6_alloc_table, a_1),
                sub_int(integer_of_uint32(n), (1)))))))}
-     unit reads int_P_int_M_a_0_6 writes int_P_int_M_a_0_6
+     unit reads int_P_int_M_a_6 writes int_P_int_M_a_6
      { ((true = true) ->
         (JC_76:
         ((JC_74:
-         Permut(contents(a_0_0, int_P_int_M_a_0_6),
-         contents(a_0_0@, int_P_int_M_a_0_6), (0),
+         Permut(contents(a_1, int_P_int_M_a_6),
+         contents(a_1@, int_P_int_M_a_6), (0),
          sub_int(integer_of_uint32(n), (1))))
         and (JC_75:
-            Sorted(a_0_0, (0), sub_int(integer_of_uint32(n), (1)),
-            int_P_int_M_a_0_6))))) }
+            Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+            int_P_int_M_a_6))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1131,63 +1130,65 @@ parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
 parameter sift_down :
- a_1:int_P pointer ->
+ a_0_0:int_P pointer ->
   low:uint32 ->
    high:uint32 ->
     v_0:int32 ->
-     int_P_int_M_a_5:(int_P, int32) memory ref ->
-      int_P_a_5_alloc_table:int_P alloc_table ->
-       { } unit reads int_P_int_M_a_5 writes int_P_int_M_a_5
+     int_P_int_M_a_0_5:(int_P, int32) memory ref ->
+      int_P_a_0_5_alloc_table:int_P alloc_table ->
+       { } unit reads int_P_int_M_a_0_5 writes int_P_int_M_a_0_5
        { ((true = true) ->
           (JC_24:
           ((JC_22:
            ((JC_20:
-            Permut(contents(a_1, int_P_int_M_a_5),
-            update(contents(a_1@, int_P_int_M_a_5), integer_of_uint32(low@),
-            v_0@), integer_of_uint32(low), integer_of_uint32(high)))
+            Permut(contents(a_0_0, int_P_int_M_a_0_5),
+            update(contents(a_0_0@, int_P_int_M_a_0_5),
+            integer_of_uint32(low@), v_0@), integer_of_uint32(low),
+            integer_of_uint32(high)))
            and (JC_21:
-               H(a_1, integer_of_uint32(low), integer_of_uint32(high),
-               int_P_int_M_a_5))))
+               H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+               int_P_int_M_a_0_5))))
           and (JC_23:
-              not_assigns(int_P_a_5_alloc_table@, int_P_int_M_a_5@,
-              int_P_int_M_a_5,
-              pset_range(pset_singleton(a_1@), integer_of_uint32(low@),
+              not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
+              int_P_int_M_a_0_5,
+              pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
               integer_of_uint32(high@))))))) }
 
 parameter sift_down_requires :
- a_1:int_P pointer ->
+ a_0_0:int_P pointer ->
   low:uint32 ->
    high:uint32 ->
     v_0:int32 ->
-     int_P_int_M_a_5:(int_P, int32) memory ref ->
-      int_P_a_5_alloc_table:int_P alloc_table ->
+     int_P_int_M_a_0_5:(int_P, int32) memory ref ->
+      int_P_a_0_5_alloc_table:int_P alloc_table ->
        { (JC_6:
          ((JC_1: le_int((0), integer_of_uint32(low)))
          and ((JC_2: le_int(integer_of_uint32(low), integer_of_uint32(high)))
              and ((JC_3:
-                  le_int(offset_min(int_P_a_5_alloc_table, a_1),
+                  le_int(offset_min(int_P_a_0_5_alloc_table, a_0_0),
                   integer_of_uint32(low)))
                  and ((JC_4:
-                      ge_int(offset_max(int_P_a_5_alloc_table, a_1),
+                      ge_int(offset_max(int_P_a_0_5_alloc_table, a_0_0),
                       integer_of_uint32(high)))
                      and (JC_5:
-                         H(a_1, add_int(integer_of_uint32(low), (1)),
-                         integer_of_uint32(high), int_P_int_M_a_5)))))))}
-       unit reads int_P_int_M_a_5 writes int_P_int_M_a_5
+                         H(a_0_0, add_int(integer_of_uint32(low), (1)),
+                         integer_of_uint32(high), int_P_int_M_a_0_5)))))))}
+       unit reads int_P_int_M_a_0_5 writes int_P_int_M_a_0_5
        { ((true = true) ->
           (JC_24:
           ((JC_22:
            ((JC_20:
-            Permut(contents(a_1, int_P_int_M_a_5),
-            update(contents(a_1@, int_P_int_M_a_5), integer_of_uint32(low@),
-            v_0@), integer_of_uint32(low), integer_of_uint32(high)))
+            Permut(contents(a_0_0, int_P_int_M_a_0_5),
+            update(contents(a_0_0@, int_P_int_M_a_0_5),
+            integer_of_uint32(low@), v_0@), integer_of_uint32(low),
+            integer_of_uint32(high)))
            and (JC_21:
-               H(a_1, integer_of_uint32(low), integer_of_uint32(high),
-               int_P_int_M_a_5))))
+               H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+               int_P_int_M_a_0_5))))
           and (JC_23:
-              not_assigns(int_P_a_5_alloc_table@, int_P_int_M_a_5@,
-              int_P_int_M_a_5,
-              pset_range(pset_singleton(a_1@), integer_of_uint32(low@),
+              not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
+              int_P_int_M_a_0_5,
+              pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
               integer_of_uint32(high@))))))) }
 
 parameter uint32_of_integer_ :
@@ -1196,13 +1197,13 @@ parameter uint32_of_integer_ :
   { eq_int(integer_of_uint32(result), x) }
 
 let heapsort_ensures_default =
- fun (a_0_0 : int_P pointer) (n : uint32) (int_P_int_M_a_0_6 : (int_P, int32) memory ref) (int_P_a_0_6_alloc_table : int_P alloc_table) ->
+ fun (a_1 : int_P pointer) (n : uint32) (int_P_int_M_a_6 : (int_P, int32) memory ref) (int_P_a_6_alloc_table : int_P alloc_table) ->
   { ((true = true)
     and (JC_69:
         ((JC_66: le_int((0), integer_of_uint32(n)))
-        and ((JC_67: le_int(offset_min(int_P_a_0_6_alloc_table, a_0_0), (0)))
+        and ((JC_67: le_int(offset_min(int_P_a_6_alloc_table, a_1), (0)))
             and (JC_68:
-                ge_int(offset_max(int_P_a_0_6_alloc_table, a_0_0),
+                ge_int(offset_max(int_P_a_6_alloc_table, a_1),
                 sub_int(integer_of_uint32(n), (1)))))))) }
   (init:
   try
@@ -1237,20 +1238,20 @@ let heapsort_ensures_default =
                                                         lt_int(integer_of_uint32(i_0_0),
                                                         integer_of_uint32(n)))
                                                        and ((JC_117:
-                                                            Permut(contents(a_0_0,
-                                                                   int_P_int_M_a_0_6),
-                                                            contents(a_0_0@init,
-                                                            int_P_int_M_a_0_6@init),
+                                                            Permut(contents(a_1,
+                                                                   int_P_int_M_a_6),
+                                                            contents(a_1@init,
+                                                            int_P_int_M_a_6@init),
                                                             (0),
                                                             sub_int(integer_of_uint32(n),
                                                             (1))))
                                                            and (JC_118:
-                                                               H(a_0_0,
+                                                               H(a_1,
                                                                integer_of_uint32(i_0_0),
                                                                sub_int(
                                                                integer_of_uint32(n),
                                                                (1)),
-                                                               int_P_int_M_a_0_6))))))
+                                                               int_P_int_M_a_6))))))
                                                   }
                                                 begin
                                                   [ { } unit { true } ];
@@ -1273,7 +1274,7 @@ let heapsort_ensures_default =
                                                                     (C_73:
                                                                     begin
                                                                       
-                                                                    (let jessie_98 = a_0_0 in
+                                                                    (let jessie_98 = a_1 in
                                                                     (let jessie_97 = 
                                                                     (C_66:
                                                                     (safe_uint32_of_integer_ 
@@ -1288,9 +1289,9 @@ let heapsort_ensures_default =
                                                                     (integer_of_uint32 n)) (1))))) in
                                                                     (let jessie_95 = 
                                                                     (C_72:
-                                                                    ((safe_acc_ !int_P_int_M_a_0_6) 
+                                                                    ((safe_acc_ !int_P_int_M_a_6) 
                                                                     (C_71:
-                                                                    ((shift a_0_0) 
+                                                                    ((shift a_1) 
                                                                     (integer_of_uint32 
                                                                     (C_70:
                                                                     (safe_uint32_of_integer_ 
@@ -1298,7 +1299,7 @@ let heapsort_ensures_default =
                                                                     ((sub_int 
                                                                     (integer_of_uint32 !i_0_0)) (1)))))))))) in
                                                                     (JC_123:
-                                                                    ((((((sift_down jessie_98) jessie_97) jessie_96) jessie_95) int_P_int_M_a_0_6) int_P_a_0_6_alloc_table))))));
+                                                                    ((((((sift_down jessie_98) jessie_97) jessie_96) jessie_95) int_P_int_M_a_6) int_P_a_6_alloc_table))))));
                                                                     (C_76:
                                                                     begin
                                                                       
@@ -1351,29 +1352,28 @@ let heapsort_ensures_default =
                                                          lt_int(integer_of_uint32(i_0_0),
                                                          integer_of_uint32(n)))
                                                         and ((JC_126:
-                                                             Permut(contents(a_0_0,
-                                                                    int_P_int_M_a_0_6),
-                                                             contents(a_0_0@init,
-                                                             int_P_int_M_a_0_6@init),
+                                                             Permut(contents(a_1,
+                                                                    int_P_int_M_a_6),
+                                                             contents(a_1@init,
+                                                             int_P_int_M_a_6@init),
                                                              (0),
                                                              sub_int(
                                                              integer_of_uint32(n),
                                                              (1))))
                                                             and ((JC_127:
-                                                                 H(a_0_0,
-                                                                 (0),
+                                                                 H(a_1, (0),
                                                                  integer_of_uint32(i_0_0),
-                                                                 int_P_int_M_a_0_6))
+                                                                 int_P_int_M_a_6))
                                                                 and (
                                                                     (JC_128:
-                                                                    Sorted(a_0_0,
+                                                                    Sorted(a_1,
                                                                     add_int(
                                                                     integer_of_uint32(i_0_0),
                                                                     (1)),
                                                                     sub_int(
                                                                     integer_of_uint32(n),
                                                                     (1)),
-                                                                    int_P_int_M_a_0_6))
+                                                                    int_P_int_M_a_6))
                                                                     and 
                                                                     (JC_129:
                                                                     (forall k1:int32.
@@ -1395,12 +1395,12 @@ let heapsort_ensures_default =
                                                                     integer_of_uint32(n))) ->
                                                                     le_int(
                                                                     integer_of_int32(
-                                                                    select(int_P_int_M_a_0_6,
-                                                                    shift(a_0_0,
+                                                                    select(int_P_int_M_a_6,
+                                                                    shift(a_1,
                                                                     integer_of_int32(k1)))),
                                                                     integer_of_int32(
-                                                                    select(int_P_int_M_a_0_6,
-                                                                    shift(a_0_0,
+                                                                    select(int_P_int_M_a_6,
+                                                                    shift(a_1,
                                                                     integer_of_int32(k2))))))))))))))))
                                                    }
                                                  begin
@@ -1423,9 +1423,9 @@ let heapsort_ensures_default =
                                                       begin
                                                         (let jessie_107 = 
                                                         (tmp := (C_93:
-                                                                ((safe_acc_ !int_P_int_M_a_0_6) 
+                                                                ((safe_acc_ !int_P_int_M_a_6) 
                                                                  (C_92:
-                                                                 ((shift a_0_0) 
+                                                                 ((shift a_1) 
                                                                   (integer_of_uint32 !i_0_0)))))) in
                                                         void);
                                                        (C_99:
@@ -1433,17 +1433,17 @@ let heapsort_ensures_default =
                                                          (let jessie_113 = 
                                                          (let jessie_109 = 
                                                          (C_96:
-                                                         ((safe_acc_ !int_P_int_M_a_0_6) 
+                                                         ((safe_acc_ !int_P_int_M_a_6) 
                                                           (C_95:
-                                                          ((shift a_0_0) (0))))) in
+                                                          ((shift a_1) (0))))) in
                                                          (let jessie_112 = 
                                                          (C_97:
-                                                         ((shift a_0_0) 
+                                                         ((shift a_1) 
                                                           (integer_of_uint32 !i_0_0))) in
-                                                         (((safe_upd_ int_P_int_M_a_0_6) jessie_112) jessie_109))) in
+                                                         (((safe_upd_ int_P_int_M_a_6) jessie_112) jessie_109))) in
                                                          void);
                                                         (C_102:
-                                                        (let jessie_117 = a_0_0 in
+                                                        (let jessie_117 = a_1 in
                                                         (let jessie_116 = 
                                                         (safe_uint32_of_integer_ (0)) in
                                                         (let jessie_115 = 
@@ -1453,7 +1453,7 @@ let heapsort_ensures_default =
                                                          ((sub_int (integer_of_uint32 !i_0_0)) (1))))) in
                                                         (let jessie_114 = !tmp in
                                                         (JC_134:
-                                                        ((((((sift_down jessie_117) jessie_116) jessie_115) jessie_114) int_P_int_M_a_0_6) int_P_a_0_6_alloc_table)))))))
+                                                        ((((((sift_down jessie_117) jessie_116) jessie_115) jessie_114) int_P_int_M_a_6) int_P_a_6_alloc_table)))))))
                                                        end)
                                                       end);
                                                       (C_105:
@@ -1500,20 +1500,18 @@ let heapsort_ensures_default =
    void end)
   { (JC_73:
     ((JC_71:
-     Permut(contents(a_0_0, int_P_int_M_a_0_6),
-     contents(a_0_0@, int_P_int_M_a_0_6), (0),
-     sub_int(integer_of_uint32(n), (1))))
+     Permut(contents(a_1, int_P_int_M_a_6), contents(a_1@, int_P_int_M_a_6),
+     (0), sub_int(integer_of_uint32(n), (1))))
     and (JC_72:
-        Sorted(a_0_0, (0), sub_int(integer_of_uint32(n), (1)),
-        int_P_int_M_a_0_6)))) }
+        Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)), int_P_int_M_a_6)))) }
 
 let heapsort_safety =
- fun (a_0_0 : int_P pointer) (n : uint32) (int_P_int_M_a_0_6 : (int_P, int32) memory ref) (int_P_a_0_6_alloc_table : int_P alloc_table) ->
+ fun (a_1 : int_P pointer) (n : uint32) (int_P_int_M_a_6 : (int_P, int32) memory ref) (int_P_a_6_alloc_table : int_P alloc_table) ->
   { (JC_69:
     ((JC_66: le_int((0), integer_of_uint32(n)))
-    and ((JC_67: le_int(offset_min(int_P_a_0_6_alloc_table, a_0_0), (0)))
+    and ((JC_67: le_int(offset_min(int_P_a_6_alloc_table, a_1), (0)))
         and (JC_68:
-            ge_int(offset_max(int_P_a_0_6_alloc_table, a_0_0),
+            ge_int(offset_max(int_P_a_6_alloc_table, a_1),
             sub_int(integer_of_uint32(n), (1))))))) }
   (init:
   try
@@ -1544,7 +1542,7 @@ let heapsort_safety =
                                                variant integer_of_uint32((JC_95 : i_0_0)) }
                                               begin
                                                 [ { } unit
-                                                  reads i_0_0,int_P_int_M_a_0_6
+                                                  reads i_0_0,int_P_int_M_a_6
                                                   { (JC_85:
                                                     ((JC_81:
                                                      le_int((0),
@@ -1553,21 +1551,21 @@ let heapsort_safety =
                                                          lt_int(integer_of_uint32(i_0_0),
                                                          integer_of_uint32(n)))
                                                         and ((JC_83:
-                                                             Permut(contents(a_0_0,
-                                                                    int_P_int_M_a_0_6),
-                                                             contents(a_0_0@init,
-                                                             int_P_int_M_a_0_6@init),
+                                                             Permut(contents(a_1,
+                                                                    int_P_int_M_a_6),
+                                                             contents(a_1@init,
+                                                             int_P_int_M_a_6@init),
                                                              (0),
                                                              sub_int(
                                                              integer_of_uint32(n),
                                                              (1))))
                                                             and (JC_84:
-                                                                H(a_0_0,
+                                                                H(a_1,
                                                                 integer_of_uint32(i_0_0),
                                                                 sub_int(
                                                                 integer_of_uint32(n),
                                                                 (1)),
-                                                                int_P_int_M_a_0_6)))))) } ];
+                                                                int_P_int_M_a_6)))))) } ];
                                                try
                                                 (let jessie_69 = begin
                                                                    (let jessie_68 = 
@@ -1586,7 +1584,7 @@ let heapsort_safety =
                                                                     (C_73:
                                                                     begin
                                                                       
-                                                                    (let jessie_66 = a_0_0 in
+                                                                    (let jessie_66 = a_1 in
                                                                     (let jessie_65 = 
                                                                     (C_66:
                                                                     (JC_92:
@@ -1604,7 +1602,7 @@ let heapsort_safety =
                                                                     (let jessie_63 = 
                                                                     (C_72:
                                                                     (JC_90:
-                                                                    ((((offset_acc_ int_P_a_0_6_alloc_table) !int_P_int_M_a_0_6) a_0_0) 
+                                                                    ((((offset_acc_ int_P_a_6_alloc_table) !int_P_int_M_a_6) a_1) 
                                                                     (integer_of_uint32 
                                                                     (C_70:
                                                                     (JC_89:
@@ -1613,7 +1611,7 @@ let heapsort_safety =
                                                                     ((sub_int 
                                                                     (integer_of_uint32 !i_0_0)) (1)))))))))) in
                                                                     (JC_93:
-                                                                    ((((((sift_down_requires jessie_66) jessie_65) jessie_64) jessie_63) int_P_int_M_a_0_6) int_P_a_0_6_alloc_table))))));
+                                                                    ((((((sift_down_requires jessie_66) jessie_65) jessie_64) jessie_63) int_P_int_M_a_6) int_P_a_6_alloc_table))))));
                                                                     (C_76:
                                                                     begin
                                                                       
@@ -1663,7 +1661,7 @@ let heapsort_safety =
                                                 variant integer_of_uint32((JC_113 : i_0_0)) }
                                                begin
                                                  [ { } unit
-                                                   reads i_0_0,int_P_int_M_a_0_6
+                                                   reads i_0_0,int_P_int_M_a_6
                                                    { (JC_103:
                                                      ((JC_97:
                                                       le_int((0),
@@ -1673,29 +1671,28 @@ let heapsort_safety =
                                                           integer_of_uint32(n)))
                                                          and ((JC_99:
                                                               Permut(
-                                                              contents(a_0_0,
-                                                              int_P_int_M_a_0_6),
-                                                              contents(a_0_0@init,
-                                                              int_P_int_M_a_0_6@init),
+                                                              contents(a_1,
+                                                              int_P_int_M_a_6),
+                                                              contents(a_1@init,
+                                                              int_P_int_M_a_6@init),
                                                               (0),
                                                               sub_int(
                                                               integer_of_uint32(n),
                                                               (1))))
                                                              and ((JC_100:
-                                                                  H(a_0_0,
-                                                                  (0),
+                                                                  H(a_1, (0),
                                                                   integer_of_uint32(i_0_0),
-                                                                  int_P_int_M_a_0_6))
+                                                                  int_P_int_M_a_6))
                                                                  and 
                                                                  ((JC_101:
-                                                                  Sorted(a_0_0,
+                                                                  Sorted(a_1,
                                                                   add_int(
                                                                   integer_of_uint32(i_0_0),
                                                                   (1)),
                                                                   sub_int(
                                                                   integer_of_uint32(n),
                                                                   (1)),
-                                                                  int_P_int_M_a_0_6))
+                                                                  int_P_int_M_a_6))
                                                                  and 
                                                                  (JC_102:
                                                                  (forall k1:int32.
@@ -1717,12 +1714,12 @@ let heapsort_safety =
                                                                     integer_of_uint32(n))) ->
                                                                     le_int(
                                                                     integer_of_int32(
-                                                                    select(int_P_int_M_a_0_6,
-                                                                    shift(a_0_0,
+                                                                    select(int_P_int_M_a_6,
+                                                                    shift(a_1,
                                                                     integer_of_int32(k1)))),
                                                                     integer_of_int32(
-                                                                    select(int_P_int_M_a_0_6,
-                                                                    shift(a_0_0,
+                                                                    select(int_P_int_M_a_6,
+                                                                    shift(a_1,
                                                                     integer_of_int32(k2)))))))))))))))) } ];
                                                 try
                                                  (let jessie_88 = begin
@@ -1746,7 +1743,7 @@ let heapsort_safety =
                                                                     (tmp := 
                                                                     (C_93:
                                                                     (JC_107:
-                                                                    ((((offset_acc_ int_P_a_0_6_alloc_table) !int_P_int_M_a_0_6) a_0_0) 
+                                                                    ((((offset_acc_ int_P_a_6_alloc_table) !int_P_int_M_a_6) a_1) 
                                                                     (integer_of_uint32 !i_0_0))))) in
                                                                     void);
                                                                     (C_99:
@@ -1756,17 +1753,17 @@ let heapsort_safety =
                                                                     (let jessie_77 = 
                                                                     (C_96:
                                                                     (JC_108:
-                                                                    (((acc_ int_P_a_0_6_alloc_table) !int_P_int_M_a_0_6) a_0_0))) in
-                                                                    (let jessie_78 = a_0_0 in
+                                                                    (((acc_ int_P_a_6_alloc_table) !int_P_int_M_a_6) a_1))) in
+                                                                    (let jessie_78 = a_1 in
                                                                     (let jessie_79 = 
                                                                     (integer_of_uint32 !i_0_0) in
                                                                     (let jessie_80 = 
                                                                     ((shift jessie_78) jessie_79) in
                                                                     (JC_109:
-                                                                    (((((offset_upd_ int_P_a_0_6_alloc_table) int_P_int_M_a_0_6) jessie_78) jessie_79) jessie_77)))))) in
+                                                                    (((((offset_upd_ int_P_a_6_alloc_table) int_P_int_M_a_6) jessie_78) jessie_79) jessie_77)))))) in
                                                                     void);
                                                                     (C_102:
-                                                                    (let jessie_85 = a_0_0 in
+                                                                    (let jessie_85 = a_1 in
                                                                     (let jessie_84 = 
                                                                     (safe_uint32_of_integer_ (0)) in
                                                                     (let jessie_83 = 
@@ -1778,7 +1775,7 @@ let heapsort_safety =
                                                                     (integer_of_uint32 !i_0_0)) (1)))))) in
                                                                     (let jessie_82 = !tmp in
                                                                     (JC_111:
-                                                                    ((((((sift_down_requires jessie_85) jessie_84) jessie_83) jessie_82) int_P_int_M_a_0_6) int_P_a_0_6_alloc_table)))))))
+                                                                    ((((((sift_down_requires jessie_85) jessie_84) jessie_83) jessie_82) int_P_int_M_a_6) int_P_a_6_alloc_table)))))))
                                                                     end)
                                                                     end);
                                                                     (C_105:
@@ -1829,20 +1826,20 @@ let heapsort_safety =
   { true }
 
 let sift_down_ensures_default =
- fun (a_1 : int_P pointer) (low : uint32) (high : uint32) (v_0 : int32) (int_P_int_M_a_5 : (int_P, int32) memory ref) (int_P_a_5_alloc_table : int_P alloc_table) ->
+ fun (a_0_0 : int_P pointer) (low : uint32) (high : uint32) (v_0 : int32) (int_P_int_M_a_0_5 : (int_P, int32) memory ref) (int_P_a_0_5_alloc_table : int_P alloc_table) ->
   { ((true = true)
     and (JC_13:
         ((JC_8: le_int((0), integer_of_uint32(low)))
         and ((JC_9: le_int(integer_of_uint32(low), integer_of_uint32(high)))
             and ((JC_10:
-                 le_int(offset_min(int_P_a_5_alloc_table, a_1),
+                 le_int(offset_min(int_P_a_0_5_alloc_table, a_0_0),
                  integer_of_uint32(low)))
                 and ((JC_11:
-                     ge_int(offset_max(int_P_a_5_alloc_table, a_1),
+                     ge_int(offset_max(int_P_a_0_5_alloc_table, a_0_0),
                      integer_of_uint32(high)))
                     and (JC_12:
-                        H(a_1, add_int(integer_of_uint32(low), (1)),
-                        integer_of_uint32(high), int_P_int_M_a_5)))))))) }
+                        H(a_0_0, add_int(integer_of_uint32(low), (1)),
+                        integer_of_uint32(high), int_P_int_M_a_0_5)))))))) }
   (init:
   try
    begin
@@ -1864,9 +1861,10 @@ let sift_down_ensures_default =
                                     le_int(integer_of_uint32(i_15),
                                     integer_of_uint32(high)))
                                    and ((JC_52:
-                                        Permut(contents(a_1, int_P_int_M_a_5),
-                                        contents(a_1@init,
-                                        int_P_int_M_a_5@init),
+                                        Permut(contents(a_0_0,
+                                               int_P_int_M_a_0_5),
+                                        contents(a_0_0@init,
+                                        int_P_int_M_a_0_5@init),
                                         integer_of_uint32(low),
                                         integer_of_uint32(high)))
                                        and ((JC_53:
@@ -1875,40 +1873,42 @@ let sift_down_ensures_default =
                                                integer_of_int32(k_2))
                                               and le_int(integer_of_int32(k_2),
                                                   integer_of_uint32(high))) ->
-                                              Hnode(a_1,
+                                              Hnode(a_0_0,
                                               integer_of_int32(k_2),
                                               integer_of_uint32(high),
-                                              int_P_int_M_a_5))))
+                                              int_P_int_M_a_0_5))))
                                            and ((JC_54:
                                                 (lt_int(integer_of_uint32(low),
                                                  integer_of_uint32(i_15)) ->
-                                                 Hnode(a_1,
+                                                 Hnode(a_0_0,
                                                  integer_of_uint32(low),
                                                  integer_of_uint32(high),
-                                                 int_P_int_M_a_5)))
+                                                 int_P_int_M_a_0_5)))
                                                and (JC_55:
                                                    (le_int(integer_of_uint32(low),
                                                     div_int(sub_int(integer_of_uint32(i_15),
                                                             (1)),
                                                     (2))) ->
                                                     ge_int(integer_of_int32(
-                                                           select(int_P_int_M_a_5,
-                                                           shift(a_1,
+                                                           select(int_P_int_M_a_0_5,
+                                                           shift(a_0_0,
                                                            div_int(sub_int(
                                                                    integer_of_uint32(i_15),
                                                                    (1)),
                                                            (2))))),
                                                     integer_of_int32(v_0))))))))))
                               and ((JC_58:
-                                   not_assigns(int_P_a_5_alloc_table@loop_2,
-                                   int_P_int_M_a_5@loop_2, int_P_int_M_a_5,
-                                   pset_range(pset_singleton(a_1),
+                                   not_assigns(int_P_a_0_5_alloc_table@loop_2,
+                                   int_P_int_M_a_0_5@loop_2,
+                                   int_P_int_M_a_0_5,
+                                   pset_range(pset_singleton(a_0_0),
                                    integer_of_uint32(low),
                                    integer_of_uint32(high))))
                                   and (JC_59:
-                                      not_assigns(int_P_a_5_alloc_table@init,
-                                      int_P_int_M_a_5@init, int_P_int_M_a_5,
-                                      pset_range(pset_singleton(a_1@init),
+                                      not_assigns(int_P_a_0_5_alloc_table@init,
+                                      int_P_int_M_a_0_5@init,
+                                      int_P_int_M_a_0_5,
+                                      pset_range(pset_singleton(a_0_0@init),
                                       integer_of_uint32(low@init),
                                       integer_of_uint32(high@init))))))
                              }
@@ -1960,9 +1960,9 @@ let sift_down_ensures_default =
                                                                    ((ge_int_ 
                                                                     (integer_of_int32 
                                                                     (C_27:
-                                                                    ((safe_acc_ !int_P_int_M_a_5) 
+                                                                    ((safe_acc_ !int_P_int_M_a_0_5) 
                                                                     (C_26:
-                                                                    ((shift a_1) 
+                                                                    ((shift a_0_0) 
                                                                     (integer_of_uint32 
                                                                     (C_25:
                                                                     (safe_uint32_of_integer_ 
@@ -1971,9 +1971,9 @@ let sift_down_ensures_default =
                                                                     (integer_of_uint32 !child)) (1)))))))))))) 
                                                                     (integer_of_int32 
                                                                     (C_23:
-                                                                    ((safe_acc_ !int_P_int_M_a_5) 
+                                                                    ((safe_acc_ !int_P_int_M_a_0_5) 
                                                                     (C_22:
-                                                                    ((shift a_1) 
+                                                                    ((shift a_0_0) 
                                                                     (integer_of_uint32 !child)))))))
                                                                    then
                                                                     (C_21:
@@ -1992,9 +1992,9 @@ let sift_down_ensures_default =
                                                                     (integer_of_int32 v_0)) 
                                                                    (integer_of_int32 
                                                                     (C_31:
-                                                                    ((safe_acc_ !int_P_int_M_a_5) 
+                                                                    ((safe_acc_ !int_P_int_M_a_0_5) 
                                                                     (C_30:
-                                                                    ((shift a_1) 
+                                                                    ((shift a_0_0) 
                                                                     (integer_of_uint32 !child)))))))
                                                                   then
                                                                    (let jessie_42 = 
@@ -2008,23 +2008,23 @@ let sift_down_ensures_default =
                                                                     (let jessie_48 = 
                                                                     (let jessie_44 = 
                                                                     (C_33:
-                                                                    ((safe_acc_ !int_P_int_M_a_5) 
+                                                                    ((safe_acc_ !int_P_int_M_a_0_5) 
                                                                     (C_32:
-                                                                    ((shift a_1) 
+                                                                    ((shift a_0_0) 
                                                                     (integer_of_uint32 !child))))) in
                                                                     (let jessie_47 = 
                                                                     (C_34:
-                                                                    ((shift a_1) 
+                                                                    ((shift a_0_0) 
                                                                     (integer_of_uint32 !i_15))) in
-                                                                    (((safe_upd_ int_P_int_M_a_5) jessie_47) jessie_44))) in
+                                                                    (((safe_upd_ int_P_int_M_a_0_5) jessie_47) jessie_44))) in
                                                                     void);
                                                                    (assert
                                                                    { 
                                                                    (JC_60:
-                                                                   Hnode(a_1,
+                                                                   Hnode(a_0_0,
                                                                    integer_of_uint32(i_15),
                                                                    integer_of_uint32(high),
-                                                                   int_P_int_M_a_5)) };
+                                                                   int_P_int_M_a_0_5)) };
                                                                    void);
                                                                    void;
                                                                    (C_38:
@@ -2056,8 +2056,8 @@ let sift_down_ensures_default =
       begin
         (let jessie_58 = (let jessie_54 = v_0 in
                          (let jessie_57 = (C_39:
-                                          ((shift a_1) (integer_of_uint32 !i_15))) in
-                         (((safe_upd_ int_P_int_M_a_5) jessie_57) jessie_54))) in
+                                          ((shift a_0_0) (integer_of_uint32 !i_15))) in
+                         (((safe_upd_ int_P_int_M_a_0_5) jessie_57) jessie_54))) in
         void);
        (raise Return)
       end)
@@ -2070,32 +2070,32 @@ let sift_down_ensures_default =
   { (JC_19:
     ((JC_17:
      ((JC_15:
-      Permut(contents(a_1, int_P_int_M_a_5),
-      update(contents(a_1@, int_P_int_M_a_5), integer_of_uint32(low@), v_0@),
-      integer_of_uint32(low), integer_of_uint32(high)))
+      Permut(contents(a_0_0, int_P_int_M_a_0_5),
+      update(contents(a_0_0@, int_P_int_M_a_0_5), integer_of_uint32(low@),
+      v_0@), integer_of_uint32(low), integer_of_uint32(high)))
      and (JC_16:
-         H(a_1, integer_of_uint32(low), integer_of_uint32(high),
-         int_P_int_M_a_5))))
+         H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+         int_P_int_M_a_0_5))))
     and (JC_18:
-        not_assigns(int_P_a_5_alloc_table@, int_P_int_M_a_5@,
-        int_P_int_M_a_5,
-        pset_range(pset_singleton(a_1@), integer_of_uint32(low@),
+        not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
+        int_P_int_M_a_0_5,
+        pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
         integer_of_uint32(high@)))))) }
 
 let sift_down_safety =
- fun (a_1 : int_P pointer) (low : uint32) (high : uint32) (v_0 : int32) (int_P_int_M_a_5 : (int_P, int32) memory ref) (int_P_a_5_alloc_table : int_P alloc_table) ->
+ fun (a_0_0 : int_P pointer) (low : uint32) (high : uint32) (v_0 : int32) (int_P_int_M_a_0_5 : (int_P, int32) memory ref) (int_P_a_0_5_alloc_table : int_P alloc_table) ->
   { (JC_13:
     ((JC_8: le_int((0), integer_of_uint32(low)))
     and ((JC_9: le_int(integer_of_uint32(low), integer_of_uint32(high)))
         and ((JC_10:
-             le_int(offset_min(int_P_a_5_alloc_table, a_1),
+             le_int(offset_min(int_P_a_0_5_alloc_table, a_0_0),
              integer_of_uint32(low)))
             and ((JC_11:
-                 ge_int(offset_max(int_P_a_5_alloc_table, a_1),
+                 ge_int(offset_max(int_P_a_0_5_alloc_table, a_0_0),
                  integer_of_uint32(high)))
                 and (JC_12:
-                    H(a_1, add_int(integer_of_uint32(low), (1)),
-                    integer_of_uint32(high), int_P_int_M_a_5))))))) }
+                    H(a_0_0, add_int(integer_of_uint32(low), (1)),
+                    integer_of_uint32(high), int_P_int_M_a_0_5))))))) }
   (init:
   try
    begin
@@ -2112,7 +2112,7 @@ let sift_down_safety =
                             variant (JC_48 : sub_int(integer_of_uint32(high),
                                              integer_of_uint32(i_15))) }
                            begin
-                             [ { } unit reads i_15,int_P_int_M_a_5
+                             [ { } unit reads i_15,int_P_int_M_a_0_5
                                { (JC_33:
                                  ((JC_27:
                                   le_int(integer_of_uint32(low),
@@ -2121,10 +2121,10 @@ let sift_down_safety =
                                       le_int(integer_of_uint32(i_15),
                                       integer_of_uint32(high)))
                                      and ((JC_29:
-                                          Permut(contents(a_1,
-                                                 int_P_int_M_a_5),
-                                          contents(a_1@init,
-                                          int_P_int_M_a_5@init),
+                                          Permut(contents(a_0_0,
+                                                 int_P_int_M_a_0_5),
+                                          contents(a_0_0@init,
+                                          int_P_int_M_a_0_5@init),
                                           integer_of_uint32(low),
                                           integer_of_uint32(high)))
                                          and ((JC_30:
@@ -2133,17 +2133,17 @@ let sift_down_safety =
                                                  integer_of_int32(k_2))
                                                 and le_int(integer_of_int32(k_2),
                                                     integer_of_uint32(high))) ->
-                                                Hnode(a_1,
+                                                Hnode(a_0_0,
                                                 integer_of_int32(k_2),
                                                 integer_of_uint32(high),
-                                                int_P_int_M_a_5))))
+                                                int_P_int_M_a_0_5))))
                                              and ((JC_31:
                                                   (lt_int(integer_of_uint32(low),
                                                    integer_of_uint32(i_15)) ->
-                                                   Hnode(a_1,
+                                                   Hnode(a_0_0,
                                                    integer_of_uint32(low),
                                                    integer_of_uint32(high),
-                                                   int_P_int_M_a_5)))
+                                                   int_P_int_M_a_0_5)))
                                                  and (JC_32:
                                                      (le_int(integer_of_uint32(low),
                                                       div_int(sub_int(
@@ -2151,8 +2151,8 @@ let sift_down_safety =
                                                               (1)),
                                                       (2))) ->
                                                       ge_int(integer_of_int32(
-                                                             select(int_P_int_M_a_5,
-                                                             shift(a_1,
+                                                             select(int_P_int_M_a_0_5,
+                                                             shift(a_0_0,
                                                              div_int(
                                                              sub_int(
                                                              integer_of_uint32(i_15),
@@ -2208,7 +2208,7 @@ let sift_down_safety =
                                                                     (integer_of_int32 
                                                                     (C_27:
                                                                     (JC_41:
-                                                                    ((((offset_acc_ int_P_a_5_alloc_table) !int_P_int_M_a_5) a_1) 
+                                                                    ((((offset_acc_ int_P_a_0_5_alloc_table) !int_P_int_M_a_0_5) a_0_0) 
                                                                     (integer_of_uint32 
                                                                     (C_25:
                                                                     (JC_40:
@@ -2219,7 +2219,7 @@ let sift_down_safety =
                                                                     (integer_of_int32 
                                                                     (C_23:
                                                                     (JC_42:
-                                                                    ((((offset_acc_ int_P_a_5_alloc_table) !int_P_int_M_a_5) a_1) 
+                                                                    ((((offset_acc_ int_P_a_0_5_alloc_table) !int_P_int_M_a_0_5) a_0_0) 
                                                                     (integer_of_uint32 !child))))))
                                                                    then
                                                                     (C_21:
@@ -2240,7 +2240,7 @@ let sift_down_safety =
                                                                    (integer_of_int32 
                                                                     (C_31:
                                                                     (JC_44:
-                                                                    ((((offset_acc_ int_P_a_5_alloc_table) !int_P_int_M_a_5) a_1) 
+                                                                    ((((offset_acc_ int_P_a_0_5_alloc_table) !int_P_int_M_a_0_5) a_0_0) 
                                                                     (integer_of_uint32 !child))))))
                                                                   then
                                                                    (let jessie_18 = 
@@ -2255,24 +2255,24 @@ let sift_down_safety =
                                                                     (let jessie_20 = 
                                                                     (C_33:
                                                                     (JC_45:
-                                                                    ((((offset_acc_ int_P_a_5_alloc_table) !int_P_int_M_a_5) a_1) 
+                                                                    ((((offset_acc_ int_P_a_0_5_alloc_table) !int_P_int_M_a_0_5) a_0_0) 
                                                                     (integer_of_uint32 !child)))) in
-                                                                    (let jessie_21 = a_1 in
+                                                                    (let jessie_21 = a_0_0 in
                                                                     (let jessie_22 = 
                                                                     (integer_of_uint32 !i_15) in
                                                                     (let jessie_23 = 
                                                                     ((shift jessie_21) jessie_22) in
                                                                     (JC_46:
-                                                                    (((((offset_upd_ int_P_a_5_alloc_table) int_P_int_M_a_5) jessie_21) jessie_22) jessie_20)))))) in
+                                                                    (((((offset_upd_ int_P_a_0_5_alloc_table) int_P_int_M_a_0_5) jessie_21) jessie_22) jessie_20)))))) in
                                                                     void);
                                                                    [ 
                                                                    { } unit
-                                                                   reads i_15,int_P_int_M_a_5
+                                                                   reads i_15,int_P_int_M_a_0_5
                                                                    { (JC_47:
-                                                                    Hnode(a_1,
+                                                                    Hnode(a_0_0,
                                                                     integer_of_uint32(i_15),
                                                                     integer_of_uint32(high),
-                                                                    int_P_int_M_a_5)) } ];
+                                                                    int_P_int_M_a_0_5)) } ];
                                                                    void;
                                                                    (C_38:
                                                                    begin
@@ -2302,11 +2302,11 @@ let sift_down_safety =
       (C_41:
       begin
         (let jessie_34 = (let jessie_30 = v_0 in
-                         (let jessie_31 = a_1 in
+                         (let jessie_31 = a_0_0 in
                          (let jessie_32 = (integer_of_uint32 !i_15) in
                          (let jessie_33 = ((shift jessie_31) jessie_32) in
                          (JC_49:
-                         (((((offset_upd_ int_P_a_5_alloc_table) int_P_int_M_a_5) jessie_31) jessie_32) jessie_30)))))) in
+                         (((((offset_upd_ int_P_a_0_5_alloc_table) int_P_int_M_a_0_5) jessie_31) jessie_32) jessie_30)))))) in
         void);
        (raise Return)
       end)
@@ -2556,12 +2556,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2503"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2503"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2601,12 +2601,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2503"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2503"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2721,11 +2721,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "1192" begin = "55" end = "89"/>
+      <location file = "why/heapsort.why" line = "1191" begin = "55" end = "89"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "1192" begin = "55" end = "89"/>
+      <location file = "why/heapsort.why" line = "1191" begin = "55" end = "89"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2814,11 +2814,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "1311" begin = "56" end = "91"/>
+      <location file = "why/heapsort.why" line = "1310" begin = "56" end = "91"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "1311" begin = "56" end = "91"/>
+      <location file = "why/heapsort.why" line = "1310" begin = "56" end = "91"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

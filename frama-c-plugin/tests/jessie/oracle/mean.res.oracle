@@ -39,26 +39,26 @@ lemma mean_1 :
 (\forall int32 x;
   ((0 <= x) ==> ((0 <= (x / 2)) && ((x / 2) <= x))))
 
-int32 mean(int32 l_0, int32 r_0)
-  requires (C_8 : ((C_9 : (0 <= l_0)) && (C_10 : (l_0 <= r_0))));
+int32 mean(int32 l, int32 r)
+  requires (C_8 : ((C_9 : (0 <= l)) && (C_10 : (l <= r))));
 behavior default:
   assumes true;
   ensures (C_11 : true);
 {  
    (var int32 __retres);
    
-   {  (C_7 : (__retres = (C_6 : ((C_5 : (l_0 +
+   {  (C_7 : (__retres = (C_6 : ((C_5 : (l +
                                           (C_4 : ((C_3 : ((C_2 : ((C_1 : 
-                                                                  (r_0 -
-                                                                    l_0)) :> int32)) /
+                                                                  (r -
+                                                                    l)) :> int32)) /
                                                            2)) :> int32)))) :> int32))));
       
       (return __retres)
    }
 }
 
-uint32 umean(uint32 l, uint32 r)
-  requires (C_22 : (l <= r));
+uint32 umean(uint32 l_0, uint32 r_0)
+  requires (C_22 : (l_0 <= r_0));
 behavior default:
   assumes true;
   ensures (C_23 : true);
@@ -67,15 +67,16 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_12 : ((C_13 : (0 <= ((r - l) / 2))) &&
-                                        (C_14 : (((r - l) / 2) <= (r - l))))));
+         (assert for default: (C_12 : ((C_13 : (0 <= ((r_0 - l_0) / 2))) &&
+                                        (C_14 : (((r_0 - l_0) / 2) <=
+                                                  (r_0 - l_0))))));
          ()
       };
-      (C_21 : (__retres_0 = (C_20 : ((C_19 : (l +
+      (C_21 : (__retres_0 = (C_20 : ((C_19 : (l_0 +
                                                (C_18 : ((C_17 : ((C_16 : (
                                                                  (C_15 : 
-                                                                 (r -
-                                                                   l)) :> uint32)) /
+                                                                 (r_0 -
+                                                                   l_0)) :> uint32)) /
                                                                   2)) :> uint32)))) :> uint32))));
       
       (return __retres_0)
@@ -514,7 +515,7 @@ parameter max_int_requires :
       or (eq_int(integer_of_int32(result), integer_of_int32(y))
          and ge_int(integer_of_int32(y), integer_of_int32(x)))))) }
 
-parameter mean : l_0:int32 -> r_0:int32 -> { } int32 { true }
+parameter mean : l:int32 -> r:int32 -> { } int32 { true }
 
 parameter mean2 : x_0:int32 -> y_0:int32 -> { } int32 { true }
 
@@ -527,11 +528,11 @@ parameter mean2_requires :
    int32 { true }
 
 parameter mean_requires :
- l_0:int32 ->
-  r_0:int32 ->
+ l:int32 ->
+  r:int32 ->
    { (JC_3:
-     ((JC_1: le_int((0), integer_of_int32(l_0)))
-     and (JC_2: le_int(integer_of_int32(l_0), integer_of_int32(r_0)))))}
+     ((JC_1: le_int((0), integer_of_int32(l)))
+     and (JC_2: le_int(integer_of_int32(l), integer_of_int32(r)))))}
    int32 { true }
 
 parameter min_int :
@@ -570,12 +571,12 @@ parameter uint32_of_integer_ :
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
 
-parameter umean : l:uint32 -> r:uint32 -> { } uint32 { true }
+parameter umean : l_0:uint32 -> r_0:uint32 -> { } uint32 { true }
 
 parameter umean_requires :
- l:uint32 ->
-  r:uint32 ->
-   { (JC_18: le_int(integer_of_uint32(l), integer_of_uint32(r)))} uint32
+ l_0:uint32 ->
+  r_0:uint32 ->
+   { (JC_18: le_int(integer_of_uint32(l_0), integer_of_uint32(r_0)))} uint32
    { true }
 
 let mean2_ensures_default =
@@ -701,11 +702,11 @@ let mean2_safety =
   { true }
 
 let mean_ensures_default =
- fun (l_0 : int32) (r_0 : int32) ->
+ fun (l : int32) (r : int32) ->
   { ((true = true)
     and (JC_7:
-        ((JC_5: le_int((0), integer_of_int32(l_0)))
-        and (JC_6: le_int(integer_of_int32(l_0), integer_of_int32(r_0)))))) }
+        ((JC_5: le_int((0), integer_of_int32(l)))
+        and (JC_6: le_int(integer_of_int32(l), integer_of_int32(r)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -716,7 +717,7 @@ let mean_ensures_default =
        (let jessie_5 = (__retres := (C_6:
                                     (safe_int32_of_integer_ (C_5:
                                                             ((add_int 
-                                                              (integer_of_int32 l_0)) 
+                                                              (integer_of_int32 l)) 
                                                              (integer_of_int32 
                                                               (C_4:
                                                               (safe_int32_of_integer_ 
@@ -728,8 +729,8 @@ let mean_ensures_default =
                                                                   (safe_int32_of_integer_ 
                                                                    (C_1:
                                                                    ((sub_int 
-                                                                    (integer_of_int32 r_0)) 
-                                                                    (integer_of_int32 l_0))))))) (2)))))))))))) in
+                                                                    (integer_of_int32 r)) 
+                                                                    (integer_of_int32 l))))))) (2)))))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -742,10 +743,10 @@ let mean_ensures_default =
   { (JC_9: true) }
 
 let mean_safety =
- fun (l_0 : int32) (r_0 : int32) ->
+ fun (l : int32) (r : int32) ->
   { (JC_7:
-    ((JC_5: le_int((0), integer_of_int32(l_0)))
-    and (JC_6: le_int(integer_of_int32(l_0), integer_of_int32(r_0))))) }
+    ((JC_5: le_int((0), integer_of_int32(l)))
+    and (JC_6: le_int(integer_of_int32(l), integer_of_int32(r))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -756,7 +757,7 @@ let mean_safety =
        (let jessie_2 = (__retres := (C_6:
                                     (JC_16:
                                     (int32_of_integer_ (C_5:
-                                                       ((add_int (integer_of_int32 l_0)) 
+                                                       ((add_int (integer_of_int32 l)) 
                                                         (integer_of_int32 
                                                          (C_4:
                                                          (JC_15:
@@ -770,8 +771,8 @@ let mean_safety =
                                                              (int32_of_integer_ 
                                                               (C_1:
                                                               ((sub_int 
-                                                                (integer_of_int32 r_0)) 
-                                                               (integer_of_int32 l_0)))))))) (2)))))))))))))) in
+                                                                (integer_of_int32 r)) 
+                                                               (integer_of_int32 l)))))))) (2)))))))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -784,9 +785,9 @@ let mean_safety =
   { true }
 
 let umean_ensures_default =
- fun (l : uint32) (r : uint32) ->
+ fun (l_0 : uint32) (r_0 : uint32) ->
   { ((true = true)
-    and (JC_20: le_int(integer_of_uint32(l), integer_of_uint32(r)))) }
+    and (JC_20: le_int(integer_of_uint32(l_0), integer_of_uint32(r_0)))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -797,12 +798,13 @@ let umean_ensures_default =
        { (JC_35:
          ((JC_33:
           le_int((0),
-          div_int(sub_int(integer_of_uint32(r), integer_of_uint32(l)), (2))))
+          div_int(sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)),
+          (2))))
          and (JC_34:
-             le_int(div_int(sub_int(integer_of_uint32(r),
-                            integer_of_uint32(l)),
+             le_int(div_int(sub_int(integer_of_uint32(r_0),
+                            integer_of_uint32(l_0)),
                     (2)),
-             sub_int(integer_of_uint32(r), integer_of_uint32(l)))))) };
+             sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) };
        void);
       void;
       (C_21:
@@ -810,7 +812,7 @@ let umean_ensures_default =
         (let jessie_11 = (__retres_0 := (C_20:
                                         (safe_uint32_of_integer_ (C_19:
                                                                  ((add_int 
-                                                                   (integer_of_uint32 l)) 
+                                                                   (integer_of_uint32 l_0)) 
                                                                   (integer_of_uint32 
                                                                    (C_18:
                                                                    (safe_uint32_of_integer_ 
@@ -822,8 +824,8 @@ let umean_ensures_default =
                                                                     (safe_uint32_of_integer_ 
                                                                     (C_15:
                                                                     ((sub_int 
-                                                                    (integer_of_uint32 r)) 
-                                                                    (integer_of_uint32 l))))))) (2)))))))))))) in
+                                                                    (integer_of_uint32 r_0)) 
+                                                                    (integer_of_uint32 l_0))))))) (2)))))))))))) in
         void);
        (return := !__retres_0);
        (raise Return)
@@ -837,8 +839,8 @@ let umean_ensures_default =
   { (JC_22: true) }
 
 let umean_safety =
- fun (l : uint32) (r : uint32) ->
-  { (JC_20: le_int(integer_of_uint32(l), integer_of_uint32(r))) }
+ fun (l_0 : uint32) (r_0 : uint32) ->
+  { (JC_20: le_int(integer_of_uint32(l_0), integer_of_uint32(r_0))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -849,12 +851,13 @@ let umean_safety =
          { (JC_28:
            ((JC_26:
             le_int((0),
-            div_int(sub_int(integer_of_uint32(r), integer_of_uint32(l)), (2))))
+            div_int(sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)),
+            (2))))
            and (JC_27:
-               le_int(div_int(sub_int(integer_of_uint32(r),
-                              integer_of_uint32(l)),
+               le_int(div_int(sub_int(integer_of_uint32(r_0),
+                              integer_of_uint32(l_0)),
                       (2)),
-               sub_int(integer_of_uint32(r), integer_of_uint32(l)))))) } ];
+               sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) } ];
       void;
       (C_21:
       begin
@@ -862,7 +865,7 @@ let umean_safety =
                                        (JC_32:
                                        (uint32_of_integer_ (C_19:
                                                            ((add_int 
-                                                             (integer_of_uint32 l)) 
+                                                             (integer_of_uint32 l_0)) 
                                                             (integer_of_uint32 
                                                              (C_18:
                                                              (JC_31:
@@ -876,8 +879,8 @@ let umean_safety =
                                                                  (uint32_of_integer_ 
                                                                   (C_15:
                                                                   ((sub_int 
-                                                                    (integer_of_uint32 r)) 
-                                                                   (integer_of_uint32 l)))))))) (2)))))))))))))) in
+                                                                    (integer_of_uint32 r_0)) 
+                                                                   (integer_of_uint32 l_0)))))))) (2)))))))))))))) in
         void);
        (return := !__retres_0);
        (raise Return)
