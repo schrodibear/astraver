@@ -48,7 +48,7 @@ PLUGIN_BFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_OFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_EXTRA_BYTE+=$(JCCMO)
 PLUGIN_EXTRA_OPT+=$(JCCMX)
-PLUGIN_DEPFLAGS:=$(JESSIE_INCLUDES)
+#PLUGIN_DEPFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_TESTS_DIRS:=jessie
 PLUGIN_NO_DEFAULT_TEST:=yes
@@ -56,19 +56,21 @@ PLUGIN_NO_DEFAULT_TEST:=yes
 ifeq ($(FRAMAC_MAKE),yes)
 unexport $(FRAMAC_MAKE)
 
-all:: why_all
+all::  $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend why_all
 
 .PHONY: why_all $(WHY_DISTRIB)/depend $(WHY_DISTRIB)/clean
-why_all: $(WHY_DISTRIB)/Makefile
+why_all: $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend
 	$(MAKE) -C $(dir $<) -j 1 all-without-frama-c-plugin
 
-$(WHY_DISTRIB)/depend:
+$(WHY_DISTRIB)/depend: $(WHY_DISTRIB)/Makefile
 	$(MAKE) -C $(dir $@) -j 1 depend FRAMAC=no
 
 $(WHY_DISTRIB)/clean:
 	$(MAKE) -C $(dir $@) -j 1 clean
 
-$(PLUGIN_DIR)/.depend depend:: $(WHY_DISTRIB)/depend
+$(PLUGIN_DIR)/.depend: $(WHY_DISTRIB)/.depend
+
+depend:: $(WHY_DISTRIB)/depend
 
 clean::$(WHY_DISTRIB)/clean
 
@@ -88,8 +90,15 @@ $(PLUGIN_DIR)/jessie_config.ml:
 $(WHY_DISTRIB)/Makefile: $(WHY_DISTRIB)/Makefile.in $(WHY_DISTRIB)/config.status
 	cd $(dir $@) && ./config.status
 
+$(WHY_DISTRIB)/.depend: $(WHY_DISTRIB)/Makefile
+	$(MAKE) -C $(dir $@) -j 1 .depend FRAMAC=no
+
 $(WHY_DISTRIB)/config.status: $(WHY_DISTRIB)/configure
-	cd $(dir $@) && ./config.status --recheck
+	if test -e $(dir $@)/config.status; then \
+	  cd $(dir $@) && ./config.status -recheck; \
+	else \
+	 cd $(dir $@) && ./configure ; \
+	fi
 
 $(WHY_DISTRIB)/configure: $(WHY_DISTRIB)/configure.in
 	cd $(dir $@) && autoconf
@@ -97,7 +106,7 @@ $(WHY_DISTRIB)/configure: $(WHY_DISTRIB)/configure.in
 $(WHY_DISTRIB)/Makefile.in: ;
 $(WHY_DISTRIB)/configure.in: ;
 
-$(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile
+$(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend
 	$(MAKE) -C $(subst /$*,,$@) -j 1 $*
 
 PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
