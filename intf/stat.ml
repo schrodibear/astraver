@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.97 2009-11-10 16:38:19 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.98 2009-11-23 16:13:35 marche Exp $ i*)
 
 open Format
 open Options
@@ -859,25 +859,39 @@ let main () =
   in
   (* menus for provers *)
   let _ = proof_factory#add_separator ()  in
+  (* to work around bug that callback is called immediately 
+     (BTS Frama-C 0037) 
+  *)
+  let prover_selection_active = ref false in
   let select_prover p = 
-    (try !flash_info ((Model.prover_id p) ^" selected for default mode !")
-     with _ -> ());
-    Format.eprintf "Selecting '%s' as default prover@." p.Model.pr_info.DpConfig.name;    
-    Model.set_default_prover p;
-    GConfig.save()
+    if !prover_selection_active then begin
+      (try !flash_info ((Model.prover_id p) ^" selected for default mode !")
+       with _ -> ());
+(*
+      Format.eprintf "select_prover: Selecting '%s' as default prover@." p.Model.pr_info.DpConfig.name;    
+*)
+      Model.set_default_prover p;
+      GConfig.save()
+    end
   in
+(*
   Format.eprintf "creating radio button list@.";  
-  let _provers_m =
+*)
+  let provers_m =
     let name = Model.prover_id (Model.get_default_prover ()) in
+(*
     Format.eprintf "radio_button selected on %s@." name;
+*)
     let pp = fst (List.hd (Model.get_prover_states ())) in
     let n = Model.prover_id pp in
     let fm = proof_factory#add_radio_item ~active:(name = n) n in
     let group = fm#group in
-    ignore(fm#connect#toggled  
+    ignore((*Format.eprintf "Calling fm#connect#toggled for '%s'@."
+             pp.Model.pr_info.DpConfig.name;*)
+           fm#connect#toggled  
 	     ~callback:(fun () -> 
-                          Format.eprintf "Call(1) select_prover '%s'@." 
-                            pp.Model.pr_info.DpConfig.name;
+                 (*         Format.eprintf "Call(1) select_prover '%s'@." 
+                            pp.Model.pr_info.DpConfig.name;*)
                           select_prover pp));
     let l = List.fold_left
       (fun acc (p,s) -> 
@@ -897,8 +911,10 @@ let main () =
       (List.tl (Model.get_prover_states ()))
     in (pp, fm) :: (List.rev l)
   in 
-  Format.eprintf "radio button list created@.";  
 (*
+  Format.eprintf "radio button list created@.";  
+*)
+  prover_selection_active := true;
   let switch_next_prover () =     
     let current_prover = Model.get_default_prover () in
     let rec find_next = function
@@ -924,7 +940,6 @@ let main () =
     proof_factory#add_image_item ~key:GdkKeysyms._N 
       ~label:"_Switch to next prover" ~callback:switch_next_prover () 
   in
-*)
   let _ = proof_factory#add_separator () in
   let hardproof = proof_factory#add_check_item 
     ~callback:(fun b -> Cache.set_hard_proof b) "_Hard proof" in

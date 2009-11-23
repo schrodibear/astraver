@@ -1,4 +1,5 @@
 
+  o [GWhy] Fixed pb default prover selection (BTS Frama-C 0037)
   o [Jessie] fixed problem with axiomatization of address operator
   o [Jessie/Krakatoa/Frama-C plugin] support for the 'for' modifier in
     decreases clauses and loop variants
