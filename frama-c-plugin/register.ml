@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: register.ml,v 1.1 2009-09-08 11:11:43 monate Exp $ *)
+(* $Id: register.ml,v 1.2 2009-11-23 16:26:45 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -218,9 +218,16 @@ let run () =
             " jessie.byte "
           else " jessie "
       in
-      let cpulimit_opt =
+      let timeout =
 	if Jessie_options.CpuLimit.get () <> 0 then
-	  "why-cpulimit " ^ (string_of_int (Jessie_options.CpuLimit.get ()))
+          if Jessie_options.Atp.get () = "gui" then
+	    begin
+              Jessie_options.error "Jessie: option -jessie-cpu-limit requires to set also -jessie-atp"; 
+              raise Exit
+            end
+          else
+	    ("TIMEOUT=" ^ (string_of_int (Jessie_options.CpuLimit.get ())) 
+             ^ " ")
 	else ""
       in
       let rec make_command = function
@@ -234,7 +241,7 @@ let run () =
       
       let cmd =
 	make_command
-	  [ env_opt; cpulimit_opt; jessie_cmd; "-why-opt -split-user-conj";
+	  [ env_opt; jessie_cmd; "-why-opt -split-user-conj";
 	    verbose_opt; why_opt; jc_opt; debug_opt; behav_opt;
 	    "-locs"; locname; filename ]
       in
@@ -250,7 +257,7 @@ let run () =
       *)
       
       Jessie_options.feedback "Calling VCs generator.";
-      sys_command ("make -f " ^ makefile ^ " " ^ (Jessie_options.Atp.get ()));
+      sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ (Jessie_options.Atp.get ()));
       flush_all ()
 	
   with Exit -> ()
