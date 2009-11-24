@@ -44,15 +44,15 @@ axiomatic int_matrices {
 
   logic real pow_i(integer a, integer b)
    
-  logic integer max_int()
+  logic integer max_int 
    
   axiom max_int_eq :
-  (max_int() == 0x1p53)
+  (max_int == 0x1p53)
    
   predicate delay(integer n, integer p) =
   (((0 < n) && (2 <= p)) &&
     ((((p - 1) / 2.) * (pow_i(p, (n - 1)) + pow_i((p - 2), (n - 1)))) <=
-      max_int()))
+      max_int))
    
   axiom delay_decreases :
   (\forall integer n1;
@@ -133,8 +133,7 @@ unit DGEMM_NEG(int32 N_0, int32 M, int32 K_0, int32 p_1, double_P[..] A_0,
                int32 LDA_0, double_P[..] X, int32 LDX, double_P[..] Y,
                int32 LDY)
   requires (C_61 : (((((((C_67 : (2 <= p_1)) &&
-                          (C_68 : ((((p_1 - 1) * (p_1 - 1)) * M) <=
-                                    max_int()))) &&
+                          (C_68 : ((((p_1 - 1) * (p_1 - 1)) * M) <= max_int))) &&
                          (C_69 : (\base_block(Y) != \base_block(A_0)))) &&
                         (C_70 : (\forall integer i_2;
                                   (\forall integer j_2;
@@ -402,8 +401,7 @@ behavior default:
   assumes true;
   assigns (X_1 + [0..((((N_3 - 1) * LDX_1) + K_2) - 1)]).double_M;
   ensures (C_174 : is_exact_int_mat_bounded_by{Here}(X_1, LDX_1, N_3, K_2,
-                                                     (- max_int()), max_int(
-                                                     )));
+                                                     (- max_int), max_int));
 {  
    (var int32 i_1);
    
@@ -578,8 +576,7 @@ behavior default:
 unit LZ_TRSM(int32 N, int32 K, int32 p_0, double_P[..] A, int32 LDA,
              double_P[..] B, int32 LDB)
   requires (C_245 : (((((C_249 : (2 <= p_0)) &&
-                         (C_250 : ((((p_0 - 1) * (p_0 - 1)) * N) <=
-                                    max_int()))) &&
+                         (C_250 : ((((p_0 - 1) * (p_0 - 1)) * N) <= max_int))) &&
                         (C_251 : (\base_block(B) != \base_block(A)))) &&
                        (C_252 : is_exact_int_mat_bounded_by{Here}(A, LDA, N,
                                                                   N, 0,
@@ -5480,22 +5477,22 @@ text = "unexplained assertion"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0112_po119.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "409" begin = "9" end = "3916"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "407" begin = "9" end = "3916"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po120.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "425" begin = "27" end = "3039"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "423" begin = "27" end = "3039"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po121.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "417" begin = "18" end = "3517"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "415" begin = "18" end = "3517"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po122.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "409" begin = "9" end = "3916"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "407" begin = "9" end = "3916"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -5693,17 +5690,17 @@ text = "unexplained assertion"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0112_po77.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "312" begin = "9" end = "3629"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "311" begin = "9" end = "3629"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po78.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "320" begin = "18" end = "3269"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "319" begin = "18" end = "3269"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po79.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "312" begin = "9" end = "3629"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "311" begin = "9" end = "3629"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -5929,12 +5926,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "165" begin = "9" end = "6366"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "165" begin = "9" end = "6366"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -5954,12 +5951,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "181" begin = "18" end = "5615"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "181" begin = "18" end = "5615"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -5994,12 +5991,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "199" begin = "27" end = "4579"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "199" begin = "27" end = "4579"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -6034,12 +6031,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po25.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "199" begin = "27" end = "4579"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "199" begin = "27" end = "4579"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -6059,12 +6056,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "181" begin = "18" end = "5615"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "181" begin = "18" end = "5615"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -6084,12 +6081,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "165" begin = "9" end = "6366"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "165" begin = "9" end = "6366"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>

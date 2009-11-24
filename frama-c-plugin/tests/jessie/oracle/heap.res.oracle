@@ -45,7 +45,7 @@ axiomatic Bag {
 
   logic type bag
    
-  logic bag empty_bag()
+  logic bag empty_bag 
    
   logic bag singleton_bag(integer x_0)
    
@@ -67,14 +67,14 @@ axiomatic Tree {
 
   logic type tree
    
-  logic tree Empty()
+  logic tree Empty 
    
   logic tree Node(tree l, integer x_4, tree r)
    
   logic bag bag_of_tree(tree t)
    
   axiom bag_of_tree_def_1 :
-  (bag_of_tree(Empty()) == empty_bag())
+  (bag_of_tree(Empty) == empty_bag)
    
   axiom bag_of_tree_def_2 :
   (\forall tree l_0;
@@ -90,11 +90,11 @@ axiomatic IsHeap {
   predicate is_heap(tree t_0)
    
   axiom is_heap_def_1 :
-  is_heap(Empty())
+  is_heap(Empty)
    
   axiom is_heap_def_2 :
   (\forall integer x_6;
-    is_heap(Node(Empty(), x_6, Empty())))
+    is_heap(Node(Empty, x_6, Empty)))
    
   axiom is_heap_def_3 :
   (\forall tree ll;
@@ -103,7 +103,7 @@ axiomatic IsHeap {
         (\forall integer x_7;
           ((x_7 >= lx) ==>
             (is_heap(Node(ll, lx, lr)) ==>
-              is_heap(Node(Node(ll, lx, lr), x_7, Empty()))))))))
+              is_heap(Node(Node(ll, lx, lr), x_7, Empty))))))))
    
   axiom is_heap_def_4 :
   (\forall tree rl;
@@ -112,7 +112,7 @@ axiomatic IsHeap {
         (\forall integer x_8;
           ((x_8 >= rx) ==>
             (is_heap(Node(rl, rx, rr)) ==>
-              is_heap(Node(Empty(), x_8, Node(rl, rx, rr)))))))))
+              is_heap(Node(Empty, x_8, Node(rl, rx, rr)))))))))
    
   axiom is_heap_def_5 :
   (\forall tree ll_0;
@@ -140,7 +140,7 @@ axiomatic TreeOfArray {
     (\forall integer root_0;
       (\forall integer bound_0;
         ((root_0 >= bound_0) ==>
-          (tree_of_array{L}(t_2, root_0, bound_0) == Empty())))))
+          (tree_of_array{L}(t_2, root_0, bound_0) == Empty)))))
    
   axiom tree_of_array_def_2{L} :
   (\forall int_P[..] t_3;
@@ -174,7 +174,7 @@ unit clear()
 behavior default:
   assumes true;
   assigns size;
-  ensures (C_2 : (model() == empty_bag()));
+  ensures (C_2 : (model() == empty_bag));
 {  
    {  (C_1 : (size = 0));
       

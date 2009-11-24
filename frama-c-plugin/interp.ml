@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.14 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: interp.ml,v 1.15 2009-11-24 15:40:34 virgile Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -633,7 +633,19 @@ let logic_labels_assoc =
   List.map (fun (_,l) -> logic_label l)
 
 let term_lhost pos = function
-  | TVar v -> mkexpr (JCPEvar v.lv_name) pos
+  | TVar v ->
+      (try
+         let li = Logic_env.find_logic_cons v in
+         match
+           li.l_labels with
+             | [] -> mkexpr(JCPEvar v.lv_name) pos
+             | [_] ->  mkexpr (JCPEapp (v.lv_name,[],[])) pos
+             | _ ->
+                 Jessie_options.fatal
+                   "cannot handle logic constant %s with several labels"
+                   v.lv_name
+       with Not_found ->
+         mkexpr (JCPEvar v.lv_name) pos)
   | TResult _ -> mkexpr (JCPEvar "\\result") pos
   | TMem _ -> assert false (* Should have been rewritten *)
 
@@ -1198,7 +1210,7 @@ let spec funspec =
     if List.exists (not $ is_normal_postcond) b.b_post_cond then
       warn_once "abrupt clause(s) ignored";
 (*
-    Format.eprintf "producing behavior '%s'@." b.b_name; 
+    Format.eprintf "producing behavior '%s'@." b.b_name;
 *)
     JCCbehavior(
       Loc.dummy_position,
@@ -1218,22 +1230,22 @@ let spec funspec =
 
   let complete_behaviors_assertions : Jc_ast.pexpr list =
     List.map
-      (fun bnames -> 
-         (* inutile, car dans le contexte de la precondition 
+      (fun bnames ->
+         (* inutile, car dans le contexte de la precondition
             let r = mkconjunct
             (List.map (function
-            | JCCrequires p -> p 
+            | JCCrequires p -> p
             | _ -> assert false)
             requires)
             Loc.dummy_position
             in
          *)
-         let a = mkdisjunct 
+         let a = mkdisjunct
            (List.fold_left
               (fun acc b ->
                  match b with
-                   | JCCbehavior(_,name,_,Some a,_,_,_) -> 
-                       if (bnames = [] && name <> "default") 
+                   | JCCbehavior(_,name,_,Some a,_,_,_) ->
+                       if (bnames = [] && name <> "default")
                          || List.mem name bnames
                        then
                          a :: acc
@@ -1248,19 +1260,19 @@ let spec funspec =
          a)
       funspec.spec_complete_behaviors
   in
-  let disjoint_behaviors_assertions  : Jc_ast.pexpr list =    
+  let disjoint_behaviors_assertions  : Jc_ast.pexpr list =
     List.fold_left
-      (fun acc bnames -> 
+      (fun acc bnames ->
          let all_assumes =
            List.fold_left
              (fun acc b ->
                 match b with
-                  | JCCbehavior(_,name,_,Some a,_,_,_) -> 
+                  | JCCbehavior(_,name,_,Some a,_,_,_) ->
 (*
-                      Format.eprintf "name = %s, len bnames = %d@." 
+                      Format.eprintf "name = %s, len bnames = %d@."
                         name (List.length bnames);
 *)
-                      if (bnames = [] && name <> "default") || 
+                      if (bnames = [] && name <> "default") ||
                         List.mem name bnames
                       then
                         a :: acc
@@ -1272,9 +1284,9 @@ let spec funspec =
            match assumes with
              | [] -> acc
              | b::rem ->
-                 let acc = 
+                 let acc =
                    List.fold_left
-                     (fun acc a -> 
+                     (fun acc a ->
                         (mkexpr (JCPEunary(`Unot,
                                            mkconjunct [b;a] Loc.dummy_position))
                            Loc.dummy_position)
@@ -1286,7 +1298,7 @@ let spec funspec =
          aux all_assumes [] acc)
       [] funspec.spec_disjoint_behaviors
   in
-  
+
   let decreases =
     match funspec.spec_variant with
       | None -> []
@@ -1300,8 +1312,8 @@ let spec funspec =
     warn_once "Termination condition(s) ignored" ;
 
   (* TODO: translate function spec variant and terminates clauses *)
-  (requires @ decreases @ behaviors), 
-  complete_behaviors_assertions, 
+  (requires @ decreases @ behaviors),
+  complete_behaviors_assertions,
   disjoint_behaviors_assertions
 
 (* Depending on the argument status, an assertion with this status may
@@ -2019,10 +2031,18 @@ let rec annotation is_axiomatic annot pos = match annot with
           | LBterm t -> JCexpr(term t)
         in
 	let name = translated_name info in
-        [JCDlogic(Option_misc.map ltype info.l_type,
-                  name,[],
-                  logic_labels info.l_labels,
-                  params,body)]
+        (match info.l_type, info.l_labels, params with
+             Some t, [], [] ->
+               let def = match body with
+                   JCreads _ | JCinductive _ -> None
+                 | JCexpr t -> Some t
+               in
+               [JCDlogic_var (ltype t, name,def)]
+           | _ ->
+               [JCDlogic(Option_misc.map ltype info.l_type,
+                         name,[],
+                         logic_labels info.l_labels,
+                         params,body)])
       with (Unsupported _ | NotImplemented _) ->
 	warning "Dropping declaration of predicate %s@." info.l_var_info.lv_name ;
         []
@@ -2339,7 +2359,7 @@ let global vardefs g =
           let params = Globals.Functions.get_params kf in
           let formal v = true, ctype v.vtype, unique_name_if_empty v.vname in
           let formals = List.map formal params in
-          let s,_cba,_dba = spec funspec in          
+          let s,_cba,_dba = spec funspec in
           [JCDfun(ctype rtyp,id,formals,s,None)]
         else
           [JCDvar(ctype v.vtype,v.vname,None)]
@@ -2379,10 +2399,10 @@ let global vardefs g =
             let body =
               List.fold_left
                 (fun acc a ->
-                   (mkexpr 
+                   (mkexpr
                       (JCPEassert([],
                                   Acheck,
-                                  mkexpr 
+                                  mkexpr
                                     (JCPElabel("complete_behaviors",a))
                                     a#pos))
                       a#pos)
@@ -2392,10 +2412,10 @@ let global vardefs g =
             let body =
               List.fold_left
                 (fun acc a ->
-                   (mkexpr 
+                   (mkexpr
                       (JCPEassert([],
                                   Acheck,
-                                  mkexpr 
+                                  mkexpr
                                     (JCPElabel("disjoint_behaviors",a))
                                     a#pos))
                       a#pos)

@@ -42,7 +42,7 @@ axiomatic List {
 
   logic type list
    
-  logic list nil()
+  logic list nil 
    
   logic list cons(struct_list[..] l, list l_0)
    
@@ -50,31 +50,31 @@ axiomatic List {
    
   axiom app_nil_right :
   (\forall list l_1;
-    (l_1 == app(l_1, nil())))
+    (l_1 == app(l_1, nil)))
    
   axiom app_nil_left :
   (\forall list l_2;
-    (l_2 == app(nil(), l_2)))
+    (l_2 == app(nil, l_2)))
    
   logic list rev(list l_3)
    
   axiom rev_nil :
-  (rev(nil()) == nil())
+  (rev(nil) == nil)
    
   predicate disjoint(list l1_0, list l2_0)
    
   axiom disjoint_nil_right :
   (\forall list l_4;
-    disjoint(l_4, nil()))
+    disjoint(l_4, nil))
    
   axiom disjoint_nil_left :
   (\forall list l_5;
-    disjoint(nil(), l_5))
+    disjoint(nil, l_5))
    
   logic int32 len(list l_6)
    
   axiom len_nil :
-  (len(nil()) == 0)
+  (len(nil) == 0)
    
   axiom len_cons :
   (\forall struct_list[..] p;
@@ -90,7 +90,7 @@ axiomatic List {
 
 predicate linked_path{L}(struct_list[..] p1, list l_8, struct_list[..] p2) {
 case path_null{L}: (\forall struct_list[..] p_0;
-                     linked_path{L}(p_0, nil(), p_0));
+                     linked_path{L}(p_0, nil, p_0));
   
   case path_cons{L}: (\forall struct_list[..] p1_0;
                        (\forall struct_list[..] p2_0;
