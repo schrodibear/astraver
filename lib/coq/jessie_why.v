@@ -1230,6 +1230,9 @@ Admitted.
 (*Why logic*) Definition integer_of_bitvector : bitvector -> Z.
 Admitted.
 
+(*Why logic*) Definition bitvector_of_integer : Z -> bitvector.
+Admitted.
+
 (*Why logic*) Definition real_of_bitvector : bitvector -> R.
 Admitted.
 

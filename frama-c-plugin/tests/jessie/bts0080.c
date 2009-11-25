@@ -1,6 +1,6 @@
 /* Frama-C BTS 0080
 
-Status: open
+Status: Duplicate of 0039
 
 yields:
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.433 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.434 2009-11-25 10:47:13 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -854,7 +854,13 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
 	      (* Convert bitvector into appropriate type *)
 	      begin match fi.jc_field_info_type with
 		| JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
-		| ty -> assert false (* TODO *)
+		| JCTnative Tinteger -> LApp(logic_integer_of_bitvector,[e'])
+                | JCTnative _ -> assert false (* TODO ? *)
+                | JCTtype_var _ -> assert false (* TODO ? *)
+                | JCTpointer (_, _, _) -> assert false (* TODO ? *)
+                | JCTlogic _ -> assert false (* TODO ? *)
+                | JCTany -> assert false (* TODO ? *)
+                | JCTnull -> assert false (* TODO ? *)
 	      end
 	  | JCmem_bitvector ->
 	      (* Retrieve bitvector *)
@@ -1627,7 +1633,13 @@ and make_upd_union mark pos off e1 fi tmp2 =
   (* Convert value assigned into bitvector *)
   let e2' = match fi.jc_field_info_type with
     | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [Var tmp2]
-    | _ty -> assert false (* TODO *)
+    | JCTnative Tinteger -> make_app logic_bitvector_of_integer [Var tmp2]
+    | JCTnative _ -> assert false (* TODO ? *)
+    | JCTtype_var _ -> assert false (* TODO ? *)
+    | JCTpointer (_, _, _) -> assert false (* TODO ? *)
+    | JCTlogic _ -> assert false (* TODO ? *)
+    | JCTany -> assert false (* TODO ? *)
+    | JCTnull -> assert false (* TODO ? *)
   in
   (* Temporary variables to avoid duplicating code *)
   let tmp1 = tmp_var_name () in

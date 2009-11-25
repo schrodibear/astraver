@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.65 2009-11-12 16:55:27 marche Exp $
+$Id: java_parser.mly,v 1.66 2009-11-25 10:47:12 marche Exp $
 
 */
 
@@ -168,9 +168,6 @@ $Id: java_parser.mly,v 1.65 2009-11-12 16:55:27 marche Exp $
 %token CARET               
 %token AMPERSAND           
 %token <Java_ast.bin_op> EQOP
-/*<<<<<<< java_parser.mly
-%token <Java_ast.bin_op> COMP
-=======*/
 %token GT LT LE GE
 %token <Java_ast.bin_op> SHIFT
 %token PLUS MINUS 
@@ -185,7 +182,7 @@ $Id: java_parser.mly,v 1.65 2009-11-12 16:55:27 marche Exp $
 %nonassoc BSFORALL
 %right LTEQEQGT 
 %right EQEQGT 
-x%right EQ ASSIGNOP 
+%right EQ ASSIGNOP 
   /*r ["="], ["*="],  ["/="], ["%="], ["+="], ["-="], ["<<="], [">>="], 
   [">>>="], ["&="], ["^="] and ["|="], and ["==>"] ["<==>"] */ 
 %right IFEXPR QUESTIONMARK     /*r [" ? : "] */

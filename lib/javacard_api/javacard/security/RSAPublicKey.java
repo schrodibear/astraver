@@ -17,8 +17,8 @@
 
 /*
 // $Workfile: RSAPublicKey.java $
-// $Revision: 1.1 $
-// $Date: 2007-09-26 14:32:59 $
+// $Revision: 1.2 $
+// $Date: 2009-11-25 10:47:13 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/security/RSAPublicKey.java $
 // $Modtime: 5/02/00 7:13p $
@@ -60,10 +60,6 @@ public interface RSAPublicKey extends PublicKey{
    * </ul>
    */
 
-    /*@ public normal_behavior
-      @   ensures true;
-      @*/
-
     void setModulus( byte[] buffer, short offset, short length) throws CryptoException;
 
   /**
@@ -84,10 +80,6 @@ public interface RSAPublicKey extends PublicKey{
    * </ul>
    */
 
-    /*@ public normal_behavior
-      @   ensures true;
-      @*/
-
     void setExponent( byte[] buffer, short offset, short length) throws CryptoException;
 
   /**
@@ -99,10 +91,6 @@ public interface RSAPublicKey extends PublicKey{
    * @return the byte length of the modulus value returned
    */
 
-    /*@ public normal_behavior
-      @   ensures true;
-      @*/
-
     short getModulus( byte[] buffer, short offset );
 
   /**
@@ -113,10 +101,6 @@ public interface RSAPublicKey extends PublicKey{
    * @param offset the offset into the output buffer at which the exponent value begins
    * @return the byte length of the public exponent returned
    */
-
-    /*@ public normal_behavior
-      @   ensures true;
-      @*/
 
     short getExponent( byte[] buffer, short offset );
 

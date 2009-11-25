@@ -24,6 +24,7 @@ val fun_any_enum : Jc_env.enum_info -> string
 
 val logic_real_of_bitvector : string
 val logic_integer_of_bitvector : string
+val logic_bitvector_of_integer : string
 
 val logic_bitvector_of_variant : Jc_env.root_info -> string
 val logic_variant_of_bitvector : Jc_env.root_info -> string
