@@ -28,7 +28,11 @@ case $1 in
 	echo "========== krakatoa execution =========="
 	rm -f $f.jc
 	rm -f $f.jloc
-	KRAKATOALIB=$DIR/lib bin/krakatoa.opt $1 || exit 1
+	opt=""
+	if grep JAVACARD $f.java ; then
+	    opt=-javacard
+	fi
+	KRAKATOALIB=$DIR/lib bin/krakatoa.opt $opt $1 || exit 1
 	mycat $f.jc 
 	mycatfilterdir $f.jloc
 	echo "========== jessie execution =========="
