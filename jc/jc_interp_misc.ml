@@ -741,7 +741,7 @@ let transpose_location_set ~region_assoc ~param_assoc locs w =
 let transpose_location_list
     ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
   if MemorySet.mem (mc,distr) rw_raw_mems then
-      begin
+    begin
 (*
 	Format.eprintf "** Jc_interp_misc.transpose_location_list: TODO: parameters **@.";
 	Format.eprintf "memory %a@\nin memory set %a@." 

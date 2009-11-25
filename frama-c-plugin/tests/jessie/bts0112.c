@@ -206,6 +206,6 @@ void LZ_TRSM (int N, int K, int p,
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C frama-c -jessie bts0112.c"
+compile-command: "make bts0112"
 End:
 */

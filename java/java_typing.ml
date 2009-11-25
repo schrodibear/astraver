@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.162 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.163 2009-11-25 16:25:22 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -880,7 +880,7 @@ and get_types package_env cus =
              eprintf "setting type env for class '%s' as:@\n" ci.class_info_name;
              List.iter
                (fun (id,_) -> eprintf "  %s@\n" id)
-               type_env;
+               full_type_env;
 *)
              Hashtbl.add class_type_env_table ci.class_info_tag 
                full_type_env
@@ -902,6 +902,9 @@ and classify_name
     | [] -> assert false
     | [(loc, id)] ->
         (* case of a simple name (JLS p 96) *)
+(*
+	Format.eprintf "classify_name for %s@." id;
+*)
         begin
           (* look for a local var of that name *)
           try
@@ -970,23 +973,26 @@ and classify_name
                                with Not_found -> acc)
                           [] package_env
                       in
-                        match l with
-                          | [(pi, h, x)] ->
-                              begin
-                                match x with
-                                  | Subpackage pi -> PackageName pi
-                                  | Type ti -> TypeName ti
-                                  | File f -> 
-                                      let ast = Java_syntax.file f in
-                                      let (_, t) = get_types package_env [ast] in
-                                        try
-                                          let ti = List.assoc id t in
-                                            Hashtbl.replace h id (Type ti);
-                                            TypeName ti
-                                        with Not_found -> 
-                                          eprintf "Anomaly: `%s' not found" id; 
-                                          assert false
-                              end
+(*
+		      eprintf "list l has length %d@." (List.length l);
+*)
+                      match l with
+                        | [(pi, h, x)] ->
+                            begin
+                              match x with
+                                | Subpackage pi -> PackageName pi
+                                | Type ti -> TypeName ti
+                                | File f -> 
+                                    let ast = Java_syntax.file f in
+                                    let (_, t) = get_types package_env [ast] in
+                                    try
+                                      let ti = List.assoc id t in
+                                      Hashtbl.replace h id (Type ti);
+                                      TypeName ti
+                                    with Not_found -> 
+                                      eprintf "Anomaly: `%s' not found" id; 
+                                      assert false
+                            end
                         | (pi1,_,_)::(pi2,_,_)::_ ->
                             typing_error loc 
                               "ambiguous name from import-on-demand packages '%s' and '%s'"
@@ -1014,6 +1020,9 @@ and classify_name
           
     | (loc,id)::n ->
         (* case of a qualified name (JLS p 97) *)
+(*
+	Format.eprintf "classify_name for %s...@." id;
+*)
         match classify_name package_env type_env current_type local_env n with
           | PackageName pi -> 
               let contents = get_package_contents pi in
@@ -2180,9 +2189,11 @@ let rec eval_const_expression env const e =
 	      | Some ci -> ci
 	    in
 	    type_field_initializer env.package_env env.type_env ci fi;
-              try 
-		List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
-	      with Not_found -> assert false (* should never happen *)
+            try 
+	      List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
+	    with Not_found -> 
+	      raise Not_found
+	      (* was assert false (* should never happen *)*)
         end
     | JEif (_, _, _)-> raise Not_found  (* TODO *)
     | JEun (op, e) -> 
@@ -3090,43 +3101,46 @@ and type_field_initializer package_env type_env ci fi =
     match init with
       | None -> None
       | Some i ->
+(*
+	  eprintf "Calling type_initializer for %s@." fi.java_field_info_name;
+*)
           let ti = 
             type_initializer ~ghost:false env fi.java_field_info_type i
           in
-            if fi.java_field_info_is_final then
-              begin
-                match ti with
-                  | JIexpr e ->
-                      begin
-                        try
-                          let v = eval_const_expression env false e in
-                            Hashtbl.add final_field_values_table 
-                              fi.java_field_info_tag [v]
-                        with Not_found ->
-                          (**)
-                          Java_options.lprintf
-                            "FIXME: cannot evaluate this initializer, %a@."
-                            Loc.gen_report_position e.java_expr_loc
-                            (**)
-                            (*
-                              typing_error e.java_expr_loc "cannot evaluate this initializer"
-                            *)              
-                      end
-                  | JIlist vil ->
+          if fi.java_field_info_is_final then
+            begin
+              match ti with
+                | JIexpr e ->
+                    begin
                       try
-                        let vil = List.map
-                          (fun vi -> match vi with
-                             | JIexpr e -> eval_const_expression env false e
-                             | JIlist _ -> assert false (* TODO *))
-                          vil
-                        in
-                          Hashtbl.add final_field_values_table 
-                            fi.java_field_info_tag vil
-                      with Not_found -> assert false 
-              end;
-            Some ti
+                        let v = eval_const_expression env false e in
+                        Hashtbl.add final_field_values_table 
+                          fi.java_field_info_tag [v]
+                      with Not_found ->
+                        (**)
+                        Java_options.lprintf
+                          "FIXME: cannot evaluate this initializer, %a@."
+                          Loc.gen_report_position e.java_expr_loc
+                          (**)
+                          (*
+                            typing_error e.java_expr_loc "cannot evaluate this initializer"
+                          *)              
+                    end
+                | JIlist vil ->
+                    try
+                      let vil = List.map
+                        (fun vi -> match vi with
+                           | JIexpr e -> eval_const_expression env false e
+                           | JIlist _ -> assert false (* TODO *))
+                        vil
+                      in
+                      Hashtbl.add final_field_values_table 
+                        fi.java_field_info_tag vil
+                    with Not_found -> assert false 
+            end;
+          Some ti
   in
-    Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
+  Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
 
 
 (* statements *)
@@ -3557,8 +3571,18 @@ type method_table_info =
 let methods_table = Hashtbl.create 97
 
 
-let type_method_spec_and_body ?(dobody=true) 
-    package_env type_env ti mi =
+let type_method_spec_and_body ?(dobody=true) package_env ti mi =
+  let type_env =
+    match ti with   
+      | TypeInterface ii -> 
+          check_if_interface_complete ii;
+          (try Hashtbl.find interface_type_env_table ii.interface_info_tag
+           with Not_found -> assert false)
+      | TypeClass ci ->
+          check_if_class_complete ci;
+          (try Hashtbl.find class_type_env_table ci.class_info_tag
+           with Not_found -> assert false)
+  in
   try
     let _ = Hashtbl.find methods_table mi.method_info_tag in ()
   with Not_found ->
@@ -3632,11 +3656,21 @@ type constructor_table_info =
 
 let constructors_table = Hashtbl.create 97
   
-let type_constr_spec_and_body ?(dobody=true) 
-    package_env type_env current_type ci =
+let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
   try
     let _ = Hashtbl.find constructors_table ci.constr_info_tag in ()
   with Not_found ->
+  let type_env =
+    match current_type with   
+      | TypeInterface ii -> 
+          check_if_interface_complete ii;
+          (try Hashtbl.find interface_type_env_table ii.interface_info_tag
+           with Not_found -> assert false)
+      | TypeClass ci ->
+          check_if_class_complete ci;
+          (try Hashtbl.find class_type_env_table ci.class_info_tag
+           with Not_found -> assert false)
+  in
   let (_,req,decreases,behs,eci,body) = 
     try
       Hashtbl.find constructors_env ci.constr_info_tag 
@@ -3790,8 +3824,17 @@ let rec compute_dependencies_expr env g fi e =
 and compute_dependencies_vi env g fi vi =
   match vi with
     | Simple_initializer e -> 
+(*
+	eprintf "Calling expr in type_env:@\n";
+        List.iter
+          (fun (id,_) -> eprintf "  %s@\n" id)
+          env.type_env;
+*)
 	let te = expr ~ghost:false env e in
-	  compute_dependencies_expr env g fi te
+(*
+	eprintf "Return from expr@.";
+*)
+	compute_dependencies_expr env g fi te
     | Array_initializer vil -> 
 	List.iter (compute_dependencies_vi env g fi) vil
 
@@ -3809,29 +3852,43 @@ and compute_dependencies env g fi =
     compute_dependencies_vi env g fi vi
 
 let type_final_fields package_env type_env ti fields =
+(*
+  eprintf "type_final_fields in type_env:@\n";
+  List.iter
+    (fun (id,_) -> eprintf "  %s@\n" id)
+    type_env;
+*)
   let g = G.create () in 
-    List.iter
-      (fun fi -> 
-	 let env = { 
-	   package_env = package_env;
-	   type_env = type_env;
-	   current_type = Some ti;
-	   behavior_names = [];
-	   label_env = [];
-	   current_label = None;
-	   env = [];
-	 }
-	 in compute_dependencies env g fi) 
-      fields;
-    List.rev
-      (T.fold
-	 (fun t acc ->
-	    let fi = G.V.label t in
-	      type_field_initializer package_env type_env 
-		fi.java_field_info_class_or_interface fi;
-	      fi :: acc)
-	 g []) 
-
+  let env = { 
+    package_env = package_env;
+    type_env = type_env;
+    current_type = Some ti;
+    behavior_names = [];
+    label_env = [];
+    current_label = None;
+    env = [];
+  }
+  in
+(*
+  eprintf "type_final_fields: start iter@.";
+*)
+  List.iter (compute_dependencies env g) fields;
+(*
+  eprintf "type_final_fields: end iter@.";
+*)
+  List.rev
+    (T.fold
+       (fun t acc ->
+	  let fi = G.V.label t in
+(*
+	  eprintf "Calling type_field_initializer for %s@."
+	    fi.java_field_info_name;
+*)
+	  type_field_initializer package_env type_env 
+	    fi.java_field_info_class_or_interface fi;
+	  fi :: acc)
+       g []) 
+    
 let rec type_decl_aux ~in_axiomatic package_env type_env acc d = 
   match d with
     | JPTclass c -> 
@@ -3860,7 +3917,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
             | TypeInterface _ -> assert false
             | TypeClass ci as ti ->
                 check_if_class_complete ci;
-                let full_type_env =
+                let type_env =
                   try Hashtbl.find class_type_env_table ci.class_info_tag
                   with Not_found -> assert false
                 in
@@ -3869,17 +3926,27 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		    (fun fi -> not fi.java_field_info_is_final)
 		    ci.class_info_fields
 		in
+		
 		let final_fields = 
-		  type_final_fields package_env type_env ti final_fields
+(*
+		  Format.eprintf "Call(1) type_final_fields@.";
+*)
+		  let x = 
+		    type_final_fields package_env type_env ti final_fields
+		  in
+(*
+		  Format.eprintf "Return(1) type_final_fields@.";
+*)
+		  x
 		in
-		  ci.class_info_final_fields <- final_fields;
-                  List.iter (type_field_initializer package_env full_type_env ti) 
-                    non_final_fields;
-                  List.iter (type_method_spec_and_body package_env full_type_env ti) 
-                    ci.class_info_methods;
-                  List.iter (type_constr_spec_and_body package_env full_type_env ti) 
-                    ci.class_info_constructors;
-		  acc
+		ci.class_info_final_fields <- final_fields;
+                List.iter (type_field_initializer package_env type_env ti) 
+                  non_final_fields;
+                List.iter (type_method_spec_and_body package_env ti) 
+                  ci.class_info_methods;
+                List.iter (type_constr_spec_and_body package_env ti) 
+                  ci.class_info_constructors;
+		acc
         end
     | JPTinterface i -> 
 	assert (not in_axiomatic);
@@ -3900,7 +3967,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
             | TypeClass _ -> assert false
             | TypeInterface ii as ti ->
                 check_if_interface_complete ii;
-                let full_type_env =
+                let type_env =
                   try Hashtbl.find interface_type_env_table ii.interface_info_tag
                   with Not_found -> assert false
                 in
@@ -3908,7 +3975,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		  type_final_fields package_env type_env ti ii.interface_info_fields
 		in
 		  ii.interface_info_final_fields <- fields;
-                  List.iter (type_method_spec_and_body package_env full_type_env ti) 
+                  List.iter (type_method_spec_and_body package_env ti) 
                     ii.interface_info_methods;
 		  acc
         end
@@ -4107,7 +4174,7 @@ let type_decl package_env type_env d =
 let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls
 
-let type_specs package_env type_env =
+let type_specs package_env _type_env =
   Hashtbl.iter
     (fun _ ti -> 
        match ti with
@@ -4118,8 +4185,20 @@ let type_specs package_env type_env =
 		    not (List.mem fi ci.class_info_final_fields))
 		 ci.class_info_fields
 	     in
+             let type_env =
+               try Hashtbl.find class_type_env_table ci.class_info_tag
+               with Not_found -> assert false
+             in
 	     let final_fields = 
-	       type_final_fields package_env type_env ti final_fields
+(*
+	       Format.eprintf "Call(2) type_final_fields for %s@." ci.class_info_name;
+*)
+	       let x = type_final_fields package_env type_env ti final_fields
+	       in
+(*
+	       Format.eprintf "Return(2) type_final_fields@.";
+*)
+	       x
 	     in
 	       ci.class_info_final_fields <-
 		 final_fields @ ci.class_info_final_fields
@@ -4129,6 +4208,10 @@ let type_specs package_env type_env =
 		 (fun fi -> not (List.mem fi ii.interface_info_final_fields))
 		 ii.interface_info_fields
 	     in
+             let type_env =
+               try Hashtbl.find interface_type_env_table ii.interface_info_tag
+               with Not_found -> assert false
+             in
 	     let final_fields = 
 	       type_final_fields package_env type_env ti final_fields
 	     in
@@ -4139,6 +4222,10 @@ let type_specs package_env type_env =
     (fun tag (current_type, env, vi, invs) -> 
        match current_type with
          | TypeClass ci ->
+             let type_env =
+               try Hashtbl.find class_type_env_table ci.class_info_tag
+               with Not_found -> assert false
+             in
              let env =
                { package_env = package_env;
                  type_env = type_env;
@@ -4158,30 +4245,37 @@ let type_specs package_env type_env =
     invariants_env;
   Hashtbl.iter 
     (fun tag (current_type, invs) ->
-       let env =
-         { package_env = package_env;
-           type_env = type_env;
-           current_type = (Some current_type);
-           behavior_names = [];
-	   label_env = [];
-	   current_label = None;
-           env = [];
-         }
-       in
-       Hashtbl.add static_invariants_table tag
-         (List.map 
-            (fun (s, e) -> s, assertion env e)
-         invs))
+       match current_type with
+         | TypeClass ci ->
+             let type_env =
+               try Hashtbl.find class_type_env_table ci.class_info_tag
+               with Not_found -> assert false
+             in
+	     let env =
+               { package_env = package_env;
+		 type_env = type_env;
+		 current_type = (Some current_type);
+		 behavior_names = [];
+		 label_env = [];
+		 current_label = None;
+		 env = [];
+               }
+	     in
+	     Hashtbl.add static_invariants_table tag
+               (List.map 
+		  (fun (s, e) -> s, assertion env e)
+		  invs)
+	 | _ -> assert false)
     static_invariants_env;
   Hashtbl.iter 
     (fun _ (mi, _, _, _,_)  ->
        type_method_spec_and_body ~dobody:false 
-         package_env type_env mi.method_info_class_or_interface mi) 
+         package_env mi.method_info_class_or_interface mi) 
     methods_env;
   Hashtbl.iter 
     (fun _ (ci, _, _, _, _, _)  ->
        type_constr_spec_and_body ~dobody:false 
-         package_env type_env (TypeClass ci.constr_info_class) ci) 
+         package_env (TypeClass ci.constr_info_class) ci) 
     constructors_env
 
 

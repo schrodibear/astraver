@@ -1,5 +1,5 @@
 /*
-* $Workfile: APDU.java $	$Revision: 1.4 $, $Date: 2009-11-25 10:47:13 $
+* $Workfile: APDU.java $	$Revision: 1.5 $, $Date: 2009-11-25 16:25:22 $
 *
 * Copyright (c) 1999 Sun Microsystems, Inc. All Rights Reserved.
 *
@@ -19,8 +19,8 @@
 
 // /*
 // $Workfile: APDU.java $
-// $Revision: 1.4 $
-// $Date: 2009-11-25 10:47:13 $
+// $Revision: 1.5 $
+// $Date: 2009-11-25 16:25:22 $
 // $Author: marche $
 // $Archive: /Products/Europa/api21/javacard/framework/APDU.java $
 // $Modtime: 5/02/00 7:13p $
@@ -32,7 +32,7 @@ package javacard.framework;
 import com.sun.javacard.impl.PrivAccess;
 import com.sun.javacard.impl.PackedBoolean;
 import com.sun.javacard.impl.NativeMethods;
-import com.sun.javacard.impl.*;
+import com.sun.javacard.impl.Constants;
 
 /**
  * Application Protocol Data Unit (APDU) is

@@ -20,6 +20,8 @@ See also bts0080.c
 
 */
 
+#pragma JessieIntegerModel(math)
+
 typedef struct {int i;int j;} las;
 
 /*@ requires \valid(a) && \valid(b);

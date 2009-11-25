@@ -52,7 +52,7 @@ case $1 in
 	mycatfilterdir $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
 	tmp=$(tempfile -s regtests_simplify)
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify 2> $tmp	
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 1" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify 2> $tmp	
 	grep -v 'CPU time limit' $tmp >&2
 	echo "========== generation of alt-ergo VC output =========="
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why	
@@ -66,7 +66,7 @@ case $1 in
 	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq	
 	    mycatfilterdir $d/coq/$b'_why'.v
 	    echo "========== running Coq =========="
-	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq		   
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 100" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq		   
         fi
 	;;
   *.c)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.186 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.187 2009-11-25 16:25:22 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -2038,7 +2038,7 @@ let tr_logic_fun fi (b : logic_decl_body) acc =
 let tr_axiom id is_axiom lab p acc =
   let def = mklemma_def
     ~name: id
-    ~axiom: is_axiom
+    ~axiom:is_axiom
     ~labels: (List.map tr_logic_label lab)
     ~body: (assertion p)
     ()
@@ -2098,98 +2098,99 @@ let tr_field type_name acc fi =
   let vi_ty = vi.jc_var_info_type in
   let fi_ty = fi.java_field_info_type in
   if fi.java_field_info_is_final then
-    let logic_body, axiom_body = try
-      let e = 
-	Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
-      in
-      let values =
-	Hashtbl.find Java_typing.final_field_values_table fi.java_field_info_tag
-      in
-      let get_value value = match fi_ty with
-	| JTYarray (_,JTYbase t) | JTYbase t -> 
-	    begin match t with
-	      | Tshort | Tbyte | Tchar | Tint 
-	      | Tlong | Tdouble | Tinteger -> 
-		  JCCinteger (Num.string_of_num value)
-	      | Tboolean -> 
-		  let b = match Num.string_of_num value with
-		    | "0" -> false
-		    | "1" -> true
-		    | _ -> assert false (* should never happen *)
-		  in JCCboolean b
-	      | Tfloat | Treal -> assert false (* TODO *) 
-	      | Tstring -> assert false (* TODO *)
-	      | Tunit -> assert false
-	    end
-	| JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ | JTYlogic _ -> 
-	    assert false
-      in
-      match e with
-	| None ->
-            None, None
-	| Some (JIexpr e) ->
-	    assert (List.length values = 1);
-	    (* evaluated constant expressions are translated *)
-            let t = term (term_of_expr e) in
-	    Some (mkconst ~const:(get_value (List.hd values)) ~pos:t#pos ()),
-	    None
-	| Some (JIlist il) ->
-	    let n = List.length il in
-	    assert (List.length values = n);
-	    let si = match vi_ty with
-	      | JCTpointer (JCtag(si, []), _, _) -> si
-	      | _ -> assert false
-	    in
-	    let vit = mkvar ~name:(var_name vi) () in
-	    let a =
-              mkapp
-                ~fun_name:
-                (non_null_pred si.jc_struct_info_name).jc_logic_info_name
-                ~args: [vit]
-                ()
-	    in
-	    let a =
-              mkand
-                ~expr1: a
-                ~expr2:
-                (mkeq
-                   ~expr1: (mkoffset_max ~expr:vit ())
-                   ~expr2: (mkint ~value:(n-1) ())
-                   ())
-                ()
-	    in
-	    let fi' = List.hd si.jc_struct_info_fields in 
-	    let a, _ = List.fold_left2 begin fun (acc, cpt) init n ->
-	      match init with
-		| JIexpr e ->
-		    let _ = term (term_of_expr e) in (* Why not used? *)
-                    mkand
-                      ~expr1: acc
-                      ~expr2:
-                      (mkeq
-                         ~expr1:
-                         (mkderef
-                            ~expr:
-                            (mkshift
-                               ~expr: vit
-                               ~offset: (mkint ~value:cpt ())
-                               ())
-                            ~field: (fi_name fi')
-                            ())
-                         ~expr2: (mkconst ~const:(get_value n) ())
-                         ())
-                      (),
-		    cpt + 1
-		| JIlist _ -> assert false (* TODO / Not supported *)
-            end (a, 0) il values in
-	    None, Some a
-    with Not_found ->
-      Java_options.lprintf
-        "Warning: final field '%s' of %a has no known value@."
-	fi.java_field_info_name 
-	Java_typing.print_type_name 
-	fi.java_field_info_class_or_interface;
-      None, None
+    let logic_body, axiom_body = 
+      try
+	let e = 
+	  Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
+	in
+	let values =
+	  Hashtbl.find Java_typing.final_field_values_table fi.java_field_info_tag
+	in
+	let get_value value = match fi_ty with
+	  | JTYarray (_,JTYbase t) | JTYbase t -> 
+	      begin match t with
+		| Tshort | Tbyte | Tchar | Tint 
+		| Tlong | Tdouble | Tinteger -> 
+		    JCCinteger (Num.string_of_num value)
+		| Tboolean -> 
+		    let b = match Num.string_of_num value with
+		      | "0" -> false
+		      | "1" -> true
+		      | _ -> assert false (* should never happen *)
+		    in JCCboolean b
+		| Tfloat | Treal -> assert false (* TODO *) 
+		| Tstring -> assert false (* TODO *)
+		| Tunit -> assert false
+	      end
+	  | JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ | JTYlogic _ -> 
+	      assert false
+	in
+	match e with
+	  | None ->
+              None, None
+	  | Some (JIexpr e) ->
+	      assert (List.length values = 1);
+	      (* evaluated constant expressions are translated *)
+              let t = term (term_of_expr e) in
+	      Some (mkconst ~const:(get_value (List.hd values)) ~pos:t#pos ()),
+	      None
+	  | Some (JIlist il) ->
+	      let n = List.length il in
+	      assert (List.length values = n);
+	      let si = match vi_ty with
+		| JCTpointer (JCtag(si, []), _, _) -> si
+		| _ -> assert false
+	      in
+	      let vit = mkvar ~name:(var_name vi) () in
+	      let a =
+		mkapp
+                  ~fun_name:
+                  (non_null_pred si.jc_struct_info_name).jc_logic_info_name
+                  ~args: [vit]
+                  ()
+	      in
+	      let a =
+		mkand
+                  ~expr1: a
+                  ~expr2:
+                  (mkeq
+                     ~expr1: (mkoffset_max ~expr:vit ())
+                     ~expr2: (mkint ~value:(n-1) ())
+                     ())
+                  ()
+	      in
+	      let fi' = List.hd si.jc_struct_info_fields in 
+	      let a, _ = List.fold_left2 begin fun (acc, cpt) init n ->
+		match init with
+		  | JIexpr e ->
+		      let _ = term (term_of_expr e) in (* Why not used? *)
+                      mkand
+			~expr1: acc
+			~expr2:
+			(mkeq
+                           ~expr1:
+                           (mkderef
+                              ~expr:
+                              (mkshift
+				 ~expr: vit
+				 ~offset: (mkint ~value:cpt ())
+				 ())
+                              ~field: (fi_name fi')
+                              ())
+                           ~expr2: (mkconst ~const:(get_value n) ())
+                           ())
+			(),
+		      cpt + 1
+		  | JIlist _ -> assert false (* TODO / Not supported *)
+              end (a, 0) il values in
+	      None, Some a
+      with Not_found ->
+	Java_options.lprintf
+          "Warning: final field '%s' of %a has no known value@."
+	  fi.java_field_info_name 
+	  Java_typing.print_type_name 
+	  fi.java_field_info_class_or_interface;
+	None, None
     in
     let def1 =
       mklogic_var_def
@@ -2198,19 +2199,27 @@ let tr_field type_name acc fi =
 	?body:logic_body 
 	()
     in
-    let acc = def1 :: acc in
-    let def2 = match axiom_body with
-      | None -> []
-      | Some a -> [
-          mklemma_def
-            ~name: (fi.java_field_info_name^"_values")
-            ~axiom: true
-            ~labels: [Jc_env.LabelHere]
-            ~body: a
-            ()
-        ]
-    in
-    def2 @ acc
+    match logic_body,axiom_body with
+      | (Some _,None) ->
+	  def1 :: acc 
+      | (None, _ (* Some a *)) -> 
+	  let ax =
+          mkaxiomatic
+	    ~name: (fi.java_field_info_name^"_theory")
+	    ~decls:[def1 ;
+		    (* disabled because should be an invariant instead
+		       of an axiom *)
+		    (*
+		    mklemma_def
+		      ~name: (fi.java_field_info_name^"_values")
+		      ~axiom: true
+		      ~labels: [Jc_env.LabelHere]
+		      ~body: a
+		      () *)]
+	    ()
+	  in
+	  ax :: acc
+      | _ -> assert false
   else
     let e = 
       try match Hashtbl.find Java_typing.field_initializer_table 
