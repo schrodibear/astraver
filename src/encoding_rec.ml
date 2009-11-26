@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_rec.ml,v 1.17 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: encoding_rec.ml,v 1.18 2009-11-26 16:07:36 andrei Exp $ i*)
 
 open Options
 open Cc
@@ -143,7 +143,10 @@ let rec push d =
       Queue.add (Dlogic (loc, ident, 
 			 Env.empty_scheme (Function (unify vars, ut)))) queue
   | Dalgtype _ ->
+      assert false
+(*
       failwith "encoding rec: algebraic types are not supported"
+*)
 (* Dans le cas logique, on redéfinit le prédicat/la fonction  *)
 (* avec le type u, et on fait un prédicat/une fonction qui  *)
 (* l'appelle avec les informations de type *)
@@ -212,6 +215,8 @@ let rec push d =
 	   Queue.add (Daxiom (loc, axiom name, ax)) queue))
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
   | Dpredicate_def (loc, ident, pred_def_sch) ->
+      assert false
+(*
       let p = pred_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with [] -> p
@@ -229,10 +234,16 @@ let rec push d =
 				   List.map (fun (i,_) -> Tvar i) (fst p),
 				   [])),
 			    (snd p)))))))
+*)
   | Dinductive_def _ ->
+      assert false
+(*
       failwith "encoding rec: inductive def not yet supported"
+*)
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) -> 
+      assert false
+(*
       let f = fun_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with 
@@ -252,6 +263,7 @@ let rec push d =
 				    List.map (fun (i,_) -> Tvar i) ptl, 
 				    []));
 				  t], []))))))
+*)
   | Daxiom (loc, name, pred_sch) ->
       let cpt = ref 0 in
       let fv = Env.Vset.fold

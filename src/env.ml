@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.85 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: env.ml,v 1.86 2009-11-26 16:07:36 andrei Exp $ i*)
 
 open Ident
 open Misc
@@ -265,7 +265,7 @@ let specialize_inductive_def = specialize_scheme subst_inductive_def
 
 let subst_function_def s (bl,t,e) =
   let bl = List.map (fun (x,pt) -> (x, subst_pure_type s pt)) bl in
-  bl, subst_pure_type s t, e
+  bl, subst_pure_type s t, subst_term s e
 
 let specialize_function_def = specialize_scheme subst_function_def
 

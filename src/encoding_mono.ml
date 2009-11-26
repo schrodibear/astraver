@@ -373,7 +373,10 @@ let rec push d =
       Queue.add (Dlogic (loc, ident,
 			 Env.empty_scheme (Function (typify vars, tt)))) queue
   | Dalgtype _ ->
+      assert false
+(*
       failwith "encoding rec: algebraic types are not supported"
+*)
 (* In the case of a logic definition, we redefine the logic symbol  *)
 (* with types u and s, and its complete arity is stored for the encoding *)
   | Dlogic (loc, ident, arity) -> 
@@ -387,16 +390,24 @@ let rec push d =
 	Queue.add (Dlogic (loc, ident, Env.empty_scheme newarity)) queue
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
   | Dpredicate_def (loc, ident, pred_def_sch) ->
+      assert false
+(*
       let (argl, pred) = pred_def_sch.Env.scheme_type in
       let rootexp = (Papp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
       let name = Ident.string ident in
       push (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
       push (Daxiom (loc, def name, (Env.generalize_predicate
 				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
-(* A function definition can be handled as a function logic definition + an axiom *)
+*)
   | Dinductive_def(loc, ident, inddef) ->
+      assert false
+(*
       failwith "encoding mono: inductive def not yet supported"
+*)
+(* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) ->
+      assert false
+(*
 (*       let _ = print_endline ident in *)
       let (argl, rt, term) = fun_def_sch.Env.scheme_type in
       let rootexp = (Tapp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
@@ -405,6 +416,7 @@ let rec push d =
       push (Daxiom (loc, def name,
 		    (Env.generalize_predicate
 		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
+*)
 (* Axiom definitions *)
   | Daxiom (loc, name, pred_sch) ->
       let cpt = ref 0 in

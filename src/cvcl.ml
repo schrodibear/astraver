@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.63 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: cvcl.ml,v 1.64 2009-11-26 16:07:36 andrei Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -222,6 +222,8 @@ let print_logic fmt id t =
   fprintf fmt "%%%% Why logic %s@\n" id;
   fprintf fmt "@[%s: %a;@]@\n@\n" id print_logic_type t
 
+(* Function and predicate definitions are handled in Encoding *)
+(*
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
   fprintf fmt "@[<hov 2>%s: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
@@ -241,6 +243,7 @@ let print_function_def fmt id (bl,t,e) =
        (fun fmt (x,pt) -> 
 	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
     print_term e
+*)
 
 let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
@@ -263,19 +266,33 @@ let output_elem fmt = function
   | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
   | Dtype _ -> assert false
   | Dalgtype _ ->
+      assert false
+(*
       failwith "CVC light: algebraic types are not supported"
+*)
   | Dlogic (_loc, id, t) ->
       print_logic fmt (Ident.string id) t.scheme_type
   | Dpredicate_def (_loc, id, d) -> 
+      assert false
+(*
       let id = Ident.string id in
       print_predicate_def fmt id d.scheme_type
+*)
   | Dinductive_def _ ->
+      assert false
+(*
       failwith "CVC light: inductive def not yet supported"
+*)
   | Dfunction_def (_loc, id, d) -> 
+      assert false
+(*
       let id = Ident.string id in
       print_function_def fmt id d.scheme_type
-  | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal (loc, expl, id, s) -> print_obligation fmt loc expl id s.Env.scheme_type
+*)
+  | Daxiom (_loc, id, p) ->
+      print_axiom fmt id p.scheme_type
+  | Dgoal (loc, expl, id, s) ->
+      print_obligation fmt loc expl id s.Env.scheme_type
 
 let prelude_done = ref false
 let prelude fmt = 

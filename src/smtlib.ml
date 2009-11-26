@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.64 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: smtlib.ml,v 1.65 2009-11-26 16:07:36 andrei Exp $ i*)
 
 open Ident
 open Options
@@ -128,7 +128,7 @@ let rec print_term fmt = function
       Print_real.print_no_exponent fmt c
 (*
 	"(real_of_int %s)"
-	"(real_of_int (* %s %s))"
+	"(real_of_int ( * %s %s))"
 	"(div_real (real_of_int %s) (real_of_int %s))" 
 	fmt c
 *)
@@ -263,6 +263,8 @@ let print_quantifiers =
 
 let pure_type_list = print_list space print_pure_type
 
+(* Function and predicate definitions are handled in Encoding *)
+(*
 let print_predicate_def fmt id (bl,p) =
   let tl = List.map snd bl in
   fprintf fmt "@[:extrapreds ((%a %a))@]@\n@\n" idents id pure_type_list tl;
@@ -281,6 +283,7 @@ let print_function_def fmt id (bl,pt,e) =
     idents id
     (print_list space (fun fmt (x,_) -> print_bvar fmt x)) bl 
     print_term e
+*)
 
 let output_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
@@ -301,7 +304,7 @@ let print_obligation fmt loc o s =
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 
-(* Inductive predicates and algebraic types handling went to Encoding.push *)
+(* Inductive predicates are handled in Encoding *)
 (*
 let rec push_decl d = 
   match d with
@@ -334,16 +337,28 @@ let output_elem fmt = function
   | Dtype (_, id, _) ->
       fprintf fmt ";; polymorphic type %s@\n@\n" (Ident.string id)
   | Dalgtype _ ->
+      assert false
+(*
       failwith "SMTLIB output: algebraic types are not supported"
+*)
   | Dlogic (_, id, t)  when not (Ident.is_simplify_arith id)
       -> print_logic fmt (Ident.string id) t.scheme_type
   | Dlogic (_, _, _) -> fprintf fmt "" 
   | Dpredicate_def (loc, id, d) -> 
+      assert false
+(*
       print_predicate_def fmt (Ident.string id) d.scheme_type
+*)
   | Dinductive_def(loc, ident, inddef) ->
+      assert false
+(*
       failwith "SMTLIB output: inductive def not yet supported"
+*)
   | Dfunction_def (loc, id, d) -> 
+      assert false
+(*
       print_function_def fmt (Ident.string id) d.scheme_type
+*)
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type 
   | Dgoal (loc, expl, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 

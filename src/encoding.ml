@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding.ml,v 1.13 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: encoding.ml,v 1.14 2009-11-26 16:07:36 andrei Exp $ i*)
 
 open Options
 
@@ -48,6 +48,10 @@ let push d = match get_types_encoding () with
   | Monomorph -> Monomorph.push_decl d
 
 let push = function
+  | Logic_decl.Dfunction_def (loc, id, d) ->
+      List.iter push (PredDefExpansor.function_def loc id d)
+  | Logic_decl.Dpredicate_def (loc, id, d) ->
+      List.iter push (PredDefExpansor.predicate_def loc id d)
   | Logic_decl.Dinductive_def (loc, id, d) ->
       List.iter push (PredDefExpansor.inductive_def loc id d)
   | Logic_decl.Dalgtype ls ->

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.93 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: simplify.ml,v 1.94 2009-11-26 16:07:36 andrei Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -42,8 +42,10 @@ open Pp
 type elem = 
   | Oblig of Loc.floc * Logic_decl.vc_expl * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
+(*
   | Predicate of string * predicate_def Env.scheme
   | FunctionDef of string * function_def Env.scheme
+*)
 
 let queue = Queue.create ()
 
@@ -55,15 +57,25 @@ let rec decl_to_elem = function
   | Dgoal (loc, expl, id, s) -> Queue.add (Oblig (loc, expl,id, s)) queue
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> 
+      assert false
+(*
       Queue.add (Predicate (Ident.string id, p)) queue
+*)
   | Dfunction_def (_, id, p) -> 
+      assert false
+(*
       Queue.add (FunctionDef (Ident.string id, p)) queue
+*)
   | Dinductive_def (loc, id, d) ->
-      assert false (* inductive predicates are handled in Encoding.push *)
-(*    List.iter decl_to_elem (PredDefExpansor.inductive_def loc id d) *)
+      assert false
+(*
+      List.iter decl_to_elem (PredDefExpansor.inductive_def loc id d)
+*)
   | Dlogic _ -> ()
   | Dtype _ -> ()
-  | Dalgtype _ -> ()
+  | Dalgtype _ ->
+      assert false
+
 
 let push_decl = Encoding.push
 
@@ -178,7 +190,7 @@ let rec print_term fmt = function
 (*
       Print_real.print_with_integers 
 	"(real_of_int %s)" 
-	"(real_of_int (* %s %s))"
+	"(real_of_int ( * %s %s))"
 	"(div_real (real_of_int %s) (real_of_int %s))" 
 	fmt c
 *)
@@ -384,6 +396,8 @@ let print_axiom fmt id p =
   if c then fprintf fmt "@\n@\n @[<hov 2>%a@]" (print_predicate true) p;
   fprintf fmt ")@]@\n@\n" 
 
+(* Function and predicate definitions are handled in Encoding *)
+(*
 let print_predicate fmt id p =
   let (bl,p) = p.Env.scheme_type in
   fprintf fmt "@[<hov 2>(DEFPRED @[(%a %a)@]@ @[%a@])@]@\n@\n" idents id
@@ -415,12 +429,15 @@ let print_function fmt id p =
 	idents_plus_prefix id
 	(print_list space (fun fmt (x,_) -> ident fmt x)) bl 
 	print_term e
+*)
 
 let print_elem fmt = function
   | Oblig (loc, _expl, id, s) -> print_obligation fmt loc id s
   | Axiom (id, p) -> print_axiom fmt id p
+(*
   | Predicate (id, p) -> print_predicate fmt id p
   | FunctionDef (id, f) -> print_function fmt id f
+*)
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.37 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: zenon.ml,v 1.38 2009-11-26 16:07:36 andrei Exp $ i*)
 
 (*s Zenon output *)
 
@@ -280,6 +280,8 @@ let print_logic fmt id t =
   fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
   *)
 
+(* Function and predicate definitions are handled in Encoding *)
+(*
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "@[;; Why predicate %a@]@\n" idents id;
   fprintf fmt "@[<hov 2>$hyp \"%a\" " idents id;
@@ -301,6 +303,7 @@ let print_function_def fmt id (bl,t,e) =
     print_term e;
   List.iter (fun _ -> fprintf fmt "))@]@\n") bl;
   fprintf fmt "@]@\n"
+*)
 
 let print_axiom fmt id p =
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
@@ -319,17 +322,29 @@ let reset () = Encoding.reset (*Monomorph.reset*) ()
 let output_elem fmt = function
   | Dtype (loc, id, _) -> declare_type fmt (Ident.string id)
   | Dalgtype _ ->
+      assert false
+(*
       failwith "Zenon output: alebraic types are not supported"
+*)
   | Dlogic (loc, id, t) ->
       print_logic fmt (Ident.string id) t.scheme_type
   | Dpredicate_def (loc, id, d) -> 
+      assert false
+(*
       let id = Ident.string id in
       print_predicate_def fmt id d.scheme_type
+*)
   | Dinductive_def _ ->
+      assert false
+(*
       failwith "Zenon output: inductive def not yet supported"
+*)
   | Dfunction_def (loc, id, d) -> 
+      assert false
+(*
       let id = Ident.string id in
       print_function_def fmt id d.scheme_type
+*)
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> 
       print_obligation fmt loc expl id s.Env.scheme_type

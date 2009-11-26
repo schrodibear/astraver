@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.105 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: pvs.ml,v 1.106 2009-11-26 16:07:36 andrei Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -362,7 +362,8 @@ let print_predicate_def fmt id (bl,p) =
     
 let print_inductive_def fmt id inddef =
   let (vars,(bl,cases)) = Env.specialize_inductive_def inddef in
-  let newvars,body = PredDefExpansor.inductive_inverse_body id bl cases in
+  let newvars = List.map (fun t -> (fresh_var(),t)) bl in
+  let body = PredDefExpansor.inductive_inverse_body id newvars cases in
   fprintf fmt "  @[<hov 2>INDUCTIVE %a(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
     ident id (print_list comma print_logic_binder) newvars print_predicate body
     
