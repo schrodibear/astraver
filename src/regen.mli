@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.mli,v 1.28 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: regen.mli,v 1.29 2009-11-26 16:07:28 andrei Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -58,7 +58,7 @@ type element =
   | Inductive of string * inductive_def Env.scheme
   | Function of string * function_def Env.scheme
   | AbstractType of string * string list
-  | AlgebraicType of string * alg_type_def Env.scheme
+  | AlgebraicType of (string * alg_type_def Env.scheme) list
 
 module type S = sig
  

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.48 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: pretty.ml,v 1.49 2009-11-26 16:07:28 andrei Exp $ i*)
 
 open Format
 open Pp
@@ -46,8 +46,8 @@ let push_decl ?(ergo=false) d =
     match d with
       | Dinductive_def (loc, id, d) ->
 	  List.iter push (PredDefExpansor.inductive_def loc id d)
-      | Dalgtype (loc, id, d) ->
-          List.iter push (PredDefExpansor.algebraic_type loc id d)
+      | Dalgtype ls ->
+          List.iter push (PredDefExpansor.algebraic_type ls)
       | _ -> Queue.add d queue
   else Queue.add d queue
 
@@ -246,15 +246,19 @@ let alg_type_constructor fmt (c,pl) =
   | _  -> fprintf fmt "| %a (@[%a@])" ident c
             (print_list comma pure_type) pl
 
+let alg_type_single fmt (_, id, d) =
+  let vs,cs = specialize d in
+  fprintf fmt "@[%a%a@] =@\n  @[%a@]"
+    alg_type_parameters vs ident id
+    (print_list newline alg_type_constructor) cs
+
 let decl fmt d = 
   match d with
   | Dtype (_, id, pl) ->
       fprintf fmt "@[type %a%a@]" type_parameters pl ident id
-  | Dalgtype (_, id, d) ->
-      let vs,cs = specialize d in
-      fprintf fmt "@[<hov 2>type @[%a%a@] =@\n%a@]"
-        alg_type_parameters vs ident id
-        (print_list newline alg_type_constructor) cs
+  | Dalgtype ls ->
+      let andsep fmt () = fprintf fmt "@\n and " in
+      fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
   | Dlogic (_, id, lt) ->
       let lt = specialize lt in
       fprintf fmt "@[logic %a : %a@]" ident id logic_type lt

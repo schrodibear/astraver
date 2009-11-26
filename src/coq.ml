@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.184 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: coq.ml,v 1.185 2009-11-26 16:07:28 andrei Exp $ i*)
 
 open Options
 open Logic
@@ -924,11 +924,14 @@ let print_inductive fmt id d =
     fprintf fmt "Implicit Arguments %a.@\n" idents id
 *)
 
-let reprint_alg_type fmt id d =
+let reprint_alg_type_single fmt (id,d) =
+  let cpt = ref 0 in
   let print_binder fmt = function
     | PTvar v ->
-        if v8 then fprintf fmt "(A%d : Set) " v.tag
-              else fprintf fmt "[A%d : Set] " v.tag
+        incr cpt;
+        let x = { tag = !cpt; user = false; type_val = None } in
+        v.type_val <- Some (PTvar x);
+        print_poly fmt x
     | _ -> assert false
   in
   let _,(vs,cs) = Env.specialize_alg_type d in
@@ -937,13 +940,16 @@ let reprint_alg_type fmt id d =
     fprintf fmt "| %a : @[%a@]" idents (Ident.string c)
       (print_list arrow print_pure_type) (pl@[th])
   in
-  fprintf fmt
-    "@[<hov 2>(*Why type*) Inductive %a @[%a: Set@] :=@\n%a.@]@\n"
+  fprintf fmt "%a @[%a: Set@] :=@\n  @[%a@]"
     idents id (print_list nothing print_binder) vs
     (print_list newline print_constructor) cs
 
-let print_alg_type fmt id d =
-  reprint_alg_type fmt id d;
+let reprint_alg_type fmt ls =
+  let andsep fmt () = fprintf fmt "@\n with " in
+  fprintf fmt "@[(*Why type*) Inductive %a.@]@\n"
+    (print_list andsep reprint_alg_type_single) ls
+
+let print_alg_type_single fmt (id,d) =
   let print_implicit (c,pl) =
     match pl with
     | [] -> fprintf fmt "Set Contextual Implicit.@\n";
@@ -955,6 +961,10 @@ let print_alg_type fmt id d =
   match vs with
   | [] -> ()
   | _ -> List.iter print_implicit cs
+
+let print_alg_type fmt ls =
+  reprint_alg_type fmt ls;
+  print_list nothing print_alg_type_single fmt ls
 
 let reprint_type fmt id vl =
   fprintf fmt "@[<hov 2>(*Why type*) Definition %a: @[%aSet@].@]@\n"
@@ -1039,7 +1049,7 @@ struct
       | Inductive(id,d) -> print_inductive fmt id d
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
-      | AlgebraicType (id, d) -> print_alg_type fmt id d
+      | AlgebraicType ls -> print_alg_type fmt ls
     end;
     fprintf fmt "@\n"
 
@@ -1053,7 +1063,7 @@ struct
     | Inductive(id, d) -> reprint_inductive fmt id d
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
-    | AlgebraicType (id, d) -> reprint_alg_type fmt id d
+    | AlgebraicType ls -> reprint_alg_type fmt ls
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -1096,9 +1106,10 @@ let push_decl = function
   | Dtype (_, id, vl) ->
       let id = Ident.string id in
       Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
-  | Dalgtype (_, id, d) ->
-      let id = Ident.string id in
-      Gen.add_elem (Ty, rename id) (AlgebraicType (id, d))
+  | Dalgtype ls ->
+      let id = match ls with (_,id,_)::_ -> id | _ -> assert false in
+      let at = List.map (fun (_,id,d) -> (Ident.string id,d)) ls in
+      Gen.add_elem (Ty, rename (Ident.string id)) (AlgebraicType at)
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))

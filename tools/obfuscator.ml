@@ -84,6 +84,7 @@ let fresh_id =
   fun id -> incr c; !prefix ^ string_of_int !c
 
 let rename_global id =
+  if Hashtbl.mem renamings (Ident.string id) then () else
   Hashtbl.add renamings (Ident.string id) (fresh_id ())
 
 let gident fmt id =
@@ -464,22 +465,25 @@ let decl fmt = function
       let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in
       fprintf fmt "@[<hov 2>function %a(%a) : %a =@ %a@]" gident id
 	(print_list comma (logic_binder m)) bl ppure_type pt (lexpr m) e
-  | TypeDecl (_, e, pl, id, []) ->
+  | TypeDecl (_, e, pl, id) ->
       rename_global id;
       fprintf fmt "%atype %a%a" print_external e type_parameters pl gident id
-  | TypeDecl (_, _, pl, id, td) ->
-      rename_global id;
-      fprintf fmt "@[<hov 2>type %a%a = @\n  @[%a@]@\n@]"
-        type_parameters pl
-        gident id
-        (print_list newline
-          (fun fmt (_,cid,cty) ->
-              rename_global cid;
-              if cty = [] then
-                fprintf fmt "| %a" gident cid
-              else
-                fprintf fmt "| %a (%a)" gident cid
-                  (print_list comma ppure_type) cty)) td
+  | AlgType ls ->
+      let print_single fmt (_, pl, id, td) =
+        fprintf fmt "[@%a%a@] =@\n  @[%a@]"
+          type_parameters pl
+          gident id
+          (print_list newline
+            (fun fmt (_,cid,cty) ->
+                rename_global cid;
+                match cty with
+                | [] -> fprintf fmt "| %a" gident cid
+                | _  -> fprintf fmt "| %a (%a)" gident cid
+                    (print_list comma ppure_type) cty)) td
+      in
+      List.iter (fun (_,_,id,_) -> rename_global id) ls;
+      let andsep fmt () = fprintf fmt "@\n and " in
+      fprintf fmt "@[type %a@]" (print_list andsep print_single) ls
 
 let file = print_list newline decl
 

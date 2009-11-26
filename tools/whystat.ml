@@ -160,6 +160,7 @@ let decl = function
   | Predicate_def _
   | Inductive_def _
   | Function_def _
+  | AlgType _
   | TypeDecl _ ->
       ()
 

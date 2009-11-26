@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.176 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: main.ml,v 1.177 2009-11-26 16:07:28 andrei Exp $ i*)
 
 open Options
 open Ptree
@@ -64,8 +64,9 @@ let reset () =
 
 let add_loc = function
   | Dtype (loc, s, _)
-  | Dalgtype (loc, s, _)
   | Dlogic (loc, s, _) -> Loc.add_ident (Ident.string s) loc
+  | Dalgtype ls ->
+      List.iter (fun (loc, s, _) -> Loc.add_ident (Ident.string s) loc) ls
   | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
   | Dpredicate_def (loc, s, _)
   | Dfunction_def (loc, s, _) 
@@ -593,14 +594,14 @@ let rec interp_decl ?(_prelude=false) d =
 	Hashtbl.add program_locs ids vloc;
 	push_decl ("","",Loc.dummy_floc) dg
 
-    | TypeDecl (loc, ext, vl, id, []) ->
+    | TypeDecl (loc, ext, vl, id) ->
 	Env.add_type loc vl id;
 	let vl = List.map Ident.string vl in
 	if not ext then 
 	  push_decl ("","",Loc.dummy_floc) (Dtype (Loc.extract loc, id, vl))
 
-    | TypeDecl (loc, _, vl, id, td) ->
-	Env.add_type loc vl id;
+    | AlgType ls ->
+      let ats (loc, vl, id, td) =
         let d = Env.generalize_alg_type (Ltyping.alg_type id vl td) in
         let vs,cs = d.Env.scheme_type in
         let th = PTexternal (vs, id) in
@@ -611,7 +612,10 @@ let rec interp_decl ?(_prelude=false) d =
           Env.add_alg_type_constructor id c;
         in
         List.iter add_constructor cs;
-	push_decl ("","",Loc.dummy_floc) (Dalgtype (Loc.extract loc, id, d))
+        (Loc.extract loc, id, d)
+      in
+        List.iter (fun (loc, vl, id, td) -> Env.add_type loc vl id) ls;
+        push_decl ("","",Loc.dummy_floc) (Dalgtype (List.map ats ls))
 
 (*s Prelude *)
 

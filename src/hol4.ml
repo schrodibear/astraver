@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.31 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: hol4.ml,v 1.32 2009-11-26 16:07:28 andrei Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -58,8 +58,8 @@ let push_decl = function
   | Dfunction_def _ -> assert false (*TODO*)
   | Dgoal (loc,expl,id,s) -> 
       Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
-  | Dtype (_,id,_) -> () (* assert false *)
-  | Dalgtype (_,id,_) -> () (* assert false *)
+  | Dtype _ -> () (* assert false *)
+  | Dalgtype _ -> () (* assert false *)
 
 (*s Pretty print *)
 

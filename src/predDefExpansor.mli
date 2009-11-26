@@ -38,7 +38,7 @@ val inductive_def :
   -> Logic_decl.t list
 
 val algebraic_type :
-  Logic_decl.loc -> Ident.t -> Logic.alg_type_def Env.scheme
+  (Logic_decl.loc * Ident.t * Logic.alg_type_def Env.scheme) list
   -> Logic_decl.t list
 
 val push: recursive_expand:bool -> Logic_decl.t -> Logic_decl.t

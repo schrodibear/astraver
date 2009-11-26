@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.169 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: util.ml,v 1.170 2009-11-26 16:07:28 andrei Exp $ i*)
 
 open Logic
 open Ident
@@ -1084,8 +1084,11 @@ let print_decl fmt = function
       fprintf fmt "inductive %a <...>" Ident.print id
   | Function_def (_, id, _, _, _) ->
       fprintf fmt "function %a <...>" Ident.print id
-  | TypeDecl (_, e, _, id, _) ->
+  | TypeDecl (_, e, _, id) ->
       fprintf fmt "%atype %a" print_external e Ident.print id
+  | AlgType ls ->
+      List.iter (fun (_, _, id, _) ->
+        fprintf fmt "type %a" Ident.print id) ls
 
 let print_pfile = print_list newline print_decl
 
@@ -1257,9 +1260,11 @@ let print_loc_predicate fmt (loc,p) =
   
 
 let print_decl fmt = function
-  | Dtype (_, s, _)
-  | Dalgtype (_, s, _) ->
+  | Dtype (_, s, _) ->
       fprintf fmt "type %s" (Ident.string s)
+  | Dalgtype ls ->
+      print_list newline (fun fmt (_, s, _) ->
+        fprintf fmt "type %s" (Ident.string s)) fmt ls
   | Dlogic (_, s, log_type_sch) -> 
       fprintf fmt "logic %a" print_logic_type log_type_sch.Env.scheme_type
   | Dpredicate_def (_, s, pred_def_sch) ->

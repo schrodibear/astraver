@@ -202,9 +202,9 @@ decl:
 | GOAL ident COLON lexpr
    { Goal (loc (), $2, $4) }
 | EXTERNAL TYPE typedecl
-   { let loc, vl, id = $3 in TypeDecl (loc, true, vl, id, []) }
+   { let loc, vl, id = $3 in TypeDecl (loc, true, vl, id) }
 | TYPE typedecl typedefn
-   { let loc, vl, id = $2 in TypeDecl (loc, false, vl, id, $3) }
+   { let loc, vl, id = $2 in $3 loc vl id }
 ;
 
 typedecl:
@@ -218,9 +218,16 @@ typedecl:
 
 typedefn:
 | /* epsilon */
+    { fun loc vl id -> TypeDecl (loc, false, vl, id) }
+| EQUAL typecase typecases typecont
+    { fun loc vl id -> AlgType ((loc, vl, id, $2::$3) :: $4) }
+;
+
+typecont:
+| /* epsilon */
     { [] }
-| EQUAL typecase typecases
-    { $2::$3 }
+| AND typedecl EQUAL typecase typecases typecont
+    { let loc, vl, id = $2 in (loc, vl, id, $4::$5) :: $6 }
 ;
 
 typecases:

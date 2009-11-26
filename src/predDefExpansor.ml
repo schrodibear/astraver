@@ -260,21 +260,28 @@ let alg_cons_injective_axiom loc zv (id,pl) =
   let pred = Env.generalize_predicate body in
   Daxiom (loc, (Ident.string id) ^ "_injective", pred)
 
-let algebraic_type loc id d =
+let algebraic_type_single (loc,id,d) =
   let z,(vs,cs) = Env.specialize_alg_type d in
   let zv = Vmap.fold (fun _ v l -> PTvar v::l) z [] in
   let th = PTexternal (vs, id) in
-  let string_of_var = function
-    | PTvar v -> "a" ^ (string_of_int v.tag)
-    | _ -> assert false
-  in
   let cons_logic (id,pl) = let t = Function (pl,th) in
     Dlogic (loc, id, Env.generalize_logic_type t)
   in
-  Dtype (loc, id, List.map string_of_var vs) ::
-    List.map cons_logic cs @
+  List.map cons_logic cs @
     alg_inversion_axiom loc id zv th cs ::
     alg_type_to_int_logic loc id zv th cs @
     List.map (alg_cons_injective_axiom loc zv)
       (List.filter (fun (_,pl) -> pl <> []) cs)
+
+let algebraic_type_decl (loc,id,d) =
+  let string_of_var = function
+    | PTvar v -> "a" ^ (string_of_int v.tag)
+    | _ -> assert false
+  in
+  let vs, _ = d.Env.scheme_type in
+  Dtype (loc, id, List.map string_of_var vs)
+
+let algebraic_type ls =
+  List.map algebraic_type_decl ls @
+  List.concat (List.map algebraic_type_single ls)
 

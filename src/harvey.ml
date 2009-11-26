@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.58 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: harvey.ml,v 1.59 2009-11-26 16:07:28 andrei Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -279,9 +279,9 @@ let decl_to_elem = function
       Queue.add (FunctionDef (Ident.string id, p)) theory
   | Dinductive_def (_, _, _) ->
       failwith "Harvey output: inductive def not yet supported"
-  | Dlogic (_, _, _) -> ()
-  | Dtype (_, _, _) -> ()
-  | Dalgtype (_, _, _) -> ()
+  | Dlogic _ -> ()
+  | Dtype _ -> ()
+  | Dalgtype _ -> ()
 
 
 

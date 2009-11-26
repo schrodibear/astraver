@@ -376,15 +376,19 @@ let print_alg_type_constructor fmt (c,pl) =
   | _  -> fprintf fmt "%a @[%a@]" idents (Ident.string c)
             (print_list space print_pure_type) pl
 
-let reprint_alg_type fmt id d =
+let reprint_alg_type_single fmt (id,d) =
   let _,(vs,cs) = Env.specialize_alg_type d in
   let newline fmt () = fprintf fmt "@\n| " in
-  fprintf fmt
-    "@[<hov 2>(*Why type*) datatype @[%a%a@] =@\n%a;@]@\n"
+  fprintf fmt "@[%a%a@] =@\n  @[  %a@]"
     print_alg_type_parameters vs idents id
     (print_list newline print_alg_type_constructor) cs
 
-let print_alg_type fmt id d = reprint_alg_type fmt id d
+let reprint_alg_type fmt ls =
+  let andsep fmt () = fprintf fmt "@\n and " in
+  fprintf fmt "@[(*Why type*) datatype %a;@]@\n"
+    (print_list andsep reprint_alg_type_single) ls
+
+let print_alg_type fmt ls = reprint_alg_type fmt ls
 
 let theory_name = ref ""
 
@@ -405,7 +409,7 @@ struct
       | Inductive(id, p) -> assert false
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
-      | AlgebraicType (id, d) -> print_alg_type fmt id d
+      | AlgebraicType ls -> print_alg_type fmt ls
     end;
     fprintf fmt "@\n"
       
@@ -420,7 +424,7 @@ struct
     | Inductive(id, p) -> assert false
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
-    | AlgebraicType (id, d) -> reprint_alg_type fmt id d
+    | AlgebraicType ls -> reprint_alg_type fmt ls
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -458,9 +462,10 @@ let push_decl = function
   | Dtype (_, id, vl) ->
       let id = Ident.string id in
       Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
-  | Dalgtype (_, id, d) ->
-      let id = Ident.string id in
-      Gen.add_elem (Ty, rename id) (AlgebraicType (id, d))
+  | Dalgtype ls ->
+      let id = match ls with (_,id,_)::_ -> id | _ -> assert false in
+      let at = List.map (fun (_,id,d) -> (Ident.string id,d)) ls in
+      Gen.add_elem (Ty, rename (Ident.string id)) (AlgebraicType at)
 
 let _ = 
   Gen.add_regexp 

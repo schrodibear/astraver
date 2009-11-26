@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.104 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: pvs.ml,v 1.105 2009-11-26 16:07:28 andrei Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -446,7 +446,7 @@ let reset () = Queue.clear queue
 let output_elem fmt = function
   | Dtype (loc, id, []) -> declare_type fmt (Ident.string id)
   | Dtype _ -> assert false
-  | Dalgtype (loc, id, {scheme_type=([],cs)}) ->
+  | Dalgtype [(loc, id, {scheme_type=([],cs)})] ->
       declare_alg_type fmt (Ident.string id) cs
   | Dalgtype _ -> assert false
   | Dlogic (loc, id, t) -> print_logic fmt (Ident.string id) t.scheme_type
@@ -519,7 +519,7 @@ let sort_theory () =
 	let n = List.length l in
 	if n > 0 then th.poly <- true;
         ArMap.add n (l, Ident.string id, []) th.types
-    | Dalgtype (_, id, { scheme_type = ([], cs) }) ->
+    | Dalgtype [(_, id, { scheme_type = ([], cs) })] ->
         ArMap.add 0 ([], Ident.string id, cs) th.types
     | Dalgtype _ ->
         failwith "PVS: polymorphic algebraic datatypes are not supported"
