@@ -111,7 +111,7 @@
 %token BIGARROW BOOL CHECK COLON COLONEQUAL COMMA DO DONE DOT ELSE END EOF EQUAL
 %token EXCEPTION EXISTS EXTERNAL FALSE FOR FORALL FPI FUN FUNCTION GE GOAL GT
 %token IF IN INCLUDE INDUCTIVE INT INVARIANT
-%token LE LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MINUS 
+%token LE LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MATCH MINUS
 %token NOT NOTEQ OF OR PARAMETER PERCENT PLUS PREDICATE PROP 
 %token QUOTE RAISE RAISES READS REAL REC REF RETURNS RIGHTB RIGHTBRIGHTB
 %token RIGHTPAR RIGHTSQ 
@@ -194,8 +194,8 @@ decl:
    { Axiom (loc (), $2, $4) }
 | PREDICATE ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR EQUAL lexpr
    { Predicate_def (loc (), $2, $4, $7) }
-| INDUCTIVE ident COLON logic_type EQUAL indcases 
-   { Inductive_def (loc (), $2, $4, $6) }
+| INDUCTIVE ident COLON logic_type inddefn
+   { Inductive_def (loc (), $2, $4, $5) }
 | FUNCTION ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR COLON 
   primitive_type EQUAL lexpr
    { Function_def (loc (), $2, $4, $7, $9) }
@@ -219,36 +219,41 @@ typedecl:
 typedefn:
 | /* epsilon */
     { fun loc vl id -> TypeDecl (loc, false, vl, id) }
-| EQUAL typecase typecases typecont
-    { fun loc vl id -> AlgType ((loc, vl, id, $2::$3) :: $4) }
+| EQUAL bar_ typecases typecont
+    { fun loc vl id -> AlgType ((loc, vl, id, $3) :: $4) }
 ;
 
 typecont:
 | /* epsilon */
     { [] }
-| AND typedecl EQUAL typecase typecases typecont
-    { let loc, vl, id = $2 in (loc, vl, id, $4::$5) :: $6 }
+| AND typedecl EQUAL bar_ typecases typecont
+    { let loc, vl, id = $2 in (loc, vl, id, $5) :: $6 }
 ;
 
 typecases:
-| /* epsilon */
-    { [] }
-| typecase typecases
-    { $1::$2 }
+| typecase                { [$1] }
+| typecase BAR typecases  { $1::$3 }
 ;
 
 typecase:
-| BAR ident
-    { (loc_i 2,$2,[]) }
-| BAR ident LEFTPAR list1_primitive_type_sep_comma RIGHTPAR
-    { (loc_i 2,$2,$4) }
+| ident
+    { (loc_i 1,$1,[]) }
+| ident LEFTPAR list1_primitive_type_sep_comma RIGHTPAR
+    { (loc_i 1,$1,$3) }
+;
+
+inddefn:
+| /* epsilon */       { [] }
+| EQUAL bar_ indcases { $3 }
 ;
 
 indcases:
-| /* epsilon */
-    { [] }
-| BAR ident COLON lexpr indcases
-    { (loc_i 2,$2,$4)::$5 }
+| indcase               { [$1] }
+| indcase BAR indcases  { $1::$3 }
+;
+
+indcase:
+| ident COLON lexpr { (loc_i 1,$1,$3) }
 ;
 
 type_v:
@@ -479,15 +484,31 @@ lexpr:
    { mk_pp (PPnamed ($1, $3)) }
 | LET ident EQUAL lexpr IN lexpr 
    { mk_pp (PPlet ($2, $4, $6)) }
+| MATCH lexpr WITH bar_ match_cases END
+   { mk_pp (PPmatch ($2, $5)) }
+;
+
+match_cases:
+| match_case                  { [$1] }
+| match_case BAR match_cases  { $1::$3 }
+;
+
+match_case:
+| pattern ARROW lexpr { ($1,$3) }
+;
+
+pattern:
+| ident                                         { ($1,[]) }
+| ident LEFTPAR list1_ident_sep_comma RIGHTPAR  { ($1,$3) }
 ;
 
 triggers:
-| /* epsilon */ { [] }
-| LEFTSQ list1_trigger_sep_bar RIGHTSQ { $2 }
+| /* epsilon */                         { [] }
+| LEFTSQ list1_trigger_sep_bar RIGHTSQ  { $2 }
 ;
 
 list1_trigger_sep_bar:
-| trigger { [$1] }
+| trigger                           { [$1] }
 | trigger BAR list1_trigger_sep_bar { $1 :: $3 }
 ;
 
@@ -570,8 +591,8 @@ expr:
    { locate (Sraise ($2, None, $3)) }
 | RAISE LEFTPAR ident expr RIGHTPAR opt_cast
    { locate (Sraise ($3, Some $4 , $6)) }
-| TRY expr WITH list1_handler_sep_bar END
-   { locate (Stry ($2, $4)) }
+| TRY expr WITH bar_ list1_handler_sep_bar END
+   { locate (Stry ($2, $5)) }
 | ABSURD opt_cast
    { locate (Sabsurd $2) }
 | simple_expr list1_simple_expr %prec prec_app
@@ -739,3 +760,9 @@ ident_or_string:
 | IDENT  { $1 }
 | STRING { $1 }
 ;
+
+bar_:
+| /* epsilon */ { () }
+| BAR           { () }
+;
+

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.23 2009-09-22 16:41:13 melquion Exp $ *)
+(* $Id: lexer.mll,v 1.24 2009-11-26 16:07:54 andrei Exp $ *)
 
 {
   open Lexing
@@ -66,6 +66,7 @@
 	"invariant", INVARIANT;
 	"let", LET;
 	"logic", LOGIC;
+	"match", MATCH;
 	"not", NOT;
 	"of", OF;
 	"or", OR;
