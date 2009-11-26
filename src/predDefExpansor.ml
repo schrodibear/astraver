@@ -110,7 +110,7 @@ let push ~recursive_expand decl =
       let vars = Vset.fold (fun v l -> v :: l) def.scheme_vars [] in
       Hashtbl.add pred_def ident (vars, List.map fst argl, p);
       if recursive_expand then 
-	Dlogic (loc, Ident.string ident, Env.generalize_logic_type (Predicate (List.map snd argl)))
+	Dlogic (loc, ident, Env.generalize_logic_type (Predicate (List.map snd argl)))
       else
 	decl
   | Dinductive_def(loc, ident, def) when recursive_expand -> 
@@ -126,6 +126,7 @@ let push ~recursive_expand decl =
   | Dinductive_def _ 
   | Daxiom _
   | Dtype _ 
+  | Dalgtype _
   | Dlogic _ -> decl
 
 (***************
@@ -162,7 +163,6 @@ forall y_1:t_1,..,y_n:t_n, id(y_1,..,y_n) ->
 
 *)
 
-
 let inductive_inverse_body id params cases =
   let yvars = List.map (fun t -> (fresh_var(),t)) params in
   let rec invert = function
@@ -187,30 +187,94 @@ let inductive_inverse_body id params cases =
   in
   yvars,body
 
-
 let inversion_axiom id params cases =
   let yvars,body = inductive_inverse_body id params cases in
   let ytvars = List.map (fun (y,_) -> Tvar y) yvars in
-  let app = Papp(id,ytvars,[]) in
-  let body = Pimplies(false,app,body) in
-  (*match yvars with
-    | [] -> body
-    | (y,t)::yvars -> 
-        let body = Forall(false,y,y,t,[[PPat app]],body) in*)
-        List.fold_right (fun (y,t) acc -> Forall(false,y,y,t,[],acc))
-          yvars body
-  
-    
-  
+  let body = Pimplies(false,Papp(id,ytvars,[]),body) in
+  List.fold_right (fun (y,t) acc -> Forall(false,y,y,t,[],acc)) yvars body
 
 let inductive_def loc id d =
   let (vars,(bl,cases)) = Env.specialize_inductive_def d in
   let t = Env.generalize_logic_type (Predicate bl) in
   let name = Ident.string id in
-  Dlogic(loc,name,t)::
+  Dlogic(loc,id,t)::
     (Daxiom(loc,name ^ "_inversion",
 	    Env.generalize_predicate (inversion_axiom id bl cases)))::
     (List.map 
        (fun (id,p) -> 
 	  let p = Env.generalize_predicate p in
 	  Daxiom(loc,Ident.string id,p)) cases)
+
+
+(***************
+ algebraic types
+**************)
+
+let fresh_cons zv id pl =
+  let yv = List.map (fun t -> (fresh_var (),t)) pl in
+  let yt = List.map (fun (y,_) -> Tvar y) yv in
+  (yv, Tapp (id,yt,zv))
+
+let yv_exists = List.fold_right (fun (y,t) f -> Exists (y,y,t,f))
+let yv_forall = List.fold_right (fun (y,t) f -> Forall (false,y,y,t,[],f))
+
+let alg_inversion_axiom loc id zv th cs =
+  let x = fresh_var () in
+  let inv_cons acc (id,pl) =
+    let yv,ct = fresh_cons zv id pl in
+    Misc.por acc (yv_exists yv (Misc.eq (Tvar x) ct))
+  in
+  let body = List.fold_left inv_cons Pfalse cs in
+  let body = Forall (false,x,x,th,[],body) in
+  let pred = Env.generalize_predicate body in
+  Daxiom (loc, Ident.string id ^ "_inversion", pred)
+
+let alg_cons_to_int_axiom loc zv nm cpt (id,pl) =
+  let yv,ct = fresh_cons zv id pl in
+  let lst = Tapp (nm, [ct], []) in
+  let rst = Tconst (ConstInt (string_of_int !cpt)) in
+  let body = yv_forall yv (Papp (t_eq_int,[lst;rst],[])) in
+  let pred = Env.generalize_predicate body in
+  incr cpt;
+  Daxiom (loc, Ident.string id ^ "_to_int", pred)
+
+let alg_type_to_int_logic loc id zv th cs =
+  let cpt = ref 0 in
+  let ty = Function ([th], PTint) in
+  let nm = Ident.create (Ident.string id ^ "_to_int") in
+  Dlogic (loc, nm, Env.generalize_logic_type ty) ::
+    List.map (alg_cons_to_int_axiom loc zv nm cpt) cs
+
+let alg_type_to_int_logic loc id zv th = function
+  | [_] -> [] | [] -> assert false
+  | cs -> alg_type_to_int_logic loc id zv th cs
+
+let alg_cons_injective_axiom loc zv (id,pl) =
+  let yv1,ct1 = fresh_cons zv id pl in
+  let yv2,ct2 = fresh_cons zv id pl in
+  let equ (y1,_) (y2,_) = Misc.eq (Tvar y1) (Tvar y2) in
+  let eqs = List.rev_map2 equ yv1 yv2 in
+  let rst = List.fold_left Misc.pand Ptrue eqs in
+  let body = Pimplies (false, Misc.eq ct1 ct2, rst) in
+  let body = yv_forall yv1 (yv_forall yv2 body) in
+  let pred = Env.generalize_predicate body in
+  Daxiom (loc, (Ident.string id) ^ "_injective", pred)
+
+let algebraic_type loc id d =
+  let z,(vs,cs) = Env.specialize_alg_type d in
+  let zv = Vmap.fold (fun _ v l -> PTvar v::l) z [] in
+  let th = PTexternal (vs, id) in
+  let string_of_var = function
+    | PTvar v -> "a" ^ (string_of_int v.tag)
+    | _ -> assert false
+  in
+  let cons_logic (id,pl) = let t = Function (pl,th) in
+    Dlogic (loc, id, Env.generalize_logic_type t)
+  in
+  Dtype (loc, id, List.map string_of_var vs) ::
+    List.map cons_logic cs @
+    alg_inversion_axiom loc id zv th cs ::
+    alg_type_to_int_logic loc id zv th cs @
+    List.map (alg_cons_injective_axiom loc zv)
+      (List.filter (fun (_,pl) -> pl <> []) cs)
+

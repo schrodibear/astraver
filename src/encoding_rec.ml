@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_rec.ml,v 1.16 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: encoding_rec.ml,v 1.17 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Options
 open Cc
@@ -48,18 +48,18 @@ let ut = PTexternal ([], Ident.create (prefix^"unique"))
 let unify ptl = List.map (fun _ -> ut) ptl
     
 let prelude =
-  (Dtype (loc, [], prefix^"unique"))::	(* The unique sort *)
-  (Dlogic (loc, prefix^"sort", 
+  (Dtype (loc, Ident.create (prefix^"unique"), []))::	(* The unique sort *)
+  (Dlogic (loc, Ident.create (prefix^"sort"),
 	   Env.empty_scheme (Function ([ut; ut], ut))))::	(* The "sort" symbol *)
-  (Dlogic (loc, prefix^"int",
+  (Dlogic (loc, Ident.create (prefix^"int"),
 	   Env.empty_scheme (Function ([], ut)))):: (* One synbol for each prefedined type *)
-  (Dlogic (loc, prefix^"bool", 
+  (Dlogic (loc, Ident.create (prefix^"bool"),
 	   Env.empty_scheme (Function ([], ut))))::
-  (Dlogic (loc, prefix^"real", 
+  (Dlogic (loc, Ident.create (prefix^"real"),
 	   Env.empty_scheme (Function ([], ut))))::
-  (Dlogic (loc, prefix^"unit", 
+  (Dlogic (loc, Ident.create (prefix^"unit"),
 	   Env.empty_scheme (Function ([], ut))))::
-  (Dlogic (loc, "equal"^suffix,
+  (Dlogic (loc, Ident.create ("equal"^suffix),
 	   Env.empty_scheme (Predicate ([ut; ut])))):: (* One 'untyped' predicate of equality *)
 (*   (Daxiom (loc, axiom "equal", *)
 (* 	   let t = Ident.create "t" *)
@@ -139,9 +139,11 @@ let rec push d =
   match d with
 (* Dans le cas type on déclare la fonction correspondante, *)
 (* d'arité correspondant à la taille du schéma de ce type  *)
-  | Dtype (loc, vars, ident) ->
+  | Dtype (loc, ident, vars) ->
       Queue.add (Dlogic (loc, ident, 
 			 Env.empty_scheme (Function (unify vars, ut)))) queue
+  | Dalgtype _ ->
+      failwith "encoding rec: algebraic types are not supported"
 (* Dans le cas logique, on redéfinit le prédicat/la fonction  *)
 (* avec le type u, et on fait un prédicat/une fonction qui  *)
 (* l'appelle avec les informations de type *)
@@ -150,6 +152,7 @@ let rec push d =
       let fv = Env.Vset.fold
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
 	  (arity.Env.scheme_vars) [] in
+      let name = Ident.string ident in
       (match arity.Env.scheme_type with 
       | Predicate ptl ->
 	  let args = 
@@ -158,11 +161,11 @@ let rec push d =
 		Ident.create (let _ = cpt := !cpt + 1 in var^(string_of_int !cpt)), t)
 	      ptl in
 	  let terml = 
-	    Papp (Ident.create (ident^suffix),
+	    Papp (Ident.create (name^suffix),
 		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args,
 		  []) 
 	  and termr =
-	    Papp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []) in
+	    Papp (ident, List.map (fun (t, _) -> Tvar t) args, []) in
 	  let rec lifted  l p =
 	    match l with [] -> p
 	    | a::q -> lifted q (Forall(false, a, a, ut, [], p)) in
@@ -170,17 +173,17 @@ let rec push d =
 	      (lifted 
 		 ((fst (List.split args))@(List.map (fun i -> Ident.create i) (snd (List.split fv))))
 		 (Piff (terml, termr))) in
-	  (Queue.add (Dlogic (loc, ident^suffix,
+	  (Queue.add (Dlogic (loc, Ident.create (name^suffix),
 			      Env.empty_scheme (Predicate (unify ptl)))) queue;
 	   Queue.add (Dlogic (loc, ident,
 			      Env.empty_scheme (Predicate (unify ptl)))) queue;
-	   Queue.add (Daxiom (loc, axiom ident, ax)) queue)
+	   Queue.add (Daxiom (loc, axiom name, ax)) queue)
       | Function (ptl, rt) -> 
 	  let _ =
 	    if is_poly_cons ptl rt then
 	      (if debug then
-		 print_endline ("Constante polymorphe détectée : "^ident);
-	       poly_consts := ident :: !poly_consts)
+		 print_endline ("Constante polymorphe détectée : "^name);
+	       poly_consts := name :: !poly_consts)
 	    else () in
 	  let args = 
 	    List.map
@@ -188,12 +191,12 @@ let rec push d =
 		Ident.create (let _ = cpt := !cpt + 1 in var^(string_of_int !cpt)), t)
 	      ptl in
 	  let terml = 
-	    Tapp (Ident.create (ident^suffix),
+	    Tapp (Ident.create (name^suffix),
 		  List.map (fun (id, t) -> plunge fv (Tvar id) t) args,
 		  []) 
 	  and termr =
 	    plunge fv 
-	      (Tapp (Ident.create ident, List.map (fun (t, _) -> Tvar t) args, []))
+	      (Tapp (ident, List.map (fun (t, _) -> Tvar t) args, []))
 	      rt in
 	  let rec lifted  l p =
 	    match l with [] -> p
@@ -202,11 +205,11 @@ let rec push d =
 	      (lifted 
 		 ((fst (List.split args))@(List.map (fun i -> Ident.create i) (snd (List.split fv))))
 		 (Papp (Ident.t_eq, [terml;termr], []))) in
-	  (Queue.add (Dlogic (loc, ident^suffix, 
+	  (Queue.add (Dlogic (loc, Ident.create (name^suffix),
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Dlogic (loc, ident,
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
-	   Queue.add (Daxiom (loc, axiom ident, ax)) queue))
+	   Queue.add (Daxiom (loc, axiom name, ax)) queue))
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
   | Dpredicate_def (loc, ident, pred_def_sch) ->
       let p = pred_def_sch.Env.scheme_type in
@@ -215,7 +218,7 @@ let rec push d =
 	  | (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) 
       in
       let name = Ident.string ident in
-      push (Dlogic (loc, name, 
+      push (Dlogic (loc, ident,
 		    (Env.generalize_logic_type 
 		       (Predicate (snd (List.split (fst p)))))));
       push (Daxiom 
@@ -238,7 +241,7 @@ let rec push d =
       in
       let (ptl, rt, t) = f in
       let name = Ident.string ident in
-      push (Dlogic (loc, name, 
+      push (Dlogic (loc, ident,
 		    (Env.generalize_logic_type (Function (snd (List.split ptl), rt)))));
       push (Daxiom 
 	      (loc, def name,
@@ -249,7 +252,7 @@ let rec push d =
 				    List.map (fun (i,_) -> Tvar i) ptl, 
 				    []));
 				  t], []))))))
-  | Daxiom (loc, ident, pred_sch) -> 
+  | Daxiom (loc, name, pred_sch) ->
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
@@ -309,10 +312,10 @@ let rec push d =
 	| (_,a)::q -> 
 	    lifted q (Forall(false, Ident.create a, Ident.create a, ut, [], p))
       in
-      Queue.add (Daxiom (loc, ident,
+      Queue.add (Daxiom (loc, name,
 			 Env.empty_scheme 
  			   (lifted fv (translate_eq [] pred_sch.Env.scheme_type)))) queue
-  | Dgoal (loc, expl, ident, s_sch) ->
+  | Dgoal (loc, expl, name, s_sch) ->
       let cpt = ref 0 in
       let (cel, pred) = s_sch.Env.scheme_type in
       let fv = Env.Vset.fold
@@ -384,7 +387,7 @@ let rec push d =
 	    lifted q (Forall(false, Ident.create a, Ident.create a, ut, [], p))
       in
       Queue.add (Dgoal 
-		   (loc, expl, ident,
+		   (loc, expl, name,
 		    Env.empty_scheme 
 		      (List.map 
 			 (fun s -> match s with 

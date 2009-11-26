@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.mli,v 1.30 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.31 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -46,6 +46,10 @@ val type_c :
   Loc.position -> Label.t -> local_env -> ptype_c -> type_c
 
 val logic_type : plogic_type -> logic_type
+
+val alg_type : Ident.t -> Ident.t list ->
+  (Loc.position * Ident.t * ppure_type list) list ->
+    alg_type_def
 
 val predicate : Label.t -> local_env -> lexpr -> predicate
 

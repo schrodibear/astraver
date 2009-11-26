@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.57 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: harvey.ml,v 1.58 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -281,6 +281,7 @@ let decl_to_elem = function
       failwith "Harvey output: inductive def not yet supported"
   | Dlogic (_, _, _) -> ()
   | Dtype (_, _, _) -> ()
+  | Dalgtype (_, _, _) -> ()
 
 
 

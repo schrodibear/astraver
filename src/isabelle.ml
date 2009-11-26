@@ -365,6 +365,27 @@ let reprint_type fmt id vl =
 
 let print_type fmt id vl = reprint_type fmt id vl
 
+let print_alg_type_parameters fmt = function
+  | [] -> ()
+  | [id] -> fprintf fmt "%a " print_pure_type id
+  | l -> fprintf fmt "(%a) " (print_list comma print_pure_type) l
+
+let print_alg_type_constructor fmt (c,pl) =
+  match pl with
+  | [] -> fprintf fmt "%a" idents (Ident.string c)
+  | _  -> fprintf fmt "%a @[%a@]" idents (Ident.string c)
+            (print_list space print_pure_type) pl
+
+let reprint_alg_type fmt id d =
+  let _,(vs,cs) = Env.specialize_alg_type d in
+  let newline fmt () = fprintf fmt "@\n| " in
+  fprintf fmt
+    "@[<hov 2>(*Why type*) datatype @[%a%a@] =@\n%a;@]@\n"
+    print_alg_type_parameters vs idents id
+    (print_list newline print_alg_type_constructor) cs
+
+let print_alg_type fmt id d = reprint_alg_type fmt id d
+
 let theory_name = ref ""
 
 open Regen
@@ -384,6 +405,7 @@ struct
       | Inductive(id, p) -> assert false
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
+      | AlgebraicType (id, d) -> print_alg_type fmt id d
     end;
     fprintf fmt "@\n"
       
@@ -398,6 +420,7 @@ struct
     | Inductive(id, p) -> assert false
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
+    | AlgebraicType (id, d) -> reprint_alg_type fmt id d
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -418,8 +441,11 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal (loc,expl,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
-  | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
+  | Dgoal (loc,expl,l,s) ->
+      Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
+  | Dlogic (_, id, t) ->
+      let id = Ident.string id in
+      Gen.add_elem (Lg, rename id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
   | Dpredicate_def (_, id, p) -> 
       let id = Ident.string id in
@@ -429,7 +455,12 @@ let push_decl = function
   | Dfunction_def (_, id, p) -> 
       let id = Ident.string id in
       Gen.add_elem (Fun, rename id) (Function (id, p))
-  | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
+  | Dtype (_, id, vl) ->
+      let id = Ident.string id in
+      Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
+  | Dalgtype (_, id, d) ->
+      let id = Ident.string id in
+      Gen.add_elem (Ty, rename id) (AlgebraicType (id, d))
 
 let _ = 
   Gen.add_regexp 
@@ -446,6 +477,12 @@ let _ =
     "(\\*Why predicate\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Pr;
   Gen.add_regexp 
     "(\\*Why function\\*) constdefs[ ]+\\([^ ]*\\)[ ]*::[ ]*" Fun;
+  Gen.add_regexp
+    "(\\*Why type\\*) datatype[ ]+\\([^ ]*\\) =" Ty;
+  Gen.add_regexp
+    "(\\*Why type\\*) datatype[ ]+[^ ]*[ ]+\\([^ ]*\\) =" Ty;
+  Gen.add_regexp
+    "(\\*Why type\\*) datatype[ ]+(.*)[ ]+\\([^ ]*\\) =" Ty;
   Gen.add_regexp 
     "(\\*Why type\\*) typedecl[ ]+\\([^ ]*\\);" Ty;
   Gen.add_regexp 

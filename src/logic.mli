@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.51 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: logic.mli,v 1.52 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Logic. *)
 
@@ -96,6 +96,8 @@ and triggers = trigger list
 type logic_type =
   | Predicate of pure_type list
   | Function of pure_type list * pure_type
+
+type alg_type_def = pure_type list * (Ident.t * pure_type list) list
 
 type predicate_def = (Ident.t * pure_type) list * predicate
 

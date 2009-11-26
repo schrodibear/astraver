@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.183 2009-08-26 13:47:41 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.184 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Options
 open Logic
@@ -845,8 +845,10 @@ let polymorphic t = not (Env.Vset.is_empty t.Env.scheme_vars)
 let implicits_for_logic_type t = match t.Env.scheme_type with
   | Predicate [] -> false
   | Function _ | Predicate _ -> polymorphic t
-let implicits_for_predicate t =
+
+let implicits_for_predicate t = 
   let (bl,_) = t.Env.scheme_type in bl <> [] && polymorphic t
+
 let is_logic_constant t = match t.Env.scheme_type with
   | Function ([],_) -> true
   | Function _ | Predicate _ -> false
@@ -921,6 +923,38 @@ let print_inductive fmt id d =
   if implicits_for_predicate p then
     fprintf fmt "Implicit Arguments %a.@\n" idents id
 *)
+
+let reprint_alg_type fmt id d =
+  let print_binder fmt = function
+    | PTvar v ->
+        if v8 then fprintf fmt "(A%d : Set) " v.tag
+              else fprintf fmt "[A%d : Set] " v.tag
+    | _ -> assert false
+  in
+  let _,(vs,cs) = Env.specialize_alg_type d in
+  let th = PTexternal (vs, Ident.create id) in
+  let print_constructor fmt (c,pl) =
+    fprintf fmt "| %a : @[%a@]" idents (Ident.string c)
+      (print_list arrow print_pure_type) (pl@[th])
+  in
+  fprintf fmt
+    "@[<hov 2>(*Why type*) Inductive %a @[%a: Set@] :=@\n%a.@]@\n"
+    idents id (print_list nothing print_binder) vs
+    (print_list newline print_constructor) cs
+
+let print_alg_type fmt id d =
+  reprint_alg_type fmt id d;
+  let print_implicit (c,pl) =
+    match pl with
+    | [] -> fprintf fmt "Set Contextual Implicit.@\n";
+            fprintf fmt "Implicit Arguments %a.@\n" idents (Ident.string c);
+            fprintf fmt "Unset Contextual Implicit.@\n"
+    | _  -> fprintf fmt "Implicit Arguments %a.@\n" idents (Ident.string c)
+  in
+  let vs,cs = d.Env.scheme_type in
+  match vs with
+  | [] -> ()
+  | _ -> List.iter print_implicit cs
 
 let reprint_type fmt id vl =
   fprintf fmt "@[<hov 2>(*Why type*) Definition %a: @[%aSet@].@]@\n"
@@ -1005,6 +1039,7 @@ struct
       | Inductive(id,d) -> print_inductive fmt id d
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
+      | AlgebraicType (id, d) -> print_alg_type fmt id d
     end;
     fprintf fmt "@\n"
 
@@ -1018,6 +1053,7 @@ struct
     | Inductive(id, d) -> reprint_inductive fmt id d
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
+    | AlgebraicType (id, d) -> reprint_alg_type fmt id d
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -1041,20 +1077,28 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal (loc,expl,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
-  | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
-  | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
-  | Dpredicate_def (_,id,p) ->
+  | Dgoal (loc,expl,l,s) ->
+      Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
+  | Dlogic (_, id, t) ->
+      let id = Ident.string id in
+      Gen.add_elem (Lg, rename id) (Logic (id, t))
+  | Daxiom (_, id, p) ->
+      Gen.add_elem (Ax, rename id) (Axiom (id, p))
+  | Dpredicate_def (_,id,p) -> 
       let id = Ident.string id in
       Gen.add_elem (Pr, rename id) (Predicate (id, p))
   | Dinductive_def(loc, id, d) ->
       let id = Ident.string id in
-      Gen.add_elem (Ind, rename id) (Inductive(id,d))
-  | Dfunction_def (_,id,f) ->
+      Gen.add_elem (Ind, rename id) (Inductive(id, d))
+  | Dfunction_def (_,id,f) -> 
       let id = Ident.string id in
       Gen.add_elem (Fun, rename id) (Function (id, f))
-  | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
-
+  | Dtype (_, id, vl) ->
+      let id = Ident.string id in
+      Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
+  | Dalgtype (_, id, d) ->
+      let id = Ident.string id in
+      Gen.add_elem (Ty, rename id) (AlgebraicType (id, d))
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))
@@ -1088,6 +1132,8 @@ let _ =
   Gen.add_regexp
     "(\\*Why type\\*) Parameter[ ]+\\([^ ]*\\):" Ty;
   Gen.add_regexp
+    "(\\*Why type\\*) Inductive[ ]+\\([^ ]*\\) " Ty;
+  Gen.add_regexp 
     "(\\*Why type\\*) Definition[ ]+\\([^ ]*\\):" Ty
 
 (* validations *)

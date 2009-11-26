@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.47 2009-11-12 16:55:27 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.48 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Format
 open Pp
@@ -42,11 +42,12 @@ let reset () = Queue.clear queue
 let push_decl ?(ergo=false) d = 
   if ergo
   then
+    let push d = Queue.add d queue in
     match d with
       | Dinductive_def (loc, id, d) ->
-	  List.iter
-	    (fun d -> Queue.add d queue)
-            (PredDefExpansor.inductive_def loc id d)
+	  List.iter push (PredDefExpansor.inductive_def loc id d)
+      | Dalgtype (loc, id, d) ->
+          List.iter push (PredDefExpansor.algebraic_type loc id d)
       | _ -> Queue.add d queue
   else Queue.add d queue
 
@@ -218,9 +219,9 @@ let logic_binder fmt (id, pt) =
   fprintf fmt "%a: %a" ident id pure_type pt
 
 let logic_type fmt = function
-  | Predicate [] -> 
-      fprintf fmt " prop" 
-  | Function ([], pt) -> 
+  | Predicate [] ->
+      fprintf fmt "prop"
+  | Function ([], pt) ->
       fprintf fmt "%a" pure_type pt
   | Predicate ptl -> 
       fprintf fmt "%a -> prop" (print_list comma pure_type) ptl
@@ -234,13 +235,29 @@ let type_parameters fmt l =
   | [id] -> fprintf fmt "%a " type_var id
   | l -> fprintf fmt "(%a) " (print_list comma type_var) l
 
+let alg_type_parameters fmt = function
+  | [] -> ()
+  | [id] -> fprintf fmt "%a " pure_type id
+  | l -> fprintf fmt "(%a) " (print_list comma pure_type) l
+
+let alg_type_constructor fmt (c,pl) =
+  match pl with
+  | [] -> fprintf fmt "| %a" ident c
+  | _  -> fprintf fmt "| %a (@[%a@])" ident c
+            (print_list comma pure_type) pl
+
 let decl fmt d = 
   match d with
-  | Dtype (_, pl, id) ->
-      fprintf fmt "@[type %a%s@]" type_parameters pl id
+  | Dtype (_, id, pl) ->
+      fprintf fmt "@[type %a%a@]" type_parameters pl ident id
+  | Dalgtype (_, id, d) ->
+      let vs,cs = specialize d in
+      fprintf fmt "@[<hov 2>type @[%a%a@] =@\n%a@]"
+        alg_type_parameters vs ident id
+        (print_list newline alg_type_constructor) cs
   | Dlogic (_, id, lt) ->
       let lt = specialize lt in
-      fprintf fmt "@[logic %s : %a@]" id logic_type lt
+      fprintf fmt "@[logic %a : %a@]" ident id logic_type lt
   | Dpredicate_def (_, id, def) ->
       let bl,p = specialize def in
       fprintf fmt "@[<hov 2>predicate %a(%a) =@ %a@]" ident id 

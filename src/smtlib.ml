@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.63 2009-11-10 10:33:26 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.64 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Ident
 open Options
@@ -301,11 +301,16 @@ let print_obligation fmt loc o s =
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 
+(* Inductive predicates and algebraic types handling went to Encoding.push *)
+(*
 let rec push_decl d = 
   match d with
     | Dinductive_def (loc, id, d) ->
 	List.iter push_decl (PredDefExpansor.inductive_def loc id d)
     | _ -> Encoding.push d
+*)
+
+let push_decl = Encoding.push
 
 let iter = Encoding.iter
 
@@ -325,10 +330,13 @@ let print_logic fmt id t =
 	  idents id pure_type_list tl print_pure_type pt
 	
 let output_elem fmt = function
-  | Dtype (loc, [], id) -> declare_type fmt id
-  | Dtype (_, _, id) -> fprintf fmt ";; polymorphic type %s@\n@\n" id
-  | Dlogic (_, id, t)  when not (Ident.is_simplify_arith (Ident.create id))
-      -> print_logic fmt id t.scheme_type
+  | Dtype (loc, id, []) -> declare_type fmt (Ident.string id)
+  | Dtype (_, id, _) ->
+      fprintf fmt ";; polymorphic type %s@\n@\n" (Ident.string id)
+  | Dalgtype _ ->
+      failwith "SMTLIB output: algebraic types are not supported"
+  | Dlogic (_, id, t)  when not (Ident.is_simplify_arith id)
+      -> print_logic fmt (Ident.string id) t.scheme_type
   | Dlogic (_, _, _) -> fprintf fmt "" 
   | Dpredicate_def (loc, id, d) -> 
       print_predicate_def fmt (Ident.string id) d.scheme_type

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding.ml,v 1.11 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: encoding.ml,v 1.12 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Options
 
@@ -46,6 +46,13 @@ let push d = match get_types_encoding () with
   | Stratified -> Encoding_strat.push d
   | Recursive -> Encoding_rec.push d
   | Monomorph -> Monomorph.push_decl d
+
+let push = function
+  | Logic_decl.Dinductive_def (loc, id, d) ->
+      List.iter push (PredDefExpansor.inductive_def loc id d)
+  | Logic_decl.Dalgtype (loc, id, d) ->
+      List.iter push (PredDefExpansor.algebraic_type loc id d)
+  | d -> push d
 
 let iter f = match get_types_encoding () with
   | NoEncoding -> Queue.iter f queue

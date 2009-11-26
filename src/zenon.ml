@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.36 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: zenon.ml,v 1.37 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Zenon output *)
 
@@ -317,8 +317,11 @@ let iter = Encoding.iter (*Monomorph.iter*)
 let reset () = Encoding.reset (*Monomorph.reset*) ()
 
 let output_elem fmt = function
-  | Dtype (loc, _, id) -> declare_type fmt id
-  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dtype (loc, id, _) -> declare_type fmt (Ident.string id)
+  | Dalgtype _ ->
+      failwith "Zenon output: alebraic types are not supported"
+  | Dlogic (loc, id, t) ->
+      print_logic fmt (Ident.string id) t.scheme_type
   | Dpredicate_def (loc, id, d) -> 
       let id = Ident.string id in
       print_predicate_def fmt id d.scheme_type

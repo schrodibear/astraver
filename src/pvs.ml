@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.103 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: pvs.ml,v 1.104 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -331,6 +331,23 @@ let print_logic_type fmt = function
 let declare_type fmt id = 
   fprintf fmt "  @[%s: TYPE+;@]@\n@\n" id
 
+let declare_alg_type fmt id cs =
+  let print_cargs c fmt pl =
+    let cpt = ref 0 in
+    let print_carg fmt t =
+      incr cpt; fprintf fmt "%s_proj_%i : %a" c !cpt print_pure_type t
+    in
+    match pl with
+    | [] -> ()
+    | _  -> fprintf fmt "@[(%a)@]" (print_list comma print_carg) pl
+  in
+  let cons fmt (c,pl) =
+    let c = Ident.string c in
+    fprintf fmt "%s%a : %s?" c (print_cargs c) pl c
+  in
+  fprintf fmt "  @[<hov 2>%s: DATATYPE@\n@[<hov 2>BEGIN@\n%a@]@\nEND %s@]@\n@\n"
+    id (print_list newline cons) cs id
+
 let print_logic fmt id t = 
   fprintf fmt "  %%%% Why logic %s@\n" id;
   fprintf fmt "  %s: @[%a@]@\n@\n" id print_logic_type t
@@ -358,7 +375,7 @@ let print_obligation fmt (loc,expl,id,s) =
   fprintf fmt "  @[%% %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
-  fprintf fmt "@]@\n"
+  fprintf fmt "@]@\n@\n"
   (*;
   fprintf fmt "@[%% %a @]@\n@\n" Util.print_explanation expl
   *)
@@ -427,9 +444,12 @@ let iter f = Queue.iter f queue
 let reset () = Queue.clear queue
 
 let output_elem fmt = function
-  | Dtype (loc, [], id) -> declare_type fmt id
+  | Dtype (loc, id, []) -> declare_type fmt (Ident.string id)
   | Dtype _ -> assert false
-  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dalgtype (loc, id, {scheme_type=([],cs)}) ->
+      declare_alg_type fmt (Ident.string id) cs
+  | Dalgtype _ -> assert false
+  | Dlogic (loc, id, t) -> print_logic fmt (Ident.string id) t.scheme_type
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
   | Dinductive_def(loc, ident, inddef) -> print_inductive_def fmt ident inddef
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
@@ -476,7 +496,7 @@ module ArMap = struct
 end
 
 type pvs_theories = {
-  types : (string list * string) ArMap.t;
+  types : (string list * string * (Ident.t * pure_type list) list) ArMap.t;
   decls : (string * logic_type scheme) ArMap.t;
   defs : (string * def) Queue.t;
   axioms : (string * predicate scheme) ArMap.t;
@@ -495,12 +515,16 @@ let sort_theory () =
   in
   let poly s = if not (Vset.is_empty s.scheme_vars) then th.poly <- true in
   let sort = function
-    | Dtype (_, l, id) -> 
+    | Dtype (_, id, l) ->
 	let n = List.length l in
 	if n > 0 then th.poly <- true;
-	ArMap.add n (l,id) th.types
+        ArMap.add n (l, Ident.string id, []) th.types
+    | Dalgtype (_, id, { scheme_type = ([], cs) }) ->
+        ArMap.add 0 ([], Ident.string id, cs) th.types
+    | Dalgtype _ ->
+        failwith "PVS: polymorphic algebraic datatypes are not supported"
     | Dlogic (_, id, s) -> 
-	poly s; ArMap.add_scheme s (id,s) th.decls
+	poly s; ArMap.add_scheme s (Ident.string id, s) th.decls
     | Dpredicate_def (_, id, s) -> 
 	poly s; Queue.add (Ident.string id, DefPredicate s) th.defs
     | Dinductive_def(loc, ident, inddef) ->
@@ -571,7 +595,9 @@ let output_theory fmt th_name =
     (* types *)
     ArMap.print_theories fmt (th_name ^ "_types") 
       (fun () -> ())
-      (fun (_,id) -> declare_type fmt id) th.types
+      (function
+        | (_,id,[]) -> declare_type fmt id
+        | (_,id,cs) -> declare_alg_type fmt id cs) th.types
   end else begin 
     (* simple case: no polymorphism at all -> a single theory *)
     iter (output_elem fmt);

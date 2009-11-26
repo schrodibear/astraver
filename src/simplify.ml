@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.92 2009-11-10 13:06:52 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.93 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -59,9 +59,11 @@ let rec decl_to_elem = function
   | Dfunction_def (_, id, p) -> 
       Queue.add (FunctionDef (Ident.string id, p)) queue
   | Dinductive_def (loc, id, d) ->
-      List.iter decl_to_elem (PredDefExpansor.inductive_def loc id d)
+      assert false (* inductive predicates are handled in Encoding.push *)
+(*    List.iter decl_to_elem (PredDefExpansor.inductive_def loc id d) *)
   | Dlogic _ -> ()
   | Dtype _ -> ()
+  | Dalgtype _ -> ()
 
 let push_decl = Encoding.push
 

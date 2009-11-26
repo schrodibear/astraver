@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.40 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: monomorph.ml,v 1.41 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (* monomorphic output *)
 
@@ -347,13 +347,14 @@ let declare_type loc = function
   | PTexternal (i,x) as pt 
       when is_closed_pure_type pt && not (Htypes.mem declared_types pt) ->
       Htypes.add declared_types pt ();
-      push (Dtype (loc, [], name (Ident.string x) i))
+      push (Dtype (loc, Ident.create (name (Ident.string x) i), []))
   | _ -> 
       ()
 
 let push_logic_instance loc id i t =
   IterIT.logic_type (declare_type loc) t;
-  push (Dlogic (loc, name id i, empty_scheme t))
+  let id = Ident.create (name (Ident.string id) i) in
+  push (Dlogic (loc, id, empty_scheme t))
 
 (* logic symbols (functions and predicates) *)
 
@@ -370,7 +371,7 @@ let push_logic loc id t =
   else
     (* nothing to do until we encounter closed instances of [id] *)
     (* we only remember the type of [id] *)
-    Hashtbl.add logic_symbols (Ident.create id) (Uninterp t)
+    Hashtbl.add logic_symbols id (Uninterp t)
 	
 module Hinstance = Hashtbl.Make(Instance)
 let declared_logic = Hinstance.create 97
@@ -398,7 +399,7 @@ let rec declare_logic loc id i =
 	    (Pp.print_list Pp.comma Util.print_pure_type) i
 	    Util.print_logic_type t;
 	  *)
-	  push_logic_instance loc (Ident.string id) i t
+	  push_logic_instance loc id i t
       | PredicateDef p ->
 	  assert (Vset.cardinal p.scheme_vars = List.length i);
 	  let s = 
@@ -537,17 +538,19 @@ let push_obligation loc expl o s =
   let vs, s = specialize_sequent s in
   Vmap.iter
     (fun _ tv -> 
-       let pt = new_type () in
-       push (Dtype (loc, [], pt));
-       tv.type_val <- Some (PTexternal ([], Ident.create pt)))
+       let pt = Ident.create (new_type ()) in
+       push (Dtype (loc, pt, []));
+       tv.type_val <- Some (PTexternal ([], pt)))
       vs;
   IterIT.sequent (declare_logic loc) (declare_type loc) s;
   instantiate_axioms loc;
   push (Dgoal (loc, expl, o, empty_scheme s))
 
 let push_decl = function
-  | Dtype (loc, [], id) -> declare_type loc (PTexternal ([], Ident.create id))
+  | Dtype (loc, id, []) -> declare_type loc (PTexternal ([], id))
   | Dtype _ -> ()
+  | Dalgtype _ ->
+      failwith "encoding rec: algebraic types are not supported"
   | Dlogic (loc, x, t) -> push_logic loc x t
   | Dpredicate_def (loc, x, d) -> push_predicate_def loc x d
   | Dinductive_def(loc, ident, inddef) ->

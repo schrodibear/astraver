@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.168 2009-11-26 16:06:46 andrei Exp $ i*)
+(*i $Id: util.ml,v 1.169 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Logic
 open Ident
@@ -1257,8 +1257,9 @@ let print_loc_predicate fmt (loc,p) =
   
 
 let print_decl fmt = function
-    Dtype (_, sl, s) -> 
-      fprintf fmt "type %s" s
+  | Dtype (_, s, _)
+  | Dalgtype (_, s, _) ->
+      fprintf fmt "type %s" (Ident.string s)
   | Dlogic (_, s, log_type_sch) -> 
       fprintf fmt "logic %a" print_logic_type log_type_sch.Env.scheme_type
   | Dpredicate_def (_, s, pred_def_sch) ->

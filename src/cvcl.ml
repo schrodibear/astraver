@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.62 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: cvcl.ml,v 1.63 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -260,9 +260,12 @@ let iter = Encoding.iter
 let reset () = Encoding.reset ()
 
 let output_elem fmt = function
-  | Dtype (_loc, [], id) -> declare_type fmt id
+  | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
   | Dtype _ -> assert false
-  | Dlogic (_loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dalgtype _ ->
+      failwith "CVC light: algebraic types are not supported"
+  | Dlogic (_loc, id, t) ->
+      print_logic fmt (Ident.string id) t.scheme_type
   | Dpredicate_def (_loc, id, d) -> 
       let id = Ident.string id in
       print_predicate_def fmt id d.scheme_type

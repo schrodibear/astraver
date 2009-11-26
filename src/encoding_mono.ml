@@ -85,25 +85,25 @@ let arities = ref [eq_arity; neq_arity]
 
 let prelude = [
   (* first the three new types *)
-  (Dtype (loc, [], utname));
-  (Dtype (loc, [], stname));
-  (Dtype (loc, [], ttname))]
+  (Dtype (loc, Ident.create utname, []));
+  (Dtype (loc, Ident.create stname, []));
+  (Dtype (loc, Ident.create ttname, []))]
   (* the function symbols representing constant types *)
   @
- (List.map (fun t -> (Dlogic (loc, prefix (cname t),
+ (List.map (fun t -> (Dlogic (loc, Ident.create (prefix (cname t)),
 			       Env.empty_scheme (Function ([], tt)))))
      htypes)
   (* the sorting and conversion functions *)
   @
-  [(Dlogic (loc, sort, Env.empty_scheme (Function ([tt; ut], st))))]
+  [(Dlogic (loc, Ident.create sort, Env.empty_scheme (Function ([tt; ut], st))))]
   @
   (List.map (fun t ->
-	       (Dlogic (loc, c2u t, 
+	       (Dlogic (loc, Ident.create (c2u t),
 			Env.empty_scheme (Function ([t], ut)))))
      htypes)
   @
   (List.map (fun t ->
-	       (Dlogic (loc, s2c t,
+	       (Dlogic (loc, Ident.create (s2c t),
 			Env.empty_scheme (Function ([st], t)))))
      htypes)
   (* and the conversion axioms *)
@@ -369,16 +369,18 @@ let rec push d =
   try (match d with
 (* A type declaration is translated as new logical function, the arity of *)
 (* which depends on the number of type variables in the declaration *)
-  | Dtype (loc, vars, ident) ->
+  | Dtype (loc, ident, vars) ->
       Queue.add (Dlogic (loc, ident,
 			 Env.empty_scheme (Function (typify vars, tt)))) queue
+  | Dalgtype _ ->
+      failwith "encoding rec: algebraic types are not supported"
 (* In the case of a logic definition, we redefine the logic symbol  *)
 (* with types u and s, and its complete arity is stored for the encoding *)
   | Dlogic (loc, ident, arity) -> 
 (*
       Format.eprintf "Encoding_mono: adding %s in arities@." ident;
 *)
-      arities := (ident, arity)::!arities;
+      arities := (Ident.string ident, arity)::!arities;
       let newarity = match arity.Env.scheme_type with
 	  Predicate ptl -> Predicate (monoify ptl)
 	| Function (ptl, pt) -> Function (monoify ptl, sortify ut pt) in
@@ -388,7 +390,7 @@ let rec push d =
       let (argl, pred) = pred_def_sch.Env.scheme_type in
       let rootexp = (Papp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
       let name = Ident.string ident in
-      push (Dlogic (loc, name, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
+      push (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
       push (Daxiom (loc, def name, (Env.generalize_predicate
 				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
 (* A function definition can be handled as a function logic definition + an axiom *)
@@ -399,23 +401,23 @@ let rec push d =
       let (argl, rt, term) = fun_def_sch.Env.scheme_type in
       let rootexp = (Tapp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
       let name = Ident.string ident in
-      push (Dlogic (loc, name, (Env.generalize_logic_type (Function (snd (List.split argl), rt)))));
+      push (Dlogic (loc, ident, (Env.generalize_logic_type (Function (snd (List.split argl), rt)))));
       push (Daxiom (loc, def name,
 		    (Env.generalize_predicate
 		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
 (* Axiom definitions *)
-  | Daxiom (loc, ident, pred_sch) ->
+  | Daxiom (loc, name, pred_sch) ->
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	(fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
 	(pred_sch.Env.scheme_vars) [] in
       let new_axiom = Env.empty_scheme
 	(lifted fv (translate_pred fv [] pred_sch.Env.scheme_type) []) in
-	Queue.add (Daxiom (loc, ident, new_axiom)) queue
+	Queue.add (Daxiom (loc, name, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
-  | Dgoal (loc, expl, ident, s_sch) ->
+  | Dgoal (loc, expl, name, s_sch) ->
       begin try
-	if debug then Printf.printf "Encoding goal %s, %s...\n" ident (f2s loc);
+	if debug then Printf.printf "Encoding goal %s, %s...\n" name (f2s loc);
 	let cpt = ref 0 in
 	let fv = Env.Vset.fold
 	  (fun tv acc -> 
@@ -446,10 +448,10 @@ let rec push d =
 	  Env.empty_scheme
 	    (lifted_ctxt fv (List.rev new_cel),
 	     translate_pred fv context (snd (s_sch.Env.scheme_type))) in
-	Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue
+	Queue.add (Dgoal (loc, expl, name, new_sequent)) queue
       with Not_found -> 
 	Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
-	Queue.add (Dgoal (loc, expl, ident, Env.empty_scheme([],Pfalse))) queue
+	Queue.add (Dgoal (loc, expl, name, Env.empty_scheme([],Pfalse))) queue
       end)
   with Not_found -> 
     Format.eprintf "Exception caught in : %a\n" Util.print_decl d;

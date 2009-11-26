@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.84 2009-11-26 16:06:46 andrei Exp $ i*)
+(*i $Id: env.ml,v 1.85 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Ident
 open Misc
@@ -83,15 +83,12 @@ let generalize_logic_type t =
   let l = find_logic_type_vars t in
   { scheme_vars = l ; scheme_type = t }
 
-let generalize_constructor t =
-  match t with
-    | Function(tl,tr) ->
-	let lr = find_pure_type_vars Vset.empty tr in
-        let ll = List.fold_left find_pure_type_vars lr tl in
-        if Vset.subset ll lr
-          then { scheme_vars = ll ; scheme_type = t }
-          else raise Not_found
-    | Predicate(tl) -> assert false
+let generalize_alg_type t =
+  let vs,cs = t in
+  let pls = List.map (fun (_,pl) -> pl) cs in
+  let act = List.fold_left find_pure_type_vars in
+  let l = List.fold_left act Vset.empty (vs::pls) in
+  { scheme_vars = l ; scheme_type = t }
 
 let rec find_term_vars acc = function
   | Tconst _
@@ -188,6 +185,10 @@ let subst_logic_type s = function
   | Predicate (tl) -> 
       Predicate (List.map (subst_pure_type s) tl)
 
+let subst_alg_type s (vs,cs) =
+  (List.map (subst_pure_type s) vs,
+    List.map (fun (c,pl) -> (c, List.map (subst_pure_type s) pl)) cs)
+
 let rec subst_term s = function
   | Tapp (id, tl, i) -> 
       Tapp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
@@ -243,6 +244,8 @@ let specialize_scheme subst s =
   (env, subst env s.scheme_type)
 
 let specialize_logic_type = specialize_scheme subst_logic_type
+
+let specialize_alg_type = specialize_scheme subst_alg_type
 
 let specialize_type_v = specialize_scheme subst_type_v
 

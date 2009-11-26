@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.54 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: mizar.ml,v 1.55 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Mizar output *)
 
@@ -53,7 +53,7 @@ let reset () = Queue.clear elem_q
 let push_decl = function
   | Dgoal (loc, expl, id, s) -> 
       Queue.add (Obligation (loc, expl, id, s.Env.scheme_type)) elem_q
-  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
+  | Dlogic (_, id, t) -> Queue.add (Logic (Ident.string id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> 
       Queue.add (Predicate (Ident.string id, p)) elem_q
@@ -61,6 +61,7 @@ let push_decl = function
       failwith "Mizar output: inductive def not yet supported"
   | Dfunction_def _ -> () (*TODO*)
   | Dtype _ -> () (*TODO*)
+  | Dalgtype _ -> () (*TODO*)
 
 (*s Pretty print *)
 
@@ -331,6 +332,7 @@ struct
       | Inductive _ -> assert false (*TODO*)
       | Function _ -> assert false (*TODO*)
       | AbstractType _ -> assert false (*TODO*)
+      | AlgebraicType _ -> assert false (*TODO*)
     end;
     fprintf fmt "@\n"
       
@@ -344,6 +346,7 @@ struct
     | Inductive _ -> assert false (*TODO*)
     | Function _ -> assert false (*TODO*)
     | AbstractType _ -> assert false (*TODO*)
+    | AlgebraicType _ -> assert false (*TODO*)
 
   let re_oblig_loc = Str.regexp " :: Why obligation from .*"
 

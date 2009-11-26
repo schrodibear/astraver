@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.57 2009-11-26 16:06:46 andrei Exp $ i*)
+(*i $Id: env.mli,v 1.58 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -141,7 +141,7 @@ val new_type_var : ?user:bool -> unit -> type_var
 val type_var_name : type_var -> string (* for error messages only *)
 
 val generalize_logic_type : logic_type -> logic_type scheme
-val generalize_constructor : logic_type -> logic_type scheme
+val generalize_alg_type : alg_type_def -> alg_type_def scheme
 val generalize_type_v : type_v -> type_v scheme
 val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme
@@ -151,6 +151,7 @@ val generalize_sequent : sequent -> sequent scheme
 
 val specialize_type_scheme : type_v scheme -> var_subst * type_v
 val specialize_logic_type : logic_type scheme -> var_subst * logic_type
+val specialize_alg_type : alg_type_def scheme -> var_subst * alg_type_def
 val specialize_predicate : predicate scheme -> var_subst * predicate
 val specialize_predicate_def : 
   predicate_def scheme -> var_subst * predicate_def

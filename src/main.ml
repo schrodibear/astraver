@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.175 2009-11-26 16:06:46 andrei Exp $ i*)
+(*i $Id: main.ml,v 1.176 2009-11-26 16:07:03 andrei Exp $ i*)
 
 open Options
 open Ptree
@@ -63,8 +63,9 @@ let reset () =
     | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> ()
 
 let add_loc = function
-  | Dtype (loc, _, s)
-  | Dlogic (loc, s, _)
+  | Dtype (loc, s, _)
+  | Dalgtype (loc, s, _)
+  | Dlogic (loc, s, _) -> Loc.add_ident (Ident.string s) loc
   | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
   | Dpredicate_def (loc, s, _)
   | Dfunction_def (loc, s, _) 
@@ -493,7 +494,7 @@ let rec interp_decl ?(_prelude=false) d =
 	    end
 	  else
 	    begin
-	      push_decl ("","",Loc.dummy_floc) (Dlogic (Loc.extract loc, Ident.string id, t));
+	      push_decl ("","",Loc.dummy_floc) (Dlogic (Loc.extract loc, id, t));
 	    end 
 	in
 	List.iter add ids
@@ -592,22 +593,25 @@ let rec interp_decl ?(_prelude=false) d =
 	Hashtbl.add program_locs ids vloc;
 	push_decl ("","",Loc.dummy_floc) dg
 
-    | TypeDecl (loc, ext, vl, id, td) ->
+    | TypeDecl (loc, ext, vl, id, []) ->
 	Env.add_type loc vl id;
-        let add_constructor (cloc, cid, cty) =
-          if is_global_logic cid then raise_located cloc (Clash cid);
-          let v = List.map (fun x -> PPTvarid (x, loc)) vl in
-          let t = PFunction (cty, PPTexternal (v, id, loc)) in
-          let t = try generalize_constructor (Ltyping.logic_type t)
-                  with Not_found -> raise_located cloc CannotGeneralize
-          in
-          Env.add_global_logic cid t;
-          Env.add_alg_type_constructor id cid
-        in
-        List.iter add_constructor td;
 	let vl = List.map Ident.string vl in
 	if not ext then 
-	  push_decl ("","",Loc.dummy_floc) (Dtype (Loc.extract loc, vl, Ident.string id))
+	  push_decl ("","",Loc.dummy_floc) (Dtype (Loc.extract loc, id, vl))
+
+    | TypeDecl (loc, _, vl, id, td) ->
+	Env.add_type loc vl id;
+        let d = Env.generalize_alg_type (Ltyping.alg_type id vl td) in
+        let vs,cs = d.Env.scheme_type in
+        let th = PTexternal (vs, id) in
+        let add_constructor (c, pl) =
+          if is_global_logic c then raise_located loc (Clash c);
+          let t = Env.generalize_logic_type (Function (pl,th)) in
+          Env.add_global_logic c t;
+          Env.add_alg_type_constructor id c;
+        in
+        List.iter add_constructor cs;
+	push_decl ("","",Loc.dummy_floc) (Dalgtype (Loc.extract loc, id, d))
 
 (*s Prelude *)
 

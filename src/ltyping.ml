@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.77 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: ltyping.ml,v 1.78 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -523,4 +523,19 @@ let logic_type lt =
       Predicate (List.map (pure_type env) pl)
   | PFunction (pl, t) -> 
       Function (List.map (pure_type env) pl, pure_type env t)
+
+let alg_type id vl td =
+  let vls = List.rev_map Ident.string vl in
+  let bound x = List.mem (Ident.string x) vls in
+  let rec check = function
+    | PPTvarid (x, loc) -> if bound x then ()
+        else raise_located loc (UnboundType x)
+    | PPTexternal (p,_,_) -> List.iter check p
+    | _ -> ()
+  in
+  let () = List.iter (fun (_,_,pl) -> List.iter check pl) td in
+  let env = Env.empty_logic () in
+  let vs = List.map (fun v -> PTvar (find_type_var v env)) vl in
+  let cons (_,c,pl) = (c, List.map (pure_type env) pl) in
+  (vs, List.map cons td)
 

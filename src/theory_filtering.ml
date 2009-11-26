@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.13 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.14 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -257,8 +257,12 @@ let display_symb_of set =
  
 let display (q,s) n = 
   let di = function 
-    | Dtype (_, _, id) -> Printf.printf  "type %s (%d) : "  id 
-    | Dlogic (_, id, t) -> Printf.printf  "arit %s (%d) : " id   
+    | Dtype (_, id, _) ->
+        Printf.printf  "type %s (%d) : "  (Ident.string id)
+    | Dalgtype _ ->
+        failwith "Theory filtering: algebraic types are not supported"
+    | Dlogic (_, id, t) ->
+        Printf.printf  "arit %s (%d) : " (Ident.string id)
     | Dpredicate_def (_, id, d) -> 
 	let id = Ident.string id in
 	Printf.printf  "def_pred %s (%d): " id 
@@ -345,10 +349,12 @@ let declare_type id ax =
 
     
 let launcher decl = match decl with   
-  | Dtype (_, _, id) as ax -> (*Printf.printf  "Dtype %s \n"  id ;*) 
-      declare_type id ax 
+  | Dtype (_, id, _) as ax -> (*Printf.printf  "Dtype %s \n"  id ;*)
+      declare_type (Ident.string id) ax
+  | Dalgtype _ ->
+      failwith "Theory filtering: algebraic types are not supported"
   | Dlogic (_, id, t) as ax -> (* Printf.printf  "Dlogic %s \n"  id ;*) 
-      declare_arity  id ax
+      declare_arity (Ident.string id) ax
   | Dpredicate_def (_, id, d) as ax -> 
       (*Printf.printf  "Dpredicate_def %s \n"  *)
       let id = Ident.string id in

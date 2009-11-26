@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.71 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.72 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -2220,7 +2220,7 @@ let managesContext relevantPreds decl =
                 (* Sinon on insere la signature du predicat avec un logic *)
 		let name = Ident.string ident in
                 (let bl, _ = def.scheme_type in
-                 Queue.push (Dlogic(loc, name, generalize_logic_type (Predicate(List.map snd bl)))) decl);
+                 Queue.push (Dlogic(loc, ident, generalize_logic_type (Predicate(List.map snd bl)))) decl);
                 
                 (* Ensuite, on test chacune des clauses pour eventuellement les  *)
                 (* preserver                                                     *)

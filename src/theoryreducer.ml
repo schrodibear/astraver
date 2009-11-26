@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.15 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.16 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -484,12 +484,14 @@ let declareType id ax =
     
     
 let launcher decl = match decl with   
-  | Dtype (_, _, id) as ax -> 
+  | Dtype (_, id, _) as ax ->
       (*Printf.printf  "Dtype %s \n"  id ;*) 
-      declareType id ax 
+      declareType (Ident.string id) ax
+  | Dalgtype _ ->
+      failwith "Theory reducer: algebraic types are not supported"
   | Dlogic (_, id, t) as ax -> 
       (* Printf.printf  "Dlogic %s \n"  id ;*) 
-      typingPredicate  id ax
+      typingPredicate (Ident.string id) ax
   | Dpredicate_def (_, id, d) as ax -> 
       (*Printf.printf  "Dpredicate_def %s \n"  id ; *)
       let id = Ident.string id in
@@ -511,8 +513,10 @@ let launcher decl = match decl with
 
 let display q = 
   let displayMatch e  = match e with   
-  | Dtype (_, _, id) -> Printf.printf  "%s \n"  id  
-  | Dlogic (_, id, t) -> Printf.printf  "%s \n" id   
+  | Dtype (_, id, _) -> Printf.printf  "%s \n" (Ident.string id)
+  | Dalgtype _ ->
+      failwith "Theory reducer: algebraic types are not supported"
+  | Dlogic (_, id, t) -> Printf.printf  "%s \n" (Ident.string id)
   | Dpredicate_def (_, id, d) -> 
       let id = Ident.string id in
       Printf.printf  "%s \n" id

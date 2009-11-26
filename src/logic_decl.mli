@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic_decl.mli,v 1.21 2009-09-04 15:29:45 bobot Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.22 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
@@ -60,8 +60,9 @@ type obligation = Loc.floc * vc_expl * string * sequent
     (* loc, explanation, id, sequent *) 
 
 type t =
-  | Dtype          of loc * string list * string
-  | Dlogic         of loc * string * logic_type scheme
+  | Dtype          of loc * Ident.t * string list
+  | Dalgtype       of loc * Ident.t * alg_type_def scheme
+  | Dlogic         of loc * Ident.t * logic_type scheme
   | Dpredicate_def of loc * Ident.t * predicate_def scheme
   | Dinductive_def of loc * Ident.t * inductive_def scheme
   | Dfunction_def  of loc * Ident.t * function_def scheme

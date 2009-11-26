@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.30 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: hol4.ml,v 1.31 2009-11-26 16:07:03 andrei Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -50,7 +50,7 @@ let elem_q = Queue.create ()
 let reset () = Queue.clear elem_q
 
 let push_decl = function
-  | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
+  | Dlogic (_, id, t) -> Queue.add (Logic (Ident.string id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (Ident.string id, p)) elem_q
   | Dinductive_def(loc, ident, inddef) ->
@@ -58,7 +58,8 @@ let push_decl = function
   | Dfunction_def _ -> assert false (*TODO*)
   | Dgoal (loc,expl,id,s) -> 
       Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
-  | Dtype (_,_,id) -> () (* assert false *)
+  | Dtype (_,id,_) -> () (* assert false *)
+  | Dalgtype (_,id,_) -> () (* assert false *)
 
 (*s Pretty print *)
 
