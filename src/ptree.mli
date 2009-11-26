@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.51 2009-11-26 16:07:54 andrei Exp $ i*)
+(*i $Id: ptree.mli,v 1.52 2009-11-26 16:08:03 andrei Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -68,7 +68,7 @@ and pp_desc =
   | PPexists of Ident.t * ppure_type * lexpr
   | PPnamed of string * lexpr
   | PPlet of Ident.t * lexpr * lexpr
-  | PPmatch of lexpr * ((Ident.t * Ident.t list) * lexpr) list
+  | PPmatch of lexpr * ((Ident.t * Ident.t list * loc) * lexpr) list
 
 type assertion = { 
   pa_name : Ident.name; 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: report.ml,v 1.25 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.26 2009-11-26 16:08:03 andrei Exp $ i*)
 
 open Ident
 open Logic
@@ -76,6 +76,8 @@ let report fmt = function
       fprintf fmt "This expression should not have side effects"
   | ShouldBeBoolean ->
       fprintf fmt "This expression should have type bool"
+  | ShouldBeAlgebraic ->
+      fprintf fmt "This expression should have an algebraic type"
   | ShouldBeAnnotated ->
       fprintf fmt "This test should be annotated"
   | CannotBeMutable ->
@@ -149,6 +151,11 @@ let report fmt = function
 	"A mutable type cannot contain another mutable type or a function"
   | PolymorphicGoal ->
       fprintf fmt "A goal cannot be polymorphic"
+  | NonExhaustive id ->
+      fprintf fmt "Non-exhausitive pattern matching, missing constructor %a"
+        Ident.print id
+  | PatternBadArity ->
+      fprintf fmt "A pattern variable occurs several times"
   | TypeBadArity ->
       fprintf fmt "A type parameter occurs several times"
   | TypeArity (id, a, n) ->

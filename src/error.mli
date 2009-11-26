@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: error.mli,v 1.34 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.35 2009-11-26 16:08:03 andrei Exp $ i*)
 
 (*s Errors. *)
 
@@ -50,6 +50,7 @@ type t =
   | NotAnIndex
   | HasSideEffects
   | ShouldBeBoolean
+  | ShouldBeAlgebraic
   | ShouldBeAnnotated
   | CannotBeMutable
   | MustBePure
@@ -78,6 +79,8 @@ type t =
   | CannotBeRaised of Ident.t
   | MutableMutable
   | PolymorphicGoal
+  | NonExhaustive of Ident.t
+  | PatternBadArity
   | TypeBadArity
   | TypeArity of Ident.t * int * int
   | GlobalWithEffects of Ident.t * Effect.t

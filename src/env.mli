@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.58 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: env.mli,v 1.59 2009-11-26 16:08:03 andrei Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -81,7 +81,7 @@ val type_arity : Ident.t -> int
 
 (*s algebraic types (only global) *)
 
-val add_alg_type_constructor : Ident.t -> Ident.t -> unit
+val set_constructors : Ident.t -> Ident.t list -> unit
 val is_alg_type : Ident.t -> bool
 val alg_type_constructors : Ident.t -> Ident.t list
 
@@ -183,3 +183,8 @@ end
 (* debug *)
 
 val dump_type_var : (type_var -> unit) ref
+
+(* misc *)
+
+val bad_arity : Ident.t list -> bool
+

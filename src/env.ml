@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.86 2009-11-26 16:07:36 andrei Exp $ i*)
+(*i $Id: env.ml,v 1.87 2009-11-26 16:08:03 andrei Exp $ i*)
 
 open Ident
 open Misc
@@ -639,9 +639,9 @@ let alg_types = Hashtbl.create 97
 
 let is_alg_type = Hashtbl.mem alg_types
 
-let alg_type_constructors = Hashtbl.find_all alg_types
+let alg_type_constructors = Hashtbl.find alg_types
 
-let add_alg_type_constructor = Hashtbl.add alg_types
+let set_constructors = Hashtbl.add alg_types
 
 (* access in env, local then global *)
 

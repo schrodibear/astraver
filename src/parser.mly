@@ -498,8 +498,8 @@ match_case:
 ;
 
 pattern:
-| ident                                         { ($1,[]) }
-| ident LEFTPAR list1_ident_sep_comma RIGHTPAR  { ($1,$3) }
+| ident                                         { ($1, [], loc ()) }
+| ident LEFTPAR list1_ident_sep_comma RIGHTPAR  { ($1, $3, loc ()) }
 ;
 
 triggers:

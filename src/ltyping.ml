@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.79 2009-11-26 16:07:54 andrei Exp $ i*)
+(*i $Id: ltyping.ml,v 1.80 2009-11-26 16:08:03 andrei Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -188,6 +188,52 @@ let instance x i =
   *)
   l
 
+(* match expression handling *)
+
+let match_branches prop gloc loc x ty l =
+  let id = match ty with
+    | PTexternal (_,id) when Env.is_alg_type id -> id
+    | _ -> raise_located loc ShouldBeAlgebraic
+  in
+  let cs = Env.alg_type_constructors id in
+  let check cm ((c,vs,loc),r) =
+    if not (List.mem c cs) then raise_located loc
+      (ExpectedType (fun f -> print_pure_type f ty));
+    if Idmap.mem c cm then raise_located loc (ClashParam c);
+    let () = match find_global_logic c with
+      | _, Function (pl,_)
+        when List.length pl = List.length vs -> ()
+      | _, _ -> raise_located loc PartialApp
+    in
+    if bad_arity vs then raise_located loc PatternBadArity;
+    let expr ex = { pp_loc = loc; pp_desc = ex } in
+    let r = if not prop then r else
+      let al = List.map (fun v -> expr (PPvar v)) vs in
+      let hd = PPinfix (x, PPeq, expr (PPapp (c,al))) in
+      expr (PPinfix (expr hd, PPand, r))
+    in
+    let i = ref 0 in
+    let proj acc v =
+      let pt = PPapp (proj_id c !i, [x]) in
+      incr i ; expr (PPlet (v, expr pt, acc))
+    in
+    Idmap.add c (List.fold_left proj r vs) cm
+  in
+  let cm = List.fold_left check Idmap.empty l in
+  let pick c = try Idmap.find c cm with
+    | Not_found -> raise_located gloc (NonExhaustive c)
+  in
+  let bs = List.map pick cs in
+  if not prop then
+    { pp_loc = gloc; pp_desc = PPapp (match_id id, x::bs) }
+  else
+    let rec join = function
+      | [b] -> b
+      | b::bs -> { pp_loc = gloc; pp_desc = PPinfix (b, PPor, join bs) }
+      | _ -> assert false
+    in
+    join bs
+
 (* typing predicates *)
 
 let rec predicate lab env p =
@@ -259,7 +305,11 @@ and desc_predicate loc lab env = function
       plet x ty t1 (predicate lab env e2)
   | PPmatch (e, l) ->
       let t, ty = term lab env e in
-      assert false
+      let x = fresh_var () in
+      let v = { pp_loc = loc ; pp_desc = PPvar x } in
+      let f = match_branches true loc e.pp_loc v ty l in
+      let env = Env.add_logic x ty env in
+      plet x ty t (predicate lab env f)
 
 and type_pvar loc env x =
   if is_at x then 
@@ -319,10 +369,16 @@ and desc_term loc lab env = function
       tsubst_in_term (subst_one x t1) t2, ty2
   | PPmatch (e, l) ->
       let t, ty = term lab env e in
-      assert false
+      let x = fresh_var () in
+      let v = { pp_loc = e.pp_loc; pp_desc = PPvar x } in
+      let f = match_branches false loc e.pp_loc v ty l in
+      let env = Env.add_logic x ty env in
+      let f, ty = term lab env f in
+      tsubst_in_term (subst_one x t) f, ty
   | PPprefix (PPnot, _) | PPforall _ | PPexists _ ->
       term_expected loc
 
+(* (* dead code *)
 and type_if lab env a b c =
   match term lab env a, term lab env b, term lab env c with
     | (ta, PTbool), (tb, tyb), (tc, tyc) -> 
@@ -331,6 +387,7 @@ and type_if lab env a b c =
 	    (ExpectedType (fun f -> print_pure_type f tyb));
 	Tapp (if_then_else, [ta; tb; tc], []), tyb
     | _ -> raise_located a.pp_loc ShouldBeBoolean
+*)
 
 and type_tvar loc lab env x = 
   let x,xu = 
