@@ -464,9 +464,22 @@ let decl fmt = function
       let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in
       fprintf fmt "@[<hov 2>function %a(%a) : %a =@ %a@]" gident id
 	(print_list comma (logic_binder m)) bl ppure_type pt (lexpr m) e
-  | TypeDecl (_, e, pl, id) ->
+  | TypeDecl (_, e, pl, id, []) ->
       rename_global id;
       fprintf fmt "%atype %a%a" print_external e type_parameters pl gident id
+  | TypeDecl (_, _, pl, id, td) ->
+      rename_global id;
+      fprintf fmt "@[<hov 2>type %a%a = @\n  @[%a@]@\n@]"
+        type_parameters pl
+        gident id
+        (print_list newline
+          (fun fmt (_,cid,cty) ->
+              rename_global cid;
+              if cty = [] then
+                fprintf fmt "| %a" gident cid
+              else
+                fprintf fmt "| %a (%a)" gident cid
+                  (print_list comma ppure_type) cty)) td
 
 let file = print_list newline decl
 

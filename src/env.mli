@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.56 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.57 2009-11-26 16:06:46 andrei Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -78,6 +78,12 @@ val lookup_global : Ident.t -> type_v
 val add_type : Loc.position -> Ident.t list -> Ident.t -> unit
 val is_type : Ident.t -> bool
 val type_arity : Ident.t -> int
+
+(*s algebraic types (only global) *)
+
+val add_alg_type_constructor : Ident.t -> Ident.t -> unit
+val is_alg_type : Ident.t -> bool
+val alg_type_constructors : Ident.t -> Ident.t list
 
 (*s exceptions (only global) *)
 
@@ -135,6 +141,7 @@ val new_type_var : ?user:bool -> unit -> type_var
 val type_var_name : type_var -> string (* for error messages only *)
 
 val generalize_logic_type : logic_type -> logic_type scheme
+val generalize_constructor : logic_type -> logic_type scheme
 val generalize_type_v : type_v -> type_v scheme
 val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme

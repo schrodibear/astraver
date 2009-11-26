@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.48 2009-09-04 15:29:45 bobot Exp $ i*)
+(*i $Id: ptree.mli,v 1.49 2009-11-26 16:06:46 andrei Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -161,5 +161,6 @@ type decl =
   | Axiom of loc * Ident.t * lexpr
   | Goal of loc * Ident.t * lexpr
   | TypeDecl of loc * external_ * Ident.t list * Ident.t
+                                * (loc * Ident.t * ppure_type list) list
 
 type file = decl list

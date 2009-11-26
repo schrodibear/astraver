@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.167 2009-09-04 15:29:46 bobot Exp $ i*)
+(*i $Id: util.ml,v 1.168 2009-11-26 16:06:46 andrei Exp $ i*)
 
 open Logic
 open Ident
@@ -1084,7 +1084,7 @@ let print_decl fmt = function
       fprintf fmt "inductive %a <...>" Ident.print id
   | Function_def (_, id, _, _, _) ->
       fprintf fmt "function %a <...>" Ident.print id
-  | TypeDecl (_, e, _, id) ->
+  | TypeDecl (_, e, _, id, _) ->
       fprintf fmt "%atype %a" print_external e Ident.print id
 
 let print_pfile = print_list newline print_decl

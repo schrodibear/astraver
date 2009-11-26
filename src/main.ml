@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.174 2009-11-10 10:33:26 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.175 2009-11-26 16:06:46 andrei Exp $ i*)
 
 open Options
 open Ptree
@@ -591,14 +591,24 @@ let rec interp_decl ?(_prelude=false) d =
 	in
 	Hashtbl.add program_locs ids vloc;
 	push_decl ("","",Loc.dummy_floc) dg
-	  
 
-    | TypeDecl (loc, ext, vl, id) ->
+    | TypeDecl (loc, ext, vl, id, td) ->
 	Env.add_type loc vl id;
+        let add_constructor (cloc, cid, cty) =
+          if is_global_logic cid then raise_located cloc (Clash cid);
+          let v = List.map (fun x -> PPTvarid (x, loc)) vl in
+          let t = PFunction (cty, PPTexternal (v, id, loc)) in
+          let t = try generalize_constructor (Ltyping.logic_type t)
+                  with Not_found -> raise_located cloc CannotGeneralize
+          in
+          Env.add_global_logic cid t;
+          Env.add_alg_type_constructor id cid
+        in
+        List.iter add_constructor td;
 	let vl = List.map Ident.string vl in
 	if not ext then 
 	  push_decl ("","",Loc.dummy_floc) (Dtype (Loc.extract loc, vl, Ident.string id))
-	    
+
 (*s Prelude *)
 
 and load_file ?(_prelude=false) f =

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.83 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: env.ml,v 1.84 2009-11-26 16:06:46 andrei Exp $ i*)
 
 open Ident
 open Misc
@@ -82,6 +82,16 @@ and find_binder_vars acc (_,t) = find_type_v_vars acc t
 let generalize_logic_type t =
   let l = find_logic_type_vars t in
   { scheme_vars = l ; scheme_type = t }
+
+let generalize_constructor t =
+  match t with
+    | Function(tl,tr) ->
+	let lr = find_pure_type_vars Vset.empty tr in
+        let ll = List.fold_left find_pure_type_vars lr tl in
+        if Vset.subset ll lr
+          then { scheme_vars = ll ; scheme_type = t }
+          else raise Not_found
+    | Predicate(tl) -> assert false
 
 let rec find_term_vars acc = function
   | Tconst _
@@ -619,6 +629,16 @@ let add_type loc v id =
   Hashtbl.add types id (List.length v)
 
 let type_arity = Hashtbl.find types
+
+(* Algebraic types with their constructors *)
+
+let alg_types = Hashtbl.create 97
+
+let is_alg_type = Hashtbl.mem alg_types
+
+let alg_type_constructors = Hashtbl.find_all alg_types
+
+let add_alg_type_constructor = Hashtbl.add alg_types
 
 (* access in env, local then global *)
 

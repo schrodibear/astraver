@@ -201,12 +201,40 @@ decl:
    { Function_def (loc (), $2, $4, $7, $9) }
 | GOAL ident COLON lexpr
    { Goal (loc (), $2, $4) }
-| external_ TYPE ident
-   { TypeDecl (loc_i 3, $1, [], $3) }
-| external_ TYPE type_var ident
-   { TypeDecl (loc_i 4, $1, [$3], $4) }
-| external_ TYPE LEFTPAR list1_type_var_sep_comma RIGHTPAR ident
-   { TypeDecl (loc_i 6, $1, $4, $6) }
+| EXTERNAL TYPE typedecl
+   { let loc, vl, id = $3 in TypeDecl (loc, true, vl, id, []) }
+| TYPE typedecl typedefn
+   { let loc, vl, id = $2 in TypeDecl (loc, false, vl, id, $3) }
+;
+
+typedecl:
+| ident
+    { (loc_i 1, [], $1) }
+| type_var ident
+    { (loc_i 2, [$1], $2) }
+| LEFTPAR type_var COMMA list1_type_var_sep_comma RIGHTPAR ident
+    { (loc_i 6, $2 :: $4, $6) }
+;
+
+typedefn:
+| /* epsilon */
+    { [] }
+| EQUAL typecase typecases
+    { $2::$3 }
+;
+
+typecases:
+| /* epsilon */
+    { [] }
+| typecase typecases
+    { $1::$2 }
+;
+
+typecase:
+| BAR ident
+    { (loc_i 2,$2,[]) }
+| BAR ident LEFTPAR list1_primitive_type_sep_comma RIGHTPAR
+    { (loc_i 2,$2,$4) }
 ;
 
 indcases:
