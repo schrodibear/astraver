@@ -236,37 +236,6 @@ let yv_forall = List.fold_right (fun (y,t) f -> Forall (false,y,y,t,[],f))
 let peq t l r = Papp (t_eq, [l;r], [t])
 
 (*
-let alg_inversion_axiom loc id zv th cs =
-  let x = fresh_var () in
-  let inv_cons acc (id,pl) =
-    let yv,ct = fresh_cons zv id pl in
-    Misc.por acc (yv_exists yv (peq th (Tvar x) ct))
-  in
-  let body = List.fold_left inv_cons Pfalse cs in
-  let body = Forall (false,x,x,th,[],body) in
-  let pred = Env.generalize_predicate body in
-  Daxiom (loc, Ident.string id ^ "_inversion", pred)
-
-let alg_cons_to_int_axiom loc zv nm cpt (id,pl) =
-  let yv,ct = fresh_cons zv id pl in
-  let lst = Tapp (nm, [ct], []) in
-  let rst = Tconst (ConstInt (string_of_int !cpt)) in
-  let body = yv_forall yv (Papp (t_eq_int,[lst;rst],[])) in
-  let pred = Env.generalize_predicate body in
-  incr cpt;
-  Daxiom (loc, Ident.string id ^ "_to_int", pred)
-
-let alg_type_to_int_logic loc id zv th cs =
-  let cpt = ref 0 in
-  let ty = Function ([th], PTint) in
-  let nm = Ident.create (Ident.string id ^ "_to_int") in
-  Dlogic (loc, nm, Env.generalize_logic_type ty) ::
-    List.map (alg_cons_to_int_axiom loc zv nm cpt) cs
-
-let alg_type_to_int_logic loc id zv th = function
-  | [_] -> [] | [] -> assert false
-  | cs -> alg_type_to_int_logic loc id zv th cs
-
 let alg_cons_injective_axiom loc zv th (id,pl) =
   let yv1,ct1 = fresh_cons zv id pl in
   let yv2,ct2 = fresh_cons zv id pl in
@@ -330,18 +299,33 @@ let alg_match_fun_axiom loc id zv th cs =
   Dlogic (loc, nm, find_global_logic_gen nm) ::
     List.map2 axiom cs ts
 
+let alg_to_int_fun_axiom loc id zv th cs =
+  let cpt = ref 0 in
+  let ty = Function ([th], PTint) in
+  let nm = Ident.create (Ident.string id ^ "_to_int") in
+  let axiom (id,pl) =
+    let yv,ct = fresh_cons zv id pl in
+    let lst = Tapp (nm, [ct], zv) in
+    let rst = Tconst (ConstInt (string_of_int !cpt)) in
+    let body = yv_forall yv (Papp (t_eq_int,[lst;rst],[])) in
+    let pred = Env.generalize_predicate body in
+    incr cpt;
+    Daxiom (loc, Ident.string nm ^ "_" ^ Ident.string id, pred)
+  in
+  Dlogic (loc, nm, Env.generalize_logic_type ty) ::
+    List.map axiom cs
+
 let algebraic_type_single (loc,id,d) =
   let vars,(vs,cs) = Env.specialize_alg_type d in
   let zv = Ltyping.instance id vars in
   let th = PTexternal (vs, id) in
   List.map (fun (c,_) ->
       Dlogic (loc, c, find_global_logic_gen c)) cs @
+    alg_match_fun_axiom loc id zv th cs @
     List.concat (List.map (alg_proj_fun loc zv th) cs) @
     alg_inversion_axiom loc id zv th cs ::
-    alg_match_fun_axiom loc id zv th cs
+    alg_to_int_fun_axiom loc id zv th cs
 (*
-    alg_inversion_axiom loc id zv th cs ::
-    alg_type_to_int_logic loc id zv th cs @
     List.map (alg_cons_injective_axiom loc zv th)
       (List.filter (fun (_,pl) -> pl <> []) cs)
 *)
