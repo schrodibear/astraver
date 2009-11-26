@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.65 2009-09-21 15:52:58 melquion Exp $ i*)
+(*i $Id: ident.mli,v 1.66 2009-11-26 16:07:49 andrei Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -91,6 +91,11 @@ val nt_lift : t
 (*s Identifiers for the functional validation. *)
 
 val fun_id : t -> t
+
+(*s Identifiers for algebraic-typed term matching *)
+
+val match_id : t -> t
+val proj_id : t -> int -> t
 
 (*s Some pre-defined identifiers. *)
 

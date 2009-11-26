@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.74 2009-09-21 15:52:58 melquion Exp $ i*)
+(*i $Id: ident.ml,v 1.75 2009-11-26 16:07:49 andrei Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -122,6 +122,11 @@ let nt_lift : t = create "nt_lift"
 (*s Identifiers for the functional validation. *)
 
 let fun_id x = create (string x ^ "_fun")
+
+(*s Identifiers for algebraic-typed term matching *)
+
+let match_id x = create (string x ^ "_match")
+let proj_id x i = create (string x ^ "_proj_" ^ string_of_int i)
 
 (*s Pre-defined. *)
 

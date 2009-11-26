@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.177 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: main.ml,v 1.178 2009-11-26 16:07:49 andrei Exp $ i*)
 
 open Options
 open Ptree
@@ -610,7 +610,21 @@ let rec interp_decl ?(_prelude=false) d =
           let t = Env.generalize_logic_type (Function (pl,th)) in
           Env.add_global_logic c t;
           Env.add_alg_type_constructor id c;
+          let r = ref 0 in
+          let add_proj t =
+            let pr = Ident.proj_id c !r in
+            let pt = Env.generalize_logic_type (Function ([th],t)) in
+            if is_global_logic pr then raise_located loc (Clash pr);
+            Env.add_global_logic pr pt; incr r
+          in
+          List.iter add_proj pl
         in
+        let mt = Ident.match_id id in
+        let nt = PTvar (Env.new_type_var()) in
+        let ns = List.map (fun _ -> nt) cs in
+        let tm = Env.generalize_logic_type (Function (th::ns,nt)) in
+        if is_global_logic mt then raise_located loc (Clash mt);
+        Env.add_global_logic mt tm;
         List.iter add_constructor cs;
         (Loc.extract loc, id, d)
       in
