@@ -25,54 +25,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding.ml,v 1.15 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: encoding_mono_inst.mli,v 1.1 2009-11-27 17:15:47 bobot Exp $ i*)
 
-open Options
+(* make a monorphic output for provers not supporting polymorphism
+   (e.g. PVS or CVC Lite) *)
 
-let queue = Queue.create ()
+(* input... *)
 
-let reset () = match get_types_encoding () with
-  | NoEncoding -> Queue.clear queue
-  | Predicates -> Encoding_pred.reset ()
-  | Stratified -> Encoding_strat.reset ()
-  | SortedStratified -> Encoding_mono.reset ()
-  | Recursive -> Encoding_rec.reset ()
-  | Monomorph -> Monomorph.reset ()
-  | MonoInst -> Encoding_mono_inst.reset ()
+val push_decl : Logic_decl.t -> unit
 
-let push d = match get_types_encoding () with
-  | NoEncoding -> Queue.add d queue
-  | Predicates -> Encoding_pred.push d
-  | SortedStratified -> Encoding_mono.push d
-  | Stratified -> Encoding_strat.push d
-  | Recursive -> Encoding_rec.push d
-  | Monomorph -> Monomorph.push_decl d
-  | MonoInst -> Encoding_mono_inst.push_decl d
+(* ...and output *)
 
-let push = function
-  | Logic_decl.Dfunction_def (loc, id, d) ->
-      List.iter push (PredDefExpansor.function_def loc id d)
-  | Logic_decl.Dpredicate_def (loc, id, d) ->
-      List.iter push (PredDefExpansor.predicate_def loc id d)
-  | Logic_decl.Dinductive_def (loc, id, d) ->
-      List.iter push (PredDefExpansor.inductive_def loc id d)
-  | Logic_decl.Dalgtype ls ->
-      List.iter push (PredDefExpansor.algebraic_type ls)
-  | d -> push d
+val iter : (Logic_decl.t -> unit) -> unit
 
-let push d = match get_types_encoding () with
-  | NoEncoding -> Queue.add d queue
-  | _ -> push d
-
-let iter f = match get_types_encoding () with
-  | NoEncoding -> Queue.iter f queue
-  | Predicates -> Encoding_pred.iter f
-  | Stratified -> Encoding_strat.iter f
-  | SortedStratified -> Encoding_mono.iter f
-  | Recursive -> Encoding_rec.iter f
-  | Monomorph -> Monomorph.iter f
-  | MonoInst -> Encoding_mono_inst.iter f
-
-let symbol ((id,_) as s) = match get_types_encoding () with
-  | Monomorph -> Monomorph.symbol s
-  | _ -> Ident.string id
+val reset : unit -> unit

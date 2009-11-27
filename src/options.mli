@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.102 2009-11-10 10:33:26 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.103 2009-11-27 17:15:47 bobot Exp $ i*)
 
 (*s General options *)
 
@@ -98,7 +98,7 @@ val get_type_expanding : unit -> expanding
 
 type encoding = 
   | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
-  | SortedStratified
+  | SortedStratified |MonoInst
 val get_types_encoding : unit -> encoding
 val set_types_encoding : encoding -> unit
 

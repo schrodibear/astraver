@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.87 2009-11-26 16:08:03 andrei Exp $ i*)
+(*i $Id: env.ml,v 1.88 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Ident
 open Misc
@@ -35,6 +35,9 @@ open Logic
 open Error
 open Report
 open Cc
+
+module StringMap = Map.Make(String)
+module StringSet = Set.Make(String)
 
 (* generalization *)
 
@@ -235,6 +238,11 @@ and subst_type_c s c =
     c_pre = List.map (subst_predicate s) c.c_pre;
     c_post = option_app (post_app (subst_predicate s)) c.c_post }
 
+let subst_predicate_def s (bl,p) =
+  let bl = List.map (fun (x,pt) -> (x, subst_pure_type s pt)) bl in
+  bl, subst_predicate s p
+
+
 let specialize_scheme subst s =
   let env =
     Vset.fold
@@ -251,10 +259,6 @@ let specialize_type_v = specialize_scheme subst_type_v
 
 let specialize_predicate = specialize_scheme subst_predicate
 
-let subst_predicate_def s (bl,p) =
-  let bl = List.map (fun (x,pt) -> (x, subst_pure_type s pt)) bl in
-  bl, subst_predicate s p
-
 let specialize_predicate_def = specialize_scheme subst_predicate_def
 
 let subst_inductive_def s (bl,p) =
@@ -268,6 +272,34 @@ let subst_function_def s (bl,t,e) =
   bl, subst_pure_type s t, subst_term s e
 
 let specialize_function_def = specialize_scheme subst_function_def
+
+let instantiate_specialized env inst =
+  let r = Vmap.fold (fun _ v l -> 
+		      (match l with 
+                         | [] -> 
+                            invalid_arg ("instantiate_specialized : too many var type to instantiate")
+			 | a::q -> (v.type_val <- Some a; q)))
+    env (List.rev inst) in (* Pourquoi List.rev? *)
+  match r with
+    | [] -> ()
+    | _ -> invalid_arg ("instantiate_specialized : not enough var type to instantiate")
+
+let instantiate_scheme subst s inst =
+  let (env,x) = specialize_scheme subst s in
+  instantiate_specialized env inst;
+  x
+
+let instantiate_logic_type = instantiate_scheme subst_logic_type
+
+let instantiate_type_v = instantiate_scheme subst_type_v
+
+let instantiate_predicate = instantiate_scheme subst_predicate
+
+let instantiate_predicate_def = instantiate_scheme subst_predicate_def
+
+let instantiate_inductive_def = instantiate_scheme subst_inductive_def
+
+let instantiate_function_def = instantiate_scheme subst_function_def
 
 let rec find_cc_type_vars acc = function
   | TTpure pt -> find_pure_type_vars acc pt
@@ -330,6 +362,7 @@ let generalize_sequent s =
   { scheme_vars = l; scheme_type = s }
 
 let specialize_sequent = specialize_scheme subst_sequent
+let instantiate_sequent = instantiate_scheme subst_sequent
 
 let rec find_gen_cc_term_vars hole_fun acc t = 
   let find_cc_term_vars = find_gen_cc_term_vars hole_fun in
@@ -633,6 +666,9 @@ let add_type loc v id =
 
 let type_arity = Hashtbl.find types
 
+let iter_type f = Hashtbl.iter f types
+let fold_type f = Hashtbl.fold f types
+
 (* Algebraic types with their constructors *)
 
 let alg_types = Hashtbl.create 97
@@ -701,9 +737,21 @@ let is_logic_function x =
     false
 
 let iter_global_logic f = Idmap.iter f !logic_table
+let fold_global_logic f = Idmap.fold f !logic_table
 
 let add_global_logic_gen x t =
   add_global_logic x (generalize_logic_type t)
+
+
+let global_builtin = [(t_eq,
+                      let v = PTvar (new_type_var()) in 
+                      Predicate [v;v]);
+                      (t_neq,
+                      let v = PTvar (new_type_var()) in 
+                      Predicate [v;v])]
+
+let () = 
+  List.iter (fun (id,t) -> add_global_logic_gen id t) global_builtin
 
 (*s Labels *)
 

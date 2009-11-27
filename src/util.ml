@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.170 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: util.ml,v 1.171 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Logic
 open Ident
@@ -44,26 +44,36 @@ open Options
 open Format
 open Pp
 
-let rec print_pure_type fmt = function
+let rec print_type_var fmt = function
+  | ({user=true; type_val=None} as v) -> 
+      fprintf fmt "'%s" (type_var_name v)
+  | {user=true; type_val=Some _} -> assert false
+  | {tag=t; type_val=None} -> fprintf fmt "'a%d" t
+  | {tag=t; type_val=Some pt} -> 
+      if debug then
+	fprintf fmt "'a%d(=%a)" t print_pure_type pt
+      else
+	print_pure_type fmt pt
+
+and print_pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTreal -> fprintf fmt "real"
   | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
-  | PTvar ({user=true; type_val=None} as v) -> 
-      fprintf fmt "'%s" (type_var_name v)
-  | PTvar {user=true; type_val=Some _} -> assert false
-  | PTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
-  | PTvar {tag=t; type_val=Some pt} -> 
-      if debug then
-	fprintf fmt "'a%d(=%a)" t print_pure_type pt
-      else
-	print_pure_type fmt pt
+  | PTvar var -> print_type_var fmt var
   | PTexternal([t],id) -> 
       fprintf fmt "%a %a" print_pure_type t Ident.print id
   | PTexternal(l,id) -> fprintf fmt "(%a) %a" 
       (print_list comma print_pure_type) l
       Ident.print id
+
+let print_instance = Pp.print_list Pp.semi print_pure_type
+
+
+let print_scheme pr fmt x =
+  fprintf fmt "[%a]%a" (Pp.print_iter1 Vset.iter Pp.comma print_type_var) x.scheme_vars
+    pr x.scheme_type
 
 let rec print_logic_type fmt lt =
   let print_args = print_list comma print_pure_type in

@@ -229,10 +229,10 @@ CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
 	   src/ident.cmo src/print_real.cmo  \
 	   src/effect.cmo src/pp.cmo src/option_misc.cmo src/misc.cmo 	\
 	   src/parser.cmo src/lexer.cmo src/report.cmo \
-           src/env.cmo src/rename.cmo src/explain.cmo src/util.cmo 	\
+           src/env.cmo src/mapenv.cmo src/rename.cmo src/explain.cmo src/util.cmo \
            src/ltyping.cmo src/typing.cmo src/wp.cmo src/fastwp.cmo \
            src/monad.cmo src/mlize.cmo src/red.cmo src/vcg.cmo \
-	   src/predDefExpansor.cmo \
+	   src/predDefExpansor.cmo src/encoding_mono_inst.cmo \
 	   src/encoding_rec.cmo src/encoding_pred.cmo src/encoding_strat.cmo \
 	   src/encoding_mono.cmo src/monomorph.cmo src/encoding.cmo \
 	   src/pvs.cmo src/hol4.cmo src/gappa.cmo \

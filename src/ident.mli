@@ -25,11 +25,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.66 2009-11-26 16:07:49 andrei Exp $ i*)
+(*i $Id: ident.mli,v 1.67 2009-11-27 17:15:47 bobot Exp $ i*)
 
 (*s Identifiers. *)
 
-type t
+module I : 
+sig
+  type t 
+  val compare : t -> t -> int
+end
+
+type t = I.t
 
 val create : string -> t
 

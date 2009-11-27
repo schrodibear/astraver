@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.22 2009-10-19 11:55:33 bobot Exp $ i*)
+(*i $Id: pp.ml,v 1.23 2009-11-27 17:15:47 bobot Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -50,6 +50,23 @@ let print_list_or_default default sep print fmt = function
 
 let print_list_par sep pr fmt l =
   print_list sep (fun fmt x -> fprintf fmt "(%a)" pr x) fmt l
+
+let print_iter1 iter sep print fmt l =
+  let first = ref true in
+  iter (fun x -> 
+          if !first
+          then first := false
+          else sep fmt (); 
+          print fmt x ) l
+
+let print_iter2 iter sep1 sep2 print1 print2 fmt l =
+  let first = ref true in
+  iter (fun x y -> 
+          if !first
+          then first := false
+          else sep1 fmt (); 
+          print1 fmt x;sep2 fmt (); print2 fmt y) l
+
 
 let print_list_delim start stop sep pr fmt = function
   | [] -> ()
@@ -76,6 +93,7 @@ let lchevron fmt () = fprintf fmt "<"
 let rchevron fmt () = fprintf fmt ">"
 let nothing fmt _ = ()
 let string fmt s = fprintf fmt "%s" s
+let int fmt i = fprintf fmt "%d" i
 let constant_string s fmt () = string fmt s
 
 let print_pair pr1 = print_pair_delim lparen comma rparen pr1

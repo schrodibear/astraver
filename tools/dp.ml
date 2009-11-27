@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.51 2009-05-20 14:37:29 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.52 2009-11-27 17:15:47 bobot Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -36,6 +36,7 @@ let timeout = ref 10
 let eclauses = ref 2000 (* E prover max nb of clauses *)
 let debug = ref false
 let batch = ref false
+let simple = ref false
 let timings = ref true (* print timings *)
 let basename = ref false
 let listing = ref false
@@ -62,6 +63,7 @@ let spec =
     "-listing", Arg.Set listing, "argument file only lists real argument files";
     "-select", Arg.Set select_hypotheses, 
     "applies some selection of hypotheses (only Alt-Ergo)";
+    "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout"
   ]
 
 let () = 
@@ -112,36 +114,30 @@ let nfailure = ref 0
 let tfailure = ref 0.0
 
 let is_valid t = 
-  if !batch then exit 0;
   printf "."; incr nvalid; 
   tvalid := !tvalid +. t;
   tmaxvalid := max !tmaxvalid t
 
-
 let is_invalid t = 
-  if !batch then exit 2;
   printf "*"; incr ninvalid; 
   tinvalid := !tinvalid +. t;
   tmaxinvalid := max !tmaxinvalid t
 
 let is_unknown t = 
-  if !batch then exit 3;
   printf "?"; incr nunknown; 
   tunknown := !tunknown +. t;
   tmaxunknown := max !tmaxunknown t
 
 let is_timeout t = 
-  if !batch then exit 4;
   printf "#"; incr ntimeout;
   ttimeout := !ttimeout +. t
 
 let is_failure t = 
-  if !batch then exit 5;
   printf "!"; incr nfailure;
   tfailure := !tfailure +. t 
 
 
-let wrapper r = 
+let wrapper_complete r = 
   begin match r with
     | Valid t -> is_valid t
     | Invalid(t,_) -> is_invalid t
@@ -150,6 +146,30 @@ let wrapper r =
     | ProverFailure(t,_) -> is_failure t
   end;
   flush stdout
+
+let wrapper_batch r = 
+  begin match r with
+    | Valid t -> exit 0
+    | Invalid(t,_) -> exit 2
+    | CannotDecide (t,_) -> exit 3
+    | Timeout t -> exit 4
+    | ProverFailure(t,_) -> exit 5
+  end
+
+let wrapper_simple r = 
+  begin match r with
+    | Valid t -> printf "Valid %f@." t
+    | Invalid(t,_) -> printf "Invalid %f@." t
+    | CannotDecide (t,_) -> printf "I don't know %f@." t
+    | Timeout t -> printf "Timeout %f@." t
+    | ProverFailure(t,_) -> printf "Fail %f@." t
+  end;
+  flush stdout
+
+let wrapper = 
+  if !batch then wrapper_batch
+  else if !simple then wrapper_simple
+  else wrapper_complete
 
 let call_ergo f = 
   wrapper (Calldp.ergo ~debug:!debug ~timeout:!timeout 
@@ -177,7 +197,7 @@ let call_smt_solver = match !smt_solver with
   | Z3 -> call_z3
 
 let split f =
-  if not !batch then printf "%-30s: " 
+  if not !batch && not !simple then printf "%-30s: " 
     (if !basename then Filename.basename f else f);
   let oldv = !nvalid in
   let oldi = !ninvalid in
@@ -212,8 +232,9 @@ let split f =
     end
   else 
     begin Arg.usage spec usage; exit 1 end;
-  printf 
-    " (%d/%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt) (!nfailure - oldf)
+  if not !simple then
+    printf 
+      " (%d/%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt) (!nfailure - oldf)
     
 let print_time fmt f =
   if f < 60.0 then fprintf fmt "%.2f sec" f else 
@@ -236,7 +257,7 @@ let main () =
   end;
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
   let wctime0 = Unix.gettimeofday() in
-  if not !batch then printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
+  if not !batch && not !simple then printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
   Queue.iter split files;
   let wctime = Unix.gettimeofday() -. wctime0 in
   let n = !nvalid + !ninvalid + !ntimeout + !nunknown + !nfailure in

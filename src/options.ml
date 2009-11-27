@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.133 2009-11-10 10:33:26 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.134 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Format
 
@@ -91,7 +91,7 @@ let locs_table = Hashtbl.create 97
 
 type encoding = 
   | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
-  | SortedStratified
+  | SortedStratified | MonoInst
 
 type expanding = All | Goal | NoExpanding
 
@@ -252,6 +252,7 @@ Encoding for types in untyped logic:
   --encoding rec     encodes types with typing axioms
   --encoding mono    encodes types using monomorphisation
   --encoding sstrat  encodes types using some types  + strat
+  --encoding monoinst  encodes types using some types  + monomorphisation
 
 Prover selection:
   --alt-ergo  selects Alt-Ergo prover
@@ -532,6 +533,7 @@ let files =
 	| "rec" -> types_encoding_ := Recursive
 	| "mono" -> types_encoding_ := Monomorph
 	| "sstrat" -> types_encoding_ := SortedStratified
+	| "monoinst" -> types_encoding_ := MonoInst
 	| _ -> usage (); exit 1);
 	parse args
     | ("-explain" | "--explain") :: args ->

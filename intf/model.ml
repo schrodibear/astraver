@@ -66,6 +66,7 @@ let enc_name ~nl n p =
     | Recursive -> n ^ nl "(rec)"
     | Stratified -> n ^ nl "(Strat)"
     | Predicates -> n ^ nl "(pred)"
+    | MonoInst -> n ^ nl "(monoinst)"
 
 let prover_id p = 
   enc_name ~nl:false p.pr_info.DpConfig.name p

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.49 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: pretty.ml,v 1.50 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Format
 open Pp
@@ -35,29 +35,20 @@ open Misc
 open Logic
 open Logic_decl
 
-let queue = Queue.create ()
-
-let reset () = Queue.clear queue
+let reset = Encoding.reset
 
 let push_decl ?(ergo=false) d = 
   if ergo
   then
-    let push d = Queue.add d queue in
     match d with
       | Dinductive_def (loc, id, d) ->
-	  List.iter push (PredDefExpansor.inductive_def loc id d)
+	  List.iter Encoding.push (PredDefExpansor.inductive_def loc id d)
       | Dalgtype ls ->
-          List.iter push (PredDefExpansor.algebraic_type ls)
-      | _ -> Queue.add d queue
-  else Queue.add d queue
+          List.iter Encoding.push (PredDefExpansor.algebraic_type ls)
+      | _ -> Encoding.push d
+  else Encoding.push d
 
-let iter f = Queue.iter f queue
-
-(*
-let reset = Encoding.reset
-let push_decl = Encoding.push
 let iter = Encoding.iter
-*)
 
 let ident = Ident.print
 
@@ -295,11 +286,10 @@ let print_trace fmt id expl =
   fprintf fmt "@\n"
 
 let print_traces fmt =
-  Queue.iter
+  iter
     (function
        | Dgoal (loc, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
        | _ -> ())
-    queue
 
 let output_file f =
   print_in_file print_file (f ^ "_why.why");
@@ -310,7 +300,7 @@ let output_files f =
   let po = ref 0 in
   print_in_file
     (fun ctxfmt ->
-       Queue.iter 
+       iter 
 	 (function 
 	    | Dgoal (loc,expl,id,_) as d -> 
 		incr po;		
@@ -320,8 +310,7 @@ let output_files f =
 		  let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
 		  print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl)) ftr
 	    | d -> 
-		decl ctxfmt d)
-	 queue)
+		decl ctxfmt d))
     (f ^ "_ctx.why");
   eprintf "Multi-Why output done@."
   
@@ -346,7 +335,7 @@ let output_project f =
   let functions = ref SMap.empty in
   print_in_file
     (fun ctxfmt ->
-       Queue.iter 
+       iter 
 	 (function 
 	    | Dgoal (_,e,id,_) as d -> 
 		incr po;
@@ -372,8 +361,7 @@ let output_project f =
 			functions := SMap.add fn behs !functions;
 		end
 	    | d -> 
-		decl ctxfmt d)
-	 queue)
+		decl ctxfmt d))
     (f ^ "_ctx.why");
   Hashtbl.iter 
     (fun key (fn,beh,loc) -> 

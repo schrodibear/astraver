@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: z3.ml,v 1.3 2009-11-26 16:08:24 andrei Exp $ i*)
+(*i $Id: z3.ml,v 1.4 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Ident
 open Options
@@ -108,9 +108,9 @@ let removeChar =
 let idents fmt s = 
   (* Yices does not expect names to begin with an underscore if
      Yices understand Z3 smtlib extended we can keep that. *)
-  if is_smtlib_keyword s || leading_underscore s then
+  (*if is_smtlib_keyword s || leading_underscore s then
     fprintf fmt "smtlib__%s" s
-  else 
+  else *)
     fprintf fmt "%s" s
 
 let ident fmt id = idents fmt (Ident.string id)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.22 2009-10-19 11:55:33 bobot Exp $ i*)
+(*i $Id: pp.mli,v 1.23 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Format
 
@@ -46,6 +46,21 @@ val print_list_delim :
   (Format.formatter -> unit -> unit) ->
   (Format.formatter -> unit -> unit) ->
   (Format.formatter -> 'b -> unit) -> Format.formatter -> 'b list -> unit
+
+val print_iter1 : 
+  (('a -> unit) -> 'b -> unit) ->
+  (Format.formatter -> unit -> unit) -> 
+  (Format.formatter -> 'a -> unit) -> 
+  Format.formatter -> 'b -> unit
+
+val print_iter2: 
+  (('a -> 'b -> unit) -> 'c -> unit) ->
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> 'a -> unit) -> 
+  (Format.formatter -> 'b -> unit) -> 
+  Format.formatter -> 'c -> unit
+
 val print_pair_delim :
   (Format.formatter -> unit -> unit) ->
   (Format.formatter -> unit -> unit) ->
@@ -75,6 +90,7 @@ val lchevron : formatter -> unit -> unit
 val rchevron : formatter -> unit -> unit
 val nothing : formatter -> 'a -> unit
 val string : formatter -> string -> unit
+val int : formatter -> int -> unit
 val constant_string : string -> formatter -> unit -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 

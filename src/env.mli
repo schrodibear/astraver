@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.59 2009-11-26 16:08:03 andrei Exp $ i*)
+(*i $Id: env.mli,v 1.60 2009-11-27 17:15:47 bobot Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -39,6 +39,9 @@ open Cc
 open Logic
 open Types
 open Ast
+
+module StringMap : Map.S with type key = string
+module StringSet : Set.S with type elt = string
 
 (*s type schemes *)
 
@@ -79,6 +82,9 @@ val add_type : Loc.position -> Ident.t list -> Ident.t -> unit
 val is_type : Ident.t -> bool
 val type_arity : Ident.t -> int
 
+val iter_type : (Ident.t -> int -> unit) -> unit
+val fold_type : (Ident.t -> int -> 'a -> 'a) -> 'a -> 'a
+
 (*s algebraic types (only global) *)
 
 val set_constructors : Ident.t -> Ident.t list -> unit
@@ -99,6 +105,7 @@ val add_global_logic : Ident.t -> logic_type scheme -> unit
 val find_global_logic : Ident.t -> var_subst * logic_type
 
 val iter_global_logic : (Ident.t -> logic_type scheme -> unit) -> unit
+val fold_global_logic : (Ident.t -> logic_type scheme -> 'a -> 'a) -> 'a -> 'a
 val is_global_logic : Ident.t -> bool
 val is_logic_function : Ident.t -> bool
 
@@ -170,6 +177,18 @@ val specialize_validation :
 val specialize_cc_functional_program : 
   Cc.cc_type -> Cc.cc_functional_program 
   -> var_subst * Cc.cc_type * Cc.cc_functional_program
+
+val instantiate_specialized : var_subst -> instance -> unit
+
+val instantiate_logic_type : logic_type scheme -> instance -> logic_type
+val instantiate_predicate : predicate scheme -> instance -> predicate
+val instantiate_predicate_def : 
+  predicate_def scheme -> instance -> predicate_def
+val instantiate_inductive_def : 
+  inductive_def scheme -> instance -> inductive_def
+val instantiate_function_def : 
+  function_def scheme -> instance -> function_def
+val instantiate_sequent : sequent scheme -> instance -> sequent
 
 (*s Labels *)
 

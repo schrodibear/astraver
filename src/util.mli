@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.76 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: util.mli,v 1.77 2009-11-27 17:15:47 bobot Exp $ i*)
 
 open Cc
 open Logic
@@ -182,7 +182,11 @@ open Format
 
 val print_pred_binders : bool ref
 
+val print_scheme : (formatter -> 'a -> unit) -> formatter -> 'a scheme -> unit
+
+val print_type_var : formatter -> type_var -> unit
 val print_pure_type : formatter -> pure_type -> unit
+val print_instance : formatter -> instance -> unit
 val print_logic_type : formatter -> logic_type -> unit
 
 val print_term : formatter -> term -> unit
