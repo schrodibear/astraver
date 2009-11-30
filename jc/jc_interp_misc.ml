@@ -107,23 +107,6 @@ let why_name_of_format = function
   | `Double -> "Double"
   | `Binary80 -> "Binary80"
 
-let any_value = function
-  | JCTnative ty -> 
-      begin match ty with
-	| Tunit -> Void
-	| Tboolean -> App(Var "any_bool", Void)
-	| Tinteger -> App(Var "any_int", Void)
-	| Treal -> App(Var "any_real", Void)
-	| Tgenfloat f -> App(Var "any_gen_float", Var (why_name_of_format f)) 
-	| Tstring -> App(Var "any_string", Void)
-      end
-  | JCTnull 
-  | JCTpointer _ -> App(Var "any_pointer", Void)
-  | JCTenum ri -> App (Var(fun_any_enum ri), Void)
-  | JCTlogic _ -> assert false (* TODO *)
-  | JCTany -> assert false
-  | JCTtype_var _ -> assert false (* TODO: need environment *)
-
 (* functions to make Why expressions *)
 
 let make_if_term cond a b =
@@ -383,6 +366,26 @@ let tr_var_base_type v =
 
 let tr_var_type v = 
   tr_type ~region:v.jc_var_info_region v.jc_var_info_type
+
+let any_value = function
+  | JCTnative ty -> 
+      begin match ty with
+	| Tunit -> Void
+	| Tboolean -> App(Var "any_bool", Void)
+	| Tinteger -> App(Var "any_int", Void)
+	| Treal -> App(Var "any_real", Void)
+	| Tgenfloat f -> App(Var "any_gen_float", Var (why_name_of_format f)) 
+	| Tstring -> App(Var "any_string", Void)
+      end
+  | JCTnull 
+  | JCTpointer _ -> App(Var "any_pointer", Void)
+  | JCTenum ri -> App (Var(fun_any_enum ri), Void)
+  | JCTlogic _ as ty -> 
+      let t = 
+        Annot_type(LTrue, Base_type (tr_base_type ty), [], [], LTrue, [])
+      in BlackBox t
+  | JCTany -> assert false
+  | JCTtype_var _ -> assert false (* TODO: need environment *)
 
 (* model types *)
 

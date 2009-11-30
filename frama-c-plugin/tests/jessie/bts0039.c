@@ -1,4 +1,4 @@
-/* Frama-C BTS 0040
+/* Frama-C BTS 0039
 
 Status: open
 
@@ -16,7 +16,7 @@ Update: now yields
 File "why/bts0039.why", line 711, characters 125-140:
 Application to int_P_int_M_p_3 creates an alias
 
-See also bts0080.c
+See also bts0080.c, bts0303.c
 
 */
 
