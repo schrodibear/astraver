@@ -1,4 +1,5 @@
 
+  o [GWhy] VC explanation when using --fast-wp option
   o [Jessie] fixed bug when return type is a logic type 
   o [Krakatoa] fixed bug with final fields 
   o [Frama-C plugin] fixed bug 0341

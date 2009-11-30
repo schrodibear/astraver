@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.98 2009-11-23 16:13:35 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.99 2009-11-30 19:52:29 nrousset Exp $ i*)
 
 open Format
 open Options
@@ -1111,9 +1111,11 @@ let main () =
 		 else false) 
 	      (Model.get_prover_states ()) 
 	    with
-		| [p,_] -> p
-		| [] -> assert false
-		| _ -> assert false
+		| [p, _] -> (* case double-click in a prover column *)
+                    p
+		| [] -> (* case double-click in the VC explanation column *)
+                    Model.get_default_prover ()
+		| _ -> assert false (* should never happen *)
 (*
             try Model.get_prover name 
             with Model.No_such_prover -> Model.get_default_prover ()

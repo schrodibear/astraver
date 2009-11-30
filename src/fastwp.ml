@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2, with the special exception on linking              *)
+(*  License version 2.1, with the special exception on linking            *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.31 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: fastwp.ml,v 1.32 2009-11-30 19:52:29 nrousset Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -203,11 +203,11 @@ let with_exception_type e v f x = match find_exception e, v with
 *)
 
 let rec wp e s = 
-  let _,(_,ee) as r = wp0 e s in
+  let _,(_,ee) as r = wp0 e.info e s in
   assert (List.length ee = List.length (get_exns e.info.t_effect));
   r
 
-and wp0 e s =
+and wp0 info e s =
   (*Format.eprintf "@[wp avec %a@]@." Subst.print s;*)
   let v = result_type e in
   match e.desc with
@@ -312,22 +312,46 @@ and wp0 e s =
       end
   | Assertion (k, al, e1) ->
       (* OK: al /\ ok(e1)
-	 NE: al /\ ne(e1,result) *)
-      let ok,((ne1,s'),ee1) = wp e1 s in
+	 NE: al /\ ne(e1, result) *)
+      let ok, ((ne1, s'), ee1) = wp e1 s in
       let pl = List.map (fun a -> subst_in_predicate s.sigma a.a_value) al in
-      let ee x = let ee,sx = exn x ee1 s in wpands (pl @ [ee]), sx in
-      wpands (pl@[ok]), ((wpands (pl@[ne1]), s'), exns e ee)
+      let ee x = let ee, sx = exn x ee1 s in wpands (pl @ [ee]), sx in
+      (* wpands (pl@[ok]), ((wpands (pl@[ne1]), s'), exns e ee) *)
+      let expl =  
+	match k with
+	 | `ABSURD ->
+	    Cc.VCEabsurd
+	 | #Cc.assert_kind as k -> (* ASSERT and CHECK *)
+	    Cc.VCEassert (k, List.map (fun a -> (a.a_loc, a.a_value)) al) 
+	 | `PRE ->
+	    let lab = info.t_userlabel in
+	    let loc = info.t_loc in
+	    Cc.VCEpre (lab, loc, List.map (fun a -> (a.a_loc, a.a_value)) al)
+      in
+      let id = reg_explanation expl in
+      Pnamed (id, wpands (pl@[ok])), ((wpands (pl@[ne1]), s'), exns e ee)
   | Post (e1, q, _) ->
       (* TODO: what to do with the transparency here? *)
       let lab = e1.info.t_label in
       let s = Subst.label lab s in
-      let ok,((ne1,s'),ee1) = wp e1 s in
-      let (q,ql) = post_app (asst_app (change_label "" lab)) q in
+      let ok, ((ne1, s'), ee1) = wp e1 s in
+      let q, ql = post_app (asst_app (change_label "" lab)) q in
+      let q = 
+        let id = reg_explanation (Cc.VCEpost (q.a_loc, q.a_value)) in
+        { q with a_value = Pnamed (id, q.a_value) } 
+      in
+      let ql = 
+        List.map
+          (fun (x, q) ->
+	     let id = reg_explanation (Cc.VCEpost (q.a_loc, q.a_value)) in
+             x, { q with a_value = Pnamed (id, q.a_value) })
+	  ql
+      in
       let subst p s = subst_in_predicate s.sigma p.a_value in
       let q = subst q s' in
-      let ql = List.map2 (fun (_,(_,sx)) (x,qx) -> x, subst qx sx) ee1 ql in
-      let post_exn (x,(ex,_)) (x',qx) =
-	assert (x=x'); 
+      let ql = List.map2 (fun (_, (_,sx)) (x, qx) -> x, subst qx sx) ee1 ql in
+      let post_exn (x, (ex, _)) (x', qx) =
+	assert (x = x'); 
 	let p = wpimplies ex qx in
 	match find_exception x with
 	  | Some pt -> wpforall result (PureType pt) p
@@ -340,7 +364,7 @@ and wp0 e s =
 	     List.map2 post_exn ee1 ql)
       in
       let ne = wpand ne1 q, s' in
-      let ee x = let ee,sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
+      let ee x = let ee, sx = exn x ee1 s in wpand ee (List.assoc x ql), sx in
       ok, (ne, exns e ee)
   | Label (l, e) ->
       wp e (Subst.label l s)
@@ -356,25 +380,42 @@ and wp0 e s =
 	 E : e(e1) *)
       (* TODO: termination *)
       let s0 = Subst.writes (Effect.get_writes e1.info.t_effect) s in
-      let ok1,((ne1,s1),ee1) = wp e1 s0 in
+      let ok1, ((ne1, s1), ee1) = wp e1 s0 in
       let ne1void = tsubst_in_predicate (subst_one result tvoid) ne1 in
-      let subst_inv s = match inv with
-	| None -> Ptrue
-	| Some {a_value=i} -> Subst.predicate s i
+      let inv1 = 
+        option_app
+	  (fun inv -> 
+             let lab = info.t_userlabel in
+	     let id = reg_explanation (Cc.VCEinvinit (lab, (inv.a_loc, inv.a_value))) in
+	     { inv with a_value = Pnamed (id, inv.a_value) })
+          inv
       in
-      let i0 = subst_inv s0 in 
+      let inv2 = 
+        option_app
+	  (fun inv -> 
+             let lab = info.t_userlabel in
+	     let id = reg_explanation (Cc.VCEinvpreserv (lab, (inv.a_loc, inv.a_value))) in
+	     { inv with a_value = Pnamed (id, inv.a_value) })
+          inv
+      in
+      let subst_inv inv s = match inv with
+	| None -> Ptrue
+	| Some { a_value = i } -> Subst.predicate s i
+      in
+      let i0 = subst_inv inv1 s0 in 
+      let i1 = subst_inv inv2 s0 in 
       let decphi = match var with
 	| None -> Ptrue
-	| Some (loc,phi,_,r) -> 
-	    let id = Util.reg_explanation (Cc.VCEvardecr(loc,phi)) in
-	    Pnamed(id, Papp (r, [Subst.term s1 phi;Subst.term s0 phi], []))
+	| Some (loc, phi, _, r) -> 
+	    let id = reg_explanation (Cc.VCEvardecr (loc, phi)) in
+	    Pnamed (id, Papp (r, [Subst.term s1 phi; Subst.term s0 phi], []))
       in
       let ok = 
 	wpands
 	  [Wp.well_founded_rel var;
-	   subst_inv s;
-	   wpimplies i0 
-	     (wpand ok1 (wpimplies ne1void (wpand (subst_inv s1) decphi)))]
+	   subst_inv inv1 s;
+	   wpimplies i1 
+	     (wpand ok1 (wpimplies ne1void (wpand (subst_inv inv2 s1) decphi)))]
       in
       let ee x =
 	let ee,sx = exn x ee1 s0 in wpand i0 ee, sx
@@ -510,11 +551,11 @@ and wp0 e s =
 
 let wp e =
   let s = Subst.frame e.info.t_env e.info.t_effect Subst.empty in
-  let ok,_ = wp e s in
+  let ok, _ = wp e s in
   ok
 
 (*
-Local Variables: 
-compile-command: "unset LANG; make -C .. byte"
-End: 
+ Local Variables: 
+ compile-command: "unset LANG; make -C .. byte"
+ End: 
 *)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.65 2009-11-26 16:07:36 andrei Exp $ i*)
+(*i $Id: smtlib.ml,v 1.66 2009-11-30 19:52:29 nrousset Exp $ i*)
 
 open Ident
 open Options
@@ -166,7 +166,7 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "Unit"
   | PTexternal(_,id) when id==farray -> fprintf fmt "Array" 
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
-  | PTvar v -> assert false (*  fprintf fmt "A%d" v.tag *)
+  | PTvar v -> fprintf fmt "A%d" v.tag
   | PTexternal (i,id) -> idents fmt (Encoding.symbol (id, i))
 
 and instance fmt = function

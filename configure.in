@@ -224,24 +224,6 @@ else
    OCAMLGRAPHVER=" in Ocaml lib, main dir"
 fi
 
-# checking ocamlgraph version
-
-AC_MSG_CHECKING(ocamlgraph version)
-if $OCAMLC $OCAMLGRAPHLIB graph.cma config/check_ocamlgraph.ml > /dev/null 2>&1 && (test "$OCAMLBEST" = "byte" || $OCAMLOPT $OCAMLGRAPHLIB graph.cmxa config/check_ocamlgraph.ml > /dev/null 2>&1); then
-   AC_MSG_RESULT(ok)
-   OCAMLGRAPHVER="0.99"$OCAMLGRAPHVER
-else
-   AC_MSG_RESULT(failed)
-   if test -d ocamlgraph; then
-      AC_MSG_RESULT(Switching to local ocamlgraph)
-      OCAMLGRAPHLIB="-I ocamlgraph"
-      OCAMLGRAPHVER=" in local subdir ocamlgraph"
-      LOCALOCAMLGRAPH=yes
-   else
-      AC_MSG_ERROR(You need ocamlgraph 0.99b or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*)
-   fi
-fi
-rm -f config/check_ocamlgraph.cmo config/check_ocamlgraph.cmi config/check_ocamlgraph.cmx config/check_ocamlgraph$EXE
 # checking local ocamlgraph compilation
 
 if test "$LOCALOCAMLGRAPH" = yes; then
