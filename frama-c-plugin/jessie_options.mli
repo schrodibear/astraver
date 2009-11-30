@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jessie_options.mli,v 1.1 2009-09-08 11:11:43 monate Exp $ *)
+(* $Id: jessie_options.mli,v 1.2 2009-11-30 17:59:15 signoles Exp $ *)
 
 open Plugin
 include Plugin.S
@@ -48,6 +48,6 @@ module HintLevel: INT
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.."
+compile-command: "LC_ALL=C make"
 End:
 *)

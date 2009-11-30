@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jessie_options.ml,v 1.1 2009-09-08 11:11:43 monate Exp $ *)
+(* $Id: jessie_options.ml,v 1.2 2009-11-30 17:59:15 signoles Exp $ *)
 
 include
   Plugin.Register
@@ -81,13 +81,14 @@ module JcOpt =
 	      let descr = "give an option to Jc (e.g., -trust-ai)"
 	    end)
 
-module WhyOpt =
-  StringSet(struct
-	      let option_name = "-jessie-why-opt"
-	      let module_name = "-jessie-why-opt"
-	      let arg_name = ""
-	      let descr = "give an option to Why (e.g., -fast-wp)"
-	    end)
+module WhyOpt = 
+  StringSet
+    (struct
+       let option_name = "-jessie-why-opt"
+       let module_name = "-jessie-why-opt"
+       let arg_name = ""
+       let descr = "give an option to Why (e.g., -fast-wp)"
+     end)
 
 type int_model = IMexact | IMbounded | IMmodulo
 let pp_int_model _ fmt im =
@@ -190,6 +191,6 @@ module HintLevel =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.."
+compile-command: "LC_ALL=C make"
 End:
 *)

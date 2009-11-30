@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: register.ml,v 1.2 2009-11-23 16:26:45 marche Exp $ *)
+(* $Id: register.ml,v 1.3 2009-11-30 17:59:15 signoles Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -186,14 +186,17 @@ let run () =
       
       (* Phase 8: call Jessie to Why translation *)
       
-      let why_opt =
-	Jessie_options.WhyOpt.fold
-	  (fun opt acc -> " -why-opt \"" ^ opt ^ "\" " ^ acc) ""
+      let why_opt = 
+	let res = ref "" in
+	Jessie_options.WhyOpt.iter
+	  (fun s -> 
+	     res := Format.sprintf "%s%s-why-opt %S" 
+	       !res
+	       (if !res = "" then "" else " ")
+	       s);
+	!res
       in
-      let jc_opt =
-	StringSet.fold (fun opt acc -> " " ^ opt ^ " " ^ acc)
-	  (Jessie_options.JcOpt.get ()) ""
-      in
+      let jc_opt = Jessie_options.JcOpt.get_set ~sep:" " () in
       let debug_opt = if Jessie_options.debug_atleast 1 then " -d " else " " in
       let behav_opt =
 	if Jessie_options.Behavior.get () <> "" then
@@ -214,8 +217,7 @@ let run () =
           (* NdV: the test below might not be that useful, since ocaml
              has stack trace in native code since 3.10, even though -g
              is usually missing from native flags.  *)
-          if Jessie_options.debug_atleast 1 then
-            " jessie.byte "
+          if Jessie_options.debug_atleast 1 then " jessie.byte "
           else " jessie "
       in
       let timeout =
@@ -245,7 +247,7 @@ let run () =
 	    verbose_opt; why_opt; jc_opt; debug_opt; behav_opt;
 	    "-locs"; locname; filename ]
       in
-      (*     Format.eprintf "%s" cmd; *)
+      (*      Format.eprintf "CMD=%S" cmd; *)
       sys_command cmd;
       
       (* Phase 9: call Why to VP translation *)
@@ -295,6 +297,6 @@ let () = Db.Main.extend main
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.."
+compile-command: "LC_ALL=C make"
 End:
 *)
