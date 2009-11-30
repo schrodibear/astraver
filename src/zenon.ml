@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.38 2009-11-26 16:07:36 andrei Exp $ i*)
+(*i $Id: zenon.ml,v 1.39 2009-11-30 21:33:07 marche Exp $ i*)
 
 (*s Zenon output *)
 
@@ -313,7 +313,7 @@ let print_obligation fmt loc expl o s =
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.gen_report_line loc;
   fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
 
-let push_decl d = Encoding.push (*Monomorph.push_decl*) d
+let push_decl = Encoding.push ~encode_preds:true ~encode_funs:true 
 
 let iter = Encoding.iter (*Monomorph.iter*)
 

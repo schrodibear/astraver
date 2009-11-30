@@ -4880,6 +4880,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -12331,6 +12333,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -15365,10 +15369,10 @@ goal Sort_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sort2_why.why             : ........................#........#.#.....#.#.... (43/0/0/5/0)
+why/Sort2_why.why             : ........................##.......#.#.....#.#.... (42/0/0/6/0)
 total   :  48
-valid   :  43 ( 90%)
+valid   :  42 ( 88%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 10%)
+timeout :   6 ( 12%)
 failure :   0 (  0%)

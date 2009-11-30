@@ -6,10 +6,54 @@
 
 type 'a list = Nil | Cons('a, 'a list)
 
-logic rev : 'a list -> 'a list
+goal discr_test:
+     forall x:'a. forall l:'a list. not(Nil = Cons(x,l))
 
+(* append function *)
 logic app : 'a list, 'a list -> 'a list
 
+axiom app_def: forall l1,l2:'a list.
+  app(l1,l2) = match l1 with
+    | Nil -> l2
+    | Cons(x,l) -> Cons(x,app(l,l2))
+  end
+
+goal app_test0: 
+     app(Nil,Nil) = Nil
+
+goal app_test1: 
+     app(Cons(1,Nil),Nil) = Cons(1,Nil)
+
+goal app_test2: 
+     app(Nil,Cons(1,Nil)) = Cons(1,Nil)
+
+goal app_test3: 
+     app(Cons(1,Nil),Cons(2,Nil)) = Cons(1,Cons(2,Nil))
+
+(* rev2(l1,l2) produces rev(l1)@l2 *)
+logic rev2 : 'a list, 'a list -> 'a list
+
+axiom rev2_def: forall l1,l2:'a list. 
+  rev2(l1,l2) = match l1 with 
+     | Nil -> l2
+     | Cons(x,l) -> rev2(l,Cons(x,l2))
+  end
+
+function rev(l:'a list):'a list = rev2(l,Nil)
+
+goal rev_test0: 
+     rev(Nil) = Nil
+
+goal rev_test1: 
+     rev(Cons(1,Nil)) = Cons(1,Nil)
+
+goal rev_test2: 
+     rev(Cons(1,Cons(2,Nil))) = Cons(2,Cons(1,Nil))
+
+goal rev_test3: 
+     rev(Cons(1,Cons(2,(Cons(3,Nil))))) = Cons(3,Cons(2,Cons(1,Nil)))
+
+(* disjoint predicate *)
 logic disjoint : 'a list, 'a list -> prop
 
 (* modelisation of pointers *)
@@ -58,25 +102,14 @@ inductive llist : pointer_store, pointer, pointer list -> prop =
   is_valid_pointer(tl,p) and llist(tl, pget(tl,p), l) 
       -> llist(tl, p, Cons(p,l))
 
-(*
-logic llist : pointer_store, pointer, pointer list -> prop
-*)
-
-predicate is_list(tl:pointer_store, p:pointer) = 
-  exists l:pointer list. llist(tl,p,l)
-
-
-
-(* for termination *)
-
-type StorePointerPair
-
-logic store_pointer_pair : pointer_store, pointer -> StorePointerPair
+goal null_model_is_Nil: 
+     forall tl:pointer_store. forall l:pointer list. 
+           llist(tl, null, l) -> l = Nil
 
 (* in-place list reversal *)
 
-let reverse (p0:pointer) =
-  { is_list(Ltl, p0) }
+let reverse (p0:pointer) (p0_model:pointer list) =
+  { llist(Ltl, p0, p0_model) }
   init:
   let p = ref p0 in
   let r = ref !p in
@@ -84,11 +117,10 @@ let reverse (p0:pointer) =
     p := null;
     while (ne_pointer !r null) do
       { invariant exists lp:pointer list. exists lr:pointer list.
-                  llist(Ltl, p, lp) and llist(Ltl, r, lr) and
-	          disjoint(lp, lr) and 
-	           forall l:pointer list. 
-	           llist(Ltl@init, p0, l) -> app(rev(lr), lp) = rev(l)
-        variant store_pointer_pair(Ltl, r) for ll_order }
+                  llist(Ltl, p, lp) and llist(Ltl, r, lr) 
+		  (* and  disjoint(lp, lr) *) and 
+	           rev2(lr, lp) = rev(p0_model) 
+        (* variant store_pointer_pair(Ltl, r) for ll_order *) }
       let q = ref !r in
       begin
       r := (pget !Ltl !r);
@@ -98,7 +130,5 @@ let reverse (p0:pointer) =
     done;
     !p
   end
-  { exists l:pointer list. 
-      llist(Ltl, result, l) and
-      forall l0:pointer list. llist(Ltl@, p0, l0) -> l = rev(l0) }
+  { llist(Ltl, result, rev(p0_model)) }
 

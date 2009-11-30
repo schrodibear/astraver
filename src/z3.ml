@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: z3.ml,v 1.4 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: z3.ml,v 1.5 2009-11-30 21:33:07 marche Exp $ i*)
 
 open Ident
 open Options
@@ -327,7 +327,7 @@ let rec push_decl d =
     | _ -> Encoding.push d
 *)
 
-let push_decl = Encoding.push
+let push_decl = Encoding.push ~encode_preds:true ~encode_funs:true
 
 let iter = Encoding.iter
 

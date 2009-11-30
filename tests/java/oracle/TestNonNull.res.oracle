@@ -2917,6 +2917,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -4318,8 +4320,8 @@ why -simplify [...] why/TestNonNull.why
  (EQ (parenttag String_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why function TestNonNull_N
-  (EQ TestNonNull_N (int32_of_integer 2)))
+ ;; Why axiom TestNonNull_N_def
+ (EQ TestNonNull_N (int32_of_integer 2)))
 
 (BG_PUSH
  ;; Why axiom TestNonNull_parenttag_Object
@@ -5735,6 +5737,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -6349,10 +6353,10 @@ goal cons_TestNonNull_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/TestNonNull_why.why       : ....#..# (6/0/0/2/0)
+why/TestNonNull_why.why       : .......# (7/0/0/1/0)
 total   :   8
-valid   :   6 ( 75%)
+valid   :   7 ( 88%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   2 ( 25%)
+timeout :   1 ( 12%)
 failure :   0 (  0%)

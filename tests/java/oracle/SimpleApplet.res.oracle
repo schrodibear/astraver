@@ -11757,68 +11757,68 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (parenttag AID_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why function APDU_ACK_INS
-  (EQ APDU_ACK_INS (byte_of_integer 1)))
+ ;; Why axiom APDU_ACK_INS_def
+ (EQ APDU_ACK_INS (byte_of_integer 1)))
 
 (BG_PUSH
- ;; Why function APDU_ACK_NONE
-  (EQ APDU_ACK_NONE (byte_of_integer 0)))
+ ;; Why axiom APDU_ACK_NONE_def
+ (EQ APDU_ACK_NONE (byte_of_integer 0)))
 
 (BG_PUSH
- ;; Why function APDU_ACK_NOT_INS
-  (EQ APDU_ACK_NOT_INS (byte_of_integer 2)))
+ ;; Why axiom APDU_ACK_NOT_INS_def
+ (EQ APDU_ACK_NOT_INS (byte_of_integer 2)))
 
 (BG_PUSH
- ;; Why function APDU_BUFFER_OVERFLOW
-  (EQ APDU_BUFFER_OVERFLOW (short_of_integer (- 0 16383))))
+ ;; Why axiom APDU_BUFFER_OVERFLOW_def
+ (EQ APDU_BUFFER_OVERFLOW (short_of_integer (- 0 16383))))
 
 (BG_PUSH
- ;; Why function APDU_IFSC
-  (EQ APDU_IFSC (byte_of_integer 1)))
+ ;; Why axiom APDU_IFSC_def
+ (EQ APDU_IFSC (byte_of_integer 1)))
 
 (BG_PUSH
- ;; Why function APDU_IFSD
-  (EQ APDU_IFSD (short_of_integer 258)))
+ ;; Why axiom APDU_IFSD_def
+ (EQ APDU_IFSD (short_of_integer 258)))
 
 (BG_PUSH
- ;; Why function APDU_INVALID_GET_RESPONSE
-  (EQ APDU_INVALID_GET_RESPONSE (short_of_integer (- 0 16378))))
+ ;; Why axiom APDU_INVALID_GET_RESPONSE_def
+ (EQ APDU_INVALID_GET_RESPONSE (short_of_integer (- 0 16378))))
 
 (BG_PUSH
- ;; Why function APDU_LC
-  (EQ APDU_LC (byte_of_integer 2)))
+ ;; Why axiom APDU_LC_def
+ (EQ APDU_LC (byte_of_integer 2)))
 
 (BG_PUSH
- ;; Why function APDU_LE
-  (EQ APDU_LE (byte_of_integer 0)))
+ ;; Why axiom APDU_LE_def
+ (EQ APDU_LE (byte_of_integer 0)))
 
 (BG_PUSH
- ;; Why function APDU_LR
-  (EQ APDU_LR (byte_of_integer 1)))
+ ;; Why axiom APDU_LR_def
+ (EQ APDU_LR (byte_of_integer 1)))
 
 (BG_PUSH
- ;; Why function APDU_PRE_READ_LENGTH
-  (EQ APDU_PRE_READ_LENGTH (byte_of_integer 3)))
+ ;; Why axiom APDU_PRE_READ_LENGTH_def
+ (EQ APDU_PRE_READ_LENGTH (byte_of_integer 3)))
 
 (BG_PUSH
- ;; Why function APDU_PROTOCOL_T0
-  (EQ APDU_PROTOCOL_T0 (byte_of_integer 0)))
+ ;; Why axiom APDU_PROTOCOL_T0_def
+ (EQ APDU_PROTOCOL_T0 (byte_of_integer 0)))
 
 (BG_PUSH
- ;; Why function APDU_PROTOCOL_T1
-  (EQ APDU_PROTOCOL_T1 (byte_of_integer 1)))
+ ;; Why axiom APDU_PROTOCOL_T1_def
+ (EQ APDU_PROTOCOL_T1 (byte_of_integer 1)))
 
 (BG_PUSH
- ;; Why function APDU_RAM_VARS_LENGTH
-  (EQ APDU_RAM_VARS_LENGTH (byte_of_integer 4)))
+ ;; Why axiom APDU_RAM_VARS_LENGTH_def
+ (EQ APDU_RAM_VARS_LENGTH (byte_of_integer 4)))
 
 (BG_PUSH
- ;; Why function APDU_READ_ERROR
-  (EQ APDU_READ_ERROR (short_of_integer (- 0 16381))))
+ ;; Why axiom APDU_READ_ERROR_def
+ (EQ APDU_READ_ERROR (short_of_integer (- 0 16381))))
 
 (BG_PUSH
- ;; Why function APDU_WRITE_ERROR
-  (EQ APDU_WRITE_ERROR (short_of_integer (- 0 16380))))
+ ;; Why axiom APDU_WRITE_ERROR_def
+ (EQ APDU_WRITE_ERROR (short_of_integer (- 0 16380))))
 
 (BG_PUSH
  ;; Why axiom APDU_parenttag_Object
@@ -11833,48 +11833,48 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (parenttag CardRuntimeException_tag RuntimeException_tag) |@true|))
 
 (BG_PUSH
- ;; Why function Card_Card_Class
-  (EQ Card_Card_Class (byte_of_integer (- 0 128))))
+ ;; Why axiom Card_Card_Class_def
+ (EQ Card_Card_Class (byte_of_integer (- 0 128))))
 
 (BG_PUSH
- ;; Why function Card_Card_Ins_Auth
-  (EQ Card_Card_Ins_Auth (byte_of_integer 1)))
+ ;; Why axiom Card_Card_Ins_Auth_def
+ (EQ Card_Card_Ins_Auth (byte_of_integer 1)))
 
 (BG_PUSH
- ;; Why function Card_Card_Ins_Del
-  (EQ Card_Card_Ins_Del (byte_of_integer 6)))
+ ;; Why axiom Card_Card_Ins_Del_def
+ (EQ Card_Card_Ins_Del (byte_of_integer 6)))
 
 (BG_PUSH
- ;; Why function Card_Card_Ins_Pin
-  (EQ Card_Card_Ins_Pin (byte_of_integer 2)))
+ ;; Why axiom Card_Card_Ins_Pin_def
+ (EQ Card_Card_Ins_Pin (byte_of_integer 2)))
 
 (BG_PUSH
- ;; Why function Card_Card_Ins_Read
-  (EQ Card_Card_Ins_Read (byte_of_integer 7)))
+ ;; Why axiom Card_Card_Ins_Read_def
+ (EQ Card_Card_Ins_Read (byte_of_integer 7)))
 
 (BG_PUSH
- ;; Why function Card_Card_Ins_Write
-  (EQ Card_Card_Ins_Write (byte_of_integer 5)))
+ ;; Why axiom Card_Card_Ins_Write_def
+ (EQ Card_Card_Ins_Write (byte_of_integer 5)))
 
 (BG_PUSH
- ;; Why function Card_Data_Count
-  (EQ Card_Data_Count (short_of_integer 10)))
+ ;; Why axiom Card_Data_Count_def
+ (EQ Card_Data_Count (short_of_integer 10)))
 
 (BG_PUSH
- ;; Why function Card_Data_Len
-  (EQ Card_Data_Len (short_of_integer 5)))
+ ;; Why axiom Card_Data_Len_def
+ (EQ Card_Data_Len (short_of_integer 5)))
 
 (BG_PUSH
- ;; Why function Card_Key_Length
-  (EQ Card_Key_Length (byte_of_integer (- 0 124))))
+ ;; Why axiom Card_Key_Length_def
+ (EQ Card_Key_Length (byte_of_integer (- 0 124))))
 
 (BG_PUSH
- ;; Why function Card_Term_Function_Reader
-  (EQ Card_Term_Function_Reader (byte_of_integer 17)))
+ ;; Why axiom Card_Term_Function_Reader_def
+ (EQ Card_Term_Function_Reader (byte_of_integer 17)))
 
 (BG_PUSH
- ;; Why function Card_Term_Function_Writer
-  (EQ Card_Term_Function_Writer (byte_of_integer (- 0 86))))
+ ;; Why axiom Card_Term_Function_Writer_def
+ (EQ Card_Term_Function_Writer (byte_of_integer (- 0 86))))
 
 (BG_PUSH
  ;; Why axiom Card_parenttag_Applet
@@ -11885,120 +11885,120 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (parenttag Exception_tag Throwable_tag) |@true|))
 
 (BG_PUSH
- ;; Why function ISO7816_CLA_ISO7816
-  (EQ ISO7816_CLA_ISO7816 (byte_of_integer 0)))
+ ;; Why axiom ISO7816_CLA_ISO7816_def
+ (EQ ISO7816_CLA_ISO7816 (byte_of_integer 0)))
 
 (BG_PUSH
- ;; Why function ISO7816_INS_EXTERNAL_AUTHENTICATE
-  (EQ ISO7816_INS_EXTERNAL_AUTHENTICATE (byte_of_integer (- 0 126))))
+ ;; Why axiom ISO7816_INS_EXTERNAL_AUTHENTICATE_def
+ (EQ ISO7816_INS_EXTERNAL_AUTHENTICATE (byte_of_integer (- 0 126))))
 
 (BG_PUSH
- ;; Why function ISO7816_INS_SELECT
-  (EQ ISO7816_INS_SELECT (byte_of_integer (- 0 92))))
+ ;; Why axiom ISO7816_INS_SELECT_def
+ (EQ ISO7816_INS_SELECT (byte_of_integer (- 0 92))))
 
 (BG_PUSH
- ;; Why function ISO7816_OFFSET_CDATA
-  (EQ ISO7816_OFFSET_CDATA (byte_of_integer 5)))
+ ;; Why axiom ISO7816_OFFSET_CDATA_def
+ (EQ ISO7816_OFFSET_CDATA (byte_of_integer 5)))
 
 (BG_PUSH
- ;; Why function ISO7816_OFFSET_CLA
-  (EQ ISO7816_OFFSET_CLA (byte_of_integer 0)))
+ ;; Why axiom ISO7816_OFFSET_CLA_def
+ (EQ ISO7816_OFFSET_CLA (byte_of_integer 0)))
 
 (BG_PUSH
- ;; Why function ISO7816_OFFSET_INS
-  (EQ ISO7816_OFFSET_INS (byte_of_integer 1)))
+ ;; Why axiom ISO7816_OFFSET_INS_def
+ (EQ ISO7816_OFFSET_INS (byte_of_integer 1)))
 
 (BG_PUSH
- ;; Why function ISO7816_OFFSET_LC
-  (EQ ISO7816_OFFSET_LC (byte_of_integer 4)))
+ ;; Why axiom ISO7816_OFFSET_LC_def
+ (EQ ISO7816_OFFSET_LC (byte_of_integer 4)))
 
 (BG_PUSH
- ;; Why function ISO7816_OFFSET_P1
-  (EQ ISO7816_OFFSET_P1 (byte_of_integer 2)))
+ ;; Why axiom ISO7816_OFFSET_P1_def
+ (EQ ISO7816_OFFSET_P1 (byte_of_integer 2)))
 
 (BG_PUSH
- ;; Why function ISO7816_OFFSET_P2
-  (EQ ISO7816_OFFSET_P2 (byte_of_integer 3)))
+ ;; Why axiom ISO7816_OFFSET_P2_def
+ (EQ ISO7816_OFFSET_P2 (byte_of_integer 3)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_APPLET_SELECT_FAILED
-  (EQ ISO7816_SW_APPLET_SELECT_FAILED (short_of_integer 27033)))
+ ;; Why axiom ISO7816_SW_APPLET_SELECT_FAILED_def
+ (EQ ISO7816_SW_APPLET_SELECT_FAILED (short_of_integer 27033)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_BYTES_REMAINING_00
-  (EQ ISO7816_SW_BYTES_REMAINING_00 (short_of_integer 24832)))
+ ;; Why axiom ISO7816_SW_BYTES_REMAINING_00_def
+ (EQ ISO7816_SW_BYTES_REMAINING_00 (short_of_integer 24832)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_CLA_NOT_SUPPORTED
-  (EQ ISO7816_SW_CLA_NOT_SUPPORTED (short_of_integer 28160)))
+ ;; Why axiom ISO7816_SW_CLA_NOT_SUPPORTED_def
+ (EQ ISO7816_SW_CLA_NOT_SUPPORTED (short_of_integer 28160)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_COMMAND_NOT_ALLOWED
-  (EQ ISO7816_SW_COMMAND_NOT_ALLOWED (short_of_integer 27014)))
+ ;; Why axiom ISO7816_SW_COMMAND_NOT_ALLOWED_def
+ (EQ ISO7816_SW_COMMAND_NOT_ALLOWED (short_of_integer 27014)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_CONDITIONS_NOT_SATISFIED
-  (EQ ISO7816_SW_CONDITIONS_NOT_SATISFIED (short_of_integer 27013)))
+ ;; Why axiom ISO7816_SW_CONDITIONS_NOT_SATISFIED_def
+ (EQ ISO7816_SW_CONDITIONS_NOT_SATISFIED (short_of_integer 27013)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_CORRECT_LENGTH_00
-  (EQ ISO7816_SW_CORRECT_LENGTH_00 (short_of_integer 27648)))
+ ;; Why axiom ISO7816_SW_CORRECT_LENGTH_00_def
+ (EQ ISO7816_SW_CORRECT_LENGTH_00 (short_of_integer 27648)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_DATA_INVALID
-  (EQ ISO7816_SW_DATA_INVALID (short_of_integer 27012)))
+ ;; Why axiom ISO7816_SW_DATA_INVALID_def
+ (EQ ISO7816_SW_DATA_INVALID (short_of_integer 27012)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_FILE_FULL
-  (EQ ISO7816_SW_FILE_FULL (short_of_integer 27268)))
+ ;; Why axiom ISO7816_SW_FILE_FULL_def
+ (EQ ISO7816_SW_FILE_FULL (short_of_integer 27268)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_FILE_INVALID
-  (EQ ISO7816_SW_FILE_INVALID (short_of_integer 27011)))
+ ;; Why axiom ISO7816_SW_FILE_INVALID_def
+ (EQ ISO7816_SW_FILE_INVALID (short_of_integer 27011)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_FILE_NOT_FOUND
-  (EQ ISO7816_SW_FILE_NOT_FOUND (short_of_integer 27266)))
+ ;; Why axiom ISO7816_SW_FILE_NOT_FOUND_def
+ (EQ ISO7816_SW_FILE_NOT_FOUND (short_of_integer 27266)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_FUNC_NOT_SUPPORTED
-  (EQ ISO7816_SW_FUNC_NOT_SUPPORTED (short_of_integer 27265)))
+ ;; Why axiom ISO7816_SW_FUNC_NOT_SUPPORTED_def
+ (EQ ISO7816_SW_FUNC_NOT_SUPPORTED (short_of_integer 27265)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_INCORRECT_P1P2
-  (EQ ISO7816_SW_INCORRECT_P1P2 (short_of_integer 27270)))
+ ;; Why axiom ISO7816_SW_INCORRECT_P1P2_def
+ (EQ ISO7816_SW_INCORRECT_P1P2 (short_of_integer 27270)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_INS_NOT_SUPPORTED
-  (EQ ISO7816_SW_INS_NOT_SUPPORTED (short_of_integer 27904)))
+ ;; Why axiom ISO7816_SW_INS_NOT_SUPPORTED_def
+ (EQ ISO7816_SW_INS_NOT_SUPPORTED (short_of_integer 27904)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_NO_ERROR
-  (EQ ISO7816_SW_NO_ERROR (short_of_integer (- 0 28672))))
+ ;; Why axiom ISO7816_SW_NO_ERROR_def
+ (EQ ISO7816_SW_NO_ERROR (short_of_integer (- 0 28672))))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_RECORD_NOT_FOUND
-  (EQ ISO7816_SW_RECORD_NOT_FOUND (short_of_integer 27267)))
+ ;; Why axiom ISO7816_SW_RECORD_NOT_FOUND_def
+ (EQ ISO7816_SW_RECORD_NOT_FOUND (short_of_integer 27267)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_SECURITY_STATUS_NOT_SATISFIED
-  (EQ ISO7816_SW_SECURITY_STATUS_NOT_SATISFIED (short_of_integer 27010)))
+ ;; Why axiom ISO7816_SW_SECURITY_STATUS_NOT_SATISFIED_def
+ (EQ ISO7816_SW_SECURITY_STATUS_NOT_SATISFIED (short_of_integer 27010)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_UNKNOWN
-  (EQ ISO7816_SW_UNKNOWN (short_of_integer 28416)))
+ ;; Why axiom ISO7816_SW_UNKNOWN_def
+ (EQ ISO7816_SW_UNKNOWN (short_of_integer 28416)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_WRONG_DATA
-  (EQ ISO7816_SW_WRONG_DATA (short_of_integer 27264)))
+ ;; Why axiom ISO7816_SW_WRONG_DATA_def
+ (EQ ISO7816_SW_WRONG_DATA (short_of_integer 27264)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_WRONG_LENGTH
-  (EQ ISO7816_SW_WRONG_LENGTH (short_of_integer 26368)))
+ ;; Why axiom ISO7816_SW_WRONG_LENGTH_def
+ (EQ ISO7816_SW_WRONG_LENGTH (short_of_integer 26368)))
 
 (BG_PUSH
- ;; Why function ISO7816_SW_WRONG_P1P2
-  (EQ ISO7816_SW_WRONG_P1P2 (short_of_integer 27392)))
+ ;; Why axiom ISO7816_SW_WRONG_P1P2_def
+ (EQ ISO7816_SW_WRONG_P1P2 (short_of_integer 27392)))
 
 (BG_PUSH
  ;; Why axiom ISOException_parenttag_CardRuntimeException

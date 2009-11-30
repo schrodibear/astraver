@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.187 2009-11-25 16:25:22 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.188 2009-11-30 21:33:07 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -543,7 +543,9 @@ let non_null_pred name =
   try
     Hashtbl.find non_null_preds name
   with
-      Not_found -> assert false
+      Not_found -> 
+	Format.eprintf "Java_interp: non_null_pred(%s)@." name;
+	assert false
 	
 let create_non_null_fun si =
   let fi = 
@@ -1583,9 +1585,21 @@ let rec statement s =
 	  mkreturn ~expr:(expr e) ()
       | JSthrow e ->
 	  (* TODO: insert a check that e is not null *)
-          mkthrow
-            ~exn: (exn_name (get_exception e.java_expr_type))
-            ~argument: (expr e)
+	  let e' = expr e in
+	  let t = get_exception e.java_expr_type in
+	  let li = non_null_pred t.jc_exception_info_name in
+          let ass = mkassert ~expr:(mkapp ~fun_name:li.jc_logic_info_name ~args:[e'] ()) () in
+          let th =
+	    mkthrow
+              ~exn: (exn_name t)
+              ~argument: (mkvar ~name:"java_thrown_exception" ())
+              ()
+	  in
+	  mklet
+            ~typ: (new ptype (JCPTpointer(t.jc_exception_info_name,[],None,None)))
+            ~var: "java_thrown_exception"
+            ~init: e'
+            ~body: (mkblock [ass; th] ())
             ()
       | JSblock l ->
           mkblock ~exprs:(List.map statement l)	()
@@ -2381,7 +2395,7 @@ let tr_static_invariant (s, a) =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -j -C .. byte"
+compile-command: "LC_ALL=C make -C .. byte"
 End: 
 *)
 

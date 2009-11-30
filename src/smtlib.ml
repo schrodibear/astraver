@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.66 2009-11-30 19:52:29 nrousset Exp $ i*)
+(*i $Id: smtlib.ml,v 1.67 2009-11-30 21:33:07 marche Exp $ i*)
 
 open Ident
 open Options
@@ -304,16 +304,7 @@ let print_obligation fmt loc o s =
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 
-(* Inductive predicates are handled in Encoding *)
-(*
-let rec push_decl d = 
-  match d with
-    | Dinductive_def (loc, id, d) ->
-	List.iter push_decl (PredDefExpansor.inductive_def loc id d)
-    | _ -> Encoding.push d
-*)
-
-let push_decl = Encoding.push
+let push_decl = Encoding.push ~encode_preds:true ~encode_funs:true
 
 let iter = Encoding.iter
 

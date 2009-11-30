@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.64 2009-11-26 16:07:36 andrei Exp $ i*)
+(*i $Id: cvcl.ml,v 1.65 2009-11-30 21:33:07 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -222,8 +222,6 @@ let print_logic fmt id t =
   fprintf fmt "%%%% Why logic %s@\n" id;
   fprintf fmt "@[%s: %a;@]@\n@\n" id print_logic_type t
 
-(* Function and predicate definitions are handled in Encoding *)
-(*
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
   fprintf fmt "@[<hov 2>%s: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
@@ -243,7 +241,6 @@ let print_function_def fmt id (bl,t,e) =
        (fun fmt (x,pt) -> 
 	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
     print_term e
-*)
 
 let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
@@ -256,7 +253,7 @@ let print_obligation fmt loc _expl o s =
   fprintf fmt "@[%%%% %a@]@\n" Util.print_explanation expl
 *)
 
-let push_decl d = Encoding.push d
+let push_decl d = Encoding.push ~encode_preds:false ~encode_funs:false d
 
 let iter = Encoding.iter
 

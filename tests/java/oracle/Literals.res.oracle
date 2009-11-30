@@ -2222,6 +2222,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -3371,8 +3373,8 @@ why -simplify [...] why/Literals.why
  (EQ (parenttag Literals_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why function Literals_x
-  (EQ Literals_x (int32_of_integer 2989)))
+ ;; Why axiom Literals_x_def
+ (EQ Literals_x (int32_of_integer 2989)))
 
 (DEFPRED (Non_null_Object x Object_alloc_table)
   (EQ (offset_max Object_alloc_table x) 0))
@@ -4616,6 +4618,8 @@ axiom concat_select_bytes:
                (s1 + s2))))))))))
 
 logic integer_of_bitvector : bitvector -> int
+
+logic bitvector_of_integer : int -> bitvector
 
 logic real_of_bitvector : bitvector -> real
 

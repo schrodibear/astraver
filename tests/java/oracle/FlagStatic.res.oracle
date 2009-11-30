@@ -5669,6 +5669,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -9661,16 +9663,16 @@ why -simplify [...] why/FlagStatic.why
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why function FlagStatic_BLUE
-  (EQ FlagStatic_BLUE 1))
+ ;; Why axiom FlagStatic_BLUE_def
+ (EQ FlagStatic_BLUE 1))
 
 (BG_PUSH
- ;; Why function FlagStatic_RED
-  (EQ FlagStatic_RED 3))
+ ;; Why axiom FlagStatic_RED_def
+ (EQ FlagStatic_RED 3))
 
 (BG_PUSH
- ;; Why function FlagStatic_WHITE
-  (EQ FlagStatic_WHITE 2))
+ ;; Why axiom FlagStatic_WHITE_def
+ (EQ FlagStatic_WHITE 2))
 
 (BG_PUSH
  ;; Why axiom FlagStatic_parenttag_Object
@@ -13383,6 +13385,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -16551,10 +16555,10 @@ goal FlagStatic_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/FlagStatic_why.why        : .......#....###.....?.#....###........................................#.... (65/0/1/9/0)
+why/FlagStatic_why.why        : .......#....###.......#....##.........................................#.... (67/0/0/8/0)
 total   :  75
-valid   :  65 ( 87%)
+valid   :  67 ( 89%)
 invalid :   0 (  0%)
-unknown :   1 (  1%)
-timeout :   9 ( 12%)
+unknown :   0 (  0%)
+timeout :   8 ( 11%)
 failure :   0 (  0%)

@@ -63,3 +63,11 @@ public class Purse {
     }
 	
 }
+
+
+
+/*
+  Local Variables: 
+  compile-command: "make Purse"
+  End: 
+*/

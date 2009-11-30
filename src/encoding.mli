@@ -25,13 +25,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding.mli,v 1.11 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: encoding.mli,v 1.12 2009-11-30 21:33:07 marche Exp $ i*)
 
 open Cc
 
 val reset : unit -> unit
 
-val push : Logic_decl.t -> unit
+val push_direct : Logic_decl.t -> unit
+val push : encode_preds:bool -> encode_funs:bool -> Logic_decl.t -> unit
 val iter : (Logic_decl.t -> unit) -> unit
 
 val symbol : Ident.t * Logic.instance -> string
