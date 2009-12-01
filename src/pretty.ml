@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.51 2009-11-30 21:33:07 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.52 2009-12-01 10:12:28 bobot Exp $ i*)
 
 open Format
 open Pp
@@ -40,15 +40,8 @@ let reset = Encoding.reset
 let push_decl ?(ergo=false) d = 
   if ergo
   then Encoding.push ~encode_preds:false ~encode_funs:false d
-(*
-    match d with
-      | Dinductive_def (loc, id, d) ->
-	  List.iter Encoding.push (PredDefExpansor.inductive_def loc id d)
-      | Dalgtype ls ->
-          List.iter Encoding.push (PredDefExpansor.algebraic_type ls)
-      | _ -> Encoding.push d
-*)
-  else Encoding.push_direct d
+  else Encoding.push ~encode_preds:false ~encode_funs:false
+    ~encode_inductive:false ~encode_algtype:false d
 
 let iter = Encoding.iter
 

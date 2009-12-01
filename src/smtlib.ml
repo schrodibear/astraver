@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.67 2009-11-30 21:33:07 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.68 2009-12-01 10:12:28 bobot Exp $ i*)
 
 open Ident
 open Options
@@ -304,7 +304,7 @@ let print_obligation fmt loc o s =
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 
-let push_decl = Encoding.push ~encode_preds:true ~encode_funs:true
+let push_decl d = Encoding.push d
 
 let iter = Encoding.iter
 

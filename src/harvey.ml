@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.60 2009-11-30 21:33:07 marche Exp $ i*)
+(*i $Id: harvey.ml,v 1.61 2009-12-01 10:12:28 bobot Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -49,7 +49,7 @@ let oblig = Queue.create ()
 let reset () = Queue.clear theory; Queue.clear oblig
 
 
-let push_decl = Encoding.push ~encode_preds:false ~encode_funs:false
+let push_decl d = Encoding.push ~encode_preds:false ~encode_funs:false d
 
 
 (*let push_decl = function

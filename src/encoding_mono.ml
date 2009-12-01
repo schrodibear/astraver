@@ -310,7 +310,7 @@ let rec translate_pred fv lv = function
 and translate_pattern fv lv p = function
   | TPat t -> 
       let rec lookfor_term fv lv acc rt = function
-        | t2 when (Format.printf "%a = %a? %b@." Util.print_term t Util.print_term t2 (Misc.eq_term t t2); Misc.eq_term t t2) -> 
+        | t2 when ((*Format.printf "%a = %a? %b@." Util.print_term t Util.print_term t2 (Misc.eq_term t t2);*) Misc.eq_term t t2) -> 
             (translate_term fv lv rt t2)::acc
         | Tvar _ | Tconst _ | Tderef _ -> acc
         | Tapp (id, tl, inst) ->

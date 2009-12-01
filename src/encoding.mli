@@ -25,14 +25,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding.mli,v 1.12 2009-11-30 21:33:07 marche Exp $ i*)
+(*i $Id: encoding.mli,v 1.13 2009-12-01 10:12:28 bobot Exp $ i*)
 
 open Cc
 
 val reset : unit -> unit
 
-val push_direct : Logic_decl.t -> unit
-val push : encode_preds:bool -> encode_funs:bool -> Logic_decl.t -> unit
+val push : ?encode_inductive:bool -> ?encode_algtype:bool -> 
+  ?encode_preds:bool -> ?encode_funs:bool -> Logic_decl.t -> unit
 val iter : (Logic_decl.t -> unit) -> unit
 
 val symbol : Ident.t * Logic.instance -> string

@@ -10,7 +10,7 @@ TEMPFILE=${TEMPFILEWHY%.why}
 trap "rm -f -- '$TEMPFILEWHY'" EXIT
 
 cp $3 $TEMPFILEWHY
-why $1 $TEMPFILEWHY || why --no-pervasives $1 $TEMPFILEWHY || exit 1
+why $1 $TEMPFILEWHY > /dev/null 2>&1 || why --no-pervasives $1 $TEMPFILEWHY > /dev/null 2>&1 || exit 1
 why-dp $2 ${TEMPFILE}_why*
 
 rm -f -- "$TEMPFILEWHY" ${TEMPFILE}_why*

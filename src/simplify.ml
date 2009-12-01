@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.95 2009-11-30 21:33:07 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.96 2009-12-01 10:12:28 bobot Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -70,7 +70,7 @@ let rec decl_to_elem = function
   | Dalgtype _ ->  assert false
 
 
-let push_decl = Encoding.push ~encode_preds:false ~encode_funs:true
+let push_decl d = Encoding.push ~encode_preds:false d
 
 let defpred = Hashtbl.create 97
 

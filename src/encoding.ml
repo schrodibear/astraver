@@ -25,13 +25,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding.ml,v 1.16 2009-11-30 21:33:07 marche Exp $ i*)
+(*i $Id: encoding.ml,v 1.17 2009-12-01 10:12:28 bobot Exp $ i*)
 
 open Options
 
 let queue = Queue.create ()
-
-let push_direct d = Queue.add d queue
 
 let reset () = match get_types_encoding () with
   | NoEncoding -> Queue.clear queue
@@ -51,14 +49,15 @@ let push d = match get_types_encoding () with
   | Monomorph -> Monomorph.push_decl d
   | MonoInst -> Encoding_mono_inst.push_decl d
 
-let push ~encode_preds ~encode_funs = function
+let push ?(encode_inductive=true) ?(encode_algtype=true) 
+    ?(encode_preds=true) ?(encode_funs=true) = function
   | Logic_decl.Dfunction_def (loc, id, d) when encode_funs ->
       List.iter push (PredDefExpansor.function_def loc id d)
   | Logic_decl.Dpredicate_def (loc, id, d) when encode_preds ->
       List.iter push (PredDefExpansor.predicate_def loc id d)
-  | Logic_decl.Dinductive_def (loc, id, d) ->
+  | Logic_decl.Dinductive_def (loc, id, d) when encode_inductive ->
       List.iter push (PredDefExpansor.inductive_def loc id d)
-  | Logic_decl.Dalgtype ls ->
+  | Logic_decl.Dalgtype ls when encode_algtype ->
       List.iter push (PredDefExpansor.algebraic_type ls)
   | d -> push d
 

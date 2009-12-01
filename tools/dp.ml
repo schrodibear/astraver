@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.52 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: dp.ml,v 1.53 2009-12-01 10:12:28 bobot Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -37,6 +37,7 @@ let eclauses = ref 2000 (* E prover max nb of clauses *)
 let debug = ref false
 let batch = ref false
 let simple = ref false
+let split = ref false
 let timings = ref true (* print timings *)
 let basename = ref false
 let listing = ref false
@@ -63,7 +64,8 @@ let spec =
     "-listing", Arg.Set listing, "argument file only lists real argument files";
     "-select", Arg.Set select_hypotheses, 
     "applies some selection of hypotheses (only Alt-Ergo)";
-    "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout"
+    "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout";
+    "-split", Arg.Set split, "Create a directory wich contains all the goal splitted in different file"
   ]
 
 let () = 
@@ -92,6 +94,9 @@ let () =
   Cvcl_split.debug := !debug; 
   Simplify_split.debug := !debug;
   Zenon_split.debug := !debug
+
+let () =
+  if !split then simple := true
 
 (* stats *)
 
@@ -162,7 +167,7 @@ let wrapper_simple r =
     | Invalid(t,_) -> printf "Invalid %f@." t
     | CannotDecide (t,_) -> printf "I don't know %f@." t
     | Timeout t -> printf "Timeout %f@." t
-    | ProverFailure(t,_) -> printf "Fail %f@." t
+    | ProverFailure(t,s) -> printf "Fail %f@.%s@." t s
   end;
   flush stdout
 
@@ -191,12 +196,40 @@ let call_zenon f =
 let call_harvey f = 
   wrapper (Calldp.harvey ~debug:!debug ~timeout:!timeout ~filename:f ())
 
+let cp = 
+  let max_len = 1024 in
+  fun fi fo ->
+    let s = String.make max_len ' ' in
+    let fi = open_in fi in
+    let fo = open_out fo in
+    let nb = ref 0 in
+    nb := input fi s 0 max_len;
+    while !nb != 0 do
+      output fo s 0 !nb;
+      nb := input fi s 0 max_len
+    done;
+    close_in fi;
+    close_out fo
+
+let new_num = 
+  let c = ref (-1) in
+  (fun () -> incr c;!c)
+
+let dir_name f = (Filename.chop_extension f)^".split"
+
+let call_split callback dir_name suffixe =
+  if !split then (fun f -> cp f (sprintf "%s/goal%i%s" dir_name (new_num ()) suffixe))
+  else callback 
+  
+
 let call_smt_solver = match !smt_solver with
   | Yices -> call_yices
   | CVC3 -> call_cvc3
   | Z3 -> call_z3
 
 let split f =
+  let dir_name = dir_name f in
+  if !split && not (Sys.file_exists dir_name) then Unix.mkdir dir_name 0o740;
   if not !batch && not !simple then printf "%-30s: " 
     (if !basename then Filename.basename f else f);
   let oldv = !nvalid in
@@ -206,29 +239,29 @@ let split f =
   let oldf = !nfailure in
   if Filename.check_suffix f ".smt"  || Filename.check_suffix f ".smt.all" then
     begin
-      Smtlib_split.iter call_smt_solver f 
+      Smtlib_split.iter (call_split call_smt_solver dir_name ".smt") f 
     end 
   else
   if Filename.check_suffix f ".why" then
     begin
-      Ergo_split.iter call_ergo f 
+      Ergo_split.iter (call_split call_ergo dir_name ".why") f 
     end
   else 
   if Filename.check_suffix f ".cvc"  || Filename.check_suffix f ".cvc.all" then
-    Cvcl_split.iter call_cvcl f 
+    Cvcl_split.iter (call_split call_cvcl dir_name ".cvc") f 
   else 
   if Filename.check_suffix f ".sx" || 
      Filename.check_suffix f ".sx.all" ||
      Filename.check_suffix f ".simplify"
   then
-    Simplify_split.iter call_simplify f 
+    Simplify_split.iter (call_split call_simplify dir_name ".sx") f 
   else 
   if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then
-    Zenon_split.iter call_zenon f (* TODO: Zenon_split *)
+    Zenon_split.iter (call_split call_zenon dir_name ".znn") f (* TODO: Zenon_split *)
   else 
   if Filename.check_suffix f ".rv" then
     begin
-      Rv_split.iter  call_harvey f 
+      Rv_split.iter  (call_split call_harvey dir_name ".rv") f 
     end
   else 
     begin Arg.usage spec usage; exit 1 end;
