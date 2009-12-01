@@ -222,7 +222,8 @@ let create_tag (tbuf:GText.buffer) t loc =
     in
     ignore(
       new_tag#connect#event ~callback:
-	(fun ~origin ev it -> 
+	(fun ~origin ev _it ->
+           assert (origin == origin); (* to prevent unused warning *)
 	   if GdkEvent.get_type ev = `BUTTON_PRESS then 
 	     move_to_source (Some loc)
 	   else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin
@@ -244,7 +245,7 @@ let print_oblig fmt (ctx,concl) =
     then Astprinter.print_pure_type, Astpprinter.print_predicate
     else Astprinter.print_pure_type, Astnprinter.print_predicate
   in 
-  let ctx, concl = intros ctx concl in
+  let ctx, _concl = intros ctx concl in
   let rec print_list print = function
     | [] -> ()
     | p::r -> print p; fprintf fmt "@\n"; print_list print r 
@@ -337,7 +338,7 @@ let is_ident_char s = String.length s = 1 && match s.[0] with
   | 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' -> true
   | _ -> false
 
-let show_definition (tv:GText.view) (tv_s:GText.view) = 
+let show_definition (tv:GText.view) (_tv_s:GText.view) = 
   let buf = tv#buffer in
   let find_backward (it:GText.iter) = 
     let rec find start stop = 
@@ -386,7 +387,7 @@ let show_definition (tv:GText.view) (tv_s:GText.view) =
     with Not_found -> ()
   end
     
-let text_of_obligation (tv:GText.view) (o,expl,s,p) = 
+let text_of_obligation (tv:GText.view) (_o,_expl,s,p) = 
   let p = p.Env.scheme_type in
   last_fct := s;
   if (unchanged s (is_active ())) then 

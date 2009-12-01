@@ -112,20 +112,20 @@ end
 
 (*****)
 let test_correct = function
-  | `Logic (f,_,params) -> 
+  | `Logic (f,_,_params) -> 
       if List.length f.jc_logic_info_labels <> 1 then
         failwith "Separation predicate generation :
  Logic must have only one label"
       else
         MemoryMap.iter
-          (fun (mc,distr) labs -> 
+          (fun (mc,_distr) _labs -> 
              match mc with 
                | JCmem_field _ -> ()
                | _ -> failwith "Separation predicate generation :
  Only simple memory model"         
           )
           f.jc_logic_info_effects.jc_effect_memories
-  | `Pointer g -> ()
+  | `Pointer _g -> ()
 
 let if_in_restr restr e = 
   match restr with [] -> true | _ ->
@@ -370,7 +370,7 @@ let fun_def f ta fa ft term_coerce params =
             [logic;axiom]
           else
             [Function(false, f.jc_logic_info_final_name, params, ty', t')]
-      | ty_opt, JCReads r -> (* Logic *)
+      | ty_opt, JCReads _r -> (* Logic *)
           let ty' = match ty_opt with
 	    | None -> simple_logic_type prop_type
 	    | Some ty -> tr_base_type ty
@@ -393,7 +393,7 @@ let fun_def f ta fa ft term_coerce params =
       | None, JCInductive l  ->
 	  [Inductive(false, f.jc_logic_info_final_name, params,  
 		    List.map 
-		      (fun (id,labels,a) ->
+		      (fun (id,_labels,a) ->
 			 let ef = Jc_effect.assertion empty_effects a in
 			 let a' = fa a in
 			 let params = 
@@ -408,7 +408,7 @@ let fun_def f ta fa ft term_coerce params =
       | None, JCTerm _ -> assert false 
       | Some _, JCAssertion _ -> assert false
 
-let gen_no_update_axioms f ta fa ft term_coerce params acc =
+let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
     match ta with 
       |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
       | JCReads [] -> acc (* TODO: diff "reads \nothing" and nothing *)
@@ -425,7 +425,7 @@ let gen_no_update_axioms f ta fa ft term_coerce params acc =
             params_memory*)
 	 if not (is_memory_type paramty) then count,acc else
 	   let (mc,r),_ = (* Recover which memory it is exactly *)
-	     List.find (fun ((mc,r),(n,_v,_ty')) -> n = fst param) 
+	     List.find (fun ((_mc,_r),(n,_v,_ty')) -> n = fst param) 
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
@@ -448,7 +448,7 @@ let gen_no_update_axioms f ta fa ft term_coerce params acc =
                      LIff(
 		       LPred(f.jc_logic_info_final_name,normal_params),
 		       LPred(f.jc_logic_info_final_name,update_params)))
-	       | Some rety ->
+	       | Some _rety ->
 		   LImpl(
                      sepa,
                      LPred("eq",[
@@ -471,7 +471,7 @@ let gen_no_update_axioms f ta fa ft term_coerce params acc =
 	   count + 1, Axiom(name,a) :: acc
       ) (0,acc) params)
 
-let gen_no_assign_axioms f ta fa ft term_coerce params acc =
+let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
 (* WRONG when JCreads [], it does not distinghishes between no reads and reads \nothing
    TODO: use computed effects instead *)
     match ta with 
@@ -488,10 +488,10 @@ let gen_no_assign_axioms f ta fa ft term_coerce params acc =
 	 let paramty = snd param in
 	 if not (is_memory_type paramty) then count,acc else
 	   let (mc,r),_ = (* Recover which memory it is exactly *)
-	     List.find (fun ((mc,r),(n,_v,_ty')) -> n = fst param) 
+	     List.find (fun ((_mc,_r),(n,_v,_ty')) -> n = fst param) 
 	       memory_params_reads
 	   in
-	   let zonety,basety = deconstruct_memory_type_args paramty in
+	   let zonety,_basety = deconstruct_memory_type_args paramty in
 	   let pset = 
 	     reads ~type_safe:false ~global_assertion:true pset (mc,r) 
 	   in
@@ -514,7 +514,7 @@ let gen_no_assign_axioms f ta fa ft term_coerce params acc =
                      LIff(
 		       LPred(f.jc_logic_info_final_name,normal_params),
 		       LPred(f.jc_logic_info_final_name,update_params)))
-	       | Some rety ->
+	       | Some _rety ->
 		   LImpl(
                      make_and sepa upda,
                      LPred("eq",[
@@ -539,7 +539,7 @@ let gen_no_assign_axioms f ta fa ft term_coerce params acc =
 	   count + 1, Axiom(name,a) :: acc
       ) (0,acc) params) (* memory_param_reads ? *)
 
-let gen_alloc_extend_axioms f ta fa ft term_coerce params acc = 
+let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc = 
 (* TODO: use computed effects instead*)
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
@@ -577,7 +577,7 @@ let gen_alloc_extend_axioms f ta fa ft term_coerce params acc =
                    LIff(
 		     LPred(f.jc_logic_info_final_name,normal_params),
 		     LPred(f.jc_logic_info_final_name,update_params)))
-	     | Some rety ->
+	     | Some _rety ->
 		 LImpl(
                    make_and exta valida,
                    LPred("eq",[
@@ -618,7 +618,7 @@ struct
   }
     
 
-  let from_memory for_one (((mc,distr) as m),label) = 
+  let from_memory for_one (((mc,_distr) as m),label) = 
     let (s,_,_) = tmemory_param ~label_in_name:true label m (*memory_name (mc,distr)*) in
     if for_one
     then     
@@ -690,7 +690,7 @@ let push_not e =
   and trad f = function
     | LImpl(a,b) -> f (LOr(LNot a,b))
     | LIff(a,b) -> trad f (LAnd (LImpl(a,b),LImpl(b,a)))
-    | LIf(t,a,b) -> assert false (* How to trad this? t is a term *)
+    | LIf(_t,_a,_b) -> assert false (* How to trad this? t is a term *)
     | LLet _ -> assert false (* More difficult *)
     | LTrue | LFalse |LAnd _ |LOr _ | LNot _ | LForall _ | LExists _ | LPred _ | LNamed _ -> assert false in
   pos e
@@ -819,7 +819,7 @@ struct
       Axiom (axiom_name^"3", make_forall_list params [] assertion)::acc in
     acc
 
-  let def_ft_pred ~for_one ~do_rem f notin ta_conv acc = 
+  let def_ft_pred ~for_one ~do_rem _f notin ta_conv acc = 
     match ta_conv with 
         (* Devrait peut-être utiliser la vrai transformation d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> begin 
@@ -831,8 +831,8 @@ struct
                           simple_logic_type prop_type)::acc in
 
           let rec gen_one_neg acc = function
-            | LNot a -> assert false (*gen_one_neg notin acc a*)
-            | LPred (id,lt) as e -> 
+            | LNot _a -> assert false (*gen_one_neg notin acc a*)
+            | LPred (_id,lt) as e -> 
                 (*Jc_options.lprintf "term_extract_effect %s@." id;*)
                 let acc = List.fold_left 
                   (term_extract_effect notin) acc lt in
@@ -873,8 +873,8 @@ struct
                asser::acc
             ) acc l in
           let conjs = List.map
-            (fun (ident,assertion) ->
-               let impl s lt asser = 
+            (fun (_ident,assertion) ->
+               let impl _s lt asser = 
                  let eqs = List.map2 (fun (x,_) y -> make_eq (LVar x) y) params lt in
                  make_impl (make_and_list eqs) asser in
                gen_one ~impl [] assertion) l in
@@ -894,7 +894,7 @@ struct
                                     add_decl_args notin params,
                                     conv_to_ft notin assertion) in
           new_pred::acc
-      | [Function (bool,f_name,params,ltype,term)] ->
+      | [Function (_bool,f_name,params,_ltype,term)] ->
           let name = ft_name notin f_name in
           Jc_options.lprintf "Generate logic : %s :@." name;
           let acc = Logic(false,
@@ -1016,13 +1016,13 @@ struct
     let notin_name = notin_name notin f_name in
     gen f_name notin_name false notin_update params []
 
-  let def_notin f notin ta_conv acc = 
+  let def_notin _f notin ta_conv acc = 
     match ta_conv with 
         (* Devrait peut-être utiliser la vrai transformation d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> begin 
 
           let rec gen_one_neg notin acc = function
-            | LNot a -> assert false (*gen_one_neg notin acc a*)
+            | LNot _a -> assert false (*gen_one_neg notin acc a*)
             | LPred (_,lt) as e -> 
                 let acc = List.fold_left 
                   (term_extract_effect notin) acc lt in
@@ -1068,7 +1068,7 @@ struct
           let name = notin_name notin f_name in
           Jc_options.lprintf "Generate function : %s :@." name;
           let rec gen_one_neg notin acc = function
-            | LNot a -> assert false (*gen_one_neg notin acc a*)
+            | LNot _a -> assert false (*gen_one_neg notin acc a*)
             | LPred (_,lt) as e -> 
                 let acc = List.fold_left 
                   (term_extract_effect notin) acc lt in
@@ -1084,7 +1084,7 @@ struct
                                    NotIn.ty notin,
                                    MyBag.make_inter_rem_list asser) in
           new_pred::acc
-      | [Function (bool,f_name,params,ltype,term)] ->
+      | [Function (_bool,f_name,params,_ltype,term)] ->
           let name = notin_name notin f_name in
           Jc_options.lprintf "Generate logic : %s :@." name;
           let acc = Logic(false,

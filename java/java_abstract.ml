@@ -69,7 +69,7 @@ let modifier fmt m =
   | Model-> assert false (* TODO *)
   | Non_null -> assert false (* TODO *)
   | Nullable -> assert false (* TODO *)
-  | Annot_modifier(loc,id) -> assert false (* TODO *)
+  | Annot_modifier(_loc,_id) -> assert false (* TODO *)
 
 let modifiers fmt = List.iter (modifier fmt)
 
@@ -77,7 +77,7 @@ let type_expr fmt t =
   match t with
     | Base_type b -> base_type fmt b
     | Type_name id -> fprintf fmt "%a" qualified_ident id;
-    | Array_type_expr typ ->  assert false (* TODO *)
+    | Array_type_expr _typ ->  assert false (* TODO *)
 
 let float_suffix fmt = function
   | `Single -> fprintf fmt "f"
@@ -87,11 +87,11 @@ let float_suffix fmt = function
 let literal fmt l =
   match l with
     | Null -> fprintf fmt "null"
-    | Integer s -> assert false (* TODO *)
+    | Integer _s -> assert false (* TODO *)
     | Float(s,suf) -> fprintf fmt "%s%a" s float_suffix suf
-    | Bool b -> assert false (* TODO *)
-    | String s -> assert false (* TODO *)
-    | Char s -> assert false (* TODO *)
+    | Bool _b -> assert false (* TODO *)
+    | String _s -> assert false (* TODO *)
+    | Char _s -> assert false (* TODO *)
 
 let bin_op fmt op =
   match op with
@@ -148,7 +148,7 @@ let rec expr fmt e =
 
 let rec param fmt p =
   match p with
-    | Simple_parameter(modifier, typ, id) ->
+    | Simple_parameter(_modifier, typ, id) ->
 	fprintf fmt "%a %a" type_expr typ ident id
     | Array_parameter p -> 
 	fprintf fmt "%a[]" param p
@@ -157,7 +157,7 @@ let method_declarator fmt d =
   match d with
     | Simple_method_declarator(id,params) ->
 	fprintf fmt "%a(@[%a@]);@\n@\n" ident id (print_list comma param) params
-    | Array_method_declarator md ->
+    | Array_method_declarator _md ->
 	assert false (* TODO *)
 
 
@@ -196,7 +196,7 @@ let rec variable_id fmt = function
 
 let rec initialize fmt = function
   | Simple_initializer e -> expr fmt e
-  | Array_initializer l -> assert false (* TODO *)
+  | Array_initializer _l -> assert false (* TODO *)
       
 
 let variable_declarator ~is_final fmt vd =
@@ -238,7 +238,7 @@ let field_declaration fmt f =
 *)
   match f with
     | JPFmethod(md,_block) -> method_declaration fmt md      
-    | JPFmethod_spec(req, dec, behs ) -> 
+    | JPFmethod_spec(req, _dec, _behs ) -> 
 	fprintf fmt "@[/*@@";
 	print_option (fun fmt e -> fprintf fmt " requires %a;@\n  @@" expr e) fmt req;
 	(* TODO *)
@@ -248,7 +248,7 @@ let field_declaration fmt f =
     | JPFstatic_invariant (_, _) -> assert false (* TODO *)
     | JPFinvariant (_, _) -> assert false (* TODO *)
     | JPFannot (_, _) -> assert false (* TODO *)
-    | JPFstatic_initializer block -> ()	
+    | JPFstatic_initializer _block -> ()	
     | JPFvariable vd -> variable_declaration fmt vd
     | JPFconstructor(cd, _invoke, _block) -> 
 	constructor_declaration fmt cd
@@ -284,11 +284,11 @@ let type_declaration fmt d =
     | JPTclass cd -> class_declaration fmt cd
     | JPTinterface id -> interface_declaration fmt id
     | JPTannot _ -> assert false
-    | JPTlemma (id,is_axiom,labels,p) -> assert false
-    | JPTlogic_type_decl id -> assert false
-    | JPTlogic_reads(id,rettype,labels,params,reads) -> assert false
-    | JPTlogic_def(id,rettype,labels,param,e) -> assert false
-    | JPTinductive(id,labels,param,e) -> assert false
+    | JPTlemma (_id,_is_axiom,_labels,_p) -> assert false
+    | JPTlogic_type_decl _id -> assert false
+    | JPTlogic_reads(_id,_rettype,_labels,_params,_reads) -> assert false
+    | JPTlogic_def(_id,_rettype,_labels,_param,_e) -> assert false
+    | JPTinductive(_id,_labels,_param,_e) -> assert false
     | JPTaxiomatic _ -> assert false
     | JPTimport _ -> assert false	
 

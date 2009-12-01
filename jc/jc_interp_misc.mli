@@ -340,7 +340,7 @@ val local_write_effects : callee_reads:Jc_fenv.effect ->
            callee_writes:Jc_fenv.effect -> string list
 
 val write_effects : 
-  callee_reads:'a ->
+  callee_reads:Jc_fenv.effect ->
   callee_writes:Jc_fenv.effect ->
   region_list:Jc_region.RegionTable.key list ->
   params:Jc_env.var_info list -> string list
@@ -353,7 +353,7 @@ val read_effects :
 
 val write_parameters :  type_safe:bool ->
            region_list:Jc_region.RegionTable.key list ->
-           callee_reads:'a ->
+           callee_reads:Jc_fenv.effect ->
            callee_writes:Jc_fenv.effect ->
            params:Jc_env.var_info list -> (string * Output.logic_type) list
 
@@ -366,7 +366,7 @@ val read_parameters : type_safe:bool ->
            (string * Output.logic_type) list
 
 val write_locals : region_list:Jc_region.RegionTable.key list ->
-           callee_reads:'a ->
+           callee_reads:Jc_fenv.effect ->
            callee_writes:Jc_fenv.effect ->
            params:Jc_env.var_info list -> (string * Output.logic_type) list
 

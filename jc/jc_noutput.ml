@@ -57,11 +57,11 @@ let rec expr fmt e =
           labs (print_list comma expr) el
     | JCNEassign(e1, e2) ->
         out "(@[<hv 2>%a =@ %a@])" expr e1 expr e2
-    | JCNEinstanceof(e1, id) ->
+    | JCNEinstanceof(_e1, _id) ->
         out "(TODO instanceof)"
-    | JCNEcast(e1, id) ->
+    | JCNEcast(_e1, _id) ->
         out "(TODO cast)"
-    | JCNEif(e1, e2, e3) ->
+    | JCNEif(_e1, _e2, _e3) ->
         out "(TODO if)"
     | JCNEoffset(k, e1) ->
         out "(\\offset_m%a(%a))" offset_kind k expr e1
@@ -69,9 +69,9 @@ let rec expr fmt e =
         out "(\\%aaddress(%a))" address_kind absolute expr e1
     | JCNEbase_block(e1) ->
         out "(\\base_block(%a))" expr e1
-    | JCNEalloc(e1, id) ->
+    | JCNEalloc(_e1, _id) ->
         out "(TODO alloc)"
-    | JCNEfree e1 ->
+    | JCNEfree _e1 ->
         out "(TODO free)"
     | JCNElet(Some pty, id, Some e1, e2) ->
         out "(@[<hv 2>let %a %s = %a in@ %a@])" ptype pty id expr e1 expr e2
@@ -92,7 +92,7 @@ let rec expr fmt e =
     | JCNEcontract _ -> assert false (* TODO *)
     | JCNEblock el ->
         out "{@ @[<hv 2>%a@]@ }" (print_list semi expr) el
-    | JCNEloop(inv, Some e2, e3) ->
+    | JCNEloop(_inv, Some _e2, _e3) ->
 	out "(some loop)" (* TODO *)
 	  (*
         out "@[<hv 2>%a@ variant %a;@ %a done@]" 
@@ -107,7 +107,7 @@ let rec expr fmt e =
 	  expr e2
           expr e3
 	  *)
-    | JCNEloop(inv, None, e2) ->
+    | JCNEloop(_inv, None, _e2) ->
         out "(some loop)" (* TODO *)
 	  (*
 	    out "@[<hv 2>%a@ %a done@]" 
@@ -135,11 +135,11 @@ let rec expr fmt e =
         out "(throw %s %a)" id#name expr e1
     | JCNEthrow(id, None) ->
         out "(throw %s)" id#name
-    | JCNEpack(e1, ido) ->
+    | JCNEpack(_e1, _ido) ->
         out "(TODO pack)"
-    | JCNEunpack(e1, ido) ->
+    | JCNEunpack(_e1, _ido) ->
         out "(TODO unpack)"
-    | JCNEmatch(e1, pel) ->
+    | JCNEmatch(_e1, _pel) ->
         out "(TODO match)"
     | JCNEquantifier(Forall, pty, idl, trigs, e1) ->
         out "(@[<hv 2>\\forall %a %a %a,@ %a@])" ptype pty
@@ -149,15 +149,15 @@ let rec expr fmt e =
         out "(@[<hv 2>\\exists %a %a%a,@ %a@])" ptype pty
           (print_list space identifier) idl 
            triggers trigs expr e1
-    | JCNEold e1 ->
+    | JCNEold _e1 ->
         out "(TODO old)"
     | JCNEat(e1, lab) ->
         out "\\at(%a,@ %a)" expr e1 label lab
-    | JCNEmutable(e1, tag) ->
+    | JCNEmutable(_e1, _tag) ->
         out "(TODO mutable)"
-    | JCNEeqtype(tag1, tag2) ->
+    | JCNEeqtype(_tag1, _tag2) ->
         out "(TODO eqtype)"
-    | JCNEsubtype(tag1, tag2) ->
+    | JCNEsubtype(_tag1, _tag2) ->
         out "(TODO subtype)"
     | JCNErange(Some e1, Some e2) ->
         out "(%a .. %a)" expr e1 expr e2

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_rec.ml,v 1.19 2009-11-26 16:07:43 andrei Exp $ i*)
+(*i $Id: encoding_rec.ml,v 1.20 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Options
 open Cc
@@ -88,7 +88,7 @@ let type_vars t =
     match t with
     | PTvar ({type_val = None} as var) -> var::acc
     | PTvar {type_val = Some pt} -> aux acc pt
-    | PTexternal (ptl, id) -> List.fold_left aux acc ptl
+    | PTexternal (ptl, _id) -> List.fold_left aux acc ptl
     | _ -> [] in
   aux [] t
 
@@ -214,7 +214,7 @@ let rec push d =
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Daxiom (loc, axiom name, ax)) queue))
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (loc, ident, pred_def_sch) ->
+  | Dpredicate_def (_loc, _ident, _pred_def_sch) ->
       assert false
 (*
       let p = pred_def_sch.Env.scheme_type in
@@ -241,7 +241,7 @@ let rec push d =
       failwith "encoding rec: inductive def not yet supported"
 *)
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dfunction_def (loc, ident, fun_def_sch) -> 
+  | Dfunction_def (_loc, _ident, _fun_def_sch) -> 
       assert false
 (*
       let f = fun_def_sch.Env.scheme_type in
@@ -336,7 +336,7 @@ let rec push d =
       let lookup id =
 	let rec aux = function
 	  | [] -> raise Not_found
-	  | (Svar (i, pt))::q when id = i -> pt
+	  | (Svar (i, pt))::_q when id = i -> pt
 	  | (Spred (_, _))::q | (Svar (_,_))::q -> aux q in
 	aux cel in
       let rec translate_eq lv = function

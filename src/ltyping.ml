@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.80 2009-11-26 16:08:03 andrei Exp $ i*)
+(*i $Id: ltyping.ml,v 1.81 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -164,7 +164,7 @@ let make_arith loc = function
   | (a,t1), (PPadd|PPsub|PPmul|PPdiv as r), (b,t2) 
     when unify t1 PTreal && unify t2 PTreal ->
       Tapp (real_arith r, [a; b], []), PTreal
-  | (_,t1),op,(_,t2) ->
+  | (_,_t1),_op,(_,_t2) ->
       expected_num loc
 
 let predicate_expected loc =
@@ -173,7 +173,7 @@ let predicate_expected loc =
 let term_expected loc =
   raise_located loc (AnyMessage "syntax error: term expected")
 
-let instance x i = 
+let instance _x i = 
   let l = 
     Vmap.fold 
       (fun _ v l -> 
@@ -311,7 +311,7 @@ and desc_predicate loc lab env = function
       let env = Env.add_logic x ty env in
       plet x ty t (predicate lab env f)
 
-and type_pvar loc env x =
+and type_pvar loc _env x =
   if is_at x then 
     raise_located loc (AnyMessage "predicates cannot be labelled");
   try match snd (find_global_logic x) with
@@ -321,7 +321,7 @@ and type_pvar loc env x =
   with Not_found -> 
     raise_located loc (UnboundVariable x)
 
-and type_papp loc env x tl =
+and type_papp loc _env x tl =
   try match find_global_logic x with
     | vars, Predicate at -> 
 	check_type_args loc at tl; 
@@ -415,7 +415,7 @@ and type_tvar loc lab env x =
     raise_located loc (UnboundVariable xu)
 
 
-and type_tapp loc env x tl =
+and type_tapp loc _env x tl =
   try match find_global_logic x with
     | vars, Function (at, t) -> 
 	check_type_args loc at tl; normalize_pure_type t, instance x vars
@@ -586,7 +586,7 @@ let logic_type lt =
   | PFunction (pl, t) -> 
       Function (List.map (pure_type env) pl, pure_type env t)
 
-let alg_type id vl td =
+let alg_type _id vl td =
   let vls = List.rev_map Ident.string vl in
   let bound x = List.mem (Ident.string x) vls in
   let rec check = function

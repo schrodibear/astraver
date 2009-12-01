@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.ml,v 1.85 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.86 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -145,7 +145,7 @@ struct
     | Rec (_, _, _, None, _, _) ->
 	assert false
 
-    | Rec (f, bl, v, Some var, p, e) -> 
+    | Rec (f, bl, _v, Some var, p, e) -> 
 	let bl',env' = trad_binders ren info.t_env bl in
 	let ren' = push_date (initial_renaming env') e.info.t_label in
 	let recf w ren = cc_lam bl' (abstraction e.info p w ren) in
@@ -178,7 +178,7 @@ struct
 	in
 	  Monad.handle e.info (trad e) info (List.map handler hl) ren
 
-    | Assertion (k, al, e) ->
+    | Assertion (_k, al, e) ->
 	insert_many_pre info.t_env al (trad e) ren
 
     | Ast.Absurd ->
@@ -211,7 +211,7 @@ struct
     | Label (s, e) ->
 	cross_label s (trad e) ren
 
-    | Post (e, q, _) ->
+    | Post (e, _q, _) ->
 	(* TODO *)
 	trad e ren 
 

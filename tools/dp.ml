@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.53 2009-12-01 10:12:28 bobot Exp $ i*)
+(*i $Id: dp.ml,v 1.54 2009-12-01 11:51:36 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -154,11 +154,11 @@ let wrapper_complete r =
 
 let wrapper_batch r = 
   begin match r with
-    | Valid t -> exit 0
-    | Invalid(t,_) -> exit 2
-    | CannotDecide (t,_) -> exit 3
-    | Timeout t -> exit 4
-    | ProverFailure(t,_) -> exit 5
+    | Valid _t -> exit 0
+    | Invalid(_t,_) -> exit 2
+    | CannotDecide (_t,_) -> exit 3
+    | Timeout _t -> exit 4
+    | ProverFailure(_t,_) -> exit 5
   end
 
 let wrapper_simple r = 

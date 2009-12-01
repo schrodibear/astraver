@@ -46,7 +46,7 @@ let rec add_subtype_list s l =
   List.fold_left (fun s e -> add_subtype s e) s l
 and add_subtype s = function
   | PTint | PTbool | PTreal | PTunit | PTvar _ as t -> PT_Set.add t s
-  | PTexternal (l,id) as t -> add_subtype_list (PT_Set.add t s) l
+  | PTexternal (l,_id) as t -> add_subtype_list (PT_Set.add t s) l
 
 let _PT_Set_add_normalize x s = PT_Set.add (Misc.normalize_pure_type x) s
 

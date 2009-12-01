@@ -128,7 +128,7 @@ module PatternTerm = Pattern(MakeTerm)
 let make_blackbox_annot pre ty reads writes post exn_posts =
   BlackBox(Annot_type(pre, ty, reads, writes, post, exn_posts))
 
-let pattern_list_expr translate_body arg r ty pbl =
+let pattern_list_expr translate_body arg _r ty pbl =
   List.fold_left
     (fun accbody (pat, body) ->
        let notcond, cond, vars = PatternAssertion.pattern arg ty pat in
@@ -154,7 +154,7 @@ let pattern_list_term translate_body arg ty pbl default =
      be problems (though variables are renamed so it should be ok).
      Will be better when (if) Why has Let binders at the term level. *)
   List.fold_left
-    (fun (accbody, acclets) (pat, body) ->
+    (fun (accbody, _acclets) (pat, body) ->
        let _, cond, vars = PatternTerm.pattern arg ty pat in
        let body = translate_body body in
        let body = make_if_term cond body accbody in

@@ -81,7 +81,7 @@ let renamings = Hashtbl.create 97
 
 let fresh_id =
   let c = ref 0 in
-  fun id -> incr c; !prefix ^ string_of_int !c
+  fun _id -> incr c; !prefix ^ string_of_int !c
 
 let rename_global id =
   if Hashtbl.mem renamings (Ident.string id) then () else
@@ -109,7 +109,7 @@ let rec pure_type fmt = function
   | PTreal -> fprintf fmt "real"
   | PTexternal([],id) -> fprintf fmt "%a" gident id
   | PTvar {tag=t; type_val=None} -> fprintf fmt "'a%d" t
-  | PTvar {tag=t; type_val=Some pt} -> pure_type fmt pt
+  | PTvar {tag=_t; type_val=Some pt} -> pure_type fmt pt
   | PTexternal([t],id) -> 
       fprintf fmt "%a %a" pure_type t gident id
   | PTexternal(l,id) -> fprintf fmt "(%a) %a" 
@@ -202,6 +202,14 @@ let rec lexpr m fmt p =
       let m = rename m id in
       fprintf fmt "@[<hov 2>(let %a = %a in@ %a)@]" (ident m) id 
 	(lexpr m) t (lexpr m) p
+  | PPmatch(e,l) -> 
+      fprintf fmt "@[<hov 2>(match %a with@ %a)@]" lexprm e
+	(print_list newline 
+	   (fun fmt ((id,idl,_loc),e) -> 
+              let m = List.fold_left rename m idl in
+              fprintf fmt "| %a(%a) ->@ %a;" gident id 
+                (print_list comma (ident m)) idl 
+                (lexpr m) e)) l
 
 and triggers m fmt = function
   | [] -> ()

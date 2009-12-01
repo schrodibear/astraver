@@ -47,7 +47,7 @@ let rec assertion acc p =
   match p#node with
   | JCAtrue 
   | JCAfalse -> acc
-  | JCArelation(t1,op,t2) ->
+  | JCArelation(t1,_op,t2) ->
       term (term acc t1) t2
   | JCAapp app -> app.jc_app_fun :: (List.fold_left term acc app.jc_app_args)
   | JCAand(pl) | JCAor(pl) -> List.fold_left assertion acc pl
@@ -100,7 +100,7 @@ let spec s =
 let loop_annot acc la = 
   let acc = 
     List.fold_left 
-      (fun acc (id,inv,assigns) -> 
+      (fun acc (_id,inv,_assigns) -> 
 	 (* TODO : traverse assigns clause *)
 	 Option_misc.fold_left assertion acc inv)
       acc la.jc_loop_behaviors 
@@ -120,7 +120,7 @@ let expr =
 	     | JCfun f -> (a,f::b)
 	     | JClogic_fun f -> (f::a,b)
 	   end
-       | JCEloop(spec,s) ->
+       | JCEloop(spec,_s) ->
 	   let (a,b) = acc in (loop_annot a spec,b)
        | _ -> acc
     )
@@ -148,7 +148,7 @@ let compute_logic_calls f t =
     match t with
       | JCTerm t -> term [] t 
       | JCAssertion a -> assertion [] a 
-      | JCReads r -> 
+      | JCReads _r -> 
 	  begin
 	    match f.jc_logic_info_axiomatic with
 	      | None -> []
@@ -159,8 +159,8 @@ let compute_logic_calls f t =
   in
   f.jc_logic_info_calls <- calls
 
-let compute_calls f s b = 
-  let (a,b) = expr ([],[]) b in
+let compute_calls f _s b = 
+  let (_a,b) = expr ([],[]) b in
   f.jc_fun_info_calls <- b
       
 module LogicCallGraph = struct 
@@ -172,7 +172,7 @@ module LogicCallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    Hashtbl.iter (fun _ (f,a) -> iter f) 
+    Hashtbl.iter (fun _ (f,_a) -> iter f) 
   let iter_succ iter _ f =
     List.iter iter f.jc_logic_info_calls 
   end
@@ -188,7 +188,7 @@ module CallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    Hashtbl.iter (fun _ (f,loc,spec,b) -> iter f) 
+    Hashtbl.iter (fun _ (f,_loc,_spec,_b) -> iter f) 
   let iter_succ iter _ f =
     List.iter iter f.jc_fun_info_calls 
   end

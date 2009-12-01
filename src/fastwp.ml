@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fastwp.ml,v 1.32 2009-11-30 19:52:29 nrousset Exp $ i*)
+(*i $Id: fastwp.ml,v 1.33 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Fast weakest preconditions *)
 
@@ -266,7 +266,7 @@ and wp0 info e s =
       in
       let ok2,((ne2,s2),ee2) = wp e2 s1 in
       begin match e1.info.t_result_type with
-	| PureType pt ->
+	| PureType _pt ->
 	    let ne1x = subst_in_predicate (subst_onev result x') ne1 in
 	    let subst = subst_in_predicate (subst_onev x x') in
 	    let ok = wpand ok1 (wpimplies ne1x (subst ok2)) in
@@ -495,7 +495,7 @@ and wp0 info e s =
       let q = List.filter (function (_,PureType _) -> true | _ -> false) bl in
       wpforalls (q @ qr) (wpimplies (wpands pl) ok),
       ((Ptrue, s), [])
-  | Rec (f, bl, v, var, pl, e) ->
+  | Rec (_f, bl, _v, var, pl, e) ->
       (* OK: well_founded(R) /\ forall bl. pl => ok(e)
 	 NE: forall bl. pl /\ ne(e, result) *)
       let wfr = Wp.well_founded_rel var in
@@ -544,7 +544,7 @@ and wp0 info e s =
 	     in
 	     exns e ee)
 	| None -> 
-	    let ee x = Ptrue, s' in
+	    let ee _x = Ptrue, s' in
 	    (Ptrue, s'), exns e ee
       in
       Ptrue, nee

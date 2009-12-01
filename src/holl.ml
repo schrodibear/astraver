@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: holl.ml,v 1.53 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: holl.ml,v 1.54 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -53,7 +53,7 @@ let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (Ident.string id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (Ident.string id, p)) elem_q
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "HOL light output: inductive def not yet supported"
   | Dgoal (loc,expl,id,s) -> 
       Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
@@ -239,27 +239,27 @@ let print_sequent fmt (hyps,concl) =
   fprintf fmt "@[%a@]@?" print_seq hyps
 
 (* TODO *)
-let print_logic fmt id t =
+let print_logic fmt id _t =
   fprintf fmt "@[(* logic %s *);;@\n@\n@]" id
 
 let print_axiom fmt id p =
-  let (l,p) = Env.specialize_predicate p in
+  let (_l,p) = Env.specialize_predicate p in
   fprintf fmt "@[<hov 2>let %s = new_axiom@ `%a`;;@\n@\n@]" 
     id print_predicate p
 
 let print_predicate fmt id p =
-  let (l,(bl,p)) = Env.specialize_predicate_def p in
+  let (_l,(bl,p)) = Env.specialize_predicate_def p in
   fprintf fmt "@[<hov 2>let %s = new_definition@ `%s %a = %a`;;@\n@\n@]" 
     id id (print_list space Ident.print) (List.map fst bl) print_predicate p
 
-let print_obligation fmt loc id sq =
+let print_obligation fmt _loc id sq =
 (*
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
 *)
   fprintf fmt "@[<hov 2>let %s =@ `%a`;;@\n@\n@]" id print_sequent sq
 
 let print_elem fmt = function
-  | Obligation (loc, expl, s, sq) -> print_obligation fmt loc s sq
+  | Obligation (loc, _expl, s, sq) -> print_obligation fmt loc s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p

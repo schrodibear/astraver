@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.33 2009-06-23 14:37:30 marche Exp $ *)
+(* $Id: jc_region.ml,v 1.34 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -445,7 +445,7 @@ struct
 	  let acc = r :: acc in
 	  try
 	    let t = RegionTable.find global_region_table r in
-	    FieldTable.fold (fun fi fr acc -> collect acc fr) t acc
+	    FieldTable.fold (fun _fi fr acc -> collect acc fr) t acc
 	  with Not_found -> acc
     in
     List.fold_left collect [] rls

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.126 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: misc.ml,v 1.127 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Options
 open Ident
@@ -240,7 +240,7 @@ let optpost_exn x = option_app (post_exn x)
 
 (* substititution within some parts of postconditions *)
 let val_app f (x,xl) = (asst_app f x, xl)
-let exn_app x f (x,xl) = (x, List.map (fun (x,a) -> x, asst_app f a) xl)
+let exn_app _x f (x,xl) = (x, List.map (fun (x,a) -> x, asst_app f a) xl)
 
 let optval_app f = option_app (val_app f)
 let optexn_app x f = option_app (exn_app x f)
@@ -597,14 +597,14 @@ let rec eq_pure_type t1 t2 = match t1, t2 with
       t1 = t2
 
 let rec eq_term t1 t2 = match t1, t2 with
-  | Tapp (id1, tl1, i1), Tapp (id2, tl2, i2) ->
+  | Tapp (id1, tl1, _i1), Tapp (id2, tl2, _i2) ->
       id1 == id2 && List.for_all2 eq_term tl1 tl2 
 	(* && List.for_all2 eq_pure_type i1 i2 ??? *)
   | _ -> 
       t1 = t2
 
 let rec eq_predicate p1 p2 = match p1, p2 with
-  | Papp (id1, tl1, i1), Papp (id2, tl2, i2) ->
+  | Papp (id1, tl1, _i1), Papp (id2, tl2, _i2) ->
       id1 == id2 && List.for_all2 eq_term tl1 tl2 
 	(* && List.for_all2 eq_pure_type i1 i2 ??? *)
   | Pvar id1, Pvar id2 ->

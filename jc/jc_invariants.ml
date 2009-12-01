@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_invariants.ml,v 1.88 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_invariants.ml,v 1.89 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -265,7 +265,7 @@ let rec assertion this p =
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
     | JCAat(p,_) -> assertion this p
-    | JCAquantifier(_,id, _, p) -> assertion this p
+    | JCAquantifier(_,_id, _, p) -> assertion this p
     | JCAapp app ->
 	let id = app.jc_app_fun in
 	if MemoryMap.is_empty id.jc_logic_info_effects.jc_effect_memories
@@ -305,7 +305,7 @@ let check invs =
 let rec term_memories aux t = 
   Jc_iterators.fold_term 
     (fun aux t -> match t#node with
-    | JCTderef(t, lab, fi) ->
+    | JCTderef(_t, _lab, fi) ->
 	let m = fi.jc_field_info_final_name in
 	StringSet.add m aux
     | _ -> aux
@@ -363,14 +363,14 @@ let struct_inv_memories acc st =
 let invariant_params acc li =
   let acc =
     MemoryMap.fold
-      (fun (mc,r) labels acc -> 
+      (fun (mc,r) _labels acc -> 
 	 (memory_name(mc,r), memory_type mc)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
   let acc =
     AllocMap.fold
-      (fun (ac,r) labs acc -> 
+      (fun (ac,r) _labs acc -> 
 	 (alloc_table_name (ac, r),
 	  alloc_table_type (ac))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_tables
@@ -378,7 +378,7 @@ let invariant_params acc li =
   in
   let acc =
     TagMap.fold
-      (fun (v,r) labels acc -> 
+      (fun (v,r) _labels acc -> 
 	 let t = { logic_type_args = [root_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
@@ -1054,7 +1054,7 @@ let hierarchy_committed_postcond this root fields value =
   in
   (* pset of pointers that have been modified *)
   let pset_list = List.map
-    (fun (fi, this_fi, omin, omax) ->
+    (fun (_fi, this_fi, omin, omax) ->
        (pset_range (pset_singleton this_fi) omin omax))
     fields
   in
@@ -1104,7 +1104,7 @@ let make_components_postcond this st reads writes committed =
   in
   let reads = StringSet.union reads writes in
   let reads = List.fold_left
-    (fun acc (pc, fields) -> StringSet.add
+    (fun acc (pc, _fields) -> StringSet.add
        (generic_alloc_table_name (alloc_class_of_pointer_class pc)) acc)
     reads comps
   in
@@ -1416,7 +1416,7 @@ let rec invariant_for_struct ?pos this si =
 	      ~conjuncts:[invs; (invariant_for_struct ?pos this si)]
 	      ()
 	      
-let code_function (fi, pos, fs, sl) vil =
+let code_function (fi, pos, fs, _sl) vil =
   begin
     match !Jc_common_options.inv_sem with
       | InvArguments ->  (* apply arguments invariant policy *)

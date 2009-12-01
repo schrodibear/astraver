@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.293 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.294 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -47,7 +47,7 @@ exception Typing_error of Loc.position * string
 
 let typing_error l = 
   Format.kfprintf 
-    (fun fmt -> raise (Typing_error(l, flush_str_formatter()))) 
+    (fun _fmt -> raise (Typing_error(l, flush_str_formatter()))) 
     str_formatter
 
 let uenv = Jc_type_var.create {Jc_type_var.f = typing_error}
@@ -240,7 +240,7 @@ let rec substruct st = function
         begin match st.jc_struct_info_parent with
           | None -> false
           | Some(p, []) -> substruct p pc
-          | Some(p, _) -> assert false (* TODO *)
+          | Some(_p, _) -> assert false (* TODO *)
         end
   | JCroot vi ->
       struct_root st == vi
@@ -552,7 +552,7 @@ let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
 let term_coerce t1 t2 e =
   let tn1 =
     match t1 with
-      | JCTenum ri -> Tinteger
+      | JCTenum _ri -> Tinteger
       | JCTnative t -> t
       | _ -> assert false
   in
@@ -777,7 +777,7 @@ and type_labels_opt env ~result_label label e =
     | Some e -> type_labels env ~result_label label e
 	
 and behavior_labels env 
-    (loc,id,throws,assumes,requires,assigns,ensures) =
+    (_loc,_id,_throws,assumes,requires,assigns,ensures) =
   let here = Some LabelHere in
   let _ = type_labels_opt env ~result_label:None here assumes in
   let _ = type_labels_opt env ~result_label:None here requires in
@@ -1049,7 +1049,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEaddress(Addr_pointer,e1) ->
         let te1 = ft e1 in
         begin match te1#typ with
-          | JCTpointer(JCtag(st, _), _, _) ->
+          | JCTpointer(JCtag(_st, _), _, _) ->
               integer_type, dummy_region, JCTaddress(Addr_pointer,te1)
           | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
@@ -1107,7 +1107,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEat(e1, lab) ->
         let te1 = ft e1 in
         te1#typ, te1#region, JCTat(te1, lab)
-    | JCNEmutable(e, t) -> assert false (* TODO *)
+    | JCNEmutable(_e, _t) -> assert false (* TODO *)
     | JCNErange(Some e1, Some e2) ->
         let e1 = ft e1 and e2 = ft e2 in
         let t1 = e1#typ and t2 = e2#typ in
@@ -1446,7 +1446,7 @@ let loop_annot =
 
 let rec location_set env e =
   let ty,r,locs_node = match e#node with
-    | JCNElabel(l,e) -> 
+    | JCNElabel(_l,_e) -> 
         assert false (* TODO *)
     | JCNEvar id ->
         let vi =
@@ -1464,7 +1464,7 @@ let rec location_set env e =
           let ty,tr,te = location_set env e in
 	  let ti = term env i in
           begin match ty, ti#typ with 
-            | JCTpointer(st,_,_), t2 when is_integer t2 ->
+            | JCTpointer(_st,_,_), t2 when is_integer t2 ->
                 begin match ti#node with
                   | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
                   | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
@@ -1483,7 +1483,7 @@ let rec location_set env e =
           let ty, tr, te = t1#typ, t1#region, t1 in
 	  let ti = term env i in
           begin match ty, ti#typ with 
-            | JCTpointer(st,_,_), t2 when is_integer t2 ->
+            | JCTpointer(_st,_,_), t2 when is_integer t2 ->
                 begin match ti#node with
                   | JCTrange(t1,t2) -> ty,tr,JCLSrange_term(te,t1,t2)
                   | _ -> ty,tr,JCLSrange_term(te,Some ti,Some ti)
@@ -1528,7 +1528,7 @@ let rec location_set env e =
 
 let rec location env e =
   let ty,r,loc_node = match e#node with
-    | JCNElabel(l, e) ->
+    | JCNElabel(_l, _e) ->
         assert false (* TODO *)
     | JCNEvar id ->
         let vi =
@@ -1573,7 +1573,7 @@ let rec location env e =
       loc_node
   in ty,r,loc
   
-let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures) =
+let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, ensures) =
   let throws,env_result = 
     match throws with
       | None -> None, (vi_result.jc_var_info_name,vi_result)::env 
@@ -1631,7 +1631,7 @@ let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures
 let loopbehavior env (names,inv,ass) = 
   (names,Option_misc.map (assertion env) inv,
      Option_misc.map 
-       (fun (p,locs) -> 
+       (fun (_p,locs) -> 
 	  List.map 
 	    (fun l -> 
 	       let _,_,tl = location env l in tl) locs) ass)
@@ -1684,7 +1684,7 @@ let make_unary_op loc (op : Jc_ast.unary_op) e2 =
 let coerce t1 t2 e =
   let tn1 =
     match t1 with
-      | JCTenum ri -> Tinteger
+      | JCTenum _ri -> Tinteger
       | JCTnative t -> t
       | _ -> assert false
   in
@@ -1913,7 +1913,7 @@ let rec expr env e =
           assert (labs = []);
           let tl = try
             List.map2
-              (fun (valid,vi) e ->
+              (fun (_valid,vi) e ->
                  let ty = vi.jc_var_info_type in
                  let te = fe e in
                  if subtype te#typ ty then te
@@ -2213,7 +2213,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEaddress(Addr_pointer,e1) ->
         let te1 = fe e1 in
         begin match te1#typ with 
-          | JCTpointer(JCtag(st, _), _, _) ->
+          | JCTpointer(JCtag(_st, _), _, _) ->
               integer_type, dummy_region, JCEaddress(Addr_pointer,te1)
           | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
@@ -2257,7 +2257,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     (* old statements *)
     | JCNEassert(behav,asrt,e1) ->
         unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
-    | JCNEcontract(req,dec,behs,e) ->
+    | JCNEcontract(req,_dec,behs,e) ->
 	let requires = Option_misc.map (assertion env) req in
 	let decreases = Option_misc.map (fun t -> term env t,None) req in
 	let e = expr env e in
@@ -2467,7 +2467,7 @@ let rec type_labels_in_decl d = match d#node with
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
 *)
       type_labels labels  ~result_label:None (default_label labels) e
-  | JCDlogic(_, _, _, labels, _, JCinductive l) ->
+  | JCDlogic(_, _, _, _labels, _, JCinductive l) ->
 (*
       let _labels = match labels with [] -> [ LabelHere ] | _ -> labels in
 *)
@@ -2481,7 +2481,7 @@ let rec type_labels_in_decl d = match d#node with
   | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ 
   | JCDlogic_var _ ->
       ()
-  | JCDaxiomatic(id,l) -> List.iter type_labels_in_decl l
+  | JCDaxiomatic(_id,l) -> List.iter type_labels_in_decl l
   | JCDpragma_gen_sep _ -> ()
 
 
@@ -2595,12 +2595,12 @@ let get_fundecl id =
   let fi = Hashtbl.find functions_env id in
   let param_env =
     List.map 
-      (fun (valid,v) -> (v.jc_var_info_name, v)) 
+      (fun (_valid,v) -> (v.jc_var_info_name, v)) 
       fi.jc_fun_info_parameters
   in
   param_env, fi
 
-let add_fundecl (ty,loc,id,pl) =
+let add_fundecl (ty,_loc,id,pl) =
   try
     let param_env,fi = get_fundecl id in
     Format.eprintf 
@@ -2662,7 +2662,7 @@ let type_range_of_term ty t =
         in
         let maxa = new assertion (JCArelation(t,(`Ble,`Integer),maxt)) in
 	new assertion (JCAand [ mina; maxa ])
-    | JCTpointer (JCtag(st, _), n1opt, n2opt) ->
+    | JCTpointer (JCtag(st, _), _n1opt, n2opt) ->
 (*      let instanceofcstr = new assertion (JCAinstanceof (t, st)) in *)
 (*      let mincstr = match n1opt with
           | None -> true_assertion
@@ -2697,7 +2697,7 @@ let type_range_of_term ty t =
 (*        Jc_pervasives.make_and [mincstr; maxcstr] *)
 (*        else
           Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
-    | JCTpointer (JCroot vi, _, _) ->
+    | JCTpointer (JCroot _vi, _, _) ->
         assert false (* TODO, but need to change JCToffset before *)
     | _ -> Assertion.mktrue ()
 
@@ -2746,8 +2746,8 @@ let rec signed_occurrences pi a =
 match a#node with
   | JCArelation _ | JCAtrue | JCAfalse -> (0,0)
   | JCAapp app -> ((if app.jc_app_fun == pi then 1 else 0),0)
-  | JCAquantifier (Forall, vi, _, p) -> signed_occurrences pi p
-  | JCAquantifier (Exists, vi, _, p) -> assert false (* TODO *)
+  | JCAquantifier (Forall, _vi, _, p) -> signed_occurrences pi p
+  | JCAquantifier (Exists, _vi, _, _p) -> assert false (* TODO *)
   | JCAimplies (p1, p2) -> 
       let (pos1,neg1) = signed_occurrences pi p1 in
       let (pos2,neg2) = signed_occurrences pi p2 in
@@ -2773,7 +2773,7 @@ match a#node with
   | JCAmatch (_, _) -> assert false (* TODO *)
 
 let check_positivity loc pi a =
-  let (pos,neg) = signed_occurrences pi a in
+  let (pos,_neg) = signed_occurrences pi a in
   if pos = 0 then 
     typing_error loc "predicate has no positive occurrence in this case";
   if pos > 1 then 
@@ -2843,7 +2843,7 @@ let rec occurrences table a =
       occurrences table p1; occurrences table p2 
   | JCAand l | JCAor l -> 
       List.iter (occurrences table) l
-  | JCArelation(t1,op,t2) -> 
+  | JCArelation(t1,_op,t2) -> 
       term_occurrences table t1; term_occurrences table t2
   | JCAsubtype (_, _, _) -> assert false (* TODO *)
   | JCAeqtype (_, _, _) -> assert false (* TODO *)
@@ -2877,17 +2877,17 @@ let check_consistency id data =
 	    List.iter
 	      (fun label_assoc -> 
 		 Jc_options.lprintf "%a ;" 
-		   (Pp.print_list Pp.comma (fun fmt (l1,l2) -> Jc_output_misc.label fmt l2)) label_assoc)
+		   (Pp.print_list Pp.comma (fun fmt (_l1,l2) -> Jc_output_misc.label fmt l2)) label_assoc)
 	      l;
 	    Jc_options.lprintf "@]@\n")
 	 h;		 
        Jc_options.lprintf "@]@.";
-       if Hashtbl.fold (fun pi l acc -> acc && l=[]) h true then
+       if Hashtbl.fold (fun _pi l acc -> acc && l=[]) h true then
 	 typing_error loc 
 	   "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
        List.iter
 	 (fun lab ->
-	    if not (Hashtbl.fold (fun pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
+	    if not (Hashtbl.fold (fun _pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
 	      typing_error loc 
 		"there should be at least one declared symbol depending on label %a in this axiom" Jc_output_misc.label lab)
 	 labels
@@ -2914,7 +2914,7 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
               find_logic_info s
             with Not_found -> raise (Identifier_Not_found s)
           in `Logic (info,restr)
-      | JCPTidentifier (s,l),_ -> typing_error loc "A Separation pragma can't reference a logic type"
+      | JCPTidentifier (_s,_l),_ -> typing_error loc "A Separation pragma can't reference a logic type"
       | JCPTpointer (_,[],None,None),[] -> 
           let ty = type_type p in
           `Pointer (newvar ty)
@@ -2988,7 +2988,7 @@ let create_if_pragma_before ident =
 
 let test_if_pragma_notdefined () =
   if not (Hashtbl.is_empty pragma_before_def) then
-    Hashtbl.iter (fun ident (loc,kind,id,li) ->
+    Hashtbl.iter (fun ident (loc,_kind,id,_li) ->
     typing_error loc "The pragma %s has not been defined because 
 %s appeared nowhere" id ident) pragma_before_def
   
@@ -3001,7 +3001,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
   let loc = d#pos in
   let in_axiomatic = axiomatic <> None in
   match d#node with
-    | JCDvar (ty, id, init) ->
+    | JCDvar (_ty, id, init) ->
 	if not only_types then
 	  begin
 	    if in_axiomatic then
@@ -3013,7 +3013,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	  end
 	else 
 	  acc
-    | JCDfun (ty, id, pl, specs, body) -> 
+    | JCDfun (_ty, id, _pl, specs, body) -> 
 	if not only_types then
 	  begin
 	if in_axiomatic then
@@ -3075,7 +3075,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
 	  end
 	else 
 	  acc
-    | JCDtag(id, _, parent, fields, inv) ->
+    | JCDtag(id, _, _parent, _fields, inv) ->
 	if not only_types then
 	  begin
 	Jc_options.lprintf "Typing tag %s@." id;
@@ -3112,8 +3112,8 @@ of an invariant policy";
 	else 
 	  acc
 
-    | JCDvariant_type(id, tags) -> acc
-    | JCDunion_type(id,_discr,tags) -> acc
+    | JCDvariant_type(_id, _tags) -> acc
+    | JCDunion_type(_id,_discr,_tags) -> acc
 
 (*    | JCDrectypes(pdecls) ->
         (* first pass: adding structure names *)
@@ -3199,7 +3199,7 @@ of an invariant policy";
 	  end
 	else 
 	  acc
-    | JCDlogic_var (ty, id, body) -> assert false
+    | JCDlogic_var (_ty, _id, _body) -> assert false
 (*         let ty, vi = add_logic_constdecl (ty, id) in *)
 (*         let t = Option_misc.map  *)
 (* 	  (function body -> *)
@@ -3217,7 +3217,7 @@ of an invariant policy";
 (*
 	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
 *)
-            let param_env,ty,pi = add_logic_fundecl (None,id,poly_args,labels,pl) in
+            let param_env,_ty,pi = add_logic_fundecl (None,id,poly_args,labels,pl) in
             create_if_pragma_before id;
             let p = match body with
           | JCreads reads ->
@@ -3449,7 +3449,7 @@ let type_variant d = match d#node with
   | _ -> ()
 
 let declare_tag_fields d = match d#node with
-  | JCDtag(id, _, _, fields, inv) ->
+  | JCDtag(id, _, _, fields, _inv) ->
       let struct_info, _ = Hashtbl.find structs_table id in
       let root = struct_info.jc_struct_info_hroot in
       let fields = List.map (field struct_info root) fields in
@@ -3576,7 +3576,7 @@ let print_file fmt () =
   in
   let axioms =
     Hashtbl.fold
-      (fun name (loc,is_axiom,poly_args,labels, a) f ->
+      (fun name (_loc,is_axiom,poly_args,labels, a) f ->
          Jc_output.JClemma_def (name,is_axiom, poly_args, labels,a)
          :: f
       ) lemmas_table []

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.141 2009-11-09 16:17:21 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.142 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -173,7 +173,7 @@ let main () =
     begin match !Jc_options.inv_sem with
       | InvOwnership ->
 	  Jc_options.lprintf "Adding structure invariants@.";
-	  Hashtbl.iter (fun name (_,invs) -> Jc_invariants.check invs)
+	  Hashtbl.iter (fun _name (_,invs) -> Jc_invariants.check invs)
 	    Jc_typing.structs_table
       | InvNone
       | InvArguments -> ()

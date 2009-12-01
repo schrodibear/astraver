@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.45 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_separation.ml,v 1.46 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -120,7 +120,7 @@ let single_term rresult t =
 
 let term rresult t = Jc_iterators.iter_term (single_term rresult) t
 
-let single_assertion rresult a =
+let single_assertion _rresult a =
   match a#node with
        | JCAapp app -> 
 	   let li = app.jc_app_fun in
@@ -192,7 +192,7 @@ let single_expr rresult e =
     | JCEapp call -> 
 (*	let f = call.jc_call_fun in*)
 	let in_current_comp = match call.jc_call_fun with
-	  | JClogic_fun f -> false
+	  | JClogic_fun _f -> false
 	  | JCfun f -> in_current_component f
 	in
 	let params = match call.jc_call_fun with
@@ -242,13 +242,13 @@ let single_expr rresult e =
 	if e#typ = unit_type then
 	  () (* Result of call discarded *)
 	else Region.unify result_region e#region
-    | JCEreturn(ty,e) ->
+    | JCEreturn(_ty,e) ->
 	Region.unify rresult e#region
-    | JCEassert(_behav,_asrt,a) ->
+    | JCEassert(_behav,_asrt,_a) ->
 	()
-    | JCEcontract(req,dec,vi_result,behs,e) -> 
+    | JCEcontract(_req,_dec,_vi_result,_behs,_e) -> 
 	assert false (* TODO *)
-    | JCEloop(la,_) -> ()
+    | JCEloop(_la,_) -> ()
     | JCEblock _ | JCEtry _ 
     | JCEreturn_void | JCEpack _ | JCEunpack _ -> 
 	()
@@ -337,7 +337,7 @@ let code_component fls =
   (* Fill in association table at each call site *)
   List.iter code_function fls
 
-let axiom id (loc,is_axiom,_,labels,a) = assertion (* labels *) dummy_region a
+let axiom _id (_loc,_is_axiom,_,_labels,a) = assertion (* labels *) dummy_region a
 
 let regionalize_assertion a assoc =
   Jc_iterators.map_term_in_assertion (fun t ->

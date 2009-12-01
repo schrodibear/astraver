@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.68 2009-12-01 10:12:28 bobot Exp $ i*)
+(*i $Id: smtlib.ml,v 1.69 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Ident
 open Options
@@ -188,7 +188,7 @@ let rec print_predicate fmt = function
       fprintf fmt "false"
   | Pvar id -> 
       fprintf fmt "%a" ident id
-  | Papp (id, [t], _) when id == well_founded ->
+  | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "true;; was well founded @\n" 
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
@@ -223,7 +223,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(iff@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
-  | Forall (_,id,n,t,_,p) -> 
+  | Forall (_,_id,n,t,_,p) -> 
       (*Printf.printf "Forall : %s\n" (Ident.string id);  *)
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = (bound_variable n) in
@@ -234,7 +234,7 @@ let rec print_predicate fmt = function
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall (%a %a)@ %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
-  | Exists (id,n,t,p) -> 
+  | Exists (_id,n,t,p) -> 
       (*let id' = next_away id (predicate_vars p) in*)
       let id' = bound_variable n in
       let p' = subst_in_predicate (subst_onev n id') p in
@@ -298,7 +298,7 @@ let output_sequent fmt (hyps,concl) =
   in
   print_seq fmt hyps
 
-let print_obligation fmt loc o s = 
+let print_obligation fmt loc _o s = 
   fprintf fmt "@[:formula@\n"; 
   fprintf fmt "  @[;; %a@]@\n" Loc.gen_report_line loc;
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
@@ -324,7 +324,7 @@ let print_logic fmt id t =
 	  idents id pure_type_list tl print_pure_type pt
 	
 let output_elem fmt = function
-  | Dtype (loc, id, []) -> declare_type fmt (Ident.string id)
+  | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
   | Dtype (_, id, _) ->
       fprintf fmt ";; polymorphic type %s@\n@\n" (Ident.string id)
   | Dalgtype _ ->
@@ -335,23 +335,23 @@ let output_elem fmt = function
   | Dlogic (_, id, t)  when not (Ident.is_simplify_arith id)
       -> print_logic fmt (Ident.string id) t.scheme_type
   | Dlogic (_, _, _) -> fprintf fmt "" 
-  | Dpredicate_def (loc, id, d) -> 
+  | Dpredicate_def (_loc, _id, _d) -> 
       assert false
 (*
       print_predicate_def fmt (Ident.string id) d.scheme_type
 *)
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       assert false
 (*
       failwith "SMTLIB output: inductive def not yet supported"
 *)
-  | Dfunction_def (loc, id, d) -> 
+  | Dfunction_def (_loc, _id, _d) -> 
       assert false
 (*
       print_function_def fmt (Ident.string id) d.scheme_type
 *)
-  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type 
-  | Dgoal (loc, expl, id, s) -> print_obligation fmt loc id s.Env.scheme_type
+  | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type 
+  | Dgoal (loc, _expl, id, s) -> print_obligation fmt loc id s.Env.scheme_type
 
 
    

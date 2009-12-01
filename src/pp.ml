@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.23 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: pp.ml,v 1.24 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -91,7 +91,7 @@ let lparen fmt () = fprintf fmt "("
 let rparen fmt () = fprintf fmt ")"
 let lchevron fmt () = fprintf fmt "<"
 let rchevron fmt () = fprintf fmt ">"
-let nothing fmt _ = ()
+let nothing _fmt _ = ()
 let string fmt s = fprintf fmt "%s" s
 let int fmt i = fprintf fmt "%d" i
 let constant_string s fmt () = string fmt s

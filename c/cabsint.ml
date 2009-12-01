@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.29 2008-11-05 14:03:13 filliatr Exp $ *)
+(* $Id: cabsint.ml,v 1.30 2009-12-01 11:51:35 marche Exp $ *)
 
 (* TO DO:
 
@@ -313,7 +313,9 @@ struct
     | PWall -> PWall
 
   (* ideally, [pw2] should be smaller than [pw1] when unioning maps *)
-  let join ?(backward=false) pw1 pw2 = match pw1,pw2 with
+  let join ?(backward=false) pw1 pw2 = 
+    assert (backward=false); (* to prevent unused warning *)
+    match pw1,pw2 with
     | PWempty,pw | pw,PWempty -> pw
     | PWall,_ | _,PWall -> PWall
     | PWmap _m1,PWmap m2 -> 

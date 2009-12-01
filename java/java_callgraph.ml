@@ -32,7 +32,7 @@ let rec term acc t =
   match t.java_term_node with
     | JTlit _ | JTvar _ 
     | JTstatic_field_access _ -> acc
-    | JTapp (f,labs,lt) -> f::(List.fold_left term acc lt)
+    | JTapp (f,_labs,lt) -> f::(List.fold_left term acc lt)
     | JTat(t,_) -> term acc t
     | JTbin (t1,_,_,t2) -> term (term acc t1) t2
     | JTun (_,_,t1) -> term acc t1
@@ -53,11 +53,11 @@ let rec assertion acc p =
   match p.java_assertion_node with
   | JAtrue 
   | JAfalse -> acc
-  | JAat(a,lab) -> assertion acc a
+  | JAat(a,_lab) -> assertion acc a
   | JAnot a -> assertion acc a
   | JAbin_obj(t1,_,t2)
   | JAbin(t1,_,_,t2) -> term (term acc t1) t2
-  | JAapp(f,labs,lt) -> f::(List.fold_left term acc lt)
+  | JAapp(f,_labs,lt) -> f::(List.fold_left term acc lt)
   | JAand(p1,p2) | JAor(p1,p2) 
   | JAimpl (p1,p2) | JAiff(p1,p2) -> 
       assertion (assertion acc p1) p2
@@ -79,7 +79,7 @@ let rec expr acc e : 'a list =
 	List.fold_left expr (expr (ConstructorInfo ci::acc) e) args
     | JEstatic_call (mi, args) ->
 	List.fold_left expr (MethodInfo mi::acc) args
-    | JEnew_array(ty, dims) ->
+    | JEnew_array(_ty, dims) ->
 	List.fold_left expr acc dims
     | JEnew_object(ci,args) ->
 	List.fold_left expr (ConstructorInfo ci::acc) args
@@ -113,7 +113,7 @@ let loop_annot acc la =
   term (assertion acc la.java_loop_invariant) la.java_loop_variant
 *)
 
-let behavior acc (id,assumes,throws,assigns,ensures) =
+let behavior acc (_id,assumes,_throws,assigns,ensures) =
   let acc = Option_misc.fold_left assertion acc assumes in
   let acc = 
     match assigns with
@@ -156,12 +156,12 @@ let rec statement acc s : ('a list * 'b list) =
     | JSreturn_void
     | JSbreak _ -> acc 
     | JScontinue _ -> acc 
-    | JSlabel(lab,s) ->	statement acc s
+    | JSlabel(_lab,s) ->	statement acc s
     | JSswitch (e, l)-> 
 	let (a,b) = acc in
 	let b = expr b e in
 	  List.fold_left
-	    (fun acc (cases,body) -> statements acc body)
+	    (fun acc (_cases,body) -> statements acc body)
 	    (a,b) l
     | JSthrow e 
     | JSreturn e 
@@ -177,7 +177,7 @@ let rec statement acc s : ('a list * 'b list) =
     | JSfor_decl (inits, cond, annot, updates, body)-> 
 	let (a,b) = acc in
 	let b = List.fold_left 
-	  (fun acc (vi,i) -> Option_misc.fold_left initialiser acc i)
+	  (fun acc (_vi,i) -> Option_misc.fold_left initialiser acc i)
 	  (List.fold_left expr (expr b cond) updates)
 	  inits
 	in
@@ -194,7 +194,7 @@ let rec statement acc s : ('a list * 'b list) =
 	let b = expr b cond in
 	let a = loop_annot a annot in
 	statement (a,b) body
-    | JSvar_decl (vi, init, s)-> 
+    | JSvar_decl (_vi, init, s)-> 
 	let (a,b)=acc in
 	statement (a,Option_misc.fold_left initialiser b init) s
     | JSskip -> acc
@@ -220,12 +220,12 @@ let compute_logic_calls f (t : [< Java_typing.logic_decl_body]) =
   in
   f.java_logic_info_calls <- calls
 
-let compute_calls f req body = 
-  let (a, b) = List.fold_left statement ([], []) body in
+let compute_calls f _req body = 
+  let (_a, b) = List.fold_left statement ([], []) body in
     f.method_info_calls <- b
 
-let compute_constr_calls f req body = 
-  let (a, b) = List.fold_left statement ([], []) body in
+let compute_constr_calls f _req body = 
+  let (_a, b) = List.fold_left statement ([], []) body in
     f.constr_info_calls <- b
       
 module LogicCallGraph = struct 
@@ -237,7 +237,7 @@ module LogicCallGraph = struct
     let equal f1 f2 = f1 == f2
   end
   let iter_vertex iter =
-    Hashtbl.iter (fun _ (f,a) -> iter f) 
+    Hashtbl.iter (fun _ (f,_a) -> iter f) 
   let iter_succ iter _ f =
     List.iter iter f.java_logic_info_calls 
   end
@@ -289,7 +289,7 @@ module CallGraph = struct
   end
   let iter_vertex iter g = 
     Hashtbl.iter 
-      (fun i mti -> 
+      (fun _i mti -> 
 	 let f = method_or_constructor_info mti in
 	 iter f) g 
   let iter_succ iter _ f =
@@ -331,7 +331,7 @@ let compute_components methods constrs =
        Hashtbl.add h 
 	 cti.Java_typing.ct_constr_info.constr_info_tag (ConstructorData cti))
     constrs;
-  let n,comp = CallComponents.scc h in
+  let _n,comp = CallComponents.scc h in
   let tab_comp = CallComponents.scc_array h in
   Java_options.lprintf "******************************@\n";
   Java_options.lprintf "Call graph: has %d components@\n" (Array.length tab_comp);

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.189 2009-12-01 05:49:04 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.190 2009-12-01 11:51:35 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -235,7 +235,7 @@ and tr_type pos t =
 	let st = get_class ci.class_info_name in
 	  JCTpointer 
 	    (JCtag(st, []), Some num_zero, if non_null then Some num_zero else None)
-    | JTYinterface ii ->
+    | JTYinterface _ii ->
 	JCTpointer(JCtag(st_interface, []), Some num_zero,None)
 (*
 	let st = get_interface ii in
@@ -251,7 +251,7 @@ and tr_type pos t =
 let ptype_node_of_type = function
   | JCTnative n -> JCPTnative n
   | JCTlogic (s,[]) -> JCPTidentifier (s,[])
-  | JCTlogic (s,_) -> failwith ("Java_interp.ptype_node_of_type : \
+  | JCTlogic (_s,_) -> failwith ("Java_interp.ptype_node_of_type : \
 The case of logic type with argument is left undone")
   | JCTenum e -> JCPTidentifier (e.jc_enum_info_name,[])
   | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name,[], l, r)
@@ -470,7 +470,7 @@ let any_string_decl =
 let lit l =
   match l with
   | Integer s | Char s -> JCCinteger s
-  | Float(s,suf) -> JCCreal s (* TODO: support for true floating point numbers *)
+  | Float(s,_suf) -> JCCreal s (* TODO: support for true floating point numbers *)
   | Bool b -> JCCboolean b
   | String s -> JCCstring s
   | Null  -> JCCnull
@@ -497,7 +497,7 @@ let lun_op t op: [> Jc_ast.unary_op] =
     | Uplus -> assert false
     | Ucompl -> `Ubw_not
 	
-let lbin_op t op: [> Jc_ast.bin_op] =
+let lbin_op _t op: [> Jc_ast.bin_op] =
   match op with
     | Bgt -> `Bgt
     | Bge -> `Bge
@@ -588,7 +588,7 @@ let plus_one e =
 let rec term t =
   let t' =
     match t.java_term_node with
-      | JTlit (String s) -> any_string
+      | JTlit (String _s) -> any_string
       | JTlit l -> mkconst ~const:(lit l) ()
       | JTun (t,op,e1) ->
           mkunary
@@ -614,7 +614,7 @@ let rec term t =
             ~expr: (term t)
             ~field: (fi_name (get_field fi))
             ()
-      | JTstatic_field_access(ci,fi) ->	  
+      | JTstatic_field_access(_ci,fi) ->	  
 	  mkvar ~name:(var_name (get_static_var fi)) ()
       | JTarray_length(t) -> 
 	  begin
@@ -702,12 +702,12 @@ let rec assertion ?(reg=false) a =
 	    let t1 = term e1 in
 	      match e1.java_term_type with
 		| JTYbase _ | JTYnull | JTYlogic _ -> assert false
-		| JTYclass (_, ci) ->
+		| JTYclass (_, _ci) ->
                     mkapp
                       ~fun_name: (non_null_pred "Object").jc_logic_info_name
                       ~args: [t1]
                       ()
-		| JTYinterface ii ->
+		| JTYinterface _ii ->
                     mkeq
                       ~expr1: (mkoffset_max ~expr:t1 ())
                       ~expr2: zero
@@ -760,7 +760,7 @@ let rec assertion ?(reg=false) a =
             ()
       | JAbool_expr t ->
           term t
-      | JAinstanceof (t, lab, ty) ->
+      | JAinstanceof (t, _lab, ty) ->
 	  let ty = tr_type Loc.dummy_position ty in
 	  begin
 	    match ty with
@@ -989,9 +989,9 @@ let array_types decls =
 
 let rec location_set logic_label t =
   match t.java_term_node with
-      | JTlit l -> assert false (* TODO *)
-      | JTun(t,op,e1) -> assert false (* TODO *)
-      | JTbin(e1,t,op,e2) -> assert false (* TODO *)
+      | JTlit _l -> assert false (* TODO *)
+      | JTun(_t,_op,_e1) -> assert false (* TODO *)
+      | JTbin(_e1,_t,_op,_e2) -> assert false (* TODO *)
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
@@ -1005,9 +1005,9 @@ let rec location_set logic_label t =
                   ~field: (fi_name (get_field fi))
                   ()
 	  end
-      | JTstatic_field_access(ci,fi) ->
+      | JTstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
-      | JTarray_length(t) -> assert false (* TODO *)
+      | JTarray_length(_t) -> assert false (* TODO *)
       | JTarray_access(t1,t2) -> 
 	  begin
 	    match t1.java_term_type with
@@ -1039,7 +1039,7 @@ let rec location_set logic_label t =
 		  let shift = mkrange ~locations:t1' ?left:t2' ?right:t3' () in
 		  begin match logic_label with
 		    | None -> assert false
-		    | Some lab ->
+		    | Some _lab ->
                         let fi = List.hd st.jc_struct_info_fields in
                         mkderef
                           ~expr: shift
@@ -1049,15 +1049,15 @@ let rec location_set logic_label t =
 	      | _ -> assert false
 	  end
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
-      | JTcast(ty,t) -> assert false (* TODO *)
+      | JTcast(_ty,_t) -> assert false (* TODO *)
       | JTif _ -> assert false (* TODO *)
 
 
 let location logic_label t =
   match t.java_term_node with
-      | JTlit l -> assert false (* TODO *)
-      | JTun(t,op,e1) -> assert false (* TODO *)
-      | JTbin(e1,t,op,e2) -> assert false (* TODO *)
+      | JTlit _l -> assert false (* TODO *)
+      | JTun(_t,_op,_e1) -> assert false (* TODO *)
+      | JTbin(_e1,_t,_op,_e2) -> assert false (* TODO *)
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
@@ -1071,9 +1071,9 @@ let location logic_label t =
                   ~field: (fi_name (get_field fi))
                   ()
 	  end
-      | JTstatic_field_access(ci,fi) ->
+      | JTstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
-      | JTarray_length(t) -> assert false (* TODO *)
+      | JTarray_length(_t) -> assert false (* TODO *)
       | JTarray_access(t1,t2) -> 
 	  begin
 	    match t1.java_term_type with
@@ -1116,7 +1116,7 @@ let location logic_label t =
 	      | _ -> assert false
 	  end
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
-      | JTcast(ty,t) -> assert false (* TODO *)
+      | JTcast(_ty,_t) -> assert false (* TODO *)
       | JTif _ -> assert false (* TODO *)
   
 
@@ -1175,7 +1175,7 @@ let rec expr ?(reg=false) e =
   let reg = ref reg in
   let e' =
     match e.java_expr_node with
-      | JElit (String s) -> any_string
+      | JElit (String _s) -> any_string
       | JElit l ->
           mkconst ~const:(lit l) ()
       | JEincr_local_var(op,v) -> 
@@ -1262,7 +1262,7 @@ let rec expr ?(reg=false) e =
             ()
       | JEvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
-      | JEstatic_field_access(ci,fi) ->
+      | JEstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
       | JEfield_access(e1,fi) -> 
 	  reg := true;
@@ -1411,7 +1411,7 @@ let rec expr ?(reg=false) e =
             ~count: (expr e1)
             ~typ: si.jc_struct_info_name
             ()
-      | JEnew_array(ty,_) ->
+      | JEnew_array(_ty,_) ->
 	  assert false (* TODO *)
       | JEnew_object(ci,args) ->
 	  let si = get_class ci.constr_info_class.class_info_name in
@@ -1440,7 +1440,7 @@ let rec expr ?(reg=false) e =
       | JEcast(ty,e1) ->
 	  begin
 	    match ty with
-	      | JTYbase t -> 
+	      | JTYbase _t -> 
 		  if !Java_options.ignore_overflow then expr e1 else begin
                     reg := true;
                     mkcast
@@ -1448,12 +1448,12 @@ let rec expr ?(reg=false) e =
                       ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
                       ()
                   end
-	      | JTYclass(_,ci) ->
+	      | JTYclass(_,_ci) ->
 		  reg := true;	    
                   mkcast ~expr:(expr e1) 
 		    ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
 		    ()
-	      | JTYinterface ii -> 
+	      | JTYinterface _ii -> 
 		  begin
 		    match e1.java_expr_type with
 		      | JTYclass _ -> expr e1 (* TODO *)
@@ -1514,7 +1514,7 @@ let make_block l =
 
 let rec reg_and_subexpr a =
   match a#node with
-    | JAand(a1,a2) -> a
+    | JAand(_a1,_a2) -> a
     | _ -> a
 
 let reg_assertion a = assertion ~reg:true a
@@ -1703,7 +1703,7 @@ let rec statement s =
             ~finally:
             (mkblock
                ~exprs:
-               (Option_misc.fold (fun s acc -> List.map statement s) finally [])
+               (Option_misc.fold (fun s _acc -> List.map statement s) finally [])
                ())
             ()
       | JSstatement_spec(req,dec,behs,s) ->
@@ -2091,7 +2091,7 @@ let tr_axiomatic_axioms id l acc =
 
 let tr_axiomatic_decl acc d =
   match d with
-    | Aaxiom(id,is_axiom,labels,a) -> acc
+    | Aaxiom(_id,_is_axiom,_labels,_a) -> acc
     | Atype s -> 
 	Java_options.lprintf "translating logic type %s@." s;
 	tr_logic_type s acc
@@ -2104,8 +2104,8 @@ let tr_axiomatic_axiom acc d =
     | Aaxiom(id,is_axiom,labels,a) -> 
 	Java_options.lprintf "translating axiom %s@." id;
 	tr_axiom id is_axiom labels a acc
-    | Atype s -> acc
-    | Adecl(fi, b) -> acc
+    | Atype _s -> acc
+    | Adecl(_fi, _b) -> acc
 
 let tr_axiomatic id l acc =
   Java_options.lprintf "translating axiomatic %s@." id;

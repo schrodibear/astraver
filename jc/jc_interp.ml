@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.435 2009-11-25 16:25:22 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.436 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -390,7 +390,7 @@ let equality_op_for_type = function
   | JCTnative Treal -> "eq_real"
   | JCTnative (Tgenfloat _) -> "eq_gen_float"
   | JCTnative Tstring -> "eq"
-  | JCTlogic s -> (* TODO *) assert false
+  | JCTlogic _s -> (* TODO *) assert false
   | JCTenum ei -> eq_of_enum ei
   | JCTpointer _
   | JCTnull ->  "eq"
@@ -521,7 +521,7 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
     | JCTnative (Tgenfloat f), JCTnative Treal ->
 	LApp ("gen_float_of_real_logic", 
 	      [ LVar (float_format f) ; logic_current_rounding_mode () ; e' ])
-    | JCTnative (Tgenfloat f), (JCTnative Tinteger | JCTenum _) ->
+    | JCTnative (Tgenfloat _f), (JCTnative Tinteger | JCTenum _) ->
         term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
           (term_coerce ~type_safe ~global_assertion lab pos (JCTnative Treal) ty_src e e')
     | JCTnative Tinteger, JCTnative Treal -> 
@@ -582,7 +582,7 @@ let eval_integral_const e =
 	    | `Bland, _ -> raise Exit
 	    | `Blor, _ -> raise Exit
           end
-      | JCEif(e1,e2,e3) ->
+      | JCEif(_e1,_e2,_e3) ->
           (* TODO: write [eval_boolean_const] *)
           raise Exit
       | JCEconst _ | JCEvar _ | JCEshift _ | JCEderef _ 
@@ -812,7 +812,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
 	      term_coerce t1#pos real_type t1#typ t1 t1'
           | Real_to_integer ->
               term_coerce t1#pos integer_type t1#typ t1 t1'
-	  | Round(f,rm) ->
+	  | Round(f,_rm) ->
               term_coerce t1#pos (JCTnative (Tgenfloat f)) t1#typ t1 t1'
 	end
     | JCTderef(t1,lab',fi) -> 
@@ -929,7 +929,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
     | JCTat(t1,lab') -> 
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
 	term ~type_safe ~global_assertion ~relocate lab oldlab t1
-    | JCTrange(t1,t2) -> assert false (* TODO ? *)
+    | JCTrange(_t1,_t2) -> assert false (* TODO ? *)
     | JCTmatch(t, ptl) ->
         let t' = ft t in
         (* TODO: use a temporary variable for t' *)
@@ -1212,7 +1212,7 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
           with Not_found -> [iloc]
         in
         (refs, MemoryMap.add (mc,location_set_region e) l mems)
-    | JCLderef_term(t1,fi) -> 
+    | JCLderef_term(_t1,_fi) -> 
 	assert false
 (*
         let iloc = LApp("pset_singleton",[ ft t1 ]) in
@@ -1228,20 +1228,20 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
     | JCLvar vi -> 
         let var = vi.jc_var_info_final_name in
         (StringMap.add var true refs,mems)
-    | JCLat(loc,lab) ->
+    | JCLat(loc,_lab) ->
         collect_locations ~type_safe ~global_assertion before (refs,mems) loc
 
 let rec collect_pset_locations ~type_safe ~global_assertion loc =
   let ft = term ~type_safe ~global_assertion ~relocate:false in
   match loc#node with
-    | JCLderef(e,lab,fi,_fr) -> 
+    | JCLderef(e,lab,_fi,_fr) -> 
         pset ~type_safe ~global_assertion lab e
-    | JCLderef_term(t1,fi) -> 
+    | JCLderef_term(t1,_fi) -> 
 	let lab = match t1#label with Some l -> l | None -> assert false in
 	LApp("pset_singleton",[ ft lab lab t1 ])	
-    | JCLvar vi -> 
+    | JCLvar _vi -> 
 	LVar "pset_empty"
-    | JCLat(loc,lab) ->
+    | JCLat(loc,_lab) ->
         collect_pset_locations ~type_safe ~global_assertion loc
 
 let assigns ~type_safe ?region_list before ef locs loc =
@@ -1256,7 +1256,7 @@ let assigns ~type_safe ?region_list before ef locs loc =
             assigns.Ceffect.assigns_var 
     *)
     VarMap.fold
-      (fun v labs m -> StringMap.add v.jc_var_info_final_name false m)
+      (fun v _labs m -> StringMap.add v.jc_var_info_final_name false m)
       ef.jc_writes.jc_effect_globals StringMap.empty
   in
   let mems = 
@@ -1310,7 +1310,7 @@ let reads ~type_safe ~global_assertion locs (mc,r) =
   in
   let mems = MemoryMap.empty 
   in
-  let refs,mems = 
+  let _refs,mems = 
     List.fold_left (collect_locations ~type_safe ~global_assertion LabelOld) (refs,mems) locs
   in
   let p = try MemoryMap.find (mc,r) mems with Not_found -> [] in
@@ -1798,7 +1798,7 @@ and make_deref_union mark pos off e fi =
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
     | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [e']
-    | ty -> assert false (* TODO *)
+    | _ty -> assert false (* TODO *)
 
 and make_deref_bytes mark pos e fi =
   (* Define memory and allocation table *)
@@ -1894,7 +1894,7 @@ and type_assert tmp ty e =
 	  LApp(f,[alloc; LVar tmp; LConst(Prim_int s)])
   in
   let a = match ty with
-    | JCTpointer(pc,n1o,n2o) ->
+    | JCTpointer(_pc,n1o,n2o) ->
 	let offset_mina n = 
 	  LPred ("le_int",
 		 [offset Offset_min e ty tmp;
@@ -1906,7 +1906,7 @@ and type_assert tmp ty e =
 		  LConst (Prim_int (Num.string_of_num n))])
 	in
 	begin match e#typ with
-	  | JCTpointer (si', n1o', n2o') ->
+	  | JCTpointer (_si', n1o', n2o') ->
 	      begin match n1o, n2o with
 		| None, None -> LTrue
 		| Some n, None ->
@@ -2115,7 +2115,7 @@ and expr e =
           | Real_to_integer ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos integer_type e1#typ e1 e1'
-          | Round(f,rm) ->
+          | Round(f,_rm) ->
               coerce ~check_int_overflow:(safety_checking() 
 					    (* no safe version in the full model*) 
 	      || not (float_model_has_safe_functions ()))
@@ -2553,7 +2553,7 @@ and expr e =
 	let loop_assigns_from_function = 
 	  let s = get_current_spec () in
 	  List.fold_left
-	    (fun acc (pos,id,b) ->
+	    (fun acc (_pos,id,b) ->
 	       if is_current_behavior id then
 		 match b.jc_behavior_assigns with
 		   | None -> acc
@@ -2660,11 +2660,11 @@ and expr e =
         Label(loop_label.label_info_final_name,
 	      While(Cte(Prim_bool true), inv', loop_variant, body))
 	
-    | JCEcontract(req,dec,vi_result,behs,e) ->
+    | JCEcontract(req,dec,_vi_result,behs,e) ->
 	assert (req = None);
 	assert (dec = None);
 	begin match behs with
-	  | [pos,id,b] ->
+	  | [_pos,_id,b] ->
 	      assert (b.jc_behavior_throws = None);
 	      assert (b.jc_behavior_assumes = None);
 	      assert (b.jc_behavior_assigns = None);
@@ -2681,7 +2681,7 @@ and expr e =
         Raise(exception_name exc,Some e1')
     | JCEthrow(exc, None) -> 
         Raise(exception_name exc,None)
-    | JCEtry (s, catches, finally) -> 
+    | JCEtry (s, catches, _finally) -> 
 (*      assert (finally.jc_statement_node = JCEblock []); (\* TODO *\) *)
         let catch (s,excs) (ei,v_opt,st) =
           if ExceptionSet.mem ei excs then
@@ -2770,7 +2770,7 @@ let tr_axiomatic_decl acc d =
 
 let excep_posts_for_others exc_opt excep_behaviors =
   ExceptionMap.fold
-    (fun exc bl acc ->
+    (fun exc _bl acc ->
        match exc_opt with 
          | Some exc' -> 
 	     if exc.jc_exception_info_tag = exc'.jc_exception_info_tag then
@@ -2803,7 +2803,7 @@ let annot_fun_parameters params write_params read_params annot_type =
   List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
     params annot_type
        
-let function_body f spec behavior_name body =
+let function_body _f spec behavior_name body =
   set_current_behavior behavior_name;
   set_current_spec spec;
   let e' = expr body in
@@ -2873,7 +2873,7 @@ let get_valid_pred_app vi =
     | JCTtype_var _ -> LTrue
 
 
-let pre_tr_fun f funpos spec body acc =
+let pre_tr_fun f _funpos spec _body acc =
   begin
     match spec.jc_fun_decreases with
       | None -> ()
@@ -3390,7 +3390,7 @@ let tr_specialized_fun n fname param_name_assoc acc =
       
   and modif_term t =
     match t with
-      | LConst(c) -> t
+      | LConst(_c) -> t
       | LApp(id,l) -> LApp(id,List.map modif_term l)
       | LVar(id) -> 
 	  let id = StringMap.find_or_default id id param_name_assoc in
@@ -3617,7 +3617,7 @@ let tr_enum_type_pair ri1 ri2 acc =
         mod_coincide ri1 ri2 name1 name2
         :: mod_coincide ri2 ri1 name2 name1 :: acc
 
-let tr_variable vi e acc =
+let tr_variable vi _e acc =
   if vi.jc_var_info_assigned then
     let t = Ref_type(tr_var_type vi) in
       Param(false,vi.jc_var_info_final_name,t)::acc

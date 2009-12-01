@@ -113,12 +113,25 @@ let rec lexpr avoid s p = match p.pp_desc with
       lexpr avoid s p
   | PPlet (id, t, p) ->
       lexpr (S.add id avoid) (lexpr avoid s t) p
+  | PPmatch(e,l) ->
+      let s = lexpr avoid s e in
+      List.fold_left 
+        (fun s ((id,idl,_loc),e) ->
+           let s = ident avoid s id in
+           let avoid = 
+             List.fold_left (fun avoid id -> S.add id avoid) avoid idl 
+           in
+           lexpr avoid s e)
+        s
+        l
+                        
 
 
 let number_of_literals = ref 0
 
 
-let rec compute_literal_number  pr = match pr.pp_desc with
+let rec compute_literal_number  pr = 
+  match pr.pp_desc with
   | PPinfix (p1,_, p2) ->
       compute_literal_number  p1 ; 
       compute_literal_number  p2 ; 
@@ -138,6 +151,12 @@ let rec compute_literal_number  pr = match pr.pp_desc with
       number_of_literals := !number_of_literals + 1
   | PPtrue 
   | PPfalse -> ()
+  | PPmatch(_e,l) ->
+      List.iter
+        (fun ((_id,_idl,_loc),p) -> compute_literal_number p)
+        l
+      
+      
       
 
 

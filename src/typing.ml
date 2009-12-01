@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.142 2009-09-04 15:29:46 bobot Exp $ i*)
+(*i $Id: typing.ml,v 1.143 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -762,7 +762,7 @@ let rec typef ?(userlabel="") lab env expr =
       let varinfo,env' = match var with
 	| None -> 
 	    None, env'
-	| Some (loc,phi,tphi,r) ->
+	| Some (_loc,phi,tphi,r) ->
 	    let vphi0 = variant_name () in
 	    let tphi = PureType tphi in
 	    let env' = Env.add vphi0 tphi env' in

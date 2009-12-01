@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monad.ml,v 1.80 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.81 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Format
 open Misc
@@ -133,7 +133,7 @@ and output ren env (v,o,x) =
 and prod ren env g = 
   List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
 
-and trad_imp_type ren env = function
+and trad_imp_type _ren _env = function
   | Ref v -> TTpure v
   | _ -> assert false
 
@@ -262,7 +262,7 @@ let unit info r ren =
 	  in
 	  (* type of the obligation: [y1]...[yn][res]Q *)
 	  let ht = 
-	    let _,o,xs,_ = get_repr ef in
+	    let _,o,_xs,_ = get_repr ef in
 	    let ren' = Rename.next ren (result :: o) in
 	    let result' = current_var ren' result in
 	    let q = a_apply_post info.t_label ren' env q in
@@ -287,9 +287,9 @@ let exn_pattern dep x res xs =
   let rec make = function
     | [] -> 
 	assert false
-    | y :: yl when x = y -> 
+    | y :: _yl when x = y -> 
 	PPcons ((if dep then exn_qexn else exn_exn), res)
-    | y :: yl -> 
+    | _y :: yl -> 
 	PPcons ((if dep then exn_qval else exn_val), [make yl])
   in
   make xs
@@ -298,7 +298,7 @@ let exn_pattern dep x res xs =
 let val_pattern dep res xs =
   let t = if dep then [PPcons (exist, res)] else res in
   let id = if dep then exn_qval else exn_val in
-  List.hd (List.fold_right (fun x cc -> [PPcons (id, cc)]) xs t)
+  List.hd (List.fold_right (fun _x cc -> [PPcons (id, cc)]) xs t)
 
 (*s [compose k1 e1 e2 ren env] constructs the term
    
@@ -331,7 +331,7 @@ let decomp x b v =
    [handler x res : interp] is the handler for exception [x] with value [res].
 *)
 
-let gen_compose isapp handler info1 e1 info2 e2 ren =
+let gen_compose isapp handler info1 e1 _info2 e2 ren =
   let env = info1.t_env in
   let (res1,v1),ef1,q1 = decomp_kappa info1 in
   let ren = push_date ren info1.t_label in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.88 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: env.ml,v 1.89 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -59,7 +59,7 @@ let rec find_pure_type_vars env t =
 	Vset.add v env
     | PTvar { type_val = Some t } ->
 	find_pure_type_vars env t
-    | PTexternal(l,id) ->
+    | PTexternal(l,_id) ->
 	List.fold_left find_pure_type_vars env l
     | PTint | PTreal | PTbool | PTunit -> 
 	env
@@ -162,7 +162,7 @@ let generalize_function_def (bl,t,e) =
 
 (* specialization *)
 
-let dump_type_var = ref (fun (v:type_var) -> ())
+let dump_type_var = ref (fun (_v:type_var) -> ())
 
 let new_type_var =
   let c = ref 0 in
@@ -418,7 +418,7 @@ let rec find_proof_vars acc = function
 and find_cc_term_vars x = find_gen_cc_term_vars find_proof_vars x
 
 and find_cc_functional_program_vars = 
-  find_gen_cc_term_vars (fun accu (loc, pred) -> find_predicate_vars accu pred)
+  find_gen_cc_term_vars (fun accu (_loc, pred) -> find_predicate_vars accu pred)
 
 let rec subst_gen_cc_term subst_hole s t = 
   let subst_cc_term = subst_gen_cc_term subst_hole in

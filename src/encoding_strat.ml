@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.27 2009-11-26 16:07:43 andrei Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.28 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -134,7 +134,7 @@ let plunge fv term pt =
    in let-ins *)
 let strip_topmost t =
   match t with
-    | Tapp (symb, [encoded_ty; encoded_t], []) 
+    | Tapp (symb, [_encoded_ty; encoded_t], []) 
 	when symb = Ident.create (prefix^"sort") ->
 	encoded_t
     | _ -> t
@@ -147,7 +147,7 @@ let instantiate_arity id inst =
       (print_endline ("unknown arity for symbol "^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
   match log_type with 
-    Function (ptl, rt) ->
+    Function (_ptl, rt) ->
       ignore (Env.Vmap.fold (fun _ v l ->
 	(match l with [] -> [] 
 	| _ -> (v.type_val <- Some (List.hd l); (List.tl l))))
@@ -164,7 +164,7 @@ let rec translate_term fv lv = function
 (* 		   print_endline "=== in ==="; *)
 (* 		   ignore (List.iter (fun (n, _) -> print_endline (pp n)) lv); *)
 	  raise e)
-  | Tapp (id, tl, inst) when Ident.is_simplify_arith id ->
+  | Tapp (id, tl, _inst) when Ident.is_simplify_arith id ->
       Tapp(Ident.create (Ident.string id ^ suffix),
 	   List.map (translate_term fv lv) tl, [])
   | Tapp (id, tl, inst) ->
@@ -173,7 +173,7 @@ let rec translate_term fv lv = function
   | Tconst (ConstInt _) as t -> plunge [] t PTint
   | Tconst (ConstBool _) as t -> plunge [] t PTbool
   | Tconst (ConstUnit) as t -> plunge [] t PTunit
-  | Tconst (ConstFloat f) as t -> plunge [] t PTreal
+  | Tconst (ConstFloat _f) as t -> plunge [] t PTreal
   | Tderef id as t -> print_endline ("id in Tderef : "^(Ident.string id)); t
   | Tnamed(_,t) -> translate_term fv lv t
 
@@ -195,12 +195,12 @@ let rec lifted_ctxt l cel =
 
 (* Translation of a predicate *)
 let rec translate_pred fv lv = function
-  | Papp (id, tl, inst) when Ident.is_simplify_arith id ->
+  | Papp (id, tl, _inst) when Ident.is_simplify_arith id ->
       Papp (Ident.create ((Ident.string id)^suffix), 
 	    List.map (translate_term fv lv) tl, [])
 (*   | Papp (id, [a; b], inst) when Ident.is_neq id -> *)
 (*       Papp (Ident.create ("neq"^suffix), [translate_term fv lv a; translate_term fv lv b], []) *)
-  | Papp (id, tl, inst) ->
+  | Papp (id, tl, _inst) ->
       Papp (id, List.map (translate_term fv lv) tl, [])
   | Plet (id, n, pt, t, p) -> 
       let t' = strip_topmost (translate_term fv lv t) in
@@ -338,7 +338,7 @@ let rec push d =
       Queue.add (Dlogic (loc, ident,
 			 Env.empty_scheme newarity)) queue
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (loc, ident, pred_def_sch) ->
+  | Dpredicate_def (_loc, _ident, _pred_def_sch) ->
       assert false
 (*
       let (argl, pred) = pred_def_sch.Env.scheme_type in
@@ -348,13 +348,13 @@ let rec push d =
       push (Daxiom (loc, def name, (Env.generalize_predicate 
 				       (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
 *)
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       assert false
 (*
       failwith "encoding strat: inductive def not yet supported"
 *)
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dfunction_def (loc, ident, fun_def_sch) ->
+  | Dfunction_def (_loc, _ident, _fun_def_sch) ->
       assert false
 (*
 (* ?????

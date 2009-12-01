@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.179 2009-11-26 16:08:03 andrei Exp $ i*)
+(*i $Id: main.ml,v 1.180 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -68,9 +68,9 @@ let add_loc = function
   | Dalgtype ls ->
       List.iter (fun (loc, s, _) -> Loc.add_ident (Ident.string s) loc) ls
   | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
-  | Dpredicate_def (loc, s, _)
-  | Dfunction_def (loc, s, _) 
-  | Dinductive_def (loc, s , _) -> () (* TODO ? *)
+  | Dpredicate_def (_loc, _s, _)
+  | Dfunction_def (_loc, _s, _) 
+  | Dinductive_def (_loc, _s , _) -> () (* TODO ? *)
   | Dgoal _ -> ()
 
 let store_decl_into_a_queue d  = 
@@ -398,7 +398,7 @@ let rec occurrences pi a =
       (pos1+pos2,neg1+neg2)
   | Pnot p1 -> 
       let (pos1,neg1) = occurrences pi p1 in (neg1,pos1)
-  | Forall (is_wp, id1, id2, typ, triggers, p) -> 
+  | Forall (_is_wp, _id1, _id2, _typ, _triggers, _p) -> 
       assert false (* TODO *)
       (* occurrences pi p *)
   | Pnamed (_, _) -> assert false (* TODO *)
@@ -414,7 +414,7 @@ let rec check_unquantified_clausal_form loc id a =
   match a with
     | Pimplies (_, p1, p2) -> 
 	check_unquantified_clausal_form loc id p2;
-	let (pos1,neg1) = occurrences id p1 in
+	let (_pos1,neg1) = occurrences id p1 in
 	if neg1 > 0 then 
 	  raise_located loc 
 	    (AnyMessage "inductive predicate has a negative occurrence in this case")
@@ -429,7 +429,7 @@ let rec check_unquantified_clausal_form loc id a =
 
 let rec check_clausal_form loc id a =
   match a with
-    | Forall (is_wp, id1, id2, typ, triggers, p) -> 
+    | Forall (_is_wp, _id1, _id2, _typ, _triggers, p) -> 
 	check_clausal_form loc id p
     | _ -> check_unquantified_clausal_form loc id a
 
@@ -628,7 +628,7 @@ let rec interp_decl ?(_prelude=false) d =
         Env.add_global_logic mt tm;
         (Loc.extract loc, id, d)
       in
-        List.iter (fun (loc, vl, id, td) -> Env.add_type loc vl id) ls;
+        List.iter (fun (loc, vl, id, _td) -> Env.add_type loc vl id) ls;
         push_decl ("","",Loc.dummy_floc) (Dalgtype (List.map ats ls))
 
 (*s Prelude *)

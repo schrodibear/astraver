@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.27 2008-11-05 14:03:14 filliatr Exp $ *)
+(* $Id: cptr.ml,v 1.28 2009-12-01 11:51:35 marche Exp $ *)
 
 (* TO DO:
 
@@ -296,6 +296,7 @@ struct
 
   (* union *)
   let rec join ?(backward=false) p1 p2 = 
+    assert (backward=false); (* to prevent unused warning *)
     if not (comparable p1 p2) then 
       if same_var p1 p2 then
 	(* case of interest here is 2 PKindex with different indices,
@@ -1216,6 +1217,11 @@ end = struct
   *)
   let transfer ?(backward=false) ?(with_assert=false) ?(one_pass=false) 
       ?previous_value node cur_val =
+
+    assert (backward=false); (* to prevent unused warning *)
+    assert (with_assert=false); (* to prevent unused warning *)
+    assert (one_pass=false); (* to prevent unused warning *)
+    assert (previous_value=None); (* to prevent unused warning *)
 
     if debug_more then Coptions.lprintf 
       "[transfer] %a@." Node.pretty node;

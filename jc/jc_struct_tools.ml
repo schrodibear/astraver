@@ -122,7 +122,7 @@ let struct_size_in_bytes st =
   s/8
 
 let rec all_fields acc = function
-  | JCroot vi -> acc
+  | JCroot _vi -> acc
   | JCtag ({ jc_struct_info_parent = Some(p, pp) } as st, _) ->
       all_fields (st.jc_struct_info_fields @ acc) (JCtag(p, pp))
   | JCtag ({ jc_struct_info_parent = None } as st, _) ->

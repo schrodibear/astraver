@@ -510,7 +510,7 @@ let rewrite_var_left_lemma = Ident.create "why_rewrite_var_left"
 let rewrite_var ctx concl = match ctx, concl with
   (* ..., v=t, p(v) |- p(t) *)
   | Spred (h1, p1) ::
-    Svar (id'1, PTbool) ::
+    Svar (_id'1, PTbool) ::
     Spred (h2, Papp (ide, [Tvar v; t], _)) ::
     Svar (v', ty) :: _,
     p
@@ -622,7 +622,7 @@ let clean_sequent hyps concl =
   let rec clean = function
     | [] ->
 	[]
-    | Svar (x, v) as h :: hl -> 
+    | Svar (x, _v) as h :: hl -> 
 	if List.exists (occur_in_hyp x) hl || occur_predicate x concl then
 	  h :: clean hl
 	else
@@ -860,7 +860,7 @@ let rec explain_for_pred internal user = function
   | Pimplies (_,_,p)  -> explain_for_pred internal user p
   | Pnamed(Internal n,p) -> explain_for_pred (Some n) user p
   | Pnamed(User n,p) -> explain_for_pred internal (Some n) p
-  | p ->
+  | _p ->
       (if debug then
 	 eprintf "User label for explanation: `%a'@." (Pp.print_option pp_print_string)user;
        user)
@@ -885,7 +885,7 @@ let rec explain_for_pred internal user = function
 	      
 (* Proof obligations from the WP *)
 
-let vcg_from_wp loc ids name beh w =
+let vcg_from_wp _loc ids name beh w =
   let po = ref [] in
   let cpt = ref 0 in
   let push_one (ctx, concl) = 

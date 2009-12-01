@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: creport.ml,v 1.30 2008-11-05 14:03:14 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.31 2009-12-01 11:51:35 marche Exp $ i*)
 
 open Format
 open Cerror
@@ -48,7 +48,7 @@ and print_type_node fmt = function
   | Tstruct (x) -> fprintf fmt "struct %s" x
   | Tunion (x) -> fprintf fmt "union %s" x
   | Tenum (x) -> fprintf fmt "enum %s" x
-  | Tfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
+  | Tfun (_pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
 
 and print_sign fmt = function
   | Signed -> fprintf fmt "signed"
@@ -119,14 +119,14 @@ let unsupported loc s = raise (Error (Some loc, Unsupported s))
 
 let error l = 
   Format.kfprintf 
-    (fun fmt -> raise (Error(Some l, AnyMessage (flush_str_formatter())))) 
+    (fun _fmt -> raise (Error(Some l, AnyMessage (flush_str_formatter())))) 
     str_formatter
 
 let wtbl = Hashtbl.create 17;;
 
 let warning loc = 
   Format.kfprintf 
-    (fun fmt -> 
+    (fun _fmt -> 
        let s = flush_str_formatter() in
        let n = try Hashtbl.find wtbl s with Not_found -> 0 in
        if n <= 2 then

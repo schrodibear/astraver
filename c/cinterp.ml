@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.266 2009-09-04 15:29:44 bobot Exp $ i*)
+(*i $Id: cinterp.ml,v 1.267 2009-12-01 11:51:35 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -59,7 +59,7 @@ let abs_fname f =
   else f
 
 let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =  
-  let id,oldid = match id,oldid with
+  let id,_oldid = match id,oldid with
     | None,_ ->  
 	incr name_counter;
 	"CADUCEUS_" ^ string_of_int !name_counter, oldid
@@ -267,8 +267,8 @@ let zoned_name (f : string) (ty : Info.why_type) =
     | Info.Int -> assert false
     | Info.Real -> assert false
     | Unit -> assert false
-    | Why_Logic s ->  assert false
-    | Memory(t,z) -> assert false
+    | Why_Logic _s ->  assert false
+    | Memory(_t,_z) -> assert false
   
 let term_float_conversion fk1 fk2 e = 
   if not floats then e else
@@ -353,7 +353,7 @@ let rec interp_term label old_label t =
 	  LApp("arrlen",[f t])
 	else
 	  LApp("arrlen",[interp_var label "alloc"; f t])
-    | NTstrlen (t,zone,var) -> 
+    | NTstrlen (t,_zone,var) -> 
 	(* [strlen(p)] depends on the value pointed to by [p].
 	   Pass an additional parameter for the memory. *)
 	let te = f t in
@@ -374,7 +374,7 @@ let rec interp_term label old_label t =
 	interp_term (Some l) old_label t
     | NTif (t1, t2, t3) -> 
 	LApp ("ite", [interp_boolean_term label old_label t1; f t2; f t3])
-    | NTarrow (t,z, field) -> 
+    | NTarrow (t,_z, field) -> 
 	let te = f t in
 	let var = zoned_name field.var_unique_name (Cnorm.type_why_for_term t)
 	in
@@ -414,11 +414,11 @@ let rec interp_term label old_label t =
 	begin match t1.nterm_type.ctype_node, t.nterm_type.ctype_node with
 	  | (Tenum _ | Tint _ as ty1), (Tint (_, ExactInt) as ty2) -> 
 	      term_int_conversion ty1 ty2 (f t1)
-	  | ty1,ty2 -> 
+	  | _ty1,_ty2 -> 
 	      error t1.nterm_loc "cannot convert type %a to %a" 
 		Creport.print_type t1.nterm_type Creport.print_type t.nterm_type; 
 	end
-    | NTunop ((Uround_error | Utotal_error), t1) when not floats ->
+    | NTunop ((Uround_error | Utotal_error), _t1) when not floats ->
 	LConst (Prim_real "0.0")
     | NTunop (Uround_error, t1) ->
 	begin match t1.nterm_type.ctype_node with
@@ -494,7 +494,7 @@ and interp_term_address  label old_label e = match e.nterm_node with
       end
   | NTunop (Ustar, e1) -> 
       interp_term  label old_label e1
-  | NTarrow (e1,z, f) ->
+  | NTarrow (e1,_z, f) ->
       begin match e.nterm_type.ctype_node with
 	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_term  label old_label e1
@@ -514,7 +514,7 @@ and interp_boolean_term label old_label t =
   let cmp,zero = match t.nterm_type.Ctypes.ctype_node with
     | Tenum _ | Tint _ -> 
 	"neq_int_bool", LConst (Prim_int "0")
-    | Tfloat fk -> 
+    | Tfloat _fk -> 
 	assert false (* TODO *)
     | Tarray _ | Tpointer _ -> 
 	assert false (* TODO *)
@@ -536,12 +536,12 @@ let rec interp_predicate label old_label p =
 	LTrue
     | NPexists (l, p) -> 
 	List.fold_right
-	  (fun (t,x) p -> 
+	  (fun (_t,x) p -> 
 	     LExists(x.var_unique_name,
 		     Info.output_why_type x.var_why_type, [],p)) l (f p)
     | NPforall (l, p) ->	
 	List.fold_right
-	  (fun (t,x) p -> 
+	  (fun (_t,x) p -> 
 	     LForall(x.var_unique_name,
 		     Info.output_why_type x.var_why_type, [],p)) l (f p)
     | NPif (t, p1, p2) -> 
@@ -926,7 +926,7 @@ let make_int_types_decls () =
 (* buils the declarations for enum types with checks *)
 let make_enum_types_decls () =
   let int = Base_type (simple_logic_type "int") in
-  let declare_enum_type s (tyn, vl) acc =
+  let declare_enum_type s (_tyn, vl) acc =
     let name = Cenv.enum_type_for s in
     let of_name = "of_" ^ name in
     let is_enum = "is_" ^ name in
@@ -1173,7 +1173,7 @@ and interp_expr_loc e =
     | NEvar( Var_info v) -> 
 	let n = heap_var_name v in
 	if v.var_is_assigned then Deref n else Var n
-    | NEvar (Fun_info v) -> assert false
+    | NEvar (Fun_info _v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | NEbinary (_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
 		  |Blt_float _ | Bgt_float _ | Ble_float _ | Bge_float _
@@ -1282,9 +1282,9 @@ and interp_expr_loc e =
 	Void
     | NEcond(e1,e2,e3) ->
 	If (interp_boolean_expr e1, interp_expr e2, interp_expr e3)
-    | NEstring_literal s -> 
+    | NEstring_literal _s -> 
 	unsupported e.nexpr_loc "string literal"
-    | NEarrow (e,z,s) ->
+    | NEarrow (e,_z,s) ->
 	let te = interp_expr e in
 	let var = zoned_name s.var_unique_name (Cnorm.type_why e) in
 	let valid = 
@@ -1303,7 +1303,7 @@ and interp_expr_loc e =
 	    | Not_valid -> 
 		guarded_make_app PointerDeref loc "acc_" [Var(var);te] 
 	end
-    | NEunary (Ustar, e) -> assert false
+    | NEunary (Ustar, _e) -> assert false
     | NEunary (Uplus, e) ->
 	interp_expr e
     | NEunary (Uminus, e) -> 
@@ -1383,7 +1383,7 @@ and interp_boolean_expr_loc e =
 	let e,cmp,zero = match e.nexpr_type.Ctypes.ctype_node with
 	  | Tenum _ | Tint _ -> 
 	      interp_int_expr e, "neq_int_", Cte (Prim_int "0")
-	  | Tfloat fk -> 
+	  | Tfloat _fk -> 
 	      interp_expr e, "neq_real_", Cte (Prim_real "0.0")
 	  | Tarray _ | Tpointer _ -> 
 	      interp_expr e, "neq_pointer", Var "null"
@@ -1446,8 +1446,8 @@ and interp_incr_expr op e =
 and interp_lvalue e =
   match e.nexpr_node with
     | NEvar (Var_info v) -> LocalRef v
-    | NEvar (Fun_info v) -> assert false
-    | NEunary(Ustar,e1) -> assert false
+    | NEvar (Fun_info _v) -> assert false
+    | NEunary(Ustar,_e1) -> assert false
     | NEarrow (e1,_,f) ->
 	let valid =
 	  match e1.nexpr_type.Ctypes.ctype_node with
@@ -1468,7 +1468,7 @@ and interp_address e = match e.nexpr_node with
        | Tstruct _ | Tunion _ -> Deref v.var_unique_name
        | _ -> Var v.var_unique_name
        end
-  | NEvar (Fun_info v) -> unsupported e.nexpr_loc "& operator on functions"
+  | NEvar (Fun_info _v) -> unsupported e.nexpr_loc "& operator on functions"
   | NEunary (Ustar, _) -> assert false
   | NEarrow (e1,_, f) ->
       begin match e.nexpr_type.Ctypes.ctype_node with
@@ -1747,7 +1747,7 @@ let interp_assigns label old_label assigns = function
 	assigns.Ceffect.assigns_var StringMap.empty 
       in
       let m = ZoneSet.fold
-	(fun (z,s,ty) m -> 
+	(fun (z,s,_ty) m -> 
 	  StringMap.add (zoned_name s (Pointer z)) (Memory []) m)
 	assigns.Ceffect.assigns m 
       in
@@ -1838,7 +1838,7 @@ let strong_invariant_name id reads_var reads =
   in
   let args = 
     ZoneSet.fold 
-      (fun (z,s,ty) l -> let z = repr z in
+      (fun (z,s,_ty) l -> let z = repr z in
        (LVar (zoned_name s (Pointer z)))::l)
       reads args in
   LPred(id,args)
@@ -1884,7 +1884,7 @@ let subst a p =
 let strong_invariants_for hvs =
   let pred =
     Hashtbl.fold
-      (fun id (p,e1,e2) acc ->
+      (fun id (p,_e1,e2) acc ->
 	 let l = add hvs.Ceffect.reads e2.Ceffect.reads_var in
 	 let rec add_pred id p l acc = 
 	   match l with 
@@ -2053,7 +2053,7 @@ let make_switch_condition tmp l =
   else
     let a = 
       IntMap.fold 
-	(fun x n test -> 
+	(fun _x n test -> 
 	   make_or_expr 
 	     (App(App (Var "eq_int_",Var tmp), interp_int_expr n)) test) 
 	l
@@ -2068,7 +2068,7 @@ let make_switch_condition_default tmp l used_cases=
      else IntMap.add x e m) used_cases IntMap.empty in
   let cond =
     IntMap.fold 
-      (fun x e test -> 
+      (fun _x e test -> 
 	 make_and_expr 
 	   (App(App (Var "neq_int_",Var tmp), interp_int_expr e)) test)
       fl
@@ -2192,9 +2192,9 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
 	end
   | NSgoto(GotoForwardOuter,lab) ->
       Raise ("Goto_" ^ lab.label_info_name, None)
-  | NSgoto(GotoForwardInner,lab) ->
+  | NSgoto(GotoForwardInner,_lab) ->
       unsupported stat.nst_loc "forward inner goto"
-  | NSgoto(GotoBackward,lab) ->
+  | NSgoto(GotoBackward,_lab) ->
       (* When planning to support backward gotos, add a widening node inside 
 	 the induced loop in the operational graph created for various 
 	 dataflow analyses in [Cabsint]. *)
@@ -2217,7 +2217,7 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       (* Abusing assumptions endangers your proof ... *)
       let post,_ = interp_predicate None "init" pred, Void in
       BlackBox (Annot_type (LTrue, unit_type, [], [], post, []))
-  | NSlogic_label(l) -> 
+  | NSlogic_label(_l) -> 
       assert false
 (*
 Output.Label (l, Void)
@@ -2283,7 +2283,7 @@ and interp_block ab may_break statements =
 	  let (be,bl) = block (st::bl) in
 	  Hashtbl.add labels_table lab.label_info_name ();
 	  Raise("Goto_"^lab.label_info_name,None),(lab,be)::bl
-    | {nst_loc = loc ; nst_node = NSlogic_label(l) } :: bl -> 
+    | {nst_loc = _loc ; nst_node = NSlogic_label(l) } :: bl -> 
 	  let (be,bl) = block bl in
 	  Output.Label(l, be), bl
     | [s] ->
@@ -2384,7 +2384,7 @@ and interp_case ab may_break i =
 let interp_predicate_args id args =
   let args =
     List.fold_right
-      (fun (id,t) args -> 
+      (fun (id,_t) args -> 
 	 (id.var_unique_name,Info.output_why_type id.var_why_type)::args)
       args []
   in
@@ -2404,7 +2404,7 @@ let type_to_base_type l =
 
 let cinterp_logic_symbol id ls =
   match ls with
-    | NPredicate_reads(args,locs) -> 
+    | NPredicate_reads(args,_locs) -> 
 	let args = interp_predicate_args id args in
 (*
 	let _ty = 
@@ -2441,7 +2441,7 @@ let cinterp_logic_symbol id ls =
 	in
 	let args =
 	  List.fold_right
-	    (fun (id,ty) t -> 
+	    (fun (id,_ty) t -> 
 	       (id.var_unique_name,
 		Info.output_why_type id.var_why_type)::t)
 	    args []
@@ -2524,7 +2524,7 @@ let heap_var_unique_names v =
 let heap_var_unique v =
   ZoneSet.fold (fun (z,s,_) l -> zoned_name s (Pointer z)::l) v []
   
-let interp_function_spec id sp ty pl =
+let interp_function_spec id sp _ty pl =
   (* add to precondition the validity or nullity of pointer arguments*)
   let sp = 
     if false then (* Coptions.abstract_interp || Coptions.gen_invariant then *)
@@ -2626,10 +2626,10 @@ let interp_located_tdecl why_spec decl =
       lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
       Axiom(id,a)::why_spec
-  | Ninvariant(id,p) -> 
+  | Ninvariant(id,_p) -> 
       lprintf "translating invariant declaration %s@." id;      
       why_spec
-  | Ninvariant_strong (id,p) ->
+  | Ninvariant_strong (id,_p) ->
       lprintf "translating invariant declaration %s@." id;      
       why_spec
   | Ntypedecl ({ Ctypes.ctype_node = Tenum _ })
@@ -2641,12 +2641,12 @@ let interp_located_tdecl why_spec decl =
       assert false
   | Ntype _ ->
       why_spec
-  | Ndecl(ctype,v,init) -> 
+  | Ndecl(_ctype,_v,_init) -> 
       (* global initialisations already handled in cinit.ml *)
       why_spec
 
 
-let interp_c_fun fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
+let interp_c_fun _fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
   if (id = Cinit.invariants_initially_established_info &&  
       not !Cinit.user_invariants)
   then

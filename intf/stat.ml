@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.99 2009-11-30 19:52:29 nrousset Exp $ i*)
+(*i $Id: stat.ml,v 1.100 2009-12-01 11:51:35 marche Exp $ i*)
 
 open Format
 open Options
@@ -192,7 +192,7 @@ module View = struct
     let _n : int = view#append_column first_col in
     let l = 
       List.map
-	(fun (p,state) ->
+	(fun (p,_state) ->
 	   let vc_stock = 
 	     GTree.view_column ~title:(prover_name_with_version_and_enc p) 
 	       ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) 
@@ -1106,7 +1106,7 @@ let main () =
 		 if s then
 		   match p.Model.pr_viewcol with
 		     | None -> assert false
-		     | Some (vc1,vc2) -> vc1#title = col#title
+		     | Some (vc1,_vc2) -> vc1#title = col#title
 		  (* WHY c == col is not enough ???? *)
 		 else false) 
 	      (Model.get_prover_states ()) 

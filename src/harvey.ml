@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.61 2009-12-01 10:12:28 bobot Exp $ i*)
+(*i $Id: harvey.ml,v 1.62 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -210,7 +210,7 @@ let rec print_predicate fmt = function
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall %a@ %a)@]" ident id' print_predicate p'
-  | Exists (id,n,t,p) -> 
+  | Exists (id,n,_t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(exists %a@ %a)@]" ident id' print_predicate p'
@@ -257,7 +257,7 @@ let output_sequent fmt (ctx, concl) =
   let rec print_seq fmt = function
     | [] -> 
 	fprintf fmt "@[%a@]" print_predicate concl
-    | Svar (id, ty) :: ctx -> 
+    | Svar (id, _ty) :: ctx -> 
 	fprintf fmt "@[(forall %a@ %a)@]"
 	  Ident.print id print_seq ctx
     | Spred (_, p) :: ctx -> 
@@ -266,7 +266,7 @@ let output_sequent fmt (ctx, concl) =
   in
   print_seq fmt ctx
 
-let output_obligation fmt (loc, expl, o, s) = 
+let output_obligation fmt (loc, _expl, _o, s) = 
   fprintf fmt "@\n@[;; %a@]@\n" Loc.gen_report_line loc;
   fprintf fmt "@[%a@]@\n" output_sequent s
 

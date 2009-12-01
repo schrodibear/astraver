@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.185 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: coq.ml,v 1.186 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Options
 open Logic
@@ -434,7 +434,7 @@ let rec print_proof_v7 fmt = function
 and print_cc_term_v7 x = print_gen_cc_term_v7 print_proof_v7 x
 
 let print_cc_functional_program_v7 =
-  print_gen_cc_term_v7 (fun fmt (loc, p) -> print_predicate_v7 fmt p)
+  print_gen_cc_term_v7 (fun fmt (_loc, p) -> print_predicate_v7 fmt p)
 
 (* printers for Coq V8 *)
 
@@ -577,7 +577,7 @@ let print_predicate_v8 fmt p =
     | Pnamed (User n, p) ->
 	fprintf fmt "@[(* %s *)@ %a@]" n print3 p
     | Pnamed (_, p) -> print3 fmt p
-    | Plet (id, n, pt, t, p) ->
+    | Plet (id, n, _pt, t, p) ->
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "@[@[<hov 2>let %a :=@ %a in@]@\n%a@]"
@@ -757,7 +757,7 @@ let rec print_proof_v8 fmt = function
 and print_cc_term_v8 x = print_gen_cc_term_v8 print_proof_v8 x
 
 let print_cc_functional_program_v8 =
-  print_gen_cc_term_v8 (fun fmt (loc, p) -> print_predicate_v8 fmt p)
+  print_gen_cc_term_v8 (fun fmt (_loc, p) -> print_predicate_v8 fmt p)
 
 (* printers selection *)
 
@@ -800,7 +800,7 @@ let print_sequent fmt s =
 
 (*let _ = Vcg.log_print_function := print_sequent*)
 
-let reprint_obligation fmt loc expl id s =
+let reprint_obligation fmt loc _expl id s =
   fprintf fmt "@[(* %a *)@]@\n" (Loc.report_obligation_position  ~onlybasename:true) loc;
   fprintf fmt "@[<hov 2>(*Why goal*) Lemma %s : @\n%a.@]@\n" id print_sequent s
   (*;
@@ -949,7 +949,7 @@ let reprint_alg_type fmt ls =
   fprintf fmt "@[(*Why type*) Inductive %a.@]@\n"
     (print_list andsep reprint_alg_type_single) ls
 
-let print_alg_type_single fmt (id,d) =
+let print_alg_type_single fmt (_id,d) =
   let print_implicit (c,pl) =
     match pl with
     | [] -> fprintf fmt "Set Contextual Implicit.@\n";
@@ -975,7 +975,7 @@ let print_type fmt id vl =
   fprintf fmt "Admitted.@\n"
 
 let reprint_function fmt id p =
-  let (l,(bl,t,e)) = Env.specialize_function_def p in
+  let (l,(bl,_t,e)) = Env.specialize_function_def p in
   let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
   let print_poly fmt x =
     if v8 then fprintf fmt "(A%d:Set)" x.tag else fprintf fmt "[A%d:Set]" x.tag
@@ -1077,7 +1077,7 @@ struct
       List.iter (fun x -> fprintf fmt "Dp_hint %a.@\n" idents x) !library_hints;
     fprintf fmt "@\n"
 
-  let first_time_trailer fmt = ()
+  let first_time_trailer _fmt = ()
 
   let not_end_of_element _ s =
     let n = String.length s in n = 0 || s.[n-1] <> '.'
@@ -1097,7 +1097,7 @@ let push_decl = function
   | Dpredicate_def (_,id,p) -> 
       let id = Ident.string id in
       Gen.add_elem (Pr, rename id) (Predicate (id, p))
-  | Dinductive_def(loc, id, d) ->
+  | Dinductive_def(_loc, id, d) ->
       let id = Ident.string id in
       Gen.add_elem (Ind, rename id) (Inductive(id, d))
   | Dfunction_def (_,id,f) -> 

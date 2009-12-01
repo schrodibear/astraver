@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.40 2009-08-24 14:25:40 giorgetti Exp $
+$Id: java_lexer.mll,v 1.41 2009-12-01 11:51:35 marche Exp $
 
 ***************************************************************************)
 
@@ -193,7 +193,7 @@ $Id: java_lexer.mll,v 1.40 2009-08-24 14:25:40 giorgetti Exp $
     let table = Hashtbl.create 17 in
     let _ = 
       List.iter
-	(fun (ty,id,params) -> Hashtbl.add table id ())
+	(fun (_ty,id,_params) -> Hashtbl.add table id ())
 	Java_pervasives.builtin_logic_symbols
     in table
 

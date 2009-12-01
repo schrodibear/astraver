@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.160 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.161 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -45,7 +45,7 @@ exception Error of Loc.position * string
 
 let error l = 
   Format.kfprintf 
-    (fun fmt -> raise (Error(l, flush_str_formatter()))) 
+    (fun _fmt -> raise (Error(l, flush_str_formatter()))) 
     str_formatter
 
 let zero = Num.Int 0
@@ -145,7 +145,7 @@ let rec print_type fmt t =
     | JCTany -> fprintf fmt "(anytype)"  
     | JCTtype_var v -> print_type_var fmt v
 
-let num_of_constant loc c =
+let num_of_constant _loc c =
     match c with
       | JCCinteger n -> 
 	  (try Num.num_of_string n

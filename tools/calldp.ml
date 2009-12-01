@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.68 2009-07-16 15:52:34 nguyen Exp $ i*)
+(*i $Id: calldp.ml,v 1.69 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Printf
 
@@ -237,7 +237,7 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
   let cmd = sprintf "why --%s --no-pervasives %s " option f in
   let t'= 
     (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
-  let t'',c,out = timed_sys_command ~debug (int_of_float t') cmd in
+  let t'',_c,_out = timed_sys_command ~debug (int_of_float t') cmd in
 (*
   let cmd = sprintf "Simplify %s"  f_for_simplify in
   let t'',c,out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
@@ -278,7 +278,7 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
     do
       (* compute the new proof obligation *)
       let cmd = sprintf "why --%s --no-pervasives --prune-hyp %d %d %s " option !pb !vb f  in
-      let t'',c',out = timed_sys_command ~debug (int_of_float t') cmd in
+      let t'',_c',_out = timed_sys_command ~debug (int_of_float t') cmd in
     
 (*
       let cmd = sprintf "Simplify %s"  f_for_simplify in
@@ -420,7 +420,7 @@ let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
 
 let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "rvc %s" f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
+  let t,c,_out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then (error c t cmd)
   else begin
     let f = Filename.chop_suffix f ".rv" in

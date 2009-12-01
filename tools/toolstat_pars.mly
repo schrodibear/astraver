@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.10 2008-11-25 12:44:22 moy Exp $ */
+/* $Id: toolstat_pars.mly,v 1.11 2009-12-01 11:51:37 marche Exp $ */
 
 %{
   open Format
@@ -104,7 +104,7 @@ project_record_list:
 project_record:
 | PROJECT annot_list subrecord_list
     { ([ ($1,$2) ],
-       List.map (fun (completed,project,prover,test,summary,detail,time) ->
+       List.map (fun (completed,_project,prover,test,summary,detail,time) ->
 		   let test = $1 ^ ":" ^ test in
 		   (completed,Some $1,prover,test,summary,detail,time)
 		) $3)

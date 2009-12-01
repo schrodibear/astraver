@@ -584,9 +584,9 @@ expr:
    { let b =  force_function_post ~warn:true $6 in
      locate (Sletin ($2, locate (Slam ($3, $5, b)), $8)) }
 | LET REC recfun %prec prec_letrec
-   { let loc,p = $3 in locate p }
+   { let _loc,p = $3 in locate p }
 | LET REC recfun IN expr
-   { let loc,p = $3 in locate (Sletin (rec_name p, locate p, $5)) }
+   { let _loc,p = $3 in locate (Sletin (rec_name p, locate p, $5)) }
 | RAISE ident opt_cast
    { locate (Sraise ($2, None, $3)) }
 | RAISE LEFTPAR ident expr RIGHTPAR opt_cast

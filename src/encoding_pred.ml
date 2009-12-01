@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_pred.ml,v 1.19 2009-11-26 16:07:43 andrei Exp $ i*)
+(*i $Id: encoding_pred.ml,v 1.20 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -140,7 +140,7 @@ let rec push d =
 			      Env.empty_scheme (Function (unify ptl, ut)))) queue;
 	   Queue.add (Daxiom (loc, axiom name, ax)) queue))
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (loc, ident, pred_def_sch) ->
+  | Dpredicate_def (_loc, _ident, _pred_def_sch) ->
       assert false
 (*
       let p = pred_def_sch.Env.scheme_type in
@@ -161,13 +161,13 @@ let rec push d =
 					[])),
 			         (snd p)))))))
 *)
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       assert false
 (*
       failwith "encoding rec: inductive def not yet supported"
 *)
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dfunction_def (loc, ident, fun_def_sch) ->
+  | Dfunction_def (_loc, _ident, _fun_def_sch) ->
       assert false
 (*
       let f = fun_def_sch.Env.scheme_type in

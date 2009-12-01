@@ -180,7 +180,7 @@ let plunge fv term pt =
    in let-ins *)
 let strip_topmost t =
   match t with
-    | Tapp (symb, [encoded_ty; encoded_t], []) when symb = Ident.create sort ->
+    | Tapp (symb, [_encoded_ty; encoded_t], []) when symb = Ident.create sort ->
 	encoded_t
     | _ -> t
 
@@ -203,7 +203,7 @@ let instantiate_arity id inst =
        Env.Vmap.iter (fun _ v -> Printf.printf "%d" v.tag) vs;
        print_endline "}");
     match log_type with
-	Function (ptl, rt) ->
+	Function (_ptl, rt) ->
 	  if debug then Printf.printf "Instantiate : %d vars - %d types\n"
 	    (Env.Vmap.fold (fun _ _ n -> n + 1) vs 0) (List.length inst);
 	  ignore 
@@ -212,7 +212,7 @@ let instantiate_arity id inst =
 				 | a::q -> (v.type_val <- Some a; q)))
 	       vs (List.rev inst));
 	  rt
-      | Predicate ptl ->
+      | Predicate _ptl ->
 	  ignore 
 	    (Env.Vmap.fold (fun _ v l -> 
 			      (match l with [] -> []
@@ -313,8 +313,8 @@ and translate_pattern fv lv p = function
         | t2 when ((*Format.printf "%a = %a? %b@." Util.print_term t Util.print_term t2 (Misc.eq_term t t2);*) Misc.eq_term t t2) -> 
             (translate_term fv lv rt t2)::acc
         | Tvar _ | Tconst _ | Tderef _ -> acc
-        | Tapp (id, tl, inst) ->
-            let ptl, pt = get_arity id in
+        | Tapp (id, tl, _inst) ->
+            let ptl, _pt = get_arity id in
             List.fold_left2 (lookfor_term fv lv) acc ptl tl
         | Tnamed(_,t2) -> lookfor_term fv lv acc rt t2 in
       let rec lookfor_term_in_predicate fv lv acc = function
@@ -323,7 +323,7 @@ and translate_pattern fv lv p = function
             let acc =  lookfor_term_in_predicate fv lv acc p1 in
             let acc =  lookfor_term_in_predicate fv lv acc p2 in
             acc
-        | Papp (id, tl, inst) ->
+        | Papp (id, tl, _inst) ->
             let arity,_ = get_arity id in
 	    List.fold_left2 (lookfor_term fv lv) acc arity tl
         | Plet (_, n, pt, t, p) -> 
@@ -389,7 +389,7 @@ let rec push d =
 	| Function (ptl, pt) -> Function (monoify ptl, sortify ut pt) in
 	Queue.add (Dlogic (loc, ident, Env.empty_scheme newarity)) queue
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (loc, ident, pred_def_sch) ->
+  | Dpredicate_def (_loc, _ident, _pred_def_sch) ->
       assert false
 (*
       let (argl, pred) = pred_def_sch.Env.scheme_type in
@@ -399,13 +399,13 @@ let rec push d =
       push (Daxiom (loc, def name, (Env.generalize_predicate
 				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
 *)
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       assert false
 (*
       failwith "encoding mono: inductive def not yet supported"
 *)
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dfunction_def (loc, ident, fun_def_sch) ->
+  | Dfunction_def (_loc, _ident, _fun_def_sch) ->
       assert false
 (*
 (*       let _ = print_endline ident in *)
@@ -452,7 +452,7 @@ let rec push d =
 	if debug then
 	  (Printf.printf "Goal context :\n";
 	   List.iter (fun ce -> match ce with 
-			| Svar (id, pt) -> Printf.printf "\tvar %s : ??\n" (Ident.string id)
+			| Svar (id, _pt) -> Printf.printf "\tvar %s : ??\n" (Ident.string id)
 			| Spred(id, _) -> Printf.printf "\thyp %s : ...\n" (Ident.string id)
 		     ) new_cel;
 	   Printf.printf "=========\n");

@@ -114,8 +114,8 @@ let ident_of_close_type t =
     | PTunit -> fprintf fmt "unit"
     | PTreal -> fprintf fmt "real"
     | PTexternal ([],id) -> fprintf fmt "%a" Ident.print id
-    | PTvar {tag=t; type_val=None} -> assert false (* close type *)
-    | PTvar {tag=t; type_val=Some pt} -> aux fmt pt
+    | PTvar {tag=_t; type_val=None} -> assert false (* close type *)
+    | PTvar {tag=_t; type_val=Some pt} -> aux fmt pt
     | PTexternal (l,id) -> fprintf fmt "%aI%a" 
         (Pp.print_list (Pp.constant_string "I") aux) l Ident.print id in
   let b = Buffer.create 10 in
@@ -211,21 +211,21 @@ module E = struct
   (** The encoded type are represented by tt *)
   let reduce_to_type = function 
     | Mono x -> x
-    | Enco t -> dt
+    | Enco _t -> dt
 
  (** The encoded term are represented by u *)
   let reduce_to_type_neg = function 
     | Mono x -> x
-    | Enco t -> st
+    | Enco _t -> st
 
 (** The encoded term are represented by s *)
   let reduce_to_type_pos = function 
     | Mono x -> x
-    | Enco t -> ut
+    | Enco _t -> ut
 
   (** The instantiated types don't need encoding *)
   let reduce_to_term = function 
-    | Mono x -> None
+    | Mono _x -> None
     | Enco t -> Some t
 
   (** Keep the builtin type for builtin type *)
@@ -233,8 +233,8 @@ module E = struct
     | PTint | PTbool | PTreal | PTunit as t -> t
     | _ -> PTexternal ([],v)
 
-  let type_of_mono v k = k
-  let ident_of_mono v k = v
+  let type_of_mono _v k = k
+  let ident_of_mono v _k = v
 
   let trad_type env fv_t t =
     (*if debug then Format.eprintf "trad_type : %a@." Util.print_pure_type t;*)
@@ -406,7 +406,7 @@ module E = struct
     let id_inst = instance_of env fv_t id inst in
     let ty = type_of env id inst in
     match ty with
-      | Function (arg,ret) -> (id_inst,(List.map (fun x -> reduce_to_term (trad_type env fv_t x)) arg))
+      | Function (arg,_ret) -> (id_inst,(List.map (fun x -> reduce_to_term (trad_type env fv_t x)) arg))
       | Predicate _ -> assert false
 
   let rec get_pred env fv_t id inst =
@@ -600,7 +600,7 @@ let rec translate_pred env fv_t = function
       Piff (translate_pred env fv_t p1, translate_pred env fv_t p2)
   | Pnot p ->
       Pnot (translate_pred env fv_t p)
-  | Forall (iswp, id, n, pt, tl, p) ->
+  | Forall (iswp, id, n, pt, _tl, p) ->
       let pt = E.trad_to_type_pos env fv_t pt in
       let tl = (*translate_triggers env fv_t p tl*) [] in
       Forall (iswp, id, n, pt, tl, translate_pred env fv_t p)
@@ -683,7 +683,7 @@ let rec translate_assertion env iter_fun d =
          | Dalgtype _ -> assert false
 (* A type declaration is translated as new logical function, the arity of *)
 (* which depends on the number of type variables in the declaration *)
-  | Dtype (loc, ident, vars) ->
+  | Dtype (loc, ident, _vars) ->
       let terms = E.get_type env ident in
       List.iter 
         (fun (ident,nargs) ->
@@ -692,7 +692,7 @@ let rec translate_assertion env iter_fun d =
       env
 (* In the case of a logic definition, we redefine the logic symbol  *)
 (* with types u and s, and its complete arity is stored for the encoding *)
-  | Dlogic (loc, ident, arity) -> 
+  | Dlogic (loc, ident, _arity) -> 
 (*
       Format.eprintf "Encoding_mono: adding %s in arities@." ident;
 *)
@@ -710,7 +710,7 @@ let rec translate_assertion env iter_fun d =
 				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]])))) in
       env
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "encoding mono: inductive def not yet supported"
   | Dfunction_def (loc, ident, fun_def_sch) ->
 (*       let _ = print_endline ident in *)

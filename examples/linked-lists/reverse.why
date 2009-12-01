@@ -39,6 +39,9 @@ axiom rev2_def: forall l1,l2:'a list.
      | Cons(x,l) -> rev2(l,Cons(x,l2))
   end
 
+goal rev2_test: 
+     forall l:'a list. rev2(Nil,l) = l
+
 function rev(l:'a list):'a list = rev2(l,Nil)
 
 goal rev_test0: 
@@ -55,6 +58,9 @@ goal rev_test3:
 
 (* disjoint predicate *)
 logic disjoint : 'a list, 'a list -> prop
+
+axiom disjoint_nil_l: forall l:'a list. disjoint(Nil,l)
+axiom disjoint_l_nil: forall l:'a list. disjoint(l,Nil)
 
 (* modelisation of pointers *)
 
@@ -118,9 +124,8 @@ let reverse (p0:pointer) (p0_model:pointer list) =
     while (ne_pointer !r null) do
       { invariant exists lp:pointer list. exists lr:pointer list.
                   llist(Ltl, p, lp) and llist(Ltl, r, lr) 
-		  (* and  disjoint(lp, lr) *) and 
-	           rev2(lr, lp) = rev(p0_model) 
-        (* variant store_pointer_pair(Ltl, r) for ll_order *) }
+		  and  disjoint(lp, lr) and 
+	           rev2(lr, lp) = rev(p0_model) }
       let q = ref !r in
       begin
       r := (pget !Ltl !r);

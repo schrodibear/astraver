@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.160 2009-11-13 16:16:37 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.161 2009-12-01 11:51:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -383,7 +383,7 @@ let has_memory_effect ef (mc,r) =
     with Not_found ->
       let locs = 
 	LocationMap.filter 
-	  (fun (loc,mem) _ -> Memory.equal mem (mc,r))
+	  (fun (_loc,mem) _ -> Memory.equal mem (mc,r))
 	  ef.jc_effect_precise_memories
       in
       not (LocationMap.is_empty locs)
@@ -671,7 +671,7 @@ let possible_union_deref e fi =
 		  Some(e1,fi,offset_of_field fi)
 		else None
 	  end
-      | JCEshift(e1,e2) ->
+      | JCEshift(e1,_e2) ->
 	  begin match access e1 fi with
 	    | Some(e2,fi2,off1) ->
 		let off2 = offset_of_expr e2 in
@@ -750,7 +750,7 @@ let tpossible_union_deref t fi =
 		  Some(t1,fi,offset_of_field fi)
 		else None
 	  end
-      | JCTshift(t1,t2) ->
+      | JCTshift(t1,_t2) ->
 	  begin match access t1 fi with
 	    | Some(t2,fi2,off1) ->
 		let off2 = offset_of_term t2 in
@@ -771,17 +771,17 @@ let tdestruct_union_access t fi_opt =
     | Some x -> x
     | None -> assert false
 
-let lpossible_union_access t fi = None (* TODO *)
+let lpossible_union_access _t _fi = None (* TODO *)
 
-let lpossible_union_deref t fi = None (* TODO *)
+let lpossible_union_deref _t _fi = None (* TODO *)
 
 let ldestruct_union_access loc fi_opt = 
   match lpossible_union_access loc fi_opt with
     | Some x -> x
     | None -> assert false
 
-let foreign_union e = [] (* TODO: subterms of union that are not in union *)
-let tforeign_union t = []
+let foreign_union _e = [] (* TODO: subterms of union that are not in union *)
+let tforeign_union _t = []
 
 let common_deref_alloc_class ~type_safe union_access e =
   if not type_safe && Region.bitwise e#region then
@@ -923,7 +923,7 @@ let rec location_of_term t =
     let loc_node = match t#node with
       | JCTvar v -> 
 	  JCLvar v
-      | JCTderef(t1,lab,fi) ->
+      | JCTderef(t1,_lab,fi) ->
 	  JCLderef(location_set_of_term t1, LabelHere, fi, t#region)
       | _ -> failwith "No location for term"
     in
@@ -934,7 +934,7 @@ and location_set_of_term t =
   let locs_node = match t#node with
     | JCTvar v -> 
 	JCLSvar v
-    | JCTderef(t1,lab,fi) ->
+    | JCTderef(t1,_lab,fi) ->
 	JCLSderef(location_set_of_term t1, LabelHere, fi, t#region)
     | _ -> failwith "No location for term"
   in
@@ -944,15 +944,15 @@ and location_set_of_term t =
 (* last location can be mutated *)
 let rec immutable_location fef loc =
   match loc#node with
-    | JCLvar v -> true
-    | JCLderef(locs,lab,fi,_r) ->
+    | JCLvar _v -> true
+    | JCLderef(locs,_lab,_fi,_r) ->
 	immutable_location_set fef locs 
     | _ -> false
 
 and immutable_location_set fef locs =
   match locs#node with
     | JCLSvar v -> not v.jc_var_info_assigned
-    | JCLSderef(locs,lab,fi,_r) ->
+    | JCLSderef(locs,_lab,fi,_r) ->
 	let mc,_fi_opt = lderef_mem_class ~type_safe:true locs fi in
 	immutable_location_set fef locs 
 	&& not (MemoryMap.mem (mc,locs#region) fef.jc_writes.jc_effect_memories)
@@ -1030,7 +1030,7 @@ let rec single_term ef t =
 	  else 
 	    add_local_effect lab ef vi
 	else ef
-    | JCToffset(_k,t,st) ->
+    | JCToffset(_k,t,_st) ->
         let ac = tderef_alloc_class ~type_safe:true t in
 	true,
 	add_alloc_effect lab ef (ac,t#region)
@@ -1073,7 +1073,7 @@ let rec single_term ef t =
     | JCTinstanceof(t,lab,st) ->
 	true,
 	add_tag_effect lab ef (struct_root st,t#region)
-    | JCTmatch(t,ptl) ->
+    | JCTmatch(_t,ptl) ->
 	true,
 	List.fold_left pattern ef (List.map fst ptl)
     | JCTconst _ | JCTrange _ | JCTbinary _ | JCTunary _
@@ -1084,7 +1084,7 @@ let rec single_term ef t =
 and term ef t =
   Jc_iterators.fold_rec_term single_term ef t
 
-let tag ef lab t vi_opt r =
+let tag ef lab _t vi_opt r =
   match vi_opt with
     | None -> ef
     | Some vi -> add_tag_effect lab ef (vi,r)
@@ -1116,7 +1116,7 @@ let single_assertion ef a =
 	  (tag ef lab ta (* Yannick: really effect on tag here? *)
 	     (Some (struct_root st)) t#region)
 	  (JCtag(st, []))
-    | JCAmatch(t,pal) ->
+    | JCAmatch(_t,pal) ->
 	true,
 	List.fold_left pattern ef (List.map fst pal)
     | JCAtrue | JCAfalse | JCAif _ | JCAbool_term _ | JCAnot _
@@ -1170,7 +1170,7 @@ let single_location ~in_assigns fef loc =
 	let mc,ufi_opt = lderef_mem_class ~type_safe:true locs fi in
 	let fef = add_mem ~only_writes:false fef mc in
 	begin match mc,ufi_opt with
-	  | JCmem_field fi, Some ufi ->
+	  | JCmem_field _fi, Some ufi ->
 	      let mems = overlapping_union_memories ufi in
 	      List.fold_left (add_mem ~only_writes:true) fef mems
 	  | JCmem_field _, None 
@@ -1192,14 +1192,14 @@ let single_location ~in_assigns fef loc =
 	let mc,ufi_opt = tderef_mem_class ~type_safe:true t1 fi in
 	let fef = add_mem ~only_writes:false fef mc in
 	begin match mc,ufi_opt with
-	  | JCmem_field fi, Some ufi ->
+	  | JCmem_field _fi, Some ufi ->
 	      let mems = overlapping_union_memories ufi in
 	      List.fold_left (add_mem ~only_writes:true) fef mems
 	  | JCmem_field _, None 
 	  | JCmem_plain_union _, _ 
 	  | JCmem_bitvector, _ -> fef
 	end
-    | JCLat(loc,_lab) -> fef
+    | JCLat(_loc,_lab) -> fef
   in true, fef
 
 let rec single_location_set fef locs =
@@ -1214,7 +1214,7 @@ let rec single_location_set fef locs =
 	  else fef
 	else fef
     | JCLSderef(locs,lab,fi,_r) ->
-	let mc,ufi_opt = lderef_mem_class ~type_safe:true locs fi in
+	let mc,_ufi_opt = lderef_mem_class ~type_safe:true locs fi in
 	add_memory_reads lab fef (mc,locs#region)
     | JCLSrange(_,_,_)
     | JCLSrange_term(_,_,_) ->
@@ -1252,7 +1252,7 @@ let rec expr fef e =
 	     else 
 	       add_local_writes LabelHere fef v
 	   else fef
-       | JCEoffset(_k,e,st) ->
+       | JCEoffset(_k,e,_st) ->
 	   let ac = deref_alloc_class ~type_safe:true e in
 	   true,
 	   add_alloc_reads LabelHere fef (ac,e#region)
@@ -1324,7 +1324,7 @@ let rec expr fef e =
 		   | JCmem_plain_union _vi, _ -> 
 		       false, (* do not call on sub-expressions of union *)
 		       List.fold_left expr fef (foreign_union e1)
-		   | JCmem_field fi, Some ufi ->
+		   | JCmem_field _fi, Some ufi ->
 		       let mems = overlapping_union_memories ufi in
 		       true,
 		       List.fold_left 
@@ -1571,9 +1571,9 @@ let logic_fun_effects f =
     | JCInductive l ->
 	let ax_effects =
 	  List.fold_left 
-	    (fun ef (id,labels,a) -> assertion ef a) empty_effects l
+	    (fun ef (_id,_labels,a) -> assertion ef a) empty_effects l
 	in
-	List.fold_left (fun acc (id,labels,a) -> 
+	List.fold_left (fun acc (_id,_labels,a) -> 
 			  effects_from_assertion f ax_effects acc a) ef l
     | JCReads [] ->
 	begin match f.jc_logic_info_axiomatic with

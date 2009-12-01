@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.41 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: monomorph.ml,v 1.42 2009-12-01 11:51:36 marche Exp $ i*)
 
 (* monomorphic output *)
 
@@ -420,11 +420,11 @@ let rec declare_logic loc id i =
     
 (* predicates definitions *)
 
-and push_predicate_def_instance loc id i ((bl,p) as d) =
+and push_predicate_def_instance loc id i ((_bl,_p) as d) =
   IterIT.predicate_def (declare_logic loc) (declare_type loc) d;
   push (Dpredicate_def (loc,Ident.create (name id i), empty_scheme d))
 
-and push_function_def_instance loc id i ((bl,t,e) as d) =
+and push_function_def_instance loc id i ((_bl,_t,_e) as d) =
   IterIT.function_def (declare_logic loc) (declare_type loc) d;
   push (Dfunction_def (loc, Ident.create (name id i), empty_scheme d))
       
@@ -553,7 +553,7 @@ let push_decl = function
       failwith "encoding rec: algebraic types are not supported"
   | Dlogic (loc, x, t) -> push_logic loc x t
   | Dpredicate_def (loc, x, d) -> push_predicate_def loc x d
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "monomorph: inductive def not supported"
   | Dfunction_def (loc, x, d) -> push_function_def loc x d
   | Daxiom (loc, x, p) -> push_axiom loc x p

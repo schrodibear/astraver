@@ -102,7 +102,7 @@ let replace_sub_pexpr e el =
   let replace_sub_tag tag el =
     let tag_node,el = match tag#node with
       | JCPTtag _ | JCPTbottom as tag_node -> tag_node,el
-      | JCPTtypeof e -> 
+      | JCPTtypeof _e -> 
 	  let e1,el = pop el in
 	  JCPTtypeof e1,el
     in
@@ -182,7 +182,7 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEassert(behav,asrt,e1)
     | JCPEcontract(req,dec,behs,_e) ->
 	let e1 = as1 el in JCPEcontract(req,dec,behs,e1)
-    | JCPEwhile(test,behs,variant,body) ->
+    | JCPEwhile(_test,behs,variant,_body) ->
 	let test,el = pop el in
 	let behs,el =
 	  List.fold_right
@@ -195,11 +195,11 @@ let replace_sub_pexpr e el =
 	let variant,el = 
           match variant with
             | None -> None,el
-            | Some(v,r) -> let v,el = pop el in Some(v,r),el
+            | Some(_v,r) -> let v,el = pop el in Some(v,r),el
         in
 	let body = as1 el in 
 	JCPEwhile(test,behs,variant,body)
-    | JCPEfor(inits,test,updates,behs,var,body) ->
+    | JCPEfor(inits,_test,updates,behs,var,_body) ->
 	let inits,el = popn (List.length inits) el in
 	let test,el = pop el in
 	let updates,el = popn (List.length updates) el in
@@ -214,13 +214,13 @@ let replace_sub_pexpr e el =
 	let var,el = 
           match var with
             | None -> None,el
-            | Some(var,r) -> let v,el = pop el in Some(v,r),el
+            | Some(_var,r) -> let v,el = pop el in Some(v,r),el
         in
 	let body = as1 el in 
 	JCPEfor(inits,test,updates,behs,var,body)
     | JCPEreturn _ ->
 	let e1 = as1 el in JCPEreturn e1
-    | JCPEtry(body,catches,finally) ->
+    | JCPEtry(_body,catches,_finally) ->
 	let body,el = pop el in
 	let catches,el = 
 	  List.fold_left (fun (acc,el) (id,name,_e) -> 
@@ -312,7 +312,7 @@ module PExprAst = struct
       | JCPEwhile(e1,behs,variant,body) ->
 	  let acc =
 	    List.fold_right
-	      (fun (_,inv,ass) acc ->
+	      (fun (_,inv,_ass) acc ->
 		 Option_misc.fold (fun x l -> x::l) inv acc
 		   (* TODO : ass *))
 	      behs
@@ -321,7 +321,7 @@ module PExprAst = struct
       | JCPEfor(inits,cond,update,behs,variant,body) ->
 	  let acc =
 	    List.fold_right
-	      (fun (_,inv,ass) acc ->
+	      (fun (_,inv,_ass) acc ->
 		 Option_misc.fold (fun x l -> x::l) inv acc
 		   (* TODO : ass *))
 	      behs
@@ -330,7 +330,7 @@ module PExprAst = struct
       | JCPEblock el
       | JCPEapp(_,_,el) ->
 	  el
-      | JCPEquantifier(_,_,_,trigs,e) -> [e](*::(List.concat trigs)*)
+      | JCPEquantifier(_,_,_,_trigs,e) -> [e](*::(List.concat trigs)*)
       | JCPEtry(e1, l, e2) ->
           e1 :: List.map (fun (_, _, e) -> e) l @ [ e2 ]
       | JCPEmatch(e, pel) ->
@@ -383,7 +383,7 @@ let rec subst_term (subst : term_subst) t =
     | JCTapp app -> 
         JCTapp({app with jc_app_args = List.map f app.jc_app_args})
     | JCTif(t1,t2,t3) -> JCTif(f t1, f t2, f t3)
-    | JCTmatch(t, ptl) -> 
+    | JCTmatch(_t, _ptl) -> 
         assert false (* TODO, beware of variable capture *)
           (* JCTmatch(f t,List.map f ptl) *)
   in
@@ -739,7 +739,7 @@ let fold_sub_location_set itt itls ft fls acc locs =
 	let acc = itt acc t0 in
 	let acc = Option_misc.fold_left itt acc t1_opt in
 	Option_misc.fold_left itt acc t2_opt 
-   | JCLSat(ls,lab) -> itls acc ls
+   | JCLSat(ls,_lab) -> itls acc ls
 
 let rec fold_location_set ft fls acc locs =
   let acc = fls acc locs in
@@ -782,7 +782,7 @@ let rec fold_rec_location ft fl fls acc loc =
 let iter_location ft fl fls loc =
   fold_location (fold_unit ft) (fold_unit fl) (fold_unit fls) () loc
 
-let fold_sub_behavior itt ita itl itls ft fa fl fls acc b =
+let fold_sub_behavior _itt ita itl _itls ft fa fl fls acc b =
   let ita = ita ft fa and itl = itl ft fl fls in
   let acc = Option_misc.fold_left ita acc b.jc_behavior_assumes in
   let acc =
@@ -810,7 +810,7 @@ let iter_behavior ft fa fl fls b =
     () b
 *)
 
-let fold_sub_funspec itb itt ita itl itls ft fa fl fls acc spec =
+let fold_sub_funspec itb _itt ita _itl _itls ft fa fl fls acc spec =
   let ita = ita ft fa and itb = itb ft fa fl fls in
   let acc = ita acc spec.jc_fun_requires in
   let acc = ita acc spec.jc_fun_free_requires in
@@ -1085,7 +1085,7 @@ let replace_sub_expr e el =
 	JCEloop(annot,body)
     | JCEreturn(ty,_e) ->
 	let e1 = as1 el in JCEreturn(ty,e1)
-    | JCEtry(body,catches,finally) ->
+    | JCEtry(_body,catches,_finally) ->
 	let body,el = pop el in
 	let catches,el = 
 	  List.fold_left (fun (acc,el) (id,name,_e) -> 
@@ -1096,7 +1096,7 @@ let replace_sub_expr e el =
 	let finally = as1 el in
 	JCEtry(body,catches,finally)
     | JCEthrow(id,eopt) ->
-	let eopt,el = popopt el eopt in
+	let eopt,_el = popopt el eopt in
         JCEthrow(id,eopt)
     | JCEpack(st1,_e,st2) ->
 	let e1 = as1 el in JCEpack(st1,e1,st2)
@@ -1218,7 +1218,7 @@ let fold_sub_expr_and_term_and_assertion
 	let acc = ite acc e1 in
 	let acc = 
 	  List.fold_left 
-	    (fun acc (id,inv,assigns) -> 
+	    (fun acc (_id,inv,_assigns) -> 
 	       let acc = Option_misc.fold_left ita acc inv in
 	       acc (* TODO: fold on assigns *)
 	    ) acc la.jc_loop_behaviors

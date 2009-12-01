@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.72 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.73 2009-12-01 11:51:36 marche Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -155,7 +155,7 @@ let free_vars_of qvars t =
   let vars = ref VarStringSet.empty in
   let rec collect formula =
     match formula with
-    | Tapp (id, tl, _) ->
+    | Tapp (_id, tl, _) ->
         List.iter collect tl
     | Tvar (id) ->
         if not (VarStringSet.mem (PureVar (Ident.string id)) qvars) then
@@ -280,7 +280,7 @@ let miniscoping pr =
               | _ -> Forall (t1, t2, p3, p4, p5, fm)
             end
         end
-    | Exists (t1, t2, pt, p) ->
+    | Exists (t1, t2, pt, _p) ->
         begin
           if not (member_of
                 (Ident.string t1)
@@ -328,8 +328,8 @@ let miniscoping pr =
     | Pand (p1, p2, p, q) -> Pand(p1, p2, minib p, minib q)
     | Forallb (p1, p, q) -> Pand(p1, false, minib p, minib q)
     | Por (p, q) -> Por(minib p, minib q)
-    | Forall (t1, t2, p3, p4, p5, p) as pi -> mq pi (minib p)
-    | Exists (t1, t2, pt, p) as pi -> mq pi (minib p)
+    | Forall (_t1, _t2, _p3, _p4, _p5, p) as pi -> mq pi (minib p)
+    | Exists (_t1, _t2, _pt, p) as pi -> mq pi (minib p)
     | _ -> fm
   in
   minib (nnf pr)
@@ -484,7 +484,7 @@ let sets_of_vars f =
     | Papp (id, [el1; el2], _) when is_eq id ->
         begin
           match (el1, el2) with
-          |	(Tvar (v1), Tvar(v2)) ->
+          |	(Tvar (v1), Tvar(_v2)) ->
               vars := SS_set.add
                 ((VarStringSet.add (get_flaged_var v1 !ac_fv_set)) (* (PureVar (Ident.string v1))  *)
                     (VarStringSet.singleton (get_flaged_var v1 !ac_fv_set)))    (* (PureVar (Ident.string v2))) )*)
@@ -689,7 +689,7 @@ let build_var_graph (l, c) =
             VarStringSet.union s t) v VarStringSet.empty in
   let rec mem = function
     | [] -> ()
-    | Svar (id, v) :: q -> mem q
+    | Svar (_id, _v) :: q -> mem q
     | Spred (_, p) :: q ->
         let v = sets_of_vars p in
         (** for each set of variables, build the SCC
@@ -1429,7 +1429,7 @@ let build_pred_graph decl =
 
 	(* If it is not a comparison or 
 	   it is a comparison, we considere comparison but we don't considere it as a special predicate *)
-      | Pnot (Papp (id, l, i)) 
+      | Pnot (Papp (id, _l, _i)) 
 	  when ((not (is_comparison id))
 		|| ((is_comparison id) && (comparison_to_consider id) && not considere_arith_comparison_as_special_predicate)) ->
 (* 	  when not (considere_arith_comparison_as_special_predicate  *)
@@ -1438,7 +1438,7 @@ let build_pred_graph decl =
 
 
 	    
-      | Papp (id, l, i) 
+      | Papp (id, _l, _i) 
 	  when ((not (is_comparison id))
 		|| ((is_comparison id) && (comparison_to_consider id) && not considere_arith_comparison_as_special_predicate)) ->
 (* 	  when not (considere_arith_comparison_as_special_predicate  *)
@@ -1448,7 +1448,7 @@ let build_pred_graph decl =
 
 	    
       (* If it is a comparison, we considere comparison and considere it as a special predicate *)
-      | Pnot (Papp (id, [el1; el2], i)) 
+      | Pnot (Papp (id, [el1; el2], _i)) 
 	  when ((is_comparison id) && (comparison_to_consider id) && considere_arith_comparison_as_special_predicate) ->
 	  begin 
 	    match (el1, el2) with
@@ -1490,7 +1490,7 @@ let build_pred_graph decl =
 
 	  end
 	    
-      | Papp (id, [el1; el2], i) 
+      | Papp (id, [el1; el2], _i) 
 	  when ((is_comparison id) && (comparison_to_consider id) && considere_arith_comparison_as_special_predicate) ->
 	  begin
 	    match (el1, el2) with
@@ -1788,7 +1788,7 @@ let get_preds_of p filter_comparison =
   in
   let rec get polarity = function
     (* Treatment of each predicates cases, expect comparison predicates *)
-    | Papp (id, l, i) when not (comparison_to_consider id) ->
+    | Papp (id, _l, _i) when not (comparison_to_consider id) ->
         s := PdlSet.add { l = remove_percents (Ident.string id);
             pol = if polarity == 1 then Pos else Neg } !s
     
@@ -1799,11 +1799,11 @@ let get_preds_of p filter_comparison =
     (* Particular treatment for comparison predicates (only equality at    *)
     (* this time). Each of them is added twice (with a suffix corresonding *)
     (* to each of parameters)                                              *)
-    | Papp (id, l, i) when (comparison_to_consider id) && filter_comparison ->
+    | Papp (id, l, _i) when (comparison_to_consider id) && filter_comparison ->
         (List.iter (add_suffixed_comparison id polarity) l)
     
-    | Forall (_(*w*), id, b, v, _(*tl*), p) 
-    | Exists (id, b, v, p) ->
+    | Forall (_(*w*), _id, _b, _v, _(*tl*), p) 
+    | Exists (_id, _b, _v, p) ->
         get polarity p 
 
 
@@ -1951,7 +1951,7 @@ let reduce_subst (l', g') =
   
   let compute_subst (sl, fl) f =
     match f with
-    | Svar (id, v) as var_def -> (sl, var_def:: fl)
+    | Svar (_id, _v) as var_def -> (sl, var_def:: fl)
     | Spred (id, p) ->
         begin
           match p with
@@ -2011,7 +2011,7 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
         List.for_all (all_vars_from_term vars qvars) lt
     | Tconst _ ->
         true
-    | Tnamed(lab, t) ->
+    | Tnamed(_lab, t) ->
         all_vars_from_term vars qvars t
   in
   
@@ -2064,7 +2064,7 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
           failwith "Pnamed has to be not found there (nnf has to remove it)"
       | Forallb (_, _, _) ->
           failwith "Forallb has to be not found there (nnf has to remove it)"
-      | Pif (a, b, c) ->
+      | Pif (_a, _b, _c) ->
           failwith "Pif has to be not found there (nnf has to remove it)"
     
     in
@@ -2264,7 +2264,7 @@ let managesContext relevantPreds decl =
                 filter l
               end
         
-        | (p_cnf, c) :: l ->
+        | (_p_cnf, c) :: l ->
             if debug then
               begin
                 Format.printf "Ctx (Autre): \n";
@@ -2346,7 +2346,7 @@ let hyps_to_cnf lh =
   let lh_cnf =
     List.fold_left (fun l h ->
             match h with
-            | Svar (id, v) as var_def -> var_def:: l
+            | Svar (_id, _v) as var_def -> var_def:: l
             | Spred (id, p) ->
                 let p'= cnf p in 
 		(* p' est une CNF de P mais on veut 1 hypothese par clause 
@@ -2378,7 +2378,7 @@ let reduce q decl =
   
   (** manage goal **)
   let q' = match q with
-      (loc, expl, id, s) as ax ->
+      (_loc, _expl, _id, s) as ax ->
         let (l, g) = s in (* l : liste d'hypotheses (contexte local) et g : le but*)
         let (l', g') = Util.intros [] g my_fresh_hyp (var_filter_tactic == SplitHyps) in
         let l' = if (var_filter_tactic == CNFHyps) then hyps_to_cnf l' else l' in

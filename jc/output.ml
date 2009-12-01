@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.50 2009-11-12 16:55:27 marche Exp $ i*)
+(*i $Id: output.ml,v 1.51 2009-12-01 11:51:35 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -60,10 +60,10 @@ type term =
 
 let rec iter_term f t =
   match t with
-  | LConst(c) -> ()
+  | LConst(_c) -> ()
   | LApp(id,l) -> f id; List.iter (iter_term f) l
   | LVar(id) -> f id
-  | LVarAtLabel(id,l) -> f id
+  | LVarAtLabel(id,_l) -> f id
   | Tnamed(_,t) -> iter_term f t
   | TIf(t1,t2,t3) -> 
       iter_term f t1; iter_term f t2; iter_term f t3
@@ -196,11 +196,11 @@ let rec iter_assertion f a =
   | LImpl(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
   | LIf(t,a1,a2) -> 
       iter_term f t; iter_assertion f a1; iter_assertion f a2 
-  | LLet(id,t,a) -> iter_term f t; iter_assertion f a
-  | LForall(id,t,trigs,a) -> iter_logic_type f t; 
+  | LLet(_id,t,a) -> iter_term f t; iter_assertion f a
+  | LForall(_id,t,trigs,a) -> iter_logic_type f t; 
       iter_triggers f trigs;
       iter_assertion f a
-  | LExists(id,t,trigs,a) -> iter_logic_type f t; 
+  | LExists(_id,t,trigs,a) -> iter_logic_type f t; 
       iter_triggers f trigs;
       iter_assertion f a
   | LPred(id,l) -> f id; List.iter (iter_term f) l
@@ -375,7 +375,7 @@ let rec fprintf_type anon form t =
 	      | l ->
 		  fprintf form 
 		    "raises%a@ @[<hv 2>{ %a@ | %a }@]@]" 
-		    (print_list comma (fun fmt (e,r) -> fprintf fmt " %s" e))
+		    (print_list comma (fun fmt (e,_r) -> fprintf fmt " %s" e))
 		    l
 		    fprintf_assertion q
 		    (print_list alt (fun fmt (e,r) -> 
@@ -484,7 +484,7 @@ let append e1 e2 =
 
 let rec iter_expr f e =
   match e with
-    | Cte(c) -> ()
+    | Cte(_c) -> ()
     | Var(id) -> f id
     | And(e1,e2) -> iter_expr f e1; iter_expr f e2
     | Or(e1,e2) -> iter_expr f e1; iter_expr f e2
@@ -504,13 +504,13 @@ let rec iter_expr f e =
 	List.iter (iter_expr f) e2
     | Block(el) -> List.iter (iter_expr f) el
     | Assign(id,e) -> f id; iter_expr f e
-    | Let(id,e1,e2) -> iter_expr f e1; iter_expr f e2
-    | Let_ref(id,e1,e2) -> iter_expr f e1; iter_expr f e2
+    | Let(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
+    | Let_ref(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | App(e1,e2) -> iter_expr f e1; iter_expr f e2
     | Raise (_, None) -> ()
-    | Raise(id,Some e) -> iter_expr f e
-    | Try(e1,exc,id,e2) -> iter_expr f e1; iter_expr f e2
-    | Fun(params,pre,body,post,signals) ->
+    | Raise(_id,Some e) -> iter_expr f e
+    | Try(e1,_exc,_id,e2) -> iter_expr f e1; iter_expr f e2
+    | Fun(_params,pre,body,post,signals) ->
 	iter_assertion f pre;
 	iter_expr f body;
 	iter_assertion f post;
@@ -642,7 +642,7 @@ let rec fprintf_expr form e =
 	  (fprintf_type false) t
     | Absurd ->
 	fprintf form "@[<hv 0>absurd@ @]" 
-    | Loc (l, e) ->
+    | Loc (_l, e) ->
 	fprintf_expr form e
 	(*
 	fprintf form "@[#%S %d %d#%a@]" l.pos_fname l.pos_lnum 
@@ -695,22 +695,22 @@ let get_why_id d =
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
-    | Def(id,t) -> iter_expr f t
-    | Logic(_,id,args,t) -> 
+    | Def(_id,t) -> iter_expr f t
+    | Logic(_,_id,args,t) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t
-    | Inductive(_,id,args,cases) ->
+    | Inductive(_,_id,args,cases) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	List.iter (fun (_,a) -> iter_assertion f a) cases
-    | Predicate(_,id,args,p) -> 
+    | Predicate(_,_id,args,p) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_assertion f p
-    | Goal(id,t) | Axiom(id,t) -> iter_assertion f t
-    | Function(_,id,args,t,p) -> 
+    | Goal(_id,t) | Axiom(_id,t) -> iter_assertion f t
+    | Function(_,_id,args,t,p) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t;
 	iter_term f p
-    | Type(t,args) -> List.iter f args
+    | Type(_t,args) -> List.iter f args
     | Exception(_,t) -> Option_misc.iter (iter_logic_type f) t
 
 
@@ -766,14 +766,14 @@ let fprintf_why_decl form d =
     | Logic(b,id,args,t) ->
 	fprintf form "@[<hv 1>%slogic %s: %a -> %a@.@."
 	  (if b then "external " else "") id 
-	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
+	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
 	  fprintf_logic_type t 
     | Inductive(b,id,args,cases) ->
 	fprintf form "@[<hv 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
 	  (if b then "external " else "") id 
-	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
+	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
 	  (print_list newline 
-	     (fun fmt (id,a) ->
+	     (fun _fmt (id,a) ->
 		fprintf form "| %s: @[%a@]" id fprintf_assertion a))
 	  cases
     | Axiom(id,p) ->

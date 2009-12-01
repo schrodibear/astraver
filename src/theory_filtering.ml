@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.14 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.15 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -149,7 +149,7 @@ let functional_symbols  f  = (*: Logic_decl.t -> StringSet*)
   let symbolsSet  = ref Int_set.empty  in 
   let rec collect formula  = 
     match formula with 
-      | Tconst (ConstInt n) -> ()
+      | Tconst (ConstInt _n) -> ()
       | Tconst (ConstBool _) -> () 
       | Tconst ConstUnit -> ()
       | Tconst (ConstFloat _) -> ()
@@ -161,9 +161,9 @@ let functional_symbols  f  = (*: Logic_decl.t -> StringSet*)
       | Tapp (id, tl, _) when is_relation id || is_arith id ->
 	  symbolsSet  := Int_set.add (Symbol_container.index_of (Ident.string id))  !symbolsSet ;
 	  List.iter collect tl 
-      | Tapp (id, [], i) -> 
+      | Tapp (id, [], _i) -> 
 	  symbolsSet  := Int_set.add (Symbol_container.index_of (Ident.string id)) !symbolsSet
-      | Tapp (id, tl, i) ->
+      | Tapp (id, tl, _i) ->
 	  symbolsSet  := Int_set.add (Symbol_container.index_of (Ident.string id)) !symbolsSet;
 	  List.iter collect tl 
       | _ -> ()
@@ -191,7 +191,7 @@ let symbols  f  =
 	    Pimplies (_, a, b) ->
 	  collect a;
 	      collect b
-      | Papp (id, tl, i) -> 
+      | Papp (id, tl, _i) -> 
 	  let rec functional_symbolsFromList  l  =  
 	    match l with 
 		[] -> Int_set.empty
@@ -207,7 +207,7 @@ let symbols  f  =
 	  collect c
       | Pnot a ->
 	  collect a;
-      | Forall (_,id,n,t,_,p) | Exists (id,n,t,p) ->    
+      | Forall (_,_id,_n,_t,_,p) | Exists (_id,_n,_t,p) ->    
 	  collect p
       | Pnamed (_, p) -> (* TODO: print name *)
 	  collect p 
@@ -261,28 +261,28 @@ let display (q,s) n =
         Printf.printf  "type %s (%d) : "  (Ident.string id)
     | Dalgtype _ ->
         failwith "Theory filtering: algebraic types are not supported"
-    | Dlogic (_, id, t) ->
+    | Dlogic (_, id, _t) ->
         Printf.printf  "arit %s (%d) : " (Ident.string id)
-    | Dpredicate_def (_, id, d) -> 
+    | Dpredicate_def (_, id, _d) -> 
 	let id = Ident.string id in
 	Printf.printf  "def_pred %s (%d): " id 
-    | Dinductive_def(loc, ident, inddef) ->
+    | Dinductive_def(_loc, _ident, _inddef) ->
 	failwith "Theory filtering: inductive def not yet supported"
-    | Dfunction_def (_, id, d) -> 
+    | Dfunction_def (_, id, _d) -> 
 	let id = Ident.string id in
 	Printf.printf  "def_func %s (%d): " id 
-    | Daxiom (_, id, p)          -> Printf.printf  "axiom %s (%d): "  id 
-    | Dgoal (_, expl, id, s)   -> Printf.printf  "goal %s (%d):"  id 
+    | Daxiom (_, id, _p)          -> Printf.printf  "axiom %s (%d): "  id 
+    | Dgoal (_, _expl, id, _s)   -> Printf.printf  "goal %s (%d):"  id 
   in 
   if debug then begin 
     (di q) n;
     display_symb_of s; Printf.printf "\n" 
   end
 
-let managesGoal id ax (hyps,concl) =   
+let managesGoal _id ax (hyps,concl) =   
   let rec symb_of_seq = function
     | [] -> symbols concl
-    | Svar (id, v) :: q ->  symb_of_seq  q 
+    | Svar (_id, _v) :: q ->  symb_of_seq  q 
     | Spred (_,p) :: q -> 
 	Int_set.union 
 	  (symbols p) 
@@ -314,7 +314,7 @@ let managesGoal id ax (hyps,concl) =
   
   
 
-let declare_axiom id ax p =
+let declare_axiom _id ax p =
   let setOfSymbols = symbols p in 
   let n = Theory_container.add  (ax,setOfSymbols) in 
   Theory_container.set_produce n setOfSymbols ;
@@ -353,13 +353,13 @@ let launcher decl = match decl with
       declare_type (Ident.string id) ax
   | Dalgtype _ ->
       failwith "Theory filtering: algebraic types are not supported"
-  | Dlogic (_, id, t) as ax -> (* Printf.printf  "Dlogic %s \n"  id ;*) 
+  | Dlogic (_, id, _t) as ax -> (* Printf.printf  "Dlogic %s \n"  id ;*) 
       declare_arity (Ident.string id) ax
   | Dpredicate_def (_, id, d) as ax -> 
       (*Printf.printf  "Dpredicate_def %s \n"  *)
       let id = Ident.string id in
       declare_predicate id ax d.scheme_type 
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "Theory filtering: inductive def not yet supported"
   | Dfunction_def (_, id, d)  as ax ->
       (*Printf.printf  "Dfunction_def %s \n"  id ;*)  
@@ -367,7 +367,7 @@ let launcher decl = match decl with
       declare_function id ax d.scheme_type 
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)
       declare_axiom  id ax p.scheme_type 
-  | Dgoal (_, expl, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)
+  | Dgoal (_, _expl, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)
       managesGoal id ax s.Env.scheme_type 
 
 

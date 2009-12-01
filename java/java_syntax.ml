@@ -151,7 +151,7 @@ let spec_file f =
     close_in c;
     printf "Parsing of spec file %s was OK.@." f;
     match d with
-    | JPTtheory(PolyTheoryId(qid,params),body) ->
+    | JPTtheory(PolyTheoryId(qid,_params),body) ->
          printf "It contains theory '%s'@."
            (Java_pervasives.qualified_ident2string
              qid ".");
@@ -171,7 +171,7 @@ let file f =
       close_in c;
       printf "Parsing of spec file %s was OK.@." f;
       match d with
-	| JPTtheory(PolyTheoryId(qid,params),_) ->
+	| JPTtheory(PolyTheoryId(qid,_params),_) ->
 	    printf "It contains theory '%s'@."
               (Java_pervasives.qualified_ident2string qid ".");
  	    exit 0

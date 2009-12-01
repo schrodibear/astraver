@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.55 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: mizar.ml,v 1.56 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -57,7 +57,7 @@ let push_decl = function
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> 
       Queue.add (Predicate (Ident.string id, p)) elem_q
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "Mizar output: inductive def not yet supported"
   | Dfunction_def _ -> () (*TODO*)
   | Dtype _ -> () (*TODO*)
@@ -288,7 +288,7 @@ let rec print_thesis fmt = function
   | Pand (_, _, t1, t2) -> fprintf fmt "%a@ %a" print_thesis t1 print_thesis t2
   | t -> fprintf fmt "@[thus %a@];" print_predicate t
 
-let reprint_obligation fmt loc expl id s =
+let reprint_obligation fmt loc _expl id s =
   let s = s.Env.scheme_type in
   fprintf fmt "@[ :: %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "@[ (*Why goal*) theorem %s:@\n @[%a@]@]@\n" id print_sequent s
@@ -301,13 +301,13 @@ let print_obligation fmt loc expl id s =
   let t = snd s.Env.scheme_type in
   fprintf fmt "@[  :: FILL PROOF HERE@\n  @[%a@]@]@\n end;@\n" print_thesis t
 
-let print_logic fmt id t = 
+let print_logic _fmt _id t = 
   let _ = Env.specialize_logic_type t in
   assert false (*TODO*)
 
 let reprint_logic fmt id t = print_logic fmt id t
 
-let reprint_axiom fmt id p =
+let reprint_axiom _fmt _id p =
   let _ = Env.specialize_predicate p in
   assert false (*TODO*)
   (*
@@ -370,7 +370,7 @@ environ
 begin :: proof obligations start here
 " (match mizar_environ with None -> environ | Some s -> s)
 
-  let first_time_trailer fmt = ()
+  let first_time_trailer _fmt = ()
 
   let edit_below = Str.regexp "[ ]*:: EDIT BELOW THIS LINE[ ]*"
   let not_end_of_element _ s = not (Str.string_match edit_below s 0)

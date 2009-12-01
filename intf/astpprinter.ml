@@ -91,7 +91,7 @@ let print_term fmt t =
 	       fprintf fmt "@[%a@]" print3 t;
 	       pp_close_tag fmt ()
 	)
-    | Tnamed (Internal n, t) ->
+    | Tnamed (Internal _n, t) ->
 	fprintf fmt "@[%a@]" print3 t
   and print_terms fmt tl =
     print_list comma print3 fmt tl
@@ -99,16 +99,16 @@ let print_term fmt t =
     | Tapp (id, _, _) when (Ident.string id = "shift") -> true
     | _ -> false
   and print_fct_acc fmt = function
-	| Tapp (id, [m; term], _) -> 
+	| Tapp (_id, [m; term], _) -> 
 	    if (is_shift term) 
 	    then fprintf fmt "%a{%a}" print_fct_acc_shift term print3 m
 	    else fprintf fmt "%a{%a}" print3 term print3 m
 	| t -> print3 fmt t
   and print_fct_acc_shift fmt = function 
-    | Tapp (id, [p; offset], _) -> fprintf fmt "%a[%a]" print3 p print3 offset;
+    | Tapp (_id, [p; offset], _) -> fprintf fmt "%a[%a]" print3 p print3 offset;
     | t -> print3 fmt t
   and print_fct_shift fmt = function
-	 | Tapp (id, [p; offset], _) -> 
+	 | Tapp (_id, [p; offset], _) -> 
 	     fprintf fmt "%a + %a" print3 p print3 offset
 	 | t -> print3 fmt t
   in
@@ -188,7 +188,7 @@ let print_predicate fmt p =
 	       fprintf fmt "@[%a@]" print3 p;
 	       pp_close_tag fmt ()
 	)
-    | Pnamed (Internal n, p) ->
+    | Pnamed (Internal _n, p) ->
 	fprintf fmt "@[%a@]" print3 p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "@[(%a)@]" print0 p

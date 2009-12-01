@@ -150,7 +150,7 @@ axiom round_%s_idempotent:
 
 (* Strict  model *)
 
-let output_strict_part fmt t p e =
+let output_strict_part fmt t _p _e =
   fprintf fmt "include \"%s_model.why\"@.@." t;
   fprintf fmt "(* Parameters for the strict model for %s format *)@.@." t;
 

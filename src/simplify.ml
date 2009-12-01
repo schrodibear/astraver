@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.96 2009-12-01 10:12:28 bobot Exp $ i*)
+(*i $Id: simplify.ml,v 1.97 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -58,7 +58,7 @@ let rec decl_to_elem = function
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> 
       Queue.add (Predicate (Ident.string id, p)) queue
-  | Dfunction_def (_, id, p) -> 
+  | Dfunction_def (_, _id, _p) -> 
       assert false
 (*
       Queue.add (FunctionDef (Ident.string id, p)) queue

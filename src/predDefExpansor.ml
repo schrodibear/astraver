@@ -136,7 +136,7 @@ let push ~recursive_expand decl =
 let function_def loc id d =
   let (vars,(yv,tr,e)) = Env.specialize_function_def d in
   let zv = Ltyping.instance id vars in
-  let ts = List.map (fun (y,t) -> t) yv in
+  let ts = List.map (fun (_y,t) -> t) yv in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
   let t = Env.generalize_logic_type (Function (ts,tr)) in
   let fall (y,t) acc = Forall (false, y, y, t, [], acc) in
@@ -149,7 +149,7 @@ let function_def loc id d =
 let predicate_def loc id d =
   let (vars,(yv,e)) = Env.specialize_predicate_def d in
   let zv = Ltyping.instance id vars in
-  let ts = List.map (fun (y,t) -> t) yv in
+  let ts = List.map (fun (_y,t) -> t) yv in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
   let t = Env.generalize_logic_type (Predicate ts) in
   let fall (y,t) acc = Forall (false, y, y, t, [], acc) in
@@ -195,8 +195,8 @@ forall y_1:t_1,..,y_n:t_n, id(y_1,..,y_n) ->
 let inductive_inverse_body id yv cases =
   let eq_and (y,t) e = Misc.pand (Papp (t_eq, [Tvar y; e], [t])) in
   let rec invert = function
-    | Forall(w,id,n,t,trig,p) -> Exists(id,n,t,invert p)
-    | Pimplies(w,h,p) -> Misc.pand h (invert p)
+    | Forall(_w,id,n,t,_trig,p) -> Exists(id,n,t,invert p)
+    | Pimplies(_w,h,p) -> Misc.pand h (invert p)
     | Papp(f,l,_) when f == id -> List.fold_right2 eq_and yv l Ptrue
     | _ -> assert false (* ill-formed, should have been catch by typing *)
   in
@@ -252,7 +252,7 @@ let find_global_logic_gen id =
   let _,t = find_global_logic id in
   generalize_logic_type t
 
-let alg_proj_fun loc zv th (id,pl) =
+let alg_proj_fun loc zv _th (id,pl) =
   let r = ref 0 in
   let yv,ct = fresh_cons zv id pl in
   let proj (v,t) =
@@ -283,7 +283,7 @@ let alg_inversion_axiom loc id zv th cs =
   let pred = Env.generalize_predicate body in
   Daxiom (loc, Ident.string id ^ "_inversion", pred)
 
-let alg_match_fun_axiom loc id zv th cs =
+let alg_match_fun_axiom loc id zv _th cs =
   let nm = Ident.match_id id in
   let nt = PTvar (new_type_var ()) in
   let vs = List.map (fun _ -> (fresh_var (), nt)) cs in

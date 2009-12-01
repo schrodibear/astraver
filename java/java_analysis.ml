@@ -85,20 +85,20 @@ let rec intro_array_struct t =
 	 - Nicolas R. *)
       Hashtbl.add array_struct_table n (t, n ^ "M", n ^ "P")
 
-let term t = () (* TODO *)
+let term _t = () (* TODO *)
 
-let assertion a = () (* TODO *)
+let assertion _a = () (* TODO *)
 
 let rec expr e = 
   match e.java_expr_node with
-    | JElit l -> ()
-    | JEincr_local_var(op,v) -> ()
-    | JEincr_field(op,e1,fi) -> expr e1
+    | JElit _l -> ()
+    | JEincr_local_var(_op,_v) -> ()
+    | JEincr_field(_op,e1,_fi) -> expr e1
     | JEun (_, e1) -> expr e1
     | JEbin (e1, _, e2) | JEincr_array (_, e1, e2) -> expr e1; expr e2 
-    | JEvar vi -> ()
-    | JEstatic_field_access(ci,fi) -> ()
-    | JEfield_access(e1,fi) -> expr e1
+    | JEvar _vi -> ()
+    | JEstatic_field_access(_ci,_fi) -> ()
+    | JEfield_access(e1,_fi) -> expr e1
     | JEarray_length e -> 
 	begin
 	  match e.java_expr_type with
@@ -116,8 +116,8 @@ let rec expr e =
     | JEassign_local_var_op (_, _, e)
     | JEassign_static_field (_, e) 
     | JEassign_static_field_op (_, _, e) -> expr e
-    | JEassign_field(e1,fi,e2) -> expr e1; expr e2
-    | JEassign_field_op(e1,fi,op,e2) -> expr e1; expr e2
+    | JEassign_field(e1,_fi,e2) -> expr e1; expr e2
+    | JEassign_field_op(e1,_fi,_op,e2) -> expr e1; expr e2
     | JEif(e1,e2,e3) -> expr e1; expr e2; expr e3
     | JEassign_array(e1,e2,e3) 
     | JEassign_array_op(e1,e2,_,e3) -> 
@@ -132,16 +132,16 @@ let rec expr e =
 		  Java_typing.print_type e3.java_expr_type;
 		assert false
 	end
-    | JEcall(e,mi,args) ->
+    | JEcall(e,_mi,args) ->
 	expr e;	List.iter expr args
     | JEconstr_call (e, _, args) ->
 	expr e; List.iter expr args
-    | JEstatic_call(mi,args) ->
+    | JEstatic_call(_mi,args) ->
 	List.iter expr args
-    | JEnew_array(ty,dims) ->
+    | JEnew_array(_ty,dims) ->
 	List.iter expr dims
 	(* intro_array_struct ty ??? *)
-    | JEnew_object(ci,args) ->
+    | JEnew_object(_ci,args) ->
 	List.iter expr args
     | JEinstanceof(e,_)
     | JEcast(_,e) -> expr e
@@ -155,7 +155,7 @@ let switch_label = function
   | Java_ast.Default -> ()
   | Java_ast.Case e -> expr e
   
-let behavior (id,assumes,throws,assigns,ensures) =
+let behavior (_id,assumes,_throws,assigns,ensures) =
   Option_misc.iter assertion assumes;
   Option_misc.iter (fun (_,l) -> List.iter term l) assigns;
   assertion ensures
@@ -170,9 +170,9 @@ let rec statement s =
     | JSskip 
     | JSreturn_void
     | JSbreak _ | JScontinue _ -> ()
-    | JSlabel(lab,s) -> statement s
+    | JSlabel(_lab,s) -> statement s
     | JSblock l -> List.iter statement l	  
-    | JSvar_decl (vi, init, s) ->
+    | JSvar_decl (_vi, init, s) ->
 	Option_misc.iter do_initializer init;
 	statement s
     | JSif (e, s1, s2) -> expr e; statement s1; statement s2
@@ -257,7 +257,7 @@ let disambiguates_method_names () =
 	 mt.Java_typing.mt_method_info.method_info_tag mt)
       methods_list
 
-let do_method mi req behs body =
+let do_method mi _req _behs body =
 (*
   Option_misc.iter assertion req;
   ... behs
@@ -271,7 +271,7 @@ let do_method mi req behs body =
   Option_misc.iter param mi.method_info_result
 
 
-let do_constructor ci req behs body =
+let do_constructor ci _req _behs body =
 (*
   let l = ci.constr_info_class.class_info_constructors in
   if List.length l >= 2 then

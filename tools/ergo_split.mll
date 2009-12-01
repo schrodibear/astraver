@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ergo_split.mll,v 1.7 2009-08-26 13:47:41 marche Exp $ i*)
+(*i $Id: ergo_split.mll,v 1.8 2009-12-01 11:51:37 marche Exp $ i*)
 
 {
 
@@ -33,7 +33,7 @@
   open Lexing
 
   let debug = ref false
-  let callback = ref (fun f -> assert false)
+  let callback = ref (fun _f -> assert false)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192

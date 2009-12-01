@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.45 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.46 2009-12-01 11:51:35 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -122,7 +122,7 @@ let rec pexpr fmt e =
     | JCPElet(None,vi,Some e1,e2) -> 
 	fprintf fmt "@[(let %s =@ %a@ in %a)@]" 
           vi pexpr e1 pexpr e2 
-    | JCPElet(ty,vi,None,e2) -> assert false
+    | JCPElet(_ty,_vi,None,_e2) -> assert false
     | JCPEassign (v, e) -> 
 	fprintf fmt "(%a = %a)" pexpr v pexpr e
     | JCPEassign_op (v, op, e) -> 

@@ -204,7 +204,7 @@ let const c =
     | JCCreal s -> Prim_real s
     | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
     | JCCboolean b -> Prim_bool b
-    | JCCstring s -> assert false (* TODO *)
+    | JCCstring _s -> assert false (* TODO *)
 
 type forall_or_let =
   | JCforall of string * Output.logic_type
@@ -621,7 +621,13 @@ let ttag_table_param ~label_in_name lab (vi,r) =
 let ref_term : (?subst:(Output.term Jc_envset.VarMap.t) -> 
                  type_safe:bool -> global_assertion:bool -> relocate:bool 
 		 -> label -> label -> Jc_fenv.term -> Output.term) ref 
-    = ref (fun ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate _ _ _ -> assert false)
+    = ref (fun ?(subst=VarMap.empty) ~type_safe ~global_assertion 
+             ~relocate _ _ _ -> 
+               assert (VarMap.is_empty subst);
+               assert (type_safe=false);
+               assert (global_assertion=false);
+               assert (relocate=false);
+               assert false)
 
 let rec location ~type_safe ~global_assertion lab loc = 
   let flocs = location_set ~type_safe ~global_assertion lab in
@@ -641,7 +647,7 @@ and location_set ~type_safe ~global_assertion lab locs =
   match locs#node with
     | JCLSvar v ->
 	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
-    | JCLSderef(locs,lab,fi,r) ->
+    | JCLSderef(locs,lab,fi,_r) ->
 	let mc,_fi_opt = lderef_mem_class ~type_safe locs fi in
         let mem = 
 	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
@@ -663,7 +669,7 @@ and location_set ~type_safe ~global_assertion lab locs =
 	LApp("pset_range_right",[ LApp("pset_singleton", [ ft locs ]); ft t1 ])
     | JCLSrange_term(locs,None,None) ->
 	LApp("pset_all",[ LApp("pset_singleton", [ ft locs ]) ])
-    | JCLSat(locs,lab) -> flocs locs
+    | JCLSat(locs,_lab) -> flocs locs
 	
 
 let rec location_list' = function
@@ -737,7 +743,7 @@ and transpose_location_set ~region_assoc ~param_assoc locs =
 	in
 	new location_set_with ~region:rloc ~node locs
 
-let transpose_location_set ~region_assoc ~param_assoc locs w =
+let transpose_location_set ~region_assoc ~param_assoc locs _w =
   try Some(transpose_location_set ~region_assoc ~param_assoc locs)
   with NoRegion -> None
 
@@ -778,7 +784,7 @@ let transpose_location_list
              with
 	       | None -> acc
 	       | Some(RawMemory _) -> assert false
-	       | Some(PreciseMemory(loc,(mc,rloc))) -> loc :: acc
+	       | Some(PreciseMemory(loc,(_mc,_rloc))) -> loc :: acc
            else acc) rw_precise_mems []
 
 let write_read_separation_condition 
@@ -823,10 +829,10 @@ let write_read_separation_condition
 
 let write_write_separation_condition 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc
-    ww_inter_names writes reads =
+    ww_inter_names writes _reads =
   let writes = 
     List.filter 
-      (fun ((mc,distr),(v,_ty)) -> 
+      (fun ((_mc,_distr),(v,_ty)) -> 
 	 let n = var_name' v in
 	 StringSet.mem n ww_inter_names
       ) writes 
@@ -1118,7 +1124,7 @@ let make_alloc_param ~check_size ac pc =
   (* parameters and effects *)
   let writes = alloc_write_parameters (ac,dummy_region) pc in
   let write_effects = 
-    List.map (function (Var n,ty') -> n | _ -> assert false) writes
+    List.map (function (Var n,_ty') -> n | _ -> assert false) writes
   in
   let write_params = 
     List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
@@ -1213,7 +1219,7 @@ let make_param ~name ~writes ~reads ~pre ~post ~return_type =
   in
   Param(false,name,annot_type)
 
-let conv_bw_alloc_parameters ~deref r pc =
+let conv_bw_alloc_parameters ~deref r _pc =
   let ac = JCalloc_bitvector in
   let allocv = 
     if deref then
@@ -1224,7 +1230,7 @@ let conv_bw_alloc_parameters ~deref r pc =
   let alloc = (allocv, alloc_table_type ac) in
   [ alloc ]
 
-let conv_bw_mem_parameters ~deref r pc =
+let conv_bw_mem_parameters ~deref r _pc =
   let mc = JCmem_bitvector in
   let memv = 
     if deref then
@@ -1943,6 +1949,7 @@ let make_region_assoc region_list =
 
 let write_model_parameters 
     ~type_safe ~mode ~callee_reads ~callee_writes ?region_list ~params () =
+  assert (Jc_effect.same_effects callee_reads callee_reads);
   let region_assoc = Option_misc.map make_region_assoc region_list in
   let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
@@ -2067,7 +2074,7 @@ let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
       ~region_assoc ~region_mem_assoc ~already_used:[]
   in
   let pointer_of_parameter = function 
-      (((ac,distr),locr),(v',ty')) ->
+      (((ac,_distr),locr),(_v',_ty')) ->
 	let pc = match ac with
 	  | JCalloc_root vi -> JCroot vi
 	  | JCalloc_bitvector -> assert false
@@ -2105,7 +2112,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
       ~region_assoc ~region_mem_assoc ~already_used:[]
   in
   let pointer_of_parameter = function
-      (((mc,distr),locr),(v',ty')) ->
+      (((mc,_distr),locr),(_v',_ty')) ->
 	let pc = match mc with
 	  | JCmem_field fi -> JCtag(fi.jc_field_info_struct,[])
 	  | JCmem_plain_union vi -> JCroot vi
@@ -2116,7 +2123,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
   let wpointers = List.map pointer_of_parameter writes in
   let rpointers = List.map pointer_of_parameter reads in
   let remove_local effects =
-    List.map (fun ((mem,locr),(v',ty')) -> (mem,(v',ty'))) effects
+    List.map (fun ((mem,_locr),(v',ty')) -> (mem,(v',ty'))) effects
   in
   let writes' = remove_local writes and reads' = remove_local reads in
   (* Check if there are duplicates between reads and writes *)
@@ -2197,6 +2204,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
     pre, new_fname, wpointers, rpointers, writes, reads
   
 let global_arguments ~callee_reads ~callee_writes ~region_assoc =
+  assert (region_assoc=[]);
   let writes = global_writes ~callee_writes in
   let reads = global_reads ~callee_reads in
   (List.map fst writes), (List.map fst reads)
@@ -2368,6 +2376,7 @@ let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
        ~label_in_name ?region_assoc ?label_assoc reads)
 
 let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  assert (region_assoc=None);
   VarMap.fold
     (fun v labs acc ->
        LogicLabelSet.fold
@@ -2431,7 +2440,7 @@ let logic_info_reads acc li =
   in
   let acc =
     AllocMap.fold
-      (fun (ac,r) labs acc ->
+      (fun (ac,r) _labs acc ->
 	 StringSet.add (alloc_table_name (ac, r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_tables
       acc
@@ -2446,7 +2455,7 @@ let logic_info_reads acc li =
 let all_effects ef =
   let res =
     MemoryMap.fold
-      (fun (mc,r) labels acc -> 
+      (fun (mc,r) _labels acc -> 
 	let mem = memory_name(mc,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then
@@ -2462,13 +2471,13 @@ let all_effects ef =
   in
   let res =
     VarMap.fold
-      (fun v labs acc -> v.jc_var_info_final_name::acc)
+      (fun v _labs acc -> v.jc_var_info_final_name::acc)
       ef.jc_effect_globals
       res
   in
   let res =
     AllocMap.fold
-      (fun (a,r) labs acc -> 
+      (fun (a,r) _labs acc -> 
 	let alloc = alloc_table_name(a,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then

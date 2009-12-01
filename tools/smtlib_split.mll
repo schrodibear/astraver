@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib_split.mll,v 1.10 2008-11-05 14:03:19 filliatr Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.11 2009-12-01 11:51:37 marche Exp $ i*)
 
 {
 
@@ -33,7 +33,7 @@
   open Lexing 
 
   let debug = ref false
-  let callback = ref (fun f -> assert false : string -> unit)
+  let callback = ref (fun _f -> assert false : string -> unit)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192

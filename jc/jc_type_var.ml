@@ -84,7 +84,7 @@ let rec substruct st = function
         begin match st.jc_struct_info_parent with
           | None -> false
           | Some(p, []) -> substruct p pc
-          | Some(p, _) -> assert false (* TODO *)
+          | Some(_p, _) -> assert false (* TODO *)
         end
   | JCroot vi ->
       struct_root st == vi
@@ -133,7 +133,7 @@ let subst env a = subst_aux env.vmap a
 
 let rec occur_check tvar t =
   match t with
-    | JCTlogic (s,l) -> List.exists (occur_check tvar) l
+    | JCTlogic (_s,l) -> List.exists (occur_check tvar) l
     | JCTtype_var tvar2 -> TypeVarOrd.equal tvar tvar2
     | _ -> false
 

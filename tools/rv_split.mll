@@ -31,7 +31,7 @@
   open Lexing 
 
   let debug = ref true
-  let callback = ref (fun f -> assert false : string -> unit)
+  let callback = ref (fun _f -> assert false : string -> unit)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192

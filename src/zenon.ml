@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.40 2009-12-01 10:12:28 bobot Exp $ i*)
+(*i $Id: zenon.ml,v 1.41 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Zenon output *)
 
@@ -81,7 +81,7 @@ let rename s =
 let ident fmt id = fprintf fmt "%s" (rename (string id))
 let idents fmt s = fprintf fmt "%s" (rename s)
 
-let symbol fmt (id,i) = ident fmt id
+let symbol fmt (id,_i) = ident fmt id
   (* Monomorph.symbol fmt (id, i) *)
 
 let infix id =
@@ -182,7 +182,7 @@ let rec print_predicate fmt = function
       fprintf fmt "%a" ident id
   | Papp (id, tl, _) when id == t_distinct ->
       fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
-  | Papp (id, [t], _) when id == well_founded ->
+  | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "True ;; was well_founded@\n"
   | Papp (id, [a; b], _) when id == t_eq_bool ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
@@ -274,7 +274,7 @@ let print_parameter fmt id c =
   fprintf fmt 
     "@[<hov 2>;;  %a: %a@]@\n@\n" idents id print_cc_type c
     
-let print_logic fmt id t =
+let print_logic fmt id _t =
   fprintf fmt ";; Why logic %a@\n@\n" idents id
   (*
   fprintf fmt "@[;; %a%a: %a@]@\n@\n" idents id instance i print_logic_type t
@@ -309,7 +309,7 @@ let print_axiom fmt id p =
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>$hyp \"%s\" %a@]@\n@\n" id print_predicate p
 
-let print_obligation fmt loc expl o s = 
+let print_obligation fmt loc _expl o s = 
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.gen_report_line loc;
   fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
 
@@ -320,15 +320,15 @@ let iter = Encoding.iter (*Monomorph.iter*)
 let reset () = Encoding.reset (*Monomorph.reset*) ()
 
 let output_elem fmt = function
-  | Dtype (loc, id, _) -> declare_type fmt (Ident.string id)
+  | Dtype (_loc, id, _) -> declare_type fmt (Ident.string id)
   | Dalgtype _ ->
       assert false
 (*
       failwith "Zenon output: alebraic types are not supported"
 *)
-  | Dlogic (loc, id, t) ->
+  | Dlogic (_loc, id, t) ->
       print_logic fmt (Ident.string id) t.scheme_type
-  | Dpredicate_def (loc, id, d) -> 
+  | Dpredicate_def (_loc, _id, _d) -> 
       assert false
 (*
       let id = Ident.string id in
@@ -339,13 +339,13 @@ let output_elem fmt = function
 (*
       failwith "Zenon output: inductive def not yet supported"
 *)
-  | Dfunction_def (loc, id, d) -> 
+  | Dfunction_def (_loc, _id, _d) -> 
       assert false
 (*
       let id = Ident.string id in
       print_function_def fmt id d.scheme_type
 *)
-  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> 
       print_obligation fmt loc expl id s.Env.scheme_type
 

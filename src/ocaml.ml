@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ocaml.ml,v 1.28 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.29 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -173,7 +173,7 @@ and exprd fmt = function
       Ident.print fmt id
   | Seq (e1, e2) ->
       fprintf fmt "@[<hv>begin@;<1 2>%a;@ %a end@]" expr e1 expr e2
-  | Loop (inv, var, e2) ->
+  | Loop (_inv, _var, e2) ->
       fprintf fmt "@[<hv>while true do@;<1 2>%a@ done@]" expr e2
   | If (e1, e2, e3) ->
       fprintf fmt "(@[<hv>if %a then@;<1 2>%a@ else@;<1 2>%a@])" 
@@ -194,7 +194,7 @@ and exprd fmt = function
   | LetIn (id, e1, e2) ->
       fprintf fmt "@[(@[<hov 2>let %a =@ %a in@]@\n%a)@]" 
 	Ident.print id expr e1 expr e2
-  | Rec (id, bl, v, var, p, e) ->
+  | Rec (id, bl, _v, _var, p, e) ->
       fprintf fmt "@[<hov 2>(let rec %a %a =@ %a in@ %a)@]" 
 	Ident.print id binder_ids bl expr_pre (p,e) Ident.print id
   | Raise (id, None) ->
@@ -210,7 +210,7 @@ and exprd fmt = function
       fprintf fmt "@[assert false@]"
   | Any _ ->
       fprintf fmt "@[assert false (* code not given *)@]"
-  | Assertion (k, p,e) ->
+  | Assertion (_k, p,e) ->
       expr_pre fmt (p,e)
   | Post (e, q, _) ->
       let q = post_app a_value q in

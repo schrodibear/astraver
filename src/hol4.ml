@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.32 2009-11-26 16:07:28 andrei Exp $ i*)
+(*i $Id: hol4.ml,v 1.33 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -53,7 +53,7 @@ let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (Ident.string id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (Ident.string id, p)) elem_q
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "HOL4 output: inductive def not yet supported"
   | Dfunction_def _ -> assert false (*TODO*)
   | Dgoal (loc,expl,id,s) -> 
@@ -239,7 +239,7 @@ let print_sequent fmt (hyps,concl) =
   fprintf fmt "@[%a@]@?" print_seq hyps
 
 (* TODO *)
-let print_parameter fmt id v =
+let print_parameter fmt id _v =
   fprintf fmt "(* parameter %s *);;" id
 
 (* TODO *)
@@ -248,17 +248,17 @@ let print_logic fmt id t =
   fprintf fmt "(* logic %s *);;" id
 
 (* TODO *)
-let print_axiom fmt id v =
+let print_axiom fmt id _v =
   fprintf fmt "(* axiom %s *);;" id
 
-let print_obligation fmt loc id sq =
+let print_obligation fmt _loc id sq =
 (*
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
 *)
   fprintf fmt "val %s = Parse.Term `%a`;;@\n@\n" id print_sequent sq
 
 let print_elem fmt = function
-  | Obligation (loc, expl, s, sq) -> print_obligation fmt loc s sq
+  | Obligation (loc, _expl, s, sq) -> print_obligation fmt loc s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate _ -> assert false (*TODO*)

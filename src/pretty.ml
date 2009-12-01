@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.52 2009-12-01 10:12:28 bobot Exp $ i*)
+(*i $Id: pretty.ml,v 1.53 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Format
 open Pp
@@ -69,7 +69,7 @@ let rec pure_type fmt = function
   | PTreal -> fprintf fmt "real"
   | PTexternal ([],id) -> fprintf fmt "%a" ident id
   | PTvar {tag=t; type_val=None} -> type_var fmt t
-  | PTvar {tag=t; type_val=Some pt} -> pure_type fmt pt
+  | PTvar {tag=_t; type_val=Some pt} -> pure_type fmt pt
   | PTexternal ([t],id) -> 
       fprintf fmt "%a %a" pure_type t ident id
   | PTexternal (l,id) -> fprintf fmt "(%a) %a" 
@@ -131,7 +131,7 @@ let rec predicate fmt = function
       fprintf fmt "(%a %s %a)" term t1 (real_relation_string id) term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) and@ (%a < %a))@]" term b term a term b
-  | Papp (id, [t], _) when id == well_founded ->
+  | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "@[false (* was well_founded(...) *)@]" 
   | Papp (id, l, _) ->
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma term) l
@@ -267,7 +267,7 @@ let decl fmt d =
   | Daxiom (_, id, p) ->
       let p = specialize p in
       fprintf fmt "@[<hov 2>axiom %s:@ %a@]" id predicate p
-  | Dgoal (_, expl, id, sq) ->
+  | Dgoal (_, _expl, id, sq) ->
       let sq = specialize sq in
       fprintf fmt "@[<hov 2>goal %s:@\n%a@]" id sequent sq
 
@@ -283,7 +283,7 @@ let print_trace fmt id expl =
 let print_traces fmt =
   iter
     (function
-       | Dgoal (loc, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
+       | Dgoal (_loc, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
        | _ -> ())
 
 let output_file f =
@@ -297,7 +297,7 @@ let output_files f =
     (fun ctxfmt ->
        iter 
 	 (function 
-	    | Dgoal (loc,expl,id,_) as d -> 
+	    | Dgoal (_loc,expl,id,_) as d -> 
 		incr po;		
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
@@ -313,7 +313,7 @@ let push_or_output_decl =
   let po = ref 0 in 
   function d ->
     match d with
-      | Dgoal (loc,expl,id,_) as d -> 
+      | Dgoal (_loc,expl,id,_) as d -> 
 	  incr po;
 	  let fpo = Options.out_file (id ^ ".why") in
 	  print_in_file (fun fmt -> decl fmt d) fpo;
@@ -332,7 +332,7 @@ let output_project f =
     (fun ctxfmt ->
        iter 
 	 (function 
-	    | Dgoal (_,e,id,_) as d -> 
+	    | Dgoal (_,e,_id,_) as d -> 
 		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
@@ -359,7 +359,7 @@ let output_project f =
 		decl ctxfmt d))
     (f ^ "_ctx.why");
   Hashtbl.iter 
-    (fun key (fn,beh,loc) -> 
+    (fun _key (fn,_beh,_loc) -> 
        try
 	 let _ = SMap.find fn !functions in ()
        with Not_found ->

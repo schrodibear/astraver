@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.149 2009-11-12 16:55:27 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.150 2009-12-01 11:51:35 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -121,7 +121,7 @@ let real_conversion fmt rc =
     | Double_to_real -> fprintf fmt "float_value"
     | Float_to_real -> fprintf fmt "float_value"
     | Real_to_integer -> fprintf fmt "integer"
-    | Round(f,m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
+    | Round(_f,_m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
          (* TODO ? parameter rounding mode *)
 	assert false
 
@@ -406,7 +406,7 @@ let rec expr fmt e =
 	       comma identifier)
 	    behav
 	    assertion a
-      | JCEcontract(req,dec,vi_result,behs,e) ->
+      | JCEcontract(_req,_dec,_vi_result,_behs,_e) ->
 	  assert false (* TODO *)
       | JCEblock l ->
           block fmt l

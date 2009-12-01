@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.106 2009-11-26 16:07:36 andrei Exp $ i*)
+(*i $Id: pvs.ml,v 1.107 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -192,16 +192,16 @@ let print_term fmt t =
 	fprintf fmt "(NOT(%a))" print3 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[IF %a@ THEN %a@ ELSE %a@ ENDIF@])" print0 a print0 b print0 c
-    | Tapp (id, l, _) as t when is_infix id ->
+    | Tapp (id, _l, _) as t when is_infix id ->
 	fprintf fmt "@[%a@]" print0 t
-    | Tapp (id, l, _) as t when is_arith_binop id ->
+    | Tapp (id, _l, _) as t when is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
 	fprintf fmt "%a%a" ident id print_instance (List.rev i)
     | Tapp (id, tl, i) -> 
 	fprintf fmt "%a%a(@[%a@])" 
 	  ident id print_instance (List.rev i) (print_list comma print0) tl
-    | Tnamed(lab,t) -> print3 fmt t
+    | Tnamed(_lab,t) -> print3 fmt t
   in
   print0 fmt t
 
@@ -361,7 +361,7 @@ let print_predicate_def fmt id (bl,p) =
     ident id (print_list comma print_logic_binder) bl print_predicate p
     
 let print_inductive_def fmt id inddef =
-  let (vars,(bl,cases)) = Env.specialize_inductive_def inddef in
+  let (_vars,(bl,cases)) = Env.specialize_inductive_def inddef in
   let newvars = List.map (fun t -> (fresh_var(),t)) bl in
   let body = PredDefExpansor.inductive_inverse_body id newvars cases in
   fprintf fmt "  @[<hov 2>INDUCTIVE %a(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
@@ -372,7 +372,7 @@ let print_function_def fmt id (bl,t,e) =
     ident id (print_list comma print_logic_binder) bl 
     print_pure_type t print_term e
     
-let print_obligation fmt (loc,expl,id,s) =
+let print_obligation fmt (loc,_expl,id,s) =
   fprintf fmt "  @[%% %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
@@ -432,7 +432,7 @@ let print_def_scheme fmt id = function
       print_scheme l;
       print_predicate_def fmt id d
   | DefInductive s ->
-      let l,d = Env.specialize_inductive_def s in
+      let l,_d = Env.specialize_inductive_def s in
       print_scheme l;      
       print_inductive_def fmt id s
 
@@ -445,16 +445,16 @@ let iter f = Queue.iter f queue
 let reset () = Queue.clear queue
 
 let output_elem fmt = function
-  | Dtype (loc, id, []) -> declare_type fmt (Ident.string id)
+  | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
   | Dtype _ -> assert false
-  | Dalgtype [(loc, id, {scheme_type=([],cs)})] ->
+  | Dalgtype [(_loc, id, {scheme_type=([],cs)})] ->
       declare_alg_type fmt (Ident.string id) cs
   | Dalgtype _ -> assert false
-  | Dlogic (loc, id, t) -> print_logic fmt (Ident.string id) t.scheme_type
-  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
-  | Dinductive_def(loc, ident, inddef) -> print_inductive_def fmt ident inddef
-  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
-  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Dlogic (_loc, id, t) -> print_logic fmt (Ident.string id) t.scheme_type
+  | Dpredicate_def (_loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dinductive_def(_loc, ident, inddef) -> print_inductive_def fmt ident inddef
+  | Dfunction_def (_loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> print_goal fmt (loc, expl, id, s)
 
 module ArMap = struct
@@ -528,7 +528,7 @@ let sort_theory () =
 	poly s; ArMap.add_scheme s (Ident.string id, s) th.decls
     | Dpredicate_def (_, id, s) -> 
 	poly s; Queue.add (Ident.string id, DefPredicate s) th.defs
-    | Dinductive_def(loc, ident, inddef) ->
+    | Dinductive_def(_loc, ident, inddef) ->
 	poly inddef; Queue.add (Ident.string ident, DefInductive inddef) th.defs
     | Dfunction_def (_, id, s) -> 
 	poly s; Queue.add (Ident.string id, DefFunction s) th.defs

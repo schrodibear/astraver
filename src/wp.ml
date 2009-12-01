@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.116 2009-09-04 15:29:46 bobot Exp $ i*)
+(*i $Id: wp.ml,v 1.117 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -146,7 +146,7 @@ let is_while p =
     \end{verbatim} *)
 
 
-let abstract_wp loc (q',ql') (q,ql) res out =
+let abstract_wp _loc (q',ql') (q,ql) res out =
   assert (List.length ql' = List.length ql);
   let quantify a' a res =
     let vars = match res with Some b -> b :: out | None -> out in

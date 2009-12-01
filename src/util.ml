@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.171 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: util.ml,v 1.172 2009-12-01 11:51:36 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -273,14 +273,14 @@ and print_desc fmt = function
       Ident.print fmt id
   | Seq (e1, e2) -> 
       fprintf fmt "@[%a@ %a@]" print_expr e1 print_expr e2
-  | Loop (i, var, e) ->
+  | Loop (i, _var, e) ->
       fprintf fmt 
 	"loop @\n { invariant @[%a@] variant _ }@\n  @[%a@]@\ndone" 
 	(print_option print_assertion) i print_expr e
   | If (p1, p2, p3) ->
       fprintf fmt "@[if %a then@ %a else@ %a@]" 
 	print_expr p1 print_expr p2 print_expr p3
-  | Lam (bl, p, e) -> 
+  | Lam (_bl, p, e) -> 
       fprintf fmt "@[fun <bl> ->@ @[%a@]@\n  %a@]" 
 	(print_pre print_assertion) p print_expr e
   | AppRef (p, x, k) -> 
@@ -295,7 +295,7 @@ and print_desc fmt = function
   | LetIn (id, p1, p2) ->
       fprintf fmt "@[<hv>@[<hv 2>let %a =@ %a in@]@ %a@]" 
 	Ident.print id print_expr p1 print_expr p2
-  | Rec (id, bl, v, var, p, e) ->
+  | Rec (id, _bl, v, _var, p, e) ->
       fprintf fmt "rec %a : <bl> %a { variant _ } =@ %a@\n%a" 
 	Ident.print id print_type_v v 
 	(print_pre print_assertion) p print_expr e
@@ -313,7 +313,7 @@ and print_desc fmt = function
       fprintf fmt "absurd"
   | Any k ->
       fprintf fmt "[%a]" print_type_c k
-  | Assertion (b, l, p) ->
+  | Assertion (_b, l, p) ->
       fprintf fmt "@[{%a}@ %a@]" 
 	(print_pre print_assertion) l print_expr p
   | Post (e, q, Transparent) ->
@@ -732,7 +732,7 @@ let foralls ?(is_wp=false) =
 let foralls_many ?(is_wp=false) bl p =
   let l1,l2 = 
     List.fold_right 
-      (fun ((x,v) as xv) (l1,l2) ->
+      (fun ((x,_v) as xv) (l1,l2) ->
 	if occur_predicate x p then 
 	  let n = Ident.bound x in xv::l1, n::l2
 	else
@@ -898,7 +898,7 @@ let rec split_one ctx pol = function
 let rec split ctx my_fresh_hyp =
   function
     | [] -> ctx
-    | Spred (h,p):: l -> split (List.fold_left (fun lp p -> Spred(my_fresh_hyp (),p)::lp ) ctx (split_one [] 1 p)) my_fresh_hyp l
+    | Spred (_h,p):: l -> split (List.fold_left (fun lp p -> Spred(my_fresh_hyp (),p)::lp ) ctx (split_one [] 1 p)) my_fresh_hyp l
     | c :: l -> c :: (split (c::ctx) my_fresh_hyp l)
 
 
@@ -1039,7 +1039,7 @@ let rec print_ptree fmt p = match p.pdesc with
       fprintf fmt "@[<hv 2>(%a ||@ %a)@]" print_ptree p1 print_ptree p2
   | Snot p1 ->
       fprintf fmt "@[<hv 2>(not %a)@]" print_ptree p1
-  | Slam (bl, pre, p) ->
+  | Slam (_bl, _pre, p) ->
       fprintf fmt "@[<hov 2>fun <...> ->@ %a@]" print_ptree p
   | Sapp (p, a) ->
       fprintf fmt "(%a %a)" print_ptree p print_ptree a
@@ -1061,10 +1061,10 @@ let rec print_ptree fmt p = match p.pdesc with
   | Sconst c -> print_term fmt (Tconst c)
   | Sabsurd _ -> fprintf fmt "<Sabsurd>"
   | Sany _ -> fprintf fmt "<Sany>"
-  | Spost (e,q,Transparent) -> fprintf fmt "@[%a@ {...}@]" print_ptree e
-  | Spost (e,q,Opaque) -> fprintf fmt "@[%a@ {{...}}@]" print_ptree e
-  | Sassert (`ASSERT,p,e) -> fprintf fmt "@[{...}@ %a@]" print_ptree e
-  | Sassert (`CHECK,p,e) -> fprintf fmt "@[{{...}}@ %a@]" print_ptree e
+  | Spost (e,_q,Transparent) -> fprintf fmt "@[%a@ {...}@]" print_ptree e
+  | Spost (e,_q,Opaque) -> fprintf fmt "@[%a@ {{...}}@]" print_ptree e
+  | Sassert (`ASSERT,_p,e) -> fprintf fmt "@[{...}@ %a@]" print_ptree e
+  | Sassert (`CHECK,_p,e) -> fprintf fmt "@[{{...}}@ %a@]" print_ptree e
   | Slabel (l,e) -> fprintf fmt "@[%s: %a@]" l print_ptree e
 
 and print_phandler fmt = function
@@ -1078,15 +1078,15 @@ let print_external fmt b = if b then fprintf fmt "external "
 let print_decl fmt = function
   | Include (_,s) -> fprintf fmt "include \"%S\"" s 
   | Program (_,id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
-  | Parameter (_, e, ids, v) -> 
+  | Parameter (_, e, _ids, _v) -> 
       fprintf fmt "%aparameter <...>" print_external e
-  | Exception (_, id, pto) -> fprintf fmt "exception %a <...>" Ident.print id
-  | Logic (_, e, ids, lt) -> 
+  | Exception (_, id, _pto) -> fprintf fmt "exception %a <...>" Ident.print id
+  | Logic (_, e, ids, _lt) -> 
       fprintf fmt "%alogic %a : <...>" print_external e 
 	(print_list comma Ident.print) ids
-  | Axiom (_, id, p) ->
+  | Axiom (_, id, _p) ->
       fprintf fmt "axiom %a : <...>" Ident.print id
-  | Goal (_, id, p) ->
+  | Goal (_, id, _p) ->
       fprintf fmt "assert %a : <...>" Ident.print id
   | Predicate_def (_, id, _, _) ->
       fprintf fmt "predicate %a <...>" Ident.print id
@@ -1128,7 +1128,7 @@ let loc_of_label n =
     
 let reloc_xpl_term (loc,t) = 
   match t with
-    | Tnamed(User n,p) ->     
+    | Tnamed(User n,_p) ->     
 	begin
 	  try loc_of_label n
 	  with Not_found -> Loc.extract loc
@@ -1137,7 +1137,7 @@ let reloc_xpl_term (loc,t) =
 
 let reloc_xpl (loc,p) = 
   match p with
-    | Pnamed(User n,p) -> 
+    | Pnamed(User n,_p) -> 
 	begin
 	  try loc_of_label n
 	  with Not_found -> Loc.extract loc
@@ -1152,7 +1152,7 @@ let dummy_reloc = Loc.dummy_floc
    string, followed by the location in the source file where the loop
    is.
 *)
-let cook_loop_invariant internal_lab (userlab : string option) p =
+let cook_loop_invariant _internal_lab (userlab : string option) p =
   match userlab with
     | None -> "", reloc_xpl p
     | Some lab ->
@@ -1194,7 +1194,7 @@ let cook_explanation (userlab : string option) e =
           (match k with 
             | `ASSERT -> EKAssert
             | `CHECK -> EKCheck), (reloc_xpl (List.hd p))      
-      | VCEpre(lab,loc,p) -> 
+      | VCEpre(lab,loc,_p) -> 
 	  begin
 	    if debug then eprintf "Util.cook_explanation: label,loc for pre = %s,%a@." lab
 	      Loc.gen_report_position loc;
@@ -1275,7 +1275,7 @@ let print_decl fmt = function
   | Dalgtype ls ->
       print_list newline (fun fmt (_, s, _) ->
         fprintf fmt "type %s" (Ident.string s)) fmt ls
-  | Dlogic (_, s, log_type_sch) -> 
+  | Dlogic (_, _s, log_type_sch) -> 
       fprintf fmt "logic %a" print_logic_type log_type_sch.Env.scheme_type
   | Dpredicate_def (_, s, pred_def_sch) ->
       let (args, pred) = pred_def_sch.Env.scheme_type in
@@ -1292,7 +1292,7 @@ let print_decl fmt = function
   | Daxiom (_, s, pred_sch) ->
       fprintf fmt "axiom %s : %a" s 
 	print_predicate pred_sch.Env.scheme_type
-  | Dgoal (loc, expl, s, seq_sch) -> 
+  | Dgoal (_loc, expl, s, seq_sch) -> 
       let (cel, pred) = seq_sch.Env.scheme_type in
       fprintf fmt "goal %s (%a) : %a" s
 	(print_list comma 

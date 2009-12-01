@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.53 2009-10-14 12:17:18 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.54 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -256,7 +256,7 @@ let termo t = try Some (term (subst_var t)) with NotGappa -> None
 
 let gando = function
   | Some p1, Some p2 -> Some (Gand (p1, p2))
-  | (Some p as v), None | None, (Some p as v) -> v
+  | (Some _p as v), None | None, (Some _p as v) -> v
   | None, None -> None
 
 (* recognition of a Gappa predicate *)
@@ -539,7 +539,7 @@ let output_one_file f =
   do_not_edit_above ~file
     ~before:(fun fmt -> Queue.iter (print_obligation fmt) queue)
     ~sep
-    ~after:(fun fmt -> ())
+    ~after:(fun _fmt -> ())
 
 
 let output_file fwe =
@@ -553,5 +553,5 @@ let output_file fwe =
        do_not_edit_above ~file
 	 ~before:(fun fmt -> print_obligation fmt o)
 	 ~sep
-	 ~after:(fun fmt -> ()))
+	 ~after:(fun _fmt -> ()))
     queue

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: effect.ml,v 1.27 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.28 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Effects. *)
 
@@ -130,9 +130,9 @@ let union e1 e2 =
 
 (*s comparison relation *)
 
-let le e1 e2 = failwith "effects: le: not yet implemented"
+let le _e1 _e2 = failwith "effects: le: not yet implemented"
 
-let inf e1 e2 = failwith "effects: inf: not yet implemented"
+let inf _e1 _e2 = failwith "effects: inf: not yet implemented"
 
 (*s remove *)
 

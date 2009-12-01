@@ -276,11 +276,11 @@ let print_sequent fmt (hyps,concl) =
   fprintf fmt "@[%a@]@?" print_seq hyps
 
 let print_predicate_scheme fmt p =
-  let (l,p) = Env.specialize_predicate p in
+  let (_l,p) = Env.specialize_predicate p in
   print_predicate fmt p
 
 let print_logic_type fmt s = 
-  let (l,t) = Env.specialize_logic_type s in
+  let (_l,t) = Env.specialize_logic_type s in
   match t with
   | Logic.Function ([], t) ->
       print_pure_type fmt t
@@ -305,7 +305,7 @@ let reprint_axiom fmt id p =
 let print_axiom fmt id p = 
   reprint_axiom fmt id p
 
-let reprint_obligation fmt loc expl id s =
+let reprint_obligation fmt loc _expl id s =
   fprintf fmt "@[(* %a *)@]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "@[<hov 4>(*Why goal*) lemma %a:@\n%a;@]@\n" idents id print_sequent s
 (*;
@@ -317,10 +317,10 @@ let print_obligation fmt loc expl id s =
   fprintf fmt "(* FILL PROOF HERE *)@\n@\n"
 
 let reprint_predicate fmt id p =
-  let (l,(bl,p)) = Env.specialize_predicate_def p in
-  let print_binder_type fmt (x,pt) = 
+  let (_l,(bl,p)) = Env.specialize_predicate_def p in
+  let print_binder_type fmt (_x,pt) = 
       fprintf fmt "%a" print_pure_type pt in
-  let print_binder fmt (x,pt) = 
+  let print_binder fmt (x,_pt) = 
       fprintf fmt "%a" ident x in
   fprintf fmt
      "@[<hov 2>(*Why predicate*) constdefs %a :: @[\"[@[%a@]] => bool\"@]@]@\n" 
@@ -335,10 +335,10 @@ let reprint_predicate fmt id p =
 let print_predicate fmt id p = reprint_predicate fmt id p
 
 let reprint_function fmt id p =
-  let (l,(bl,t,e)) = Env.specialize_function_def p in
-  let print_binder_type fmt (x,pt) = 
+  let (_l,(bl,t,e)) = Env.specialize_function_def p in
+  let print_binder_type fmt (_x,pt) = 
       fprintf fmt "%a" print_pure_type pt in
-  let print_binder fmt (x,pt) = 
+  let print_binder fmt (x,_pt) = 
       fprintf fmt "%a" ident x in
   fprintf fmt
      "@[<hov 2>(*Why function*) constdefs %a :: @[\"[%a] => %a\"@]@]@\n" 
@@ -406,7 +406,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
-      | Inductive(id, p) -> assert false
+      | Inductive(_id, _p) -> assert false
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
       | AlgebraicType ls -> print_alg_type fmt ls
@@ -421,7 +421,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
-    | Inductive(id, p) -> assert false
+    | Inductive(_id, _p) -> assert false
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
     | AlgebraicType ls -> reprint_alg_type fmt ls
@@ -454,7 +454,7 @@ let push_decl = function
   | Dpredicate_def (_, id, p) -> 
       let id = Ident.string id in
       Gen.add_elem (Pr, rename id) (Predicate (id, p))
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "Isabelle output: inductive def not yet supported"
   | Dfunction_def (_, id, p) -> 
       let id = Ident.string id in

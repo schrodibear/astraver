@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.16 2009-11-26 16:07:03 andrei Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.17 2009-12-01 11:51:36 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -84,7 +84,7 @@ struct
     
   let outputSymbolList  e =
     Printf.printf "%s \t \n" e ; 
-    let myPrint k v = 
+    let myPrint k _v = 
       (Printf.printf "%s \t \n" k)
     in
     (Hashtbl.iter myPrint sContainer)
@@ -136,7 +136,7 @@ struct
       match formula with 
 	| Tconst (ConstInt n) -> 
 	    symbolsSet  := StringSet.add n !symbolsSet 
-	| Tconst (ConstBool b) -> () 
+	| Tconst (ConstBool _b) -> () 
 	| Tconst ConstUnit -> ()
 	| Tconst (ConstFloat (RConstDecimal (i,f,None))) ->
 	    symbolsSet  :=  StringSet.add  (i^"."^f) !symbolsSet
@@ -152,9 +152,9 @@ struct
 	| Tapp (id, tl, _) when is_relation id || is_arith id ->
 	    symbolsSet  := StringSet.add (Ident.string id)  !symbolsSet ;
 	    collectIntoAList tl 
-	| Tapp (id, [], i) -> 
+	| Tapp (id, [], _i) -> 
 	    symbolsSet  := StringSet.add (Ident.string id) !symbolsSet
-	| Tapp (id, tl, i) ->
+	| Tapp (id, tl, _i) ->
 	    symbolsSet  := StringSet.add (Ident.string id) !symbolsSet;
 	    collectIntoAList tl 
 	| _ -> ()
@@ -205,7 +205,7 @@ struct
 (*	| Papp (id, tl, _) when is_relation id || is_arith id ->
 	    symbolsSet  := StringSet.union (functionalSymbolsCollectFromList tl)
 	      !symbolsSet  *) 
-	| Papp (id, tl, i) -> 
+	| Papp (id, tl, _i) -> 
 	    symbolsSet  := StringSet.union (functionalSymbolsCollectFromList tl) 
 	      !symbolsSet ;   
 	    symbolsSet  := StringSet.add  (Ident.string id)  !symbolsSet 
@@ -216,7 +216,7 @@ struct
 	    collect c
 	| Pnot a ->
 	    collect a;
-	| Forall (_,id,n,t,_,p) | Exists (id,n,t,p) ->    
+	| Forall (_,_id,_n,_t,_,p) | Exists (_id,_n,_t,p) ->    
 	    collect p
 	| Pnamed (_, p) -> (* TODO: print name *)
 	    collect p 
@@ -298,7 +298,7 @@ struct
     mergeTypeDefinitionNumber n
   
 
-  let getReducedTheory t=
+  let getReducedTheory _t=
     let localSet = ref IntSet.empty in 
     if !firstGoalNumber = 0  then 
       Queue.create () 
@@ -311,7 +311,7 @@ struct
 	
       (** computes the declarations corresponding to the formula classe**)
 	let goalClassNumber = UnionFindInt.find !firstGoalNumber !partition in 
-	let addToSet k v = 
+	let addToSet k _v = 
 	  if ((UnionFindInt.find k !partition) = goalClassNumber) then
 	    localSet := IntSet.add k !localSet
 	in
@@ -369,12 +369,12 @@ let manageSymbols symbolsList n =
   
 	  
 
-let managesGoal id ax (hyps,concl) = 
+let managesGoal _id ax (hyps,concl) = 
   let n = FormulaContainer.add  ax in
   (* Retrieve the list symbolList of symbols in hyps *)
   let rec managesHypotheses = function
     | [] -> SymbolContainer.getAllSymbols  concl
-    | Svar (id, v) :: q ->  managesHypotheses  q 
+    | Svar (_id, _v) :: q ->  managesHypotheses  q 
     | Spred (_,p) :: q -> 
 	SymbolContainer.StringSet.union 
 	  (SymbolContainer.getAllSymbols p) 
@@ -401,7 +401,7 @@ let managesGoal id ax (hyps,concl) =
     @p is is the predicative part of the definition of 
     the predicate
 **) 
-let managesAxiom id ax p =
+let managesAxiom _id ax p =
   let n = FormulaContainer.add  ax in 
   (* Retrieve the list symbolList of symbols in such predicate
      and we add into it the symbol id *)
@@ -476,7 +476,7 @@ let typingPredicate id ax =
    such function treats the  definition of  new types
    @param id it the type name 
    @param ax is the complete node**)
-let declareType id ax = 
+let declareType _id ax = 
   let n = FormulaContainer.add ax in 
     EquivClass.addTypeDefinition n 
   
@@ -489,14 +489,14 @@ let launcher decl = match decl with
       declareType (Ident.string id) ax
   | Dalgtype _ ->
       failwith "Theory reducer: algebraic types are not supported"
-  | Dlogic (_, id, t) as ax -> 
+  | Dlogic (_, id, _t) as ax -> 
       (* Printf.printf  "Dlogic %s \n"  id ;*) 
       typingPredicate (Ident.string id) ax
   | Dpredicate_def (_, id, d) as ax -> 
       (*Printf.printf  "Dpredicate_def %s \n"  id ; *)
       let id = Ident.string id in
       managesPredicate id ax d.scheme_type
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "Theory reducer: inductive def not yet supported"
   | Dfunction_def (_, id, d)  as ax -> 
       (*Printf.printf  "Dfunction_def %s \n"  id ; *)
@@ -505,7 +505,7 @@ let launcher decl = match decl with
   | Daxiom (_, id, p) as ax -> 
       (*Printf.printf  "Daxiom %s \n"  id ; *)
       managesAxiom  id ax p.scheme_type
-  | Dgoal (_, expl, id, s)  as ax -> 
+  | Dgoal (_, _expl, id, s)  as ax -> 
       (*Printf.printf  "Dgoal %s \n"  id ; *)
       managesGoal id ax s.Env.scheme_type 
 
@@ -516,17 +516,17 @@ let display q =
   | Dtype (_, id, _) -> Printf.printf  "%s \n" (Ident.string id)
   | Dalgtype _ ->
       failwith "Theory reducer: algebraic types are not supported"
-  | Dlogic (_, id, t) -> Printf.printf  "%s \n" (Ident.string id)
-  | Dpredicate_def (_, id, d) -> 
+  | Dlogic (_, id, _t) -> Printf.printf  "%s \n" (Ident.string id)
+  | Dpredicate_def (_, id, _d) -> 
       let id = Ident.string id in
       Printf.printf  "%s \n" id
-  | Dinductive_def(loc, ident, inddef) ->
+  | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "Theory reducer: inductive def not yet supported"
-  | Dfunction_def (_, id, d) -> 
+  | Dfunction_def (_, id, _d) -> 
       let id = Ident.string id in
       Printf.printf  "%s \n" id
-  | Daxiom (_, id, p)          -> Printf.printf  "%s \n"  id
-  | Dgoal (_, expl, id, s)   -> Printf.printf  "%s \n"  id
+  | Daxiom (_, id, _p)          -> Printf.printf  "%s \n"  id
+  | Dgoal (_, _expl, id, _s)   -> Printf.printf  "%s \n"  id
   in
   Queue.iter displayMatch q 
 
