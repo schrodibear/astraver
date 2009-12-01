@@ -9,17 +9,7 @@
 
 include "real.why"
 
-type mode
-
-logic nearest_even, to_zero, up, down, nearest_away : mode
-
-axiom no_other_mode : forall m:mode. 
-      m = nearest_even or m = to_zero or m = up or m = down or m = nearest_away
-axiom mode_distinct : 
-      nearest_even <> to_zero and nearest_even <> up and nearest_even <> down and 
-      nearest_even <> nearest_away and  to_zero <> up and to_zero <> down and 
-      to_zero <> nearest_away and up <> down and up <> nearest_away and 
-      down <> nearest_away
+type mode = nearest_even | to_zero | up | down | nearest_away 
 
 parameter current_rounding_mode : mode ref
 
@@ -29,9 +19,7 @@ parameter current_rounding_mode : mode ref
 (*********** generic precision floats **************) 
 (***************************************************)
 
-type float_format
-
-logic Single, Double, Binary80, Quad : float_format
+type float_format = Single | Double | Binary80 | Quad 
 
 (* [gen_float] denotes the type of generic floats *)
 
@@ -44,21 +32,23 @@ logic float_value : gen_float -> real
 logic exact_value : gen_float -> real
 logic model_value : gen_float -> real
 
-logic max_gen_float : float_format -> real
+function max_gen_float(f:float_format): real =
+  match f with 
+   | Single -> 0x1.FFFFFEp127 (* (2 - 2^-23)*2^127 *)
+   | Double -> 0x1.FFFFFFFFFFFFFp1023 (* (2 - 2^-52)*2^1023 *)
+   | Binary80 -> 0x1.FFFFFFFFFFFFFFFEp16383 
+   | Quad -> 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383 
+  end
+
 logic min_gen_float : float_format -> real
 (*logic max_exp : float_format -> int*)
 
 (* values of max_gen_float *)
-axiom max_single: max_gen_float(Single) = 0x1.FFFFFEp127
+goal max_single: max_gen_float(Single) = 0x1.FFFFFEp127
                  (* (2 - 2^-23)*2^127 *)
-axiom max_double: max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
+goal max_double: max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
                  (* (2 - 2^-52)*2^1023 *)
-axiom max_binary80: max_gen_float(Binary80) = 0x1.FFFFFFFFFFFFFFFEp16383 
-
-(* commented out because makes Yices fail (really ? to check)
-axiom max_quad: max_gen_float(Quad) = 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383 
-                (* (2 - 2^-112)*2^16383 *)
-*)
+goal max_binary80: max_gen_float(Binary80) = 0x1.FFFFFFFFFFFFFFFEp16383 
 
 
 (* values of min_gen_float *)

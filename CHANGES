@@ -1,5 +1,13 @@
 
+version 2.23, December 1, 2009
+===============================
+
+  o [Simplify output] fixed bug with function definitions
   o [GWhy] VC explanation when using --fast-wp option
+
+version 2.22, November 30, 2009
+===============================
+
   o [Jessie] fixed bug when return type is a logic type 
   o [Krakatoa] fixed bug with final fields 
   o [Frama-C plugin] fixed bug 0341
