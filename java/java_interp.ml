@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.188 2009-11-30 21:33:07 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.189 2009-12-01 05:49:04 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1584,20 +1584,26 @@ let rec statement s =
           let _ = tr_type e.java_expr_loc e.java_expr_type in
 	  mkreturn ~expr:(expr e) ()
       | JSthrow e ->
-	  (* TODO: insert a check that e is not null *)
+	  (* insert a check that e is not null *)
 	  let e' = expr e in
 	  let t = get_exception e.java_expr_type in
-	  let li = non_null_pred t.jc_exception_info_name in
-          let ass = mkassert ~expr:(mkapp ~fun_name:li.jc_logic_info_name ~args:[e'] ()) () in
+	  let li = non_null_pred "Object" in
+	  let tmp_name = "java_thrown_exception" in
+	  let tmp_var = mkvar ~name:"java_thrown_exception" () in
+          let ass = 
+	    mkassert 
+	      ~expr:(mkapp ~fun_name:li.jc_logic_info_name 
+		       ~args:[tmp_var] ()) () 
+	  in
           let th =
 	    mkthrow
               ~exn: (exn_name t)
-              ~argument: (mkvar ~name:"java_thrown_exception" ())
+              ~argument: tmp_var
               ()
 	  in
 	  mklet
             ~typ: (new ptype (JCPTpointer(t.jc_exception_info_name,[],None,None)))
-            ~var: "java_thrown_exception"
+            ~var: tmp_name
             ~init: e'
             ~body: (mkblock [ass; th] ())
             ()

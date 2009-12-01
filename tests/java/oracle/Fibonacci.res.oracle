@@ -2498,6 +2498,8 @@ axiom concat_select_bytes:
 
 logic integer_of_bitvector : bitvector -> int
 
+logic bitvector_of_integer : int -> bitvector
+
 logic real_of_bitvector : bitvector -> real
 
 type Object
@@ -4999,6 +5001,8 @@ axiom concat_select_bytes:
                (s1 + s2))))))))))
 
 logic integer_of_bitvector : bitvector -> int
+
+logic bitvector_of_integer : int -> bitvector
 
 logic real_of_bitvector : bitvector -> real
 
