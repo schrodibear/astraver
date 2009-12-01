@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.172 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: util.ml,v 1.173 2009-12-01 16:46:27 andrei Exp $ i*)
 
 open Logic
 open Ident
@@ -752,11 +752,6 @@ let exists x v p =
 
 let pexists x v p = 
   if p = Ptrue then Ptrue else exists x v p
-
-let exists x v p = 
-  let n = Ident.bound x in
-  let p = subst_in_predicate (subst_onev x n) p in
-  Exists (x, n, mlize_type v, p)
 
 let plet x pt t p =
   let n = Ident.bound x in

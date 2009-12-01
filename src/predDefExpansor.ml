@@ -129,6 +129,19 @@ let push ~recursive_expand decl =
   | Dalgtype _
   | Dlogic _ -> decl
 
+
+(***************
+ ad-hoc utilities
+**************)
+
+let ah_equal t l r = Papp (t_eq, [l;r], [t])
+
+let ah_exists = List.fold_right (fun (y,t) f -> Util.exists y (Types.PureType t) f)
+
+let ah_forall yv tl f =
+  let fall (y,t) (l,f) = ([], Util.forall y (Types.PureType t) ~triggers:l f) in
+  snd (List.fold_right fall yv (tl,f))
+
 (***************
  function and predicate definitions
 **************)
@@ -138,10 +151,10 @@ let function_def loc id d =
   let zv = Ltyping.instance id vars in
   let ts = List.map (fun (_y,t) -> t) yv in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
+  let lhs = Tapp (id,yt,zv) in
+  let body = ah_equal tr lhs e in
+  let axiom = ah_forall yv [[TPat lhs]] body in
   let t = Env.generalize_logic_type (Function (ts,tr)) in
-  let fall (y,t) acc = Forall (false, y, y, t, [], acc) in
-  let body = Papp (t_eq, [Tapp (id,yt,zv); e], [tr]) in
-  let axiom = List.fold_right fall yv body in
   let name = Ident.string id in
   [ Dlogic (loc, id, t);
     Daxiom (loc, name ^ "_def", Env.generalize_predicate axiom) ]
@@ -151,9 +164,10 @@ let predicate_def loc id d =
   let zv = Ltyping.instance id vars in
   let ts = List.map (fun (_y,t) -> t) yv in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
+  let lhs = Papp (id,yt,zv) in
+  let body = Piff (lhs, e) in
+  let axiom = ah_forall yv [[PPat lhs]] body in
   let t = Env.generalize_logic_type (Predicate ts) in
-  let fall (y,t) acc = Forall (false, y, y, t, [], acc) in
-  let axiom = List.fold_right fall yv (Piff (Papp (id,yt,zv), e)) in
   let name = Ident.string id in
   [ Dlogic (loc, id, t);
     Daxiom (loc, name ^ "_def", Env.generalize_predicate axiom) ]
@@ -186,14 +200,14 @@ forall y_1:t_1,..,y_n:t_n, id(y_1,..,y_n) ->
 
   exists x_1,..,x_k: H1 /\ ... /\ Hi /\ y_1 = e1 /\ .. /\ y_n = e_n
 
-\/ 
- 
-  ... 
+\/
+
+  ...
 
 *)
 
 let inductive_inverse_body id yv cases =
-  let eq_and (y,t) e = Misc.pand (Papp (t_eq, [Tvar y; e], [t])) in
+  let eq_and (y,t) e = Misc.pand (ah_equal t (Tvar y) e) in
   let rec invert = function
     | Forall(_w,id,n,t,_trig,p) -> Exists(id,n,t,invert p)
     | Pimplies(_w,h,p) -> Misc.pand h (invert p)
@@ -205,9 +219,9 @@ let inductive_inverse_body id yv cases =
 let inversion_axiom id zv bl cases =
   let yv = List.map (fun t -> (fresh_var(),t)) bl in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
+  let lhs = Papp (id,yt,zv) in
   let body = inductive_inverse_body id yv cases in
-  let fall (y,t) acc = Forall (false, y, y, t, [], acc) in
-  List.fold_right fall yv (Pimplies (false, Papp (id,yt,zv), body))
+  ah_forall yv [[PPat lhs]] (Pimplies (false, lhs, body))
 
 let inductive_def loc id d =
   let (vars,(bl,cases)) = Env.specialize_inductive_def d in
@@ -217,8 +231,8 @@ let inductive_def loc id d =
   Dlogic(loc,id,t)::
     (Daxiom(loc,name ^ "_inversion",
 	    Env.generalize_predicate (inversion_axiom id zv bl cases)))::
-    (List.map 
-       (fun (id,p) -> 
+    (List.map
+       (fun (id,p) ->
 	  let p = Env.generalize_predicate p in
 	  Daxiom(loc,Ident.string id,p)) cases)
 
@@ -231,23 +245,6 @@ let fresh_cons zv id pl =
   let yt = List.map (fun (y,_) -> Tvar y) yv in
   (yv, Tapp (id,yt,zv))
 
-let yv_exists = List.fold_right (fun (y,t) f -> Exists (y,y,t,f))
-let yv_forall = List.fold_right (fun (y,t) f -> Forall (false,y,y,t,[],f))
-let peq t l r = Papp (t_eq, [l;r], [t])
-
-(*
-let alg_cons_injective_axiom loc zv th (id,pl) =
-  let yv1,ct1 = fresh_cons zv id pl in
-  let yv2,ct2 = fresh_cons zv id pl in
-  let equ (y1,t) (y2,_) = peq t (Tvar y1) (Tvar y2) in
-  let eqs = List.rev_map2 equ yv1 yv2 in
-  let rst = List.fold_left Misc.pand Ptrue eqs in
-  let body = Pimplies (false, peq th ct1 ct2, rst) in
-  let body = yv_forall yv1 (yv_forall yv2 body) in
-  let pred = Env.generalize_predicate body in
-  Daxiom (loc, (Ident.string id) ^ "_injective", pred)
-*)
-
 let find_global_logic_gen id =
   let _,t = find_global_logic id in
   generalize_logic_type t
@@ -258,7 +255,8 @@ let alg_proj_fun loc zv _th (id,pl) =
   let proj (v,t) =
     let nm = Ident.proj_id id !r in
     let head = Tapp (nm, [ct], zv) in
-    let body = yv_forall yv (peq t head (Tvar v)) in
+    let body = ah_equal t head (Tvar v) in
+    let body = ah_forall yv [[TPat ct]] body in
     let pred = Env.generalize_predicate body in
     let () = incr r in
     Dlogic (loc, nm, find_global_logic_gen nm) ::
@@ -276,10 +274,10 @@ let alg_inversion_axiom loc id zv th cs =
       Tapp (nm, [Tvar x], zv)
     in
     let ct = Tapp (id, List.map targ pl, zv) in
-    Misc.por acc (peq th (Tvar x) ct)
+    Misc.por acc (ah_equal th (Tvar x) ct)
   in
   let body = List.fold_left inv_cons Pfalse cs in
-  let body = Forall (false,x,x,th,[],body) in
+  let body = Util.forall x (Types.PureType th) body in
   let pred = Env.generalize_predicate body in
   Daxiom (loc, Ident.string id ^ "_inversion", pred)
 
@@ -288,11 +286,11 @@ let alg_match_fun_axiom loc id zv _th cs =
   let nt = PTvar (new_type_var ()) in
   let vs = List.map (fun _ -> (fresh_var (), nt)) cs in
   let ts = List.map (fun (v,_) -> Tvar v) vs in
-  let head t = Tapp (nm, t :: ts, nt::zv) in
   let axiom (id,pl) v =
     let yv,ct = fresh_cons zv id pl in
-    let body = peq nt (head ct) v in
-    let body = yv_forall vs (yv_forall yv body) in
+    let head = Tapp (nm, ct::ts, nt::zv) in
+    let body = ah_equal nt head v in
+    let body = ah_forall (vs @ yv) [[TPat head]] body in
     let pred = Env.generalize_predicate body in
     Daxiom (loc, Ident.string nm ^ "_" ^ Ident.string id, pred)
   in
@@ -307,7 +305,8 @@ let alg_to_int_fun_axiom loc id zv th cs =
     let yv,ct = fresh_cons zv id pl in
     let lst = Tapp (nm, [ct], zv) in
     let rst = Tconst (ConstInt (string_of_int !cpt)) in
-    let body = yv_forall yv (Papp (t_eq_int,[lst;rst],[])) in
+    let body = Papp (t_eq_int,[lst;rst],[]) in
+    let body = ah_forall yv [[TPat ct]] body in
     let pred = Env.generalize_predicate body in
     incr cpt;
     Daxiom (loc, Ident.string nm ^ "_" ^ Ident.string id, pred)
