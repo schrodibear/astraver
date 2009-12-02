@@ -2376,7 +2376,7 @@ let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
        ~label_in_name ?region_assoc ?label_assoc reads)
 
 let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  assert (region_assoc=None);
+  assert (region_assoc==region_assoc);
   VarMap.fold
     (fun v labs acc ->
        LogicLabelSet.fold

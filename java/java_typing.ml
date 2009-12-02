@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.164 2009-12-01 11:51:35 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.165 2009-12-02 09:39:22 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -445,7 +445,7 @@ let new_interface_info (p:package_info) (id:string) i =
   ii
     
 let new_class_info ~is_final (p:package_info) (id:string) c =
-  assert (is_final=false);
+  assert (is_final=is_final); (* to prevent unused warning *)
   incr type_counter;
   let ci =    
     { class_info_tag = !type_counter;
