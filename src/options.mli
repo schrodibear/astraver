@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.103 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: options.mli,v 1.104 2009-12-02 14:54:52 bobot Exp $ i*)
 
 (*s General options *)
 
@@ -101,6 +101,12 @@ type encoding =
   | SortedStratified |MonoInst
 val get_types_encoding : unit -> encoding
 val set_types_encoding : encoding -> unit
+
+type monoinstWorldGen =
+  | MonoinstSorted
+  | MonoinstBuiltin
+  | MonoinstGoal
+val monoinstworldgen : monoinstWorldGen
 
 type termination = UseVariant | Partial | Total
 val termination : termination

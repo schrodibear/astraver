@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: z3.mli,v 1.1 2009-11-10 10:33:26 filliatr Exp $ i*)
+(*i $Id: z3.mli,v 1.2 2009-12-02 14:54:52 bobot Exp $ i*)
 
 (* Z3 native syntax *)
 
@@ -35,6 +35,6 @@ val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
 
-val output_file : ?logic:string -> string -> unit
+val output_file : string -> unit
 
 

@@ -295,9 +295,9 @@ let rec translate_pred fv lv = function
       Piff (translate_pred fv lv p1, translate_pred fv lv p2)
   | Pnot p ->
       Pnot (translate_pred fv lv p)
-  | Forall (iswp, id, n, pt, tl, p) ->
+  | Forall (iswp, id, n, pt, _(*tl*), p) ->
       let lv' = (n,pt)::lv in
-       let tl' = translate_triggers fv lv' p tl in
+       let tl' = (*translate_triggers fv lv' p tl*) [] in
 	Forall (iswp, id, n, sortify ut pt, tl', translate_pred fv lv' p)
   | Forallb (iswp, p1, p2) ->
       Forallb (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
@@ -337,7 +337,7 @@ and translate_pattern fv lv p = function
         | Pnot p | Pnamed (_, p) -> lookfor_term_in_predicate fv lv acc p 
         | Pvar _|Pfalse|Ptrue -> acc in
       let r = (lookfor_term_in_predicate fv lv [] p) in
-      Format.printf "%a : %a@." Util.print_term t (Pp.print_list Pp.comma Util.print_term) r;
+      (*Format.printf "%a : %a@." Util.print_term t (Pp.print_list Pp.comma Util.print_term) r;*)
       List.map (fun x -> TPat x) r
 (*
   let rec translate_term_for_pattern fv lv = function

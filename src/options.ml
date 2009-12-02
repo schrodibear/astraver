@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.134 2009-11-27 17:15:47 bobot Exp $ i*)
+(*i $Id: options.ml,v 1.135 2009-12-02 14:54:52 bobot Exp $ i*)
 
 open Format
 
@@ -99,6 +99,12 @@ type expanding = All | Goal | NoExpanding
 let types_encoding_ = ref NoEncoding (* ne pas changer svp! *)
 (* let types_encoding_ = ref Stratified *)
 
+type monoinstWorldGen =
+  | MonoinstSorted
+  | MonoinstBuiltin
+  | MonoinstGoal
+
+let monoinstworldgen = ref MonoinstBuiltin
 let defExpanding_ = ref NoExpanding 
 
 type termination = UseVariant | Partial | Total
@@ -286,6 +292,9 @@ Coq-specific options:
 
 SMT-lib-specific options:
   --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
+
+Monoinst-specific options
+  --monoinstworldgen <builtin|complete|goal>
 
 PVS-specific options:
   --pvs-preamble <text>
@@ -536,6 +545,13 @@ let files =
 	| "monoinst" -> types_encoding_ := MonoInst
 	| _ -> usage (); exit 1);
 	parse args
+    | ("-monoinstworldgen" | "--monoinstworldgen") :: s :: args ->
+	(match s with 
+	  "sorted" -> monoinstworldgen := MonoinstSorted
+	| "builtin" -> monoinstworldgen := MonoinstBuiltin
+	| "goal" -> monoinstworldgen := MonoinstGoal
+	| _ -> usage (); exit 1);
+	parse args
     | ("-explain" | "--explain") :: args ->
 	explain_vc := true; parse args
     | ("-locs" | "--locs") :: s :: args ->
@@ -620,6 +636,8 @@ let () =
 
 let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec
+
+let monoinstworldgen = !monoinstworldgen
 
 let get_type_expanding () = !defExpanding_
 

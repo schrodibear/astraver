@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.69 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.70 2009-12-02 14:54:52 bobot Exp $ i*)
 
 open Printf
 
@@ -64,7 +64,9 @@ let timed_sys_command ~debug timeout cmd =
   let t0 = Unix.times () in
   if debug then Format.eprintf "command line: %s@." cmd;
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
+  let cmd = if timeout = 0 
+  then sprintf "%s > %s 2>&1" cmd out
+  else sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
   let ret = Sys.command cmd in
   let t1 = Unix.times () in
   let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in

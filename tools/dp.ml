@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.54 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.55 2009-12-02 14:54:52 bobot Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -53,7 +53,7 @@ let set_smt_solver = function
   | s -> eprintf "unknown SMT solver %s@." s; exit 1
 
 let spec = 
-  [ "-timeout", Arg.Int ((:=) timeout), "<int>  set the timeout (in seconds)";
+  [ "-timeout", Arg.Int ((:=) timeout), "<int>  set the timeout (in seconds) (0 no timeout)";
     "-eclauses", Arg.Int ((:=) eclauses), 
     "<int>  set the max nb of clauses for the E prover";
     "-debug", Arg.Set debug, "set the debug flag";

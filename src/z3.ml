@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: z3.ml,v 1.7 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: z3.ml,v 1.8 2009-12-02 14:54:52 bobot Exp $ i*)
 
 open Ident
 open Options
@@ -58,7 +58,7 @@ let prefix id =
   else if id == t_add_int then "+"
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
-  else if id == t_div_int then "div_int"
+  else if id == t_div_int then "div"
   else if id == t_mod_int then 
     if Options.modulo then "%" else "modulo" 
   else if id == t_neg_int then "-"
@@ -82,13 +82,13 @@ let is_smtlib_keyword =
   let ht = Hashtbl.create 50  in
   List.iter (fun kw -> Hashtbl.add ht kw ()) 
     ["and";" benchmark";" distinct";"exists";"false";"flet";"forall";
-     "if then else";"iff";"implies";"ite";"let";"logic";"not";"or";
+     "if_then_else";"iff";"implies";"ite";"let";"logic";"not";"or";
      "sat";"theory";"true";"unknown";"unsat";"xor";
-     "assumption";"axioms";"defintion";"extensions";"formula";
+     "assumption";"axioms";"definition";"extensions";"formula";
      "funs";"extrafuns";"extrasorts";"extrapreds";"language";
      "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
      "Array";"U";"select";"store";"define_sorts";"datatypes";"const";
-     "map";"default"];
+     "map";"default";"div"];
   Hashtbl.mem ht
 
 let leading_underscore s = s <> "" && s.[0] = '_'
@@ -108,9 +108,9 @@ let removeChar =
 let idents fmt s = 
   (* Yices does not expect names to begin with an underscore if
      Yices understand Z3 smtlib extended we can keep that. *)
-  (*if is_smtlib_keyword s || leading_underscore s then
+  if is_smtlib_keyword s then
     fprintf fmt "smtlib__%s" s
-  else *)
+  else
     fprintf fmt "%s" s
 
 let ident fmt id = idents fmt (Ident.string id)
@@ -379,32 +379,15 @@ let output_elem fmt = function
 
    
 
-let output_file ?logic f = 
+let output_file f = 
   let fname = f ^ "_why.z3.smt" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
   fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
   fprintf fmt "  :status unknown@\n";
-  begin
-    match logic with
-      | None -> ()
-      | Some l -> 
-	  fprintf fmt "  :logic %s@\n" l;
-  end;
-(*   if (Options.get_types_encoding() != SortedStratified) then   *)
-  begin
-    fprintf fmt "  :extrasorts (c_Boolean)@\n";
-    fprintf fmt "  :extrafuns ((c_Boolean_true c_Boolean))@\n";
-    fprintf fmt "  :extrafuns ((c_Boolean_false c_Boolean))@\n";
-    fprintf fmt "  :assumption
-                   (forall (?bcd c_Boolean) (or (= ?bcd c_Boolean_true) 
-                                            (= ?bcd c_Boolean_false)))@\n";
-    fprintf fmt "  :assumption
-                   (not 
-                      (= c_Boolean_true  c_Boolean_false))@\n";
-  end;
+  fprintf fmt "  :datatypes ((c_Boolean c_Boolean_true c_Boolean_false))@.";
+  (*fprintf fmt "  :datatypes ((Unit tt))@.";*)
   fprintf fmt "  :extrasorts (Unit)@\n";
-  fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
   if not modulo then begin 
     fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
   end;

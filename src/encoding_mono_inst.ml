@@ -97,7 +97,7 @@ let dt = PTexternal ([], dtnameid)
 let eq_arity = (Ident.string Ident.t_eq, Env.empty_scheme (Predicate [st; st]))
 let neq_arity = (Ident.string Ident.t_neq, Env.empty_scheme (Predicate [st; st]))
 
-let builtin_poly = [Ident.t_eq;Ident.t_neq]
+let builtin_poly = [Ident.t_eq;Ident.t_neq(*;Ident.if_then_else*)]
 let builtin_poly = List.fold_left (fun s x -> Ident.Idset.add x s) Ident.Idset.empty builtin_poly
 
 let builtin = [] (*[Ident.t_sub_int;Ident.t_add_int;Ident.t_mul_int;Ident.t_div_int;
@@ -809,7 +809,7 @@ let make_world_context_element world = function
   | Svar (_,ty) -> _PT_Set_add ty world
   | Spred (_,p) -> make_world_predicate world p
 
-let make_world world  = function
+let make_world_sorted world  = function
   | Dalgtype _ -> assert false
   | Dtype(_,s,[]) -> _PT_Set_add (PTexternal([],s)) world
   | Dlogic(_,_,sch) when Env.Vset.is_empty sch.Env.scheme_vars -> 
@@ -837,6 +837,21 @@ let make_world world  = function
       List.fold_left make_world_context_element world con
   | Dgoal _ -> assert false (* Dgoal must have been monomorphised *)
   | _ -> world (* Polymorph case *)
+
+let make_world_just_goal world  = function
+  | Dgoal (_,_,_,{Env.scheme_vars =v;scheme_type=(con,p)}) 
+      when Env.Vset.is_empty v ->
+      let world = make_world_predicate world p in
+      List.fold_left make_world_context_element world con
+  | Dgoal _ -> assert false (* Dgoal must have been monomorphised *)
+  | _ -> world
+
+let make_world_none world _ = world
+
+let make_world = match Options.monoinstworldgen with
+  | Options.MonoinstBuiltin -> make_world_none
+  | Options.MonoinstSorted -> make_world_sorted
+  | Options.MonoinstGoal -> make_world_just_goal
 
 let monomorph_goal acc = function
   | Dgoal (loc,vc,id,sch) ->
