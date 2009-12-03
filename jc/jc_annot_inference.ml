@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.161 2009-11-05 16:53:20 marche Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.162 2009-12-03 13:20:00 signoles Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -221,7 +221,7 @@ let name_of_assertion a =
 (* support of <new> (Nicolas) *)
 let rec destruct_alloc t = 
   match t#node with
-    | JCTconst (JCCinteger str) -> None, Some t 
+    | JCTconst (JCCinteger _str) -> None, Some t 
     | JCTvar vi -> Some vi, None
     | JCTbinary (t1, (`Bsub,`Integer), t2) ->
 	begin
@@ -598,7 +598,7 @@ let rec atp_of_term t =
 	Atp.Fn(atp_of_binop bop, List.map atp_of_term [t1;t2])
     | JCTbinary(t1,(`Bdiv,`Integer as bop),t2) when (is_constant_term t2) ->
 	Atp.Fn(atp_of_binop bop, List.map atp_of_term [t1;t2])
-    | JCTbinary(t1,bop,t2) ->
+    | JCTbinary(_t1,_bop,_t2) ->
 	Atp.Var (Vwp.variable_for_term t)
     | JCTunary((`Uminus,`Integer as uop),t1) ->
 	Atp.Fn(atp_of_unop uop, [atp_of_term t1])
@@ -624,10 +624,10 @@ let rec term_of_atp tm =
       | Atp.Fn(s,[]) ->
 	  let tnode = JCTconst(JCCinteger s) in
 	  new term ~typ:integer_type tnode
-      | tm -> assert false
+      | _tm -> assert false
   with Assert_failure _ ->
     printf "[Jc_annot_inference.term_of_atp] unexpected ATP term %a@."
-      (fun fmt tm -> Atp.printert tm) tm;
+      (fun _fmt tm -> Atp.printert tm) tm;
     assert false
 
 let term_of_atp_with_variable_for_assertion tm =
@@ -660,11 +660,11 @@ let term_of_atp_with_variable_for_assertion tm =
 	    None, - c1
 	| Atp.Fn(s,[]) ->
 	    None, int_of_string s
-	| tm -> assert false
+	| _tm -> assert false
     in aux tm
   with Assert_failure _ ->
     printf "[Jc_annot_inference.term_of_atp_with_variable_for_assertion] unexpected ATP term %a@."
-      (fun fmt tm -> Atp.printert tm) tm;
+      (fun _fmt tm -> Atp.printert tm) tm;
     assert false
 
 let atp_of_asrt a = 
@@ -738,7 +738,7 @@ let atp_of_asrt a =
       let s = Vwp.variable_for_assertion a in
       let fm = Atp.Atom(Atp.R("<=",[Atp.Fn("0",[]);Atp.Var s])) in
       match a#node with
-	| JCAnot a1 -> Atp.Not fm
+	| JCAnot _a1 -> Atp.Not fm
 	| _ -> fm
   in aux a
 
@@ -749,8 +749,8 @@ let has_variable_for_assertion fm =
 let asrt_of_atp_with_variable_for_assertion fm =
   try match fm with
     | Atp.Atom(Atp.R(r,[tm1;tm2])) ->
-	let a1,c1 = term_of_atp_with_variable_for_assertion tm1 in
-	let a2,c2 = term_of_atp_with_variable_for_assertion tm2 in
+	let a1,_c1 = term_of_atp_with_variable_for_assertion tm1 in
+	let a2,_c2 = term_of_atp_with_variable_for_assertion tm2 in
 	begin match a1,a2 with
 	  | Some _,Some _
 	  | None,None -> assert false
@@ -770,7 +770,7 @@ let asrt_of_atp_with_variable_for_assertion fm =
     | _ -> assert false
   with Assert_failure _ ->
     printf "[Jc_annot_inference.asrt_of_atp_with_variable_for_assertion] unexpected ATP formula %a@."
-      (fun fmt fm -> Atp.printer fm) fm;
+      (fun _fmt fm -> Atp.printer fm) fm;
     assert false
 
 let rec asrt_of_atp fm =
@@ -785,7 +785,7 @@ let rec asrt_of_atp fm =
 	JCArelation(term_of_atp tm1,binrel_of_atp r,term_of_atp tm2)
     | Atp.Atom _ ->
 	printf "[Jc_annot_inference.term_of_atp] unexpected ATP atom %a@." 
-	  (fun fmt fm -> Atp.printer fm) fm;
+	  (fun _fmt fm -> Atp.printer fm) fm;
 	assert false
     | Atp.Not fm ->
 	JCAnot(asrt_of_atp fm)
@@ -800,7 +800,7 @@ let rec asrt_of_atp fm =
     | Atp.Forall _ | Atp.Exists _ ->
 	printf 
 	  "[Jc_annot_inference.term_of_atp] unexpected ATP quantification %a@." 
-	  (fun fmt fm -> Atp.printer fm) fm;
+	  (fun _fmt fm -> Atp.printer fm) fm;
 	assert false
   in
   new assertion anode
@@ -1201,7 +1201,7 @@ let linearize t =
 
 let linstr_of_term env t =
   let mkmulstr = function
-    | (va, Int 0) -> ""
+    | (_va, Int 0) -> ""
     | (va, c) -> string_of_num c ^ " * " ^ va 
   in
   let rec mkaddstr = function
@@ -1402,7 +1402,7 @@ let mkassertion lincons =
     | SUPEQ -> (`Bge,`Integer), JCCinteger "0"
     | SUP -> (`Bgt,`Integer), JCCinteger "0"
     | DISEQ -> (`Bneq,`Integer), JCCinteger "0"
-    | EQMOD scalar -> 
+    | EQMOD _scalar -> 
 	(* If using a new domain that generates such modulo equalities,
 	   add support for those *)
 	assert false
@@ -1686,7 +1686,7 @@ let simplify =
 	     try
 	       if Jc_options.debug then
 		 printf "asrt conjunct : %a@."
-		   (Pp.print_list (fun fmt () -> printf " /\\ ")
+		   (Pp.print_list (fun _fmt () -> printf " /\\ ")
 		      Jc_output.assertion)
 		   conjunct;
 	       let absval,other_conjuncts = 
@@ -1830,7 +1830,7 @@ let collect_free_vars a =
 	 | JCTvar vi -> VarSet.add vi vars, qvars
 	 | _ -> acc) 
       (fun (vars,qvars as acc) a -> match a#node with
-	 | JCAquantifier(_,vi,_trig,a) -> vars, VarSet.add vi qvars
+	 | JCAquantifier(_,vi,_trig,_a) -> vars, VarSet.add vi qvars
 	 | _ -> acc)
       (VarSet.empty,VarSet.empty) a
   in
@@ -2178,11 +2178,11 @@ let rec wp_expr weakpre =
 	  begin match e1opt with None -> curposts | Some e1 -> 
 	    wp e1 curposts
 	  end
-      | JCEtry(body,handlers,finally) ->
+      | JCEtry(body,handlers,_finally) ->
 	  (* TODO: apply finally stmt to all paths. *)
 	  let handlpostexcl,handlvs = 
 	    List.fold_left 
-	      (fun (curpostexcl,curvs) (ei,vio,ehandler) ->
+	      (fun (curpostexcl,curvs) (ei,_vio,ehandler) ->
 		 let excposts = wp ehandler curposts in
 		 let curpostexcl = match excposts.jc_post_normal with
 		   | None -> curpostexcl
@@ -2272,7 +2272,7 @@ let rec wp_expr weakpre =
 	    (* 	      add_modified_var curposts vi  *)
 	    (* 	  in *)
 	    (* 	  { curposts with jc_post_normal = post; } *)
-      | JCEapp call -> 
+      | JCEapp _call -> 
 (* 	  let curposts = wp e curposts in *)
 	  curposts
       | JCEvar _
@@ -2466,7 +2466,7 @@ let collect_expr_targets e =
   in
 
   (* Collect memory safety assertions. *)
-  let collect_memory_access e1 fi =
+  let collect_memory_access e1 _fi =
     match Jc_effect.term_of_expr e1 with None -> [] | Some t1 ->
       let ptrt, offt = match destruct_pointer t1 with
 	| None -> t1, None
@@ -2532,7 +2532,7 @@ let collect_expr_targets e =
           in
 	  let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
           conjuncts reqa
-      | JCEassert(_,Ahint, a) -> 
+      | JCEassert(_,Ahint, _a) -> 
 	  (* Hints are not to be proved by abstract interpretation, 
 	     only added to help it. *)
 	  []
@@ -2566,7 +2566,7 @@ let collect_expr_targets e =
   let collect e = collect_asserts e @ collect_hints e in
   Jc_iterators.IExpr.fold_left (fun acc e -> collect e @ acc) [] e
     
-let rec collect_targets filter_asrt targets s =
+let rec collect_targets filter_asrt _targets s =
   let candidates = List.rev (collect_expr_targets s) in
   List.filter (fun target -> filter_asrt target.jc_target_assertion) candidates
 
@@ -2646,9 +2646,9 @@ let collect_immediate_targets targets s =
 	  ite acc finally
       | JCEassert(_behav,_asrt,_a) ->
 	  acc
-      | JCEloop(la,e1) ->
+      | JCEloop(_la,e1) ->
 	  ite acc e1
-      | JCEcontract(a_opt,t_opt,_v,behavs,e) ->
+      | JCEcontract(_a_opt,_t_opt,_v,_behavs,e) ->
 	  ite acc e
     in
     fpost acc s
@@ -2781,7 +2781,7 @@ let rec backprop_expr target s curpost =
     end
   else curpost
 
-let backprop_function targets (fi,fs,sl) =
+let backprop_function targets (_fi,_fs,sl) =
   if debug then printf "[backprop_function]@.";
   List.iter (fun target ->
 	       ignore(backprop_expr target sl None)
@@ -3044,7 +3044,7 @@ let assign_pointer_variables mgr t e curinvs =
 let assign_expr mgr t e curinvs =
   apply_to_current_invariant (assign_expr mgr t e) curinvs
     
-let assign_heap mgr e1 fi topt curinvs =
+let assign_heap mgr e1 fi _topt curinvs =
   apply_to_current_invariant (assign_heap mgr e1 fi) curinvs 
 
 let keep_extern mgr fi post =
@@ -3124,7 +3124,7 @@ let return_abstract_value mgr postret e absval1 =
   with Not_found ->
     Hashtbl.replace postret key absval1
 
-let rec ai_inter_function_call mgr iai abs pre fi loc fs sl el =
+let rec ai_inter_function_call _mgr _iai _abs _pre _fi _loc _fs _sl _el =
   assert false
     (*   let pre,formal_vars = *)
     (*     List.fold_left2 *)
@@ -3217,7 +3217,7 @@ and ai_expr iaio abs curinvs e =
   let loop_invariants = abs.jc_absint_loop_invariants in
   let loop_iterations = abs.jc_absint_loop_iterations in
   match e#node with
-    | JCEloop(annot,body) ->
+    | JCEloop(annot,_body) ->
 	(* Reinitialize the loop iteration count and the loop invariant.
 	 * This is useful to get precise results for inner loops.
 	 * Comment those lines to gain in scaling, at the cost of precision.
@@ -3257,7 +3257,7 @@ and intern_ai_expr iaio abs curinvs e =
 
   (* Apply appropriate transition function. *)
   let curinvs = match e#node with
-    | JCElet(v,None,e1) ->
+    | JCElet(_v,None,e1) ->
 	ai curinvs e1
     | JCElet(v,Some e1,e2) when Expr.is_app e1 ->
 	let curinvs = ai_call iaio abs curinvs (Some v) e1 in
@@ -3526,7 +3526,7 @@ and ai_call iaio abs curinvs vio e =
 
   (* Compute abstract value at function call *)
   let curinvs = List.fold_left (ai_expr iaio abs) curinvs args in
-  let _f, pos, spec, body = 
+  let _f, _pos, spec, _body = 
     Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag 
   in
 (*   begin match body with None -> () | Some body -> *)
@@ -3561,7 +3561,7 @@ and ai_call iaio abs curinvs vio e =
   (* Compute normal postcondition *)
   let normal_post =
     List.fold_left
-      (fun acc (pos,name,b) ->
+      (fun acc (_pos,_name,b) ->
 	 (* TODO : handle 'assumes' clauses precisely *)
 	 if b.jc_behavior_throws = None && compulsory_behavior b then
 	   Assertion.mkand [ b.jc_behavior_ensures; acc ] ()
@@ -3586,7 +3586,7 @@ and ai_call iaio abs curinvs vio e =
   let normal_post =
     match vio with
       | None -> normal_post
-      | Some v ->
+      | Some _v ->
   	  let result = f.jc_fun_info_result in
   	  let cstrs = 
 	    Jc_typing.type_range_of_term result.jc_var_info_type 
@@ -3938,7 +3938,7 @@ let prepare_target target =
 
 let code_function (f,pos,spec,body) =
   match body with None -> () | Some body ->
-    let wp_filter canda =
+    let wp_filter _canda =
       (* Only propagate candidate assertions for targets if Atp can make 
        * sense of them.
        *)
@@ -4053,7 +4053,7 @@ let rec nb_conj_atoms a = match a#node with
   | JCAor _ | JCAnot _ | JCAold _ | JCAat _ | JCAsubtype _ -> 1
       
 
-let rec record_ai_inter_annotations mgr iai fi pos fs sl =
+let rec record_ai_inter_annotations mgr iai fi pos fs _sl =
   let env = Environment.make [||] [||] in
   inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
   (* record inferred precondition for [fi] *)
@@ -4187,7 +4187,7 @@ let ai_interprocedural mgr (fi, loc, fs, sl) =
       
       
 let main_function = function
-  | fi, loc, fs, None -> ()
+  | _fi, _loc, _fs, None -> ()
   | fi, loc, fs, Some sl ->
       begin match !Jc_options.ai_domain with
 	| AbsBox ->
