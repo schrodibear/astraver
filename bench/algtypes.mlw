@@ -1,4 +1,4 @@
-type 'a list = nil | cons ('a, 'a list)
+type 'a list = Nil | Cons ('a, 'a list)
 
 type ('sym,'val) formula =
   | False

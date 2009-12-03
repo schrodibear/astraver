@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.81 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.82 2009-12-03 17:40:59 andrei Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -212,7 +212,7 @@ let match_branches prop gloc loc x ty l =
       let hd = PPinfix (x, PPeq, expr (PPapp (c,al))) in
       expr (PPinfix (expr hd, PPand, r))
     in
-    let i = ref 0 in
+    let i = ref 1 in
     let proj acc v =
       let pt = PPapp (proj_id c !i, [x]) in
       incr i ; expr (PPlet (v, expr pt, acc))

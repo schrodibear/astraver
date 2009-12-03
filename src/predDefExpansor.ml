@@ -149,7 +149,7 @@ let ah_forall yv tl f =
 let function_def loc id d =
   let (vars,(yv,tr,e)) = Env.specialize_function_def d in
   let zv = Ltyping.instance id vars in
-  let ts = List.map (fun (_y,t) -> t) yv in
+  let ts = List.map (fun (_,t) -> t) yv in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
   let lhs = Tapp (id,yt,zv) in
   let body = ah_equal tr lhs e in
@@ -162,7 +162,7 @@ let function_def loc id d =
 let predicate_def loc id d =
   let (vars,(yv,e)) = Env.specialize_predicate_def d in
   let zv = Ltyping.instance id vars in
-  let ts = List.map (fun (_y,t) -> t) yv in
+  let ts = List.map (fun (_,t) -> t) yv in
   let yt = List.map (fun (y,_) -> Tvar y) yv in
   let lhs = Papp (id,yt,zv) in
   let body = Piff (lhs, e) in
@@ -249,8 +249,8 @@ let find_global_logic_gen id =
   let _,t = find_global_logic id in
   generalize_logic_type t
 
-let alg_proj_fun loc zv _th (id,pl) =
-  let r = ref 0 in
+let alg_proj_fun loc zv (id,pl) =
+  let r = ref 1 in
   let yv,ct = fresh_cons zv id pl in
   let proj (v,t) =
     let nm = Ident.proj_id id !r in
@@ -267,7 +267,7 @@ let alg_proj_fun loc zv _th (id,pl) =
 let alg_inversion_axiom loc id zv th cs =
   let x = fresh_var () in
   let inv_cons acc (id,pl) =
-    let r = ref 0 in
+    let r = ref 1 in
     let targ _ =
       let nm = Ident.proj_id id !r in
       let () = incr r in
@@ -281,7 +281,7 @@ let alg_inversion_axiom loc id zv th cs =
   let pred = Env.generalize_predicate body in
   Daxiom (loc, Ident.string id ^ "_inversion", pred)
 
-let alg_match_fun_axiom loc id zv _th cs =
+let alg_match_fun_axiom loc id zv cs =
   let nm = Ident.match_id id in
   let nt = PTvar (new_type_var ()) in
   let vs = List.map (fun _ -> (fresh_var (), nt)) cs in
@@ -320,8 +320,8 @@ let algebraic_type_single (loc,id,d) =
   let th = PTexternal (vs, id) in
   List.map (fun (c,_) ->
       Dlogic (loc, c, find_global_logic_gen c)) cs @
-    alg_match_fun_axiom loc id zv th cs @
-    List.concat (List.map (alg_proj_fun loc zv th) cs) @
+    alg_match_fun_axiom loc id zv cs @
+    List.concat (List.map (alg_proj_fun loc zv) cs) @
     alg_inversion_axiom loc id zv th cs ::
     alg_to_int_fun_axiom loc id zv th cs
 (*

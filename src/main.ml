@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.180 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: main.ml,v 1.181 2009-12-03 17:40:59 andrei Exp $ i*)
 
 open Options
 open Ptree
@@ -609,7 +609,7 @@ let rec interp_decl ?(_prelude=false) d =
           if is_global_logic c then raise_located loc (Clash c);
           let t = Env.generalize_logic_type (Function (pl,th)) in
           Env.add_global_logic c t;
-          let r = ref 0 in
+          let r = ref 1 in
           let add_proj t =
             let pr = Ident.proj_id c !r in
             let pt = Env.generalize_logic_type (Function ([th],t)) in
