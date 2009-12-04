@@ -564,15 +564,13 @@ why --project [...] why/duprat3.why
     <behavior name="Normal behavior `ok'">
     <goal why_file="why/duprat3_po2.why">
       <location file = "PPCHOME/tests/jessie/duprat3.c" line = "7" begin = "14" end = "26"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `ko'">
     <goal why_file="why/duprat3_po1.why">
       <location file = "PPCHOME/tests/jessie/duprat3.c" line = "10" begin = "14" end = "26"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>

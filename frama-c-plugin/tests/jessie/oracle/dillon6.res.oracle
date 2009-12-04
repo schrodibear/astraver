@@ -779,14 +779,14 @@ why --project [...] why/dillon6.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/dillon6_po1.why">
-      <location file = "PPCHOME/tests/jessie/dillon6.c" line = "3" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "59" begin = "13" end = "27"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon6_po2.why">
-      <location file = "PPCHOME/tests/jessie/dillon6.c" line = "3" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "59" begin = "13" end = "27"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
   </function>

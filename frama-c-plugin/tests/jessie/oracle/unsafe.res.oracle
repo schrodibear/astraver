@@ -817,14 +817,14 @@ why --project [...] why/unsafe.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/unsafe_po6.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "38" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/unsafe_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "38" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
   </function>
@@ -832,9 +832,9 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/unsafe_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "34" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "IndexBounds"/>
     </goal>
     </behavior>
   </function>
@@ -842,24 +842,24 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/unsafe_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "30" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/unsafe_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "30" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/unsafe_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "30" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/unsafe_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/unsafe.c" line = "30" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
   </function>

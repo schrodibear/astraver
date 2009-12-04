@@ -571,9 +571,9 @@ why --project [...] why/clash_alloc.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/clash_alloc_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/clash_alloc.c" line = "32" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
   </function>

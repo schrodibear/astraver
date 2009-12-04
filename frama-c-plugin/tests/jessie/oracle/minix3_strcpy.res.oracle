@@ -1713,24 +1713,24 @@ why --project [...] why/minix3_strcpy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/minix3_strcpy_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strcpy.c" line = "17" begin = "1" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strcpy.c" line = "17" begin = "1" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strcpy.jessie/minix3_strcpy.jc" line = "404" begin = "27" end = "54"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strcpy.jessie/minix3_strcpy.jc" line = "404" begin = "27" end = "54"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po5.why">
       <location file = "why/minix3_strcpy.why" line = "1194" begin = "61" end = "62"/>

@@ -773,44 +773,44 @@ why --project [...] why/simple_cast.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/simple_cast_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "44" begin = "14" end = "34"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "44" begin = "14" end = "34"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "46" begin = "14" end = "34"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "46" begin = "14" end = "34"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "48" begin = "15" end = "36"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po6.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "48" begin = "15" end = "36"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "50" begin = "15" end = "36"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/simple_cast_po8.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/simple_cast.jessie/simple_cast.jc" line = "50" begin = "15" end = "36"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
   </function>

@@ -2406,104 +2406,104 @@ why --project [...] why/heapsort.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/heapsort_po90.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "124" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po91.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "124" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po92.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "124" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po93.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "124" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po94.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po95.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po96.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po97.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po98.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po99.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po100.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po101.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po102.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "51" end = "56"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po103.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "125" begin = "51" end = "56"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po104.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "126" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po105.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "126" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po106.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "127" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po107.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "127" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po108.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "245" begin = "24" end = "234"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po109.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "245" begin = "24" end = "234"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po110.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "122" begin = "8" end = "16"/>
@@ -2514,116 +2514,96 @@ text = "unexplained assertion"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po112.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "258" begin = "15" end = "52"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po113.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "258" begin = "15" end = "52"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/heapsort_po70.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "8" end = "16"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po71.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "15" end = "24"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po72.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "115" begin = "8" end = "61"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po73.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "116" begin = "8" end = "62"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po74.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "117" begin = "8" end = "41"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po75.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "118" begin = "8" end = "44"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
       <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
       <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "128" begin = "15" end = "32"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/heapsort_po79.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "8" end = "16"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po80.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "15" end = "24"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po81.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "115" begin = "8" end = "61"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po82.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "116" begin = "8" end = "62"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po83.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "117" begin = "8" end = "41"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po84.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "118" begin = "8" end = "44"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
       <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
       <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "108" begin = "6" end = "71"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/heapsort_po88.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "109" begin = "6" end = "21"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/heapsort_po89.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "111" begin = "5" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -2631,94 +2611,94 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/heapsort_po31.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/heapsort_po32.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po33.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po34.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po35.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po36.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po37.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po38.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po39.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po40.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po41.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "29" end = "38"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po42.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "6" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po43.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "11" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po44.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "26" end = "52"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po45.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "26" end = "52"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po46.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "104" begin = "6" end = "23"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po47.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po48.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
       <location file = "why/heapsort.why" line = "1191" begin = "55" end = "89"/>
@@ -2729,89 +2709,89 @@ text = "unexplained assertion"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "157" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po52.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "157" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po53.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "158" begin = "4" end = "7"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po54.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "158" begin = "4" end = "7"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po55.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "159" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po56.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "159" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po57.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "328" begin = "27" end = "287"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po58.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "328" begin = "27" end = "287"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po59.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "160" begin = "4" end = "13"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po60.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "160" begin = "4" end = "13"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po61.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "6" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po62.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "11" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po63.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "26" end = "52"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po64.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "103" begin = "26" end = "52"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po65.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "104" begin = "6" end = "23"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po66.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "157" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po67.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "157" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
       <location file = "why/heapsort.why" line = "1310" begin = "56" end = "91"/>
@@ -2825,113 +2805,91 @@ text = "unexplained assertion"/>
     <behavior name="Default behavior">
     <goal why_file="why/heapsort_po9.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "8" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po10.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "13" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po11.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "145" begin = "8" end = "58"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po12.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "146" begin = "8" end = "20"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po13.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "8" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po14.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "13" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po15.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "145" begin = "8" end = "58"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po16.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "146" begin = "8" end = "20"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po17.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "8" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po18.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "13" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po19.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "152" begin = "8" end = "58"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po20.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "8" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po21.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "22" end = "41"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po22.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "154" begin = "8" end = "78"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po23.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "8" end = "14"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po24.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "13" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po25.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "152" begin = "8" end = "58"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po26.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "8" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po27.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "22" end = "41"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po28.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "154" begin = "8" end = "78"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po29.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "137" begin = "6" end = "52"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/heapsort_po30.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "138" begin = "6" end = "23"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>

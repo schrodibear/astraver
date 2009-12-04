@@ -4,7 +4,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [jessie] Producing Jessie files in subdir bts0039.jessie
 [jessie] File bts0039.jessie/bts0039.jc written.
 [jessie] File bts0039.jessie/bts0039.cloc written.
-# IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -16,18 +15,14 @@ axiomatic Padding {
   
 }
 
-type int32 = -2147483648..2147483647
-
-type int8 = -128..127
-
 tag int_P = {
-  int32 int_M: 32;
+  integer int_M: 32;
 }
 
 type int_P = [int_P]
 
 tag char_P = {
-  int8 char_M: 8;
+  integer char_M: 8;
 }
 
 type char_P = [char_P]
@@ -81,10 +76,6 @@ type __anonstruct_las_1
 
 type char_P
 
-type int32
-
-type int8
-
 type int_P
 
 type padding
@@ -134,20 +125,6 @@ logic char_P_of_bitvector: bitvector -> char_P pointer
 axiom bitvector_of_char_P_of_char_P_of_bitvector :
  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
 
-logic bitvector_of_int32: int32 -> bitvector
-
-logic int32_of_bitvector: bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector :
- (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8: int8 -> bitvector
-
-logic int8_of_bitvector: bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector :
- (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
-
 logic bitvector_of_int_P: int_P pointer -> bitvector
 
 logic int_P_of_bitvector: bitvector -> int_P pointer
@@ -181,47 +158,6 @@ axiom char_P_tags :
  (forall x:char_P pointer.
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
-
-logic integer_of_int32: int32 -> int
-
-predicate eq_int32(x:int32,
- y:int32) =
- eq_int(integer_of_int32(x), integer_of_int32(y))
-
-logic integer_of_int8: int8 -> int
-
-predicate eq_int8(x:int8,
- y:int8) =
- eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic int32_of_integer: int -> int32
-
-axiom int32_coerce :
- (forall x:int.
-  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
-   eq_int(integer_of_int32(int32_of_integer(x)), x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32 :
- (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range :
- (forall x:int32.
-  (le_int((-2147483648), integer_of_int32(x))
-  and le_int(integer_of_int32(x), (2147483647))))
-
-logic int8_of_integer: int -> int8
-
-axiom int8_coerce :
- (forall x:int.
-  ((le_int((-128), x) and le_int(x, (127))) ->
-   eq_int(integer_of_int8(int8_of_integer(x)), x)))
-
-axiom int8_of_bitvector_of_bitvector_of_int8 :
- (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
-axiom int8_range :
- (forall x:int8.
-  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 logic int_P_tag:  -> int_P tag_id
 
@@ -675,13 +611,9 @@ parameter alloc_struct_void_P_requires :
           and (alloc_fresh(void_P_alloc_table@, result, n)
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
-parameter any_int32 : unit -> { } int32 { true }
-
-parameter any_int8 : unit -> { } int8 { true }
-
 parameter f :
  p:__anonstruct_las_1 pointer ->
-  int_P_int_M_p_3:(int_P, int32) memory ref ->
+  int_P_int_M_p_3:(int_P, int) memory ref ->
    int_P_p_3_alloc_table:int_P alloc_table ->
     __anonstruct_las_1_p_3_alloc_table:__anonstruct_las_1 alloc_table ->
      __anonstruct_las_1_j_p_3:(__anonstruct_las_1, int_P pointer) memory ->
@@ -697,7 +629,7 @@ parameter f :
 
 parameter f_requires :
  p:__anonstruct_las_1 pointer ->
-  int_P_int_M_p_3:(int_P, int32) memory ref ->
+  int_P_int_M_p_3:(int_P, int) memory ref ->
    int_P_p_3_alloc_table:int_P alloc_table ->
     __anonstruct_las_1_p_3_alloc_table:__anonstruct_las_1 alloc_table ->
      __anonstruct_las_1_j_p_3:(__anonstruct_las_1, int_P pointer) memory ->
@@ -719,8 +651,8 @@ parameter f_requires :
 parameter g :
  a:int_P pointer ->
   b:int_P pointer ->
-   int_P_int_M_b_2:(int_P, int32) memory ref ->
-    int_P_int_M_a_1:(int_P, int32) memory ref ->
+   int_P_int_M_b_2:(int_P, int) memory ref ->
+    int_P_int_M_a_1:(int_P, int) memory ref ->
      int_P_b_2_alloc_table:int_P alloc_table ->
       int_P_a_1_alloc_table:int_P alloc_table ->
        { } unit writes int_P_int_M_a_1,int_P_int_M_b_2
@@ -736,8 +668,8 @@ parameter g :
 parameter g_requires :
  a:int_P pointer ->
   b:int_P pointer ->
-   int_P_int_M_b_2:(int_P, int32) memory ref ->
-    int_P_int_M_a_1:(int_P, int32) memory ref ->
+   int_P_int_M_b_2:(int_P, int) memory ref ->
+    int_P_int_M_a_1:(int_P, int) memory ref ->
      int_P_b_2_alloc_table:int_P alloc_table ->
       int_P_a_1_alloc_table:int_P alloc_table ->
        { (JC_5:
@@ -756,24 +688,8 @@ parameter g_requires :
               not_assigns(int_P_b_2_alloc_table@, int_P_int_M_b_2@,
               int_P_int_M_b_2, pset_singleton(b@)))))) }
 
-parameter int32_of_integer_ :
- x:int ->
-  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
-  { eq_int(integer_of_int32(result), x) }
-
-parameter int8_of_integer_ :
- x:int ->
-  { (le_int((-128), x) and le_int(x, (127)))} int8
-  { eq_int(integer_of_int8(result), x) }
-
-parameter safe_int32_of_integer_ :
- x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
-
-parameter safe_int8_of_integer_ :
- x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
-
 let f_ensures_default =
- fun (p : __anonstruct_las_1 pointer) (int_P_int_M_p_3 : (int_P, int32) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, int_P pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, int_P pointer) memory) ->
+ fun (p : __anonstruct_las_1 pointer) (int_P_int_M_p_3 : (int_P, int) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, int_P pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, int_P pointer) memory) ->
   { ((true = true)
     and (JC_31:
         ((JC_29:
@@ -802,7 +718,7 @@ let f_ensures_default =
     pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@))))) }
 
 let f_safety =
- fun (p : __anonstruct_las_1 pointer) (int_P_int_M_p_3 : (int_P, int32) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, int_P pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, int_P pointer) memory) ->
+ fun (p : __anonstruct_las_1 pointer) (int_P_int_M_p_3 : (int_P, int) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, int_P pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, int_P pointer) memory) ->
   { (JC_31:
     ((JC_29: le_int(offset_min(__anonstruct_las_1_p_3_alloc_table, p), (0)))
     and (JC_30:
@@ -830,7 +746,7 @@ let f_safety =
   { true }
 
 let g_ensures_default =
- fun (a : int_P pointer) (b : int_P pointer) (int_P_int_M_a_1 : (int_P, int32) memory ref) (int_P_int_M_b_2 : (int_P, int32) memory ref) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_b_2_alloc_table : int_P alloc_table) ->
+ fun (a : int_P pointer) (b : int_P pointer) (int_P_int_M_a_1 : (int_P, int) memory ref) (int_P_int_M_b_2 : (int_P, int) memory ref) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_b_2_alloc_table : int_P alloc_table) ->
   { ((true = true)
     and (JC_11:
         ((JC_7: le_int(offset_min(int_P_a_1_alloc_table, a), (0)))
@@ -843,13 +759,13 @@ let g_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_18 = (let jessie_14 = (safe_int32_of_integer_ (11)) in
+       (let jessie_18 = (let jessie_14 = (11) in
                         (let jessie_17 = a in
                         (((safe_upd_ int_P_int_M_a_1) jessie_17) jessie_14))) in
        void);
       (C_4:
       begin
-        (let jessie_24 = (let jessie_20 = (safe_int32_of_integer_ (15)) in
+        (let jessie_24 = (let jessie_20 = (15) in
                          (let jessie_23 = b in
                          (((safe_upd_ int_P_int_M_b_2) jessie_23) jessie_20))) in
         void);
@@ -870,7 +786,7 @@ let g_ensures_default =
         int_P_int_M_b_2, pset_singleton(b@))))) }
 
 let g_safety =
- fun (a : int_P pointer) (b : int_P pointer) (int_P_int_M_a_1 : (int_P, int32) memory ref) (int_P_int_M_b_2 : (int_P, int32) memory ref) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_b_2_alloc_table : int_P alloc_table) ->
+ fun (a : int_P pointer) (b : int_P pointer) (int_P_int_M_a_1 : (int_P, int) memory ref) (int_P_int_M_b_2 : (int_P, int) memory ref) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_b_2_alloc_table : int_P alloc_table) ->
   { (JC_11:
     ((JC_7: le_int(offset_min(int_P_a_1_alloc_table, a), (0)))
     and ((JC_8: ge_int(offset_max(int_P_a_1_alloc_table, a), (0)))
@@ -881,14 +797,14 @@ let g_safety =
    begin
      (C_2:
      begin
-       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (11)) in
+       (let jessie_6 = (let jessie_2 = (11) in
                        (let jessie_5 = a in
                        (JC_23:
                        ((((upd_ int_P_a_1_alloc_table) int_P_int_M_a_1) jessie_5) jessie_2)))) in
        void);
       (C_4:
       begin
-        (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (15)) in
+        (let jessie_12 = (let jessie_8 = (15) in
                          (let jessie_11 = b in
                          (JC_24:
                          ((((upd_ int_P_b_2_alloc_table) int_P_int_M_b_2) jessie_11) jessie_8)))) in

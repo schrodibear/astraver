@@ -669,56 +669,54 @@ why --project [...] why/union_simple.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/union_simple_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "48" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "48" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "48" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po6.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "48" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "54" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po8.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "54" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po9.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "54" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_simple_po10.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/union_simple.jessie/union_simple.jc" line = "54" begin = "14" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/union_simple_po1.why">
       <location file = "PPCHOME/tests/jessie/union_simple.c" line = "9" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_simple_po2.why">
       <location file = "PPCHOME/tests/jessie/union_simple.c" line = "11" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>

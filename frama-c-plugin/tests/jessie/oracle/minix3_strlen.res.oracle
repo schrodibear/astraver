@@ -1683,14 +1683,14 @@ why --project [...] why/minix3_strlen.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/minix3_strlen_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strlen.c" line = "18" begin = "1" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strlen_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strlen.c" line = "18" begin = "1" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strlen_po3.why">
       <location file = "why/minix3_strlen.why" line = "1198" begin = "61" end = "62"/>
@@ -1701,19 +1701,19 @@ text = "unexplained assertion"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/minix3_strlen.why" line = "1250" begin = "60" end = "84"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     <goal why_file="why/minix3_strlen_po6.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strlen.c" line = "21" begin = "1" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/minix3_strlen_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strlen.c" line = "21" begin = "1" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     </behavior>
   </function>

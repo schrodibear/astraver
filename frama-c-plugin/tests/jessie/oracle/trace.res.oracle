@@ -1546,21 +1546,20 @@ why --project [...] why/trace.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po54.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "39" begin = "14" end = "32"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po55.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "39" begin = "14" end = "32"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/trace_po53.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "12" begin = "12" end = "24"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1568,26 +1567,24 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po51.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "196" begin = "15" end = "31"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po52.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "196" begin = "15" end = "31"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/trace_po49.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "122" begin = "12" end = "21"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/trace_po50.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "124" begin = "5" end = "7"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1595,14 +1592,14 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po47.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "113" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po48.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "113" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
   </function>
@@ -1610,84 +1607,84 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po31.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po32.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po33.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po34.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po35.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po36.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po37.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po38.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po39.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po40.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po41.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po42.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po43.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po44.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po45.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po46.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     </behavior>
   </function>
@@ -1695,14 +1692,14 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po27.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "91" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po28.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "91" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po29.why">
       <location file = "why/trace.why" line = "1014" begin = "36" end = "68"/>
@@ -1716,13 +1713,11 @@ text = "unexplained assertion"/>
     <behavior name="Default behavior">
     <goal why_file="why/trace_po25.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "87" begin = "21" end = "27"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/trace_po26.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "87" begin = "21" end = "27"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
   </function>
@@ -1730,14 +1725,14 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po21.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "74" begin = "6" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po22.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "74" begin = "6" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po23.why">
       <location file = "why/trace.why" line = "869" begin = "36" end = "67"/>
@@ -1751,23 +1746,19 @@ text = "unexplained assertion"/>
     <behavior name="Default behavior">
     <goal why_file="why/trace_po17.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "69" begin = "21" end = "27"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/trace_po18.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "69" begin = "31" end = "37"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/trace_po19.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "69" begin = "21" end = "27"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/trace_po20.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "69" begin = "31" end = "37"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
   </function>
@@ -1775,24 +1766,24 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po13.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "37" begin = "13" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/trace_po14.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "37" begin = "17" end = "24"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/trace_po15.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "37" begin = "21" end = "30"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/trace_po16.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "37" begin = "27" end = "36"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
   </function>
@@ -1800,46 +1791,42 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po9.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "43" begin = "4" end = "10"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po10.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "43" begin = "4" end = "10"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po11.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "45" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po12.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "45" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/trace_po5.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "38" begin = "12" end = "17"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/trace_po6.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "38" begin = "16" end = "23"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/trace_po7.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "38" begin = "27" end = "39"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/trace_po8.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "38" begin = "43" end = "55"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1847,26 +1834,24 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "28" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "28" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/trace_po1.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "27" begin = "13" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/trace_po2.why">
       <location file = "PPCHOME/tests/jessie/trace.c" line = "27" begin = "23" end = "28"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>

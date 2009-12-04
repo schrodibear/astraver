@@ -870,19 +870,17 @@ why --project [...] why/decreases.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "707" begin = "57" end = "158"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/decreases_po8.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "707" begin = "57" end = "158"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/decreases_po9.why">
-      <location file = "PPCHOME/tests/jessie/decreases.c" line = "7" begin = "13" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "24" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
   </function>
@@ -890,9 +888,8 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "533" begin = "54" end = "145"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/decreases_po5.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -909,19 +906,17 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "355" begin = "53" end = "148"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/decreases_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "355" begin = "53" end = "148"/>
+      <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/decreases_po3.why">
-      <location file = "PPCHOME/tests/jessie/decreases.c" line = "12" begin = "13" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "19" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
   </function>

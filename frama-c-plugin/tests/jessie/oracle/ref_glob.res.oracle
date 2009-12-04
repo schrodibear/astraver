@@ -1438,36 +1438,34 @@ why --project [...] why/ref_glob.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po26.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "73" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po27.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "73" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po28.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "122" begin = "15" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po29.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "122" begin = "15" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/ref_glob_po24.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "70" begin = "12" end = "20"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/ref_glob_po25.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "72" begin = "5" end = "6"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1475,26 +1473,24 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po22.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "55" begin = "14" end = "35"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po23.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "55" begin = "14" end = "35"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/ref_glob_po20.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "27" begin = "12" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/ref_glob_po21.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "29" begin = "5" end = "6"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1502,71 +1498,68 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po10.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "59" begin = "2" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po11.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "59" begin = "2" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po12.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "60" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po13.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "60" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po14.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "25" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "100" begin = "14" end = "33"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po15.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "25" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "100" begin = "14" end = "33"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po16.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "61" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po17.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "61" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po18.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "25" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "101" begin = "14" end = "33"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po19.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "25" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "101" begin = "14" end = "33"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/ref_glob_po7.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "55" begin = "12" end = "25"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/ref_glob_po8.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "55" begin = "29" end = "42"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/ref_glob_po9.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "57" begin = "5" end = "7"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1574,26 +1567,24 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po5.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "25" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "81" begin = "14" end = "18"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po6.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "25" begin = "13" end = "22"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "81" begin = "14" end = "18"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/ref_glob_po3.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "43" begin = "12" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/ref_glob_po4.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "45" begin = "5" end = "7"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1602,13 +1593,11 @@ text = "unexplained assertion"/>
     <behavior name="Default behavior">
     <goal why_file="why/ref_glob_po1.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "36" begin = "12" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/ref_glob_po2.why">
       <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "38" begin = "5" end = "7"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>

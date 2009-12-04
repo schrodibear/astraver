@@ -457,14 +457,14 @@ why --project [...] why/a.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/a_po1.why">
-      <location file = "PPCHOME/tests/jessie/a.c" line = "2" begin = "12" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/a.jessie/a.jc" line = "41" begin = "13" end = "20"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/a_po2.why">
-      <location file = "PPCHOME/tests/jessie/a.c" line = "2" begin = "12" end = "18"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "PPCHOME/tests/jessie/a.jessie/a.jc" line = "42" begin = "13" end = "20"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     </behavior>
   </function>

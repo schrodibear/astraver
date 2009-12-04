@@ -632,19 +632,19 @@ why --project [...] why/varname.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/varname_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/varname.why" line = "484" begin = "29" end = "56"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     <goal why_file="why/varname_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/varname.why" line = "492" begin = "31" end = "58"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     <goal why_file="why/varname_po6.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/varname.why" line = "503" begin = "32" end = "59"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     </behavior>
   </function>
@@ -652,19 +652,19 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/varname_po1.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/varname.why" line = "375" begin = "29" end = "54"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     <goal why_file="why/varname_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/varname.why" line = "383" begin = "31" end = "54"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     <goal why_file="why/varname_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/varname.why" line = "394" begin = "32" end = "57"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     </behavior>
   </function>
