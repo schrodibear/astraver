@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.165 2009-12-02 09:39:22 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.166 2009-12-04 08:19:55 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -444,8 +444,7 @@ let new_interface_info (p:package_info) (id:string) i =
   Hashtbl.replace h id (Type (TypeInterface ii));
   ii
     
-let new_class_info ~is_final (p:package_info) (id:string) c =
-  assert (is_final=is_final); (* to prevent unused warning *)
+let new_class_info ~is_final:_ (p:package_info) (id:string) c =
   incr type_counter;
   let ci =    
     { class_info_tag = !type_counter;

@@ -621,12 +621,9 @@ let ttag_table_param ~label_in_name lab (vi,r) =
 let ref_term : (?subst:(Output.term Jc_envset.VarMap.t) -> 
                  type_safe:bool -> global_assertion:bool -> relocate:bool 
 		 -> label -> label -> Jc_fenv.term -> Output.term) ref 
-    = ref (fun ?(subst=VarMap.empty) ~type_safe ~global_assertion 
-             ~relocate _ _ _ -> 
+    = ref (fun ?(subst=VarMap.empty) ~type_safe:_ ~global_assertion:_ 
+             ~relocate:_ _ _ _ -> 
                assert (VarMap.is_empty subst);
-               assert (type_safe=false);
-               assert (global_assertion=false);
-               assert (relocate=false);
                assert false)
 
 let rec location ~type_safe ~global_assertion lab loc = 
@@ -2203,8 +2200,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
     Hashtbl.add specialized_functions new_fname (fname,name_assoc);
     pre, new_fname, wpointers, rpointers, writes, reads
   
-let global_arguments ~callee_reads ~callee_writes ~region_assoc =
-  assert (region_assoc=[]);
+let global_arguments ~callee_reads ~callee_writes ~region_assoc:_ =
   let writes = global_writes ~callee_writes in
   let reads = global_reads ~callee_reads in
   (List.map fst writes), (List.map fst reads)
@@ -2375,8 +2371,7 @@ let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
     (ttag_table_detailed_params 
        ~label_in_name ?region_assoc ?label_assoc reads)
 
-let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  assert (region_assoc==region_assoc);
+let tglob_detailed_params ~label_in_name ?region_assoc:_ ?label_assoc reads =
   VarMap.fold
     (fun v labs acc ->
        LogicLabelSet.fold

@@ -222,8 +222,7 @@ let create_tag (tbuf:GText.buffer) t loc =
     in
     ignore(
       new_tag#connect#event ~callback:
-	(fun ~origin ev _it ->
-           assert (origin == origin); (* to prevent unused warning *)
+	(fun ~origin:_ ev _it ->
 	   if GdkEvent.get_type ev = `BUTTON_PRESS then 
 	     move_to_source (Some loc)
 	   else if GdkEvent.get_type ev = `MOTION_NOTIFY then begin

@@ -86,7 +86,6 @@ parameter set_model : x:gen_float ref -> y:real ->
 (*************************************************************)
 (**** a few lemmas for automatic provers others than gappa ***)
 (*************************************************************)
-(*
 axiom bounded_real_no_overflow : 
       forall f:float_format. forall m:mode. forall x:real. 
       	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
@@ -101,6 +100,7 @@ axiom round_increasing:
       forall f:float_format. forall m:mode. forall x:real. forall y:real.
       x <= y -> round_float(f,m,x) <= round_float(f,m,y)
 
+(*
 (* just for m <> nearest_even *)
 axiom bounded_real_overflow_pos: forall f:float_format. forall m:mode. forall x:real.
       x > max_gen_float(f) -> 

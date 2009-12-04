@@ -1,7 +1,8 @@
 
-version 2.23, December 1, 2009
+version 2.23, December 4, 2009
 ===============================
 
+  o [Why] fixed bug with let construct in logic
   o [Simplify output] fixed bug with function definitions
   o [GWhy] VC explanation when using --fast-wp option
 

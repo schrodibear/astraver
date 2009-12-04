@@ -3757,17 +3757,17 @@ why -simplify [...] why/Fibonacci.why
 
 (BG_PUSH
  ;; Why axiom isfib_inversion
- (FORALL (aux_1_0 aux_2_0)
- (IMPLIES (EQ (isfib aux_1_0 aux_2_0) |@true|)
- (OR (AND (EQ aux_1_0 0) (EQ aux_2_0 0))
- (OR (AND (EQ aux_1_0 1) (EQ aux_2_0 1))
+ (FORALL (aux_1 aux_2)
+ (IMPLIES (EQ (isfib aux_1 aux_2) |@true|)
+ (OR (AND (EQ aux_1 0) (EQ aux_2 0))
+ (OR (AND (EQ aux_1 1) (EQ aux_2 1))
  (EXISTS (n)
  (EXISTS (r_0)
  (EXISTS (p)
  (AND
  (AND (>= n 2)
  (AND (EQ (isfib (- n 2) r_0) |@true|) (EQ (isfib (- n 1) p) |@true|)))
- (AND (EQ aux_1_0 n) (EQ aux_2_0 (+ p r_0))))))))))))
+ (AND (EQ aux_1 n) (EQ aux_2 (+ p r_0))))))))))))
 
 (BG_PUSH
  ;; Why axiom isfib0
@@ -5090,16 +5090,16 @@ axiom interface_tags:
 logic isfib : int, int -> prop
 
 axiom isfib_inversion:
-  (forall aux_1_0:int.
-    (forall aux_2_0:int.
-      (isfib(aux_1_0, aux_2_0) ->
-       (((aux_1_0 = 0) and (aux_2_0 = 0)) or
-        (((aux_1_0 = 1) and (aux_2_0 = 1)) or
+  (forall aux_1:int.
+    (forall aux_2:int [isfib(aux_1, aux_2)].
+      (isfib(aux_1, aux_2) ->
+       (((aux_1 = 0) and (aux_2 = 0)) or
+        (((aux_1 = 1) and (aux_2 = 1)) or
          (exists n:int.
            (exists r_0:int.
              (exists p:int.
                (((n >= 2) and (isfib((n - 2), r_0) and isfib((n - 1), p))) and
-                ((aux_1_0 = n) and (aux_2_0 = (p + r_0))))))))))))
+                ((aux_1 = n) and (aux_2 = (p + r_0))))))))))))
 
 axiom isfib0: isfib(0, 0)
 

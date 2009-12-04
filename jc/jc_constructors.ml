@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.34 2009-12-02 09:39:22 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.35 2009-12-04 08:19:55 marche Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -526,9 +526,7 @@ module Assertion = struct
   let mk ?pos ?mark ~node () =
     new assertion ?pos ?mark node
 
-  let fake ?pos ?mark ~value () = 
-    assert (pos==pos); (* to prevent unused warning *)
-    assert (mark==mark); (* to prevent unused warning *)
+  let fake ?pos:_ ?mark:_ ~value () = 
     value
 
   let is_true a = 

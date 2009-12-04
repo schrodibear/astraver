@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.173 2009-12-01 16:46:27 andrei Exp $ i*)
+(*i $Id: util.ml,v 1.174 2009-12-04 08:19:55 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -756,7 +756,7 @@ let pexists x v p =
 let plet x pt t p =
   let n = Ident.bound x in
   let s = subst_onev x n in
-  let t = subst_in_term s t in
+  (* warning: do not subst in t *)
   let p = subst_in_predicate s p in
   Plet (x, n, pt, t, p)
 

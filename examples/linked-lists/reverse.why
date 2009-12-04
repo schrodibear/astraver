@@ -85,7 +85,9 @@ type pointer_store
 logic pget : pointer_store, pointer -> pointer
 logic pset : pointer_store, pointer, pointer -> pointer_store
 
-logic is_valid_pointer : pointer_store, pointer -> prop
+logic is_valid_pointer : pointer -> prop
+
+axiom null_not_valid: not is_valid_pointer(null)
 
 parameter Ltl : pointer_store ref
 
@@ -105,7 +107,7 @@ inductive llist : pointer_store, pointer, pointer list -> prop =
 | llist_nil: forall tl:pointer_store. llist(tl, null, Nil)
 | llist_cons: forall tl:pointer_store. forall p:pointer. 
   forall l:pointer list. 
-  is_valid_pointer(tl,p) and llist(tl, pget(tl,p), l) 
+  is_valid_pointer(p) and llist(tl, pget(tl,p), l) 
       -> llist(tl, p, Cons(p,l))
 
 goal null_model_is_Nil: 
@@ -124,7 +126,7 @@ let reverse (p0:pointer) (p0_model:pointer list) =
     while (ne_pointer !r null) do
       { invariant exists lp:pointer list. exists lr:pointer list.
                   llist(Ltl, p, lp) and llist(Ltl, r, lr) 
-		  and  disjoint(lp, lr) and 
+		  and disjoint(lp, lr) and 
 	           rev2(lr, lp) = rev(p0_model) }
       let q = ref !r in
       begin
