@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.75 2009-11-26 16:07:49 andrei Exp $ i*)
+
 
 type t = { stamp : int; name : string; label : string option }
 

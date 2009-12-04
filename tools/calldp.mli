@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.26 2009-07-16 14:50:54 nguyen Exp $ i*)
+
 
 (* Call external decision procedures on a single input file *)
 

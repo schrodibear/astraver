@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.mli,v 1.17 2008-11-05 14:03:17 filliatr Exp $ i*)
+
 
 (*s translation of imperative programs into intermediate functional programs *)
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: wserver.mli,v 1.3 2008-11-05 14:03:18 filliatr Exp $ *)
+
 (* Copyright (c) 1998-2005 INRIA *)
 
 (* module [Wserver]: elementary web service *)

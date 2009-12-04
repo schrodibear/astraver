@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: linenum.mli,v 1.9 2008-11-05 14:03:17 filliatr Exp $ i*)
+
 
 (* [from_char f n] gives the actual source file, line number, position of the
    beginning of the line. *)

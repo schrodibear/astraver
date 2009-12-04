@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon_split.mli,v 1.8 2008-11-05 14:03:19 filliatr Exp $ i*)
+
 
 (* Split a Zenon input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)

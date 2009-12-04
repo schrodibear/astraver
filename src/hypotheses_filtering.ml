@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.73 2009-12-01 11:51:36 marche Exp $ i*)
+
 
 (**
    This module provides a quick way to filter hypotheses of 

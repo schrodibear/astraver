@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: numconst.mli,v 1.6 2008-11-05 14:03:16 filliatr Exp $ i*)
+
 
 (* Evaluation of constant literals: superset of C and Java
 

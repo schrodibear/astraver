@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono2.ml,v 1.7 2009-03-27 17:01:16 marche Exp $ i*)
+
 
 (** 
     Such encoding aims at simulating polymorphism in 

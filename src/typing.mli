@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.mli,v 1.24 2008-11-05 14:03:18 filliatr Exp $ i*)
+
 
 (*s This module realizes type and effect inference *)
 

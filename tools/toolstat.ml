@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.14 2009-12-01 11:51:37 marche Exp $ i*)
+
 
 (* Statistics on automatic provers results *)
 

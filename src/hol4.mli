@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.mli,v 1.11 2008-11-05 14:03:17 filliatr Exp $ i*)
+
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 

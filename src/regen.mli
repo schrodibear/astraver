@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.mli,v 1.29 2009-11-26 16:07:28 andrei Exp $ i*)
+
 
 (* files partly edited and partly regenerated *)
 

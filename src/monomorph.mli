@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.mli,v 1.14 2008-11-05 14:03:17 filliatr Exp $ i*)
+
 
 (* make a monorphic output for provers not supporting polymorphism
    (e.g. PVS or CVC Lite) *)

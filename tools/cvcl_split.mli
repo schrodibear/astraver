@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl_split.mli,v 1.9 2008-11-05 14:03:18 filliatr Exp $ i*)
+
 
 (* Split a CVC Lite input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)

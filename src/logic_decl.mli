@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic_decl.mli,v 1.23 2009-11-26 16:07:28 andrei Exp $ i*)
+
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers

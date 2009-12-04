@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: types.mli,v 1.25 2008-11-05 14:03:18 filliatr Exp $ i*)
+
 
 (*s Types for programs.
     Types of values ([type_v]) and computations ([type_c]) *)

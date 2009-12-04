@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monad.mli,v 1.34 2008-11-05 14:03:17 filliatr Exp $ i*)
+
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)

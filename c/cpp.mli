@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cpp.mli,v 1.9 2008-11-05 14:03:13 filliatr Exp $ i*)
+
 
 (* [cpp f] preprocesses file [f] and returns the preprocessed file. *)
 

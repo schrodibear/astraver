@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.33 2009-12-01 11:51:36 marche Exp $ i*)
+
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 

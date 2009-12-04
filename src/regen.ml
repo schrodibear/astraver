@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.ml,v 1.32 2009-11-26 16:07:28 andrei Exp $ i*)
+
 
 (* files partly edited and partly regenerated *)
 

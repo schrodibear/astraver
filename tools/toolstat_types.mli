@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat_types.mli,v 1.6 2008-11-25 12:44:22 moy Exp $ i*)
+
 
 type project = string option
 type prover = string

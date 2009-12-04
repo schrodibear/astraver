@@ -231,7 +231,7 @@ let config_options =
     (fun _ _ acc -> acc);
 
     "DONTRUN",
-    (fun _ s (current,rev_opts) ->
+    (fun _ _s (current,rev_opts) ->
        { current with dc_dont_run = true }, rev_opts );
 
     "EXECNOW",
@@ -799,6 +799,6 @@ let () =
 
 (*
 Local Variables: 
-compile-command: "make -j -C .. bin/regtest.byte"
+compile-command: "make -j -C .. regtest.byte"
 End: 
 *)

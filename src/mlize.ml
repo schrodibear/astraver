@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.ml,v 1.86 2009-12-01 11:51:36 marche Exp $ i*)
+
 
 (*s Translation of imperative programs into functional ones. *)
 

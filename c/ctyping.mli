@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.mli,v 1.20 2008-11-05 14:03:14 filliatr Exp $ i*)
+
 
 (* Typing C programs *)
 val tezero : Cast.texpr

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ergo_split.mli,v 1.5 2008-11-05 14:03:18 filliatr Exp $ i*)
+
 
 (* Split a Ergo input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)
