@@ -25,8 +25,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 (*s Fast weakest preconditions *)
 
 open Ident
@@ -104,7 +102,8 @@ module Subst = struct
   let fresh_pure x pt s =
     let x' = next_away x s.all_vars in
     x',
-    { s with 
+    { current = Idmap.add x x' s.current; 
+      sigma = Idmap.add x x' s.sigma;
       types = Idmap.add x' pt s.types;
       all_vars = Idset.add x' s.all_vars }
 
