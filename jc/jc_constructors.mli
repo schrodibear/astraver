@@ -631,6 +631,10 @@ module PDecl :
       value:inv_sem ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned
 
+    val mktermination_policy_def :
+      value:termination_policy ->
+      ?pos:Loc.position -> unit -> 'a decl_node node_positioned
+
     val mkseparation_policy_def :
       value:separation_sem ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned

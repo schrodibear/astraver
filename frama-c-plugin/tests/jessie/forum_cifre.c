@@ -2,6 +2,9 @@
 //#pragma AnnotationPolicy(StrongPre)
 //#pragma AbstractDomain(Pol)
 
+
+#pragma JessieTerminationPolicy(user)
+
 #include <jessie_prolog.h>
 
 #define TAILLE_MAXIMUM 1000000

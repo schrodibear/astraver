@@ -1,4 +1,7 @@
 
+  o [Krakatoa & Frama-C plugin] new pragma TerminationPolicy to allow
+    the user to prevent generation of VCs for termination
+
 version 2.23, December 4, 2009
 ===============================
 

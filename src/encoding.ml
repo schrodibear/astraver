@@ -61,12 +61,6 @@ let push ?(encode_inductive=true) ?(encode_algtype=true)
       List.iter push (PredDefExpansor.algebraic_type ls)
   | d -> push d
 
-(*
-let push d = match get_types_encoding () with
-  | NoEncoding -> Queue.add d queue
-  | _ -> push d
-*)
-
 let iter f = match get_types_encoding () with
   | NoEncoding -> Queue.iter f queue
   | Predicates -> Encoding_pred.iter f

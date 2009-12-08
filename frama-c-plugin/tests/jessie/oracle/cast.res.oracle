@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# SeparationPolicy = Regions
 
 axiomatic Padding {
 
@@ -950,42 +949,42 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/cast_po2.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "47" begin = "14" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "46" begin = "14" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po3.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "47" begin = "14" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "46" begin = "14" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po4.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "49" begin = "14" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "48" begin = "14" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po5.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "49" begin = "14" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "48" begin = "14" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po6.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "51" begin = "15" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "50" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po7.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "51" begin = "15" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "50" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po8.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "53" begin = "15" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "52" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po9.why">
-      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "53" begin = "15" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/cast.jessie/cast.jc" line = "52" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

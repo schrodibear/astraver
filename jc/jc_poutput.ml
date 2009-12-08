@@ -440,6 +440,8 @@ let rec pdecl fmt d =
         fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)  
     | JCDseparation_policy p ->
         fprintf fmt "# SeparationPolicy = %s@\n" (string_of_separation_policy p)
+    | JCDtermination_policy p ->
+        fprintf fmt "# TerminationPolicy = %s@\n" (string_of_termination_policy p)
     | JCDannotation_policy p ->
         fprintf fmt "# AnnotationPolicy = %s@\n" (string_of_annotation_policy p)
     | JCDabstract_domain p ->

@@ -293,6 +293,7 @@ let main () =
   (* production phase 5 : produce Jessie file *)
   let decls = 
     (mkinvariant_policy_def ~value:!Java_options.inv_sem ())
+    :: (mktermination_policy_def ~value:!Java_options.termination_policy ()) 
     :: (mkseparation_policy_def ~value:!Java_options.separation_policy ()) 
     :: (mkannotation_policy_def ~value:!Java_options.annotation_sem ())
     :: (mkabstract_domain_def ~value:!Java_options.ai_domain ())

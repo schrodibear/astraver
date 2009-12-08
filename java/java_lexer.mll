@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.41 2009-12-01 11:51:35 marche Exp $
+$Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 
 ***************************************************************************)
 
@@ -237,6 +237,16 @@ i*)
 
   let pragma lexbuf id v =
     match id with
+      | "TerminationPolicy" ->
+	  begin
+	    Java_options.termination_policy :=
+	      match v with
+		| "always" -> Jc_env.TPalways 
+		| "user" -> Jc_env.TPuser 
+		| "never" -> Jc_env.TPnever 
+		| _ -> lex_error lexbuf ("unknown termination policy " ^ v)
+	  end  
+          
       | "AbstractDomain" ->
 	  begin
 	    Java_options.ai_domain :=

@@ -25,10 +25,13 @@
 /* break tests */
 
 
+#pragma JessieTerminationPolicy(always)
+
+
 /*@ ensures \result == 12; */
 int f1()
 {
-  /*@ loop invariant \true; loop variant 1; */ while (1) break;
+  /*@ loop invariant \true; */ while (1) break;
   return 12;
 }
 

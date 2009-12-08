@@ -9,6 +9,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
+# TerminationPolicy = user
 
 axiomatic Padding {
 
@@ -2219,7 +2220,7 @@ let bubble_sort_safety =
         (let jessie_59 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_44: true) variant (0) }
+                           { invariant (JC_44: true)  }
                             begin
                               [ { } unit { true } ];
                              try
@@ -2297,7 +2298,7 @@ let bubble_sort_safety =
                                                                     { invariant
                                                                     (JC_51:
                                                                     true)
-                                                                    variant (0) }
+                                                                     }
                                                                     begin
                                                                       
                                                                     [ 
@@ -2729,49 +2730,49 @@ why --project [...] why/bubble_sort.why
   <function name="Function swap">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/bubble_sort_po65.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "55" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po66.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "56" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po67.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "56" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po68.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "14" end = "75"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
     <goal why_file="why/bubble_sort_po69.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "50" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "14" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po70.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "51" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "107" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po71.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "51" begin = "2" end = "3"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po72.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "105" begin = "14" end = "75"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po73.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "105" begin = "14" end = "75"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po74.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "15" end = "51"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po75.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "107" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/bubble_sort_po67.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "45" begin = "10" end = "83"/>
+    <goal why_file="why/bubble_sort_po63.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "50" begin = "10" end = "83"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/bubble_sort_po68.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "47" begin = "10" end = "34"/>
+    <goal why_file="why/bubble_sort_po64.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "52" begin = "10" end = "34"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2780,289 +2781,273 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bubble_sort_po47.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "104" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po48.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "104" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po49.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "104" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po50.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "104" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po51.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "104" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po52.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "104" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po53.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "111" begin = "4" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "116" begin = "4" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po54.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "111" begin = "4" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "116" begin = "4" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po55.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "241" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po56.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "241" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po57.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "241" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po58.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "241" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po59.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "119" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "124" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po60.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "119" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "124" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po61.why">
-      <location file = "why/bubble_sort.why" line = "1967" begin = "77" end = "78"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "86" begin = "1" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po62.why">
-      <location file = "why/bubble_sort.why" line = "1967" begin = "77" end = "78"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po63.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "81" begin = "1" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "86" begin = "1" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po64.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "81" begin = "1" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po65.why">
-      <location file = "why/bubble_sort.why" line = "1889" begin = "62" end = "63"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po66.why">
-      <location file = "why/bubble_sort.why" line = "1889" begin = "62" end = "63"/>
-      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `sorted'">
     <goal why_file="why/bubble_sort_po9.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "75" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "80" begin = "18" end = "36"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po10.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "74" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "24"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po11.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "74" begin = "22" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "22" end = "34"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po12.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "73" begin = "18" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po13.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "83" begin = "25" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "88" begin = "25" end = "43"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po14.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "87" begin = "25" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "92" begin = "25" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po15.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po16.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "85"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "103" begin = "19" end = "85"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "96" begin = "19" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "95" begin = "19" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po19.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "95" begin = "24" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po20.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "94" begin = "23" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po21.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "93" begin = "19" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po22.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "107" begin = "27" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "112" begin = "27" end = "47"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po23.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "108" begin = "27" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "113" begin = "27" end = "46"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po24.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "27" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "114" begin = "27" end = "46"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po25.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "113" begin = "27" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "118" begin = "27" end = "47"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po26.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "114" begin = "26" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "119" begin = "26" end = "46"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po27.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "115" begin = "26" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "120" begin = "26" end = "45"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po28.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "118" begin = "26" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "123" begin = "26" end = "47"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po29.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "120" begin = "26" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "125" begin = "26" end = "46"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po30.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "121" begin = "26" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "126" begin = "26" end = "45"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po31.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po32.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "85"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "103" begin = "19" end = "85"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po33.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "97" begin = "19" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "102" begin = "19" end = "38"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po34.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "96" begin = "19" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po35.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "95" begin = "19" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po36.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "95" begin = "24" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po37.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "94" begin = "23" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po38.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "94" begin = "28" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "28" end = "41"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po39.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "93" begin = "19" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po40.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "124" begin = "25" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "129" begin = "25" end = "41"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po41.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "76" begin = "18" end = "83"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "81" begin = "18" end = "83"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po42.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "75" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "80" begin = "18" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po43.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "74" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "24"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po44.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "74" begin = "22" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "22" end = "34"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po45.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "73" begin = "18" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po46.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "60" begin = "10" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "65" begin = "10" end = "32"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `permutation'">
     <goal why_file="why/bubble_sort_po2.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "84" begin = "18" end = "50"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po3.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "112" begin = "32" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "117" begin = "32" end = "64"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po4.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "102" begin = "19" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "107" begin = "19" end = "51"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po5.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "125" begin = "33" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "130" begin = "33" end = "65"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po6.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "84" begin = "18" end = "50"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po7.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "127" begin = "31" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "132" begin = "31" end = "63"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po8.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "62" begin = "10" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "67" begin = "10" end = "42"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bubble_sort_po1.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "88" begin = "15" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "93" begin = "15" end = "28"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

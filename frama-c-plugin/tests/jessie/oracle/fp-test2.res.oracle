@@ -620,87 +620,57 @@ let main_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-test2.jessie --quiet -f fp-test2.makefile project
 why --project [...] why/fp-test2.why
 <project name="fp-test2" context="why/fp-test2_ctx.why">
-  <lemma name="max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/fp-test2_po1.why">
-      <location file = "" line = "47" begin = "0" end = "55"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/fp-test2_po2.why">
-      <location file = "" line = "49" begin = "0" end = "63"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/fp-test2_po3.why">
-      <location file = "" line = "51" begin = "0" end = "71"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <function name="goal max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/fp-test2_po5.why">
+    <goal why_file="why/fp-test2_po2.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "61" begin = "21" end = "39"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po6.why">
+    <goal why_file="why/fp-test2_po3.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "62" begin = "21" end = "39"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po7.why">
+    <goal why_file="why/fp-test2_po4.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "63" begin = "33" end = "48"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po8.why">
+    <goal why_file="why/fp-test2_po5.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "16" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po9.why">
+    <goal why_file="why/fp-test2_po6.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "64" begin = "33" end = "48"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po10.why">
+    <goal why_file="why/fp-test2_po7.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "17" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po11.why">
+    <goal why_file="why/fp-test2_po8.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po12.why">
+    <goal why_file="why/fp-test2_po9.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "19" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po13.why">
+    <goal why_file="why/fp-test2_po10.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "19" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/fp-test2_po4.why">
+    <goal why_file="why/fp-test2_po1.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "20" begin = "24" end = "34"/>
       <explain kind = "Assert"/>
     </goal>

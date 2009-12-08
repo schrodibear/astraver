@@ -262,6 +262,7 @@ type 'expr decl_node =
   (* "pragma" options and policies *)
   | JCDinvariant_policy of Jc_env.inv_sem
   | JCDseparation_policy of Jc_env.separation_sem
+  | JCDtermination_policy of Jc_env.termination_policy
   | JCDannotation_policy of Jc_env.annotation_sem
   | JCDabstract_domain of Jc_env.abstract_domain 
   | JCDint_model of Jc_env.int_model

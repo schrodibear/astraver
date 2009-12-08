@@ -568,82 +568,52 @@ let f_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test5_floats.jessie --quiet -f test5_floats.makefile project
 why --project [...] why/test5_floats.why
 <project name="test5_floats" context="why/test5_floats_ctx.why">
-  <lemma name="max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/test5_floats_po1.why">
-      <location file = "" line = "47" begin = "0" end = "55"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/test5_floats_po2.why">
-      <location file = "" line = "49" begin = "0" end = "63"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/test5_floats_po3.why">
-      <location file = "" line = "51" begin = "0" end = "71"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <function name="goal max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/test5_floats_po8.why">
+    <goal why_file="why/test5_floats_po5.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.jessie/test5_floats.jc" line = "42" begin = "18" end = "32"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test5_floats_po9.why">
+    <goal why_file="why/test5_floats_po6.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.jessie/test5_floats.jc" line = "43" begin = "18" end = "32"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test5_floats_po10.why">
+    <goal why_file="why/test5_floats_po7.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.jessie/test5_floats.jc" line = "61" begin = "39" end = "53"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test5_floats_po11.why">
+    <goal why_file="why/test5_floats_po8.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "21" begin = "26" end = "27"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test5_floats_po12.why">
+    <goal why_file="why/test5_floats_po9.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "19" begin = "19" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/test5_floats_po13.why">
+    <goal why_file="why/test5_floats_po10.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "19" begin = "19" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/test5_floats_po4.why">
+    <goal why_file="why/test5_floats_po1.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "17" begin = "21" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
-    <goal why_file="why/test5_floats_po5.why">
+    <goal why_file="why/test5_floats_po2.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "17" begin = "21" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/test5_floats_po6.why">
+    <goal why_file="why/test5_floats_po3.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "22" begin = "13" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/test5_floats_po7.why">
+    <goal why_file="why/test5_floats_po4.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "22" begin = "18" end = "31"/>
       <explain kind = "Assert"/>
     </goal>

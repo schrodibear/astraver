@@ -2,6 +2,9 @@
    DONTRUN: cast between real and integer no working yet
 */
 
+
+#pragma JessieTerminationPolicy(user)
+
 void f(char*x,int*y) {
   (*x)++;
   *x++;

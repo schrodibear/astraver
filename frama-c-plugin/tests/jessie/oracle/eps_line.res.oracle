@@ -698,44 +698,14 @@ let sign_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C eps_line.jessie --quiet -f eps_line.makefile project
 why --project [...] why/eps_line.why
 <project name="eps_line" context="why/eps_line_ctx.why">
-  <lemma name="max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/eps_line_po1.why">
-      <location file = "" line = "47" begin = "0" end = "55"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/eps_line_po2.why">
-      <location file = "" line = "49" begin = "0" end = "63"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/eps_line_po3.why">
-      <location file = "" line = "51" begin = "0" end = "71"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <function name="goal max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
   <function name="Function sign">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
-    <goal why_file="why/eps_line_po21.why">
+    <goal why_file="why/eps_line_po18.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "7" begin = "12" end = "59"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/eps_line_po22.why">
+    <goal why_file="why/eps_line_po19.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "8" begin = "13" end = "31"/>
       <explain kind = "Post"/>
     </goal>
@@ -744,8 +714,23 @@ why --project [...] why/eps_line.why
   <function name="Function eps_line">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/eps_line_po5.why">
+    <goal why_file="why/eps_line_po2.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/eps_line_po3.why">
+      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/eps_line_po4.why">
+      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/eps_line_po5.why">
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "80" begin = "44" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -755,37 +740,37 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po7.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/eps_line_po8.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "80" begin = "44" end = "75"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/eps_line_po9.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/eps_line_po10.why">
       <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "81" begin = "33" end = "64"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/eps_line_po11.why">
+    <goal why_file="why/eps_line_po8.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "UserCall"/>
+    </goal>
+    <goal why_file="why/eps_line_po9.why">
+      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/eps_line_po10.why">
+      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/eps_line_po11.why">
+      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po12.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "33" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po13.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "84" begin = "44" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -795,38 +780,23 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po15.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/eps_line_po16.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "84" begin = "44" end = "75"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/eps_line_po17.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/eps_line_po18.why">
       <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "85" begin = "33" end = "64"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/eps_line_po19.why">
+    <goal why_file="why/eps_line_po16.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/eps_line_po20.why">
+    <goal why_file="why/eps_line_po17.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "34" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/eps_line_po4.why">
+    <goal why_file="why/eps_line_po1.why">
       <location file = "PPCHOME/tests/jessie/eps_line.c" line = "25" begin = "7" end = "164"/>
       <explain kind = "Post"/>
     </goal>

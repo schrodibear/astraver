@@ -1,4 +1,8 @@
 
+
+
+//@+ TerminationPolicy = user
+
 //@+ CheckArithOverflow = no
 
 /*@ predicate Sorted{L}(int a[], integer l, integer h) =

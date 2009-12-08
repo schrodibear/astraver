@@ -2479,7 +2479,7 @@ let rec type_labels_in_decl d = match d#node with
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
   | JCDexception _ | JCDinvariant_policy _ | JCDseparation_policy _
   | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ 
-  | JCDlogic_var _ ->
+  | JCDtermination_policy _ | JCDlogic_var _ ->
       ()
   | JCDaxiomatic(_id,l) -> List.iter type_labels_in_decl l
   | JCDpragma_gen_sep _ -> ()
@@ -3302,8 +3302,9 @@ of an invariant policy";
 	else 
 	  acc
     | JCDint_model _|JCDabstract_domain _|JCDannotation_policy _
-    | JCDseparation_policy _|JCDinvariant_policy _ ->
-        assert false
+    | JCDseparation_policy _
+    | JCDtermination_policy _
+    | JCDinvariant_policy _ -> assert false
     | JCDpragma_gen_sep (kind,id,li) -> 
 	if Jc_options.gen_frame_rule_with_ft && not only_types then
 	  begin

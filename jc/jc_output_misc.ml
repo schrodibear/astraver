@@ -31,6 +31,12 @@ open Jc_ast
 open Format
 open Pp
 
+let string_of_termination_policy p =
+  match p with
+    | Jc_env.TPalways -> "always"
+    | Jc_env.TPuser -> "user"
+    | Jc_env.TPnever -> "never"
+
 let string_of_invariant_policy p =
   match p with
     | InvNone -> "None"

@@ -63,6 +63,7 @@ val usage : unit -> unit
 val inv_sem: Jc_env.inv_sem ref
 val separation_sem : Jc_env.separation_sem ref
 val annotation_sem : Jc_env.annotation_sem ref
+val termination_policy : Jc_env.termination_policy ref
 val ai_domain : Jc_env.abstract_domain ref
 val int_model : Jc_env.int_model ref
 val float_model : Jc_env.float_model ref

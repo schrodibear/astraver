@@ -2888,40 +2888,10 @@ let mul_up_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C interval_arith_struct.jessie --quiet -f interval_arith_struct.makefile project
 why --project [...] why/interval_arith_struct.why
 <project name="interval_arith_struct" context="why/interval_arith_struct_ctx.why">
-  <lemma name="max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/interval_arith_struct_po1.why">
-      <location file = "" line = "47" begin = "0" end = "55"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/interval_arith_struct_po2.why">
-      <location file = "" line = "49" begin = "0" end = "63"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/interval_arith_struct_po3.why">
-      <location file = "" line = "51" begin = "0" end = "71"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <function name="goal max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
   <function name="Function mul_up">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
-    <goal why_file="why/interval_arith_struct_po169.why">
+    <goal why_file="why/interval_arith_struct_po166.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "64" begin = "12" end = "41"/>
       <explain kind = "Post"/>
     </goal>
@@ -2930,7 +2900,7 @@ why --project [...] why/interval_arith_struct.why
   <function name="Function mul_dn">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
-    <goal why_file="why/interval_arith_struct_po22.why">
+    <goal why_file="why/interval_arith_struct_po19.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "45" begin = "12" end = "39"/>
       <explain kind = "Post"/>
     </goal>
@@ -2939,41 +2909,56 @@ why --project [...] why/interval_arith_struct.why
   <function name="Function mul">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/interval_arith_struct_po24.why">
+    <goal why_file="why/interval_arith_struct_po21.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "96" begin = "22" end = "23"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po25.why">
+    <goal why_file="why/interval_arith_struct_po22.why">
       <location file = "why/interval_arith_struct.why" line = "1830" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po26.why">
+    <goal why_file="why/interval_arith_struct_po23.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "96" begin = "34" end = "35"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po27.why">
+    <goal why_file="why/interval_arith_struct_po24.why">
       <location file = "why/interval_arith_struct.why" line = "1842" begin = "38" end = "200"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po28.why">
+    <goal why_file="why/interval_arith_struct_po25.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "98" begin = "11" end = "12"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po29.why">
+    <goal why_file="why/interval_arith_struct_po26.why">
       <location file = "why/interval_arith_struct.why" line = "1854" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po30.why">
+    <goal why_file="why/interval_arith_struct_po27.why">
       <location file = "PPCHOME/tests/jessie/" line = "0" begin = "-1" end = "-1"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po31.why">
+    <goal why_file="why/interval_arith_struct_po28.why">
       <location file = "why/interval_arith_struct.why" line = "1866" begin = "46" end = "226"/>
       <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/interval_arith_struct_po29.why">
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/interval_arith_struct_po30.why">
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/interval_arith_struct_po31.why">
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po32.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
@@ -3031,17 +3016,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po43.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "104" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po44.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "104" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po45.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "103" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "104" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3111,17 +3096,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po59.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "104" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "106" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po60.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "104" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "106" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po61.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "104" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "106" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3141,17 +3126,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po65.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "106" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "107" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po66.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "106" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "107" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po67.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "106" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "107" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3176,17 +3161,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po72.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "107" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "110" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po73.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "107" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "110" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po74.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "107" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "110" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3206,17 +3191,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po78.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "110" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "111" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po79.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "110" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "111" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po80.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "110" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "111" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3241,17 +3226,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po85.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "111" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "118" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po86.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "111" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "118" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po87.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "111" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "118" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3271,17 +3256,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po91.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "118" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "119" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po92.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "118" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "119" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po93.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "118" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "119" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3306,17 +3291,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po98.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "119" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "121" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po99.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "119" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "121" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po100.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "119" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "121" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3336,17 +3321,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po104.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "121" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "122" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po105.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "121" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "122" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po106.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "121" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "122" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3371,17 +3356,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po111.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "122" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "125" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po112.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "122" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "125" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po113.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "122" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "125" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3401,17 +3386,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po117.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "125" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "126" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po118.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "125" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "126" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po119.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "125" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "126" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3436,17 +3421,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po124.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "126" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "134" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po125.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "126" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "134" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po126.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "126" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "134" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3466,17 +3451,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po130.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "134" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "135" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po131.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "134" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "135" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po132.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "134" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "135" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3501,17 +3486,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po137.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "135" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "137" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po138.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "135" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "137" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po139.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "135" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "137" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3531,17 +3516,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po143.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "137" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "138" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po144.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "137" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "138" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po145.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "137" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "138" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3566,17 +3551,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po150.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "138" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "141" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po151.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "138" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "141" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po152.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "138" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "141" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3596,17 +3581,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po156.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "141" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "142" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po157.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "141" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "142" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po158.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "141" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "142" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3631,38 +3616,23 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po163.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "142" begin = "12" end = "13"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/interval_arith_struct_po164.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "142" begin = "12" end = "13"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/interval_arith_struct_po165.why">
-      <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "142" begin = "12" end = "13"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/interval_arith_struct_po166.why">
       <location file = "why/interval_arith_struct.why" line = "2374" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po167.why">
+    <goal why_file="why/interval_arith_struct_po164.why">
       <location file = "why/interval_arith_struct.why" line = "2377" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po168.why">
+    <goal why_file="why/interval_arith_struct_po165.why">
       <location file = "why/interval_arith_struct.why" line = "2380" begin = "16" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/interval_arith_struct_po23.why">
+    <goal why_file="why/interval_arith_struct_po20.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "94" begin = "6" end = "114"/>
       <explain kind = "Post"/>
     </goal>
@@ -3671,15 +3641,15 @@ text = ""/>
   <function name="Function min">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
-    <goal why_file="why/interval_arith_struct_po19.why">
+    <goal why_file="why/interval_arith_struct_po16.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "7" begin = "12" end = "32"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po20.why">
+    <goal why_file="why/interval_arith_struct_po17.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "7" begin = "36" end = "56"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po21.why">
+    <goal why_file="why/interval_arith_struct_po18.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "9" begin = "12" end = "56"/>
       <explain kind = "Post"/>
     </goal>
@@ -3688,15 +3658,15 @@ text = ""/>
   <function name="Function max">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
-    <goal why_file="why/interval_arith_struct_po16.why">
+    <goal why_file="why/interval_arith_struct_po13.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "17" begin = "12" end = "32"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po17.why">
+    <goal why_file="why/interval_arith_struct_po14.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "17" begin = "36" end = "56"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po18.why">
+    <goal why_file="why/interval_arith_struct_po15.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "19" begin = "12" end = "56"/>
       <explain kind = "Post"/>
     </goal>
@@ -3705,60 +3675,60 @@ text = ""/>
   <function name="Function add">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/interval_arith_struct_po5.why">
+    <goal why_file="why/interval_arith_struct_po2.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "83" begin = "22" end = "23"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po6.why">
+    <goal why_file="why/interval_arith_struct_po3.why">
       <location file = "why/interval_arith_struct.why" line = "886" begin = "36" end = "193"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po7.why">
+    <goal why_file="why/interval_arith_struct_po4.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "83" begin = "34" end = "35"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po8.why">
+    <goal why_file="why/interval_arith_struct_po5.why">
       <location file = "why/interval_arith_struct.why" line = "898" begin = "35" end = "190"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po9.why">
+    <goal why_file="why/interval_arith_struct_po6.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "85" begin = "11" end = "12"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po10.why">
+    <goal why_file="why/interval_arith_struct_po7.why">
       <location file = "why/interval_arith_struct.why" line = "910" begin = "34" end = "185"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po11.why">
+    <goal why_file="why/interval_arith_struct_po8.why">
       <location file = "PPCHOME/tests/jessie/" line = "0" begin = "-1" end = "-1"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po12.why">
+    <goal why_file="why/interval_arith_struct_po9.why">
       <location file = "why/interval_arith_struct.why" line = "922" begin = "43" end = "216"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po13.why">
+    <goal why_file="why/interval_arith_struct_po10.why">
       <location file = "why/interval_arith_struct.why" line = "1007" begin = "16" end = "82"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po14.why">
+    <goal why_file="why/interval_arith_struct_po11.why">
       <location file = "why/interval_arith_struct.why" line = "1010" begin = "17" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/interval_arith_struct_po15.why">
+    <goal why_file="why/interval_arith_struct_po12.why">
       <location file = "why/interval_arith_struct.why" line = "1013" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/interval_arith_struct_po4.why">
+    <goal why_file="why/interval_arith_struct_po1.why">
       <location file = "PPCHOME/tests/jessie/interval_arith_struct.c" line = "81" begin = "7" end = "103"/>
       <explain kind = "Post"/>
     </goal>

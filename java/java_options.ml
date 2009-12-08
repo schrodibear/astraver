@@ -85,6 +85,7 @@ let why_opt = ref ""
 let ignore_overflow = ref false
 let nonnull_sem = ref Java_env.NonNullNone
 let minimal_class_hierarchy = ref false
+let termination_policy = ref Jc_env.TPalways
 
 (* Jessie options *)
 let inv_sem = ref Jc_env.InvArguments

@@ -26,6 +26,7 @@
 (**************************************************************************)
 
 
+type termination_policy = TPalways | TPnever | TPuser
 
 type float_format = [ `Double | `Float | `Binary80 ]
 

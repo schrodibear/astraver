@@ -3,7 +3,6 @@
 #pragma JessieIntegerModel(exact)
 
 
-
 /*@ requires n >= 0;
   @ decreases n; 
   @*/

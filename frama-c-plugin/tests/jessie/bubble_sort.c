@@ -1,3 +1,8 @@
+
+
+#pragma JessieTerminationPolicy(user)
+
+
 /*@
   predicate sorted{Here}(int* a, integer start_index, integer end_index) =
     \forall integer k1, k2;

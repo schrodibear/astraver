@@ -52,7 +52,7 @@ let treat_jessie_std_headers () =
 *)
 
 let treat_integer_model () =
-  if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
+  if !Interp.int_model = Interp.IMexact then
     Parameters.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
 
 let () =

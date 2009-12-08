@@ -678,6 +678,7 @@ let rec decl d =
     | JCDlogic_type _
     | JCDint_model _
     | JCDabstract_domain _
+    | JCDtermination_policy _
     | JCDannotation_policy _
     | JCDseparation_policy _
     | JCDinvariant_policy _

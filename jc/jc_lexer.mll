@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.93 2009-12-01 11:51:35 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.94 2009-12-08 16:38:49 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -163,6 +163,15 @@
 		 | "x87" -> Jc_env.FISx87
 		 | "ieee754" -> Jc_env.FISstrictIEEE754
 		 | _ -> lex_error lexbuf ("unknown float instruction set " ^ v))
+	  end 
+      | "TerminationPolicy" ->
+	  begin
+	    Jc_options.termination_policy :=
+	      (match v with
+		 | "always" -> Jc_env.TPalways
+		 | "never" -> Jc_env.TPnever
+		 | "user" -> Jc_env.TPuser
+		 | _ -> lex_error lexbuf ("unknown termination policy " ^ v))
 	  end 
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 

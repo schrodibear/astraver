@@ -89,6 +89,8 @@ let ai_domain = ref AbsNone
 
 let current_rounding_mode = ref FRMnearest
 
+let termination_policy = ref Jc_env.TPalways
+
 let int_model = ref IMbounded
 let interprocedural = ref false
 let main = ref ""

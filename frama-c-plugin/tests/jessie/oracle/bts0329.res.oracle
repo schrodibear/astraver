@@ -449,41 +449,26 @@ let cosine1a_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0329.jessie --quiet -f bts0329.makefile project
 why --project [...] why/bts0329.why
 <project name="bts0329" context="why/bts0329_ctx.why">
-  <lemma name="max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/bts0329_po1.why">
-      <location file = "" line = "47" begin = "0" end = "55"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/bts0329_po2.why">
-      <location file = "" line = "49" begin = "0" end = "63"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/bts0329_po3.why">
-      <location file = "" line = "51" begin = "0" end = "71"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <function name="goal max_single">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_double">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
-  <function name="goal max_binary80">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-  </function>
   <function name="Function cosine1a">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/bts0329_po6.why">
+    <goal why_file="why/bts0329_po3.why">
       <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "40" begin = "26" end = "40"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/bts0329_po4.why">
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/bts0329_po5.why">
+      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "41" begin = "53" end = "67"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/bts0329_po6.why">
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -492,28 +477,13 @@ text = "FPOverflow"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0329_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "41" begin = "53" end = "67"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0329_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0329_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/bts0329_po4.why">
+    <goal why_file="why/bts0329_po1.why">
       <location file = "PPCHOME/tests/jessie/bts0329.c" line = "11" begin = "12" end = "62"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/bts0329_po5.why">
+    <goal why_file="why/bts0329_po2.why">
       <location file = "PPCHOME/tests/jessie/bts0329.c" line = "12" begin = "11" end = "61"/>
       <explain kind = "Post"/>
     </goal>

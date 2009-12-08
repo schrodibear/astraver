@@ -1557,10 +1557,18 @@ let decreases_clause_table = Hashtbl.create 17
 
 let term_zero = new term ~typ:integer_type (JCTconst(JCCinteger "0"))
 
+
 let get_measure_for f =
-  try
-    Hashtbl.find decreases_clause_table (f.jc_fun_info_tag)
-  with Not_found -> (term_zero,None)
+  match !Jc_options.termination_policy with
+    | TPalways ->
+        (try
+          Hashtbl.find decreases_clause_table (f.jc_fun_info_tag)
+        with Not_found -> (term_zero,None))
+    | TPuser ->
+        (try
+          Hashtbl.find decreases_clause_table (f.jc_fun_info_tag)
+         with Not_found -> raise Exit)
+    | TPnever -> raise Exit
 
 
 
@@ -2307,8 +2315,8 @@ and expr e =
 	      let this_comp = f.jc_fun_info_component in
 	      let current_comp = (get_current_function()).jc_fun_info_component in
 	      let call =
-                (* disabled temporarily *)
 		if safety_checking() && this_comp = current_comp then
+                  try
 		  let cur_measure,cur_r = get_measure_for (get_current_function()) in
                   let cur_measure = 
                     term ~type_safe:true ~global_assertion:true
@@ -2340,6 +2348,7 @@ and expr e =
 		  in
 		  make_check ~mark:e#mark ~kind:VarDecr e#pos 
 		    (Assert(`ASSERT,pre,call))		  
+                  with Exit -> call
 		else call
 	      in
 	      (* separation assertions *)
@@ -2639,7 +2648,8 @@ and expr e =
 	(* loop variant *)
 	let loop_variant =	  
           match la.jc_loop_variant with
-            | Some (t,r) when safety_checking () ->
+            | Some (t,r) when safety_checking () && 
+                !Jc_options.termination_policy <> TPnever ->
 		let variant = 
 		  named_term 
 		    ~type_safe:false ~global_assertion:false ~relocate:false
@@ -2653,7 +2663,8 @@ and expr e =
                   | Some id -> variant, Some id.jc_logic_info_name
                 in
                 Some (variant,r)
-            | None when safety_checking () ->
+            | None when safety_checking () && 
+                !Jc_options.termination_policy = TPalways ->
                 Some (LConst(Prim_int "0"),None)
             | _ -> None
         in

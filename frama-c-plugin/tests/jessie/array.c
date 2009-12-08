@@ -1,3 +1,6 @@
+
+#pragma JessieTerminationPolicy(user)
+
 int foo(int* arr, int n) {
    int i = 0;
    while (1) {

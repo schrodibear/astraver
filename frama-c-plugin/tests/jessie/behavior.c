@@ -1,3 +1,7 @@
+
+#pragma JessieTerminationPolicy(user)
+
+
 int x;
 
 /*@ behavior one:

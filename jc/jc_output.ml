@@ -63,6 +63,7 @@ type jc_decl =
   | JCfloat_rounding_mode of Jc_env.float_rounding_mode      
   | JCfloat_model of Jc_env.float_model 
   | JCfloat_instruction_set of string
+  | JCtermination_policy of Jc_env.termination_policy
 
 (*
 let lbin_op op =
@@ -548,6 +549,7 @@ let print_super fmt = function
   | None -> ()
   | Some id -> fprintf fmt "%s with " id
 
+(*
 let string_of_invariant_policy p =
   match p with
     | Jc_env.InvNone -> "None"
@@ -578,6 +580,7 @@ let string_of_int_model p =
   match p with
     | Jc_env.IMbounded -> "bounded"
     | Jc_env.IMmodulo -> "modulo"
+*)
 
 let string_of_float_rounding_mode p =
   match p with
@@ -602,6 +605,8 @@ let rec print_decl fmt d =
         fprintf fmt "# SeparationPolicy = %s@\n" (string_of_separation_policy p)
     | JCannotation_policy p ->
         fprintf fmt "# AnnotationPolicy = %s@\n" (string_of_annotation_policy p)
+    | JCtermination_policy p ->
+        fprintf fmt "# TerminationPolicy = %s@\n" (string_of_termination_policy p)
     | JCabstract_domain p ->
         fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
     | JCint_model p ->

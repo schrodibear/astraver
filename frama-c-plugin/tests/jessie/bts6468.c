@@ -1,3 +1,7 @@
+
+
+#pragma JessieTerminationPolicy(user)
+
 char *strcat(char * dest, const char *src) {
   char *ret = dest;
   while( *dest ) { dest++; }

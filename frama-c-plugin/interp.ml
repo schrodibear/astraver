@@ -183,10 +183,16 @@ let relation = function
   | Rneq -> `Bneq
 
 
-type float_model = [ `Real | `Strict | `Full | `Multirounding ]
 
-let float_model : float_model ref = ref `Real
+let invariant_policy = ref Jc_env.InvArguments
 
+let separation_policy_regions = ref true
+
+type int_model = IMexact | IMbounded | IMmodulo
+
+let int_model = ref IMbounded
+
+let float_model = ref `Real
 
 let rec name_with_profile s prof =
   match prof with
@@ -458,11 +464,7 @@ let type_conversion ty1 ty2 =
       Hashtbl.add
         type_conversion_table (sig1,sig2) (ty1,ty2,ty1_to_ty2,ty2_to_ty1);
       ty1_to_ty2,ty2_to_ty1
-(*
-type float_model = [ `Real | `Strict | `Full | `Multirounding ]
 
-let float_model : float_model ref = ref `Real
-*)
 type float_rounding_mode = [ `Downward | `Nearest | `Upward | `Towardzero | `Towardawayzero ]
 
 let float_rounding_mode : float_rounding_mode ref = ref `Nearest
@@ -472,7 +474,7 @@ let ctype ?bitsize ty =
     | TVoid _attr -> JCPTnative Tunit
 
     | TInt(_ik,_attr) ->
-        if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
+        if !int_model = IMexact then
           JCPTnative Tinteger
         else
           JCPTidentifier (name_of_integral_type ?bitsize ty,[])
@@ -744,7 +746,7 @@ and terms t =
              (coerce_floats t2)
     | TCastE(ty,t)
         when isIntegralType ty && isLogicArithmeticType t.term_type ->
-        if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
+        if !int_model = IMexact then
           List.map (fun x -> x#node) (terms t)
         else
           List.map (fun x -> JCPEcast(x,ctype ty)) (terms t)
@@ -1608,14 +1610,14 @@ and integral_expr pos e =
 
       | CastE(ty,e1) when isFloatingType (typeOf e1) ->
           let e1' = locate (mkexpr (JCPEcast(expr e1,ltype Linteger)) pos) in
-          if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
+          if !int_model = IMexact then
             e1'#node
           else
             let e2' = locate (mkexpr (JCPEcast(e1',ctype ty)) pos) in
             e2'#node
 
       | CastE(ty,e) when isIntegralType (typeOf e) ->
-          if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
+          if !int_model = IMexact then
             (int_expr e)#node
           else
             let e = locate (mkexpr (JCPEcast(int_expr e,ctype ty)) pos) in
@@ -2468,7 +2470,7 @@ let integral_type name ty bitsize =
 (*   all_ik IBool *)
 
 let integral_types () =
-  if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
+  if !int_model = IMexact then
     []
   else
     Hashtbl.fold
@@ -2542,19 +2544,19 @@ let pragma = function
       begin match name with
         | "InvariantPolicy" ->
             begin match String.lowercase arg with
-              | "none" -> [Jc_output.JCinvariant_policy Jc_env.InvNone]
-              | "arguments" ->
-                  [Jc_output.JCinvariant_policy Jc_env.InvArguments]
-              | "ownership" ->
-                  [Jc_output.JCinvariant_policy Jc_env.InvOwnership]
+              | "none" -> invariant_policy := Jc_env.InvNone
+              | "arguments" -> invariant_policy := Jc_env.InvArguments
+              | "ownership" -> invariant_policy := Jc_env.InvOwnership
               | _ -> assert false
-            end
+            end;
+            []
         | "SeparationPolicy" ->
             begin match String.lowercase arg with
-              | "none" -> [Jc_output.JCseparation_policy Jc_env.SepNone]
-              | "regions" -> [Jc_output.JCseparation_policy Jc_env.SepRegions]
+              | "none" -> separation_policy_regions := false
+              | "regions" -> separation_policy_regions := true
               | _ -> assert false
-            end
+            end;
+            []
         | "AnnotationPolicy" ->
             begin match String.lowercase arg with
               | "none" -> [Jc_output.JCannotation_policy Jc_env.AnnotNone]
@@ -2619,17 +2621,27 @@ let pragma = function
 
         | "JessieIntegerModel" ->
             begin match String.lowercase arg with
-              | "exact" | "math" ->
-                  Jessie_options.IntModel.set "exact"
-              | "strict" ->
-                  Jessie_options.IntModel.set "strict"
-              | "modulo" ->
-                  Jessie_options.IntModel.set "modulo"
+              | "exact" | "math" -> int_model := IMexact
+              | "strict" -> int_model := IMbounded
+              | "modulo" -> int_model := IMmodulo
               | s ->
                   Jessie_options.warning ~current:true
 		    "pragma %s: identifier %s is not a valid value (ignored)." name s
             end;
             []
+
+	| "JessieTerminationPolicy" ->
+	    begin match String.lowercase arg with
+              | "always" ->
+		  [Jc_output.JCtermination_policy TPalways]
+              | "user" ->
+		  [Jc_output.JCtermination_policy TPuser]
+              | "never" ->
+		  [Jc_output.JCtermination_policy TPnever]
+	      | s ->
+                  Jessie_options.warning ~current:true
+		    "pragma %s: identifier %s is not a valid value (ignored)" name s; []
+            end
         | _ ->
             Jessie_options.warning ~current:true
 	      "pragma %s is ignored by Jessie." name;
@@ -2639,12 +2651,14 @@ let pragma = function
   | _ -> []
 
 let pragmas f =
-  (match Jessie_options.IntModel.get_val () with
-    | Jessie_options.IMexact -> []
-    | Jessie_options.IMbounded -> [ Jc_output.JCint_model Jc_env.IMbounded ]
-    | Jessie_options.IMmodulo -> [ Jc_output.JCint_model Jc_env.IMmodulo ])
-  @ Jc_output.JCinvariant_policy Jc_env.InvArguments
-  :: (if Jessie_options.SepRegions.get () then
+  let l = List.flatten (List.rev (List.rev_map pragma f.globals)) in
+  
+  (match !int_model with
+    | IMexact -> []
+    | IMbounded -> [ Jc_output.JCint_model Jc_env.IMbounded ]
+    | IMmodulo -> [ Jc_output.JCint_model Jc_env.IMmodulo ])
+  @ Jc_output.JCinvariant_policy !invariant_policy
+  :: (if !separation_policy_regions then
         Jc_output.JCseparation_policy Jc_env.SepRegions
       else
         Jc_output.JCseparation_policy Jc_env.SepNone)
@@ -2662,7 +2676,7 @@ let pragmas f =
         | "poly" -> Jc_output.JCabstract_domain Jc_env.AbsPol
         | s ->
 	    Jessie_options.abort "unknown abstract domain %s" s)
-  :: List.flatten (List.rev (List.rev_map pragma f.globals))
+  :: l
 
 
 (*

@@ -430,6 +430,7 @@ module PDecl = struct
 
   let mkinvariant_policy_def ~value = mk ~node:(JCDinvariant_policy value)
   let mkseparation_policy_def ~value = mk ~node:(JCDseparation_policy value)
+  let mktermination_policy_def ~value = mk ~node:(JCDtermination_policy value)
   let mkannotation_policy_def ~value = mk ~node:(JCDannotation_policy value)
   let mkabstract_domain_def ~value = mk ~node:(JCDabstract_domain value)
   let mkint_model_def ~value = mk ~node:(JCDint_model value)

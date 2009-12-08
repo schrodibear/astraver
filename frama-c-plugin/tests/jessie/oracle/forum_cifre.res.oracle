@@ -9,6 +9,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
+# TerminationPolicy = user
 
 axiomatic Padding {
 
@@ -2387,7 +2388,7 @@ let strncpy_safety =
           (let jessie_31 = begin
                              (loop_1:
                              while true do
-                             { invariant (JC_10: true) variant (0) }
+                             { invariant (JC_10: true)  }
                               begin
                                 [ { } unit { true } ];
                                try
@@ -2520,7 +2521,7 @@ let strncpy_safety =
             (let jessie_50 = begin
                                (loop_2:
                                while true do
-                               { invariant (JC_19: true) variant (0) }
+                               { invariant (JC_19: true)  }
                                 begin
                                   [ { } unit { true } ];
                                  try
@@ -2611,100 +2612,84 @@ why --project [...] why/forum_cifre.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/forum_cifre_po8.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "33" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po9.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "33" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po10.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "421" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "422" begin = "30" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po11.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "421" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "422" begin = "30" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po12.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "33" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po13.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "33" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po14.why">
-      <location file = "why/forum_cifre.why" line = "1888" begin = "64" end = "65"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po15.why">
-      <location file = "why/forum_cifre.why" line = "1888" begin = "64" end = "65"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po16.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "35" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po17.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "35" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po18.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "35" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po19.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "35" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po20.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "35" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "450" begin = "33" end = "58"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po21.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "35" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "450" begin = "33" end = "58"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po22.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "449" begin = "33" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "39" begin = "6" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po23.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "449" begin = "33" end = "58"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/forum_cifre_po24.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "6" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "39" begin = "6" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/forum_cifre_po25.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "6" end = "8"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/forum_cifre_po26.why">
-      <location file = "why/forum_cifre.why" line = "2021" begin = "66" end = "67"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/forum_cifre_po27.why">
-      <location file = "why/forum_cifre.why" line = "2021" begin = "66" end = "67"/>
-      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -2712,38 +2697,38 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/forum_cifre_po5.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "56" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "59" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po6.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "57" begin = "2" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "60" begin = "2" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po7.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "490" begin = "14" end = "71"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "491" begin = "14" end = "71"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `succes'">
     <goal why_file="why/forum_cifre_po3.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "52" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "55" begin = "14" end = "26"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/forum_cifre_po4.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "54" begin = "11" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "57" begin = "11" end = "29"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `echec'">
     <goal why_file="why/forum_cifre_po1.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "48" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "51" begin = "14" end = "26"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/forum_cifre_po2.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "54" begin = "11" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "57" begin = "11" end = "29"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

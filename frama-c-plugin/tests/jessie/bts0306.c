@@ -10,7 +10,8 @@ Uncaught exception: File "jc/jc_interp.ml", line 1831, characters 19-25: Asserti
 
 */
 
-# pragma JessieIntegerModel(math)
+#pragma JessieIntegerModel(math)
+#pragma JessieTerminationPolicy(user)
 
 #include <jessie_prolog.h>
 
@@ -25,6 +26,6 @@ int strcmp(const char *s1, const char *s2)
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C frama-c -jessie bts0306.c"
+compile-command: "make bts0306"
 End:
 */

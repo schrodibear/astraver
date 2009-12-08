@@ -56,7 +56,11 @@ module Analysis =
 let () =
   (* [JS 2009/10/04]
      Preserve the behaviour of svn release <= r5012.
-     However it works only if the int-model is set from the command line. *)
+     However it works only if the int-model is set from the command line. 
+     [CM 2009/12/08]
+     setting int-model on the command-line is obsolete, so what is this 
+     code for ?
+  *)
   Analysis.add_set_hook
     (fun _ b -> 
        if b then begin
@@ -78,7 +82,7 @@ module JcOpt =
 	      let option_name = "-jessie-jc-opt"
 	      let module_name = "-jessie-jc-opt"
 	      let arg_name = ""
-	      let descr = "give an option to Jc (e.g., -trust-ai)"
+	      let descr = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
 	    end)
 
 module WhyOpt = 
@@ -87,8 +91,11 @@ module WhyOpt =
        let option_name = "-jessie-why-opt"
        let module_name = "-jessie-why-opt"
        let arg_name = ""
-       let descr = "give an option to Why (e.g., -fast-wp)"
+       let descr = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
      end)
+
+(*
+ obsolete
 
 type int_model = IMexact | IMbounded | IMmodulo
 let pp_int_model _ fmt im =
@@ -121,6 +128,7 @@ module IntModel =
     end)
 let () = IntModel.add_choice "exact" imexact
 let () = IntModel.add_choice "modulo" immodulo
+*)
 
 module GenOnly =
   False(struct
@@ -129,12 +137,15 @@ module GenOnly =
 	  let descr = "only generates jessie code (for developer use)"
 	end)
 
+(*
 module SepRegions =
   True(struct
 	 let option_name = "-jessie-regions"
 	 let module_name = "-jessie-regions"
 	 let descr = "separate memory into regions (for developer use)"
        end)
+*)
+
 (*
 module StdStubs =
   False(struct
@@ -142,6 +153,7 @@ module StdStubs =
 	  let descr = ""
 	end)
 *)
+
 module InferAnnot =
   EmptyString
     (struct

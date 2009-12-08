@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# SeparationPolicy = Regions
 
 axiomatic Padding {
 
@@ -814,12 +813,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/cast_call_po7.why">
-      <location file = "PPCHOME/tests/jessie/cast_call.jessie/cast_call.jc" line = "58" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/cast_call.jessie/cast_call.jc" line = "57" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_call_po8.why">
-      <location file = "PPCHOME/tests/jessie/cast_call.jessie/cast_call.jc" line = "58" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/cast_call.jessie/cast_call.jc" line = "57" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

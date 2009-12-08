@@ -1,7 +1,10 @@
 /* run.config
    DONTRUN: cast no working yet
 */
-#pragma IntModel(modulo)
+#pragma JessieIntegerModel(modulo)
+
+#pragma JessieTerminationPolicy(user)
+
 
 #include <limits.h>
 
