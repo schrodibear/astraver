@@ -328,7 +328,7 @@ Misc options:
   --ocaml        Ocaml code output
   --ocaml-annot  Show all annotations in ocaml code
   --ocaml-ext    Consider \"external\"s as parameters in ocaml code
-  --output f     Redirect output to file f
+  --output f     Redirect output to file f ( - for stdout)
   --dir d        Output files in directory d
   --int-is-ident
                  Consider `int' as a normal identifier, and use 
@@ -649,7 +649,21 @@ let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_
 let ocaml_externals = !ocaml_externals_
 
-let out_file f = match !output_ with None -> file f | Some f -> f
+let out_file f = match !output_ with 
+  | None -> file f 
+  | Some "-" -> invalid_arg "I can't use stdout for that output";
+  | Some f -> f
+
+let open_out_file f = match !output_ with 
+  | Some "-" -> stdout
+  | _ -> open_out (out_file f)
+let close_out_file cout = match !output_ with 
+  | Some "-" -> ()
+  | _ -> close_out cout
+let out_file_exists f =  
+  match !output_ with 
+    | Some "-" -> false
+    | _ -> Sys.file_exists (out_file f)
 
 let if_verbose f x = if verbose then f x
 let if_verbose_2 f x y = if verbose then f x y

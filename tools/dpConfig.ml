@@ -102,7 +102,7 @@ let z3 =
     command = "z3";
     command_switches = "-smt";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
-    undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
+    undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b|\\bFail\\b";
   }
 
 

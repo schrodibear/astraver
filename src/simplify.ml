@@ -432,7 +432,7 @@ let print_elem fmt = function
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
-  let file = out_file (fwe ^ "_why.sx") in
+  let file = fwe ^ "_why.sx" in
   do_not_edit_below ~file
     ~before:(fun _fmt -> ())
     ~sep

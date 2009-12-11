@@ -381,7 +381,7 @@ let output_elem fmt = function
 
 let output_file f = 
   let fname = f ^ "_why.z3.smt" in
-  let cout = open_out fname in
+  let cout = Options.open_out_file fname in
   let fmt = formatter_of_out_channel cout in
   fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
   fprintf fmt "  :status unknown@\n";
@@ -396,7 +396,7 @@ let output_file f =
   (* end of smtlib file *)
   fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();
-  close_out cout
+  Options.close_out_file cout
 
 
 (*

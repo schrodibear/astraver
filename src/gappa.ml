@@ -571,7 +571,7 @@ let print_obligation fmt (eq,p) =
 
 let output_one_file f =
   let sep = "### DO NOT EDIT ABOVE THIS LINE" in
-  let file = out_file (f ^ "_why.gappa") in
+  let file = f ^ "_why.gappa" in
   do_not_edit_above ~file
     ~before:(fun fmt -> Queue.iter (print_obligation fmt) queue)
     ~sep

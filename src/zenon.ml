@@ -369,7 +369,7 @@ $hyp \"why__prelude_3\" ; x+y=y+x
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
-  let file = out_file (fwe ^ "_why.znn") in
+  let file = fwe ^ "_why.znn" in
   do_not_edit_below ~file
     ~before:prelude
     ~sep

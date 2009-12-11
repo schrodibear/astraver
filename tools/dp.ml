@@ -196,20 +196,7 @@ let call_zenon f =
 let call_harvey f = 
   wrapper (Calldp.harvey ~debug:!debug ~timeout:!timeout ~filename:f ())
 
-let cp = 
-  let max_len = 1024 in
-  fun fi fo ->
-    let s = String.make max_len ' ' in
-    let fi = open_in fi in
-    let fo = open_out fo in
-    let nb = ref 0 in
-    nb := input fi s 0 max_len;
-    while !nb != 0 do
-      output fo s 0 !nb;
-      nb := input fi s 0 max_len
-    done;
-    close_in fi;
-    close_out fo
+
 
 let new_num = 
   let c = ref (-1) in
@@ -218,7 +205,7 @@ let new_num =
 let dir_name f = (Filename.chop_extension f)^".split"
 
 let call_split callback dir_name suffixe =
-  if !split then (fun f -> cp f (sprintf "%s/goal%i%s" dir_name (new_num ()) suffixe))
+  if !split then (fun f -> Lib.file_copy f (sprintf "%s/goal%i%s" dir_name (new_num ()) suffixe))
   else callback 
   
 

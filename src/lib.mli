@@ -39,6 +39,9 @@ val file : dir:string -> file:string -> string
    creating [dir] if necessary. *)
 val file_subdir : dir:string -> file:string -> string
 
+(* [file_copy f1 f2] copies [f1] into name [f2] *)
+val file_copy : string -> string -> unit
+
 (* [file_copy_if_different f1 f2] copies [f1] into name [f2], unless
    [f2] already exists and is identical to [f1] (thus keeping the same
    modification date) *)

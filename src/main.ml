@@ -165,9 +165,9 @@ let push_parameter id _v tv = match prover () with
 
 let output is_last fwe =
   if wol then begin
-    let cout = open_out (Options.out_file (fwe ^ ".wol")) in
+    let cout = Options.open_out_file (fwe ^ ".wol") in
     output_value cout !Vcg.logs;
-    close_out cout
+    Options.close_out_file cout
   end else if ocaml then 
     Pp.print_in_file Ocaml.output (Options.out_file "out")
   else begin match prover () with
@@ -673,7 +673,7 @@ let deal_file is_last f =
   close_in cin;
   if not type_only then
     let fwe = Filename.chop_extension f in
-    if not (single_file ()) then output is_last (Options.out_file fwe)
+    if not (single_file ()) then output is_last fwe
 
 let rec iter_with_last f = function
   | [] -> ()
@@ -686,7 +686,7 @@ let main () =
   if files = [] then 
     begin
       deal_channel (why_parser "standard input") stdin;
-      output false (Options.out_file "out")
+      output false "out"
     end 
   else 
     begin
@@ -699,8 +699,7 @@ let main () =
 	end;
       if single_file () then 
 	let lf = Filename.chop_extension (last files) in
-	let outf = Options.out_file lf in      
-	output false outf
+	output false lf
     end;
   if show_time then
     let t1 = Unix.times () in

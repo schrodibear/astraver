@@ -145,10 +145,18 @@ val show_time : bool
 
 val file : string -> string
 
-(* [out_file f] returns the file specified with option -o, 
-   or [file f] otherwise *)
+(* [out_file f] returns the file specified with option -o, or [file f]
+   otherwise. This function musn't be used if you want to be able to
+   output on stdout *)
 
 val out_file : string -> string
+
+(* If you want to be able to print to stdout transparently you must
+   use this function instead of the standard one. *)
+
+val open_out_file : string -> out_channel
+val close_out_file : out_channel -> unit
+val out_file_exists :  string -> bool
 
 (* [lib_file f] appends [f] to the lib directory *)
 

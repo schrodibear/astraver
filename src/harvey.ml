@@ -286,8 +286,8 @@ let decl_to_elem = function
 
 
 let output_file f = 
-  let fname = Options.out_file (f ^ "_why.rv") in
-  let cout = open_out fname in
+  let fname = f ^ "_why.rv" in
+  let cout = Options.open_out_file fname in
   let fmt = formatter_of_out_channel cout in
   Encoding.iter decl_to_elem ;
   if Options.no_harvey_prelude then 
@@ -296,5 +296,5 @@ let output_file f =
     output_theory fmt (Filename.basename f);
   Queue.iter (output_obligation fmt) oblig;
   pp_print_flush fmt ();
-  close_out cout
+  Options.close_out_file cout
 

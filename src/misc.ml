@@ -695,12 +695,13 @@ let file_formatter f cout =
 
 let do_not_edit_below ~file ~before ~sep ~after =
   let cout = 
-    if not (Sys.file_exists file) then begin
-      let cout = open_out file in
+    if not (out_file_exists file) then begin
+      let cout = open_out_file file in
       file_formatter before cout;
       output_string cout ("\n" ^ sep ^ "\n\n");
       cout
     end else begin
+      let file = out_file file in
       let file_bak = file ^ ".bak" in
       Sys.rename file file_bak;
       let cin = open_in file_bak in
@@ -719,16 +720,17 @@ let do_not_edit_below ~file ~before ~sep ~after =
     end
   in
   file_formatter after cout;
-  close_out cout
+  close_out_file cout
 
 let do_not_edit_above ~file ~before ~sep ~after =
-  if not (Sys.file_exists file) then begin
-    let cout = open_out file in
+  if not (out_file_exists file) then begin
+    let cout = open_out_file file in
     file_formatter before cout;
     output_string cout ("\n" ^ sep ^ "\n\n");
     file_formatter after cout;
-    close_out cout
+    close_out_file cout
   end else begin
+    let file = out_file file in
     let file_bak = file ^ ".bak" in
     Sys.rename file file_bak;
     let cout = open_out file in
@@ -743,6 +745,6 @@ let do_not_edit_above ~file ~before ~sep ~after =
     with End_of_file -> 
       ()
     end;
-    close_out cout
+    close_out_file cout
   end
 

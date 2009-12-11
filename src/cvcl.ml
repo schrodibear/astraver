@@ -302,7 +302,7 @@ ASSERT (true /= false);
 
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
-  let file = out_file (fwe ^ "_why.cvc") in
+  let file = fwe ^ "_why.cvc" in
   do_not_edit_below ~file
     ~before:prelude
     ~sep
