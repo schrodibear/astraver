@@ -336,7 +336,7 @@ else
 	   8.2*|trunk)
  	      if test -f "$COQLIB/user-contrib/AllFloat.vo"; then
 	        AC_MSG_RESULT(yes)
-	  	WHYFLOATS="lib/coq/floats_strict.vo lib/coq/JessieFloats.vo"
+	  	WHYFLOATS="lib/coq/JessieFloats.vo"
 		COQFLOATSMSG=yes
 	      else
 	        AC_MSG_RESULT(no)
