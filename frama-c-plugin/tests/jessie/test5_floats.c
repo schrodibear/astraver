@@ -14,7 +14,7 @@ void f() {
   
   float x = 1.0f, y = 0.0f;
   
-  /*@ loop invariant x-y == 1.0;
+  /*@ loop invariant y < 0x2.0p24 ==> x-y == 1.0;
     @ loop assigns x,y;
     @ loop variant (16777216 - truncate(y));  
     @*/
