@@ -12,7 +12,7 @@
 
 /*@ requires 2 <= N <= 0x1p26 && 
   @      \exact(u0)==u0 && \exact(u1)==u1 &&
-  @      \forall integer k; 0 <= k <= N ==> \abs(u0+(real)k*(u1-u0)) <= 1;
+  @      \forall integer k; 0 <= k <= N ==> \abs(u0+k*(u1-u0)) <= 1;
   @ ensures  \exact(\result)== u0+N*(u1-u0) &&
   @          \round_error(\result) <= (N)*(N+1)/2.0* 0x1p-53;
   @*/
