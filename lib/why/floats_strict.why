@@ -1,325 +1,348 @@
-
-
-(************************************************************************)
-(************************************************************************)
-(****** Jessie prelude for floating-point arithmetic, Strict mode *******) 
-
-(************************************************************************)
-(************************************************************************)
-
+(***************************************************************************)
+(***************************************************************************)
+(*** Jessie prelude for floating-point arithmetic: Strict mode *************)
+(***************************************************************************)
+(***************************************************************************)
 
 include "floats_common.why"
 
 
-
-(***************************************************)
-(******** axioms on gen_float_of_real_logic ********)
-(***************************************************)
-
-(* obsolete ?
-axiom a1: forall f:float_format. forall m:mode. forall x:real.
-          no_overflow(f,m,x) ->
-          float_value(gen_float_of_real_logic(f,m,x)) = round_float(f,m,x)
-
-axiom a2: forall f:float_format. forall m:mode. forall x:real.
-          exact_value(gen_float_of_real_logic(f,m,x)) = x
-
-axiom a3: forall f:float_format. forall m:mode. forall x:real.
-          model_value(gen_float_of_real_logic(f,m,x)) = x
-
-*)
-(* FAUX
-axiom a4: forall f:float_format. forall m:mode. forall x:real. 
-          no_overflow(f,m,x) and (exists y:gen_float. x = float_value(y)) -> 
-          float_value(gen_float_of_real_logic(f,m,x))= x
-*)
- 
+(* Axioms about rounding, in single precision *)
+axiom round_single_down_le: forall x:real. 
+      round_single(down,x) <= x
+axiom round_up_single_ge: forall x:real. 
+      round_single(up,x) >= x
+axiom round_down_single_neg: forall x:real. 
+     round_single(down,-x) = -round_single(up,x)
+axiom round_up_single_neg: forall x:real. 
+     round_single(up,-x) = -round_single(down,x)
+axiom round_single_idempotent:
+      forall m1:mode. forall m2:mode. forall x:real. 
+      round_single(m1,round_single(m2,x)) = round_single(m2,x)
 
 
-(***************************************************)
-(** specification of unary and binary operations ***)
-(***************************************************)
+(* Axioms about rounding, in double precision *)
+axiom round_double_down_le: forall x:real. 
+      round_double(down,x) <= x
+axiom round_up_double_ge: forall x:real. 
+      round_double(up,x) >= x
+axiom round_down_double_neg: forall x:real. 
+     round_double(down,-x) = -round_double(up,x)
+axiom round_up_double_neg: forall x:real. 
+     round_double(up,-x) = -round_double(down,x)
+axiom round_double_idempotent:
+      forall m1:mode. forall m2:mode. forall x:real. 
+      round_double(m1,round_double(m2,x)) = round_double(m2,x)
+
+(* Axioms about casts *)
+axiom double_to_single_val: forall m:mode. forall s:single.
+  double_value(single_to_double(m,s))=single_value(s)
+axiom single_to_double_val: forall m:mode. forall d:double.
+  single_value(double_to_single(m,d))=round_single(m,double_value(d))
 
 
-predicate gen_float_of_real_post(f:float_format,m:mode,x:real,res:gen_float) =
-    float_value(res) = round_float(f,m,x)
+(* Specification of operations in single precision *)
+predicate single_of_real_post(m:mode,x:real,res:single) =
+    single_value(res) = round_single(m,x)
     and
-    exact_value(res) = x
+    single_exact(res) = x
     and
-    model_value(res) = x
+    single_model(res) = x
 
-
-
-parameter gen_float_of_real : 
-  f:float_format -> m:mode -> x:real ->
-  { no_overflow(f,m,x) }
-  gen_float
-  { gen_float_of_real_post(f,m,x,result) }
-
-
-
-parameter gen_float_of_real_safe : 
-  f:float_format -> m:mode -> x:real ->
-  { }
-  gen_float
-  { no_overflow(f,m,x) and
-    gen_float_of_real_post(f,m,x,result) }
-
-
-
-predicate add_gen_float_post(f:float_format,m:mode,
-                             x:gen_float,y:gen_float,res:gen_float) =
-    float_value(res) = round_float(f,m,float_value(x) + float_value(y))
+predicate add_single_post(m:mode,x:single,y:single,res:single) =
+    single_value(res) = round_single(m,single_value(x) + single_value(y))
     and 
-    exact_value(res) = exact_value(x) + exact_value(y)
+    single_exact(res) = single_exact(x) + single_exact(y)
     and 
-    model_value(res) = model_value(x) + model_value(y)
+    single_model(res) = single_model(x) + single_model(y)
 
-
-
-parameter add_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { no_overflow(f,m,float_value(x) + float_value(y)) }
-  gen_float
-  { add_gen_float_post(f,m,x,y,result) }
-
-
-
-parameter add_gen_float_safe : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { }
-  gen_float
-  { no_overflow(f,m,float_value(x) + float_value(y)) and
-    add_gen_float_post(f,m,x,y,result) }
-
-
-
-predicate sub_gen_float_post(f:float_format,m:mode,
-	                     x:gen_float,y:gen_float,res:gen_float) =
-    float_value(res) = round_float(f,m,float_value(x) - float_value(y))
+predicate sub_single_post(m:mode,x:single,y:single,res:single) =
+    single_value(res) = round_single(m,single_value(x) - single_value(y))
     and 
-    exact_value(res) = exact_value(x) - exact_value(y)
+    single_exact(res) = single_exact(x) - single_exact(y)
     and 
-    model_value(res) = model_value(x) - model_value(y)
+    single_model(res) = single_model(x) - single_model(y)
 
-
-
-parameter sub_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { no_overflow(f,m,float_value(x) - float_value(y)) }
-  gen_float
-  { sub_gen_float_post(f,m,x,y,result) }
-
-
-
-parameter sub_gen_float_safe : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { }
-  gen_float
-  { no_overflow(f,m,float_value(x) - float_value(y)) 
-    and sub_gen_float_post(f,m,x,y,result) }
-
-
-
-predicate neg_gen_float_post(f:float_format,m:mode,
-	                     x:gen_float,res:gen_float) =
-    float_value(res) = round_float(f,m,-(float_value(x)))
+predicate mul_single_post(m:mode,x:single,y:single,res:single) =
+    single_value(res) = round_single(m,single_value(x) * single_value(y))
     and 
-    exact_value(res) = -(exact_value(x))
+    single_exact(res) = single_exact(x) * single_exact(y)
     and 
-    model_value(res) = -(model_value(x))
+    single_model(res) = single_model(x) * single_model(y)
 
-
-
-parameter neg_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  { no_overflow(f,m,-(float_value(x))) }
-  gen_float
-  { neg_gen_float_post(f,m,x,result) }
-
-
-
-parameter neg_gen_float_safe : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  { }
-  gen_float
-  { no_overflow(f,m,-(float_value(x))) and
-    neg_gen_float_post(f,m,x,result) }
-
-
-
-predicate mul_gen_float_post(f:float_format,m:mode,
-                             x:gen_float,y:gen_float,res:gen_float) =
-    float_value(res) = round_float(f,m,float_value(x) * float_value(y))
+predicate div_single_post(m:mode,x:single,y:single,res:single) =
+    single_value(res) = round_single(m,single_value(x) / single_value(y))
     and 
-    exact_value(res) = exact_value(x) * exact_value(y)
+    single_exact(res) = single_exact(x) / single_exact(y)
     and 
-    model_value(res) = model_value(x) * model_value(y)
+    single_model(res) = single_model(x) / single_model(y)
 
-
-
-parameter mul_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { no_overflow(f,m,float_value(x)*float_value(y)) }
-  gen_float
-  { mul_gen_float_post(f,m,x,y,result) }
-
-
-
-parameter mul_gen_float_safe : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { }
-  gen_float
-  { no_overflow(f,m,float_value(x)*float_value(y)) and
-    mul_gen_float_post(f,m,x,y,result) }
-
-
-
-predicate div_gen_float_post(f:float_format,m:mode,
-                             x:gen_float,y:gen_float,res:gen_float) =
-    float_value(res) = round_float(f,m,float_value(x)/float_value(y))
+predicate sqrt_single_post(m:mode,x:single,res:single) =
+    single_value(res) = round_single(m,sqrt_real(single_value(x)))
     and 
-    exact_value(res) = exact_value(x)/exact_value(y)
+    single_exact(res) = sqrt_real(single_exact(x))
     and 
-    model_value(res) = model_value(x)/model_value(y)
+    single_model(res) = sqrt_real(single_model(x))
 
-
-
-parameter div_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { float_value(y) <> 0.0 
+predicate neg_single_post(x:single,res:single) =
+    single_value(res) = -single_value(x)
     and 
-    no_overflow(f,m,float_value(x)/float_value(y)) }
-  gen_float
-  { div_gen_float_post(f,m,x,y,result) }
-
-
-
-parameter div_gen_float_safe : 
-  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
-  { }
-  gen_float
-  { float_value(y) <> 0.0 
+    single_exact(res) = -single_exact(x)
     and 
-    no_overflow(f,m,float_value(x)/float_value(y))
-    and div_gen_float_post(f,m,x,y,result) }
+    single_model(res) = -single_model(x)
 
-
-
-parameter sqrt_gen_float_requires : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  { float_value(x) >= 0.0 
+predicate abs_single_post(x:single,res:single) =
+    single_value(res) = abs_real(single_value(x))
     and 
-    no_overflow(f,m,sqrt_real(float_value(x))) }
-  gen_float
-  { float_value(result) = round_float(f,m,sqrt_real(float_value(x)))
+    single_exact(res) = abs_real(single_exact(x))
     and 
-    exact_value(result) = sqrt_real(exact_value(x))
-    and 
-    model_value(result) = sqrt_real(model_value(x))
-  }
+    single_model(res) = abs_real(single_model(x))
 
 
-
-parameter sqrt_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  {  }
-  gen_float
-  { float_value(result) = round_float(f,m,sqrt_real(float_value(x)))
-    and 
-    exact_value(result) = sqrt_real(exact_value(x))
-    and 
-    model_value(result) = sqrt_real(model_value(x))
-  }
-
-
-
-parameter abs_gen_float_requires : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  { no_overflow(f,m,abs_real(float_value(x))) }
-  gen_float
-  { float_value(result) = round_float(f,m,abs_real(float_value(x)))
-    and 
-    exact_value(result) = abs_real(exact_value(x))
-    and 
-    model_value(result) = abs_real(model_value(x))
-  }
-
-
-parameter abs_gen_float : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  {  }
-  gen_float
-  { float_value(result) = round_float(f,m,abs_real(float_value(x)))
-    and 
-    exact_value(result) = abs_real(exact_value(x))
-    and 
-    model_value(result) = abs_real(model_value(x))
-  }
-
-
-(***************************************************)
-(******** comparisons of floats in the code ********)
-(***************************************************)
-
-parameter lt_gen_float :
-  x:gen_float -> y:gen_float -> 
-  {} bool { if result then float_value(x) < float_value(y) 
-            else float_value(x) >= float_value(y) }
-
-parameter le_gen_float :
-  x:gen_float -> y:gen_float -> 
-  {} bool { if result then float_value(x) <= float_value(y) 
-            else float_value(x) > float_value(y) }
-
-parameter gt_gen_float :
-  x:gen_float -> y:gen_float -> 
-  {} bool { if result then float_value(x) > float_value(y) 
-            else float_value(x) <= float_value(y) }
-
-parameter ge_gen_float :
-  x:gen_float -> y:gen_float -> 
-  {} bool { if result then float_value(x) >= float_value(y) 
-            else float_value(x) < float_value(y) }
-
-parameter eq_gen_float :
-  x:gen_float -> y:gen_float -> 
-  {} bool { if result then float_value(x) = float_value(y) 
-            else float_value(x) <> float_value(y) }
-
-parameter neq_gen_float :
-  x:gen_float -> y:gen_float -> 
-  {} bool { if result then float_value(x) <> float_value(y) 
-            else float_value(x) = float_value(y) }
-
-
-
-(***************************************************)
-(*********** conversions between formats ***********)
-(***************************************************)
-
-predicate cast_gen_float_post(f:float_format,m:mode,x:gen_float,res:gen_float) =
-    float_value(res) = round_float(f,m,float_value(x))
+(* Specification of operations in double precision *)
+predicate double_of_real_post(m:mode,x:real,res:double) =
+    double_value(res) = round_double(m,x)
     and
-    exact_value(res) = exact_value(x)
+    double_exact(res) = x
     and
-    model_value(res) = model_value(x)
+    double_model(res) = x
 
-parameter cast_gen_float : f:float_format -> m:mode -> x:gen_float ->
-  { no_overflow(f,m,float_value(x)) }
-  gen_float
-  { cast_gen_float_post(f,m,x,result) }
+predicate add_double_post(m:mode,x:double,y:double,res:double) =
+    double_value(res) = round_double(m,double_value(x) + double_value(y))
+    and 
+    double_exact(res) = double_exact(x) + double_exact(y)
+    and 
+    double_model(res) = double_model(x) + double_model(y)
 
-parameter cast_gen_float_safe : f:float_format -> m:mode -> x:gen_float ->
+predicate sub_double_post(m:mode,x:double,y:double,res:double) =
+    double_value(res) = round_double(m,double_value(x) - double_value(y))
+    and 
+    double_exact(res) = double_exact(x) - double_exact(y)
+    and 
+    double_model(res) = double_model(x) - double_model(y)
+
+predicate mul_double_post(m:mode,x:double,y:double,res:double) =
+    double_value(res) = round_double(m,double_value(x) * double_value(y))
+    and 
+    double_exact(res) = double_exact(x) * double_exact(y)
+    and 
+    double_model(res) = double_model(x) * double_model(y)
+
+predicate div_double_post(m:mode,x:double,y:double,res:double) =
+    double_value(res) = round_double(m,double_value(x) / double_value(y))
+    and 
+    double_exact(res) = double_exact(x) / double_exact(y)
+    and 
+    double_model(res) = double_model(x) / double_model(y)
+
+predicate sqrt_double_post(m:mode,x:double,res:double) =
+    double_value(res) = round_double(m,sqrt_real(double_value(x)))
+    and 
+    double_exact(res) = sqrt_real(double_exact(x))
+    and 
+    double_model(res) = sqrt_real(double_model(x))
+
+predicate neg_double_post(x:double,res:double) =
+    double_value(res) = -double_value(x)
+    and 
+    double_exact(res) = -double_exact(x)
+    and 
+    double_model(res) = -double_model(x)
+
+predicate abs_double_post(x:double,res:double) =
+    double_value(res) = abs_real(double_value(x))
+    and 
+    double_exact(res) = abs_real(double_exact(x))
+    and 
+    double_model(res) = abs_real(double_model(x))
+
+
+
+(* Parameters in single precision *)
+parameter single_of_real : m:mode -> x:real ->
+  { no_overflow_single(m,x) }
+  single
+  { single_of_real_post(m,x,result) }
+parameter single_of_real_safe : m:mode -> x:real ->
   { }
-  gen_float
-  { no_overflow(f,m,float_value(x)) and
-    cast_gen_float_post(f,m,x,result) }
+  single
+  { no_overflow_single(m,x) and
+    single_of_real_post(m,x,result) }
+
+parameter add_single : m:mode -> x:single -> y:single -> 
+  { no_overflow_single(m,single_value(x) + single_value(y)) }
+  single
+  { add_single_post(m,x,y,result) }
+parameter add_single_safe : m:mode -> x:single -> y:single -> 
+  { }
+  single
+  { no_overflow_single(m,single_value(x) + single_value(y)) and
+    add_single_post(m,x,y,result) }
+
+parameter sub_single : m:mode -> x:single -> y:single -> 
+  { no_overflow_single(m,single_value(x) - single_value(y)) }
+  single
+  { sub_single_post(m,x,y,result) }
+parameter sub_single_safe : m:mode -> x:single -> y:single -> 
+  { }
+  single
+  { no_overflow_single(m,single_value(x) - single_value(y)) and
+    sub_single_post(m,x,y,result) }
+
+parameter mul_single : m:mode -> x:single -> y:single -> 
+  { no_overflow_single(m,single_value(x) * single_value(y)) }
+  single
+  { mul_single_post(m,x,y,result) }
+parameter mul_single_safe : m:mode -> x:single -> y:single -> 
+  { }
+  single
+  { no_overflow_single(m,single_value(x) * single_value(y)) and
+    mul_single_post(m,x,y,result) }
+
+parameter div_single : m:mode -> x:single -> y:single -> 
+  { single_value(y) <> 0.0 
+    and
+    no_overflow_single(m,single_value(x) / single_value(y)) }
+  single
+  { div_single_post(m,x,y,result) }
+parameter div_single_safe : m:mode -> x:single -> y:single -> 
+  { }
+  single
+  { single_value(y) <> 0.0  and
+    no_overflow_single(m,single_value(x) / single_value(y)) and
+    div_single_post(m,x,y,result) }
+
+parameter sqrt_single : m:mode -> x:single -> 
+  { single_value(x) >= 0.0 }
+  single
+  { sqrt_single_post(m,x,result) }
+parameter sqrt_single_safe : m:mode -> x:single ->
+  { }
+  single
+  { single_value(x) >= 0.0  and
+    sqrt_single_post(m,x,result) }
+
+parameter neg_single : x:single -> 
+  { }
+  single
+  { neg_single_post(x,result) }
+parameter abs_single : x:single -> 
+  { }
+  single
+  { abs_single_post(x,result) }
+
+(* Parameters in double precision *)
+parameter double_of_real : m:mode -> x:real ->
+  { no_overflow_double(m,x) }
+  double
+  { double_of_real_post(m,x,result) }
+parameter double_of_real_safe : m:mode -> x:real ->
+  { }
+  double
+  { no_overflow_double(m,x) and
+    double_of_real_post(m,x,result) }
+
+parameter add_double : m:mode -> x:double -> y:double -> 
+  { no_overflow_double(m,double_value(x) + double_value(y)) }
+  double
+  { add_double_post(m,x,y,result) }
+parameter add_double_safe : m:mode -> x:double -> y:double -> 
+  { }
+  double
+  { no_overflow_double(m,double_value(x) + double_value(y)) and
+    add_double_post(m,x,y,result) }
+
+parameter sub_double : m:mode -> x:double -> y:double -> 
+  { no_overflow_double(m,double_value(x) - double_value(y)) }
+  double
+  { sub_double_post(m,x,y,result) }
+parameter sub_double_safe : m:mode -> x:double -> y:double -> 
+  { }
+  double
+  { no_overflow_double(m,double_value(x) - double_value(y)) and
+    sub_double_post(m,x,y,result) }
+
+parameter mul_double : m:mode -> x:double -> y:double -> 
+  { no_overflow_double(m,double_value(x) * double_value(y)) }
+  double
+  { mul_double_post(m,x,y,result) }
+parameter mul_double_safe : m:mode -> x:double -> y:double -> 
+  { }
+  double
+  { no_overflow_double(m,double_value(x) * double_value(y)) and
+    mul_double_post(m,x,y,result) }
+
+parameter div_double : m:mode -> x:double -> y:double -> 
+  { double_value(y) <> 0.0 
+    and
+    no_overflow_double(m,double_value(x) / double_value(y)) }
+  double
+  { div_double_post(m,x,y,result) }
+parameter div_double_safe : m:mode -> x:double -> y:double -> 
+  { }
+  double
+  { double_value(y) <> 0.0  and
+    no_overflow_double(m,double_value(x) / double_value(y)) and
+    div_double_post(m,x,y,result) }
+
+parameter sqrt_double : m:mode -> x:double -> 
+  { double_value(x) >= 0.0 }
+  double
+  { sqrt_double_post(m,x,result) }
+parameter sqrt_double_safe : m:mode -> x:double ->
+  { }
+  double
+  { double_value(x) >= 0.0  and
+    sqrt_double_post(m,x,result) }
+
+parameter neg_double : x:double -> 
+  { }
+  double
+  { neg_double_post(x,result) }
+parameter abs_double : x:double -> 
+  { }
+  double
+  { abs_double_post(x,result) }
 
 
+(* Comparisons in single precision *)
+parameter lt_single : x:single -> y:single -> 
+  {} bool { if result then single_value(x) < single_value(y) 
+            else single_value(x) >= single_value(y) }
+parameter le_single : x:single -> y:single -> 
+  {} bool { if result then single_value(x) <= single_value(y) 
+            else single_value(x) > single_value(y) }
+parameter gt_single : x:single -> y:single -> 
+  {} bool { if result then single_value(x) > single_value(y) 
+            else single_value(x) <= single_value(y) }
+parameter ge_single : x:single -> y:single -> 
+  {} bool { if result then single_value(x) >= single_value(y) 
+            else single_value(x) < single_value(y) }
+parameter eq_single : x:single -> y:single -> 
+  {} bool { if result then single_value(x) = single_value(y) 
+            else single_value(x) <> single_value(y) }
+parameter ne_single : x:single -> y:single -> 
+  {} bool { if result then single_value(x) <> single_value(y) 
+            else single_value(x) = single_value(y) }
 
-(***************************************************)
-(***************** any function ********************) 
-(***************************************************)
 
-parameter any_gen_float : float_format -> { } gen_float { }
+(* Comparisons in double precision *)
+parameter lt_double : x:double -> y:double -> 
+  {} bool { if result then double_value(x) < double_value(y) 
+            else double_value(x) >= double_value(y) }
+parameter le_double : x:double -> y:double -> 
+  {} bool { if result then double_value(x) <= double_value(y) 
+            else double_value(x) > double_value(y) }
+parameter gt_double : x:double -> y:double -> 
+  {} bool { if result then double_value(x) > double_value(y) 
+            else double_value(x) <= double_value(y) }
+parameter ge_double : x:double -> y:double -> 
+  {} bool { if result then double_value(x) >= double_value(y) 
+            else double_value(x) < double_value(y) }
+parameter eq_double : x:double -> y:double -> 
+  {} bool { if result then double_value(x) = double_value(y) 
+            else double_value(x) <> double_value(y) }
+parameter ne_double : x:double -> y:double -> 
+  {} bool { if result then double_value(x) <> double_value(y) 
+            else double_value(x) = double_value(y) }
+

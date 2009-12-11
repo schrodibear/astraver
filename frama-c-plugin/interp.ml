@@ -240,35 +240,35 @@ let translated_name linfo =
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\double_exact"
-		| Ctype x when x == floatType -> "\\float_exact"
+		| Ctype x when x == floatType -> "\\single_exact"
 		| _ -> assert false
 	    end
 	| "\\model" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\double_model"
-		| Ctype x when x == floatType -> "\\float_model"
+		| Ctype x when x == floatType -> "\\single_model"
 		| _ -> assert false
 	    end
 	| "\\round_error" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\double_round_error"
-		| Ctype x when x == floatType -> "\\float_round_error"
+		| Ctype x when x == floatType -> "\\single_round_error"
 		| _ -> assert false
 	    end
 	| "\\total_error" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\double_total_error"
-		| Ctype x when x == floatType -> "\\float_total_error"
+		| Ctype x when x == floatType -> "\\single_total_error"
 		| _ -> assert false
 	    end
 	| "\\relative_error" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\double_relative_error"
-		| Ctype x when x == floatType -> "\\float_relative_error"
+		| Ctype x when x == floatType -> "\\single_relative_error"
 		| _ -> assert false
 	    end
 	| "\\pow" ->
@@ -286,8 +286,8 @@ let translated_name linfo =
 	| "\\sign" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
-		| Ctype x when x == doubleType -> "\\sign_double"
-		| Ctype x when x == floatType -> "\\sign_float"
+		| Ctype x when x == doubleType -> "\\double_sign"
+		| Ctype x when x == floatType -> "\\single_sign"
 		| _ -> assert false
 	    end
 	| "\\is_finite" ->
@@ -299,8 +299,8 @@ let translated_name linfo =
               | `Strict | `Full | `Multirounding ->
 	                begin
 	      		match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\is_finite_double"
-			| Ctype x when x == floatType -> "\\is_finite_float"
+			| Ctype x when x == doubleType -> "\\double_is_finite"
+			| Ctype x when x == floatType -> "\\single_is_finite"
 			| _ -> assert false
 	    		end
 	   end
@@ -313,8 +313,8 @@ let translated_name linfo =
 		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\is_infinite_double"
-			| Ctype x when x == floatType -> "\\is_infinite_float"
+			| Ctype x when x == doubleType -> "\\double_is_infinite"
+			| Ctype x when x == floatType -> "\\single_is_infinite"
 			| _ -> assert false
 		    end
 	    end
@@ -327,8 +327,8 @@ let translated_name linfo =
 		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\is_NaN_double"
-			| Ctype x when x == floatType -> "\\is_NaN_float"
+			| Ctype x when x == doubleType -> "\\double_is_NaN"
+			| Ctype x when x == floatType -> "\\single_is_NaN"
 			| _ -> assert false
 		    end
 	    end
@@ -341,8 +341,8 @@ let translated_name linfo =
 		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\is_minus_infinity_double"
-			| Ctype x when x == floatType -> "\\is_minus_infinity_float"
+			| Ctype x when x == doubleType -> "\\double_is_minus_infinity"
+			| Ctype x when x == floatType -> "\\single_is_minus_infinity"
 			| _ -> assert false
 		    end
 	    end
@@ -355,8 +355,8 @@ let translated_name linfo =
 		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\is_plus_infinity_double"
-			| Ctype x when x == floatType -> "\\is_plus_infinity_float"
+			| Ctype x when x == doubleType -> "\\double_is_plus_infinity"
+			| Ctype x when x == floatType -> "\\single_is_plus_infinity"
 			| _ -> assert false
 		    end
 	    end
@@ -364,42 +364,42 @@ let translated_name linfo =
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\le_double"
-		| Ctype x when x == floatType -> "\\le_float"
+		| Ctype x when x == floatType -> "\\le_single"
 		| _ -> assert false
 	    end
 	| "\\lt_float" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\lt_double"
-		| Ctype x when x == floatType -> "\\lt_float"
+		| Ctype x when x == floatType -> "\\lt_single"
 		| _ -> assert false
 	    end
 	| "\\ge_float" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\ge_double"
-		| Ctype x when x == floatType -> "\\ge_float"
+		| Ctype x when x == floatType -> "\\ge_single"
 		| _ -> assert false
 	    end
 	| "\\gt_float" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\gt_double"
-		| Ctype x when x == floatType -> "\\gt_float"
+		| Ctype x when x == floatType -> "\\gt_single"
 		| _ -> assert false
 	    end
 	| "\\eq_float" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\eq_double"
-		| Ctype x when x == floatType -> "\\eq_float"
+		| Ctype x when x == floatType -> "\\eq_single"
 		| _ -> assert false
 	    end
 	| "\\ne_float" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\ne_double"
-		| Ctype x when x == floatType -> "\\ne_float"
+		| Ctype x when x == floatType -> "\\ne_single"
 		| _ -> assert false
 	    end
 	| s ->

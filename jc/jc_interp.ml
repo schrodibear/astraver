@@ -184,24 +184,26 @@ let float_model_has_safe_functions () =
     | FMstrict | FMmultirounding -> true
     | FMreal | FMfull -> false
  
-let float_operator f =
-  let s =
-    match f with
-      | `Badd -> "add_gen_float"
-      | `Bsub -> "sub_gen_float"
-      | `Bmul -> "mul_gen_float"
-      | `Bdiv -> "div_gen_float"
-      | `Uminus -> "neg_gen_float"
-      | `Bmod -> assert false
-  in
-  if float_model_has_safe_functions() && (not (safety_checking())) 
-  then s ^ "_safe" else s
 
 let float_format f =
   match f with
-    | `Double -> "Double"
-    | `Float -> "Single"
-    | `Binary80 -> "Binary80"
+    | `Double -> "double"
+    | `Float -> "single"
+    | `Binary80 -> "binary80"
+
+let float_operator f t =
+  let s =
+    match f with
+      | `Badd -> "add_"
+      | `Bsub -> "sub_"
+      | `Bmul -> "mul_"
+      | `Bdiv -> "div_"
+      | `Uminus -> "neg_"
+      | `Bmod -> assert false
+  in
+  if float_model_has_safe_functions() && (not (safety_checking())) 
+  then s ^ (float_format t) ^"_safe" else s^ (float_format t)
+
 
 
 let logic_current_rounding_mode () =
@@ -249,12 +251,18 @@ let bin_op: expr_bin_op -> string = function
   | `Ble, `Real -> "le_real_"
   | `Beq, `Real -> "eq_real_"
   | `Bneq, `Real -> "neq_real_"
-  | `Bgt, (`Double | `Float) -> "gt_gen_float"
-  | `Blt, (`Double | `Float) -> "lt_gen_float"
-  | `Bge, (`Double | `Float) -> "ge_gen_float"
-  | `Ble, (`Double | `Float) -> "le_gen_float"
-  | `Beq, (`Double | `Float) -> "eq_gen_float"
-  | `Bneq, (`Double | `Float) -> "neq_gen_float"
+  | `Bgt, `Float -> "gt_single"
+  | `Blt, `Float -> "lt_single"
+  | `Bge, `Float -> "ge_single"
+  | `Ble, `Float -> "le_single"
+  | `Beq, `Float -> "eq_single"
+  | `Bneq,`Float -> "ne_single"
+  | `Bgt, `Double -> "gt_double"
+  | `Blt, `Double -> "lt_double"
+  | `Bge, `Double -> "ge_double"
+  | `Ble, `Double -> "le_double"
+  | `Beq, `Double -> "eq_double"
+  | `Bneq, `Double -> "ne_double"
   | `Badd, `Real -> "add_real"
   | `Bsub, `Real -> "sub_real"
   | `Bmul, `Real -> "mul_real"
@@ -388,7 +396,7 @@ let equality_op_for_type = function
   | JCTnative Tboolean -> "eq_bool"
   | JCTnative Tinteger -> "eq_int"
   | JCTnative Treal -> "eq_real"
-  | JCTnative (Tgenfloat _) -> "eq_gen_float"
+  | JCTnative (Tgenfloat f) -> ("eq_"^(float_format f))
   | JCTnative Tstring -> "eq"
   | JCTlogic _s -> (* TODO *) assert false
   | JCTenum ei -> eq_of_enum ei
@@ -516,11 +524,11 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
 	      let e' = LApp(logic_int_of_enum ri,[ e' ]) in
 	      LApp("real_of_int",[ e' ])
 	end
-    | JCTnative Treal, JCTnative (Tgenfloat _) ->
-	LApp("float_value",[ e' ])
+    | JCTnative Treal, JCTnative (Tgenfloat f) ->
+	LApp((float_format f)^"_value",[ e' ])
     | JCTnative (Tgenfloat f), JCTnative Treal ->
-	LApp ("gen_float_of_real_logic", 
-	      [ LVar (float_format f) ; logic_current_rounding_mode () ; e' ])
+	LApp ("round_"^(float_format f)^"_logic", 
+	      [ logic_current_rounding_mode () ; e' ])
     | JCTnative (Tgenfloat _f), (JCTnative Tinteger | JCTenum _) ->
         term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
           (term_coerce ~type_safe ~global_assertion lab pos (JCTnative Treal) ty_src e e')
@@ -629,23 +637,24 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
     | JCTnative (Tgenfloat _), (JCTnative Tinteger | JCTenum _) ->
         coerce ~check_int_overflow mark pos ty_dst (JCTnative Treal) e
           (coerce ~check_int_overflow mark pos (JCTnative Treal) ty_src e e')
-    | JCTnative (Tgenfloat f), JCTnative (Tgenfloat _) ->
+    | JCTnative (Tgenfloat f1), JCTnative (Tgenfloat f2) ->
         if check_int_overflow then
-          make_guarded_app ~mark FPoverflow pos "cast_gen_float"
-            [ Var (float_format f) ; current_rounding_mode () ; e' ]
+          make_guarded_app ~mark FPoverflow pos 
+            ((float_format f2)^"_to_"^(float_format f1))
+            [current_rounding_mode () ; e' ]
         else
-          make_app "cast_gen_float_safe"
-            [ Var (float_format f) ; current_rounding_mode () ; e' ]
+          make_app ((float_format f2)^"_to_"^(float_format f1))
+            [ current_rounding_mode () ; e' ]
     | JCTnative (Tgenfloat f), JCTnative Treal ->
 	if check_int_overflow then
 	  make_guarded_app ~mark FPoverflow pos
-	    "gen_float_of_real" 
-	    [ Var (float_format f) ; current_rounding_mode () ; e' ]
+	    ((float_format f)^"_of_real") 
+	    [ current_rounding_mode () ; e' ]
 	else
-	  make_app "gen_float_of_real_safe" 
-	    [ Var (float_format f) ; current_rounding_mode () ; e' ]
-    | JCTnative Treal, JCTnative (Tgenfloat _) ->
-	make_app "float_value" [ e' ]
+	  make_app ((float_format f)^"_of_real_safe")
+	    [ current_rounding_mode () ; e' ]
+    | JCTnative Treal, JCTnative (Tgenfloat f) ->
+	make_app ((float_format f)^"_value") [ e' ]
       (* between enums and integer *)
     | JCTenum ri1, JCTenum ri2 
 	when ri1.jc_enum_info_name = ri2.jc_enum_info_name -> e'
@@ -1995,8 +2004,8 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  (float_operator `Uminus)
-	     [Var (float_format format); current_rounding_mode () ; e2' ]
+	  (float_operator `Uminus format)
+	     [current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
         make_app (unary_op op) 
@@ -2030,8 +2039,8 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  (float_operator op)
-	  [Var (float_format format); current_rounding_mode () ; e1' ; e2' ]
+	  (float_operator op format)
+	  [current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in

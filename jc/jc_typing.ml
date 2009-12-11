@@ -942,8 +942,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		     | JCTnative (Tgenfloat f1) ->
 			 let e =
 			   match (f1,f) with
-			     | _,`Binary80 -> te1#node
-			     | (`Float|`Double),`Double -> te1#node
+			     | `Binary80,`Binary80 -> te1#node
+			     | `Double,`Double -> te1#node
 			     | `Float,`Float -> te1#node
 			     | _ ->
 				 JCTreal_cast(te1, Round(f,Round_nearest_even)) 
@@ -2002,8 +2002,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		| JCTnative (Tgenfloat f1), JCTnative (Tgenfloat f2) ->
 		    begin
 		      match (f2,f1) with
-			| _,`Binary80 -> te2
-			| (`Float|`Double),`Double -> te2
+			| `Binary80,`Binary80 -> te2
+			| `Double,`Double -> te2
 			| `Float,`Float -> te2
 			| _ ->
 			    new expr ~typ:t1 ~pos:te2#pos
@@ -2059,8 +2059,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		     | JCTnative (Tgenfloat f1) ->
 			 let e =
 			   match (f1,f) with
-			     | _,`Binary80 -> te1#node
-			     | (`Float|`Double),`Double -> te1#node
+			     | `Binary80,`Binary80 -> te1#node
+			     | `Double,`Double -> te1#node
 			     | `Float,`Float -> te1#node
 			     | _ ->
 				 JCEreal_cast(te1, Round(f,Round_nearest_even)) 

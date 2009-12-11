@@ -984,9 +984,9 @@ let string_of_op_type = function
   | `Integer -> "integer"
   | `Unit -> "unit"
   | `Real -> "real"
-  | `Double -> "gen_float"
-  | `Float -> "gen_float"
-  | `Binary80 -> "gen_float" 
+  | `Double -> "double"
+  | `Float -> "single"
+  | `Binary80 -> "binary80" 
   | `Boolean -> "boolean"
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"
@@ -1017,35 +1017,38 @@ let builtin_logic_symbols =
     Some real_type, "\\real_sqrt", "sqrt_real", [real_type];
     Some real_type, "\\real_pow", "pow_real", [real_type; real_type];
     
-    Some real_type, "\\double_exact", "exact_value", [double_type];
-    Some real_type, "\\float_exact", "exact_value", [float_type];
-    Some real_type, "\\double_model", "model_value", [double_type];
-    Some real_type, "\\float_model", "model_value", [float_type];
+    Some real_type, "\\single_exact", "single_exact", [float_type];
+    Some real_type, "\\double_exact", "double_exact", [double_type];
+    Some real_type, "\\single_model", "single_model", [float_type];
+    Some real_type, "\\double_model", "double_model", [double_type];
+
     
-    Some real_type, "\\double_round_error", "gen_round_error", [double_type];
-    Some real_type, "\\float_round_error", "gen_round_error", [float_type];
-    Some real_type, "\\double_total_error", "gen_total_error", [double_type];
-    Some real_type, "\\float_total_error", "gen_total_error", [float_type];
-    Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
-    Some real_type, "\\float_relative_error", "gen_relative_error", [float_type];
-    
-    Some sign, "\\sign_float", "float_sign", [float_type];
-    Some sign, "\\sign_double", "float_sign", [double_type];
+ 
+    Some real_type, "\\single_round_error", "single_round_error", [float_type];
+   Some real_type, "\\double_round_error", "double_round_error", [double_type]; 
+   Some real_type, "\\double_total_error", "double_total_error", [double_type];
+    Some real_type, "\\single_total_error", "single_total_error", [float_type];
+(*    Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
+    Some real_type, "\\single_relative_error", "gen_relative_error", [float_type];
+*)  
+    Some sign, "\\single_sign", "single_sign", [float_type];
+    Some sign, "\\double_sign", "double_sign", [double_type];
 
-    Some (JCTnative Tboolean), "\\is_finite_float", "is_finite", [float_type];
-    Some (JCTnative Tboolean), "\\is_finite_double", "is_finite", [double_type];
+    Some (JCTnative Tboolean), "\\single_is_finite", "single_is_finite", [float_type];
+    Some (JCTnative Tboolean), "\\double_is_finite", "double_is_finite", [double_type];
 
-    Some (JCTnative Tboolean), "\\is_infinite_float", "is_infinite", [float_type];
-    Some (JCTnative Tboolean), "\\is_infinite_double", "is_infinite", [double_type];
+    Some (JCTnative Tboolean), "\\single_is_infinite", "single_is_infinite", [float_type];
+    Some (JCTnative Tboolean), "\\double_is_infinite", "double_is_infinite", [double_type];
 
-    Some (JCTnative Tboolean), "\\is_NaN_float", "is_NaN", [float_type];
-    Some (JCTnative Tboolean), "\\is_NaN_double", "is_NaN", [double_type];
+    Some (JCTnative Tboolean), "\\single_is_NaN", "single_is_NaN", [float_type];
+    Some (JCTnative Tboolean), "\\double_is_NaN", "double_is_NaN", [double_type];
 
-    Some (JCTnative Tboolean), "\\is_minus_infinity_float", "is_minus_infinity", [float_type];
-    Some (JCTnative Tboolean), "\\is_minus_infinity_double", "is_minus_infinity", [double_type];
+    Some (JCTnative Tboolean), "\\single_is_minus_infinity", "single_is_minus_infinity", [float_type];
+    Some (JCTnative Tboolean), "\\double_is_minus_infinity", "double_is_minus_infinity", [double_type];
   
-    Some (JCTnative Tboolean), "\\is_plus_infinity_float", "is_plus_infinity", [float_type];
-    Some (JCTnative Tboolean), "\\is_plus_infinity_double", "is_plus_infinity", [double_type];
+    Some (JCTnative Tboolean), "\\single_is_plus_infinity", "single_is_plus_infinity", [float_type];
+    Some (JCTnative Tboolean), "\\double_is_plus_infinity", "double_is_plus_infinity", [double_type];
+
   
     Some real_type, "\\exp", "exp", [real_type] ;
     Some real_type, "\\log", "log", [real_type] ;
@@ -1063,9 +1066,11 @@ let builtin_logic_symbols =
     Some real_type, "\\atan2", "atan2", [real_type; real_type] ;
     Some real_type, "\\hypot", "hypot", [real_type; real_type] ;
     Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
-    None, "\\no_overflow", "no_overflow", [float_format; rounding_mode; real_type];
+    None, "\\no_overflow_single", "no_overflow_single", [rounding_mode; real_type];
+    None, "\\no_overflow_double", "no_overflow_double", [rounding_mode; real_type];
     
-    Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
+    Some real_type, "\\round_single", "round_single", [rounding_mode; real_type];
+    Some real_type, "\\round_double", "round_double", [rounding_mode; real_type];
 
     Some float_format, "\\Single", "Single", [];
     Some float_format, "\\Double", "Double", [];
@@ -1080,23 +1085,23 @@ let builtin_logic_symbols =
     Some sign, "\\Positive", "Positive", [];
     Some sign, "\\Negative", "Negative", [];
     
-    Some (JCTnative Tboolean), "\\le_float", "float_le_float", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\le_double", "float_le_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\le_float", "le_single", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\le_double", "le_double", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\lt_float", "float_lt_float", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\lt_double", "float_lt_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\lt_float", "lt_single", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\lt_double", "lt_float", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\ge_float", "float_ge_float", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\ge_double", "float_ge_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\ge_float", "ge_single", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ge_double", "ge_float", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\gt_float", "float_gt_float", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\gt_double", "float_gt_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\gt_float", "gt_single", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\gt_double", "gt_float", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\eq_float", "float_eq_float", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\eq_double", "float_eq_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\eq_float", "eq_single", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\eq_double", "eq_double", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\ne_float", "float_ne_float", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\ne_double", "float_ne_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\ne_float", "ne_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ne_double", "ne_double", [double_type;double_type];
 ]
 
 let treatdouble = TreatGenFloat (`Double :> float_format)
@@ -1107,12 +1112,12 @@ let builtin_function_symbols =
   (* return type, jessie name, why name, parameter types, special treatment *)
   [
     real_type, "\\real_of_integer", "real_of_int", [integer_type], TreatNothing ;
-    double_type, "\\double_sqrt", "sqrt_gen_float", [double_type], treatdouble ;
-    float_type, "\\float_sqrt", "sqrt_gen_float", [float_type], treatfloat ;
-    double_type, "\\double_abs", "abs_gen_float", [double_type], treatdouble ;
-    float_type, "\\float_abs", "abs_gen_float", [float_type], treatfloat ;
-    double_type, "\\neg_double", "neg_gen_float", [double_type], treatdouble ;
-    float_type, "\\neg_float", "neg_gen_float", [float_type], treatfloat ;  
+    double_type, "\\double_sqrt", "sqrt_double", [double_type], treatdouble ;
+    float_type, "\\float_sqrt", "sqrt_single", [float_type], treatfloat ;
+    double_type, "\\double_abs", "abs_double", [double_type], treatdouble ;
+    float_type, "\\float_abs", "abs_single", [float_type], treatfloat ;
+    double_type, "\\neg_double", "neg_double", [double_type], treatdouble ;
+    float_type, "\\neg_float", "neg_single", [float_type], treatfloat ;  
 ]
 
 

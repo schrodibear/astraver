@@ -119,8 +119,8 @@ let unary_op (op, _) = match op with
 let real_conversion fmt rc =
   match rc with
     | Integer_to_real -> fprintf fmt "real"
-    | Double_to_real -> fprintf fmt "float_value"
-    | Float_to_real -> fprintf fmt "float_value"
+    | Double_to_real -> fprintf fmt "double_value"
+    | Float_to_real -> fprintf fmt "single_value"
     | Real_to_integer -> fprintf fmt "integer"
     | Round(_f,_m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
          (* TODO ? parameter rounding mode *)

@@ -177,14 +177,13 @@ byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.
 .PHONY: check
 
 WHYLIBS=lib/why/bool.why lib/why/integer.why \
-	lib/why/real.why lib/why/arrays.why lib/why/floats.why \
-	lib/why/floats_common.why lib/why/floats_strict.why lib/why/floats_multi_rounding.why\
-	lib/why/floats_full.why \
+	lib/why/real.why lib/why/arrays.why \
 	lib/why/jessie.why lib/why/mybag.why \
 	lib/why/mix.why \
-	lib/why/double_model.why lib/why/double_strict.why lib/why/single_model.why lib/why/single_strict.why
+	lib/why/floats_common.why lib/why/floats_strict.why lib/why/floats_full.why lib/why/floats_multi_rounding.why\
 
-GENERATEDCOQFILES=floats_common_Floats floats_common_Gappa
+
+
 
 PRELUDE=lib/why/prelude.why $(WHYLIBS)
 
@@ -195,13 +194,8 @@ check: $(BINARY) $(PRELUDE)
 		WHYLIB=lib $(BINARY) -tc $$f; \
 	done
 
-generate_coq_files: $(BINARY)
-	for f in $(GENERATEDCOQFILES) ; do \
-		WHYLIB=lib $(BINARY) -output lib/coq/$$f lib/why/floats_common.why ;\
-	done
-
-lib/coq/float_common_Gappa_why.v: lib/why/floats_common.why
-	WHYLIB=lib $(BINARY) -tc -output $@ $<
+#lib/coq/float_common_Gappa_why.v: lib/why/floats_common.why
+#	WHYLIB=lib $(BINARY) -tc -output $@ $<
 
 # why-config
 WHYCONFIGCMO = src/rc.cmo src/version.cmo tools/dpConfig.cmo tools/whyConfig.cmo
@@ -650,16 +644,6 @@ bin/tool-stat.opt: $(TOOLCMX)
 bin/cadlog.opt: src/version.cmx c/cversion.cmx tools/cadlog.cmx
 	$(OCAMLOPT) unix.cmxa -o $@ $^
 
-tools/make_float_model.opt: tools/make_float_model.cmx
-	$(OCAMLOPT) -o $@ $^
-
-lib/why/double_model.why lib/why/double_strict.why: tools/make_float_model.opt
-	tools/make_float_model.opt double 53 -1074
-
-lib/why/single_model.why lib/why/single_strict.why: tools/make_float_model.opt
-	tools/make_float_model.opt single 24 -149
-
-
 static:: $(STATICBINARY)
 
 ########
@@ -669,8 +653,8 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: coq-@COQVER@
 coq-v7: $(VO7)
-coq-v8: generate_coq_files $(VO8)
-coq-v8.1: generate_coq_files $(VO8)
+coq-v8: $(VO8)
+coq-v8.1: $(VO8)
 
 ########
 # PVS

@@ -89,7 +89,9 @@ let native_name = function
   | Tboolean -> "boolean"
   | Tinteger -> "integer"
   | Treal -> "real"
-  | Tgenfloat _ -> "gen_float"
+  | Tgenfloat `Double -> "double"
+  | Tgenfloat `Float -> "single"
+  | Tgenfloat `Binary80 -> "binary80"
   | Tstring -> "string"
 
 (* let logic_bitvector_of_native nty = "bitvector_of_" ^ (native_name nty) *)
@@ -107,6 +109,7 @@ let why_name_of_format = function
   | `Double -> "Double"
   | `Binary80 -> "Binary80"
 
+
 (* functions to make Why expressions *)
 
 let make_if_term cond a b =
@@ -120,7 +123,7 @@ let make_eq_term ty a b =
     | JCTnative Tboolean -> "eq_bool_bool"
     | JCTnative Tinteger -> "eq_int_bool"
     | JCTnative Treal -> "eq_real_bool"
-    | JCTnative (Tgenfloat _) -> "eq_gen_float"
+    | JCTnative (Tgenfloat f) -> ("eq_"^(native_name (Tgenfloat f)))
     | JCTnative Tstring -> "eq_string_bool"
     | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
@@ -135,7 +138,7 @@ let make_eq_pred ty a b =
     | JCTnative Tboolean -> "eq_bool"
     | JCTnative Tinteger -> "eq_int"
     | JCTnative Treal -> "eq_real"
-    | JCTnative (Tgenfloat _) -> "eq_gen_float"
+    | JCTnative (Tgenfloat f) -> ("eq_"^(native_name (Tgenfloat f)))
     | JCTnative Tstring -> "eq_string"
     | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
@@ -335,7 +338,9 @@ let tr_native_type = function
   | Tboolean -> "bool"
   | Tinteger -> "int"
   | Treal -> "real"
-  | Tgenfloat _ -> "gen_float"
+  | Tgenfloat `Double -> "double"
+  | Tgenfloat `Float -> "single"
+  | Tgenfloat `Binary80 -> "binary80"
   | Tstring -> "string"
 
 let rec tr_base_type ?region = function
@@ -374,7 +379,7 @@ let any_value = function
 	| Tboolean -> App(Var "any_bool", Void)
 	| Tinteger -> App(Var "any_int", Void)
 	| Treal -> App(Var "any_real", Void)
-	| Tgenfloat f -> App(Var "any_gen_float", Var (why_name_of_format f)) 
+	| Tgenfloat _ -> Var ("any_"^(native_name ty)) 
 	| Tstring -> App(Var "any_string", Void)
       end
   | JCTnull 
@@ -386,6 +391,7 @@ let any_value = function
       in BlackBox t
   | JCTany -> assert false
   | JCTtype_var _ -> assert false (* TODO: need environment *)
+
 
 (* model types *)
 

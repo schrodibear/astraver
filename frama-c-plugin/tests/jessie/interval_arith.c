@@ -49,13 +49,13 @@ double mul_dn(double x, double y)
 {
   double z = x*y;
   /* @ assert \is_finite(x) && \is_finite(y) 
-    @     && \no_overflow(\Double,\Down,x*y) ==> double_le_real(z,x*y);
+    @     && \no_overflow_double(\Down,x*y) ==> double_le_real(z,x*y);
     @*/
   /* @ assert \is_finite(x) && \is_finite(y) 
-    @     && ! \no_overflow(\Double,\Down,x*y) && \sign(x) == \sign(y) ==> double_le_real(z,x*y);
+    @     && ! \no_overflow_double(\Down,x*y) && \sign(x) == \sign(y) ==> double_le_real(z,x*y);
     @*/
   /* @ assert \is_finite(x) && \is_finite(y) 
-    @     && ! \no_overflow(\Double,\Down,x*y) && \sign(x) != \sign(y)  ==> double_le_real(z,x*y);
+    @     && ! \no_overflow_double(\Down,x*y) && \sign(x) != \sign(y)  ==> double_le_real(z,x*y);
     @*/
   /* @ assert \is_infinite(x) || \is_infinite(y) ==> double_le_real(z,x*y);
     @*/
@@ -71,7 +71,7 @@ double mul_dn(double x, double y)
   @          &&
   @          (\is_infinite(y) && \is_finite(x) ==> x != 0.0 )
   @          &&
-  @          (\is_finite(x) && \is_finite(y) && !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive
+  @          (\is_finite(x) && \is_finite(y) && !\no_overflow_double(\Down,-y) && \sign(y) == \Positive
   @                            ==> x > 0.0 );
   @ ensures  real_le_double(x * y,\result);
   @*/
@@ -88,10 +88,10 @@ double mul_up(double x, double y) {
   /*@ assert \is_finite(x) && \is_infinite(y) ==> real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_infinite(x) && \is_finite(y) && 
-    @    \no_overflow(\Double,\Down,-y) ==> real_le_double(x * y,z);
+    @    \no_overflow_double(\Down,-y) ==> real_le_double(x * y,z);
     @*/
   /*@ assert \is_infinite(x) && \is_finite(y) &&
-    @    ! \no_overflow(\Double,\Down,-y) ==> real_le_double(x * y,z);
+    @    ! \no_overflow_double(\Down,-y) ==> real_le_double(x * y,z);
     @*/
   /*@ assert \is_infinite(x) && \is_infinite(y) ==> real_le_double(x * y,z);
     @*/
@@ -99,41 +99,41 @@ double mul_up(double x, double y) {
   
 
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     \no_overflow(\Double,\Down,-y) &&
-    @     \no_overflow(\Double,\Down,x*a) && 
-    @     !\no_overflow(\Double,\Down,-b) ==> real_le_double(x * y,z) ;
+    @     \no_overflow_double(\Down,-y) &&
+    @     \no_overflow_double(\Down,x*a) && 
+    @     !\no_overflow_double(\Down,-b) ==> real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     \no_overflow(\Double,\Down,-y) &&
-    @     !\no_overflow(\Double,\Down,x*a) ==> real_le_double(x * y,z) ;
+    @     \no_overflow_double(\Down,-y) &&
+    @     !\no_overflow_double(\Down,x*a) ==> real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive
+    @     !\no_overflow_double(\Down,-y) && \sign(y) == \Positive
     @                                     ==> real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Negative &&
-    @     !\no_overflow(\Double,\Down,x*a) ==> real_le_double(x * y,z) ;
+    @     !\no_overflow_double(\Down,-y) && \sign(y) == \Negative &&
+    @     !\no_overflow_double(\Down,x*a) ==> real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Negative &&
-    @     \no_overflow(\Double,\Down,x*a) &&
-    @     !\no_overflow(\Double,\Down,-b)  ==> real_le_double(x * y,z) ;
+    @     !\no_overflow_double(\Down,-y) && \sign(y) == \Negative &&
+    @     \no_overflow_double(\Down,x*a) &&
+    @     !\no_overflow_double(\Down,-b)  ==> real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Negative &&
-    @     \no_overflow(\Double,\Down,x*a) &&
-    @     \no_overflow(\Double,\Down,-b) ==> real_le_double(x * y,z);
+    @     !\no_overflow_double(\Down,-y) && \sign(y) == \Negative &&
+    @     \no_overflow_double(\Down,x*a) &&
+    @     \no_overflow_double(\Down,-b) ==> real_le_double(x * y,z);
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     \no_overflow(\Double,\Down,-y) &&
-    @     \no_overflow(\Double,\Down,x*a) && 
-    @     \no_overflow(\Double,\Down,-b) && x > 0.0 ==> \is_finite(z) && real_le_double(x * y,z) ;
+    @     \no_overflow_double(\Down,-y) &&
+    @     \no_overflow_double(\Down,x*a) && 
+    @     \no_overflow_double(\Down,-b) && x > 0.0 ==> \is_finite(z) && real_le_double(x * y,z) ;
     @*/
   /*@ assert \is_finite(x) && \is_finite(y) && 
-    @     \no_overflow(\Double,\Down,-y) &&
-    @     \no_overflow(\Double,\Down,x*a) && 
-    @     \no_overflow(\Double,\Down,-b) && x < 0.0 ==> \is_finite(z) && real_le_double(x * y,z) ;
+    @     \no_overflow_double(\Down,-y) &&
+    @     \no_overflow_double(\Down,x*a) && 
+    @     \no_overflow_double(\Down,-b) && x < 0.0 ==> \is_finite(z) && real_le_double(x * y,z) ;
     @*/
   
    return z;  

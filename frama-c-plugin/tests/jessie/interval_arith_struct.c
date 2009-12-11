@@ -52,7 +52,7 @@ double mul_dn(double x, double y)
   @          &&
   @          (\is_infinite(y) ==> x != 0.0 )
   @          &&
-  @          (\is_finite(y) && !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive
+  @          (\is_finite(y) && !\no_overflow_double(\Down,-y) && \sign(y) == \Positive
                               ==> x != 0.0 );
   @ ensures  real_le_double(x * y,\result);
   @*/

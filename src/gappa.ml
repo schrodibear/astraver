@@ -85,18 +85,23 @@ let rnd_up = Ident.create "up"
 let rnd_dn = Ident.create "down"
 let rnd_na = Ident.create "nearest_away"
 
-let max_gen_float = Ident.create "max_gen_float"
-let round_float = Ident.create "round_float"
-let gen_round_error = Ident.create "gen_round_error"
-let gen_float_of_real_logic = Ident.create "gen_float_of_real_logic"
+let max_single = Ident.create "max_single"
+let max_double = Ident.create "max_double"
+let round_single = Ident.create "round_single"
+let round_double = Ident.create "round_double"
+let single_round_error = Ident.create "single_round_error"
+let double_round_error = Ident.create "double_round_error"
+let round_single_logic = Ident.create "round_single_logic"
+let round_double_logic = Ident.create "round_double_logic"
+let single_to_double = Ident.create "single_to_double"
+let double_to_single = Ident.create "double_to_single"
 
-let float_value = Ident.create "float_value"
-let exact_value = Ident.create "exact_value"
-let model_value = Ident.create "model_value"
-
-let fmt_single = Ident.create "Single"
-let fmt_double = Ident.create "Double"
-let fmt_binary80 = Ident.create "Binary80"
+let single_value = Ident.create "single_value"
+let double_value = Ident.create "double_value"
+let single_exact = Ident.create "single_exact"
+let double_exact = Ident.create "double_exact"
+let single_model = Ident.create "single_model"
+let double_model = Ident.create "double_model"
 
 let is_int_constant = function
   | Tconst (ConstInt _) -> true
@@ -112,8 +117,8 @@ let is_pos_constant = function
   | Tconst (ConstInt _) -> true
   | Tconst (ConstFloat _) -> true
   | Tapp (id, [Tconst (ConstInt _)], _) when id == real_of_int -> true
-  | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float &&
-      (id' == fmt_single || id' == fmt_double || id' == fmt_binary80) -> true
+  | Tapp (id,_,_) when id == max_single -> true
+  | Tapp (id,_,_) when id == max_double -> true
   | _ -> false
 
 let is_constant = function
@@ -132,11 +137,8 @@ let eval_pos_constant = function
   | Tconst (ConstInt n) -> n
   | Tconst (ConstFloat f) -> eval_rconst f
   | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> "-" ^ n
-  | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float ->
-      if id' == fmt_single then "0x1.FFFFFEp127" else
-      if id' == fmt_double then "0x1.FFFFFFFFFFFFFp1023" else
-      if id' == fmt_binary80 then "0x1.FFFFFFFFFFFFFFFEp16383" else
-      raise NotGappa
+  | Tapp (id,_,_) when id == max_single -> "0x1.FFFFFEp127"
+  | Tapp (id,_,_) when id == max_double -> "0x1.FFFFFFFFFFFFFp1023"
   | _ -> raise NotGappa
 
 let eval_constant = function
@@ -149,9 +151,9 @@ let eval_constant = function
   | _ -> raise NotGappa
 
 let field_of_id s =
-  if s == float_value then Rounded else
-  if s == exact_value then Exact else
-  if s == model_value then Model else
+  if s == single_value || s == double_value then Rounded else
+  if s == single_exact || s == double_exact then Exact else
+  if s == single_model || s == double_model then Model else
   assert false
 
 (* contains all the terms that have been generalized away,
@@ -207,14 +209,10 @@ let rec term = function
   (* conversions *)
   | Tapp (id, [t], _) when id == real_of_int ->
       term t
+
   (* [Jessie] rounding *)
-  | Tapp (id, [Tapp (fmt, [], _); Tapp (m, [], _); t], _)
-      when id == round_float ->
-      let fmt =
-        if fmt == fmt_single then Single else
-        if fmt == fmt_double then Double else
-        if fmt == fmt_binary80 then Binary80 else
-        raise NotGappa in
+  | Tapp (id, [Tapp (m, [], _); t], _)
+      when id == round_single ->
       let mode =
         if m == rnd_ne then RndNE else
         if m == rnd_zr then RndZR else
@@ -222,19 +220,55 @@ let rec term = function
         if m == rnd_dn then RndDN else
         if m == rnd_na then RndNA else
         raise NotGappa in
-      Hashtbl.replace rnd_table (fmt, mode) ();
-      Grnd (fmt, mode, term t)
+      Hashtbl.replace rnd_table (Single, mode) ();
+      Grnd (Single, mode, term t)
+  | Tapp (id, [Tapp (m, [], _); t], _)
+      when id == round_double ->
+      let mode =
+        if m == rnd_ne then RndNE else
+        if m == rnd_zr then RndZR else
+        if m == rnd_up then RndUP else
+        if m == rnd_dn then RndDN else
+        if m == rnd_na then RndNA else
+        raise NotGappa in
+      Hashtbl.replace rnd_table (Double, mode) ();
+      Grnd (Double, mode, term t)
+
   | Tapp (id1, [Tapp (id2, l1, l2)], _)
-      when id1 == float_value && id2 == gen_float_of_real_logic ->
-      term (Tapp (round_float, l1, l2))
+      when id1 == single_value && id2 == round_single_logic ->
+      term (Tapp (round_single, l1, l2))
+  | Tapp (id1, [Tapp (id2, l1, l2)], _)
+      when id1 == double_value && id2 == round_double_logic ->
+      term (Tapp (round_double, l1, l2))
+
+  (* casts *)
+  | Tapp (id1, [Tapp (id2,[Tapp (m, [], _); t] , l2)], _)  
+      when id1 == single_value && id2 == double_to_single ->
+      let mode =
+        if m == rnd_ne then RndNE else
+        if m == rnd_zr then RndZR else
+        if m == rnd_up then RndUP else
+        if m == rnd_dn then RndDN else
+        if m == rnd_na then RndNA else
+        raise NotGappa in
+      Hashtbl.replace rnd_table (Single, mode) ();
+      Grnd (Single, mode, term (Tapp (double_value,[t],l2)))
+
+  | Tapp (id1, [Tapp (id2,[Tapp (_m, [], _); t] , l2)], _)  
+      when id1 == double_value && id2 == single_to_double ->
+        term (Tapp (single_value,[t],l2))
+
+
   | Tapp (id, [Tvar _ as x], _)
-      when (id == float_value || id == exact_value || id == model_value) ->
+      when (id == single_value || id == double_value || id == single_exact 
+         || id == double_exact || id == single_model || id == double_model) ->
     begin
       match term x with
         | Gvar v -> Gfld (field_of_id id, v)
         | _ -> raise NotGappa
     end
-  | Tapp (id, [Tvar _ as x], _) when id == gen_round_error ->
+  | Tapp (id, [Tvar _ as x], _) 
+    when id == single_round_error || id == double_round_error ->
     begin
       match term x with
         | Gvar v -> Gabs (Gsub (Gfld (Rounded, v), Gfld (Exact, v)))
@@ -379,7 +413,9 @@ let rec ghyp = function
       [], None
     end
   | Papp (id, [Tapp (id', [Tvar x], _); t], _) as p
-      when is_eq id && (id' == float_value || id' == exact_value || id' == model_value) ->
+      when is_eq id && 
+	(id' == single_value || id' == double_value || id' == single_exact 
+       || id' == double_exact || id' == single_model || id' == double_model) ->
     begin
       match termo t with
       | Some t ->
