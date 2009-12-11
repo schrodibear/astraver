@@ -170,6 +170,9 @@ let rnd_table = Hashtbl.create 10
    so new definitions should be as equalities *)
 let def_table = Hashtbl.create 10
 
+(* contains the reverted list of aliases from def_table *)
+let def_list = ref []
+
 let rec subst_var = function
   | Tvar id as t ->
     begin
@@ -259,12 +262,22 @@ let rec term = function
         term (Tapp (single_value,[t],l2))
 
 
-  | Tapp (id, [Tvar _ as x], _)
+  | Tapp (id, [Tvar vx as x], _)
       when (id == single_value || id == double_value || id == single_exact 
          || id == double_exact || id == single_model || id == double_model) ->
     begin
       match term x with
-        | Gvar v -> Gfld (field_of_id id, v)
+        | Gvar v ->
+            let f = field_of_id id in
+            let add_def fmt =
+              if not (Hashtbl.mem def_table (f, vx)) then begin
+                Hashtbl.add def_table (f, vx) ();
+                Hashtbl.replace rnd_table (fmt, RndNE) ();
+                def_list := (f, v, Grnd (fmt, RndNE, Gvar ("dummy_float_" ^ v))) :: !def_list
+              end in
+            if id == single_value then add_def Single else
+            if id == double_value then add_def Double;
+            Gfld (f, v)
         | _ -> raise NotGappa
     end
   | Tapp (id, [Tvar _ as x], _) 
@@ -410,7 +423,7 @@ let rec ghyp = function
   | Papp (id, [Tvar x; t], _) when is_eq id ->
     begin
       Hashtbl.replace var_table x (subst_var t);
-      [], None
+      None
     end
   | Papp (id, [Tapp (id', [Tvar x], _); t], _) as p
       when is_eq id && 
@@ -422,20 +435,19 @@ let rec ghyp = function
           let f = field_of_id id' in
           if not (Hashtbl.mem def_table (f, x)) then
            (Hashtbl.add def_table (f, x) ();
-            [f, Ident.string x, t], None)
+            def_list := (f, Ident.string x, t) :: !def_list;
+            None)
           else
-            [], gpred true p
+            gpred true p
       | None ->
-          [], gpred true p
+          gpred true p
     end
   | Pand (_, _, p1, p2) ->
-      begin match ghyp p1, ghyp p2 with
-        | (e1,p1), (e2, p2) -> e1 @ e2, gando (p1, p2)
-      end
+      gando (ghyp p1, ghyp p2)
   | Pnamed (_, p) ->
       ghyp p
   | p ->
-      [], gpred true p
+      gpred true p
 
 (* Processing obligations.
    One Why obligation can be split into several Gappa obligations *)
@@ -447,7 +459,8 @@ let reset () =
   Hashtbl.clear gen_table;
   Hashtbl.clear var_table;
   Hashtbl.clear rnd_table;
-  Hashtbl.clear def_table
+  Hashtbl.clear def_table;
+  def_list := []
 
 let add_ctx_vars =
   List.fold_left 
@@ -470,29 +483,24 @@ let rec intros ctx = function
 let process_obligation (ctx, concl) =
   let ctx, concl = intros (List.rev ctx) concl in
   let ctx = List.rev ctx in
-  let el, pl =
+  let pl =
     List.fold_left
-      (fun ((el, pl) as acc) h ->
+      (fun pl h ->
         match h with
-          | Svar _ -> acc
+          | Svar _ -> pl
           | Spred (_, p) -> 
-              let ep, pp = ghyp p in
-              let pl =
-                match pp with
-                  | None -> pl
-                  | Some pp -> pp :: pl
-                in
-              ep :: el, pl)
-      ([],[]) ctx
+              match ghyp p with
+                | None -> pl
+                | Some pp -> pp :: pl)
+      [] ctx
     in
-  let el = List.rev (List.flatten el) in
   let gconcl =
     match gpred false concl with
       | None -> Gle (Gcst "1", "0")
       | Some p -> p
     in
   let gconcl = List.fold_left (fun acc p -> Gimplies (p, acc)) gconcl pl in
-  Queue.add (el, gconcl) queue
+  Queue.add (List.rev !def_list, gconcl) queue
 
 let push_decl d =
   let decl = PredDefExpansor.push ~recursive_expand:true d in
