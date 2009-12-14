@@ -106,7 +106,22 @@ let prefix id =
   with Not_found -> assert false
 
 
-let ident = Ident.print
+let is_pvs_keyword =
+  let ht = Hashtbl.create 50  in
+  List.iter (fun kw -> Hashtbl.add ht kw ()) 
+    [];
+  Hashtbl.mem ht
+
+let leading_underscore s = s <> "" && s.[0] = '_'
+
+let idents fmt s = 
+  (* PVS does not expect names to begin with an underscore. *)
+  if is_pvs_keyword s || leading_underscore s then
+    fprintf fmt "why__%s" s
+  else 
+    fprintf fmt "%s" s
+
+let ident fmt id = idents fmt (Ident.string id)
 
 let rec filter_phantom_type = function
   | PTexternal (_, id) ->
@@ -177,7 +192,7 @@ let print_term fmt t =
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "zwf_zero"
     | Tvar id ->
-	Ident.print fmt id
+	ident fmt id
     | Tapp (id, [a; Tapp (id', [b], _)], _) 
       when id == t_pow_real && id' == t_real_of_int ->
 	fprintf fmt "(@[%a@ ^ %a@])" print3 a print3 b
@@ -206,7 +221,7 @@ let print_term fmt t =
   print0 fmt t
 
 let print_logic_binder fmt (id,pt) =
-  fprintf fmt "%s:%a" (Ident.string id) print_pure_type pt
+  fprintf fmt "%a:%a" ident id print_pure_type pt
 
 
 let print_predicate fmt p =
@@ -237,7 +252,7 @@ let print_predicate fmt p =
     | Pfalse ->
 	fprintf fmt "False"
     | Pvar id -> 
-	Ident.print fmt id
+	ident fmt id
     | Papp (id, tl, _) when id == t_distinct ->
 	fprintf fmt "@[(%a)@]" print0 (Util.distinct tl)
     | Papp (id, [t], _) when id == well_founded ->
@@ -260,13 +275,13 @@ let print_predicate fmt p =
     | Forall (_,id,n,t,_,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "@[(FORALL (%s: " (Ident.string id');
+	fprintf fmt "@[(FORALL (%a: " ident id';
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 fmt p'; fprintf fmt ")@]"
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[EXISTS (%s: " (Ident.string id');
+	fprintf fmt "(@[EXISTS (%a: " ident id';
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 fmt p'; fprintf fmt "@])"
     | Pnamed (_, p) -> (* TODO: print name *)
@@ -283,7 +298,7 @@ let print_sequent fmt (hyps,concl) =
     | [] ->
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "FORALL (%a: %a) :@\n" Ident.print id print_pure_type v;
+	fprintf fmt "FORALL (%a: %a) :@\n" ident id print_pure_type v;
 	print_seq hyps
     | Spred (_,p) :: hyps -> 
 	print_predicate fmt p; fprintf fmt " IMPLIES@\n";
@@ -329,7 +344,7 @@ let print_logic_type fmt = function
 	(print_list comma print_pure_type) pl print_pure_type t
 
 let declare_type fmt id = 
-  fprintf fmt "  @[%s: TYPE+;@]@\n@\n" id
+  fprintf fmt "  @[%a: TYPE+;@]@\n@\n" idents id
 
 let declare_alg_type fmt id cs =
   let print_cargs c fmt pl =
@@ -350,11 +365,11 @@ let declare_alg_type fmt id cs =
 
 let print_logic fmt id t = 
   fprintf fmt "  %%%% Why logic %s@\n" id;
-  fprintf fmt "  %s: @[%a@]@\n@\n" id print_logic_type t
+  fprintf fmt "  %a: @[%a@]@\n@\n" idents id print_logic_type t
     
 let print_axiom fmt id p =
   fprintf fmt "  @[%%%% Why axiom %s@]@\n" id;
-  fprintf fmt "  @[<hov 2>%s: AXIOM@ @[%a@]@]@\n@\n" id print_predicate p
+  fprintf fmt "  @[<hov 2>%a: AXIOM@ @[%a@]@]@\n@\n" idents id print_predicate p
     
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "  @[<hov 2>%a(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
@@ -374,7 +389,7 @@ let print_function_def fmt id (bl,t,e) =
     
 let print_obligation fmt (loc,_expl,id,s) =
   fprintf fmt "  @[%% %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
-  fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
+  fprintf fmt "  @[<hov 2>%a: LEMMA@\n" idents id;
   print_sequent fmt s;
   fprintf fmt "@]@\n@\n"
   (*;

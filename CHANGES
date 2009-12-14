@@ -1,4 +1,5 @@
 
+  o [PVS output] fixed problems with idents starting with underscore
   o [Krakatoa & Frama-C plugin] new pragma TerminationPolicy to allow
     the user to prevent generation of VCs for termination
 
