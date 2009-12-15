@@ -44,6 +44,7 @@ Generating JC function cons_Object for constructor Object
 Done.
 ========== file tests/java/MacCarthy.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -524,7 +525,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 31
+line = 32
 begin = 8
 end = 23
 
@@ -566,7 +567,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 31
+line = 32
 begin = 8
 end = 23
 
@@ -652,7 +653,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 33
+line = 34
 begin = 11
 end = 65
 
@@ -808,7 +809,7 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 33
+line = 34
 begin = 11
 end = 65
 

@@ -39,8 +39,8 @@ tag __anonstruct_interval_1 = {
 type __anonstruct_interval_1 = [__anonstruct_interval_1]
 
 double min(double x_0, double y_0)
-  requires (C_3 : ((C_4 : (! \is_NaN_double(x_0))) &&
-                    (C_5 : (! \is_NaN_double(y_0)))));
+  requires (C_3 : ((C_4 : (! \double_is_NaN(x_0))) &&
+                    (C_5 : (! \double_is_NaN(y_0)))));
 behavior default:
   assumes true;
   ensures (C_6 : (((C_8 : \le_double(\result, x_0)) &&
@@ -57,8 +57,8 @@ behavior default:
 }
 
 double max(double x, double y)
-  requires (C_13 : ((C_14 : (! \is_NaN_double(x))) &&
-                     (C_15 : (! \is_NaN_double(y)))));
+  requires (C_13 : ((C_14 : (! \double_is_NaN(x))) &&
+                     (C_15 : (! \double_is_NaN(y)))));
 behavior default:
   assumes true;
   ensures (C_16 : (((C_18 : \le_double(x, \result)) &&
@@ -75,26 +75,26 @@ behavior default:
 }
 
 predicate dif_sign(double x, double y) =
-(\sign_double(x) != \sign_double(y))
+(\double_sign(x) != \double_sign(y))
 
 predicate sam_sign(double x_0, double y_0) =
-(\sign_double(x_0) == \sign_double(y_0))
+(\double_sign(x_0) == \double_sign(y_0))
 
 predicate double_le_real(double x_1, real y_1) =
-((\is_finite_double(x_1) && ((x_1 :> real) <= y_1)) ||
-  \is_minus_infinity_double(x_1))
+((\double_is_finite(x_1) && ((x_1 :> real) <= y_1)) ||
+  \double_is_minus_infinity(x_1))
 
 predicate real_le_double(real x_2, double y_2) =
-((\is_finite_double(y_2) && (x_2 <= (y_2 :> real))) ||
-  \is_plus_infinity_double(y_2))
+((\double_is_finite(y_2) && (x_2 <= (y_2 :> real))) ||
+  \double_is_plus_infinity(y_2))
 
 double mul_dn(double x_3, double y_3)
-  requires (C_23 : ((((C_26 : (! \is_NaN_double(x_3))) &&
-                       (C_27 : (! \is_NaN_double(y_3)))) &&
-                      (C_28 : (\is_infinite_double(x_3) ==>
+  requires (C_23 : ((((C_26 : (! \double_is_NaN(x_3))) &&
+                       (C_27 : (! \double_is_NaN(y_3)))) &&
+                      (C_28 : (\double_is_infinite(x_3) ==>
                                 (((y_3 :> real) != 0.0) &&
                                   dif_sign(x_3, y_3))))) &&
-                     (C_29 : (\is_infinite_double(y_3) ==>
+                     (C_29 : (\double_is_infinite(y_3) ==>
                                (((x_3 :> real) != 0.0) && dif_sign(x_3, y_3))))));
 behavior default:
   assumes true;
@@ -110,18 +110,18 @@ behavior default:
 }
 
 double mul_up(double x_2, double y_2)
-  requires (C_35 : ((((((C_40 : (! \is_NaN_double(x_2))) &&
-                         (C_41 : (! \is_NaN_double(y_2)))) &&
+  requires (C_35 : ((((((C_40 : (! \double_is_NaN(x_2))) &&
+                         (C_41 : (! \double_is_NaN(y_2)))) &&
                         (C_42 : sam_sign(x_2, y_2))) &&
-                       (C_43 : (\is_infinite_double(x_2) ==>
+                       (C_43 : (\double_is_infinite(x_2) ==>
                                  (((y_2 :> real) != 0.0) &&
                                    (\real_abs((y_2 :> real)) >= 0x2.0p-1074))))) &&
-                      (C_44 : (\is_infinite_double(y_2) ==>
+                      (C_44 : (\double_is_infinite(y_2) ==>
                                 ((x_2 :> real) != 0.0)))) &&
-                     (C_45 : (((\is_finite_double(y_2) &&
-                                 (! \no_overflow(\Double(), \Down(),
-                                                 (- (y_2 :> real))))) &&
-                                (\sign_double(y_2) == \Positive())) ==>
+                     (C_45 : (((\double_is_finite(y_2) &&
+                                 (! \no_overflow_double(\Down(),
+                                                        (- (y_2 :> real))))) &&
+                                (\double_sign(y_2) == \Positive())) ==>
                                ((x_2 :> real) != 0.0)))));
 behavior default:
   assumes true;
@@ -136,8 +136,8 @@ behavior default:
 }
 
 predicate is_interval{Here}(__anonstruct_interval_1[0] x_3) =
-((\is_finite_double(x_3.l) || \is_minus_infinity_double(x_3.l)) &&
-  (\is_finite_double(x_3.u) || \is_plus_infinity_double(x_3.u)))
+((\double_is_finite(x_3.l) || \double_is_minus_infinity(x_3.l)) &&
+  (\double_is_finite(x_3.u) || \double_is_plus_infinity(x_3.u)))
 
 predicate in_interval{L}(real a, __anonstruct_interval_1[0] x_4) =
 (double_le_real(x_4.l, a) && real_le_double(a, x_4.u))
@@ -481,14 +481,14 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-predicate dif_sign(x_1:gen_float,
- y_1:gen_float) =
- (float_sign(x_1) <> float_sign(y_1))
+predicate dif_sign(x_1:double,
+ y_1:double) =
+ (double_sign(x_1) <> double_sign(y_1))
 
-predicate double_le_real(x_1_0:gen_float,
+predicate double_le_real(x_1_0:double,
  y_1_0:real) =
- ((is_finite(x_1_0) and le_real(float_value(x_1_0), y_1_0))
- or is_minus_infinity(x_1_0))
+ ((double_is_finite(x_1_0) and le_real(double_value(x_1_0), y_1_0))
+ or double_is_minus_infinity(x_1_0))
 
 logic integer_of_int8: int8 -> int
 
@@ -497,14 +497,14 @@ predicate eq_int8(x:int8,
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 predicate real_le_double(x_2:real,
- y_2:gen_float) =
- ((is_finite(y_2) and le_real(x_2, float_value(y_2)))
- or is_plus_infinity(y_2))
+ y_2:double) =
+ ((double_is_finite(y_2) and le_real(x_2, double_value(y_2)))
+ or double_is_plus_infinity(y_2))
 
 predicate in_interval(a:real,
  x_4:__anonstruct_interval_1 pointer,
- __anonstruct_interval_1_u_x_4_2_at_L:(__anonstruct_interval_1, gen_float) memory,
- __anonstruct_interval_1_l_x_4_2_at_L:(__anonstruct_interval_1, gen_float) memory) =
+ __anonstruct_interval_1_u_x_4_2_at_L:(__anonstruct_interval_1, double) memory,
+ __anonstruct_interval_1_l_x_4_2_at_L:(__anonstruct_interval_1, double) memory) =
  (double_le_real(select(__anonstruct_interval_1_l_x_4_2_at_L, x_4), a)
  and real_le_double(a, select(__anonstruct_interval_1_u_x_4_2_at_L, x_4)))
 
@@ -523,12 +523,13 @@ axiom int8_range :
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate is_interval(x_3_0:__anonstruct_interval_1 pointer,
- __anonstruct_interval_1_u_x_3_1:(__anonstruct_interval_1, gen_float) memory,
- __anonstruct_interval_1_l_x_3_1:(__anonstruct_interval_1, gen_float) memory) =
- ((is_finite(select(__anonstruct_interval_1_l_x_3_1, x_3_0))
-  or is_minus_infinity(select(__anonstruct_interval_1_l_x_3_1, x_3_0)))
- and (is_finite(select(__anonstruct_interval_1_u_x_3_1, x_3_0))
-     or is_plus_infinity(select(__anonstruct_interval_1_u_x_3_1, x_3_0))))
+ __anonstruct_interval_1_u_x_3_1:(__anonstruct_interval_1, double) memory,
+ __anonstruct_interval_1_l_x_3_1:(__anonstruct_interval_1, double) memory) =
+ ((double_is_finite(select(__anonstruct_interval_1_l_x_3_1, x_3_0))
+  or double_is_minus_infinity(select(__anonstruct_interval_1_l_x_3_1, x_3_0)))
+ and (double_is_finite(select(__anonstruct_interval_1_u_x_3_1, x_3_0))
+     or double_is_plus_infinity(select(__anonstruct_interval_1_u_x_3_1,
+                                x_3_0))))
 
 predicate left_valid_struct___anonstruct_interval_1(p:__anonstruct_interval_1 pointer,
  a:int,
@@ -572,9 +573,9 @@ predicate right_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate sam_sign(x_0_0:gen_float,
- y_0_0:gen_float) =
- (float_sign(x_0_0) = float_sign(y_0_0))
+predicate sam_sign(x_0_0:double,
+ y_0_0:double) =
+ (double_sign(x_0_0) = double_sign(y_0_0))
 
 predicate strict_valid_root___anonstruct_interval_1(p:__anonstruct_interval_1 pointer,
  a:int,
@@ -710,14 +711,14 @@ parameter add :
   v_y_4:__anonstruct_interval_1 pointer ->
    __anonstruct_interval_1_result_5_alloc_table:__anonstruct_interval_1 alloc_table ref ->
     __anonstruct_interval_1_result_5_tag_table:__anonstruct_interval_1 tag_table ref ->
-     __anonstruct_interval_1_u_result_5:(__anonstruct_interval_1, gen_float) memory ref ->
-      __anonstruct_interval_1_l_result_5:(__anonstruct_interval_1, gen_float) memory ref ->
+     __anonstruct_interval_1_u_result_5:(__anonstruct_interval_1, double) memory ref ->
+      __anonstruct_interval_1_l_result_5:(__anonstruct_interval_1, double) memory ref ->
        __anonstruct_interval_1_v_y_4_4_alloc_table:__anonstruct_interval_1 alloc_table ->
         __anonstruct_interval_1_v_x_4_3_alloc_table:__anonstruct_interval_1 alloc_table ->
-         __anonstruct_interval_1_u_v_y_4_4:(__anonstruct_interval_1, gen_float) memory ->
-          __anonstruct_interval_1_u_v_x_4_3:(__anonstruct_interval_1, gen_float) memory ->
-           __anonstruct_interval_1_l_v_y_4_4:(__anonstruct_interval_1, gen_float) memory ->
-            __anonstruct_interval_1_l_v_x_4_3:(__anonstruct_interval_1, gen_float) memory ->
+         __anonstruct_interval_1_u_v_y_4_4:(__anonstruct_interval_1, double) memory ->
+          __anonstruct_interval_1_u_v_x_4_3:(__anonstruct_interval_1, double) memory ->
+           __anonstruct_interval_1_l_v_y_4_4:(__anonstruct_interval_1, double) memory ->
+            __anonstruct_interval_1_l_v_x_4_3:(__anonstruct_interval_1, double) memory ->
              { } __anonstruct_interval_1 pointer
              reads __anonstruct_interval_1_l_result_5,__anonstruct_interval_1_result_5_alloc_table,__anonstruct_interval_1_u_result_5
              writes __anonstruct_interval_1_l_result_5,__anonstruct_interval_1_result_5_alloc_table,__anonstruct_interval_1_result_5_tag_table,__anonstruct_interval_1_u_result_5
@@ -740,14 +741,14 @@ parameter add_requires :
   v_y_4:__anonstruct_interval_1 pointer ->
    __anonstruct_interval_1_result_5_alloc_table:__anonstruct_interval_1 alloc_table ref ->
     __anonstruct_interval_1_result_5_tag_table:__anonstruct_interval_1 tag_table ref ->
-     __anonstruct_interval_1_u_result_5:(__anonstruct_interval_1, gen_float) memory ref ->
-      __anonstruct_interval_1_l_result_5:(__anonstruct_interval_1, gen_float) memory ref ->
+     __anonstruct_interval_1_u_result_5:(__anonstruct_interval_1, double) memory ref ->
+      __anonstruct_interval_1_l_result_5:(__anonstruct_interval_1, double) memory ref ->
        __anonstruct_interval_1_v_y_4_4_alloc_table:__anonstruct_interval_1 alloc_table ->
         __anonstruct_interval_1_v_x_4_3_alloc_table:__anonstruct_interval_1 alloc_table ->
-         __anonstruct_interval_1_u_v_y_4_4:(__anonstruct_interval_1, gen_float) memory ->
-          __anonstruct_interval_1_u_v_x_4_3:(__anonstruct_interval_1, gen_float) memory ->
-           __anonstruct_interval_1_l_v_y_4_4:(__anonstruct_interval_1, gen_float) memory ->
-            __anonstruct_interval_1_l_v_x_4_3:(__anonstruct_interval_1, gen_float) memory ->
+         __anonstruct_interval_1_u_v_y_4_4:(__anonstruct_interval_1, double) memory ->
+          __anonstruct_interval_1_u_v_x_4_3:(__anonstruct_interval_1, double) memory ->
+           __anonstruct_interval_1_l_v_y_4_4:(__anonstruct_interval_1, double) memory ->
+            __anonstruct_interval_1_l_v_x_4_3:(__anonstruct_interval_1, double) memory ->
              { } __anonstruct_interval_1 pointer
              reads __anonstruct_interval_1_l_result_5,__anonstruct_interval_1_result_5_alloc_table,__anonstruct_interval_1_u_result_5
              writes __anonstruct_interval_1_l_result_5,__anonstruct_interval_1_result_5_alloc_table,__anonstruct_interval_1_result_5_tag_table,__anonstruct_interval_1_u_result_5
@@ -909,64 +910,62 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter max :
- x:gen_float ->
-  y:gen_float ->
-   { } gen_float
+ x:double ->
+  y:double ->
+   { } double
    { ((true = true) ->
       (JC_34:
-      ((JC_31: float_le_float(x, result))
-      and ((JC_32: float_le_float(y, result))
-          and (JC_33:
-              (float_eq_float(result, x) or float_eq_float(result, y))))))) }
+      ((JC_31: le_double(x, result))
+      and ((JC_32: le_double(y, result))
+          and (JC_33: (eq_double(result, x) or eq_double(result, y))))))) }
 
 parameter max_requires :
- x:gen_float ->
-  y:gen_float ->
-   { (JC_21: ((JC_19: (not is_NaN(x))) and (JC_20: (not is_NaN(y)))))}
-   gen_float
+ x:double ->
+  y:double ->
+   { (JC_21:
+     ((JC_19: (not double_is_NaN(x))) and (JC_20: (not double_is_NaN(y)))))}
+   double
    { ((true = true) ->
       (JC_34:
-      ((JC_31: float_le_float(x, result))
-      and ((JC_32: float_le_float(y, result))
-          and (JC_33:
-              (float_eq_float(result, x) or float_eq_float(result, y))))))) }
+      ((JC_31: le_double(x, result))
+      and ((JC_32: le_double(y, result))
+          and (JC_33: (eq_double(result, x) or eq_double(result, y))))))) }
 
 parameter min :
- x_0:gen_float ->
-  y_0:gen_float ->
-   { } gen_float
+ x_0:double ->
+  y_0:double ->
+   { } double
    { ((true = true) ->
       (JC_16:
-      ((JC_13: float_le_float(result, x_0))
-      and ((JC_14: float_le_float(result, y_0))
-          and (JC_15:
-              (float_eq_float(result, x_0) or float_eq_float(result, y_0))))))) }
+      ((JC_13: le_double(result, x_0))
+      and ((JC_14: le_double(result, y_0))
+          and (JC_15: (eq_double(result, x_0) or eq_double(result, y_0))))))) }
 
 parameter min_requires :
- x_0:gen_float ->
-  y_0:gen_float ->
-   { (JC_3: ((JC_1: (not is_NaN(x_0))) and (JC_2: (not is_NaN(y_0)))))}
-   gen_float
+ x_0:double ->
+  y_0:double ->
+   { (JC_3:
+     ((JC_1: (not double_is_NaN(x_0))) and (JC_2: (not double_is_NaN(y_0)))))}
+   double
    { ((true = true) ->
       (JC_16:
-      ((JC_13: float_le_float(result, x_0))
-      and ((JC_14: float_le_float(result, y_0))
-          and (JC_15:
-              (float_eq_float(result, x_0) or float_eq_float(result, y_0))))))) }
+      ((JC_13: le_double(result, x_0))
+      and ((JC_14: le_double(result, y_0))
+          and (JC_15: (eq_double(result, x_0) or eq_double(result, y_0))))))) }
 
 parameter mul :
  v_x_1:__anonstruct_interval_1 pointer ->
   v_y_1:__anonstruct_interval_1 pointer ->
    __anonstruct_interval_1_result_9_alloc_table:__anonstruct_interval_1 alloc_table ref ->
     __anonstruct_interval_1_result_9_tag_table:__anonstruct_interval_1 tag_table ref ->
-     __anonstruct_interval_1_u_result_9:(__anonstruct_interval_1, gen_float) memory ref ->
-      __anonstruct_interval_1_l_result_9:(__anonstruct_interval_1, gen_float) memory ref ->
+     __anonstruct_interval_1_u_result_9:(__anonstruct_interval_1, double) memory ref ->
+      __anonstruct_interval_1_l_result_9:(__anonstruct_interval_1, double) memory ref ->
        __anonstruct_interval_1_v_y_1_8_alloc_table:__anonstruct_interval_1 alloc_table ->
         __anonstruct_interval_1_v_x_1_7_alloc_table:__anonstruct_interval_1 alloc_table ->
-         __anonstruct_interval_1_u_v_y_1_8:(__anonstruct_interval_1, gen_float) memory ->
-          __anonstruct_interval_1_u_v_x_1_7:(__anonstruct_interval_1, gen_float) memory ->
-           __anonstruct_interval_1_l_v_y_1_8:(__anonstruct_interval_1, gen_float) memory ->
-            __anonstruct_interval_1_l_v_x_1_7:(__anonstruct_interval_1, gen_float) memory ->
+         __anonstruct_interval_1_u_v_y_1_8:(__anonstruct_interval_1, double) memory ->
+          __anonstruct_interval_1_u_v_x_1_7:(__anonstruct_interval_1, double) memory ->
+           __anonstruct_interval_1_l_v_y_1_8:(__anonstruct_interval_1, double) memory ->
+            __anonstruct_interval_1_l_v_x_1_7:(__anonstruct_interval_1, double) memory ->
              { } __anonstruct_interval_1 pointer
              reads __anonstruct_interval_1_l_result_9,__anonstruct_interval_1_result_9_alloc_table,__anonstruct_interval_1_u_result_9
              writes __anonstruct_interval_1_l_result_9,__anonstruct_interval_1_result_9_alloc_table,__anonstruct_interval_1_result_9_tag_table,__anonstruct_interval_1_u_result_9
@@ -985,43 +984,43 @@ parameter mul :
                    __anonstruct_interval_1_l_result_9)))))) }
 
 parameter mul_dn :
- x_3:gen_float ->
-  y_3:gen_float ->
-   { } gen_float
+ x_3:double ->
+  y_3:double ->
+   { } double
    { ((true = true) ->
       (JC_51:
-      double_le_real(result, mul_real(float_value(x_3), float_value(y_3))))) }
+      double_le_real(result, mul_real(double_value(x_3), double_value(y_3))))) }
 
 parameter mul_dn_requires :
- x_3:gen_float ->
-  y_3:gen_float ->
+ x_3:double ->
+  y_3:double ->
    { (JC_41:
-     ((JC_37: (not is_NaN(x_3)))
-     and ((JC_38: (not is_NaN(y_3)))
+     ((JC_37: (not double_is_NaN(x_3)))
+     and ((JC_38: (not double_is_NaN(y_3)))
          and ((JC_39:
-              (is_infinite(x_3) ->
-               (neq_real(float_value(y_3), 0.0) and dif_sign(x_3, y_3))))
+              (double_is_infinite(x_3) ->
+               (neq_real(double_value(y_3), 0.0) and dif_sign(x_3, y_3))))
              and (JC_40:
-                 (is_infinite(y_3) ->
-                  (neq_real(float_value(x_3), 0.0) and dif_sign(x_3, y_3))))))))}
-   gen_float
+                 (double_is_infinite(y_3) ->
+                  (neq_real(double_value(x_3), 0.0) and dif_sign(x_3, y_3))))))))}
+   double
    { ((true = true) ->
       (JC_51:
-      double_le_real(result, mul_real(float_value(x_3), float_value(y_3))))) }
+      double_le_real(result, mul_real(double_value(x_3), double_value(y_3))))) }
 
 parameter mul_requires :
  v_x_1:__anonstruct_interval_1 pointer ->
   v_y_1:__anonstruct_interval_1 pointer ->
    __anonstruct_interval_1_result_9_alloc_table:__anonstruct_interval_1 alloc_table ref ->
     __anonstruct_interval_1_result_9_tag_table:__anonstruct_interval_1 tag_table ref ->
-     __anonstruct_interval_1_u_result_9:(__anonstruct_interval_1, gen_float) memory ref ->
-      __anonstruct_interval_1_l_result_9:(__anonstruct_interval_1, gen_float) memory ref ->
+     __anonstruct_interval_1_u_result_9:(__anonstruct_interval_1, double) memory ref ->
+      __anonstruct_interval_1_l_result_9:(__anonstruct_interval_1, double) memory ref ->
        __anonstruct_interval_1_v_y_1_8_alloc_table:__anonstruct_interval_1 alloc_table ->
         __anonstruct_interval_1_v_x_1_7_alloc_table:__anonstruct_interval_1 alloc_table ->
-         __anonstruct_interval_1_u_v_y_1_8:(__anonstruct_interval_1, gen_float) memory ->
-          __anonstruct_interval_1_u_v_x_1_7:(__anonstruct_interval_1, gen_float) memory ->
-           __anonstruct_interval_1_l_v_y_1_8:(__anonstruct_interval_1, gen_float) memory ->
-            __anonstruct_interval_1_l_v_x_1_7:(__anonstruct_interval_1, gen_float) memory ->
+         __anonstruct_interval_1_u_v_y_1_8:(__anonstruct_interval_1, double) memory ->
+          __anonstruct_interval_1_u_v_x_1_7:(__anonstruct_interval_1, double) memory ->
+           __anonstruct_interval_1_l_v_y_1_8:(__anonstruct_interval_1, double) memory ->
+            __anonstruct_interval_1_l_v_x_1_7:(__anonstruct_interval_1, double) memory ->
              { } __anonstruct_interval_1 pointer
              reads __anonstruct_interval_1_l_result_9,__anonstruct_interval_1_result_9_alloc_table,__anonstruct_interval_1_u_result_9
              writes __anonstruct_interval_1_l_result_9,__anonstruct_interval_1_result_9_alloc_table,__anonstruct_interval_1_result_9_tag_table,__anonstruct_interval_1_u_result_9
@@ -1040,45 +1039,45 @@ parameter mul_requires :
                    __anonstruct_interval_1_l_result_9)))))) }
 
 parameter mul_up :
- x_2_0:gen_float ->
-  y_2_0:gen_float ->
-   { } gen_float
+ x_2_0:double ->
+  y_2_0:double ->
+   { } double
    { ((true = true) ->
       (JC_74:
-      real_le_double(mul_real(float_value(x_2_0), float_value(y_2_0)),
+      real_le_double(mul_real(double_value(x_2_0), double_value(y_2_0)),
       result))) }
 
 parameter mul_up_requires :
- x_2_0:gen_float ->
-  y_2_0:gen_float ->
+ x_2_0:double ->
+  y_2_0:double ->
    { (JC_63:
-     ((JC_57: (not is_NaN(x_2_0)))
-     and ((JC_58: (not is_NaN(y_2_0)))
+     ((JC_57: (not double_is_NaN(x_2_0)))
+     and ((JC_58: (not double_is_NaN(y_2_0)))
          and ((JC_59: sam_sign(x_2_0, y_2_0))
              and ((JC_60:
-                  (is_infinite(x_2_0) ->
-                   (neq_real(float_value(y_2_0), 0.0)
-                   and ge_real(abs_real(float_value(y_2_0)), 0x2.0p-1074))))
+                  (double_is_infinite(x_2_0) ->
+                   (neq_real(double_value(y_2_0), 0.0)
+                   and ge_real(abs_real(double_value(y_2_0)), 0x2.0p-1074))))
                  and ((JC_61:
-                      (is_infinite(y_2_0) ->
-                       neq_real(float_value(x_2_0), 0.0)))
+                      (double_is_infinite(y_2_0) ->
+                       neq_real(double_value(x_2_0), 0.0)))
                      and (JC_62:
-                         ((is_finite(y_2_0)
-                          and ((not no_overflow(Double, down,
-                                    neg_real(float_value(y_2_0))))
-                              and (float_sign(y_2_0) = Positive))) ->
-                          neq_real(float_value(x_2_0), 0.0)))))))))}
-   gen_float
+                         ((double_is_finite(y_2_0)
+                          and ((not no_overflow_double(down,
+                                    neg_real(double_value(y_2_0))))
+                              and (double_sign(y_2_0) = Positive))) ->
+                          neq_real(double_value(x_2_0), 0.0)))))))))}
+   double
    { ((true = true) ->
       (JC_74:
-      real_le_double(mul_real(float_value(x_2_0), float_value(y_2_0)),
+      real_le_double(mul_real(double_value(x_2_0), double_value(y_2_0)),
       result))) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let add_ensures_default =
- fun (v_x_4 : __anonstruct_interval_1 pointer) (v_y_4 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_5_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_5_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_5 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_u_result_5 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_v_x_4_3_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_4_4_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_4_3 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_l_v_y_4_4 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_x_4_3 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_y_4_4 : (__anonstruct_interval_1, gen_float) memory) ->
+ fun (v_x_4 : __anonstruct_interval_1 pointer) (v_y_4 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_5_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_5_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_5 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_u_result_5 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_v_x_4_3_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_4_4_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_4_3 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_l_v_y_4_4 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_x_4_3 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_y_4_4 : (__anonstruct_interval_1, double) memory) ->
   { ((true = true)
     and (valid_struct___anonstruct_interval_1(v_y_4, (0), (0),
          __anonstruct_interval_1_v_y_4_4_alloc_table)
@@ -1166,9 +1165,8 @@ let add_ensures_default =
          begin
            (let jessie_123 = (let jessie_119 = (C_69:
                                                (JC_107:
-                                               ((((add_gen_float Double) down) 
-                                                 (C_68:
-                                                 ((safe_acc_ !__anonstruct_interval_1_l_x_4_11) !x_4_0))) 
+                                               (((add_double down) (C_68:
+                                                                   ((safe_acc_ !__anonstruct_interval_1_l_x_4_11) !x_4_0))) 
                                                 (C_67:
                                                 ((safe_acc_ !__anonstruct_interval_1_l_y_4_12) !y_4))))) in
                              (let jessie_122 = !z in
@@ -1178,17 +1176,16 @@ let add_ensures_default =
           begin
             (let jessie_129 = (let jessie_125 = (C_76:
                                                 (JC_110:
-                                                (((neg_gen_float Double) down) 
-                                                 (C_75:
-                                                 (JC_109:
-                                                 ((((sub_gen_float Double) down) 
-                                                   (C_74:
-                                                   (JC_108:
-                                                   (((neg_gen_float Double) down) 
-                                                    (C_73:
-                                                    ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
-                                                  (C_72:
-                                                  ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
+                                                ((neg_double down) (C_75:
+                                                                   (JC_109:
+                                                                   (((sub_double down) 
+                                                                    (C_74:
+                                                                    (JC_108:
+                                                                    ((neg_double down) 
+                                                                    (C_73:
+                                                                    ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
+                                                                    (C_72:
+                                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
                               (let jessie_128 = !z in
                               (((safe_upd_ __anonstruct_interval_1_u_z_13) jessie_128) jessie_125))) in
             void);
@@ -1245,7 +1242,7 @@ let add_ensures_default =
        __anonstruct_interval_1_l_result_5))))) }
 
 let add_safety =
- fun (v_x_4 : __anonstruct_interval_1 pointer) (v_y_4 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_5_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_5_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_5 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_u_result_5 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_v_x_4_3_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_4_4_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_4_3 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_l_v_y_4_4 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_x_4_3 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_y_4_4 : (__anonstruct_interval_1, gen_float) memory) ->
+ fun (v_x_4 : __anonstruct_interval_1 pointer) (v_y_4 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_5_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_5_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_5 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_u_result_5 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_v_x_4_3_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_4_4_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_4_3 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_l_v_y_4_4 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_x_4_3 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_y_4_4 : (__anonstruct_interval_1, double) memory) ->
   { (valid_struct___anonstruct_interval_1(v_y_4, (0), (0),
      __anonstruct_interval_1_v_y_4_4_alloc_table)
     and valid_struct___anonstruct_interval_1(v_x_4, (0), (0),
@@ -1356,9 +1353,8 @@ let add_safety =
          begin
            (let jessie_66 = (let jessie_62 = (C_69:
                                              (JC_99:
-                                             ((((add_gen_float Double) down) 
-                                               (C_68:
-                                               ((safe_acc_ !__anonstruct_interval_1_l_x_4_11) !x_4_0))) 
+                                             (((add_double down) (C_68:
+                                                                 ((safe_acc_ !__anonstruct_interval_1_l_x_4_11) !x_4_0))) 
                                               (C_67:
                                               ((safe_acc_ !__anonstruct_interval_1_l_y_4_12) !y_4))))) in
                             (let jessie_65 = !z in
@@ -1368,17 +1364,16 @@ let add_safety =
           begin
             (let jessie_72 = (let jessie_68 = (C_76:
                                               (JC_102:
-                                              (((neg_gen_float Double) down) 
-                                               (C_75:
-                                               (JC_101:
-                                               ((((sub_gen_float Double) down) 
-                                                 (C_74:
-                                                 (JC_100:
-                                                 (((neg_gen_float Double) down) 
-                                                  (C_73:
-                                                  ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
-                                                (C_72:
-                                                ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
+                                              ((neg_double down) (C_75:
+                                                                 (JC_101:
+                                                                 (((sub_double down) 
+                                                                   (C_74:
+                                                                   (JC_100:
+                                                                   ((neg_double down) 
+                                                                    (C_73:
+                                                                    ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
+                                                                  (C_72:
+                                                                  ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
                              (let jessie_71 = !z in
                              (((safe_upd_ __anonstruct_interval_1_u_z_13) jessie_71) jessie_68))) in
             void);
@@ -1426,16 +1421,17 @@ let add_safety =
   { true }
 
 let max_ensures_default =
- fun (x : gen_float) (y : gen_float) ->
+ fun (x : double) (y : double) ->
   { ((true = true)
-    and (JC_25: ((JC_23: (not is_NaN(x))) and (JC_24: (not is_NaN(y)))))) }
+    and (JC_25:
+        ((JC_23: (not double_is_NaN(x))) and (JC_24: (not double_is_NaN(y)))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let tmp_0 = ref (any_gen_float Double) in
+     (let tmp_0 = ref (any_double void) in
      begin
-       (let jessie_15 = (if ((gt_gen_float x) y)
+       (let jessie_15 = (if ((gt_double x) y)
                         then (C_12: begin   (tmp_0 := x); !tmp_0 end)
                         else (C_11: begin   (tmp_0 := y); !tmp_0 end)) in
        void);
@@ -1448,20 +1444,21 @@ let max_ensures_default =
    Return ->
    !return end))
   { (JC_30:
-    ((JC_27: float_le_float(x, result))
-    and ((JC_28: float_le_float(y, result))
-        and (JC_29: (float_eq_float(result, x) or float_eq_float(result, y)))))) }
+    ((JC_27: le_double(x, result))
+    and ((JC_28: le_double(y, result))
+        and (JC_29: (eq_double(result, x) or eq_double(result, y)))))) }
 
 let max_safety =
- fun (x : gen_float) (y : gen_float) ->
-  { (JC_25: ((JC_23: (not is_NaN(x))) and (JC_24: (not is_NaN(y))))) }
+ fun (x : double) (y : double) ->
+  { (JC_25:
+    ((JC_23: (not double_is_NaN(x))) and (JC_24: (not double_is_NaN(y))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let tmp_0 = ref (any_gen_float Double) in
+     (let tmp_0 = ref (any_double void) in
      begin
-       (let jessie_11 = (if ((gt_gen_float x) y)
+       (let jessie_11 = (if ((gt_double x) y)
                         then (C_12: begin   (tmp_0 := x); !tmp_0 end)
                         else (C_11: begin   (tmp_0 := y); !tmp_0 end)) in
        void);
@@ -1476,16 +1473,18 @@ let max_safety =
   { true }
 
 let min_ensures_default =
- fun (x_0 : gen_float) (y_0 : gen_float) ->
+ fun (x_0 : double) (y_0 : double) ->
   { ((true = true)
-    and (JC_7: ((JC_5: (not is_NaN(x_0))) and (JC_6: (not is_NaN(y_0)))))) }
+    and (JC_7:
+        ((JC_5: (not double_is_NaN(x_0)))
+        and (JC_6: (not double_is_NaN(y_0)))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let tmp = ref (any_gen_float Double) in
+     (let tmp = ref (any_double void) in
      begin
-       (let jessie_7 = (if ((lt_gen_float x_0) y_0)
+       (let jessie_7 = (if ((lt_double x_0) y_0)
                        then (C_2: begin   (tmp := x_0); !tmp end)
                        else (C_1: begin   (tmp := y_0); !tmp end)) in
        void);
@@ -1498,21 +1497,21 @@ let min_ensures_default =
    Return ->
    !return end))
   { (JC_12:
-    ((JC_9: float_le_float(result, x_0))
-    and ((JC_10: float_le_float(result, y_0))
-        and (JC_11:
-            (float_eq_float(result, x_0) or float_eq_float(result, y_0)))))) }
+    ((JC_9: le_double(result, x_0))
+    and ((JC_10: le_double(result, y_0))
+        and (JC_11: (eq_double(result, x_0) or eq_double(result, y_0)))))) }
 
 let min_safety =
- fun (x_0 : gen_float) (y_0 : gen_float) ->
-  { (JC_7: ((JC_5: (not is_NaN(x_0))) and (JC_6: (not is_NaN(y_0))))) }
+ fun (x_0 : double) (y_0 : double) ->
+  { (JC_7:
+    ((JC_5: (not double_is_NaN(x_0))) and (JC_6: (not double_is_NaN(y_0))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let tmp = ref (any_gen_float Double) in
+     (let tmp = ref (any_double void) in
      begin
-       (let jessie_3 = (if ((lt_gen_float x_0) y_0)
+       (let jessie_3 = (if ((lt_double x_0) y_0)
                        then (C_2: begin   (tmp := x_0); !tmp end)
                        else (C_1: begin   (tmp := y_0); !tmp end)) in
        void);
@@ -1527,27 +1526,27 @@ let min_safety =
   { true }
 
 let mul_dn_ensures_default =
- fun (x_3 : gen_float) (y_3 : gen_float) ->
+ fun (x_3 : double) (y_3 : double) ->
   { ((true = true)
     and (JC_47:
-        ((JC_43: (not is_NaN(x_3)))
-        and ((JC_44: (not is_NaN(y_3)))
+        ((JC_43: (not double_is_NaN(x_3)))
+        and ((JC_44: (not double_is_NaN(y_3)))
             and ((JC_45:
-                 (is_infinite(x_3) ->
-                  (neq_real(float_value(y_3), 0.0) and dif_sign(x_3, y_3))))
+                 (double_is_infinite(x_3) ->
+                  (neq_real(double_value(y_3), 0.0) and dif_sign(x_3, y_3))))
                 and (JC_46:
-                    (is_infinite(y_3) ->
-                     (neq_real(float_value(x_3), 0.0) and dif_sign(x_3, y_3))))))))) }
+                    (double_is_infinite(y_3) ->
+                     (neq_real(double_value(x_3), 0.0)
+                     and dif_sign(x_3, y_3))))))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let __retres = ref (any_gen_float Double) in
+     (let __retres = ref (any_double void) in
      (C_22:
      begin
        (let jessie_21 = (__retres := (C_21:
-                                     (JC_56:
-                                     ((((mul_gen_float Double) down) x_3) y_3)))) in
+                                     (JC_56: (((mul_double down) x_3) y_3)))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -1558,29 +1557,28 @@ let mul_dn_ensures_default =
    Return ->
    !return end))
   { (JC_49:
-    double_le_real(result, mul_real(float_value(x_3), float_value(y_3)))) }
+    double_le_real(result, mul_real(double_value(x_3), double_value(y_3)))) }
 
 let mul_dn_safety =
- fun (x_3 : gen_float) (y_3 : gen_float) ->
+ fun (x_3 : double) (y_3 : double) ->
   { (JC_47:
-    ((JC_43: (not is_NaN(x_3)))
-    and ((JC_44: (not is_NaN(y_3)))
+    ((JC_43: (not double_is_NaN(x_3)))
+    and ((JC_44: (not double_is_NaN(y_3)))
         and ((JC_45:
-             (is_infinite(x_3) ->
-              (neq_real(float_value(y_3), 0.0) and dif_sign(x_3, y_3))))
+             (double_is_infinite(x_3) ->
+              (neq_real(double_value(y_3), 0.0) and dif_sign(x_3, y_3))))
             and (JC_46:
-                (is_infinite(y_3) ->
-                 (neq_real(float_value(x_3), 0.0) and dif_sign(x_3, y_3)))))))) }
+                (double_is_infinite(y_3) ->
+                 (neq_real(double_value(x_3), 0.0) and dif_sign(x_3, y_3)))))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let __retres = ref (any_gen_float Double) in
+     (let __retres = ref (any_double void) in
      (C_22:
      begin
        (let jessie_18 = (__retres := (C_21:
-                                     (JC_55:
-                                     ((((mul_gen_float Double) down) x_3) y_3)))) in
+                                     (JC_55: (((mul_double down) x_3) y_3)))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -1593,7 +1591,7 @@ let mul_dn_safety =
   { true }
 
 let mul_ensures_default =
- fun (v_x_1 : __anonstruct_interval_1 pointer) (v_y_1 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_9_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_9_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_9 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_u_result_9 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_v_x_1_7_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_1_8_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_1_7 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_l_v_y_1_8 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_x_1_7 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_y_1_8 : (__anonstruct_interval_1, gen_float) memory) ->
+ fun (v_x_1 : __anonstruct_interval_1 pointer) (v_y_1 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_9_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_9_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_9 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_u_result_9 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_v_x_1_7_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_1_8_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_1_7 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_l_v_y_1_8 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_x_1_7 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_y_1_8 : (__anonstruct_interval_1, double) memory) ->
   { ((true = true)
     and (valid_struct___anonstruct_interval_1(v_y_1, (0), (0),
          __anonstruct_interval_1_v_y_1_8_alloc_table)
@@ -1618,10 +1616,10 @@ let mul_ensures_default =
      (let x_1_1 = ref (any_pointer void) in
      (let y_1_1 = ref (any_pointer void) in
      (let z_0 = ref (any_pointer void) in
-     (let tmp_1 = ref (any_gen_float Double) in
-     (let tmp_0_0 = ref (any_gen_float Double) in
-     (let tmp_1_0 = ref (any_gen_float Double) in
-     (let tmp_2 = ref (any_gen_float Double) in
+     (let tmp_1 = ref (any_double void) in
+     (let tmp_0_0 = ref (any_double void) in
+     (let tmp_1_0 = ref (any_double void) in
+     (let tmp_2 = ref (any_double void) in
      (let __cil_tmp_0 = ref (any_pointer void) in
      (C_90:
      begin
@@ -1681,25 +1679,25 @@ let mul_ensures_default =
                             end)))
                            end) in
          void);
-         (let jessie_611 = (if ((lt_gen_float (C_238:
-                                              ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1))) 
+         (let jessie_611 = (if ((lt_double (C_238:
+                                           ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1))) 
                                 (JC_173:
-                                (((gen_float_of_real Double) down) 0.0)))
+                                ((double_of_real down) 0.0)))
                            then
-                            (if ((gt_gen_float (C_237:
-                                               ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
+                            (if ((gt_double (C_237:
+                                            ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
                                  (JC_174:
-                                 (((gen_float_of_real Double) down) 0.0)))
+                                 ((double_of_real down) 0.0)))
                             then
-                             (if ((lt_gen_float (C_236:
-                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
+                             (if ((lt_double (C_236:
+                                             ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
                                   (JC_175:
-                                  (((gen_float_of_real Double) down) 0.0)))
+                                  ((double_of_real down) 0.0)))
                              then
-                              (if ((gt_gen_float (C_235:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_235:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_176:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                begin
                                  (let jessie_423 = (C_216:
@@ -1813,10 +1811,10 @@ let mul_ensures_default =
                                 end)))
                                end))
                              else
-                              (if ((gt_gen_float (C_202:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_202:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_185:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_196:
                                begin
@@ -1852,13 +1850,13 @@ let mul_ensures_default =
                                begin
                                  (let jessie_482 = (let jessie_478 = 
                                                    (JC_188:
-                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                   ((double_of_real down) 0.0)) in
                                                    (let jessie_481 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_481) jessie_478))) in
                                  void);
                                 (C_191:
                                 (let jessie_484 = (JC_189:
-                                                  (((gen_float_of_real Double) down) 0.0)) in
+                                                  ((double_of_real down) 0.0)) in
                                 (let jessie_487 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_487) jessie_484);
@@ -1866,15 +1864,15 @@ let mul_ensures_default =
                                 end)))
                                end)))
                             else
-                             (if ((lt_gen_float (C_187:
-                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
+                             (if ((lt_double (C_187:
+                                             ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
                                   (JC_190:
-                                  (((gen_float_of_real Double) down) 0.0)))
+                                  ((double_of_real down) 0.0)))
                              then
-                              (if ((gt_gen_float (C_186:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_186:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_191:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_180:
                                begin
@@ -1936,10 +1934,10 @@ let mul_ensures_default =
                                 end)))
                                end))
                              else
-                              (if ((gt_gen_float (C_165:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_165:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_196:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_159:
                                begin
@@ -1975,13 +1973,13 @@ let mul_ensures_default =
                                begin
                                  (let jessie_538 = (let jessie_534 = 
                                                    (JC_199:
-                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                   ((double_of_real down) 0.0)) in
                                                    (let jessie_537 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_537) jessie_534))) in
                                  void);
                                 (C_154:
                                 (let jessie_540 = (JC_200:
-                                                  (((gen_float_of_real Double) down) 0.0)) in
+                                                  ((double_of_real down) 0.0)) in
                                 (let jessie_543 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_543) jessie_540);
@@ -1989,20 +1987,20 @@ let mul_ensures_default =
                                 end)))
                                end))))
                            else
-                            (if ((gt_gen_float (C_150:
-                                               ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
+                            (if ((gt_double (C_150:
+                                            ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
                                  (JC_201:
-                                 (((gen_float_of_real Double) down) 0.0)))
+                                 ((double_of_real down) 0.0)))
                             then
-                             (if ((lt_gen_float (C_149:
-                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
+                             (if ((lt_double (C_149:
+                                             ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
                                   (JC_202:
-                                  (((gen_float_of_real Double) down) 0.0)))
+                                  ((double_of_real down) 0.0)))
                              then
-                              (if ((gt_gen_float (C_148:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_148:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_203:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_142:
                                begin
@@ -2064,10 +2062,10 @@ let mul_ensures_default =
                                 end)))
                                end))
                              else
-                              (if ((gt_gen_float (C_127:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_127:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_208:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_121:
                                begin
@@ -2103,13 +2101,13 @@ let mul_ensures_default =
                                begin
                                  (let jessie_594 = (let jessie_590 = 
                                                    (JC_211:
-                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                   ((double_of_real down) 0.0)) in
                                                    (let jessie_593 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_593) jessie_590))) in
                                  void);
                                 (C_116:
                                 (let jessie_596 = (JC_212:
-                                                  (((gen_float_of_real Double) down) 0.0)) in
+                                                  ((double_of_real down) 0.0)) in
                                 (let jessie_599 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_599) jessie_596);
@@ -2120,13 +2118,13 @@ let mul_ensures_default =
                              (C_110:
                              begin
                                (let jessie_605 = (let jessie_601 = (JC_213:
-                                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                                   ((double_of_real down) 0.0)) in
                                                  (let jessie_604 = !z_0 in
                                                  (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_604) jessie_601))) in
                                void);
                               (C_112:
                               (let jessie_607 = (JC_214:
-                                                (((gen_float_of_real Double) down) 0.0)) in
+                                                ((double_of_real down) 0.0)) in
                               (let jessie_610 = !z_0 in
                               begin
                                 (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_610) jessie_607);
@@ -2185,7 +2183,7 @@ let mul_ensures_default =
        __anonstruct_interval_1_l_result_9))))) }
 
 let mul_safety =
- fun (v_x_1 : __anonstruct_interval_1 pointer) (v_y_1 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_9_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_9_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_9 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_u_result_9 : (__anonstruct_interval_1, gen_float) memory ref) (__anonstruct_interval_1_v_x_1_7_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_1_8_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_1_7 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_l_v_y_1_8 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_x_1_7 : (__anonstruct_interval_1, gen_float) memory) (__anonstruct_interval_1_u_v_y_1_8 : (__anonstruct_interval_1, gen_float) memory) ->
+ fun (v_x_1 : __anonstruct_interval_1 pointer) (v_y_1 : __anonstruct_interval_1 pointer) (__anonstruct_interval_1_result_9_alloc_table : __anonstruct_interval_1 alloc_table ref) (__anonstruct_interval_1_result_9_tag_table : __anonstruct_interval_1 tag_table ref) (__anonstruct_interval_1_l_result_9 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_u_result_9 : (__anonstruct_interval_1, double) memory ref) (__anonstruct_interval_1_v_x_1_7_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_v_y_1_8_alloc_table : __anonstruct_interval_1 alloc_table) (__anonstruct_interval_1_l_v_x_1_7 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_l_v_y_1_8 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_x_1_7 : (__anonstruct_interval_1, double) memory) (__anonstruct_interval_1_u_v_y_1_8 : (__anonstruct_interval_1, double) memory) ->
   { (valid_struct___anonstruct_interval_1(v_y_1, (0), (0),
      __anonstruct_interval_1_v_y_1_8_alloc_table)
     and valid_struct___anonstruct_interval_1(v_x_1, (0), (0),
@@ -2209,10 +2207,10 @@ let mul_safety =
      (let x_1_1 = ref (any_pointer void) in
      (let y_1_1 = ref (any_pointer void) in
      (let z_0 = ref (any_pointer void) in
-     (let tmp_1 = ref (any_gen_float Double) in
-     (let tmp_0_0 = ref (any_gen_float Double) in
-     (let tmp_1_0 = ref (any_gen_float Double) in
-     (let tmp_2 = ref (any_gen_float Double) in
+     (let tmp_1 = ref (any_double void) in
+     (let tmp_0_0 = ref (any_double void) in
+     (let tmp_1_0 = ref (any_double void) in
+     (let tmp_2 = ref (any_double void) in
      (let __cil_tmp_0 = ref (any_pointer void) in
      (C_90:
      begin
@@ -2296,25 +2294,25 @@ let mul_safety =
                             end)))
                            end) in
          void);
-         (let jessie_370 = (if ((lt_gen_float (C_238:
-                                              ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1))) 
+         (let jessie_370 = (if ((lt_double (C_238:
+                                           ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1))) 
                                 (JC_127:
-                                (((gen_float_of_real Double) down) 0.0)))
+                                ((double_of_real down) 0.0)))
                            then
-                            (if ((gt_gen_float (C_237:
-                                               ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
+                            (if ((gt_double (C_237:
+                                            ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
                                  (JC_128:
-                                 (((gen_float_of_real Double) down) 0.0)))
+                                 ((double_of_real down) 0.0)))
                             then
-                             (if ((lt_gen_float (C_236:
-                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
+                             (if ((lt_double (C_236:
+                                             ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
                                   (JC_129:
-                                  (((gen_float_of_real Double) down) 0.0)))
+                                  ((double_of_real down) 0.0)))
                              then
-                              (if ((gt_gen_float (C_235:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_235:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_130:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                begin
                                  (let jessie_182 = (C_216:
@@ -2428,10 +2426,10 @@ let mul_safety =
                                 end)))
                                end))
                              else
-                              (if ((gt_gen_float (C_202:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_202:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_139:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_196:
                                begin
@@ -2467,13 +2465,13 @@ let mul_safety =
                                begin
                                  (let jessie_241 = (let jessie_237 = 
                                                    (JC_142:
-                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                   ((double_of_real down) 0.0)) in
                                                    (let jessie_240 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_240) jessie_237))) in
                                  void);
                                 (C_191:
                                 (let jessie_243 = (JC_143:
-                                                  (((gen_float_of_real Double) down) 0.0)) in
+                                                  ((double_of_real down) 0.0)) in
                                 (let jessie_246 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_246) jessie_243);
@@ -2481,15 +2479,15 @@ let mul_safety =
                                 end)))
                                end)))
                             else
-                             (if ((lt_gen_float (C_187:
-                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
+                             (if ((lt_double (C_187:
+                                             ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
                                   (JC_144:
-                                  (((gen_float_of_real Double) down) 0.0)))
+                                  ((double_of_real down) 0.0)))
                              then
-                              (if ((gt_gen_float (C_186:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_186:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_145:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_180:
                                begin
@@ -2551,10 +2549,10 @@ let mul_safety =
                                 end)))
                                end))
                              else
-                              (if ((gt_gen_float (C_165:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_165:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_150:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_159:
                                begin
@@ -2590,13 +2588,13 @@ let mul_safety =
                                begin
                                  (let jessie_297 = (let jessie_293 = 
                                                    (JC_153:
-                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                   ((double_of_real down) 0.0)) in
                                                    (let jessie_296 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_296) jessie_293))) in
                                  void);
                                 (C_154:
                                 (let jessie_299 = (JC_154:
-                                                  (((gen_float_of_real Double) down) 0.0)) in
+                                                  ((double_of_real down) 0.0)) in
                                 (let jessie_302 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_302) jessie_299);
@@ -2604,20 +2602,20 @@ let mul_safety =
                                 end)))
                                end))))
                            else
-                            (if ((gt_gen_float (C_150:
-                                               ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
+                            (if ((gt_double (C_150:
+                                            ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
                                  (JC_155:
-                                 (((gen_float_of_real Double) down) 0.0)))
+                                 ((double_of_real down) 0.0)))
                             then
-                             (if ((lt_gen_float (C_149:
-                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
+                             (if ((lt_double (C_149:
+                                             ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
                                   (JC_156:
-                                  (((gen_float_of_real Double) down) 0.0)))
+                                  ((double_of_real down) 0.0)))
                              then
-                              (if ((gt_gen_float (C_148:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_148:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_157:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_142:
                                begin
@@ -2679,10 +2677,10 @@ let mul_safety =
                                 end)))
                                end))
                              else
-                              (if ((gt_gen_float (C_127:
-                                                 ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
+                              (if ((gt_double (C_127:
+                                              ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
                                    (JC_162:
-                                   (((gen_float_of_real Double) down) 0.0)))
+                                   ((double_of_real down) 0.0)))
                               then
                                (C_121:
                                begin
@@ -2718,13 +2716,13 @@ let mul_safety =
                                begin
                                  (let jessie_353 = (let jessie_349 = 
                                                    (JC_165:
-                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                   ((double_of_real down) 0.0)) in
                                                    (let jessie_352 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_352) jessie_349))) in
                                  void);
                                 (C_116:
                                 (let jessie_355 = (JC_166:
-                                                  (((gen_float_of_real Double) down) 0.0)) in
+                                                  ((double_of_real down) 0.0)) in
                                 (let jessie_358 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_358) jessie_355);
@@ -2735,13 +2733,13 @@ let mul_safety =
                              (C_110:
                              begin
                                (let jessie_364 = (let jessie_360 = (JC_167:
-                                                                   (((gen_float_of_real Double) down) 0.0)) in
+                                                                   ((double_of_real down) 0.0)) in
                                                  (let jessie_363 = !z_0 in
                                                  (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_363) jessie_360))) in
                                void);
                               (C_112:
                               (let jessie_366 = (JC_168:
-                                                (((gen_float_of_real Double) down) 0.0)) in
+                                                ((double_of_real down) 0.0)) in
                               (let jessie_369 = !z_0 in
                               begin
                                 (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_369) jessie_366);
@@ -2791,41 +2789,40 @@ let mul_safety =
   { true }
 
 let mul_up_ensures_default =
- fun (x_2_0 : gen_float) (y_2_0 : gen_float) ->
+ fun (x_2_0 : double) (y_2_0 : double) ->
   { ((true = true)
     and (JC_71:
-        ((JC_65: (not is_NaN(x_2_0)))
-        and ((JC_66: (not is_NaN(y_2_0)))
+        ((JC_65: (not double_is_NaN(x_2_0)))
+        and ((JC_66: (not double_is_NaN(y_2_0)))
             and ((JC_67: sam_sign(x_2_0, y_2_0))
                 and ((JC_68:
-                     (is_infinite(x_2_0) ->
-                      (neq_real(float_value(y_2_0), 0.0)
-                      and ge_real(abs_real(float_value(y_2_0)), 0x2.0p-1074))))
+                     (double_is_infinite(x_2_0) ->
+                      (neq_real(double_value(y_2_0), 0.0)
+                      and ge_real(abs_real(double_value(y_2_0)), 0x2.0p-1074))))
                     and ((JC_69:
-                         (is_infinite(y_2_0) ->
-                          neq_real(float_value(x_2_0), 0.0)))
+                         (double_is_infinite(y_2_0) ->
+                          neq_real(double_value(x_2_0), 0.0)))
                         and (JC_70:
-                            ((is_finite(y_2_0)
-                             and ((not no_overflow(Double, down,
-                                       neg_real(float_value(y_2_0))))
-                                 and (float_sign(y_2_0) = Positive))) ->
-                             neq_real(float_value(x_2_0), 0.0)))))))))) }
+                            ((double_is_finite(y_2_0)
+                             and ((not no_overflow_double(down,
+                                       neg_real(double_value(y_2_0))))
+                                 and (double_sign(y_2_0) = Positive))) ->
+                             neq_real(double_value(x_2_0), 0.0)))))))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let __retres_0 = ref (any_gen_float Double) in
+     (let __retres_0 = ref (any_double void) in
      (C_34:
      begin
        (let jessie_27 = (__retres_0 := (C_33:
                                        (JC_82:
-                                       (((neg_gen_float Double) down) 
-                                        (C_32:
-                                        (JC_81:
-                                        ((((mul_gen_float Double) down) x_2_0) 
-                                         (C_31:
-                                         (JC_80:
-                                         (((neg_gen_float Double) down) y_2_0)))))))))) in
+                                       ((neg_double down) (C_32:
+                                                          (JC_81:
+                                                          (((mul_double down) x_2_0) 
+                                                           (C_31:
+                                                           (JC_80:
+                                                           ((neg_double down) y_2_0)))))))))) in
        void);
       (return := !__retres_0);
       (raise Return)
@@ -2836,43 +2833,43 @@ let mul_up_ensures_default =
    Return ->
    !return end))
   { (JC_73:
-    real_le_double(mul_real(float_value(x_2_0), float_value(y_2_0)), result)) }
+    real_le_double(mul_real(double_value(x_2_0), double_value(y_2_0)),
+    result)) }
 
 let mul_up_safety =
- fun (x_2_0 : gen_float) (y_2_0 : gen_float) ->
+ fun (x_2_0 : double) (y_2_0 : double) ->
   { (JC_71:
-    ((JC_65: (not is_NaN(x_2_0)))
-    and ((JC_66: (not is_NaN(y_2_0)))
+    ((JC_65: (not double_is_NaN(x_2_0)))
+    and ((JC_66: (not double_is_NaN(y_2_0)))
         and ((JC_67: sam_sign(x_2_0, y_2_0))
             and ((JC_68:
-                 (is_infinite(x_2_0) ->
-                  (neq_real(float_value(y_2_0), 0.0)
-                  and ge_real(abs_real(float_value(y_2_0)), 0x2.0p-1074))))
+                 (double_is_infinite(x_2_0) ->
+                  (neq_real(double_value(y_2_0), 0.0)
+                  and ge_real(abs_real(double_value(y_2_0)), 0x2.0p-1074))))
                 and ((JC_69:
-                     (is_infinite(y_2_0) ->
-                      neq_real(float_value(x_2_0), 0.0)))
+                     (double_is_infinite(y_2_0) ->
+                      neq_real(double_value(x_2_0), 0.0)))
                     and (JC_70:
-                        ((is_finite(y_2_0)
-                         and ((not no_overflow(Double, down,
-                                   neg_real(float_value(y_2_0))))
-                             and (float_sign(y_2_0) = Positive))) ->
-                         neq_real(float_value(x_2_0), 0.0))))))))) }
+                        ((double_is_finite(y_2_0)
+                         and ((not no_overflow_double(down,
+                                   neg_real(double_value(y_2_0))))
+                             and (double_sign(y_2_0) = Positive))) ->
+                         neq_real(double_value(x_2_0), 0.0))))))))) }
   (init:
-  (let return = ref (any_gen_float Double) in
+  (let return = ref (any_double void) in
   try
    begin
-     (let __retres_0 = ref (any_gen_float Double) in
+     (let __retres_0 = ref (any_double void) in
      (C_34:
      begin
        (let jessie_24 = (__retres_0 := (C_33:
                                        (JC_79:
-                                       (((neg_gen_float Double) down) 
-                                        (C_32:
-                                        (JC_78:
-                                        ((((mul_gen_float Double) down) x_2_0) 
-                                         (C_31:
-                                         (JC_77:
-                                         (((neg_gen_float Double) down) y_2_0)))))))))) in
+                                       ((neg_double down) (C_32:
+                                                          (JC_78:
+                                                          (((mul_double down) x_2_0) 
+                                                           (C_31:
+                                                           (JC_77:
+                                                           ((neg_double down) y_2_0)))))))))) in
        void);
       (return := !__retres_0);
       (raise Return)
@@ -2915,7 +2912,7 @@ why --project [...] why/interval_arith_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po22.why">
-      <location file = "why/interval_arith_struct.why" line = "1830" begin = "37" end = "197"/>
+      <location file = "why/interval_arith_struct.why" line = "1828" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po23.why">
@@ -2924,7 +2921,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po24.why">
-      <location file = "why/interval_arith_struct.why" line = "1842" begin = "38" end = "200"/>
+      <location file = "why/interval_arith_struct.why" line = "1840" begin = "38" end = "200"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po25.why">
@@ -2933,7 +2930,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po26.why">
-      <location file = "why/interval_arith_struct.why" line = "1854" begin = "37" end = "197"/>
+      <location file = "why/interval_arith_struct.why" line = "1852" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po27.why">
@@ -2942,7 +2939,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po28.why">
-      <location file = "why/interval_arith_struct.why" line = "1866" begin = "46" end = "226"/>
+      <location file = "why/interval_arith_struct.why" line = "1864" begin = "46" end = "226"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po29.why">
@@ -3616,17 +3613,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po163.why">
-      <location file = "why/interval_arith_struct.why" line = "2374" begin = "14" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "2372" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po164.why">
-      <location file = "why/interval_arith_struct.why" line = "2377" begin = "15" end = "81"/>
+      <location file = "why/interval_arith_struct.why" line = "2375" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po165.why">
-      <location file = "why/interval_arith_struct.why" line = "2380" begin = "16" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "2378" begin = "16" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3681,7 +3678,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po3.why">
-      <location file = "why/interval_arith_struct.why" line = "886" begin = "36" end = "193"/>
+      <location file = "why/interval_arith_struct.why" line = "883" begin = "36" end = "193"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po4.why">
@@ -3690,7 +3687,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po5.why">
-      <location file = "why/interval_arith_struct.why" line = "898" begin = "35" end = "190"/>
+      <location file = "why/interval_arith_struct.why" line = "895" begin = "35" end = "190"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po6.why">
@@ -3699,7 +3696,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po7.why">
-      <location file = "why/interval_arith_struct.why" line = "910" begin = "34" end = "185"/>
+      <location file = "why/interval_arith_struct.why" line = "907" begin = "34" end = "185"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po8.why">
@@ -3708,21 +3705,21 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po9.why">
-      <location file = "why/interval_arith_struct.why" line = "922" begin = "43" end = "216"/>
+      <location file = "why/interval_arith_struct.why" line = "919" begin = "43" end = "216"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po10.why">
-      <location file = "why/interval_arith_struct.why" line = "1007" begin = "16" end = "82"/>
+      <location file = "why/interval_arith_struct.why" line = "1002" begin = "16" end = "82"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po11.why">
-      <location file = "why/interval_arith_struct.why" line = "1010" begin = "17" end = "81"/>
+      <location file = "why/interval_arith_struct.why" line = "1005" begin = "17" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po12.why">
-      <location file = "why/interval_arith_struct.why" line = "1013" begin = "18" end = "78"/>
+      <location file = "why/interval_arith_struct.why" line = "1008" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -4675,81 +4672,69 @@ type mode =
   | down
   | nearest_away
 
-type float_format =
-  | Single
-  | Double
-  | Binary80
-  | Quad
+type double
 
-type gen_float
+logic round_double : mode, real -> real
 
-logic round_float : float_format, mode, real -> real
+logic round_double_logic : mode, real -> double
 
-logic gen_float_of_real_logic : float_format, mode, real -> gen_float
+logic double_value : double -> real
 
-logic float_value : gen_float -> real
+logic double_exact : double -> real
 
-logic exact_value : gen_float -> real
+logic double_model : double -> real
 
-logic model_value : gen_float -> real
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
 
-function max_gen_float(f: float_format) : real = float_format_match(f,
-  0x1.FFFFFEp127, 0x1.FFFFFFFFFFFFFp1023, 0x1.FFFFFFFFFFFFFFFEp16383,
-  0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383)
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
 
-logic min_gen_float : float_format -> real
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
 
-axiom min_single: (min_gen_float(Single) = 0x1.p-149)
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
 
-axiom min_double: (min_gen_float(Double) = 0x1.p-1074)
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
 
-predicate no_overflow(f: float_format, m: mode, x: real) =
-  (abs_real(round_float(f, m, x)) <= max_gen_float(f))
+type single
 
-function gen_round_error(x: gen_float) : real =
-  abs_real((float_value(x) - exact_value(x)))
+logic round_single : mode, real -> real
 
-function gen_relative_error(x: gen_float) : real =
-  abs_real(((float_value(x) - exact_value(x)) / exact_value(x)))
+logic round_single_logic : mode, real -> single
 
-function gen_total_error(x: gen_float) : real =
-  abs_real((float_value(x) - model_value(x)))
+logic single_value : single -> real
 
-axiom bounded_real_no_overflow:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((abs_real(x) <= max_gen_float(f)) -> no_overflow(f, m, x)))))
+logic single_exact : single -> real
 
-axiom round_of_zero:
-  (forall f:float_format. (forall m:mode. (round_float(f, m, 0.0) = 0.0)))
+logic single_model : single -> real
 
-axiom round_greater_max:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((not no_overflow(f, m, x)) -> (abs_real(x) > max_gen_float(f))))))
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
 
-axiom round_increasing:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (forall y:real.
-          ((x <= y) -> (round_float(f, m, x) <= round_float(f, m, y)))))))
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
 
-axiom round_up_ge:
-  (forall f:float_format. (forall x:real. (round_float(f, up, x) >= x)))
+function max_single() : real = 0x1.FFFFFEp127
 
-axiom round_up_neg:
-  (forall f:float_format.
-    (forall x:real. (round_float(f, up, (-x)) = (-round_float(f, down, x)))))
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
 
-axiom round_idempotent:
-  (forall f:float_format.
-    (forall m1:mode.
-      (forall m2:mode.
-        (forall x:real. (round_float(f, m1, round_float(f, m2,
-          x)) = round_float(f, m2, x))))))
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
+
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
+
+function min_single() : real = 0x1.p-149
+
+function min_double() : real = 0x1.p-1074
 
 type Float_class
 
@@ -4775,9 +4760,13 @@ axiom no_other_sign: (forall s:sign. ((s = Negative) or (s = Positive)))
 
 axiom sign_distinct: (Negative <> Positive)
 
-logic float_class : gen_float -> Float_class
+logic single_class : single -> Float_class
 
-logic float_sign : gen_float -> sign
+logic double_class : double -> Float_class
+
+logic single_sign : single -> sign
+
+logic double_sign : double -> sign
 
 inductive same_sign_real_bool: sign, real -> prop =
   | neg_case: (forall x:real.
@@ -4787,13 +4776,21 @@ inductive same_sign_real_bool: sign, real -> prop =
 
 
 
-axiom sign_not_pos_neg:
-  (forall x:gen_float.
-    ((float_sign(x) <> Positive) -> (float_sign(x) = Negative)))
+axiom single_sign_not_pos_neg:
+  (forall x:single.
+    ((single_sign(x) <> Positive) -> (single_sign(x) = Negative)))
 
-axiom sign_not_neg_pos:
-  (forall x:gen_float.
-    ((float_sign(x) <> Negative) -> (float_sign(x) = Positive)))
+axiom single_sign_not_neg_pos:
+  (forall x:single.
+    ((single_sign(x) <> Negative) -> (single_sign(x) = Positive)))
+
+axiom double_sign_not_pos_neg:
+  (forall x:double.
+    ((double_sign(x) <> Positive) -> (double_sign(x) = Negative)))
+
+axiom double_sign_not_neg_pos:
+  (forall x:double.
+    ((double_sign(x) <> Negative) -> (double_sign(x) = Positive)))
 
 axiom same_sign_real_bool_zero1:
   (forall b:sign. (not same_sign_real_bool(b, 0.0)))
@@ -4816,236 +4813,447 @@ axiom same_sign_real_bool_correct3:
     (forall x:real.
       (same_sign_real_bool(b, x) -> ((x > 0.0) <-> (b = Positive)))))
 
-predicate same_sign_real(x: gen_float, y: real) =
-  same_sign_real_bool(float_sign(x), y)
+predicate single_same_sign_real(x: single, y: real) =
+  same_sign_real_bool(single_sign(x), y)
 
-predicate same_sign(x: gen_float, y: gen_float) =
-  (float_sign(x) = float_sign(y))
+predicate single_same_sign(x: single, y: single) =
+  (single_sign(x) = single_sign(y))
 
-predicate diff_sign(x: gen_float, y: gen_float) =
-  (float_sign(x) <> float_sign(y))
+predicate single_diff_sign(x: single, y: single) =
+  (single_sign(x) <> single_sign(y))
 
-predicate product_sign(z: gen_float, x: gen_float, y: gen_float) =
-  ((same_sign(x, y) -> (float_sign(z) = Positive)) and
-   (diff_sign(x, y) -> (float_sign(z) = Negative)))
+predicate single_product_sign(z: single, x: single, y: single) =
+  ((single_same_sign(x, y) -> (single_sign(z) = Positive)) and
+   (single_diff_sign(x, y) -> (single_sign(z) = Negative)))
 
-predicate same_class(x: gen_float, y: gen_float) =
-  (float_class(x) = float_class(y))
+predicate double_same_sign_real(x: double, y: real) =
+  same_sign_real_bool(double_sign(x), y)
 
-predicate diff_class(x: gen_float, y: gen_float) =
-  (float_class(x) <> float_class(y))
+predicate double_same_sign(x: double, y: double) =
+  (double_sign(x) = double_sign(y))
 
-axiom finite_sign:
-  (forall x:gen_float.
-    (((float_class(x) = Finite) and (float_value(x) <> 0.0)) ->
-     same_sign_real(x, float_value(x))))
+predicate double_diff_sign(x: double, y: double) =
+  (double_sign(x) <> double_sign(y))
 
-axiom finite_sign_neg1:
-  (forall x:gen_float.
-    (((float_class(x) = Finite) and (float_value(x) < 0.0)) ->
-     (float_sign(x) = Negative)))
+predicate double_product_sign(z: double, x: double, y: double) =
+  ((double_same_sign(x, y) -> (double_sign(z) = Positive)) and
+   (double_diff_sign(x, y) -> (double_sign(z) = Negative)))
 
-axiom finite_sign_neg2:
-  (forall x:gen_float.
-    (((float_class(x) = Finite) and
-      ((float_value(x) <> 0.0) and (float_sign(x) = Negative))) ->
-     (float_value(x) < 0.0)))
+predicate single_same_class(x: single, y: single) =
+  (single_class(x) = single_class(y))
 
-axiom finite_sign_pos1:
-  (forall x:gen_float.
-    (((float_class(x) = Finite) and (float_value(x) > 0.0)) ->
-     (float_sign(x) = Positive)))
+predicate singlediff_class(x: single, y: single) =
+  (single_class(x) <> single_class(y))
 
-axiom finite_sign_pos2:
-  (forall x:gen_float.
-    (((float_class(x) = Finite) and
-      ((float_value(x) <> 0.0) and (float_sign(x) = Positive))) ->
-     (float_value(x) > 0.0)))
+predicate double_same_class(x: double, y: double) =
+  (double_class(x) = double_class(y))
 
-axiom diff_sign_trans:
-  (forall x:gen_float.
-    (forall y:gen_float.
-      (forall z:gen_float.
-        ((diff_sign(x, y) and diff_sign(y, z)) -> same_sign(x, z)))))
+predicate doublediff_class(x: double, y: double) =
+  (double_class(x) <> double_class(y))
 
-axiom same_sign_product:
-  (forall x:gen_float.
-    (forall y:gen_float.
-      (((float_class(x) = Finite) and
-        ((float_class(y) = Finite) and same_sign(x, y))) ->
-       ((float_value(x) * float_value(y)) >= 0.0))))
+axiom single_finite_sign:
+  (forall x:single.
+    (((single_class(x) = Finite) and (single_value(x) <> 0.0)) ->
+     single_same_sign_real(x, single_value(x))))
 
-axiom diff_sign_product:
-  (forall x:gen_float.
-    (forall y:gen_float.
-      (((float_class(x) = Finite) and
-        ((float_class(y) = Finite) and
-         ((float_value(x) * float_value(y)) < 0.0))) ->
-       diff_sign(x, y))))
+axiom single_finite_sign_neg1:
+  (forall x:single.
+    (((single_class(x) = Finite) and (single_value(x) < 0.0)) ->
+     (single_sign(x) = Negative)))
 
-predicate is_finite(x: gen_float) = (float_class(x) = Finite)
+axiom single_finite_sign_neg2:
+  (forall x:single.
+    (((single_class(x) = Finite) and
+      ((single_value(x) <> 0.0) and (single_sign(x) = Negative))) ->
+     (single_value(x) < 0.0)))
 
-predicate is_infinite(x: gen_float) = (float_class(x) = Infinite)
+axiom single_finite_sign_pos1:
+  (forall x:single.
+    (((single_class(x) = Finite) and (single_value(x) > 0.0)) ->
+     (single_sign(x) = Positive)))
 
-predicate is_NaN(x: gen_float) = (float_class(x) = NaN)
+axiom single_finite_sign_pos2:
+  (forall x:single.
+    (((single_class(x) = Finite) and
+      ((single_value(x) <> 0.0) and (single_sign(x) = Positive))) ->
+     (single_value(x) > 0.0)))
 
-predicate is_not_NaN(x: gen_float) = (is_finite(x) or is_infinite(x))
+axiom single_diff_sign_trans:
+  (forall x:single.
+    (forall y:single.
+      (forall z:single.
+        ((single_diff_sign(x, y) and single_diff_sign(y, z)) ->
+         single_same_sign(x, z)))))
 
-predicate is_minus_infinity(x: gen_float) =
-  (is_infinite(x) and (float_sign(x) = Negative))
+axiom single_same_sign_product:
+  (forall x:single.
+    (forall y:single.
+      (((single_class(x) = Finite) and
+        ((single_class(y) = Finite) and single_same_sign(x, y))) ->
+       ((single_value(x) * single_value(y)) >= 0.0))))
 
-predicate is_plus_infinity(x: gen_float) =
-  (is_infinite(x) and (float_sign(x) = Positive))
+axiom single_diff_sign_product:
+  (forall x:single.
+    (forall y:single.
+      (((single_class(x) = Finite) and
+        ((single_class(y) = Finite) and
+         ((single_value(x) * single_value(y)) < 0.0))) ->
+       single_diff_sign(x, y))))
 
-predicate is_gen_zero(x: gen_float) =
-  (is_finite(x) and (float_value(x) = 0.0))
+axiom double_finite_sign:
+  (forall x:double.
+    (((double_class(x) = Finite) and (double_value(x) <> 0.0)) ->
+     double_same_sign_real(x, double_value(x))))
 
-predicate is_gen_zero_plus(x: gen_float) =
-  (is_gen_zero(x) and (float_sign(x) = Positive))
+axiom double_finite_sign_neg1:
+  (forall x:double.
+    (((double_class(x) = Finite) and (double_value(x) < 0.0)) ->
+     (double_sign(x) = Negative)))
 
-predicate is_gen_zero_minus(x: gen_float) =
-  (is_gen_zero(x) and (float_sign(x) = Negative))
+axiom double_finite_sign_neg2:
+  (forall x:double.
+    (((double_class(x) = Finite) and
+      ((double_value(x) <> 0.0) and (double_sign(x) = Negative))) ->
+     (double_value(x) < 0.0)))
 
-predicate overflow_value(f: float_format, m: mode, x: gen_float) =
+axiom double_finite_sign_pos1:
+  (forall x:double.
+    (((double_class(x) = Finite) and (double_value(x) > 0.0)) ->
+     (double_sign(x) = Positive)))
+
+axiom double_finite_sign_pos2:
+  (forall x:double.
+    (((double_class(x) = Finite) and
+      ((double_value(x) <> 0.0) and (double_sign(x) = Positive))) ->
+     (double_value(x) > 0.0)))
+
+axiom double_diff_sign_trans:
+  (forall x:double.
+    (forall y:double.
+      (forall z:double.
+        ((double_diff_sign(x, y) and double_diff_sign(y, z)) ->
+         double_same_sign(x, z)))))
+
+axiom double_same_sign_product:
+  (forall x:double.
+    (forall y:double.
+      (((double_class(x) = Finite) and
+        ((double_class(y) = Finite) and double_same_sign(x, y))) ->
+       ((double_value(x) * double_value(y)) >= 0.0))))
+
+axiom double_diff_sign_product:
+  (forall x:double.
+    (forall y:double.
+      (((double_class(x) = Finite) and
+        ((double_class(y) = Finite) and
+         ((double_value(x) * double_value(y)) < 0.0))) ->
+       double_diff_sign(x, y))))
+
+predicate single_is_finite(x: single) = (single_class(x) = Finite)
+
+predicate single_is_infinite(x: single) = (single_class(x) = Infinite)
+
+predicate single_is_NaN(x: single) = (single_class(x) = NaN)
+
+predicate single_is_not_NaN(x: single) =
+  (single_is_finite(x) or single_is_infinite(x))
+
+predicate single_is_minus_infinity(x: single) =
+  (single_is_infinite(x) and (single_sign(x) = Negative))
+
+predicate single_is_plus_infinity(x: single) =
+  (single_is_infinite(x) and (single_sign(x) = Positive))
+
+predicate single_is_gen_zero(x: single) =
+  (single_is_finite(x) and (single_value(x) = 0.0))
+
+predicate single_is_gen_zero_plus(x: single) =
+  (single_is_gen_zero(x) and (single_sign(x) = Positive))
+
+predicate single_is_gen_zero_minus(x: single) =
+  (single_is_gen_zero(x) and (single_sign(x) = Negative))
+
+predicate double_is_finite(x: double) = (double_class(x) = Finite)
+
+predicate double_is_infinite(x: double) = (double_class(x) = Infinite)
+
+predicate double_is_NaN(x: double) = (double_class(x) = NaN)
+
+predicate double_is_not_NaN(x: double) =
+  (double_is_finite(x) or double_is_infinite(x))
+
+predicate double_is_minus_infinity(x: double) =
+  (double_is_infinite(x) and (double_sign(x) = Negative))
+
+predicate double_is_plus_infinity(x: double) =
+  (double_is_infinite(x) and (double_sign(x) = Positive))
+
+predicate double_is_gen_zero(x: double) =
+  (double_is_finite(x) and (double_value(x) = 0.0))
+
+predicate double_is_gen_zero_plus(x: double) =
+  (double_is_gen_zero(x) and (double_sign(x) = Positive))
+
+predicate double_is_gen_zero_minus(x: double) =
+  (double_is_gen_zero(x) and (double_sign(x) = Negative))
+
+predicate single_overflow_value(m: mode, x: single) =
   (((m = down) ->
-    (((float_sign(x) = Negative) -> is_infinite(x)) and
-     ((float_sign(x) = Positive) ->
-      (is_finite(x) and (float_value(x) = max_gen_float(f)))))) and
+    (((single_sign(x) = Negative) -> single_is_infinite(x)) and
+     ((single_sign(x) = Positive) ->
+      (single_is_finite(x) and (single_value(x) = max_single))))) and
    (((m = up) ->
-     (((float_sign(x) = Negative) ->
-       (is_finite(x) and (float_value(x) = (-max_gen_float(f))))) and
-      ((float_sign(x) = Positive) -> is_infinite(x)))) and
+     (((single_sign(x) = Negative) ->
+       (single_is_finite(x) and (single_value(x) = (-max_single)))) and
+      ((single_sign(x) = Positive) -> single_is_infinite(x)))) and
     (((m = to_zero) ->
-      (is_finite(x) and
-       (((float_sign(x) = Negative) -> (float_value(x) = (-max_gen_float(f)))) and
-        ((float_sign(x) = Positive) -> (float_value(x) = max_gen_float(f)))))) and
-     (((m = nearest_away) or (m = nearest_even)) -> is_infinite(x)))))
+      (single_is_finite(x) and
+       (((single_sign(x) = Negative) -> (single_value(x) = (-max_single))) and
+        ((single_sign(x) = Positive) -> (single_value(x) = max_single))))) and
+     (((m = nearest_away) or (m = nearest_even)) -> single_is_infinite(x)))))
 
-predicate underflow_value(f: float_format, m: mode, x: gen_float) =
-  (is_finite(x) and
-   (((float_sign(x) = Positive) ->
+predicate double_overflow_value(m: mode, x: double) =
+  (((m = down) ->
+    (((double_sign(x) = Negative) -> double_is_infinite(x)) and
+     ((double_sign(x) = Positive) ->
+      (double_is_finite(x) and (double_value(x) = max_double))))) and
+   (((m = up) ->
+     (((double_sign(x) = Negative) ->
+       (double_is_finite(x) and (double_value(x) = (-max_double)))) and
+      ((double_sign(x) = Positive) -> double_is_infinite(x)))) and
+    (((m = to_zero) ->
+      (double_is_finite(x) and
+       (((double_sign(x) = Negative) -> (double_value(x) = (-max_double))) and
+        ((double_sign(x) = Positive) -> (double_value(x) = max_double))))) and
+     (((m = nearest_away) or (m = nearest_even)) -> double_is_infinite(x)))))
+
+predicate single_underflow_value(m: mode, x: single) =
+  (single_is_finite(x) and
+   (((single_sign(x) = Positive) ->
      ((((m = down) or
         ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
-       (float_value(x) = 0.0)) and
-      ((m = up) -> (float_value(x) = min_gen_float(f))))) and
-    ((float_sign(x) = Negative) ->
+       (single_value(x) = 0.0)) and
+      ((m = up) -> (single_value(x) = min_single)))) and
+    ((single_sign(x) = Negative) ->
      ((((m = up) or
         ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
-       (float_value(x) = 0.0)) and
-      ((m = down) -> (float_value(x) = (-min_gen_float(f))))))))
+       (single_value(x) = 0.0)) and
+      ((m = down) -> (single_value(x) = (-min_single)))))))
 
-predicate sign_zero_result(m: mode, x: gen_float) =
-  ((float_value(x) = 0.0) ->
-   (((m = down) -> (float_sign(x) = Negative)) and
-    ((m <> down) -> (float_sign(x) = Positive))))
+predicate double_underflow_value(m: mode, x: double) =
+  (double_is_finite(x) and
+   (((double_sign(x) = Positive) ->
+     ((((m = down) or
+        ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
+       (double_value(x) = 0.0)) and
+      ((m = up) -> (double_value(x) = min_double)))) and
+    ((double_sign(x) = Negative) ->
+     ((((m = up) or
+        ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
+       (double_value(x) = 0.0)) and
+      ((m = down) -> (double_value(x) = (-min_double)))))))
 
-predicate float_le_float(x: gen_float, y: gen_float) =
-  ((is_finite(x) and (is_finite(y) and (float_value(x) <= float_value(y)))) or
-   ((is_minus_infinity(x) and is_not_NaN(y)) or
-    (is_not_NaN(x) and is_plus_infinity(y))))
+predicate single_sign_zero_result(m: mode, x: single) =
+  ((single_value(x) = 0.0) ->
+   (((m = down) -> (single_sign(x) = Negative)) and
+    ((m <> down) -> (single_sign(x) = Positive))))
 
-predicate float_lt_float(x: gen_float, y: gen_float) =
-  ((is_finite(x) and (is_finite(y) and (float_value(x) < float_value(y)))) or
-   ((is_minus_infinity(x) and (is_not_NaN(y) and (not is_minus_infinity(y)))) or
-    (is_not_NaN(x) and ((not is_plus_infinity(x)) and is_plus_infinity(y)))))
+predicate double_sign_zero_result(m: mode, x: double) =
+  ((double_value(x) = 0.0) ->
+   (((m = down) -> (double_sign(x) = Negative)) and
+    ((m <> down) -> (double_sign(x) = Positive))))
 
-predicate float_ge_float(x: gen_float, y: gen_float) = float_le_float(y, x)
+predicate le_single(x: single, y: single) =
+  ((single_is_finite(x) and
+    (single_is_finite(y) and (single_value(x) <= single_value(y)))) or
+   ((single_is_minus_infinity(x) and single_is_not_NaN(y)) or
+    (single_is_not_NaN(x) and single_is_plus_infinity(y))))
 
-predicate float_gt_float(x: gen_float, y: gen_float) = float_lt_float(y, x)
+predicate lt_single(x: single, y: single) =
+  ((single_is_finite(x) and
+    (single_is_finite(y) and (single_value(x) < single_value(y)))) or
+   ((single_is_minus_infinity(x) and
+     (single_is_not_NaN(y) and (not single_is_minus_infinity(y)))) or
+    (single_is_not_NaN(x) and
+     ((not single_is_plus_infinity(x)) and single_is_plus_infinity(y)))))
 
-predicate float_eq_float(x: gen_float, y: gen_float) =
-  (is_not_NaN(x) and
-   (is_not_NaN(y) and
-    ((is_finite(x) and (is_finite(y) and (float_value(x) = float_value(y)))) or
-     (is_infinite(x) and (is_infinite(y) and same_sign(x, y))))))
+predicate ge_single(x: single, y: single) = le_single(y, x)
 
-predicate float_ne_float(x: gen_float, y: gen_float) = (not float_eq_float(x,
-  y))
+predicate gt_single(x: single, y: single) = lt_single(y, x)
 
-axiom a1:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (no_overflow(f, m, x) ->
-         (is_finite(gen_float_of_real_logic(f, m, x)) and
-          (float_value(gen_float_of_real_logic(f, m, x)) = round_float(f, m,
-          x)))))))
+predicate eq_single(x: single, y: single) =
+  (single_is_not_NaN(x) and
+   (single_is_not_NaN(y) and
+    ((single_is_finite(x) and
+      (single_is_finite(y) and (single_value(x) = single_value(y)))) or
+     (single_is_infinite(x) and
+      (single_is_infinite(y) and single_same_sign(x, y))))))
 
-axiom a2:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((not no_overflow(f, m, x)) ->
-         (same_sign_real(gen_float_of_real_logic(f, m, x), x) and
-          overflow_value(f, m, gen_float_of_real_logic(f, m, x)))))))
+predicate ne_single(x: single, y: single) = (not eq_single(x, y))
 
-axiom a3:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real. (exact_value(gen_float_of_real_logic(f, m, x)) = x))))
+predicate le_double(x: double, y: double) =
+  ((double_is_finite(x) and
+    (double_is_finite(y) and (double_value(x) <= double_value(y)))) or
+   ((double_is_minus_infinity(x) and double_is_not_NaN(y)) or
+    (double_is_not_NaN(x) and double_is_plus_infinity(y))))
 
-axiom a4:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real. (model_value(gen_float_of_real_logic(f, m, x)) = x))))
+predicate lt_double(x: double, y: double) =
+  ((double_is_finite(x) and
+    (double_is_finite(y) and (double_value(x) < double_value(y)))) or
+   ((double_is_minus_infinity(x) and
+     (double_is_not_NaN(y) and (not double_is_minus_infinity(y)))) or
+    (double_is_not_NaN(x) and
+     ((not double_is_plus_infinity(x)) and double_is_plus_infinity(y)))))
 
-axiom gen_float_of_zero:
-  (forall f:float_format.
-    (forall m:mode. is_gen_zero(gen_float_of_real_logic(f, m, 0.0))))
+predicate ge_double(x: double, y: double) = le_double(y, x)
 
-axiom finite_gen_float_of_real_logic:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (is_finite(gen_float_of_real_logic(f, m, x)) ->
-         (abs_real(float_value(gen_float_of_real_logic(f, m,
-         x))) <= max_gen_float(f))))))
+predicate gt_double(x: double, y: double) = lt_double(y, x)
 
-axiom gen_bounded_real_no_overflow:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((abs_real(x) <= max_gen_float(f)) ->
-         (is_finite(gen_float_of_real_logic(f, m, x)) and
-          (float_value(gen_float_of_real_logic(f, m, x)) = round_float(f, m,
-          x)))))))
+predicate eq_double(x: double, y: double) =
+  (double_is_not_NaN(x) and
+   (double_is_not_NaN(y) and
+    ((double_is_finite(x) and
+      (double_is_finite(y) and (double_value(x) = double_value(y)))) or
+     (double_is_infinite(x) and
+      (double_is_infinite(y) and double_same_sign(x, y))))))
 
-axiom gen_positive_constant:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (((min_gen_float(f) <= x) and (x <= max_gen_float(f))) ->
-         (is_finite(gen_float_of_real_logic(f, m, x)) and
-          ((float_value(gen_float_of_real_logic(f, m, x)) > 0.0) and
-           (float_sign(gen_float_of_real_logic(f, m, x)) = Positive)))))))
+predicate ne_double(x: double, y: double) = (not eq_double(x, y))
 
-axiom gen_negative_constant:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((((-max_gen_float(f)) <= x) and (x <= (-min_gen_float(f)))) ->
-         (is_finite(gen_float_of_real_logic(f, m, x)) and
-          ((float_value(gen_float_of_real_logic(f, m, x)) < 0.0) and
-           (float_sign(gen_float_of_real_logic(f, m, x)) = Negative)))))))
+axiom round_single1:
+  (forall m:mode.
+    (forall x:real.
+      (no_overflow_single(m, x) ->
+       (single_is_finite(round_single_logic(m, x)) and
+        (single_value(round_single_logic(m, x)) = round_single(m, x))))))
 
-axiom dsds:
-  (forall f:float_format.
-    (forall x:gen_float.
-      ((abs_real(float_value(x)) <= max_gen_float(f)) -> is_finite(x))))
+axiom round_single2:
+  (forall m:mode.
+    (forall x:real.
+      ((not no_overflow_single(m, x)) ->
+       (single_same_sign_real(round_single_logic(m, x), x) and
+        single_overflow_value(m, round_single_logic(m, x))))))
 
-axiom is_gen_zero_comp1:
-  (forall x:gen_float.
-    (forall y:gen_float.
-      ((is_gen_zero(x) and
-        ((float_value(x) = float_value(y)) and is_finite(y))) ->
-       is_gen_zero(y))))
+axiom round_single3:
+  (forall m:mode.
+    (forall x:real. (single_exact(round_single_logic(m, x)) = x)))
 
-axiom is_gen_zero_comp2:
-  (forall x:gen_float.
-    (forall y:gen_float.
-      ((is_finite(x) and
-        ((not is_gen_zero(x)) and (float_value(x) = float_value(y)))) ->
-       (not is_gen_zero(y)))))
+axiom round_single4:
+  (forall m:mode.
+    (forall x:real. (single_model(round_single_logic(m, x)) = x)))
+
+axiom single_of_zero:
+  (forall m:mode. single_is_gen_zero(round_single_logic(m, 0.0)))
+
+axiom round_single_logic_le:
+  (forall m:mode.
+    (forall x:real.
+      (single_is_finite(round_single_logic(m, x)) ->
+       (abs_real(single_value(round_single_logic(m, x))) <= max_single))))
+
+axiom round_single_no_overflow:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) ->
+       (single_is_finite(round_single_logic(m, x)) and
+        (single_value(round_single_logic(m, x)) = round_single(m, x))))))
+
+axiom single_positive_constant:
+  (forall m:mode.
+    (forall x:real.
+      (((min_single <= x) and (x <= max_single)) ->
+       (single_is_finite(round_single_logic(m, x)) and
+        ((single_value(round_single_logic(m, x)) > 0.0) and
+         (single_sign(round_single_logic(m, x)) = Positive))))))
+
+axiom single_negative_constant:
+  (forall m:mode.
+    (forall x:real.
+      ((((-max_single) <= x) and (x <= (-min_single))) ->
+       (single_is_finite(round_single_logic(m, x)) and
+        ((single_value(round_single_logic(m, x)) < 0.0) and
+         (single_sign(round_single_logic(m, x)) = Negative))))))
+
+axiom round_double1:
+  (forall m:mode.
+    (forall x:real.
+      (no_overflow_double(m, x) ->
+       (double_is_finite(round_double_logic(m, x)) and
+        (double_value(round_double_logic(m, x)) = round_double(m, x))))))
+
+axiom round_double2:
+  (forall m:mode.
+    (forall x:real.
+      ((not no_overflow_double(m, x)) ->
+       (double_same_sign_real(round_double_logic(m, x), x) and
+        double_overflow_value(m, round_double_logic(m, x))))))
+
+axiom round_double3:
+  (forall m:mode.
+    (forall x:real. (double_exact(round_double_logic(m, x)) = x)))
+
+axiom round_double4:
+  (forall m:mode.
+    (forall x:real. (double_model(round_double_logic(m, x)) = x)))
+
+axiom double_of_zero:
+  (forall m:mode. double_is_gen_zero(round_double_logic(m, 0.0)))
+
+axiom round_double_logic_le:
+  (forall m:mode.
+    (forall x:real.
+      (double_is_finite(round_double_logic(m, x)) ->
+       (abs_real(double_value(round_double_logic(m, x))) <= max_double))))
+
+axiom round_double_no_overflow:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) ->
+       (double_is_finite(round_double_logic(m, x)) and
+        (double_value(round_double_logic(m, x)) = round_double(m, x))))))
+
+axiom double_positive_constant:
+  (forall m:mode.
+    (forall x:real.
+      (((min_double <= x) and (x <= max_double)) ->
+       (double_is_finite(round_double_logic(m, x)) and
+        ((double_value(round_double_logic(m, x)) > 0.0) and
+         (double_sign(round_double_logic(m, x)) = Positive))))))
+
+axiom double_negative_constant:
+  (forall m:mode.
+    (forall x:real.
+      ((((-max_double) <= x) and (x <= (-min_double))) ->
+       (double_is_finite(round_double_logic(m, x)) and
+        ((double_value(round_double_logic(m, x)) < 0.0) and
+         (double_sign(round_double_logic(m, x)) = Negative))))))
+
+axiom single_is_gen_zero_comp1:
+  (forall x:single.
+    (forall y:single.
+      ((single_is_gen_zero(x) and
+        ((single_value(x) = single_value(y)) and single_is_finite(y))) ->
+       single_is_gen_zero(y))))
+
+axiom single_is_gen_zero_comp2:
+  (forall x:single.
+    (forall y:single.
+      ((single_is_finite(x) and
+        ((not single_is_gen_zero(x)) and (single_value(x) = single_value(y)))) ->
+       (not single_is_gen_zero(y)))))
+
+axiom double_is_gen_zero_comp1:
+  (forall x:double.
+    (forall y:double.
+      ((double_is_gen_zero(x) and
+        ((double_value(x) = double_value(y)) and double_is_finite(y))) ->
+       double_is_gen_zero(y))))
+
+axiom double_is_gen_zero_comp2:
+  (forall x:double.
+    (forall y:double.
+      ((double_is_finite(x) and
+        ((not double_is_gen_zero(x)) and (double_value(x) = double_value(y)))) ->
+       (not double_is_gen_zero(y)))))
 
 type __anonstruct_interval_1
 
@@ -5131,26 +5339,27 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-predicate dif_sign(x_1: gen_float, y_1: gen_float) =
-  (float_sign(x_1) <> float_sign(y_1))
+predicate dif_sign(x_1: double, y_1: double) =
+  (double_sign(x_1) <> double_sign(y_1))
 
-predicate double_le_real(x_1_0: gen_float, y_1_0: real) =
-  ((is_finite(x_1_0) and (float_value(x_1_0) <= y_1_0)) or
-   is_minus_infinity(x_1_0))
+predicate double_le_real(x_1_0: double, y_1_0: real) =
+  ((double_is_finite(x_1_0) and (double_value(x_1_0) <= y_1_0)) or
+   double_is_minus_infinity(x_1_0))
 
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-predicate real_le_double(x_2: real, y_2: gen_float) =
-  ((is_finite(y_2) and (x_2 <= float_value(y_2))) or is_plus_infinity(y_2))
+predicate real_le_double(x_2: real, y_2: double) =
+  ((double_is_finite(y_2) and (x_2 <= double_value(y_2))) or
+   double_is_plus_infinity(y_2))
 
 predicate in_interval(a: real, x_4: __anonstruct_interval_1 pointer,
   __anonstruct_interval_1_u_x_4_2_at_L: (__anonstruct_interval_1,
-  gen_float) memory,
+  double) memory,
   __anonstruct_interval_1_l_x_4_2_at_L: (__anonstruct_interval_1,
-  gen_float) memory) =
+  double) memory) =
   (double_le_real(select(__anonstruct_interval_1_l_x_4_2_at_L, x_4), a) and
    real_le_double(a, select(__anonstruct_interval_1_u_x_4_2_at_L, x_4)))
 
@@ -5169,14 +5378,13 @@ axiom int8_range:
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate is_interval(x_3_0: __anonstruct_interval_1 pointer,
-  __anonstruct_interval_1_u_x_3_1: (__anonstruct_interval_1,
-  gen_float) memory,
+  __anonstruct_interval_1_u_x_3_1: (__anonstruct_interval_1, double) memory,
   __anonstruct_interval_1_l_x_3_1: (__anonstruct_interval_1,
-  gen_float) memory) =
-  ((is_finite(select(__anonstruct_interval_1_l_x_3_1, x_3_0)) or
-    is_minus_infinity(select(__anonstruct_interval_1_l_x_3_1, x_3_0))) and
-   (is_finite(select(__anonstruct_interval_1_u_x_3_1, x_3_0)) or
-    is_plus_infinity(select(__anonstruct_interval_1_u_x_3_1, x_3_0))))
+  double) memory) =
+  ((double_is_finite(select(__anonstruct_interval_1_l_x_3_1, x_3_0)) or
+    double_is_minus_infinity(select(__anonstruct_interval_1_l_x_3_1, x_3_0))) and
+   (double_is_finite(select(__anonstruct_interval_1_u_x_3_1, x_3_0)) or
+    double_is_plus_infinity(select(__anonstruct_interval_1_u_x_3_1, x_3_0))))
 
 predicate left_valid_struct___anonstruct_interval_1(p: __anonstruct_interval_1 pointer,
   a: int,
@@ -5218,8 +5426,8 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
 
-predicate sam_sign(x_0_0: gen_float, y_0_0: gen_float) =
-  (float_sign(x_0_0) = float_sign(y_0_0))
+predicate sam_sign(x_0_0: double, y_0_0: double) =
+  (double_sign(x_0_0) = double_sign(y_0_0))
 
 predicate strict_valid_root___anonstruct_interval_1(p: __anonstruct_interval_1 pointer,
   a: int, b: int,

@@ -107,6 +107,7 @@ Generating JC function Purse_getBalance for method Purse.getBalance
 Done.
 ========== file tests/java/Purse.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -1395,7 +1396,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Purse.jc"
-line = 48
+line = 49
 begin = 8
 end = 23
 
@@ -1421,7 +1422,7 @@ end = 20
 
 [JC_3]
 file = "HOME/tests/java/Purse.jc"
-line = 48
+line = 49
 begin = 8
 end = 23
 
@@ -1483,7 +1484,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Purse.jc"
-line = 50
+line = 51
 begin = 11
 end = 65
 
@@ -1629,7 +1630,7 @@ end = 16
 
 [JC_161]
 file = "HOME/tests/java/Purse.jc"
-line = 128
+line = 129
 begin = 9
 end = 16
 
@@ -1647,7 +1648,7 @@ end = 16
 
 [JC_164]
 file = "HOME/tests/java/Purse.jc"
-line = 128
+line = 129
 begin = 9
 end = 16
 
@@ -1745,7 +1746,7 @@ end = 22
 
 [JC_175]
 file = "HOME/tests/java/Purse.jc"
-line = 137
+line = 138
 begin = 9
 end = 16
 
@@ -1771,7 +1772,7 @@ end = 20
 
 [JC_178]
 file = "HOME/tests/java/Purse.jc"
-line = 137
+line = 138
 begin = 9
 end = 16
 
@@ -1783,7 +1784,7 @@ end = 22
 
 [JC_10]
 file = "HOME/tests/java/Purse.jc"
-line = 50
+line = 51
 begin = 11
 end = 65
 
@@ -1977,7 +1978,7 @@ end = -1
 
 [JC_202]
 file = "HOME/tests/java/Purse.jc"
-line = 149
+line = 150
 begin = 9
 end = 25
 
@@ -2039,13 +2040,13 @@ end = -1
 
 [JC_206]
 file = "HOME/tests/java/Purse.jc"
-line = 149
+line = 150
 begin = 9
 end = 25
 
 [JC_191]
 file = "HOME/tests/java/Purse.jc"
-line = 145
+line = 146
 begin = 9
 end = 16
 
@@ -2058,7 +2059,7 @@ end = 20
 [JC_207]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 159
+line = 160
 begin = 43
 end = 67
 
@@ -2071,7 +2072,7 @@ end = 34
 [JC_208]
 kind = IndexBounds
 file = "HOME/tests/java/Purse.jc"
-line = 159
+line = 160
 begin = 10
 end = 68
 
@@ -2084,7 +2085,7 @@ end = 66
 [JC_209]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 162
+line = 163
 begin = 27
 end = 55
 
@@ -2102,7 +2103,7 @@ end = 24
 
 [JC_196]
 file = "HOME/tests/java/Purse.jc"
-line = 145
+line = 146
 begin = 9
 end = 16
 
@@ -2144,7 +2145,7 @@ end = -1
 
 [JC_210]
 file = "HOME/tests/java/Purse.jc"
-line = 168
+line = 169
 begin = 17
 end = 55
 
@@ -2157,7 +2158,7 @@ end = -1
 [JC_211]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 159
+line = 160
 begin = 43
 end = 67
 
@@ -2170,7 +2171,7 @@ end = -1
 [JC_212]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 162
+line = 163
 begin = 27
 end = 55
 
@@ -2182,7 +2183,7 @@ end = 20
 
 [JC_213]
 file = "HOME/tests/java/Purse.jc"
-line = 168
+line = 169
 begin = 17
 end = 55
 
@@ -2195,7 +2196,7 @@ end = -1
 [JC_214]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 159
+line = 160
 begin = 43
 end = 67
 
@@ -2216,7 +2217,7 @@ end = 20
 [JC_215]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 162
+line = 163
 begin = 27
 end = 55
 
@@ -2228,7 +2229,7 @@ end = -1
 
 [JC_216]
 file = "HOME/tests/java/Purse.jc"
-line = 168
+line = 169
 begin = 17
 end = 55
 
@@ -3916,7 +3917,7 @@ why --project [...] why/Purse.why
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po13.why">
-      <location file = "HOME/tests/java/Purse.jc" line = "159" begin = "43" end = "67"/>
+      <location file = "HOME/tests/java/Purse.jc" line = "160" begin = "43" end = "67"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
@@ -3953,7 +3954,7 @@ text = "AllocSize"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po8.why">
-      <location file = "HOME/tests/java/Purse.jc" line = "168" begin = "17" end = "55"/>
+      <location file = "HOME/tests/java/Purse.jc" line = "169" begin = "17" end = "55"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -6675,7 +6676,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))))))
 
-;; Purse_withdraw_ensures_default_po_4, File "HOME/tests/java/Purse.jc", line 168, characters 17-55
+;; Purse_withdraw_ensures_default_po_4, File "HOME/tests/java/Purse.jc", line 169, characters 17-55
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6783,7 +6784,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (balance_non_negative this_5 Purse_balance0)))))))))))))
 
-;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 159, characters 43-67
+;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 160, characters 43-67
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)

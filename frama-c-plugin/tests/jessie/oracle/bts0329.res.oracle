@@ -31,15 +31,15 @@ tag void_P = {
 type void_P = [void_P]
 
 float cosine1a(float x)
-  requires (C_5 : ((C_6 : (\real_abs(\float_exact(x)) <= 0x1p-5)) &&
-                    (C_7 : (\float_round_error(x) <= 0x1p-20))));
+  requires (C_5 : ((C_6 : (\real_abs(\single_exact(x)) <= 0x1p-5)) &&
+                    (C_7 : (\single_round_error(x) <= 0x1p-20))));
 behavior default:
   assumes true;
-  ensures (C_8 : ((C_9 : (\real_abs((\float_exact(\result) -
-                                      \cos(\float_exact(x)))) <=
+  ensures (C_8 : ((C_9 : (\real_abs((\single_exact(\result) -
+                                      \cos(\single_exact(x)))) <=
                            0x1p-24)) &&
-                   (C_10 : (\float_round_error(\result) <=
-                             (\float_round_error(x) + 0x3p-24)))));
+                   (C_10 : (\single_round_error(\result) <=
+                             (\single_round_error(x) + 0x3p-24)))));
 {  
    (var float r);
    
@@ -334,31 +334,31 @@ parameter alloc_struct_void_P_requires :
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter cosine1a :
- x:gen_float ->
-  { } gen_float
+ x:single ->
+  { } single
   { ((true = true) ->
      (JC_14:
      ((JC_12:
-      le_real(abs_real(sub_real(exact_value(result), cos(exact_value(x)))),
+      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x)))),
       0x1p-24))
      and (JC_13:
-         le_real(gen_round_error(result),
-         add_real(gen_round_error(x), 0x3p-24)))))) }
+         le_real(single_round_error(result),
+         add_real(single_round_error(x), 0x3p-24)))))) }
 
 parameter cosine1a_requires :
- x:gen_float ->
+ x:single ->
   { (JC_3:
-    ((JC_1: le_real(abs_real(exact_value(x)), 0x1p-5))
-    and (JC_2: le_real(gen_round_error(x), 0x1p-20))))}
-  gen_float
+    ((JC_1: le_real(abs_real(single_exact(x)), 0x1p-5))
+    and (JC_2: le_real(single_round_error(x), 0x1p-20))))}
+  single
   { ((true = true) ->
      (JC_14:
      ((JC_12:
-      le_real(abs_real(sub_real(exact_value(result), cos(exact_value(x)))),
+      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x)))),
       0x1p-24))
      and (JC_13:
-         le_real(gen_round_error(result),
-         add_real(gen_round_error(x), 0x3p-24)))))) }
+         le_real(single_round_error(result),
+         add_real(single_round_error(x), 0x3p-24)))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -369,29 +369,27 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let cosine1a_ensures_default =
- fun (x : gen_float) ->
+ fun (x : single) ->
   { ((true = true)
     and (JC_7:
-        ((JC_5: le_real(abs_real(exact_value(x)), 0x1p-5))
-        and (JC_6: le_real(gen_round_error(x), 0x1p-20))))) }
+        ((JC_5: le_real(abs_real(single_exact(x)), 0x1p-5))
+        and (JC_6: le_real(single_round_error(x), 0x1p-20))))) }
   (init:
-  (let return = ref (any_gen_float Single) in
+  (let return = ref (any_single void) in
   try
    begin
-     (let r = ref (any_gen_float Single) in
+     (let r = ref (any_single void) in
      (C_4:
      begin
        (let jessie_5 = (r := (C_3:
                              (JC_24:
-                             ((((sub_gen_float_safe Single) nearest_even) 
-                               (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
+                             (((sub_single_safe nearest_even) ((single_of_real_safe nearest_even) 1.0)) 
                               (C_2:
                               (JC_23:
-                              ((((mul_gen_float_safe Single) nearest_even) 
-                                (C_1:
-                                (JC_22:
-                                ((((mul_gen_float_safe Single) nearest_even) x) x)))) 
-                               (((gen_float_of_real_safe Single) nearest_even) 0.5)))))))) in
+                              (((mul_single_safe nearest_even) (C_1:
+                                                               (JC_22:
+                                                               (((mul_single_safe nearest_even) x) x)))) 
+                               ((single_of_real_safe nearest_even) 0.5)))))))) in
        void);
       (return := !r);
       (raise Return)
@@ -403,37 +401,35 @@ let cosine1a_ensures_default =
    !return end))
   { (JC_11:
     ((JC_9:
-     le_real(abs_real(sub_real(exact_value(result), cos(exact_value(x)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x)))),
      0x1p-24))
     and (JC_10:
-        le_real(gen_round_error(result),
-        add_real(gen_round_error(x), 0x3p-24))))) }
+        le_real(single_round_error(result),
+        add_real(single_round_error(x), 0x3p-24))))) }
 
 let cosine1a_safety =
- fun (x : gen_float) ->
+ fun (x : single) ->
   { (JC_7:
-    ((JC_5: le_real(abs_real(exact_value(x)), 0x1p-5))
-    and (JC_6: le_real(gen_round_error(x), 0x1p-20)))) }
+    ((JC_5: le_real(abs_real(single_exact(x)), 0x1p-5))
+    and (JC_6: le_real(single_round_error(x), 0x1p-20)))) }
   (init:
-  (let return = ref (any_gen_float Single) in
+  (let return = ref (any_single void) in
   try
    begin
-     (let r = ref (any_gen_float Single) in
+     (let r = ref (any_single void) in
      (C_4:
      begin
        (let jessie_2 = (r := (C_3:
                              (JC_21:
-                             ((((sub_gen_float Single) nearest_even) 
-                               (JC_17:
-                               (((gen_float_of_real Single) nearest_even) 1.0))) 
+                             (((sub_single nearest_even) (JC_17:
+                                                         ((single_of_real nearest_even) 1.0))) 
                               (C_2:
                               (JC_20:
-                              ((((mul_gen_float Single) nearest_even) 
-                                (C_1:
-                                (JC_18:
-                                ((((mul_gen_float Single) nearest_even) x) x)))) 
+                              (((mul_single nearest_even) (C_1:
+                                                          (JC_18:
+                                                          (((mul_single nearest_even) x) x)))) 
                                (JC_19:
-                               (((gen_float_of_real Single) nearest_even) 0.5))))))))) in
+                               ((single_of_real nearest_even) 0.5))))))))) in
        void);
       (return := !r);
       (raise Return)
@@ -1430,126 +1426,193 @@ type mode =
   | down
   | nearest_away
 
-type float_format =
-  | Single
-  | Double
-  | Binary80
-  | Quad
+type double
 
-type gen_float
+logic round_double : mode, real -> real
 
-logic round_float : float_format, mode, real -> real
+logic round_double_logic : mode, real -> double
 
-logic gen_float_of_real_logic : float_format, mode, real -> gen_float
+logic double_value : double -> real
 
-logic float_value : gen_float -> real
+logic double_exact : double -> real
 
-logic exact_value : gen_float -> real
+logic double_model : double -> real
 
-logic model_value : gen_float -> real
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
 
-function max_gen_float(f: float_format) : real = float_format_match(f,
-  0x1.FFFFFEp127, 0x1.FFFFFFFFFFFFFp1023, 0x1.FFFFFFFFFFFFFFFEp16383,
-  0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383)
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
 
-logic min_gen_float : float_format -> real
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
 
-axiom min_single: (min_gen_float(Single) = 0x1.p-149)
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
 
-axiom min_double: (min_gen_float(Double) = 0x1.p-1074)
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
 
-predicate no_overflow(f: float_format, m: mode, x: real) =
-  (abs_real(round_float(f, m, x)) <= max_gen_float(f))
+type single
 
-function gen_round_error(x: gen_float) : real =
-  abs_real((float_value(x) - exact_value(x)))
+logic round_single : mode, real -> real
 
-function gen_relative_error(x: gen_float) : real =
-  abs_real(((float_value(x) - exact_value(x)) / exact_value(x)))
+logic round_single_logic : mode, real -> single
 
-function gen_total_error(x: gen_float) : real =
-  abs_real((float_value(x) - model_value(x)))
+logic single_value : single -> real
 
-axiom bounded_real_no_overflow:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((abs_real(x) <= max_gen_float(f)) -> no_overflow(f, m, x)))))
+logic single_exact : single -> real
 
-axiom round_of_zero:
-  (forall f:float_format. (forall m:mode. (round_float(f, m, 0.0) = 0.0)))
+logic single_model : single -> real
 
-axiom round_greater_max:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((not no_overflow(f, m, x)) -> (abs_real(x) > max_gen_float(f))))))
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
 
-axiom round_increasing:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (forall y:real.
-          ((x <= y) -> (round_float(f, m, x) <= round_float(f, m, y)))))))
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
 
-axiom round_up_ge:
-  (forall f:float_format. (forall x:real. (round_float(f, up, x) >= x)))
+function max_single() : real = 0x1.FFFFFEp127
 
-axiom round_up_neg:
-  (forall f:float_format.
-    (forall x:real. (round_float(f, up, (-x)) = (-round_float(f, down, x)))))
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
 
-axiom round_idempotent:
-  (forall f:float_format.
-    (forall m1:mode.
-      (forall m2:mode.
-        (forall x:real. (round_float(f, m1, round_float(f, m2,
-          x)) = round_float(f, m2, x))))))
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
 
-predicate gen_float_of_real_post(f: float_format, m: mode, x: real,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, x)) and
-   ((exact_value(res) = x) and (model_value(res) = x)))
+logic single_to_double : mode, single -> double
 
-predicate add_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) + float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) + exact_value(y))) and
-    (model_value(res) = (model_value(x) + model_value(y)))))
+logic double_to_single : mode, double -> single
 
-predicate sub_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) - float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) - exact_value(y))) and
-    (model_value(res) = (model_value(x) - model_value(y)))))
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
-predicate neg_gen_float_post(f: float_format, m: mode, x: gen_float,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, (-float_value(x)))) and
-   ((exact_value(res) = (-exact_value(x))) and
-    (model_value(res) = (-model_value(x)))))
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-predicate mul_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) * float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) * exact_value(y))) and
-    (model_value(res) = (model_value(x) * model_value(y)))))
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
 
-predicate div_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) / float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) / exact_value(y))) and
-    (model_value(res) = (model_value(x) / model_value(y)))))
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
 
-predicate cast_gen_float_post(f: float_format, m: mode, x: gen_float,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, float_value(x))) and
-   ((exact_value(res) = exact_value(x)) and
-    (model_value(res) = model_value(x))))
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
 
 type char_P
 

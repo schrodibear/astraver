@@ -35,7 +35,7 @@ parameter double_set_model : x:double ref -> y:real ->
     and double_model(x) = y }
 
 function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
-logic any_double : double
+parameter any_double : unit -> { } double { }
 
 predicate no_overflow_double(m:mode,x:real) = 
 	  abs_real(round_double(m,x)) <= max_double
@@ -67,7 +67,7 @@ parameter single_set_model : x:single ref -> y:real ->
     and single_model(x) = y }
 
 function max_single() : real = 0x1.FFFFFEp127
-logic any_single : single
+parameter any_single : unit -> { } single { }
 
 predicate no_overflow_single(m:mode,x:real) = 
 	  abs_real(round_single(m,x)) <= max_single

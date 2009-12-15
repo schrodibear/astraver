@@ -53,6 +53,7 @@ Generating JC function cons_AllZeros for constructor AllZeros
 Done.
 ========== file tests/java/AllZeros.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -445,19 +446,19 @@ end = -1
 
 [JC_46]
 file = "HOME/tests/java/AllZeros.jc"
-line = 81
+line = 82
 begin = 9
 end = 641
 
 [JC_1]
 file = "HOME/tests/java/AllZeros.jc"
-line = 48
+line = 49
 begin = 8
 end = 21
 
 [JC_47]
 file = "HOME/tests/java/AllZeros.jc"
-line = 81
+line = 82
 begin = 9
 end = 641
 
@@ -476,7 +477,7 @@ end = 29
 
 [JC_3]
 file = "HOME/tests/java/AllZeros.jc"
-line = 48
+line = 49
 begin = 8
 end = 21
 
@@ -519,14 +520,14 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/AllZeros.jc"
-line = 50
+line = 51
 begin = 11
 end = 66
 
 [JC_50]
 kind = ArithOverflow
 file = "HOME/tests/java/AllZeros.jc"
-line = 91
+line = 92
 begin = 18
 end = 22
 
@@ -568,13 +569,13 @@ end = -1
 
 [JC_57]
 file = "HOME/tests/java/AllZeros.jc"
-line = 81
+line = 82
 begin = 9
 end = 641
 
 [JC_58]
 file = "HOME/tests/java/AllZeros.jc"
-line = 81
+line = 82
 begin = 9
 end = 641
 
@@ -613,7 +614,7 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/AllZeros.jc"
-line = 50
+line = 51
 begin = 11
 end = 66
 
@@ -625,7 +626,7 @@ end = -1
 
 [JC_11]
 file = "HOME/tests/java/AllZeros.jc"
-line = 53
+line = 54
 begin = 8
 end = 30
 
@@ -657,7 +658,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/AllZeros.jc"
-line = 53
+line = 54
 begin = 8
 end = 30
 
@@ -705,31 +706,31 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/AllZeros.jc"
-line = 56
+line = 57
 begin = 11
 end = 113
 
 [JC_20]
 file = "HOME/tests/java/AllZeros.jc"
-line = 55
+line = 56
 begin = 10
 end = 18
 
 [JC_21]
 file = "HOME/tests/java/AllZeros.jc"
-line = 56
+line = 57
 begin = 11
 end = 113
 
 [JC_22]
 file = "HOME/tests/java/AllZeros.jc"
-line = 55
+line = 56
 begin = 10
 end = 18
 
 [JC_23]
 file = "HOME/tests/java/AllZeros.jc"
-line = 60
+line = 61
 begin = 8
 end = 23
 
@@ -741,7 +742,7 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/AllZeros.jc"
-line = 60
+line = 61
 begin = 8
 end = 23
 
@@ -785,13 +786,13 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/AllZeros.jc"
-line = 62
+line = 63
 begin = 11
 end = 65
 
 [JC_32]
 file = "HOME/tests/java/AllZeros.jc"
-line = 62
+line = 63
 begin = 11
 end = 65
 
@@ -1934,12 +1935,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/AllZeros_po13.why">
-      <location file = "HOME/tests/java/AllZeros.jc" line = "91" begin = "18" end = "22"/>
+      <location file = "HOME/tests/java/AllZeros.jc" line = "92" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "HOME/tests/java/AllZeros.jc" line = "91" begin = "18" end = "22"/>
+      <location file = "HOME/tests/java/AllZeros.jc" line = "92" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -5179,7 +5180,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (< (integer_of_int32 k) result0)
 (<= (integer_of_int32 k) (offset_max Object_alloc_table t))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_3, File "HOME/tests/java/AllZeros.jc", line 91, characters 18-22
+;; AllZeros_all_zeros_safety_po_3, File "HOME/tests/java/AllZeros.jc", line 92, characters 18-22
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -5208,7 +5209,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result1) 0)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 k) 1))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "HOME/tests/java/AllZeros.jc", line 91, characters 18-22
+;; AllZeros_all_zeros_safety_po_4, File "HOME/tests/java/AllZeros.jc", line 92, characters 18-22
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

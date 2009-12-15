@@ -1,4 +1,7 @@
 
+  o [Jessie] interpretation of floating-point parameters does not forget
+    anymore the format of origin, which then provides proper bounds for them.
+  o [Frama-C plugin] bts 0361 fixed: free allows NULL as argument
   o [PVS output] fixed problems with idents starting with underscore
   o [Krakatoa & Frama-C plugin] new pragma TerminationPolicy to allow
     the user to prevent generation of VCs for termination

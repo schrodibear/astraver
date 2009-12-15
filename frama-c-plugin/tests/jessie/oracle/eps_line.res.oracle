@@ -351,90 +351,91 @@ parameter alloc_struct_void_P_requires :
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
 parameter eps_line :
- sx:gen_float ->
-  sy:gen_float ->
-   vx:gen_float ->
-    vy:gen_float ->
+ sx:double ->
+  sy:double ->
+   vx:double ->
+    vy:double ->
      { } int
      { ((true = true) ->
         (JC_38:
         (neq_int(result, (0)) ->
          eq_int(result,
-         mul_int(l_sign(add_real(mul_real(exact_value(sx), exact_value(vx)),
-                        mul_real(exact_value(sy), exact_value(vy)))),
-         l_sign(sub_real(mul_real(exact_value(sx), exact_value(vy)),
-                mul_real(exact_value(sy), exact_value(vx))))))))) }
+         mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
+                        mul_real(double_exact(sy), double_exact(vy)))),
+         l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
+                mul_real(double_exact(sy), double_exact(vx))))))))) }
 
 parameter eps_line_requires :
- sx:gen_float ->
-  sy:gen_float ->
-   vx:gen_float ->
-    vy:gen_float ->
+ sx:double ->
+  sy:double ->
+   vx:double ->
+    vy:double ->
      { (JC_25:
-       ((JC_17: eq_real(float_value(sx), exact_value(sx)))
-       and ((JC_18: eq_real(float_value(sy), exact_value(sy)))
-           and ((JC_19: eq_real(float_value(vx), exact_value(vx)))
-               and ((JC_20: eq_real(float_value(vy), exact_value(vy)))
-                   and ((JC_21: le_real(abs_real(float_value(sx)), 100.0))
+       ((JC_17: eq_real(double_value(sx), double_exact(sx)))
+       and ((JC_18: eq_real(double_value(sy), double_exact(sy)))
+           and ((JC_19: eq_real(double_value(vx), double_exact(vx)))
+               and ((JC_20: eq_real(double_value(vy), double_exact(vy)))
+                   and ((JC_21: le_real(abs_real(double_value(sx)), 100.0))
                        and ((JC_22:
-                            le_real(abs_real(float_value(sy)), 100.0))
+                            le_real(abs_real(double_value(sy)), 100.0))
                            and ((JC_23:
-                                le_real(abs_real(float_value(vx)), 1.0))
+                                le_real(abs_real(double_value(vx)), 1.0))
                                and (JC_24:
-                                   le_real(abs_real(float_value(vy)), 1.0))))))))))}
+                                   le_real(abs_real(double_value(vy)), 1.0))))))))))}
      int
      { ((true = true) ->
         (JC_38:
         (neq_int(result, (0)) ->
          eq_int(result,
-         mul_int(l_sign(add_real(mul_real(exact_value(sx), exact_value(vx)),
-                        mul_real(exact_value(sy), exact_value(vy)))),
-         l_sign(sub_real(mul_real(exact_value(sx), exact_value(vy)),
-                mul_real(exact_value(sy), exact_value(vx))))))))) }
+         mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
+                        mul_real(double_exact(sy), double_exact(vy)))),
+         l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
+                mul_real(double_exact(sy), double_exact(vx))))))))) }
 
 parameter sign :
- x_0:gen_float ->
-  e1:gen_float ->
-   e2:gen_float ->
+ x_0:double ->
+  e1:double ->
+   e2:double ->
     { } int
     { ((true = true) ->
        (JC_14:
        ((JC_12:
-        (neq_int(result, (0)) -> eq_int(result, l_sign(exact_value(x_0)))))
+        (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
        and (JC_13: le_real(abs_real(real_of_int(result)), 1.0))))) }
 
 parameter sign_requires :
- x_0:gen_float ->
-  e1:gen_float ->
-   e2:gen_float ->
+ x_0:double ->
+  e1:double ->
+   e2:double ->
     { (JC_3:
       ((JC_1:
-       le_real(float_value(e1), sub_real(float_value(x_0), exact_value(x_0))))
+       le_real(double_value(e1),
+       sub_real(double_value(x_0), double_exact(x_0))))
       and (JC_2:
-          le_real(sub_real(float_value(x_0), exact_value(x_0)),
-          float_value(e2)))))}
+          le_real(sub_real(double_value(x_0), double_exact(x_0)),
+          double_value(e2)))))}
     int
     { ((true = true) ->
        (JC_14:
        ((JC_12:
-        (neq_int(result, (0)) -> eq_int(result, l_sign(exact_value(x_0)))))
+        (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
        and (JC_13: le_real(abs_real(real_of_int(result)), 1.0))))) }
 
 let eps_line_ensures_default =
- fun (sx : gen_float) (sy : gen_float) (vx : gen_float) (vy : gen_float) ->
+ fun (sx : double) (sy : double) (vx : double) (vy : double) ->
   { ((true = true)
     and (JC_35:
-        ((JC_27: eq_real(float_value(sx), exact_value(sx)))
-        and ((JC_28: eq_real(float_value(sy), exact_value(sy)))
-            and ((JC_29: eq_real(float_value(vx), exact_value(vx)))
-                and ((JC_30: eq_real(float_value(vy), exact_value(vy)))
-                    and ((JC_31: le_real(abs_real(float_value(sx)), 100.0))
+        ((JC_27: eq_real(double_value(sx), double_exact(sx)))
+        and ((JC_28: eq_real(double_value(sy), double_exact(sy)))
+            and ((JC_29: eq_real(double_value(vx), double_exact(vx)))
+                and ((JC_30: eq_real(double_value(vy), double_exact(vy)))
+                    and ((JC_31: le_real(abs_real(double_value(sx)), 100.0))
                         and ((JC_32:
-                             le_real(abs_real(float_value(sy)), 100.0))
+                             le_real(abs_real(double_value(sy)), 100.0))
                             and ((JC_33:
-                                 le_real(abs_real(float_value(vx)), 1.0))
+                                 le_real(abs_real(double_value(vx)), 1.0))
                                 and (JC_34:
-                                    le_real(abs_real(float_value(vy)), 1.0))))))))))) }
+                                    le_real(abs_real(double_value(vy)), 1.0))))))))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -447,18 +448,18 @@ let eps_line_ensures_default =
        (let jessie_39 = (s1 := (C_14:
                                (let jessie_38 = (C_12:
                                                 (JC_58:
-                                                ((((add_gen_float_safe Double) nearest_even) 
+                                                (((add_double_safe nearest_even) 
                                                   (C_11:
                                                   (JC_56:
-                                                  ((((mul_gen_float_safe Double) nearest_even) sx) vx)))) 
+                                                  (((mul_double_safe nearest_even) sx) vx)))) 
                                                  (C_10:
                                                  (JC_57:
-                                                 ((((mul_gen_float_safe Double) nearest_even) sy) vy)))))) in
+                                                 (((mul_double_safe nearest_even) sy) vy)))))) in
                                (let jessie_37 = (C_13:
                                                 (JC_55:
-                                                (((neg_gen_float_safe Double) nearest_even) 
-                                                 (((gen_float_of_real_safe Double) nearest_even) 0x1.9000000001ap-45)))) in
-                               (let jessie_36 = (((gen_float_of_real_safe Double) nearest_even) 0x1.9000000001ap-45) in
+                                                ((neg_double_safe nearest_even) 
+                                                 ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
+                               (let jessie_36 = ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
                                (JC_59:
                                (((sign jessie_38) jessie_37) jessie_36))))))) in
        void);
@@ -467,18 +468,18 @@ let eps_line_ensures_default =
         (let jessie_44 = (s2 := (C_20:
                                 (let jessie_43 = (C_18:
                                                  (JC_63:
-                                                 ((((sub_gen_float_safe Double) nearest_even) 
+                                                 (((sub_double_safe nearest_even) 
                                                    (C_17:
                                                    (JC_61:
-                                                   ((((mul_gen_float_safe Double) nearest_even) sx) vy)))) 
+                                                   (((mul_double_safe nearest_even) sx) vy)))) 
                                                   (C_16:
                                                   (JC_62:
-                                                  ((((mul_gen_float_safe Double) nearest_even) sy) vx)))))) in
+                                                  (((mul_double_safe nearest_even) sy) vx)))))) in
                                 (let jessie_42 = (C_19:
                                                  (JC_60:
-                                                 (((neg_gen_float_safe Double) nearest_even) 
-                                                  (((gen_float_of_real_safe Double) nearest_even) 0x1.9000000001ap-45)))) in
-                                (let jessie_41 = (((gen_float_of_real_safe Double) nearest_even) 0x1.9000000001ap-45) in
+                                                 ((neg_double_safe nearest_even) 
+                                                  ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
+                                (let jessie_41 = ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
                                 (JC_64:
                                 (((sign jessie_43) jessie_42) jessie_41))))))) in
         void);
@@ -499,23 +500,24 @@ let eps_line_ensures_default =
   { (JC_37:
     (neq_int(result, (0)) ->
      eq_int(result,
-     mul_int(l_sign(add_real(mul_real(exact_value(sx), exact_value(vx)),
-                    mul_real(exact_value(sy), exact_value(vy)))),
-     l_sign(sub_real(mul_real(exact_value(sx), exact_value(vy)),
-            mul_real(exact_value(sy), exact_value(vx)))))))) }
+     mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
+                    mul_real(double_exact(sy), double_exact(vy)))),
+     l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
+            mul_real(double_exact(sy), double_exact(vx)))))))) }
 
 let eps_line_safety =
- fun (sx : gen_float) (sy : gen_float) (vx : gen_float) (vy : gen_float) ->
+ fun (sx : double) (sy : double) (vx : double) (vy : double) ->
   { (JC_35:
-    ((JC_27: eq_real(float_value(sx), exact_value(sx)))
-    and ((JC_28: eq_real(float_value(sy), exact_value(sy)))
-        and ((JC_29: eq_real(float_value(vx), exact_value(vx)))
-            and ((JC_30: eq_real(float_value(vy), exact_value(vy)))
-                and ((JC_31: le_real(abs_real(float_value(sx)), 100.0))
-                    and ((JC_32: le_real(abs_real(float_value(sy)), 100.0))
-                        and ((JC_33: le_real(abs_real(float_value(vx)), 1.0))
+    ((JC_27: eq_real(double_value(sx), double_exact(sx)))
+    and ((JC_28: eq_real(double_value(sy), double_exact(sy)))
+        and ((JC_29: eq_real(double_value(vx), double_exact(vx)))
+            and ((JC_30: eq_real(double_value(vy), double_exact(vy)))
+                and ((JC_31: le_real(abs_real(double_value(sx)), 100.0))
+                    and ((JC_32: le_real(abs_real(double_value(sy)), 100.0))
+                        and ((JC_33:
+                             le_real(abs_real(double_value(vx)), 1.0))
                             and (JC_34:
-                                le_real(abs_real(float_value(vy)), 1.0)))))))))) }
+                                le_real(abs_real(double_value(vy)), 1.0)))))))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -528,20 +530,20 @@ let eps_line_safety =
        (let jessie_26 = (s1 := (C_14:
                                (let jessie_25 = (C_12:
                                                 (JC_46:
-                                                ((((add_gen_float Double) nearest_even) 
+                                                (((add_double nearest_even) 
                                                   (C_11:
                                                   (JC_44:
-                                                  ((((mul_gen_float Double) nearest_even) sx) vx)))) 
+                                                  (((mul_double nearest_even) sx) vx)))) 
                                                  (C_10:
                                                  (JC_45:
-                                                 ((((mul_gen_float Double) nearest_even) sy) vy)))))) in
+                                                 (((mul_double nearest_even) sy) vy)))))) in
                                (let jessie_24 = (C_13:
                                                 (JC_43:
-                                                (((neg_gen_float Double) nearest_even) 
+                                                ((neg_double nearest_even) 
                                                  (JC_42:
-                                                 (((gen_float_of_real Double) nearest_even) 0x1.9000000001ap-45))))) in
+                                                 ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
                                (let jessie_23 = (JC_41:
-                                                (((gen_float_of_real Double) nearest_even) 0x1.9000000001ap-45)) in
+                                                ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
                                (JC_47:
                                (((sign_requires jessie_25) jessie_24) jessie_23))))))) in
        void);
@@ -550,20 +552,20 @@ let eps_line_safety =
         (let jessie_31 = (s2 := (C_20:
                                 (let jessie_30 = (C_18:
                                                  (JC_53:
-                                                 ((((sub_gen_float Double) nearest_even) 
+                                                 (((sub_double nearest_even) 
                                                    (C_17:
                                                    (JC_51:
-                                                   ((((mul_gen_float Double) nearest_even) sx) vy)))) 
+                                                   (((mul_double nearest_even) sx) vy)))) 
                                                   (C_16:
                                                   (JC_52:
-                                                  ((((mul_gen_float Double) nearest_even) sy) vx)))))) in
+                                                  (((mul_double nearest_even) sy) vx)))))) in
                                 (let jessie_29 = (C_19:
                                                  (JC_50:
-                                                 (((neg_gen_float Double) nearest_even) 
+                                                 ((neg_double nearest_even) 
                                                   (JC_49:
-                                                  (((gen_float_of_real Double) nearest_even) 0x1.9000000001ap-45))))) in
+                                                  ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
                                 (let jessie_28 = (JC_48:
-                                                 (((gen_float_of_real Double) nearest_even) 0x1.9000000001ap-45)) in
+                                                 ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
                                 (JC_54:
                                 (((sign_requires jessie_30) jessie_29) jessie_28))))))) in
         void);
@@ -584,15 +586,15 @@ let eps_line_safety =
   { true }
 
 let sign_ensures_default =
- fun (x_0 : gen_float) (e1 : gen_float) (e2 : gen_float) ->
+ fun (x_0 : double) (e1 : double) (e2 : double) ->
   { ((true = true)
     and (JC_7:
         ((JC_5:
-         le_real(float_value(e1),
-         sub_real(float_value(x_0), exact_value(x_0))))
+         le_real(double_value(e1),
+         sub_real(double_value(x_0), double_exact(x_0))))
         and (JC_6:
-            le_real(sub_real(float_value(x_0), exact_value(x_0)),
-            float_value(e2)))))) }
+            le_real(sub_real(double_value(x_0), double_exact(x_0)),
+            double_value(e2)))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -600,7 +602,7 @@ let sign_ensures_default =
      (let __retres = ref (any_int void) in
      try
       (let jessie_20 = begin
-                         (if ((gt_gen_float x_0) e2)
+                         (if ((gt_double x_0) e2)
                          then
                           (let jessie_14 = (C_1:
                                            begin
@@ -610,7 +612,7 @@ let sign_ensures_default =
                                            end) in
                           void)
                          else void);
-                        (if ((lt_gen_float x_0) e1)
+                        (if ((lt_double x_0) e1)
                         then
                          (let jessie_17 = (C_2:
                                           begin
@@ -638,17 +640,18 @@ let sign_ensures_default =
    !return end))
   { (JC_11:
     ((JC_9:
-     (neq_int(result, (0)) -> eq_int(result, l_sign(exact_value(x_0)))))
+     (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
     and (JC_10: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 let sign_safety =
- fun (x_0 : gen_float) (e1 : gen_float) (e2 : gen_float) ->
+ fun (x_0 : double) (e1 : double) (e2 : double) ->
   { (JC_7:
     ((JC_5:
-     le_real(float_value(e1), sub_real(float_value(x_0), exact_value(x_0))))
+     le_real(double_value(e1),
+     sub_real(double_value(x_0), double_exact(x_0))))
     and (JC_6:
-        le_real(sub_real(float_value(x_0), exact_value(x_0)),
-        float_value(e2))))) }
+        le_real(sub_real(double_value(x_0), double_exact(x_0)),
+        double_value(e2))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -656,7 +659,7 @@ let sign_safety =
      (let __retres = ref (any_int void) in
      try
       (let jessie_10 = begin
-                         (if ((gt_gen_float x_0) e2)
+                         (if ((gt_double x_0) e2)
                          then
                           (let jessie_4 = (C_1:
                                           begin
@@ -666,7 +669,7 @@ let sign_safety =
                                           end) in
                           void)
                          else void);
-                        (if ((lt_gen_float x_0) e1)
+                        (if ((lt_double x_0) e1)
                         then
                          (let jessie_7 = (C_2:
                                          begin
@@ -1743,248 +1746,194 @@ type mode =
   | down
   | nearest_away
 
-type float_format =
-  | Single
-  | Double
-  | Binary80
-  | Quad
+type double
 
-type gen_float
+logic round_double : mode, real -> real
 
-logic round_float : float_format, mode, real -> real
+logic round_double_logic : mode, real -> double
 
-logic gen_float_of_real_logic : float_format, mode, real -> gen_float
+logic double_value : double -> real
 
-logic float_value : gen_float -> real
+logic double_exact : double -> real
 
-logic exact_value : gen_float -> real
+logic double_model : double -> real
 
-logic model_value : gen_float -> real
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
 
-function max_gen_float(f: float_format) : real = float_format_match(f,
-  0x1.FFFFFEp127, 0x1.FFFFFFFFFFFFFp1023, 0x1.FFFFFFFFFFFFFFFEp16383,
-  0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383)
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
 
-logic min_gen_float : float_format -> real
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
 
-axiom min_single: (min_gen_float(Single) = 0x1.p-149)
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
 
-axiom min_double: (min_gen_float(Double) = 0x1.p-1074)
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
 
-predicate no_overflow(f: float_format, m: mode, x: real) =
-  (abs_real(round_float(f, m, x)) <= max_gen_float(f))
+type single
 
-function gen_round_error(x: gen_float) : real =
-  abs_real((float_value(x) - exact_value(x)))
+logic round_single : mode, real -> real
 
-function gen_relative_error(x: gen_float) : real =
-  abs_real(((float_value(x) - exact_value(x)) / exact_value(x)))
+logic round_single_logic : mode, real -> single
 
-function gen_total_error(x: gen_float) : real =
-  abs_real((float_value(x) - model_value(x)))
+logic single_value : single -> real
 
-axiom bounded_real_no_overflow:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((abs_real(x) <= max_gen_float(f)) -> no_overflow(f, m, x)))))
+logic single_exact : single -> real
 
-axiom round_of_zero:
-  (forall f:float_format. (forall m:mode. (round_float(f, m, 0.0) = 0.0)))
+logic single_model : single -> real
 
-axiom round_greater_max:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((not no_overflow(f, m, x)) -> (abs_real(x) > max_gen_float(f))))))
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
 
-axiom round_increasing:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (forall y:real.
-          ((x <= y) -> (round_float(f, m, x) <= round_float(f, m, y)))))))
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
 
-axiom round_up_ge:
-  (forall f:float_format. (forall x:real. (round_float(f, up, x) >= x)))
+function max_single() : real = 0x1.FFFFFEp127
 
-axiom round_up_neg:
-  (forall f:float_format.
-    (forall x:real. (round_float(f, up, (-x)) = (-round_float(f, down, x)))))
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
 
-axiom round_idempotent:
-  (forall f:float_format.
-    (forall m1:mode.
-      (forall m2:mode.
-        (forall x:real. (round_float(f, m1, round_float(f, m2,
-          x)) = round_float(f, m2, x))))))
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
 
-axiom a1:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (no_overflow(f, m, x) -> (float_value(gen_float_of_real_logic(f, m,
-         x)) = round_float(f, m, x))))))
+logic single_to_double : mode, single -> double
 
-axiom a2:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real. (exact_value(gen_float_of_real_logic(f, m, x)) = x))))
+logic double_to_single : mode, double -> single
 
-axiom a3:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real. (model_value(gen_float_of_real_logic(f, m, x)) = x))))
+logic cond_sub_double : mode, double, double -> int
 
-logic cond_sub : float_format, mode, gen_float, gen_float -> int
+axiom cond_sub_double_axiom1:
+  (forall m:mode.
+    (forall x:double.
+      (forall y:double.
+        ((abs_real((double_value(x) - double_value(y))) >= 0x1.p-1022) ->
+         (cond_sub_double(m, x, y) = 1)))))
 
-axiom cond_sub_axiom1:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:gen_float.
-        (forall y:gen_float.
-          ((abs_real((float_value(x) - float_value(y))) >= 0x1.p-1022) ->
-           (cond_sub(f, m, x, y) = 1))))))
+axiom cond_sub_double_axiom2:
+  (forall m:mode.
+    (forall x:double.
+      (forall y:double.
+        ((((0x1.p-1075 <= abs_real((double_value(x) - double_value(y)))) and
+           (abs_real((double_value(x) - double_value(y))) <= 0x1.p-1022)) and
+          ((abs_real((double_value(x) - double_value(y))) <> 0x1.p-1022) and
+           (abs_real((double_value(x) - double_value(y))) <> 0x1.p-1075))) ->
+         (cond_sub_double(m, x, y) = 2)))))
 
-axiom cond_sub_axiom2:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:gen_float.
-        (forall y:gen_float.
-          ((((0x1.p-1075 <= abs_real((float_value(x) - float_value(y)))) and
-             (abs_real((float_value(x) - float_value(y))) <= 0x1.p-1022)) and
-            ((abs_real((float_value(x) - float_value(y))) <> 0x1.p-1022) and
-             (abs_real((float_value(x) - float_value(y))) <> 0x1.p-1075))) ->
-           (cond_sub(f, m, x, y) = 2))))))
+axiom cond_sub_double_axiom3:
+  (forall m:mode.
+    (forall x:double.
+      (forall y:double.
+        (((0.0 <= abs_real((double_value(x) - double_value(y)))) and
+          (abs_real((double_value(x) - double_value(y))) <= 0x1.p-1075)) ->
+         (cond_sub_double(m, x, y) = 3)))))
 
-axiom cond_sub_axiom3:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:gen_float.
-        (forall y:gen_float.
-          (((0.0 <= abs_real((float_value(x) - float_value(y)))) and
-            (abs_real((float_value(x) - float_value(y))) <= 0x1.p-1075)) ->
-           (cond_sub(f, m, x, y) = 3))))))
+logic post_cond_sub_double : mode, double, double, double -> int
 
-logic post_cond_sub : float_format, mode, gen_float, gen_float,
-gen_float -> int
+axiom post_cond_sub_double_axiom1:
+  (forall m:mode.
+    (forall x:double.
+      (forall y:double.
+        (forall result:double.
+          ((post_cond_sub_double(m, x, y, result) = 1) ->
+           (abs_real(((double_value(result) - (double_value(x) - double_value(y))) / (double_value(x) - double_value(y)))) <= 0x1.p-53))))))
 
-axiom post_cond_sub_axiom1:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:gen_float.
-        (forall y:gen_float.
-          (forall result:gen_float.
-            ((post_cond_sub(f, m, x, y, result) = 1) ->
-             (abs_real(((float_value(result) - (float_value(x) - float_value(y))) / (float_value(x) - float_value(y)))) <= 0x1.p-53)))))))
+axiom post_cond_sub_double_axiom2:
+  (forall m:mode.
+    (forall x:double.
+      (forall y:double.
+        (forall result:double.
+          ((post_cond_sub_double(m, x, y, result) = 2) ->
+           (double_value(result) = (double_value(x) - double_value(y))))))))
 
-axiom post_cond_sub_axiom2:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:gen_float.
-        (forall y:gen_float.
-          (forall result:gen_float.
-            ((post_cond_sub(f, m, x, y, result) = 2) ->
-             (float_value(result) = (float_value(x) - float_value(y)))))))))
+axiom post_cond_sub_double_axiom3:
+  (forall m:mode.
+    (forall x:double.
+      (forall y:double.
+        (forall result:double.
+          ((post_cond_sub_double(m, x, y, result) = 3) ->
+           (double_value(result) = 0.0))))))
 
-axiom post_cond_sub_axiom3:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:gen_float.
-        (forall y:gen_float.
-          (forall result:gen_float.
-            ((post_cond_sub(f, m, x, y, result) = 3) ->
-             (float_value(result) = 0.0)))))))
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
 
-predicate gen_float_of_real_post(f: float_format, m: mode, x: real,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, x)) and
-   ((exact_value(res) = x) and (model_value(res) = x)))
+predicate add_double_post(m: mode, x: double, y: double, result: double) =
+  (((abs_real((double_value(x) + double_value(y))) >= 0x1.p-1022) ->
+    ((abs_real(((double_value(result) - (double_value(x) + double_value(y))) / (double_value(x) + double_value(y)))) <= 0x1.0000000001p-53) and
+     ((abs_real(double_value(result)) >= 0x1.p-1022) and
+      (abs_real((double_value(x) + double_value(y))) >= 0x1.p-1022)))) and
+   (((abs_real((double_value(x) + double_value(y))) <= 0x1.p-1022) ->
+     (((abs_real((double_value(result) - (double_value(x) + double_value(y)))) <= 0x1.00000000001p-1075) and
+       (abs_real((double_value(x) + double_value(y))) <= 0x1.p-1022)) and
+      (abs_real(double_value(result)) <= 0x1.p-1022))) and
+    (double_exact(result) = (double_exact(x) + double_exact(y)))))
 
-predicate add_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, result: gen_float) =
-  (((abs_real((float_value(x) + float_value(y))) >= 0x1.p-1022) ->
-    ((abs_real(((float_value(result) - (float_value(x) + float_value(y))) / (float_value(x) + float_value(y)))) <= 0x1.0000000001p-53) and
-     ((abs_real(float_value(result)) >= 0x1.p-1022) and
-      (abs_real((float_value(x) + float_value(y))) >= 0x1.p-1022)))) and
-   (((abs_real((float_value(x) + float_value(y))) <= 0x1.p-1022) ->
-     (((abs_real((float_value(result) - (float_value(x) + float_value(y)))) <= 0x1.00000000001p-1075) and
-       (abs_real((float_value(x) + float_value(y))) <= 0x1.p-1022)) and
-      (abs_real(float_value(result)) <= 0x1.p-1022))) and
-    (exact_value(result) = (exact_value(x) + exact_value(y)))))
+predicate sub_double_post(m: mode, x: double, y: double, result: double) =
+  (((abs_real((double_value(x) - double_value(y))) >= 0x1.p-1022) ->
+    ((abs_real(((double_value(result) - (double_value(x) - double_value(y))) / (double_value(x) - double_value(y)))) <= 0x1.0000000001p-53) and
+     ((abs_real(double_value(result)) >= 0x1.p-1022) and
+      (abs_real((double_value(x) - double_value(y))) >= 0x1.p-1022)))) and
+   ((((0.0 <= abs_real((double_value(x) - double_value(y)))) and
+      (abs_real((double_value(x) - double_value(y))) <= 0x1.p-1022)) ->
+     (((abs_real((double_value(result) - (double_value(x) - double_value(y)))) <= 0x1.00000000001p-1075) and
+       (abs_real((double_value(x) - double_value(y))) <= 0x1.p-1022)) and
+      (abs_real(double_value(result)) <= 0x1.p-1022))) and
+    (double_exact(result) = (double_exact(x) - double_exact(y)))))
 
-predicate sub_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, result: gen_float) =
-  (((abs_real((float_value(x) - float_value(y))) >= 0x1.p-1022) ->
-    ((abs_real(((float_value(result) - (float_value(x) - float_value(y))) / (float_value(x) - float_value(y)))) <= 0x1.0000000001p-53) and
-     ((abs_real(float_value(result)) >= 0x1.p-1022) and
-      (abs_real((float_value(x) - float_value(y))) >= 0x1.p-1022)))) and
-   ((((0.0 <= abs_real((float_value(x) - float_value(y)))) and
-      (abs_real((float_value(x) - float_value(y))) <= 0x1.p-1022)) ->
-     (((abs_real((float_value(result) - (float_value(x) - float_value(y)))) <= 0x1.00000000001p-1075) and
-       (abs_real((float_value(x) - float_value(y))) <= 0x1.p-1022)) and
-      (abs_real(float_value(result)) <= 0x1.p-1022))) and
-    (exact_value(result) = (exact_value(x) - exact_value(y)))))
+predicate neg_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, (-double_value(x)))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
 
-predicate neg_gen_float_post(f: float_format, m: mode, x: gen_float,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, (-float_value(x)))) and
-   ((exact_value(res) = (-exact_value(x))) and
-    (model_value(res) = (-model_value(x)))))
+predicate mul_double_post(m: mode, x: double, y: double, result: double) =
+  (((abs_real((double_value(x) * double_value(y))) >= 0x1.p-1022) ->
+    ((abs_real(((double_value(result) - (double_value(x) * double_value(y))) / (double_value(x) * double_value(y)))) <= 0x1.0000000001p-53) and
+     ((abs_real(double_value(result)) >= 0x1.p-1022) and
+      (abs_real((double_value(x) * double_value(y))) >= 0x1.p-1022)))) and
+   (((abs_real((double_value(x) * double_value(y))) <= 0x1.p-1022) ->
+     (((abs_real((double_value(result) - (double_value(x) * double_value(y)))) <= 0x1.00000000001p-1075) and
+       (abs_real((double_value(x) * double_value(y))) <= 0x1.p-1022)) and
+      (abs_real(double_value(result)) <= 0x1.p-1022))) and
+    (double_exact(result) = (double_exact(x) * double_exact(y)))))
 
-predicate mul_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, result: gen_float) =
-  (((abs_real((float_value(x) * float_value(y))) >= 0x1.p-1022) ->
-    ((abs_real(((float_value(result) - (float_value(x) * float_value(y))) / (float_value(x) * float_value(y)))) <= 0x1.0000000001p-53) and
-     ((abs_real(float_value(result)) >= 0x1.p-1022) and
-      (abs_real((float_value(x) * float_value(y))) >= 0x1.p-1022)))) and
-   (((abs_real((float_value(x) * float_value(y))) <= 0x1.p-1022) ->
-     (((abs_real((float_value(result) - (float_value(x) * float_value(y)))) <= 0x1.00000000001p-1075) and
-       (abs_real((float_value(x) * float_value(y))) <= 0x1.p-1022)) and
-      (abs_real(float_value(result)) <= 0x1.p-1022))) and
-    (exact_value(result) = (exact_value(x) * exact_value(y)))))
+predicate div_double_post(m: mode, x: double, y: double, result: double) =
+  (((abs_real((double_value(x) / double_value(y))) >= 0x1.p-1022) ->
+    ((abs_real(((double_value(result) - (double_value(x) / double_value(y))) / (double_value(x) / double_value(y)))) <= 0x1.0000000001p-53) and
+     ((abs_real(double_value(result)) >= 0x1.p-1022) and
+      (abs_real((double_value(x) / double_value(y))) >= 0x1.p-1022)))) and
+   (((abs_real((double_value(x) / double_value(y))) <= 0x1.p-1022) ->
+     (((abs_real((double_value(result) - (double_value(x) / double_value(y)))) <= 0x1.00000000001p-1075) and
+       (abs_real((double_value(x) / double_value(y))) <= 0x1.p-1022)) and
+      (abs_real(double_value(result)) <= 0x1.p-1022))) and
+    (double_exact(result) = (double_exact(x) / double_exact(y)))))
 
-predicate div_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, result: gen_float) =
-  (((abs_real((float_value(x) / float_value(y))) >= 0x1.p-1022) ->
-    ((abs_real(((float_value(result) - (float_value(x) / float_value(y))) / (float_value(x) / float_value(y)))) <= 0x1.0000000001p-53) and
-     ((abs_real(float_value(result)) >= 0x1.p-1022) and
-      (abs_real((float_value(x) / float_value(y))) >= 0x1.p-1022)))) and
-   (((abs_real((float_value(x) / float_value(y))) <= 0x1.p-1022) ->
-     (((abs_real((float_value(result) - (float_value(x) / float_value(y)))) <= 0x1.00000000001p-1075) and
-       (abs_real((float_value(x) / float_value(y))) <= 0x1.p-1022)) and
-      (abs_real(float_value(result)) <= 0x1.p-1022))) and
-    (exact_value(result) = (exact_value(x) / exact_value(y)))))
+predicate sqrt_double_post(m: mode, x: double, result: double) =
+  (((abs_real(sqrt_real(double_value(x))) >= 0x1.p-1022) ->
+    ((abs_real((double_value(result) - (sqrt_real(double_value(x)) / sqrt_real(double_value(x))))) <= 0x1.0000000001p-53) and
+     ((abs_real(double_value(result)) >= 0x1.p-1022) and
+      (abs_real(sqrt_real(double_value(x))) >= 0x1.p-1022)))) and
+   (((abs_real(sqrt_real(double_value(x))) <= 0x1.p-1022) ->
+     (((abs_real((double_value(result) - sqrt_real(double_value(x)))) <= 0x1.00000000001p-1075) and
+       (abs_real(sqrt_real(double_value(x))) <= 0x1.p-1022)) and
+      (abs_real(double_value(result)) <= 0x1.p-1022))) and
+    (double_exact(result) = sqrt_real(double_exact(x)))))
 
-predicate sqrt_gen_float_post(f: float_format, m: mode, x: gen_float,
-  result: gen_float) =
-  (((abs_real(sqrt_real(float_value(x))) >= 0x1.p-1022) ->
-    ((abs_real((float_value(result) - (sqrt_real(float_value(x)) / sqrt_real(float_value(x))))) <= 0x1.0000000001p-53) and
-     ((abs_real(float_value(result)) >= 0x1.p-1022) and
-      (abs_real(sqrt_real(float_value(x))) >= 0x1.p-1022)))) and
-   (((abs_real(sqrt_real(float_value(x))) <= 0x1.p-1022) ->
-     (((abs_real((float_value(result) - sqrt_real(float_value(x)))) <= 0x1.00000000001p-1075) and
-       (abs_real(sqrt_real(float_value(x))) <= 0x1.p-1022)) and
-      (abs_real(float_value(result)) <= 0x1.p-1022))) and
-    (exact_value(result) = sqrt_real(exact_value(x)))))
-
-predicate abs_gen_float_post(f: float_format, m: mode, x: gen_float,
-  result: gen_float) =
-  (((abs_real(float_value(x)) >= 0x1.p-1022) ->
-    ((abs_real((float_value(result) - (abs_real(float_value(x)) / abs_real(float_value(x))))) <= 0x1.0000000001p-53) and
-     ((abs_real(float_value(result)) >= 0x1.p-1022) and
-      (abs_real(abs_real(float_value(x))) >= 0x1.p-1022)))) and
-   (((abs_real(float_value(x)) <= 0x1.p-1022) ->
-     (((abs_real((float_value(result) - abs_real(float_value(x)))) <= 0x1.00000000001p-1075) and
-       (abs_real(float_value(x)) <= 0x1.p-1022)) and
-      (abs_real(float_value(result)) <= 0x1.p-1022))) and
-    (exact_value(result) = abs_real(exact_value(x)))))
-
-predicate cast_gen_float_post(f: float_format, m: mode, x: gen_float,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, float_value(x))) and
-   ((exact_value(res) = exact_value(x)) and
-    (model_value(res) = model_value(x))))
+predicate abs_double_post(m: mode, x: double, result: double) =
+  (((abs_real(double_value(x)) >= 0x1.p-1022) ->
+    ((abs_real((double_value(result) - (abs_real(double_value(x)) / abs_real(double_value(x))))) <= 0x1.0000000001p-53) and
+     ((abs_real(double_value(result)) >= 0x1.p-1022) and
+      (abs_real(abs_real(double_value(x))) >= 0x1.p-1022)))) and
+   (((abs_real(double_value(x)) <= 0x1.p-1022) ->
+     (((abs_real((double_value(result) - abs_real(double_value(x)))) <= 0x1.00000000001p-1075) and
+       (abs_real(double_value(x)) <= 0x1.p-1022)) and
+      (abs_real(double_value(result)) <= 0x1.p-1022))) and
+    (double_exact(result) = abs_real(double_exact(x)))))
 
 type char_P
 

@@ -10,8 +10,9 @@ int main() {
   double y = tmp - 1.0;
   //@ assert y == \exact(y);
   double res = x - y * y;
-  //@ assert res == 0.0;   // OK if IEE-754, but if real mode or FMA: -1.0
+  //@ assert res == 0.0;   // OK if IEEE-754, but if real mode or FMA: -1.0
   printf("%g\n",res);
+  return 0;
 }
 /* 
 Local Variables:

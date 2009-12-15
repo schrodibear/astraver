@@ -825,7 +825,7 @@ predicate is_exact_int_mat(X:double_P pointer,
  N:int,
  M:int,
  double_P_X_1_alloc_table_at_L:double_P alloc_table,
- double_P_double_M_X_1_at_L:(double_P, gen_float) memory) =
+ double_P_double_M_X_1_at_L:(double_P, double) memory) =
  (le_int(offset_min(double_P_X_1_alloc_table_at_L, X), (0))
  and (ge_int(offset_max(double_P_X_1_alloc_table_at_L, X),
       add_int(mul_int(N, LDX), M))
@@ -838,16 +838,17 @@ predicate is_exact_int_mat(X:double_P pointer,
                            ((le_int((0), i)
                             and (lt_int(i, N)
                                 and (le_int((0), j) and lt_int(j, M)))) ->
-                            (eq_real(gen_round_error(select(double_P_double_M_X_1_at_L,
-                                                     shift(X,
-                                                     add_int(mul_int(i, LDX),
-                                                     j)))),
+                            (eq_real(double_round_error(select(double_P_double_M_X_1_at_L,
+                                                        shift(X,
+                                                        add_int(mul_int(i,
+                                                                LDX),
+                                                        j)))),
                              0.0)
                             and (exists v:int.
-                                 eq_real(float_value(select(double_P_double_M_X_1_at_L,
-                                                     shift(X,
-                                                     add_int(mul_int(i, LDX),
-                                                     j)))),
+                                 eq_real(double_value(select(double_P_double_M_X_1_at_L,
+                                                      shift(X,
+                                                      add_int(mul_int(i, LDX),
+                                                      j)))),
                                  real_of_int(v)))))))))))))
 
 predicate is_exact_int_mat_bounded_by(X_0:double_P pointer,
@@ -857,7 +858,7 @@ predicate is_exact_int_mat_bounded_by(X_0:double_P pointer,
  min:int,
  max:int,
  double_P_X_0_2_alloc_table_at_L:double_P alloc_table,
- double_P_double_M_X_0_2_at_L:(double_P, gen_float) memory) =
+ double_P_double_M_X_0_2_at_L:(double_P, double) memory) =
  (le_int(offset_min(double_P_X_0_2_alloc_table_at_L, X_0), (0))
  and (ge_int(offset_max(double_P_X_0_2_alloc_table_at_L, X_0),
       add_int(mul_int(N_0, LDX_0), M_0))
@@ -870,29 +871,29 @@ predicate is_exact_int_mat_bounded_by(X_0:double_P pointer,
                            ((le_int((0), i_0)
                             and (lt_int(i_0, N_0)
                                 and (le_int((0), j_0) and lt_int(j_0, M_0)))) ->
-                            (eq_real(gen_round_error(select(double_P_double_M_X_0_2_at_L,
-                                                     shift(X_0,
-                                                     add_int(mul_int(i_0,
-                                                             LDX_0),
-                                                     j_0)))),
+                            (eq_real(double_round_error(select(double_P_double_M_X_0_2_at_L,
+                                                        shift(X_0,
+                                                        add_int(mul_int(i_0,
+                                                                LDX_0),
+                                                        j_0)))),
                              0.0)
                             and ((exists v_0:int.
-                                  eq_real(float_value(select(double_P_double_M_X_0_2_at_L,
-                                                      shift(X_0,
-                                                      add_int(mul_int(i_0,
-                                                              LDX_0),
-                                                      j_0)))),
+                                  eq_real(double_value(select(double_P_double_M_X_0_2_at_L,
+                                                       shift(X_0,
+                                                       add_int(mul_int(i_0,
+                                                               LDX_0),
+                                                       j_0)))),
                                   real_of_int(v_0)))
                                 and (le_real(real_of_int(min),
-                                     float_value(select(double_P_double_M_X_0_2_at_L,
-                                                 shift(X_0,
-                                                 add_int(mul_int(i_0, LDX_0),
-                                                 j_0)))))
-                                    and le_real(float_value(select(double_P_double_M_X_0_2_at_L,
-                                                            shift(X_0,
-                                                            add_int(mul_int(i_0,
-                                                                    LDX_0),
-                                                            j_0)))),
+                                     double_value(select(double_P_double_M_X_0_2_at_L,
+                                                  shift(X_0,
+                                                  add_int(mul_int(i_0, LDX_0),
+                                                  j_0)))))
+                                    and le_real(double_value(select(double_P_double_M_X_0_2_at_L,
+                                                             shift(X_0,
+                                                             add_int(
+                                                             mul_int(i_0,
+                                                             LDX_0), j_0)))),
                                         real_of_int(max))))))))))))))
 
 axiom l_pmax_def :
@@ -993,7 +994,7 @@ predicate temporary_is_exact_int_mat_bounded_by(X_1:double_P pointer,
  min_0:int,
  max_0:int,
  double_P_X_1_3_alloc_table_at_L:double_P alloc_table,
- double_P_double_M_X_1_3_at_L:(double_P, gen_float) memory) =
+ double_P_double_M_X_1_3_at_L:(double_P, double) memory) =
  (le_int(offset_min(double_P_X_1_3_alloc_table_at_L, X_1), (0))
  and (ge_int(offset_max(double_P_X_1_3_alloc_table_at_L, X_1),
       add_int(mul_int(N_1, LDX_1), M_1))
@@ -1008,29 +1009,29 @@ predicate temporary_is_exact_int_mat_bounded_by(X_1:double_P pointer,
                                  and (le_int((0), j_1) and lt_int(j_1, M_1))))
                             or (eq_int(i_1, N_1)
                                and (le_int((0), j_1) and lt_int(j_1, k)))) ->
-                            (eq_real(gen_round_error(select(double_P_double_M_X_1_3_at_L,
-                                                     shift(X_1,
-                                                     add_int(mul_int(i_1,
-                                                             LDX_1),
-                                                     j_1)))),
+                            (eq_real(double_round_error(select(double_P_double_M_X_1_3_at_L,
+                                                        shift(X_1,
+                                                        add_int(mul_int(i_1,
+                                                                LDX_1),
+                                                        j_1)))),
                              0.0)
                             and ((exists v_1:int.
-                                  eq_real(float_value(select(double_P_double_M_X_1_3_at_L,
-                                                      shift(X_1,
-                                                      add_int(mul_int(i_1,
-                                                              LDX_1),
-                                                      j_1)))),
+                                  eq_real(double_value(select(double_P_double_M_X_1_3_at_L,
+                                                       shift(X_1,
+                                                       add_int(mul_int(i_1,
+                                                               LDX_1),
+                                                       j_1)))),
                                   real_of_int(v_1)))
                                 and (le_real(real_of_int(min_0),
-                                     float_value(select(double_P_double_M_X_1_3_at_L,
-                                                 shift(X_1,
-                                                 add_int(mul_int(i_1, LDX_1),
-                                                 j_1)))))
-                                    and le_real(float_value(select(double_P_double_M_X_1_3_at_L,
-                                                            shift(X_1,
-                                                            add_int(mul_int(i_1,
-                                                                    LDX_1),
-                                                            j_1)))),
+                                     double_value(select(double_P_double_M_X_1_3_at_L,
+                                                  shift(X_1,
+                                                  add_int(mul_int(i_1, LDX_1),
+                                                  j_1)))))
+                                    and le_real(double_value(select(double_P_double_M_X_1_3_at_L,
+                                                             shift(X_1,
+                                                             add_int(
+                                                             mul_int(i_1,
+                                                             LDX_1), j_1)))),
                                         real_of_int(max_0))))))))))))))
 
 predicate valid_bitvector_struct_char_P(p:unit pointer,
@@ -1125,12 +1126,12 @@ parameter DGEMM_NEG :
         LDX_2:int32 ->
          Y:double_P pointer ->
           LDY:int32 ->
-           double_P_double_M_Y_6:(double_P, gen_float) memory ref ->
+           double_P_double_M_Y_6:(double_P, double) memory ref ->
             double_P_Y_6_alloc_table:double_P alloc_table ->
              double_P_X_5_alloc_table:double_P alloc_table ->
               double_P_A_0_4_alloc_table:double_P alloc_table ->
-               double_P_double_M_X_5:(double_P, gen_float) memory ->
-                double_P_double_M_A_0_4:(double_P, gen_float) memory ->
+               double_P_double_M_X_5:(double_P, double) memory ->
+                double_P_double_M_A_0_4:(double_P, double) memory ->
                  { } unit reads double_P_double_M_Y_6
                  writes double_P_double_M_Y_6
                  { ((true = true) ->
@@ -1164,12 +1165,12 @@ parameter DGEMM_NEG_requires :
         LDX_2:int32 ->
          Y:double_P pointer ->
           LDY:int32 ->
-           double_P_double_M_Y_6:(double_P, gen_float) memory ref ->
+           double_P_double_M_Y_6:(double_P, double) memory ref ->
             double_P_Y_6_alloc_table:double_P alloc_table ->
              double_P_X_5_alloc_table:double_P alloc_table ->
               double_P_A_0_4_alloc_table:double_P alloc_table ->
-               double_P_double_M_X_5:(double_P, gen_float) memory ->
-                double_P_double_M_A_0_4:(double_P, gen_float) memory ->
+               double_P_double_M_X_5:(double_P, double) memory ->
+                double_P_double_M_A_0_4:(double_P, double) memory ->
                  { (JC_8:
                    ((JC_1: le_int((2), integer_of_int32(p_1)))
                    and ((JC_2:
@@ -1251,7 +1252,7 @@ parameter DREMM :
    p_2:int32 ->
     X_0_0:double_P pointer ->
      LDX_0_0:int32 ->
-      double_P_double_M_X_0_7:(double_P, gen_float) memory ref ->
+      double_P_double_M_X_0_7:(double_P, double) memory ref ->
        double_P_X_0_7_alloc_table:double_P alloc_table ->
         { } unit reads double_P_double_M_X_0_7 writes double_P_double_M_X_0_7
         { ((true = true) ->
@@ -1270,16 +1271,16 @@ parameter DREMM :
                        and (le_int((0), j_3_0)
                            and lt_int(j_3_0, integer_of_int32(K_1))))) ->
                    (exists d:int.
-                    eq_real(float_value(select(double_P_double_M_X_0_7,
-                                        shift(X_0_0,
-                                        add_int(mul_int(i_3_0,
-                                                integer_of_int32(LDX_0_0)),
-                                        j_3_0)))),
-                    add_real(float_value(select(double_P_double_M_X_0_7@,
-                                         shift(X_0_0@,
-                                         add_int(mul_int(i_3_0@,
-                                                 integer_of_int32(LDX_0_0@)),
-                                         j_3_0@)))),
+                    eq_real(double_value(select(double_P_double_M_X_0_7,
+                                         shift(X_0_0,
+                                         add_int(mul_int(i_3_0,
+                                                 integer_of_int32(LDX_0_0)),
+                                         j_3_0)))),
+                    add_real(double_value(select(double_P_double_M_X_0_7@,
+                                          shift(X_0_0@,
+                                          add_int(mul_int(i_3_0@,
+                                                  integer_of_int32(LDX_0_0@)),
+                                          j_3_0@)))),
                     real_of_int(mul_int(d, integer_of_int32(p_2))))))))))))
            and (JC_116:
                not_assigns(double_P_X_0_7_alloc_table@,
@@ -1296,7 +1297,7 @@ parameter DREMM_requires :
    p_2:int32 ->
     X_0_0:double_P pointer ->
      LDX_0_0:int32 ->
-      double_P_double_M_X_0_7:(double_P, gen_float) memory ref ->
+      double_P_double_M_X_0_7:(double_P, double) memory ref ->
        double_P_X_0_7_alloc_table:double_P alloc_table ->
         { (JC_104:
           is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
@@ -1319,16 +1320,16 @@ parameter DREMM_requires :
                        and (le_int((0), j_3_0)
                            and lt_int(j_3_0, integer_of_int32(K_1))))) ->
                    (exists d:int.
-                    eq_real(float_value(select(double_P_double_M_X_0_7,
-                                        shift(X_0_0,
-                                        add_int(mul_int(i_3_0,
-                                                integer_of_int32(LDX_0_0)),
-                                        j_3_0)))),
-                    add_real(float_value(select(double_P_double_M_X_0_7@,
-                                         shift(X_0_0@,
-                                         add_int(mul_int(i_3_0@,
-                                                 integer_of_int32(LDX_0_0@)),
-                                         j_3_0@)))),
+                    eq_real(double_value(select(double_P_double_M_X_0_7,
+                                         shift(X_0_0,
+                                         add_int(mul_int(i_3_0,
+                                                 integer_of_int32(LDX_0_0)),
+                                         j_3_0)))),
+                    add_real(double_value(select(double_P_double_M_X_0_7@,
+                                          shift(X_0_0@,
+                                          add_int(mul_int(i_3_0@,
+                                                  integer_of_int32(LDX_0_0@)),
+                                          j_3_0@)))),
                     real_of_int(mul_int(d, integer_of_int32(p_2))))))))))))
            and (JC_116:
                not_assigns(double_P_X_0_7_alloc_table@,
@@ -1346,10 +1347,10 @@ parameter DTRSM :
     LDA_1:int32 ->
      X_1_0:double_P pointer ->
       LDX_1_0:int32 ->
-       double_P_double_M_X_1_9:(double_P, gen_float) memory ref ->
+       double_P_double_M_X_1_9:(double_P, double) memory ref ->
         double_P_X_1_9_alloc_table:double_P alloc_table ->
          double_P_A_1_8_alloc_table:double_P alloc_table ->
-          double_P_double_M_A_1_8:(double_P, gen_float) memory ->
+          double_P_double_M_A_1_8:(double_P, double) memory ->
            { } unit reads double_P_double_M_X_1_9
            writes double_P_double_M_X_1_9
            { ((true = true) ->
@@ -1376,10 +1377,10 @@ parameter DTRSM_requires :
     LDA_1:int32 ->
      X_1_0:double_P pointer ->
       LDX_1_0:int32 ->
-       double_P_double_M_X_1_9:(double_P, gen_float) memory ref ->
+       double_P_double_M_X_1_9:(double_P, double) memory ref ->
         double_P_X_1_9_alloc_table:double_P alloc_table ->
          double_P_A_1_8_alloc_table:double_P alloc_table ->
-          double_P_double_M_A_1_8:(double_P, gen_float) memory ->
+          double_P_double_M_A_1_8:(double_P, double) memory ->
            { (JC_156:
              ((JC_153: le_int(integer_of_int32(N_3), (55)))
              and ((JC_154:
@@ -1420,10 +1421,10 @@ parameter LZ_TRSM :
      LDA:int32 ->
       B:double_P pointer ->
        LDB:int32 ->
-        double_P_double_M_B_11:(double_P, gen_float) memory ref ->
+        double_P_double_M_B_11:(double_P, double) memory ref ->
          double_P_B_11_alloc_table:double_P alloc_table ->
           double_P_A_10_alloc_table:double_P alloc_table ->
-           double_P_double_M_A_10:(double_P, gen_float) memory ->
+           double_P_double_M_A_10:(double_P, double) memory ->
             { } unit reads double_P_double_M_B_11
             writes double_P_double_M_B_11
             { ((true = true) ->
@@ -1451,10 +1452,10 @@ parameter LZ_TRSM_requires :
      LDA:int32 ->
       B:double_P pointer ->
        LDB:int32 ->
-        double_P_double_M_B_11:(double_P, gen_float) memory ref ->
+        double_P_double_M_B_11:(double_P, double) memory ref ->
          double_P_B_11_alloc_table:double_P alloc_table ->
           double_P_A_10_alloc_table:double_P alloc_table ->
-           double_P_double_M_A_10:(double_P, gen_float) memory ->
+           double_P_double_M_A_10:(double_P, double) memory ->
             { (JC_275:
               ((JC_270: le_int((2), integer_of_int32(p_0_0)))
               and ((JC_271:
@@ -1693,7 +1694,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let DGEMM_NEG_ensures_default =
- fun (N_0_0 : int32) (M_2 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, gen_float) memory ref) (double_P_A_0_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_0_4 : (double_P, gen_float) memory) (double_P_double_M_X_5 : (double_P, gen_float) memory) ->
+ fun (N_0_0 : int32) (M_2 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, double) memory ref) (double_P_A_0_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_0_4 : (double_P, double) memory) (double_P_double_M_X_5 : (double_P, double) memory) ->
   { ((true = true)
     and (JC_17:
         ((JC_10: le_int((2), integer_of_int32(p_1)))
@@ -1945,7 +1946,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (
                                                                     (JC_84:
                                                                     eq_real(
-                                                                    gen_round_error(
+                                                                    double_round_error(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -1959,7 +1960,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (JC_85:
                                                                     (exists v_2:int.
                                                                     eq_real(
-                                                                    float_value(
+                                                                    double_value(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -1981,7 +1982,7 @@ let DGEMM_NEG_ensures_default =
                                                                     integer_of_int32(p_1),
                                                                     (1))),
                                                                     integer_of_int32(j_3))),
-                                                                    float_value(
+                                                                    double_value(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -1992,7 +1993,7 @@ let DGEMM_NEG_ensures_default =
                                                                     and 
                                                                     (JC_87:
                                                                     le_real(
-                                                                    float_value(
+                                                                    double_value(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -2070,7 +2071,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (let jessie_68 = 
                                                                     (C_44:
                                                                     (JC_93:
-                                                                    ((((sub_gen_float_safe Double) nearest_even) 
+                                                                    (((sub_double_safe nearest_even) 
                                                                     (C_43:
                                                                     ((safe_acc_ !double_P_double_M_Y_6) 
                                                                     (C_42:
@@ -2090,7 +2091,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 !k_0))))))))))) 
                                                                     (C_37:
                                                                     (JC_92:
-                                                                    ((((mul_gen_float_safe Double) nearest_even) 
+                                                                    (((mul_double_safe nearest_even) 
                                                                     (C_36:
                                                                     ((safe_acc_ double_P_double_M_A_0_4) 
                                                                     (C_35:
@@ -2264,7 +2265,7 @@ let DGEMM_NEG_ensures_default =
         (1))))))) }
 
 let DGEMM_NEG_safety =
- fun (N_0_0 : int32) (M_2 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, gen_float) memory ref) (double_P_A_0_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_0_4 : (double_P, gen_float) memory) (double_P_double_M_X_5 : (double_P, gen_float) memory) ->
+ fun (N_0_0 : int32) (M_2 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, double) memory ref) (double_P_A_0_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_0_4 : (double_P, double) memory) (double_P_double_M_X_5 : (double_P, double) memory) ->
   { (JC_17:
     ((JC_10: le_int((2), integer_of_int32(p_1)))
     and ((JC_11:
@@ -2463,7 +2464,7 @@ let DGEMM_NEG_safety =
                                                                     (
                                                                     (JC_43:
                                                                     eq_real(
-                                                                    gen_round_error(
+                                                                    double_round_error(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -2477,7 +2478,7 @@ let DGEMM_NEG_safety =
                                                                     (JC_44:
                                                                     (exists v_2:int.
                                                                     eq_real(
-                                                                    float_value(
+                                                                    double_value(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -2499,7 +2500,7 @@ let DGEMM_NEG_safety =
                                                                     integer_of_int32(p_1),
                                                                     (1))),
                                                                     integer_of_int32(j_3))),
-                                                                    float_value(
+                                                                    double_value(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -2510,7 +2511,7 @@ let DGEMM_NEG_safety =
                                                                     and 
                                                                     (JC_46:
                                                                     le_real(
-                                                                    float_value(
+                                                                    double_value(
                                                                     select(double_P_double_M_Y_6,
                                                                     shift(Y,
                                                                     add_int(
@@ -2547,7 +2548,7 @@ let DGEMM_NEG_safety =
                                                                     (let jessie_41 = 
                                                                     (C_44:
                                                                     (JC_61:
-                                                                    ((((sub_gen_float Double) nearest_even) 
+                                                                    (((sub_double nearest_even) 
                                                                     (C_43:
                                                                     (JC_53:
                                                                     ((((offset_acc_ double_P_Y_6_alloc_table) !double_P_double_M_Y_6) Y) 
@@ -2568,7 +2569,7 @@ let DGEMM_NEG_safety =
                                                                     (integer_of_int32 !k_0))))))))))) 
                                                                     (C_37:
                                                                     (JC_60:
-                                                                    ((((mul_gen_float Double) nearest_even) 
+                                                                    (((mul_double nearest_even) 
                                                                     (C_36:
                                                                     (JC_56:
                                                                     ((((offset_acc_ double_P_A_0_4_alloc_table) double_P_double_M_A_0_4) A_0) 
@@ -2736,7 +2737,7 @@ let DGEMM_NEG_safety =
   { true }
 
 let DREMM_ensures_default =
- fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, gen_float) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
+ fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, double) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
   { ((true = true)
     and (JC_106:
         is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
@@ -2848,7 +2849,7 @@ let DREMM_ensures_default =
                                                                     (C_92:
                                                                     (let jessie_120 = 
                                                                     (C_85:
-                                                                    (((gen_float_of_real_safe Double) nearest_even) 
+                                                                    ((double_of_real_safe nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 __cil_tmp)))) in
                                                                     (let jessie_123 = 
@@ -2874,7 +2875,7 @@ let DREMM_ensures_default =
                                                                     end)))) in
                                                                     void);
                                                                     (if 
-                                                                    ((lt_gen_float 
+                                                                    ((lt_double 
                                                                     (C_115:
                                                                     ((safe_acc_ !double_P_double_M_X_0_7) 
                                                                     (C_114:
@@ -2893,14 +2894,14 @@ let DREMM_ensures_default =
                                                                     (integer_of_int32 LDX_0_0))))))) 
                                                                     (integer_of_int32 !k_0_0))))))))))) 
                                                                     (C_109:
-                                                                    (((gen_float_of_real_safe Double) nearest_even) 0.0)))
+                                                                    ((double_of_real_safe nearest_even) 0.0)))
                                                                     then
                                                                     (C_108:
                                                                     (let jessie_130 = 
                                                                     (let jessie_126 = 
                                                                     (C_101:
                                                                     (JC_152:
-                                                                    ((((add_gen_float_safe Double) nearest_even) 
+                                                                    (((add_double_safe nearest_even) 
                                                                     (C_100:
                                                                     ((safe_acc_ !double_P_double_M_X_0_7) 
                                                                     (C_99:
@@ -2919,7 +2920,7 @@ let DREMM_ensures_default =
                                                                     (integer_of_int32 LDX_0_0))))))) 
                                                                     (integer_of_int32 !k_0_0))))))))))) 
                                                                     (C_94:
-                                                                    (((gen_float_of_real_safe Double) nearest_even) 
+                                                                    ((double_of_real_safe nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 p_2))))))) in
                                                                     (let jessie_129 = 
@@ -3026,16 +3027,16 @@ let DREMM_ensures_default =
                 and (le_int((0), j_3_0)
                     and lt_int(j_3_0, integer_of_int32(K_1))))) ->
             (exists d:int.
-             eq_real(float_value(select(double_P_double_M_X_0_7,
-                                 shift(X_0_0,
-                                 add_int(mul_int(i_3_0,
-                                         integer_of_int32(LDX_0_0)),
-                                 j_3_0)))),
-             add_real(float_value(select(double_P_double_M_X_0_7@,
-                                  shift(X_0_0@,
-                                  add_int(mul_int(i_3_0@,
-                                          integer_of_int32(LDX_0_0@)),
-                                  j_3_0@)))),
+             eq_real(double_value(select(double_P_double_M_X_0_7,
+                                  shift(X_0_0,
+                                  add_int(mul_int(i_3_0,
+                                          integer_of_int32(LDX_0_0)),
+                                  j_3_0)))),
+             add_real(double_value(select(double_P_double_M_X_0_7@,
+                                   shift(X_0_0@,
+                                   add_int(mul_int(i_3_0@,
+                                           integer_of_int32(LDX_0_0@)),
+                                   j_3_0@)))),
              real_of_int(mul_int(d, integer_of_int32(p_2))))))))))))
     and (JC_111:
         not_assigns(double_P_X_0_7_alloc_table@, double_P_double_M_X_0_7@,
@@ -3047,7 +3048,7 @@ let DREMM_ensures_default =
         (1))))))) }
 
 let DREMM_safety =
- fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, gen_float) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
+ fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, double) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
   { (JC_106:
     is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
     integer_of_int32(N_1_0), integer_of_int32(K_1),
@@ -3134,7 +3135,7 @@ let DREMM_safety =
                                                                     (let jessie_93 = 
                                                                     (C_85:
                                                                     (JC_127:
-                                                                    (((gen_float_of_real Double) nearest_even) 
+                                                                    ((double_of_real nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 __cil_tmp))))) in
                                                                     (let jessie_94 = X_0_0 in
@@ -3164,7 +3165,7 @@ let DREMM_safety =
                                                                     end)))))) in
                                                                     void);
                                                                     (if 
-                                                                    ((lt_gen_float 
+                                                                    ((lt_double 
                                                                     (C_115:
                                                                     (JC_133:
                                                                     ((((offset_acc_ double_P_X_0_7_alloc_table) !double_P_double_M_X_0_7) X_0_0) 
@@ -3185,14 +3186,14 @@ let DREMM_safety =
                                                                     (integer_of_int32 !k_0_0))))))))))) 
                                                                     (C_109:
                                                                     (JC_134:
-                                                                    (((gen_float_of_real Double) nearest_even) 0.0))))
+                                                                    ((double_of_real nearest_even) 0.0))))
                                                                     then
                                                                     (C_108:
                                                                     (let jessie_103 = 
                                                                     (let jessie_99 = 
                                                                     (C_101:
                                                                     (JC_139:
-                                                                    ((((add_gen_float Double) nearest_even) 
+                                                                    (((add_double nearest_even) 
                                                                     (C_100:
                                                                     (JC_137:
                                                                     ((((offset_acc_ double_P_X_0_7_alloc_table) !double_P_double_M_X_0_7) X_0_0) 
@@ -3213,7 +3214,7 @@ let DREMM_safety =
                                                                     (integer_of_int32 !k_0_0))))))))))) 
                                                                     (C_94:
                                                                     (JC_138:
-                                                                    (((gen_float_of_real Double) nearest_even) 
+                                                                    ((double_of_real nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 p_2)))))))) in
                                                                     (let jessie_100 = X_0_0 in
@@ -3314,7 +3315,7 @@ let DREMM_safety =
   { true }
 
 let DTRSM_ensures_default =
- fun (N_3 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, gen_float) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, gen_float) memory) ->
+ fun (N_3 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, double) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, double) memory) ->
   { ((true = true)
     and (JC_161:
         ((JC_158: le_int(integer_of_int32(N_3), (55)))
@@ -3492,7 +3493,7 @@ let DTRSM_ensures_default =
                                                                     (let jessie_176 = 
                                                                     (C_152:
                                                                     (JC_209:
-                                                                    ((((sub_gen_float_safe Double) nearest_even) 
+                                                                    (((sub_double_safe nearest_even) 
                                                                     (C_151:
                                                                     ((safe_acc_ !double_P_double_M_X_1_9) 
                                                                     (C_150:
@@ -3512,7 +3513,7 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 !k_1))))))))))) 
                                                                     (C_145:
                                                                     (JC_208:
-                                                                    ((((mul_gen_float_safe Double) nearest_even) 
+                                                                    (((mul_double_safe nearest_even) 
                                                                     (C_144:
                                                                     ((safe_acc_ double_P_double_M_A_1_8) 
                                                                     (C_143:
@@ -3683,7 +3684,7 @@ let DTRSM_ensures_default =
         (1))))))) }
 
 let DTRSM_safety =
- fun (N_3 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, gen_float) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, gen_float) memory) ->
+ fun (N_3 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, double) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, double) memory) ->
   { (JC_161:
     ((JC_158: le_int(integer_of_int32(N_3), (55)))
     and ((JC_159:
@@ -3822,7 +3823,7 @@ let DTRSM_safety =
                                                                     (let jessie_149 = 
                                                                     (C_152:
                                                                     (JC_192:
-                                                                    ((((sub_gen_float Double) nearest_even) 
+                                                                    (((sub_double nearest_even) 
                                                                     (C_151:
                                                                     (JC_184:
                                                                     ((((offset_acc_ double_P_X_1_9_alloc_table) !double_P_double_M_X_1_9) X_1_0) 
@@ -3843,7 +3844,7 @@ let DTRSM_safety =
                                                                     (integer_of_int32 !k_1))))))))))) 
                                                                     (C_145:
                                                                     (JC_191:
-                                                                    ((((mul_gen_float Double) nearest_even) 
+                                                                    (((mul_double nearest_even) 
                                                                     (C_144:
                                                                     (JC_187:
                                                                     ((((offset_acc_ double_P_A_1_8_alloc_table) double_P_double_M_A_1_8) A_1) 
@@ -4011,7 +4012,7 @@ let DTRSM_safety =
   { true }
 
 let LZ_TRSM_ensures_default =
- fun (N_4 : int32) (K : int32) (p_0_0 : int32) (A : double_P pointer) (LDA : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, gen_float) memory ref) (double_P_A_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_10 : (double_P, gen_float) memory) ->
+ fun (N_4 : int32) (K : int32) (p_0_0 : int32) (A : double_P pointer) (LDA : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, double) memory ref) (double_P_A_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_10 : (double_P, double) memory) ->
   { ((true = true)
     and (JC_282:
         ((JC_277: le_int((2), integer_of_int32(p_0_0)))
@@ -4179,7 +4180,7 @@ let LZ_TRSM_ensures_default =
         (1))))))) }
 
 let LZ_TRSM_safety =
- fun (N_4 : int32) (K : int32) (p_0_0 : int32) (A : double_P pointer) (LDA : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, gen_float) memory ref) (double_P_A_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_10 : (double_P, gen_float) memory) ->
+ fun (N_4 : int32) (K : int32) (p_0_0 : int32) (A : double_P pointer) (LDA : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, double) memory ref) (double_P_A_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_10 : (double_P, double) memory) ->
   { (JC_282:
     ((JC_277: le_int((2), integer_of_int32(p_0_0)))
     and ((JC_278:
@@ -4351,18 +4352,18 @@ let Nmax_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let pp = ref (any_gen_float Double) in
-     (let p2_0 = ref (any_gen_float Double) in
+     (let pp = ref (any_double void) in
+     (let p2_0 = ref (any_double void) in
      (let N_4_0 = ref (any_int32 void) in
      (C_176:
      begin
        (let jessie_210 = (pp := (C_175:
-                                (((gen_float_of_real_safe Double) nearest_even) 1.0))) in
+                                ((double_of_real_safe nearest_even) 1.0))) in
        void);
       (C_178:
       begin
         (let jessie_212 = (p2_0 := (C_177:
-                                   (((gen_float_of_real_safe Double) nearest_even) 1.0))) in
+                                   ((double_of_real_safe nearest_even) 1.0))) in
         void);
        (C_179:
        begin
@@ -4388,15 +4389,15 @@ let Nmax_ensures_default =
                                                                  (C_188:
                                                                  (safe_int32_of_integer_ 
                                                                   (if 
-                                                                  ((lt_gen_float 
+                                                                  ((lt_double 
                                                                     (C_187:
                                                                     (JC_249:
-                                                                    ((((div_gen_float_safe Double) nearest_even) 
+                                                                    (((div_double_safe nearest_even) 
                                                                     (C_186:
                                                                     (JC_248:
-                                                                    ((((mul_gen_float_safe Double) nearest_even) 
+                                                                    (((mul_double_safe nearest_even) 
                                                                     (C_185:
-                                                                    (((gen_float_of_real_safe Double) nearest_even) 
+                                                                    ((double_of_real_safe nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 
                                                                     (C_184:
@@ -4406,11 +4407,11 @@ let Nmax_ensures_default =
                                                                     (integer_of_int32 p_0)) (1)))))))))) 
                                                                     (C_182:
                                                                     (JC_247:
-                                                                    ((((add_gen_float_safe Double) nearest_even) !pp) !p2_0))))))) 
+                                                                    (((add_double_safe nearest_even) !pp) !p2_0))))))) 
                                                                     (C_181:
-                                                                    (((gen_float_of_real_safe Double) nearest_even) 2.0)))))) 
+                                                                    ((double_of_real_safe nearest_even) 2.0)))))) 
                                                                    (C_180:
-                                                                   (((gen_float_of_real_safe Double) nearest_even) 1.0)))
+                                                                   ((double_of_real_safe nearest_even) 1.0)))
                                                                   then (1)
                                                                   else (0)))))) 
                                                                (neg_int (53)))))))) (0))
@@ -4426,9 +4427,9 @@ let Nmax_ensures_default =
                                                        (let jessie_217 = 
                                                        (pp := (C_192:
                                                               (JC_250:
-                                                              ((((mul_gen_float_safe Double) nearest_even) !pp) 
+                                                              (((mul_double_safe nearest_even) !pp) 
                                                                (C_191:
-                                                               (((gen_float_of_real_safe Double) nearest_even) 
+                                                               ((double_of_real_safe nearest_even) 
                                                                 (real_of_int 
                                                                  (integer_of_int32 p_0)))))))) in
                                                        void);
@@ -4437,9 +4438,9 @@ let Nmax_ensures_default =
                                                         (let jessie_219 = 
                                                         (p2_0 := (C_197:
                                                                  (JC_251:
-                                                                 ((((mul_gen_float_safe Double) nearest_even) !p2_0) 
+                                                                 (((mul_double_safe nearest_even) !p2_0) 
                                                                   (C_196:
-                                                                  (((gen_float_of_real_safe Double) nearest_even) 
+                                                                  ((double_of_real_safe nearest_even) 
                                                                    (real_of_int 
                                                                     (integer_of_int32 
                                                                     (C_195:
@@ -4502,20 +4503,19 @@ let Nmax_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let pp = ref (any_gen_float Double) in
-     (let p2_0 = ref (any_gen_float Double) in
+     (let pp = ref (any_double void) in
+     (let p2_0 = ref (any_double void) in
      (let N_4_0 = ref (any_int32 void) in
      (C_176:
      begin
        (let jessie_194 = (pp := (C_175:
-                                (JC_224:
-                                (((gen_float_of_real Double) nearest_even) 1.0)))) in
+                                (JC_224: ((double_of_real nearest_even) 1.0)))) in
        void);
       (C_178:
       begin
         (let jessie_196 = (p2_0 := (C_177:
                                    (JC_225:
-                                   (((gen_float_of_real Double) nearest_even) 1.0)))) in
+                                   ((double_of_real nearest_even) 1.0)))) in
         void);
        (C_179:
        begin
@@ -4543,16 +4543,16 @@ let Nmax_safety =
                                                                  (JC_236:
                                                                  (int32_of_integer_ 
                                                                   (if 
-                                                                  ((lt_gen_float 
+                                                                  ((lt_double 
                                                                     (C_187:
                                                                     (JC_234:
-                                                                    ((((div_gen_float Double) nearest_even) 
+                                                                    (((div_double nearest_even) 
                                                                     (C_186:
                                                                     (JC_232:
-                                                                    ((((mul_gen_float Double) nearest_even) 
+                                                                    (((mul_double nearest_even) 
                                                                     (C_185:
                                                                     (JC_230:
-                                                                    (((gen_float_of_real Double) nearest_even) 
+                                                                    ((double_of_real nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 
                                                                     (C_184:
@@ -4563,13 +4563,13 @@ let Nmax_safety =
                                                                     (integer_of_int32 p_0)) (1)))))))))))) 
                                                                     (C_182:
                                                                     (JC_231:
-                                                                    ((((add_gen_float Double) nearest_even) !pp) !p2_0))))))) 
+                                                                    (((add_double nearest_even) !pp) !p2_0))))))) 
                                                                     (C_181:
                                                                     (JC_233:
-                                                                    (((gen_float_of_real Double) nearest_even) 2.0))))))) 
+                                                                    ((double_of_real nearest_even) 2.0))))))) 
                                                                    (C_180:
                                                                    (JC_235:
-                                                                   (((gen_float_of_real Double) nearest_even) 1.0))))
+                                                                   ((double_of_real nearest_even) 1.0))))
                                                                   then (1)
                                                                   else (0))))))) 
                                                                (neg_int (53))))))))) (0))
@@ -4585,10 +4585,10 @@ let Nmax_safety =
                                                        (let jessie_201 = 
                                                        (pp := (C_192:
                                                               (JC_239:
-                                                              ((((mul_gen_float Double) nearest_even) !pp) 
+                                                              (((mul_double nearest_even) !pp) 
                                                                (C_191:
                                                                (JC_238:
-                                                               (((gen_float_of_real Double) nearest_even) 
+                                                               ((double_of_real nearest_even) 
                                                                 (real_of_int 
                                                                  (integer_of_int32 p_0))))))))) in
                                                        void);
@@ -4597,10 +4597,10 @@ let Nmax_safety =
                                                         (let jessie_203 = 
                                                         (p2_0 := (C_197:
                                                                  (JC_242:
-                                                                 ((((mul_gen_float Double) nearest_even) !p2_0) 
+                                                                 (((mul_double nearest_even) !p2_0) 
                                                                   (C_196:
                                                                   (JC_241:
-                                                                  (((gen_float_of_real Double) nearest_even) 
+                                                                  ((double_of_real nearest_even) 
                                                                    (real_of_int 
                                                                     (integer_of_int32 
                                                                     (C_195:
@@ -5123,11 +5123,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po186.why">
-      <location file = "why/bts0112.why" line = "3650" begin = "13" end = "31"/>
+      <location file = "why/bts0112.why" line = "3651" begin = "13" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po187.why">
-      <location file = "why/bts0112.why" line = "3650" begin = "13" end = "31"/>
+      <location file = "why/bts0112.why" line = "3651" begin = "13" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po188.why">
@@ -5206,11 +5206,11 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po203.why">
-      <location file = "why/bts0112.why" line = "3693" begin = "14" end = "32"/>
+      <location file = "why/bts0112.why" line = "3694" begin = "14" end = "32"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po204.why">
-      <location file = "why/bts0112.why" line = "3693" begin = "14" end = "32"/>
+      <location file = "why/bts0112.why" line = "3694" begin = "14" end = "32"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po205.why">
@@ -5418,11 +5418,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po157.why">
-      <location file = "why/bts0112.why" line = "3157" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3158" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po158.why">
-      <location file = "why/bts0112.why" line = "3157" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3158" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po159.why">
@@ -5436,11 +5436,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po161.why">
-      <location file = "why/bts0112.why" line = "3117" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3118" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po162.why">
-      <location file = "why/bts0112.why" line = "3117" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3118" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po163.why">
@@ -5454,11 +5454,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po165.why">
-      <location file = "why/bts0112.why" line = "3079" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "3080" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po166.why">
-      <location file = "why/bts0112.why" line = "3079" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "3080" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -5643,11 +5643,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po113.why">
-      <location file = "why/bts0112.why" line = "2464" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "2465" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po114.why">
-      <location file = "why/bts0112.why" line = "2464" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "2465" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po115.why">
@@ -5661,11 +5661,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po117.why">
-      <location file = "why/bts0112.why" line = "2430" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "2431" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po118.why">
-      <location file = "why/bts0112.why" line = "2430" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "2431" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -5840,11 +5840,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po67.why">
-      <location file = "why/bts0112.why" line = "1808" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "1809" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po68.why">
-      <location file = "why/bts0112.why" line = "1808" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "1809" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po69.why">
@@ -5858,11 +5858,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po71.why">
-      <location file = "why/bts0112.why" line = "1737" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "1738" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po72.why">
-      <location file = "why/bts0112.why" line = "1737" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "1738" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po73.why">
@@ -5876,11 +5876,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po75.why">
-      <location file = "why/bts0112.why" line = "1687" begin = "61" end = "62"/>
+      <location file = "why/bts0112.why" line = "1688" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po76.why">
-      <location file = "why/bts0112.why" line = "1687" begin = "61" end = "62"/>
+      <location file = "why/bts0112.why" line = "1688" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -6980,126 +6980,193 @@ type mode =
   | down
   | nearest_away
 
-type float_format =
-  | Single
-  | Double
-  | Binary80
-  | Quad
+type double
 
-type gen_float
+logic round_double : mode, real -> real
 
-logic round_float : float_format, mode, real -> real
+logic round_double_logic : mode, real -> double
 
-logic gen_float_of_real_logic : float_format, mode, real -> gen_float
+logic double_value : double -> real
 
-logic float_value : gen_float -> real
+logic double_exact : double -> real
 
-logic exact_value : gen_float -> real
+logic double_model : double -> real
 
-logic model_value : gen_float -> real
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
 
-function max_gen_float(f: float_format) : real = float_format_match(f,
-  0x1.FFFFFEp127, 0x1.FFFFFFFFFFFFFp1023, 0x1.FFFFFFFFFFFFFFFEp16383,
-  0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383)
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
 
-logic min_gen_float : float_format -> real
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
 
-axiom min_single: (min_gen_float(Single) = 0x1.p-149)
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
 
-axiom min_double: (min_gen_float(Double) = 0x1.p-1074)
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
 
-predicate no_overflow(f: float_format, m: mode, x: real) =
-  (abs_real(round_float(f, m, x)) <= max_gen_float(f))
+type single
 
-function gen_round_error(x: gen_float) : real =
-  abs_real((float_value(x) - exact_value(x)))
+logic round_single : mode, real -> real
 
-function gen_relative_error(x: gen_float) : real =
-  abs_real(((float_value(x) - exact_value(x)) / exact_value(x)))
+logic round_single_logic : mode, real -> single
 
-function gen_total_error(x: gen_float) : real =
-  abs_real((float_value(x) - model_value(x)))
+logic single_value : single -> real
 
-axiom bounded_real_no_overflow:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((abs_real(x) <= max_gen_float(f)) -> no_overflow(f, m, x)))))
+logic single_exact : single -> real
 
-axiom round_of_zero:
-  (forall f:float_format. (forall m:mode. (round_float(f, m, 0.0) = 0.0)))
+logic single_model : single -> real
 
-axiom round_greater_max:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((not no_overflow(f, m, x)) -> (abs_real(x) > max_gen_float(f))))))
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
 
-axiom round_increasing:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (forall y:real.
-          ((x <= y) -> (round_float(f, m, x) <= round_float(f, m, y)))))))
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
 
-axiom round_up_ge:
-  (forall f:float_format. (forall x:real. (round_float(f, up, x) >= x)))
+function max_single() : real = 0x1.FFFFFEp127
 
-axiom round_up_neg:
-  (forall f:float_format.
-    (forall x:real. (round_float(f, up, (-x)) = (-round_float(f, down, x)))))
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
 
-axiom round_idempotent:
-  (forall f:float_format.
-    (forall m1:mode.
-      (forall m2:mode.
-        (forall x:real. (round_float(f, m1, round_float(f, m2,
-          x)) = round_float(f, m2, x))))))
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
 
-predicate gen_float_of_real_post(f: float_format, m: mode, x: real,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, x)) and
-   ((exact_value(res) = x) and (model_value(res) = x)))
+logic single_to_double : mode, single -> double
 
-predicate add_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) + float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) + exact_value(y))) and
-    (model_value(res) = (model_value(x) + model_value(y)))))
+logic double_to_single : mode, double -> single
 
-predicate sub_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) - float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) - exact_value(y))) and
-    (model_value(res) = (model_value(x) - model_value(y)))))
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
-predicate neg_gen_float_post(f: float_format, m: mode, x: gen_float,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, (-float_value(x)))) and
-   ((exact_value(res) = (-exact_value(x))) and
-    (model_value(res) = (-model_value(x)))))
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-predicate mul_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) * float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) * exact_value(y))) and
-    (model_value(res) = (model_value(x) * model_value(y)))))
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
 
-predicate div_gen_float_post(f: float_format, m: mode, x: gen_float,
-  y: gen_float, res: gen_float) =
-  ((float_value(res) = round_float(f, m,
-   (float_value(x) / float_value(y)))) and
-   ((exact_value(res) = (exact_value(x) / exact_value(y))) and
-    (model_value(res) = (model_value(x) / model_value(y)))))
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
 
-predicate cast_gen_float_post(f: float_format, m: mode, x: gen_float,
-  res: gen_float) =
-  ((float_value(res) = round_float(f, m, float_value(x))) and
-   ((exact_value(res) = exact_value(x)) and
-    (model_value(res) = model_value(x))))
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
 
 type char_P
 
@@ -7256,7 +7323,7 @@ axiom int8_range:
 
 predicate is_exact_int_mat(X: double_P pointer, LDX: int, N: int, M: int,
   double_P_X_1_alloc_table_at_L: double_P alloc_table,
-  double_P_double_M_X_1_at_L: (double_P, gen_float) memory) =
+  double_P_double_M_X_1_at_L: (double_P, double) memory) =
   ((offset_min(double_P_X_1_alloc_table_at_L, X) <= 0) and
    ((offset_max(double_P_X_1_alloc_table_at_L, X) >= ((N * LDX) + M)) and
     ((0 <= LDX) and
@@ -7266,15 +7333,15 @@ predicate is_exact_int_mat(X: double_P pointer, LDX: int, N: int, M: int,
         (forall i:int.
           (forall j:int.
             (((0 <= i) and ((i < N) and ((0 <= j) and (j < M)))) ->
-             ((gen_round_error(select(double_P_double_M_X_1_at_L, shift(X,
+             ((double_round_error(select(double_P_double_M_X_1_at_L, shift(X,
               ((i * LDX) + j)))) = 0.0) and
-              (exists v:int. (float_value(select(double_P_double_M_X_1_at_L,
+              (exists v:int. (double_value(select(double_P_double_M_X_1_at_L,
                 shift(X, ((i * LDX) + j)))) = real_of_int(v)))))))))))))
 
 predicate is_exact_int_mat_bounded_by(X_0: double_P pointer, LDX_0: int,
   N_0: int, M_0: int, min: int, max: int,
   double_P_X_0_2_alloc_table_at_L: double_P alloc_table,
-  double_P_double_M_X_0_2_at_L: (double_P, gen_float) memory) =
+  double_P_double_M_X_0_2_at_L: (double_P, double) memory) =
   ((offset_min(double_P_X_0_2_alloc_table_at_L, X_0) <= 0) and
    ((offset_max(double_P_X_0_2_alloc_table_at_L,
     X_0) >= ((N_0 * LDX_0) + M_0)) and
@@ -7285,14 +7352,14 @@ predicate is_exact_int_mat_bounded_by(X_0: double_P pointer, LDX_0: int,
         (forall i_0:int.
           (forall j_0:int.
             (((0 <= i_0) and ((i_0 < N_0) and ((0 <= j_0) and (j_0 < M_0)))) ->
-             ((gen_round_error(select(double_P_double_M_X_0_2_at_L,
+             ((double_round_error(select(double_P_double_M_X_0_2_at_L,
               shift(X_0, ((i_0 * LDX_0) + j_0)))) = 0.0) and
               ((exists v_0:int.
-                 (float_value(select(double_P_double_M_X_0_2_at_L, shift(X_0,
-                 ((i_0 * LDX_0) + j_0)))) = real_of_int(v_0))) and
-               ((real_of_int(min) <= float_value(select(double_P_double_M_X_0_2_at_L,
+                 (double_value(select(double_P_double_M_X_0_2_at_L,
+                 shift(X_0, ((i_0 * LDX_0) + j_0)))) = real_of_int(v_0))) and
+               ((real_of_int(min) <= double_value(select(double_P_double_M_X_0_2_at_L,
                 shift(X_0, ((i_0 * LDX_0) + j_0))))) and
-                (float_value(select(double_P_double_M_X_0_2_at_L, shift(X_0,
+                (double_value(select(double_P_double_M_X_0_2_at_L, shift(X_0,
                 ((i_0 * LDX_0) + j_0)))) <= real_of_int(max))))))))))))))
 
 axiom l_pmax_def:
@@ -7372,7 +7439,7 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
 predicate temporary_is_exact_int_mat_bounded_by(X_1: double_P pointer,
   LDX_1: int, N_1: int, M_1: int, k: int, min_0: int, max_0: int,
   double_P_X_1_3_alloc_table_at_L: double_P alloc_table,
-  double_P_double_M_X_1_3_at_L: (double_P, gen_float) memory) =
+  double_P_double_M_X_1_3_at_L: (double_P, double) memory) =
   ((offset_min(double_P_X_1_3_alloc_table_at_L, X_1) <= 0) and
    ((offset_max(double_P_X_1_3_alloc_table_at_L,
     X_1) >= ((N_1 * LDX_1) + M_1)) and
@@ -7384,14 +7451,14 @@ predicate temporary_is_exact_int_mat_bounded_by(X_1: double_P pointer,
           (forall j_1:int.
             ((((0 <= i_1) and ((i_1 < N_1) and ((0 <= j_1) and (j_1 < M_1)))) or
               ((i_1 = N_1) and ((0 <= j_1) and (j_1 < k)))) ->
-             ((gen_round_error(select(double_P_double_M_X_1_3_at_L,
+             ((double_round_error(select(double_P_double_M_X_1_3_at_L,
               shift(X_1, ((i_1 * LDX_1) + j_1)))) = 0.0) and
               ((exists v_1:int.
-                 (float_value(select(double_P_double_M_X_1_3_at_L, shift(X_1,
-                 ((i_1 * LDX_1) + j_1)))) = real_of_int(v_1))) and
-               ((real_of_int(min_0) <= float_value(select(double_P_double_M_X_1_3_at_L,
+                 (double_value(select(double_P_double_M_X_1_3_at_L,
+                 shift(X_1, ((i_1 * LDX_1) + j_1)))) = real_of_int(v_1))) and
+               ((real_of_int(min_0) <= double_value(select(double_P_double_M_X_1_3_at_L,
                 shift(X_1, ((i_1 * LDX_1) + j_1))))) and
-                (float_value(select(double_P_double_M_X_1_3_at_L, shift(X_1,
+                (double_value(select(double_P_double_M_X_1_3_at_L, shift(X_1,
                 ((i_1 * LDX_1) + j_1)))) <= real_of_int(max_0))))))))))))))
 
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,

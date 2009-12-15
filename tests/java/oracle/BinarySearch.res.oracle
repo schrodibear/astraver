@@ -94,6 +94,7 @@ Generating JC function cons_BinarySearch for constructor BinarySearch
 Done.
 ========== file tests/java/BinarySearch.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -554,7 +555,7 @@ clean:
 [JC_90]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 128
+line = 129
 begin = 54
 end = 140
 
@@ -650,7 +651,7 @@ end = 50
 
 [JC_1]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 48
+line = 49
 begin = 8
 end = 21
 
@@ -674,7 +675,7 @@ end = 97
 
 [JC_3]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 48
+line = 49
 begin = 8
 end = 21
 
@@ -717,7 +718,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 50
+line = 51
 begin = 11
 end = 66
 
@@ -754,13 +755,13 @@ end = -1
 
 [JC_55]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
 [JC_56]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
@@ -774,7 +775,7 @@ end = 23
 [JC_58]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 128
+line = 129
 begin = 54
 end = 140
 
@@ -808,7 +809,7 @@ end = 28
 
 [JC_10]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 50
+line = 51
 begin = 11
 end = 66
 
@@ -821,7 +822,7 @@ end = 18
 
 [JC_11]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 53
+line = 54
 begin = 8
 end = 30
 
@@ -846,7 +847,7 @@ end = 10
 
 [JC_13]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 53
+line = 54
 begin = 8
 end = 30
 
@@ -907,7 +908,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 56
+line = 57
 begin = 11
 end = 113
 
@@ -927,7 +928,7 @@ end = -1
 
 [JC_71]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
@@ -941,26 +942,26 @@ end = 28
 
 [JC_72]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
 [JC_20]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 55
+line = 56
 begin = 10
 end = 18
 
 [JC_73]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 128
+line = 129
 begin = 54
 end = 140
 
 [JC_21]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 56
+line = 57
 begin = 11
 end = 113
 
@@ -973,7 +974,7 @@ end = 24
 
 [JC_22]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 55
+line = 56
 begin = 10
 end = 18
 
@@ -993,7 +994,7 @@ end = 13
 
 [JC_23]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 60
+line = 61
 begin = 8
 end = 23
 
@@ -1025,7 +1026,7 @@ end = 34
 
 [JC_25]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 60
+line = 61
 begin = 8
 end = 23
 
@@ -1043,7 +1044,7 @@ end = -1
 
 [JC_79]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
@@ -1067,14 +1068,14 @@ end = -1
 
 [JC_80]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
 [JC_81]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 128
+line = 129
 begin = 54
 end = 140
 
@@ -1099,7 +1100,7 @@ end = 74
 
 [JC_31]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 62
+line = 63
 begin = 11
 end = 65
 
@@ -1107,7 +1108,7 @@ end = 65
 name = "mean_property1"
 behavior = "lemma"
 file = "HOME/tests/java/BinarySearch.jc"
-line = 72
+line = 73
 begin = 0
 end = 132
 
@@ -1119,7 +1120,7 @@ end = 13
 
 [JC_32]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 62
+line = 63
 begin = 11
 end = 65
 
@@ -1127,7 +1128,7 @@ end = 65
 name = "mean_property2"
 behavior = "lemma"
 file = "HOME/tests/java/BinarySearch.jc"
-line = 77
+line = 78
 begin = 0
 end = 182
 
@@ -1169,7 +1170,7 @@ end = 26
 
 [JC_88]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
@@ -1181,7 +1182,7 @@ end = -1
 
 [JC_89]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 113
+line = 114
 begin = 12
 end = 1406
 
@@ -2653,22 +2654,22 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "72" begin = "0" end = "132"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "73" begin = "0" end = "132"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mean_property2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po2.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "77" begin = "0" end = "182"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "78" begin = "0" end = "182"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="mean_property2">
-    <location file = "HOME/tests/java/BinarySearch.jc" line = "77" begin = "0" end = "182"/>
+    <location file = "HOME/tests/java/BinarySearch.jc" line = "78" begin = "0" end = "182"/>
   </function>
   <function name="mean_property1">
-    <location file = "HOME/tests/java/BinarySearch.jc" line = "72" begin = "0" end = "132"/>
+    <location file = "HOME/tests/java/BinarySearch.jc" line = "73" begin = "0" end = "132"/>
   </function>
   <function name="Method binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -2694,7 +2695,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po25.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "128" begin = "54" end = "140"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "129" begin = "54" end = "140"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
@@ -6679,7 +6680,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property1, File "HOME/tests/java/BinarySearch.jc", line 72, characters 0-132
+;; mean_property1, File "HOME/tests/java/BinarySearch.jc", line 73, characters 0-132
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (int_div (+ x_4 y) 2)) (<= (int_div (+ x_4 y) 2) y))))
@@ -6690,7 +6691,7 @@ why -simplify [...] why/BinarySearch.why
  (IMPLIES (<= x_4 y)
  (AND (<= x_4 (int_div (+ x_4 y) 2)) (<= (int_div (+ x_4 y) 2) y)))))
 
-;; mean_property2, File "HOME/tests/java/BinarySearch.jc", line 77, characters 0-182
+;; mean_property2, File "HOME/tests/java/BinarySearch.jc", line 78, characters 0-182
 (FORALL (x_0_0 y_0)
 (IMPLIES (<= x_0_0 y_0)
 (AND (<= x_0_0 (+ x_0_0 (int_div (- y_0 x_0_0) 2)))
@@ -7667,7 +7668,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (- (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_5, File "HOME/tests/java/BinarySearch.jc", line 128, characters 54-140
+;; BinarySearch_binary_search_safety_po_5, File "HOME/tests/java/BinarySearch.jc", line 129, characters 54-140
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_0 0 Object_alloc_table)

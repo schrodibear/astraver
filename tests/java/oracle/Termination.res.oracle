@@ -64,6 +64,7 @@ Generating JC function cons_Termination for constructor Termination
 Done.
 ========== file tests/java/Termination.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -448,13 +449,13 @@ end = -1
 
 [JC_43]
 file = "HOME/tests/java/Termination.jc"
-line = 53
+line = 54
 begin = 3
 end = 149
 
 [JC_44]
 file = "HOME/tests/java/Termination.jc"
-line = 53
+line = 54
 begin = 3
 end = 149
 
@@ -488,7 +489,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Termination.jc"
-line = 31
+line = 32
 begin = 8
 end = 23
 
@@ -512,7 +513,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Termination.jc"
-line = 31
+line = 32
 begin = 8
 end = 23
 
@@ -562,7 +563,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Termination.jc"
-line = 33
+line = 34
 begin = 11
 end = 65
 
@@ -610,7 +611,7 @@ end = -1
 
 [JC_57]
 file = "HOME/tests/java/Termination.jc"
-line = 70
+line = 71
 begin = 9
 end = 217
 
@@ -624,7 +625,7 @@ end = 14
 
 [JC_58]
 file = "HOME/tests/java/Termination.jc"
-line = 70
+line = 71
 begin = 9
 end = 217
 
@@ -662,7 +663,7 @@ end = 14
 
 [JC_10]
 file = "HOME/tests/java/Termination.jc"
-line = 33
+line = 34
 begin = 11
 end = 65
 
@@ -680,7 +681,7 @@ end = 14
 
 [JC_64]
 file = "HOME/tests/java/Termination.jc"
-line = 70
+line = 71
 begin = 9
 end = 217
 
@@ -692,7 +693,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/java/Termination.jc"
-line = 70
+line = 71
 begin = 9
 end = 217
 
@@ -802,13 +803,13 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/Termination.jc"
-line = 42
+line = 43
 begin = 3
 end = 133
 
 [JC_22]
 file = "HOME/tests/java/Termination.jc"
-line = 42
+line = 43
 begin = 3
 end = 133
 
@@ -832,13 +833,13 @@ end = -1
 
 [JC_26]
 file = "HOME/tests/java/Termination.jc"
-line = 42
+line = 43
 begin = 3
 end = 133
 
 [JC_27]
 file = "HOME/tests/java/Termination.jc"
-line = 42
+line = 43
 begin = 3
 end = 133
 
@@ -904,7 +905,7 @@ end = -1
 
 [JC_38]
 file = "HOME/tests/java/Termination.jc"
-line = 53
+line = 54
 begin = 3
 end = 149
 
@@ -918,7 +919,7 @@ end = -1
 
 [JC_39]
 file = "HOME/tests/java/Termination.jc"
-line = 53
+line = 54
 begin = 3
 end = 149
 

@@ -28,6 +28,7 @@ Generating JC function cons_SideEffects for constructor SideEffects
 Done.
 ========== file tests/java/SideEffects.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -503,7 +504,7 @@ end = -1
 [JC_41]
 kind = PointerDeref
 file = "HOME/tests/java/SideEffects.jc"
-line = 65
+line = 66
 begin = 17
 end = 46
 
@@ -528,7 +529,7 @@ end = 31
 [JC_45]
 kind = PointerDeref
 file = "HOME/tests/java/SideEffects.jc"
-line = 68
+line = 69
 begin = 17
 end = 46
 
@@ -540,7 +541,7 @@ end = 21
 
 [JC_1]
 file = "HOME/tests/java/SideEffects.jc"
-line = 38
+line = 39
 begin = 8
 end = 21
 
@@ -572,7 +573,7 @@ end = 44
 
 [JC_3]
 file = "HOME/tests/java/SideEffects.jc"
-line = 38
+line = 39
 begin = 8
 end = 21
 
@@ -614,14 +615,14 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/SideEffects.jc"
-line = 40
+line = 41
 begin = 11
 end = 66
 
 [JC_50]
 kind = PointerDeref
 file = "HOME/tests/java/SideEffects.jc"
-line = 73
+line = 74
 begin = 18
 end = 48
 
@@ -658,7 +659,7 @@ end = 57
 [JC_56]
 kind = PointerDeref
 file = "HOME/tests/java/SideEffects.jc"
-line = 79
+line = 80
 begin = 18
 end = 48
 
@@ -708,7 +709,7 @@ end = 21
 
 [JC_10]
 file = "HOME/tests/java/SideEffects.jc"
-line = 40
+line = 41
 begin = 11
 end = 66
 
@@ -720,7 +721,7 @@ end = 31
 
 [JC_11]
 file = "HOME/tests/java/SideEffects.jc"
-line = 43
+line = 44
 begin = 8
 end = 30
 
@@ -744,7 +745,7 @@ end = 21
 
 [JC_13]
 file = "HOME/tests/java/SideEffects.jc"
-line = 43
+line = 44
 begin = 8
 end = 30
 
@@ -804,7 +805,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/SideEffects.jc"
-line = 46
+line = 47
 begin = 11
 end = 113
 
@@ -828,7 +829,7 @@ end = 57
 
 [JC_20]
 file = "HOME/tests/java/SideEffects.jc"
-line = 45
+line = 46
 begin = 10
 end = 18
 
@@ -840,7 +841,7 @@ end = 57
 
 [JC_21]
 file = "HOME/tests/java/SideEffects.jc"
-line = 46
+line = 47
 begin = 11
 end = 113
 
@@ -852,7 +853,7 @@ end = 21
 
 [JC_22]
 file = "HOME/tests/java/SideEffects.jc"
-line = 45
+line = 46
 begin = 10
 end = 18
 
@@ -864,7 +865,7 @@ end = 34
 
 [JC_23]
 file = "HOME/tests/java/SideEffects.jc"
-line = 50
+line = 51
 begin = 8
 end = 23
 
@@ -888,7 +889,7 @@ end = 57
 
 [JC_25]
 file = "HOME/tests/java/SideEffects.jc"
-line = 50
+line = 51
 begin = 8
 end = 23
 
@@ -968,7 +969,7 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/SideEffects.jc"
-line = 52
+line = 53
 begin = 11
 end = 65
 
@@ -980,7 +981,7 @@ end = -1
 
 [JC_32]
 file = "HOME/tests/java/SideEffects.jc"
-line = 52
+line = 53
 begin = 11
 end = 65
 
@@ -1980,32 +1981,32 @@ why --project [...] why/SideEffects.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/SideEffects_po14.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "65" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "66" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po15.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "65" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "66" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po16.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "68" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "69" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po17.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "68" begin = "17" end = "46"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "69" begin = "17" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po18.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "73" begin = "18" end = "48"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "74" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po19.why">
-      <location file = "HOME/tests/java/SideEffects.jc" line = "73" begin = "18" end = "48"/>
+      <location file = "HOME/tests/java/SideEffects.jc" line = "74" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5066,7 +5067,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP3)
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4)) (EQ i2 0)))))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_1, File "HOME/tests/java/SideEffects.jc", line 65, characters 17-46
+;; SideEffects_m1_safety_po_1, File "HOME/tests/java/SideEffects.jc", line 66, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -5076,7 +5077,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1)) (<= (offset_min Object_alloc_table t) 0)))))))
 
-;; SideEffects_m1_safety_po_2, File "HOME/tests/java/SideEffects.jc", line 65, characters 17-46
+;; SideEffects_m1_safety_po_2, File "HOME/tests/java/SideEffects.jc", line 66, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -5086,7 +5087,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1)) (<= 0 (offset_max Object_alloc_table t))))))))
 
-;; SideEffects_m1_safety_po_3, File "HOME/tests/java/SideEffects.jc", line 68, characters 17-46
+;; SideEffects_m1_safety_po_3, File "HOME/tests/java/SideEffects.jc", line 69, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -5104,7 +5105,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1)) (<= (offset_min Object_alloc_table t) i0))))))))))))))
 
-;; SideEffects_m1_safety_po_4, File "HOME/tests/java/SideEffects.jc", line 68, characters 17-46
+;; SideEffects_m1_safety_po_4, File "HOME/tests/java/SideEffects.jc", line 69, characters 17-46
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -5122,7 +5123,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1)) (<= i0 (offset_max Object_alloc_table t)))))))))))))))
 
-;; SideEffects_m1_safety_po_5, File "HOME/tests/java/SideEffects.jc", line 73, characters 18-48
+;; SideEffects_m1_safety_po_5, File "HOME/tests/java/SideEffects.jc", line 74, characters 18-48
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -5148,7 +5149,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i1)
 (IMPLIES (EQ i1 (- i0 1)) (<= (offset_min Object_alloc_table t) i1))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_6, File "HOME/tests/java/SideEffects.jc", line 73, characters 18-48
+;; SideEffects_m1_safety_po_6, File "HOME/tests/java/SideEffects.jc", line 74, characters 18-48
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)

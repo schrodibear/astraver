@@ -19,6 +19,7 @@ Generating JC function cons_Literals for constructor Literals
 Done.
 ========== file tests/java/Literals.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -258,7 +259,7 @@ clean:
 ========== file tests/java/Literals.loc ==========
 [JC_1]
 file = "HOME/tests/java/Literals.jc"
-line = 44
+line = 45
 begin = 8
 end = 23
 
@@ -270,7 +271,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Literals.jc"
-line = 44
+line = 45
 begin = 8
 end = 23
 
@@ -322,7 +323,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Literals.jc"
-line = 46
+line = 47
 begin = 11
 end = 65
 
@@ -336,7 +337,7 @@ end = 9
 
 [JC_10]
 file = "HOME/tests/java/Literals.jc"
-line = 46
+line = 47
 begin = 11
 end = 65
 

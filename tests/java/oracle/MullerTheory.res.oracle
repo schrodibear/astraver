@@ -54,6 +54,7 @@ Generating JC function cons_MullerTheory for constructor MullerTheory
 Done.
 ========== file tests/java/MullerTheory.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -711,7 +712,7 @@ end = 95
 
 [JC_1]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 38
+line = 39
 begin = 8
 end = 21
 
@@ -729,19 +730,19 @@ end = -1
 
 [JC_48]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 109
+line = 110
 begin = 15
 end = 1099
 
 [JC_3]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 38
+line = 39
 begin = 8
 end = 21
 
 [JC_49]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 109
+line = 110
 begin = 15
 end = 1099
 
@@ -785,7 +786,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 40
+line = 41
 begin = 11
 end = 66
 
@@ -868,19 +869,19 @@ end = -1
 
 [JC_61]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 139
+line = 140
 begin = 21
 end = 1746
 
 [JC_62]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 139
+line = 140
 begin = 21
 end = 1746
 
 [JC_10]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 40
+line = 41
 begin = 11
 end = 66
 
@@ -893,7 +894,7 @@ end = 28
 
 [JC_11]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 43
+line = 44
 begin = 8
 end = 30
 
@@ -919,7 +920,7 @@ end = 36
 
 [JC_13]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 43
+line = 44
 begin = 8
 end = 30
 
@@ -980,7 +981,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 46
+line = 47
 begin = 11
 end = 113
 
@@ -1004,7 +1005,7 @@ end = 36
 
 [JC_20]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 45
+line = 46
 begin = 10
 end = 18
 
@@ -1016,7 +1017,7 @@ end = 95
 
 [JC_21]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 46
+line = 47
 begin = 11
 end = 113
 
@@ -1028,25 +1029,25 @@ end = -1
 
 [JC_22]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 45
+line = 46
 begin = 10
 end = 18
 
 [JC_75]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 109
+line = 110
 begin = 15
 end = 1099
 
 [JC_23]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 50
+line = 51
 begin = 8
 end = 23
 
 [JC_76]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 109
+line = 110
 begin = 15
 end = 1099
 
@@ -1060,7 +1061,7 @@ end = -1
 name = "num_of_pos_empty"
 behavior = "axiom"
 file = "HOME/tests/java/MullerTheory.jc"
-line = 77
+line = 78
 begin = 2
 end = 174
 
@@ -1073,7 +1074,7 @@ end = 28
 
 [JC_25]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 50
+line = 51
 begin = 8
 end = 23
 
@@ -1122,7 +1123,7 @@ end = -1
 name = "num_of_pos_true_case"
 behavior = "axiom"
 file = "HOME/tests/java/MullerTheory.jc"
-line = 68
+line = 69
 begin = 2
 end = 303
 
@@ -1170,7 +1171,7 @@ end = 36
 
 [JC_31]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 52
+line = 53
 begin = 11
 end = 65
 
@@ -1182,7 +1183,7 @@ end = 95
 
 [JC_32]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 52
+line = 53
 begin = 11
 end = 65
 
@@ -1190,7 +1191,7 @@ end = 65
 name = "num_of_pos_strictly_increasing"
 behavior = "lemma"
 file = "HOME/tests/java/MullerTheory.jc"
-line = 85
+line = 86
 begin = 0
 end = 320
 
@@ -1208,7 +1209,7 @@ end = 24
 
 [JC_86]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 139
+line = 140
 begin = 21
 end = 1746
 
@@ -1220,7 +1221,7 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/java/MullerTheory.jc"
-line = 139
+line = 140
 begin = 21
 end = 1746
 
@@ -1271,7 +1272,7 @@ end = -1
 name = "num_of_pos_false_case"
 behavior = "axiom"
 file = "HOME/tests/java/MullerTheory.jc"
-line = 59
+line = 60
 begin = 2
 end = 304
 
@@ -2401,12 +2402,12 @@ why --project [...] why/MullerTheory.why
   <lemma name="num_of_pos_strictly_increasing">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/MullerTheory_po1.why">
-      <location file = "HOME/tests/java/MullerTheory.jc" line = "85" begin = "0" end = "320"/>
+      <location file = "HOME/tests/java/MullerTheory.jc" line = "86" begin = "0" end = "320"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="num_of_pos_strictly_increasing">
-    <location file = "HOME/tests/java/MullerTheory.jc" line = "85" begin = "0" end = "320"/>
+    <location file = "HOME/tests/java/MullerTheory.jc" line = "86" begin = "0" end = "320"/>
   </function>
   <function name="Method m">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -6648,7 +6649,7 @@ why -simplify [...] why/MullerTheory.why
  (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_6_at_L)
  (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_6_at_L))))))
 
-;; num_of_pos_strictly_increasing, File "HOME/tests/java/MullerTheory.jc", line 85, characters 0-320
+;; num_of_pos_strictly_increasing, File "HOME/tests/java/MullerTheory.jc", line 86, characters 0-320
 (FORALL (intM_intP_t_3_16_at_L i_3 j_3 k_1 l t_3)
 (IMPLIES
 (AND (< j_3 k_1)

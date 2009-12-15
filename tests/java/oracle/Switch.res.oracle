@@ -88,6 +88,7 @@ Generating JC function cons_Switch for constructor Switch
 Done.
 ========== file tests/java/Switch.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -436,7 +437,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Switch.jc"
-line = 41
+line = 42
 begin = 8
 end = 23
 
@@ -456,7 +457,7 @@ end = 27
 
 [JC_3]
 file = "HOME/tests/java/Switch.jc"
-line = 41
+line = 42
 begin = 8
 end = 23
 
@@ -500,7 +501,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Switch.jc"
-line = 43
+line = 44
 begin = 11
 end = 65
 
@@ -522,7 +523,7 @@ end = 27
 
 [JC_10]
 file = "HOME/tests/java/Switch.jc"
-line = 43
+line = 44
 begin = 11
 end = 65
 
@@ -598,7 +599,7 @@ end = 27
 
 [JC_20]
 file = "HOME/tests/java/Switch.jc"
-line = 52
+line = 53
 begin = 10
 end = 18
 
@@ -610,7 +611,7 @@ end = 50
 
 [JC_22]
 file = "HOME/tests/java/Switch.jc"
-line = 52
+line = 53
 begin = 10
 end = 18
 
@@ -698,7 +699,7 @@ end = 110
 
 [JC_34]
 file = "HOME/tests/java/Switch.jc"
-line = 78
+line = 79
 begin = 10
 end = 18
 
@@ -722,7 +723,7 @@ end = 110
 
 [JC_38]
 file = "HOME/tests/java/Switch.jc"
-line = 78
+line = 79
 begin = 10
 end = 18
 

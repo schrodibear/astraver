@@ -128,6 +128,7 @@ Generating JC function cons_Arrays for constructor Arrays
 Done.
 ========== file tests/java/Arrays.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -965,7 +966,7 @@ clean:
 ========== file tests/java/Arrays.loc ==========
 [JC_90]
 file = "HOME/tests/java/Arrays.jc"
-line = 86
+line = 87
 begin = 18
 end = 2047
 
@@ -1082,7 +1083,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Arrays.jc"
-line = 38
+line = 39
 begin = 8
 end = 21
 
@@ -1136,7 +1137,7 @@ end = 36
 
 [JC_3]
 file = "HOME/tests/java/Arrays.jc"
-line = 38
+line = 39
 begin = 8
 end = 21
 
@@ -1251,7 +1252,7 @@ end = 80
 
 [JC_9]
 file = "HOME/tests/java/Arrays.jc"
-line = 40
+line = 41
 begin = 11
 end = 66
 
@@ -1348,7 +1349,7 @@ end = 20
 
 [JC_162]
 file = "HOME/tests/java/Arrays.jc"
-line = 196
+line = 197
 begin = 9
 end = 1153
 
@@ -1366,7 +1367,7 @@ end = 32
 
 [JC_163]
 file = "HOME/tests/java/Arrays.jc"
-line = 196
+line = 197
 begin = 9
 end = 1153
 
@@ -1405,7 +1406,7 @@ end = 53
 [JC_165]
 kind = PointerDeref
 file = "HOME/tests/java/Arrays.jc"
-line = 214
+line = 215
 begin = 21
 end = 80
 
@@ -1496,7 +1497,7 @@ end = 129
 
 [JC_10]
 file = "HOME/tests/java/Arrays.jc"
-line = 40
+line = 41
 begin = 11
 end = 66
 
@@ -1508,13 +1509,13 @@ end = -1
 
 [JC_11]
 file = "HOME/tests/java/Arrays.jc"
-line = 43
+line = 44
 begin = 8
 end = 30
 
 [JC_64]
 file = "HOME/tests/java/Arrays.jc"
-line = 86
+line = 87
 begin = 18
 end = 2047
 
@@ -1532,13 +1533,13 @@ end = 230
 
 [JC_65]
 file = "HOME/tests/java/Arrays.jc"
-line = 86
+line = 87
 begin = 18
 end = 2047
 
 [JC_13]
 file = "HOME/tests/java/Arrays.jc"
-line = 43
+line = 44
 begin = 8
 end = 30
 
@@ -1563,7 +1564,7 @@ end = -1
 
 [JC_172]
 file = "HOME/tests/java/Arrays.jc"
-line = 196
+line = 197
 begin = 9
 end = 1153
 
@@ -1588,13 +1589,13 @@ end = -1
 
 [JC_173]
 file = "HOME/tests/java/Arrays.jc"
-line = 196
+line = 197
 begin = 9
 end = 1153
 
 [JC_121]
 file = "HOME/tests/java/Arrays.jc"
-line = 146
+line = 147
 begin = 18
 end = 1821
 
@@ -1619,7 +1620,7 @@ end = -1
 
 [JC_122]
 file = "HOME/tests/java/Arrays.jc"
-line = 146
+line = 147
 begin = 18
 end = 1821
 
@@ -1677,7 +1678,7 @@ end = 31
 
 [JC_19]
 file = "HOME/tests/java/Arrays.jc"
-line = 46
+line = 47
 begin = 11
 end = 113
 
@@ -1758,7 +1759,7 @@ end = 42
 
 [JC_20]
 file = "HOME/tests/java/Arrays.jc"
-line = 45
+line = 46
 begin = 10
 end = 18
 
@@ -1770,7 +1771,7 @@ end = 53
 
 [JC_21]
 file = "HOME/tests/java/Arrays.jc"
-line = 46
+line = 47
 begin = 11
 end = 113
 
@@ -1790,7 +1791,7 @@ end = 31
 
 [JC_22]
 file = "HOME/tests/java/Arrays.jc"
-line = 45
+line = 46
 begin = 10
 end = 18
 
@@ -1808,7 +1809,7 @@ end = 71
 
 [JC_23]
 file = "HOME/tests/java/Arrays.jc"
-line = 50
+line = 51
 begin = 8
 end = 23
 
@@ -1844,7 +1845,7 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/Arrays.jc"
-line = 50
+line = 51
 begin = 8
 end = 23
 
@@ -1864,7 +1865,7 @@ end = 23
 
 [JC_78]
 file = "HOME/tests/java/Arrays.jc"
-line = 86
+line = 87
 begin = 18
 end = 2047
 
@@ -1890,7 +1891,7 @@ end = 31
 
 [JC_79]
 file = "HOME/tests/java/Arrays.jc"
-line = 86
+line = 87
 begin = 18
 end = 2047
 
@@ -1926,13 +1927,13 @@ end = -1
 
 [JC_135]
 file = "HOME/tests/java/Arrays.jc"
-line = 146
+line = 147
 begin = 18
 end = 1821
 
 [JC_136]
 file = "HOME/tests/java/Arrays.jc"
-line = 146
+line = 147
 begin = 18
 end = 1821
 
@@ -1988,7 +1989,7 @@ end = 42
 
 [JC_31]
 file = "HOME/tests/java/Arrays.jc"
-line = 52
+line = 53
 begin = 11
 end = 65
 
@@ -2000,7 +2001,7 @@ end = 53
 
 [JC_32]
 file = "HOME/tests/java/Arrays.jc"
-line = 52
+line = 53
 begin = 11
 end = 65
 
@@ -2080,7 +2081,7 @@ end = 23
 
 [JC_89]
 file = "HOME/tests/java/Arrays.jc"
-line = 86
+line = 87
 begin = 18
 end = 2047
 
@@ -2122,13 +2123,13 @@ end = -1
 
 [JC_146]
 file = "HOME/tests/java/Arrays.jc"
-line = 146
+line = 147
 begin = 18
 end = 1821
 
 [JC_147]
 file = "HOME/tests/java/Arrays.jc"
-line = 146
+line = 147
 begin = 18
 end = 1821
 
@@ -3968,12 +3969,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Arrays_po11.why">
-      <location file = "HOME/tests/java/Arrays.jc" line = "214" begin = "21" end = "80"/>
+      <location file = "HOME/tests/java/Arrays.jc" line = "215" begin = "21" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Arrays_po12.why">
-      <location file = "HOME/tests/java/Arrays.jc" line = "214" begin = "21" end = "80"/>
+      <location file = "HOME/tests/java/Arrays.jc" line = "215" begin = "21" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8865,7 +8866,7 @@ why -simplify [...] why/Arrays.why
          (select intM_intP (shift t_2 (- i_2 1))))))))))
 (IMPLIES (> j_0 0) (<= (- j_0 1) (offset_max Object_alloc_table t_2)))))))))))))
 
-;; Arrays_arrayShift_safety_po_3, File "HOME/tests/java/Arrays.jc", line 214, characters 21-80
+;; Arrays_arrayShift_safety_po_3, File "HOME/tests/java/Arrays.jc", line 215, characters 21-80
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8899,7 +8900,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result0 (select intM_intP0 (shift t_2 (- j_0 1))))
 (<= (offset_min Object_alloc_table t_2) j_0)))))))))))))))
 
-;; Arrays_arrayShift_safety_po_4, File "HOME/tests/java/Arrays.jc", line 214, characters 21-80
+;; Arrays_arrayShift_safety_po_4, File "HOME/tests/java/Arrays.jc", line 215, characters 21-80
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

@@ -379,7 +379,7 @@ let any_value = function
 	| Tboolean -> App(Var "any_bool", Void)
 	| Tinteger -> App(Var "any_int", Void)
 	| Treal -> App(Var "any_real", Void)
-	| Tgenfloat _ -> Var ("any_"^(native_name ty)) 
+	| Tgenfloat _ -> App(Var ("any_"^(native_name ty)), Void) 
 	| Tstring -> App(Var "any_string", Void)
       end
   | JCTnull 

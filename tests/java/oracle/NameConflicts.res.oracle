@@ -32,6 +32,7 @@ Generating JC function cons_NameConflicts for constructor NameConflicts
 Done.
 ========== file tests/java/NameConflicts.jc ==========
 # InvariantPolicy = Arguments
+# TerminationPolicy = always
 # SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
@@ -340,7 +341,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 43
+line = 44
 begin = 8
 end = 23
 
@@ -352,7 +353,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 43
+line = 44
 begin = 8
 end = 23
 
@@ -396,13 +397,13 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 45
+line = 46
 begin = 11
 end = 65
 
 [JC_10]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 45
+line = 46
 begin = 11
 end = 65
 
