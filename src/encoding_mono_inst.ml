@@ -88,7 +88,7 @@ let st = PTexternal ([], stname)
 let tt = PTexternal ([], ttname)
 
 (* one dumb type *)
-let dtname = prefix "poly"
+let dtname = prefix "alpha"
 let dtnameid = Ident.create dtname
 let dt = PTexternal ([], dtnameid)
 
@@ -290,21 +290,23 @@ module E = struct
     | 0 ->  (l,nargs)::acc
     | n -> let acc = PT_Map.fold 
         (fun k v acc -> all_possible which env acc ((which v k)::l) nargs (n-1)) env.mono acc in
-      all_possible which env acc (dt::l) (nargs+1) (n-1)
+      all_possible which env acc ((which dtnameid dt)::l) (nargs+1) (n-1)
 
-  (** add a polymorphe (or not, but make_world ensures it) type to 
-      take into account.
-      *)
+  (** add a polymorphe (or not, but make_world ensures it (not anymore ;))) type to take into account. *)
   let add_type env tid nargs = 
-    let allp = all_possible name_of_mono env [] [] 0 nargs in
+    let allp = all_possible (fun v k -> (v,k)) env [] [] 0 nargs in
     let encode,l = List.fold_left
-      (fun (encode,ll) (l,nargs) -> 
-         let l = PTexternal (l,tid) in
-         let lid = ident_of_close_type l in
-         let encodell = if PT_Map.mem l env.mono 
-         then encode,ll 
-         else (PT_Map.add l lid encode,(lid,nargs)::ll) in
-         encodell) 
+      (fun (encode,ll) (vk,nargs) ->
+         let l = PTexternal (List.map snd vk,tid) in
+         let encodell =
+           if PT_Map.mem l env.mono 
+           then encode,ll 
+           else begin
+             let l = List.map (fun (v,k) -> name_of_mono v k) vk in
+             let l = PTexternal (l,tid) in
+             let lid = ident_of_close_type l in
+             PT_Map.add l lid encode,(lid,nargs)::ll
+           end in encodell)
       (env.encode,[]) allp in
     {env with encode = encode;
        def_type = Idmap.add tid l env.def_type}
@@ -871,6 +873,16 @@ let monomorph_goal acc = function
 
 let push_decl a = Queue.add a queue
 
+let output_world world env =
+  let print_world fmt = PT_Set.iter (fprintf fmt "%a;@." Util.print_pure_type) in
+  let print_map fmt = Mapenv.PT_Map.iter (fun k v -> fprintf fmt "%a \"%a\";@." Util.print_pure_type k Ident.print v) in
+  Format.printf "{%t}{%a}{%a}{%a}@." 
+    (fun fmt -> Env.iter_type (fun id sch -> fprintf fmt "%a %i;@." Ident.print id sch))
+    print_world world
+    print_map env.E.mono
+    print_map env.E.encode;
+  exit 0
+
 let iter f =
   (* monomorph the goal *)
   let decls = Queue.fold monomorph_goal [] queue in
@@ -884,6 +896,7 @@ let iter f =
   let env = E.create (PT_Set.elements world) in
   (* On ajoute toute les logics et type et donc même celle qui sont builtin *)
   let env = Env.fold_type (fun id sch env -> E.add_type env id sch) env in
+  if Options.monoinstoutput_world then output_world world env;
   let env = Env.fold_global_logic (fun id sch env -> 
                                      try
                                        E.add_logic env id sch

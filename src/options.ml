@@ -105,6 +105,8 @@ type monoinstWorldGen =
   | MonoinstGoal
 
 let monoinstworldgen = ref MonoinstBuiltin
+let monoinstoutput_world = ref false
+
 let defExpanding_ = ref NoExpanding 
 
 type termination = UseVariant | Partial | Total
@@ -551,7 +553,12 @@ let files =
 	| "builtin" -> monoinstworldgen := MonoinstBuiltin
 	| "goal" -> monoinstworldgen := MonoinstGoal
 	| _ -> usage (); exit 1);
+        types_encoding_ := MonoInst;
 	parse args
+    | ("-monoinstoutput_world" | "--monoinstoutput_world")::args ->
+        monoinstoutput_world := true;
+        types_encoding_ := MonoInst;
+        parse args
     | ("-explain" | "--explain") :: args ->
 	explain_vc := true; parse args
     | ("-locs" | "--locs") :: s :: args ->
@@ -638,6 +645,7 @@ let get_types_encoding () = !types_encoding_
 let set_types_encoding ec = types_encoding_ := ec
 
 let monoinstworldgen = !monoinstworldgen
+let monoinstoutput_world = !monoinstoutput_world
 
 let get_type_expanding () = !defExpanding_
 

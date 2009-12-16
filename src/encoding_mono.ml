@@ -389,8 +389,8 @@ let rec push d =
 	| Function (ptl, pt) -> Function (monoify ptl, sortify ut pt) in
 	Queue.add (Dlogic (loc, ident, Env.empty_scheme newarity)) queue
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (_loc, _ident, _pred_def_sch) ->
-      assert false
+  | Dpredicate_def (loc,id,d) ->
+      List.iter push (PredDefExpansor.predicate_def loc id d)
 (*
       let (argl, pred) = pred_def_sch.Env.scheme_type in
       let rootexp = (Papp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
