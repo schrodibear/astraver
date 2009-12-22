@@ -103,6 +103,7 @@ type monoinstWorldGen =
   | MonoinstSorted
   | MonoinstBuiltin
   | MonoinstGoal
+  | MonoinstPremises
 
 let monoinstworldgen = ref MonoinstBuiltin
 let monoinstoutput_world = ref false
@@ -296,7 +297,7 @@ SMT-lib-specific options:
   --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
 
 Monoinst-specific options
-  --monoinstworldgen <builtin|complete|goal>
+  --monoinstworldgen <builtin|complete|goal|premises>
 
 PVS-specific options:
   --pvs-preamble <text>
@@ -552,6 +553,7 @@ let files =
 	  "sorted" -> monoinstworldgen := MonoinstSorted
 	| "builtin" -> monoinstworldgen := MonoinstBuiltin
 	| "goal" -> monoinstworldgen := MonoinstGoal
+        | "premises" -> monoinstworldgen := MonoinstPremises
 	| _ -> usage (); exit 1);
         types_encoding_ := MonoInst;
 	parse args

@@ -106,6 +106,7 @@ type monoinstWorldGen =
   | MonoinstSorted
   | MonoinstBuiltin
   | MonoinstGoal
+  | MonoinstPremises
 val monoinstworldgen : monoinstWorldGen
 val monoinstoutput_world : bool
 

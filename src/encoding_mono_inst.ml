@@ -811,26 +811,40 @@ let make_world_context_element world = function
   | Svar (_,ty) -> _PT_Set_add ty world
   | Spred (_,p) -> make_world_predicate world p
 
-let make_world_sorted world  = function
+let make_world_sorted ~monotype ~monosig ~monodef world  = function
   | Dalgtype _ -> assert false
-  | Dtype(_,s,[]) -> _PT_Set_add (PTexternal([],s)) world
+  | Dtype(_,s,[]) -> if monotype 
+    then _PT_Set_add (PTexternal([],s)) world
+    else world
   | Dlogic(_,_,sch) when Env.Vset.is_empty sch.Env.scheme_vars -> 
+      if monosig then
       (match sch.Env.scheme_type with
          | Function (arg,rt) ->  List.fold_left (fun s x -> _PT_Set_add x s)  world (rt::arg)
          | Predicate arg ->  List.fold_left (fun s x -> _PT_Set_add x s)  world arg)
+      else world
   | Dpredicate_def(_,_,sch) when Env.Vset.is_empty sch.Env.scheme_vars ->
-      let world = List.fold_left (fun world (_,ty) -> _PT_Set_add ty world) world 
-        (fst sch.Env.scheme_type) in
-      make_world_predicate world (snd sch.Env.scheme_type)
+        let world =      
+          if monosig then
+            List.fold_left (fun world (_,ty) -> _PT_Set_add ty world) world 
+              (fst sch.Env.scheme_type) 
+          else world in
+        if monodef then
+        make_world_predicate world (snd sch.Env.scheme_type)
+        else world
+      
   | Dinductive_def(_,_,sch) when Env.Vset.is_empty sch.Env.scheme_vars ->
-      let world =  List.fold_left (fun s x -> _PT_Set_add x s)  world (fst sch.Env.scheme_type) in
-      List.fold_left (fun world (_,p) -> make_world_predicate world p) world
-        (snd sch.Env.scheme_type)
+      let world = if monosig then List.fold_left (fun s x -> _PT_Set_add x s)  world (fst sch.Env.scheme_type) else world in
+      if monodef then
+        List.fold_left (fun world (_,p) -> make_world_predicate world p) world
+          (snd sch.Env.scheme_type)
+      else world
   | Dfunction_def(_,_,{Env.scheme_vars =v;scheme_type=(tyl,tyr,t)}) 
       when Env.Vset.is_empty v ->
-      let world = List.fold_left (fun world (_,ty) -> _PT_Set_add ty world) world tyl in
-      let world = _PT_Set_add tyr world in
-      make_world_term world t
+      let world = if monosig then List.fold_left (fun world (_,ty) -> _PT_Set_add ty world) world tyl else world in
+      let world = if monosig then _PT_Set_add tyr world else world in
+      if monodef then
+        make_world_term world t
+      else world
   | Daxiom(_,_,sch) when Env.Vset.is_empty sch.Env.scheme_vars ->
       make_world_predicate world sch.Env.scheme_type
   | Dgoal (_,_,_,{Env.scheme_vars =v;scheme_type=(con,p)}) 
@@ -852,8 +866,9 @@ let make_world_none world _ = world
 
 let make_world = match Options.monoinstworldgen with
   | Options.MonoinstBuiltin -> make_world_none
-  | Options.MonoinstSorted -> make_world_sorted
+  | Options.MonoinstSorted -> make_world_sorted ~monotype:true ~monodef:true ~monosig:true
   | Options.MonoinstGoal -> make_world_just_goal
+  | Options.MonoinstPremises -> make_world_sorted ~monotype:false  ~monodef:true ~monosig:false
 
 let monomorph_goal acc = function
   | Dgoal (loc,vc,id,sch) ->
