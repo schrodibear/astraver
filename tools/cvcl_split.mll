@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl_split.mll,v 1.11 2009-12-01 11:51:36 marche Exp $ i*)
+(*i $Id: cvcl_split.mll,v 1.12 2009-12-27 16:46:36 bobot Exp $ i*)
 
 {
 
@@ -33,7 +33,7 @@
   open Lexing
 
   let debug = ref false
-  let callback = ref (fun _f -> assert false)
+  let callback = ref (fun _ _ -> assert false)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192
@@ -49,7 +49,7 @@
 
   let end_file file =
     close_out !outc;
-    !callback file;
+    !callback file [] ;
     if not !debug then Sys.remove file
 
 }

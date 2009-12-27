@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib_split.mll,v 1.11 2009-12-01 11:51:37 marche Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.12 2009-12-27 16:46:36 bobot Exp $ i*)
 
 {
 
@@ -33,27 +33,24 @@
   open Lexing 
 
   let debug = ref false
-  let callback = ref (fun _f -> assert false : string -> unit)
+  let callback = ref (fun _ _ -> assert false : string -> Buffer.t list -> unit)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192
+  let buf_goal = Buffer.create 8192
 
-  let outc = ref stdout
-  let file = ref ""
+  let buf_goal = Buffer.create 512
+
+  let print_hypo s = Buffer.add_string buf s
+  let print_goal s = Buffer.add_string buf_goal s
+
+  let start_file () =
+    Buffer.reset buf_goal
+
+  let end_file () =
+    !callback "smtlib.smt" [buf;buf_goal]
+
   let level = ref 0 
-
-  let print s = 
-    output_string !outc s
-
-(*  let start_file () =
-    let f = Filename.temp_file "smtlib" ".smt" in
-    outc := open_out f;
-    f
-*)
-  let end_file file =
-    close_out !outc;
-    !callback file;
-    if not !debug then Sys.remove file
 
 }
 
@@ -62,38 +59,35 @@ let ident = ['a'-'z' 'A'-'Z' '0'-'9']+
 
 rule split = parse
   | "(" space* "benchmark"
-      { Buffer.add_string buf (lexeme lexbuf); 
+      { print_hypo (lexeme lexbuf); 
 	split lexbuf 
       }
   | ":" space* "status"  
       { 
-	Buffer.add_string buf (lexeme lexbuf); 
+	print_hypo (lexeme lexbuf); 
 	split lexbuf }
   | ":" space* ("extrasorts" | "extrafuns" | "assumption")
-      { Buffer.add_string buf (lexeme lexbuf); 
+      { print_hypo (lexeme lexbuf); 
 	lisp_copy lexbuf; split lexbuf }
   | ident 
       { 
-	Buffer.add_string buf (lexeme lexbuf);
+	print_hypo (lexeme lexbuf);
 	split lexbuf } 
   | ":" space* "formula"
       { 
-	file := Filename.temp_file "smtlib" ".smt"; 
 	(*printf "formula: ouverture du fichier %s \n" !file ;*)
 	level := 0 ;
-	outc := open_out !file;
-	print (Buffer.contents buf);
-	print (lexeme lexbuf); 
+        print_goal (lexeme lexbuf);
 	query lexbuf;
-	print ")" ; (* ends the benchmark bracket *)
+	print_goal ")" ; (* ends the benchmark bracket *)
 	(*printf "formula: fermeture du fichier %s \n" !file ; *)
-	end_file !file;
+	end_file ();
 	split lexbuf}
   | eof 
       { () }
   | _ 
       { 
-      Buffer.add_string buf (lexeme lexbuf); split lexbuf }
+      print_hypo (lexeme lexbuf); split lexbuf }
 
 
 
@@ -103,29 +97,27 @@ and lisp_copy = parse
   | "(" { Buffer.add_char buf '('; lisp_copy lexbuf; }
   | ")" { Buffer.add_char buf ')' }
   | eof { () }
-  | _   { Buffer.add_string buf (lexeme lexbuf); lisp_copy lexbuf }
+  | _   { print_hypo (lexeme lexbuf); lisp_copy lexbuf }
 
 (* prints up to the end of the S-expression *)
 and query = parse
-  | "(" { print "("; 
+  | "(" { print_goal "("; 
 	  level := !level + 1 ; 
 	  query lexbuf;}
-  | ")" { print ")" ;
+  | ")" { print_goal ")" ;
 	  level := !level - 1 ;
 	  (*printf ")%d" !level ; *)
 	  if !level <> 0 then query lexbuf 
 	}
-  | _   { print (lexeme lexbuf); query lexbuf }
+  | _   { print_goal (lexeme lexbuf); query lexbuf }
 
 {
 
-  let iter cb f =
+  let iter cb c =
     callback := cb;
     Buffer.reset buf;
-    let c = open_in f in
     let lb = from_channel c in
-    split lb;
-    close_in c
+    split lb
 
 }
 

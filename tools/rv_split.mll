@@ -31,7 +31,7 @@
   open Lexing 
 
   let debug = ref true
-  let callback = ref (fun _f -> assert false : string -> unit)
+  let callback = ref (fun _ _ -> assert false : string -> Buffer.t list -> unit)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192
@@ -45,7 +45,7 @@
 
   let end_file file =
     close_out !outc;
-    !callback file
+    !callback file []
     (*if not !debug then Sys.remove file*)
 
 }

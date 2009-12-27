@@ -37,40 +37,29 @@ type prover_result =
   | Timeout of float                       
   | ProverFailure of float * string        
 
+type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffer.t list) -> unit -> 
+  prover_result
+
 let cpulimit = ref "why-cpulimit"
 
 
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()
 
-let file_contents f =
-  let buf = Buffer.create 1024 in
-  try
-    let c = open_in f in
-    begin try 
-      while true do 
-	let s = input_line c in Buffer.add_string buf s; 
-	Buffer.add_char buf '\n'
-      done;
-      assert false
-    with End_of_file ->
-      close_in c;
-      Buffer.contents buf
-    end
-  with _ -> 
-    sprintf "(cannot open %s)" f
-
-let timed_sys_command ~debug timeout cmd =
+let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
   let t0 = Unix.times () in
   if debug then Format.eprintf "command line: %s@." cmd;
-  let out = Filename.temp_file "out" "" in
   let cmd = if timeout = 0 
-  then sprintf "%s > %s 2>&1" cmd out
-  else sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
-  let ret = Sys.command cmd in
+  then sprintf "%s 2>&1" cmd
+  else sprintf "%s %d %s 2>&1" !cpulimit timeout cmd in
+  let (cin,cout) as p = Unix.open_process cmd in
+  List.iter (Buffer.output_buffer cout) stdin;
+  close_out cout;
+  let out = Lib.channel_contents cin in
+  let ret = Unix.close_process p in
   let t1 = Unix.times () in
   let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
-  if debug then Format.eprintf "Output file %s:@.%s@." out (file_contents out);
+  if debug then Format.eprintf "Calldp : Command output : %s@." out;
   (cpu_time,ret,out)
 
 let grep re str =
@@ -86,35 +75,47 @@ let grep re str =
     let _ = Str.search_forward re str 0 in true
   with Not_found -> false
 
-let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") ~filename:f p =
-  let cmd = 
-    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ 
-      switch ^ " " ^ f 
-  in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
-  then 
-    (remove_file ~debug out; Timeout t)
-  else
-    let res = file_contents out in
-    let r =
-      let valid_result =
-	match p.DpConfig.valid_regexp with
-	  | None -> c == 0
-	  | Some r -> grep r res
-      in
-      if valid_result then
-        Valid t
-      else if grep p.DpConfig.undecided_regexp res then
-        CannotDecide(t, None)
-      else
-        ProverFailure(t,"prover command " ^ cmd ^ " produced unrecognized answer: " ^ out)
-      in
-    remove_file ~debug out;
-    r
+let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") ?filename ?buffers p =
+  let cmd,(t,c,res) = match buffers,p.DpConfig.stdin_switch,filename with
+    | None,_, Some f ->
+        let cmd = sprintf "%s %s %s %s" 
+          p.DpConfig.command p.DpConfig.command_switches switch f 
+        in
+        cmd,timed_sys_command ~debug timeout cmd
+    | Some buffers, Some stdin_s, _ ->
+        let cmd = sprintf "%s %s %s %s" 
+          p.DpConfig.command p.DpConfig.command_switches switch stdin_s
+        in
+        cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
+    | Some buffers, None, Some f ->
+        let f = Filename.temp_file "" f in
+        let cout = open_out f in
+        List.iter (Buffer.output_buffer cout) buffers;
+        close_out cout;
+        let cmd = sprintf "%s %s %s %s" 
+          p.DpConfig.command p.DpConfig.command_switches switch f
+        in
+        cmd,timed_sys_command ~debug timeout cmd
+    | _ -> invalid_arg "Calldp.gen_prover_call : filename must be given if the prover can't use stdin." in
+  match c with
+    |  Unix.WSTOPPED 24 | Unix.WSIGNALED 24 | Unix.WEXITED 124 -> (* (*128 +*) SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
+        Timeout t
+    | Unix.WSTOPPED _ | Unix.WSIGNALED _ -> ProverFailure(t,"prover command "^ cmd ^ " stopped abnormally with output: " ^ res)
+    | Unix.WEXITED c ->
+        let valid_result =
+	  match p.DpConfig.valid_regexp with
+	    | None -> c == 0
+	    | Some r -> grep r res
+        in
+        if valid_result then
+          Valid t
+        else if grep p.DpConfig.undecided_regexp res then
+          CannotDecide(t, None)
+        else
+          ProverFailure(t,"prover command " ^ cmd ^ " produced unrecognized answer: " ^ res)
 
-let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.gappa
+let gappa ?(debug=false) ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~timeout ~filename DpConfig.gappa
 (*
   let p = DpConfig.gappa in
   let cmd = 
@@ -137,40 +138,41 @@ let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
   r
 *)
 
-let ergo ?(debug=false) ?(timeout=10) ~select_hypotheses ~filename:f () =
+let ergo ~select_hypotheses ?(debug=false) ?(timeout=10) ?filename ?buffers () =
   if select_hypotheses then
     gen_prover_call ~debug ~timeout ~switch:"-select 1" 
-      ~filename:f DpConfig.alt_ergo
+      ?filename ?buffers DpConfig.alt_ergo
   else    
     gen_prover_call ~debug ~timeout 
-      ~filename:f DpConfig.alt_ergo
+      ?filename ?buffers DpConfig.alt_ergo
 
-let coq ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.coq
+let coq ?(debug=false) ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~timeout ~filename DpConfig.coq
 	        
-let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.simplify
+let simplify ?(debug=false) ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~timeout ~filename DpConfig.simplify
 
-let z3 ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.z3
+let z3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.z3
 
-let yices ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.yices
+let yices ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.yices
 
-let cvc3 ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.cvc3
+let cvc3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvc3
 
 
 let error c t cmd =
-  if c = 152 then Timeout t 
-  else ProverFailure (t,"command failed: " ^ cmd) 
+  match c with
+    | Unix.WSTOPPED 24 | Unix.WSIGNALED 24 -> Timeout t 
+    | _ -> ProverFailure (t,"command failed: " ^ cmd) 
 
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "cvcl < %s" f in
   let t,c,out = timed_sys_command debug timeout cmd in
-  if c <> 0 then error c t cmd
+  if c <> Unix.WEXITED 0 then error c t cmd
   else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
-    ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
+    ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ out)
   else
     let r=
       let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
@@ -178,15 +180,15 @@ let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
       else 
 	let c = Sys.command (sprintf "grep -q -w Unknown %s" out)  in
 	if c = 0 then 
-	  CannotDecide(t,Some (file_contents out)) 
+	  CannotDecide(t,Some out) 
 	else
-	  Invalid (t, Some (file_contents out))
+	  Invalid (t, Some out)
     in
     remove_file ~debug out;
     r
 
 (*
-let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
+let simplify ?(debug=false) ?(timeout=10) ~filename ~buffers () =
   let cmd = sprintf "Simplify %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then error c t cmd
@@ -329,7 +331,7 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
   (*let cmd = sprintf "rv-sat %s" f in*)
   let cmd = sprintf "rv-sat %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then error c t cmd
+  if c <> Unix.WEXITED 0 then error c t cmd
   else 
     let r =
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
@@ -423,13 +425,13 @@ let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
 let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "rvc %s" f in
   let t,c,_out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then (error c t cmd)
+  if c <> Unix.WEXITED 0 then (error c t cmd)
   else begin
     let f = Filename.chop_suffix f ".rv" in
     let fi = f ^ "-0"  ^ ".baf" in
     let cmd = sprintf "rv   %s" fi in
     let t,c,out = timed_sys_command ~debug timeout cmd in
-    if c <> 0 then (error c t cmd)
+    if c <> Unix.WEXITED 0 then (error c t cmd)
     else
       let r =
 	if Sys.command 
@@ -458,7 +460,7 @@ let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
 let zenon ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "zenon %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then error c t cmd
+  if c <> Unix.WEXITED 0 then error c t cmd
   else 
     let r =
       if Sys.command (sprintf "grep -q PROOF-FOUND %s" out) = 0 then

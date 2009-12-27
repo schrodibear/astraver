@@ -49,6 +49,7 @@ type prover_data =
     command_switches : string;
     valid_regexp : lazy_regexp option;
     undecided_regexp : lazy_regexp;
+    stdin_switch : string option;
   }
     
 

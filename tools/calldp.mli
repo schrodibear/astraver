@@ -41,12 +41,13 @@ type prover_result =
 
 val cpulimit : string ref
 
-val gappa :
-  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffer.t list) -> unit -> 
   prover_result
 
-val simplify : 
-  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+val gappa : ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+  prover_result
+
+val simplify : ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
 val harvey : 
@@ -65,21 +66,13 @@ val rvsat :
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
 
-val yices : 
-  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
-  prover_result
+val yices : prover
 
-val cvc3 : 
-  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
-  prover_result
+val cvc3 : prover
 
-val z3 : 
-  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
-  prover_result
+val z3 : prover
 
-val ergo : 
-  ?debug:bool -> ?timeout:int -> select_hypotheses:bool -> filename:string ->
-  unit -> prover_result
+val ergo : select_hypotheses:bool -> prover
 
 val generic_hypotheses_selection : 
   ?debug:bool -> 

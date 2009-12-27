@@ -1,4 +1,12 @@
 
+  o [Why] option "-output -" outputs the generated files (.why, 
+    .smt, .mlw) on stdout
+  o [Why-dp] with the option "-simple" output only one line by goal
+  o [Why-dp] option "-timeout 0" disables the time limit.
+  o [Why-dp] option "-prover" allows to select the prover to use
+    independently from the extension
+  o [Why-dp] reads the file to send to the prover from stdin if no
+    files are provided. In that case the option "-prover" is mandatory.
   o [Jessie] interpretation of floating-point parameters does not forget
     anymore the format of origin, which then provides proper bounds for them.
   o [Frama-C plugin] bts 0361 fixed: free allows NULL as argument

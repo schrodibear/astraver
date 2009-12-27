@@ -93,7 +93,7 @@ let is_smtlib_keyword =
 let leading_underscore s = s <> "" && s.[0] = '_'
 
 let removeChar =
-  let lc = ('\'','p')::('_','u')::[] in 
+  let lc = ('\'','p')::('_','u')::('-','t')::[] in 
   function s ->
     for i=0 to (String.length s)-1 do
       let c = (String.get s i) in 
@@ -360,7 +360,7 @@ let output_file ?logic f =
   let fname = f ^ "_why.smt" in
   let cout = Options.open_out_file fname in
   let fmt = formatter_of_out_channel cout in
-  fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
+  fprintf fmt "(benchmark %a@\n" idents (removeChar (Filename.basename f));
   fprintf fmt "  :status unknown@\n";
   begin
     match logic with

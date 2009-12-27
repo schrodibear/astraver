@@ -47,4 +47,11 @@ val file_copy : string -> string -> unit
    modification date) *)
 val file_copy_if_different : string -> string -> unit
 
+(* return the content of an in-channel *)
+val channel_contents : in_channel -> string
 
+(* return the content of a file *)
+val file_contents : string -> string
+
+(* return the content of a file *)
+val file_contents_buf : string -> Buffer.t

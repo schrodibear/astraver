@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ergo_split.mll,v 1.8 2009-12-01 11:51:37 marche Exp $ i*)
+(*i $Id: ergo_split.mll,v 1.9 2009-12-27 16:46:36 bobot Exp $ i*)
 
 {
 
@@ -33,24 +33,20 @@
   open Lexing
 
   let debug = ref false
-  let callback = ref (fun _f -> assert false)
+  let callback = ref (fun _ _ -> assert false)
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192
+  let buf_goal = Buffer.create 512
 
-  let outc = ref stdout
-  let print s = output_string !outc s
+  let print_hypo s = Buffer.add_string buf s
+  let print_goal s = Buffer.add_string buf_goal s
 
   let start_file () =
-    let f = Filename.temp_file "ergo" ".why" in
-    outc := open_out f;
-    print (Buffer.contents buf);
-    f
+    Buffer.reset buf_goal
 
-  let end_file file =
-    close_out !outc;
-    !callback file;
-    if not !debug then Sys.remove file
+  let end_file () =
+    !callback "ergo.why" [buf;buf_goal]
 
 }
 
@@ -58,33 +54,31 @@ let letters = ['a'-'z''A'-'Z''_''0'-'9']+
 
 rule split = parse
   | "goal" 
-      { let file = start_file () in print "goal"; goal file lexbuf }
+      { start_file (); print_goal "goal"; goal lexbuf }
   | (letters | _) as s
-      { Buffer.add_string buf s; split lexbuf }
+      { print_hypo s; split lexbuf }
   | eof 
       { () }
 
 (* copy the query up to the semi-colon *)
-and goal file = parse
+and goal = parse
   | "goal" 
-      { end_file file; let file = start_file () in 
-	print "goal "; goal file lexbuf }
+      { end_file (); start_file ();
+	print_goal "goal "; goal lexbuf }
   | ("\"" ([^ '\"'] | "\\" _)* "\"") as s
-      { print s; goal file lexbuf }
+      { print_goal s; goal lexbuf }
   | ("type" | "logic" | "predicate" | "axiom") as k
-      { end_file file; Buffer.add_string buf k; split lexbuf }
+      { end_file (); print_hypo k; split lexbuf }
   | (letters | _) as s
-      { print s; goal file lexbuf }
-  | eof { end_file file }
+      { print_goal s; goal lexbuf }
+  | eof { end_file () }
 
 {
 
-  let iter cb f =
+  let iter cb c =
     callback := cb;
     Buffer.reset buf;
-    let c = open_in f in
     let lb = from_channel c in
-    split lb;
-    close_in c
+    split lb
 
 }

@@ -63,4 +63,32 @@ let file_copy_if_different src dst =
   if not (Sys.file_exists dst) || Digest.file dst <> Digest.file src then
     file_copy src dst
 
+let channel_contents_buf cin =
+  let buf = Buffer.create 1024
+  and buff = String.make 1024 ' ' in
+  let n = ref 0 in
+  while n := input cin buff 0 1024; !n <> 0 do 
+    Buffer.add_substring buf buff 0 !n
+  done;
+  buf
 
+let channel_contents cin = Buffer.contents (channel_contents_buf cin)
+
+let file_contents f =
+  try 
+    let cin = open_in f in
+    let s = channel_contents cin in
+    close_in cin;
+    s
+  with _ -> 
+    invalid_arg (Printf.sprintf "(cannot open %s)" f)
+
+let file_contents_buf f =
+  try 
+    let cin = open_in f in
+    let buf = channel_contents_buf cin in
+    close_in cin;
+    buf
+  with _ -> 
+    invalid_arg (Printf.sprintf "(cannot open %s)" f)
+      

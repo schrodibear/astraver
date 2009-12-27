@@ -69,7 +69,6 @@ if test "$VERBOSEMAKE" = yes ; then
 	AC_MSG_RESULT(Make will be verbose.)
 fi
 
-
 # Check for arch/OS
 
 AC_MSG_CHECKING(executable suffix)
@@ -262,7 +261,18 @@ if test "$enable_apron" = "yes" ; then
 fi
 
 # Frama-C
-AC_CHECK_PROG(FRAMAC,frama-c,yes,no)
+TESTFRAMAC=yes
+AC_ARG_ENABLE(framac-plugin,[  --enable-framac-plugin    disable the compilation of the Frama-C plugin],TESTFRAMAC=no)
+
+if test "$TESTFRAMAC" = no ; then
+	AC_MSG_RESULT(The compilation of the Frama-C plugin is disabled)
+fi
+
+if test "$TESTFRAMAC" = no ; then
+   FRAMAC=no   
+else
+   AC_CHECK_PROG(FRAMAC,frama-c,yes,no)
+fi
 
 # camlp4 
 AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)

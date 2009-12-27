@@ -51,6 +51,7 @@ type prover_data =
     valid_regexp : lazy_regexp option;
     (* when None, validity is checked by testing return code == 0 *)
     undecided_regexp : lazy_regexp;
+    stdin_switch : string option;
   }
     
 let gappa =
@@ -64,6 +65,7 @@ let gappa =
     command_switches = "";
     valid_regexp = None; (* valid iff return code = 0 *)
     undecided_regexp = make_regexp "no contradiction was found\\|some enclosures were not satisfied";
+    stdin_switch = None;
   }
 
 let alt_ergo =
@@ -77,6 +79,7 @@ let alt_ergo =
     command_switches = "";
     valid_regexp = Some (make_regexp "\\bValid\\b");
     undecided_regexp = make_regexp "\\bI don't know\\b\\|\\bInvalid\\b";
+    stdin_switch = None;
   }
 
 let simplify = 
@@ -90,6 +93,7 @@ let simplify =
     command_switches = "";
     valid_regexp = Some (make_regexp "\\bValid\\b");
     undecided_regexp = make_regexp "\\bInvalid\\b";
+    stdin_switch = None;
   }
 
 let z3 =
@@ -103,6 +107,7 @@ let z3 =
     command_switches = "-smt";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b|\\bFail\\b";
+    stdin_switch = Some "-in";
   }
 
 
@@ -117,6 +122,7 @@ let yices =
     command_switches = "-smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
+    stdin_switch = Some "";
   }
 
 let cvc3 =    
@@ -130,6 +136,7 @@ let cvc3 =
     command_switches = "-lang smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
+    stdin_switch = Some "";
   }
 
 let coq =    
@@ -143,6 +150,7 @@ let coq =
     command_switches = "";
     valid_regexp = None;
     undecided_regexp = make_regexp "Error while reading";
+    stdin_switch = None;
   }
 
 
