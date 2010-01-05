@@ -98,7 +98,7 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") ?filename ?buffers
         cmd,timed_sys_command ~debug timeout cmd
     | _ -> invalid_arg "Calldp.gen_prover_call : filename must be given if the prover can't use stdin." in
   match c with
-    |  Unix.WSTOPPED 24 | Unix.WSIGNALED 24 | Unix.WEXITED 124 -> (* (*128 +*) SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
+    |  Unix.WSTOPPED 24 | Unix.WSIGNALED 24 | Unix.WEXITED 124 |Unix.WEXITED 152 -> (* (*128 +*) SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
         Timeout t
     | Unix.WSTOPPED _ | Unix.WSIGNALED _ -> ProverFailure(t,"prover command "^ cmd ^ " stopped abnormally with output: " ^ res)
     | Unix.WEXITED c ->
