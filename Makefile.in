@@ -180,7 +180,8 @@ WHYLIBS=lib/why/bool.why lib/why/integer.why \
 	lib/why/real.why lib/why/arrays.why \
 	lib/why/jessie.why lib/why/mybag.why \
 	lib/why/mix.why \
-	lib/why/floats_common.why lib/why/floats_strict.why lib/why/floats_full.why lib/why/floats_multi_rounding.why
+	lib/why/floats_common.why lib/why/floats_strict.why \
+	lib/why/floats_full.why lib/why/floats_multi_rounding.why
 
 
 

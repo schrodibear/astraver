@@ -710,10 +710,6 @@ predicate fully_packed(
 (* default values                                                            *)
 (*****************************************************************************)
 
-(* already in Why
-parameter any_int: unit -> {} int {}
-*)
-
 parameter any_pointer: unit -> {} 'z pointer { true }
 
 parameter any_memory: unit -> {} ('t,'v) memory { true }

@@ -19,6 +19,7 @@ float cosine2(float x) {
   return r;
 }
 
+
 /*@ lemma abs_triangle: \forall real x,y,z;
   @           \abs(x-y) <= \abs(x-z)+\abs(z-y);
   @ lemma cos_lipschitz: \forall real x,y;
