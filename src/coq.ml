@@ -1173,6 +1173,9 @@ let output_validations fwe =
 (* output file. *)
 
 let output_file is_last fwe =
+  let fwe = Options.out_file fwe 
+    (* because not done anymore in main.ml *)
+  in
   let f = fwe ^ "_why.v" in
   is_last_file:=is_last;
   Gen.output_file f;
