@@ -125,7 +125,7 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat c) ->
-      Print_real.print_no_exponent fmt c
+      Print_real.print_no_exponent fmt ~prefix_div:true c
 (*
 	"(real_of_int %s)"
 	"(real_of_int ( * %s %s))"

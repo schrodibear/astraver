@@ -654,7 +654,7 @@ let get_type_expanding () = !defExpanding_
 let show_time = !show_time_
 
 let file f = 
-  Format.printf "Options.file: dir = %s, f = %s@." dir f;
+  (*Format.printf "Options.file: dir = %s, f = %s@." dir f;*)
   if dir = "" then f else Lib.file ~dir ~file:f
 
 let ocaml = !ocaml_

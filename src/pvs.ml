@@ -182,7 +182,7 @@ let print_term fmt t =
     | Tconst ConstUnit -> 
 	fprintf fmt "unit" 
     | Tconst (ConstFloat f) -> 
-	print_real fmt f
+	print_real fmt ~prefix_div:false f
     | Tapp (id, [t], _) when id == t_real_of_int ->
 	fprintf fmt "%a" print3 t
     | Tderef _ ->

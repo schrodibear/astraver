@@ -561,17 +561,11 @@ let main () =
 		 Colors.window_width := w;
 		 GConfig.save ()
 	       end));
-  (* no effect 
-     w#misc#modify_font !general_font;
-  *)  
   let _ = w#connect#destroy ~callback:(fun () -> exit 0) in
   let vbox = GPack.vbox ~homogeneous:false ~packing:w#add () in
 
   (* Menu *)
   let menubar = GMenu.menu_bar ~packing:vbox#pack () in
-  (* no effect
-     let () = menubar#misc#modify_font !general_font in
-  *)
   let factory = new GMenu.factory menubar in
   let accel_group = factory#accel_group in
   let file_menu = factory#add_submenu "_File" in
@@ -670,14 +664,8 @@ let main () =
     ~width:(!Colors.window_width / 2) ~packing:hp#add () 
   in
   let _ = scrollview#set_shadow_type `ETCHED_OUT in
-(*
-  let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
-*)
 
   let view = GTree.view ~model ~packing:scrollview#add () in
-  (* has effect but not nice 
-     let () = view#misc#modify_font !general_font in
-  *)
   modifiable_font_views := view#misc :: !modifiable_font_views;
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in

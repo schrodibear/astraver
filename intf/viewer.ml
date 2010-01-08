@@ -153,6 +153,7 @@ let window_width = 800
 let window_height = 900
 let show_discharged = ref false
 
+(*
 let monospace_font = ref (Pango.Font.from_string "Monospace 15")
 let general_font = ref (Pango.Font.from_string "Monospace 15")
 
@@ -162,6 +163,7 @@ let statusbar_font = ref !general_font
 let proved_lemma_font = ref !monospace_font
 let to_prove_lemma_font = ref !monospace_font
 let discharged_lemma_font = ref !monospace_font
+*)
 let display_info = ref (function s -> failwith "not ready")
 let flash_info = ref (function s -> failwith "not ready")
 

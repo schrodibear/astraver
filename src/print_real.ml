@@ -3,7 +3,7 @@ open Format
 open Big_int
 open Logic
 
-let print_decimal_no_exponent fmt = function
+let print_decimal_no_exponent fmt ~prefix_div = function
   | "","0",_ | "0","",_ | "0","0",_ -> 
       fprintf fmt "0.0"
   | "",f, None -> 
@@ -16,10 +16,15 @@ let print_decimal_no_exponent fmt = function
       let e = (int_of_string e) - String.length f in
       if e = 0 then
 	fprintf fmt "%s%s" i f
-      else if e > 0 then
-	fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
-      else
-	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
+      else 
+        let op,s =
+          if e > 0 then "*",(String.make e '0')
+          else "/",(String.make (-e) '0')
+        in
+        if prefix_div then
+	  fprintf fmt "(%s %s%s.0 1%s.0)" op i f s
+        else
+	  fprintf fmt "(%s%s %s.0 1%s.0)" i f op s
 
 
 let num0 = Num.Int 0
@@ -86,8 +91,8 @@ let print_hexa fmt i f e =
   Format.fprintf fmt ";;;; %s@\n" (Num.string_of_num v)
 *)
 
-let print_no_exponent fmt = function
-  | RConstDecimal (i, f, e) -> print_decimal_no_exponent fmt (i,f,e)
+let print_no_exponent fmt ~prefix_div = function
+  | RConstDecimal (i, f, e) -> print_decimal_no_exponent fmt ~prefix_div (i,f,e)
   | RConstHexa (i, f, e) -> print_hexa fmt i f e 
 
 let hexa_to_decimal s =
