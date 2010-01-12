@@ -1,3 +1,6 @@
+/* run.config
+   DONTRUN: oracle is missing in svn
+*/
 /* Frama-C BTS 0367
 
 Status: solved
@@ -11,14 +14,14 @@ Status: solved
 
 bool_t func1(float32_t x);
 /*@ ensures \result == TRUE;
-  
+
 */
 bool_t func1(float32_t x)
  {
     if (x < 1E-6){
        ;
     }
-   
+
     return TRUE;
 }
 

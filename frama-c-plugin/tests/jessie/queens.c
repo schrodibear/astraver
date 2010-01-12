@@ -1,3 +1,6 @@
+/* run.config
+   DONTRUN: [VP] no oracle present. Skip it by default
+ */
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */
@@ -50,46 +53,46 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
   axiom empty_card : \forall int_set s; card(s)==0 <==> s==empty;
 
   logic int_set diff(int_set a, int_set b);
-  axiom diff_def : 
+  axiom diff_def :
     \forall int_set a, b, integer i;
        in_(i,diff(a,b)) <==> (in_(i,a) && !in_(i,b));
 
   logic int_set add(integer x, int_set a);
-  axiom add_def : 
+  axiom add_def :
      \forall int_set s, integer x, integer i;
        in_(i,add(x,s)) <==> (i==x || in_(i,s));
 
   logic int_set remove(integer x, int_set s);
-  axiom remove_def : 
+  axiom remove_def :
      \forall int_set s, integer x, integer i;
        in_(i,remove(x,s))  <==> (in_(i,s) && i!=x);
 
-  axiom remove_card : 
+  axiom remove_card :
      \forall int_set s, integer i;
        in_(i,s) ==> card(remove(i,s)) == card(s) - 1;
 
   logic integer min_elt(int_set s);
-  axiom min_elt_def : 
-     \forall int_set s; card(s) > 0 ==> 
+  axiom min_elt_def :
+     \forall int_set s; card(s) > 0 ==>
        (in_(min_elt(s), s) &&
        \forall integer i; in_(i,s) ==> min_elt(s) <= i);
 
   logic int_set singleton(integer x);
-  axiom singleton_def : 
+  axiom singleton_def :
     \forall integer i, integer j; in_(j,singleton(i)) <==> j==i;
 
   logic int_set succ(int_set s);
-  axiom succ_def_1 :  
+  axiom succ_def_1 :
      \forall int_set s, integer i; in_(i,s) ==> in_(i+1,succ(s));
 
-  axiom succ_def_2 :  
+  axiom succ_def_2 :
      \forall int_set s, integer i; in_(i,succ(s)) ==> i>=1 && in_(i-1,s);
 
   logic int_set pred(int_set s);
-  axiom pred_def_1 : 
+  axiom pred_def_1 :
      \forall int_set s, integer i; i>=1 ==> in_(i,s) ==> in_(i-1,pred(s));
 
-  axiom pred_def_2 : 
+  axiom pred_def_2 :
      \forall int_set s, integer i; in_(i,pred(s)) ==> in_(i+1,s);
 
   logic int_set below(integer n);
@@ -105,12 +108,12 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 
   logic int_set iset(int x);
 
-  axiom iset_c_zero : 
+  axiom iset_c_zero :
   \forall int x; iset(x)==empty <==> x==0;
 
-  axiom iset_c_remove : 
-    \forall integer x, int a, int b; 
-       iset(b)==singleton(x) ==> in_(x,iset(a)) ==> 
+  axiom iset_c_remove :
+    \forall integer x, int a, int b;
+       iset(b)==singleton(x) ==> in_(x,iset(a)) ==>
          iset((int)(a-b))==remove(x, iset(a));
 
   // lowest bit trick
@@ -121,8 +124,8 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
     \forall int a, int b; iset((int)(a&~b)) == diff(iset(a), iset(b));
 
   axiom iset_c_add :
-    \forall integer x, int a, int b; 
-      iset(b)==singleton(x) ==> !in_(x,iset(a)) ==> 
+    \forall integer x, int a, int b;
+      iset(b)==singleton(x) ==> !in_(x,iset(a)) ==>
         iset((int)(a+b)) == add(x, iset(a));
 
 // @ axiom iset_c_succ : \forall int a; iset(a*2) == succ(iset(a))
@@ -156,7 +159,7 @@ c+d)/2));return f;}main(q){scanf("%d",&q);printf("%d\n",t(~(~0<<q),0,0));}
 #pragma JessieIntegerModel(exact)
 #pragma SeparationPolicy(none)
 
-// t1: termination 
+// t1: termination
 
 //@ decreases card(iset(a));
 int t1(int a, int b, int c){
@@ -176,7 +179,7 @@ int t1(int a, int b, int c){
 
 /*@ axiomatic N_queens {
 
-  logic integer N; // N queens on a NxN chessboard 
+  logic integer N; // N queens on a NxN chessboard
   axiom N_positive : N > 0;
 
   }
@@ -199,22 +202,22 @@ int t1(int a, int b, int c){
 //@ ghost int* col; // current solution being built
 //@ ghost int k;    // current row in the current solution
 
-/*@ 
-    
-    lemma dont_bother_me_I_am_a_ghost_1{L} : 
+/*@
+
+    lemma dont_bother_me_I_am_a_ghost_1{L} :
      \forall int i; \valid(sol+i);
 
-    lemma dont_bother_me_I_am_a_ghost_2{L} : 
+    lemma dont_bother_me_I_am_a_ghost_2{L} :
      \forall int i, int j; \valid(sol[i]+j);
 
-    lemma dont_bother_me_I_am_a_ghost_3{L} : 
+    lemma dont_bother_me_I_am_a_ghost_3{L} :
      \forall int i; \valid(col+i);
 
 */
 
 // s stores a partial solution, for the rows 0..k-1
 /*@ predicate partial_solution{L}(integer k, int* s) =
-  @   \forall integer i; 0 <= i < k ==> 
+  @   \forall integer i; 0 <= i < k ==>
   @     0 <= s[i] < N &&
   @     (\forall int j; 0 <= j < i ==> s[i] != s[j] &&
   @                                   s[i]-s[j] != i-j &&
@@ -250,18 +253,18 @@ void store_solution();
 
 /*@ requires
   @   0 <= k && k + card(iset(a)) == N && 0 <= s &&
-  @   pre_a: (\forall int i; in_(i,iset(a)) <==> 
+  @   pre_a: (\forall int i; in_(i,iset(a)) <==>
   @            (0<=i<N && \forall int j; 0<=j<k ==> i != col[j])) &&
-  @   pre_b: (\forall int i; i>=0 ==> (in_(i,iset(b)) <==> 
+  @   pre_b: (\forall int i; i>=0 ==> (in_(i,iset(b)) <==>
   @            (\exists int j; 0<=j<k && col[j] == i+j-k))) &&
-  @   pre_c: (\forall int i; i>=0 ==> (in_(i,iset(c)) <==> 
+  @   pre_c: (\forall int i; i>=0 ==> (in_(i,iset(c)) <==>
   @            (\exists int j; 0<=j<k && col[j] == i+k-j))) &&
   @   partial_solution(k, col);
-  @ decreases 
+  @ decreases
   @   card(iset(a));
   @ assigns
   @   col[k..], s, k, sol[s..][..];
-  @ ensures  
+  @ ensures
   @   \result == s - \old(s) && \result >= 0 && k == \old(k) &&
   @   sorted(sol, \old(s), s) &&
   @   \forall int* t; ((solution(t) && eq_prefix(col,t,k)) <==>
@@ -271,24 +274,24 @@ int t3(int a, int b, int c){
   int d, e=a&~b&~c, f=1;
   //@ ghost L:
   if (a)
-    /*@ loop invariant 
+    /*@ loop invariant
       @   included(iset(e),\at(iset(e),L)) &&
-      @   f == s - \at(s,L) && f >= 0 && k == \at(k,L) && 
+      @   f == s - \at(s,L) && f >= 0 && k == \at(k,L) &&
       @   partial_solution(k, col) &&
       @   sorted(sol, \at(s,L), s) &&
-      @   \forall int *t; 
-      @     (solution(t) && 
+      @   \forall int *t;
+      @     (solution(t) &&
       @      \exists int di; in_(di, diff(\at(iset(e),L), iset(e))) &&
       @          eq_prefix(col,t,k) && t[k]==di) <==>
       @     (\exists int i; \at(s,L)<=i<s && eq_sol(t, sol[i]));
       @ loop assigns
       @   col[k..], s, k, sol[s..][..];
-      @ loop variant 
-      @   card(iset(e)); 
+      @ loop variant
+      @   card(iset(e));
       @*/
     for (f=0; d=e&-e; e-=d) {
       //@ assert \exists int x; iset(d) == singleton(x) && in_(x,iset(a)) ;
-      //@ ghost col[k] = min_elt(d);            // ghost code 
+      //@ ghost col[k] = min_elt(d);            // ghost code
       //@ ghost k++;                            // ghost code
       f += t3(a-d, (b+d)*2, (c+d)/2);
       //@ ghost k--;                            // ghost code
@@ -298,12 +301,12 @@ int t3(int a, int b, int c){
   return f;
 }
 
-/*@ requires 
+/*@ requires
   @   n == N && s == 0 && k == 0;
-  @ ensures 
+  @ ensures
   @   \result == s &&
   @   sorted(sol, 0, s) &&
-  @   \forall int* t; 
+  @   \forall int* t;
   @      solution(t) <==> (\exists int i; 0<=i<\result && eq_sol(t,sol[i]));
   @*/
 int queens(int n) {
@@ -312,7 +315,7 @@ int queens(int n) {
 
 
 
-/* 
+/*
 Local Variables:
 compile-command: "PPCHOME=../.. LC_ALL=C make queens"
 End:

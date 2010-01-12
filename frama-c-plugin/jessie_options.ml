@@ -53,16 +53,23 @@ module Analysis =
 	  let descr = "perform C to Jessie translation"
 	end)
 
+module ForceAdHocNormalization =
+  False(struct
+          let option_name = "-jessie-adhoc-normalization"
+          let descr =
+            "enforce code normalization in a mode suitable for Jessie plugin."
+        end)
+
 let () =
   (* [JS 2009/10/04]
      Preserve the behaviour of svn release <= r5012.
-     However it works only if the int-model is set from the command line. 
+     However it works only if the int-model is set from the command line.
      [CM 2009/12/08]
-     setting int-model on the command-line is obsolete, so what is this 
+     setting int-model on the command-line is obsolete, so what is this
      code for ?
   *)
-  Analysis.add_set_hook
-    (fun _ b -> 
+  ForceAdHocNormalization.add_set_hook
+    (fun _ b ->
        if b then begin
 	 Parameters.SimplifyCfg.on ();
 	 Parameters.KeepSwitch.on ();
@@ -70,12 +77,15 @@ let () =
 	 Parameters.PreprocessAnnot.on ();
 	 Cabs2cil.setDoTransformWhile ();
 	 Cabs2cil.setDoAlternateConditional ();
-	 Cabs2cil.setDoAlternateAssign ()
        end);
-  Parameters.SimplifyCfg.depend Analysis.self;
-  Parameters.KeepSwitch.depend Analysis.self;
-  Parameters.Constfold.depend Analysis.self;
-  Parameters.PreprocessAnnot.depend Analysis.self
+  Parameters.SimplifyCfg.depend ForceAdHocNormalization.self;
+  Parameters.KeepSwitch.depend ForceAdHocNormalization.self;
+  Parameters.Constfold.depend ForceAdHocNormalization.self;
+  Parameters.PreprocessAnnot.depend ForceAdHocNormalization.self
+
+let () =
+  Analysis.add_set_hook (fun _ b -> ForceAdHocNormalization.set b);
+  ForceAdHocNormalization.depend Analysis.self
 
 module JcOpt =
   StringSet(struct
@@ -85,7 +95,7 @@ module JcOpt =
 	      let descr = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
 	    end)
 
-module WhyOpt = 
+module WhyOpt =
   StringSet
     (struct
        let option_name = "-jessie-why-opt"
