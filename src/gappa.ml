@@ -156,6 +156,14 @@ let field_of_id s =
   if s == single_model || s == double_model then Model else
   assert false
 
+let mode_of_id s =
+  if s == rnd_ne then RndNE else
+  if s == rnd_zr then RndZR else
+  if s == rnd_up then RndUP else
+  if s == rnd_dn then RndDN else
+  if s == rnd_na then RndNA else
+  raise NotGappa
+
 (* contains all the terms that have been generalized away,
    because they were not recognized *)
 let gen_table = Hashtbl.create 10
@@ -216,24 +224,12 @@ let rec term = function
   (* [Jessie] rounding *)
   | Tapp (id, [Tapp (m, [], _); t], _)
       when id == round_single ->
-      let mode =
-        if m == rnd_ne then RndNE else
-        if m == rnd_zr then RndZR else
-        if m == rnd_up then RndUP else
-        if m == rnd_dn then RndDN else
-        if m == rnd_na then RndNA else
-        raise NotGappa in
+      let mode = mode_of_id m in
       Hashtbl.replace rnd_table (Single, mode) ();
       Grnd (Single, mode, term t)
   | Tapp (id, [Tapp (m, [], _); t], _)
       when id == round_double ->
-      let mode =
-        if m == rnd_ne then RndNE else
-        if m == rnd_zr then RndZR else
-        if m == rnd_up then RndUP else
-        if m == rnd_dn then RndDN else
-        if m == rnd_na then RndNA else
-        raise NotGappa in
+      let mode = mode_of_id m in
       Hashtbl.replace rnd_table (Double, mode) ();
       Grnd (Double, mode, term t)
 
@@ -247,13 +243,7 @@ let rec term = function
   (* casts *)
   | Tapp (id1, [Tapp (id2,[Tapp (m, [], _); t] , l2)], _)  
       when id1 == single_value && id2 == double_to_single ->
-      let mode =
-        if m == rnd_ne then RndNE else
-        if m == rnd_zr then RndZR else
-        if m == rnd_up then RndUP else
-        if m == rnd_dn then RndDN else
-        if m == rnd_na then RndNA else
-        raise NotGappa in
+      let mode = mode_of_id m in
       Hashtbl.replace rnd_table (Single, mode) ();
       Grnd (Single, mode, term (Tapp (double_value,[t],l2)))
 
