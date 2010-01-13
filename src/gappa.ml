@@ -136,7 +136,7 @@ let eval_rconst = function
 let eval_pos_constant = function
   | Tconst (ConstInt n) -> n
   | Tconst (ConstFloat f) -> eval_rconst f
-  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> "-" ^ n
+  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> n
   | Tapp (id,_,_) when id == max_single -> "0x1.FFFFFEp127"
   | Tapp (id,_,_) when id == max_double -> "0x1.FFFFFFFFFFFFFp1023"
   | _ -> raise NotGappa
