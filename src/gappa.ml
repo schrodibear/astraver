@@ -262,31 +262,26 @@ let rec term = function
         term (Tapp (single_value,[t],l2))
 
 
-  | Tapp (id, [Tvar vx as x], _)
+  | Tapp (id, [Tvar vx], _)
       when (id == single_value || id == double_value || id == single_exact 
          || id == double_exact || id == single_model || id == double_model) ->
-    begin
-      match term x with
-        | Gvar v ->
-            let f = field_of_id id in
-            let add_def fmt =
-              if not (Hashtbl.mem def_table (f, vx)) then begin
-                Hashtbl.add def_table (f, vx) ();
-                Hashtbl.replace rnd_table (fmt, RndNE) ();
-                def_list := (f, v, Grnd (fmt, RndNE, Gvar ("dummy_float_" ^ v))) :: !def_list
-              end in
-            if id == single_value then add_def Single else
-            if id == double_value then add_def Double;
-            Gfld (f, v)
-        | _ -> raise NotGappa
-    end
-  | Tapp (id, [Tvar _ as x], _) 
+      let v = Ident.string vx in
+      let f = field_of_id id in
+      let add_def fmt =
+        if not (Hashtbl.mem def_table (f, vx)) then begin
+          Hashtbl.add def_table (f, vx) ();
+          Hashtbl.replace rnd_table (fmt, RndNE) ();
+          def_list := (f, v, Grnd (fmt, RndNE, Gvar ("dummy_float_" ^ v))) :: !def_list;
+        end in
+      if id == single_value then add_def Single else
+      if id == double_value then add_def Double;
+      Gfld (f, v)
+
+  | Tapp (id, [Tvar vx], _) 
     when id == single_round_error || id == double_round_error ->
-    begin
-      match term x with
-        | Gvar v -> Gabs (Gsub (Gfld (Rounded, v), Gfld (Exact, v)))
-        | _ -> raise NotGappa
-    end
+    let v = Ident.string vx in
+    Gabs (Gsub (Gfld (Rounded, v), Gfld (Exact, v)))
+
   (* anything else is generalized as a fresh variable *)
   | Tapp _ as t ->
       Gvar (
