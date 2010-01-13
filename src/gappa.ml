@@ -181,6 +181,9 @@ let def_table = Hashtbl.create 10
 (* contains the reverted list of aliases from def_table *)
 let def_list = ref []
 
+(* contains the list of format-implied bounds on float variables *)
+let bnd_list = ref []
+
 let rec subst_var = function
   | Tvar id as t ->
     begin
@@ -262,6 +265,11 @@ let rec term = function
           Hashtbl.add def_table (f, vx) ();
           Hashtbl.replace rnd_table (fmt, RndNE) ();
           def_list := (f, v, Grnd (fmt, RndNE, Gvar ("dummy_float_" ^ v))) :: !def_list;
+          let b =
+            if fmt = Single then "0x1.FFFFFEp127" else
+            if fmt = Double then "0x1.FFFFFFFFFFFFFp1023" else
+            assert false in
+          bnd_list := Gin (Gfld (f, v), "-"^b, b) :: !bnd_list
         end in
       if id == single_value then add_def Single else
       if id == double_value then add_def Double;
@@ -445,7 +453,8 @@ let reset () =
   Hashtbl.clear var_table;
   Hashtbl.clear rnd_table;
   Hashtbl.clear def_table;
-  def_list := []
+  def_list := [];
+  bnd_list := []
 
 let add_ctx_vars =
   List.fold_left 
@@ -485,6 +494,7 @@ let process_obligation (ctx, concl) =
       | Some p -> p
     in
   let gconcl = List.fold_left (fun acc p -> Gimplies (p, acc)) gconcl pl in
+  let gconcl = List.fold_left (fun acc p -> Gimplies (p, acc)) gconcl !bnd_list in
   Queue.add (List.rev !def_list, gconcl) queue
 
 let push_decl d =
