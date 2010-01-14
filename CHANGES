@@ -1,5 +1,7 @@
-
-  o [Why] option "-output -" outputs the generated files (.why, 
+  o [Frama-C plugin] option "-jessie-adhoc-normalization" triggers a code
+    normalization suited for jessie without launching the analysis
+    (fixes bts 332)
+  o [Why] option "-output -" outputs the generated files (.why,
     .smt, .mlw) on stdout
   o [Why-dp] with the option "-simple" output only one line by goal
   o [Why-dp] option "-timeout 0" disables the time limit.
@@ -24,8 +26,8 @@ version 2.23, December 4, 2009
 version 2.22, November 30, 2009
 ===============================
 
-  o [Jessie] fixed bug when return type is a logic type 
-  o [Krakatoa] fixed bug with final fields 
+  o [Jessie] fixed bug when return type is a logic type
+  o [Krakatoa] fixed bug with final fields
   o [Frama-C plugin] fixed bug 0341
   o [Frama-C plugin] fixed bug 0034
   o [GWhy] Fixed pb default prover selection (BTS Frama-C 0037)
@@ -34,15 +36,15 @@ version 2.22, November 30, 2009
     decreases clauses and loop variants
   o [Alt-Ergo output] avoid empty list of arguments
   o [GWhy] added alternative "boomy" icon set
-  o [Alt-Ergo+Simplify output] well_founded() translated by false 
-    instead of true, for soundness 
-  o [Jessie/Krakatoa/Frama-C plugin] support for decreases clauses, 
-    even for mutually recursive functions  
+  o [Alt-Ergo+Simplify output] well_founded() translated by false
+    instead of true, for soundness
+  o [Jessie/Krakatoa/Frama-C plugin] support for decreases clauses,
+    even for mutually recursive functions
   o [Frama-C plugin] bug fix 0284
   o [Frama-C plugin] support for "complete behaviors" and "disjoint
     behaviors" clauses. fixes bug 0026.
   o [Jessie][Frama-C] bug fix: 0103. Loops without variant are given a
-      default unprovable variant. 
+      default unprovable variant.
   o [Frama-C plugin] bug fix: 0112 (partially fixes bts0039 and bts0080)
   o [Frama-C plugin] bug fix: 0306
   o [Frama-C plugin] bugs closed: 0041, 0063, 0073, 0094, 0102, 0199, 0273
@@ -55,16 +57,16 @@ version 2.21, October 15, 2009
   o [Frama-C plugin] predicates for finiteness of floats (\is_finite,
     \is_infinite, etc.) do not fail in mode JessieFloatModel(real) but
     give the expected truth value.
-  o [Jessie] do not fail anymore on pointer casts over floats or reals. 
+  o [Jessie] do not fail anymore on pointer casts over floats or reals.
     Fixes bug 273 of Frama-C BTS
-  
+
 version 2.20, October 2nd, 2009
 ===============================
 
   o [Jessie][Frama-C] Integration of the Jessie plugin for Frama-C
     Compatible with Frama-C release Beryllium 2 (20090902)
   o [Why][Jessie] add a new assertion check which is used like assert.
-    It try to prove the assertion but do not use it as hypothesis.  
+    It try to prove the assertion but do not use it as hypothesis.
   o [Why] fixed some bugs with Coq output
   o [GWhy] new column gappa+hypotheses selection
 
@@ -82,16 +84,16 @@ version 2.19, June 23rd, 2009
     resurected. Beware that the semantics is slightly different from
     Caduceus one: it has to precisely give the memory footprint of the
     function, and not only an under-approximation. It is use to
-    automatically generate footprint axioms.    
+    automatically generate footprint axioms.
   o [GWhy] improved prover column configuration, improved config saving
-    incompatibility warning: old .gwhyrc files will be ignored and overwritten 
+    incompatibility warning: old .gwhyrc files will be ignored and overwritten
   o [Why] deprecated options -no-prelude, -no-arrays, -fp
   o [Why] new declaration [include "file"] in Why input language
-  o [Why] prelude is split into smaller files: bool.why integer.why 
+  o [Why] prelude is split into smaller files: bool.why integer.why
     real.why
-  o [Jessie] added several builtin functions on reals: 
-    \exp, \log, \cos, \sin, etc. 
-  o [Why] added several functions on reals in prelude: 
+  o [Jessie] added several builtin functions on reals:
+    \exp, \log, \cos, \sin, etc.
+  o [Why] added several functions on reals in prelude:
     exp, log, cos, sin, etc. (see prelude.why)
   o [Jessie] syntax change for loops: can have behaviors with assigns clauses
   o [Why] fixed typing bug with polymorphic function symbols and comparisons
@@ -104,14 +106,14 @@ version 2.18, January 22th, 2009
 ================================
 
   o Jessie: bug fix related to assignment to the null pointer
-  o Krakatoa: several bug fixes related to constructors (class invariant 
-    not anymore assumed true at entrance, object fields initialized to 
+  o Krakatoa: several bug fixes related to constructors (class invariant
+    not anymore assumed true at entrance, object fields initialized to
     their default values)
-  o Krakatoa/Jessie: support for "for" sections (associated to various 
-    behaviors) in code annotations (assert and loop invariants). 
+  o Krakatoa/Jessie: support for "for" sections (associated to various
+    behaviors) in code annotations (assert and loop invariants).
     See e.g tests/java/BinarySearch.java
-  o Caduceus: fixed 'pvs' target in generated makefile 
-  o Why: min and max functions in the prelude, with appropriate 
+  o Caduceus: fixed 'pvs' target in generated makefile
+  o Why: min and max functions in the prelude, with appropriate
     axiomatization
 
 version 2.17, December 17th, 2008
@@ -120,7 +122,7 @@ version 2.17, December 17th, 2008
   o This version is synchronized with Frama-C Lithium 20081201
     (http://frama-c.cea.fr/)
   o why-cpulimit: specific implementation for Cygwin (contributed by
-    Dillon Pariente)  
+    Dillon Pariente)
   o jessie: bug fix: inductive predicates and multiple labels
   o jessie: new support for floating-point computations
   o krakatoa/jessie: bug fix: axiomatic and multiple labels
@@ -129,8 +131,8 @@ version 2.17, December 17th, 2008
 
 version 2.16, October 29th, 2008
 ================================
-  
-  o This version is synchronized with Frama-C Lithium beta 1 
+
+  o This version is synchronized with Frama-C Lithium beta 1
     (http://frama-c.cea.fr/)
   o GWhy: improved display of VCs
   o Krakatoa/Jessie: changed syntax for axiomatic definitions. 'reads'
@@ -138,8 +140,8 @@ version 2.16, October 29th, 2008
   o Krakatoa/Jessie: support for inductive definitions
   o Why: Improved support for inductive definitions. For automatic provers,
     an inversion axiom is generated.
-  o New option -alt-ergo to output VCs in Alt-Ergo syntax. Beware that 
-    because of inductive definition, -alt-ergo is now different from 
+  o New option -alt-ergo to output VCs in Alt-Ergo syntax. Beware that
+    because of inductive definition, -alt-ergo is now different from
     -why output: inductive definitions are expansed.
   o License changed to GNU LGPL 2, with a special exception on
     linking (see enclosed file LICENSE)
@@ -147,18 +149,18 @@ version 2.16, October 29th, 2008
 version 2.15, September 9th, 2008
 =================================
 
-  o Why: preliminary support for inductive definitions 
+  o Why: preliminary support for inductive definitions
   o Krakatoa/Jessie: new syntax for axiomatic definitions
   o Coq support for floats requires Coq version 8.1 at least
   o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
-    prelude axioms 
+    prelude axioms
 
 version 2.14, July 28th, 2008
 =============================
   o tools `dp' and `cpulimit' renamed into `why-dp' and `why-cpulimit'
   o krakatoa/jessie: preliminary support for statement contracts
-  o krakatoa/jessie/why: new builtin logic symbols \int_max, \int_min, 
-    \real_max, \real_min 
+  o krakatoa/jessie/why: new builtin logic symbols \int_max, \int_min,
+    \real_max, \real_min
   o Zenon: fixed syntax for Zenon 0.5.0 (missing $hyp)
   o WP: no more duplication of VCs when operators &&, || and not are
     applied to pure boolean expressions; command line option
@@ -176,11 +178,11 @@ version 2.14, July 28th, 2008
   o krakatoa/jessie: added support for bitwise operator on booleans
   o krakatoa/jessie/why/provers: better support of real numbers
   o CVC3: no more options +arith-new +quant-polarity -quant-new
-  o fixed HOL4 output; contribution by Vladimir Timashov 
+  o fixed HOL4 output; contribution by Vladimir Timashov
     (vladimir.timashov@gmail.com)
   o gwhy: fixed efficiency issue with large comments
   o jessie: fixed coq entry in jessie-generated makefile
-  o why typing safely fails when duplicate parameter names in 
+  o why typing safely fails when duplicate parameter names in
     logic definitions
 
 version 2.13, May 27th, 2008
@@ -242,8 +244,8 @@ version 2.04, August 2nd, 2007
   o gwhy: Ctrl-B successively tries all provers on all proof obligations
   o new option -load-file to read an input file without generating
     output for the prover
-  o new prover interface Graph which iteratively allows to select more 
-    and more hypotheses and to discharge POs in Simplify 
+  o new prover interface Graph which iteratively allows to select more
+    and more hypotheses and to discharge POs in Simplify
   o new option -prune-hyp to select relevant hypotheses in the goal
   o fixed Isabelle output (contribution by Yasuhiko Minamide)
 
@@ -286,13 +288,13 @@ version 2.01, November 29th, 2006
   o no using anymore the external command 'timeout', but use our own
     command 'cpulimit' for the same purpose. Time limit is now user
     CPU time instead of wall clock time.
-  o fixed bugs in smtlib output: all variables are "?" prefixed, 
-    brackets around constants are removed, 
-    validity question is turned into a sat question,  
-    Boolean sort with Boolean_false and  Boolean_true constants 
-    are introduced, 
-    Unit sort is introduced  
-  o fixed bugs into the harvey (rv-fol) output (principally the 
+  o fixed bugs in smtlib output: all variables are "?" prefixed,
+    brackets around constants are removed,
+    validity question is turned into a sat question,
+    Boolean sort with Boolean_false and  Boolean_true constants
+    are introduced,
+    Unit sort is introduced
+  o fixed bugs into the harvey (rv-fol) output (principally the
     command lines)
   o triggers added to axioms of the caduceus model
 
@@ -304,7 +306,7 @@ version 2.00, June 12th, 2006
   o new encodings of Why logic into first-order monosorted logic for
     untyped provers (like Simplify or Zenon) : there are three
     possible encodings that can be selected through the command
-    line --encoding option    
+    line --encoding option
   o better naming of type variables in Coq output (A1, A2,
     etc. instead of A718, etc.)
   o fixed bugs with polymorphic logic constants used in programs
@@ -352,10 +354,10 @@ version 1.80, June 3rd, 2005
   o Isabelle/HOL output (--isabelle option) contribution by Yasuhiko Minamide
   o HOL 4 output (--hol4 option) contribution by Seungkeol Choe
   o SMT-LIB format output (--smtlib option)
- 
+
 version 1.75, March 15th, 2005
 ==============================
-  o fixed installation issue with Coq 8.0pl2 
+  o fixed installation issue with Coq 8.0pl2
   o new option -where to print Why's library path
 
 version 1.71, February 3rd, 2005
@@ -419,7 +421,7 @@ version 1.42, March 16th, 2004
 ==============================
   o new option --pvs-preamble
   o change in syntax: "external" is now a modifier for "parameter" and
-    "logic" (see the manual for explainations); to be conservative, 
+    "logic" (see the manual for explainations); to be conservative,
     the following substitutions have to be made:
        "external" -> "external parameter"
        "logic"    -> "external logic"
@@ -435,7 +437,7 @@ version 1.40, December 19th, 2003
     variables, to be conform with the syntax of the next version of
     haRVey (presumably 0.4)
     Also added option --no-harvey-prelude
-   
+
 version 1.32
 ============
   o output for Coq version 8 with --coq-v8
@@ -445,7 +447,7 @@ version 1.32
     Mizar article in lib/mizar/why.miz (installed by "make install")
 
 version 1.3, September 17th, 2003
-================================= 
+=================================
   o new tool why2html to convert Why input files to HTML
   o Simplify output (with option --simplify)
   o fixed bug with WP of constants false/true (simplification added)
@@ -470,7 +472,7 @@ version 1.2, May 12th, 2003
 
 version 1.10, April 4th, 2003
 ==============================
-  o C: added label statement and alternate syntax /*@ label id */ 
+  o C: added label statement and alternate syntax /*@ label id */
   o fixed bug in ocaml code generation
 
 version 1.08, March 28th, 2003
@@ -510,9 +512,9 @@ version 1.0, January 31st, 2003
   o fixed WP bug in a sequence of calls with before-after annotations
   o no more "pvs" declaration (the user can now edit the _why.pvs file)
   o fixed bug in type-checking of recursive functions with exceptions
-  o fixed bug in loop tests automatic annotation; 
+  o fixed bug in loop tests automatic annotation;
     now a warning when a loop test cannot be given a postcondition
-  o fixed bug in interpretation of @init 
+  o fixed bug in interpretation of @init
   o doc: C programs, Coq and PVS libraries documented
   o logic: if-then-else construct on terms
   o PVS: arrays defined in Why prelude and fixed pretty-print; installation
@@ -558,9 +560,9 @@ version 0.7, October 2nd, 2002
 ==============================
   o Why library compatible with Coq 7.3 (released version) and with Coq
     development version (determined at configuration)
-  o code ported to ocaml 3.06  
-  o examples: quicksort (2 versions) 
-  o more obligations automatically discharged 
+  o code ported to ocaml 3.06
+  o examples: quicksort (2 versions)
+  o more obligations automatically discharged
     (True  /  A and B |- A  /  A,B |- A and B)
   o Coq: fixed associativity in pretty-print for /\ and \/ (right)
     right associativity adopted in Why
@@ -580,6 +582,6 @@ version 0.5,  July 2nd, 2002
 ============================
   o first (beta) release
 
-Local Variables: 
+Local Variables:
 mode: text
-End: 
+End:
