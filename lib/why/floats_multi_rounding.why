@@ -215,9 +215,9 @@ and
    and
    abs_real(double_value(result)) <= 0x1p-1022 ))
 )
-    and 
+and 
     double_exact(result) = -(double_exact(x))
-    and 
+and 
     double_model(result) = -(double_model(x))
 
 parameter neg_double : 
@@ -399,9 +399,12 @@ parameter sqrt_double_requires :
 
 parameter sqrt_double : 
   m:mode -> x:double -> 
-  {  }
+   {  }
   double
-  { sqrt_double_post(m,x,result)
+  { 
+    no_overflow_double(m,sqrt_real(double_value(x)))
+    and
+    sqrt_double_post(m,x,result)
    
   }
 
@@ -447,7 +450,10 @@ parameter abs_double :
   m:mode -> x:double -> 
   {  }
   double
-  { abs_double_post(m,x,result)
+  { 
+    no_overflow_double(m,abs_real(double_value(x)))
+    and
+    abs_double_post(m,x,result)
 
   }
 
