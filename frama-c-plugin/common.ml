@@ -460,8 +460,11 @@ let type_name ty =
 
 let logic_type_name ty =
   ignore (flush_str_formatter ());
+  let old_mode = Parameters.UseUnicode.get() in
+  Parameters.UseUnicode.set false;
   fprintf str_formatter "%a" !Ast_printer.d_logic_type ty;
   let name = flush_str_formatter () in
+  Parameters.UseUnicode.set old_mode;
   filter_alphanumeric name [('*','x')] '_'
 
 let name_of_padding_type = reserved_logic_name "padding"
@@ -509,7 +512,7 @@ let detach_globinits file =
   let gif =
     Kernel_function.get_definition (Globals.Functions.get_glob_init file)
   in
-  Format.eprintf "Common.detach_globinits: len(globinits) = %d@." 
+  Format.eprintf "Common.detach_globinits: len(globinits) = %d@."
     (List.length !globinits);
   gif.sbody.bstmts <- List.rev_append !globinits gif.sbody.bstmts;
   globinits := []
