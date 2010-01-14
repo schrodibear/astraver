@@ -988,12 +988,11 @@ let add_ensures_default =
       begin
         (let jessie_44 = (zu := (C_66:
                                 (JC_132:
-                                ((neg_double down) (C_65:
-                                                   (JC_131:
-                                                   (((sub_double down) 
-                                                     (C_64:
-                                                     (JC_130:
-                                                     ((neg_double down) xu_0)))) yu_0))))))) in
+                                (neg_double (C_65:
+                                            (JC_131:
+                                            (((sub_double down) (C_64:
+                                                                (JC_130:
+                                                                (neg_double xu_0)))) yu_0))))))) in
         void);
        (raise Return)
       end)
@@ -1027,12 +1026,11 @@ let add_safety =
       begin
         (let jessie_40 = (zu := (C_66:
                                 (JC_128:
-                                ((neg_double down) (C_65:
-                                                   (JC_127:
-                                                   (((sub_double down) 
-                                                     (C_64:
-                                                     (JC_126:
-                                                     ((neg_double down) xu_0)))) yu_0))))))) in
+                                (neg_double (C_65:
+                                            (JC_127:
+                                            (((sub_double down) (C_64:
+                                                                (JC_126:
+                                                                (neg_double xu_0)))) yu_0))))))) in
         void);
        (raise Return)
       end)
@@ -1893,8 +1891,7 @@ let mul_up_ensures_default =
      (let z_0 = ref (any_double void) in
      (C_32:
      begin
-       (let jessie_31 = (a_0 := (C_31: (JC_93: ((neg_double down) y_1_1)))) in
-       void);
+       (let jessie_31 = (a_0 := (C_31: (JC_93: (neg_double y_1_1)))) in void);
       (C_34:
       begin
         (let jessie_33 = (b := (C_33:
@@ -1902,8 +1899,7 @@ let mul_up_ensures_default =
         void);
        (C_36:
        begin
-         (let jessie_35 = (z_0 := (C_35: (JC_95: ((neg_double down) !b)))) in
-         void);
+         (let jessie_35 = (z_0 := (C_35: (JC_95: (neg_double !b)))) in void);
         (assert
         { (JC_96:
           ((double_is_infinite(x_1_1) or double_is_infinite(y_1_1)) ->
@@ -2100,8 +2096,7 @@ let mul_up_safety =
      (let z_0 = ref (any_double void) in
      (C_32:
      begin
-       (let jessie_24 = (a_0 := (C_31: (JC_77: ((neg_double down) y_1_1)))) in
-       void);
+       (let jessie_24 = (a_0 := (C_31: (JC_77: (neg_double y_1_1)))) in void);
       (C_34:
       begin
         (let jessie_26 = (b := (C_33:
@@ -2109,8 +2104,7 @@ let mul_up_safety =
         void);
        (C_36:
        begin
-         (let jessie_28 = (z_0 := (C_35: (JC_79: ((neg_double down) !b)))) in
-         void);
+         (let jessie_28 = (z_0 := (C_35: (JC_79: (neg_double !b)))) in void);
         [ { } unit reads z_0
           { (JC_80:
             ((double_is_infinite(x_1_1) or double_is_infinite(y_1_1)) ->

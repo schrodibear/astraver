@@ -1,6 +1,3 @@
-/* run.config
-   DONTRUN: oracle missing in svn
-*/
 /* Frama-C BTS 0329
 
 Status: open

@@ -1176,16 +1176,16 @@ let add_ensures_default =
           begin
             (let jessie_129 = (let jessie_125 = (C_76:
                                                 (JC_110:
-                                                ((neg_double down) (C_75:
-                                                                   (JC_109:
-                                                                   (((sub_double down) 
-                                                                    (C_74:
-                                                                    (JC_108:
-                                                                    ((neg_double down) 
-                                                                    (C_73:
-                                                                    ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
-                                                                    (C_72:
-                                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
+                                                (neg_double (C_75:
+                                                            (JC_109:
+                                                            (((sub_double down) 
+                                                              (C_74:
+                                                              (JC_108:
+                                                              (neg_double 
+                                                               (C_73:
+                                                               ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
+                                                             (C_72:
+                                                             ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
                               (let jessie_128 = !z in
                               (((safe_upd_ __anonstruct_interval_1_u_z_13) jessie_128) jessie_125))) in
             void);
@@ -1364,16 +1364,16 @@ let add_safety =
           begin
             (let jessie_72 = (let jessie_68 = (C_76:
                                               (JC_102:
-                                              ((neg_double down) (C_75:
-                                                                 (JC_101:
-                                                                 (((sub_double down) 
-                                                                   (C_74:
-                                                                   (JC_100:
-                                                                   ((neg_double down) 
-                                                                    (C_73:
-                                                                    ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
-                                                                  (C_72:
-                                                                  ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
+                                              (neg_double (C_75:
+                                                          (JC_101:
+                                                          (((sub_double down) 
+                                                            (C_74:
+                                                            (JC_100:
+                                                            (neg_double 
+                                                             (C_73:
+                                                             ((safe_acc_ !__anonstruct_interval_1_u_x_4_11) !x_4_0)))))) 
+                                                           (C_72:
+                                                           ((safe_acc_ !__anonstruct_interval_1_u_y_4_12) !y_4)))))))) in
                              (let jessie_71 = !z in
                              (((safe_upd_ __anonstruct_interval_1_u_z_13) jessie_71) jessie_68))) in
             void);
@@ -2817,12 +2817,12 @@ let mul_up_ensures_default =
      begin
        (let jessie_27 = (__retres_0 := (C_33:
                                        (JC_82:
-                                       ((neg_double down) (C_32:
-                                                          (JC_81:
-                                                          (((mul_double down) x_2_0) 
-                                                           (C_31:
-                                                           (JC_80:
-                                                           ((neg_double down) y_2_0)))))))))) in
+                                       (neg_double (C_32:
+                                                   (JC_81:
+                                                   (((mul_double down) x_2_0) 
+                                                    (C_31:
+                                                    (JC_80:
+                                                    (neg_double y_2_0)))))))))) in
        void);
       (return := !__retres_0);
       (raise Return)
@@ -2864,12 +2864,12 @@ let mul_up_safety =
      begin
        (let jessie_24 = (__retres_0 := (C_33:
                                        (JC_79:
-                                       ((neg_double down) (C_32:
-                                                          (JC_78:
-                                                          (((mul_double down) x_2_0) 
-                                                           (C_31:
-                                                           (JC_77:
-                                                           ((neg_double down) y_2_0)))))))))) in
+                                       (neg_double (C_32:
+                                                   (JC_78:
+                                                   (((mul_double down) x_2_0) 
+                                                    (C_31:
+                                                    (JC_77:
+                                                    (neg_double y_2_0)))))))))) in
        void);
       (return := !__retres_0);
       (raise Return)

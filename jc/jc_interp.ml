@@ -198,6 +198,7 @@ let float_operator f t =
       | `Bsub -> "sub_"
       | `Bmul -> "mul_"
       | `Bdiv -> "div_"
+      | `Uminus -> "neg_"
       | `Bmod -> assert false
   in
   if float_model_has_safe_functions() && (not (safety_checking())) 
@@ -2001,10 +2002,17 @@ and expr e =
     | JCEvar v -> var v
     | JCEunary((`Uminus,(`Double|`Float as format)),e2) ->
         let e2' = expr e2 in
-        make_guarded_app
-          ~mark:e#mark FPoverflow e#pos
-          ("neg_" ^ float_format format)
-          [ e2' ]
+        if !Jc_options.float_model <> FMmultirounding then
+          make_guarded_app
+            ~mark:e#mark FPoverflow e#pos
+            ("neg_" ^ float_format format)
+            [ e2' ]
+        else
+          make_guarded_app
+            ~mark:e#mark FPoverflow e#pos
+ 	    (float_operator `Uminus format)
+ 	    [current_rounding_mode () ; e2' ]
+
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
         make_app (unary_op op) 

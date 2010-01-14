@@ -1,6 +1,3 @@
-/* run.config
-   DONTRUN: [VP] no oracle present. Skip it by default
- */
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */

@@ -647,7 +647,7 @@ and
 
 
 		    	        
-parameter neg_single : m:mode -> x:single -> 
+parameter neg_single : x:single -> 
 { }
 single
 { (single_is_NaN(x)  -> single_is_NaN(result))
@@ -997,7 +997,7 @@ and
 
 
 		    	        
-parameter neg_double : m:mode -> x:double -> 
+parameter neg_double : x:double -> 
 { }
 double
 { (double_is_NaN(x)  -> double_is_NaN(result))
