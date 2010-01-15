@@ -43,7 +43,7 @@ Implicit Arguments array_length.
       (forall (k2:Z),
        ((i <= k1 /\ k1 <= k2) /\ k2 <= j -> (access t k1) <= (access t k2)))).
 
-(*Why predicate*) Definition exchange (A118:Set) (a1:(array A118)) (a2:(array A118)) (i:Z) (j:Z)
+(*Why predicate*) Definition exchange (A120:Set) (a1:(array A120)) (a2:(array A120)) (i:Z) (j:Z)
   := (array_length a1) = (array_length a2) /\
      (access a1 i) = (access a2 j) /\ (access a2 i) = (access a1 j) /\
      (forall (k:Z), (k <> i /\ k <> j -> (access a1 k) = (access a2 k))).
@@ -119,7 +119,7 @@ Admitted.
         (forall (i:Z), (i < l \/ u < i -> (access a2 i) = (access a1 i))))))))).
 Admitted.
 
-(*Why predicate*) Definition permutation (A127:Set) (a1:(array A127)) (a2:(array A127))
+(*Why predicate*) Definition permutation (A129:Set) (a1:(array A129)) (a2:(array A129))
   := (permut a1 a2 0 ((array_length a1) - 1)).
 Implicit Arguments permutation.
 

@@ -392,7 +392,7 @@ module E = struct
         try
           Inst_Map.find (id,inst3) env.instances
         with Not_found as e -> 
-          Format.eprintf "Not_found : instance_of : id=%a@.inst=%a@.inst2=%a@.inst3=%a" Ident.print id Util.print_instance inst (Pp.print_list Pp.semi print_w) inst2 Util.print_instance inst3;
+          Format.eprintf "Not_found : instance_of : id=%a@.inst=%a@.inst2=%a@.inst3=%a@." Ident.print id Util.print_instance inst (Pp.print_list Pp.semi print_w) inst2 Util.print_instance inst3;
             raise e
 
   let type_of env id inst =
@@ -704,25 +704,29 @@ let rec translate_assertion env iter_fun d =
            iter_fun (Dlogic (loc,ident, ty))) logics;
       env
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
-  | Dpredicate_def (loc, ident, pred_def_sch) ->
-      let (argl, pred) = pred_def_sch.Env.scheme_type in
-      let rootexp = (Papp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
+  | Dpredicate_def (loc,id,d) ->
+      List.fold_left ta env (PredDefExpansor.predicate_def loc id d)
+(*      let (argl, pred) = pred_def_sch.Env.scheme_type in
+      (* Et l'ordre pour l'instantiation? *)
+      let typevar = List.map (fun x ->  PTvar x) (Env.Vset.elements pred_def_sch.Env.scheme_vars) in
+      let rootexp = (Papp (ident, List.map (fun (i,_) -> Tvar i) argl, typevar)) in
       let env = ta env (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl)))))) in
       let env = ta env (Daxiom (loc, def ident, (Env.generalize_predicate
 				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]])))) in
-      env
+      env*)
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "encoding mono: inductive def not yet supported"
-  | Dfunction_def (loc, ident, fun_def_sch) ->
+  | Dfunction_def _(*loc, ident, fun_def_sch*) ->
 (*       let _ = print_endline ident in *)
-      let (argl, rt, term) = fun_def_sch.Env.scheme_type in
+(*      let (argl, rt, term) = fun_def_sch.Env.scheme_type in
       let rootexp = (Tapp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
       let env = ta env (Dlogic (loc, ident, (Env.generalize_logic_type (Function (snd (List.split argl), rt))))) in
       let env = ta env (Daxiom (loc, def ident,
 		    (Env.generalize_predicate
 		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]])))) in
-      env
+      env*)
+      assert false
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
       let insts,p_inst = E.give_inst env pred_sch in
