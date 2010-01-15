@@ -311,7 +311,7 @@ let iter = Encoding.iter
 let reset () = Encoding.reset ()
 
 let declare_type fmt id =
-  fprintf fmt ":extrasorts (%s)@\n" id
+  fprintf fmt ":extrasorts (%a)@\n" ident id
 
 let print_logic fmt id t =
   fprintf fmt ";;;; Why logic %s@\n" id;
@@ -324,7 +324,7 @@ let print_logic fmt id t =
 	  idents id pure_type_list tl print_pure_type pt
 	
 let output_elem fmt = function
-  | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
+  | Dtype (_loc, id, []) -> declare_type fmt id
   | Dtype (_, id, _) ->
       fprintf fmt ";; polymorphic type %s@\n@\n" (Ident.string id)
   | Dalgtype _ ->
