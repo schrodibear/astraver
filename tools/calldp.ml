@@ -167,8 +167,10 @@ let error c t cmd =
     | Unix.WSTOPPED 24 | Unix.WSIGNALED 24 -> Timeout t 
     | _ -> ProverFailure (t,"command failed: " ^ cmd) 
 
-let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "cvcl < %s" f in
+let cvcl ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvcl
+
+(*  let cmd = sprintf "cvcl < %s" f in
   let t,c,out = timed_sys_command debug timeout cmd in
   if c <> Unix.WEXITED 0 then error c t cmd
   else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
@@ -186,7 +188,7 @@ let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
     in
     remove_file ~debug out;
     r
-
+*)
 (*
 let simplify ?(debug=false) ?(timeout=10) ~filename ~buffers () =
   let cmd = sprintf "Simplify %s" f in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib_split.mll,v 1.12 2009-12-27 16:46:36 bobot Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.13 2010-01-17 16:07:14 bobot Exp $ i*)
 
 {
 
@@ -37,8 +37,6 @@
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192
-  let buf_goal = Buffer.create 8192
-
   let buf_goal = Buffer.create 512
 
   let print_hypo s = Buffer.add_string buf s

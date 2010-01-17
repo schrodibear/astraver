@@ -39,3 +39,5 @@ val push_decl : Logic_decl.t -> unit
 val iter : (Logic_decl.t -> unit) -> unit
 
 val reset : unit -> unit
+
+val create_ident_id : string

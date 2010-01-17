@@ -139,6 +139,20 @@ let cvc3 =
     stdin_switch = Some "";
   }
 
+let cvcl =    
+  {
+    name = "CVCL";
+    is_interactive = false;
+    version = "";
+    version_switch = "-version";
+    version_regexp = "This is CVC3 version \\([^ ]+\\)";
+    command = "cvc3";
+    command_switches = "";
+    valid_regexp = Some (make_regexp "\\bValid\\b");
+    undecided_regexp = make_regexp "\\bUnknown\\b\\|\\bError\\b";
+    stdin_switch = Some "";
+  }
+
 let coq =    
   {
     name = "Coq";
@@ -161,6 +175,7 @@ let prover_list =
     Z3, (z3, ["z3"]) ;
     Yices, (yices, ["yices"]) ;
     Cvc3, (cvc3, ["cvc3"]) ;
+    Cvcl, (cvcl, ["cvcl"]) ;
     Coq, (coq, ["coqc"]);
     Gappa, (gappa, ["gappa"]) ;
   ] 

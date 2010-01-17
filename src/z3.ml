@@ -108,7 +108,7 @@ let removeChar =
 let idents fmt s = 
   (* Yices does not expect names to begin with an underscore if
      Yices understand Z3 smtlib extended we can keep that. *)
-  if is_smtlib_keyword s then
+  if is_smtlib_keyword s  || leading_underscore s then
     fprintf fmt "smtlib__%s" s
   else
     fprintf fmt "%s" s
@@ -153,8 +153,16 @@ let rec print_term fmt = function
   | Tapp (id, [], i) -> 
       fprintf fmt "%a" idents (Encoding.symbol (id, i))
   | Tapp (id, tl, i) ->
-      fprintf fmt "@[(%a@ %a)@]" 
-	idents (Encoding.symbol (id, i)) (print_list space print_term) tl
+      (match Ident.fresh_from id with
+        | Some (s,logic_id::_) when s == Encoding_mono_inst.create_ident_id
+            && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd") -> 
+            (match tl,Ident.string logic_id with
+              | [mem;key],"acc" -> fprintf fmt "@[(select %a %a)@]" print_term mem print_term key
+              | [mem;key;value],"upd" -> fprintf fmt "@[(store %a %a %a)@]" print_term mem
+                  print_term key print_term value
+              | _ -> assert false)
+        | _ -> fprintf fmt "@[(%a@ %a)@]" 
+	idents (Encoding.symbol (id, i)) (print_list space print_term) tl)
   | Tnamed (_, t) -> (* TODO: print name *)
       print_term fmt t
 
@@ -333,21 +341,35 @@ let iter = Encoding.iter
 
 let reset () = Encoding.reset ()
 
-let declare_type fmt id =
-  fprintf fmt ":extrasorts (%s)@\n" id
+let declare_type fmt id = 
+  match Ident.fresh_from id with
+    | Some (s,[mem;value;key]) when s == Encoding_mono_inst.create_ident_id 
+        && Ident.string mem = "memory" ->      
+        fprintf fmt ":define_sorts ((%a  (array %aIpointer %s)))"
+          ident id 
+          ident key 
+          (let s = Ident.string value in if s = "int" then "Int" else s)
+    | _ -> fprintf fmt ":extrasorts (%a)@\n" ident id
 
+
+(*let declare_type fmt id =
+  fprintf fmt ":extrasorts (%a)@\n" ident id
+*)
 let print_logic fmt id t =
-  fprintf fmt ";;;; Why logic %s@\n" id;
+  fprintf fmt ";;;; Why logic %a@\n" ident id;
   match t with
     | Predicate tl ->
 	fprintf fmt "@[:extrapreds ((%a %a))@]@\n@\n" 
-	  idents id pure_type_list tl
+	  ident id pure_type_list tl
     | Function (tl, pt) ->
-	fprintf fmt "@[:extrafuns ((%a %a %a))@]@\n@\n" 
-	  idents id pure_type_list tl print_pure_type pt
+        match Ident.fresh_from id with
+          | Some (s,logic_id::_) when s == Encoding_mono_inst.create_ident_id
+              && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd") -> ()
+          | _ -> fprintf fmt "@[:extrafuns ((%a %a %a))@]@\n@\n" 
+	      ident id pure_type_list tl print_pure_type pt
 	
 let output_elem fmt = function
-  | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
+  | Dtype (_loc, id, []) -> declare_type fmt id
   | Dtype (_, id, _) ->
       fprintf fmt ";; polymorphic type %s@\n@\n" (Ident.string id)
   | Dalgtype _ ->
@@ -356,7 +378,7 @@ let output_elem fmt = function
       failwith "SMTLIB output: algebraic types are not supported"
 *)
   | Dlogic (_, id, t)  when not (Ident.is_simplify_arith id)
-      -> print_logic fmt (Ident.string id) t.scheme_type
+      -> print_logic fmt id t.scheme_type
   | Dlogic (_, _, _) -> fprintf fmt "" 
   | Dpredicate_def (_loc, _id, _d) -> 
       assert false

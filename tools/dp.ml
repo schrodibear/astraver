@@ -68,7 +68,7 @@ let spec =
     "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout";
     "-split", Arg.Set split, "Create a directory wich contains all the goal splitted in different file";
     "-prover", Arg.Symbol (
-      ["Alt-Ergo";"CVC3";"Z3";"Yices";"Simplify"],(fun s -> prover := Some s)), "Select the prover to use"
+      ["Alt-Ergo";"CVC3";"CVCL";"Z3";"Yices";"Simplify"],(fun s -> prover := Some s)), "Select the prover to use"
   ]
 
 let () = 
@@ -182,8 +182,8 @@ let wrapper =
 let call_ergo f b = 
   wrapper (Calldp.ergo ~debug:!debug ~timeout:!timeout 
 	     ~select_hypotheses:!select_hypotheses ~filename:f ~buffers:b ())
-let call_cvcl f _ = 
-  wrapper (Calldp.cvcl ~debug:!debug ~timeout:!timeout ~filename:f ())
+let call_cvcl f b = 
+  wrapper (Calldp.cvcl ~debug:!debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_simplify f _ = 
   wrapper (Calldp.simplify ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_yices f b = 
@@ -228,6 +228,7 @@ let call_smt_solver = match !smt_solver with
 let dispatch_prover_by_name cin = function
   | "Alt-Ergo" -> Ergo_split.iter call_ergo cin
   | "CVC3" -> Smtlib_split.iter call_cvc3 cin
+  | "CVCL" -> Cvcl_split.iter call_cvcl cin
   | "Z3" -> Smtlib_split.iter call_z3 cin
   | "Yices" -> Smtlib_split.iter call_yices cin
   | "Simplify" -> Simplify_split.iter call_simplify cin
@@ -247,7 +248,7 @@ let dispatch_prover_by_extension dir_name f =
     end
   else 
   if Filename.check_suffix f ".cvc"  || Filename.check_suffix f ".cvc.all" then
-    Cvcl_split.iter (call_split call_cvcl dir_name ".cvc") f 
+    Cvcl_split.iter (call_split call_cvcl dir_name ".cvc") cin 
   else 
   if Filename.check_suffix f ".sx" || 
      Filename.check_suffix f ".sx.all" ||

@@ -63,6 +63,9 @@ val yices : prover_data
 
 val cvc3 : prover_data
 
+(* cvcl is in fact cvc3 with native language *)
+val cvcl : prover_data
+
 val gappa : prover_data
 
 val coq : prover_data

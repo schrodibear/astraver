@@ -54,10 +54,6 @@ val harvey :
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result 
 
-val cvcl : 
-  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
-  prover_result
-
 val zenon : 
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
   prover_result
@@ -69,6 +65,8 @@ val rvsat :
 val yices : prover
 
 val cvc3 : prover
+
+val cvcl : prover
 
 val z3 : prover
 

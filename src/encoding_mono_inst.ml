@@ -107,7 +107,10 @@ let builtin = [] (*[Ident.t_sub_int;Ident.t_add_int;Ident.t_mul_int;Ident.t_div_
 
 let builtin = List.fold_left (fun s x -> Ident.Idset.add x s) builtin_poly builtin
 
-let ident_of_close_type t = 
+let create_ident_id = "ident_of_close_type"
+
+let rec ident_of_close_type ?(from=false)t = 
+  (*let from = false && from in*)
   let rec aux fmt = function
     | PTint -> fprintf fmt "int"
     | PTbool -> fprintf fmt "bool"
@@ -120,7 +123,10 @@ let ident_of_close_type t =
         (Pp.print_list (Pp.constant_string "I") aux) l Ident.print id in
   let b = Buffer.create 10 in
   Format.bprintf b "%a@?" aux t;
-  Ident.create (Buffer.contents b)
+  let from = match from,t with
+    | true,PTexternal (l,id) -> Some (create_ident_id,id::(List.map (ident_of_close_type ~from:false) l))
+    | _ -> None in
+  Ident.create ?from (Buffer.contents b)
 
 module E = struct
   open Mapenv
@@ -191,7 +197,7 @@ module E = struct
   let create l =
     let s = add_subtype_list PT_Set.empty l in
     let m = PT_Set.fold 
-      (fun e m -> PT_Map.add e (ident_of_close_type e) m) s PT_Map.empty in
+      (fun e m -> PT_Map.add e (ident_of_close_type ~from:true e) m) s PT_Map.empty in
     {instances = Inst_Map.empty;
      mono = m;
      encode = PT_Map.empty;
@@ -331,11 +337,13 @@ module E = struct
              | Predicate(arg) ->
                  let arg = List.map (trad_to_type_neg env Vmap.empty) arg in
                  arg,Predicate(arg) in
+         (*could we use builtin theory ? *)
+         let from = List.for_all (fun e -> e<>st && e<>ut) l_ty in
          let l_ty = PTexternal (l_ty,tid) in
-         (* If the identifier is not polymorph then we keep its name *)
+         (* If the identifier is polymorph then we keep its name *)
          let lid = if nargs = 0 
          then tid
-         else ident_of_close_type l_ty in
+         else ident_of_close_type ~from l_ty in
          let inst = List.map (trad_to_type env Vmap.empty) inst in
          let instances = Inst_Map.add (tid,inst) lid instances in
          let lidset,l = if Idset.mem lid lidset 

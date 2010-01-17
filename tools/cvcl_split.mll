@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl_split.mll,v 1.12 2009-12-27 16:46:36 bobot Exp $ i*)
+(*i $Id: cvcl_split.mll,v 1.13 2010-01-17 16:07:14 bobot Exp $ i*)
 
 {
 
@@ -37,52 +37,46 @@
 
   (* we put everything not a goal into [buf] *)
   let buf = Buffer.create 8192
+  let buf_goal = Buffer.create 512
 
-  let outc = ref stdout
-  let print s = output_string !outc s
+  let print_hypo s = Buffer.add_string buf s
+  let print_goal s = Buffer.add_string buf_goal s
 
   let start_file () =
-    let f = Filename.temp_file "cvcl" ".cvc" in
-    outc := open_out f;
-    print (Buffer.contents buf);
-    f
+    Buffer.reset buf_goal
 
-  let end_file file =
-    close_out !outc;
-    !callback file [] ;
-    if not !debug then Sys.remove file
+  let end_file () =
+    !callback "cvcl.cvc" [buf;buf_goal]
 
 }
 
 (* copy everything into [buf] until we find a query *)
 rule split = parse
   | "QUERY" 
-      { let file = start_file () in 
-	print "QUERY"; query lexbuf; end_file file; split lexbuf }
+      { start_file ();
+	print_goal "QUERY"; query lexbuf; end_file (); split lexbuf }
   | "%" [^'\n']* '\n' 
-      { Buffer.add_string buf (lexeme lexbuf); split lexbuf }
+      { print_hypo (lexeme lexbuf); split lexbuf }
   | eof 
       { () }
   | _ 
-      { Buffer.add_string buf (lexeme lexbuf); split lexbuf }
+      { print_hypo (lexeme lexbuf); split lexbuf }
 
 (* copy the query up to the semi-colon *)
 and query = parse
-  | ";" { print ";" }
+  | ";" { print_goal ";" }
   | "%" [^'\n']* '\n' 
-        { print (lexeme lexbuf); query lexbuf }
+        { print_goal (lexeme lexbuf); query lexbuf }
   | eof { () }
-  | _   { print (lexeme lexbuf); query lexbuf }
+  | _   { print_goal (lexeme lexbuf); query lexbuf }
 
 {
 
-  let iter cb f =
+  let iter cb c =
     callback := cb;
     Buffer.reset buf;
-    let c = open_in f in
     let lb = from_channel c in
-    split lb;
-    close_in c
+    split lb
 
 }
 

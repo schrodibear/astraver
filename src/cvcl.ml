@@ -123,8 +123,16 @@ let rec print_term fmt = function
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
   | Tapp (id, [], i) ->
       fprintf fmt "%s" (Encoding.symbol (id, i))
-  | Tapp (id, tl, i) ->
-      fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl
+  | Tapp (id, tl, i) -> 
+      (match Ident.fresh_from id with
+        | Some (s,logic_id::_) when s == Encoding_mono_inst.create_ident_id
+            && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd") -> 
+            (match tl,Ident.string logic_id with
+              | [mem;key],"acc" -> fprintf fmt "@[(%a[%a])@]" print_term mem print_term key
+              | [mem;key;value],"upd" -> fprintf fmt "@[(%a WITH [%a] := %a)@]" print_term mem
+                  print_term key print_term value
+              | _ -> assert false)
+        | _ -> fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl)
   | Tnamed (_, t) -> (* TODO: print name *)
       print_term fmt t
 
@@ -153,8 +161,7 @@ let rec print_predicate fmt = function
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl, i) -> 
-      fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl
+  | Papp (id, tl, i) -> fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(%a =>@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -216,11 +223,23 @@ let rec print_logic_type fmt = function
 let is_array s = String.length s >= 6 && String.sub s 0 6 = "array_"
 
 let declare_type fmt id = 
-  if not (is_array id) then fprintf fmt "@[%s: TYPE;@]@\n@\n" id
+  match Ident.fresh_from id with
+    | Some (s,[mem;value;key]) when s == Encoding_mono_inst.create_ident_id 
+        && Ident.string mem = "memory" ->      
+        fprintf fmt "@[%a: TYPE = ARRAY %aIpointer OF %s;@]@.@." 
+          Ident.print id 
+          Ident.print key 
+          (let s = Ident.string value in if s = "int" then "INT" else s)
+    | _ -> if not (is_array (Ident.string id)) then fprintf fmt "@[%a: TYPE;@]@\n@\n" Ident.print id
+         
 
 let print_logic fmt id t =
-  fprintf fmt "%%%% Why logic %s@\n" id;
-  fprintf fmt "@[%s: %a;@]@\n@\n" id print_logic_type t
+  match Ident.fresh_from id with
+    | Some (s,logic_id::_) when s == Encoding_mono_inst.create_ident_id
+        && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd") -> ()
+    | _ ->
+        fprintf fmt "%%%% Why logic %a@\n" Ident.print id;
+          fprintf fmt "@[%a: %a;@]@\n@\n" Ident.print id print_logic_type t
 
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
@@ -243,6 +262,13 @@ let print_function_def fmt id (bl,t,e) =
     print_term e
 
 let print_axiom fmt id p =
+  match id,p with
+    | ("acc_upd" |"acc_upd_neq"), Forall (_,_,_,PTexternal (_,t),_,_) when   
+        (match Ident.fresh_from t with
+           | Some (s,[mem;_;_]) when s == Encoding_mono_inst.create_ident_id 
+               && Ident.string mem = "memory" -> true
+           | _ -> false) -> ()
+    | _ ->
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
@@ -260,7 +286,7 @@ let iter = Encoding.iter
 let reset () = Encoding.reset ()
 
 let output_elem fmt = function
-  | Dtype (_loc, id, []) -> declare_type fmt (Ident.string id)
+  | Dtype (_loc, id, []) -> declare_type fmt id
   | Dtype _ -> assert false
   | Dalgtype _ ->
       assert false
@@ -268,7 +294,7 @@ let output_elem fmt = function
       failwith "CVC light: algebraic types are not supported"
 *)
   | Dlogic (_loc, id, t) ->
-      print_logic fmt (Ident.string id) t.scheme_type
+      print_logic fmt id t.scheme_type
   | Dpredicate_def (_loc, id, d) -> 
       let id = Ident.string id in
       print_predicate_def fmt id d.scheme_type

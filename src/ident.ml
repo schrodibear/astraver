@@ -27,17 +27,17 @@
 
 
 
-type t = { stamp : int; name : string; label : string option }
+type t = { stamp : int; name : string; label : string option; fresh_from : (string * t list) option }
 
 let hashcons = 
   let h = Hashtbl.create 97 in
   fun id -> try Hashtbl.find h id with Not_found -> Hashtbl.add h id id; id 
 
-let create s = hashcons { stamp = 0; name = s; label = None }
+let create ?from s = hashcons { stamp = 0; name = s; label = None; fresh_from = from }
 let string s = s.name
+let fresh_from s = s.fresh_from
 
-
-let completeString s = s.name^"_"^(string_of_int s.stamp)
+let completeString s = s.name^"_"^(string_of_int s.stamp)  
 
 module I = struct type t_ = t type t = t_ let compare = compare end
 

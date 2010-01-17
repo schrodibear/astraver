@@ -37,11 +37,17 @@ end
 
 type t = I.t
 
-val create : string -> t
+(* from :
+       - string inform which creates the fresh ident
+       - t list gives the arguments
+*)
+val create : ?from:(string * t list) -> string -> t
 
 val string : t -> string
 
 val completeString : t -> string 
+
+val fresh_from : t -> (string * t list) option
 
 module Idset : Set.S with type elt = t
 type set = Idset.t
