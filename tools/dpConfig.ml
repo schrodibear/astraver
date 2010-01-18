@@ -209,6 +209,7 @@ let load_rc_file () =
 	 | "Z3" -> load_prover_info z3 key args
 	 | "Yices" -> load_prover_info yices key args
 	 | "CVC3" -> load_prover_info cvc3 key args
+         | "CVCL" -> load_prover_info cvcl key args
 	 | "Coq" -> load_prover_info coq key args
 	 | "Gappa" -> load_prover_info gappa key args
 	 | _ -> 
