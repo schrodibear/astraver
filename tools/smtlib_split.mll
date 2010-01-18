@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib_split.mll,v 1.13 2010-01-17 16:07:14 bobot Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.14 2010-01-18 14:16:20 marche Exp $ i*)
 
 {
 
@@ -74,6 +74,7 @@ rule split = parse
   | ":" space* "formula"
       { 
 	(*printf "formula: ouverture du fichier %s \n" !file ;*)
+        start_file();
 	level := 0 ;
         print_goal (lexeme lexbuf);
 	query lexbuf;
