@@ -126,10 +126,10 @@ let rec print_term fmt = function
   | Tapp (id, tl, i) -> 
       (match Ident.fresh_from id with
         | Some (s,logic_id::_) when s == Encoding_mono_inst.create_ident_id
-            && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd") -> 
+            && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd" || Ident.string logic_id = "select" || Ident.string logic_id = "store" ) -> 
             (match tl,Ident.string logic_id with
-              | [mem;key],"acc" -> fprintf fmt "@[(%a[%a])@]" print_term mem print_term key
-              | [mem;key;value],"upd" -> fprintf fmt "@[(%a WITH [%a] := %a)@]" print_term mem
+              | [mem;key],("acc"|"select") -> fprintf fmt "@[(%a[%a])@]" print_term mem print_term key
+              | [mem;key;value],("upd"|"store") -> fprintf fmt "@[(%a WITH [%a] := %a)@]" print_term mem
                   print_term key print_term value
               | _ -> assert false)
         | _ -> fprintf fmt "@[%s(%a)@]" (Encoding.symbol (id, i)) print_terms tl)
@@ -168,7 +168,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(%a <=>@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
       fprintf fmt 
-     "@[((%a=TRUE => %a) AND@ (%a=FALSE => %a))@]"
+     "@[((%a=true => %a) AND@ (%a=false => %a))@]"
       print_term a print_predicate b print_term a print_predicate c
   | Pand (_, _, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(%a AND@ %a)@]" print_predicate a print_predicate b
@@ -222,16 +222,19 @@ let rec print_logic_type fmt = function
 
 let is_array s = String.length s >= 6 && String.sub s 0 6 = "array_"
 
+let memory_arg_kv = lazy (is_logic_function (Ident.create "select"))
+
 let declare_type fmt id = 
-  match Ident.fresh_from id with
-    | Some (s,[mem;value;key]) when s == Encoding_mono_inst.create_ident_id 
-        && Ident.string mem = "memory" ->      
+  match (Lazy.force memory_arg_kv), Ident.fresh_from id with
+    | (false,Some (s,[mem;value;key])|true,Some (s,[mem;key;value]))
+        when s == Encoding_mono_inst.create_ident_id 
+          && Ident.string mem = "memory" ->      
         fprintf fmt "@[%a: TYPE = ARRAY %aIpointer OF %s;@]@.@." 
           Ident.print id 
           Ident.print key 
           (let s = Ident.string value in if s = "int" then "INT" else s)
     | _ -> if not (is_array (Ident.string id)) then fprintf fmt "@[%a: TYPE;@]@\n@\n" Ident.print id
-         
+        
 
 let print_logic fmt id t =
   match Ident.fresh_from id with
@@ -263,7 +266,8 @@ let print_function_def fmt id (bl,t,e) =
 
 let print_axiom fmt id p =
   match id,p with
-    | ("acc_upd" |"acc_upd_neq"), Forall (_,_,_,PTexternal (_,t),_,_) when   
+    | ("acc_upd" |"acc_upd_neq"|"select_store_eq"|"select_store_neq"), 
+      Forall (_,_,_,PTexternal (_,t),_,_) when   
         (match Ident.fresh_from t with
            | Some (s,[mem;_;_]) when s == Encoding_mono_inst.create_ident_id 
                && Ident.string mem = "memory" -> true

@@ -155,10 +155,10 @@ let rec print_term fmt = function
   | Tapp (id, tl, i) ->
       (match Ident.fresh_from id with
         | Some (s,logic_id::_) when s == Encoding_mono_inst.create_ident_id
-            && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd") -> 
+            && (Ident.string logic_id = "acc" || Ident.string logic_id = "upd" || Ident.string logic_id = "select" || Ident.string logic_id = "store") -> 
             (match tl,Ident.string logic_id with
-              | [mem;key],"acc" -> fprintf fmt "@[(select %a %a)@]" print_term mem print_term key
-              | [mem;key;value],"upd" -> fprintf fmt "@[(store %a %a %a)@]" print_term mem
+              | [mem;key],("acc"|"select") -> fprintf fmt "@[(select %a %a)@]" print_term mem print_term key
+              | [mem;key;value],("upd" |"store")-> fprintf fmt "@[(store %a %a %a)@]" print_term mem
                   print_term key print_term value
               | _ -> assert false)
         | _ -> fprintf fmt "@[(%a@ %a)@]" 
@@ -273,6 +273,14 @@ and print_predicate fmt = function
 	print_predicate p'
 
 let print_axiom fmt id p =
+  match id,p with
+    | ("acc_upd" |"acc_upd_neq"|"select_store_eq"|"select_store_neq"),
+      Forall (_,_,_,PTexternal (_,t),_,_) when   
+        (match Ident.fresh_from t with
+           | Some (s,[mem;_;_]) when s == Encoding_mono_inst.create_ident_id 
+               && Ident.string mem = "memory" -> true
+           | _ -> false) -> ()
+    | _ ->
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
   fprintf fmt " @[<hov 2>:assumption@ %a@]" print_predicate p;
   fprintf fmt "@]@\n@\n" 
@@ -341,11 +349,13 @@ let iter = Encoding.iter
 
 let reset () = Encoding.reset ()
 
+let memory_arg_kv = lazy (is_logic_function (Ident.create "select"))
+
 let declare_type fmt id = 
-  match Ident.fresh_from id with
-    | Some (s,[mem;value;key]) when s == Encoding_mono_inst.create_ident_id 
+  match (Lazy.force memory_arg_kv), Ident.fresh_from id with
+    | (false,Some (s,[mem;value;key])|true,Some (s,[mem;key;value])) when s == Encoding_mono_inst.create_ident_id 
         && Ident.string mem = "memory" ->      
-        fprintf fmt ":define_sorts ((%a  (array %aIpointer %s)))"
+        fprintf fmt ":define_sorts ((%a  (array %aIpointer %s)))@."
           ident id 
           ident key 
           (let s = Ident.string value in if s = "int" then "Int" else s)
