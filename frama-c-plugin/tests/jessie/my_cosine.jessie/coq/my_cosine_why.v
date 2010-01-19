@@ -341,6 +341,11 @@ Parameter single: Set.
 
 Parameter single_value: single -> R.
 
+
+
+
+
+
 Require Import tactics.
 
 (* Why obligation from file "my_cosine.c", line 8, characters 13-53: *)
@@ -361,6 +366,14 @@ Proof.
 intuition.
 interval with (i_bisect_diff (single_value x_1),i_nocheck).
 Save.
+
+
+
+
+
+
+
+
 
 Inductive mode : Set := nearest_even.
 

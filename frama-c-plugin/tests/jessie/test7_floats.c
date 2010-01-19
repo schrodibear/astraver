@@ -10,7 +10,7 @@
   @ ensures \abs(\result - \exp(x)) <= 0x1p-4; 
   @ */
 
-double monexp(double x) {
+double my_exp(double x) {
   /*@ assert \abs(0.9890365552 + 1.130258690*x + 0.5540440796*x*x - \exp(x)) 
                   <= 0x0.FFFFp-4;
     @*/
@@ -18,6 +18,22 @@ double monexp(double x) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
 /*@ lemma abs_triangle: \forall real x,y,z;
   @            \abs(x-y) <= \abs(x-z)+\abs(z-y);
   @*/
@@ -43,6 +59,7 @@ double exp1(double x) {
   return r;
 }
 
+#endif
 
 /* 
 Local Variables:

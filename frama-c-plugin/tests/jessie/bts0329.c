@@ -1,6 +1,6 @@
 /* Frama-C BTS 0329
 
-Status: 
+Status: resolved
 
 */
 
