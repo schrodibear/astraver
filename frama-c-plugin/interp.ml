@@ -865,6 +865,12 @@ and terms t =
 
     | Tnull -> [JCPEconst JCCnull]
 
+    | Tlet(v,def,body) ->
+        let jc_def = term def in
+        let jc_body = term body in
+        let typ = ltype v.lv_type in
+        [JCPElet(Some typ, v.lv_name, Some jc_def, jc_body)]
+
     | TCoerce(_t,_typ) ->
 	(* TODO: see if useful *)
 	Extlib.not_yet_implemented "Interp.terms TCoerce"
@@ -2652,7 +2658,7 @@ let pragma = function
 
 let pragmas f =
   let l = List.flatten (List.rev (List.rev_map pragma f.globals)) in
-  
+
   (match !int_model with
     | IMexact -> []
     | IMbounded -> [ Jc_output.JCint_model Jc_env.IMbounded ]

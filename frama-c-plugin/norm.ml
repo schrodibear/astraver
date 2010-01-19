@@ -725,7 +725,7 @@ object
       | TSizeOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _
       | Tlambda _ | TDataCons _ | Tbase_addr _ | TBinOp _ | TUnOp _
       | Tblock_length _ | TCoerce _ | TCoerceE _ | TUpdate _
-      | Ttypeof _ | Ttype _ -> assert false
+      | Ttypeof _ | Ttype _ | Tlet _ -> assert false
     in
     let zone = function
       | Location idts ->
