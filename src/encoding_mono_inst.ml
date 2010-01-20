@@ -910,6 +910,9 @@ let output_world world env =
     print_map env.E.encode;
   exit 0
 
+let memory_arg_kv = lazy (Env.is_logic_function (Ident.create "select"))
+let pointer = Ident.create "pointer"
+
 let iter f =
   (* monomorph the goal *)
   let decls = Queue.fold monomorph_goal [] queue in
@@ -919,8 +922,16 @@ let iter f =
   let world = List.fold_left make_world PT_Set.empty decls in
   (* Filter if asked *)
   let world = if Options.monoinstonlymem
-  then PT_Set.filter (function PTexternal (_,mem) when Ident.string mem = "memory" -> true
-			| _ -> false) world
+  then let world = PT_Set.filter (function PTexternal (_,mem)
+				      when Ident.string mem = "memory" -> true
+				    | _ -> false) world in
+  PT_Set.fold (fun pt acc ->
+		 match (Lazy.force memory_arg_kv),pt with
+		   | (true,PTexternal ([key;_],mem)) |
+			 (false,PTexternal ([_;key],mem))
+			   when Ident.string mem = "memory"  ->
+		       PT_Set.add (PTexternal ([key],pointer)) acc
+		   | _ -> acc) world world
   else world in
   let world = List.fold_left (fun s x -> _PT_Set_add x s) world htypes in
   if debug then 

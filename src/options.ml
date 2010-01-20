@@ -567,7 +567,7 @@ let files =
         monoinstonlymem := true;
         parse args
     | ("-monoinstnounit" | "--monoinstnounit")::args ->
-        monoinstnounit := true;
+        (*monoinstnounit := true;*)
         parse args
     | ("-explain" | "--explain") :: args ->
 	explain_vc := true; parse args
