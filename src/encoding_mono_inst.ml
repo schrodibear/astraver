@@ -74,7 +74,7 @@ let c2u t = (cname t)^"2u"
 let s2c t = "s2"^(cname t)*)
 
 (* This is the list of constant types which is handled as such *)
-let htypes = [PTint; PTbool; PTreal; PTunit]
+let htypes = [PTint; PTbool; PTreal]@(if Options.monoinstnounit then [] else [PTunit])
 
 (* The monosorted stratified encoding introduces
    three new external types : a sort for syntactically 
@@ -917,12 +917,21 @@ let iter f =
   if debug then Format.eprintf "Goal monomorphised@.";
   (* Find the type to monomorph *)
   let world = List.fold_left make_world PT_Set.empty decls in
+  (* Filter if asked *)
+  let world = if Options.monoinstonlymem
+  then PT_Set.filter (function PTexternal (_,mem) when Ident.string mem = "memory" -> true
+			| _ -> false) world
+  else world in
   let world = List.fold_left (fun s x -> _PT_Set_add x s) world htypes in
   if debug then 
     Format.eprintf "world :%a@." (Pp.print_list Pp.comma Util.print_pure_type) (PT_Set.elements world);
   let env = E.create (PT_Set.elements world) in
-  (* On ajoute toute les logics et type et donc même celle qui sont builtin *)
+  (* On ajoute toute les logics et type. Mais pas les types builtin *)
   let env = Env.fold_type (fun id sch env -> E.add_type env id sch) env in
+  (* On ajoute unit in encode if asked *)
+  let env = if Options.monoinstnounit 
+  then {env with E.encode = Mapenv.PT_Map.add PTunit (Ident.create "unit") env.E.encode}
+  else env in
   if Options.monoinstoutput_world then output_world world env;
   let env = Env.fold_global_logic (fun id sch env -> 
                                      try

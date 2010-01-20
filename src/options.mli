@@ -109,6 +109,8 @@ type monoinstWorldGen =
   | MonoinstPremises
 val monoinstworldgen : monoinstWorldGen
 val monoinstoutput_world : bool
+val monoinstonlymem : bool
+val monoinstnounit : bool
 
 type termination = UseVariant | Partial | Total
 val termination : termination
