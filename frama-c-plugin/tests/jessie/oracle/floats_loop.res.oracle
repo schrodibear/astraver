@@ -2,10 +2,11 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD floats_loop.c"
 [jessie] Starting Jessie translation
 [kernel] No code for function printf, default assigns generated
-floats_loop.c:58:[jessie] warning: skipping all arguments of implicit prototype printf
+floats_loop.c:57:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir floats_loop.jessie
 [jessie] File floats_loop.jessie/floats_loop.jc written.
 [jessie] File floats_loop.jessie/floats_loop.cloc written.
+# IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -18,8 +19,12 @@ axiomatic Padding {
   
 }
 
+type int8 = -128..127
+
+type int32 = -2147483648..2147483647
+
 tag char_P = {
-  integer char_M: 8;
+  int8 char_M: 8;
 }
 
 type char_P = [char_P]
@@ -52,16 +57,16 @@ lemma inf_mult :
 lemma round01 :
 (\real_abs((((0.1 :> float) :> real) - 0.1)) <= 1.49012e-09)
 
-float f_single(integer n)
-  requires (C_16 : ((C_17 : (0 <= n)) && (C_18 : (n <= 100))));
+float f_single(int32 n)
+  requires (C_17 : ((C_18 : (0 <= n)) && (C_19 : (n <= 100))));
 behavior default:
   assumes true;
-  ensures (C_19 : (\real_abs(((\result :> real) - (n * 0.1))) <=
+  ensures (C_20 : (\real_abs(((\result :> real) - (n * 0.1))) <=
                     (n * (4.76838e-07 + 1.49012e-09))));
 {  
    (var float t);
    
-   (var integer i);
+   (var int32 i);
    
    {  (C_1 : (t = (0.0 :> float)));
       (C_2 : (i = 0));
@@ -97,7 +102,7 @@ behavior default:
                                                  4.76838e-07)));
                   ()
                };
-               (C_15 : (i = (C_14 : (i + 1))))
+               (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
             }
          };
          (while_0_break : ())
@@ -107,25 +112,25 @@ behavior default:
    }
 }
 
-integer printf()
+int32 printf()
 behavior default:
   assumes true;
   assigns \nothing;
-  ensures (C_20 : true);
+  ensures (C_21 : true);
 ;
 
-integer main()
+int32 main()
 behavior default:
   assumes true;
-  ensures (C_25 : true);
+  ensures (C_26 : true);
 {  
    (var float tmp);
    
-   (var integer __retres);
+   (var int32 __retres);
    
-   {  (C_22 : (tmp = (C_21 : f_single(100))));
-      (C_23 : printf());
-      (C_24 : (__retres = 0));
+   {  (C_23 : (tmp = (C_22 : f_single(100))));
+      (C_24 : printf());
+      (C_25 : (__retres = 0));
       
       (return __retres)
    }
@@ -134,6 +139,10 @@ WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fa
 type __string_float___2__15f__1
 
 type char_P
+
+type int32
+
+type int8
 
 type padding
 
@@ -155,6 +164,20 @@ logic char_P_of_bitvector: bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector :
  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
+
+logic bitvector_of_int32: int32 -> bitvector
+
+logic int32_of_bitvector: bitvector -> int32
+
+axiom bitvector_of_int32_of_int32_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
+
+logic bitvector_of_int8: int8 -> bitvector
+
+logic int8_of_bitvector: bitvector -> int8
+
+axiom bitvector_of_int8_of_int8_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P: void_P pointer -> bitvector
 
@@ -183,6 +206,18 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
+logic integer_of_int32: int32 -> int
+
+predicate eq_int32(x:int32,
+ y:int32) =
+ eq_int(integer_of_int32(x), integer_of_int32(y))
+
+logic integer_of_int8: int8 -> int
+
+predicate eq_int8(x:int8,
+ y:int8) =
+ eq_int(integer_of_int8(x), integer_of_int8(y))
+
 goal inf_mult :
  (forall x:real.
   (forall y:real.
@@ -196,6 +231,35 @@ axiom inf_mult_as_axiom :
    (forall z:real.
     ((le_real(x, y) and le_real(0.0, z)) ->
      le_real(mul_real(x, z), mul_real(y, z))))))
+
+logic int32_of_integer: int -> int32
+
+axiom int32_coerce :
+ (forall x:int.
+  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
+   eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_of_bitvector_of_bitvector_of_int32 :
+ (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
+axiom int32_range :
+ (forall x:int32.
+  (le_int((-2147483648), integer_of_int32(x))
+  and le_int(integer_of_int32(x), (2147483647))))
+
+logic int8_of_integer: int -> int8
+
+axiom int8_coerce :
+ (forall x:int.
+  ((le_int((-128), x) and le_int(x, (127))) ->
+   eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_of_bitvector_of_bitvector_of_int8 :
+ (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
+
+axiom int8_range :
+ (forall x:int8.
+  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
@@ -435,24 +499,31 @@ parameter alloc_struct_void_P_requires :
           and (alloc_fresh(void_P_alloc_table@, result, n)
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
+parameter any_int32 : unit -> { } int32 { true }
+
+parameter any_int8 : unit -> { } int8 { true }
+
 parameter char_P___string_float___2__15f__1_alloc_table :
  char_P alloc_table ref
 
 parameter f_single :
- n:int ->
+ n:int32 ->
   { } single reads char_P___string_float___2__15f__1_alloc_table
   { ((JC_19:
      valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))
     and ((true = true) ->
          (JC_17:
          le_real(abs_real(sub_real(single_value(result),
-                          mul_real(real_of_int(n), 0.1))),
-         mul_real(real_of_int(n), add_real(4.76838e-07, 1.49012e-09)))))) }
+                          mul_real(real_of_int(integer_of_int32(n)), 0.1))),
+         mul_real(real_of_int(integer_of_int32(n)),
+         add_real(4.76838e-07, 1.49012e-09)))))) }
 
 parameter f_single_requires :
- n:int ->
+ n:int32 ->
   { (JC_8:
-    ((JC_6: ((JC_4: le_int((0), n)) and (JC_5: le_int(n, (100)))))
+    ((JC_6:
+     ((JC_4: le_int((0), integer_of_int32(n)))
+     and (JC_5: le_int(integer_of_int32(n), (100)))))
     and (JC_7:
         valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))))}
   single reads char_P___string_float___2__15f__1_alloc_table
@@ -461,42 +532,61 @@ parameter f_single_requires :
     and ((true = true) ->
          (JC_17:
          le_real(abs_real(sub_real(single_value(result),
-                          mul_real(real_of_int(n), 0.1))),
-         mul_real(real_of_int(n), add_real(4.76838e-07, 1.49012e-09)))))) }
+                          mul_real(real_of_int(integer_of_int32(n)), 0.1))),
+         mul_real(real_of_int(integer_of_int32(n)),
+         add_real(4.76838e-07, 1.49012e-09)))))) }
+
+parameter int32_of_integer_ :
+ x:int ->
+  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
+  { eq_int(integer_of_int32(result), x) }
+
+parameter int8_of_integer_ :
+ x:int ->
+  { (le_int((-128), x) and le_int(x, (127)))} int8
+  { eq_int(integer_of_int8(result), x) }
 
 parameter main :
  tt:unit ->
-  { } int reads char_P___string_float___2__15f__1_alloc_table
-  { (JC_64:
+  { } int32 reads char_P___string_float___2__15f__1_alloc_table
+  { (JC_65:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_57:
+  { (JC_58:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))}
-  int reads char_P___string_float___2__15f__1_alloc_table
-  { (JC_64:
+  int32 reads char_P___string_float___2__15f__1_alloc_table
+  { (JC_65:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
 
 parameter printf :
  tt:unit ->
-  { } int reads char_P___string_float___2__15f__1_alloc_table
-  { (JC_56:
+  { } int32 reads char_P___string_float___2__15f__1_alloc_table
+  { (JC_57:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
 
 parameter printf_requires :
  tt:unit ->
-  { (JC_47:
+  { (JC_48:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))}
-  int reads char_P___string_float___2__15f__1_alloc_table
-  { (JC_56:
+  int32 reads char_P___string_float___2__15f__1_alloc_table
+  { (JC_57:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
 
+parameter safe_int32_of_integer_ :
+ x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
+
+parameter safe_int8_of_integer_ :
+ x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
 let f_single_ensures_default =
- fun (n : int) ->
+ fun (n : int32) ->
   { ((true = true)
     and (JC_14:
-        ((JC_12: ((JC_10: le_int((0), n)) and (JC_11: le_int(n, (100)))))
+        ((JC_12:
+         ((JC_10: le_int((0), integer_of_int32(n)))
+         and (JC_11: le_int(integer_of_int32(n), (100)))))
         and (JC_13:
             valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))))) }
   (init:
@@ -504,28 +594,32 @@ let f_single_ensures_default =
   try
    begin
      (let t = ref (any_single void) in
-     (let i_0 = ref (any_int void) in
+     (let i_0 = ref (any_int32 void) in
      (C_1:
      begin
        (let jessie_17 = (t := ((single_of_real_safe nearest_even) 0.0)) in
        void);
       (C_2:
       begin
-        (let jessie_19 = (i_0 := (0)) in void);
+        (let jessie_19 = (i_0 := (safe_int32_of_integer_ (0))) in void);
        try
         (let jessie_26 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               ((JC_35:
+                               ((JC_36:
                                 le_real(abs_real(sub_real(single_value(t),
-                                                 mul_real(real_of_int(i_0),
+                                                 mul_real(real_of_int(
+                                                          integer_of_int32(i_0)),
                                                  0.1))),
-                                mul_real(real_of_int(i_0),
+                                mul_real(real_of_int(integer_of_int32(i_0)),
                                 add_real(4.76838e-07, 1.49012e-09))))
-                               and (JC_38:
-                                   ((JC_36: le_int((0), i_0))
-                                   and (JC_37: le_int(i_0, n)))))
+                               and (JC_39:
+                                   ((JC_37:
+                                    le_int((0), integer_of_int32(i_0)))
+                                   and (JC_38:
+                                       le_int(integer_of_int32(i_0),
+                                       integer_of_int32(n))))))
                               }
                             begin
                               [ { } unit { true } ];
@@ -533,7 +627,9 @@ let f_single_ensures_default =
                               (let jessie_25 = begin
                                                  (let jessie_24 = begin
                                                                     (if 
-                                                                    ((lt_int_ !i_0) n)
+                                                                    ((lt_int_ 
+                                                                    (integer_of_int32 !i_0)) 
+                                                                    (integer_of_int32 n))
                                                                     then void
                                                                     else
                                                                     (let jessie_20 = 
@@ -546,13 +642,13 @@ let f_single_ensures_default =
                                                                      
                                                                     (assert
                                                                     { 
-                                                                    (JC_44:
+                                                                    (JC_45:
                                                                     (
-                                                                    (JC_42:
+                                                                    (JC_43:
                                                                     le_real(0.0,
                                                                     single_value(t)))
                                                                     and 
-                                                                    (JC_43:
+                                                                    (JC_44:
                                                                     le_real(
                                                                     single_value(t),
                                                                     mul_real(100.0,
@@ -567,13 +663,13 @@ let f_single_ensures_default =
                                                                     (let jessie_22 = 
                                                                     (t := 
                                                                     (C_11:
-                                                                    (JC_45:
+                                                                    (JC_46:
                                                                     (((add_single_safe nearest_even) !t) 
                                                                     ((single_of_real_safe nearest_even) 0.1))))) in
                                                                     void);
                                                                     (assert
                                                                     { 
-                                                                    (JC_46:
+                                                                    (JC_47:
                                                                     le_real(
                                                                     abs_real(
                                                                     sub_real(
@@ -586,12 +682,15 @@ let f_single_ensures_default =
                                                                     4.76838e-07)) };
                                                                     void);
                                                                     void;
-                                                                    (C_15:
+                                                                    (C_16:
                                                                     begin
                                                                       
                                                                     (i_0 := 
+                                                                    (C_15:
+                                                                    (safe_int32_of_integer_ 
                                                                     (C_14:
-                                                                    ((add_int !i_0) (1))));
+                                                                    ((add_int 
+                                                                    (integer_of_int32 !i_0)) (1))))));
                                                                     !i_0
                                                                     end)
                                                                     end)
@@ -625,13 +724,16 @@ let f_single_ensures_default =
    !return end))
   { (JC_16:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(n), 0.1))),
-    mul_real(real_of_int(n), add_real(4.76838e-07, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n)),
+    add_real(4.76838e-07, 1.49012e-09)))) }
 
 let f_single_safety =
- fun (n : int) ->
+ fun (n : int32) ->
   { (JC_14:
-    ((JC_12: ((JC_10: le_int((0), n)) and (JC_11: le_int(n, (100)))))
+    ((JC_12:
+     ((JC_10: le_int((0), integer_of_int32(n)))
+     and (JC_11: le_int(integer_of_int32(n), (100)))))
     and (JC_13:
         valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)))) }
   (init:
@@ -639,36 +741,43 @@ let f_single_safety =
   try
    begin
      (let t = ref (any_single void) in
-     (let i_0 = ref (any_int void) in
+     (let i_0 = ref (any_int32 void) in
      (C_1:
      begin
        (let jessie_5 = (t := (JC_20: ((single_of_real nearest_even) 0.0))) in
        void);
       (C_2:
       begin
-        (let jessie_7 = (i_0 := (0)) in void);
+        (let jessie_7 = (i_0 := (safe_int32_of_integer_ (0))) in void);
        try
         (let jessie_14 = begin
                            (loop_1:
                            while true do
                            { invariant (JC_26: true)
-                             variant (JC_34 : sub_int(n, i_0)) }
+                             variant (JC_35 : sub_int(integer_of_int32(n),
+                                              integer_of_int32(i_0))) }
                             begin
                               [ { } unit reads i_0,t
                                 { ((JC_21:
                                    le_real(abs_real(sub_real(single_value(t),
-                                                    mul_real(real_of_int(i_0),
+                                                    mul_real(real_of_int(
+                                                             integer_of_int32(i_0)),
                                                     0.1))),
-                                   mul_real(real_of_int(i_0),
+                                   mul_real(real_of_int(integer_of_int32(i_0)),
                                    add_real(4.76838e-07, 1.49012e-09))))
                                   and (JC_24:
-                                      ((JC_22: le_int((0), i_0))
-                                      and (JC_23: le_int(i_0, n))))) } ];
+                                      ((JC_22:
+                                       le_int((0), integer_of_int32(i_0)))
+                                      and (JC_23:
+                                          le_int(integer_of_int32(i_0),
+                                          integer_of_int32(n)))))) } ];
                              try
                               (let jessie_13 = begin
                                                  (let jessie_12 = begin
                                                                     (if 
-                                                                    ((lt_int_ !i_0) n)
+                                                                    ((lt_int_ 
+                                                                    (integer_of_int32 !i_0)) 
+                                                                    (integer_of_int32 n))
                                                                     then void
                                                                     else
                                                                     (let jessie_8 = 
@@ -722,12 +831,16 @@ let f_single_safety =
                                                                     0.1))))),
                                                                     4.76838e-07)) } ];
                                                                     void;
-                                                                    (C_15:
+                                                                    (C_16:
                                                                     begin
                                                                       
                                                                     (i_0 := 
+                                                                    (C_15:
+                                                                    (JC_34:
+                                                                    (int32_of_integer_ 
                                                                     (C_14:
-                                                                    ((add_int !i_0) (1))));
+                                                                    ((add_int 
+                                                                    (integer_of_int32 !i_0)) (1)))))));
                                                                     !i_0
                                                                     end)
                                                                     end)
@@ -765,26 +878,26 @@ let f_single_safety =
 let main_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_59:
+    and (JC_60:
         valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))) }
   (init:
-  (let return = ref (any_int void) in
+  (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_single void) in
-     (let __retres = ref (any_int void) in
-     (C_22:
+     (let __retres = ref (any_int32 void) in
+     (C_23:
      begin
-       (let jessie_37 = (tmp := (C_21:
-                                (let jessie_36 = (100) in
-                                (JC_67: (f_single jessie_36))))) in
+       (let jessie_37 = (tmp := (C_22:
+                                (let jessie_36 = (safe_int32_of_integer_ (100)) in
+                                (JC_68: (f_single jessie_36))))) in
        void);
-      (C_23:
+      (C_24:
       begin
-        (let jessie_38 = (JC_68: (printf void)) in void);
-       (C_24:
+        (let jessie_38 = (JC_69: (printf void)) in void);
+       (C_25:
        begin
-         (let jessie_40 = (__retres := (0)) in void);
+         (let jessie_40 = (__retres := (safe_int32_of_integer_ (0))) in void);
         (return := !__retres);
         (raise Return)
        end)
@@ -795,30 +908,30 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_61: true) }
+  { (JC_62: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_59:
+  { (JC_60:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
   (init:
-  (let return = ref (any_int void) in
+  (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_single void) in
-     (let __retres = ref (any_int void) in
-     (C_22:
+     (let __retres = ref (any_int32 void) in
+     (C_23:
      begin
-       (let jessie_30 = (tmp := (C_21:
-                                (let jessie_29 = (100) in
-                                (JC_65: (f_single_requires jessie_29))))) in
+       (let jessie_30 = (tmp := (C_22:
+                                (let jessie_29 = (safe_int32_of_integer_ (100)) in
+                                (JC_66: (f_single_requires jessie_29))))) in
        void);
-      (C_23:
+      (C_24:
       begin
-        (let jessie_31 = (JC_66: (printf_requires void)) in void);
-       (C_24:
+        (let jessie_31 = (JC_67: (printf_requires void)) in void);
+       (C_25:
        begin
-         (let jessie_33 = (__retres := (0)) in void);
+         (let jessie_33 = (__retres := (safe_int32_of_integer_ (0))) in void);
         (return := !__retres);
         (raise Return)
        end)
@@ -829,7 +942,7 @@ let main_safety =
    with
    Return ->
    !return end))
-  { (JC_63:
+  { (JC_64:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
 
 
@@ -839,53 +952,53 @@ why --project [...] why/floats_loop.why
   <lemma name="inf_mult">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/floats_loop_po1.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "38" begin = "0" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "43" begin = "0" end = "132"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="real_of_int_inf_100">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/floats_loop_po2.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "30" begin = "0" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "35" begin = "0" end = "80"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="real_of_int_succ">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/floats_loop_po3.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "34" begin = "0" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "39" begin = "0" end = "70"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="round01">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/floats_loop_po4.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "44" begin = "0" end = "76"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "49" begin = "0" end = "76"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="round01">
-    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "44" begin = "0" end = "76"/>
+    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "49" begin = "0" end = "76"/>
   </function>
   <function name="real_of_int_succ">
-    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "34" begin = "0" end = "70"/>
+    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "39" begin = "0" end = "70"/>
   </function>
   <function name="real_of_int_inf_100">
-    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "30" begin = "0" end = "80"/>
+    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "35" begin = "0" end = "80"/>
   </function>
   <function name="inf_mult">
-    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "38" begin = "0" end = "132"/>
+    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "43" begin = "0" end = "132"/>
   </function>
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/floats_loop_po20.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "58" begin = "2" end = "8"/>
+    <goal why_file="why/floats_loop_po22.why">
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "57" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/floats_loop_po21.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "58" begin = "2" end = "8"/>
+    <goal why_file="why/floats_loop_po23.why">
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "57" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -895,68 +1008,78 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_loop_po15.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "58" begin = "18" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "63" begin = "18" end = "32"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po16.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "83" begin = "41" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "88" begin = "41" end = "55"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po17.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "35" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "4" end = "5"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po18.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "30" begin = "19" end = "22"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "31" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po19.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "30" begin = "19" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "31" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/floats_loop_po20.why">
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "29" begin = "19" end = "22"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/floats_loop_po21.why">
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "29" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/floats_loop_po5.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "29" begin = "21" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "21" end = "73"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po6.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po7.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "26" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "33" begin = "15" end = "23"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "22" end = "66"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "33" begin = "22" end = "66"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po10.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "36" begin = "15" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "35" begin = "15" end = "63"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "29" begin = "21" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "21" end = "73"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po12.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po13.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "26" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po14.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "21" begin = "12" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "20" begin = "12" end = "68"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2094,6 +2217,10 @@ type __string_float___2__15f__1
 
 type char_P
 
+type int32
+
+type int8
+
 type padding
 
 type void_P
@@ -2106,6 +2233,20 @@ logic char_P_of_bitvector : bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
+
+logic bitvector_of_int32 : int32 -> bitvector
+
+logic int32_of_bitvector : bitvector -> int32
+
+axiom bitvector_of_int32_of_int32_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
+
+logic bitvector_of_int8 : int8 -> bitvector
+
+logic int8_of_bitvector : bitvector -> int8
+
+axiom bitvector_of_int8_of_int8_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P : void_P pointer -> bitvector
 
@@ -2135,10 +2276,49 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
+logic integer_of_int32 : int32 -> int
+
+predicate eq_int32(x: int32, y: int32) =
+  (integer_of_int32(x) = integer_of_int32(y))
+
+logic integer_of_int8 : int8 -> int
+
+predicate eq_int8(x: int8, y: int8) =
+  (integer_of_int8(x) = integer_of_int8(y))
+
 axiom inf_mult_as_axiom:
   (forall x:real.
     (forall y:real.
       (forall z:real. (((x <= y) and (0.0 <= z)) -> ((x * z) <= (y * z))))))
+
+logic int32_of_integer : int -> int32
+
+axiom int32_coerce:
+  (forall x:int.
+    ((((-2147483648) <= x) and (x <= 2147483647)) ->
+     (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_of_bitvector_of_bitvector_of_int32:
+  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
+axiom int32_range:
+  (forall x:int32.
+    (((-2147483648) <= integer_of_int32(x)) and
+     (integer_of_int32(x) <= 2147483647)))
+
+logic int8_of_integer : int -> int8
+
+axiom int8_coerce:
+  (forall x:int.
+    ((((-128) <= x) and (x <= 127)) ->
+     (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_of_bitvector_of_bitvector_of_int8:
+  (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
+
+axiom int8_range:
+  (forall x:int8.
+    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
