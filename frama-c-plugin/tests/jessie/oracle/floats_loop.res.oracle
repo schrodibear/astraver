@@ -2,7 +2,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD floats_loop.c"
 [jessie] Starting Jessie translation
 [kernel] No code for function printf, default assigns generated
-floats_loop.c:57:[jessie] warning: skipping all arguments of implicit prototype printf
+floats_loop.c:64:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir floats_loop.jessie
 [jessie] File floats_loop.jessie/floats_loop.jc written.
 [jessie] File floats_loop.jessie/floats_loop.cloc written.
@@ -40,9 +40,9 @@ invariant valid___string_float___2__15f_ :
 ((\offset_min(__string_float___2__15f_) <= 0) &&
   (\offset_max(__string_float___2__15f_) >= 15))
 
-lemma real_of_int_inf_100 :
+lemma real_of_int_inf_NMAX :
 (\forall integer i;
-  ((i <= 100) ==> (i <= 100.0)))
+  ((i <= 1000000) ==> (i <= 1000000.0)))
 
 lemma real_of_int_succ :
 (\forall integer n;
@@ -58,11 +58,11 @@ lemma round01 :
 (\real_abs((((0.1 :> float) :> real) - 0.1)) <= 1.49012e-09)
 
 float f_single(int32 n)
-  requires (C_17 : ((C_18 : (0 <= n)) && (C_19 : (n <= 100))));
+  requires (C_17 : ((C_18 : (0 <= n)) && (C_19 : (n <= 1000000))));
 behavior default:
   assumes true;
   ensures (C_20 : (\real_abs(((\result :> real) - (n * 0.1))) <=
-                    (n * (4.76838e-07 + 1.49012e-09))));
+                    (n * (0x1p-8 + 1.49012e-09))));
 {  
    (var float t);
    
@@ -77,7 +77,7 @@ behavior default:
            invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n))));
          behavior default:
            invariant (C_4 : (\real_abs(((t :> real) - (i * 0.1))) <=
-                              (i * (4.76838e-07 + 1.49012e-09))));
+                              (i * (0x1p-8 + 1.49012e-09))));
          variant (C_3 : (n - i));
          while (true)
          {  
@@ -87,9 +87,9 @@ behavior default:
                {  
                   (assert for default: (C_8 : ((C_9 : (0.0 <= (t :> real))) &&
                                                 (C_10 : ((t :> real) <=
-                                                          (100.0 *
+                                                          (1000000.0 *
                                                             (0.1 +
-                                                              (4.76838e-07 +
+                                                              (0x1p-8 +
                                                                 1.49012e-09))))))));
                   ()
                });
@@ -99,7 +99,7 @@ behavior default:
                   (assert for default: (C_13 : (\real_abs(((t :> real) -
                                                             ((\at(t,L) :> real) +
                                                               ((0.1 :> float) :> real)))) <=
-                                                 4.76838e-07)));
+                                                 0x1p-8)));
                   ()
                };
                (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
@@ -279,11 +279,11 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-goal real_of_int_inf_100 :
- (forall i:int. (le_int(i, (100)) -> le_real(real_of_int(i), 100.0)))
+goal real_of_int_inf_NMAX :
+ (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
 
-axiom real_of_int_inf_100_as_axiom :
- (forall i:int. (le_int(i, (100)) -> le_real(real_of_int(i), 100.0)))
+axiom real_of_int_inf_NMAX_as_axiom :
+ (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
 
 goal real_of_int_succ :
  (forall n_0:int.
@@ -516,14 +516,14 @@ parameter f_single :
          le_real(abs_real(sub_real(single_value(result),
                           mul_real(real_of_int(integer_of_int32(n)), 0.1))),
          mul_real(real_of_int(integer_of_int32(n)),
-         add_real(4.76838e-07, 1.49012e-09)))))) }
+         add_real(0x1p-8, 1.49012e-09)))))) }
 
 parameter f_single_requires :
  n:int32 ->
   { (JC_8:
     ((JC_6:
      ((JC_4: le_int((0), integer_of_int32(n)))
-     and (JC_5: le_int(integer_of_int32(n), (100)))))
+     and (JC_5: le_int(integer_of_int32(n), (1000000)))))
     and (JC_7:
         valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))))}
   single reads char_P___string_float___2__15f__1_alloc_table
@@ -534,7 +534,7 @@ parameter f_single_requires :
          le_real(abs_real(sub_real(single_value(result),
                           mul_real(real_of_int(integer_of_int32(n)), 0.1))),
          mul_real(real_of_int(integer_of_int32(n)),
-         add_real(4.76838e-07, 1.49012e-09)))))) }
+         add_real(0x1p-8, 1.49012e-09)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -586,7 +586,7 @@ let f_single_ensures_default =
     and (JC_14:
         ((JC_12:
          ((JC_10: le_int((0), integer_of_int32(n)))
-         and (JC_11: le_int(integer_of_int32(n), (100)))))
+         and (JC_11: le_int(integer_of_int32(n), (1000000)))))
         and (JC_13:
             valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))))) }
   (init:
@@ -613,7 +613,7 @@ let f_single_ensures_default =
                                                           integer_of_int32(i_0)),
                                                  0.1))),
                                 mul_real(real_of_int(integer_of_int32(i_0)),
-                                add_real(4.76838e-07, 1.49012e-09))))
+                                add_real(0x1p-8, 1.49012e-09))))
                                and (JC_39:
                                    ((JC_37:
                                     le_int((0), integer_of_int32(i_0)))
@@ -651,9 +651,9 @@ let f_single_ensures_default =
                                                                     (JC_44:
                                                                     le_real(
                                                                     single_value(t),
-                                                                    mul_real(100.0,
+                                                                    mul_real(1000000.0,
                                                                     add_real(0.1,
-                                                                    add_real(4.76838e-07,
+                                                                    add_real(0x1p-8,
                                                                     1.49012e-09))))))) };
                                                                     void);
                                                                     void;
@@ -679,7 +679,7 @@ let f_single_ensures_default =
                                                                     single_value(
                                                                     round_single_logic(nearest_even,
                                                                     0.1))))),
-                                                                    4.76838e-07)) };
+                                                                    0x1p-8)) };
                                                                     void);
                                                                     void;
                                                                     (C_16:
@@ -725,15 +725,14 @@ let f_single_ensures_default =
   { (JC_16:
     le_real(abs_real(sub_real(single_value(result),
                      mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n)),
-    add_real(4.76838e-07, 1.49012e-09)))) }
+    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
 
 let f_single_safety =
  fun (n : int32) ->
   { (JC_14:
     ((JC_12:
      ((JC_10: le_int((0), integer_of_int32(n)))
-     and (JC_11: le_int(integer_of_int32(n), (100)))))
+     and (JC_11: le_int(integer_of_int32(n), (1000000)))))
     and (JC_13:
         valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)))) }
   (init:
@@ -764,7 +763,7 @@ let f_single_safety =
                                                              integer_of_int32(i_0)),
                                                     0.1))),
                                    mul_real(real_of_int(integer_of_int32(i_0)),
-                                   add_real(4.76838e-07, 1.49012e-09))))
+                                   add_real(0x1p-8, 1.49012e-09))))
                                   and (JC_24:
                                       ((JC_22:
                                        le_int((0), integer_of_int32(i_0)))
@@ -800,9 +799,9 @@ let f_single_safety =
                                                                     (JC_29:
                                                                     le_real(
                                                                     single_value(t),
-                                                                    mul_real(100.0,
+                                                                    mul_real(1000000.0,
                                                                     add_real(0.1,
-                                                                    add_real(4.76838e-07,
+                                                                    add_real(0x1p-8,
                                                                     1.49012e-09))))))) } ];
                                                                     void;
                                                                     (C_12:
@@ -829,7 +828,7 @@ let f_single_safety =
                                                                     single_value(
                                                                     round_single_logic(nearest_even,
                                                                     0.1))))),
-                                                                    4.76838e-07)) } ];
+                                                                    0x1p-8)) } ];
                                                                     void;
                                                                     (C_16:
                                                                     begin
@@ -956,10 +955,10 @@ why --project [...] why/floats_loop.why
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="real_of_int_inf_100">
+  <lemma name="real_of_int_inf_NMAX">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/floats_loop_po2.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "35" begin = "0" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "35" begin = "0" end = "89"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -983,8 +982,8 @@ why --project [...] why/floats_loop.why
   <function name="real_of_int_succ">
     <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "39" begin = "0" end = "70"/>
   </function>
-  <function name="real_of_int_inf_100">
-    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "35" begin = "0" end = "80"/>
+  <function name="real_of_int_inf_NMAX">
+    <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "35" begin = "0" end = "89"/>
   </function>
   <function name="inf_mult">
     <location file = "PPCHOME/tests/jessie/floats_loop.jessie/floats_loop.jc" line = "43" begin = "0" end = "132"/>
@@ -993,12 +992,12 @@ why --project [...] why/floats_loop.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_loop_po22.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "57" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "64" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/floats_loop_po23.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "57" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "64" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1018,68 +1017,68 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po17.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "41" begin = "4" end = "5"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po18.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "31" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "38" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po19.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "31" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "38" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_loop_po20.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "29" begin = "19" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "36" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_loop_po21.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "29" begin = "19" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "36" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/floats_loop_po5.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "21" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "35" begin = "21" end = "68"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po6.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po7.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "26" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "33" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "40" begin = "15" end = "23"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "33" begin = "22" end = "66"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "40" begin = "22" end = "65"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po10.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "35" begin = "15" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "42" begin = "15" end = "58"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "28" begin = "21" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "35" begin = "21" end = "68"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po12.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po13.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "34" begin = "26" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po14.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "20" begin = "12" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "27" begin = "12" end = "63"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2338,8 +2337,8 @@ axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
 
-axiom real_of_int_inf_100_as_axiom:
-  (forall i:int. ((i <= 100) -> (real_of_int(i) <= 100.0)))
+axiom real_of_int_inf_NMAX_as_axiom:
+  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
 
 axiom real_of_int_succ_as_axiom:
   (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))

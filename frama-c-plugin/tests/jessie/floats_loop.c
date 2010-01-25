@@ -1,6 +1,11 @@
 # pragma JessieFloatModel(strict)
 
-//@ lemma real_of_int_inf_100: \forall integer i; i <= 100 ==> i <= 100.0;
+#define NMAX 1000000
+#define NMAXR 1000000.0
+
+/*@ lemma real_of_int_inf_NMAX: 
+  @   \forall integer i; i <= NMAX ==> i <= NMAXR;
+  @*/
 
 //@ lemma real_of_int_succ: \forall integer n; n+1 == n + 1.0;
 
@@ -11,12 +16,14 @@
 
 //@ lemma round01: \abs((float)0.1 - 0.1) <=  A;
 
-#define B 4.76838e-07
-// B is a bound of round_error(t+(float)0.1) for 0 <= t <= 10.01
+// B is a bound of round_error(t+(float)0.1) for 0 <= t <= 0.1*NMAXR
+// NMAX = 100 -> #define B 4.76838e-07
+// NMAX = 1000000 ->
+#define B 0x1p-8
 
 #define C (B + A)
 
-/*@ requires 0 <= n <= 100;
+/*@ requires 0 <= n <= NMAX;
   @ ensures \abs(\result - n*0.1) <= n * C;
   @*/
 float f_single(int n)
@@ -30,7 +37,7 @@ float f_single(int n)
     @*/
   for(i=0;i<n;i++) {
   L:
-    //@ assert 0.0 <= t <= 100.0*(0.1+C)  ;
+    //@ assert 0.0 <= t <= NMAXR*(0.1+C)  ;
     t = t + 0.1f;
     //@ assert \abs(t - (\at(t,L) + (float)0.1)) <=  B;
   }
