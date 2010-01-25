@@ -109,6 +109,7 @@ let monoinstworldgen = ref MonoinstBuiltin
 let monoinstoutput_world = ref false
 let monoinstonlymem = ref false
 let monoinstnounit = ref false
+let monoinstonlyconst = ref false
 
 let defExpanding_ = ref NoExpanding 
 
@@ -565,9 +566,14 @@ let files =
         parse args
     | ("-monoinstonlymem" | "--monoinstonlymem")::args ->
         monoinstonlymem := true;
+        monoinstonlyconst := false;
         parse args
     | ("-monoinstnounit" | "--monoinstnounit")::args ->
         (*monoinstnounit := true;*)
+        parse args
+    | ("-monoinstonlyconst" | "--monoinstonlyconst")::args ->
+        monoinstonlyconst := true;
+        monoinstonlymem := false;
         parse args
     | ("-explain" | "--explain") :: args ->
 	explain_vc := true; parse args
@@ -658,6 +664,7 @@ let monoinstworldgen = !monoinstworldgen
 let monoinstoutput_world = !monoinstoutput_world
 let monoinstonlymem = !monoinstonlymem
 let monoinstnounit = !monoinstnounit
+let monoinstonlyconst = !monoinstonlyconst
 
 let get_type_expanding () = !defExpanding_
 

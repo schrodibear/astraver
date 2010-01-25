@@ -313,7 +313,7 @@ let main () =
       | None -> eprintf "Can't use stdin without the option -prover@.";
           Arg.usage spec usage;exit 1
       | Some p -> dispatch_prover_by_name stdin p
-    else Queue.iter split files;
+  else Queue.iter split files;
   let wctime = Unix.gettimeofday() -. wctime0 in
   let n = !nvalid + !ninvalid + !ntimeout + !nunknown + !nfailure in
   if n = 0 then exit 0;

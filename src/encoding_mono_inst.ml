@@ -913,14 +913,7 @@ let output_world world env =
 let memory_arg_kv = lazy (Env.is_logic_function (Ident.create "select"))
 let pointer = Ident.create "pointer"
 
-let iter f =
-  (* monomorph the goal *)
-  let decls = Queue.fold monomorph_goal [] queue in
-  let decls = List.rev decls in
-  if debug then Format.eprintf "Goal monomorphised@.";
-  (* Find the type to monomorph *)
-  let world = List.fold_left make_world PT_Set.empty decls in
-  (* Filter if asked *)
+let filter_world world = 
   let world = if Options.monoinstonlymem
   then let world = PT_Set.filter (function PTexternal (_,mem)
 				      when Ident.string mem = "memory" -> true
@@ -933,6 +926,22 @@ let iter f =
 		       PT_Set.add (PTexternal ([key],pointer)) acc
 		   | _ -> acc) world world
   else world in
+  let world = if Options.monoinstonlyconst
+  then PT_Set.filter (function PTexternal ([],_) -> true
+			| _ -> false) world
+  else world in
+  world
+
+
+let iter f =
+  (* monomorph the goal *)
+  let decls = Queue.fold monomorph_goal [] queue in
+  let decls = List.rev decls in
+  if debug then Format.eprintf "Goal monomorphised@.";
+  (* Find the type to monomorph *)
+  let world = List.fold_left make_world PT_Set.empty decls in
+  (* Filter if asked *)
+  let world = filter_world world in
   let world = List.fold_left (fun s x -> _PT_Set_add x s) world htypes in
   if debug then 
     Format.eprintf "world :%a@." (Pp.print_list Pp.comma Util.print_pure_type) (PT_Set.elements world);
