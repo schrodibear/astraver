@@ -420,6 +420,7 @@ let output_file f =
   fprintf fmt "  :datatypes ((c_Boolean c_Boolean_true c_Boolean_false))@.";
   (*fprintf fmt "  :datatypes ((Unit tt))@.";*)
   fprintf fmt "  :extrasorts (Unit)@\n";
+  fprintf fmt "  :extrafuns ((tt  Unit))@\n";
   if not modulo then begin 
     fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
   end;

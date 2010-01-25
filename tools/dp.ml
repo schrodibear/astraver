@@ -122,26 +122,26 @@ let nfailure = ref 0
 let tfailure = ref 0.0
 
 let is_valid t = 
-  printf "."; incr nvalid; 
+  printf ".@?"; incr nvalid; 
   tvalid := !tvalid +. t;
   tmaxvalid := max !tmaxvalid t
 
 let is_invalid t = 
-  printf "*"; incr ninvalid; 
+  printf "*@?"; incr ninvalid; 
   tinvalid := !tinvalid +. t;
   tmaxinvalid := max !tmaxinvalid t
 
 let is_unknown t = 
-  printf "?"; incr nunknown; 
+  printf "?@?"; incr nunknown; 
   tunknown := !tunknown +. t;
   tmaxunknown := max !tmaxunknown t
 
 let is_timeout t = 
-  printf "#"; incr ntimeout;
+  printf "#@?"; incr ntimeout;
   ttimeout := !ttimeout +. t
 
 let is_failure t = 
-  printf "!"; incr nfailure;
+  printf "!@?"; incr nfailure;
   tfailure := !tfailure +. t 
 
 
