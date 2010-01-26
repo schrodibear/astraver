@@ -75,32 +75,40 @@ let grep re str =
     let _ = Str.search_forward re str 0 in true
   with Not_found -> false
 
-let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") ?filename ?buffers p =
-  let cmd,(t,c,res) = match buffers,p.DpConfig.stdin_switch,filename with
-    | None,_, Some f ->
-        let cmd = sprintf "%s %s %s %s" 
-          p.DpConfig.command p.DpConfig.command_switches switch f 
-        in
-        cmd,timed_sys_command ~debug timeout cmd
-    | Some buffers, Some stdin_s, _ ->
-        let cmd = sprintf "%s %s %s %s" 
-          p.DpConfig.command p.DpConfig.command_switches switch stdin_s
-        in
-        cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
-    | Some buffers, None, Some f ->
-        let f = Filename.temp_file "" f in
-        let cout = open_out f in
-        List.iter (Buffer.output_buffer cout) buffers;
-        close_out cout;
-        let cmd = sprintf "%s %s %s %s" 
-          p.DpConfig.command p.DpConfig.command_switches switch f
-        in
-        cmd,timed_sys_command ~debug timeout cmd
-    | _ -> invalid_arg "Calldp.gen_prover_call : filename must be given if the prover can't use stdin." in
+let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") 
+    ?filename ?buffers p =
+  let cmd,(t,c,res) = 
+    match buffers,p.DpConfig.stdin_switch,filename with
+      | None,_, Some f ->
+          let cmd = sprintf "%s %s %s %s" 
+            p.DpConfig.command p.DpConfig.command_switches switch f 
+          in
+          cmd,timed_sys_command ~debug timeout cmd
+      | Some buffers, Some stdin_s, _ ->
+          let cmd = sprintf "%s %s %s %s" 
+            p.DpConfig.command p.DpConfig.command_switches switch stdin_s
+          in
+          cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
+      | Some buffers, None, Some f ->
+          let f = Filename.temp_file "" f in
+          let cout = open_out f in
+          List.iter (Buffer.output_buffer cout) buffers;
+          close_out cout;
+          let cmd = sprintf "%s %s %s %s" 
+            p.DpConfig.command p.DpConfig.command_switches switch f
+          in
+          cmd,timed_sys_command ~debug timeout cmd
+      | _ -> invalid_arg 
+          "Calldp.gen_prover_call : filename must be given if the prover can't use stdin." 
+  in
   match c with
-    |  Unix.WSTOPPED 24 | Unix.WSIGNALED 24 | Unix.WEXITED 124 |Unix.WEXITED 152 -> (* (*128 +*) SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
-        Timeout t
-    | Unix.WSTOPPED _ | Unix.WSIGNALED _ -> ProverFailure(t,"prover command "^ cmd ^ " stopped abnormally with output: " ^ res)
+    | Unix.WSTOPPED 24 | Unix.WSIGNALED 24 | Unix.WEXITED 124 
+    | Unix.WEXITED 152 -> 
+        (* (*128 +*) SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
+         Timeout t
+    | Unix.WSTOPPED _ | Unix.WSIGNALED _ -> 
+        ProverFailure(t,"prover command " ^ cmd ^ 
+                        " stopped abnormally with output: " ^ res)
     | Unix.WEXITED c ->
         let valid_result =
 	  match p.DpConfig.valid_regexp with
@@ -112,7 +120,8 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") ?filename ?buffers
         else if grep p.DpConfig.undecided_regexp res then
           CannotDecide(t, None)
         else
-          ProverFailure(t,"prover command " ^ cmd ^ " produced unrecognized answer: " ^ res)
+          ProverFailure(t,"prover command " ^ cmd ^ 
+                          " produced unrecognized answer: " ^ res)
 
 let gappa ?(debug=false) ?(timeout=10) ~filename () =
   gen_prover_call ~debug ~timeout ~filename DpConfig.gappa

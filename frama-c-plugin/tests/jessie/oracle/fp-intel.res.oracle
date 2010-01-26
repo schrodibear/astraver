@@ -1602,33 +1602,20 @@ logic single_to_double : mode, single -> double
 
 logic double_to_single : mode, double -> single
 
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
 function min_single() : real = 0x1.p-149
 
 function min_double() : real = 0x1.p-1074
 
-type Float_class
+type Float_class =
+  | Finite
+  | Infinite
+  | NaN
 
-logic Finite : Float_class
-
-logic Infinite : Float_class
-
-logic NaN : Float_class
-
-axiom no_other_class:
-  (forall f:Float_class. ((f = Finite) or ((f = Infinite) or (f = NaN))))
-
-axiom class_distinct:
-  ((Finite <> Infinite) and ((Finite <> NaN) and (Infinite <> NaN)))
-
-type sign
-
-logic Negative : sign
-
-logic Positive : sign
-
-axiom no_other_sign: (forall s:sign. ((s = Negative) or (s = Positive)))
-
-axiom sign_distinct: (Negative <> Positive)
+type sign =
+  | Negative
+  | Positive
 
 logic single_class : single -> Float_class
 
@@ -1645,22 +1632,6 @@ inductive same_sign_real_bool: sign, real -> prop =
                 ((x > 0.0) -> same_sign_real_bool(Positive, x)))
 
 
-
-axiom single_sign_not_pos_neg:
-  (forall x:single.
-    ((single_sign(x) <> Positive) -> (single_sign(x) = Negative)))
-
-axiom single_sign_not_neg_pos:
-  (forall x:single.
-    ((single_sign(x) <> Negative) -> (single_sign(x) = Positive)))
-
-axiom double_sign_not_pos_neg:
-  (forall x:double.
-    ((double_sign(x) <> Positive) -> (double_sign(x) = Negative)))
-
-axiom double_sign_not_neg_pos:
-  (forall x:double.
-    ((double_sign(x) <> Negative) -> (double_sign(x) = Positive)))
 
 axiom same_sign_real_bool_zero1:
   (forall b:sign. (not same_sign_real_bool(b, 0.0)))

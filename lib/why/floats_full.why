@@ -6,6 +6,38 @@
 
 include "floats_common.why"
 
+(* Axioms about rounding, in single precision *)
+(*
+axiom round_single_down_le: forall x:real. 
+      round_single(down,x) <= x
+axiom round_up_single_ge: forall x:real. 
+      round_single(up,x) >= x
+axiom round_down_single_neg: forall x:real. 
+     round_single(down,-x) = -round_single(up,x)
+axiom round_up_single_neg: forall x:real. 
+     round_single(up,-x) = -round_single(down,x)
+axiom round_single_idempotent:
+      forall m1:mode. forall m2:mode. forall x:real. 
+      round_single(m1,round_single(m2,x)) = round_single(m2,x)
+*)
+
+(* Axioms about rounding, in double precision *)
+axiom round_double_down_le: forall x:real. 
+      round_double(down,x) <= x
+(*
+axiom round_up_double_ge: forall x:real. 
+      round_double(up,x) >= x
+*)
+(*
+axiom round_down_double_neg: forall x:real. 
+     round_double(down,-x) = -round_double(up,x)
+axiom round_up_double_neg: forall x:real. 
+     round_double(up,-x) = -round_double(down,x)
+axiom round_double_idempotent:
+      forall m1:mode. forall m2:mode. forall x:real. 
+      round_double(m1,round_double(m2,x)) = round_double(m2,x)
+*)
+
 function min_single() : real =  0x1p-149
 function min_double() : real =  0x1p-1074
 
@@ -14,22 +46,9 @@ function min_double() : real =  0x1p-1074
 (*************** additional views ******************) 
 (***************************************************)
 
-type Float_class
+type Float_class = Finite | Infinite | NaN 
 
-logic Finite : Float_class
-logic Infinite : Float_class
-logic NaN : Float_class
-
-axiom no_other_class : forall f:Float_class. f = Finite or f = Infinite or f = NaN
-axiom class_distinct : Finite <> Infinite and Finite <> NaN and Infinite <> NaN 
- 
-type sign 
-
-logic Negative : sign     
-logic Positive : sign    
-
-axiom no_other_sign : forall s:sign. s = Negative or s = Positive
-axiom sign_distinct : Negative <> Positive
+type sign = Negative | Positive
 
 logic single_class : single -> Float_class
 logic double_class : double -> Float_class
@@ -48,6 +67,8 @@ inductive same_sign_real_bool : sign, real -> prop =
 (*********** axioms on float_sign ******************) 
 (***************************************************)
 
+(* useful ???
+
 axiom single_sign_not_pos_neg : forall x:single. 
       single_sign(x) <> Positive -> single_sign(x) = Negative
 axiom single_sign_not_neg_pos : forall x:single. 
@@ -57,6 +78,7 @@ axiom double_sign_not_pos_neg : forall x:double.
       double_sign(x) <> Positive -> double_sign(x) = Negative
 axiom double_sign_not_neg_pos : forall x:double. 
       double_sign(x) <> Negative -> double_sign(x) = Positive
+*)
 
 axiom same_sign_real_bool_zero1 : forall b:sign. not same_sign_real_bool(b,0.0)
 axiom same_sign_real_bool_zero2 : forall x:real. 
