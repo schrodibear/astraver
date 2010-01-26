@@ -39,22 +39,25 @@ let rec detect_prover p cmds =
 	eprintf "debug: command = %s@." c;
 *)
 	let ret = Sys.command c in
-	if ret <> 0 && not (p == gappa && ret = 1) then
+	if ret <> 0 (* && not (p == gappa && ret = 1) *) then
 	  begin
 	    printf "command %s failed@." cmd;
 	    detect_prover p rem
 	  end
 	else
 	  let ch = open_in out in
-	  let s = input_line ch in
+	  let s = 
+            try input_line ch 
+            with Not_found (* End_of_file *) -> ""
+          in
 	  let re = Str.regexp p.version_regexp in
 	  if Str.string_match re s 0 then
 	    let nam = p.name in
 	    let ver = Str.matched_group 1 s in
 	    printf "Found prover %s version %s@." nam ver;
 	    p.command <- cmd;
-	    p.version <- ver;
-	  else
+	    p.version <- ver;              
+	  else 
 	    begin
 	      printf "Warning: found prover %s but name/version not recognized by regexp `%s'@." p.name p.version_regexp;
 	      printf "Answer was `%s'@." s;
