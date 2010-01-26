@@ -17,7 +17,7 @@ int main() {
   double b = tmp2 + 1.0;
   double c = tmp1 * tmp2;
   double res = a*b - c;
-  //@ assert ifIEEE744: res == 0.0; // in IEEE 754 mode
+  //@ assert ifIEEE754: res == 0.0; // in IEEE 754 mode
   // @ assert ifIntel387: res == 0x1p52; // indeed tmp2, in intel 80 bits mode
   // @ assert ifIntel387: res > 0.0; // indeed tmp2, in intel 80 bits mode
   printf("a=%a b=%a c=%a res=%a\n",a,b,c,res);

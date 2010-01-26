@@ -212,7 +212,7 @@ let translated_names_table = Hashtbl.create 257
 
 exception CtePredicate of bool
 
-let translated_name linfo =
+let translated_name linfo largs =
 (*
   Format.eprintf "Jessie.interp: linfo = %s(%a)(%d)@."
     linfo.l_name
@@ -236,6 +236,20 @@ let translated_name linfo =
 		| Some Linteger -> "\\integer_abs"
 		| _ -> assert false
 	    end
+	| "\\min" ->
+	    begin
+	      match linfo.l_type with
+		| Some Lreal -> "\\real_min"
+		| Some Linteger -> "\\integer_min"
+		| _ -> assert false
+	    end
+	| "\\max" ->
+	    begin
+	      match linfo.l_type with
+		| Some Lreal -> "\\real_max"
+		| Some Linteger -> "\\integer_max"
+		| _ -> assert false
+	    end
 	| "\\exact" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
@@ -249,6 +263,20 @@ let translated_name linfo =
 		| Ctype x when x == doubleType -> "\\double_model"
 		| Ctype x when x == floatType -> "\\single_model"
 		| _ -> assert false
+	    end
+	| "\\round_float" ->
+	    begin
+	      match (List.hd largs).term_node with
+                | TDataCons(ctor,_args) ->
+                    begin
+                      match ctor.ctor_name with
+		        | "\\Double" -> "\\round_double"
+		        | "\\Single" -> "\\round_single"
+		        | s ->
+                            warning "first arg '%s' of \\round_float unsupported (should be \\Double or \\Single)" s;
+                            assert false
+                    end
+                | _ ->    assert false
 	    end
 	| "\\round_error" ->
 	    begin
@@ -826,7 +854,13 @@ and terms t =
     | Tapp(linfo,labels,tlist) ->
 	begin
 	  try
-            let name = translated_name linfo in
+            let name = translated_name linfo tlist in
+            let prof, tlist = 
+              if linfo.l_var_info.lv_name = "\\round_float" then
+                List.tl linfo.l_profile, List.tl tlist 
+              else
+                linfo.l_profile, tlist
+            in
             let args =
 	      List.map2
 		(fun lv t ->
@@ -838,7 +872,7 @@ and terms t =
 			  mkexpr (JCPEcast(t', mktype (JCPTnative Treal))) t.term_loc)
 		       t'
 	       else t')
-		linfo.l_profile
+		prof
 		tlist
 	    in
             let all_args = List.fold_right (product (fun x y -> x::y)) args [[]] in
@@ -985,7 +1019,7 @@ let rec pred p =
     | Papp(pinfo,labels,tl) ->
 	begin
 	  try
-            let name = translated_name pinfo in
+            let name = translated_name pinfo tl in
 	(*
           JCPEapp(name,logic_labels_assoc labels,List.map term tl)
 	*)
@@ -2038,7 +2072,7 @@ let rec annotation is_axiomatic annot pos = match annot with
               JCinductive l
           | LBterm t -> JCexpr(term t)
         in
-	let name = translated_name info in
+	let name = translated_name info [] in
         (match info.l_type, info.l_labels, params with
              Some t, [], [] ->
                let def = match body with
@@ -2066,7 +2100,7 @@ let rec annotation is_axiomatic annot pos = match annot with
 
   | Dinvariant property ->
       begin try
-	let n = translated_name property in
+	let n = translated_name property [] in
         [JCDglobal_inv(n,pred (Logic_utils.get_pred_body property))]
       with (Unsupported _ | NotImplemented _) ->
         warning "Dropping invariant %s@." property.l_var_info.lv_name ;
@@ -2075,7 +2109,7 @@ let rec annotation is_axiomatic annot pos = match annot with
 
   | Dtype_annot annot ->
       begin try
-	let n = translated_name annot in
+	let n = translated_name annot [] in
         [JCDlogic(
            None,n, [],logic_labels annot.l_labels,
            List.map logic_variable annot.l_profile,

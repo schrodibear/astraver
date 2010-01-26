@@ -15,7 +15,7 @@
   @ behavior failure:
   @   assumes sorted(t,0,n-1);
   @   ensures \result == -1 ==> 
-  @     \forall integer k; 0 <= k < n ==> ! \eq_float(t[k],v);
+  @     \forall integer k; 0 <= k < n ==> \ne_float(t[k],v);
   @*/
 int binary_search(double t[], int n, double v) {
   int l = 0, u = n-1;
@@ -23,7 +23,11 @@ int binary_search(double t[], int n, double v) {
     @   0 <= l && u <= n-1;
     @ for failure: 
     @   loop invariant
-    @   \forall integer k; 0 <= k < n && \eq_float(t[k],v) ==> l <= k <= u;
+    @     \forall integer k; 
+    @      0 <= k < l ==> \lt_float(t[k],v);
+    @   loop invariant
+    @     \forall integer k; 
+    @      u < k <= n-1 ==> \lt_float(v,t[k]);
     @ loop variant u-l;
     @*/
   while (l <= u ) {

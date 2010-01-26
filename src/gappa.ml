@@ -282,6 +282,7 @@ let rec term = function
 
   (* anything else is generalized as a fresh variable *)
   | Tapp _ as t ->
+      printf "term %a is interpreted as a fresh variable@." Util.print_term t;
       Gvar (
         try
           Hashtbl.find gen_table t

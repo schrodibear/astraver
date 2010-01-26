@@ -356,6 +356,14 @@ predicate eq_double(x:double,y:double) =
 predicate ne_double(x:double,y:double) = not eq_double(x,y)
 
 
+axiom le_lt_double_trans:
+      forall x,y,z:double.
+         le_double(x,y) and lt_double(y,z) -> lt_double(x,z)
+
+axiom lt_le_double_trans:
+      forall x,y,z:double.
+         lt_double(x,y) and le_double(y,z) -> lt_double(x,z)
+
 
 
 (***************************************************)
@@ -692,7 +700,8 @@ parameter lt_single : x:single -> y:single ->
 { }
 bool
 { 
-if result then single_is_not_NaN(x) and single_is_not_NaN(y) and 
+if result then 
+single_is_not_NaN(x) and single_is_not_NaN(y) and 
    (single_is_finite(x) and single_is_finite(y) and single_value(x) < single_value(y))
     or 
    (single_is_minus_infinity(x) and single_is_plus_infinity(y))
@@ -1042,7 +1051,10 @@ parameter lt_double : x:double -> y:double ->
 { }
 bool
 { 
-if result then double_is_not_NaN(x) and double_is_not_NaN(y) and 
+if result then lt_double(x,y) else not lt_double(x,y)
+
+(*
+double_is_not_NaN(x) and double_is_not_NaN(y) and 
    (double_is_finite(x) and double_is_finite(y) and double_value(x) < double_value(y))
     or 
    (double_is_minus_infinity(x) and double_is_plus_infinity(y))
@@ -1057,7 +1069,9 @@ else (double_is_NaN(x) or double_is_NaN(y)
      double_is_plus_infinity(x) 
     or 
      double_is_minus_infinity(y))
+*)
 }
+
 
 
 parameter le_double : x:double -> y:double -> 
@@ -1091,7 +1105,10 @@ parameter gt_double : x:double -> y:double ->
 { }
 bool
 { 
-if result then double_is_not_NaN(x) and double_is_not_NaN(y) and 
+if result then gt_double(x,y) else not gt_double(x,y)
+   
+(*
+double_is_not_NaN(x) and double_is_not_NaN(y) and 
    (double_is_finite(x) and double_is_finite(y) and double_value(x) > double_value(y))
     or 
    (double_is_plus_infinity(x) and double_is_minus_infinity(y))
@@ -1106,6 +1123,7 @@ else (double_is_NaN(x) or double_is_NaN(y)
      double_is_minus_infinity(x) 
     or 
      double_is_plus_infinity(y))
+*)
 }
 
 

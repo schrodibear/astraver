@@ -5098,6 +5098,18 @@ predicate eq_double(x: double, y: double) =
 
 predicate ne_double(x: double, y: double) = (not eq_double(x, y))
 
+axiom le_lt_double_trans:
+  (forall x:double.
+    (forall y:double.
+      (forall z:double.
+        ((le_double(x, y) and lt_double(y, z)) -> lt_double(x, z)))))
+
+axiom lt_le_double_trans:
+  (forall x:double.
+    (forall y:double.
+      (forall z:double.
+        ((lt_double(x, y) and le_double(y, z)) -> lt_double(x, z)))))
+
 axiom round_single1:
   (forall m:mode.
     (forall x:real.

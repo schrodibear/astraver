@@ -1089,18 +1089,18 @@ let builtin_logic_symbols =
     Some (JCTnative Tboolean), "\\le_double", "le_double", [double_type;double_type];
 
     Some (JCTnative Tboolean), "\\lt_float", "lt_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\lt_double", "lt_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\lt_double", "lt_double", [double_type;double_type];
 
     Some (JCTnative Tboolean), "\\ge_float", "ge_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\ge_double", "ge_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\ge_double", "ge_double", [double_type;double_type];
 
     Some (JCTnative Tboolean), "\\gt_float", "gt_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\gt_double", "gt_float", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\gt_double", "gt_double", [double_type;double_type];
 
     Some (JCTnative Tboolean), "\\eq_float", "eq_single", [float_type;float_type];
     Some (JCTnative Tboolean), "\\eq_double", "eq_double", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\ne_float", "ne_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ne_float", "ne_single", [float_type;float_type];
     Some (JCTnative Tboolean), "\\ne_double", "ne_double", [double_type;double_type];
 ]
 
