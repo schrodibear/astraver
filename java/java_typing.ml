@@ -1525,6 +1525,10 @@ type typing_env =
       env : (string * Java_env.java_var_info) list;
     }
 
+let find_label env (loc,id) =
+  try List.assoc id env.label_env 
+  with Not_found -> typing_error loc "unknown label %s" id
+  
 
 let label_assoc loc id env fun_labels effective_labels =
   match fun_labels, effective_labels with
@@ -1539,12 +1543,7 @@ let label_assoc loc id env fun_labels effective_labels =
     | _ ->
 	try
 	  List.map2
-	    (fun l1 (loc,id) -> 
-	       let l2 =
-		 try List.assoc id env.label_env 
-		 with Not_found -> typing_error loc "unknown label %s" id
-	       in
-	       (l1,l2))
+	    (fun l1 lab -> let l2 = find_label env lab in (l1,l2))
 	    fun_labels effective_labels
 	with Invalid_argument _ ->
 	  typing_error loc 
@@ -1633,13 +1632,13 @@ and term env e =
           typing_error loc
             "quantified formulas not allowed in term position"
       | JPEold e1 -> 
-          (* TODO : check label Old exists *)
-          let te1 = termt e1 in 
-          te1.java_term_type,JTat(te1,LabelOld)
+	  let l = find_label env (loc,"Old") in
+          let te1 = term { env  with current_label = Some l} e1 in 
+          te1.java_term_type,JTat(te1,l)
       | JPEat(e1,lab) -> 
-          let te1 = termt e1 in 
-          (* TODO : check label exists *)
-          te1.java_term_type,JTat(te1,LabelName (snd lab))      
+	  let l = find_label env lab in
+          let te1 = term { env  with current_label = Some l} e1 in 
+          te1.java_term_type,JTat(te1,l)                  
       | JPEinstanceof (_, _)-> assert false (* TODO *)
       | JPEcast (t, e1)-> 
           let te1 = termt e1 in
@@ -1831,13 +1830,13 @@ and assertion env e =
         in
         a.java_assertion_node
     | JPEold a -> 
-          (* TODO : check label Old exists *)
-          let ta = assertiont a in 
-          JAat(ta,LabelOld)
+        let l = find_label env (e.java_pexpr_loc,"Old") in
+        let ta = assertion { env  with current_label = Some l} a in 
+        JAat(ta,l)
     | JPEat(a,lab) -> 
-        let ta = assertiont a in 
-        (* TODO : check label exists *)
-        JAat(ta,LabelName (snd lab))    
+        let l = find_label env lab in
+        let ta = assertion { env  with current_label = Some l} a in 
+        JAat(ta,l)    
     | JPEinstanceof (e, ty) ->
         begin
           match env.current_label with
@@ -3170,7 +3169,7 @@ let add_Pre_Here e =
 
 let add_Old e = 
   { e with 
-      label_env = ("Old",LabelOld)::e.label_env;
+      label_env = ("Pre",LabelOld)::("Old",LabelOld)::e.label_env;
   }
 
 let behavior env pre_state_env post_state_env (id, b) = 

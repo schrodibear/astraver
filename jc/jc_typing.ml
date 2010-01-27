@@ -2430,10 +2430,10 @@ let type_labels_in_clause = function
       Option_misc.iter
         (fun (_, x) ->
            List.iter
-             (type_labels [LabelOld; LabelPost] 
+             (type_labels [LabelOld; LabelPre; LabelPost] 
 		~result_label:(Some LabelPost) (Some LabelOld)) x)
         assigns;
-      type_labels [LabelOld; LabelHere] 
+      type_labels [LabelOld; LabelPre; LabelHere] 
 	~result_label:(Some LabelHere) (Some LabelHere) ensures
 
 (** Apply [type_labels] in all expressions of a normalized declaration,

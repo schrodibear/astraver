@@ -46,6 +46,10 @@ type prover_data =
     mutable version: string;
     version_switch : string;
     version_regexp : string;
+(*
+    versions_ok : string list;
+    versions_old : string list;
+*)
     mutable command : string;
     command_switches : string;
     valid_regexp : lazy_regexp option;
@@ -61,6 +65,10 @@ let gappa =
     version = "";
     version_switch = "--version";
     version_regexp = "Gappa \\([^ ]*\\)";
+(*
+    versions_ok = [""];
+    versions_old = [""];
+*)
     command = "gappa";
     command_switches = "";
     valid_regexp = None; (* valid iff return code = 0 *)

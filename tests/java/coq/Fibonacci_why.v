@@ -134,7 +134,7 @@ Admitted.
                     (isfib n (p + r_0))))))
      .
 
-(* Why obligation from file "Fibonacci.jc", line 56, characters 0-29: *)
+(* Why obligation from file "Fibonacci.jc", line 57, characters 0-29: *)
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
@@ -146,7 +146,7 @@ Save.
 (*Why axiom*) Lemma isfib_2_1_as_axiom : (isfib 2 1).
 Admitted.
 
-(* Why obligation from file "Fibonacci.jc", line 50, characters 0-29: *)
+(* Why obligation from file "Fibonacci.jc", line 51, characters 0-29: *)
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
@@ -185,7 +185,7 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_interface  (p:(pointer interface)) (a:Z) (interface_alloc_table:(alloc_table interface))
   := (offset_min interface_alloc_table p) <= a.
 
-(* Why obligation from file "Fibonacci.jc", line 53, characters 0-37: *)
+(* Why obligation from file "Fibonacci.jc", line 54, characters 0-37: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.

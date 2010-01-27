@@ -432,7 +432,6 @@ let print_elem fmt = function
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
-  Format.printf "Simplify.output_file: few = %s@." fwe;
   let file = fwe ^ "_why.sx" in
   do_not_edit_below ~file
     ~before:(fun _fmt -> ())

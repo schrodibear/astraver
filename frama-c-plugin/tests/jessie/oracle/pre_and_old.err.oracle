@@ -1,0 +1,2 @@
+/bin/sh: bin/toplevel.opt: No such file or directory
+make: *** [pre_and_old.regtest] Error 127
