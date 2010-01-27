@@ -30,7 +30,8 @@
 
 type prover_id = 
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
-  | Cvc3 | SimplifySelect | Z3 | Coq | Gappa | GappaSelect
+  | Cvc3 | SimplifySelect | Z3 | Gappa | GappaSelect
+  | Coq | PVS
 
 type lazy_regexp =
   {
@@ -45,6 +46,8 @@ type prover_data =
     mutable version: string;
     version_switch : string;
     version_regexp : string;
+    versions_ok : string list;
+    versions_old : string list;
     mutable command : string;
     command_switches : string;
     valid_regexp : lazy_regexp option;
@@ -69,6 +72,8 @@ val cvcl : prover_data
 val gappa : prover_data
 
 val coq : prover_data
+
+val pvs : prover_data
 
 val prover_list : (prover_id * (prover_data * string list)) list
   (** list of all known provers: uniq id, data, list of possible command names *)

@@ -79,3 +79,7 @@ val generic_hypotheses_selection :
 val coq : 
   ?debug:bool -> 
   ?timeout:int -> filename:string -> unit -> prover_result
+
+val pvs : 
+  ?debug:bool -> 
+  ?timeout:int -> filename:string -> unit -> prover_result

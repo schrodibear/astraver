@@ -28,8 +28,9 @@
 
 
 type prover_id = 
-    Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
-  | Cvc3 | SimplifySelect | Z3 | Coq | Gappa | GappaSelect
+  | Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
+  | Cvc3 | SimplifySelect | Z3 | Gappa | GappaSelect
+  | Coq | PVS
 
 type lazy_regexp =
   {
@@ -46,10 +47,8 @@ type prover_data =
     mutable version: string;
     version_switch : string;
     version_regexp : string;
-(*
     versions_ok : string list;
     versions_old : string list;
-*)
     mutable command : string;
     command_switches : string;
     valid_regexp : lazy_regexp option;
@@ -65,10 +64,8 @@ let gappa =
     version = "";
     version_switch = "--version";
     version_regexp = "Gappa \\([^ ]*\\)";
-(*
-    versions_ok = [""];
+    versions_ok = ["0.12.0"];
     versions_old = [""];
-*)
     command = "gappa";
     command_switches = "";
     valid_regexp = None; (* valid iff return code = 0 *)
@@ -83,6 +80,8 @@ let alt_ergo =
     version = "";
     version_switch = "-version";
     version_regexp = ".*Ergo \\([^ ]*\\)";
+    versions_ok = ["0.9"];
+    versions_old = ["0.8"];
     command = "alt-ergo";
     command_switches = "";
     valid_regexp = Some (make_regexp "\\bValid\\b");
@@ -97,6 +96,8 @@ let simplify =
     version = "";
     version_switch = "-version";
     version_regexp = "Simplify version \\([^ ,]+\\)";
+    versions_ok = ["1.5.4";"1.5.5"];
+    versions_old = [""];
     command = "Simplify";
     command_switches = "";
     valid_regexp = Some (make_regexp "\\bValid\\b");
@@ -111,6 +112,8 @@ let z3 =
     version = "";
     version_switch = "-version";
     version_regexp = "Z3 version \\([^ \r]+\\)";
+    versions_ok = ["2.2"];
+    versions_old = ["2.1";"1.3"];
     command = "z3";
     command_switches = "-smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
@@ -126,6 +129,8 @@ let yices =
     version = "";
     version_switch = "--version";
     version_regexp = "[Yices ]*\\([0-9.]+\\)";
+    versions_ok = ["1.0.17";"1.0.24"];
+    versions_old = [""];
     command = "yices";
     command_switches = "-smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
@@ -140,6 +145,8 @@ let cvc3 =
     version = "";
     version_switch = "-version";
     version_regexp = "This is CVC3 version \\([^ ]+\\)";
+    versions_ok = ["2.1"];
+    versions_old = [""];
     command = "cvc3";
     command_switches = "-lang smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
@@ -154,6 +161,8 @@ let cvcl =
     version = "";
     version_switch = "-version";
     version_regexp = "This is CVC3 version \\([^ ]+\\)";
+    versions_ok = [""];
+    versions_old = [""];
     command = "cvc3";
     command_switches = "";
     valid_regexp = Some (make_regexp "\\bValid\\b");
@@ -168,10 +177,28 @@ let coq =
     version = "";
     version_switch = "-v";
     version_regexp = "The Coq Proof Assistant, version \\([^ ]+\\)";
+    versions_ok = ["8.0"; "8.1";"8.2"];
+    versions_old = ["7.4"];
     command = "coqc";
     command_switches = "";
     valid_regexp = None;
     undecided_regexp = make_regexp "Error while reading";
+    stdin_switch = None;
+  }
+
+let pvs =    
+  {
+    name = "PVS";
+    is_interactive = true;
+    version = "";
+    version_switch = "-version";
+    version_regexp = "PVS Version \\([^ ]+\\)";
+    versions_ok = [];
+    versions_old = [];
+    command = "pvs";
+    command_switches = "-batch";
+    valid_regexp = None;
+    undecided_regexp = make_regexp "Error";
     stdin_switch = None;
   }
 
@@ -184,8 +211,9 @@ let prover_list =
     Yices, (yices, ["yices"]) ;
     Cvc3, (cvc3, ["cvc3"]) ;
     Cvcl, (cvcl, ["cvcl"]) ;
-    Coq, (coq, ["coqc"]);
     Gappa, (gappa, ["gappa"]) ;
+    Coq, (coq, ["coqc"]);
+    PVS, (pvs, ["pvs"]);
   ] 
 
 let rc_file () = 

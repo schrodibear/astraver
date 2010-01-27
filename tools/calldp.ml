@@ -158,6 +158,9 @@ let ergo ~select_hypotheses ?(debug=false) ?(timeout=10) ?filename ?buffers () =
 let coq ?(debug=false) ?(timeout=10) ~filename () =
   gen_prover_call ~debug ~timeout ~filename DpConfig.coq
 	        
+let pvs ?(debug=false) ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~timeout ~filename DpConfig.pvs
+	        
 let simplify ?(debug=false) ?(timeout=10) ~filename () =
   gen_prover_call ~debug ~timeout ~filename DpConfig.simplify
 

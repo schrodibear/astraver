@@ -28,6 +28,8 @@
 open Format
 open DpConfig
 
+let prover_tips_info = ref false
+
 let rec detect_prover p cmds =
   match cmds with
     | [] ->
@@ -54,7 +56,18 @@ let rec detect_prover p cmds =
 	  if Str.string_match re s 0 then
 	    let nam = p.name in
 	    let ver = Str.matched_group 1 s in
-	    printf "Found prover %s version %s@." nam ver;
+            begin
+              if List.mem ver p.versions_ok then 
+	        printf "Found prover %s version %s, OK.@." nam ver
+              else
+                begin
+                  prover_tips_info := true;
+                  if List.mem ver p.versions_old then 
+                    printf "Warning: prover %s version %s is quite old, please consider upgrading to a newer version.@." nam ver
+                  else
+                    printf "Warning: prover %s version %s is not known to be supported, use it at your own risk!@." nam ver
+                end
+            end;
 	    p.command <- cmd;
 	    p.version <- ver;              
 	  else 
@@ -74,8 +87,14 @@ let main () =
       printf "rc file not found, using default values for provers@\n@.";
   end;
   printf "starting autodetection...@.";
-  List.iter (fun (_,(p,l)) -> detect_prover p (l@[p.command])) prover_list;
+  List.iter (fun (_,(p,l)) -> 
+               let l =
+                 if List.mem p.command l then l else l@[p.command]
+               in
+               detect_prover p l) prover_list;
   printf "detection done.@.";
+  if !prover_tips_info then
+    printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@.";
   printf "writing rc file...@.";
   save_rc_file ()
 

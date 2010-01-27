@@ -86,6 +86,7 @@ let load_default_config () =
 	       | Yices -> Model.yicesSS
 	       | Gappa -> Model.gappa
 	       | Coq -> raise Exit (* not yet supported in GWhy *)
+	       | PVS -> raise Exit (* not yet supported in GWhy *)
 	       | SimplifySelect
 	       | ErgoSelect | GappaSelect
 	       | Rvsat|Zenon|Cvcl|Harvey ->

@@ -69,6 +69,7 @@ let push_elem p e =
   | Ergo | ErgoSelect | SimplifySelect 
   | GappaSelect -> Pretty.push_decl ~ergo:true e
   | Coq -> Coq.push_decl e
+  | PVS -> Pvs.push_decl e
   | Gappa -> Gappa.push_decl e
 
 let push_obligation p (loc, expl, id, s) = 
@@ -82,6 +83,7 @@ let push_obligation p (loc, expl, id, s) =
   | Ergo | ErgoSelect | SimplifySelect 
   | GappaSelect -> Pretty.push_decl g
   | Coq -> Coq.push_decl g
+  | PVS -> Pvs.push_decl g
   | Gappa -> Gappa.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
@@ -109,6 +111,7 @@ let output_file ?encoding p (elems,o) =
     | Ergo | ErgoSelect | SimplifySelect
     | GappaSelect -> Pretty.reset ()
     | Coq -> () (* Coq.reset () *)
+    | PVS -> Pvs.reset()
     | Gappa -> Gappa.reset ()
   end;
   
@@ -161,6 +164,8 @@ let output_file ?encoding p (elems,o) =
 	(* Coq.output_file f; *)
 	if debug then Format.printf "Reusing coq file %s_why.v@." f;
 	f ^ "_why.v" 
+    | PVS ->
+        Pvs.output_file f; f ^ "_why.pvs"
 
 
 	
@@ -219,6 +224,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	  DpConfig.Simplify ()
     | Coq ->
 	Calldp.coq ~debug ?timeout ~filename ()
+    | PVS ->
+	Calldp.pvs ~debug ?timeout ~filename ()
     | Gappa ->
 	Calldp.gappa ~debug ?timeout ~filename ()
     | GappaSelect ->
