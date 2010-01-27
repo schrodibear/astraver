@@ -137,7 +137,7 @@ struct_list[..] list_reverse(struct_list[..] p0)
 behavior default:
   assumes true;
   ensures (C_11 : (\forall list l0;
-                    (\old(list_contents{Here}(p0, l0)) ==>
+                    (\old(list_contents{Old}(p0, l0)) ==>
                       list_contents{Here}(\result, rev(l0)))));
 {  
    (var struct_list[..] r);
@@ -810,8 +810,8 @@ parameter list_reverse :
     { ((true = true) ->
        (JC_6:
        (forall l0:list.
-        (list_contents(p0@, l0@, struct_list_p0_6_alloc_table,
-         struct_list_tl_p0_6) ->
+        (list_contents(p0@, l0@, struct_list_p0_6_alloc_table@,
+         struct_list_tl_p0_6@) ->
          list_contents(result, rev(l0), struct_list_p0_6_alloc_table,
          struct_list_tl_p0_6))))) }
 
@@ -825,8 +825,8 @@ parameter list_reverse_requires :
     { ((true = true) ->
        (JC_6:
        (forall l0:list.
-        (list_contents(p0@, l0@, struct_list_p0_6_alloc_table,
-         struct_list_tl_p0_6) ->
+        (list_contents(p0@, l0@, struct_list_p0_6_alloc_table@,
+         struct_list_tl_p0_6@) ->
          list_contents(result, rev(l0), struct_list_p0_6_alloc_table,
          struct_list_tl_p0_6))))) }
 
@@ -950,8 +950,8 @@ let list_reverse_ensures_default =
    !return end))
   { (JC_5:
     (forall l0:list.
-     (list_contents(p0@, l0@, struct_list_p0_6_alloc_table,
-      struct_list_tl_p0_6) ->
+     (list_contents(p0@, l0@, struct_list_p0_6_alloc_table@,
+      struct_list_tl_p0_6@) ->
       list_contents(result, rev(l0), struct_list_p0_6_alloc_table,
       struct_list_tl_p0_6)))) }
 

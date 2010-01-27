@@ -200,7 +200,7 @@ behavior default:
   assumes true;
   assigns (a_0 + [low..high]).int_M;
   ensures (C_51 : ((C_52 : Permut(contents{Here}(a_0),
-                                  \old(update(contents{Here}(a_0), low, v)),
+                                  \old(update(contents{Old}(a_0), low, v)),
                                   low, high)) &&
                     (C_53 : H{Here}(a_0, low, high))));
 {  
@@ -274,7 +274,7 @@ unit heapsort(int_P[..] a, uint32 n)
 behavior default:
   assumes true;
   ensures (C_111 : ((C_112 : Permut(contents{Here}(a),
-                                    \old(contents{Here}(a)), 0, (n - 1))) &&
+                                    \old(contents{Old}(a)), 0, (n - 1))) &&
                      (C_113 : Sorted{Here}(a, 0, (n - 1)))));
 {  
    (var uint32 i_0);
@@ -1082,7 +1082,7 @@ parameter heapsort :
         (JC_76:
         ((JC_74:
          Permut(contents(a_1, int_P_int_M_a_6),
-         contents(a_1@, int_P_int_M_a_6), (0),
+         contents(a_1@, int_P_int_M_a_6@), (0),
          sub_int(integer_of_uint32(n), (1))))
         and (JC_75:
             Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
@@ -1104,7 +1104,7 @@ parameter heapsort_requires :
         (JC_76:
         ((JC_74:
          Permut(contents(a_1, int_P_int_M_a_6),
-         contents(a_1@, int_P_int_M_a_6), (0),
+         contents(a_1@, int_P_int_M_a_6@), (0),
          sub_int(integer_of_uint32(n), (1))))
         and (JC_75:
             Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
@@ -1142,7 +1142,7 @@ parameter sift_down :
           ((JC_22:
            ((JC_20:
             Permut(contents(a_0_0, int_P_int_M_a_0_5),
-            update(contents(a_0_0@, int_P_int_M_a_0_5),
+            update(contents(a_0_0@, int_P_int_M_a_0_5@),
             integer_of_uint32(low@), v_0@), integer_of_uint32(low),
             integer_of_uint32(high)))
            and (JC_21:
@@ -1179,7 +1179,7 @@ parameter sift_down_requires :
           ((JC_22:
            ((JC_20:
             Permut(contents(a_0_0, int_P_int_M_a_0_5),
-            update(contents(a_0_0@, int_P_int_M_a_0_5),
+            update(contents(a_0_0@, int_P_int_M_a_0_5@),
             integer_of_uint32(low@), v_0@), integer_of_uint32(low),
             integer_of_uint32(high)))
            and (JC_21:
@@ -1500,7 +1500,7 @@ let heapsort_ensures_default =
    void end)
   { (JC_73:
     ((JC_71:
-     Permut(contents(a_1, int_P_int_M_a_6), contents(a_1@, int_P_int_M_a_6),
+     Permut(contents(a_1, int_P_int_M_a_6), contents(a_1@, int_P_int_M_a_6@),
      (0), sub_int(integer_of_uint32(n), (1))))
     and (JC_72:
         Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)), int_P_int_M_a_6)))) }
@@ -2071,7 +2071,7 @@ let sift_down_ensures_default =
     ((JC_17:
      ((JC_15:
       Permut(contents(a_0_0, int_P_int_M_a_0_5),
-      update(contents(a_0_0@, int_P_int_M_a_0_5), integer_of_uint32(low@),
+      update(contents(a_0_0@, int_P_int_M_a_0_5@), integer_of_uint32(low@),
       v_0@), integer_of_uint32(low), integer_of_uint32(high)))
      and (JC_16:
          H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
