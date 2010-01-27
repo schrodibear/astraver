@@ -22,6 +22,8 @@
 /*                                                                        */
 /**************************************************************************/
 
+# pragma JessieIntegerModel(math)
+
 /*@ axiomatic Sum {
   @   // sum(t,i,j) denotes t[i]+...+t[j-1] 
   @   logic integer sum{L}(int t[], integer i, integer j);
@@ -55,7 +57,7 @@ int test1(int t[],int n) {
 }
 
 
-/*@ requires \valid_range(t,0,n-1);
+/*@ requires n >= 1 && \valid_range(t,0,n-1);
   @ assigns t[..];
   @ ensures sum(t,0,n) == \old(sum(t,0,n))+n;
   @*/
