@@ -28,6 +28,8 @@
 open Format
 open DpConfig
 
+let provers_found = ref 0
+
 let prover_tips_info = ref false
 
 let rec detect_prover p cmds =
@@ -53,7 +55,7 @@ let rec detect_prover p cmds =
             with Not_found (* End_of_file *) -> ""
           in
 	  let re = Str.regexp p.version_regexp in
-	  if Str.string_match re s 0 then
+	  if Str.string_match re s 0 then            
 	    let nam = p.name in
 	    let ver = Str.matched_group 1 s in
             begin
@@ -69,13 +71,15 @@ let rec detect_prover p cmds =
                 end
             end;
 	    p.command <- cmd;
-	    p.version <- ver;              
+	    p.version <- ver;            
+            incr provers_found
 	  else 
 	    begin
+              prover_tips_info := true;
 	      printf "Warning: found prover %s but name/version not recognized by regexp `%s'@." p.name p.version_regexp;
 	      printf "Answer was `%s'@." s;
 	      p.command <- cmd;
-	      p.version <- "";
+	      p.version <- "?";
 	    end
 		
 	
@@ -92,11 +96,35 @@ let main () =
                  if List.mem p.command l then l else l@[p.command]
                in
                detect_prover p l) prover_list;
-  printf "detection done.@.";
+  printf "detection done.@\n@.";
+  printf "    prover   version           info invocation@.";
+  printf "----------------------------------------------@.";
+  List.iter (fun (_,(p,_)) -> 
+               let nam = p.name in
+               let ver = p.version in
+               let morever = 
+                 if p.version = "" then "not found" else
+                 if p.version = "?" then "undetected" else
+                 if List.mem p.version p.versions_ok then "" else
+                 if List.mem p.version p.versions_old then "(obsolete)" else
+                   "(not supported)"
+               in
+               printf "%10s %10s %15s %s@." nam ver morever
+                 (p.command ^ " " ^ p.command_switches);
+            ) prover_list;
+  printf "----------------------------------------------@.";
+  if !provers_found = 0 then
+    begin      
+      printf "No provers found! you need to install at least one prover.@.";
+      prover_tips_info := true
+    end
+  else 
+    begin
+      printf "writing rc file...@.";
+      save_rc_file ()
+    end;
   if !prover_tips_info then
-    printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@.";
-  printf "writing rc file...@.";
-  save_rc_file ()
+    printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@."
 
 
 let () = Printexc.catch main ()
