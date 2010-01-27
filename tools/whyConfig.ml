@@ -54,6 +54,11 @@ let rec detect_prover p cmds =
             try input_line ch 
             with Not_found (* End_of_file *) -> ""
           in
+	  let s = if s="" then
+            try input_line ch 
+            with Not_found (* End_of_file *) -> ""
+          else s
+          in
 	  let re = Str.regexp p.version_regexp in
 	  if Str.string_match re s 0 then            
 	    let nam = p.name in
