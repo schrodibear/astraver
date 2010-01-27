@@ -65,7 +65,7 @@ let gappa =
     version_switch = "--version";
     version_regexp = "Gappa \\([^ ]*\\)";
     versions_ok = ["0.12.0"];
-    versions_old = [""];
+    versions_old = ["0.11.2"];
     command = "gappa";
     command_switches = "";
     valid_regexp = None; (* valid iff return code = 0 *)
@@ -193,7 +193,7 @@ let pvs =
     version = "";
     version_switch = "-version";
     version_regexp = "PVS Version \\([^ ]+\\)";
-    versions_ok = [];
+    versions_ok = ["4.1"];
     versions_old = [];
     command = "pvs";
     command_switches = "-batch";

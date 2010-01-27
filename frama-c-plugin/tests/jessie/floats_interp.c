@@ -56,6 +56,7 @@ ie 2u+l < 1022
   @ requires bounded(z);
   @ requires array_bounded(x,n) ;
   @ requires array_bounded(y,n);
+  @ assigns i_interp;
   @ ensures z <= x[0] ==> \result == y[0];
   @ ensures z > x[n-1] ==> \result == y[n-1];
   @ // ensures x[0] < z <= x[n-1] ==> 
@@ -89,6 +90,6 @@ double interp_lin(double x[], double y[], int n, double z) {
 
 /* 
 Local Variables:
-compile-command: "PPCHOME=../.. LC_ALL=C make floats_bsearch"
+compile-command: "PPCHOME=../.. LC_ALL=C make floats_interp"
 End:
 */
