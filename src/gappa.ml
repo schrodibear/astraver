@@ -39,6 +39,34 @@ open Cc
 open Format
 open Pp
 
+module HashedTerm = struct
+  type t = term
+
+  let rec equal t1 t2 =
+    match t1, t2 with
+      | Tconst c1, Tconst c2 -> c1 = c2
+      | Tvar v1, Tvar v2 -> v1 == v2
+      | Tderef d1, Tderef d2 -> d1 == d2
+      | Tapp (a1, l1, _), Tapp (a2, l2, _) ->
+          a1 == a2 &&
+          (try List.for_all2 equal l1 l2 with _ -> false)
+      | Tnamed (_, t1), Tnamed (_, t2) -> equal t1 t2
+      | _ -> false
+
+  let combine n acc = acc * 65599 + n
+
+  let rec hash = function
+    | Tconst c -> combine 1 (Hashtbl.hash c)
+    | Tvar v -> combine 2 (Hashtbl.hash v)
+    | Tderef d -> combine 3 (Hashtbl.hash d)
+    | Tapp (a, l, _) ->
+        combine (Hashtbl.hash a) (List.fold_left
+          (fun acc i -> combine (hash i) acc) 4 l)
+    | Tnamed (_, t) -> combine 5 (hash t)
+end
+
+module Termtbl = Hashtbl.Make(HashedTerm)
+
 (* Gappa terms and formulas *)
 
 (* fields of the float model *)
@@ -166,7 +194,7 @@ let mode_of_id s =
 
 (* contains all the terms that have been generalized away,
    because they were not recognized *)
-let gen_table = Hashtbl.create 10
+let gen_table = Termtbl.create 10
 
 (* contains the terms associated to variables, especially gen_float variables *)
 let var_table = Hashtbl.create 10
@@ -195,6 +223,18 @@ let rec subst_var = function
   | Tnamed (_, t) -> subst_var t
   | Tapp (id, l1, l2) -> Tapp (id, List.map subst_var l1, l2)
   | t -> t
+
+let rec create_var = function
+  | Tvar v -> Ident.string v
+  | Tnamed (_, t) -> create_var t
+  | _ as t ->
+      try
+        Termtbl.find gen_table t
+      with Not_found ->
+        let n = Ident.string (fresh_var ()) in
+        (*Format.printf "creating var for %a {%i}@." Util.print_term t (HashedTerm.hash t);*)
+        Termtbl.replace gen_table t n;
+        n
 
 let rec term = function
   | t when is_constant t ->
@@ -255,14 +295,14 @@ let rec term = function
         term (Tapp (single_value,[t],l2))
 
 
-  | Tapp (id, [Tvar vx], _)
+  | Tapp (id, [t], _)
       when (id == single_value || id == double_value || id == single_exact 
          || id == double_exact || id == single_model || id == double_model) ->
-      let v = Ident.string vx in
+      let v = create_var t in
       let f = field_of_id id in
       let add_def fmt =
-        if not (Hashtbl.mem def_table (f, vx)) then begin
-          Hashtbl.add def_table (f, vx) ();
+        if not (Hashtbl.mem def_table (f, v)) then begin
+          Hashtbl.add def_table (f, v) ();
           Hashtbl.replace rnd_table (fmt, RndNE) ();
           def_list := (f, v, Grnd (fmt, RndNE, Gvar ("dummy_float_" ^ v))) :: !def_list;
           let b =
@@ -275,23 +315,16 @@ let rec term = function
       if id == double_value then add_def Double;
       Gfld (f, v)
 
-  | Tapp (id, [Tvar vx], _) 
+  | Tapp (id, [t], _) 
     when id == single_round_error || id == double_round_error ->
-    let v = Ident.string vx in
+    let v = create_var t in
     Gabs (Gsub (Gfld (Rounded, v), Gfld (Exact, v)))
+
+  | Tnamed(_,t) -> term t
 
   (* anything else is generalized as a fresh variable *)
   | Tapp _ as t ->
-      printf "term %a is interpreted as a fresh variable@." Util.print_term t;
-      Gvar (
-        try
-          Hashtbl.find gen_table t
-        with Not_found ->
-          let n = Ident.string (fresh_var ()) in
-          Hashtbl.replace gen_table t n;
-          n
-        )
-  | Tnamed(_,t) -> term t
+      Gvar (create_var t)
 
 let termo t = try Some (term (subst_var t)) with NotGappa -> None
 
@@ -427,9 +460,10 @@ let rec ghyp = function
       match termo t with
       | Some t ->
           let f = field_of_id id' in
-          if not (Hashtbl.mem def_table (f, x)) then
-           (Hashtbl.add def_table (f, x) ();
-            def_list := (f, Ident.string x, t) :: !def_list;
+          let vx = Ident.string x in
+          if not (Hashtbl.mem def_table (f, vx)) then
+           (Hashtbl.add def_table (f, vx) ();
+            def_list := (f, vx, t) :: !def_list;
             None)
           else
             gpred true p
@@ -450,7 +484,7 @@ let queue = Queue.create ()
 
 let reset () =
   Queue.clear queue;
-  Hashtbl.clear gen_table;
+  Termtbl.clear gen_table;
   Hashtbl.clear var_table;
   Hashtbl.clear rnd_table;
   Hashtbl.clear def_table;
