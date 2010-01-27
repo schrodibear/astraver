@@ -96,23 +96,7 @@ let main () =
                  if List.mem p.command l then l else l@[p.command]
                in
                detect_prover p l) prover_list;
-  printf "detection done.@\n@.";
-  printf "    prover   version           info invocation@.";
-  printf "----------------------------------------------@.";
-  List.iter (fun (_,(p,_)) -> 
-               let nam = p.name in
-               let ver = p.version in
-               let morever = 
-                 if p.version = "" then "not found" else
-                 if p.version = "?" then "undetected" else
-                 if List.mem p.version p.versions_ok then "" else
-                 if List.mem p.version p.versions_old then "(obsolete)" else
-                   "(not supported)"
-               in
-               printf "%10s %10s %15s %s@." nam ver morever
-                 (p.command ^ " " ^ p.command_switches);
-            ) prover_list;
-  printf "----------------------------------------------@.";
+  printf "detection done.@.";
   if !provers_found = 0 then
     begin      
       printf "No provers found! you need to install at least one prover.@.";
@@ -120,8 +104,24 @@ let main () =
     end
   else 
     begin
-      printf "writing rc file...@.";
-      save_rc_file ()
+      printf "writing rc file `%s'...@\n@." (rc_file());
+      save_rc_file ();
+      printf "    prover    version            info invocation@.";
+      printf "----------------------------------------------@.";
+      List.iter (fun (_,(p,_)) -> 
+                   let nam = p.name in
+                   let ver = p.version in
+                   let morever = 
+                     if p.version = "" then "not found" else
+                       if p.version = "?" then "undetected" else
+                         if List.mem p.version p.versions_ok then "" else
+                           if List.mem p.version p.versions_old then "(obsolete)" else
+                             "(not supported)"
+                   in
+                   printf "%10s %10s %15s %s@." nam ver morever
+                     (p.command ^ " " ^ p.command_switches);
+                ) prover_list;
+      printf "----------------------------------------------@.";
     end;
   if !prover_tips_info then
     printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@."

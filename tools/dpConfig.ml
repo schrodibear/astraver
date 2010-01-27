@@ -246,8 +246,9 @@ let load_rc_file () =
 	 | "Yices" -> load_prover_info yices key args
 	 | "CVC3" -> load_prover_info cvc3 key args
          | "CVCL" -> load_prover_info cvcl key args
-	 | "Coq" -> load_prover_info coq key args
 	 | "Gappa" -> load_prover_info gappa key args
+	 | "Coq" -> load_prover_info coq key args
+	 | "PVS" -> load_prover_info pvs key args
 	 | _ -> 
 	     printf "Unknown section [%s] in config file '%s'@." key rc_file)
     rc;
