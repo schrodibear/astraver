@@ -1,3 +1,8 @@
+
+  o [Jessie/Krakatoa/Frama-C plugin] fixed bug with labels inside \old
+    and \at.  Moreover, label Pre is now allowed in function
+    contracts, as specified in ACSL.    
+  o [Why] improved detection of external provers
   o [Frama-C plugin] option "-jessie-adhoc-normalization" triggers a code
     normalization suited for jessie without launching the analysis
     (fixes bts 332)
