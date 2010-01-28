@@ -38,26 +38,26 @@ let rec detect_prover p cmds =
 	printf "detection of prover %s failed@." p.name
     | cmd::rem ->
 	let out = Filename.temp_file "out" "" in
-	let c = cmd ^ " " ^ p.version_switch ^ " > " ^ out in
-(*
-	eprintf "debug: command = %s@." c;
-*)
+        let cmd = cmd ^ " " ^ p.version_switch in
+	let c = cmd ^ " > " ^ out in
 	let ret = Sys.command c in
-	if ret <> 0 (* && not (p == gappa && ret = 1) *) then
+	if ret <> 0 
+          (* was needed for older version of gappa, but is 
+	     wrong under windows: && not (p == gappa && ret = 1) *) 
+        then
 	  begin
-	    printf "command %s failed@." cmd;
+	    printf "command '%s' failed@." cmd;
 	    detect_prover p rem
 	  end
 	else
-	  let ch = open_in out in
 	  let s = 
-            try input_line ch 
-            with Not_found (* End_of_file *) -> ""
-          in
-	  let s = if s="" then
-            try input_line ch 
-            with Not_found (* End_of_file *) -> ""
-          else s
+            try 
+              let ch = open_in out in
+              let s = ref (input_line ch) in
+              while !s = "" do s := input_line ch done;
+              close_in ch;
+              !s              
+            with Not_found | End_of_file  -> ""
           in
 	  let re = Str.regexp p.version_regexp in
 	  if Str.string_match re s 0 then            
@@ -111,8 +111,8 @@ let main () =
     begin
       printf "writing rc file `%s'...@\n@." (rc_file());
       save_rc_file ();
-      printf "    prover    version            info invocation@.";
-      printf "----------------------------------------------@.";
+      printf "    prover      version              info   invocation@.";
+      printf "------------------------------------------------------@.";
       List.iter (fun (_,(p,_)) -> 
                    let nam = p.name in
                    let ver = p.version in
@@ -123,10 +123,11 @@ let main () =
                            if List.mem p.version p.versions_old then "(obsolete)" else
                              "(not supported)"
                    in
-                   printf "%10s %10s %15s %s@." nam ver morever
-                     (p.command ^ " " ^ p.command_switches);
+                   printf "%10s   %10s   %15s   %s@." nam ver morever
+                     (if p.version ="" then "" else
+                      p.command ^ " " ^ p.command_switches);
                 ) prover_list;
-      printf "----------------------------------------------@.";
+      printf "------------------------------------------------------@.";
     end;
   if !prover_tips_info then
     printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@."
