@@ -38,15 +38,15 @@ let rec detect_prover p cmds =
 	printf "detection of prover %s failed@." p.name
     | cmd::rem ->
 	let out = Filename.temp_file "out" "" in
-        let cmd = cmd ^ " " ^ p.version_switch in
-	let c = cmd ^ " > " ^ out in
+        let cmd2 = cmd ^ " " ^ p.version_switch in
+	let c = cmd2 ^ " > " ^ out in
 	let ret = Sys.command c in
 	if ret <> 0 
           (* was needed for older version of gappa, but is 
 	     wrong under windows: && not (p == gappa && ret = 1) *) 
         then
 	  begin
-	    printf "command '%s' failed@." cmd;
+	    printf "command '%s' failed@." cmd2;
 	    detect_prover p rem
 	  end
 	else

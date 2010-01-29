@@ -64,8 +64,8 @@ let gappa =
     version = "";
     version_switch = "--version";
     version_regexp = "Gappa \\([^ ]*\\)";
-    versions_ok = ["0.12.0"];
-    versions_old = ["0.11.2"];
+    versions_ok = ["0.12.3"];
+    versions_old = ["0.11.2";"0.12.0";"0.12.1";"0.12.2"];
     command = "gappa";
     command_switches = "";
     valid_regexp = None; (* valid iff return code = 0 *)
