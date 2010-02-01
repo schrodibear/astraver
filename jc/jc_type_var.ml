@@ -101,7 +101,7 @@ let rec dec_type ~subtype acc t1 t2 =
     | JCTenum ri1, JCTenum ri2 -> 
         accorraise (subtype && Num.ge_num ri1.jc_enum_info_min ri2.jc_enum_info_min &&
                       Num.le_num ri1.jc_enum_info_max ri2.jc_enum_info_max) 
-    | JCTenum _, JCTnative Tinteger ->
+    | JCTenum _, JCTnative (Tinteger | Treal) ->
         accorraise subtype
     | JCTnative Tinteger, JCTenum _ -> 
         accorraise false
