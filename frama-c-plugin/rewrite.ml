@@ -289,7 +289,8 @@ class replaceStringConstants =
     (* Apply translation from initializer in primitive AST to block of code,
      * simple initializer and type.
      *)
-    let _b,init,ty = Cabs2cil.blockInitializer Cilutil.LvalSet.empty v inite in
+    let _b,init,ty =
+      Cabs2cil.blockInitializer Cabs2cil.empty_local_env v inite in
     (* Precise the array type *)
     v.vtype <- ty;
     (* Attach global variable and code for global initialization *)
@@ -423,7 +424,7 @@ let gather_initialization file =
 	(* Too big currently, postpone until useful *)
 (*
 	ignore s;
-  	List.iter attach_globinit s; 
+  	List.iter attach_globinit s;
 *)
 	iinfo.init <- None
       )) file
