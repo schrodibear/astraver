@@ -328,11 +328,6 @@ let rec term = function
 
 let termo t = try Some (term (subst_var t)) with NotGappa -> None
 
-let gando = function
-  | Some p1, Some p2 -> Some (Gand (p1, p2))
-  | (Some _p as v), None | None, (Some _p as v) -> v
-  | None, None -> None
-
 (* recognition of a Gappa predicate *)
 
 let rec gpred def = function
@@ -470,10 +465,6 @@ let rec ghyp = function
       | None ->
           gpred true p
     end
-  | Pand (_, _, p1, p2) ->
-      gando (ghyp p1, ghyp p2)
-  | Pnamed (_, p) ->
-      ghyp p
   | p ->
       gpred true p
 
@@ -509,6 +500,15 @@ let rec intros ctx = function
   | c -> 
       ctx, c
 
+let rec handle_hyp p acc =
+  match p with
+    | Pnamed (_, p) -> handle_hyp p acc
+    | Pand (_, _, p1, p2) -> handle_hyp p2 (handle_hyp p1 acc)
+    | _ ->
+        match ghyp p with
+          | Some p -> p :: acc
+          | None -> acc
+
 let process_obligation (ctx, concl) =
   let ctx, concl = intros (List.rev ctx) concl in
   let ctx = List.rev ctx in
@@ -517,10 +517,7 @@ let process_obligation (ctx, concl) =
       (fun pl h ->
         match h with
           | Svar _ -> pl
-          | Spred (_, p) -> 
-              match ghyp p with
-                | None -> pl
-                | Some pp -> pp :: pl)
+          | Spred (_, p) -> handle_hyp p pl)
       [] ctx
     in
   let gconcl =
