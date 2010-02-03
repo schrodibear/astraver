@@ -2766,17 +2766,18 @@ let tr_axiom loc id ~is_axiom labels a acc =
     assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab a
   in
   let params = tmodel_parameters ~label_in_name:true ef in
+  let new_id = get_unique_name id in
   reg_decl 
-    ~out_mark:id
+    ~out_mark:new_id
     ~in_mark:id
     ~name:id
     ~beh:(if is_axiom then "axiom" else "lemma")
     loc;
   let a' = List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' in
   if is_axiom then 
-    Axiom(id,a') :: acc 
+    Axiom(new_id,a') :: acc 
   else 
-    Goal(id,a') :: Axiom(id ^ "_as_axiom",a') :: acc
+    Goal(new_id,a') :: Axiom(new_id ^ "_as_axiom",a') :: acc
 
 
 

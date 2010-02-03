@@ -1,4 +1,5 @@
 
+  o [Jessie] fixed bug 0391
   o [Jessie/Krakatoa/Frama-C plugin] fixed bug with labels inside \old
     and \at.  Moreover, label Pre is now allowed in function
     contracts, as specified in ACSL.    

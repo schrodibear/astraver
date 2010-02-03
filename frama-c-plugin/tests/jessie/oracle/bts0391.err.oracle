@@ -1,0 +1,4 @@
+File "why/bts0391.why", line 94, characters 5-8:
+Syntax error
+make: *** [why/bts0391.wpr] Error 1
+make: *** [bts0391.regtest] Error 2
