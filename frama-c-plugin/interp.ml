@@ -584,13 +584,16 @@ let strip_float_suffix s =
       | 'f' | 'F' | 'l' | 'L' -> String.sub s 0 l
       | _ -> s
 
+       
 let rec const ~in_code pos = function
-  | CInt64(_i,_ik,Some s) -> JCPEconst(JCCinteger s)
+  | CInt64(_,_,Some s) -> 
       (* Use the textual representation if available *)
+      JCPEconst(JCCinteger s)
 
-  | CInt64(i,_ik,None) -> JCPEconst(JCCinteger(Int64.to_string i))
+  | CInt64(i,_ik,None) -> 
+      JCPEconst(JCCinteger(Int64.to_string i))
 
-  | CStr _ | CWStr _ -> assert false  (* Should have been rewritten *)
+  | CStr _ | CWStr _ -> assert false (* Should have been rewritten *)
 
   | CChr c -> JCPEconst(JCCinteger(string_of_int (Char.code c)))
 
@@ -598,7 +601,8 @@ let rec const ~in_code pos = function
       (* Use the textual representation if available *)
       let s = strip_float_suffix s in
       begin match in_code,!float_model with
-        | false,_ | _,`Real -> JCPEconst(JCCreal s)
+        | false,_ 
+        | _,`Real -> JCPEconst(JCCreal s)
         | true, (`Strict | `Full | `Multirounding) ->
             (* add a cast to float or double depending on the value of fk *)
             JCPEcast(mkexpr (JCPEconst(JCCreal s)) pos, mktype (JCPTnative (native_type_of_fkind fk)))

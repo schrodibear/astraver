@@ -113,7 +113,7 @@ behavior default:
    (var int32 __retres);
    
    {  (C_4 : (found = 0));
-      (C_7 : (proc_id = (C_6 : ((C_5 : (pid & 127)) :> uint32))));
+      (C_7 : (proc_id = (C_6 : ((C_5 : (pid & 127u)) :> uint32))));
       (C_9 : (process = (C_8 : pid2pcb(proc_id))));
       (C_10 : (prev_elem = null));
       (C_11 : (ready_list_elem = ready_list));

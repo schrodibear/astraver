@@ -3,4 +3,4 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 bts0199.c:17:[kernel] user error: Case statement with a non-constant
 [kernel] user error: Error during linking
 [kernel] user error: your code cannot be parsed; aborting analysis.
-[kernel] Plugin kernel aborted because of invalid user input(s).
+[kernel] Frama-C aborted because of invalid user input(s).
