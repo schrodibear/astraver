@@ -1,4 +1,4 @@
-/* Frama-C BTS 0367
+/* Frama-C BTS 0391
 
 (clash with Why keyword for a lemma identifier)
 

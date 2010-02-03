@@ -76,6 +76,7 @@ double interp_lin(double_P[..] x, double_P[..] y, int32 n, double z)
   requires (C_63 : array_bounded{Here}(y, n));
 behavior default:
   assumes true;
+  assigns i_interp;
   ensures (C_64 : ((C_65 : (((z :> real) <= ((x + 0).double_M :> real)) ==>
                              ((\result :> real) ==
                                ((y + 0).double_M :> real)))) &&
@@ -290,8 +291,6 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8,
  y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic i_interp:  -> int32
 
 logic int32_of_integer: int -> int32
 
@@ -664,6 +663,8 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter i_interp : int32 ref
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -683,15 +684,15 @@ parameter interp_lin :
       double_P_x_3_alloc_table:double_P alloc_table ->
        double_P_double_M_y_4:(double_P, double) memory ->
         double_P_double_M_x_3:(double_P, double) memory ->
-         { } double
+         { } double writes i_interp
          { ((true = true) ->
-            (JC_28:
-            ((JC_26:
+            (JC_29:
+            ((JC_27:
              (le_real(double_value(z_0),
               double_value(select(double_P_double_M_x_3, shift(x, (0))))) ->
               eq_real(double_value(result),
               double_value(select(double_P_double_M_y_4, shift(y, (0)))))))
-            and (JC_27:
+            and (JC_28:
                 (gt_real(double_value(z_0),
                  double_value(select(double_P_double_M_x_3,
                               shift(x, sub_int(integer_of_int32(n_0), (1)))))) ->
@@ -730,15 +731,15 @@ parameter interp_lin_requires :
                                        and (JC_9:
                                            array_bounded(y, n_0,
                                            double_P_double_M_y_4)))))))))))}
-         double
+         double writes i_interp
          { ((true = true) ->
-            (JC_28:
-            ((JC_26:
+            (JC_29:
+            ((JC_27:
              (le_real(double_value(z_0),
               double_value(select(double_P_double_M_x_3, shift(x, (0))))) ->
               eq_real(double_value(result),
               double_value(select(double_P_double_M_y_4, shift(y, (0)))))))
-            and (JC_27:
+            and (JC_28:
                 (gt_real(double_value(z_0),
                  double_value(select(double_P_double_M_x_3,
                               shift(x, sub_int(integer_of_int32(n_0), (1)))))) ->
@@ -816,18 +817,18 @@ let interp_lin_ensures_default =
                                              (loop_2:
                                              while true do
                                              { invariant
-                                                 ((JC_62:
+                                                 ((JC_64:
                                                   gt_real(double_value(z_0),
                                                   double_value(select(double_P_double_M_x_3,
                                                                shift(x,
                                                                sub_int(
                                                                integer_of_int32(i_2),
                                                                (1)))))))
-                                                 and (JC_65:
-                                                     ((JC_63:
+                                                 and (JC_67:
+                                                     ((JC_65:
                                                       le_int((1),
                                                       integer_of_int32(i_2)))
-                                                     and (JC_64:
+                                                     and (JC_66:
                                                          le_int(integer_of_int32(i_2),
                                                          integer_of_int32(n_0))))))
                                                 }
@@ -952,24 +953,24 @@ let interp_lin_ensures_default =
                                                        (C_35:
                                                        ((shift y) (integer_of_int32 !i_2)))))) in
                               void);
-                             (assert { (JC_69: bounded(xim1)) }; void);
+                             (assert { (JC_71: bounded(xim1)) }; void);
                              void;
-                             (assert { (JC_70: bounded(xi)) }; void);
+                             (assert { (JC_72: bounded(xi)) }; void);
                              void;
-                             (assert { (JC_71: bounded(yim1)) }; void);
+                             (assert { (JC_73: bounded(yim1)) }; void);
                              void;
-                             (assert { (JC_72: bounded(yi)) }; void);
+                             (assert { (JC_74: bounded(yi)) }; void);
                              void;
                              (let jessie_56 = (C_43:
                                               begin
                                                 (zmxim1 := (C_42:
-                                                           (JC_73:
+                                                           (JC_75:
                                                            (((sub_double_safe nearest_even) z_0) !xim1))));
                                                !zmxim1
                                               end) in
                              void);
                              (assert
-                             { (JC_74:
+                             { (JC_76:
                                ge_real(sub_real(double_value(xi),
                                        double_value(xim1)),
                                0x1p-341)) };
@@ -978,19 +979,19 @@ let interp_lin_ensures_default =
                              (C_50:
                              begin
                                (let jessie_58 = (__retres := (C_49:
-                                                             (JC_79:
+                                                             (JC_81:
                                                              (((add_double_safe nearest_even) !yim1) 
                                                               (C_48:
-                                                              (JC_78:
+                                                              (JC_80:
                                                               (((div_double_safe nearest_even) 
                                                                 (C_47:
-                                                                (JC_76:
+                                                                (JC_78:
                                                                 (((mul_double_safe nearest_even) !zmxim1) 
                                                                  (C_46:
-                                                                 (JC_75:
+                                                                 (JC_77:
                                                                  (((sub_double_safe nearest_even) !yi) !yim1))))))) 
                                                                (C_45:
-                                                               (JC_77:
+                                                               (JC_79:
                                                                (((sub_double_safe nearest_even) !xi) !xim1)))))))))) in
                                void);
                               (raise (Return_label_exc void))
@@ -1061,14 +1062,14 @@ let interp_lin_safety =
      try
       (let jessie_31 = begin
                          (if ((le_double z_0) (C_5:
-                                              (JC_31:
+                                              (JC_33:
                                               (((acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x))))
                          then
                           (let jessie_7 = (C_3:
                                           begin
                                             (let jessie_6 = (__retres := 
                                                              (C_2:
-                                                             (JC_32:
+                                                             (JC_34:
                                                              (((acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y)))) in
                                             void);
                                            (raise (Return_label_exc void))
@@ -1083,24 +1084,24 @@ let interp_lin_safety =
                           (let jessie_15 = begin
                                              (loop_1:
                                              while true do
-                                             { invariant (JC_38: true)
-                                               variant (JC_42 : sub_int(
+                                             { invariant (JC_40: true)
+                                               variant (JC_44 : sub_int(
                                                                 integer_of_int32(n_0),
                                                                 integer_of_int32(i_2))) }
                                               begin
                                                 [ { } unit reads i_2
-                                                  { ((JC_33:
+                                                  { ((JC_35:
                                                      gt_real(double_value(z_0),
                                                      double_value(select(double_P_double_M_x_3,
                                                                   shift(x,
                                                                   sub_int(
                                                                   integer_of_int32(i_2),
                                                                   (1)))))))
-                                                    and (JC_36:
-                                                        ((JC_34:
+                                                    and (JC_38:
+                                                        ((JC_36:
                                                          le_int((1),
                                                          integer_of_int32(i_2)))
-                                                        and (JC_35:
+                                                        and (JC_37:
                                                             le_int(integer_of_int32(i_2),
                                                             integer_of_int32(n_0)))))) } ];
                                                try
@@ -1122,7 +1123,7 @@ let interp_lin_safety =
                                                                     (if 
                                                                     ((le_double z_0) 
                                                                     (C_13:
-                                                                    (JC_40:
+                                                                    (JC_42:
                                                                     ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x) 
                                                                     (integer_of_int32 !i_2)))))
                                                                     then
@@ -1137,7 +1138,7 @@ let interp_lin_safety =
                                                                       
                                                                     (i_2 := 
                                                                     (C_15:
-                                                                    (JC_41:
+                                                                    (JC_43:
                                                                     (int32_of_integer_ 
                                                                     (C_14:
                                                                     ((add_int 
@@ -1170,11 +1171,11 @@ let interp_lin_safety =
                                            begin
                                              (let jessie_17 = (__retres := 
                                                                (C_20:
-                                                               (JC_44:
+                                                               (JC_46:
                                                                ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
                                                                 (integer_of_int32 
                                                                  (C_18:
-                                                                 (JC_43:
+                                                                 (JC_45:
                                                                  (int32_of_integer_ 
                                                                   (C_17:
                                                                   ((sub_int 
@@ -1187,11 +1188,11 @@ let interp_lin_safety =
                          (C_26:
                          begin
                            (let jessie_20 = (xim1 := (C_25:
-                                                     (JC_46:
+                                                     (JC_48:
                                                      ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x) 
                                                       (integer_of_int32 
                                                        (C_23:
-                                                       (JC_45:
+                                                       (JC_47:
                                                        (int32_of_integer_ 
                                                         (C_22:
                                                         ((sub_int (integer_of_int32 !i_2)) (1))))))))))) in
@@ -1199,18 +1200,18 @@ let interp_lin_safety =
                           (C_29:
                           begin
                             (let jessie_22 = (xi := (C_28:
-                                                    (JC_47:
+                                                    (JC_49:
                                                     ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x) 
                                                      (integer_of_int32 !i_2))))) in
                             void);
                            (C_34:
                            begin
                              (let jessie_24 = (yim1 := (C_33:
-                                                       (JC_49:
+                                                       (JC_51:
                                                        ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
                                                         (integer_of_int32 
                                                          (C_31:
-                                                         (JC_48:
+                                                         (JC_50:
                                                          (int32_of_integer_ 
                                                           (C_30:
                                                           ((sub_int (integer_of_int32 !i_2)) (1))))))))))) in
@@ -1218,28 +1219,28 @@ let interp_lin_safety =
                             (C_37:
                             begin
                               (let jessie_26 = (yi := (C_36:
-                                                      (JC_50:
+                                                      (JC_52:
                                                       ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
                                                        (integer_of_int32 !i_2))))) in
                               void);
-                             [ { } unit reads xim1 { (JC_51: bounded(xim1)) } ];
+                             [ { } unit reads xim1 { (JC_53: bounded(xim1)) } ];
                              void;
-                             [ { } unit reads xi { (JC_52: bounded(xi)) } ];
+                             [ { } unit reads xi { (JC_54: bounded(xi)) } ];
                              void;
-                             [ { } unit reads yim1 { (JC_53: bounded(yim1)) } ];
+                             [ { } unit reads yim1 { (JC_55: bounded(yim1)) } ];
                              void;
-                             [ { } unit reads yi { (JC_54: bounded(yi)) } ];
+                             [ { } unit reads yi { (JC_56: bounded(yi)) } ];
                              void;
                              (let jessie_28 = (C_43:
                                               begin
                                                 (zmxim1 := (C_42:
-                                                           (JC_55:
+                                                           (JC_57:
                                                            (((sub_double nearest_even) z_0) !xim1))));
                                                !zmxim1
                                               end) in
                              void);
                              [ { } unit reads xi,xim1
-                               { (JC_56:
+                               { (JC_58:
                                  ge_real(sub_real(double_value(xi),
                                          double_value(xim1)),
                                  0x1p-341)) } ];
@@ -1247,19 +1248,19 @@ let interp_lin_safety =
                              (C_50:
                              begin
                                (let jessie_30 = (__retres := (C_49:
-                                                             (JC_61:
+                                                             (JC_63:
                                                              (((add_double nearest_even) !yim1) 
                                                               (C_48:
-                                                              (JC_60:
+                                                              (JC_62:
                                                               (((div_double nearest_even) 
                                                                 (C_47:
-                                                                (JC_58:
+                                                                (JC_60:
                                                                 (((mul_double nearest_even) !zmxim1) 
                                                                  (C_46:
-                                                                 (JC_57:
+                                                                 (JC_59:
                                                                  (((sub_double nearest_even) !yi) !yim1))))))) 
                                                                (C_45:
-                                                               (JC_59:
+                                                               (JC_61:
                                                                (((sub_double nearest_even) !xi) !xim1)))))))))) in
                                void);
                               (raise (Return_label_exc void))
@@ -1299,220 +1300,220 @@ why --project [...] why/floats_interp.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_interp_po15.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "68" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "69" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po16.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "68" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "69" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po17.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "68" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "69" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po18.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "68" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "69" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po19.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "74" begin = "23" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "23" end = "25"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po20.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "74" begin = "23" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "23" end = "25"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po21.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "74" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po22.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "74" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po23.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "72" begin = "19" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "73" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp_po24.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "72" begin = "19" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "73" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp_po25.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "12" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po26.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "12" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po27.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "12" end = "18"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po28.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "75" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "12" end = "18"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po29.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "77" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po30.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "77" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po31.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "77" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po32.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "76" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "77" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po33.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "77" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "78" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po34.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "77" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "78" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po35.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "78" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "79" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po36.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "78" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "79" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po37.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "78" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "79" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po38.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "78" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "79" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po39.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "79" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "80" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po40.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "79" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "80" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_po41.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "84" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "85" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po42.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "87" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po43.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "87" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po44.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "87" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po45.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "87" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po46.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "87" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_po47.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "87" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/floats_interp_po2.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "71" begin = "21" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "72" begin = "21" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp_po3.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "70" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "71" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp_po4.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "70" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "71" begin = "26" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp_po5.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "71" begin = "21" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "72" begin = "21" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp_po6.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "70" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "71" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp_po7.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "70" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "71" begin = "26" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "80" begin = "13" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "81" begin = "13" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "81" begin = "13" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "82" begin = "13" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_po10.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "82" begin = "13" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "83" begin = "13" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "83" begin = "13" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "84" begin = "13" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_po12.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "85" begin = "13" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "86" begin = "13" end = "34"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_po13.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "59" begin = "12" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "60" begin = "12" end = "41"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/floats_interp_po14.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "60" begin = "12" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp.c" line = "61" begin = "12" end = "44"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2753,8 +2754,6 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
-
-logic i_interp : int32
 
 logic int32_of_integer : int -> int32
 
