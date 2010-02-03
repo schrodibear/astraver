@@ -447,10 +447,28 @@ let rec ghyp = function
       Hashtbl.replace var_table x (subst_var t);
       None
     end
+  | Papp (id, [t; Tapp (id', [Tvar x], _)], _) as p
+      when is_eq id &&
+       (id' == single_exact || id' == double_exact ||
+        id' == single_model || id' == double_model) ->
+    begin
+      match termo t with
+      | Some t ->
+          let f = field_of_id id' in
+          let vx = Ident.string x in
+          if not (Hashtbl.mem def_table (f, vx)) then
+           (Hashtbl.add def_table (f, vx) ();
+            def_list := (f, vx, t) :: !def_list;
+            None)
+          else
+            gpred true p
+      | None ->
+          gpred true p
+    end
   | Papp (id, [Tapp (id', [Tvar x], _); t], _) as p
-      when is_eq id && 
-	(id' == single_value || id' == double_value || id' == single_exact 
-       || id' == double_exact || id' == single_model || id' == double_model) ->
+      when is_eq id &&
+       (id' == single_value || id' == double_value || id' == single_exact ||
+        id' == double_exact || id' == single_model || id' == double_model) ->
     begin
       match termo t with
       | Some t ->
