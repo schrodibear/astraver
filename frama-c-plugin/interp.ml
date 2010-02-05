@@ -602,7 +602,7 @@ let rec const ~in_code pos = function
       let s = strip_float_suffix s in
       begin match in_code,!float_model with
         | false,_ 
-        | _,`Real -> JCPEconst(JCCreal s)
+	| true, `Real -> JCPEconst(JCCreal s)
         | true, (`Strict | `Full | `Multirounding) ->
             (* add a cast to float or double depending on the value of fk *)
             JCPEcast(mkexpr (JCPEconst(JCCreal s)) pos, mktype (JCPTnative (native_type_of_fkind fk)))

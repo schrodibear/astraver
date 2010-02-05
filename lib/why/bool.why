@@ -18,4 +18,4 @@ axiom ite_true : forall x, y : 'a. ite(true, x, y) = x
 axiom ite_false : forall x, y : 'a. ite(false, x, y) = y
 
 
-parameter any_bool : unit -> {} bool { true }
+parameter any_bool : unit -> { } bool { true }

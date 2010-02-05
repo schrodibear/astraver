@@ -722,6 +722,7 @@ parameter any_tag_table: unit -> {} 't tag_table { true }
 (*****************************************************************************)
 (* bitwise operations                                                        *)
 (*****************************************************************************)
+(* TODO: use bitvector.why instead *)
 
 logic bw_compl: int -> int
 

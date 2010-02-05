@@ -1,0 +1,128 @@
+
+include "bool.why"
+
+type bitvector (* infinite bitvector *)
+
+logic bv_nth : bitvector,int -> bool
+
+logic bv_length : bitvector -> int
+
+(* constants *)
+
+logic bv_zero: int -> bitvector
+
+axiom bv_zero_length: 
+  forall n:int. n >= 0 ->
+    bv_length(bv_zero(n)) = n
+
+axiom bv_zero_nth: 
+  forall n,s:int.
+    bv_nth(bv_zero(n),s) = false
+
+logic bv_one: int -> bitvector
+
+axiom bv_one_length: 
+  forall n:int. n >= 0 ->
+    bv_length(bv_one(n)) = n
+
+axiom bv_one_nth: 
+  forall n,s:int.
+    bv_nth(bv_one(n),s) = true
+
+function bv_zero32() : bitvector = bv_zero(32)
+function bv_one32() : bitvector = bv_one(32)
+
+(* and, or, not *)
+
+logic bv_and : bitvector, bitvector -> bitvector
+
+axiom bv_and_nth:
+  forall b1,b2:bitvector. forall n:int. 
+    bv_nth(bv_and(b1,b2),n) = bool_and(bv_nth(b1,n),bv_nth(b2,n))
+
+axiom bv_and_length:
+  forall b1,b2:bitvector. forall n:int. 
+    bv_length(b1) = n and bv_length(b2) = n ->	
+    bv_length(bv_and(b1,b2)) = n 
+
+goal test1:
+  forall b:bitvector.
+    b = bv_and(bv_zero32,bv_one32) ->
+    bv_nth(b,1) = false
+
+
+(* shift *)
+
+logic lsr : bitvector, int -> bitvector
+
+axiom lsr_length:
+  forall b:bitvector. forall s:int.
+    bv_length(lsr(b,s)) = bv_length(b)
+
+axiom lsr_nth_low:
+  forall b:bitvector. forall n,s:int.
+    n+s < bv_length(b) -> 
+      bv_nth(lsr(b,s),n) = bv_nth(b,n+s)
+
+axiom lsr_nth_high:
+  forall b:bitvector. forall n,s:int.
+    n+s >= bv_length(b) -> 
+      bv_nth(lsr(b,s),n) = false
+
+goal test2:
+  forall b:bitvector.
+    b = lsr(bv_one32,16) ->
+    bv_nth(b,15) = true
+     
+goal test3:
+  forall b:bitvector.
+    b = lsr(bv_one32,16) ->
+    bv_nth(b,16) = false
+     
+logic asr : bitvector, int -> bitvector
+
+axiom asr_length:
+  forall b:bitvector. forall s:int.
+    bv_length(asr(b,s)) = bv_length(b)
+
+axiom asr_nth_low:
+  forall b:bitvector. forall n,s:int.
+    n+s < bv_length(b) -> 
+      bv_nth(asr(b,s),n) = bv_nth(b,n+s)
+
+axiom asr_nth_high:
+  forall b:bitvector. forall n,s:int.
+    n+s >= bv_length(b) -> 
+      bv_nth(asr(b,s),n) = bv_nth(b,bv_length(b)-1)
+
+goal test4:
+  forall b:bitvector.
+    b = asr(bv_one32,16) ->
+    bv_nth(b,15) = true
+     
+goal test5:
+  forall b:bitvector.
+    b = asr(bv_one32,16) ->
+    bv_nth(b,16) = true
+
+goal test6:
+  forall b:bitvector.
+    b = asr(lsr(bv_one32,1),16) ->
+    bv_nth(b,16) = false
+     
+logic lsl : bitvector, int -> bitvector
+
+axiom lsl_length:
+  forall b:bitvector. forall s:int.
+    bv_length(lsl(b,s)) = bv_length(b)
+
+axiom lsl_nth_high:
+  forall b:bitvector. forall n,s:int.
+    n-s >= 0 -> 
+      bv_nth(lsl(b,s),n) = bv_nth(b,n-s)
+
+axiom lsl_nth_low:
+  forall b:bitvector. forall n,s:int.
+    n-s < 0 -> 
+      bv_nth(lsl(b,s),n) = false
+

@@ -74,18 +74,14 @@ double interp_lin(double x[], double y[], int n, double z) {
     @*/
   for (i=1; i<n; i++) {if (z <= x[i]) break;}
   if (i==n) return y[n-1];
-  double xim1 = x[i-1];
-  double xi = x[i];
-  double yim1 = y[i-1];
-  double yi = y[i];
-  //@ assert bounded(xim1);
-  //@ assert bounded(xi);
-  //@ assert bounded(yim1);
-  //@ assert bounded(yi);
-  double zmxim1 = z-xim1;
-  //@ assert xi - xim1 >= LOWER;
-  return yim1+zmxim1*(yi-yim1)/(xi-xim1);
-  //  return y[i-1]+(z-x[i-1])*(y[i]-y[i-1])/(x[i]-x[i-1]);
+  //@ assert bounded(x[i-1]);
+  //@ assert bounded(x[i]);
+  //@ assert bounded(y[i-1]);
+  //@ assert bounded(y[i]);
+  //@ assert x[i] - x[i-1] >= LOWER;
+  //@ assert \abs(z - x[i-1]) <= 2.0 * UPPER;
+  //@ assert \abs(y[i] - y[i-1]) <= 2.0 * UPPER;
+   return y[i-1]+(z-x[i-1])*(y[i]-y[i-1])/(x[i]-x[i-1]);
 }
 
 /* 
