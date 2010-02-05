@@ -1,4 +1,4 @@
-/* Frama-C BTS 0329
+/* Frama-C BTS 0332
 
 Status: open
 
@@ -19,6 +19,6 @@ void f(int*p,int e,int t,int f,int r)
 
 /*
 Local Variables:
-compile-command: "LC_ALL=C frama-c -jessie bts0329.c"
+compile-command: "LC_ALL=C frama-c -jessie -jessie-adhoc-normalization bts0332.c"
 End:
 */
