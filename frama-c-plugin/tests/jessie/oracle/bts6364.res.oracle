@@ -571,7 +571,7 @@ why --project [...] why/bts6364.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/bts6364_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts6364.c" line = "3" begin = "13" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/bts6364.c" line = "3" begin = "14" end = "22"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

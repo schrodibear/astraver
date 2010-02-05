@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Frama-C.                                         *)
 (*                                                                        *)
-(*  Copyright (C) 2007-2009                                               *)
+(*  Copyright (C) 2007-2010                                               *)
 (*    INRIA (Institut National de Recherche en Informatique et en         *)
 (*           Automatique)                                                 *)
 (*                                                                        *)
@@ -859,9 +859,9 @@ and terms t =
 	begin
 	  try
             let name = translated_name linfo tlist in
-            let prof, tlist = 
+            let prof, tlist =
               if linfo.l_var_info.lv_name = "\\round_float" then
-                List.tl linfo.l_profile, List.tl tlist 
+                List.tl linfo.l_profile, List.tl tlist
               else
                 linfo.l_profile, tlist
             in
@@ -903,12 +903,24 @@ and terms t =
 
     | Tnull -> [JCPEconst JCCnull]
 
-    | Tlet(v,def,body) ->
-        let jc_def = term def in
-        let jc_body = term body in
-        let typ = ltype v.lv_type in
-        [JCPElet(Some typ, v.lv_name, Some jc_def, jc_body)]
-
+    | Tlet(def,body) ->
+        begin
+          let v = def.l_var_info in
+          match def.l_body, def.l_profile with
+              LBterm t, [] ->
+                let jc_def = term t in
+                let jc_body = term body in
+                let typ = ltype v.lv_type in
+                [JCPElet(Some typ, v.lv_name, Some jc_def, jc_body)]
+            | LBpred p, [] ->
+                let jc_def = pred p in
+                let jc_body = term body in
+                [JCPElet(None,v.lv_name, Some jc_def, jc_body)]
+            | (LBterm _ | LBpred _), _::_ ->
+                Extlib.not_yet_implemented "local function definition"
+            | (LBreads _ | LBinductive _), _ ->
+                Jessie_options.fatal "Unexpected definition for local variable"
+        end
     | TCoerce(_t,_typ) ->
 	(* TODO: see if useful *)
 	Extlib.not_yet_implemented "Interp.terms TCoerce"
@@ -1013,7 +1025,7 @@ and term_lval pos lv  =
 	unsupported "Expecting a single lval, not a set:@ %a@."
           !Ast_printer.d_term_lval lv
 
-let rec pred p =
+and pred p =
   CurrentLoc.set p.loc;
   let enode = match p.content with
     | Pfalse -> JCPEconst(JCCboolean false)
@@ -1092,9 +1104,24 @@ let rec pred p =
 
     | Pif(t,p1,p2) -> JCPEif(term t,pred p1,pred p2)
 
-    | Plet(_v,_t,_p) ->
-	(* TODO *)
-	Extlib.not_yet_implemented "Interp.pred Plet"
+    | Plet(def,body) ->
+	begin
+          let v = def.l_var_info in
+          match def.l_body, def.l_profile with
+              LBterm t, [] ->
+                let jc_def = term t in
+                let jc_body = pred body in
+                let typ = ltype v.lv_type in
+                JCPElet(Some typ, v.lv_name, Some jc_def, jc_body)
+            | LBpred p, [] ->
+                let jc_def = pred p in
+                let jc_body = pred body in
+                JCPElet(None,v.lv_name, Some jc_def, jc_body)
+            | (LBterm _ | LBpred _), _::_ ->
+                Extlib.not_yet_implemented "local function definition"
+            | (LBreads _ | LBinductive _), _ ->
+                Jessie_options.fatal "Unexpected definition for local variable"
+        end
 
     | Pforall([],p) -> (pred p)#node
 

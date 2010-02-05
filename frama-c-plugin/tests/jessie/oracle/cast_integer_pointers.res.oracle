@@ -460,39 +460,39 @@ behavior default:
    }
 }
 
-int32 uchar_ptr(unsigned_char_P[..] p)
-  requires (C_27 : ((C_28 : (\offset_min(p) <= 0)) &&
-                     (C_29 : (\offset_max(p) >= 0))));
+int32 uchar_ptr(unsigned_char_P[..] p_0)
+  requires (C_27 : ((C_28 : (\offset_min(p_0) <= 0)) &&
+                     (C_29 : (\offset_max(p_0) >= 0))));
 behavior default:
   assumes true;
   ensures (C_30 : true);
 {  
    (var int32 __retres_0);
    
-   {  (C_26 : (__retres_0 = (C_25 : ((C_24 : p.unsigned_char_M) :> int32))));
+   {  (C_26 : (__retres_0 = (C_25 : ((C_24 : p_0.unsigned_char_M) :> int32))));
       
       (return __retres_0)
    }
 }
 
-int32 schar_ptr(signed_char_P[..] p_0)
-  requires (C_34 : ((C_35 : (\offset_min(p_0) <= 0)) &&
-                     (C_36 : (\offset_max(p_0) >= 0))));
+int32 schar_ptr(signed_char_P[..] p_1)
+  requires (C_34 : ((C_35 : (\offset_min(p_1) <= 0)) &&
+                     (C_36 : (\offset_max(p_1) >= 0))));
 behavior default:
   assumes true;
   ensures (C_37 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_33 : (__retres_1 = (C_32 : ((C_31 : p_0.signed_char_M) :> int32))));
+   {  (C_33 : (__retres_1 = (C_32 : ((C_31 : p_1.signed_char_M) :> int32))));
       
       (return __retres_1)
    }
 }
 
-int32 char_ptr(char_P[..] p_1)
-  requires (C_48 : ((C_49 : (\offset_min(p_1) <= 0)) &&
-                     (C_50 : (\offset_max(p_1) >= 0))));
+int32 char_ptr(char_P[..] p)
+  requires (C_48 : ((C_49 : (\offset_min(p) <= 0)) &&
+                     (C_50 : (\offset_max(p) >= 0))));
 behavior default:
   assumes true;
   ensures (C_51 : true);
@@ -503,13 +503,13 @@ behavior default:
    
    (var int32 __retres_2);
    
-   {  (if ((C_43 : ((C_42 : p_1.char_M) :> int32)) > 127) then 
-      {  (C_40 : (tmp = (C_39 : uchar_ptr((C_38 : (p_1 :> unsigned_char_P[..]))))));
+   {  (if ((C_43 : ((C_42 : p.char_M) :> int32)) > 127) then 
+      {  (C_40 : (tmp = (C_39 : uchar_ptr((C_38 : (p :> unsigned_char_P[..]))))));
          (C_41 : (__retres_2 = tmp));
          
          (goto return_label)
       } else ());
-      (C_46 : (tmp_0 = (C_45 : schar_ptr((C_44 : (p_1 :> signed_char_P[..]))))));
+      (C_46 : (tmp_0 = (C_45 : schar_ptr((C_44 : (p :> signed_char_P[..]))))));
       (C_47 : (__retres_2 = tmp_0));
       (return_label : 
       (return __retres_2))
@@ -2112,17 +2112,17 @@ parameter any_uint32 : unit -> { } uint32 { true }
 parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter char_ptr :
- p_1:char_P pointer ->
-  char_P_p_1_24_alloc_table:char_P alloc_table ->
-   char_P_char_M_p_1_24:(char_P, int8) memory -> { } int32 { true }
+ p:char_P pointer ->
+  char_P_p_24_alloc_table:char_P alloc_table ->
+   char_P_char_M_p_24:(char_P, int8) memory -> { } int32 { true }
 
 parameter char_ptr_requires :
- p_1:char_P pointer ->
-  char_P_p_1_24_alloc_table:char_P alloc_table ->
-   char_P_char_M_p_1_24:(char_P, int8) memory ->
+ p:char_P pointer ->
+  char_P_p_24_alloc_table:char_P alloc_table ->
+   char_P_char_M_p_24:(char_P, int8) memory ->
     { (JC_68:
-      ((JC_66: le_int(offset_min(char_P_p_1_24_alloc_table, p_1), (0)))
-      and (JC_67: ge_int(offset_max(char_P_p_1_24_alloc_table, p_1), (0)))))}
+      ((JC_66: le_int(offset_min(char_P_p_24_alloc_table, p), (0)))
+      and (JC_67: ge_int(offset_max(char_P_p_24_alloc_table, p), (0)))))}
     int32 { true }
 
 parameter init_uint_through_int :
@@ -2168,20 +2168,20 @@ parameter safe_uint8_of_integer_ :
  x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
 
 parameter schar_ptr :
- p_0:signed_char_P pointer ->
-  signed_char_P_p_0_23_alloc_table:signed_char_P alloc_table ->
-   signed_char_P_signed_char_M_p_0_23:(signed_char_P, int8) memory ->
+ p_1:signed_char_P pointer ->
+  signed_char_P_p_1_23_alloc_table:signed_char_P alloc_table ->
+   signed_char_P_signed_char_M_p_1_23:(signed_char_P, int8) memory ->
     { } int32 { true }
 
 parameter schar_ptr_requires :
- p_0:signed_char_P pointer ->
-  signed_char_P_p_0_23_alloc_table:signed_char_P alloc_table ->
-   signed_char_P_signed_char_M_p_0_23:(signed_char_P, int8) memory ->
+ p_1:signed_char_P pointer ->
+  signed_char_P_p_1_23_alloc_table:signed_char_P alloc_table ->
+   signed_char_P_signed_char_M_p_1_23:(signed_char_P, int8) memory ->
     { (JC_54:
       ((JC_52:
-       le_int(offset_min(signed_char_P_p_0_23_alloc_table, p_0), (0)))
+       le_int(offset_min(signed_char_P_p_1_23_alloc_table, p_1), (0)))
       and (JC_53:
-          ge_int(offset_max(signed_char_P_p_0_23_alloc_table, p_0), (0)))))}
+          ge_int(offset_max(signed_char_P_p_1_23_alloc_table, p_1), (0)))))}
     int32 { true }
 
 parameter struct_char_P_alloc_of_bitvector :
@@ -2439,19 +2439,20 @@ parameter struct_void_P_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
 parameter uchar_ptr :
- p:unsigned_char_P pointer ->
-  unsigned_char_P_p_22_alloc_table:unsigned_char_P alloc_table ->
-   unsigned_char_P_unsigned_char_M_p_22:(unsigned_char_P, uint8) memory ->
+ p_0:unsigned_char_P pointer ->
+  unsigned_char_P_p_0_22_alloc_table:unsigned_char_P alloc_table ->
+   unsigned_char_P_unsigned_char_M_p_0_22:(unsigned_char_P, uint8) memory ->
     { } int32 { true }
 
 parameter uchar_ptr_requires :
- p:unsigned_char_P pointer ->
-  unsigned_char_P_p_22_alloc_table:unsigned_char_P alloc_table ->
-   unsigned_char_P_unsigned_char_M_p_22:(unsigned_char_P, uint8) memory ->
+ p_0:unsigned_char_P pointer ->
+  unsigned_char_P_p_0_22_alloc_table:unsigned_char_P alloc_table ->
+   unsigned_char_P_unsigned_char_M_p_0_22:(unsigned_char_P, uint8) memory ->
     { (JC_40:
-      ((JC_38: le_int(offset_min(unsigned_char_P_p_22_alloc_table, p), (0)))
+      ((JC_38:
+       le_int(offset_min(unsigned_char_P_p_0_22_alloc_table, p_0), (0)))
       and (JC_39:
-          ge_int(offset_max(unsigned_char_P_p_22_alloc_table, p), (0)))))}
+          ge_int(offset_max(unsigned_char_P_p_0_22_alloc_table, p_0), (0)))))}
     int32 { true }
 
 parameter uint16_of_integer_ :
@@ -2498,15 +2499,13 @@ parameter uint_to_int_requires :
        integer_of_uint32(select(unsigned_int_P_unsigned_int_M_up_20, up))))) }
 
 let char_ptr_ensures_default =
- fun (p_1 : unit pointer) (bitvector_p_1_24_alloc_table : unit alloc_table) (bitvector_p_1_24 : (unit, bitvector) memory) ->
+ fun (p : unit pointer) (bitvector_p_24_alloc_table : unit alloc_table) (bitvector_p_24 : (unit, bitvector) memory) ->
   { ((true = true)
     and (JC_72:
         ((JC_70:
-         le_int(offset_min_bytes(bitvector_p_1_24_alloc_table, p_1, (1)),
-         (0)))
+         le_int(offset_min_bytes(bitvector_p_24_alloc_table, p, (1)), (0)))
         and (JC_71:
-            ge_int(offset_max_bytes(bitvector_p_1_24_alloc_table, p_1, (1)),
-            (0)))))) }
+            ge_int(offset_max_bytes(bitvector_p_24_alloc_table, p, (1)), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2521,25 +2520,25 @@ let char_ptr_ensures_default =
                                                           (integer_of_int8 
                                                            (C_42:
                                                            (int8_of_bitvector 
-                                                            ((((safe_acc_bytes_ bitvector_p_1_24) p_1) (0)) (1))))))))) (127))
+                                                            ((((safe_acc_bytes_ bitvector_p_24) p) (0)) (1))))))))) (127))
                          then
                           (let jessie_76 = (C_40:
                                            begin
                                              (let jessie_73 = (tmp := 
                                                                (C_39:
-                                                               (let unsigned_char_P_p_1_24_alloc_table = ref 
+                                                               (let unsigned_char_P_p_24_alloc_table = ref 
                                                                (any_alloc_table void) in
-                                                               (let unsigned_char_P_unsigned_char_M_p_1_24 = ref 
+                                                               (let unsigned_char_P_unsigned_char_M_p_24 = ref 
                                                                (any_memory void) in
                                                                begin
-                                                                 ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_p_1_24_alloc_table) bitvector_p_1_24_alloc_table);
-                                                                ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_p_1_24) bitvector_p_1_24);
+                                                                 ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_p_24_alloc_table) bitvector_p_24_alloc_table);
+                                                                ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_p_24) bitvector_p_24);
                                                                 (let jessie_72 = 
                                                                 (C_38:
-                                                                p_1) in
+                                                                p) in
                                                                 (JC_82:
                                                                 (((uchar_ptr 
-                                                                   (unsigned_char_P_of_pointer_address jessie_72)) !unsigned_char_P_p_1_24_alloc_table) !unsigned_char_P_unsigned_char_M_p_1_24)))
+                                                                   (unsigned_char_P_of_pointer_address jessie_72)) !unsigned_char_P_p_24_alloc_table) !unsigned_char_P_unsigned_char_M_p_24)))
                                                                end)))) in
                                              void);
                                             (C_41:
@@ -2554,18 +2553,18 @@ let char_ptr_ensures_default =
                         (C_46:
                         begin
                           (let jessie_79 = (tmp_0 := (C_45:
-                                                     (let signed_char_P_p_1_24_alloc_table = ref 
+                                                     (let signed_char_P_p_24_alloc_table = ref 
                                                      (any_alloc_table void) in
-                                                     (let signed_char_P_signed_char_M_p_1_24 = ref 
+                                                     (let signed_char_P_signed_char_M_p_24 = ref 
                                                      (any_memory void) in
                                                      begin
-                                                       ((struct_signed_char_P_alloc_of_bitvector signed_char_P_p_1_24_alloc_table) bitvector_p_1_24_alloc_table);
-                                                      ((struct_signed_char_P_mem_of_bitvector signed_char_P_signed_char_M_p_1_24) bitvector_p_1_24);
+                                                       ((struct_signed_char_P_alloc_of_bitvector signed_char_P_p_24_alloc_table) bitvector_p_24_alloc_table);
+                                                      ((struct_signed_char_P_mem_of_bitvector signed_char_P_signed_char_M_p_24) bitvector_p_24);
                                                       (let jessie_78 = 
                                                       (C_44:
-                                                      p_1) in
+                                                      p) in
                                                       (JC_83:
-                                                      (((schar_ptr (signed_char_P_of_pointer_address jessie_78)) !signed_char_P_p_1_24_alloc_table) !signed_char_P_signed_char_M_p_1_24)))
+                                                      (((schar_ptr (signed_char_P_of_pointer_address jessie_78)) !signed_char_P_p_24_alloc_table) !signed_char_P_signed_char_M_p_24)))
                                                      end)))) in
                           void);
                          (C_47:
@@ -2587,12 +2586,12 @@ let char_ptr_ensures_default =
   { (JC_74: true) }
 
 let char_ptr_safety =
- fun (p_1 : unit pointer) (bitvector_p_1_24_alloc_table : unit alloc_table) (bitvector_p_1_24 : (unit, bitvector) memory) ->
+ fun (p : unit pointer) (bitvector_p_24_alloc_table : unit alloc_table) (bitvector_p_24 : (unit, bitvector) memory) ->
   { (JC_72:
     ((JC_70:
-     le_int(offset_min_bytes(bitvector_p_1_24_alloc_table, p_1, (1)), (0)))
+     le_int(offset_min_bytes(bitvector_p_24_alloc_table, p, (1)), (0)))
     and (JC_71:
-        ge_int(offset_max_bytes(bitvector_p_1_24_alloc_table, p_1, (1)), (0))))) }
+        ge_int(offset_max_bytes(bitvector_p_24_alloc_table, p, (1)), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2609,25 +2608,25 @@ let char_ptr_safety =
                                                            (C_42:
                                                            (int8_of_bitvector 
                                                             (JC_78:
-                                                            (((((acc_bytes_ bitvector_p_1_24_alloc_table) bitvector_p_1_24) p_1) (0)) (1))))))))))) (127))
+                                                            (((((acc_bytes_ bitvector_p_24_alloc_table) bitvector_p_24) p) (0)) (1))))))))))) (127))
                          then
                           (let jessie_63 = (C_40:
                                            begin
                                              (let jessie_60 = (tmp := 
                                                                (C_39:
-                                                               (let unsigned_char_P_p_1_24_alloc_table = ref 
+                                                               (let unsigned_char_P_p_24_alloc_table = ref 
                                                                (any_alloc_table void) in
-                                                               (let unsigned_char_P_unsigned_char_M_p_1_24 = ref 
+                                                               (let unsigned_char_P_unsigned_char_M_p_24 = ref 
                                                                (any_memory void) in
                                                                begin
-                                                                 ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_p_1_24_alloc_table) bitvector_p_1_24_alloc_table);
-                                                                ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_p_1_24) bitvector_p_1_24);
+                                                                 ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_p_24_alloc_table) bitvector_p_24_alloc_table);
+                                                                ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_p_24) bitvector_p_24);
                                                                 (let jessie_59 = 
                                                                 (C_38:
-                                                                p_1) in
+                                                                p) in
                                                                 (JC_80:
                                                                 (((uchar_ptr_requires 
-                                                                   (unsigned_char_P_of_pointer_address jessie_59)) !unsigned_char_P_p_1_24_alloc_table) !unsigned_char_P_unsigned_char_M_p_1_24)))
+                                                                   (unsigned_char_P_of_pointer_address jessie_59)) !unsigned_char_P_p_24_alloc_table) !unsigned_char_P_unsigned_char_M_p_24)))
                                                                end)))) in
                                              void);
                                             (C_41:
@@ -2642,19 +2641,19 @@ let char_ptr_safety =
                         (C_46:
                         begin
                           (let jessie_66 = (tmp_0 := (C_45:
-                                                     (let signed_char_P_p_1_24_alloc_table = ref 
+                                                     (let signed_char_P_p_24_alloc_table = ref 
                                                      (any_alloc_table void) in
-                                                     (let signed_char_P_signed_char_M_p_1_24 = ref 
+                                                     (let signed_char_P_signed_char_M_p_24 = ref 
                                                      (any_memory void) in
                                                      begin
-                                                       ((struct_signed_char_P_alloc_of_bitvector signed_char_P_p_1_24_alloc_table) bitvector_p_1_24_alloc_table);
-                                                      ((struct_signed_char_P_mem_of_bitvector signed_char_P_signed_char_M_p_1_24) bitvector_p_1_24);
+                                                       ((struct_signed_char_P_alloc_of_bitvector signed_char_P_p_24_alloc_table) bitvector_p_24_alloc_table);
+                                                      ((struct_signed_char_P_mem_of_bitvector signed_char_P_signed_char_M_p_24) bitvector_p_24);
                                                       (let jessie_65 = 
                                                       (C_44:
-                                                      p_1) in
+                                                      p) in
                                                       (JC_81:
                                                       (((schar_ptr_requires 
-                                                         (signed_char_P_of_pointer_address jessie_65)) !signed_char_P_p_1_24_alloc_table) !signed_char_P_signed_char_M_p_1_24)))
+                                                         (signed_char_P_of_pointer_address jessie_65)) !signed_char_P_p_24_alloc_table) !signed_char_P_signed_char_M_p_24)))
                                                      end)))) in
                           void);
                          (C_47:
@@ -2870,13 +2869,13 @@ let init_uint_through_int_safety =
   { true }
 
 let schar_ptr_ensures_default =
- fun (p_0 : signed_char_P pointer) (signed_char_P_p_0_23_alloc_table : signed_char_P alloc_table) (signed_char_P_signed_char_M_p_0_23 : (signed_char_P, int8) memory) ->
+ fun (p_1 : signed_char_P pointer) (signed_char_P_p_1_23_alloc_table : signed_char_P alloc_table) (signed_char_P_signed_char_M_p_1_23 : (signed_char_P, int8) memory) ->
   { ((true = true)
     and (JC_58:
         ((JC_56:
-         le_int(offset_min(signed_char_P_p_0_23_alloc_table, p_0), (0)))
+         le_int(offset_min(signed_char_P_p_1_23_alloc_table, p_1), (0)))
         and (JC_57:
-            ge_int(offset_max(signed_char_P_p_0_23_alloc_table, p_0), (0)))))) }
+            ge_int(offset_max(signed_char_P_p_1_23_alloc_table, p_1), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2887,7 +2886,7 @@ let schar_ptr_ensures_default =
        (let jessie_56 = (__retres_1 := (C_32:
                                        (safe_int32_of_integer_ (integer_of_int8 
                                                                 (C_31:
-                                                                ((safe_acc_ signed_char_P_signed_char_M_p_0_23) p_0)))))) in
+                                                                ((safe_acc_ signed_char_P_signed_char_M_p_1_23) p_1)))))) in
        void);
       (return := !__retres_1);
       (raise Return)
@@ -2900,11 +2899,11 @@ let schar_ptr_ensures_default =
   { (JC_60: true) }
 
 let schar_ptr_safety =
- fun (p_0 : signed_char_P pointer) (signed_char_P_p_0_23_alloc_table : signed_char_P alloc_table) (signed_char_P_signed_char_M_p_0_23 : (signed_char_P, int8) memory) ->
+ fun (p_1 : signed_char_P pointer) (signed_char_P_p_1_23_alloc_table : signed_char_P alloc_table) (signed_char_P_signed_char_M_p_1_23 : (signed_char_P, int8) memory) ->
   { (JC_58:
-    ((JC_56: le_int(offset_min(signed_char_P_p_0_23_alloc_table, p_0), (0)))
+    ((JC_56: le_int(offset_min(signed_char_P_p_1_23_alloc_table, p_1), (0)))
     and (JC_57:
-        ge_int(offset_max(signed_char_P_p_0_23_alloc_table, p_0), (0))))) }
+        ge_int(offset_max(signed_char_P_p_1_23_alloc_table, p_1), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2917,7 +2916,7 @@ let schar_ptr_safety =
                                        (int32_of_integer_ (integer_of_int8 
                                                            (C_31:
                                                            (JC_64:
-                                                           (((acc_ signed_char_P_p_0_23_alloc_table) signed_char_P_signed_char_M_p_0_23) p_0)))))))) in
+                                                           (((acc_ signed_char_P_p_1_23_alloc_table) signed_char_P_signed_char_M_p_1_23) p_1)))))))) in
        void);
       (return := !__retres_1);
       (raise Return)
@@ -2930,13 +2929,13 @@ let schar_ptr_safety =
   { true }
 
 let uchar_ptr_ensures_default =
- fun (p : unsigned_char_P pointer) (unsigned_char_P_p_22_alloc_table : unsigned_char_P alloc_table) (unsigned_char_P_unsigned_char_M_p_22 : (unsigned_char_P, uint8) memory) ->
+ fun (p_0 : unsigned_char_P pointer) (unsigned_char_P_p_0_22_alloc_table : unsigned_char_P alloc_table) (unsigned_char_P_unsigned_char_M_p_0_22 : (unsigned_char_P, uint8) memory) ->
   { ((true = true)
     and (JC_44:
         ((JC_42:
-         le_int(offset_min(unsigned_char_P_p_22_alloc_table, p), (0)))
+         le_int(offset_min(unsigned_char_P_p_0_22_alloc_table, p_0), (0)))
         and (JC_43:
-            ge_int(offset_max(unsigned_char_P_p_22_alloc_table, p), (0)))))) }
+            ge_int(offset_max(unsigned_char_P_p_0_22_alloc_table, p_0), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2947,7 +2946,7 @@ let uchar_ptr_ensures_default =
        (let jessie_50 = (__retres_0 := (C_25:
                                        (safe_int32_of_integer_ (integer_of_uint8 
                                                                 (C_24:
-                                                                ((safe_acc_ unsigned_char_P_unsigned_char_M_p_22) p)))))) in
+                                                                ((safe_acc_ unsigned_char_P_unsigned_char_M_p_0_22) p_0)))))) in
        void);
       (return := !__retres_0);
       (raise Return)
@@ -2960,10 +2959,12 @@ let uchar_ptr_ensures_default =
   { (JC_46: true) }
 
 let uchar_ptr_safety =
- fun (p : unsigned_char_P pointer) (unsigned_char_P_p_22_alloc_table : unsigned_char_P alloc_table) (unsigned_char_P_unsigned_char_M_p_22 : (unsigned_char_P, uint8) memory) ->
+ fun (p_0 : unsigned_char_P pointer) (unsigned_char_P_p_0_22_alloc_table : unsigned_char_P alloc_table) (unsigned_char_P_unsigned_char_M_p_0_22 : (unsigned_char_P, uint8) memory) ->
   { (JC_44:
-    ((JC_42: le_int(offset_min(unsigned_char_P_p_22_alloc_table, p), (0)))
-    and (JC_43: ge_int(offset_max(unsigned_char_P_p_22_alloc_table, p), (0))))) }
+    ((JC_42:
+     le_int(offset_min(unsigned_char_P_p_0_22_alloc_table, p_0), (0)))
+    and (JC_43:
+        ge_int(offset_max(unsigned_char_P_p_0_22_alloc_table, p_0), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2976,7 +2977,7 @@ let uchar_ptr_safety =
                                        (int32_of_integer_ (integer_of_uint8 
                                                            (C_24:
                                                            (JC_50:
-                                                           (((acc_ unsigned_char_P_p_22_alloc_table) unsigned_char_P_unsigned_char_M_p_22) p)))))))) in
+                                                           (((acc_ unsigned_char_P_p_0_22_alloc_table) unsigned_char_P_unsigned_char_M_p_0_22) p_0)))))))) in
        void);
       (return := !__retres_0);
       (raise Return)
@@ -3183,11 +3184,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/cast_integer_pointers_po15.why">
-      <location file = "why/cast_integer_pointers.why" line = "2280" begin = "62" end = "63"/>
+      <location file = "why/cast_integer_pointers.why" line = "2279" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/cast_integer_pointers_po16.why">
-      <location file = "why/cast_integer_pointers.why" line = "2280" begin = "62" end = "63"/>
+      <location file = "why/cast_integer_pointers.why" line = "2279" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
