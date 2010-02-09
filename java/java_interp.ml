@@ -888,7 +888,7 @@ let array_types decls =
        let result_var = mkvar ~name:"\\result" () in
        let spec = [
          mkbehavior_clause
-           ~name: "non_null"
+           ~name: "default"
 	   ~assigns:(Loc.dummy_position,[])
            ~ensures:
            (mkand ~list:[
@@ -907,11 +907,21 @@ let array_types decls =
             ] ())
            ();
        ] in
+       let args = [false, ptype_of_type vi.jc_var_info_type, var_name vi] in
+       let array_length_fun =
+	 (mkfun_def
+            ~result_type: (ptype_of_type fi.jc_fun_info_result.jc_var_info_type)
+	    ~name: (new identifier fi.jc_fun_info_name)
+            ~params: args
+            ~clauses: spec
+            ()) 	 
+       in
        (* non_null fun & pred *)
        let non_null_fi = create_non_null_fun st in
        let non_null_spec = [
          mkbehavior_clause
-           ~name: "normal"
+           ~name: "default"
+	   ~assigns:(Loc.dummy_position,[])
            ~ensures:
            (mkif
               ~condition: result_var
@@ -931,6 +941,15 @@ let array_types decls =
        in
        let args = [false, ptype_of_type vi.jc_var_info_type, var_name vi] in
        let largs = [ptype_of_type vi.jc_var_info_type, var_name vi] in
+       let non_null_fun =
+	 mkfun_def
+            ~result_type:
+            (ptype_of_type non_null_fi.jc_fun_info_result.jc_var_info_type)
+            ~name: (new identifier non_null_fi.jc_fun_info_name)
+            ~params: args
+            ~clauses: non_null_spec
+            ()
+       in
        (mklogic_def
           ~name: non_null_pred.jc_logic_info_name
           ~labels: [Jc_env.LabelHere]
@@ -953,19 +972,8 @@ let array_types decls =
 	     None
            end st.jc_struct_info_fields)
           ()) :: acc,
-       (mkfun_def
-          ~result_type: (ptype_of_type fi.jc_fun_info_result.jc_var_info_type)
-	  ~name: (new identifier fi.jc_fun_info_name)
-          ~params: args
-          ~clauses: spec
-          ()) :: 
-	 (mkfun_def
-            ~result_type:
-            (ptype_of_type non_null_fi.jc_fun_info_result.jc_var_info_type)
-            ~name: (new identifier non_null_fi.jc_fun_info_name)
-            ~params: args
-            ~clauses: non_null_spec
-            ()) :: decls)
+       array_length_fun :: 
+	 non_null_fun :: decls)
     Java_analysis.array_struct_table
     ([], 
      ((mktag_def ~name:"interface" ()) ::

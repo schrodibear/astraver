@@ -135,7 +135,8 @@ type rounding_mode =
   | Round_nearest_away
 
 type real_conversion = 
-  | Integer_to_real | Real_to_integer 
+  | Integer_to_real 
+      (* nonsense | Real_to_integer *)
   | Double_to_real
   | Float_to_real
   | Round of float_format * rounding_mode 

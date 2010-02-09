@@ -533,7 +533,7 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
         term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
           (term_coerce ~type_safe ~global_assertion lab pos (JCTnative Treal) ty_src e e')
     | JCTnative Tinteger, JCTnative Treal -> 
-	LApp("int_of_real",[ e' ])
+	assert false (* LApp("int_of_real",[ e' ]) *)
       (* between enums and integer *)
     | JCTenum ri1, JCTenum ri2
 	when ri1.jc_enum_info_name = ri2.jc_enum_info_name -> e'
@@ -633,7 +633,7 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	      make_app "real_of_int" [ make_app (logic_int_of_enum ri) [ e' ] ]
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
-	make_app "int_of_real" [ e' ]
+	assert false (* make_app "int_of_real" [ e' ] *)
     | JCTnative (Tgenfloat _), (JCTnative Tinteger | JCTenum _) ->
         coerce ~check_int_overflow mark pos ty_dst (JCTnative Treal) e
           (coerce ~check_int_overflow mark pos (JCTnative Treal) ty_src e e')
@@ -819,8 +819,10 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
               term_coerce t1#pos real_type t1#typ t1 t1'
 	  | Float_to_real ->
 	      term_coerce t1#pos real_type t1#typ t1 t1'
+(*
           | Real_to_integer ->
               term_coerce t1#pos integer_type t1#typ t1 t1'
+*)
 	  | Round(f,_rm) ->
               term_coerce t1#pos (JCTnative (Tgenfloat f)) t1#typ t1 t1'
 	end
@@ -2136,9 +2138,11 @@ and expr e =
 	  | Float_to_real ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos real_type e1#typ e1 e1'
+(*
           | Real_to_integer ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos integer_type e1#typ e1 e1'
+*)
           | Round(f,_rm) ->
               coerce ~check_int_overflow:(safety_checking() 
 					    (* no safe version in the full model*) 

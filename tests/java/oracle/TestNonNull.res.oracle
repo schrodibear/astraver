@@ -90,15 +90,16 @@ tag intM = Object with {
 }
 
 boolean non_null_intM(! intM[0..] x)
-behavior normal:
+behavior default:
+  assigns \nothing;
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(! intM[0..] x)
-behavior non_null:
+integer java_array_length_intM(! intM[0..-1] x)
+behavior default:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
-            ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
+            ((\result >= 0) && (\result == (\offset_max(x) + 1))));
 ;
 
 boolean non_null_Object(! Object[0..] x)
@@ -369,28 +370,28 @@ clean:
 
 ========== file tests/java/TestNonNull.loc ==========
 [JC_40]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 65
-begin = 8
-end = 23
+file = "HOME/tests/java/TestNonNull.java"
+line = 16
+begin = 4
+end = 15
 
 [JC_41]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 65
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_42]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 65
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_43]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 65
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_44]
 file = "HOME/tests/java/TestNonNull.java"
@@ -399,34 +400,37 @@ begin = 4
 end = 15
 
 [JC_45]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_46]
 file = "HOME/tests/java/TestNonNull.java"
 line = 16
 begin = 4
 end = 15
 
+[JC_46]
+kind = AllocSize
+file = "HOME/tests/java/TestNonNull.jc"
+line = 82
+begin = 23
+end = 34
+
 [JC_47]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/TestNonNull.jc"
+line = 82
+begin = 11
+end = 35
 
 [JC_48]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.java"
+line = 18
+begin = 12
+end = 25
 
 [JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = AllocSize
+file = "HOME/tests/java/TestNonNull.jc"
+line = 82
+begin = 23
+end = 34
 
 [JC_6]
 file = "HOME/tests/java/TestNonNull.jc"
@@ -478,66 +482,63 @@ end = 15
 
 [JC_50]
 file = "HOME/tests/java/TestNonNull.java"
-line = 16
-begin = 4
-end = 15
+line = 18
+begin = 12
+end = 25
 
 [JC_51]
-file = "HOME/tests/java/TestNonNull.java"
-line = 16
-begin = 4
-end = 15
-
-[JC_52]
-kind = AllocSize
-file = "HOME/tests/java/TestNonNull.jc"
-line = 81
-begin = 23
-end = 34
-
-[JC_53]
-kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.jc"
-line = 81
-begin = 11
-end = 35
-
-[JC_54]
-file = "HOME/tests/java/TestNonNull.java"
-line = 18
-begin = 12
-end = 25
-
-[JC_55]
-kind = AllocSize
-file = "HOME/tests/java/TestNonNull.jc"
-line = 81
-begin = 23
-end = 34
-
-[JC_56]
-file = "HOME/tests/java/TestNonNull.java"
-line = 18
-begin = 12
-end = 25
-
-[JC_57]
 file = "HOME/tests/java/TestNonNull.java"
 line = 22
 begin = 17
 end = 30
 
-[JC_58]
+[JC_52]
 file = "HOME/tests/java/TestNonNull.java"
 line = 23
 begin = 9
 end = 13
 
-[JC_59]
+[JC_53]
 file = "HOME/tests/java/TestNonNull.java"
 line = 23
 begin = 9
 end = 13
+
+[JC_54]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+file = "HOME/tests/java/TestNonNull.java"
+line = 22
+begin = 17
+end = 30
+
+[JC_56]
+file = "HOME/tests/java/TestNonNull.java"
+line = 23
+begin = 9
+end = 13
+
+[JC_57]
+file = "HOME/tests/java/TestNonNull.java"
+line = 23
+begin = 9
+end = 13
+
+[JC_58]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_60]
 file = "HOME/"
@@ -547,9 +548,9 @@ end = -1
 
 [JC_61]
 file = "HOME/tests/java/TestNonNull.java"
-line = 22
-begin = 17
-end = 30
+line = 23
+begin = 9
+end = 13
 
 [JC_62]
 file = "HOME/tests/java/TestNonNull.java"
@@ -558,52 +559,56 @@ begin = 9
 end = 13
 
 [JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 56
+begin = 11
+end = 66
 
 [JC_63]
+kind = IndexBounds
 file = "HOME/tests/java/TestNonNull.java"
-line = 23
+line = 24
 begin = 9
 end = 13
 
 [JC_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 55
+begin = 10
+end = 18
 
 [JC_64]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/TestNonNull.jc"
+line = 93
+begin = 17
+end = 33
 
 [JC_12]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 53
-begin = 8
-end = 21
+line = 56
+begin = 11
+end = 66
 
 [JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/TestNonNull.java"
+line = 26
+begin = 9
+end = 13
 
 [JC_13]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 53
-begin = 8
-end = 21
+line = 55
+begin = 10
+end = 18
 
 [JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/TestNonNull.jc"
+line = 98
+begin = 23
+end = 76
 
 [JC_14]
 file = "HOME/tests/java/TestNonNull.jc"
@@ -612,10 +617,11 @@ begin = 8
 end = 21
 
 [JC_67]
+kind = IndexBounds
 file = "HOME/tests/java/TestNonNull.java"
-line = 23
-begin = 9
-end = 13
+line = 28
+begin = 1
+end = 6
 
 [JC_15]
 file = "HOME/tests/java/TestNonNull.jc"
@@ -623,34 +629,21 @@ line = 53
 begin = 8
 end = 21
 
-[JC_68]
-file = "HOME/tests/java/TestNonNull.java"
-line = 23
-begin = 9
-end = 13
-
 [JC_16]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 53
+line = 59
 begin = 8
-end = 21
-
-[JC_69]
-kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.java"
-line = 24
-begin = 9
-end = 13
+end = 30
 
 [JC_17]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 53
-begin = 8
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 58
+line = 59
 begin = 8
 end = 30
 
@@ -660,93 +653,65 @@ line = 0
 begin = -1
 end = -1
 
-[JC_70]
-kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.jc"
-line = 92
-begin = 17
-end = 33
-
-[JC_71]
-kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.java"
-line = 26
-begin = 9
-end = 13
-
-[JC_72]
-kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.jc"
-line = 97
-begin = 23
-end = 76
-
 [JC_20]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 58
-begin = 8
-end = 30
-
-[JC_73]
-kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.java"
-line = 28
-begin = 1
-end = 6
+line = 62
+begin = 11
+end = 103
 
 [JC_21]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 61
+begin = 10
+end = 18
 
 [JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 62
+begin = 11
+end = 103
 
 [JC_23]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 61
+begin = 10
+end = 18
 
 [JC_24]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 58
+line = 59
 begin = 8
 end = 30
 
 [JC_25]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 58
+line = 59
 begin = 8
 end = 30
 
 [JC_26]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 58
+line = 66
 begin = 8
-end = 30
+end = 23
 
 [JC_27]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 58
-begin = 8
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_28]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 60
-begin = 10
-end = 18
+line = 66
+begin = 8
+end = 23
 
 [JC_29]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 58
-begin = 8
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_TestNonNull_safety]
 name = "Constructor of class TestNonNull"
@@ -757,64 +722,64 @@ begin = 4
 end = 15
 
 [JC_30]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 58
-begin = 8
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_31]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 60
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_32]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 65
+line = 66
 begin = 8
 end = 23
 
 [JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 66
+begin = 8
+end = 23
 
 [JC_34]
 file = "HOME/tests/java/TestNonNull.jc"
-line = 65
+line = 66
 begin = 8
 end = 23
 
 [JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 66
+begin = 8
+end = 23
 
 [JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/TestNonNull.jc"
+line = 66
+begin = 8
+end = 23
 
 [JC_37]
+file = "HOME/tests/java/TestNonNull.jc"
+line = 66
+begin = 8
+end = 23
+
+[JC_38]
+file = "HOME/tests/java/TestNonNull.java"
+line = 16
+begin = 4
+end = 15
+
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_38]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 65
-begin = 8
-end = 23
-
-[JC_39]
-file = "HOME/tests/java/TestNonNull.jc"
-line = 65
-begin = 8
-end = 23
 
 ========== file tests/java/why/TestNonNull.why ==========
 type Object
@@ -1331,16 +1296,16 @@ parameter TestNonNull_test :
  this_0:Object pointer ->
   t:Object pointer ->
    { } unit reads Object_alloc_table,intM_intP writes intM_intP
-   { (JC_68: st_length(Object_alloc_table)) }
+   { (JC_62: st_length(Object_alloc_table)) }
 
 parameter TestNonNull_test_requires :
  this_0:Object pointer ->
   t:Object pointer ->
-   { (JC_59:
-     ((JC_57: ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
-     and (JC_58: st_length(Object_alloc_table))))}
+   { (JC_53:
+     ((JC_51: ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
+     and (JC_52: st_length(Object_alloc_table))))}
    unit reads Object_alloc_table,intM_intP writes intM_intP
-   { (JC_68: st_length(Object_alloc_table)) }
+   { (JC_62: st_length(Object_alloc_table)) }
 
 parameter alloc_bitvector_struct_Exception :
  n:int ->
@@ -1659,14 +1624,14 @@ parameter cons_TestNonNull :
  this_1:Object pointer ->
   { } unit reads Object_alloc_table,TestNonNull_t
   writes Object_alloc_table,Object_tag_table,TestNonNull_t
-  { (JC_51: st_length(Object_alloc_table)) }
+  { (JC_45: st_length(Object_alloc_table)) }
 
 parameter cons_TestNonNull_requires :
  this_1:Object pointer ->
-  { (JC_44: st_length(Object_alloc_table))} unit
+  { (JC_38: st_length(Object_alloc_table))} unit
   reads Object_alloc_table,TestNonNull_t
   writes Object_alloc_table,Object_tag_table,TestNonNull_t
-  { (JC_51: st_length(Object_alloc_table)) }
+  { (JC_45: st_length(Object_alloc_table)) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1677,25 +1642,21 @@ parameter java_array_length_intM :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
   { ((JC_25: st_length(Object_alloc_table))
-    and (JC_30:
-        ((le_int(result, (2147483647))
-         and (ge_int(result, (0))
-             and (eq_int(result,
-                  add_int(offset_max(Object_alloc_table, x_2), (1)))
-                 and (true = true))))
-        and (JC_29: st_length(Object_alloc_table))))) }
+    and (JC_22:
+        (le_int(result, (2147483647))
+        and (ge_int(result, (0))
+            and eq_int(result,
+                add_int(offset_max(Object_alloc_table, x_2), (1))))))) }
 
 parameter java_array_length_intM_requires :
  x_2:Object pointer ->
-  { (JC_18: st_length(Object_alloc_table))} int reads Object_alloc_table
+  { (JC_16: st_length(Object_alloc_table))} int reads Object_alloc_table
   { ((JC_25: st_length(Object_alloc_table))
-    and (JC_30:
-        ((le_int(result, (2147483647))
-         and (ge_int(result, (0))
-             and (eq_int(result,
-                  add_int(offset_max(Object_alloc_table, x_2), (1)))
-                 and (true = true))))
-        and (JC_29: st_length(Object_alloc_table))))) }
+    and (JC_22:
+        (le_int(result, (2147483647))
+        and (ge_int(result, (0))
+            and eq_int(result,
+                add_int(offset_max(Object_alloc_table, x_2), (1))))))) }
 
 parameter long_of_integer_ :
  x:int ->
@@ -1705,42 +1666,40 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
-  { ((JC_39: st_length(Object_alloc_table))
-    and (JC_43:
+  { ((JC_33: st_length(Object_alloc_table))
+    and (JC_37:
         ((if result
           then eq_int(offset_max(Object_alloc_table, x_3), (0))
           else (x_3 = null))
-        and (JC_42: st_length(Object_alloc_table))))) }
+        and (JC_36: st_length(Object_alloc_table))))) }
 
 parameter non_null_Object_requires :
  x_3:Object pointer ->
-  { (JC_32: st_length(Object_alloc_table))} bool reads Object_alloc_table
-  { ((JC_39: st_length(Object_alloc_table))
-    and (JC_43:
+  { (JC_26: st_length(Object_alloc_table))} bool reads Object_alloc_table
+  { ((JC_33: st_length(Object_alloc_table))
+    and (JC_37:
         ((if result
           then eq_int(offset_max(Object_alloc_table, x_3), (0))
           else (x_3 = null))
-        and (JC_42: st_length(Object_alloc_table))))) }
+        and (JC_36: st_length(Object_alloc_table))))) }
 
 parameter non_null_intM :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { ((JC_13: st_length(Object_alloc_table))
-    and (JC_17:
-        ((if result
-          then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
-          else (x_1 = null))
-        and (JC_16: st_length(Object_alloc_table))))) }
+  { ((JC_15: st_length(Object_alloc_table))
+    and (JC_12:
+        (if result
+         then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+         else (x_1 = null)))) }
 
 parameter non_null_intM_requires :
  x_1:Object pointer ->
   { (JC_6: st_length(Object_alloc_table))} bool reads Object_alloc_table
-  { ((JC_13: st_length(Object_alloc_table))
-    and (JC_17:
-        ((if result
-          then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
-          else (x_1 = null))
-        and (JC_16: st_length(Object_alloc_table))))) }
+  { ((JC_15: st_length(Object_alloc_table))
+    and (JC_12:
+        (if result
+         then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+         else (x_1 = null)))) }
 
 parameter safe_byte_of_integer_ :
  x:int -> { } byte { eq_int(integer_of_byte(result), x) }
@@ -1767,10 +1726,10 @@ let TestNonNull_test_ensures_default =
   { (valid_struct_intM(t, (0), (-1), Object_alloc_table)
     and (valid_struct_TestNonNull(this_0, (0), (0), Object_alloc_table,
          TestNonNull_t)
-        and (JC_63:
-            ((JC_61:
+        and (JC_57:
+            ((JC_55:
              ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
-            and (JC_62: st_length(Object_alloc_table)))))) }
+            and (JC_56: st_length(Object_alloc_table)))))) }
   (init:
   try
    begin
@@ -1807,22 +1766,22 @@ let TestNonNull_test_ensures_default =
    with
    Return ->
    void end)
-  { (JC_65: true) }
+  { (JC_59: true) }
 
 let TestNonNull_test_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
   { (valid_struct_intM(t, (0), (-1), Object_alloc_table)
     and (valid_struct_TestNonNull(this_0, (0), (0), Object_alloc_table,
          TestNonNull_t)
-        and (JC_63:
-            ((JC_61:
+        and (JC_57:
+            ((JC_55:
              ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
-            and (JC_62: st_length(Object_alloc_table)))))) }
+            and (JC_56: st_length(Object_alloc_table)))))) }
   (init:
   try
    begin
      (let jessie_39 = (let i = (K_11:
-                               (JC_69:
+                               (JC_63:
                                ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t) (3)))) in
                       (K_5:
                       begin
@@ -1830,11 +1789,11 @@ let TestNonNull_test_safety =
                                          (let jessie_28 = t in
                                          (let jessie_29 = (2) in
                                          (let jessie_30 = ((shift jessie_28) jessie_29) in
-                                         (JC_70:
+                                         (JC_64:
                                          (((((lsafe_lbound_upd_ !Object_alloc_table) intM_intP) jessie_28) jessie_29) jessie_27)))))) in
                         void);
                        (let j = (K_10:
-                                (JC_71:
+                                (JC_65:
                                 ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t) (2)))) in
                        (K_7:
                        begin
@@ -1842,12 +1801,12 @@ let TestNonNull_test_safety =
                                           (let jessie_35 = t in
                                           (let jessie_36 = (3) in
                                           (let jessie_37 = ((shift jessie_35) jessie_36) in
-                                          (JC_72:
+                                          (JC_66:
                                           (((((lsafe_lbound_upd_ !Object_alloc_table) intM_intP) jessie_35) jessie_36) jessie_34)))))) in
                          void);
                         (K_9:
                         ((eq_int_ (integer_of_int32 (K_8:
-                                                    (JC_73:
+                                                    (JC_67:
                                                     ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) TestNonNull_st) (3)))))) (1)))
                        end))
                       end)) in
@@ -1857,13 +1816,13 @@ let TestNonNull_test_safety =
    with
    Return ->
    void end)
-  { (JC_67: st_length(Object_alloc_table)) }
+  { (JC_61: st_length(Object_alloc_table)) }
 
 let cons_TestNonNull_ensures_default =
  fun (this_1 : Object pointer) ->
   { (valid_struct_TestNonNull(this_1, (0), (0), Object_alloc_table,
      TestNonNull_t)
-    and (JC_46: st_length(Object_alloc_table))) }
+    and (JC_40: st_length(Object_alloc_table))) }
   (init:
   try
    begin
@@ -1873,14 +1832,14 @@ let cons_TestNonNull_ensures_default =
      void);
     (K_1:
     begin
-      (let jessie_24 = (let jessie_20 = (JC_55:
+      (let jessie_24 = (let jessie_20 = (JC_49:
                                         (((alloc_struct_intM (3)) Object_alloc_table) Object_tag_table)) in
                        (let jessie_23 = this_1 in
                        (((safe_upd_ TestNonNull_t) jessie_23) jessie_20))) in
       void);
      (K_3:
      (assert
-     { (JC_56:
+     { (JC_50:
        eq_int(add_int(offset_max(Object_alloc_table,
                       select(TestNonNull_t, this_1)),
               (1)),
@@ -1892,13 +1851,13 @@ let cons_TestNonNull_ensures_default =
    with
    Return ->
    void end)
-  { (JC_48: true) }
+  { (JC_42: true) }
 
 let cons_TestNonNull_safety =
  fun (this_1 : Object pointer) ->
   { (valid_struct_TestNonNull(this_1, (0), (0), Object_alloc_table,
      TestNonNull_t)
-    and (JC_46: st_length(Object_alloc_table))) }
+    and (JC_40: st_length(Object_alloc_table))) }
   (init:
   try
    begin
@@ -1908,9 +1867,9 @@ let cons_TestNonNull_safety =
      void);
     (K_1:
     begin
-      (let jessie_12 = (let jessie_8 = (let jessie_7 = (JC_52:
+      (let jessie_12 = (let jessie_8 = (let jessie_7 = (JC_46:
                                                        (((alloc_struct_intM_requires (3)) Object_alloc_table) Object_tag_table)) in
-                                       (JC_53:
+                                       (JC_47:
                                        (assert
                                        { ge_int(offset_max(Object_alloc_table,
                                                 jessie_7),
@@ -1921,7 +1880,7 @@ let cons_TestNonNull_safety =
       void);
      (K_3:
      [ { } unit reads Object_alloc_table,TestNonNull_t
-       { (JC_54:
+       { (JC_48:
          eq_int(add_int(offset_max(Object_alloc_table,
                         select(TestNonNull_t, this_1)),
                 (1)),
@@ -1932,7 +1891,7 @@ let cons_TestNonNull_safety =
    with
    Return ->
    void end)
-  { (JC_50: st_length(Object_alloc_table)) }
+  { (JC_44: st_length(Object_alloc_table)) }
 
 
 ========== make project execution ==========
@@ -1948,7 +1907,7 @@ why --project [...] why/TestNonNull.why
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/TestNonNull_po2.why">
-      <location file = "HOME/tests/java/TestNonNull.jc" line = "92" begin = "17" end = "33"/>
+      <location file = "HOME/tests/java/TestNonNull.jc" line = "93" begin = "17" end = "33"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -1967,12 +1926,12 @@ text = "IndexBounds"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/TestNonNull_po6.why">
-      <location file = "HOME/tests/java/TestNonNull.jc" line = "81" begin = "23" end = "34"/>
+      <location file = "HOME/tests/java/TestNonNull.jc" line = "82" begin = "23" end = "34"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/TestNonNull_po7.why">
-      <location file = "why/TestNonNull.why" line = "1096" begin = "41" end = "184"/>
+      <location file = "why/TestNonNull.why" line = "1090" begin = "41" end = "184"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/TestNonNull_po8.why">
@@ -2131,7 +2090,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2186,7 +2175,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2205,6 +2198,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 
@@ -3353,9 +3348,9 @@ goal TestNonNull_test_safety_po_1:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t))
 
 ========== file tests/java/why/TestNonNull_po2.why ==========
@@ -3370,9 +3365,9 @@ goal TestNonNull_test_safety_po_2:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -3392,9 +3387,9 @@ goal TestNonNull_test_safety_po_3:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -3427,9 +3422,9 @@ goal TestNonNull_test_safety_po_4:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -3451,7 +3446,7 @@ goal TestNonNull_test_safety_po_4:
   (3 <= offset_max(Object_alloc_table, TestNonNull_st)) ->
   forall result3:int32.
   (result3 = select(intM_intP1, shift(TestNonNull_st, 3))) ->
-  ("JC_67": st_length(Object_alloc_table))
+  ("JC_61": st_length(Object_alloc_table))
 
 ========== file tests/java/why/TestNonNull_po5.why ==========
 goal cons_TestNonNull_ensures_default_po_1:
@@ -3460,7 +3455,7 @@ goal cons_TestNonNull_ensures_default_po_1:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -3474,8 +3469,8 @@ goal cons_TestNonNull_ensures_default_po_1:
   forall TestNonNull_t1:(Object,
   Object pointer) memory.
   (TestNonNull_t1 = store(TestNonNull_t0, this_1, result)) ->
-  ("JC_56":
-  ("JC_56": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
+  ("JC_50":
+  ("JC_50": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
   this_1)) + 1) = 3)))
 
 ========== file tests/java/why/TestNonNull_po6.why ==========
@@ -3485,7 +3480,7 @@ goal cons_TestNonNull_safety_po_1:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -3498,7 +3493,7 @@ goal cons_TestNonNull_safety_po_2:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -3519,7 +3514,7 @@ goal cons_TestNonNull_safety_po_3:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -3535,9 +3530,9 @@ goal cons_TestNonNull_safety_po_3:
   forall TestNonNull_t1:(Object,
   Object pointer) memory.
   (TestNonNull_t1 = store(TestNonNull_t0, this_1, result)) ->
-  ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
+  ("JC_48": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
   this_1)) + 1) = 3)) ->
-  ("JC_50": st_length(Object_alloc_table0))
+  ("JC_44": st_length(Object_alloc_table0))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/TestNonNull.why
@@ -3624,6 +3619,38 @@ why -simplify [...] why/TestNonNull.why
  (FORALL (x y) (OR (EQ (int_min x y) x) (EQ (int_min x y) y))))
 
 (BG_PUSH
+ ;; Why axiom real_of_int_zero
+ (EQ (real_of_int 0) real_constant_0_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_one
+ (EQ (real_of_int 1) real_constant_1_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_add
+ (FORALL (x y)
+ (EQ (real_of_int (+ x y)) (real_add (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_sub
+ (FORALL (x y)
+ (EQ (real_of_int (- x y)) (real_sub (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_down_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (AND (EQ (le_real (real_of_int (truncate_real_to_int x)) x) |@true|)
+ (EQ (lt_real x (real_of_int (+ (truncate_real_to_int x) 1))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_up_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (AND (EQ (lt_real (real_of_int (- (truncate_real_to_int x) 1)) x) |@true|)
+ (EQ (le_real x (real_of_int (truncate_real_to_int x))) |@true|)))))
+
+(BG_PUSH
  ;; Why axiom lt_real_bool_axiom
  (FORALL (x y)
  (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
@@ -3672,6 +3699,16 @@ why -simplify [...] why/TestNonNull.why
  (FORALL (x y) (OR (EQ (real_min x y) x) (EQ (real_min x y) y))))
 
 (BG_PUSH
+ ;; Why axiom sqr_real_def
+ (FORALL (x) (EQ (sqr_real x) (real_mul x x))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_sqr
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (sqr_real (real_sqrt x)) x))))
+
+(BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
  (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
@@ -3685,6 +3722,11 @@ why -simplify [...] why/TestNonNull.why
 (BG_PUSH
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom exp_log
+ (FORALL (x)
+ (IMPLIES (EQ (gt_real x real_constant_0_0e) |@true|) (EQ (exp (log x)) x))))
 
 (BG_PUSH
  ;; Why axiom prod_pos
@@ -4632,7 +4674,7 @@ why -simplify [...] why/TestNonNull.why
          (st_length Object_alloc_table))))
 (<= 3 (offset_max Object_alloc_table t)))))))
 
-;; TestNonNull_test_safety_po_2, File "HOME/tests/java/TestNonNull.jc", line 92, characters 17-33
+;; TestNonNull_test_safety_po_2, File "HOME/tests/java/TestNonNull.jc", line 93, characters 17-33
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4736,7 +4778,7 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (EQ TestNonNull_t1 (|why__store| TestNonNull_t0 this_1 result))
 (EQ (+ (offset_max Object_alloc_table0 (select TestNonNull_t1 this_1)) 1) 3)))))))))))))
 
-;; cons_TestNonNull_safety_po_1, File "HOME/tests/java/TestNonNull.jc", line 81, characters 23-34
+;; cons_TestNonNull_safety_po_1, File "HOME/tests/java/TestNonNull.jc", line 82, characters 23-34
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)
@@ -4748,7 +4790,7 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (EQ TestNonNull_t0 (|why__store| TestNonNull_t this_1 null))
 (>= 3 0)))))))
 
-;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1096, characters 41-184
+;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1090, characters 41-184
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)
@@ -4951,7 +4993,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -5006,7 +5078,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -5025,6 +5101,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 
@@ -6172,9 +6250,9 @@ goal TestNonNull_test_safety_po_1:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t))
 
 goal TestNonNull_test_safety_po_2:
@@ -6188,9 +6266,9 @@ goal TestNonNull_test_safety_po_2:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -6209,9 +6287,9 @@ goal TestNonNull_test_safety_po_3:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -6243,9 +6321,9 @@ goal TestNonNull_test_safety_po_4:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    ("JC_63":
-    (("JC_61": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-     ("JC_62": st_length(Object_alloc_table)))))) ->
+    ("JC_57":
+    (("JC_55": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_56": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -6267,7 +6345,7 @@ goal TestNonNull_test_safety_po_4:
   (3 <= offset_max(Object_alloc_table, TestNonNull_st)) ->
   forall result3:int32.
   (result3 = select(intM_intP1, shift(TestNonNull_st, 3))) ->
-  ("JC_67": st_length(Object_alloc_table))
+  ("JC_61": st_length(Object_alloc_table))
 
 goal cons_TestNonNull_ensures_default_po_1:
   forall this_1:Object pointer.
@@ -6275,7 +6353,7 @@ goal cons_TestNonNull_ensures_default_po_1:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -6289,8 +6367,8 @@ goal cons_TestNonNull_ensures_default_po_1:
   forall TestNonNull_t1:(Object,
   Object pointer) memory.
   (TestNonNull_t1 = store(TestNonNull_t0, this_1, result)) ->
-  ("JC_56":
-  ("JC_56": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
+  ("JC_50":
+  ("JC_50": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
   this_1)) + 1) = 3)))
 
 goal cons_TestNonNull_safety_po_1:
@@ -6299,7 +6377,7 @@ goal cons_TestNonNull_safety_po_1:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -6311,7 +6389,7 @@ goal cons_TestNonNull_safety_po_2:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -6331,7 +6409,7 @@ goal cons_TestNonNull_safety_po_3:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_40": st_length(Object_alloc_table))) ->
   forall TestNonNull_t0:(Object,
   Object pointer) memory.
   (TestNonNull_t0 = store(TestNonNull_t, this_1, null)) ->
@@ -6347,9 +6425,9 @@ goal cons_TestNonNull_safety_po_3:
   forall TestNonNull_t1:(Object,
   Object pointer) memory.
   (TestNonNull_t1 = store(TestNonNull_t0, this_1, result)) ->
-  ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
+  ("JC_48": ((offset_max(Object_alloc_table0, select(TestNonNull_t1,
   this_1)) + 1) = 3)) ->
-  ("JC_50": st_length(Object_alloc_table0))
+  ("JC_44": st_length(Object_alloc_table0))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

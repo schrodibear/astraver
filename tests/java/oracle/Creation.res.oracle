@@ -3088,7 +3088,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -3143,7 +3173,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -3162,6 +3196,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 
@@ -4532,6 +4568,38 @@ why -simplify [...] why/Creation.why
  (FORALL (x y) (OR (EQ (int_min x y) x) (EQ (int_min x y) y))))
 
 (BG_PUSH
+ ;; Why axiom real_of_int_zero
+ (EQ (real_of_int 0) real_constant_0_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_one
+ (EQ (real_of_int 1) real_constant_1_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_add
+ (FORALL (x y)
+ (EQ (real_of_int (+ x y)) (real_add (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_sub
+ (FORALL (x y)
+ (EQ (real_of_int (- x y)) (real_sub (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_down_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (AND (EQ (le_real (real_of_int (truncate_real_to_int x)) x) |@true|)
+ (EQ (lt_real x (real_of_int (+ (truncate_real_to_int x) 1))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_up_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (AND (EQ (lt_real (real_of_int (- (truncate_real_to_int x) 1)) x) |@true|)
+ (EQ (le_real x (real_of_int (truncate_real_to_int x))) |@true|)))))
+
+(BG_PUSH
  ;; Why axiom lt_real_bool_axiom
  (FORALL (x y)
  (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
@@ -4580,6 +4648,16 @@ why -simplify [...] why/Creation.why
  (FORALL (x y) (OR (EQ (real_min x y) x) (EQ (real_min x y) y))))
 
 (BG_PUSH
+ ;; Why axiom sqr_real_def
+ (FORALL (x) (EQ (sqr_real x) (real_mul x x))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_sqr
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (sqr_real (real_sqrt x)) x))))
+
+(BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
  (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
@@ -4593,6 +4671,11 @@ why -simplify [...] why/Creation.why
 (BG_PUSH
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom exp_log
+ (FORALL (x)
+ (IMPLIES (EQ (gt_real x real_constant_0_0e) |@true|) (EQ (exp (log x)) x))))
 
 (BG_PUSH
  ;; Why axiom prod_pos
@@ -5833,7 +5916,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -5888,7 +6001,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -5907,6 +6024,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

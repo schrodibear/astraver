@@ -914,9 +914,9 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	let ty = type_type t in
 	begin match ty with
 	  | JCTnative Tinteger ->
-	      if is_real te1#typ then
+	      (*if is_real te1#typ then
 		integer_type, te1#region, JCTreal_cast(te1,Real_to_integer)
-	      else if is_integer te1#typ then
+	      else*) if is_integer te1#typ then
 		integer_type, te1#region, te1#node
 	      else
                 not_the_good_type e#pos ty "bad cast to integer"
@@ -2033,9 +2033,9 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	let ty = type_type t in
 	begin match ty with
 	  | JCTnative Tinteger ->
-	      if is_real te1#typ then
+	      (* if is_real te1#typ then
 		integer_type, te1#region, JCEreal_cast(te1,Real_to_integer)
-	      else if is_integer te1#typ then
+	      else*) if is_integer te1#typ then
 		integer_type, te1#region, te1#node
 	      else
 		typing_error e#pos "bad cast to integer"

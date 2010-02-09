@@ -776,6 +776,11 @@ and terms t =
           (fun x y -> JCPEbinary(x,binop op,y))
              (coerce_floats t1)
              (coerce_floats t2)
+
+    | TCastE(ty,t) 
+        when isIntegralType ty && isLogicRealType t.term_type ->
+          List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
+
     | TCastE(ty,t)
         when isIntegralType ty && isLogicArithmeticType t.term_type ->
         if !int_model = IMexact then
@@ -1481,6 +1486,12 @@ let rec expr pos e =
           locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) pos)
         in
         e#node
+
+    | CastE(ty,e') 
+        when isIntegralType ty && isFloatingType (typeOf e') ->
+	let e = 
+	  locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[expr e'])) pos)
+	in e#node
 
     | CastE(ty,e') when isIntegralType ty && isArithmeticType (typeOf e') ->
         (integral_expr e)#node

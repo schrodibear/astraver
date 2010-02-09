@@ -1013,6 +1013,7 @@ let builtin_logic_symbols =
 
     Some integer_type, "\\integer_abs", "abs_int", [integer_type] ;
     Some real_type, "\\real_abs", "abs_real", [real_type] ;
+    Some integer_type, "\\truncate_real_to_int", "truncate_real_to_int", [real_type] ;
 
     Some real_type, "\\real_sqrt", "sqrt_real", [real_type];
     Some real_type, "\\real_pow", "pow_real", [real_type; real_type];

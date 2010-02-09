@@ -443,27 +443,29 @@ tag shortM = Object with {
 }
 
 boolean non_null_byteM(! byteM[0..] x)
-behavior normal:
+behavior default:
+  assigns \nothing;
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_byteM(! byteM[0..] x)
-behavior non_null:
+integer java_array_length_byteM(! byteM[0..-1] x)
+behavior default:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
-            ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
+            ((\result >= 0) && (\result == (\offset_max(x) + 1))));
 ;
 
 boolean non_null_shortM(! shortM[0..] x)
-behavior normal:
+behavior default:
+  assigns \nothing;
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_shortM(! shortM[0..] x)
-behavior non_null:
+integer java_array_length_shortM(! shortM[0..-1] x)
+behavior default:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
-            ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
+            ((\result >= 0) && (\result == (\offset_max(x) + 1))));
 ;
 
 boolean non_null_Object(! Object[0..] x)
@@ -1520,16 +1522,16 @@ begin = -1
 end = -1
 
 [JC_157]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 272
+begin = 18
+end = 27
 
 [JC_270]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 190
-begin = 15
-end = 31
+line = 197
+begin = 18
+end = 33
 
 [JC_158]
 file = "HOME/"
@@ -1538,22 +1540,22 @@ begin = -1
 end = -1
 
 [JC_271]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 190
-begin = 15
-end = 31
-
-[JC_159]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_272]
+[JC_159]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 197
+line = 272
 begin = 18
-end = 33
+end = 27
+
+[JC_272]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_273]
 file = "HOME/"
@@ -1568,16 +1570,16 @@ begin = 18
 end = 33
 
 [JC_275]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 197
+begin = 18
+end = 33
 
 [JC_276]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 198
+begin = 15
+end = 30
 
 [JC_40]
 file = "HOME/"
@@ -1593,39 +1595,39 @@ end = -1
 
 [JC_41]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 293
-begin = 11
-end = 113
+line = 299
+begin = 8
+end = 23
 
 [JC_390]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 219
-begin = 15
-end = 31
+line = 225
+begin = 10
+end = 27
 
 [JC_278]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 197
-begin = 18
-end = 33
+line = 198
+begin = 15
+end = 30
 
 [JC_42]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 292
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_391]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 219
-begin = 15
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_279]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 197
-begin = 18
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Card_safety]
 name = "Constructor of class Card"
@@ -1637,21 +1639,21 @@ end = 8
 
 [JC_43]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 293
-begin = 11
-end = 113
+line = 299
+begin = 8
+end = 23
 
 [JC_392]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 225
-begin = 10
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_44]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 292
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_393]
 file = "HOME/"
@@ -1666,10 +1668,10 @@ begin = -1
 end = -1
 
 [JC_45]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 297
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_394]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -1678,10 +1680,10 @@ begin = 10
 end = 27
 
 [JC_161]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 272
-begin = 18
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_46]
 file = "HOME/"
@@ -1690,10 +1692,10 @@ begin = -1
 end = -1
 
 [JC_395]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 225
+begin = 10
+end = 27
 
 [JC_162]
 file = "HOME/"
@@ -1702,10 +1704,10 @@ begin = -1
 end = -1
 
 [JC_47]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 297
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_APDU_ensures_default]
 name = "Constructor of class APDU"
@@ -1716,10 +1718,10 @@ begin = 2
 end = 6
 
 [JC_396]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 226
+begin = 15
+end = 32
 
 [JC_163]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -1740,52 +1742,52 @@ begin = -1
 end = -1
 
 [JC_164]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_49]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_398]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 225
-begin = 10
-end = 27
-
-[JC_165]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_399]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 225
-begin = 10
-end = 27
-
-[JC_166]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_167]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 272
 begin = 18
 end = 27
 
-[JC_280]
+[JC_49]
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 301
+begin = 11
+end = 65
+
+[JC_398]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 198
+line = 226
 begin = 15
-end = 30
+end = 32
+
+[JC_165]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 269
+begin = 18
+end = 35
+
+[JC_399]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_166]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 272
+begin = 18
+end = 27
+
+[JC_167]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 269
+begin = 18
+end = 35
+
+[JC_280]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_168]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -1808,10 +1810,10 @@ begin = -1
 end = -1
 
 [JC_169]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 269
-begin = 18
-end = 35
+file = "HOME/tests/java/SimpleApplet.java"
+line = 61
+begin = 16
+end = 23
 
 [JC_282]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -1820,16 +1822,16 @@ begin = 15
 end = 30
 
 [JC_283]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 198
+begin = 15
+end = 30
 
 [JC_284]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 199
+begin = 15
+end = 32
 
 [JC_285]
 file = "HOME/"
@@ -1839,33 +1841,33 @@ end = -1
 
 [JC_286]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 198
-begin = 15
-end = 30
-
-[JC_50]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_287]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 198
-begin = 15
-end = 30
-
-[JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_288]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 199
 begin = 15
 end = 32
+
+[JC_50]
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 301
+begin = 11
+end = 65
+
+[JC_287]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_51]
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 97
+begin = 14
+end = 20
+
+[JC_288]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_52]
 file = "HOME/"
@@ -1880,34 +1882,34 @@ begin = -1
 end = -1
 
 [JC_53]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 299
-begin = 11
-end = 65
-
-[JC_54]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 299
-begin = 11
-end = 65
-
-[JC_170]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 272
-begin = 18
-end = 27
-
-[JC_55]
 file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
 line = 97
 begin = 14
 end = 20
 
+[JC_54]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_170]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_55]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_171]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 269
-begin = 18
-end = 35
+file = "HOME/tests/java/SimpleApplet.java"
+line = 61
+begin = 16
+end = 23
 
 [JC_56]
 file = "HOME/"
@@ -1916,22 +1918,22 @@ begin = -1
 end = -1
 
 [JC_172]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 272
-begin = 18
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_57]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 97
-begin = 14
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_173]
-file = "HOME/tests/java/SimpleApplet.java"
-line = 61
-begin = 16
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_58]
 file = "HOME/"
@@ -1946,10 +1948,10 @@ begin = -1
 end = -1
 
 [JC_59]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 139
+begin = 23
+end = 30
 
 [JC_175]
 file = "HOME/tests/java/SimpleApplet.java"
@@ -1958,16 +1960,17 @@ begin = 16
 end = 23
 
 [JC_176]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.java"
+line = 61
+begin = 16
+end = 23
 
 [JC_177]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.java"
+line = 63
+begin = 5
+end = 22
 
 [JC_290]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -1976,28 +1979,30 @@ begin = 15
 end = 32
 
 [JC_178]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.java"
+line = 67
+begin = 14
+end = 30
 
 [JC_291]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 199
+begin = 15
+end = 32
 
 [JC_179]
+kind = IndexBounds
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
-begin = 16
-end = 23
+line = 67
+begin = 14
+end = 30
 
 [JC_292]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 202
+begin = 18
+end = 39
 
 [JC_293]
 file = "HOME/"
@@ -2007,21 +2012,21 @@ end = -1
 
 [JC_294]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 199
-begin = 15
-end = 32
-
-[JC_295]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 199
-begin = 15
-end = 32
-
-[JC_296]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 202
 begin = 18
 end = 39
+
+[JC_295]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_296]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_60]
 file = "HOME/"
@@ -2036,10 +2041,10 @@ begin = -1
 end = -1
 
 [JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 139
+begin = 23
+end = 30
 
 [JC_298]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -2054,16 +2059,16 @@ begin = -1
 end = -1
 
 [JC_299]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 202
+begin = 18
+end = 39
+
+[JC_63]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_63]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 139
-begin = 23
-end = 30
 
 [JC_64]
 file = "HOME/"
@@ -2072,23 +2077,24 @@ begin = -1
 end = -1
 
 [JC_180]
+kind = IndexBounds
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
-begin = 16
-end = 23
+line = 70
+begin = 4
+end = 27
 
 [JC_65]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 139
-begin = 23
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_181]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 63
+line = 71
 begin = 5
-end = 22
+end = 55
 
 [JC_66]
 file = "HOME/"
@@ -2097,24 +2103,24 @@ begin = -1
 end = -1
 
 [JC_182]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.java"
-line = 67
-begin = 14
-end = 30
-
-[JC_67]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_183]
 kind = IndexBounds
 file = "HOME/tests/java/SimpleApplet.java"
-line = 67
-begin = 14
-end = 30
+line = 74
+begin = 9
+end = 32
+
+[JC_67]
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 166
+begin = 25
+end = 32
+
+[JC_183]
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 395
+begin = 22
+end = 72
 
 [JC_68]
 file = "HOME/"
@@ -2123,52 +2129,50 @@ begin = -1
 end = -1
 
 [JC_184]
-kind = IndexBounds
-file = "HOME/tests/java/SimpleApplet.java"
-line = 70
-begin = 4
-end = 27
-
-[JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_185]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.java"
-line = 71
-begin = 5
-end = 55
-
-[JC_186]
-kind = IndexBounds
-file = "HOME/tests/java/SimpleApplet.java"
-line = 74
-begin = 9
-end = 32
-
-[JC_187]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 393
-begin = 22
-end = 72
-
-[JC_188]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
 line = 63
 begin = 5
 end = 22
 
-[JC_189]
+[JC_69]
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 166
+begin = 25
+end = 32
+
+[JC_185]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
 line = 67
 begin = 14
 end = 30
+
+[JC_186]
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.java"
+line = 71
+begin = 5
+end = 55
+
+[JC_187]
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 395
+begin = 22
+end = 72
+
+[JC_188]
+file = "HOME/lib/javacard_api/java/lang/Object.java"
+line = 47
+begin = 9
+end = 15
+
+[JC_189]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Throwable_ensures_default]
 name = "Constructor of class Throwable"
@@ -2185,10 +2189,10 @@ begin = -1
 end = -1
 
 [JC_71]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 166
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_72]
 file = "HOME/"
@@ -2203,30 +2207,28 @@ begin = 25
 end = 32
 
 [JC_74]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 166
+begin = 25
+end = 32
 
 [JC_190]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.java"
-line = 71
-begin = 5
-end = 55
+file = "HOME/lib/javacard_api/java/lang/Object.java"
+line = 47
+begin = 9
+end = 15
 
 [JC_75]
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 185
+begin = 19
+end = 25
+
+[JC_191]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_191]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 393
-begin = 22
-end = 72
 
 [JC_76]
 file = "HOME/"
@@ -2235,16 +2237,16 @@ begin = -1
 end = -1
 
 [JC_192]
-file = "HOME/lib/javacard_api/java/lang/Object.java"
-line = 47
-begin = 9
-end = 15
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_77]
 file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 166
-begin = 25
-end = 32
+line = 185
+begin = 19
+end = 25
 
 [JC_193]
 file = "HOME/"
@@ -2253,22 +2255,22 @@ begin = -1
 end = -1
 
 [JC_78]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 166
-begin = 25
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_194]
-file = "HOME/lib/javacard_api/java/lang/Object.java"
-line = 47
-begin = 9
-end = 15
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_79]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 185
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_195]
 file = "HOME/"
@@ -2277,10 +2279,10 @@ begin = -1
 end = -1
 
 [JC_196]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/Object.java"
+line = 85
+begin = 33
+end = 39
 
 [JC_197]
 file = "HOME/"
@@ -2289,10 +2291,10 @@ begin = -1
 end = -1
 
 [JC_198]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/Object.java"
+line = 85
+begin = 33
+end = 39
 
 [JC_199]
 file = "HOME/"
@@ -2307,10 +2309,10 @@ begin = -1
 end = -1
 
 [JC_81]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 185
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_82]
 file = "HOME/"
@@ -2319,10 +2321,10 @@ begin = -1
 end = -1
 
 [JC_83]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 209
+begin = 16
+end = 24
 
 [JC_84]
 file = "HOME/"
@@ -2331,10 +2333,10 @@ begin = -1
 end = -1
 
 [JC_85]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 209
+begin = 16
+end = 24
 
 [JC_86]
 file = "HOME/"
@@ -2343,10 +2345,10 @@ begin = -1
 end = -1
 
 [JC_87]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 209
-begin = 16
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_88]
 file = "HOME/"
@@ -2355,10 +2357,10 @@ begin = -1
 end = -1
 
 [JC_89]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 209
-begin = 16
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_90]
 file = "HOME/"
@@ -2367,10 +2369,10 @@ begin = -1
 end = -1
 
 [JC_91]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 230
+begin = 21
+end = 48
 
 [JC_92]
 file = "HOME/"
@@ -2379,10 +2381,10 @@ begin = -1
 end = -1
 
 [JC_93]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 230
+begin = 21
+end = 48
 
 [JC_94]
 file = "HOME/"
@@ -2391,10 +2393,10 @@ begin = -1
 end = -1
 
 [JC_95]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 230
-begin = 21
-end = 48
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_96]
 file = "HOME/"
@@ -2403,10 +2405,10 @@ begin = -1
 end = -1
 
 [JC_97]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 230
-begin = 21
-end = 48
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_98]
 file = "HOME/"
@@ -2415,10 +2417,10 @@ begin = -1
 end = -1
 
 [JC_99]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 252
+begin = 25
+end = 33
 
 [cons_ISOException_short_ensures_default]
 name = "Constructor of class ISOException"
@@ -2429,10 +2431,10 @@ begin = 9
 end = 21
 
 [JC_600]
-file = "HOME/lib/javacard_api/java/lang/Exception.java"
-line = 49
-begin = 9
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_601]
 file = "HOME/"
@@ -2441,10 +2443,10 @@ begin = -1
 end = -1
 
 [JC_602]
-file = "HOME/lib/javacard_api/java/lang/Exception.java"
-line = 49
-begin = 9
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_603]
 file = "HOME/"
@@ -2461,10 +2463,10 @@ begin = 9
 end = 15
 
 [JC_604]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/RuntimeException.java"
+line = 47
+begin = 9
+end = 25
 
 [JC_605]
 file = "HOME/"
@@ -2473,10 +2475,10 @@ begin = -1
 end = -1
 
 [JC_606]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/RuntimeException.java"
+line = 47
+begin = 9
+end = 25
 
 [JC_607]
 file = "HOME/"
@@ -2485,10 +2487,10 @@ begin = -1
 end = -1
 
 [JC_608]
-file = "HOME/lib/javacard_api/java/lang/RuntimeException.java"
-line = 47
-begin = 9
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_609]
 file = "HOME/"
@@ -2505,10 +2507,10 @@ begin = 23
 end = 30
 
 [JC_610]
-file = "HOME/lib/javacard_api/java/lang/RuntimeException.java"
-line = 47
-begin = 9
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_611]
 file = "HOME/"
@@ -2517,10 +2519,10 @@ begin = -1
 end = -1
 
 [JC_612]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 56
+begin = 9
+end = 29
 
 [JC_613]
 file = "HOME/"
@@ -2529,10 +2531,10 @@ begin = -1
 end = -1
 
 [JC_614]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 56
+begin = 9
+end = 29
 
 [JC_615]
 file = "HOME/"
@@ -2541,10 +2543,10 @@ begin = -1
 end = -1
 
 [JC_616]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 56
-begin = 9
-end = 29
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_617]
 file = "HOME/"
@@ -2553,10 +2555,10 @@ begin = -1
 end = -1
 
 [JC_618]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 56
-begin = 9
-end = 29
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_619]
 file = "HOME/"
@@ -2565,10 +2567,10 @@ begin = -1
 end = -1
 
 [JC_500]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 422
+begin = 15
+end = 26
 
 [JC_501]
 file = "HOME/"
@@ -2578,9 +2580,9 @@ end = -1
 
 [JC_502]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 403
-begin = 14
-end = 31
+line = 422
+begin = 15
+end = 26
 
 [cons_Exception_ensures_default]
 name = "Constructor of class Exception"
@@ -2591,16 +2593,16 @@ begin = 9
 end = 18
 
 [JC_503]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 403
-begin = 14
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_504]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 422
-begin = 15
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_505]
 file = "HOME/"
@@ -2615,22 +2617,22 @@ begin = 15
 end = 26
 
 [JC_507]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 422
+begin = 15
+end = 26
 
 [JC_620]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 67
+begin = 31
+end = 40
 
 [JC_508]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 459
+begin = 15
+end = 27
 
 [JC_621]
 file = "HOME/"
@@ -2645,10 +2647,10 @@ begin = -1
 end = -1
 
 [JC_622]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 67
+begin = 31
+end = 40
 
 [JC_623]
 file = "HOME/"
@@ -2657,10 +2659,10 @@ begin = -1
 end = -1
 
 [JC_624]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 67
-begin = 31
-end = 40
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_625]
 file = "HOME/"
@@ -2669,10 +2671,10 @@ begin = -1
 end = -1
 
 [JC_626]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 67
-begin = 31
-end = 40
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_627]
 file = "HOME/"
@@ -2681,10 +2683,10 @@ begin = -1
 end = -1
 
 [JC_628]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 74
+begin = 14
+end = 23
 
 [JC_629]
 file = "HOME/"
@@ -2694,21 +2696,21 @@ end = -1
 
 [JC_510]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 422
-begin = 15
-end = 26
-
-[JC_511]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 422
-begin = 15
-end = 26
-
-[JC_512]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 459
 begin = 15
 end = 27
+
+[JC_511]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_512]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_513]
 file = "HOME/"
@@ -2723,16 +2725,16 @@ begin = 15
 end = 27
 
 [JC_515]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 459
+begin = 15
+end = 27
 
 [JC_516]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 505
+begin = 15
+end = 36
 
 [JC_517]
 file = "HOME/"
@@ -2741,16 +2743,16 @@ begin = -1
 end = -1
 
 [JC_630]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 74
+begin = 14
+end = 23
 
 [JC_518]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 459
+line = 505
 begin = 15
-end = 27
+end = 36
 
 [JC_631]
 file = "HOME/"
@@ -2759,16 +2761,16 @@ begin = -1
 end = -1
 
 [JC_519]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 459
-begin = 15
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_632]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 74
-begin = 14
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_633]
 file = "HOME/"
@@ -2777,16 +2779,16 @@ begin = -1
 end = -1
 
 [JC_400]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 226
-begin = 15
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_634]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 74
-begin = 14
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_401]
 file = "HOME/"
@@ -2807,16 +2809,16 @@ begin = 15
 end = 32
 
 [JC_636]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 89
+begin = 21
+end = 28
 
 [JC_403]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 226
+begin = 15
+end = 32
 
 [cons_Applet_safety]
 name = "Constructor of class Applet"
@@ -2833,16 +2835,16 @@ begin = -1
 end = -1
 
 [JC_404]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 227
+begin = 15
+end = 34
 
 [JC_638]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
+line = 89
+begin = 21
+end = 28
 
 [JC_405]
 file = "HOME/"
@@ -2858,27 +2860,27 @@ end = -1
 
 [JC_406]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 226
-begin = 15
-end = 32
-
-[JC_407]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 226
-begin = 15
-end = 32
-
-[JC_520]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 505
-begin = 15
-end = 36
-
-[JC_408]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 227
 begin = 15
 end = 34
+
+[JC_407]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_520]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_408]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_521]
 file = "HOME/"
@@ -2899,16 +2901,16 @@ begin = 15
 end = 36
 
 [JC_523]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 505
+begin = 15
+end = 36
 
 [JC_524]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 520
+begin = 16
+end = 24
 
 [JC_525]
 file = "HOME/"
@@ -2918,27 +2920,27 @@ end = -1
 
 [JC_526]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 505
-begin = 15
-end = 36
-
-[JC_527]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 505
-begin = 15
-end = 36
-
-[JC_640]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 89
-begin = 21
-end = 28
-
-[JC_528]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 520
 begin = 16
 end = 24
+
+[JC_527]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_640]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_528]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Object_safety]
 name = "Constructor of class Object"
@@ -2969,10 +2971,10 @@ begin = 14
 end = 20
 
 [JC_642]
-file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
-line = 89
-begin = 21
-end = 28
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_643]
 file = "HOME/"
@@ -2987,16 +2989,16 @@ begin = 15
 end = 34
 
 [JC_644]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 59
+begin = 9
+end = 21
 
 [JC_411]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 227
+begin = 15
+end = 34
 
 [JC_645]
 file = "HOME/"
@@ -3005,16 +3007,16 @@ begin = -1
 end = -1
 
 [JC_412]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 230
+begin = 18
+end = 38
 
 [JC_646]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 59
+begin = 9
+end = 21
 
 [JC_413]
 file = "HOME/"
@@ -3030,21 +3032,21 @@ end = -1
 
 [JC_414]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 227
-begin = 15
-end = 34
+line = 230
+begin = 18
+end = 38
 
 [JC_648]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 59
-begin = 9
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_415]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 227
-begin = 15
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_649]
 file = "HOME/"
@@ -3053,10 +3055,10 @@ begin = -1
 end = -1
 
 [JC_416]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 230
-begin = 18
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_417]
 file = "HOME/"
@@ -3085,22 +3087,22 @@ begin = 9
 end = 29
 
 [JC_531]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 520
+begin = 16
+end = 24
 
 [JC_419]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 230
+begin = 18
+end = 38
 
 [JC_532]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 577
+begin = 14
+end = 23
 
 [JC_533]
 file = "HOME/"
@@ -3109,16 +3111,16 @@ begin = -1
 end = -1
 
 [JC_300]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 203
+begin = 15
+end = 36
 
 [JC_534]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 520
-begin = 16
-end = 24
+line = 577
+begin = 14
+end = 23
 
 [JC_301]
 file = "HOME/"
@@ -3127,28 +3129,28 @@ begin = -1
 end = -1
 
 [JC_535]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 520
-begin = 16
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_302]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 202
-begin = 18
-end = 39
+line = 203
+begin = 15
+end = 36
 
 [JC_536]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 577
-begin = 14
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_303]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 202
-begin = 18
-end = 39
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_537]
 file = "HOME/"
@@ -3157,16 +3159,16 @@ begin = -1
 end = -1
 
 [JC_304]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 203
-begin = 15
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_650]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 59
-begin = 9
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_538]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3187,10 +3189,10 @@ begin = -1
 end = -1
 
 [JC_539]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 577
+begin = 14
+end = 23
 
 [JC_306]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3199,16 +3201,16 @@ begin = 15
 end = 36
 
 [JC_652]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 106
+begin = 29
+end = 38
 
 [JC_307]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 203
+begin = 15
+end = 36
 
 [JC_653]
 file = "HOME/"
@@ -3217,22 +3219,22 @@ begin = -1
 end = -1
 
 [JC_420]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 231
+begin = 15
+end = 35
 
 [JC_308]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 204
+begin = 15
+end = 38
 
 [JC_654]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 106
+begin = 29
+end = 38
 
 [JC_421]
 file = "HOME/"
@@ -3254,21 +3256,21 @@ end = -1
 
 [JC_422]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 230
-begin = 18
-end = 38
+line = 231
+begin = 15
+end = 35
 
 [JC_656]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 106
-begin = 29
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_423]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 230
-begin = 18
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_657]
 file = "HOME/"
@@ -3277,10 +3279,10 @@ begin = -1
 end = -1
 
 [JC_424]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 231
-begin = 15
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Card_process_safety]
 name = "Method process"
@@ -3291,10 +3293,10 @@ begin = 16
 end = 23
 
 [JC_658]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 106
-begin = 29
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_425]
 file = "HOME/"
@@ -3315,22 +3317,22 @@ begin = 15
 end = 35
 
 [JC_427]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 231
+begin = 15
+end = 35
 
 [JC_540]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 685
+begin = 14
+end = 27
 
 [JC_428]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 232
+begin = 15
+end = 37
 
 [JC_541]
 file = "HOME/"
@@ -3346,33 +3348,33 @@ end = -1
 
 [JC_542]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 577
-begin = 14
-end = 23
-
-[JC_543]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 577
-begin = 14
-end = 23
-
-[JC_310]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 203
-begin = 15
-end = 36
-
-[JC_544]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 685
 begin = 14
 end = 27
 
-[JC_311]
+[JC_543]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_310]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 203
+line = 204
 begin = 15
-end = 36
+end = 38
+
+[JC_544]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_311]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_545]
 file = "HOME/"
@@ -3381,10 +3383,10 @@ begin = -1
 end = -1
 
 [JC_312]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 204
-begin = 15
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_546]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3399,10 +3401,10 @@ begin = -1
 end = -1
 
 [JC_547]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 685
+begin = 14
+end = 27
 
 [JC_314]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3411,22 +3413,22 @@ begin = 15
 end = 38
 
 [JC_660]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 119
+begin = 14
+end = 23
 
 [JC_548]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 719
+begin = 15
+end = 33
 
 [JC_315]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 204
+begin = 15
+end = 38
 
 [JC_661]
 file = "HOME/"
@@ -3441,16 +3443,16 @@ begin = -1
 end = -1
 
 [JC_316]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 207
+begin = 18
+end = 33
 
 [JC_662]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 119
+begin = 14
+end = 23
 
 [JC_317]
 file = "HOME/"
@@ -3466,33 +3468,33 @@ end = -1
 
 [JC_430]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 231
+line = 232
 begin = 15
-end = 35
+end = 37
 
 [JC_318]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 204
-begin = 15
-end = 38
+line = 207
+begin = 18
+end = 33
 
 [JC_664]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 119
-begin = 14
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_431]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 231
-begin = 15
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_319]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 204
-begin = 15
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_665]
 file = "HOME/"
@@ -3509,16 +3511,16 @@ begin = 2
 end = 6
 
 [JC_432]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 232
-begin = 15
-end = 37
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_666]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 119
-begin = 14
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_433]
 file = "HOME/"
@@ -3527,10 +3529,10 @@ begin = -1
 end = -1
 
 [JC_200]
-file = "HOME/lib/javacard_api/java/lang/Object.java"
-line = 85
-begin = 33
-end = 39
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_667]
 file = "HOME/"
@@ -3550,25 +3552,13 @@ line = 0
 begin = -1
 end = -1
 
-[JC_668]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_435]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 232
+begin = 15
+end = 37
 
 [JC_202]
-file = "HOME/lib/javacard_api/java/lang/Object.java"
-line = 85
-begin = 33
-end = 39
-
-[JC_669]
 file = "HOME/"
 line = 0
 begin = -1
@@ -3583,10 +3573,10 @@ begin = 9
 end = 25
 
 [JC_436]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 239
+begin = 2
+end = 6
 
 [JC_203]
 file = "HOME/"
@@ -3601,10 +3591,10 @@ begin = -1
 end = -1
 
 [JC_204]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 171
+begin = 16
+end = 21
 
 [Card_process_ensures_default]
 name = "Method process"
@@ -3616,15 +3606,15 @@ end = 23
 
 [JC_550]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 685
-begin = 14
-end = 27
+line = 719
+begin = 15
+end = 33
 
 [JC_438]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 232
-begin = 15
-end = 37
+line = 239
+begin = 2
+end = 6
 
 [JC_205]
 file = "HOME/"
@@ -3633,28 +3623,28 @@ begin = -1
 end = -1
 
 [JC_551]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 685
-begin = 14
-end = 27
-
-[JC_439]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 232
-begin = 15
-end = 37
-
-[JC_206]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_552]
+[JC_439]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_206]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 719
-begin = 15
-end = 33
+line = 171
+begin = 16
+end = 21
+
+[JC_552]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_207]
 file = "HOME/"
@@ -3669,16 +3659,16 @@ begin = -1
 end = -1
 
 [JC_320]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 207
-begin = 18
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_208]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 171
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_554]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3699,10 +3689,10 @@ begin = -1
 end = -1
 
 [JC_555]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 719
+begin = 15
+end = 33
 
 [JC_322]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3711,16 +3701,16 @@ begin = 18
 end = 33
 
 [JC_556]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 726
+begin = 7
+end = 16
 
 [JC_323]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 207
+begin = 18
+end = 33
 
 [JC_557]
 file = "HOME/"
@@ -3729,22 +3719,16 @@ begin = -1
 end = -1
 
 [JC_324]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_670]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 208
+begin = 15
+end = 30
 
 [JC_558]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 719
-begin = 15
-end = 33
+line = 726
+begin = 7
+end = 16
 
 [JC_325]
 file = "HOME/"
@@ -3752,41 +3736,35 @@ line = 0
 begin = -1
 end = -1
 
-[JC_671]
+[JC_559]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_559]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 719
-begin = 15
-end = 33
-
 [JC_326]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 207
-begin = 18
-end = 33
-
-[JC_327]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 207
-begin = 18
-end = 33
-
-[JC_440]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 239
-begin = 2
-end = 6
-
-[JC_328]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 208
 begin = 15
 end = 30
+
+[JC_327]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_440]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_328]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_441]
 file = "HOME/"
@@ -3807,10 +3785,10 @@ begin = 2
 end = 6
 
 [JC_443]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 239
+begin = 2
+end = 6
 
 [JC_210]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3819,16 +3797,16 @@ begin = 16
 end = 21
 
 [JC_444]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 291
+begin = 22
+end = 36
 
 [JC_211]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 171
+begin = 16
+end = 21
 
 [JC_445]
 file = "HOME/"
@@ -3837,16 +3815,16 @@ begin = -1
 end = -1
 
 [JC_212]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 175
+begin = 15
+end = 20
 
 [JC_446]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 239
-begin = 2
-end = 6
+line = 291
+begin = 22
+end = 36
 
 [JC_213]
 file = "HOME/"
@@ -3855,16 +3833,16 @@ begin = -1
 end = -1
 
 [JC_447]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 239
-begin = 2
-end = 6
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_214]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 171
-begin = 16
-end = 21
+line = 175
+begin = 15
+end = 20
 
 [JC_1]
 file = "HOME/tests/java/SimpleApplet.jc"
@@ -3873,22 +3851,22 @@ begin = 8
 end = 22
 
 [JC_560]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 726
-begin = 7
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_448]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 291
-begin = 22
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_215]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 171
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_2]
 file = "HOME/"
@@ -3909,10 +3887,10 @@ begin = -1
 end = -1
 
 [JC_216]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 175
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_3]
 file = "HOME/tests/java/SimpleApplet.jc"
@@ -3939,10 +3917,10 @@ begin = -1
 end = -1
 
 [JC_563]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 726
+begin = 7
+end = 16
 
 [JC_330]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3957,34 +3935,34 @@ begin = 15
 end = 20
 
 [JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 276
+begin = 11
+end = 66
 
 [JC_564]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 752
+begin = 7
+end = 15
 
 [JC_331]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 208
+begin = 15
+end = 30
 
 [JC_219]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 175
+begin = 15
+end = 20
 
 [JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 275
+begin = 10
+end = 18
 
 [JC_565]
 file = "HOME/"
@@ -3993,22 +3971,22 @@ begin = -1
 end = -1
 
 [JC_332]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 209
+begin = 15
+end = 32
 
 [JC_7]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 276
+begin = 11
+end = 66
 
 [JC_566]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 726
+line = 752
 begin = 7
-end = 16
+end = 15
 
 [JC_333]
 file = "HOME/"
@@ -4023,40 +4001,40 @@ begin = -1
 end = -1
 
 [JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_567]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 726
-begin = 7
-end = 16
-
-[JC_101]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_9]
 file = "HOME/tests/java/SimpleApplet.jc"
 line = 275
-begin = 11
-end = 66
+begin = 10
+end = 18
+
+[JC_567]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_101]
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 252
+begin = 25
+end = 33
+
+[JC_9]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_334]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 208
+line = 209
 begin = 15
-end = 30
+end = 32
 
 [JC_568]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 752
-begin = 7
-end = 15
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_102]
 file = "HOME/"
@@ -4065,10 +4043,10 @@ begin = -1
 end = -1
 
 [JC_335]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 208
-begin = 15
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_569]
 file = "HOME/"
@@ -4077,16 +4055,16 @@ begin = -1
 end = -1
 
 [JC_336]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 209
-begin = 15
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_103]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 252
-begin = 25
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_337]
 file = "HOME/"
@@ -4101,10 +4079,10 @@ begin = -1
 end = -1
 
 [JC_450]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 291
-begin = 22
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_338]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -4113,10 +4091,10 @@ begin = 15
 end = 32
 
 [JC_105]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 252
-begin = 25
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_451]
 file = "HOME/"
@@ -4125,10 +4103,10 @@ begin = -1
 end = -1
 
 [JC_339]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 209
+begin = 15
+end = 32
 
 [JC_106]
 file = "HOME/"
@@ -4145,16 +4123,16 @@ begin = 9
 end = 29
 
 [JC_452]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 310
+begin = 22
+end = 37
 
 [JC_107]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 281
+begin = 25
+end = 33
 
 [JC_453]
 file = "HOME/"
@@ -4163,10 +4141,10 @@ begin = -1
 end = -1
 
 [JC_220]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 178
+begin = 16
+end = 21
 
 [JC_108]
 file = "HOME/"
@@ -4175,10 +4153,10 @@ begin = -1
 end = -1
 
 [JC_454]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 310
+begin = 22
+end = 37
 
 [JC_221]
 file = "HOME/"
@@ -4187,10 +4165,10 @@ begin = -1
 end = -1
 
 [JC_109]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 281
+begin = 25
+end = 33
 
 [JC_455]
 file = "HOME/"
@@ -4200,21 +4178,21 @@ end = -1
 
 [JC_222]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 175
-begin = 15
-end = 20
+line = 178
+begin = 16
+end = 21
 
 [JC_456]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 310
-begin = 22
-end = 37
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_223]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 175
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_457]
 file = "HOME/"
@@ -4223,10 +4201,10 @@ begin = -1
 end = -1
 
 [JC_224]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 178
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_570]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -4235,10 +4213,10 @@ begin = 7
 end = 15
 
 [JC_458]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 310
-begin = 22
-end = 37
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_225]
 file = "HOME/"
@@ -4247,10 +4225,10 @@ begin = -1
 end = -1
 
 [JC_571]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 752
+begin = 7
+end = 15
 
 [JC_459]
 file = "HOME/"
@@ -4265,16 +4243,16 @@ begin = 16
 end = 21
 
 [JC_572]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 793
+begin = 7
+end = 29
 
 [JC_227]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 178
+begin = 16
+end = 21
 
 [JC_573]
 file = "HOME/"
@@ -4283,22 +4261,22 @@ begin = -1
 end = -1
 
 [JC_340]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 212
+begin = 18
+end = 39
 
 [JC_228]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 182
+begin = 15
+end = 20
 
 [JC_574]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 752
+line = 793
 begin = 7
-end = 15
+end = 29
 
 [JC_341]
 file = "HOME/"
@@ -4313,28 +4291,28 @@ begin = -1
 end = -1
 
 [JC_575]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 752
-begin = 7
-end = 15
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_342]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 209
-begin = 15
-end = 32
+line = 212
+begin = 18
+end = 39
 
 [JC_576]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 793
-begin = 7
-end = 29
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_343]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 209
-begin = 15
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_110]
 file = "HOME/"
@@ -4349,16 +4327,16 @@ begin = -1
 end = -1
 
 [JC_344]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 212
-begin = 18
-end = 39
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_111]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 281
-begin = 25
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_578]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -4379,10 +4357,10 @@ begin = -1
 end = -1
 
 [JC_579]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 793
+begin = 7
+end = 29
 
 [JC_346]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -4391,16 +4369,16 @@ begin = 18
 end = 39
 
 [JC_113]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 281
-begin = 25
-end = 33
-
-[JC_347]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_347]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 212
+begin = 18
+end = 39
 
 [JC_114]
 file = "HOME/"
@@ -4409,22 +4387,22 @@ begin = -1
 end = -1
 
 [JC_460]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 329
+begin = 21
+end = 32
 
 [JC_348]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 213
+begin = 15
+end = 36
 
 [JC_115]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 293
+begin = 28
+end = 43
 
 [JC_461]
 file = "HOME/"
@@ -4445,16 +4423,16 @@ begin = -1
 end = -1
 
 [JC_462]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 329
+begin = 21
+end = 32
 
 [JC_117]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
+line = 293
+begin = 28
+end = 43
 
 [JC_463]
 file = "HOME/"
@@ -4464,9 +4442,9 @@ end = -1
 
 [JC_230]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 178
-begin = 16
-end = 21
+line = 182
+begin = 15
+end = 20
 
 [JC_118]
 file = "HOME/"
@@ -4475,22 +4453,22 @@ begin = -1
 end = -1
 
 [JC_464]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 329
-begin = 21
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_231]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 178
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_119]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 293
-begin = 28
-end = 43
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_465]
 file = "HOME/"
@@ -4499,16 +4477,16 @@ begin = -1
 end = -1
 
 [JC_232]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 182
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_466]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 329
-begin = 21
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_233]
 file = "HOME/"
@@ -4529,22 +4507,22 @@ begin = 15
 end = 20
 
 [JC_580]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 811
+begin = 21
+end = 34
 
 [JC_468]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 339
+begin = 14
+end = 20
 
 [JC_235]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 182
+begin = 15
+end = 20
 
 [JC_581]
 file = "HOME/"
@@ -4559,10 +4537,10 @@ begin = -1
 end = -1
 
 [JC_236]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 185
+begin = 15
+end = 20
 
 [cons_ISOException_short_safety]
 name = "Constructor of class ISOException"
@@ -4574,9 +4552,9 @@ end = 21
 
 [JC_582]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 793
-begin = 7
-end = 29
+line = 811
+begin = 21
+end = 34
 
 [JC_237]
 file = "HOME/"
@@ -4585,40 +4563,40 @@ begin = -1
 end = -1
 
 [JC_583]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 793
-begin = 7
-end = 29
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_350]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 212
-begin = 18
-end = 39
+line = 213
+begin = 15
+end = 36
 
 [JC_238]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 182
+line = 185
 begin = 15
 end = 20
 
 [JC_584]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 811
-begin = 21
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_351]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 212
-begin = 18
-end = 39
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_239]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 182
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_585]
 file = "HOME/"
@@ -4627,16 +4605,16 @@ begin = -1
 end = -1
 
 [JC_352]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 213
-begin = 15
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_586]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 811
-begin = 21
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_353]
 file = "HOME/"
@@ -4663,22 +4641,22 @@ begin = 15
 end = 36
 
 [JC_121]
-file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
-line = 293
-begin = 28
-end = 43
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_588]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/Throwable.java"
+line = 48
+begin = 9
+end = 18
 
 [JC_355]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 213
+begin = 15
+end = 36
 
 [JC_122]
 file = "HOME/"
@@ -4693,16 +4671,16 @@ begin = -1
 end = -1
 
 [JC_356]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 214
+begin = 15
+end = 38
 
 [JC_123]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.java"
+line = 46
+begin = 4
+end = 8
 
 [JC_357]
 file = "HOME/"
@@ -4717,22 +4695,22 @@ begin = -1
 end = -1
 
 [JC_470]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 339
+begin = 14
+end = 20
 
 [JC_358]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 213
+line = 214
 begin = 15
-end = 36
+end = 38
 
 [JC_125]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.java"
+line = 46
+begin = 4
+end = 8
 
 [JC_471]
 file = "HOME/"
@@ -4741,10 +4719,10 @@ begin = -1
 end = -1
 
 [JC_359]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 213
-begin = 15
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_126]
 file = "HOME/"
@@ -4753,16 +4731,16 @@ begin = -1
 end = -1
 
 [JC_472]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 339
-begin = 14
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_127]
-file = "HOME/tests/java/SimpleApplet.java"
-line = 46
-begin = 4
-end = 8
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_473]
 file = "HOME/"
@@ -4771,10 +4749,10 @@ begin = -1
 end = -1
 
 [JC_240]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 185
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_128]
 file = "HOME/"
@@ -4803,16 +4781,16 @@ begin = -1
 end = -1
 
 [JC_129]
-file = "HOME/tests/java/SimpleApplet.java"
-line = 46
-begin = 4
-end = 8
-
-[JC_475]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_475]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 339
+begin = 14
+end = 20
 
 [JC_242]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -4821,16 +4799,16 @@ begin = 15
 end = 20
 
 [JC_476]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 354
+begin = 15
+end = 26
 
 [JC_243]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 185
+begin = 15
+end = 20
 
 [JC_477]
 file = "HOME/"
@@ -4839,22 +4817,22 @@ begin = -1
 end = -1
 
 [JC_244]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 186
+begin = 15
+end = 20
 
 [JC_590]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/Throwable.java"
+line = 48
+begin = 9
+end = 18
 
 [JC_478]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 339
-begin = 14
-end = 20
+line = 354
+begin = 15
+end = 26
 
 [JC_245]
 file = "HOME/"
@@ -4869,40 +4847,40 @@ begin = -1
 end = -1
 
 [JC_479]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 339
-begin = 14
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_10]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 275
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_246]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 185
+line = 186
 begin = 15
 end = 20
 
 [JC_592]
-file = "HOME/lib/javacard_api/java/lang/Throwable.java"
-line = 48
-begin = 9
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_11]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 278
+line = 279
 begin = 8
 end = 31
 
 [JC_247]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 185
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_593]
 file = "HOME/"
@@ -4917,26 +4895,26 @@ begin = -1
 end = -1
 
 [JC_360]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 214
-begin = 15
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_248]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 186
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_594]
-file = "HOME/lib/javacard_api/java/lang/Throwable.java"
-line = 48
-begin = 9
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_13]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 278
+line = 279
 begin = 8
 end = 31
 
@@ -4971,22 +4949,22 @@ begin = 15
 end = 38
 
 [JC_596]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/Exception.java"
+line = 49
+begin = 9
+end = 18
 
 [JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 282
+begin = 11
+end = 103
 
 [JC_363]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 214
+begin = 15
+end = 38
 
 [JC_130]
 file = "HOME/"
@@ -5001,34 +4979,34 @@ begin = -1
 end = -1
 
 [JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 281
+begin = 10
+end = 18
 
 [JC_364]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 217
+begin = 18
+end = 32
 
 [JC_131]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.java"
+line = 53
+begin = 23
+end = 30
 
 [JC_598]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/java/lang/Exception.java"
+line = 49
+begin = 9
+end = 18
 
 [JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 282
+begin = 11
+end = 103
 
 [JC_365]
 file = "HOME/"
@@ -5049,22 +5027,22 @@ begin = -1
 end = -1
 
 [JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 281
+begin = 10
+end = 18
 
 [JC_366]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 214
-begin = 15
-end = 38
+line = 217
+begin = 18
+end = 32
 
 [JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.java"
+line = 53
+begin = 23
+end = 30
 
 [Card_install_safety]
 name = "Method install"
@@ -5075,16 +5053,16 @@ begin = 23
 end = 30
 
 [JC_19]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 281
-begin = 11
-end = 113
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_367]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 214
-begin = 15
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_134]
 file = "HOME/"
@@ -5093,22 +5071,22 @@ begin = -1
 end = -1
 
 [JC_480]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 354
-begin = 15
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_368]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 217
-begin = 18
-end = 32
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_135]
-file = "HOME/tests/java/SimpleApplet.java"
-line = 53
-begin = 23
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_481]
 file = "HOME/"
@@ -5135,16 +5113,16 @@ begin = 15
 end = 26
 
 [JC_137]
-file = "HOME/tests/java/SimpleApplet.java"
-line = 53
-begin = 23
-end = 30
-
-[JC_483]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_483]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 354
+begin = 15
+end = 26
 
 [JC_250]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -5159,22 +5137,23 @@ begin = -1
 end = -1
 
 [JC_484]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 381
+begin = 15
+end = 36
 
 [JC_251]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 186
+begin = 15
+end = 20
 
 [JC_139]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = PointerDeref
+file = "HOME/tests/java/SimpleApplet.java"
+line = 55
+begin = 52
+end = 67
 
 [JC_485]
 file = "HOME/"
@@ -5183,16 +5162,16 @@ begin = -1
 end = -1
 
 [JC_252]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 189
+begin = 15
+end = 31
 
 [JC_486]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 354
+line = 381
 begin = 15
-end = 26
+end = 36
 
 [JC_253]
 file = "HOME/"
@@ -5201,28 +5180,28 @@ begin = -1
 end = -1
 
 [JC_487]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 354
-begin = 15
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_254]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 186
+line = 189
 begin = 15
-end = 20
+end = 31
 
 [JC_488]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 381
-begin = 15
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_255]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 186
-begin = 15
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_489]
 file = "HOME/"
@@ -5231,22 +5210,22 @@ begin = -1
 end = -1
 
 [JC_20]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 280
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_256]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 189
-begin = 15
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_21]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 281
-begin = 11
-end = 113
+line = 286
+begin = 8
+end = 23
 
 [JC_257]
 file = "HOME/"
@@ -5255,10 +5234,10 @@ begin = -1
 end = -1
 
 [JC_22]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 280
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_370]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -5274,21 +5253,21 @@ end = 31
 
 [JC_23]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 285
+line = 286
 begin = 8
 end = 23
 
 [JC_371]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 217
+begin = 18
+end = 32
 
 [JC_259]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 189
+begin = 15
+end = 31
 
 [JC_24]
 file = "HOME/"
@@ -5297,16 +5276,16 @@ begin = -1
 end = -1
 
 [JC_372]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 218
+begin = 15
+end = 29
 
 [JC_25]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 285
-begin = 8
-end = 23
+line = 289
+begin = 11
+end = 66
 
 [JC_373]
 file = "HOME/"
@@ -5315,65 +5294,68 @@ begin = -1
 end = -1
 
 [JC_140]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = ArithOverflow
+file = "HOME/tests/java/SimpleApplet.java"
+line = 55
+begin = 38
+end = 49
 
 [JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 288
+begin = 10
+end = 18
 
 [JC_374]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 217
-begin = 18
-end = 32
-
-[JC_141]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_375]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 217
-begin = 18
-end = 32
-
-[JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_376]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 218
 begin = 15
 end = 29
 
-[JC_143]
-kind = PointerDeref
+[JC_141]
+kind = ArithOverflow
 file = "HOME/tests/java/SimpleApplet.java"
 line = 55
-begin = 52
-end = 67
+begin = 29
+end = 50
+
+[JC_27]
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 289
+begin = 11
+end = 66
+
+[JC_375]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_142]
+kind = AllocSize
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 358
+begin = 67
+end = 78
+
+[JC_28]
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 288
+begin = 10
+end = 18
+
+[JC_376]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_143]
+kind = IndexBounds
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 358
+begin = 47
+end = 79
 
 [JC_29]
 file = "HOME/"
@@ -5388,11 +5370,11 @@ begin = -1
 end = -1
 
 [JC_144]
-kind = ArithOverflow
-file = "HOME/tests/java/SimpleApplet.java"
-line = 55
-begin = 38
-end = 49
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 361
+begin = 64
+end = 129
 
 [JC_490]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -5407,43 +5389,43 @@ begin = 15
 end = 29
 
 [JC_145]
-kind = ArithOverflow
-file = "HOME/tests/java/SimpleApplet.java"
-line = 55
-begin = 29
-end = 50
+kind = UserCall
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 356
+begin = 10
+end = 738
 
 [JC_491]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 381
+begin = 15
+end = 36
 
 [JC_379]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 218
+begin = 15
+end = 29
 
 [JC_146]
 kind = AllocSize
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 356
+line = 358
 begin = 67
 end = 78
 
 [JC_492]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 403
+begin = 14
+end = 31
 
 [JC_147]
-kind = IndexBounds
+kind = UserCall
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 356
-begin = 47
-end = 79
+line = 361
+begin = 64
+end = 129
 
 [JC_493]
 file = "HOME/"
@@ -5452,23 +5434,23 @@ begin = -1
 end = -1
 
 [JC_260]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 190
+begin = 15
+end = 31
 
 [JC_148]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 359
-begin = 64
-end = 129
+line = 356
+begin = 10
+end = 738
 
 [JC_494]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 381
-begin = 15
-end = 36
+line = 403
+begin = 14
+end = 31
 
 [JC_261]
 file = "HOME/"
@@ -5477,35 +5459,34 @@ begin = -1
 end = -1
 
 [JC_149]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 354
-begin = 10
-end = 738
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 86
+begin = 23
+end = 30
 
 [JC_495]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 381
-begin = 15
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_262]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 189
+line = 190
 begin = 15
 end = 31
 
 [JC_496]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 403
-begin = 14
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_263]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 189
-begin = 15
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_497]
 file = "HOME/"
@@ -5514,10 +5495,10 @@ begin = -1
 end = -1
 
 [JC_264]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 190
-begin = 15
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_498]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -5532,10 +5513,10 @@ begin = -1
 end = -1
 
 [JC_499]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 403
+begin = 14
+end = 31
 
 [JC_30]
 file = "HOME/"
@@ -5551,37 +5532,37 @@ end = 31
 
 [JC_31]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 287
-begin = 11
-end = 66
+line = 292
+begin = 8
+end = 32
 
 [JC_267]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 190
+begin = 15
+end = 31
 
 [JC_32]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 287
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_380]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 219
+begin = 15
+end = 31
 
 [JC_268]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 197
+begin = 18
+end = 33
 
 [JC_33]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 290
+line = 292
 begin = 8
 end = 32
 
@@ -5599,9 +5580,9 @@ end = -1
 
 [JC_382]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 218
+line = 219
 begin = 15
-end = 29
+end = 31
 
 [JC_34]
 file = "HOME/"
@@ -5618,42 +5599,40 @@ begin = 9
 end = 18
 
 [JC_383]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 218
-begin = 15
-end = 29
-
-[JC_35]
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 290
-begin = 8
-end = 32
-
-[JC_150]
-kind = AllocSize
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 356
-begin = 67
-end = 78
-
-[JC_384]
-file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
-line = 219
-begin = 15
-end = 31
-
-[JC_36]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_151]
-kind = UserCall
+[JC_35]
 file = "HOME/tests/java/SimpleApplet.jc"
-line = 359
-begin = 64
-end = 129
+line = 295
+begin = 11
+end = 103
+
+[JC_150]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_384]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_36]
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 294
+begin = 10
+end = 18
+
+[JC_151]
+file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
+line = 86
+begin = 23
+end = 30
 
 [JC_385]
 file = "HOME/"
@@ -5662,17 +5641,16 @@ begin = -1
 end = -1
 
 [JC_37]
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 295
+begin = 11
+end = 103
+
+[JC_152]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_152]
-kind = UserCall
-file = "HOME/tests/java/SimpleApplet.jc"
-line = 354
-begin = 10
-end = 738
 
 [JC_386]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -5681,22 +5659,22 @@ begin = 15
 end = 31
 
 [JC_38]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleApplet.jc"
+line = 294
+begin = 10
+end = 18
 
 [JC_153]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 86
-begin = 23
-end = 30
-
-[JC_387]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_387]
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 219
+begin = 15
+end = 31
 
 [JC_39]
 file = "HOME/"
@@ -5711,10 +5689,10 @@ begin = -1
 end = -1
 
 [JC_388]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
+line = 225
+begin = 10
+end = 27
 
 [cons_Card_ensures_default]
 name = "Constructor of class Card"
@@ -5725,10 +5703,10 @@ begin = 4
 end = 8
 
 [JC_155]
-file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
-line = 86
-begin = 23
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/SimpleApplet.why ==========
 type Object
@@ -6723,30 +6701,30 @@ parameter APDU_complete :
  this_60:Object pointer ->
   status:short ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_575: buffer_inv(this_60, Object_alloc_table, APDU_buffer)) }
+   { (JC_571: buffer_inv(this_60, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_complete_requires :
  this_60:Object pointer ->
   status:short ->
-   { (JC_568: buffer_inv(this_60, Object_alloc_table, APDU_buffer))} unit
+   { (JC_564: buffer_inv(this_60, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_575: buffer_inv(this_60, Object_alloc_table, APDU_buffer)) }
+   { (JC_571: buffer_inv(this_60, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getBuffer :
  this_47:Object pointer ->
   { } Object pointer reads APDU_buffer,Object_alloc_table
-  { ((JC_168: buffer_inv(this_47, Object_alloc_table, APDU_buffer))
-    and (JC_172:
-        ((JC_171: (result = select(APDU_buffer, this_47)))
+  { ((JC_164: buffer_inv(this_47, Object_alloc_table, APDU_buffer))
+    and (JC_168:
+        ((JC_167: (result = select(APDU_buffer, this_47)))
         and buffer_inv(this_47, Object_alloc_table, APDU_buffer)))) }
 
 parameter APDU_getBuffer_requires :
  this_47:Object pointer ->
-  { (JC_161: buffer_inv(this_47, Object_alloc_table, APDU_buffer))}
+  { (JC_157: buffer_inv(this_47, Object_alloc_table, APDU_buffer))}
   Object pointer reads APDU_buffer,Object_alloc_table
-  { ((JC_168: buffer_inv(this_47, Object_alloc_table, APDU_buffer))
-    and (JC_172:
-        ((JC_171: (result = select(APDU_buffer, this_47)))
+  { ((JC_164: buffer_inv(this_47, Object_alloc_table, APDU_buffer))
+    and (JC_168:
+        ((JC_167: (result = select(APDU_buffer, this_47)))
         and buffer_inv(this_47, Object_alloc_table, APDU_buffer)))) }
 
 parameter APDU_getInBlockSize : tt:unit -> { } short { true }
@@ -6756,90 +6734,90 @@ parameter APDU_getInBlockSize_requires : tt:unit -> { } short { true }
 parameter APDU_getIncomingFlag :
  this_26:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_279: buffer_inv(this_26, Object_alloc_table, APDU_buffer)) }
+  { (JC_275: buffer_inv(this_26, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getIncomingFlag_requires :
  this_26:Object pointer ->
-  { (JC_272: buffer_inv(this_26, Object_alloc_table, APDU_buffer))} bool
+  { (JC_268: buffer_inv(this_26, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_279: buffer_inv(this_26, Object_alloc_table, APDU_buffer)) }
+  { (JC_275: buffer_inv(this_26, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLc :
  this_22:Object pointer ->
   { } byte reads APDU_buffer,Object_alloc_table
-  { (JC_247: buffer_inv(this_22, Object_alloc_table, APDU_buffer)) }
+  { (JC_243: buffer_inv(this_22, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLc_requires :
  this_22:Object pointer ->
-  { (JC_240: buffer_inv(this_22, Object_alloc_table, APDU_buffer))} byte
+  { (JC_236: buffer_inv(this_22, Object_alloc_table, APDU_buffer))} byte
   reads APDU_buffer,Object_alloc_table
-  { (JC_247: buffer_inv(this_22, Object_alloc_table, APDU_buffer)) }
+  { (JC_243: buffer_inv(this_22, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLe :
  this_18:Object pointer ->
   { } short reads APDU_buffer,Object_alloc_table
-  { (JC_215: buffer_inv(this_18, Object_alloc_table, APDU_buffer)) }
+  { (JC_211: buffer_inv(this_18, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLe_requires :
  this_18:Object pointer ->
-  { (JC_208: buffer_inv(this_18, Object_alloc_table, APDU_buffer))} short
+  { (JC_204: buffer_inv(this_18, Object_alloc_table, APDU_buffer))} short
   reads APDU_buffer,Object_alloc_table
-  { (JC_215: buffer_inv(this_18, Object_alloc_table, APDU_buffer)) }
+  { (JC_211: buffer_inv(this_18, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLr :
  this_20:Object pointer ->
   { } short reads APDU_buffer,Object_alloc_table
-  { (JC_231: buffer_inv(this_20, Object_alloc_table, APDU_buffer)) }
+  { (JC_227: buffer_inv(this_20, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLrIs256Flag :
  this_38:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_375: buffer_inv(this_38, Object_alloc_table, APDU_buffer)) }
+  { (JC_371: buffer_inv(this_38, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLrIs256Flag_requires :
  this_38:Object pointer ->
-  { (JC_368: buffer_inv(this_38, Object_alloc_table, APDU_buffer))} bool
+  { (JC_364: buffer_inv(this_38, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_375: buffer_inv(this_38, Object_alloc_table, APDU_buffer)) }
+  { (JC_371: buffer_inv(this_38, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getLr_requires :
  this_20:Object pointer ->
-  { (JC_224: buffer_inv(this_20, Object_alloc_table, APDU_buffer))} short
+  { (JC_220: buffer_inv(this_20, Object_alloc_table, APDU_buffer))} short
   reads APDU_buffer,Object_alloc_table
-  { (JC_231: buffer_inv(this_20, Object_alloc_table, APDU_buffer)) }
+  { (JC_227: buffer_inv(this_20, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getNAD :
  this_48:Object pointer ->
   { } byte reads APDU_buffer,Object_alloc_table
-  { (JC_479: buffer_inv(this_48, Object_alloc_table, APDU_buffer)) }
+  { (JC_475: buffer_inv(this_48, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getNAD_requires :
  this_48:Object pointer ->
-  { (JC_472: buffer_inv(this_48, Object_alloc_table, APDU_buffer))} byte
+  { (JC_468: buffer_inv(this_48, Object_alloc_table, APDU_buffer))} byte
   reads APDU_buffer,Object_alloc_table
-  { (JC_479: buffer_inv(this_48, Object_alloc_table, APDU_buffer)) }
+  { (JC_475: buffer_inv(this_48, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getNoChainingFlag :
  this_41:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_399: buffer_inv(this_41, Object_alloc_table, APDU_buffer)) }
+  { (JC_395: buffer_inv(this_41, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getNoChainingFlag_requires :
  this_41:Object pointer ->
-  { (JC_392: buffer_inv(this_41, Object_alloc_table, APDU_buffer))} bool
+  { (JC_388: buffer_inv(this_41, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_399: buffer_inv(this_41, Object_alloc_table, APDU_buffer)) }
+  { (JC_395: buffer_inv(this_41, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getNoGetResponseFlag :
  this_44:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_423: buffer_inv(this_44, Object_alloc_table, APDU_buffer)) }
+  { (JC_419: buffer_inv(this_44, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getNoGetResponseFlag_requires :
  this_44:Object pointer ->
-  { (JC_416: buffer_inv(this_44, Object_alloc_table, APDU_buffer))} bool
+  { (JC_412: buffer_inv(this_44, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_423: buffer_inv(this_44, Object_alloc_table, APDU_buffer)) }
+  { (JC_419: buffer_inv(this_44, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getOutBlockSize : tt:unit -> { } short { true }
 
@@ -6848,35 +6826,35 @@ parameter APDU_getOutBlockSize_requires : tt:unit -> { } short { true }
 parameter APDU_getOutgoingFlag :
  this_32:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_327: buffer_inv(this_32, Object_alloc_table, APDU_buffer)) }
+  { (JC_323: buffer_inv(this_32, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getOutgoingFlag_requires :
  this_32:Object pointer ->
-  { (JC_320: buffer_inv(this_32, Object_alloc_table, APDU_buffer))} bool
+  { (JC_316: buffer_inv(this_32, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_327: buffer_inv(this_32, Object_alloc_table, APDU_buffer)) }
+  { (JC_323: buffer_inv(this_32, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getOutgoingLenSetFlag :
  this_35:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_351: buffer_inv(this_35, Object_alloc_table, APDU_buffer)) }
+  { (JC_347: buffer_inv(this_35, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getOutgoingLenSetFlag_requires :
  this_35:Object pointer ->
-  { (JC_344: buffer_inv(this_35, Object_alloc_table, APDU_buffer))} bool
+  { (JC_340: buffer_inv(this_35, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_351: buffer_inv(this_35, Object_alloc_table, APDU_buffer)) }
+  { (JC_347: buffer_inv(this_35, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getPreReadLength :
  this_24:Object pointer ->
   { } byte reads APDU_buffer,Object_alloc_table
-  { (JC_263: buffer_inv(this_24, Object_alloc_table, APDU_buffer)) }
+  { (JC_259: buffer_inv(this_24, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getPreReadLength_requires :
  this_24:Object pointer ->
-  { (JC_256: buffer_inv(this_24, Object_alloc_table, APDU_buffer))} byte
+  { (JC_252: buffer_inv(this_24, Object_alloc_table, APDU_buffer))} byte
   reads APDU_buffer,Object_alloc_table
-  { (JC_263: buffer_inv(this_24, Object_alloc_table, APDU_buffer)) }
+  { (JC_259: buffer_inv(this_24, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getProtocol : tt:unit -> { } byte { true }
 
@@ -6885,13 +6863,13 @@ parameter APDU_getProtocol_requires : tt:unit -> { } byte { true }
 parameter APDU_getSendInProgressFlag :
  this_29:Object pointer ->
   { } bool reads APDU_buffer,Object_alloc_table
-  { (JC_303: buffer_inv(this_29, Object_alloc_table, APDU_buffer)) }
+  { (JC_299: buffer_inv(this_29, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_getSendInProgressFlag_requires :
  this_29:Object pointer ->
-  { (JC_296: buffer_inv(this_29, Object_alloc_table, APDU_buffer))} bool
+  { (JC_292: buffer_inv(this_29, Object_alloc_table, APDU_buffer))} bool
   reads APDU_buffer,Object_alloc_table
-  { (JC_303: buffer_inv(this_29, Object_alloc_table, APDU_buffer)) }
+  { (JC_299: buffer_inv(this_29, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_incomingFlag : (Object, byte) memory ref
 
@@ -6909,122 +6887,122 @@ parameter APDU_receiveBytes :
  this_53:Object pointer ->
   bOff:short ->
    { } short reads APDU_buffer,Object_alloc_table
-   { (JC_519: buffer_inv(this_53, Object_alloc_table, APDU_buffer)) }
+   { (JC_515: buffer_inv(this_53, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_receiveBytes_requires :
  this_53:Object pointer ->
   bOff:short ->
-   { (JC_512: buffer_inv(this_53, Object_alloc_table, APDU_buffer))} short
+   { (JC_508: buffer_inv(this_53, Object_alloc_table, APDU_buffer))} short
    reads APDU_buffer,Object_alloc_table
-   { (JC_519: buffer_inv(this_53, Object_alloc_table, APDU_buffer)) }
+   { (JC_515: buffer_inv(this_53, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetAPDU :
  this_59:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_567: buffer_inv(this_59, Object_alloc_table, APDU_buffer)) }
+  { (JC_563: buffer_inv(this_59, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetAPDU_requires :
  this_59:Object pointer ->
-  { (JC_560: buffer_inv(this_59, Object_alloc_table, APDU_buffer))} unit
+  { (JC_556: buffer_inv(this_59, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_567: buffer_inv(this_59, Object_alloc_table, APDU_buffer)) }
+  { (JC_563: buffer_inv(this_59, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetIncomingFlag :
  this_28:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_295: buffer_inv(this_28, Object_alloc_table, APDU_buffer)) }
+  { (JC_291: buffer_inv(this_28, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetIncomingFlag_requires :
  this_28:Object pointer ->
-  { (JC_288: buffer_inv(this_28, Object_alloc_table, APDU_buffer))} unit
+  { (JC_284: buffer_inv(this_28, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_295: buffer_inv(this_28, Object_alloc_table, APDU_buffer)) }
+  { (JC_291: buffer_inv(this_28, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetLrIs256Flag :
  this_40:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_391: buffer_inv(this_40, Object_alloc_table, APDU_buffer)) }
+  { (JC_387: buffer_inv(this_40, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetLrIs256Flag_requires :
  this_40:Object pointer ->
-  { (JC_384: buffer_inv(this_40, Object_alloc_table, APDU_buffer))} unit
+  { (JC_380: buffer_inv(this_40, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_391: buffer_inv(this_40, Object_alloc_table, APDU_buffer)) }
+  { (JC_387: buffer_inv(this_40, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetNoChainingFlag :
  this_43:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_415: buffer_inv(this_43, Object_alloc_table, APDU_buffer)) }
+  { (JC_411: buffer_inv(this_43, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetNoChainingFlag_requires :
  this_43:Object pointer ->
-  { (JC_408: buffer_inv(this_43, Object_alloc_table, APDU_buffer))} unit
+  { (JC_404: buffer_inv(this_43, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_415: buffer_inv(this_43, Object_alloc_table, APDU_buffer)) }
+  { (JC_411: buffer_inv(this_43, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetNoGetResponseFlag :
  this_46:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_439: buffer_inv(this_46, Object_alloc_table, APDU_buffer)) }
+  { (JC_435: buffer_inv(this_46, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetNoGetResponseFlag_requires :
  this_46:Object pointer ->
-  { (JC_432: buffer_inv(this_46, Object_alloc_table, APDU_buffer))} unit
+  { (JC_428: buffer_inv(this_46, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_439: buffer_inv(this_46, Object_alloc_table, APDU_buffer)) }
+  { (JC_435: buffer_inv(this_46, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetOutgoingFlag :
  this_34:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_343: buffer_inv(this_34, Object_alloc_table, APDU_buffer)) }
+  { (JC_339: buffer_inv(this_34, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetOutgoingFlag_requires :
  this_34:Object pointer ->
-  { (JC_336: buffer_inv(this_34, Object_alloc_table, APDU_buffer))} unit
+  { (JC_332: buffer_inv(this_34, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_343: buffer_inv(this_34, Object_alloc_table, APDU_buffer)) }
+  { (JC_339: buffer_inv(this_34, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetOutgoingLenSetFlag :
  this_37:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_367: buffer_inv(this_37, Object_alloc_table, APDU_buffer)) }
+  { (JC_363: buffer_inv(this_37, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetOutgoingLenSetFlag_requires :
  this_37:Object pointer ->
-  { (JC_360: buffer_inv(this_37, Object_alloc_table, APDU_buffer))} unit
+  { (JC_356: buffer_inv(this_37, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_367: buffer_inv(this_37, Object_alloc_table, APDU_buffer)) }
+  { (JC_363: buffer_inv(this_37, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetSendInProgressFlag :
  this_31:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_319: buffer_inv(this_31, Object_alloc_table, APDU_buffer)) }
+  { (JC_315: buffer_inv(this_31, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_resetSendInProgressFlag_requires :
  this_31:Object pointer ->
-  { (JC_312: buffer_inv(this_31, Object_alloc_table, APDU_buffer))} unit
+  { (JC_308: buffer_inv(this_31, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_319: buffer_inv(this_31, Object_alloc_table, APDU_buffer)) }
+  { (JC_315: buffer_inv(this_31, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_send61xx :
  this_55:Object pointer ->
   len_0:short ->
    { } short reads APDU_buffer,Object_alloc_table
-   { (JC_535: buffer_inv(this_55, Object_alloc_table, APDU_buffer)) }
+   { (JC_531: buffer_inv(this_55, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_send61xx_requires :
  this_55:Object pointer ->
   len_0:short ->
-   { (JC_528: buffer_inv(this_55, Object_alloc_table, APDU_buffer))} short
+   { (JC_524: buffer_inv(this_55, Object_alloc_table, APDU_buffer))} short
    reads APDU_buffer,Object_alloc_table
-   { (JC_535: buffer_inv(this_55, Object_alloc_table, APDU_buffer)) }
+   { (JC_531: buffer_inv(this_55, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_sendBytes :
  this_56:Object pointer ->
   bOff_0:short ->
    len_1:short ->
     { } unit reads APDU_buffer,Object_alloc_table
-    { (JC_543: buffer_inv(this_56, Object_alloc_table, APDU_buffer)) }
+    { (JC_539: buffer_inv(this_56, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_sendBytesLong :
  this_57:Object pointer ->
@@ -7032,240 +7010,240 @@ parameter APDU_sendBytesLong :
    bOff_1:short ->
     len_2:short ->
      { } unit reads APDU_buffer,Object_alloc_table
-     { (JC_551: buffer_inv(this_57, Object_alloc_table, APDU_buffer)) }
+     { (JC_547: buffer_inv(this_57, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_sendBytesLong_requires :
  this_57:Object pointer ->
   outData:Object pointer ->
    bOff_1:short ->
     len_2:short ->
-     { (JC_544: buffer_inv(this_57, Object_alloc_table, APDU_buffer))} unit
+     { (JC_540: buffer_inv(this_57, Object_alloc_table, APDU_buffer))} unit
      reads APDU_buffer,Object_alloc_table
-     { (JC_551: buffer_inv(this_57, Object_alloc_table, APDU_buffer)) }
+     { (JC_547: buffer_inv(this_57, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_sendBytes_requires :
  this_56:Object pointer ->
   bOff_0:short ->
    len_1:short ->
-    { (JC_536: buffer_inv(this_56, Object_alloc_table, APDU_buffer))} unit
+    { (JC_532: buffer_inv(this_56, Object_alloc_table, APDU_buffer))} unit
     reads APDU_buffer,Object_alloc_table
-    { (JC_543: buffer_inv(this_56, Object_alloc_table, APDU_buffer)) }
+    { (JC_539: buffer_inv(this_56, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_sendInProgressFlag : (Object, byte) memory ref
 
 parameter APDU_setIncoming :
  this_52:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_511: buffer_inv(this_52, Object_alloc_table, APDU_buffer)) }
+  { (JC_507: buffer_inv(this_52, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setIncomingAndReceive :
  this_54:Object pointer ->
   { } short reads APDU_buffer,Object_alloc_table
-  { (JC_527: buffer_inv(this_54, Object_alloc_table, APDU_buffer)) }
+  { (JC_523: buffer_inv(this_54, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setIncomingAndReceive_requires :
  this_54:Object pointer ->
-  { (JC_520: buffer_inv(this_54, Object_alloc_table, APDU_buffer))} short
+  { (JC_516: buffer_inv(this_54, Object_alloc_table, APDU_buffer))} short
   reads APDU_buffer,Object_alloc_table
-  { (JC_527: buffer_inv(this_54, Object_alloc_table, APDU_buffer)) }
+  { (JC_523: buffer_inv(this_54, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setIncomingFlag :
  this_27:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_287: buffer_inv(this_27, Object_alloc_table, APDU_buffer)) }
+  { (JC_283: buffer_inv(this_27, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setIncomingFlag_requires :
  this_27:Object pointer ->
-  { (JC_280: buffer_inv(this_27, Object_alloc_table, APDU_buffer))} unit
+  { (JC_276: buffer_inv(this_27, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_287: buffer_inv(this_27, Object_alloc_table, APDU_buffer)) }
+  { (JC_283: buffer_inv(this_27, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setIncoming_requires :
  this_52:Object pointer ->
-  { (JC_504: buffer_inv(this_52, Object_alloc_table, APDU_buffer))} unit
+  { (JC_500: buffer_inv(this_52, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_511: buffer_inv(this_52, Object_alloc_table, APDU_buffer)) }
+  { (JC_507: buffer_inv(this_52, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLc :
  this_23:Object pointer ->
   data_1:byte ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_255: buffer_inv(this_23, Object_alloc_table, APDU_buffer)) }
+   { (JC_251: buffer_inv(this_23, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLc_requires :
  this_23:Object pointer ->
   data_1:byte ->
-   { (JC_248: buffer_inv(this_23, Object_alloc_table, APDU_buffer))} unit
+   { (JC_244: buffer_inv(this_23, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_255: buffer_inv(this_23, Object_alloc_table, APDU_buffer)) }
+   { (JC_251: buffer_inv(this_23, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLe :
  this_19:Object pointer ->
   data:byte ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_223: buffer_inv(this_19, Object_alloc_table, APDU_buffer)) }
+   { (JC_219: buffer_inv(this_19, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLe_requires :
  this_19:Object pointer ->
   data:byte ->
-   { (JC_216: buffer_inv(this_19, Object_alloc_table, APDU_buffer))} unit
+   { (JC_212: buffer_inv(this_19, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_223: buffer_inv(this_19, Object_alloc_table, APDU_buffer)) }
+   { (JC_219: buffer_inv(this_19, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLr :
  this_21:Object pointer ->
   data_0:byte ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_239: buffer_inv(this_21, Object_alloc_table, APDU_buffer)) }
+   { (JC_235: buffer_inv(this_21, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLrIs256Flag :
  this_39:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_383: buffer_inv(this_39, Object_alloc_table, APDU_buffer)) }
+  { (JC_379: buffer_inv(this_39, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLrIs256Flag_requires :
  this_39:Object pointer ->
-  { (JC_376: buffer_inv(this_39, Object_alloc_table, APDU_buffer))} unit
+  { (JC_372: buffer_inv(this_39, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_383: buffer_inv(this_39, Object_alloc_table, APDU_buffer)) }
+  { (JC_379: buffer_inv(this_39, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setLr_requires :
  this_21:Object pointer ->
   data_0:byte ->
-   { (JC_232: buffer_inv(this_21, Object_alloc_table, APDU_buffer))} unit
+   { (JC_228: buffer_inv(this_21, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_239: buffer_inv(this_21, Object_alloc_table, APDU_buffer)) }
+   { (JC_235: buffer_inv(this_21, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setNoChainingFlag :
  this_42:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_407: buffer_inv(this_42, Object_alloc_table, APDU_buffer)) }
+  { (JC_403: buffer_inv(this_42, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setNoChainingFlag_requires :
  this_42:Object pointer ->
-  { (JC_400: buffer_inv(this_42, Object_alloc_table, APDU_buffer))} unit
+  { (JC_396: buffer_inv(this_42, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_407: buffer_inv(this_42, Object_alloc_table, APDU_buffer)) }
+  { (JC_403: buffer_inv(this_42, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setNoGetResponseFlag :
  this_45:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_431: buffer_inv(this_45, Object_alloc_table, APDU_buffer)) }
+  { (JC_427: buffer_inv(this_45, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setNoGetResponseFlag_requires :
  this_45:Object pointer ->
-  { (JC_424: buffer_inv(this_45, Object_alloc_table, APDU_buffer))} unit
+  { (JC_420: buffer_inv(this_45, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_431: buffer_inv(this_45, Object_alloc_table, APDU_buffer)) }
+  { (JC_427: buffer_inv(this_45, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoing :
  this_49:Object pointer ->
   { } short reads APDU_buffer,Object_alloc_table
-  { (JC_487: buffer_inv(this_49, Object_alloc_table, APDU_buffer)) }
+  { (JC_483: buffer_inv(this_49, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingAndSend :
  this_58:Object pointer ->
   bOff_2:short ->
    len_3:short ->
     { } unit reads APDU_buffer,Object_alloc_table
-    { (JC_559: buffer_inv(this_58, Object_alloc_table, APDU_buffer)) }
+    { (JC_555: buffer_inv(this_58, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingAndSend_requires :
  this_58:Object pointer ->
   bOff_2:short ->
    len_3:short ->
-    { (JC_552: buffer_inv(this_58, Object_alloc_table, APDU_buffer))} unit
+    { (JC_548: buffer_inv(this_58, Object_alloc_table, APDU_buffer))} unit
     reads APDU_buffer,Object_alloc_table
-    { (JC_559: buffer_inv(this_58, Object_alloc_table, APDU_buffer)) }
+    { (JC_555: buffer_inv(this_58, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingFlag :
  this_33:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_335: buffer_inv(this_33, Object_alloc_table, APDU_buffer)) }
+  { (JC_331: buffer_inv(this_33, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingFlag_requires :
  this_33:Object pointer ->
-  { (JC_328: buffer_inv(this_33, Object_alloc_table, APDU_buffer))} unit
+  { (JC_324: buffer_inv(this_33, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_335: buffer_inv(this_33, Object_alloc_table, APDU_buffer)) }
+  { (JC_331: buffer_inv(this_33, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingLenSetFlag :
  this_36:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_359: buffer_inv(this_36, Object_alloc_table, APDU_buffer)) }
+  { (JC_355: buffer_inv(this_36, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingLenSetFlag_requires :
  this_36:Object pointer ->
-  { (JC_352: buffer_inv(this_36, Object_alloc_table, APDU_buffer))} unit
+  { (JC_348: buffer_inv(this_36, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_359: buffer_inv(this_36, Object_alloc_table, APDU_buffer)) }
+  { (JC_355: buffer_inv(this_36, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingLength :
  this_51:Object pointer ->
   len:short ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_503: buffer_inv(this_51, Object_alloc_table, APDU_buffer)) }
+   { (JC_499: buffer_inv(this_51, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingLength_requires :
  this_51:Object pointer ->
   len:short ->
-   { (JC_496: buffer_inv(this_51, Object_alloc_table, APDU_buffer))} unit
+   { (JC_492: buffer_inv(this_51, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_503: buffer_inv(this_51, Object_alloc_table, APDU_buffer)) }
+   { (JC_499: buffer_inv(this_51, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingNoChaining :
  this_50:Object pointer ->
   { } short reads APDU_buffer,Object_alloc_table
-  { (JC_495: buffer_inv(this_50, Object_alloc_table, APDU_buffer)) }
+  { (JC_491: buffer_inv(this_50, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoingNoChaining_requires :
  this_50:Object pointer ->
-  { (JC_488: buffer_inv(this_50, Object_alloc_table, APDU_buffer))} short
+  { (JC_484: buffer_inv(this_50, Object_alloc_table, APDU_buffer))} short
   reads APDU_buffer,Object_alloc_table
-  { (JC_495: buffer_inv(this_50, Object_alloc_table, APDU_buffer)) }
+  { (JC_491: buffer_inv(this_50, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setOutgoing_requires :
  this_49:Object pointer ->
-  { (JC_480: buffer_inv(this_49, Object_alloc_table, APDU_buffer))} short
+  { (JC_476: buffer_inv(this_49, Object_alloc_table, APDU_buffer))} short
   reads APDU_buffer,Object_alloc_table
-  { (JC_487: buffer_inv(this_49, Object_alloc_table, APDU_buffer)) }
+  { (JC_483: buffer_inv(this_49, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setPreReadLength :
  this_25:Object pointer ->
   data_2:byte ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_271: buffer_inv(this_25, Object_alloc_table, APDU_buffer)) }
+   { (JC_267: buffer_inv(this_25, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setPreReadLength_requires :
  this_25:Object pointer ->
   data_2:byte ->
-   { (JC_264: buffer_inv(this_25, Object_alloc_table, APDU_buffer))} unit
+   { (JC_260: buffer_inv(this_25, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_271: buffer_inv(this_25, Object_alloc_table, APDU_buffer)) }
+   { (JC_267: buffer_inv(this_25, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setSendInProgressFlag :
  this_30:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_311: buffer_inv(this_30, Object_alloc_table, APDU_buffer)) }
+  { (JC_307: buffer_inv(this_30, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_setSendInProgressFlag_requires :
  this_30:Object pointer ->
-  { (JC_304: buffer_inv(this_30, Object_alloc_table, APDU_buffer))} unit
+  { (JC_300: buffer_inv(this_30, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_311: buffer_inv(this_30, Object_alloc_table, APDU_buffer)) }
+  { (JC_307: buffer_inv(this_30, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_thePackedBoolean : (Object, Object pointer) memory ref
 
 parameter APDU_undoIncomingAndReceive :
  this_61:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
-  { (JC_583: buffer_inv(this_61, Object_alloc_table, APDU_buffer)) }
+  { (JC_579: buffer_inv(this_61, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_undoIncomingAndReceive_requires :
  this_61:Object pointer ->
-  { (JC_576: buffer_inv(this_61, Object_alloc_table, APDU_buffer))} unit
+  { (JC_572: buffer_inv(this_61, Object_alloc_table, APDU_buffer))} unit
   reads APDU_buffer,Object_alloc_table
-  { (JC_583: buffer_inv(this_61, Object_alloc_table, APDU_buffer)) }
+  { (JC_579: buffer_inv(this_61, Object_alloc_table, APDU_buffer)) }
 
 parameter APDU_waitExtension : tt:unit -> { } unit { true }
 
@@ -7297,14 +7275,14 @@ parameter Applet_process :
  this_10:Object pointer ->
   apdu:Object pointer ->
    { } unit reads APDU_buffer,Object_alloc_table
-   { (JC_78: buffer_inv(apdu, Object_alloc_table, APDU_buffer)) }
+   { (JC_74: buffer_inv(apdu, Object_alloc_table, APDU_buffer)) }
 
 parameter Applet_process_requires :
  this_10:Object pointer ->
   apdu:Object pointer ->
-   { (JC_71: buffer_inv(apdu, Object_alloc_table, APDU_buffer))} unit
+   { (JC_67: buffer_inv(apdu, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table
-   { (JC_78: buffer_inv(apdu, Object_alloc_table, APDU_buffer)) }
+   { (JC_74: buffer_inv(apdu, Object_alloc_table, APDU_buffer)) }
 
 parameter Applet_register :
  this_14:Object pointer -> { } unit reads Object_alloc_table { true }
@@ -7381,14 +7359,14 @@ parameter Card_process :
  this_1:Object pointer ->
   apdu_0:Object pointer ->
    { } unit reads APDU_buffer,Object_alloc_table,byteM_byteP
-   { (JC_180: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
+   { (JC_176: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
 
 parameter Card_process_requires :
  this_1:Object pointer ->
   apdu_0:Object pointer ->
-   { (JC_173: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer))} unit
+   { (JC_169: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer))} unit
    reads APDU_buffer,Object_alloc_table,byteM_byteP
-   { (JC_180: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
+   { (JC_176: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
 
 parameter ISOException_getReason :
  this_64:Object pointer -> { } short reads Object_alloc_table { true }
@@ -8186,13 +8164,13 @@ parameter cons_APDU :
  this_68:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
   writes APDU_buffer,APDU_incomingFlag,APDU_lrIs256Flag,APDU_noChainingFlag,APDU_noGetResponseFlag,APDU_outgoingFlag,APDU_outgoingLenSetFlag,APDU_sendInProgressFlag,APDU_thePackedBoolean
-  { (JC_447: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
+  { (JC_443: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
 
 parameter cons_APDU_requires :
  this_68:Object pointer ->
   { } unit reads APDU_buffer,Object_alloc_table
   writes APDU_buffer,APDU_incomingFlag,APDU_lrIs256Flag,APDU_noChainingFlag,APDU_noGetResponseFlag,APDU_outgoingFlag,APDU_outgoingLenSetFlag,APDU_sendInProgressFlag,APDU_thePackedBoolean
-  { (JC_447: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
+  { (JC_443: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
 
 parameter cons_Applet :
  this_66:Object pointer ->
@@ -8262,42 +8240,34 @@ parameter int32_of_integer_ :
 parameter java_array_length_byteM :
  x_3:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_21:
+  { (JC_17:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and (eq_int(result,
-             add_int(offset_max(Object_alloc_table, x_3), (1)))
-            and (true = true))))) }
+        and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
 
 parameter java_array_length_byteM_requires :
  x_3:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_21:
+  { (JC_17:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and (eq_int(result,
-             add_int(offset_max(Object_alloc_table, x_3), (1)))
-            and (true = true))))) }
+        and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
 
 parameter java_array_length_shortM :
  x_5:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_43:
+  { (JC_37:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and (eq_int(result,
-             add_int(offset_max(Object_alloc_table, x_5), (1)))
-            and (true = true))))) }
+        and eq_int(result, add_int(offset_max(Object_alloc_table, x_5), (1)))))) }
 
 parameter java_array_length_shortM_requires :
  x_5:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_43:
+  { (JC_37:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and (eq_int(result,
-             add_int(offset_max(Object_alloc_table, x_5), (1)))
-            and (true = true))))) }
+        and eq_int(result, add_int(offset_max(Object_alloc_table, x_5), (1)))))) }
 
 parameter long_of_integer_ :
  x:int ->
@@ -8307,7 +8277,7 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_6:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_54:
+  { (JC_50:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_6), (0))
      else (x_6 = null))) }
@@ -8315,7 +8285,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_6:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_54:
+  { (JC_50:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_6), (0))
      else (x_6 = null))) }
@@ -8323,7 +8293,7 @@ parameter non_null_Object_requires :
 parameter non_null_byteM :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_7:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
@@ -8331,7 +8301,7 @@ parameter non_null_byteM :
 parameter non_null_byteM_requires :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_7:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
@@ -8339,7 +8309,7 @@ parameter non_null_byteM_requires :
 parameter non_null_shortM :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_32:
+  { (JC_27:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
      else (x_4 = null))) }
@@ -8347,7 +8317,7 @@ parameter non_null_shortM :
 parameter non_null_shortM_requires :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_32:
+  { (JC_27:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
      else (x_4 = null))) }
@@ -8381,10 +8351,10 @@ let Card_install_ensures_default =
   try
    begin
      (K_4:
-     (let jessie_25 = (let this = (JC_150:
+     (let jessie_25 = (let this = (JC_146:
                                   (((alloc_struct_Card (1)) Object_alloc_table) Object_tag_table)) in
                       (let tt = (let jessie_28 = this in
-                                (JC_151: (cons_Card jessie_28))) in
+                                (JC_147: (cons_Card jessie_28))) in
                       this)) in
      (let jessie_24 = bArray_1 in
      (let jessie_23 = (K_2:
@@ -8394,14 +8364,14 @@ let Card_install_ensures_default =
                                                                    (integer_of_short bOffset_1)) (1))))))) in
      (let jessie_22 = (K_3:
                       ((safe_acc_ !byteM_byteP) ((shift bArray_1) (integer_of_short bOffset_1)))) in
-     (JC_152:
+     (JC_148:
      ((((Applet_register_byteA_short_byte jessie_25) jessie_24) jessie_23) jessie_22)))))));
     (raise Return)
    end
    with
    Return ->
    void end)
-  { (JC_139: true) }
+  { (JC_135: true) }
 
 let Card_install_safety =
  fun (bArray_1 : Object pointer) (bOffset_1 : short) (bLength_1 : byte) ->
@@ -8410,30 +8380,30 @@ let Card_install_safety =
   try
    begin
      (K_4:
-     (let jessie_18 = (let this = (let jessie_19 = (JC_146:
+     (let jessie_18 = (let this = (let jessie_19 = (JC_142:
                                                    (((alloc_struct_Card_requires (1)) Object_alloc_table) Object_tag_table)) in
-                                  (JC_147:
+                                  (JC_143:
                                   (assert
                                   { ge_int(offset_max(Object_alloc_table,
                                            jessie_19),
                                     (0)) };
                                   jessie_19))) in
                       (let tt = (let jessie_21 = this in
-                                (JC_148: (cons_Card_requires jessie_21))) in
+                                (JC_144: (cons_Card_requires jessie_21))) in
                       this)) in
      (let jessie_17 = bArray_1 in
      (let jessie_16 = (K_2:
-                      (JC_145:
+                      (JC_141:
                       (short_of_integer_ (integer_of_int32 (K_1:
-                                                           (JC_144:
+                                                           (JC_140:
                                                            (int32_of_integer_ 
                                                             ((add_int 
                                                               (integer_of_short bOffset_1)) (1))))))))) in
      (let jessie_15 = (K_3:
-                      (JC_143:
+                      (JC_139:
                       ((((offset_acc_ !Object_alloc_table) !byteM_byteP) bArray_1) 
                        (integer_of_short bOffset_1)))) in
-     (JC_149:
+     (JC_145:
      ((((Applet_register_byteA_short_byte_requires jessie_18) jessie_17) jessie_16) jessie_15)))))));
     (raise Return)
    end
@@ -8446,18 +8416,18 @@ let Card_process_ensures_default =
  fun (this_1 : Object pointer) (apdu_0 : Object pointer) ->
   { (left_valid_struct_APDU(apdu_0, (0), Object_alloc_table)
     and (valid_struct_Card(this_1, (0), (0), Object_alloc_table)
-        and (JC_175: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) }
+        and (JC_171: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) }
   (init:
   try
    begin
      (if (K_6:
          (let jessie_36 = this_1 in
-         (JC_188: (Applet_selectingApplet jessie_36))))
+         (JC_184: (Applet_selectingApplet jessie_36))))
      then (raise Return)
      else void);
     (let buf = (K_12:
                (let jessie_38 = apdu_0 in
-               (JC_189: (APDU_getBuffer jessie_38)))) in
+               (JC_185: (APDU_getBuffer jessie_38)))) in
     begin
       (if (K_9:
           ((neq_int_ (integer_of_byte (K_8:
@@ -8467,19 +8437,19 @@ let Card_process_ensures_default =
       then
        (K_7:
        (let jessie_39 = ISO7816_SW_CLA_NOT_SUPPORTED in
-       (JC_190: (ISOException_throwIt jessie_39))))
+       (JC_186: (ISOException_throwIt jessie_39))))
       else void);
      (let jessie_1 = (K_11:
                      ((safe_acc_ !byteM_byteP) ((shift buf) (integer_of_byte ISO7816_OFFSET_INS)))) in
      try
-      (if (((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read)) || false)
+      (if ((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read))
       then (let jessie_41 = (raise (Loop_exit_exc void)) in void)
       else
-       (if (true || false)
+       (if true
        then
         (K_10:
         (let jessie_42 = ISO7816_SW_INS_NOT_SUPPORTED in
-        (JC_191: (ISOException_throwIt jessie_42))))
+        (JC_187: (ISOException_throwIt jessie_42))))
        else void))
       with
       Loop_exit_exc jessie_2 ->
@@ -8491,50 +8461,50 @@ let Card_process_ensures_default =
    with
    Return ->
    void end)
-  { (JC_177: true) }
+  { (JC_173: true) }
 
 let Card_process_safety =
  fun (this_1 : Object pointer) (apdu_0 : Object pointer) ->
   { (left_valid_struct_APDU(apdu_0, (0), Object_alloc_table)
     and (valid_struct_Card(this_1, (0), (0), Object_alloc_table)
-        and (JC_175: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) }
+        and (JC_171: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) }
   (init:
   try
    begin
      (if (K_6:
          (let jessie_29 = this_1 in
-         (JC_181: (Applet_selectingApplet_requires jessie_29))))
+         (JC_177: (Applet_selectingApplet_requires jessie_29))))
      then (raise Return)
      else void);
     (let buf = (K_12:
                (let jessie_31 = apdu_0 in
-               (JC_183:
+               (JC_179:
                (assert
                { ge_int(offset_max(Object_alloc_table, jessie_31), (0)) };
-               (JC_182: (APDU_getBuffer_requires jessie_31)))))) in
+               (JC_178: (APDU_getBuffer_requires jessie_31)))))) in
     begin
       (if (K_9:
           ((neq_int_ (integer_of_byte (K_8:
-                                      (JC_184:
+                                      (JC_180:
                                       ((((lsafe_lbound_acc_ !Object_alloc_table) !byteM_byteP) buf) (0)))))) 
            (integer_of_byte Card_Card_Class)))
       then
        (K_7:
        (let jessie_32 = ISO7816_SW_CLA_NOT_SUPPORTED in
-       (JC_185: (ISOException_throwIt_requires jessie_32))))
+       (JC_181: (ISOException_throwIt_requires jessie_32))))
       else void);
      (let jessie_1 = (K_11:
-                     (JC_186:
+                     (JC_182:
                      ((((lsafe_lbound_acc_ !Object_alloc_table) !byteM_byteP) buf) (1)))) in
      try
-      (if (((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read)) || false)
+      (if ((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read))
       then (let jessie_34 = (raise (Loop_exit_exc void)) in void)
       else
-       (if (true || false)
+       (if true
        then
         (K_10:
         (let jessie_35 = ISO7816_SW_INS_NOT_SUPPORTED in
-        (JC_187: (ISOException_throwIt_requires jessie_35))))
+        (JC_183: (ISOException_throwIt_requires jessie_35))))
        else void))
       with
       Loop_exit_exc jessie_2 ->
@@ -8546,7 +8516,7 @@ let Card_process_safety =
    with
    Return ->
    void end)
-  { (JC_179: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
+  { (JC_175: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
 
 let cons_APDU_ensures_default =
  fun (this_68 : Object pointer) ->
@@ -8600,7 +8570,7 @@ let cons_APDU_ensures_default =
    with
    Return ->
    void end)
-  { (JC_444: true) }
+  { (JC_440: true) }
 
 let cons_APDU_safety =
  fun (this_68 : Object pointer) ->
@@ -8654,7 +8624,7 @@ let cons_APDU_safety =
    with
    Return ->
    void end)
-  { (JC_446: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
+  { (JC_442: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
 
 let cons_Applet_ensures_default =
  fun (this_66 : Object pointer) ->
@@ -8674,7 +8644,7 @@ let cons_Applet_ensures_default =
    with
    Return ->
    void end)
-  { (JC_59: true) }
+  { (JC_55: true) }
 
 let cons_Applet_safety =
  fun (this_66 : Object pointer) ->
@@ -8714,7 +8684,7 @@ let cons_CardRuntimeException_short_ensures_default =
    with
    Return ->
    void end)
-  { (JC_620: true) }
+  { (JC_616: true) }
 
 let cons_CardRuntimeException_short_safety =
  fun (this_72 : Object pointer) (reason : short) ->
@@ -8740,7 +8710,7 @@ let cons_Card_ensures_default =
  fun (this_9 : Object pointer) ->
   { valid_struct_Card(this_9, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_131: true) }
+  { (JC_127: true) }
 
 let cons_Card_safety =
  fun (this_9 : Object pointer) ->
@@ -8752,7 +8722,7 @@ let cons_Exception_ensures_default =
  fun (this_70 : Object pointer) ->
   { valid_struct_Exception(this_70, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_604: true) }
+  { (JC_600: true) }
 
 let cons_Exception_safety =
  fun (this_70 : Object pointer) ->
@@ -8778,7 +8748,7 @@ let cons_ISOException_short_ensures_default =
    with
    Return ->
    void end)
-  { (JC_652: true) }
+  { (JC_648: true) }
 
 let cons_ISOException_short_safety =
  fun (this_73 : Object pointer) (sw : short) ->
@@ -8804,7 +8774,7 @@ let cons_Object_ensures_default =
  fun (this_67 : Object pointer) ->
   { valid_struct_Object(this_67, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_196: true) }
+  { (JC_192: true) }
 
 let cons_Object_safety =
  fun (this_67 : Object pointer) ->
@@ -8816,7 +8786,7 @@ let cons_RuntimeException_ensures_default =
  fun (this_71 : Object pointer) ->
   { valid_struct_RuntimeException(this_71, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_612: true) }
+  { (JC_608: true) }
 
 let cons_RuntimeException_safety =
  fun (this_71 : Object pointer) ->
@@ -8828,7 +8798,7 @@ let cons_Throwable_ensures_default =
  fun (this_69 : Object pointer) ->
   { valid_struct_Throwable(this_69, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_596: true) }
+  { (JC_592: true) }
 
 let cons_Throwable_safety =
  fun (this_69 : Object pointer) ->
@@ -8862,12 +8832,12 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/SimpleApplet_po1.why">
-      <location file = "HOME/tests/java/SimpleApplet.jc" line = "356" begin = "67" end = "78"/>
+      <location file = "HOME/tests/java/SimpleApplet.jc" line = "358" begin = "67" end = "78"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/SimpleApplet_po2.why">
-      <location file = "why/SimpleApplet.why" line = "2684" begin = "36" end = "169"/>
+      <location file = "why/SimpleApplet.why" line = "2676" begin = "36" end = "169"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SimpleApplet_po3.why">
@@ -9079,7 +9049,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -9134,7 +9134,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -9153,6 +9157,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 
@@ -10687,16 +10693,16 @@ goal Card_process_safety_po_1:
   byte) memory.
   (left_valid_struct_APDU(apdu_0, 0, Object_alloc_table) and
    (valid_struct_Card(this_1, 0, 0, Object_alloc_table) and
-    ("JC_175": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
+    ("JC_171": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
   forall result:bool.
   (if result then
-   ("JC_179": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) else
+   ("JC_175": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) else
    ((offset_max(Object_alloc_table, apdu_0) >= 0) and
-    (("JC_161": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
+    (("JC_157": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
      (forall result:Object pointer.
-       ((("JC_168": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
-         ("JC_172":
-         (("JC_171": (result = select(APDU_buffer, apdu_0))) and
+       ((("JC_164": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
+         ("JC_168":
+         (("JC_167": (result = select(APDU_buffer, apdu_0))) and
           buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
         ((0 <= offset_max(Object_alloc_table, result)) and
          (forall result0:byte.
@@ -10706,38 +10712,24 @@ goal Card_process_safety_po_1:
                ((1 <= offset_max(Object_alloc_table, result)) and
                 (forall result0:byte.
                   ((result0 = select(byteM_byteP, shift(result, 1))) ->
-                   ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                      ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                       (false = true))) ->
-                     ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
+                   (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                     ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
                      APDU_buffer))) and
-                    (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                      (false = false)) ->
-                     ((((true = true) or ((true = false) and (false = true))) ->
-                       (true ->
-                        ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                        APDU_buffer)))) and
-                      (((true = false) and (false = false)) ->
-                       ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                       APDU_buffer))))))))))) and
+                    ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                     (true ->
+                      ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
+                      APDU_buffer)))))))))) and
              ((integer_of_byte(result0) = integer_of_byte(Card_Card_Class)) ->
               ((1 <= offset_max(Object_alloc_table, result)) and
                (forall result0:byte.
                  ((result0 = select(byteM_byteP, shift(result, 1))) ->
-                  ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                     ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                      (false = true))) ->
-                    ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
+                  (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                    ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
                     APDU_buffer))) and
-                   (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                     (false = false)) ->
-                    ((((true = true) or ((true = false) and (false = true))) ->
-                      (true ->
-                       ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                       APDU_buffer)))) and
-                     (((true = false) and (false = false)) ->
-                      ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                      APDU_buffer)))))))))))))))))))
+                   ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                    (true ->
+                     ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
+                     APDU_buffer))))))))))))))))))
 
 ========== file tests/java/why/SimpleApplet_po11.why ==========
 goal cons_APDU_safety_po_1:
@@ -10806,7 +10798,7 @@ goal cons_APDU_safety_po_1:
   byte) memory.
   (APDU_noGetResponseFlag0 = store(APDU_noGetResponseFlag, this_68,
   result5)) ->
-  ("JC_446": buffer_inv(this_68, Object_alloc_table, APDU_buffer0))
+  ("JC_442": buffer_inv(this_68, Object_alloc_table, APDU_buffer0))
 
 ========== file tests/java/why/SimpleApplet_po1.why ==========
 goal Card_install_safety_po_1:
@@ -10967,13 +10959,13 @@ goal Card_process_ensures_default_po_1:
   byte) memory.
   (left_valid_struct_APDU(apdu_0, 0, Object_alloc_table) and
    (valid_struct_Card(this_1, 0, 0, Object_alloc_table) and
-    ("JC_175": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
+    ("JC_171": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
   forall result:bool.
-  (if result then ("JC_177": true) else
+  (if result then ("JC_173": true) else
    (forall result:Object pointer.
-     ((("JC_168": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
-       ("JC_172":
-       (("JC_171": (result = select(APDU_buffer, apdu_0))) and
+     ((("JC_164": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
+       ("JC_168":
+       (("JC_167": (result = select(APDU_buffer, apdu_0))) and
         buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
       (forall result0:byte.
         ((result0 = select(byteM_byteP, shift(result,
@@ -10983,28 +10975,18 @@ goal Card_process_ensures_default_po_1:
             (forall result0:byte.
               ((result0 = select(byteM_byteP, shift(result,
                integer_of_byte(ISO7816_OFFSET_INS)))) ->
-               ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                  ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                   (false = true))) ->
-                 ("JC_177": true)) and
-                (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                  (false = false)) ->
-                 ((((true = true) or ((true = false) and (false = true))) ->
-                   (true -> ("JC_177": true))) and
-                  (((true = false) and (false = false)) -> ("JC_177": true))))))))) and
+               (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                 ("JC_173": true)) and
+                ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                 (true -> ("JC_173": true)))))))) and
           ((integer_of_byte(result0) = integer_of_byte(Card_Card_Class)) ->
            (forall result0:byte.
              ((result0 = select(byteM_byteP, shift(result,
               integer_of_byte(ISO7816_OFFSET_INS)))) ->
-              ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                 ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                  (false = true))) ->
-                ("JC_177": true)) and
-               (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                 (false = false)) ->
-                ((((true = true) or ((true = false) and (false = true))) ->
-                  (true -> ("JC_177": true))) and
-                 (((true = false) and (false = false)) -> ("JC_177": true))))))))))))))
+              (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                ("JC_173": true)) and
+               ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                (true -> ("JC_173": true)))))))))))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/SimpleApplet.why
@@ -11091,6 +11073,38 @@ why -simplify [...] why/SimpleApplet.why
  (FORALL (x y) (OR (EQ (int_min x y) x) (EQ (int_min x y) y))))
 
 (BG_PUSH
+ ;; Why axiom real_of_int_zero
+ (EQ (real_of_int 0) real_constant_0_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_one
+ (EQ (real_of_int 1) real_constant_1_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_add
+ (FORALL (x y)
+ (EQ (real_of_int (+ x y)) (real_add (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_sub
+ (FORALL (x y)
+ (EQ (real_of_int (- x y)) (real_sub (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_down_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (AND (EQ (le_real (real_of_int (truncate_real_to_int x)) x) |@true|)
+ (EQ (lt_real x (real_of_int (+ (truncate_real_to_int x) 1))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_up_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (AND (EQ (lt_real (real_of_int (- (truncate_real_to_int x) 1)) x) |@true|)
+ (EQ (le_real x (real_of_int (truncate_real_to_int x))) |@true|)))))
+
+(BG_PUSH
  ;; Why axiom lt_real_bool_axiom
  (FORALL (x y)
  (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
@@ -11139,6 +11153,16 @@ why -simplify [...] why/SimpleApplet.why
  (FORALL (x y) (OR (EQ (real_min x y) x) (EQ (real_min x y) y))))
 
 (BG_PUSH
+ ;; Why axiom sqr_real_def
+ (FORALL (x) (EQ (sqr_real x) (real_mul x x))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_sqr
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (sqr_real (real_sqrt x)) x))))
+
+(BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
  (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
@@ -11152,6 +11176,11 @@ why -simplify [...] why/SimpleApplet.why
 (BG_PUSH
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom exp_log
+ (FORALL (x)
+ (IMPLIES (EQ (gt_real x real_constant_0_0e) |@true|) (EQ (exp (log x)) x))))
 
 (BG_PUSH
  ;; Why axiom prod_pos
@@ -12512,12 +12541,12 @@ why -simplify [...] why/SimpleApplet.why
 (DEFPRED (valid_struct_shortM p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
 
-;; Card_install_safety_po_1, File "HOME/tests/java/SimpleApplet.jc", line 356, characters 67-78
+;; Card_install_safety_po_1, File "HOME/tests/java/SimpleApplet.jc", line 358, characters 67-78
 (FORALL (bArray_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_byteM bArray_1 0 Object_alloc_table) (>= 1 0))))
 
-;; Card_install_safety_po_2, File "why/SimpleApplet.why", line 2684, characters 36-169
+;; Card_install_safety_po_2, File "why/SimpleApplet.why", line 2676, characters 36-169
 (FORALL (bArray_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_byteM bArray_1 0 Object_alloc_table)
@@ -12706,26 +12735,12 @@ why -simplify [...] why/SimpleApplet.why
                                                  ISO7816_OFFSET_INS))))
                               (AND
                               (IMPLIES
-                              (OR
                               (EQ (integer_of_byte result0)
-                              (integer_of_byte Card_Card_Ins_Read))
-                              (AND
+                              (integer_of_byte Card_Card_Ins_Read)) TRUE)
+                              (IMPLIES
                               (NEQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@true|))) TRUE)
-                              (IMPLIES
-                              (AND
-                              (NEQ (integer_of_byte result0)
-                              (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@false|))
-                              (AND
-                              (IMPLIES
-                              (OR (EQ |@true| |@true|)
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@true|))) (IMPLIES TRUE TRUE))
-                              (IMPLIES
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@false|)) TRUE))))))))
+                              (IMPLIES TRUE TRUE)))))))
                               (IMPLIES
                               (EQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Class))
@@ -12738,26 +12753,12 @@ why -simplify [...] why/SimpleApplet.why
                                                  ISO7816_OFFSET_INS))))
                               (AND
                               (IMPLIES
-                              (OR
                               (EQ (integer_of_byte result0)
-                              (integer_of_byte Card_Card_Ins_Read))
-                              (AND
+                              (integer_of_byte Card_Card_Ins_Read)) TRUE)
+                              (IMPLIES
                               (NEQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@true|))) TRUE)
-                              (IMPLIES
-                              (AND
-                              (NEQ (integer_of_byte result0)
-                              (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@false|))
-                              (AND
-                              (IMPLIES
-                              (OR (EQ |@true| |@true|)
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@true|))) (IMPLIES TRUE TRUE))
-                              (IMPLIES
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@false|)) TRUE)))))))))))))))))))))
+                              (IMPLIES TRUE TRUE))))))))))))))))))))
 
 ;; Card_process_safety_po_1, File "", line 0, characters 0-0
 (FORALL (this_1)
@@ -12804,33 +12805,16 @@ why -simplify [...] why/SimpleApplet.why
                               (select byteM_byteP (shift result 1)))
                               (AND
                               (IMPLIES
-                              (OR
                               (EQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Ins_Read))
-                              (AND
-                              (NEQ (integer_of_byte result0)
-                              (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@true|)))
                               (buffer_inv
                               apdu_0 Object_alloc_table APDU_buffer))
                               (IMPLIES
-                              (AND
                               (NEQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@false|))
-                              (AND
-                              (IMPLIES
-                              (OR (EQ |@true| |@true|)
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@true|)))
                               (IMPLIES TRUE
                               (buffer_inv
-                              apdu_0 Object_alloc_table APDU_buffer)))
-                              (IMPLIES
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@false|))
-                              (buffer_inv
-                              apdu_0 Object_alloc_table APDU_buffer))))))))))
+                              apdu_0 Object_alloc_table APDU_buffer)))))))))
                               (IMPLIES
                               (EQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Class))
@@ -12842,33 +12826,16 @@ why -simplify [...] why/SimpleApplet.why
                               (select byteM_byteP (shift result 1)))
                               (AND
                               (IMPLIES
-                              (OR
                               (EQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Ins_Read))
-                              (AND
-                              (NEQ (integer_of_byte result0)
-                              (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@true|)))
                               (buffer_inv
                               apdu_0 Object_alloc_table APDU_buffer))
                               (IMPLIES
-                              (AND
                               (NEQ (integer_of_byte result0)
                               (integer_of_byte Card_Card_Ins_Read))
-                              (EQ |@false| |@false|))
-                              (AND
-                              (IMPLIES
-                              (OR (EQ |@true| |@true|)
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@true|)))
                               (IMPLIES TRUE
                               (buffer_inv
-                              apdu_0 Object_alloc_table APDU_buffer)))
-                              (IMPLIES
-                              (AND (EQ |@true| |@false|)
-                              (EQ |@false| |@false|))
-                              (buffer_inv
-                              apdu_0 Object_alloc_table APDU_buffer))))))))))))))))))))))))))
+                              apdu_0 Object_alloc_table APDU_buffer)))))))))))))))))))))))))
 
 ;; cons_APDU_safety_po_1, File "HOME/lib/javacard_api/javacard/framework/APDU.java", line 239, characters 2-6
 (FORALL (this_68)
@@ -13080,7 +13047,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -13135,7 +13132,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -13154,6 +13155,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 
@@ -14827,13 +14830,13 @@ goal Card_process_ensures_default_po_1:
   byte) memory.
   (left_valid_struct_APDU(apdu_0, 0, Object_alloc_table) and
    (valid_struct_Card(this_1, 0, 0, Object_alloc_table) and
-    ("JC_175": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
+    ("JC_171": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
   forall result:bool.
-  (if result then ("JC_177": true) else
+  (if result then ("JC_173": true) else
    (forall result:Object pointer.
-     ((("JC_168": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
-       ("JC_172":
-       (("JC_171": (result = select(APDU_buffer, apdu_0))) and
+     ((("JC_164": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
+       ("JC_168":
+       (("JC_167": (result = select(APDU_buffer, apdu_0))) and
         buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
       (forall result0:byte.
         ((result0 = select(byteM_byteP, shift(result,
@@ -14843,28 +14846,18 @@ goal Card_process_ensures_default_po_1:
             (forall result0:byte.
               ((result0 = select(byteM_byteP, shift(result,
                integer_of_byte(ISO7816_OFFSET_INS)))) ->
-               ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                  ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                   (false = true))) ->
-                 ("JC_177": true)) and
-                (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                  (false = false)) ->
-                 ((((true = true) or ((true = false) and (false = true))) ->
-                   (true -> ("JC_177": true))) and
-                  (((true = false) and (false = false)) -> ("JC_177": true))))))))) and
+               (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                 ("JC_173": true)) and
+                ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                 (true -> ("JC_173": true)))))))) and
           ((integer_of_byte(result0) = integer_of_byte(Card_Card_Class)) ->
            (forall result0:byte.
              ((result0 = select(byteM_byteP, shift(result,
               integer_of_byte(ISO7816_OFFSET_INS)))) ->
-              ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                 ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                  (false = true))) ->
-                ("JC_177": true)) and
-               (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                 (false = false)) ->
-                ((((true = true) or ((true = false) and (false = true))) ->
-                  (true -> ("JC_177": true))) and
-                 (((true = false) and (false = false)) -> ("JC_177": true))))))))))))))
+              (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                ("JC_173": true)) and
+               ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                (true -> ("JC_173": true)))))))))))))
 
 goal Card_process_safety_po_1:
   forall this_1:Object pointer.
@@ -14876,16 +14869,16 @@ goal Card_process_safety_po_1:
   byte) memory.
   (left_valid_struct_APDU(apdu_0, 0, Object_alloc_table) and
    (valid_struct_Card(this_1, 0, 0, Object_alloc_table) and
-    ("JC_175": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
+    ("JC_171": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
   forall result:bool.
   (if result then
-   ("JC_179": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) else
+   ("JC_175": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) else
    ((offset_max(Object_alloc_table, apdu_0) >= 0) and
-    (("JC_161": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
+    (("JC_157": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
      (forall result:Object pointer.
-       ((("JC_168": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
-         ("JC_172":
-         (("JC_171": (result = select(APDU_buffer, apdu_0))) and
+       ((("JC_164": buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) and
+         ("JC_168":
+         (("JC_167": (result = select(APDU_buffer, apdu_0))) and
           buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)))) ->
         ((0 <= offset_max(Object_alloc_table, result)) and
          (forall result0:byte.
@@ -14895,38 +14888,24 @@ goal Card_process_safety_po_1:
                ((1 <= offset_max(Object_alloc_table, result)) and
                 (forall result0:byte.
                   ((result0 = select(byteM_byteP, shift(result, 1))) ->
-                   ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                      ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                       (false = true))) ->
-                     ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
+                   (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                     ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
                      APDU_buffer))) and
-                    (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                      (false = false)) ->
-                     ((((true = true) or ((true = false) and (false = true))) ->
-                       (true ->
-                        ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                        APDU_buffer)))) and
-                      (((true = false) and (false = false)) ->
-                       ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                       APDU_buffer))))))))))) and
+                    ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                     (true ->
+                      ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
+                      APDU_buffer)))))))))) and
              ((integer_of_byte(result0) = integer_of_byte(Card_Card_Class)) ->
               ((1 <= offset_max(Object_alloc_table, result)) and
                (forall result0:byte.
                  ((result0 = select(byteM_byteP, shift(result, 1))) ->
-                  ((((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) or
-                     ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                      (false = true))) ->
-                    ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
+                  (((integer_of_byte(result0) = integer_of_byte(Card_Card_Ins_Read)) ->
+                    ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
                     APDU_buffer))) and
-                   (((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) and
-                     (false = false)) ->
-                    ((((true = true) or ((true = false) and (false = true))) ->
-                      (true ->
-                       ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                       APDU_buffer)))) and
-                     (((true = false) and (false = false)) ->
-                      ("JC_179": buffer_inv(apdu_0, Object_alloc_table,
-                      APDU_buffer)))))))))))))))))))
+                   ((integer_of_byte(result0) <> integer_of_byte(Card_Card_Ins_Read)) ->
+                    (true ->
+                     ("JC_175": buffer_inv(apdu_0, Object_alloc_table,
+                     APDU_buffer))))))))))))))))))
 
 goal cons_APDU_safety_po_1:
   forall this_68:Object pointer.
@@ -14994,7 +14973,7 @@ goal cons_APDU_safety_po_1:
   byte) memory.
   (APDU_noGetResponseFlag0 = store(APDU_noGetResponseFlag, this_68,
   result5)) ->
-  ("JC_446": buffer_inv(this_68, Object_alloc_table, APDU_buffer0))
+  ("JC_442": buffer_inv(this_68, Object_alloc_table, APDU_buffer0))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

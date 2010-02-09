@@ -29,8 +29,13 @@
 
 class AllZeros {
 
+    static int should_not_be_proved(int t[]) {
+	return t.length;
+
+    }
     /*@ requires t != null;
-      @ ensures \result <==> \forall integer i; 0 <= i < t.length ==> t[i] == 0; 
+      @ ensures \result <==> 
+      @      \forall integer i; 0 <= i < t.length ==> t[i] == 0; 
       @*/
     static boolean all_zeros(int t[]) {
 	/*@ loop_invariant 

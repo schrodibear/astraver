@@ -292,9 +292,14 @@ module PExpr = struct
       () =
     match expr1, expr2, list with
       | None, None, Some el ->
-          List.fold_left
-            (fun expr2 expr1 -> mkbinary ?pos ~expr1 ~expr2 ~op ())
-            default el
+	  begin
+	    match el with
+	      | [] -> default
+	      | e::el ->
+            List.fold_left
+              (fun expr2 expr1 -> mkbinary ?pos ~expr1 ~expr2 ~op ())
+              e el
+	  end
       | Some expr1, Some expr2, None -> mkbinary ~expr1 ~op ~expr2 ?pos ()
       | _ -> failwith "Jc_constructors.PExpr.mkbinary_list should be used \
 either with (~expr1 AND ~expr2) OR ~list only."

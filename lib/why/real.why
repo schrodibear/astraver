@@ -28,8 +28,43 @@ logic neg_real : real -> real      (* prefix - *)
 parameter div_real_ : x:real -> y:real -> { y<>0.0 } real { result = x / y }
 
 
+(* conversion from integers *)
+
 logic real_of_int : int -> real
-logic int_of_real : real -> int
+
+axiom real_of_int_zero: real_of_int(0) = 0.0
+axiom real_of_int_one: real_of_int(1) = 1.0
+
+axiom real_of_int_add: 
+  forall x,y:int.
+    real_of_int(x+y) = real_of_int(x) + real_of_int(y)
+
+axiom real_of_int_sub: 
+  forall x,y:int.
+    real_of_int(x-y) = real_of_int(x) - real_of_int(y)
+
+(* conversions to integers *)
+
+(* truncate_real_to_int: rounds towards zero *)
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  forall x:real.
+    x >= 0.0 -> 
+       real_of_int(truncate_real_to_int(x)) <= x < real_of_int(truncate_real_to_int(x) + 1)
+
+axiom truncate_up_neg:
+  forall x:real.
+    x <= 0.0 -> 
+      real_of_int(truncate_real_to_int(x)-1) < x <= real_of_int(truncate_real_to_int(x))
+
+(* roundings up and down *)
+
+logic floor_real_to_int: real -> int
+logic ceil_real_to_int: real -> int
+
+(* todo: axiomatization *)
 
 (* boolean versions of the comparisons and the corresponding axioms *)
 logic lt_real_bool : real,real -> bool
@@ -75,8 +110,14 @@ axiom real_min_is_some :
   (real_min(x,y) = x or real_min(x,y) = y) 
 
 
+(* square root *)
+
+function sqr_real(x:real):real = x * x
 
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: 
+  forall x:real. x >= 0.0 -> sqr_real(sqrt_real(x)) = x
 
 parameter sqrt_real_ : 
 	  x:real -> { x >= 0.0 } real { result = sqrt_real(x) }
@@ -95,6 +136,8 @@ logic log10 : real -> real
 
 axiom log_exp: forall x:real. log(exp(x)) = x
 
+axiom exp_log: forall x:real. x > 0.0 -> exp(log(x)) = x
+
 
 (* trigonometric functions *)
 
@@ -112,6 +155,8 @@ logic hypot : real, real -> real
 
 
 parameter any_real : unit -> {} real { true }
+
+(* helper axioms *)
 
 axiom prod_pos: 
   forall x:real. forall y:real.
