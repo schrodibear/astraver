@@ -382,7 +382,6 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 char_P[..] ap_cpystrn(char_P[..] dst, char_P[..] src, uint32 dst_size)
   requires (C_24 : valid_string(src));
 behavior default:
-  assumes true;
   ensures (C_25 : true);
 {  
    (var int32 i);
@@ -1531,9 +1530,8 @@ parameter uint32_of_integer_ :
 
 let ap_cpystrn_ensures_default =
  fun (dst : char_P pointer) (src : char_P pointer) (dst_size : uint32) (char_P_char_M_dst_20 : (char_P, int8) memory ref) (char_P_dst_20_alloc_table : char_P alloc_table) (char_P_src_21_alloc_table : char_P alloc_table) (char_P_char_M_src_21 : (char_P, int8) memory) ->
-  { ((true = true)
-    and (JC_3:
-        valid_string(src, char_P_src_21_alloc_table, char_P_char_M_src_21))) }
+  { (JC_3:
+    valid_string(src, char_P_src_21_alloc_table, char_P_char_M_src_21)) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -1900,12 +1898,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po7.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "400" begin = "24" end = "226"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "399" begin = "24" end = "226"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po8.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "400" begin = "24" end = "226"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "399" begin = "24" end = "226"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1940,20 +1938,20 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po15.why">
-      <location file = "why/ap_cpystrn.why" line = "1301" begin = "56" end = "57"/>
+      <location file = "why/ap_cpystrn.why" line = "1300" begin = "56" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po16.why">
-      <location file = "why/ap_cpystrn.why" line = "1301" begin = "56" end = "57"/>
+      <location file = "why/ap_cpystrn.why" line = "1300" begin = "56" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po17.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "414" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "413" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po18.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "414" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "413" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2102,7 +2100,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2157,7 +2185,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2176,6 +2208,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

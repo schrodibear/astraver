@@ -69,7 +69,6 @@ invariant valid_y :
 
 unit false0()
 behavior default:
-  assumes true;
   ensures (C_1 : false);
 {  
    {  
@@ -79,7 +78,6 @@ behavior default:
 
 unit false1()
 behavior default:
-  assumes true;
   ensures (C_5 : true);
 {  
    {  (C_4 : ((C_3 : ((C_2 : z.yy) + 5).int_M) = 3));
@@ -90,7 +88,6 @@ behavior default:
 
 unit false2()
 behavior default:
-  assumes true;
   ensures (C_8 : true);
 {  
    {  (C_7 : ((C_6 : (x + -1).int_M) = 1));
@@ -101,7 +98,6 @@ behavior default:
 
 unit false3()
 behavior default:
-  assumes true;
   ensures (C_11 : true);
 {  
    {  (C_10 : ((C_9 : (y + 5).int_M) = 2));
@@ -855,7 +851,7 @@ parameter false0 :
      ((JC_29: valid_zz(u_zz_2_alloc_table))
      and ((JC_30: valid_x(int_P_x_3_alloc_table))
          and (JC_31: valid_y(int_P_y_4_alloc_table)))))
-    and ((true = true) -> (JC_24: (false = true)))) }
+    and (JC_24: (false = true))) }
 
 parameter false0_requires :
  tt:unit ->
@@ -868,7 +864,7 @@ parameter false0_requires :
      ((JC_29: valid_zz(u_zz_2_alloc_table))
      and ((JC_30: valid_x(int_P_x_3_alloc_table))
          and (JC_31: valid_y(int_P_y_4_alloc_table)))))
-    and ((true = true) -> (JC_24: (false = true)))) }
+    and (JC_24: (false = true))) }
 
 parameter v_z_1_alloc_table : v alloc_table ref
 
@@ -970,11 +966,10 @@ parameter safe_int8_of_integer_ :
 
 let false0_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_21:
-        ((JC_18: valid_zz(u_zz_2_alloc_table))
-        and ((JC_19: valid_x(int_P_x_3_alloc_table))
-            and (JC_20: valid_y(int_P_y_4_alloc_table)))))) }
+  { (JC_21:
+    ((JC_18: valid_zz(u_zz_2_alloc_table))
+    and ((JC_19: valid_x(int_P_x_3_alloc_table))
+        and (JC_20: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
   { (JC_23: (false = true)) }
@@ -994,11 +989,10 @@ let false0_safety =
 
 let false1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_41:
-        ((JC_38: valid_zz(u_zz_2_alloc_table))
-        and ((JC_39: valid_x(int_P_x_3_alloc_table))
-            and (JC_40: valid_y(int_P_y_4_alloc_table)))))) }
+  { (JC_41:
+    ((JC_38: valid_zz(u_zz_2_alloc_table))
+    and ((JC_39: valid_x(int_P_x_3_alloc_table))
+        and (JC_40: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
    begin
@@ -1052,11 +1046,10 @@ let false1_safety =
 
 let false2_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_63:
-        ((JC_60: valid_zz(u_zz_2_alloc_table))
-        and ((JC_61: valid_x(int_P_x_3_alloc_table))
-            and (JC_62: valid_y(int_P_y_4_alloc_table)))))) }
+  { (JC_63:
+    ((JC_60: valid_zz(u_zz_2_alloc_table))
+    and ((JC_61: valid_x(int_P_x_3_alloc_table))
+        and (JC_62: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
    begin
@@ -1107,11 +1100,10 @@ let false2_safety =
 
 let false3_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_84:
-        ((JC_81: valid_zz(u_zz_2_alloc_table))
-        and ((JC_82: valid_x(int_P_x_3_alloc_table))
-            and (JC_83: valid_y(int_P_y_4_alloc_table)))))) }
+  { (JC_84:
+    ((JC_81: valid_zz(u_zz_2_alloc_table))
+    and ((JC_82: valid_x(int_P_x_3_alloc_table))
+        and (JC_83: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
    begin
@@ -1168,7 +1160,7 @@ why --project [...] why/false.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/false_po12.why">
-      <location file = "PPCHOME/tests/jessie/false.jessie/false.jc" line = "101" begin = "15" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/false.jessie/false.jc" line = "97" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -1186,7 +1178,7 @@ text = "IndexBounds"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/false_po9.why">
-      <location file = "PPCHOME/tests/jessie/false.jessie/false.jc" line = "90" begin = "14" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/false.jessie/false.jc" line = "87" begin = "14" end = "40"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -1214,7 +1206,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/false_po6.why">
-      <location file = "PPCHOME/tests/jessie/false.jessie/false.jc" line = "79" begin = "14" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/false.jessie/false.jc" line = "77" begin = "14" end = "50"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -1390,7 +1382,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1445,7 +1467,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1464,6 +1490,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

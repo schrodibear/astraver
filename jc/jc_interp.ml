@@ -2691,20 +2691,44 @@ and expr e =
         Label(loop_label.label_info_final_name,
 	      While(Cte(Prim_bool true), inv', loop_variant, body))
 	
-    | JCEcontract(req,dec,_vi_result,behs,e) ->
-	assert (req = None);
-	assert (dec = None);
+    | JCEcontract(req,dec,vi_result,behs,e) ->
+	let r =
+          match req with
+            | Some a ->
+                assertion 
+	          ~type_safe:false ~global_assertion:false ~relocate:false 
+	          LabelHere LabelPre a
+            | _ -> LTrue
+        in
+        assert (dec = None);
 	begin match behs with
-	  | [_pos,_id,b] ->
+	  | [_pos,id,b] ->
 	      assert (b.jc_behavior_throws = None);
 	      assert (b.jc_behavior_assumes = None);
-	      assert (b.jc_behavior_assigns = None);
 	      let a = 
 		assertion 
 		  ~type_safe:false ~global_assertion:false ~relocate:false 
-		  LabelHere LabelOld b.jc_behavior_ensures
+		  LabelHere LabelPre b.jc_behavior_ensures
 	      in
-	      Triple(true,LTrue,expr e,a,[])
+              let post = match b.jc_behavior_assigns with
+                | None -> a
+                | Some(_,locs) ->
+                    make_and a
+	              (assigns ~type_safe:false 
+	                 LabelPre 
+                         infunction.jc_fun_info_effects (Some locs)
+	                 e#pos)
+              in
+	      if is_current_behavior id then
+                if r = LTrue
+                then
+                  Triple(true,LTrue,expr e,post,[])
+                else
+                  append 
+                    (BlackBox(Annot_type(LTrue,unit_type,[],[],r,[])))
+                    (Triple(true,LTrue,expr e,post,[]))
+              else
+                BlackBox(Annot_type(r, tr_var_type vi_result, [], [], post, []))
 	  | _ -> assert false
 	end
     | JCEthrow(exc,Some e1) -> 

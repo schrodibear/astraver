@@ -51,7 +51,6 @@ type I = 0..2
 
 unit f()
 behavior default:
-  assumes true;
   ensures (C_1 : (4 == 4));
 {  
    {  
@@ -61,7 +60,6 @@ behavior default:
 
 int32 g(E e)
 behavior default:
-  assumes true;
   ensures (C_4 : ((C_5 : (1 <= \result)) && (C_6 : (\result <= 4))));
 {  
    (var int32 __retres);
@@ -76,7 +74,6 @@ unit h(enum___anonenum_color_1_P[..] t_0)
   requires (C_12 : ((C_13 : (\offset_min(t_0) <= 0)) &&
                      (C_14 : (\offset_max(t_0) >= 9))));
 behavior default:
-  assumes true;
   ensures (C_15 : ((((t_0 + 2).enum___anonenum_color_1_M == 0) ||
                      ((t_0 + 2).enum___anonenum_color_1_M == 1)) ||
                     ((t_0 + 2).enum___anonenum_color_1_M == 2)));
@@ -92,7 +89,6 @@ unit enum_as_array_index(int_P[..] t)
   requires (C_19 : ((C_20 : (\offset_min(t) <= 0)) &&
                      (C_21 : (\offset_max(t) >= 2))));
 behavior default:
-  assumes true;
   ensures (C_22 : ((t + 1).int_M == 0));
 {  
    {  (C_18 : ((C_17 : (C_16 : (t + 1)).int_M) = 0));
@@ -784,9 +780,8 @@ parameter enum_as_array_index :
   int_P_int_M_t_2:(int_P, int32) memory ref ->
    int_P_t_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_t_2 writes int_P_int_M_t_2
-    { ((true = true) ->
-       (JC_45:
-       eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0)))) }
+    { (JC_45:
+      eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0))) }
 
 parameter enum_as_array_index_requires :
  t:int_P pointer ->
@@ -796,31 +791,26 @@ parameter enum_as_array_index_requires :
       ((JC_36: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
       and (JC_37: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))}
     unit reads int_P_int_M_t_2 writes int_P_int_M_t_2
-    { ((true = true) ->
-       (JC_45:
-       eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0)))) }
+    { (JC_45:
+      eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0))) }
 
-parameter f :
- tt:unit -> { } unit { ((true = true) -> (JC_6: eq_int((4), (4)))) }
+parameter f : tt:unit -> { } unit { (JC_6: eq_int((4), (4))) }
 
-parameter f_requires :
- tt:unit -> { } unit { ((true = true) -> (JC_6: eq_int((4), (4)))) }
+parameter f_requires : tt:unit -> { } unit { (JC_6: eq_int((4), (4))) }
 
 parameter g :
  e:E ->
   { } int32
-  { ((true = true) ->
-     (JC_18:
-     ((JC_16: le_int((1), integer_of_int32(result)))
-     and (JC_17: le_int(integer_of_int32(result), (4)))))) }
+  { (JC_18:
+    ((JC_16: le_int((1), integer_of_int32(result)))
+    and (JC_17: le_int(integer_of_int32(result), (4))))) }
 
 parameter g_requires :
  e:E ->
   { } int32
-  { ((true = true) ->
-     (JC_18:
-     ((JC_16: le_int((1), integer_of_int32(result)))
-     and (JC_17: le_int(integer_of_int32(result), (4)))))) }
+  { (JC_18:
+    ((JC_16: le_int((1), integer_of_int32(result)))
+    and (JC_17: le_int(integer_of_int32(result), (4))))) }
 
 parameter h :
  t_0:enum___anonenum_color_1_P pointer ->
@@ -828,17 +818,16 @@ parameter h :
    enum___anonenum_color_1_P_t_0_1_alloc_table:enum___anonenum_color_1_P alloc_table ->
     { } unit reads enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
     writes enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
-    { ((true = true) ->
-       (JC_31:
-       (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                             shift(t_0, (2)))),
-        (0))
-       or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                                shift(t_0, (2)))),
-           (1))
-          or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                                  shift(t_0, (2)))),
-             (2)))))) }
+    { (JC_31:
+      (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
+                                            shift(t_0, (2)))),
+       (0))
+      or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
+                                               shift(t_0, (2)))),
+          (1))
+         or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
+                                                 shift(t_0, (2)))),
+            (2))))) }
 
 parameter h_requires :
  t_0:enum___anonenum_color_1_P pointer ->
@@ -853,17 +842,16 @@ parameter h_requires :
           (9)))))}
     unit reads enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
     writes enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
-    { ((true = true) ->
-       (JC_31:
-       (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                             shift(t_0, (2)))),
-        (0))
-       or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                                shift(t_0, (2)))),
-           (1))
-          or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                                  shift(t_0, (2)))),
-             (2)))))) }
+    { (JC_31:
+      (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
+                                            shift(t_0, (2)))),
+       (0))
+      or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
+                                               shift(t_0, (2)))),
+          (1))
+         or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
+                                                 shift(t_0, (2)))),
+            (2))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -893,10 +881,9 @@ parameter safe_int8_of_integer_ :
 
 let enum_as_array_index_ensures_default =
  fun (t : int_P pointer) (int_P_int_M_t_2 : (int_P, int32) memory ref) (int_P_t_2_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_42:
-        ((JC_40: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-        and (JC_41: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))) }
+  { (JC_42:
+    ((JC_40: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+    and (JC_41: ge_int(offset_max(int_P_t_2_alloc_table, t), (2))))) }
   (init:
   try
    begin
@@ -944,7 +931,7 @@ let enum_as_array_index_safety =
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
   { (JC_5: eq_int((4), (4))) }
@@ -958,7 +945,7 @@ let f_safety =
 
 let g_ensures_default =
  fun (e : E) ->
-  { (true = true) }
+  { (JC_12: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1007,15 +994,13 @@ let g_safety =
 
 let h_ensures_default =
  fun (t_0 : enum___anonenum_color_1_P pointer) (enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1 : (enum___anonenum_color_1_P, __anonenum_color_1) memory ref) (enum___anonenum_color_1_P_t_0_1_alloc_table : enum___anonenum_color_1_P alloc_table) ->
-  { ((true = true)
-    and (JC_28:
-        ((JC_26:
-         le_int(offset_min(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
-         (0)))
-        and (JC_27:
-            ge_int(offset_max(enum___anonenum_color_1_P_t_0_1_alloc_table,
-                   t_0),
-            (9)))))) }
+  { (JC_28:
+    ((JC_26:
+     le_int(offset_min(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
+     (0)))
+    and (JC_27:
+        ge_int(offset_max(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
+        (9))))) }
   (init:
   try
    begin
@@ -1091,12 +1076,12 @@ why --project [...] why/enum.why
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po10.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "78" begin = "15" end = "128"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "75" begin = "15" end = "128"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po11.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "78" begin = "15" end = "128"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "75" begin = "15" end = "128"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1140,12 +1125,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/enum_po2.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "92" begin = "15" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "88" begin = "15" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po3.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "92" begin = "15" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "88" begin = "15" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1300,7 +1285,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1355,7 +1370,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1374,6 +1393,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

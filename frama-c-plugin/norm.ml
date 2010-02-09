@@ -801,7 +801,8 @@ object
                   let call = Call(lvo,callee,args,loc) in
                   ChangeTo [call]
           end
-      | Asm _ | Skip _ | Code_annot _ -> SkipChildren
+      | Asm _ | Skip _ -> SkipChildren
+      | Code_annot _ -> assert false
 
   method vterm_lval tlv =
     ChangeDoChildrenPost (tlv, postaction_term_lval)

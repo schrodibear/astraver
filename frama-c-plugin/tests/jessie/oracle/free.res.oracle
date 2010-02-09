@@ -42,7 +42,6 @@ unit f(int_P[..] p_0)
   requires (C_3 : ((C_4 : (\offset_min(p_0) <= 0)) &&
                     (C_5 : (\offset_max(p_0) >= 0))));
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_6 : (! ((\offset_min(p_0) <= 0) && (\offset_max(p_0) >= 0))));
 {  
@@ -64,7 +63,6 @@ int32 main(int_P[..] q)
   requires (C_9 : ((C_10 : (\offset_min(q) <= 0)) &&
                     (C_11 : (\offset_max(q) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_12 : true);
 {  
    (var int32 __retres);
@@ -78,7 +76,6 @@ behavior default:
 
 unit free_null()
 behavior default:
-  assumes true;
   ensures (C_15 : true);
 {  
    (var int_P[..] p_1);
@@ -529,10 +526,9 @@ parameter f :
  p_0:int_P pointer ->
   int_P_p_0_1_alloc_table:int_P alloc_table ref ->
    { } unit reads int_P_p_0_1_alloc_table writes int_P_p_0_1_alloc_table
-   { ((true = true) ->
-      (JC_11:
-      (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
-           and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0)))))) }
+   { (JC_11:
+     (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
+          and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0))))) }
 
 parameter f_requires :
  p_0:int_P pointer ->
@@ -541,10 +537,9 @@ parameter f_requires :
      ((JC_1: le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0)))
      and (JC_2: ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0)))))}
    unit reads int_P_p_0_1_alloc_table writes int_P_p_0_1_alloc_table
-   { ((true = true) ->
-      (JC_11:
-      (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
-           and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0)))))) }
+   { (JC_11:
+     (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
+          and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0))))) }
 
 parameter free_null : tt:unit -> { } unit { true }
 
@@ -582,10 +577,9 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (p_0 : int_P pointer) (int_P_p_0_1_alloc_table : int_P alloc_table ref) ->
-  { ((true = true)
-    and (JC_7:
-        ((JC_5: le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0)))
-        and (JC_6: ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0)))))) }
+  { (JC_7:
+    ((JC_5: le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0)))
+    and (JC_6: ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0))))) }
   (init:
   try
    begin
@@ -636,7 +630,7 @@ let f_safety =
 
 let free_null_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_34: true) }
   (init:
   try
    begin
@@ -682,10 +676,9 @@ let free_null_safety =
 
 let main_ensures_default =
  fun (q : int_P pointer) (int_P_q_2_alloc_table : int_P alloc_table ref) ->
-  { ((true = true)
-    and (JC_23:
-        ((JC_21: le_int(offset_min(int_P_q_2_alloc_table, q), (0)))
-        and (JC_22: ge_int(offset_max(int_P_q_2_alloc_table, q), (0)))))) }
+  { (JC_23:
+    ((JC_21: le_int(offset_min(int_P_q_2_alloc_table, q), (0)))
+    and (JC_22: ge_int(offset_max(int_P_q_2_alloc_table, q), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -744,12 +737,12 @@ why --project [...] why/free.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/free_po6.why">
-      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "65" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "63" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/free_po7.why">
-      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "65" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "63" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -759,7 +752,7 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/free_po5.why">
-      <location file = "why/free.why" line = "581" begin = "9" end = "54"/>
+      <location file = "why/free.why" line = "578" begin = "9" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -769,7 +762,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/free_po4.why">
-      <location file = "why/free.why" line = "530" begin = "8" end = "52"/>
+      <location file = "why/free.why" line = "527" begin = "8" end = "52"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -932,7 +925,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -987,7 +1010,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1006,6 +1033,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

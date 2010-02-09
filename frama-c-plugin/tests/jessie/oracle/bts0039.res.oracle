@@ -45,7 +45,6 @@ unit g(int_P[..] a, int_P[..] b)
                     ((C_10 : (\offset_min(b) <= 0)) &&
                       (C_11 : (\offset_max(b) >= 0)))));
 behavior default:
-  assumes true;
   assigns a.int_M,
   b.int_M;
   ensures (C_12 : true);
@@ -61,7 +60,6 @@ unit f(__anonstruct_las_1[..] p)
   requires (C_16 : ((C_17 : (\offset_min(p) <= 0)) &&
                      (C_18 : (\offset_max(p) >= 0))));
 behavior default:
-  assumes true;
   assigns p.i.int_M,
   p.j.int_M;
   ensures (C_19 : true);
@@ -619,13 +617,11 @@ parameter f :
      __anonstruct_las_1_j_p_3:(__anonstruct_las_1, int_P pointer) memory ->
       __anonstruct_las_1_i_p_3:(__anonstruct_las_1, int_P pointer) memory ->
        { } unit writes int_P_int_M_p_3
-       { ((true = true) ->
-          (JC_36:
-          not_assigns(int_P_p_3_alloc_table@, int_P_int_M_p_3@,
-          int_P_int_M_p_3,
-          pset_union(pset_deref(__anonstruct_las_1_j_p_3@,
-                     pset_singleton(p@)),
-          pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@)))))) }
+       { (JC_36:
+         not_assigns(int_P_p_3_alloc_table@, int_P_int_M_p_3@,
+         int_P_int_M_p_3,
+         pset_union(pset_deref(__anonstruct_las_1_j_p_3@, pset_singleton(p@)),
+         pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@))))) }
 
 parameter f_requires :
  p:__anonstruct_las_1 pointer ->
@@ -640,13 +636,11 @@ parameter f_requires :
          and (JC_26:
              ge_int(offset_max(__anonstruct_las_1_p_3_alloc_table, p), (0)))))}
        unit writes int_P_int_M_p_3
-       { ((true = true) ->
-          (JC_36:
-          not_assigns(int_P_p_3_alloc_table@, int_P_int_M_p_3@,
-          int_P_int_M_p_3,
-          pset_union(pset_deref(__anonstruct_las_1_j_p_3@,
-                     pset_singleton(p@)),
-          pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@)))))) }
+       { (JC_36:
+         not_assigns(int_P_p_3_alloc_table@, int_P_int_M_p_3@,
+         int_P_int_M_p_3,
+         pset_union(pset_deref(__anonstruct_las_1_j_p_3@, pset_singleton(p@)),
+         pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@))))) }
 
 parameter g :
  a:int_P pointer ->
@@ -656,14 +650,13 @@ parameter g :
      int_P_b_2_alloc_table:int_P alloc_table ->
       int_P_a_1_alloc_table:int_P alloc_table ->
        { } unit writes int_P_int_M_a_1,int_P_int_M_b_2
-       { ((true = true) ->
-          (JC_20:
-          ((JC_18:
-           not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@,
-           int_P_int_M_a_1, pset_singleton(a@)))
-          and (JC_19:
-              not_assigns(int_P_b_2_alloc_table@, int_P_int_M_b_2@,
-              int_P_int_M_b_2, pset_singleton(b@)))))) }
+       { (JC_20:
+         ((JC_18:
+          not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@,
+          int_P_int_M_a_1, pset_singleton(a@)))
+         and (JC_19:
+             not_assigns(int_P_b_2_alloc_table@, int_P_int_M_b_2@,
+             int_P_int_M_b_2, pset_singleton(b@))))) }
 
 parameter g_requires :
  a:int_P pointer ->
@@ -679,23 +672,20 @@ parameter g_requires :
                  and (JC_4:
                      ge_int(offset_max(int_P_b_2_alloc_table, b), (0)))))))}
        unit writes int_P_int_M_a_1,int_P_int_M_b_2
-       { ((true = true) ->
-          (JC_20:
-          ((JC_18:
-           not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@,
-           int_P_int_M_a_1, pset_singleton(a@)))
-          and (JC_19:
-              not_assigns(int_P_b_2_alloc_table@, int_P_int_M_b_2@,
-              int_P_int_M_b_2, pset_singleton(b@)))))) }
+       { (JC_20:
+         ((JC_18:
+          not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@,
+          int_P_int_M_a_1, pset_singleton(a@)))
+         and (JC_19:
+             not_assigns(int_P_b_2_alloc_table@, int_P_int_M_b_2@,
+             int_P_int_M_b_2, pset_singleton(b@))))) }
 
 let f_ensures_default =
  fun (p : __anonstruct_las_1 pointer) (int_P_int_M_p_3 : (int_P, int) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, int_P pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, int_P pointer) memory) ->
-  { ((true = true)
-    and (JC_31:
-        ((JC_29:
-         le_int(offset_min(__anonstruct_las_1_p_3_alloc_table, p), (0)))
-        and (JC_30:
-            ge_int(offset_max(__anonstruct_las_1_p_3_alloc_table, p), (0)))))) }
+  { (JC_31:
+    ((JC_29: le_int(offset_min(__anonstruct_las_1_p_3_alloc_table, p), (0)))
+    and (JC_30:
+        ge_int(offset_max(__anonstruct_las_1_p_3_alloc_table, p), (0))))) }
   (init:
   try
    begin
@@ -747,13 +737,11 @@ let f_safety =
 
 let g_ensures_default =
  fun (a : int_P pointer) (b : int_P pointer) (int_P_int_M_a_1 : (int_P, int) memory ref) (int_P_int_M_b_2 : (int_P, int) memory ref) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_b_2_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_11:
-        ((JC_7: le_int(offset_min(int_P_a_1_alloc_table, a), (0)))
-        and ((JC_8: ge_int(offset_max(int_P_a_1_alloc_table, a), (0)))
-            and ((JC_9: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
-                and (JC_10:
-                    ge_int(offset_max(int_P_b_2_alloc_table, b), (0)))))))) }
+  { (JC_11:
+    ((JC_7: le_int(offset_min(int_P_a_1_alloc_table, a), (0)))
+    and ((JC_8: ge_int(offset_max(int_P_a_1_alloc_table, a), (0)))
+        and ((JC_9: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
+            and (JC_10: ge_int(offset_max(int_P_b_2_alloc_table, b), (0))))))) }
   (init:
   try
    begin

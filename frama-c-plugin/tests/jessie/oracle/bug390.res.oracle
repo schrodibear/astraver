@@ -34,14 +34,12 @@ type void_P = [void_P]
 
 int32 atoi(char_P[..] c)
 behavior default:
-  assumes true;
   assigns c.char_M;
   ensures (C_1 : true);
 ;
 
 unit f()
 behavior default:
-  assumes true;
   ensures (C_3 : true);
 {  
    {  (C_2 : atoi(null));
@@ -370,20 +368,18 @@ parameter atoi :
   char_P_char_M_c_1:(char_P, int8) memory ref ->
    char_P_c_1_alloc_table:char_P alloc_table ->
     { } int32 writes char_P_char_M_c_1
-    { ((true = true) ->
-       (JC_8:
-       not_assigns(char_P_c_1_alloc_table@, char_P_char_M_c_1@,
-       char_P_char_M_c_1, pset_singleton(c@)))) }
+    { (JC_8:
+      not_assigns(char_P_c_1_alloc_table@, char_P_char_M_c_1@,
+      char_P_char_M_c_1, pset_singleton(c@))) }
 
 parameter atoi_requires :
  c:char_P pointer ->
   char_P_char_M_c_1:(char_P, int8) memory ref ->
    char_P_c_1_alloc_table:char_P alloc_table ->
     { } int32 writes char_P_char_M_c_1
-    { ((true = true) ->
-       (JC_8:
-       not_assigns(char_P_c_1_alloc_table@, char_P_char_M_c_1@,
-       char_P_char_M_c_1, pset_singleton(c@)))) }
+    { (JC_8:
+      not_assigns(char_P_c_1_alloc_table@, char_P_char_M_c_1@,
+      char_P_char_M_c_1, pset_singleton(c@))) }
 
 parameter f : tt:unit -> { } unit { true }
 
@@ -407,7 +403,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_14: true) }
   (init:
   try
    begin
@@ -601,7 +597,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -656,7 +682,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -675,6 +705,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

@@ -1389,7 +1389,7 @@ let spec funspec =
   if funspec.spec_terminates <> None then
     warn_once "Termination condition(s) ignored" ;
 
-  (* TODO: translate function spec variant and terminates clauses *)
+  (* TODO: translate terminates clauses *)
   (requires @ decreases @ behaviors),
   complete_behaviors_assertions,
   disjoint_behaviors_assertions
@@ -1406,35 +1406,75 @@ let built_behavior_ids l =
   in
   List.map (fun i -> new identifier i) l
 
-let assert_ pos = function
-  | User annot ->
-      begin match annot.annot_content with
-        | AAssert (behav,p,status) ->
-            let behav = built_behavior_ids behav in
-            let asrt = assertion status in
-            [mkexpr (JCPEassert (behav,asrt,locate ~pos (named_pred p))) pos]
-        | AInvariant(behav,_,p) ->
-            let behav = built_behavior_ids behav in
-            [mkexpr (JCPEassert
-                       (behav,Aassert,locate ~pos (named_pred p))) pos]
-        | _ -> assert false
-      end
-  | AI(alarm,annot) ->
-      begin match annot.annot_content with
-        | AAssert (behav,p,status) ->
-            let asrt =
-              if pred_has_name p name_of_hint_assertion then Ahint
-              else assertion status
-            in
-            let p = remove_pred_name p name_of_hint_assertion in
-            let behav = built_behavior_ids behav in
-            [mkexpr (JCPEassert (behav,asrt,locate ~alarm ~pos (named_pred p))) pos]
-        | AInvariant(behav,_,p) ->
-            let behav = built_behavior_ids behav in
-            [mkexpr (JCPEassert
-                       (behav,Aassert,locate ~alarm ~pos (named_pred p))) pos]
-        | _ -> assert false
-      end
+let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a = 
+  let a, is_after =
+    match a with
+      | Before ca -> ca,false
+      | After ca -> ca,true
+  in
+  let push s =
+    if is_after 
+    then (acc_assert_before,s::acc_assert_after,contract)
+    else (s::acc_assert_before,acc_assert_after,contract)
+  in
+  match a with
+     | User annot ->
+         begin 
+           match annot.annot_content with
+             | AAssert (behav,p,status) ->
+                 let behav = built_behavior_ids behav in
+                 let asrt = assertion status in
+                 push  
+                   (mkexpr 
+                      (JCPEassert (behav,asrt,locate ~pos (named_pred p))) pos)
+             | AInvariant(_behav,is_loop_inv,_p) ->
+                 if is_loop_inv then acc (* should be handled elsewhere *)
+                 else unsupported "general code invariant"                 
+(*
+                let behav = built_behavior_ids behav in
+                push 
+                  (mkexpr 
+                     (JCPEassert
+                        (behav,Aassert,locate ~pos (named_pred p))) pos)
+*)
+            | APragma _ -> assert false
+            | AAssigns (_, _) -> acc (* should be handled elsewhere *)
+            | AVariant _ -> acc (* should be handled elsewhere *)
+            | AStmtSpec s -> 
+                begin
+                  match contract with
+                    | None -> (acc_assert_before,acc_assert_after,Some s)
+                    | Some _ -> assert false
+                end
+        end
+    | AI(alarm,annot) ->
+        begin match annot.annot_content with
+          | AAssert (behav,p,status) ->
+              let asrt =
+                if pred_has_name p name_of_hint_assertion then Ahint
+                else assertion status
+              in
+              let p = remove_pred_name p name_of_hint_assertion in
+              let behav = built_behavior_ids behav in
+              push 
+                (mkexpr 
+                   (JCPEassert 
+                      (behav,asrt,locate ~alarm ~pos (named_pred p))) pos)
+          | AInvariant(_behav,is_loop_inv,_p) ->
+              if is_loop_inv then acc (* should be handled elsewhere *)
+              else unsupported "general code invariant"
+                (*
+              let behav = built_behavior_ids behav in
+              push 
+                (mkexpr 
+                   (JCPEassert
+                      (behav,Aassert,locate ~alarm ~pos (named_pred p))) pos)
+                *)
+          | APragma _ -> assert false
+          | AAssigns (_, _) -> assert false
+          | AVariant _ -> assert false
+          | AStmtSpec _ -> assert false
+        end
 
 
 (*****************************************************************************)
@@ -1905,12 +1945,12 @@ let rec instruction = function
 
   | Skip _pos -> JCPEconst JCCvoid
 
-  | Code_annot _ -> JCPEconst JCCvoid
-      (* Annotations should be retrieved from Db *)
+  | Code_annot _ -> assert false 
 
 let rec statement s =
   let pos = get_stmtLoc s.skind in
   CurrentLoc.set pos;
+(*
   let assert_list =
     Annotations.get_filter Logic_utils.is_assert s
     @ Annotations.get_filter Logic_utils.is_stmt_invariant s
@@ -1924,7 +1964,13 @@ let rec statement s =
   let assert_after =
     List.flatten (List.map ((assert_ pos) $ before_after_content) assert_after)
   in
+*)
 
+  let assert_before, assert_after, contract =
+    List.fold_left (code_annot pos)
+      ([],[],None) 
+      (Annotations.get_filter (fun _ -> true) s)
+  in
   let snode = match s.skind with
     | Instr i -> instruction i
 
@@ -2070,6 +2116,33 @@ let rec statement s =
   (* Prefix statement by all non-case labels *)
   let labels = filter_out is_case_label s.labels in
   let s = mkexpr snode pos in
+  let s =
+    match contract with
+      | None -> s
+      | Some sp -> 
+          let sp,_cba,_dba = spec sp in
+          let requires, decreases, behaviors =
+            List.fold_left
+              (fun (r,d,b) c ->
+                 match c with
+                   | JCCrequires p -> 
+                       begin match r with
+                         | None -> (Some p,d,b)
+                         | Some _ -> notimplemented "multiple requires on statement contract"
+                       end
+                   | JCCdecreases(v,p) ->
+                       begin match d with
+                         | None -> (r,Some(v,p),b)
+                         | Some _ -> notimplemented "multiple decreases on statement contract"
+                       end
+                   | JCCbehavior be -> (r,d,be::b))
+              (None,None,[])
+              sp
+          in
+          mkexpr 
+            (JCPEcontract(requires, decreases, behaviors, s))
+            pos
+  in
   let s = match assert_before @ s :: assert_after with
     | [s] -> s
     | slist -> mkexpr (JCPEblock slist) pos
@@ -2088,6 +2161,8 @@ and block bl =
 (*****************************************************************************)
 (* Cil to Jessie translation of global declarations                          *)
 (*****************************************************************************)
+
+let drop_on_unsupported_feature = false
 
 let logic_variable v =
   let name = opt_app (fun v -> v.vname) v.lv_name v.lv_origin in
@@ -2127,7 +2202,7 @@ let rec annotation is_axiomatic annot pos = match annot with
                          name,[],
                          logic_labels info.l_labels,
                          params,body)])
-      with (Unsupported _ | NotImplemented _) ->
+      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
 	warning "Dropping declaration of predicate %s@." info.l_var_info.lv_name ;
         []
       end
@@ -2135,7 +2210,7 @@ let rec annotation is_axiomatic annot pos = match annot with
   | Dlemma(name,is_axiom,labels,_poly,property) ->
       begin try
         [JCDlemma(name,is_axiom,[],logic_labels labels,pred property)]
-      with (Unsupported _ | NotImplemented _) ->
+      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
         warning "Dropping lemma %s@." name ;
         []
       end
@@ -2144,7 +2219,7 @@ let rec annotation is_axiomatic annot pos = match annot with
       begin try
 	let n = translated_name property [] in
         [JCDglobal_inv(n,pred (Logic_utils.get_pred_body property))]
-      with (Unsupported _ | NotImplemented _) ->
+      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
         warning "Dropping invariant %s@." property.l_var_info.lv_name ;
         []
       end
@@ -2156,7 +2231,7 @@ let rec annotation is_axiomatic annot pos = match annot with
            None,n, [],logic_labels annot.l_labels,
            List.map logic_variable annot.l_profile,
            JCexpr(pred (Logic_utils.get_pred_body annot)))]
-      with (Unsupported _ | NotImplemented _) ->
+      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
         warning "Dropping type invariant %s@." annot.l_var_info.lv_name;
         []
       end
@@ -2511,7 +2586,7 @@ let global vardefs g =
               (reg_pos ~id:f.svar.vname
                  ~name:("Function " ^ f.svar.vname) f.svar.vdecl);
             [JCDfun(ctype rty,id,formals,s,Some body)]
-          with (Unsupported _ | NotImplemented _) ->
+          with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
             warning "Dropping definition of function %s@." f.svar.vname ;
             let s,_cba,_dba = spec funspec in
             [JCDfun(ctype rty,id,formals,s,None)]

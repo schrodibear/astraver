@@ -34,7 +34,6 @@ integer sign(double x, double e1, double e2)
   requires (C_4 : ((C_5 : ((e1 :> real) <= ((x :> real) - \double_exact(x)))) &&
                     (C_6 : (((x :> real) - \double_exact(x)) <= (e2 :> real)))));
 behavior default:
-  assumes true;
   ensures (C_7 : ((C_8 : ((\result != 0) ==>
                            (\result == l_sign(\double_exact(x))))) &&
                    (C_9 : (\real_abs(\result) <= 1))));
@@ -67,7 +66,6 @@ integer eps_line(double sx, double sy, double vx, double vy)
                       (C_37 : (\real_abs((vx :> real)) <= 1.0))) &&
                      (C_38 : (\real_abs((vy :> real)) <= 1.0))));
 behavior default:
-  assumes true;
   ensures (C_39 : ((\result != 0) ==>
                     (\result ==
                       (l_sign(((\double_exact(sx) * \double_exact(vx)) +
@@ -356,14 +354,13 @@ parameter eps_line :
    vx:double ->
     vy:double ->
      { } int
-     { ((true = true) ->
-        (JC_38:
-        (neq_int(result, (0)) ->
-         eq_int(result,
-         mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
-                        mul_real(double_exact(sy), double_exact(vy)))),
-         l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
-                mul_real(double_exact(sy), double_exact(vx))))))))) }
+     { (JC_38:
+       (neq_int(result, (0)) ->
+        eq_int(result,
+        mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
+                       mul_real(double_exact(sy), double_exact(vy)))),
+        l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
+               mul_real(double_exact(sy), double_exact(vx)))))))) }
 
 parameter eps_line_requires :
  sx:double ->
@@ -383,25 +380,23 @@ parameter eps_line_requires :
                                and (JC_24:
                                    le_real(abs_real(double_value(vy)), 1.0))))))))))}
      int
-     { ((true = true) ->
-        (JC_38:
-        (neq_int(result, (0)) ->
-         eq_int(result,
-         mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
-                        mul_real(double_exact(sy), double_exact(vy)))),
-         l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
-                mul_real(double_exact(sy), double_exact(vx))))))))) }
+     { (JC_38:
+       (neq_int(result, (0)) ->
+        eq_int(result,
+        mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
+                       mul_real(double_exact(sy), double_exact(vy)))),
+        l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
+               mul_real(double_exact(sy), double_exact(vx)))))))) }
 
 parameter sign :
  x_0:double ->
   e1:double ->
    e2:double ->
     { } int
-    { ((true = true) ->
-       (JC_14:
-       ((JC_12:
-        (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
-       and (JC_13: le_real(abs_real(real_of_int(result)), 1.0))))) }
+    { (JC_14:
+      ((JC_12:
+       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
+      and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 parameter sign_requires :
  x_0:double ->
@@ -415,27 +410,24 @@ parameter sign_requires :
           le_real(sub_real(double_value(x_0), double_exact(x_0)),
           double_value(e2)))))}
     int
-    { ((true = true) ->
-       (JC_14:
-       ((JC_12:
-        (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
-       and (JC_13: le_real(abs_real(real_of_int(result)), 1.0))))) }
+    { (JC_14:
+      ((JC_12:
+       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
+      and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 let eps_line_ensures_default =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
-  { ((true = true)
-    and (JC_35:
-        ((JC_27: eq_real(double_value(sx), double_exact(sx)))
-        and ((JC_28: eq_real(double_value(sy), double_exact(sy)))
-            and ((JC_29: eq_real(double_value(vx), double_exact(vx)))
-                and ((JC_30: eq_real(double_value(vy), double_exact(vy)))
-                    and ((JC_31: le_real(abs_real(double_value(sx)), 100.0))
-                        and ((JC_32:
-                             le_real(abs_real(double_value(sy)), 100.0))
-                            and ((JC_33:
-                                 le_real(abs_real(double_value(vx)), 1.0))
-                                and (JC_34:
-                                    le_real(abs_real(double_value(vy)), 1.0))))))))))) }
+  { (JC_35:
+    ((JC_27: eq_real(double_value(sx), double_exact(sx)))
+    and ((JC_28: eq_real(double_value(sy), double_exact(sy)))
+        and ((JC_29: eq_real(double_value(vx), double_exact(vx)))
+            and ((JC_30: eq_real(double_value(vy), double_exact(vy)))
+                and ((JC_31: le_real(abs_real(double_value(sx)), 100.0))
+                    and ((JC_32: le_real(abs_real(double_value(sy)), 100.0))
+                        and ((JC_33:
+                             le_real(abs_real(double_value(vx)), 1.0))
+                            and (JC_34:
+                                le_real(abs_real(double_value(vy)), 1.0)))))))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -587,14 +579,13 @@ let eps_line_safety =
 
 let sign_ensures_default =
  fun (x_0 : double) (e1 : double) (e2 : double) ->
-  { ((true = true)
-    and (JC_7:
-        ((JC_5:
-         le_real(double_value(e1),
-         sub_real(double_value(x_0), double_exact(x_0))))
-        and (JC_6:
-            le_real(sub_real(double_value(x_0), double_exact(x_0)),
-            double_value(e2)))))) }
+  { (JC_7:
+    ((JC_5:
+     le_real(double_value(e1),
+     sub_real(double_value(x_0), double_exact(x_0))))
+    and (JC_6:
+        le_real(sub_real(double_value(x_0), double_exact(x_0)),
+        double_value(e2))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -733,7 +724,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po5.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "80" begin = "44" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "78" begin = "44" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -743,7 +734,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po7.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "81" begin = "33" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "79" begin = "33" end = "64"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -773,7 +764,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po13.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "84" begin = "44" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "82" begin = "44" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -783,7 +774,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po15.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "85" begin = "33" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "83" begin = "33" end = "64"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -948,7 +939,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1003,7 +1024,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1022,6 +1047,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

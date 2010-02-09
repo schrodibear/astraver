@@ -51,7 +51,6 @@ int_P[..] copy_int_array(int_P[..] first, int_P[..] last, int_P[..] result)
   requires (C_28 : ((C_29 : (\offset_min(result) <= 0)) &&
                      (C_30 : (\offset_max(result) >= ((last - first) - 1)))));
 behavior default:
-  assumes true;
   ensures (C_31 : (\forall integer i_0;
                     (((0 <= i_0) && (i_0 < (last - first))) ==>
                       ((result + i_0).int_M == (first + i_0).int_M))));
@@ -564,13 +563,12 @@ parameter copy_int_array :
        int_P_int_M_first_3:(int_P, int32) memory ->
         { } int_P pointer reads int_P_int_M_result_5
         writes int_P_int_M_result_5
-        { ((true = true) ->
-           (JC_18:
-           (forall i_0:int.
-            ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_result_5,
-                                     shift(result_0, i_0))),
-             integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0)))))))) }
+        { (JC_18:
+          (forall i_0:int.
+           ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
+            eq_int(integer_of_int32(select(int_P_int_M_result_5,
+                                    shift(result_0, i_0))),
+            integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0))))))) }
 
 parameter copy_int_array_requires :
  first:int_P pointer ->
@@ -598,13 +596,12 @@ parameter copy_int_array_requires :
                                      result_0),
                               sub_int(sub_pointer(last, first), (1))))))))))}
         int_P pointer reads int_P_int_M_result_5 writes int_P_int_M_result_5
-        { ((true = true) ->
-           (JC_18:
-           (forall i_0:int.
-            ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_result_5,
-                                     shift(result_0, i_0))),
-             integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0)))))))) }
+        { (JC_18:
+          (forall i_0:int.
+           ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
+            eq_int(integer_of_int32(select(int_P_int_M_result_5,
+                                    shift(result_0, i_0))),
+            integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -624,24 +621,21 @@ parameter safe_int8_of_integer_ :
 
 let copy_int_array_ensures_default =
  fun (first : int_P pointer) (last : int_P pointer) (result_0 : int_P pointer) (int_P_int_M_result_5 : (int_P, int32) memory ref) (int_P_first_3_alloc_table : int_P alloc_table) (int_P_result_5_alloc_table : int_P alloc_table) (int_P_int_M_first_3 : (int_P, int32) memory) ->
-  { ((true = true)
-    and (JC_15:
-        ((JC_9: gt_int(sub_pointer(last, first), (0)))
-        and ((JC_10:
-             disjoint_arrays(first, result_0, sub_pointer(last, first)))
-            and ((JC_11:
-                 le_int(offset_min(int_P_first_3_alloc_table, first), (0)))
-                and ((JC_12:
-                     ge_int(offset_max(int_P_first_3_alloc_table, first),
-                     sub_int(sub_pointer(last, first), (1))))
-                    and ((JC_13:
-                         le_int(offset_min(int_P_result_5_alloc_table,
-                                result_0),
-                         (0)))
-                        and (JC_14:
-                            ge_int(offset_max(int_P_result_5_alloc_table,
-                                   result_0),
-                            sub_int(sub_pointer(last, first), (1))))))))))) }
+  { (JC_15:
+    ((JC_9: gt_int(sub_pointer(last, first), (0)))
+    and ((JC_10: disjoint_arrays(first, result_0, sub_pointer(last, first)))
+        and ((JC_11:
+             le_int(offset_min(int_P_first_3_alloc_table, first), (0)))
+            and ((JC_12:
+                 ge_int(offset_max(int_P_first_3_alloc_table, first),
+                 sub_int(sub_pointer(last, first), (1))))
+                and ((JC_13:
+                     le_int(offset_min(int_P_result_5_alloc_table, result_0),
+                     (0)))
+                    and (JC_14:
+                        ge_int(offset_max(int_P_result_5_alloc_table,
+                               result_0),
+                        sub_int(sub_pointer(last, first), (1)))))))))) }
   (let mutable_first = ref first in
   (let mutable_result_0 = ref result_0 in
   (init:
@@ -973,7 +967,7 @@ why --project [...] why/weber5.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber5_po14.why">
-      <location file = "why/weber5.why" line = "728" begin = "56" end = "90"/>
+      <location file = "why/weber5.why" line = "723" begin = "56" end = "90"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -988,7 +982,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/weber5_po17.why">
-      <location file = "why/weber5.why" line = "775" begin = "69" end = "102"/>
+      <location file = "why/weber5.why" line = "770" begin = "69" end = "102"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1003,21 +997,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po20.why">
-      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "93" begin = "30" end = "71"/>
+      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "92" begin = "30" end = "71"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po21.why">
-      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "93" begin = "30" end = "71"/>
+      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "92" begin = "30" end = "71"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po22.why">
-      <location file = "why/weber5.why" line = "734" begin = "63" end = "64"/>
+      <location file = "why/weber5.why" line = "729" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber5_po23.why">
-      <location file = "why/weber5.why" line = "734" begin = "63" end = "64"/>
+      <location file = "why/weber5.why" line = "729" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1219,7 +1213,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1274,7 +1298,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1293,6 +1321,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

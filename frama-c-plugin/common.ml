@@ -42,7 +42,7 @@ let notimplemented fmt =
     (fun evt -> raise (NotImplemented evt.Log.evt_message)) ~current:true fmt
 
 let unsupported fmt =
-  Jessie_options.with_error
+  Jessie_options.with_failure
     (fun evt ->
        raise (Unsupported evt.Log.evt_message)
     ) ~current:true fmt

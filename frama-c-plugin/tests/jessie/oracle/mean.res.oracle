@@ -42,7 +42,6 @@ lemma mean_1 :
 int32 mean(int32 l, int32 r)
   requires (C_8 : ((C_9 : (0 <= l)) && (C_10 : (l <= r))));
 behavior default:
-  assumes true;
   ensures (C_11 : true);
 {  
    (var int32 __retres);
@@ -60,7 +59,6 @@ behavior default:
 uint32 umean(uint32 l_0, uint32 r_0)
   requires (C_22 : (l_0 <= r_0));
 behavior default:
-  assumes true;
   ensures (C_23 : true);
 {  
    (var uint32 __retres_0);
@@ -85,7 +83,6 @@ behavior default:
 
 int32 min_int(int32 x_1, int32 y_1)
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_24 : (((\result == x_1) && (x_1 <= y_1)) ||
                     ((\result == y_1) && (y_1 <= x_1))));
@@ -93,7 +90,6 @@ behavior default:
 
 int32 max_int(int32 x, int32 y)
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_25 : (((\result == x) && (x >= y)) ||
                     ((\result == y) && (y >= x))));
@@ -102,7 +98,6 @@ behavior default:
 int32 mean2(int32 x_0, int32 y_0)
   requires (C_37 : ((C_38 : (0 <= x_0)) && (C_39 : (0 <= y_0))));
 behavior default:
-  assumes true;
   ensures (C_40 : true);
 {  
    (var int32 min);
@@ -497,23 +492,21 @@ parameter max_int :
  x:int32 ->
   y:int32 ->
    { } int32
-   { ((true = true) ->
-      (JC_53:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x))
-       and ge_int(integer_of_int32(x), integer_of_int32(y)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y))
-         and ge_int(integer_of_int32(y), integer_of_int32(x)))))) }
+   { (JC_53:
+     ((eq_int(integer_of_int32(result), integer_of_int32(x))
+      and ge_int(integer_of_int32(x), integer_of_int32(y)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y))
+        and ge_int(integer_of_int32(y), integer_of_int32(x))))) }
 
 parameter max_int_requires :
  x:int32 ->
   y:int32 ->
    { } int32
-   { ((true = true) ->
-      (JC_53:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x))
-       and ge_int(integer_of_int32(x), integer_of_int32(y)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y))
-         and ge_int(integer_of_int32(y), integer_of_int32(x)))))) }
+   { (JC_53:
+     ((eq_int(integer_of_int32(result), integer_of_int32(x))
+      and ge_int(integer_of_int32(x), integer_of_int32(y)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y))
+        and ge_int(integer_of_int32(y), integer_of_int32(x))))) }
 
 parameter mean : l:int32 -> r:int32 -> { } int32 { true }
 
@@ -539,23 +532,21 @@ parameter min_int :
  x_1:int32 ->
   y_1:int32 ->
    { } int32
-   { ((true = true) ->
-      (JC_43:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
-       and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
-         and le_int(integer_of_int32(y_1), integer_of_int32(x_1)))))) }
+   { (JC_43:
+     ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
+      and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
+        and le_int(integer_of_int32(y_1), integer_of_int32(x_1))))) }
 
 parameter min_int_requires :
  x_1:int32 ->
   y_1:int32 ->
    { } int32
-   { ((true = true) ->
-      (JC_43:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
-       and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
-         and le_int(integer_of_int32(y_1), integer_of_int32(x_1)))))) }
+   { (JC_43:
+     ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
+      and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
+        and le_int(integer_of_int32(y_1), integer_of_int32(x_1))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -581,10 +572,9 @@ parameter umean_requires :
 
 let mean2_ensures_default =
  fun (x_0 : int32) (y_0 : int32) ->
-  { ((true = true)
-    and (JC_63:
-        ((JC_61: le_int((0), integer_of_int32(x_0)))
-        and (JC_62: le_int((0), integer_of_int32(y_0)))))) }
+  { (JC_63:
+    ((JC_61: le_int((0), integer_of_int32(x_0)))
+    and (JC_62: le_int((0), integer_of_int32(y_0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -703,10 +693,9 @@ let mean2_safety =
 
 let mean_ensures_default =
  fun (l : int32) (r : int32) ->
-  { ((true = true)
-    and (JC_7:
-        ((JC_5: le_int((0), integer_of_int32(l)))
-        and (JC_6: le_int(integer_of_int32(l), integer_of_int32(r)))))) }
+  { (JC_7:
+    ((JC_5: le_int((0), integer_of_int32(l)))
+    and (JC_6: le_int(integer_of_int32(l), integer_of_int32(r))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -786,8 +775,7 @@ let mean_safety =
 
 let umean_ensures_default =
  fun (l_0 : uint32) (r_0 : uint32) ->
-  { ((true = true)
-    and (JC_20: le_int(integer_of_uint32(l_0), integer_of_uint32(r_0)))) }
+  { (JC_20: le_int(integer_of_uint32(l_0), integer_of_uint32(r_0))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -1180,7 +1168,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1235,7 +1253,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1254,6 +1276,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

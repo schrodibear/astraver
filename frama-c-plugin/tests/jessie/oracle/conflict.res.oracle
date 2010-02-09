@@ -33,7 +33,6 @@ type void_P = [void_P]
 
 int32 f(int32 x)
 behavior default:
-  assumes true;
   ensures (C_2 : (\result == 1));
 {  
    (var int32 __retres);
@@ -360,14 +359,10 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- x:int32 ->
-  { } int32
-  { ((true = true) -> (JC_6: eq_int(integer_of_int32(result), (1)))) }
+ x:int32 -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (1))) }
 
 parameter f_requires :
- x:int32 ->
-  { } int32
-  { ((true = true) -> (JC_6: eq_int(integer_of_int32(result), (1)))) }
+ x:int32 -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (1))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -387,7 +382,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x : int32) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -583,7 +578,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -638,7 +663,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -657,6 +686,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

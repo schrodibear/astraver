@@ -1,4 +1,4 @@
-extern int printf(char *format, ...);
+// extern int printf(char *format, ...);
 
 void
 print_equality(x, y)

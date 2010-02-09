@@ -49,7 +49,6 @@ int32 f(int_P[..] x)
   requires (C_10 : ((C_11 : (\offset_min(x) <= 0)) &&
                      (C_12 : (\offset_max(x) >= 0))));
 behavior default:
-  assumes true;
   assigns x.int_M;
   ensures (C_13 : ((C_14 : (x.int_M == 1)) && (C_15 : (\result == 0))));
 {  
@@ -67,7 +66,6 @@ int32 f2(int_P[..] x_0)
   requires (C_25 : ((C_26 : (\offset_min(x_0) <= 0)) &&
                      (C_27 : (\offset_max(x_0) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_28 : ((C_29 : (x_0.int_M == 1)) && (C_30 : (\result == 1))));
 {  
    (var int32 __retres);
@@ -86,7 +84,6 @@ int32 g()
   requires (C_33 : ((C_34 : (\offset_min(r) <= 0)) &&
                      (C_35 : (\offset_max(r) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_36 : (r.int_M == 1));
 {  
    (var int32 tmp_0);
@@ -99,7 +96,6 @@ behavior default:
 
 int32 g2()
 behavior default:
-  assumes true;
   ensures (C_41 : (r.int_M == 1));
 {  
    (var int32 tmp_0_0);
@@ -113,7 +109,6 @@ behavior default:
 
 int32 h()
 behavior default:
-  assumes true;
   ensures (C_53 : (\result == 1));
 {  
    (var int_P[0] z);
@@ -143,7 +138,6 @@ int32 array1()
   requires (C_62 : ((C_63 : (\offset_min(t) <= 2)) &&
                      (C_64 : (\offset_max(t) >= 2))));
 behavior default:
-  assumes true;
   ensures (C_65 : (\result == 1));
 {  
    (var int_P[..] p);
@@ -173,7 +167,6 @@ invariant valid_s :
 
 int32 struct1(int32 n)
 behavior default:
-  assumes true;
   ensures (C_74 : (\result >= 1));
 {  
    (var int_P[..] p_0);
@@ -795,7 +788,7 @@ parameter array1 :
   { ((JC_168:
      ((JC_166: valid_t(int_P_t_2_alloc_table))
      and (JC_167: valid_s(S_s_3_alloc_table))))
-    and ((true = true) -> (JC_162: eq_int(integer_of_int32(result), (1))))) }
+    and (JC_162: eq_int(integer_of_int32(result), (1)))) }
 
 parameter array1_requires :
  tt:unit ->
@@ -809,7 +802,7 @@ parameter array1_requires :
   { ((JC_168:
      ((JC_166: valid_t(int_P_t_2_alloc_table))
      and (JC_167: valid_s(S_s_3_alloc_table))))
-    and ((true = true) -> (JC_162: eq_int(integer_of_int32(result), (1))))) }
+    and (JC_162: eq_int(integer_of_int32(result), (1)))) }
 
 parameter f :
  x:int_P pointer ->
@@ -820,15 +813,14 @@ parameter f :
     { ((JC_44:
        ((JC_42: valid_t(int_P_t_2_alloc_table))
        and (JC_43: valid_s(S_s_3_alloc_table))))
-      and ((true = true) ->
-           (JC_38:
-           ((JC_36:
-            ((JC_34:
-             eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
-            and (JC_35: eq_int(integer_of_int32(result), (0)))))
-           and (JC_37:
-               not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
-               int_P_int_M_x_4, pset_singleton(x@))))))) }
+      and (JC_38:
+          ((JC_36:
+           ((JC_34:
+            eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
+           and (JC_35: eq_int(integer_of_int32(result), (0)))))
+          and (JC_37:
+              not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
+              int_P_int_M_x_4, pset_singleton(x@)))))) }
 
 parameter f2 :
  x_0:int_P pointer ->
@@ -839,11 +831,10 @@ parameter f2 :
     { ((JC_75:
        ((JC_73: valid_t(int_P_t_2_alloc_table))
        and (JC_74: valid_s(S_s_3_alloc_table))))
-      and ((true = true) ->
-           (JC_69:
-           ((JC_67:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
-           and (JC_68: eq_int(integer_of_int32(result), (1))))))) }
+      and (JC_69:
+          ((JC_67:
+           eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
+          and (JC_68: eq_int(integer_of_int32(result), (1)))))) }
 
 parameter f2_requires :
  x_0:int_P pointer ->
@@ -860,11 +851,10 @@ parameter f2_requires :
     { ((JC_75:
        ((JC_73: valid_t(int_P_t_2_alloc_table))
        and (JC_74: valid_s(S_s_3_alloc_table))))
-      and ((true = true) ->
-           (JC_69:
-           ((JC_67:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
-           and (JC_68: eq_int(integer_of_int32(result), (1))))))) }
+      and (JC_69:
+          ((JC_67:
+           eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
+          and (JC_68: eq_int(integer_of_int32(result), (1)))))) }
 
 parameter f_requires :
  x:int_P pointer ->
@@ -881,15 +871,14 @@ parameter f_requires :
     { ((JC_44:
        ((JC_42: valid_t(int_P_t_2_alloc_table))
        and (JC_43: valid_s(S_s_3_alloc_table))))
-      and ((true = true) ->
-           (JC_38:
-           ((JC_36:
-            ((JC_34:
-             eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
-            and (JC_35: eq_int(integer_of_int32(result), (0)))))
-           and (JC_37:
-               not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
-               int_P_int_M_x_4, pset_singleton(x@))))))) }
+      and (JC_38:
+          ((JC_36:
+           ((JC_34:
+            eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
+           and (JC_35: eq_int(integer_of_int32(result), (0)))))
+          and (JC_37:
+              not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
+              int_P_int_M_x_4, pset_singleton(x@)))))) }
 
 parameter int_P_r_1_alloc_table : int_P alloc_table ref
 
@@ -905,8 +894,7 @@ parameter g :
   { ((JC_102:
      ((JC_100: valid_t(int_P_t_2_alloc_table))
      and (JC_101: valid_s(S_s_3_alloc_table))))
-    and ((true = true) ->
-         (JC_96: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1))))) }
+    and (JC_96: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1)))) }
 
 parameter int_P_r_1_tag_table : int_P tag_table ref
 
@@ -918,8 +906,7 @@ parameter g2 :
   { ((JC_120:
      ((JC_118: valid_t(int_P_t_2_alloc_table))
      and (JC_119: valid_s(S_s_3_alloc_table))))
-    and ((true = true) ->
-         (JC_114: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1))))) }
+    and (JC_114: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1)))) }
 
 parameter g2_requires :
  tt:unit ->
@@ -932,8 +919,7 @@ parameter g2_requires :
   { ((JC_120:
      ((JC_118: valid_t(int_P_t_2_alloc_table))
      and (JC_119: valid_s(S_s_3_alloc_table))))
-    and ((true = true) ->
-         (JC_114: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1))))) }
+    and (JC_114: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1)))) }
 
 parameter g_requires :
  tt:unit ->
@@ -949,8 +935,7 @@ parameter g_requires :
   { ((JC_102:
      ((JC_100: valid_t(int_P_t_2_alloc_table))
      and (JC_101: valid_s(S_s_3_alloc_table))))
-    and ((true = true) ->
-         (JC_96: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1))))) }
+    and (JC_96: eq_int(integer_of_int32(select(int_P_int_M_r_1, r)), (1)))) }
 
 parameter h :
  tt:unit ->
@@ -958,7 +943,7 @@ parameter h :
   { ((JC_140:
      ((JC_138: valid_t(int_P_t_2_alloc_table))
      and (JC_139: valid_s(S_s_3_alloc_table))))
-    and ((true = true) -> (JC_134: eq_int(integer_of_int32(result), (1))))) }
+    and (JC_134: eq_int(integer_of_int32(result), (1)))) }
 
 parameter h_requires :
  tt:unit ->
@@ -969,7 +954,7 @@ parameter h_requires :
   { ((JC_140:
      ((JC_138: valid_t(int_P_t_2_alloc_table))
      and (JC_139: valid_s(S_s_3_alloc_table))))
-    and ((true = true) -> (JC_134: eq_int(integer_of_int32(result), (1))))) }
+    and (JC_134: eq_int(integer_of_int32(result), (1)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -999,7 +984,7 @@ parameter struct1 :
   { ((JC_185:
      ((JC_183: valid_t(int_P_t_2_alloc_table))
      and (JC_184: valid_s(S_s_3_alloc_table))))
-    and ((true = true) -> (JC_179: ge_int(integer_of_int32(result), (1))))) }
+    and (JC_179: ge_int(integer_of_int32(result), (1)))) }
 
 parameter struct1_requires :
  n:int32 ->
@@ -1012,17 +997,16 @@ parameter struct1_requires :
   { ((JC_185:
      ((JC_183: valid_t(int_P_t_2_alloc_table))
      and (JC_184: valid_s(S_s_3_alloc_table))))
-    and ((true = true) -> (JC_179: ge_int(integer_of_int32(result), (1))))) }
+    and (JC_179: ge_int(integer_of_int32(result), (1)))) }
 
 let array1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_159:
-        ((JC_156:
-         ((JC_154: le_int(offset_min(int_P_t_2_alloc_table, t), (2)))
-         and (JC_155: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))
-        and ((JC_157: valid_t(int_P_t_2_alloc_table))
-            and (JC_158: valid_s(S_s_3_alloc_table)))))) }
+  { (JC_159:
+    ((JC_156:
+     ((JC_154: le_int(offset_min(int_P_t_2_alloc_table, t), (2)))
+     and (JC_155: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))
+    and ((JC_157: valid_t(int_P_t_2_alloc_table))
+        and (JC_158: valid_s(S_s_3_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1128,13 +1112,12 @@ let array1_safety =
 
 let f2_ensures_default =
  fun (x_0 : int_P pointer) (int_P_int_M_x_0_5 : (int_P, int32) memory ref) (int_P_x_0_5_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_62:
-        ((JC_59:
-         ((JC_57: le_int(offset_min(int_P_x_0_5_alloc_table, x_0), (0)))
-         and (JC_58: ge_int(offset_max(int_P_x_0_5_alloc_table, x_0), (0)))))
-        and ((JC_60: valid_t(int_P_t_2_alloc_table))
-            and (JC_61: valid_s(S_s_3_alloc_table)))))) }
+  { (JC_62:
+    ((JC_59:
+     ((JC_57: le_int(offset_min(int_P_x_0_5_alloc_table, x_0), (0)))
+     and (JC_58: ge_int(offset_max(int_P_x_0_5_alloc_table, x_0), (0)))))
+    and ((JC_60: valid_t(int_P_t_2_alloc_table))
+        and (JC_61: valid_s(S_s_3_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1232,13 +1215,12 @@ let f2_safety =
 
 let f_ensures_default =
  fun (x : int_P pointer) (int_P_int_M_x_4 : (int_P, int32) memory ref) (int_P_x_4_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_27:
-        ((JC_24:
-         ((JC_22: le_int(offset_min(int_P_x_4_alloc_table, x), (0)))
-         and (JC_23: ge_int(offset_max(int_P_x_4_alloc_table, x), (0)))))
-        and ((JC_25: valid_t(int_P_t_2_alloc_table))
-            and (JC_26: valid_s(S_s_3_alloc_table)))))) }
+  { (JC_27:
+    ((JC_24:
+     ((JC_22: le_int(offset_min(int_P_x_4_alloc_table, x), (0)))
+     and (JC_23: ge_int(offset_max(int_P_x_4_alloc_table, x), (0)))))
+    and ((JC_25: valid_t(int_P_t_2_alloc_table))
+        and (JC_26: valid_s(S_s_3_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1339,10 +1321,9 @@ let f_safety =
 
 let g2_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_111:
-        ((JC_109: valid_t(int_P_t_2_alloc_table))
-        and (JC_110: valid_s(S_s_3_alloc_table))))) }
+  { (JC_111:
+    ((JC_109: valid_t(int_P_t_2_alloc_table))
+    and (JC_110: valid_s(S_s_3_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1410,13 +1391,12 @@ let g2_safety =
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_93:
-        ((JC_90:
-         ((JC_88: le_int(offset_min(int_P_r_1_alloc_table, r), (0)))
-         and (JC_89: ge_int(offset_max(int_P_r_1_alloc_table, r), (0)))))
-        and ((JC_91: valid_t(int_P_t_2_alloc_table))
-            and (JC_92: valid_s(S_s_3_alloc_table)))))) }
+  { (JC_93:
+    ((JC_90:
+     ((JC_88: le_int(offset_min(int_P_r_1_alloc_table, r), (0)))
+     and (JC_89: ge_int(offset_max(int_P_r_1_alloc_table, r), (0)))))
+    and ((JC_91: valid_t(int_P_t_2_alloc_table))
+        and (JC_92: valid_s(S_s_3_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1473,10 +1453,9 @@ let g_safety =
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_131:
-        ((JC_129: valid_t(int_P_t_2_alloc_table))
-        and (JC_130: valid_s(S_s_3_alloc_table))))) }
+  { (JC_131:
+    ((JC_129: valid_t(int_P_t_2_alloc_table))
+    and (JC_130: valid_s(S_s_3_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1605,10 +1584,9 @@ let h_safety =
 
 let struct1_ensures_default =
  fun (n : int32) ->
-  { ((true = true)
-    and (JC_176:
-        ((JC_174: valid_t(int_P_t_2_alloc_table))
-        and (JC_175: valid_s(S_s_3_alloc_table))))) }
+  { (JC_176:
+    ((JC_174: valid_t(int_P_t_2_alloc_table))
+    and (JC_175: valid_s(S_s_3_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1704,12 +1682,12 @@ why --project [...] why/pointer.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po55.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "177" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "170" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po56.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "177" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "170" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1740,7 +1718,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/pointer_po48.why">
-      <location file = "why/pointer.why" line = "1367" begin = "32" end = "160"/>
+      <location file = "why/pointer.why" line = "1353" begin = "32" end = "160"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/pointer_po49.why">
@@ -1764,7 +1742,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po53.why">
-      <location file = "why/pointer.why" line = "1398" begin = "12" end = "53"/>
+      <location file = "why/pointer.why" line = "1384" begin = "12" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1845,12 +1823,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po8.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "68" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "66" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po9.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "68" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "66" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1875,12 +1853,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po14.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "69" begin = "15" end = "89"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "67" begin = "15" end = "89"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po15.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "69" begin = "15" end = "89"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "67" begin = "15" end = "89"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1918,12 +1896,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po23.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "51" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "50" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po24.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "51" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "50" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1958,12 +1936,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po31.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "53" begin = "14" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "52" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po32.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "53" begin = "14" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "52" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1995,12 +1973,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po2.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "155" begin = "18" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "149" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po3.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "155" begin = "18" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "149" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2163,7 +2141,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2218,7 +2226,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2237,6 +2249,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

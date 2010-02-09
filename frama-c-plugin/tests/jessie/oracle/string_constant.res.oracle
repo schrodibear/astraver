@@ -387,7 +387,6 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 
 unit main()
 behavior default:
-  assumes true;
   ensures (C_9 : true);
 {  
    (var char_P[..] p);
@@ -1501,12 +1500,11 @@ parameter uint16_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_9:
-        ((JC_7:
-         valid___string_done(char_P___string_done_1_alloc_table,
-         char_P_char_M___string_done_1))
-        and (JC_8: valid___string_done_0(char_P___string_done_1_alloc_table))))) }
+  { (JC_9:
+    ((JC_7:
+     valid___string_done(char_P___string_done_1_alloc_table,
+     char_P_char_M___string_done_1))
+    and (JC_8: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1713,11 +1711,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/string_constant_po7.why">
-      <location file = "why/string_constant.why" line = "1195" begin = "62" end = "63"/>
+      <location file = "why/string_constant.why" line = "1194" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/string_constant_po8.why">
-      <location file = "why/string_constant.why" line = "1195" begin = "62" end = "63"/>
+      <location file = "why/string_constant.why" line = "1194" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1865,7 +1863,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1920,7 +1948,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1939,6 +1971,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

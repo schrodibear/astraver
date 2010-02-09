@@ -54,7 +54,6 @@ invariant valid_ga3 :
 
 unit fg(int32 i)
 behavior default:
-  assumes true;
   ensures (C_19 : ((C_20 : ((ga1 + ((0 * 1) + 0)).int_M == i)) &&
                     ((C_22 : ((ga2 + ((1 * 2) + 1)).int_M == i)) &&
                       (C_23 : ((ga3 + ((2 * 3) + 2)).int_M == i)))));
@@ -75,7 +74,6 @@ behavior default:
 
 unit testg()
 behavior default:
-  assumes true;
   ensures (C_28 : true);
 {  
    {  (C_24 : fg(5));
@@ -101,7 +99,6 @@ behavior default:
 
 unit lg(int32 i_0)
 behavior default:
-  assumes true;
   ensures (C_113 : true);
 {  
    (var int_P[0] la1);
@@ -654,22 +651,21 @@ parameter fg :
      ((JC_32: valid_ga1(int_P_ga1_1_alloc_table))
      and ((JC_33: valid_ga2(int_P_ga2_2_alloc_table))
          and (JC_34: valid_ga3(int_P_ga3_3_alloc_table)))))
-    and ((true = true) ->
-         (JC_27:
-         ((JC_24:
-          eq_int(integer_of_int32(select(int_P_int_M_ga1_1,
-                                  shift(ga1, add_int(mul_int((0), (1)), (0))))),
-          integer_of_int32(i)))
-         and ((JC_25:
-              eq_int(integer_of_int32(select(int_P_int_M_ga2_2,
-                                      shift(ga2,
-                                      add_int(mul_int((1), (2)), (1))))),
-              integer_of_int32(i)))
-             and (JC_26:
-                 eq_int(integer_of_int32(select(int_P_int_M_ga3_3,
-                                         shift(ga3,
-                                         add_int(mul_int((2), (3)), (2))))),
-                 integer_of_int32(i)))))))) }
+    and (JC_27:
+        ((JC_24:
+         eq_int(integer_of_int32(select(int_P_int_M_ga1_1,
+                                 shift(ga1, add_int(mul_int((0), (1)), (0))))),
+         integer_of_int32(i)))
+        and ((JC_25:
+             eq_int(integer_of_int32(select(int_P_int_M_ga2_2,
+                                     shift(ga2,
+                                     add_int(mul_int((1), (2)), (1))))),
+             integer_of_int32(i)))
+            and (JC_26:
+                eq_int(integer_of_int32(select(int_P_int_M_ga3_3,
+                                        shift(ga3,
+                                        add_int(mul_int((2), (3)), (2))))),
+                integer_of_int32(i))))))) }
 
 parameter fg_requires :
  i:int32 ->
@@ -684,22 +680,21 @@ parameter fg_requires :
      ((JC_32: valid_ga1(int_P_ga1_1_alloc_table))
      and ((JC_33: valid_ga2(int_P_ga2_2_alloc_table))
          and (JC_34: valid_ga3(int_P_ga3_3_alloc_table)))))
-    and ((true = true) ->
-         (JC_27:
-         ((JC_24:
-          eq_int(integer_of_int32(select(int_P_int_M_ga1_1,
-                                  shift(ga1, add_int(mul_int((0), (1)), (0))))),
-          integer_of_int32(i)))
-         and ((JC_25:
-              eq_int(integer_of_int32(select(int_P_int_M_ga2_2,
-                                      shift(ga2,
-                                      add_int(mul_int((1), (2)), (1))))),
-              integer_of_int32(i)))
-             and (JC_26:
-                 eq_int(integer_of_int32(select(int_P_int_M_ga3_3,
-                                         shift(ga3,
-                                         add_int(mul_int((2), (3)), (2))))),
-                 integer_of_int32(i)))))))) }
+    and (JC_27:
+        ((JC_24:
+         eq_int(integer_of_int32(select(int_P_int_M_ga1_1,
+                                 shift(ga1, add_int(mul_int((0), (1)), (0))))),
+         integer_of_int32(i)))
+        and ((JC_25:
+             eq_int(integer_of_int32(select(int_P_int_M_ga2_2,
+                                     shift(ga2,
+                                     add_int(mul_int((1), (2)), (1))))),
+             integer_of_int32(i)))
+            and (JC_26:
+                eq_int(integer_of_int32(select(int_P_int_M_ga3_3,
+                                        shift(ga3,
+                                        add_int(mul_int((2), (3)), (2))))),
+                integer_of_int32(i))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -765,11 +760,10 @@ parameter testg_requires :
 
 let fg_ensures_default =
  fun (i : int32) ->
-  { ((true = true)
-    and (JC_18:
-        ((JC_15: valid_ga1(int_P_ga1_1_alloc_table))
-        and ((JC_16: valid_ga2(int_P_ga2_2_alloc_table))
-            and (JC_17: valid_ga3(int_P_ga3_3_alloc_table)))))) }
+  { (JC_18:
+    ((JC_15: valid_ga1(int_P_ga1_1_alloc_table))
+    and ((JC_16: valid_ga2(int_P_ga2_2_alloc_table))
+        and (JC_17: valid_ga3(int_P_ga3_3_alloc_table))))) }
   (init:
   try
    begin
@@ -906,11 +900,10 @@ let fg_safety =
 
 let lg_ensures_default =
  fun (i_0 : int32) ->
-  { ((true = true)
-    and (JC_72:
-        ((JC_69: valid_ga1(int_P_ga1_1_alloc_table))
-        and ((JC_70: valid_ga2(int_P_ga2_2_alloc_table))
-            and (JC_71: valid_ga3(int_P_ga3_3_alloc_table)))))) }
+  { (JC_72:
+    ((JC_69: valid_ga1(int_P_ga1_1_alloc_table))
+    and ((JC_70: valid_ga2(int_P_ga2_2_alloc_table))
+        and (JC_71: valid_ga3(int_P_ga3_3_alloc_table))))) }
   (init:
   try
    begin
@@ -1488,11 +1481,10 @@ let lg_safety =
 
 let testg_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_44:
-        ((JC_41: valid_ga1(int_P_ga1_1_alloc_table))
-        and ((JC_42: valid_ga2(int_P_ga2_2_alloc_table))
-            and (JC_43: valid_ga3(int_P_ga3_3_alloc_table)))))) }
+  { (JC_44:
+    ((JC_41: valid_ga1(int_P_ga1_1_alloc_table))
+    and ((JC_42: valid_ga2(int_P_ga2_2_alloc_table))
+        and (JC_43: valid_ga3(int_P_ga3_3_alloc_table))))) }
   (init:
   try
    begin
@@ -1581,12 +1573,12 @@ why --project [...] why/array_multi.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_multi_po23.why">
-      <location file = "PPCHOME/tests/jessie/array_multi.jessie/array_multi.jc" line = "75" begin = "14" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/array_multi.jessie/array_multi.jc" line = "73" begin = "14" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_multi_po24.why">
-      <location file = "PPCHOME/tests/jessie/array_multi.jessie/array_multi.jc" line = "75" begin = "14" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/array_multi.jessie/array_multi.jc" line = "73" begin = "14" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1623,7 +1615,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_multi_po10.why">
-      <location file = "why/array_multi.why" line = "1040" begin = "34" end = "168"/>
+      <location file = "why/array_multi.why" line = "1036" begin = "34" end = "168"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_multi_po11.why">
@@ -1632,7 +1624,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_multi_po12.why">
-      <location file = "why/array_multi.why" line = "1052" begin = "35" end = "171"/>
+      <location file = "why/array_multi.why" line = "1048" begin = "35" end = "171"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_multi_po13.why">
@@ -1641,21 +1633,21 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_multi_po14.why">
-      <location file = "why/array_multi.why" line = "1064" begin = "36" end = "174"/>
+      <location file = "why/array_multi.why" line = "1060" begin = "36" end = "174"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_multi_po15.why">
-      <location file = "why/array_multi.why" line = "1277" begin = "23" end = "68"/>
+      <location file = "why/array_multi.why" line = "1273" begin = "23" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/array_multi_po16.why">
-      <location file = "why/array_multi.why" line = "1280" begin = "24" end = "69"/>
+      <location file = "why/array_multi.why" line = "1276" begin = "24" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/array_multi_po17.why">
-      <location file = "why/array_multi.why" line = "1283" begin = "25" end = "70"/>
+      <location file = "why/array_multi.why" line = "1279" begin = "25" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1853,7 +1845,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1908,7 +1930,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1927,6 +1953,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

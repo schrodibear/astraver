@@ -60,7 +60,6 @@ unit zero(U[..] x)
   requires (C_6 : ((C_7 : (\offset_min(x) <= 0)) &&
                     (C_8 : (\offset_max(x) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_9 : true);
 {  
    {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));

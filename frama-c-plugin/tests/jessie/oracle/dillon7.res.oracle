@@ -67,7 +67,6 @@ axiomatic MyCast {
 
 float_P[..] simulated_cast_to_float_ptr(__anonstruct_ts_1[..] x)
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_1 : simulated_cast{Here}(x, \result));
 ;
@@ -76,7 +75,6 @@ unit f(float_P[..] d)
   requires (C_5 : ((C_6 : (\offset_min(d) <= 0)) &&
                     (C_7 : (\offset_max(d) >= 2))));
 behavior default:
-  assumes true;
   assigns v;
   ensures (C_8 : (v == (d + 1).float_M));
 {  
@@ -88,7 +86,6 @@ behavior default:
 
 unit main()
 behavior default:
-  assumes true;
   ensures (C_18 : (v == 9.0));
 {  
    (var __anonstruct_ts_1[0] x_0);
@@ -702,8 +699,7 @@ parameter f :
   float_P_d_6_alloc_table:float_P alloc_table ->
    float_P_float_M_d_6:(float_P, real) memory ->
     { } unit reads v writes v
-    { ((true = true) ->
-       (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1)))))) }
+    { (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
 
 parameter f_requires :
  d:float_P pointer ->
@@ -713,8 +709,7 @@ parameter f_requires :
       ((JC_11: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
       and (JC_12: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))}
     unit reads v writes v
-    { ((true = true) ->
-       (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1)))))) }
+    { (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -722,12 +717,10 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter main :
- tt:unit ->
-  { } unit reads v writes v { ((true = true) -> (JC_31: eq_real(v, 9.0))) }
+ tt:unit -> { } unit reads v writes v { (JC_31: eq_real(v, 9.0)) }
 
 parameter main_requires :
- tt:unit ->
-  { } unit reads v writes v { ((true = true) -> (JC_31: eq_real(v, 9.0))) }
+ tt:unit -> { } unit reads v writes v { (JC_31: eq_real(v, 9.0)) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -741,12 +734,11 @@ parameter simulated_cast_to_float_ptr :
       __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, real) memory ->
        float_P_float_M_result_4:(float_P, real) memory ->
         { } float_P pointer
-        { ((true = true) ->
-           (JC_7:
-           simulated_cast(x, result, float_P_result_4_alloc_table,
-           __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
-           __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
-           float_P_float_M_result_4))) }
+        { (JC_7:
+          simulated_cast(x, result, float_P_result_4_alloc_table,
+          __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
+          __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
+          float_P_float_M_result_4)) }
 
 parameter simulated_cast_to_float_ptr_requires :
  x:__anonstruct_ts_1 pointer ->
@@ -757,19 +749,17 @@ parameter simulated_cast_to_float_ptr_requires :
       __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, real) memory ->
        float_P_float_M_result_4:(float_P, real) memory ->
         { } float_P pointer
-        { ((true = true) ->
-           (JC_7:
-           simulated_cast(x, result, float_P_result_4_alloc_table,
-           __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
-           __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
-           float_P_float_M_result_4))) }
+        { (JC_7:
+          simulated_cast(x, result, float_P_result_4_alloc_table,
+          __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
+          __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
+          float_P_float_M_result_4)) }
 
 let f_ensures_default =
  fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, real) memory) ->
-  { ((true = true)
-    and (JC_17:
-        ((JC_15: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-        and (JC_16: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))) }
+  { (JC_17:
+    ((JC_15: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
+    and (JC_16: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
   (init:
   try
    begin
@@ -813,7 +803,7 @@ let f_safety =
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_29: true) }
   (init:
   try
    begin
@@ -940,21 +930,21 @@ why --project [...] why/dillon7.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/dillon7_po6.why">
-      <location file = "why/dillon7.why" line = "782" begin = "33" end = "177"/>
+      <location file = "why/dillon7.why" line = "775" begin = "33" end = "177"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon7_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "95" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "92" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "95" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "92" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po9.why">
-      <location file = "why/dillon7.why" line = "807" begin = "12" end = "70"/>
+      <location file = "why/dillon7.why" line = "800" begin = "12" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1130,7 +1120,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1185,7 +1205,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1204,6 +1228,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

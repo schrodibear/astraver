@@ -94,7 +94,6 @@ unit swap(int_P[..] t, int32 i, int32 j)
                     ((C_6 : (\offset_min(t) <= j)) &&
                       (C_7 : (\offset_max(t) >= j)))));
 behavior default:
-  assumes true;
   assigns t.int_M;
   ensures (C_8 : Swap{Old, Here}(t, i, j));
 ;
@@ -104,13 +103,10 @@ unit min_sort(int_P[..] t_0, int32 n)
                      ((C_35 : (\offset_min(t_0) <= 0)) &&
                        (C_36 : (\offset_max(t_0) >= (n - 1))))));
 behavior default:
-  assumes true;
   ensures (C_37 : true);
 behavior sorted:
-  assumes true;
   ensures (C_38 : Sorted{Here}(t_0, 0, (n - 1)));
 behavior permutation:
-  assumes true;
   ensures (C_39 : Permut{Old, Here}(t_0, 0, (n - 1)));
 {  
    (var int32 i_0);
@@ -684,14 +680,12 @@ parameter min_sort :
    int_P_int_M_t_0_5:(int_P, int32) memory ref ->
     int_P_t_0_5_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_t_0_5 writes int_P_int_M_t_0_5
-     { (((true = true) ->
-         (JC_38:
-         Permut(t_0, (0), sub_int(integer_of_int32(n), (1)),
-         int_P_int_M_t_0_5, int_P_int_M_t_0_5@)))
-       and ((true = true) ->
-            (JC_36:
-            Sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
-            int_P_int_M_t_0_5)))) }
+     { ((JC_38:
+        Permut(t_0, (0), sub_int(integer_of_int32(n), (1)),
+        int_P_int_M_t_0_5, int_P_int_M_t_0_5@))
+       and (JC_36:
+           Sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+           int_P_int_M_t_0_5))) }
 
 parameter min_sort_requires :
  t_0:int_P pointer ->
@@ -705,14 +699,12 @@ parameter min_sort_requires :
                ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
                sub_int(integer_of_int32(n), (1)))))))}
      unit reads int_P_int_M_t_0_5 writes int_P_int_M_t_0_5
-     { (((true = true) ->
-         (JC_38:
-         Permut(t_0, (0), sub_int(integer_of_int32(n), (1)),
-         int_P_int_M_t_0_5, int_P_int_M_t_0_5@)))
-       and ((true = true) ->
-            (JC_36:
-            Sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
-            int_P_int_M_t_0_5)))) }
+     { ((JC_38:
+        Permut(t_0, (0), sub_int(integer_of_int32(n), (1)),
+        int_P_int_M_t_0_5, int_P_int_M_t_0_5@))
+       and (JC_36:
+           Sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+           int_P_int_M_t_0_5))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -727,14 +719,13 @@ parameter swap :
     int_P_int_M_t_4:(int_P, int32) memory ref ->
      int_P_t_4_alloc_table:int_P alloc_table ->
       { } unit reads int_P_int_M_t_4 writes int_P_int_M_t_4
-      { ((true = true) ->
-         (JC_18:
-         ((JC_16:
-          Swap(t, integer_of_int32(i_0), integer_of_int32(j_0),
-          int_P_int_M_t_4, int_P_int_M_t_4@))
-         and (JC_17:
-             not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
-             int_P_int_M_t_4, pset_singleton(t@)))))) }
+      { (JC_18:
+        ((JC_16:
+         Swap(t, integer_of_int32(i_0), integer_of_int32(j_0),
+         int_P_int_M_t_4, int_P_int_M_t_4@))
+        and (JC_17:
+            not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
+            int_P_int_M_t_4, pset_singleton(t@))))) }
 
 parameter swap_requires :
  t:int_P pointer ->
@@ -755,24 +746,22 @@ parameter swap_requires :
                     ge_int(offset_max(int_P_t_4_alloc_table, t),
                     integer_of_int32(j_0)))))))}
       unit reads int_P_int_M_t_4 writes int_P_int_M_t_4
-      { ((true = true) ->
-         (JC_18:
-         ((JC_16:
-          Swap(t, integer_of_int32(i_0), integer_of_int32(j_0),
-          int_P_int_M_t_4, int_P_int_M_t_4@))
-         and (JC_17:
-             not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
-             int_P_int_M_t_4, pset_singleton(t@)))))) }
+      { (JC_18:
+        ((JC_16:
+         Swap(t, integer_of_int32(i_0), integer_of_int32(j_0),
+         int_P_int_M_t_4, int_P_int_M_t_4@))
+        and (JC_17:
+            not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
+            int_P_int_M_t_4, pset_singleton(t@))))) }
 
 let min_sort_ensures_default =
  fun (t_0 : int_P pointer) (n : int32) (int_P_int_M_t_0_5 : (int_P, int32) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_29:
-        ((JC_26: ge_int(integer_of_int32(n), (0)))
-        and ((JC_27: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
-            and (JC_28:
-                ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))) }
+  { (JC_29:
+    ((JC_26: ge_int(integer_of_int32(n), (0)))
+    and ((JC_27: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+        and (JC_28:
+            ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
+            sub_int(integer_of_int32(n), (1))))))) }
   (init:
   try
    begin
@@ -984,13 +973,12 @@ let min_sort_ensures_default =
 
 let min_sort_ensures_permutation =
  fun (t_0 : int_P pointer) (n : int32) (int_P_int_M_t_0_5 : (int_P, int32) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_29:
-        ((JC_26: ge_int(integer_of_int32(n), (0)))
-        and ((JC_27: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
-            and (JC_28:
-                ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))) }
+  { (JC_29:
+    ((JC_26: ge_int(integer_of_int32(n), (0)))
+    and ((JC_27: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+        and (JC_28:
+            ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
+            sub_int(integer_of_int32(n), (1))))))) }
   (init:
   try
    begin
@@ -1206,13 +1194,12 @@ let min_sort_ensures_permutation =
 
 let min_sort_ensures_sorted =
  fun (t_0 : int_P pointer) (n : int32) (int_P_int_M_t_0_5 : (int_P, int32) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_29:
-        ((JC_26: ge_int(integer_of_int32(n), (0)))
-        and ((JC_27: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
-            and (JC_28:
-                ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))) }
+  { (JC_29:
+    ((JC_26: ge_int(integer_of_int32(n), (0)))
+    and ((JC_27: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+        and (JC_28:
+            ge_int(offset_max(int_P_t_0_5_alloc_table, t_0),
+            sub_int(integer_of_int32(n), (1))))))) }
   (init:
   try
    begin
@@ -1709,30 +1696,30 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po15.why">
-      <location file = "why/min_sort.why" line = "1346" begin = "77" end = "78"/>
+      <location file = "why/min_sort.why" line = "1337" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po16.why">
-      <location file = "why/min_sort.why" line = "1346" begin = "77" end = "78"/>
+      <location file = "why/min_sort.why" line = "1337" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "144" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "144" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po19.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "144" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po20.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "144" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1747,11 +1734,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po23.why">
-      <location file = "why/min_sort.why" line = "1287" begin = "61" end = "62"/>
+      <location file = "why/min_sort.why" line = "1278" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po24.why">
-      <location file = "why/min_sort.why" line = "1287" begin = "61" end = "62"/>
+      <location file = "why/min_sort.why" line = "1278" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1911,7 +1898,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1966,7 +1983,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1985,6 +2006,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

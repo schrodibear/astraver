@@ -64,7 +64,6 @@ integer test1(int_P[..] t, integer n)
                      ((C_18 : (\offset_min(t) <= 0)) &&
                        (C_19 : (\offset_max(t) >= (n - 1))))));
 behavior default:
-  assumes true;
   ensures (C_20 : (\result == sum{Here}(t, 0, n)));
 {  
    (var integer i);
@@ -100,7 +99,6 @@ unit test2(int_P[..] t_0, integer n_0)
                      ((C_39 : (\offset_min(t_0) <= 0)) &&
                        (C_40 : (\offset_max(t_0) >= (n_0 - 1))))));
 behavior default:
-  assumes true;
   assigns (t_0 + [..]).int_M;
   ensures (C_41 : (sum{Here}(t_0, 0, n_0) ==
                     (\old(sum{Old}(t_0, 0, n_0)) + n_0)));
@@ -545,9 +543,7 @@ parameter test1 :
   n:int ->
    int_P_t_2_alloc_table:int_P alloc_table ->
     int_P_int_M_t_2:(int_P, int) memory ->
-     { } int
-     { ((true = true) ->
-        (JC_12: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2)))) }
+     { } int { (JC_12: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2))) }
 
 parameter test1_requires :
  t_0:int_P pointer ->
@@ -560,9 +556,7 @@ parameter test1_requires :
            and (JC_3:
                ge_int(offset_max(int_P_t_2_alloc_table, t_0),
                sub_int(n, (1)))))))}
-     int
-     { ((true = true) ->
-        (JC_12: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2)))) }
+     int { (JC_12: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2))) }
 
 parameter test2 :
  t_0_0:int_P pointer ->
@@ -570,14 +564,13 @@ parameter test2 :
    int_P_int_M_t_0_3:(int_P, int) memory ref ->
     int_P_t_0_3_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_t_0_3 writes int_P_int_M_t_0_3
-     { ((true = true) ->
-        (JC_46:
-        ((JC_44:
-         eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
-         add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
-        and (JC_45:
-            not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
-            int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@))))))) }
+     { (JC_46:
+       ((JC_44:
+        eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
+        add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
+       and (JC_45:
+           not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
+           int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@)))))) }
 
 parameter test2_requires :
  t_0_0:int_P pointer ->
@@ -591,24 +584,21 @@ parameter test2_requires :
                ge_int(offset_max(int_P_t_0_3_alloc_table, t_0_0),
                sub_int(n_0, (1)))))))}
      unit reads int_P_int_M_t_0_3 writes int_P_int_M_t_0_3
-     { ((true = true) ->
-        (JC_46:
-        ((JC_44:
-         eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
-         add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
-        and (JC_45:
-            not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
-            int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@))))))) }
+     { (JC_46:
+       ((JC_44:
+        eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
+        add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
+       and (JC_45:
+           not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
+           int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@)))))) }
 
 let test1_ensures_default =
  fun (t_0 : int_P pointer) (n : int) (int_P_t_2_alloc_table : int_P alloc_table) (int_P_int_M_t_2 : (int_P, int) memory) ->
-  { ((true = true)
-    and (JC_9:
-        ((JC_6: ge_int(n, (1)))
-        and ((JC_7: le_int(offset_min(int_P_t_2_alloc_table, t_0), (0)))
-            and (JC_8:
-                ge_int(offset_max(int_P_t_2_alloc_table, t_0),
-                sub_int(n, (1)))))))) }
+  { (JC_9:
+    ((JC_6: ge_int(n, (1)))
+    and ((JC_7: le_int(offset_min(int_P_t_2_alloc_table, t_0), (0)))
+        and (JC_8:
+            ge_int(offset_max(int_P_t_2_alloc_table, t_0), sub_int(n, (1))))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -793,13 +783,12 @@ let test1_safety =
 
 let test2_ensures_default =
  fun (t_0_0 : int_P pointer) (n_0 : int) (int_P_int_M_t_0_3 : (int_P, int) memory ref) (int_P_t_0_3_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_39:
-        ((JC_36: ge_int(n_0, (1)))
-        and ((JC_37: le_int(offset_min(int_P_t_0_3_alloc_table, t_0_0), (0)))
-            and (JC_38:
-                ge_int(offset_max(int_P_t_0_3_alloc_table, t_0_0),
-                sub_int(n_0, (1)))))))) }
+  { (JC_39:
+    ((JC_36: ge_int(n_0, (1)))
+    and ((JC_37: le_int(offset_min(int_P_t_0_3_alloc_table, t_0_0), (0)))
+        and (JC_38:
+            ge_int(offset_max(int_P_t_0_3_alloc_table, t_0_0),
+            sub_int(n_0, (1))))))) }
   (init:
   try
    begin
@@ -1012,12 +1001,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po24.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "118" begin = "24" end = "432"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "116" begin = "24" end = "432"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po25.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "118" begin = "24" end = "432"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "116" begin = "24" end = "432"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1044,7 +1033,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum2_po15.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "107" begin = "9" end = "984"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "105" begin = "9" end = "984"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum2_po16.why">
@@ -1060,7 +1049,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum2_po19.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "107" begin = "9" end = "984"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "105" begin = "9" end = "984"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum2_po20.why">
@@ -1269,7 +1258,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1324,7 +1343,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1343,6 +1366,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

@@ -197,7 +197,6 @@ unit sift_down(int_P[..] a_0, uint32 low, uint32 high, int32 v)
                         (C_49 : (\offset_max(a_0) >= high)))) &&
                      (C_50 : H{Here}(a_0, (low + 1), high))));
 behavior default:
-  assumes true;
   assigns (a_0 + [low..high]).int_M;
   ensures (C_51 : ((C_52 : Permut(contents{Here}(a_0),
                                   \old(update(contents{Old}(a_0), low, v)),
@@ -272,7 +271,6 @@ unit heapsort(int_P[..] a, uint32 n)
                       ((C_109 : (\offset_min(a) <= 0)) &&
                         (C_110 : (\offset_max(a) >= (n - 1))))));
 behavior default:
-  assumes true;
   ensures (C_111 : ((C_112 : Permut(contents{Here}(a),
                                     \old(contents{Old}(a)), 0, (n - 1))) &&
                      (C_113 : Sorted{Here}(a, 0, (n - 1)))));
@@ -1078,15 +1076,14 @@ parameter heapsort :
    int_P_int_M_a_6:(int_P, int32) memory ref ->
     int_P_a_6_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_a_6 writes int_P_int_M_a_6
-     { ((true = true) ->
-        (JC_76:
-        ((JC_74:
-         Permut(contents(a_1, int_P_int_M_a_6),
-         contents(a_1@, int_P_int_M_a_6@), (0),
-         sub_int(integer_of_uint32(n), (1))))
-        and (JC_75:
-            Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
-            int_P_int_M_a_6))))) }
+     { (JC_76:
+       ((JC_74:
+        Permut(contents(a_1, int_P_int_M_a_6),
+        contents(a_1@, int_P_int_M_a_6@), (0),
+        sub_int(integer_of_uint32(n), (1))))
+       and (JC_75:
+           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+           int_P_int_M_a_6)))) }
 
 parameter heapsort_requires :
  a_1:int_P pointer ->
@@ -1100,15 +1097,14 @@ parameter heapsort_requires :
                ge_int(offset_max(int_P_a_6_alloc_table, a_1),
                sub_int(integer_of_uint32(n), (1)))))))}
      unit reads int_P_int_M_a_6 writes int_P_int_M_a_6
-     { ((true = true) ->
-        (JC_76:
-        ((JC_74:
-         Permut(contents(a_1, int_P_int_M_a_6),
-         contents(a_1@, int_P_int_M_a_6@), (0),
-         sub_int(integer_of_uint32(n), (1))))
-        and (JC_75:
-            Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
-            int_P_int_M_a_6))))) }
+     { (JC_76:
+       ((JC_74:
+        Permut(contents(a_1, int_P_int_M_a_6),
+        contents(a_1@, int_P_int_M_a_6@), (0),
+        sub_int(integer_of_uint32(n), (1))))
+       and (JC_75:
+           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+           int_P_int_M_a_6)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1137,22 +1133,21 @@ parameter sift_down :
      int_P_int_M_a_0_5:(int_P, int32) memory ref ->
       int_P_a_0_5_alloc_table:int_P alloc_table ->
        { } unit reads int_P_int_M_a_0_5 writes int_P_int_M_a_0_5
-       { ((true = true) ->
-          (JC_24:
-          ((JC_22:
-           ((JC_20:
-            Permut(contents(a_0_0, int_P_int_M_a_0_5),
-            update(contents(a_0_0@, int_P_int_M_a_0_5@),
-            integer_of_uint32(low@), v_0@), integer_of_uint32(low),
-            integer_of_uint32(high)))
-           and (JC_21:
-               H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
-               int_P_int_M_a_0_5))))
-          and (JC_23:
-              not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
-              int_P_int_M_a_0_5,
-              pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
-              integer_of_uint32(high@))))))) }
+       { (JC_24:
+         ((JC_22:
+          ((JC_20:
+           Permut(contents(a_0_0, int_P_int_M_a_0_5),
+           update(contents(a_0_0@, int_P_int_M_a_0_5@),
+           integer_of_uint32(low@), v_0@), integer_of_uint32(low),
+           integer_of_uint32(high)))
+          and (JC_21:
+              H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+              int_P_int_M_a_0_5))))
+         and (JC_23:
+             not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
+             int_P_int_M_a_0_5,
+             pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
+             integer_of_uint32(high@)))))) }
 
 parameter sift_down_requires :
  a_0_0:int_P pointer ->
@@ -1174,22 +1169,21 @@ parameter sift_down_requires :
                          H(a_0_0, add_int(integer_of_uint32(low), (1)),
                          integer_of_uint32(high), int_P_int_M_a_0_5)))))))}
        unit reads int_P_int_M_a_0_5 writes int_P_int_M_a_0_5
-       { ((true = true) ->
-          (JC_24:
-          ((JC_22:
-           ((JC_20:
-            Permut(contents(a_0_0, int_P_int_M_a_0_5),
-            update(contents(a_0_0@, int_P_int_M_a_0_5@),
-            integer_of_uint32(low@), v_0@), integer_of_uint32(low),
-            integer_of_uint32(high)))
-           and (JC_21:
-               H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
-               int_P_int_M_a_0_5))))
-          and (JC_23:
-              not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
-              int_P_int_M_a_0_5,
-              pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
-              integer_of_uint32(high@))))))) }
+       { (JC_24:
+         ((JC_22:
+          ((JC_20:
+           Permut(contents(a_0_0, int_P_int_M_a_0_5),
+           update(contents(a_0_0@, int_P_int_M_a_0_5@),
+           integer_of_uint32(low@), v_0@), integer_of_uint32(low),
+           integer_of_uint32(high)))
+          and (JC_21:
+              H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+              int_P_int_M_a_0_5))))
+         and (JC_23:
+             not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
+             int_P_int_M_a_0_5,
+             pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
+             integer_of_uint32(high@)))))) }
 
 parameter uint32_of_integer_ :
  x:int ->
@@ -1198,13 +1192,12 @@ parameter uint32_of_integer_ :
 
 let heapsort_ensures_default =
  fun (a_1 : int_P pointer) (n : uint32) (int_P_int_M_a_6 : (int_P, int32) memory ref) (int_P_a_6_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_69:
-        ((JC_66: le_int((0), integer_of_uint32(n)))
-        and ((JC_67: le_int(offset_min(int_P_a_6_alloc_table, a_1), (0)))
-            and (JC_68:
-                ge_int(offset_max(int_P_a_6_alloc_table, a_1),
-                sub_int(integer_of_uint32(n), (1)))))))) }
+  { (JC_69:
+    ((JC_66: le_int((0), integer_of_uint32(n)))
+    and ((JC_67: le_int(offset_min(int_P_a_6_alloc_table, a_1), (0)))
+        and (JC_68:
+            ge_int(offset_max(int_P_a_6_alloc_table, a_1),
+            sub_int(integer_of_uint32(n), (1))))))) }
   (init:
   try
    begin
@@ -1827,19 +1820,18 @@ let heapsort_safety =
 
 let sift_down_ensures_default =
  fun (a_0_0 : int_P pointer) (low : uint32) (high : uint32) (v_0 : int32) (int_P_int_M_a_0_5 : (int_P, int32) memory ref) (int_P_a_0_5_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_13:
-        ((JC_8: le_int((0), integer_of_uint32(low)))
-        and ((JC_9: le_int(integer_of_uint32(low), integer_of_uint32(high)))
-            and ((JC_10:
-                 le_int(offset_min(int_P_a_0_5_alloc_table, a_0_0),
-                 integer_of_uint32(low)))
-                and ((JC_11:
-                     ge_int(offset_max(int_P_a_0_5_alloc_table, a_0_0),
-                     integer_of_uint32(high)))
-                    and (JC_12:
-                        H(a_0_0, add_int(integer_of_uint32(low), (1)),
-                        integer_of_uint32(high), int_P_int_M_a_0_5)))))))) }
+  { (JC_13:
+    ((JC_8: le_int((0), integer_of_uint32(low)))
+    and ((JC_9: le_int(integer_of_uint32(low), integer_of_uint32(high)))
+        and ((JC_10:
+             le_int(offset_min(int_P_a_0_5_alloc_table, a_0_0),
+             integer_of_uint32(low)))
+            and ((JC_11:
+                 ge_int(offset_max(int_P_a_0_5_alloc_table, a_0_0),
+                 integer_of_uint32(high)))
+                and (JC_12:
+                    H(a_0_0, add_int(integer_of_uint32(low), (1)),
+                    integer_of_uint32(high), int_P_int_M_a_0_5))))))) }
   (init:
   try
    begin
@@ -2496,12 +2488,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po108.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "245" begin = "24" end = "234"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "244" begin = "24" end = "234"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po109.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "245" begin = "24" end = "234"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "244" begin = "24" end = "234"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2514,12 +2506,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po112.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "258" begin = "15" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "257" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po113.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "258" begin = "15" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "257" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2550,11 +2542,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
@@ -2586,11 +2578,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "208" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">
@@ -2666,27 +2658,27 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po42.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po43.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po44.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po45.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po46.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "295" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2701,11 +2693,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "1191" begin = "55" end = "89"/>
+      <location file = "why/heapsort.why" line = "1186" begin = "55" end = "89"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "1191" begin = "55" end = "89"/>
+      <location file = "why/heapsort.why" line = "1186" begin = "55" end = "89"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2739,12 +2731,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po57.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "328" begin = "27" end = "287"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "326" begin = "27" end = "287"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po58.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "328" begin = "27" end = "287"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "326" begin = "27" end = "287"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2759,27 +2751,27 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po61.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po62.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po63.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po64.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po65.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "332" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2794,11 +2786,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "1310" begin = "56" end = "91"/>
+      <location file = "why/heapsort.why" line = "1305" begin = "56" end = "91"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "1310" begin = "56" end = "91"/>
+      <location file = "why/heapsort.why" line = "1305" begin = "56" end = "91"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3036,7 +3028,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -3091,7 +3113,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -3110,6 +3136,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

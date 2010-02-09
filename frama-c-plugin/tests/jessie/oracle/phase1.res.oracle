@@ -95,7 +95,6 @@ __anonenum_T_RESULTAT_1 TesterOK(enum___anonenum_T_RESULTAT_1_P[..] status,
   requires (C_1 : ((C_2 : (\offset_min(status) <= 0)) &&
                     (C_3 : (\offset_max(status) >= 0))));
 behavior default:
-  assumes true;
   assigns status.enum___anonenum_T_RESULTAT_1_M,
   __ConsignerPanne_cpt,
   __TT0_cpt,
@@ -213,7 +212,6 @@ __anonenum_T_RESULTAT_1 phase1()
                      (C_63 : (\offset_max(__ConsignerPanne_v0) >=
                                (__ConsignerPanne_cpt + 7)))));
 behavior default:
-  assumes true;
   ensures (C_64 : ((((((((f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt),
                                           __ConsignerPanne_cpt_t0) &&
                            f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt),
@@ -974,21 +972,20 @@ parameter TesterOK :
                                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13@,
                                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13,
                                              pset_singleton(status@))))))))
-                                   and ((true = true) ->
-                                        (JC_18:
-                                        ((JC_16:
-                                         ((JC_14:
-                                          le_int(integer_of_uint32(__ConsignerPanne_cpt@),
-                                          integer_of_uint32(__ConsignerPanne_cpt)))
-                                         and (JC_15:
-                                             le_int(integer_of_uint32(__ConsignerPanne_cpt),
-                                             add_int(integer_of_uint32(__ConsignerPanne_cpt@),
-                                             (1))))))
-                                        and (JC_17:
-                                            not_assigns(enum___anonenum_T_RESULTAT_1_P_status_13_alloc_table@,
-                                            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13@,
-                                            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13,
-                                            pset_singleton(status@)))))))))))))) }
+                                   and (JC_18:
+                                       ((JC_16:
+                                        ((JC_14:
+                                         le_int(integer_of_uint32(__ConsignerPanne_cpt@),
+                                         integer_of_uint32(__ConsignerPanne_cpt)))
+                                        and (JC_15:
+                                            le_int(integer_of_uint32(__ConsignerPanne_cpt),
+                                            add_int(integer_of_uint32(__ConsignerPanne_cpt@),
+                                            (1))))))
+                                       and (JC_17:
+                                           not_assigns(enum___anonenum_T_RESULTAT_1_P_status_13_alloc_table@,
+                                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13@,
+                                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13,
+                                           pset_singleton(status@))))))))))))) }
 
 parameter TesterOK_requires :
  status:enum___anonenum_T_RESULTAT_1_P pointer ->
@@ -1230,21 +1227,20 @@ parameter TesterOK_requires :
                                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13@,
                                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13,
                                              pset_singleton(status@))))))))
-                                   and ((true = true) ->
-                                        (JC_18:
-                                        ((JC_16:
-                                         ((JC_14:
-                                          le_int(integer_of_uint32(__ConsignerPanne_cpt@),
-                                          integer_of_uint32(__ConsignerPanne_cpt)))
-                                         and (JC_15:
-                                             le_int(integer_of_uint32(__ConsignerPanne_cpt),
-                                             add_int(integer_of_uint32(__ConsignerPanne_cpt@),
-                                             (1))))))
-                                        and (JC_17:
-                                            not_assigns(enum___anonenum_T_RESULTAT_1_P_status_13_alloc_table@,
-                                            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13@,
-                                            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13,
-                                            pset_singleton(status@)))))))))))))) }
+                                   and (JC_18:
+                                       ((JC_16:
+                                        ((JC_14:
+                                         le_int(integer_of_uint32(__ConsignerPanne_cpt@),
+                                         integer_of_uint32(__ConsignerPanne_cpt)))
+                                        and (JC_15:
+                                            le_int(integer_of_uint32(__ConsignerPanne_cpt),
+                                            add_int(integer_of_uint32(__ConsignerPanne_cpt@),
+                                            (1))))))
+                                       and (JC_17:
+                                           not_assigns(enum___anonenum_T_RESULTAT_1_P_status_13_alloc_table@,
+                                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13@,
+                                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_13,
+                                           pset_singleton(status@))))))))))))) }
 
 parameter __ConsignerPanne_cpt_t0 : uint32 ref
 
@@ -1463,43 +1459,42 @@ parameter phase1 :
   { } __anonenum_T_RESULTAT_1
   reads __ConsignerPanne_cpt,__ConsignerPanne_cpt_t0,__ConsignerPanne_cpt_t1,__ConsignerPanne_cpt_t2,__ConsignerPanne_cpt_t3,__ConsignerPanne_cpt_t4,__ConsignerPanne_cpt_t5,__ConsignerPanne_cpt_t6,__ConsignerPanne_cpt_t7,__TT0_cpt,__TT1_cpt,__TT2_cpt,__TT3_cpt,__TT4_cpt,__TT5_cpt,__TT6_cpt,__TT7_cpt,enum___anonenum_T_RESULTAT_1_P___ConsignerPanne_v0_1_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT0_v0_2_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT1_v0_3_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT2_v0_4_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT3_v0_5_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT4_v0_6_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT5_v0_7_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT6_v0_8_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT7_v0_9_alloc_table,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT2_v0_4,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT3_v0_5,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT4_v0_6,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT5_v0_7,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT6_v0_8,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT7_v0_9
   writes __ConsignerPanne_cpt,__ConsignerPanne_cpt_t0,__ConsignerPanne_cpt_t1,__ConsignerPanne_cpt_t2,__ConsignerPanne_cpt_t3,__ConsignerPanne_cpt_t4,__ConsignerPanne_cpt_t5,__ConsignerPanne_cpt_t6,__ConsignerPanne_cpt_t7,__TT0_cpt,__TT1_cpt,__TT2_cpt,__TT3_cpt,__TT4_cpt,__TT5_cpt,__TT6_cpt,__TT7_cpt
-  { ((true = true) ->
-     (JC_126:
-     ((f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
-       integer_of_uint32(__ConsignerPanne_cpt_t0),
-       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,
-       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-      and (f_cond_OK(__TT1_v0, integer_of_uint32(__TT1_cpt@),
-           integer_of_uint32(__ConsignerPanne_cpt_t1),
-           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
-           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-          and (f_cond_OK(__TT2_v0, integer_of_uint32(__TT2_cpt@),
-               integer_of_uint32(__ConsignerPanne_cpt_t2),
-               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT2_v0_4,
-               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-              and (f_cond_OK(__TT3_v0, integer_of_uint32(__TT3_cpt@),
-                   integer_of_uint32(__ConsignerPanne_cpt_t3),
-                   enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT3_v0_5,
-                   enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                  and (f_cond_OK(__TT4_v0, integer_of_uint32(__TT4_cpt@),
-                       integer_of_uint32(__ConsignerPanne_cpt_t4),
-                       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT4_v0_6,
-                       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                      and (f_cond_OK(__TT5_v0, integer_of_uint32(__TT5_cpt@),
-                           integer_of_uint32(__ConsignerPanne_cpt_t5),
-                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT5_v0_7,
-                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                          and (f_cond_OK(__TT6_v0,
-                               integer_of_uint32(__TT6_cpt@),
-                               integer_of_uint32(__ConsignerPanne_cpt_t6),
-                               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT6_v0_8,
-                               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                              and f_cond_OK(__TT7_v0,
-                                  integer_of_uint32(__TT7_cpt@),
-                                  integer_of_uint32(__ConsignerPanne_cpt_t7),
-                                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT7_v0_9,
-                                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)))))))) ->
-      eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1))))) }
+  { (JC_126:
+    ((f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
+      integer_of_uint32(__ConsignerPanne_cpt_t0),
+      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,
+      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+     and (f_cond_OK(__TT1_v0, integer_of_uint32(__TT1_cpt@),
+          integer_of_uint32(__ConsignerPanne_cpt_t1),
+          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
+          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+         and (f_cond_OK(__TT2_v0, integer_of_uint32(__TT2_cpt@),
+              integer_of_uint32(__ConsignerPanne_cpt_t2),
+              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT2_v0_4,
+              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+             and (f_cond_OK(__TT3_v0, integer_of_uint32(__TT3_cpt@),
+                  integer_of_uint32(__ConsignerPanne_cpt_t3),
+                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT3_v0_5,
+                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                 and (f_cond_OK(__TT4_v0, integer_of_uint32(__TT4_cpt@),
+                      integer_of_uint32(__ConsignerPanne_cpt_t4),
+                      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT4_v0_6,
+                      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                     and (f_cond_OK(__TT5_v0, integer_of_uint32(__TT5_cpt@),
+                          integer_of_uint32(__ConsignerPanne_cpt_t5),
+                          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT5_v0_7,
+                          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                         and (f_cond_OK(__TT6_v0,
+                              integer_of_uint32(__TT6_cpt@),
+                              integer_of_uint32(__ConsignerPanne_cpt_t6),
+                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT6_v0_8,
+                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                             and f_cond_OK(__TT7_v0,
+                                 integer_of_uint32(__TT7_cpt@),
+                                 integer_of_uint32(__ConsignerPanne_cpt_t7),
+                                 enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT7_v0_9,
+                                 enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)))))))) ->
+     eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1)))) }
 
 parameter phase1_requires :
  tt:unit ->
@@ -1591,43 +1586,42 @@ parameter phase1_requires :
   __anonenum_T_RESULTAT_1
   reads __ConsignerPanne_cpt,__ConsignerPanne_cpt_t0,__ConsignerPanne_cpt_t1,__ConsignerPanne_cpt_t2,__ConsignerPanne_cpt_t3,__ConsignerPanne_cpt_t4,__ConsignerPanne_cpt_t5,__ConsignerPanne_cpt_t6,__ConsignerPanne_cpt_t7,__TT0_cpt,__TT1_cpt,__TT2_cpt,__TT3_cpt,__TT4_cpt,__TT5_cpt,__TT6_cpt,__TT7_cpt,enum___anonenum_T_RESULTAT_1_P___ConsignerPanne_v0_1_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT0_v0_2_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT1_v0_3_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT2_v0_4_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT3_v0_5_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT4_v0_6_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT5_v0_7_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT6_v0_8_alloc_table,enum___anonenum_T_RESULTAT_1_P___TT7_v0_9_alloc_table,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT2_v0_4,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT3_v0_5,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT4_v0_6,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT5_v0_7,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT6_v0_8,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT7_v0_9
   writes __ConsignerPanne_cpt,__ConsignerPanne_cpt_t0,__ConsignerPanne_cpt_t1,__ConsignerPanne_cpt_t2,__ConsignerPanne_cpt_t3,__ConsignerPanne_cpt_t4,__ConsignerPanne_cpt_t5,__ConsignerPanne_cpt_t6,__ConsignerPanne_cpt_t7,__TT0_cpt,__TT1_cpt,__TT2_cpt,__TT3_cpt,__TT4_cpt,__TT5_cpt,__TT6_cpt,__TT7_cpt
-  { ((true = true) ->
-     (JC_126:
-     ((f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
-       integer_of_uint32(__ConsignerPanne_cpt_t0),
-       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,
-       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-      and (f_cond_OK(__TT1_v0, integer_of_uint32(__TT1_cpt@),
-           integer_of_uint32(__ConsignerPanne_cpt_t1),
-           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
-           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-          and (f_cond_OK(__TT2_v0, integer_of_uint32(__TT2_cpt@),
-               integer_of_uint32(__ConsignerPanne_cpt_t2),
-               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT2_v0_4,
-               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-              and (f_cond_OK(__TT3_v0, integer_of_uint32(__TT3_cpt@),
-                   integer_of_uint32(__ConsignerPanne_cpt_t3),
-                   enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT3_v0_5,
-                   enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                  and (f_cond_OK(__TT4_v0, integer_of_uint32(__TT4_cpt@),
-                       integer_of_uint32(__ConsignerPanne_cpt_t4),
-                       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT4_v0_6,
-                       enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                      and (f_cond_OK(__TT5_v0, integer_of_uint32(__TT5_cpt@),
-                           integer_of_uint32(__ConsignerPanne_cpt_t5),
-                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT5_v0_7,
-                           enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                          and (f_cond_OK(__TT6_v0,
-                               integer_of_uint32(__TT6_cpt@),
-                               integer_of_uint32(__ConsignerPanne_cpt_t6),
-                               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT6_v0_8,
-                               enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
-                              and f_cond_OK(__TT7_v0,
-                                  integer_of_uint32(__TT7_cpt@),
-                                  integer_of_uint32(__ConsignerPanne_cpt_t7),
-                                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT7_v0_9,
-                                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)))))))) ->
-      eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1))))) }
+  { (JC_126:
+    ((f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
+      integer_of_uint32(__ConsignerPanne_cpt_t0),
+      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,
+      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+     and (f_cond_OK(__TT1_v0, integer_of_uint32(__TT1_cpt@),
+          integer_of_uint32(__ConsignerPanne_cpt_t1),
+          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
+          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+         and (f_cond_OK(__TT2_v0, integer_of_uint32(__TT2_cpt@),
+              integer_of_uint32(__ConsignerPanne_cpt_t2),
+              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT2_v0_4,
+              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+             and (f_cond_OK(__TT3_v0, integer_of_uint32(__TT3_cpt@),
+                  integer_of_uint32(__ConsignerPanne_cpt_t3),
+                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT3_v0_5,
+                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                 and (f_cond_OK(__TT4_v0, integer_of_uint32(__TT4_cpt@),
+                      integer_of_uint32(__ConsignerPanne_cpt_t4),
+                      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT4_v0_6,
+                      enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                     and (f_cond_OK(__TT5_v0, integer_of_uint32(__TT5_cpt@),
+                          integer_of_uint32(__ConsignerPanne_cpt_t5),
+                          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT5_v0_7,
+                          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                         and (f_cond_OK(__TT6_v0,
+                              integer_of_uint32(__TT6_cpt@),
+                              integer_of_uint32(__ConsignerPanne_cpt_t6),
+                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT6_v0_8,
+                              enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)
+                             and f_cond_OK(__TT7_v0,
+                                 integer_of_uint32(__TT7_cpt@),
+                                 integer_of_uint32(__ConsignerPanne_cpt_t7),
+                                 enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT7_v0_9,
+                                 enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)))))))) ->
+     eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1)))) }
 
 parameter safe___anonenum_T_ID_TEST_2_of_integer_ :
  x:int ->
@@ -1652,84 +1646,78 @@ parameter uint32_of_integer_ :
 
 let phase1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_123:
-        ((JC_105:
-         le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT0_v0_2_alloc_table,
+  { (JC_123:
+    ((JC_105:
+     le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT0_v0_2_alloc_table,
+            __TT0_v0),
+     integer_of_uint32(__TT0_cpt)))
+    and ((JC_106:
+         ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT0_v0_2_alloc_table,
                 __TT0_v0),
-         integer_of_uint32(__TT0_cpt)))
-        and ((JC_106:
-             ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT0_v0_2_alloc_table,
-                    __TT0_v0),
-             add_int(integer_of_uint32(__TT0_cpt), (1))))
-            and ((JC_107:
-                 le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT1_v0_3_alloc_table,
+         add_int(integer_of_uint32(__TT0_cpt), (1))))
+        and ((JC_107:
+             le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT1_v0_3_alloc_table,
+                    __TT1_v0),
+             integer_of_uint32(__TT1_cpt)))
+            and ((JC_108:
+                 ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT1_v0_3_alloc_table,
                         __TT1_v0),
-                 integer_of_uint32(__TT1_cpt)))
-                and ((JC_108:
-                     ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT1_v0_3_alloc_table,
-                            __TT1_v0),
-                     add_int(integer_of_uint32(__TT1_cpt), (1))))
-                    and ((JC_109:
-                         le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT2_v0_4_alloc_table,
+                 add_int(integer_of_uint32(__TT1_cpt), (1))))
+                and ((JC_109:
+                     le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT2_v0_4_alloc_table,
+                            __TT2_v0),
+                     integer_of_uint32(__TT2_cpt)))
+                    and ((JC_110:
+                         ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT2_v0_4_alloc_table,
                                 __TT2_v0),
-                         integer_of_uint32(__TT2_cpt)))
-                        and ((JC_110:
-                             ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT2_v0_4_alloc_table,
-                                    __TT2_v0),
-                             add_int(integer_of_uint32(__TT2_cpt), (1))))
-                            and ((JC_111:
-                                 le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT3_v0_5_alloc_table,
+                         add_int(integer_of_uint32(__TT2_cpt), (1))))
+                        and ((JC_111:
+                             le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT3_v0_5_alloc_table,
+                                    __TT3_v0),
+                             integer_of_uint32(__TT3_cpt)))
+                            and ((JC_112:
+                                 ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT3_v0_5_alloc_table,
                                         __TT3_v0),
-                                 integer_of_uint32(__TT3_cpt)))
-                                and ((JC_112:
-                                     ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT3_v0_5_alloc_table,
-                                            __TT3_v0),
-                                     add_int(integer_of_uint32(__TT3_cpt),
-                                     (1))))
-                                    and ((JC_113:
-                                         le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT4_v0_6_alloc_table,
+                                 add_int(integer_of_uint32(__TT3_cpt), (1))))
+                                and ((JC_113:
+                                     le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT4_v0_6_alloc_table,
+                                            __TT4_v0),
+                                     integer_of_uint32(__TT4_cpt)))
+                                    and ((JC_114:
+                                         ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT4_v0_6_alloc_table,
                                                 __TT4_v0),
-                                         integer_of_uint32(__TT4_cpt)))
-                                        and ((JC_114:
-                                             ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT4_v0_6_alloc_table,
-                                                    __TT4_v0),
-                                             add_int(integer_of_uint32(__TT4_cpt),
-                                             (1))))
-                                            and ((JC_115:
-                                                 le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT5_v0_7_alloc_table,
+                                         add_int(integer_of_uint32(__TT4_cpt),
+                                         (1))))
+                                        and ((JC_115:
+                                             le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT5_v0_7_alloc_table,
+                                                    __TT5_v0),
+                                             integer_of_uint32(__TT5_cpt)))
+                                            and ((JC_116:
+                                                 ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT5_v0_7_alloc_table,
                                                         __TT5_v0),
-                                                 integer_of_uint32(__TT5_cpt)))
-                                                and ((JC_116:
-                                                     ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT5_v0_7_alloc_table,
-                                                            __TT5_v0),
-                                                     add_int(integer_of_uint32(__TT5_cpt),
-                                                     (1))))
-                                                    and ((JC_117:
-                                                         le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT6_v0_8_alloc_table,
+                                                 add_int(integer_of_uint32(__TT5_cpt),
+                                                 (1))))
+                                                and ((JC_117:
+                                                     le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT6_v0_8_alloc_table,
+                                                            __TT6_v0),
+                                                     integer_of_uint32(__TT6_cpt)))
+                                                    and ((JC_118:
+                                                         ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT6_v0_8_alloc_table,
                                                                 __TT6_v0),
-                                                         integer_of_uint32(__TT6_cpt)))
-                                                        and ((JC_118:
-                                                             ge_int(offset_max(enum___anonenum_T_RESULTAT_1_P___TT6_v0_8_alloc_table,
-                                                                    __TT6_v0),
-                                                             add_int(
-                                                             integer_of_uint32(__TT6_cpt),
-                                                             (1))))
-                                                            and ((JC_119:
-                                                                 le_int(
-                                                                 offset_min(enum___anonenum_T_RESULTAT_1_P___TT7_v0_9_alloc_table,
-                                                                 __TT7_v0),
-                                                                 integer_of_uint32(__TT7_cpt)))
-                                                                and (
-                                                                    (JC_120:
-                                                                    ge_int(
-                                                                    offset_max(enum___anonenum_T_RESULTAT_1_P___TT7_v0_9_alloc_table,
+                                                         add_int(integer_of_uint32(__TT6_cpt),
+                                                         (1))))
+                                                        and ((JC_119:
+                                                             le_int(offset_min(enum___anonenum_T_RESULTAT_1_P___TT7_v0_9_alloc_table,
                                                                     __TT7_v0),
-                                                                    add_int(
-                                                                    integer_of_uint32(__TT7_cpt),
-                                                                    (1))))
-                                                                    and 
-                                                                    (
+                                                             integer_of_uint32(__TT7_cpt)))
+                                                            and ((JC_120:
+                                                                 ge_int(
+                                                                 offset_max(enum___anonenum_T_RESULTAT_1_P___TT7_v0_9_alloc_table,
+                                                                 __TT7_v0),
+                                                                 add_int(
+                                                                 integer_of_uint32(__TT7_cpt),
+                                                                 (1))))
+                                                                and (
                                                                     (JC_121:
                                                                     le_int(
                                                                     offset_min(enum___anonenum_T_RESULTAT_1_P___ConsignerPanne_v0_1_alloc_table,
@@ -1742,7 +1730,7 @@ let phase1_ensures_default =
                                                                     __ConsignerPanne_v0),
                                                                     add_int(
                                                                     integer_of_uint32(__ConsignerPanne_cpt),
-                                                                    (7))))))))))))))))))))))) }
+                                                                    (7)))))))))))))))))))))) }
   (init:
   (let return = ref (any___anonenum_T_RESULTAT_1 void) in
   try
@@ -2170,91 +2158,91 @@ why --project [...] why/phase1.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/phase1_po3.why">
-      <location file = "why/phase1.why" line = "1767" begin = "39" end = "214"/>
+      <location file = "why/phase1.why" line = "1757" begin = "39" end = "214"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/phase1_po4.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "234" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "232" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po5.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "234" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "232" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po6.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "236" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "234" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po7.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "236" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "234" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po8.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "238" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "236" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po9.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "238" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "236" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po10.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "240" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "238" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po11.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "240" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "238" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po12.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "242" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "240" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po13.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "242" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "240" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po14.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "244" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "242" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po15.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "244" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "242" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po16.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "246" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "244" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po17.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "246" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "244" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po18.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "248" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "246" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po19.why">
-      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "248" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase1.jessie/phase1.jc" line = "246" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po20.why">
-      <location file = "why/phase1.why" line = "1868" begin = "26" end = "109"/>
+      <location file = "why/phase1.why" line = "1858" begin = "26" end = "109"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2409,7 +2397,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2464,7 +2482,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2483,6 +2505,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

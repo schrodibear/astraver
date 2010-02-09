@@ -3,9 +3,9 @@ next subset of the same size as the given one. */
 
 #include <stdlib.h>
 
-extern long int strtol(const char * restrict nptr,char ** restrict endptr,int base);
+// extern long int strtol(const char * restrict nptr,char ** restrict endptr,int base);
 
-extern int printf (const char* restrict fmt,...);
+// extern int printf (const char* restrict fmt,...);
 
 extern void exit(int status);
 

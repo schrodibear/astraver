@@ -30,20 +30,7 @@ module Behavior: STRING
 module Analysis: BOOL
 module WhyOpt: STRING_SET
 module JcOpt: STRING_SET
-
-(*
-type int_model = IMexact | IMbounded | IMmodulo
-module IntModel: sig
-  include STRING
-  val get_val: unit -> int_model
-end
-*)
-
 module GenOnly: BOOL
-(*
-module SepRegions: BOOL
-*)
-(*module StdStubs: BOOL*)
 module InferAnnot: STRING
 module AbsDomain: STRING
 module Atp: STRING

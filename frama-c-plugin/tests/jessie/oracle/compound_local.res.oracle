@@ -57,7 +57,6 @@ unit f(S[..] s)
                      ((C_23 : (\offset_min(s.p) <= 0)) &&
                        (C_24 : (\offset_max(s.p) >= 0)))));
 behavior default:
-  assumes true;
   ensures (C_25 : ((C_26 : (s.i.int_M == 1)) && (C_27 : (s.p.int_M == 2))));
 {  
    (var int_P[..] tmp);
@@ -77,7 +76,6 @@ unit fc(T[..] t)
   requires (C_41 : ((C_42 : (\offset_min(t) <= 0)) &&
                      (C_43 : (\offset_max(t) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_44 : ((C_45 : (t.ti == 1)) && (C_46 : (t.tj == 2))));
 {  
    (var T[0] tmp_0);
@@ -791,16 +789,14 @@ parameter f :
      S_s_1_alloc_table:S alloc_table ->
       S_i_s_1:(S, int_P pointer) memory ->
        { } unit reads S_p_s_1,int_P_int_M_s_1 writes S_p_s_1,int_P_int_M_s_1
-       { ((true = true) ->
-          (JC_18:
-          ((JC_16:
-           eq_int(integer_of_int32(select(int_P_int_M_s_1,
-                                   select(S_i_s_1, s))),
-           (1)))
-          and (JC_17:
-              eq_int(integer_of_int32(select(int_P_int_M_s_1,
-                                      select(S_p_s_1, s))),
-              (2)))))) }
+       { (JC_18:
+         ((JC_16:
+          eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_i_s_1, s))),
+          (1)))
+         and (JC_17:
+             eq_int(integer_of_int32(select(int_P_int_M_s_1,
+                                     select(S_p_s_1, s))),
+             (2))))) }
 
 parameter f_requires :
  s:S pointer ->
@@ -821,16 +817,14 @@ parameter f_requires :
                             select(S_p_s_1, s)),
                      (0)))))))}
        unit reads S_p_s_1,int_P_int_M_s_1 writes S_p_s_1,int_P_int_M_s_1
-       { ((true = true) ->
-          (JC_18:
-          ((JC_16:
-           eq_int(integer_of_int32(select(int_P_int_M_s_1,
-                                   select(S_i_s_1, s))),
-           (1)))
-          and (JC_17:
-              eq_int(integer_of_int32(select(int_P_int_M_s_1,
-                                      select(S_p_s_1, s))),
-              (2)))))) }
+       { (JC_18:
+         ((JC_16:
+          eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_i_s_1, s))),
+          (1)))
+         and (JC_17:
+             eq_int(integer_of_int32(select(int_P_int_M_s_1,
+                                     select(S_p_s_1, s))),
+             (2))))) }
 
 parameter fc :
  t:T pointer ->
@@ -838,10 +832,9 @@ parameter fc :
    T_ti_t_2:(T, int32) memory ref ->
     T_t_2_alloc_table:T alloc_table ->
      { } unit reads T_ti_t_2,T_tj_t_2 writes T_ti_t_2,T_tj_t_2
-     { ((true = true) ->
-        (JC_45:
-        ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
-        and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2)))))) }
+     { (JC_45:
+       ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
+       and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2))))) }
 
 parameter fc_requires :
  t:T pointer ->
@@ -852,10 +845,9 @@ parameter fc_requires :
        ((JC_32: le_int(offset_min(T_t_2_alloc_table, t), (0)))
        and (JC_33: ge_int(offset_max(T_t_2_alloc_table, t), (0)))))}
      unit reads T_ti_t_2,T_tj_t_2 writes T_ti_t_2,T_tj_t_2
-     { ((true = true) ->
-        (JC_45:
-        ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
-        and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2)))))) }
+     { (JC_45:
+       ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
+       and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -875,17 +867,15 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (s : S pointer) (int_P_int_M_s_1 : (int_P, int32) memory ref) (S_p_s_1 : (S, int_P pointer) memory ref) (S_s_1_alloc_table : S alloc_table) (int_P_s_1_alloc_table : int_P alloc_table) (S_i_s_1 : (S, int_P pointer) memory) ->
-  { ((true = true)
-    and (JC_11:
-        ((JC_7: le_int(offset_min(S_s_1_alloc_table, s), (0)))
-        and ((JC_8: ge_int(offset_max(S_s_1_alloc_table, s), (0)))
-            and ((JC_9:
-                 le_int(offset_min(int_P_s_1_alloc_table, select(S_p_s_1, s)),
-                 (0)))
-                and (JC_10:
-                    ge_int(offset_max(int_P_s_1_alloc_table,
-                           select(S_p_s_1, s)),
-                    (0)))))))) }
+  { (JC_11:
+    ((JC_7: le_int(offset_min(S_s_1_alloc_table, s), (0)))
+    and ((JC_8: ge_int(offset_max(S_s_1_alloc_table, s), (0)))
+        and ((JC_9:
+             le_int(offset_min(int_P_s_1_alloc_table, select(S_p_s_1, s)),
+             (0)))
+            and (JC_10:
+                ge_int(offset_max(int_P_s_1_alloc_table, select(S_p_s_1, s)),
+                (0))))))) }
   (init:
   try
    begin
@@ -1027,10 +1017,9 @@ let f_safety =
 
 let fc_ensures_default =
  fun (t : T pointer) (T_ti_t_2 : (T, int32) memory ref) (T_tj_t_2 : (T, int32) memory ref) (T_t_2_alloc_table : T alloc_table) ->
-  { ((true = true)
-    and (JC_38:
-        ((JC_36: le_int(offset_min(T_t_2_alloc_table, t), (0)))
-        and (JC_37: ge_int(offset_max(T_t_2_alloc_table, t), (0)))))) }
+  { (JC_38:
+    ((JC_36: le_int(offset_min(T_t_2_alloc_table, t), (0)))
+    and (JC_37: ge_int(offset_max(T_t_2_alloc_table, t), (0))))) }
   (init:
   try
    begin
@@ -1174,31 +1163,31 @@ why --project [...] why/compound_local.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/compound_local_po19.why">
-      <location file = "why/compound_local.why" line = "1015" begin = "36" end = "172"/>
+      <location file = "why/compound_local.why" line = "1006" begin = "36" end = "172"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/compound_local_po20.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "83" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "81" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po21.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "83" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "81" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po22.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "84" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "82" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po23.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "84" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "82" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po24.why">
-      <location file = "why/compound_local.why" line = "1053" begin = "11" end = "56"/>
+      <location file = "why/compound_local.why" line = "1044" begin = "11" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1228,12 +1217,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po5.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "60" begin = "14" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "59" begin = "14" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po6.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "60" begin = "14" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "59" begin = "14" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1258,22 +1247,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po11.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "61" begin = "15" end = "62"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po12.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "61" begin = "15" end = "62"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po13.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "63" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po14.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "63" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1437,7 +1426,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1492,7 +1511,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1511,6 +1534,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

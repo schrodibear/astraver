@@ -53,7 +53,6 @@ unit g(int_P[..] i)
   requires (C_3 : ((C_4 : (\offset_min(i) <= 0)) &&
                     (C_5 : (\offset_max(i) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_6 : (i.int_M == 1));
 {  
    {  (C_2 : ((C_1 : i.int_M) = 1));
@@ -68,7 +67,6 @@ unit f(t[..] a)
                      ((C_16 : (\offset_min(a.tab) <= 0)) &&
                        (C_17 : (\offset_max(a.tab) >= 4)))));
 behavior default:
-  assumes true;
   ensures (C_18 : true);
 {  
    {  (C_9 : g((C_8 : ((C_7 : a.tab) + 0))));
@@ -833,8 +831,7 @@ parameter g :
   int_P_int_M_i_1:(int_P, int32) memory ref ->
    int_P_i_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_i_1 writes int_P_int_M_i_1
-    { ((true = true) ->
-       (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1)))) }
+    { (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1))) }
 
 parameter g_requires :
  i:int_P pointer ->
@@ -844,8 +841,7 @@ parameter g_requires :
       ((JC_1: le_int(offset_min(int_P_i_1_alloc_table, i), (0)))
       and (JC_2: ge_int(offset_max(int_P_i_1_alloc_table, i), (0)))))}
     unit reads int_P_int_M_i_1 writes int_P_int_M_i_1
-    { ((true = true) ->
-       (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1)))) }
+    { (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -865,18 +861,16 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (a : t pointer) (int_P_int_M_a_2 : (int_P, int32) memory ref) (int_P_a_2_alloc_table : int_P alloc_table) (t_a_2_alloc_table : t alloc_table) (t_tab_a_2 : (t, int_P pointer) memory) ->
-  { ((true = true)
-    and (JC_24:
-        ((JC_20: le_int(offset_min(t_a_2_alloc_table, a), (0)))
-        and ((JC_21: ge_int(offset_max(t_a_2_alloc_table, a), (0)))
-            and ((JC_22:
-                 le_int(offset_min(int_P_a_2_alloc_table,
-                        select(t_tab_a_2, a)),
-                 (0)))
-                and (JC_23:
-                    ge_int(offset_max(int_P_a_2_alloc_table,
-                           select(t_tab_a_2, a)),
-                    (4)))))))) }
+  { (JC_24:
+    ((JC_20: le_int(offset_min(t_a_2_alloc_table, a), (0)))
+    and ((JC_21: ge_int(offset_max(t_a_2_alloc_table, a), (0)))
+        and ((JC_22:
+             le_int(offset_min(int_P_a_2_alloc_table, select(t_tab_a_2, a)),
+             (0)))
+            and (JC_23:
+                ge_int(offset_max(int_P_a_2_alloc_table,
+                       select(t_tab_a_2, a)),
+                (4))))))) }
   (init:
   try
    begin
@@ -940,10 +934,9 @@ let f_safety =
 
 let g_ensures_default =
  fun (i : int_P pointer) (int_P_int_M_i_1 : (int_P, int32) memory ref) (int_P_i_1_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_7:
-        ((JC_5: le_int(offset_min(int_P_i_1_alloc_table, i), (0)))
-        and (JC_6: ge_int(offset_max(int_P_i_1_alloc_table, i), (0)))))) }
+  { (JC_7:
+    ((JC_5: le_int(offset_min(int_P_i_1_alloc_table, i), (0)))
+    and (JC_6: ge_int(offset_max(int_P_i_1_alloc_table, i), (0))))) }
   (init:
   try
    begin
@@ -994,12 +987,12 @@ why --project [...] why/array_field_addr.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_field_addr_po6.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "53" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "52" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_field_addr_po7.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "53" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "52" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1020,12 +1013,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_field_addr_po3.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "68" begin = "13" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "66" begin = "13" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_field_addr_po4.why">
-      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "68" begin = "13" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "66" begin = "13" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1180,7 +1173,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1235,7 +1258,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1254,6 +1281,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

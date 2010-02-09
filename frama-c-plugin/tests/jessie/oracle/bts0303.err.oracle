@@ -1,4 +1,4 @@
-File "why/bts0303.why", line 819, characters 123-138:
+File "why/bts0303.why", line 817, characters 123-138:
 Application to int_P_int_M_a_5 creates an alias
 make: *** [why/bts0303.wpr] Error 1
 make: *** [bts0303.regtest] Error 2

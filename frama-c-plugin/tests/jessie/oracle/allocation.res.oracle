@@ -35,7 +35,6 @@ type void_P = [void_P]
 char_P[..] f(int32 n)
   requires (C_3 : (n > 0));
 behavior default:
-  assumes true;
   ensures (C_4 : ((C_5 : (\offset_min(\result) <= 0)) &&
                    (C_6 : (\offset_max(\result) >= (n - 1)))));
 {  
@@ -368,12 +367,11 @@ parameter f :
    char_P_result_1_tag_table:char_P tag_table ref ->
     { } char_P pointer reads char_P_result_1_alloc_table
     writes char_P_result_1_alloc_table,char_P_result_1_tag_table
-    { ((true = true) ->
-       (JC_10:
-       ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
-       and (JC_9:
-           ge_int(offset_max(char_P_result_1_alloc_table, result),
-           sub_int(integer_of_int32(n), (1))))))) }
+    { (JC_10:
+      ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
+      and (JC_9:
+          ge_int(offset_max(char_P_result_1_alloc_table, result),
+          sub_int(integer_of_int32(n), (1)))))) }
 
 parameter f_requires :
  n:int32 ->
@@ -382,12 +380,11 @@ parameter f_requires :
     { (JC_1: gt_int(integer_of_int32(n), (0)))} char_P pointer
     reads char_P_result_1_alloc_table
     writes char_P_result_1_alloc_table,char_P_result_1_tag_table
-    { ((true = true) ->
-       (JC_10:
-       ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
-       and (JC_9:
-           ge_int(offset_max(char_P_result_1_alloc_table, result),
-           sub_int(integer_of_int32(n), (1))))))) }
+    { (JC_10:
+      ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
+      and (JC_9:
+          ge_int(offset_max(char_P_result_1_alloc_table, result),
+          sub_int(integer_of_int32(n), (1)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -407,7 +404,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (n : int32) (char_P_result_1_alloc_table : char_P alloc_table ref) (char_P_result_1_tag_table : char_P tag_table ref) ->
-  { ((true = true) and (JC_3: gt_int(integer_of_int32(n), (0)))) }
+  { (JC_3: gt_int(integer_of_int32(n), (0))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -624,7 +621,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -679,7 +706,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -698,6 +729,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

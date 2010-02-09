@@ -58,10 +58,8 @@ int32 binary_search(double_P[..] t, int32 n, double v)
                      (((0 <= i_0) && (i_0 <= (n - 1))) ==>
                        (! \double_is_NaN((t + i_0).double_M)))));
 behavior default:
-  assumes true;
   ensures (C_37 : ((C_38 : ((- 1) <= \result)) && (C_39 : (\result < n))));
 behavior success:
-  assumes true;
   ensures (C_40 : ((\result >= 0) ==> \eq_double((t + \result).double_M, v)));
 behavior failure:
   assumes sorted{Here}(t, 0, (n - 1));
@@ -609,17 +607,15 @@ parameter binary_search :
            (forall k_1:int.
             ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n))) ->
              ne_double(select(double_P_double_M_t_2, shift(t_0, k_1)), v))))))
-        and (((true = true) ->
-              (JC_24:
-              (ge_int(integer_of_int32(result), (0)) ->
-               eq_double(select(double_P_double_M_t_2,
-                         shift(t_0, integer_of_int32(result))),
-               v))))
-            and ((true = true) ->
-                 (JC_20:
-                 ((JC_18: le_int(neg_int((1)), integer_of_int32(result)))
-                 and (JC_19:
-                     lt_int(integer_of_int32(result), integer_of_int32(n)))))))) }
+        and ((JC_24:
+             (ge_int(integer_of_int32(result), (0)) ->
+              eq_double(select(double_P_double_M_t_2,
+                        shift(t_0, integer_of_int32(result))),
+              v)))
+            and (JC_20:
+                ((JC_18: le_int(neg_int((1)), integer_of_int32(result)))
+                and (JC_19:
+                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
 
 parameter binary_search_requires :
  t_0:double_P pointer ->
@@ -648,17 +644,15 @@ parameter binary_search_requires :
            (forall k_1:int.
             ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n))) ->
              ne_double(select(double_P_double_M_t_2, shift(t_0, k_1)), v))))))
-        and (((true = true) ->
-              (JC_24:
-              (ge_int(integer_of_int32(result), (0)) ->
-               eq_double(select(double_P_double_M_t_2,
-                         shift(t_0, integer_of_int32(result))),
-               v))))
-            and ((true = true) ->
-                 (JC_20:
-                 ((JC_18: le_int(neg_int((1)), integer_of_int32(result)))
-                 and (JC_19:
-                     lt_int(integer_of_int32(result), integer_of_int32(n)))))))) }
+        and ((JC_24:
+             (ge_int(integer_of_int32(result), (0)) ->
+              eq_double(select(double_P_double_M_t_2,
+                        shift(t_0, integer_of_int32(result))),
+              v)))
+            and (JC_20:
+                ((JC_18: le_int(neg_int((1)), integer_of_int32(result)))
+                and (JC_19:
+                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -678,20 +672,19 @@ parameter safe_int8_of_integer_ :
 
 let binary_search_ensures_default =
  fun (t_0 : double_P pointer) (n : int32) (v : double) (double_P_t_2_alloc_table : double_P alloc_table) (double_P_double_M_t_2 : (double_P, double) memory) ->
-  { ((true = true)
-    and (JC_13:
-        ((JC_8: ge_int(integer_of_int32(n), (0)))
-        and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
-            and ((JC_10:
-                 ge_int(offset_max(double_P_t_2_alloc_table, t_0),
-                 sub_int(integer_of_int32(n), (1))))
-                and ((JC_11: (not double_is_NaN(v)))
-                    and (JC_12:
-                        (forall i_0:int.
-                         ((le_int((0), i_0)
-                          and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                          (not double_is_NaN(select(double_P_double_M_t_2,
-                                             shift(t_0, i_0))))))))))))) }
+  { (JC_13:
+    ((JC_8: ge_int(integer_of_int32(n), (0)))
+    and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+        and ((JC_10:
+             ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+             sub_int(integer_of_int32(n), (1))))
+            and ((JC_11: (not double_is_NaN(v)))
+                and (JC_12:
+                    (forall i_0:int.
+                     ((le_int((0), i_0)
+                      and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
+                      (not double_is_NaN(select(double_P_double_M_t_2,
+                                         shift(t_0, i_0)))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1054,20 +1047,19 @@ let binary_search_ensures_failure =
 
 let binary_search_ensures_success =
  fun (t_0 : double_P pointer) (n : int32) (v : double) (double_P_t_2_alloc_table : double_P alloc_table) (double_P_double_M_t_2 : (double_P, double) memory) ->
-  { ((true = true)
-    and (JC_13:
-        ((JC_8: ge_int(integer_of_int32(n), (0)))
-        and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
-            and ((JC_10:
-                 ge_int(offset_max(double_P_t_2_alloc_table, t_0),
-                 sub_int(integer_of_int32(n), (1))))
-                and ((JC_11: (not double_is_NaN(v)))
-                    and (JC_12:
-                        (forall i_0:int.
-                         ((le_int((0), i_0)
-                          and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                          (not double_is_NaN(select(double_P_double_M_t_2,
-                                             shift(t_0, i_0))))))))))))) }
+  { (JC_13:
+    ((JC_8: ge_int(integer_of_int32(n), (0)))
+    and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+        and ((JC_10:
+             ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+             sub_int(integer_of_int32(n), (1))))
+            and ((JC_11: (not double_is_NaN(v)))
+                and (JC_12:
+                    (forall i_0:int.
+                     ((le_int((0), i_0)
+                      and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
+                      (not double_is_NaN(select(double_P_double_M_t_2,
+                                         shift(t_0, i_0)))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1719,7 +1711,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1774,7 +1796,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1793,6 +1819,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

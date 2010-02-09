@@ -61,7 +61,6 @@ int32 f(S[0] v_x)
   requires (C_43 : ((C_44 : (\offset_min(v_x.s) <= 0)) &&
                      (C_45 : (\offset_max(v_x.s) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_46 : true);
 {  
    (var S[0] x);
@@ -781,18 +780,16 @@ parameter uint8_of_integer_ :
 
 let f_ensures_default =
  fun (v_x : S pointer) (A_v_s_3 : (A, uint8) memory ref) (A_v_x_2_alloc_table : A alloc_table) (A_s_3_alloc_table : A alloc_table) (S_v_x_2_alloc_table : S alloc_table) (S_s_3_alloc_table : S alloc_table) (A_v_v_x_2 : (A, uint8) memory) (S_a_v_x_2 : (S, A pointer) memory) (S_a_s_3 : (S, A pointer) memory) (S_b_v_x_2 : (S, A pointer) memory) (S_c_v_x_2 : (S, A pointer) memory) (S_s_v_x_2 : (S, S pointer) memory) (S_i_v_x_2 : (S, uint8) memory) ->
-  { ((true = true)
-    and (valid_struct_S(v_x, (0), (0), A_v_x_2_alloc_table,
-         S_v_x_2_alloc_table, S_a_v_x_2, S_c_v_x_2)
-        and (JC_12:
-            ((JC_10:
-             ((JC_8:
-              le_int(offset_min(S_s_3_alloc_table, select(S_s_v_x_2, v_x)),
-              (0)))
-             and (JC_9:
-                 ge_int(offset_max(S_s_3_alloc_table, select(S_s_v_x_2, v_x)),
-                 (0)))))
-            and (JC_11: valid_aaa(S_aaa_1_alloc_table)))))) }
+  { (valid_struct_S(v_x, (0), (0), A_v_x_2_alloc_table, S_v_x_2_alloc_table,
+     S_a_v_x_2, S_c_v_x_2)
+    and (JC_12:
+        ((JC_10:
+         ((JC_8:
+          le_int(offset_min(S_s_3_alloc_table, select(S_s_v_x_2, v_x)), (0)))
+         and (JC_9:
+             ge_int(offset_max(S_s_3_alloc_table, select(S_s_v_x_2, v_x)),
+             (0)))))
+        and (JC_11: valid_aaa(S_aaa_1_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1102,7 +1099,7 @@ why --project [...] why/struct4.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct4_po2.why">
-      <location file = "why/struct4.why" line = "875" begin = "31" end = "114"/>
+      <location file = "why/struct4.why" line = "873" begin = "31" end = "114"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct4_po3.why">
@@ -1126,7 +1123,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct4_po7.why">
-      <location file = "why/struct4.why" line = "983" begin = "12" end = "49"/>
+      <location file = "why/struct4.why" line = "981" begin = "12" end = "49"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1279,7 +1276,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1334,7 +1361,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1353,6 +1384,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

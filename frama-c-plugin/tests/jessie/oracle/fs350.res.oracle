@@ -42,7 +42,6 @@ int32 main(int32 argc, char_xP[..] argv)
   requires (C_17 : ((C_18 : (\offset_min(argv) <= 0)) &&
                      (C_19 : (\offset_max(argv) >= (argc - 1)))));
 behavior default:
-  assumes true;
   ensures (C_20 : true);
 {  
    (var int32 i);
@@ -558,15 +557,14 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (argc : int32) (argv : char_xP pointer) (char_xP_argv_1_alloc_table : char_xP alloc_table) (char_xP_char_xM_argv_1 : (char_xP, char_P pointer) memory) ->
-  { ((true = true)
-    and (JC_11:
-        ((JC_7: le_int((0), integer_of_int32(argc)))
-        and ((JC_8: le_int(integer_of_int32(argc), (10)))
-            and ((JC_9:
-                 le_int(offset_min(char_xP_argv_1_alloc_table, argv), (0)))
-                and (JC_10:
-                    ge_int(offset_max(char_xP_argv_1_alloc_table, argv),
-                    sub_int(integer_of_int32(argc), (1))))))))) }
+  { (JC_11:
+    ((JC_7: le_int((0), integer_of_int32(argc)))
+    and ((JC_8: le_int(integer_of_int32(argc), (10)))
+        and ((JC_9:
+             le_int(offset_min(char_xP_argv_1_alloc_table, argv), (0)))
+            and (JC_10:
+                ge_int(offset_max(char_xP_argv_1_alloc_table, argv),
+                sub_int(integer_of_int32(argc), (1)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -810,7 +808,7 @@ why --project [...] why/fs350.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fs350_po4.why">
-      <location file = "why/fs350.why" line = "624" begin = "31" end = "158"/>
+      <location file = "why/fs350.why" line = "623" begin = "31" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs350_po5.why">
@@ -824,12 +822,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs350_po7.why">
-      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "59" begin = "23" end = "83"/>
+      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "58" begin = "23" end = "83"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs350_po8.why">
-      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "59" begin = "23" end = "83"/>
+      <location file = "PPCHOME/tests/jessie/fs350.jessie/fs350.jc" line = "58" begin = "23" end = "83"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -844,15 +842,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs350_po11.why">
-      <location file = "why/fs350.why" line = "636" begin = "62" end = "63"/>
+      <location file = "why/fs350.why" line = "635" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/fs350_po12.why">
-      <location file = "why/fs350.why" line = "636" begin = "62" end = "63"/>
+      <location file = "why/fs350.why" line = "635" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/fs350_po13.why">
-      <location file = "why/fs350.why" line = "707" begin = "11" end = "54"/>
+      <location file = "why/fs350.why" line = "706" begin = "11" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1011,7 +1009,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1066,7 +1094,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1085,6 +1117,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

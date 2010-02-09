@@ -286,7 +286,11 @@ and case fmt (c,sl) =
 
 and behavior fmt (_loc,id,throws,assumes,requires,assigns,ensures) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
-  Option_misc.iter (fprintf fmt "@\nassumes %a;" pexpr) assumes;
+  Option_misc.iter 
+    (fun a ->
+(*       Format.eprintf "Jc_poutput: assumes %a@." pexpr a;*)
+       if is_not_true a then
+         fprintf fmt "@\nassumes %a;" pexpr a) assumes;
   Option_misc.iter (fprintf fmt "@\nrequires %a;" pexpr) requires;
   Option_misc.iter 
     (fun id -> fprintf fmt "@\nthrows %s;" id#name) throws;

@@ -66,7 +66,6 @@ integer remove_copy(int_P[..] a, integer n, int_P[..] b, integer val)
   requires (C_28 : ((C_29 : (\offset_min(b) <= 0)) &&
                      (C_30 : (\offset_max(b) >= (n - 1)))));
 behavior default:
-  assumes true;
   assigns (b + [0..(n - 1)]).int_M;
   ensures (C_31 : ((C_32 : (\forall integer k_1;
                              (((\result <= k_1) && (k_1 < n)) ==>
@@ -572,32 +571,31 @@ parameter remove_copy :
        int_P_a_2_alloc_table:int_P alloc_table ->
         int_P_int_M_a_2:(int_P, int) memory ->
          { } int reads int_P_int_M_b_3 writes int_P_int_M_b_3
-         { ((true = true) ->
-            (JC_32:
-            ((JC_30:
-             ((JC_24:
-              (forall k_1:int.
-               ((le_int(result, k_1) and lt_int(k_1, n_0)) ->
-                eq_int(select(int_P_int_M_b_3, shift(b, k_1)),
-                select(int_P_int_M_b_3@, shift(b@, k_1@))))))
-             and ((JC_25:
-                  (forall k_2:int.
-                   ((le_int((0), k_2) and lt_int(k_2, result)) ->
-                    neq_int(select(int_P_int_M_b_3, shift(b, k_2)), val_0))))
-                 and ((JC_26:
-                      (forall x_0:int.
-                       (neq_int(x_0, val_0) ->
-                        eq_int(cnt(a_0, n_0, x_0, int_P_int_M_a_2),
-                        cnt(b, result, x_0, int_P_int_M_b_3)))))
-                     and ((JC_27:
-                          eq_int(result,
-                          sub_int(n_0, cnt(a_0, n_0, val_0, int_P_int_M_a_2))))
-                         and ((JC_28: le_int((0), result))
-                             and (JC_29: le_int(result, n_0))))))))
-            and (JC_31:
-                not_assigns(int_P_b_3_alloc_table@, int_P_int_M_b_3@,
-                int_P_int_M_b_3,
-                pset_range(pset_singleton(b@), (0), sub_int(n_0@, (1)))))))) }
+         { (JC_32:
+           ((JC_30:
+            ((JC_24:
+             (forall k_1:int.
+              ((le_int(result, k_1) and lt_int(k_1, n_0)) ->
+               eq_int(select(int_P_int_M_b_3, shift(b, k_1)),
+               select(int_P_int_M_b_3@, shift(b@, k_1@))))))
+            and ((JC_25:
+                 (forall k_2:int.
+                  ((le_int((0), k_2) and lt_int(k_2, result)) ->
+                   neq_int(select(int_P_int_M_b_3, shift(b, k_2)), val_0))))
+                and ((JC_26:
+                     (forall x_0:int.
+                      (neq_int(x_0, val_0) ->
+                       eq_int(cnt(a_0, n_0, x_0, int_P_int_M_a_2),
+                       cnt(b, result, x_0, int_P_int_M_b_3)))))
+                    and ((JC_27:
+                         eq_int(result,
+                         sub_int(n_0, cnt(a_0, n_0, val_0, int_P_int_M_a_2))))
+                        and ((JC_28: le_int((0), result))
+                            and (JC_29: le_int(result, n_0))))))))
+           and (JC_31:
+               not_assigns(int_P_b_3_alloc_table@, int_P_int_M_b_3@,
+               int_P_int_M_b_3,
+               pset_range(pset_singleton(b@), (0), sub_int(n_0@, (1))))))) }
 
 parameter remove_copy_requires :
  a_0:int_P pointer ->
@@ -620,47 +618,44 @@ parameter remove_copy_requires :
                            ge_int(offset_max(int_P_b_3_alloc_table, b),
                            sub_int(n_0, (1)))))))))}
          int reads int_P_int_M_b_3 writes int_P_int_M_b_3
-         { ((true = true) ->
-            (JC_32:
-            ((JC_30:
-             ((JC_24:
-              (forall k_1:int.
-               ((le_int(result, k_1) and lt_int(k_1, n_0)) ->
-                eq_int(select(int_P_int_M_b_3, shift(b, k_1)),
-                select(int_P_int_M_b_3@, shift(b@, k_1@))))))
-             and ((JC_25:
-                  (forall k_2:int.
-                   ((le_int((0), k_2) and lt_int(k_2, result)) ->
-                    neq_int(select(int_P_int_M_b_3, shift(b, k_2)), val_0))))
-                 and ((JC_26:
-                      (forall x_0:int.
-                       (neq_int(x_0, val_0) ->
-                        eq_int(cnt(a_0, n_0, x_0, int_P_int_M_a_2),
-                        cnt(b, result, x_0, int_P_int_M_b_3)))))
-                     and ((JC_27:
-                          eq_int(result,
-                          sub_int(n_0, cnt(a_0, n_0, val_0, int_P_int_M_a_2))))
-                         and ((JC_28: le_int((0), result))
-                             and (JC_29: le_int(result, n_0))))))))
-            and (JC_31:
-                not_assigns(int_P_b_3_alloc_table@, int_P_int_M_b_3@,
-                int_P_int_M_b_3,
-                pset_range(pset_singleton(b@), (0), sub_int(n_0@, (1)))))))) }
+         { (JC_32:
+           ((JC_30:
+            ((JC_24:
+             (forall k_1:int.
+              ((le_int(result, k_1) and lt_int(k_1, n_0)) ->
+               eq_int(select(int_P_int_M_b_3, shift(b, k_1)),
+               select(int_P_int_M_b_3@, shift(b@, k_1@))))))
+            and ((JC_25:
+                 (forall k_2:int.
+                  ((le_int((0), k_2) and lt_int(k_2, result)) ->
+                   neq_int(select(int_P_int_M_b_3, shift(b, k_2)), val_0))))
+                and ((JC_26:
+                     (forall x_0:int.
+                      (neq_int(x_0, val_0) ->
+                       eq_int(cnt(a_0, n_0, x_0, int_P_int_M_a_2),
+                       cnt(b, result, x_0, int_P_int_M_b_3)))))
+                    and ((JC_27:
+                         eq_int(result,
+                         sub_int(n_0, cnt(a_0, n_0, val_0, int_P_int_M_a_2))))
+                        and ((JC_28: le_int((0), result))
+                            and (JC_29: le_int(result, n_0))))))))
+           and (JC_31:
+               not_assigns(int_P_b_3_alloc_table@, int_P_int_M_b_3@,
+               int_P_int_M_b_3,
+               pset_range(pset_singleton(b@), (0), sub_int(n_0@, (1))))))) }
 
 let remove_copy_ensures_default =
  fun (a_0 : int_P pointer) (n_0 : int) (b : int_P pointer) (val_0 : int) (int_P_int_M_b_3 : (int_P, int) memory ref) (int_P_a_2_alloc_table : int_P alloc_table) (int_P_b_3_alloc_table : int_P alloc_table) (int_P_int_M_a_2 : (int_P, int) memory) ->
-  { ((true = true)
-    and (JC_13:
-        ((JC_8: ge_int(n_0, (0)))
-        and ((JC_9: le_int(offset_min(int_P_a_2_alloc_table, a_0), (0)))
-            and ((JC_10:
-                 ge_int(offset_max(int_P_a_2_alloc_table, a_0),
-                 sub_int(n_0, (1))))
-                and ((JC_11:
-                     le_int(offset_min(int_P_b_3_alloc_table, b), (0)))
-                    and (JC_12:
-                        ge_int(offset_max(int_P_b_3_alloc_table, b),
-                        sub_int(n_0, (1)))))))))) }
+  { (JC_13:
+    ((JC_8: ge_int(n_0, (0)))
+    and ((JC_9: le_int(offset_min(int_P_a_2_alloc_table, a_0), (0)))
+        and ((JC_10:
+             ge_int(offset_max(int_P_a_2_alloc_table, a_0),
+             sub_int(n_0, (1))))
+            and ((JC_11: le_int(offset_min(int_P_b_3_alloc_table, b), (0)))
+                and (JC_12:
+                    ge_int(offset_max(int_P_b_3_alloc_table, b),
+                    sub_int(n_0, (1))))))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -997,12 +992,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/burghart1_po29.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "114" begin = "27" end = "216"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "113" begin = "27" end = "216"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/burghart1_po30.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "114" begin = "27" end = "216"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "113" begin = "27" end = "216"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1041,11 +1036,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po7.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "87" begin = "9" end = "1533"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1533"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po8.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "87" begin = "9" end = "1533"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1533"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po9.why">
@@ -1077,11 +1072,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po16.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "87" begin = "9" end = "1533"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1533"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po17.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "87" begin = "9" end = "1533"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1533"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po18.why">
@@ -1257,7 +1252,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1312,7 +1337,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1331,6 +1360,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

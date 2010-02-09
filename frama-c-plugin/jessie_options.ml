@@ -104,65 +104,12 @@ module WhyOpt =
        let descr = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
      end)
 
-(*
- obsolete
-
-type int_model = IMexact | IMbounded | IMmodulo
-let pp_int_model _ fmt im =
-  Format.fprintf fmt "%s"
-    (match im with
-     | IMexact -> "IMexact"
-     | IMbounded -> "IMbounded"
-     | IMmodulo -> "IMmodulo")
-
-let int_model =
-  Type.register ~name:"int_model" ~value_name:None ~pp:pp_int_model IMexact
-
-let imbounded =
-  Dynamic.register "imbounded" ~journalize:false int_model IMbounded
-let imexact = Dynamic.register "imexact" ~journalize:false int_model IMexact
-let immodulo = Dynamic.register "immodulo" ~journalize:false int_model IMmodulo
-
-module IntModel =
-  IndexedVal
-    (struct
-      type t = int_model
-      let default_val = IMbounded
-      let default_key = "bounded"
-      let option_name = "-jessie-int-model"
-      let arg_name = ""
-      let descr =
-	"set the model for integer arithmetic (exact, bounded or modulo)"
-      let module_name = "Jessie.IntModel"
-      let ty = int_model
-    end)
-let () = IntModel.add_choice "exact" imexact
-let () = IntModel.add_choice "modulo" immodulo
-*)
-
 module GenOnly =
   False(struct
 	  let option_name = "-jessie-gen-only"
 	  let module_name = "-jessie-gen-only"
 	  let descr = "only generates jessie code (for developer use)"
 	end)
-
-(*
-module SepRegions =
-  True(struct
-	 let option_name = "-jessie-regions"
-	 let module_name = "-jessie-regions"
-	 let descr = "separate memory into regions (for developer use)"
-       end)
-*)
-
-(*
-module StdStubs =
-  False(struct
-	  let option_name = "Jessie.StdStubs"
-	  let descr = ""
-	end)
-*)
 
 module InferAnnot =
   EmptyString

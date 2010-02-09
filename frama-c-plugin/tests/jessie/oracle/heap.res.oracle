@@ -172,7 +172,6 @@ bag_of_tree(tree_of_array{L}(heap, 0, size))
 
 unit clear()
 behavior default:
-  assumes true;
   assigns size;
   ensures (C_2 : (model() == empty_bag));
 {  
@@ -185,7 +184,6 @@ behavior default:
 unit push(int32 x)
   requires (C_27 : (size < (100 - 1)));
 behavior default:
-  assumes true;
   assigns (heap + [..]).int_M,
   size;
   ensures (C_28 : (model() == add_bag(x, \old(model()))));
@@ -246,7 +244,6 @@ behavior default:
 int32 max()
   requires (C_31 : (size > 0));
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_32 : is_max_bag(model(), \result));
 {  
@@ -261,7 +258,6 @@ behavior default:
 int32 pop()
   requires (C_66 : (size > 0));
 behavior default:
-  assumes true;
   assigns (heap + [..]).int_M,
   size;
   ensures (C_67 : (((C_69 : (size == (\old(size) - 1))) &&
@@ -904,8 +900,7 @@ parameter clear :
      ((JC_31: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_32: size_inv(size))
          and (JC_33: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_25: (model(int_P_int_M_heap_1, size) = empty_bag)))) }
+    and (JC_25: (model(int_P_int_M_heap_1, size) = empty_bag))) }
 
 parameter clear_requires :
  tt:unit ->
@@ -918,8 +913,7 @@ parameter clear_requires :
      ((JC_31: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_32: size_inv(size))
          and (JC_33: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_25: (model(int_P_int_M_heap_1, size) = empty_bag)))) }
+    and (JC_25: (model(int_P_int_M_heap_1, size) = empty_bag))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -938,10 +932,8 @@ parameter max :
      ((JC_107: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_108: size_inv(size))
          and (JC_109: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_101:
-         is_max_bag(model(int_P_int_M_heap_1, size),
-         integer_of_int32(result))))) }
+    and (JC_101:
+        is_max_bag(model(int_P_int_M_heap_1, size), integer_of_int32(result)))) }
 
 parameter max_requires :
  tt:unit ->
@@ -955,10 +947,8 @@ parameter max_requires :
      ((JC_107: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_108: size_inv(size))
          and (JC_109: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_101:
-         is_max_bag(model(int_P_int_M_heap_1, size),
-         integer_of_int32(result))))) }
+    and (JC_101:
+        is_max_bag(model(int_P_int_M_heap_1, size), integer_of_int32(result)))) }
 
 parameter pop :
  tt:unit ->
@@ -968,22 +958,21 @@ parameter pop :
      ((JC_139: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_140: size_inv(size))
          and (JC_141: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_134:
-         ((JC_132:
-          ((JC_129:
-           eq_int(integer_of_int32(size),
-           sub_int(integer_of_int32(size@), (1))))
-          and ((JC_130:
-               is_max_bag(model(int_P_int_M_heap_1@, size@),
-               integer_of_int32(result)))
-              and (JC_131:
-                  (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
-                                                       model(int_P_int_M_heap_1,
-                                                       size)))))))
-         and (JC_133:
-             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-             int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))))) }
+    and (JC_134:
+        ((JC_132:
+         ((JC_129:
+          eq_int(integer_of_int32(size),
+          sub_int(integer_of_int32(size@), (1))))
+         and ((JC_130:
+              is_max_bag(model(int_P_int_M_heap_1@, size@),
+              integer_of_int32(result)))
+             and (JC_131:
+                 (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
+                                                      model(int_P_int_M_heap_1,
+                                                      size)))))))
+        and (JC_133:
+            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
+            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter pop_requires :
  tt:unit ->
@@ -998,22 +987,21 @@ parameter pop_requires :
      ((JC_139: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_140: size_inv(size))
          and (JC_141: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_134:
-         ((JC_132:
-          ((JC_129:
-           eq_int(integer_of_int32(size),
-           sub_int(integer_of_int32(size@), (1))))
-          and ((JC_130:
-               is_max_bag(model(int_P_int_M_heap_1@, size@),
-               integer_of_int32(result)))
-              and (JC_131:
-                  (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
-                                                       model(int_P_int_M_heap_1,
-                                                       size)))))))
-         and (JC_133:
-             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-             int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))))) }
+    and (JC_134:
+        ((JC_132:
+         ((JC_129:
+          eq_int(integer_of_int32(size),
+          sub_int(integer_of_int32(size@), (1))))
+         and ((JC_130:
+              is_max_bag(model(int_P_int_M_heap_1@, size@),
+              integer_of_int32(result)))
+             and (JC_131:
+                 (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
+                                                      model(int_P_int_M_heap_1,
+                                                      size)))))))
+        and (JC_133:
+            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
+            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter push :
  x:int32 ->
@@ -1023,15 +1011,13 @@ parameter push :
      ((JC_57: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_58: size_inv(size))
          and (JC_59: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_52:
-         ((JC_50:
-          (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
-                                             model(int_P_int_M_heap_1@,
-                                             size@))))
-         and (JC_51:
-             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-             int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))))) }
+    and (JC_52:
+        ((JC_50:
+         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
+                                            model(int_P_int_M_heap_1@, size@))))
+        and (JC_51:
+            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
+            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter push_requires :
  x:int32 ->
@@ -1046,15 +1032,13 @@ parameter push_requires :
      ((JC_57: valid_heap(int_P_heap_1_alloc_table))
      and ((JC_58: size_inv(size))
          and (JC_59: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and ((true = true) ->
-         (JC_52:
-         ((JC_50:
-          (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
-                                             model(int_P_int_M_heap_1@,
-                                             size@))))
-         and (JC_51:
-             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-             int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))))) }
+    and (JC_52:
+        ((JC_50:
+         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
+                                            model(int_P_int_M_heap_1@, size@))))
+        and (JC_51:
+            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
+            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1064,11 +1048,10 @@ parameter safe_int8_of_integer_ :
 
 let clear_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_21:
-        ((JC_18: valid_heap(int_P_heap_1_alloc_table))
-        and ((JC_19: size_inv(size))
-            and (JC_20: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+  { (JC_21:
+    ((JC_18: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_19: size_inv(size))
+        and (JC_20: is_heap_inv(int_P_int_M_heap_1, size))))) }
   (init:
   try
    begin
@@ -1110,12 +1093,11 @@ let clear_safety =
 
 let max_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_97:
-        ((JC_93: gt_int(integer_of_int32(size), (0)))
-        and ((JC_94: valid_heap(int_P_heap_1_alloc_table))
-            and ((JC_95: size_inv(size))
-                and (JC_96: is_heap_inv(int_P_int_M_heap_1, size))))))) }
+  { (JC_97:
+    ((JC_93: gt_int(integer_of_int32(size), (0)))
+    and ((JC_94: valid_heap(int_P_heap_1_alloc_table))
+        and ((JC_95: size_inv(size))
+            and (JC_96: is_heap_inv(int_P_int_M_heap_1, size)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1171,12 +1153,11 @@ let max_safety =
 
 let pop_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_121:
-        ((JC_117: gt_int(integer_of_int32(size), (0)))
-        and ((JC_118: valid_heap(int_P_heap_1_alloc_table))
-            and ((JC_119: size_inv(size))
-                and (JC_120: is_heap_inv(int_P_int_M_heap_1, size))))))) }
+  { (JC_121:
+    ((JC_117: gt_int(integer_of_int32(size), (0)))
+    and ((JC_118: valid_heap(int_P_heap_1_alloc_table))
+        and ((JC_119: size_inv(size))
+            and (JC_120: is_heap_inv(int_P_int_M_heap_1, size)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1615,12 +1596,11 @@ let pop_safety =
 
 let push_ensures_default =
  fun (x : int32) ->
-  { ((true = true)
-    and (JC_45:
-        ((JC_41: lt_int(integer_of_int32(size), sub_int((100), (1))))
-        and ((JC_42: valid_heap(int_P_heap_1_alloc_table))
-            and ((JC_43: size_inv(size))
-                and (JC_44: is_heap_inv(int_P_int_M_heap_1, size))))))) }
+  { (JC_45:
+    ((JC_41: lt_int(integer_of_int32(size), sub_int((100), (1))))
+    and ((JC_42: valid_heap(int_P_heap_1_alloc_table))
+        and ((JC_43: size_inv(size))
+            and (JC_44: is_heap_inv(int_P_int_M_heap_1, size)))))) }
   (init:
   try
    begin
@@ -2033,30 +2013,30 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po76.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "226" begin = "27" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "27" end = "56"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po77.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "226" begin = "27" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "27" end = "56"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "why/heap.why" line = "1500" begin = "36" end = "65"/>
+      <location file = "why/heap.why" line = "1484" begin = "36" end = "65"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1500" begin = "36" end = "65"/>
+      <location file = "why/heap.why" line = "1484" begin = "36" end = "65"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "233" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "231" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po81.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "233" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "231" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2105,11 +2085,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po57.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "196" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "196" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
@@ -2137,11 +2117,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po65.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "196" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "196" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">
@@ -2268,12 +2248,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po43.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "304" begin = "30" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "300" begin = "30" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po44.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "304" begin = "30" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "300" begin = "30" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2286,12 +2266,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po47.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "312" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "308" begin = "18" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "312" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "308" begin = "18" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2318,11 +2298,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po11.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "280" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "276" begin = "12" end = "1452"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "280" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "276" begin = "12" end = "1452"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
@@ -2334,11 +2314,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po15.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "280" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "276" begin = "12" end = "1452"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "280" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "276" begin = "12" end = "1452"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">
@@ -2544,7 +2524,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2599,7 +2609,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2618,6 +2632,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

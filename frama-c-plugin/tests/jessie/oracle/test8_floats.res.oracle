@@ -33,7 +33,6 @@ type void_P = [void_P]
 double my_exp(double x)
   requires (C_7 : (\real_abs((x :> real)) <= 1.0));
 behavior default:
-  assumes true;
   ensures (C_8 : (((\double_exact(\result) == \exp(\double_exact(x))) &&
                     (\double_relative_error(x) == 0.0)) ==>
                    (\double_relative_error(\result) <= 0.04)));

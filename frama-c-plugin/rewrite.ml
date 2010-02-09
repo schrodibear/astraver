@@ -637,7 +637,8 @@ object
 	  end;
 	DoChildren
     | Call _ -> DoChildren
-    | Asm _ | Skip _ | Code_annot _ -> SkipChildren
+    | Asm _ | Skip _ -> SkipChildren
+    | Code_annot _ -> assert false
 
   method vexpr e =
     ignore(preaction_expr e); DoChildren
@@ -990,7 +991,8 @@ object
 	  end;
 	SkipChildren
     | Call _ -> SkipChildren
-    | Asm _ | Skip _ | Code_annot _ -> SkipChildren
+    | Asm _ | Skip _ -> SkipChildren
+    | Code_annot _ -> assert false
 
 end
 
@@ -1608,6 +1610,6 @@ let rewrite file =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.. -j bin/toplevel.byte"
+compile-command: "LC_ALL=C make -C . byte"
 End:
 *)

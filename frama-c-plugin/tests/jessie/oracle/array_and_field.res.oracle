@@ -52,7 +52,6 @@ invariant valid_sg :
 
 unit fg()
 behavior default:
-  assumes true;
   ensures (C_15 : ((C_16 : ((sg.aj + 0).i == ((sg.ai + 0).j - 1))) &&
                     (C_17 : ((sg.aj + 1).j == ((sg.ai + 0).i + 1)))));
 {  
@@ -71,7 +70,6 @@ behavior default:
 
 unit fl()
 behavior default:
-  assumes true;
   ensures (C_37 : true);
 {  
    (var T[0] lg);
@@ -704,20 +702,19 @@ parameter fg :
   reads S_i_sg_1,S_j_sg_1,S_sg_1_alloc_table,T_ai_sg_1,T_aj_sg_1,T_sg_1_alloc_table
   writes S_i_sg_1,S_j_sg_1
   { ((JC_14: valid_sg(T_sg_1_alloc_table))
-    and ((true = true) ->
-         (JC_12:
-         ((JC_10:
-          eq_int(integer_of_int32(select(S_i_sg_1,
-                                  shift(select(T_aj_sg_1, sg), (0)))),
-          sub_int(integer_of_int32(select(S_j_sg_1,
-                                   shift(select(T_ai_sg_1, sg), (0)))),
-          (1))))
-         and (JC_11:
-             eq_int(integer_of_int32(select(S_j_sg_1,
-                                     shift(select(T_aj_sg_1, sg), (1)))),
-             add_int(integer_of_int32(select(S_i_sg_1,
-                                      shift(select(T_ai_sg_1, sg), (0)))),
-             (1)))))))) }
+    and (JC_12:
+        ((JC_10:
+         eq_int(integer_of_int32(select(S_i_sg_1,
+                                 shift(select(T_aj_sg_1, sg), (0)))),
+         sub_int(integer_of_int32(select(S_j_sg_1,
+                                  shift(select(T_ai_sg_1, sg), (0)))),
+         (1))))
+        and (JC_11:
+            eq_int(integer_of_int32(select(S_j_sg_1,
+                                    shift(select(T_aj_sg_1, sg), (1)))),
+            add_int(integer_of_int32(select(S_i_sg_1,
+                                     shift(select(T_ai_sg_1, sg), (0)))),
+            (1))))))) }
 
 parameter fg_requires :
  tt:unit ->
@@ -725,20 +722,19 @@ parameter fg_requires :
   reads S_i_sg_1,S_j_sg_1,S_sg_1_alloc_table,T_ai_sg_1,T_aj_sg_1,T_sg_1_alloc_table
   writes S_i_sg_1,S_j_sg_1
   { ((JC_14: valid_sg(T_sg_1_alloc_table))
-    and ((true = true) ->
-         (JC_12:
-         ((JC_10:
-          eq_int(integer_of_int32(select(S_i_sg_1,
-                                  shift(select(T_aj_sg_1, sg), (0)))),
-          sub_int(integer_of_int32(select(S_j_sg_1,
-                                   shift(select(T_ai_sg_1, sg), (0)))),
-          (1))))
-         and (JC_11:
-             eq_int(integer_of_int32(select(S_j_sg_1,
-                                     shift(select(T_aj_sg_1, sg), (1)))),
-             add_int(integer_of_int32(select(S_i_sg_1,
-                                      shift(select(T_ai_sg_1, sg), (0)))),
-             (1)))))))) }
+    and (JC_12:
+        ((JC_10:
+         eq_int(integer_of_int32(select(S_i_sg_1,
+                                 shift(select(T_aj_sg_1, sg), (0)))),
+         sub_int(integer_of_int32(select(S_j_sg_1,
+                                  shift(select(T_ai_sg_1, sg), (0)))),
+         (1))))
+        and (JC_11:
+            eq_int(integer_of_int32(select(S_j_sg_1,
+                                    shift(select(T_aj_sg_1, sg), (1)))),
+            add_int(integer_of_int32(select(S_i_sg_1,
+                                     shift(select(T_ai_sg_1, sg), (0)))),
+            (1))))))) }
 
 parameter fl :
  tt:unit ->
@@ -767,7 +763,7 @@ parameter safe_int8_of_integer_ :
 
 let fg_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_5: valid_sg(T_sg_1_alloc_table))) }
+  { (JC_5: valid_sg(T_sg_1_alloc_table)) }
   (init:
   try
    begin
@@ -872,7 +868,7 @@ let fg_safety =
 
 let fl_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_19: valid_sg(T_sg_1_alloc_table))) }
+  { (JC_19: valid_sg(T_sg_1_alloc_table)) }
   (init:
   try
    begin
@@ -1053,7 +1049,7 @@ why --project [...] why/array_and_field.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_and_field_po10.why">
-      <location file = "why/array_and_field.why" line = "873" begin = "33" end = "160"/>
+      <location file = "why/array_and_field.why" line = "871" begin = "33" end = "160"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_and_field_po11.why">
@@ -1077,7 +1073,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po15.why">
-      <location file = "why/array_and_field.why" line = "927" begin = "17" end = "56"/>
+      <location file = "why/array_and_field.why" line = "925" begin = "17" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1271,7 +1267,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1326,7 +1352,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1345,6 +1375,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

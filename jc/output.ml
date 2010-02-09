@@ -610,7 +610,7 @@ let rec fprintf_expr form e =
 	  fprintf_assertion pre
 	  fprintf_expr e
     | Triple(o,pre,e,post,exceps) ->
-	fprintf form "@[<hv 0>(assert { %a };@ (%a)@ " 
+	fprintf form "@[<hv 0>(assert { %a };@ ((%a)@ " 
 	  fprintf_assertion pre
 	  fprintf_expr e;
 	begin
@@ -630,7 +630,7 @@ let rec fprintf_expr form e =
 		       fprintf_assertion r))
 		  l
 	end;
-	fprintf form ")@]"
+	fprintf form "))@]"
     | Assert(k,p, e) ->
 	fprintf form "@[<hv 0>(%s@ { %a };@ %a)@]" 
           (match k with `ASSERT -> "assert" | `CHECK -> "check")

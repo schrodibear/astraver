@@ -50,7 +50,6 @@ invariant eev :
 
 int16 test1()
 behavior default:
-  assumes true;
   assigns returnValue;
   ensures (C_6 : (\result >= 0));
 {  
@@ -63,7 +62,6 @@ behavior default:
 
 int16 test2()
 behavior default:
-  assumes true;
   assigns returnValue;
   ensures (C_16 : (\result >= 0));
 {  
@@ -78,7 +76,6 @@ behavior default:
 
 int16 test3()
 behavior default:
-  assumes true;
   assigns returnValue;
   ensures (C_18 : (\result >= 0));
 {  
@@ -481,46 +478,44 @@ parameter test1 :
  tt:unit ->
   { } int16 reads returnValue writes returnValue
   { ((JC_31: ((JC_28: tev) and ((JC_29: ev) and (JC_30: eev(returnValue)))))
-    and ((true = true) -> (JC_22: ge_int(integer_of_int16(result), (0))))) }
+    and (JC_22: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test1_requires :
  tt:unit ->
   { (JC_13: ((JC_10: tev) and ((JC_11: ev) and (JC_12: eev(returnValue)))))}
   int16 reads returnValue writes returnValue
   { ((JC_31: ((JC_28: tev) and ((JC_29: ev) and (JC_30: eev(returnValue)))))
-    and ((true = true) -> (JC_22: ge_int(integer_of_int16(result), (0))))) }
+    and (JC_22: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test2 :
  tt:unit ->
   { } int16 reads returnValue writes returnValue
   { ((JC_56: ((JC_53: tev) and ((JC_54: ev) and (JC_55: eev(returnValue)))))
-    and ((true = true) -> (JC_47: ge_int(integer_of_int16(result), (0))))) }
+    and (JC_47: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test2_requires :
  tt:unit ->
   { (JC_38: ((JC_35: tev) and ((JC_36: ev) and (JC_37: eev(returnValue)))))}
   int16 reads returnValue writes returnValue
   { ((JC_56: ((JC_53: tev) and ((JC_54: ev) and (JC_55: eev(returnValue)))))
-    and ((true = true) -> (JC_47: ge_int(integer_of_int16(result), (0))))) }
+    and (JC_47: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test3 :
  tt:unit ->
   { } int16 reads returnValue writes returnValue
   { ((JC_83: ((JC_80: tev) and ((JC_81: ev) and (JC_82: eev(returnValue)))))
-    and ((true = true) -> (JC_74: ge_int(integer_of_int16(result), (0))))) }
+    and (JC_74: ge_int(integer_of_int16(result), (0)))) }
 
 parameter test3_requires :
  tt:unit ->
   { (JC_65: ((JC_62: tev) and ((JC_63: ev) and (JC_64: eev(returnValue)))))}
   int16 reads returnValue writes returnValue
   { ((JC_83: ((JC_80: tev) and ((JC_81: ev) and (JC_82: eev(returnValue)))))
-    and ((true = true) -> (JC_74: ge_int(integer_of_int16(result), (0))))) }
+    and (JC_74: ge_int(integer_of_int16(result), (0)))) }
 
 let test1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_18:
-        ((JC_15: tev) and ((JC_16: ev) and (JC_17: eev(returnValue)))))) }
+  { (JC_18: ((JC_15: tev) and ((JC_16: ev) and (JC_17: eev(returnValue))))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -584,9 +579,7 @@ let test1_safety =
 
 let test2_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_43:
-        ((JC_40: tev) and ((JC_41: ev) and (JC_42: eev(returnValue)))))) }
+  { (JC_43: ((JC_40: tev) and ((JC_41: ev) and (JC_42: eev(returnValue))))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -680,9 +673,7 @@ let test2_safety =
 
 let test3_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_70:
-        ((JC_67: tev) and ((JC_68: ev) and (JC_69: eev(returnValue)))))) }
+  { (JC_70: ((JC_67: tev) and ((JC_68: ev) and (JC_69: eev(returnValue))))) }
   (init:
   (let return = ref (any_int16 void) in
   try
@@ -1004,7 +995,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1059,7 +1080,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1078,6 +1103,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

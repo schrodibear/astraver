@@ -28,7 +28,6 @@ type void_P = [void_P]
 
 integer f1(integer n)
 behavior default:
-  assumes true;
   ensures (C_3 : true);
 behavior b1:
   assumes (n > 0);
@@ -52,7 +51,6 @@ behavior b2:
 integer f2(integer x, integer y)
   requires (C_8 : ((x * y) < 0));
 behavior default:
-  assumes true;
   ensures (C_9 : true);
 behavior b1:
   assumes (x >= 0);
@@ -378,7 +376,7 @@ let f1_ensures_b2 =
 
 let f1_ensures_default =
  fun (n : int) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -464,7 +462,7 @@ let f2_ensures_b2 =
 
 let f2_ensures_default =
  fun (x : int) (y : int) ->
-  { ((true = true) and (JC_23: lt_int(mul_int(x, y), (0)))) }
+  { (JC_23: lt_int(mul_int(x, y), (0))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -514,11 +512,11 @@ why --project [...] why/bts0026.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/bts0026_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "58" begin = "10" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "56" begin = "10" end = "59"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0026_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "60" begin = "10" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "58" begin = "10" end = "55"/>
       <explain kind = "Check"/>
     </goal>
     </behavior>
@@ -527,11 +525,11 @@ why --project [...] why/bts0026.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/bts0026_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "34" begin = "10" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "33" begin = "10" end = "58"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0026_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "36" begin = "10" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts0026.jessie/bts0026.jc" line = "35" begin = "10" end = "54"/>
       <explain kind = "Check"/>
     </goal>
     </behavior>
@@ -679,7 +677,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -734,7 +762,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -753,6 +785,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

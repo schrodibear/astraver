@@ -51,7 +51,6 @@ unit gi(int_P[..] p_0_0, int32 i_0_0)
   requires (C_3 : ((C_4 : (\offset_min(p_0_0) <= 0)) &&
                     (C_5 : (\offset_max(p_0_0) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_6 : (p_0_0.int_M == \old(i_0_0)));
 {  
    {  (C_2 : ((C_1 : p_0_0.int_M) = i_0_0));
@@ -62,7 +61,6 @@ behavior default:
 
 int32 fi()
 behavior default:
-  assumes true;
   ensures (C_10 : (\result == 0));
 {  
    {  (C_8 : gi(i, (C_7 : i.int_M)));
@@ -79,7 +77,6 @@ unit gp(int_xP[..] p_0, int_P[..] i_0)
                      ((C_26 : (\offset_min(i_0) <= 0)) &&
                        (C_27 : (\offset_max(i_0) >= 0)))));
 behavior default:
-  assumes true;
   ensures (C_28 : ((C_29 : (p_0.int_xM.int_M == \old(i_0.int_M))) &&
                     (C_30 : (p_0.int_xM == \old(i_0)))));
 {  
@@ -92,7 +89,6 @@ behavior default:
 
 int32 fp()
 behavior default:
-  assumes true;
   ensures (C_38 : (\result == 0));
 {  
    {  (C_32 : gp(p, (C_31 : p.int_xM)));
@@ -681,14 +677,12 @@ parameter int_P_int_M_i_1 : (int_P, int32) memory ref
 parameter fi :
  tt:unit ->
   { } int32 reads int_P_i_1_alloc_table,int_P_int_M_i_1
-  writes int_P_int_M_i_1
-  { ((true = true) -> (JC_19: eq_int(integer_of_int32(result), (0)))) }
+  writes int_P_int_M_i_1 { (JC_19: eq_int(integer_of_int32(result), (0))) }
 
 parameter fi_requires :
  tt:unit ->
   { } int32 reads int_P_i_1_alloc_table,int_P_int_M_i_1
-  writes int_P_int_M_i_1
-  { ((true = true) -> (JC_19: eq_int(integer_of_int32(result), (0)))) }
+  writes int_P_int_M_i_1 { (JC_19: eq_int(integer_of_int32(result), (0))) }
 
 parameter int_xP_p_2_alloc_table : int_xP alloc_table ref
 
@@ -703,14 +697,14 @@ parameter fp :
   { } int32
   reads int_P_i_1_alloc_table,int_P_int_M_i_1,int_P_int_M_p_7,int_P_p_7_alloc_table,int_xP_int_xM_p_2,int_xP_p_2_alloc_table
   writes int_P_int_M_p_7,int_xP_int_xM_p_2
-  { ((true = true) -> (JC_57: eq_int(integer_of_int32(result), (0)))) }
+  { (JC_57: eq_int(integer_of_int32(result), (0))) }
 
 parameter fp_requires :
  tt:unit ->
   { } int32
   reads int_P_i_1_alloc_table,int_P_int_M_i_1,int_P_int_M_p_7,int_P_p_7_alloc_table,int_xP_int_xM_p_2,int_xP_p_2_alloc_table
   writes int_P_int_M_p_7,int_xP_int_xM_p_2
-  { ((true = true) -> (JC_57: eq_int(integer_of_int32(result), (0)))) }
+  { (JC_57: eq_int(integer_of_int32(result), (0))) }
 
 parameter gi :
  p_0_0:int_P pointer ->
@@ -718,10 +712,9 @@ parameter gi :
    int_P_int_M_p_0_0_3:(int_P, int32) memory ref ->
     int_P_p_0_0_3_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_p_0_0_3 writes int_P_int_M_p_0_0_3
-     { ((true = true) ->
-        (JC_10:
-        eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
-        integer_of_int32(i_0_0@)))) }
+     { (JC_10:
+       eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
+       integer_of_int32(i_0_0@))) }
 
 parameter gi_requires :
  p_0_0:int_P pointer ->
@@ -732,10 +725,9 @@ parameter gi_requires :
        ((JC_1: le_int(offset_min(int_P_p_0_0_3_alloc_table, p_0_0), (0)))
        and (JC_2: ge_int(offset_max(int_P_p_0_0_3_alloc_table, p_0_0), (0)))))}
      unit reads int_P_int_M_p_0_0_3 writes int_P_int_M_p_0_0_3
-     { ((true = true) ->
-        (JC_10:
-        eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
-        integer_of_int32(i_0_0@)))) }
+     { (JC_10:
+       eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
+       integer_of_int32(i_0_0@))) }
 
 parameter gp :
  p_0:int_xP pointer ->
@@ -746,13 +738,12 @@ parameter gp :
       int_P_i_0_5_alloc_table:int_P alloc_table ->
        { } unit reads int_P_int_M_i_0_5,int_xP_int_xM_p_0_4
        writes int_P_int_M_i_0_5,int_xP_int_xM_p_0_4
-       { ((true = true) ->
-          (JC_45:
-          ((JC_43:
-           eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
-                                   select(int_xP_int_xM_p_0_4, p_0))),
-           integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
-          and (JC_44: (select(int_xP_int_xM_p_0_4, p_0) = i_0@))))) }
+       { (JC_45:
+         ((JC_43:
+          eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
+                                  select(int_xP_int_xM_p_0_4, p_0))),
+          integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
+         and (JC_44: (select(int_xP_int_xM_p_0_4, p_0) = i_0@)))) }
 
 parameter gp_requires :
  p_0:int_xP pointer ->
@@ -780,13 +771,12 @@ parameter gp_requires :
                              (0)))))))))}
        unit reads int_P_int_M_i_0_5,int_xP_int_xM_p_0_4
        writes int_P_int_M_i_0_5,int_xP_int_xM_p_0_4
-       { ((true = true) ->
-          (JC_45:
-          ((JC_43:
-           eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
-                                   select(int_xP_int_xM_p_0_4, p_0))),
-           integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
-          and (JC_44: (select(int_xP_int_xM_p_0_4, p_0) = i_0@))))) }
+       { (JC_45:
+         ((JC_43:
+          eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
+                                  select(int_xP_int_xM_p_0_4, p_0))),
+          integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
+         and (JC_44: (select(int_xP_int_xM_p_0_4, p_0) = i_0@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -806,7 +796,7 @@ parameter safe_int8_of_integer_ :
 
 let fi_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_17: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -852,7 +842,7 @@ let fi_safety =
 
 let fp_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_55: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -922,10 +912,9 @@ let fp_safety =
 
 let gi_ensures_default =
  fun (p_0_0 : int_P pointer) (i_0_0 : int32) (int_P_int_M_p_0_0_3 : (int_P, int32) memory ref) (int_P_p_0_0_3_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_7:
-        ((JC_5: le_int(offset_min(int_P_p_0_0_3_alloc_table, p_0_0), (0)))
-        and (JC_6: ge_int(offset_max(int_P_p_0_0_3_alloc_table, p_0_0), (0)))))) }
+  { (JC_7:
+    ((JC_5: le_int(offset_min(int_P_p_0_0_3_alloc_table, p_0_0), (0)))
+    and (JC_6: ge_int(offset_max(int_P_p_0_0_3_alloc_table, p_0_0), (0))))) }
   (init:
   try
    begin
@@ -972,24 +961,21 @@ let gi_safety =
 
 let gp_ensures_default =
  fun (p_0 : int_xP pointer) (i_0 : int_P pointer) (int_xP_int_xM_p_0_4 : (int_xP, int_P pointer) memory ref) (int_P_int_M_i_0_5 : (int_P, int32) memory ref) (int_P_i_0_5_alloc_table : int_P alloc_table) (int_xP_p_0_4_alloc_table : int_xP alloc_table) ->
-  { ((true = true)
-    and (JC_38:
-        ((JC_32: le_int(offset_min(int_xP_p_0_4_alloc_table, p_0), (0)))
-        and ((JC_33: ge_int(offset_max(int_xP_p_0_4_alloc_table, p_0), (0)))
-            and ((JC_34:
-                 le_int(offset_min(int_P_i_0_5_alloc_table,
+  { (JC_38:
+    ((JC_32: le_int(offset_min(int_xP_p_0_4_alloc_table, p_0), (0)))
+    and ((JC_33: ge_int(offset_max(int_xP_p_0_4_alloc_table, p_0), (0)))
+        and ((JC_34:
+             le_int(offset_min(int_P_i_0_5_alloc_table,
+                    select(int_xP_int_xM_p_0_4, p_0)),
+             (0)))
+            and ((JC_35:
+                 ge_int(offset_max(int_P_i_0_5_alloc_table,
                         select(int_xP_int_xM_p_0_4, p_0)),
                  (0)))
-                and ((JC_35:
-                     ge_int(offset_max(int_P_i_0_5_alloc_table,
-                            select(int_xP_int_xM_p_0_4, p_0)),
-                     (0)))
-                    and ((JC_36:
-                         le_int(offset_min(int_P_i_0_5_alloc_table, i_0),
-                         (0)))
-                        and (JC_37:
-                            ge_int(offset_max(int_P_i_0_5_alloc_table, i_0),
-                            (0)))))))))) }
+                and ((JC_36:
+                     le_int(offset_min(int_P_i_0_5_alloc_table, i_0), (0)))
+                    and (JC_37:
+                        ge_int(offset_max(int_P_i_0_5_alloc_table, i_0), (0))))))))) }
   (init:
   try
    begin
@@ -1093,22 +1079,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po22.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "80" begin = "15" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "77" begin = "15" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po23.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "80" begin = "15" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "77" begin = "15" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po24.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "81" begin = "15" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po25.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "81" begin = "15" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1128,12 +1114,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po15.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "51" begin = "14" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "50" begin = "14" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po16.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "51" begin = "14" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "50" begin = "14" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1149,42 +1135,42 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po6.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "92" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po7.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "92" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po8.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "92" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po9.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "92" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po10.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "92" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po11.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "92" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po12.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "98" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "94" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po13.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "98" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "94" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1204,12 +1190,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po2.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "62" begin = "13" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "60" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po3.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "62" begin = "13" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "60" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1364,7 +1350,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1419,7 +1435,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1438,6 +1458,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

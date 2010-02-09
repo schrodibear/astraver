@@ -49,7 +49,6 @@ predicate strcmp{L}(char_P[..] x_0, char_P[..] y) =
 int32 f(int32 x, int32 y)
   requires (C_4 : strcmp{Here}(foo{Here}(x), foo{Here}(y)));
 behavior default:
-  assumes true;
   ensures (C_5 : true);
 {  
    (var int32 __retres);
@@ -419,10 +418,9 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_1 : int32) (y_0 : int32) ->
-  { ((true = true)
-    and (JC_3:
-        strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(y_0)),
-        char_P_char_M_foo_6, char_P_char_M_foo_5))) }
+  { (JC_3:
+    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(y_0)),
+    char_P_char_M_foo_6, char_P_char_M_foo_5)) }
   (init:
   (let return = ref (any_int32 void) in
   try

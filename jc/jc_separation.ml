@@ -244,10 +244,13 @@ let single_expr rresult e =
 	else Region.unify result_region e#region
     | JCEreturn(_ty,e) ->
 	Region.unify rresult e#region
-    | JCEassert(_behav,_asrt,_a) ->
-	()
-    | JCEcontract(_req,_dec,_vi_result,_behs,_e) -> 
-	assert false (* TODO *)
+    | JCEassert(_behav,_asrt,a) ->
+	assertion rresult a 
+    | JCEcontract(req,dec,_vi_result,_behs,_e) -> 
+        (* TODO: decreases, behaviors, etc. *)
+        assert (dec = None);
+	Option_misc.iter (assertion rresult) req
+          
     | JCEloop(_la,_) -> ()
     | JCEblock _ | JCEtry _ 
     | JCEreturn_void | JCEpack _ | JCEunpack _ -> 

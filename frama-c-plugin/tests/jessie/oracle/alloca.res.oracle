@@ -39,7 +39,6 @@ type void_P = [void_P]
 
 int32 f()
 behavior default:
-  assumes true;
   ensures (C_12 : (\result == 3));
 {  
    (var int_P[0..2] t);
@@ -61,7 +60,6 @@ behavior default:
 
 int32 g()
 behavior default:
-  assumes true;
   ensures (C_24 : (\result == 3));
 {  
    (var int_P[0..2] t_0);
@@ -89,7 +87,6 @@ invariant valid_u :
 int32 h()
   requires (C_38 : ((u + 2).int_M == 12));
 behavior default:
-  assumes true;
   ensures (C_39 : (\result == 12));
 {  
    (var int_P[0..3] t_1);
@@ -112,7 +109,6 @@ behavior default:
 
 int32 two_local_arrays()
 behavior default:
-  assumes true;
   ensures (C_67 : (\result == 3));
 {  
    (var int_P[0..3] t_2);
@@ -144,7 +140,6 @@ behavior default:
 
 int32 two_local_arrays_not_alias()
 behavior default:
-  assumes true;
   ensures (C_80 : (\result == 3));
 {  
    (var int_P[0..4] t_3);
@@ -616,26 +611,26 @@ parameter f :
  tt:unit ->
   { } int32 reads int_P_u_1_alloc_table
   { ((JC_13: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_11: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_11: eq_int(integer_of_int32(result), (3)))) }
 
 parameter f_requires :
  tt:unit ->
   { (JC_6: valid_u(int_P_u_1_alloc_table))} int32 reads int_P_u_1_alloc_table
   { ((JC_13: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_11: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_11: eq_int(integer_of_int32(result), (3)))) }
 
 parameter g :
  tt:unit ->
   { } int32 reads int_P_u_1_alloc_table
   { ((JC_24: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_22: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_22: eq_int(integer_of_int32(result), (3)))) }
 
 parameter g_requires :
  tt:unit ->
   { (JC_17: valid_u(int_P_u_1_alloc_table))} int32
   reads int_P_u_1_alloc_table
   { ((JC_24: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_22: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_22: eq_int(integer_of_int32(result), (3)))) }
 
 parameter int_P_int_M_u_1 : (int_P, int32) memory ref
 
@@ -643,7 +638,7 @@ parameter h :
  tt:unit ->
   { } int32 reads int_P_int_M_u_1,int_P_u_1_alloc_table
   { ((JC_39: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_37: eq_int(integer_of_int32(result), (12))))) }
+    and (JC_37: eq_int(integer_of_int32(result), (12)))) }
 
 parameter h_requires :
  tt:unit ->
@@ -653,7 +648,7 @@ parameter h_requires :
     and (JC_29: valid_u(int_P_u_1_alloc_table))))}
   int32 reads int_P_int_M_u_1,int_P_u_1_alloc_table
   { ((JC_39: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_37: eq_int(integer_of_int32(result), (12))))) }
+    and (JC_37: eq_int(integer_of_int32(result), (12)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -675,31 +670,31 @@ parameter two_local_arrays :
  tt:unit ->
   { } int32 reads int_P_u_1_alloc_table
   { ((JC_50: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_48: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_48: eq_int(integer_of_int32(result), (3)))) }
 
 parameter two_local_arrays_not_alias :
  tt:unit ->
   { } int32 reads int_P_u_1_alloc_table
   { ((JC_64: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_62: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_62: eq_int(integer_of_int32(result), (3)))) }
 
 parameter two_local_arrays_not_alias_requires :
  tt:unit ->
   { (JC_57: valid_u(int_P_u_1_alloc_table))} int32
   reads int_P_u_1_alloc_table
   { ((JC_64: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_62: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_62: eq_int(integer_of_int32(result), (3)))) }
 
 parameter two_local_arrays_requires :
  tt:unit ->
   { (JC_43: valid_u(int_P_u_1_alloc_table))} int32
   reads int_P_u_1_alloc_table
   { ((JC_50: valid_u(int_P_u_1_alloc_table))
-    and ((true = true) -> (JC_48: eq_int(integer_of_int32(result), (3))))) }
+    and (JC_48: eq_int(integer_of_int32(result), (3)))) }
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_8: valid_u(int_P_u_1_alloc_table))) }
+  { (JC_8: valid_u(int_P_u_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -825,7 +820,7 @@ let f_safety =
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_19: valid_u(int_P_u_1_alloc_table))) }
+  { (JC_19: valid_u(int_P_u_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -951,12 +946,10 @@ let g_safety =
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_34:
-        ((JC_32:
-         eq_int(integer_of_int32(select(int_P_int_M_u_1, shift(u, (2)))),
-         (12)))
-        and (JC_33: valid_u(int_P_u_1_alloc_table))))) }
+  { (JC_34:
+    ((JC_32:
+     eq_int(integer_of_int32(select(int_P_int_M_u_1, shift(u, (2)))), (12)))
+    and (JC_33: valid_u(int_P_u_1_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1099,7 +1092,7 @@ let h_safety =
 
 let two_local_arrays_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_45: valid_u(int_P_u_1_alloc_table))) }
+  { (JC_45: valid_u(int_P_u_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1218,7 +1211,7 @@ let two_local_arrays_ensures_default =
 
 let two_local_arrays_not_alias_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_59: valid_u(int_P_u_1_alloc_table))) }
+  { (JC_59: valid_u(int_P_u_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1508,7 +1501,7 @@ why --project [...] why/alloca.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po16.why">
-      <location file = "why/alloca.why" line = "1141" begin = "35" end = "173"/>
+      <location file = "why/alloca.why" line = "1139" begin = "35" end = "173"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po17.why">
@@ -1517,16 +1510,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po18.why">
-      <location file = "why/alloca.why" line = "1153" begin = "34" end = "168"/>
+      <location file = "why/alloca.why" line = "1151" begin = "34" end = "168"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po19.why">
-      <location file = "why/alloca.why" line = "1178" begin = "13" end = "59"/>
+      <location file = "why/alloca.why" line = "1176" begin = "13" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/alloca_po20.why">
-      <location file = "why/alloca.why" line = "1181" begin = "14" end = "56"/>
+      <location file = "why/alloca.why" line = "1179" begin = "14" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1547,7 +1540,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po22.why">
-      <location file = "why/alloca.why" line = "1221" begin = "35" end = "172"/>
+      <location file = "why/alloca.why" line = "1219" begin = "35" end = "172"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po23.why">
@@ -1556,16 +1549,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po24.why">
-      <location file = "why/alloca.why" line = "1233" begin = "36" end = "175"/>
+      <location file = "why/alloca.why" line = "1231" begin = "36" end = "175"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po25.why">
-      <location file = "why/alloca.why" line = "1302" begin = "20" end = "65"/>
+      <location file = "why/alloca.why" line = "1300" begin = "20" end = "65"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/alloca_po26.why">
-      <location file = "why/alloca.why" line = "1305" begin = "21" end = "66"/>
+      <location file = "why/alloca.why" line = "1303" begin = "21" end = "66"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1586,11 +1579,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po11.why">
-      <location file = "why/alloca.why" line = "877" begin = "34" end = "168"/>
+      <location file = "why/alloca.why" line = "875" begin = "34" end = "168"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po12.why">
-      <location file = "why/alloca.why" line = "914" begin = "14" end = "59"/>
+      <location file = "why/alloca.why" line = "912" begin = "14" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1795,7 +1788,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1850,7 +1873,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1869,6 +1896,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

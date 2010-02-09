@@ -52,7 +52,6 @@ unit f(int_P[..] x)
                      (C_8 : (\offset_max(x) >= 1))) &&
                     (C_9 : p{Here}(x))));
 behavior default:
-  assumes true;
   assigns (x + 1).int_M;
   ensures (C_10 : true);
 {  
@@ -72,7 +71,6 @@ unit g(int_P[..] x_0)
                       (C_16 : (\offset_max(x_0) >= 1))) &&
                      (C_17 : p{Here}(x_0))));
 behavior default:
-  assumes true;
   assigns (x_0 + 1).int_M;
   ensures (C_18 : true);
 {  
@@ -537,10 +535,9 @@ parameter f :
   int_P_int_M_x_2:(int_P, int32) memory ref ->
    int_P_x_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_x_2 writes int_P_int_M_x_2
-    { ((true = true) ->
-       (JC_14:
-       not_assigns(int_P_x_2_alloc_table@, int_P_int_M_x_2@, int_P_int_M_x_2,
-       pset_range(pset_singleton(x_0@), (1), (1))))) }
+    { (JC_14:
+      not_assigns(int_P_x_2_alloc_table@, int_P_int_M_x_2@, int_P_int_M_x_2,
+      pset_range(pset_singleton(x_0@), (1), (1)))) }
 
 parameter f_requires :
  x_0:int_P pointer ->
@@ -551,20 +548,18 @@ parameter f_requires :
       and ((JC_2: ge_int(offset_max(int_P_x_2_alloc_table, x_0), (1)))
           and (JC_3: p(x_0, int_P_int_M_x_2)))))}
     unit reads int_P_int_M_x_2 writes int_P_int_M_x_2
-    { ((true = true) ->
-       (JC_14:
-       not_assigns(int_P_x_2_alloc_table@, int_P_int_M_x_2@, int_P_int_M_x_2,
-       pset_range(pset_singleton(x_0@), (1), (1))))) }
+    { (JC_14:
+      not_assigns(int_P_x_2_alloc_table@, int_P_int_M_x_2@, int_P_int_M_x_2,
+      pset_range(pset_singleton(x_0@), (1), (1)))) }
 
 parameter g :
  x_0_0:int_P pointer ->
   int_P_int_M_x_0_3:(int_P, int32) memory ref ->
    int_P_x_0_3_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_x_0_3 writes int_P_int_M_x_0_3
-    { ((true = true) ->
-       (JC_33:
-       not_assigns(int_P_x_0_3_alloc_table@, int_P_int_M_x_0_3@,
-       int_P_int_M_x_0_3, pset_range(pset_singleton(x_0_0@), (1), (1))))) }
+    { (JC_33:
+      not_assigns(int_P_x_0_3_alloc_table@, int_P_int_M_x_0_3@,
+      int_P_int_M_x_0_3, pset_range(pset_singleton(x_0_0@), (1), (1)))) }
 
 parameter g_requires :
  x_0_0:int_P pointer ->
@@ -575,10 +570,9 @@ parameter g_requires :
       and ((JC_21: ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (1)))
           and (JC_22: p(x_0_0, int_P_int_M_x_0_3)))))}
     unit reads int_P_int_M_x_0_3 writes int_P_int_M_x_0_3
-    { ((true = true) ->
-       (JC_33:
-       not_assigns(int_P_x_0_3_alloc_table@, int_P_int_M_x_0_3@,
-       int_P_int_M_x_0_3, pset_range(pset_singleton(x_0_0@), (1), (1))))) }
+    { (JC_33:
+      not_assigns(int_P_x_0_3_alloc_table@, int_P_int_M_x_0_3@,
+      int_P_int_M_x_0_3, pset_range(pset_singleton(x_0_0@), (1), (1)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -598,11 +592,10 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : int_P pointer) (int_P_int_M_x_2 : (int_P, int32) memory ref) (int_P_x_2_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_9:
-        ((JC_6: le_int(offset_min(int_P_x_2_alloc_table, x_0), (0)))
-        and ((JC_7: ge_int(offset_max(int_P_x_2_alloc_table, x_0), (1)))
-            and (JC_8: p(x_0, int_P_int_M_x_2)))))) }
+  { (JC_9:
+    ((JC_6: le_int(offset_min(int_P_x_2_alloc_table, x_0), (0)))
+    and ((JC_7: ge_int(offset_max(int_P_x_2_alloc_table, x_0), (1)))
+        and (JC_8: p(x_0, int_P_int_M_x_2))))) }
   (init:
   try
    begin
@@ -656,11 +649,10 @@ let f_safety =
 
 let g_ensures_default =
  fun (x_0_0 : int_P pointer) (int_P_int_M_x_0_3 : (int_P, int32) memory ref) (int_P_x_0_3_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_28:
-        ((JC_25: le_int(offset_min(int_P_x_0_3_alloc_table, x_0_0), (0)))
-        and ((JC_26: ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (1)))
-            and (JC_27: p(x_0_0, int_P_int_M_x_0_3)))))) }
+  { (JC_28:
+    ((JC_25: le_int(offset_min(int_P_x_0_3_alloc_table, x_0_0), (0)))
+    and ((JC_26: ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (1)))
+        and (JC_27: p(x_0_0, int_P_int_M_x_0_3))))) }
   (init:
   try
    begin
@@ -715,17 +707,17 @@ why --project [...] why/footprint.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/footprint_po7.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "73" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "71" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/footprint_po8.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "73" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "71" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/footprint_po9.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "73" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "71" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -745,12 +737,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/footprint_po3.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "53" begin = "14" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "52" begin = "14" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/footprint_po4.why">
-      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "53" begin = "14" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/footprint.jessie/footprint.jc" line = "52" begin = "14" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -909,7 +901,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -964,7 +986,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -983,6 +1009,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

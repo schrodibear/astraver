@@ -112,7 +112,6 @@ _Integer2[..] endianness(_Integer2[..] i_0)
   requires (C_17 : ((C_18 : (\offset_min(i_0) <= 0)) &&
                      (C_19 : (\offset_max(i_0) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_20 : ((i_0 :> xP[0]).xM == (\result :> xP[0]).xM));
 {  
    (var _Integer2[..] j);
@@ -130,7 +129,6 @@ behavior default:
 
 _Integer[0] endianness2(_Integer[0] v_i_1)
 behavior default:
-  assumes true;
   ensures (C_123 : ((v_i_1 :> x_0P[0]).x_0M == (\result :> x_0P[0]).x_0M));
 {  
    (var _Integer[0] i_1);
@@ -186,7 +184,6 @@ _Integer[..] endianness3(_Integer[..] i)
   requires (C_154 : ((C_155 : (\offset_min(i) <= 0)) &&
                       (C_156 : (\offset_max(i) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_157 : ((i :> x_0P[0]).x_0M == (\result :> x_0P[0]).x_0M));
 {  
    (var _Integer[..] j_1);
@@ -207,7 +204,6 @@ behavior default:
 
 int32 test()
 behavior default:
-  assumes true;
   ensures (C_174 : (\result == 1));
 {  
    (var _U[0] u);
@@ -1465,14 +1461,13 @@ parameter endianness :
        { } _Integer2 pointer
        reads _Integer2_fields_result_2,_Integer2_result_2_alloc_table
        writes _Integer2_fields_result_2,_Integer2_result_2_alloc_table,_Integer2_result_2_tag_table
-       { ((true = true) ->
-          (JC_10:
-          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
-                                                                   i_0),
-                                                     (0), (2)))),
-          integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
-                                                            result),
-                                              (0), (2))))))) }
+       { (JC_10:
+         eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
+                                                                  i_0),
+                                                    (0), (2)))),
+         integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
+                                                           result),
+                                             (0), (2)))))) }
 
 parameter endianness2 :
  v_i_1:_Integer pointer ->
@@ -1484,14 +1479,13 @@ parameter endianness2 :
        { } _Integer pointer
        reads _Integer_fields_result_5,_Integer_result_5_alloc_table
        writes _Integer_fields_result_5,_Integer_result_5_alloc_table,_Integer_result_5_tag_table
-       { ((true = true) ->
-          (JC_26:
-          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_v_i_1_4,
-                                                                   v_i_1),
-                                                     (0), (4)))),
-          integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_5,
-                                                            result),
-                                              (0), (4))))))) }
+       { (JC_26:
+         eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_v_i_1_4,
+                                                                  v_i_1),
+                                                    (0), (4)))),
+         integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_5,
+                                                           result),
+                                             (0), (4)))))) }
 
 parameter endianness2_requires :
  v_i_1:_Integer pointer ->
@@ -1503,14 +1497,13 @@ parameter endianness2_requires :
        { } _Integer pointer
        reads _Integer_fields_result_5,_Integer_result_5_alloc_table
        writes _Integer_fields_result_5,_Integer_result_5_alloc_table,_Integer_result_5_tag_table
-       { ((true = true) ->
-          (JC_26:
-          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_v_i_1_4,
-                                                                   v_i_1),
-                                                     (0), (4)))),
-          integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_5,
-                                                            result),
-                                              (0), (4))))))) }
+       { (JC_26:
+         eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_v_i_1_4,
+                                                                  v_i_1),
+                                                    (0), (4)))),
+         integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_5,
+                                                           result),
+                                             (0), (4)))))) }
 
 parameter endianness3 :
  i:_Integer pointer ->
@@ -1522,14 +1515,13 @@ parameter endianness3 :
        { } _Integer pointer
        reads _Integer_fields_result_8,_Integer_result_8_alloc_table
        writes _Integer_fields_result_8,_Integer_result_8_alloc_table,_Integer_result_8_tag_table
-       { ((true = true) ->
-          (JC_47:
-          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
-                                                                   i),
-                                                     (0), (4)))),
-          integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
-                                                            result),
-                                              (0), (4))))))) }
+       { (JC_47:
+         eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
+                                                                  i),
+                                                    (0), (4)))),
+         integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
+                                                           result),
+                                             (0), (4)))))) }
 
 parameter endianness3_requires :
  i:_Integer pointer ->
@@ -1544,14 +1536,13 @@ parameter endianness3_requires :
        _Integer pointer
        reads _Integer_fields_result_8,_Integer_result_8_alloc_table
        writes _Integer_fields_result_8,_Integer_result_8_alloc_table,_Integer_result_8_tag_table
-       { ((true = true) ->
-          (JC_47:
-          eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
-                                                                   i),
-                                                     (0), (4)))),
-          integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
-                                                            result),
-                                              (0), (4))))))) }
+       { (JC_47:
+         eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
+                                                                  i),
+                                                    (0), (4)))),
+         integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_result_8,
+                                                           result),
+                                             (0), (4)))))) }
 
 parameter endianness_requires :
  i_0:_Integer2 pointer ->
@@ -1567,14 +1558,13 @@ parameter endianness_requires :
        _Integer2 pointer
        reads _Integer2_fields_result_2,_Integer2_result_2_alloc_table
        writes _Integer2_fields_result_2,_Integer2_result_2_alloc_table,_Integer2_result_2_tag_table
-       { ((true = true) ->
-          (JC_10:
-          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
-                                                                   i_0),
-                                                     (0), (2)))),
-          integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
-                                                            result),
-                                              (0), (2))))))) }
+       { (JC_10:
+         eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
+                                                                  i_0),
+                                                    (0), (2)))),
+         integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_result_2,
+                                                           result),
+                                             (0), (2)))))) }
 
 parameter int16_of_integer_ :
  x:int ->
@@ -1601,19 +1591,14 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 parameter test :
- tt:unit ->
-  { } int32
-  { ((true = true) -> (JC_69: eq_int(integer_of_int32(result), (1)))) }
+ tt:unit -> { } int32 { (JC_69: eq_int(integer_of_int32(result), (1))) }
 
 parameter test_requires :
- tt:unit ->
-  { } int32
-  { ((true = true) -> (JC_69: eq_int(integer_of_int32(result), (1)))) }
+ tt:unit -> { } int32 { (JC_69: eq_int(integer_of_int32(result), (1))) }
 
 let endianness2_ensures_default =
  fun (v_i_1 : _Integer pointer) (_Integer_result_5_alloc_table : _Integer alloc_table ref) (_Integer_result_5_tag_table : _Integer tag_table ref) (_Integer_fields_result_5 : (_Integer, bitvector) memory ref) (_Integer_v_i_1_4_alloc_table : _Integer alloc_table) (_Integer_fields_v_i_1_4 : (_Integer, bitvector) memory) ->
-  { ((true = true)
-    and valid_root__Integer(v_i_1, (0), (0), _Integer_v_i_1_4_alloc_table)) }
+  { valid_root__Integer(v_i_1, (0), (0), _Integer_v_i_1_4_alloc_table) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2237,10 +2222,9 @@ let endianness2_safety =
 
 let endianness3_ensures_default =
  fun (i : _Integer pointer) (_Integer_result_8_alloc_table : _Integer alloc_table ref) (_Integer_result_8_tag_table : _Integer tag_table ref) (_Integer_fields_result_8 : (_Integer, bitvector) memory ref) (_Integer_i_7_alloc_table : _Integer alloc_table) (_Integer_fields_i_7 : (_Integer, bitvector) memory) ->
-  { ((true = true)
-    and (JC_44:
-        ((JC_42: le_int(offset_min(_Integer_i_7_alloc_table, i), (0)))
-        and (JC_43: ge_int(offset_max(_Integer_i_7_alloc_table, i), (0)))))) }
+  { (JC_44:
+    ((JC_42: le_int(offset_min(_Integer_i_7_alloc_table, i), (0)))
+    and (JC_43: ge_int(offset_max(_Integer_i_7_alloc_table, i), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2436,10 +2420,9 @@ let endianness3_safety =
 
 let endianness_ensures_default =
  fun (i_0 : _Integer2 pointer) (_Integer2_result_2_alloc_table : _Integer2 alloc_table ref) (_Integer2_result_2_tag_table : _Integer2 tag_table ref) (_Integer2_fields_result_2 : (_Integer2, bitvector) memory ref) (_Integer2_i_0_1_alloc_table : _Integer2 alloc_table) (_Integer2_fields_i_0_1 : (_Integer2, bitvector) memory) ->
-  { ((true = true)
-    and (JC_7:
-        ((JC_5: le_int(offset_min(_Integer2_i_0_1_alloc_table, i_0), (0)))
-        and (JC_6: ge_int(offset_max(_Integer2_i_0_1_alloc_table, i_0), (0)))))) }
+  { (JC_7:
+    ((JC_5: le_int(offset_min(_Integer2_i_0_1_alloc_table, i_0), (0)))
+    and (JC_6: ge_int(offset_max(_Integer2_i_0_1_alloc_table, i_0), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2565,7 +2548,7 @@ let endianness_safety =
 
 let test_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_67: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2727,11 +2710,11 @@ why --project [...] why/union.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po53.why">
-      <location file = "why/union.why" line = "2425" begin = "33" end = "162"/>
+      <location file = "why/union.why" line = "2412" begin = "33" end = "162"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po54.why">
-      <location file = "why/union.why" line = "2469" begin = "12" end = "51"/>
+      <location file = "why/union.why" line = "2456" begin = "12" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2766,22 +2749,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po14.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "188" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "185" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po15.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "188" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "185" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po16.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "188" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "185" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po17.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "188" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "185" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2796,22 +2779,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po20.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "190" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "187" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po21.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "190" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "187" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po22.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "190" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "187" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po23.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "190" begin = "16" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "187" begin = "16" end = "136"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2826,22 +2809,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po26.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "192" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "189" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po27.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "192" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "189" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po28.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "192" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "189" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po29.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "192" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "189" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2856,22 +2839,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po32.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "194" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "191" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po33.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "194" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "191" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po34.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "194" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "191" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po35.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "194" begin = "16" end = "132"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "191" begin = "16" end = "132"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2892,7 +2875,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po3.why">
-      <location file = "why/union.why" line = "1711" begin = "34" end = "172"/>
+      <location file = "why/union.why" line = "1700" begin = "34" end = "172"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po4.why">
@@ -2901,7 +2884,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po5.why">
-      <location file = "why/union.why" line = "1723" begin = "35" end = "175"/>
+      <location file = "why/union.why" line = "1712" begin = "35" end = "175"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po6.why">
@@ -2910,16 +2893,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po7.why">
-      <location file = "why/union.why" line = "1735" begin = "42" end = "198"/>
+      <location file = "why/union.why" line = "1724" begin = "42" end = "198"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po8.why">
-      <location file = "why/union.why" line = "1978" begin = "20" end = "69"/>
+      <location file = "why/union.why" line = "1967" begin = "20" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/union_po9.why">
-      <location file = "why/union.why" line = "1981" begin = "21" end = "70"/>
+      <location file = "why/union.why" line = "1970" begin = "21" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2950,22 +2933,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po40.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "114" begin = "14" end = "170"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "113" begin = "14" end = "170"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po41.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "114" begin = "14" end = "170"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "113" begin = "14" end = "170"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po42.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "114" begin = "14" end = "170"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "113" begin = "14" end = "170"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po43.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "114" begin = "14" end = "170"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "113" begin = "14" end = "170"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2980,22 +2963,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po46.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "116" begin = "15" end = "238"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "115" begin = "15" end = "238"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po47.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "116" begin = "15" end = "238"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "115" begin = "15" end = "238"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po48.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "116" begin = "15" end = "238"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "115" begin = "15" end = "238"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/union_po49.why">
-      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "116" begin = "15" end = "238"/>
+      <location file = "PPCHOME/tests/jessie/union.jessie/union.jc" line = "115" begin = "15" end = "238"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -3150,7 +3133,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -3205,7 +3218,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -3224,6 +3241,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

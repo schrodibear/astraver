@@ -385,7 +385,6 @@ char_P[..] memcpy(char_P[..] dest, char_P[..] src, uint32 n)
                     ((C_6 : (\offset_min(src) <= 0)) &&
                       (C_7 : (\offset_max(src) >= (n - 1))))));
 behavior default:
-  assumes true;
   assigns (dest + [0..(n - 1)]).char_M;
   ensures (C_8 : (((C_10 : (memcmp{Here}(dest, src, n) == 0)) &&
                     (C_11 : (\result == dest))) &&
@@ -395,14 +394,12 @@ behavior default:
 uint32 strlen(char_P[..] s)
   requires (C_13 : valid_string{Here}(s));
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_14 : (\result == strlen{Here}(s)));
 ;
 
 char_P[..] calloc(uint32 nmemb, uint32 size_0)
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_15 : ((C_16 : (\offset_min(\result) <= 0)) &&
                     (C_17 : (\offset_max(\result) >= ((size_0 * nmemb) - 1)))));
@@ -411,7 +408,6 @@ behavior default:
 unit f(char_P[..] x)
   requires (C_26 : valid_string(x));
 behavior default:
-  assumes true;
   ensures (C_27 : true);
 {  
    (var uint32 len);
@@ -1485,30 +1481,26 @@ parameter calloc :
   size_0:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
-    { ((true = true) ->
-       (JC_47:
-       ((JC_45:
-        le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
-       and (JC_46:
-           ge_int(offset_max(char_P_result_25_alloc_table, result),
-           sub_int(mul_int(integer_of_uint32(size_0),
-                   integer_of_uint32(nmemb)),
-           (1))))))) }
+    { (JC_47:
+      ((JC_45: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
+      and (JC_46:
+          ge_int(offset_max(char_P_result_25_alloc_table, result),
+          sub_int(mul_int(integer_of_uint32(size_0),
+                  integer_of_uint32(nmemb)),
+          (1)))))) }
 
 parameter calloc_requires :
  nmemb:uint32 ->
   size_0:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
-    { ((true = true) ->
-       (JC_47:
-       ((JC_45:
-        le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
-       and (JC_46:
-           ge_int(offset_max(char_P_result_25_alloc_table, result),
-           sub_int(mul_int(integer_of_uint32(size_0),
-                   integer_of_uint32(nmemb)),
-           (1))))))) }
+    { (JC_47:
+      ((JC_45: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
+      and (JC_46:
+          ge_int(offset_max(char_P_result_25_alloc_table, result),
+          sub_int(mul_int(integer_of_uint32(size_0),
+                  integer_of_uint32(nmemb)),
+          (1)))))) }
 
 parameter f :
  x:char_P pointer ->
@@ -1542,20 +1534,19 @@ parameter memcpy :
        char_P_char_M_src_21:(char_P, int8) memory ->
         { } char_P pointer reads char_P_char_M_dest_20
         writes char_P_char_M_dest_20
-        { ((true = true) ->
-           (JC_24:
-           ((JC_22:
-            ((JC_19:
-             eq_int(memcmp(dest, src, integer_of_uint32(n_0),
-                    char_P_char_M_src_21, char_P_char_M_dest_20),
-             (0)))
-            and ((JC_20: (result = dest))
-                and (JC_21: same_block(result, dest)))))
-           and (JC_23:
-               not_assigns(char_P_dest_20_alloc_table@,
-               char_P_char_M_dest_20@, char_P_char_M_dest_20,
-               pset_range(pset_singleton(dest@), (0),
-               sub_int(integer_of_uint32(n_0@), (1)))))))) }
+        { (JC_24:
+          ((JC_22:
+           ((JC_19:
+            eq_int(memcmp(dest, src, integer_of_uint32(n_0),
+                   char_P_char_M_src_21, char_P_char_M_dest_20),
+            (0)))
+           and ((JC_20: (result = dest))
+               and (JC_21: same_block(result, dest)))))
+          and (JC_23:
+              not_assigns(char_P_dest_20_alloc_table@,
+              char_P_char_M_dest_20@, char_P_char_M_dest_20,
+              pset_range(pset_singleton(dest@), (0),
+              sub_int(integer_of_uint32(n_0@), (1))))))) }
 
 parameter memcpy_requires :
  dest:char_P pointer ->
@@ -1577,20 +1568,19 @@ parameter memcpy_requires :
                       sub_int(integer_of_uint32(n_0), (1))))))))}
         char_P pointer reads char_P_char_M_dest_20
         writes char_P_char_M_dest_20
-        { ((true = true) ->
-           (JC_24:
-           ((JC_22:
-            ((JC_19:
-             eq_int(memcmp(dest, src, integer_of_uint32(n_0),
-                    char_P_char_M_src_21, char_P_char_M_dest_20),
-             (0)))
-            and ((JC_20: (result = dest))
-                and (JC_21: same_block(result, dest)))))
-           and (JC_23:
-               not_assigns(char_P_dest_20_alloc_table@,
-               char_P_char_M_dest_20@, char_P_char_M_dest_20,
-               pset_range(pset_singleton(dest@), (0),
-               sub_int(integer_of_uint32(n_0@), (1)))))))) }
+        { (JC_24:
+          ((JC_22:
+           ((JC_19:
+            eq_int(memcmp(dest, src, integer_of_uint32(n_0),
+                   char_P_char_M_src_21, char_P_char_M_dest_20),
+            (0)))
+           and ((JC_20: (result = dest))
+               and (JC_21: same_block(result, dest)))))
+          and (JC_23:
+              not_assigns(char_P_dest_20_alloc_table@,
+              char_P_char_M_dest_20@, char_P_char_M_dest_20,
+              pset_range(pset_singleton(dest@), (0),
+              sub_int(integer_of_uint32(n_0@), (1))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1609,9 +1599,8 @@ parameter strlen_0 :
   char_P_s_24_alloc_table:char_P alloc_table ->
    char_P_char_M_s_24:(char_P, int8) memory ->
     { } uint32
-    { ((true = true) ->
-       (JC_33:
-       eq_int(integer_of_uint32(result), strlen(s_0, char_P_char_M_s_24)))) }
+    { (JC_33:
+      eq_int(integer_of_uint32(result), strlen(s_0, char_P_char_M_s_24))) }
 
 parameter strlen_0_requires :
  s_0:char_P pointer ->
@@ -1619,9 +1608,8 @@ parameter strlen_0_requires :
    char_P_char_M_s_24:(char_P, int8) memory ->
     { (JC_27: valid_string(s_0, char_P_s_24_alloc_table, char_P_char_M_s_24))}
     uint32
-    { ((true = true) ->
-       (JC_33:
-       eq_int(integer_of_uint32(result), strlen(s_0, char_P_char_M_s_24)))) }
+    { (JC_33:
+      eq_int(integer_of_uint32(result), strlen(s_0, char_P_char_M_s_24))) }
 
 parameter uint16_of_integer_ :
  x:int ->
@@ -1635,8 +1623,7 @@ parameter uint32_of_integer_ :
 
 let f_ensures_default =
  fun (x : char_P pointer) (char_P_x_27_alloc_table : char_P alloc_table) (char_P_char_M_x_27 : (char_P, int8) memory) ->
-  { ((true = true)
-    and (JC_53: valid_string(x, char_P_x_27_alloc_table, char_P_char_M_x_27))) }
+  { (JC_53: valid_string(x, char_P_x_27_alloc_table, char_P_char_M_x_27)) }
   (init:
   try
    begin
@@ -1767,22 +1754,22 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/calloc_po6.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "417" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "413" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po7.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "417" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "413" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po8.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "417" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "413" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po9.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "417" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "413" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1937,7 +1924,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1992,7 +2009,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2011,6 +2032,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

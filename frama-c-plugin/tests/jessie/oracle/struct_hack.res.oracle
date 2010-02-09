@@ -63,7 +63,6 @@ unit f(S[0] v_s_0)
                      ((C_25 : (\offset_min(v_s_0.a) <= 0)) &&
                        (C_26 : (\offset_max(v_s_0.a) >= (v_s_0.i - 1))))));
 behavior default:
-  assumes true;
   ensures (C_27 : true);
 {  
    (var S[0] s_0);
@@ -112,7 +111,6 @@ unit f0(S0[0] v_s_1)
                      ((C_52 : (\offset_min(v_s_1.a0) <= 0)) &&
                        (C_53 : (\offset_max(v_s_1.a0) >= (v_s_1.i0 - 1))))));
 behavior default:
-  assumes true;
   ensures (C_54 : true);
 {  
    (var S0[0] s_1);
@@ -162,7 +160,6 @@ unit f1(S1[0] v_s)
                      ((C_84 : (\offset_min(v_s.a1) <= 0)) &&
                        (C_85 : (\offset_max(v_s.a1) >= (v_s.i1 - 1))))));
 behavior default:
-  assumes true;
   ensures (C_86 : true);
 {  
    (var S1[0] s);
@@ -1162,21 +1159,18 @@ parameter safe_int8_of_integer_ :
 
 let f0_ensures_default =
  fun (v_s_1 : S0 pointer) (S0_v_s_1_2_alloc_table : S0 alloc_table) (int_P_v_s_1_2_alloc_table : int_P alloc_table) (int_P_int_M_v_s_1_2 : (int_P, int32) memory) (S0_i0_v_s_1_2 : (S0, int32) memory) (S0_a0_v_s_1_2 : (S0, int_P pointer) memory) ->
-  { ((true = true)
-    and (valid_struct_S0(v_s_1, (0), (0), S0_v_s_1_2_alloc_table,
-         int_P_v_s_1_2_alloc_table, S0_a0_v_s_1_2)
-        and (JC_45:
-            ((JC_42:
-             ge_int(integer_of_int32(select(S0_i0_v_s_1_2, v_s_1)), (0)))
-            and ((JC_43:
-                 le_int(offset_min(int_P_v_s_1_2_alloc_table,
-                        select(S0_a0_v_s_1_2, v_s_1)),
-                 (0)))
-                and (JC_44:
-                    ge_int(offset_max(int_P_v_s_1_2_alloc_table,
-                           select(S0_a0_v_s_1_2, v_s_1)),
-                    sub_int(integer_of_int32(select(S0_i0_v_s_1_2, v_s_1)),
-                    (1))))))))) }
+  { (valid_struct_S0(v_s_1, (0), (0), S0_v_s_1_2_alloc_table,
+     int_P_v_s_1_2_alloc_table, S0_a0_v_s_1_2)
+    and (JC_45:
+        ((JC_42: ge_int(integer_of_int32(select(S0_i0_v_s_1_2, v_s_1)), (0)))
+        and ((JC_43:
+             le_int(offset_min(int_P_v_s_1_2_alloc_table,
+                    select(S0_a0_v_s_1_2, v_s_1)),
+             (0)))
+            and (JC_44:
+                ge_int(offset_max(int_P_v_s_1_2_alloc_table,
+                       select(S0_a0_v_s_1_2, v_s_1)),
+                sub_int(integer_of_int32(select(S0_i0_v_s_1_2, v_s_1)), (1)))))))) }
   (init:
   try
    begin
@@ -1485,19 +1479,18 @@ let f0_safety =
 
 let f1_ensures_default =
  fun (v_s : S1 pointer) (S1_v_s_3_alloc_table : S1 alloc_table) (int_P_v_s_3_alloc_table : int_P alloc_table) (int_P_int_M_v_s_3 : (int_P, int32) memory) (S1_i1_v_s_3 : (S1, int32) memory) (S1_a1_v_s_3 : (S1, int_P pointer) memory) ->
-  { ((true = true)
-    and (valid_struct_S1(v_s, (0), (0), S1_v_s_3_alloc_table,
-         int_P_v_s_3_alloc_table, S1_a1_v_s_3)
-        and (JC_81:
-            ((JC_78: ge_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (0)))
-            and ((JC_79:
-                 le_int(offset_min(int_P_v_s_3_alloc_table,
-                        select(S1_a1_v_s_3, v_s)),
-                 (0)))
-                and (JC_80:
-                    ge_int(offset_max(int_P_v_s_3_alloc_table,
-                           select(S1_a1_v_s_3, v_s)),
-                    sub_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (1))))))))) }
+  { (valid_struct_S1(v_s, (0), (0), S1_v_s_3_alloc_table,
+     int_P_v_s_3_alloc_table, S1_a1_v_s_3)
+    and (JC_81:
+        ((JC_78: ge_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (0)))
+        and ((JC_79:
+             le_int(offset_min(int_P_v_s_3_alloc_table,
+                    select(S1_a1_v_s_3, v_s)),
+             (0)))
+            and (JC_80:
+                ge_int(offset_max(int_P_v_s_3_alloc_table,
+                       select(S1_a1_v_s_3, v_s)),
+                sub_int(integer_of_int32(select(S1_i1_v_s_3, v_s)), (1)))))))) }
   (init:
   try
    begin
@@ -1817,21 +1810,18 @@ let f1_safety =
 
 let f_ensures_default =
  fun (v_s_0 : S pointer) (S_v_s_0_1_alloc_table : S alloc_table) (int_P_v_s_0_1_alloc_table : int_P alloc_table) (int_P_int_M_v_s_0_1 : (int_P, int32) memory) (S_i_v_s_0_1 : (S, int32) memory) (S_a_v_s_0_1 : (S, int_P pointer) memory) ->
-  { ((true = true)
-    and (valid_struct_S(v_s_0, (0), (0), S_v_s_0_1_alloc_table,
-         int_P_v_s_0_1_alloc_table, S_a_v_s_0_1)
-        and (JC_9:
-            ((JC_6:
-             ge_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (0)))
-            and ((JC_7:
-                 le_int(offset_min(int_P_v_s_0_1_alloc_table,
-                        select(S_a_v_s_0_1, v_s_0)),
-                 (0)))
-                and (JC_8:
-                    ge_int(offset_max(int_P_v_s_0_1_alloc_table,
-                           select(S_a_v_s_0_1, v_s_0)),
-                    sub_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)),
-                    (1))))))))) }
+  { (valid_struct_S(v_s_0, (0), (0), S_v_s_0_1_alloc_table,
+     int_P_v_s_0_1_alloc_table, S_a_v_s_0_1)
+    and (JC_9:
+        ((JC_6: ge_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (0)))
+        and ((JC_7:
+             le_int(offset_min(int_P_v_s_0_1_alloc_table,
+                    select(S_a_v_s_0_1, v_s_0)),
+             (0)))
+            and (JC_8:
+                ge_int(offset_max(int_P_v_s_0_1_alloc_table,
+                       select(S_a_v_s_0_1, v_s_0)),
+                sub_int(integer_of_int32(select(S_i_v_s_0_1, v_s_0)), (1)))))))) }
   (init:
   try
    begin
@@ -2150,16 +2140,16 @@ why --project [...] why/struct_hack.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct_hack_po25.why">
-      <location file = "why/struct_hack.why" line = "1466" begin = "32" end = "157"/>
+      <location file = "why/struct_hack.why" line = "1462" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct_hack_po26.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "187" begin = "24" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "184" begin = "24" end = "64"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po27.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "187" begin = "24" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "184" begin = "24" end = "64"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2182,7 +2172,7 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/struct_hack_po32.why">
-      <location file = "why/struct_hack.why" line = "1595" begin = "16" end = "54"/>
+      <location file = "why/struct_hack.why" line = "1591" begin = "16" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2227,16 +2217,16 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct_hack_po9.why">
-      <location file = "why/struct_hack.why" line = "1139" begin = "34" end = "165"/>
+      <location file = "why/struct_hack.why" line = "1136" begin = "34" end = "165"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct_hack_po10.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "133" begin = "24" end = "66"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "131" begin = "24" end = "66"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po11.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "133" begin = "24" end = "66"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "131" begin = "24" end = "66"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2259,7 +2249,7 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/struct_hack_po16.why">
-      <location file = "why/struct_hack.why" line = "1261" begin = "11" end = "53"/>
+      <location file = "why/struct_hack.why" line = "1258" begin = "11" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2304,16 +2294,16 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct_hack_po41.why">
-      <location file = "why/struct_hack.why" line = "1794" begin = "34" end = "164"/>
+      <location file = "why/struct_hack.why" line = "1787" begin = "34" end = "164"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct_hack_po42.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "83" begin = "24" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "82" begin = "24" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po43.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "83" begin = "24" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.jessie/struct_hack.jc" line = "82" begin = "24" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2336,7 +2326,7 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/struct_hack_po48.why">
-      <location file = "why/struct_hack.why" line = "1915" begin = "11" end = "52"/>
+      <location file = "why/struct_hack.why" line = "1908" begin = "11" end = "52"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2515,7 +2505,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2570,7 +2590,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2589,6 +2613,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

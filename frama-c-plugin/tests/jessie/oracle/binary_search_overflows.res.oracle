@@ -52,7 +52,6 @@ int32 binary_search(int_P[..] t, int32 n, int32 v)
                                     ((k1 <= k2) && (k2 <= (n - 1)))) ==>
                                    ((t + k1).int_M <= (t + k2).int_M)))))));
 behavior default:
-  assumes true;
   ensures (C_46 : (((\result >= 0) && ((t + \result).int_M == v)) ||
                     ((\result == (- 1)) &&
                       (\forall integer k_0;
@@ -585,18 +584,17 @@ parameter binary_search :
     int_P_t_1_alloc_table:int_P alloc_table ->
      int_P_int_M_t_1:(int_P, int32) memory ->
       { } int32
-      { ((true = true) ->
-         (JC_14:
-         ((ge_int(integer_of_int32(result), (0))
-          and eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                      shift(t, integer_of_int32(result)))),
-              integer_of_int32(v)))
-         or (eq_int(integer_of_int32(result), neg_int((1)))
-            and (forall k_0:int.
-                 ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
-                  neq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                           shift(t, k_0))),
-                  integer_of_int32(v)))))))) }
+      { (JC_14:
+        ((ge_int(integer_of_int32(result), (0))
+         and eq_int(integer_of_int32(select(int_P_int_M_t_1,
+                                     shift(t, integer_of_int32(result)))),
+             integer_of_int32(v)))
+        or (eq_int(integer_of_int32(result), neg_int((1)))
+           and (forall k_0:int.
+                ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+                 neq_int(integer_of_int32(select(int_P_int_M_t_1,
+                                          shift(t, k_0))),
+                 integer_of_int32(v))))))) }
 
 parameter binary_search_requires :
  t:int_P pointer ->
@@ -620,18 +618,17 @@ parameter binary_search_requires :
                                                shift(t, k1))),
                        integer_of_int32(select(int_P_int_M_t_1, shift(t, k2))))))))))))}
       int32
-      { ((true = true) ->
-         (JC_14:
-         ((ge_int(integer_of_int32(result), (0))
-          and eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                      shift(t, integer_of_int32(result)))),
-              integer_of_int32(v)))
-         or (eq_int(integer_of_int32(result), neg_int((1)))
-            and (forall k_0:int.
-                 ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
-                  neq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                           shift(t, k_0))),
-                  integer_of_int32(v)))))))) }
+      { (JC_14:
+        ((ge_int(integer_of_int32(result), (0))
+         and eq_int(integer_of_int32(select(int_P_int_M_t_1,
+                                     shift(t, integer_of_int32(result)))),
+             integer_of_int32(v)))
+        or (eq_int(integer_of_int32(result), neg_int((1)))
+           and (forall k_0:int.
+                ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+                 neq_int(integer_of_int32(select(int_P_int_M_t_1,
+                                          shift(t, k_0))),
+                 integer_of_int32(v))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -651,22 +648,21 @@ parameter safe_int8_of_integer_ :
 
 let binary_search_ensures_default =
  fun (t : int_P pointer) (n : int32) (v : int32) (int_P_t_1_alloc_table : int_P alloc_table) (int_P_int_M_t_1 : (int_P, int32) memory) ->
-  { ((true = true)
-    and (JC_11:
-        ((JC_7: ge_int(integer_of_int32(n), (0)))
-        and ((JC_8: le_int(offset_min(int_P_t_1_alloc_table, t), (0)))
-            and ((JC_9:
-                 ge_int(offset_max(int_P_t_1_alloc_table, t),
-                 sub_int(integer_of_int32(n), (1))))
-                and (JC_10:
-                    (forall k1:int.
-                     (forall k2:int.
-                      ((le_int((0), k1)
-                       and (le_int(k1, k2)
-                           and le_int(k2, sub_int(integer_of_int32(n), (1))))) ->
-                       le_int(integer_of_int32(select(int_P_int_M_t_1,
-                                               shift(t, k1))),
-                       integer_of_int32(select(int_P_int_M_t_1, shift(t, k2))))))))))))) }
+  { (JC_11:
+    ((JC_7: ge_int(integer_of_int32(n), (0)))
+    and ((JC_8: le_int(offset_min(int_P_t_1_alloc_table, t), (0)))
+        and ((JC_9:
+             ge_int(offset_max(int_P_t_1_alloc_table, t),
+             sub_int(integer_of_int32(n), (1))))
+            and (JC_10:
+                (forall k1:int.
+                 (forall k2:int.
+                  ((le_int((0), k1)
+                   and (le_int(k1, k2)
+                       and le_int(k2, sub_int(integer_of_int32(n), (1))))) ->
+                   le_int(integer_of_int32(select(int_P_int_M_t_1,
+                                           shift(t, k1))),
+                   integer_of_int32(select(int_P_int_M_t_1, shift(t, k2)))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1382,7 +1378,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1437,7 +1463,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1456,6 +1486,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

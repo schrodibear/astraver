@@ -394,7 +394,6 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 char_P[..] strndup(char_P[..] s, integer n)
   requires (C_1 : valid_string{Here}(s));
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_2 : (((((C_6 : (\offset_min(\result) <= 0)) &&
                       (C_7 : (\offset_max(\result) >=
@@ -416,7 +415,6 @@ invariant valid_c :
 
 unit assign_int()
 behavior default:
-  assumes true;
   assigns (a + [..]).int_M;
   ensures (C_19 : true);
 {  
@@ -445,7 +443,6 @@ behavior default:
 
 unit assign_char()
 behavior default:
-  assumes true;
   assigns (c + [..]).char_xM;
   ensures (C_29 : true);
 {  
@@ -475,7 +472,6 @@ behavior default:
 
 unit main()
 behavior default:
-  assumes true;
   assigns (a + [..]).int_M,
   (c + [..]).char_xM;
   ensures (C_32 : true);
@@ -491,7 +487,6 @@ unit foo(int_P[..] a_0, integer aLength)
   requires (C_40 : ((C_41 : (\offset_min(a_0) <= 0)) &&
                      (C_42 : (\offset_max(a_0) >= (aLength - 1)))));
 behavior default:
-  assumes true;
   assigns (a_0 + [..]).int_M;
   ensures (C_43 : true);
 {  
@@ -1727,10 +1722,9 @@ parameter assign_char :
           valid___string_something_0(char_P___string_something_1_alloc_table))
          and ((JC_121: valid_a(int_P_a_2_alloc_table))
              and (JC_122: valid_c(char_xP_c_3_alloc_table))))))
-    and ((true = true) ->
-         (JC_113:
-         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
-         char_xP_char_xM_c_3, pset_all(pset_singleton(c@)))))) }
+    and (JC_113:
+        not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
+        char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))) }
 
 parameter assign_char_requires :
  tt:unit ->
@@ -1753,10 +1747,9 @@ parameter assign_char_requires :
           valid___string_something_0(char_P___string_something_1_alloc_table))
          and ((JC_121: valid_a(int_P_a_2_alloc_table))
              and (JC_122: valid_c(char_xP_c_3_alloc_table))))))
-    and ((true = true) ->
-         (JC_113:
-         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
-         char_xP_char_xM_c_3, pset_all(pset_singleton(c@)))))) }
+    and (JC_113:
+        not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
+        char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))) }
 
 parameter int_P_int_M_a_2 : (int_P, int) memory ref
 
@@ -1773,10 +1766,9 @@ parameter assign_int :
           valid___string_something_0(char_P___string_something_1_alloc_table))
          and ((JC_82: valid_a(int_P_a_2_alloc_table))
              and (JC_83: valid_c(char_xP_c_3_alloc_table))))))
-    and ((true = true) ->
-         (JC_74:
-         not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
-         int_P_int_M_a_2, pset_all(pset_singleton(a@)))))) }
+    and (JC_74:
+        not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
+        int_P_int_M_a_2, pset_all(pset_singleton(a@))))) }
 
 parameter assign_int_requires :
  tt:unit ->
@@ -1799,10 +1791,9 @@ parameter assign_int_requires :
           valid___string_something_0(char_P___string_something_1_alloc_table))
          and ((JC_82: valid_a(int_P_a_2_alloc_table))
              and (JC_83: valid_c(char_xP_c_3_alloc_table))))))
-    and ((true = true) ->
-         (JC_74:
-         not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
-         int_P_int_M_a_2, pset_all(pset_singleton(a@)))))) }
+    and (JC_74:
+        not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
+        int_P_int_M_a_2, pset_all(pset_singleton(a@))))) }
 
 parameter foo :
  a_0:int_P pointer ->
@@ -1820,10 +1811,9 @@ parameter foo :
              valid___string_something_0(char_P___string_something_1_alloc_table))
             and ((JC_202: valid_a(int_P_a_2_alloc_table))
                 and (JC_203: valid_c(char_xP_c_3_alloc_table))))))
-       and ((true = true) ->
-            (JC_194:
-            not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
-            int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@)))))) }
+       and (JC_194:
+           not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
+           int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@))))) }
 
 parameter foo_requires :
  a_0:int_P pointer ->
@@ -1854,10 +1844,9 @@ parameter foo_requires :
              valid___string_something_0(char_P___string_something_1_alloc_table))
             and ((JC_202: valid_a(int_P_a_2_alloc_table))
                 and (JC_203: valid_c(char_xP_c_3_alloc_table))))))
-       and ((true = true) ->
-            (JC_194:
-            not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
-            int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@)))))) }
+       and (JC_194:
+           not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
+           int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@))))) }
 
 parameter main :
  tt:unit ->
@@ -1872,14 +1861,13 @@ parameter main :
           valid___string_something_0(char_P___string_something_1_alloc_table))
          and ((JC_166: valid_a(int_P_a_2_alloc_table))
              and (JC_167: valid_c(char_xP_c_3_alloc_table))))))
-    and ((true = true) ->
-         (JC_158:
-         ((JC_156:
-          not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
-          char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
-         and (JC_157:
-             not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
-             int_P_int_M_a_2, pset_all(pset_singleton(a@)))))))) }
+    and (JC_158:
+        ((JC_156:
+         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
+         char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
+        and (JC_157:
+            not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
+            int_P_int_M_a_2, pset_all(pset_singleton(a@))))))) }
 
 parameter main_requires :
  tt:unit ->
@@ -1902,14 +1890,13 @@ parameter main_requires :
           valid___string_something_0(char_P___string_something_1_alloc_table))
          and ((JC_166: valid_a(int_P_a_2_alloc_table))
              and (JC_167: valid_c(char_xP_c_3_alloc_table))))))
-    and ((true = true) ->
-         (JC_158:
-         ((JC_156:
-          not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
-          char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
-         and (JC_157:
-             not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
-             int_P_int_M_a_2, pset_all(pset_singleton(a@)))))))) }
+    and (JC_158:
+        ((JC_156:
+         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
+         char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
+        and (JC_157:
+            not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
+            int_P_int_M_a_2, pset_all(pset_singleton(a@))))))) }
 
 parameter strndup :
  s_0:char_P pointer ->
@@ -1928,24 +1915,23 @@ parameter strndup :
                valid___string_something_0(char_P___string_something_1_alloc_table))
               and ((JC_56: valid_a(int_P_a_2_alloc_table))
                   and (JC_57: valid_c(char_xP_c_3_alloc_table))))))
-         and ((true = true) ->
-              (JC_47:
-              ((JC_42:
-               le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
-              and ((JC_43:
-                   ge_int(offset_max(char_P_result_24_alloc_table, result),
-                   minimum(strlen(s_0, char_P_char_M_s_23), n_0)))
-                  and ((JC_44:
-                       valid_string(result, char_P_result_24_alloc_table,
-                       char_P_char_M_result_24))
-                      and ((JC_45:
-                           le_int(strlen(result, char_P_char_M_result_24),
-                           n_0))
-                          and (JC_46:
-                              eq_int(strncmp(result, s_0, n_0,
-                                     char_P_char_M_s_23,
-                                     char_P_char_M_result_24),
-                              (0)))))))))) }
+         and (JC_47:
+             ((JC_42:
+              le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
+             and ((JC_43:
+                  ge_int(offset_max(char_P_result_24_alloc_table, result),
+                  minimum(strlen(s_0, char_P_char_M_s_23), n_0)))
+                 and ((JC_44:
+                      valid_string(result, char_P_result_24_alloc_table,
+                      char_P_char_M_result_24))
+                     and ((JC_45:
+                          le_int(strlen(result, char_P_char_M_result_24),
+                          n_0))
+                         and (JC_46:
+                             eq_int(strncmp(result, s_0, n_0,
+                                    char_P_char_M_s_23,
+                                    char_P_char_M_result_24),
+                             (0))))))))) }
 
 parameter strndup_requires :
  s_0:char_P pointer ->
@@ -1974,36 +1960,34 @@ parameter strndup_requires :
                valid___string_something_0(char_P___string_something_1_alloc_table))
               and ((JC_56: valid_a(int_P_a_2_alloc_table))
                   and (JC_57: valid_c(char_xP_c_3_alloc_table))))))
-         and ((true = true) ->
-              (JC_47:
-              ((JC_42:
-               le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
-              and ((JC_43:
-                   ge_int(offset_max(char_P_result_24_alloc_table, result),
-                   minimum(strlen(s_0, char_P_char_M_s_23), n_0)))
-                  and ((JC_44:
-                       valid_string(result, char_P_result_24_alloc_table,
-                       char_P_char_M_result_24))
-                      and ((JC_45:
-                           le_int(strlen(result, char_P_char_M_result_24),
-                           n_0))
-                          and (JC_46:
-                              eq_int(strncmp(result, s_0, n_0,
-                                     char_P_char_M_s_23,
-                                     char_P_char_M_result_24),
-                              (0)))))))))) }
+         and (JC_47:
+             ((JC_42:
+              le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
+             and ((JC_43:
+                  ge_int(offset_max(char_P_result_24_alloc_table, result),
+                  minimum(strlen(s_0, char_P_char_M_s_23), n_0)))
+                 and ((JC_44:
+                      valid_string(result, char_P_result_24_alloc_table,
+                      char_P_char_M_result_24))
+                     and ((JC_45:
+                          le_int(strlen(result, char_P_char_M_result_24),
+                          n_0))
+                         and (JC_46:
+                             eq_int(strncmp(result, s_0, n_0,
+                                    char_P_char_M_s_23,
+                                    char_P_char_M_result_24),
+                             (0))))))))) }
 
 let assign_char_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_108:
-        ((JC_104:
-         valid___string_something(char_P___string_something_1_alloc_table,
-         char_P_char_M___string_something_1))
-        and ((JC_105:
-             valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_106: valid_a(int_P_a_2_alloc_table))
-                and (JC_107: valid_c(char_xP_c_3_alloc_table))))))) }
+  { (JC_108:
+    ((JC_104:
+     valid___string_something(char_P___string_something_1_alloc_table,
+     char_P_char_M___string_something_1))
+    and ((JC_105:
+         valid___string_something_0(char_P___string_something_1_alloc_table))
+        and ((JC_106: valid_a(int_P_a_2_alloc_table))
+            and (JC_107: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
@@ -2190,15 +2174,14 @@ let assign_char_safety =
 
 let assign_int_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_69:
-        ((JC_65:
-         valid___string_something(char_P___string_something_1_alloc_table,
-         char_P_char_M___string_something_1))
-        and ((JC_66:
-             valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_67: valid_a(int_P_a_2_alloc_table))
-                and (JC_68: valid_c(char_xP_c_3_alloc_table))))))) }
+  { (JC_69:
+    ((JC_65:
+     valid___string_something(char_P___string_something_1_alloc_table,
+     char_P_char_M___string_something_1))
+    and ((JC_66:
+         valid___string_something_0(char_P___string_something_1_alloc_table))
+        and ((JC_67: valid_a(int_P_a_2_alloc_table))
+            and (JC_68: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
@@ -2374,20 +2357,19 @@ let assign_int_safety =
 
 let foo_ensures_default =
  fun (a_0 : int_P pointer) (aLength : int) (int_P_int_M_a_0_26 : (int_P, int) memory ref) (int_P_a_0_26_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_189:
-        ((JC_184:
-         ((JC_182: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
-         and (JC_183:
-             ge_int(offset_max(int_P_a_0_26_alloc_table, a_0),
-             sub_int(aLength, (1))))))
-        and ((JC_185:
-             valid___string_something(char_P___string_something_1_alloc_table,
-             char_P_char_M___string_something_1))
-            and ((JC_186:
-                 valid___string_something_0(char_P___string_something_1_alloc_table))
-                and ((JC_187: valid_a(int_P_a_2_alloc_table))
-                    and (JC_188: valid_c(char_xP_c_3_alloc_table)))))))) }
+  { (JC_189:
+    ((JC_184:
+     ((JC_182: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
+     and (JC_183:
+         ge_int(offset_max(int_P_a_0_26_alloc_table, a_0),
+         sub_int(aLength, (1))))))
+    and ((JC_185:
+         valid___string_something(char_P___string_something_1_alloc_table,
+         char_P_char_M___string_something_1))
+        and ((JC_186:
+             valid___string_something_0(char_P___string_something_1_alloc_table))
+            and ((JC_187: valid_a(int_P_a_2_alloc_table))
+                and (JC_188: valid_c(char_xP_c_3_alloc_table))))))) }
   (init:
   try
    begin
@@ -2566,15 +2548,14 @@ let foo_safety =
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_149:
-        ((JC_145:
-         valid___string_something(char_P___string_something_1_alloc_table,
-         char_P_char_M___string_something_1))
-        and ((JC_146:
-             valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_147: valid_a(int_P_a_2_alloc_table))
-                and (JC_148: valid_c(char_xP_c_3_alloc_table))))))) }
+  { (JC_149:
+    ((JC_145:
+     valid___string_something(char_P___string_something_1_alloc_table,
+     char_P_char_M___string_something_1))
+    and ((JC_146:
+         valid___string_something_0(char_P___string_something_1_alloc_table))
+        and ((JC_147: valid_a(int_P_a_2_alloc_table))
+            and (JC_148: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
@@ -2637,32 +2618,32 @@ why --project [...] why/bts0041.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041_po48.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "477" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "473" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po49.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "477" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "473" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po50.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "477" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "473" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po51.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "478" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "474" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po52.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "478" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "474" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po53.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "478" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "474" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2694,21 +2675,21 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "504" begin = "24" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "499" begin = "24" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "504" begin = "24" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "499" begin = "24" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po40.why">
-      <location file = "why/bts0041.why" line = "1977" begin = "62" end = "63"/>
+      <location file = "why/bts0041.why" line = "1964" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po41.why">
-      <location file = "why/bts0041.why" line = "1977" begin = "62" end = "63"/>
+      <location file = "why/bts0041.why" line = "1964" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po42.why">
@@ -2734,7 +2715,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "497" begin = "9" end = "338"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "492" begin = "9" end = "338"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po35.why">
@@ -2742,7 +2723,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "497" begin = "9" end = "338"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "492" begin = "9" end = "338"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po37.why">
@@ -2755,21 +2736,21 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "429" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "427" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "429" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "427" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po28.why">
-      <location file = "why/bts0041.why" line = "1783" begin = "61" end = "62"/>
+      <location file = "why/bts0041.why" line = "1771" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po29.why">
-      <location file = "why/bts0041.why" line = "1783" begin = "61" end = "62"/>
+      <location file = "why/bts0041.why" line = "1771" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po30.why">
@@ -2795,7 +2776,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po21.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "422" begin = "9" end = "358"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "420" begin = "9" end = "358"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po22.why">
@@ -2807,7 +2788,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "422" begin = "9" end = "358"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "420" begin = "9" end = "358"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po25.why">
@@ -2840,21 +2821,21 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "458" begin = "24" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "455" begin = "24" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po13.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "458" begin = "24" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "455" begin = "24" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po14.why">
-      <location file = "why/bts0041.why" line = "1594" begin = "62" end = "63"/>
+      <location file = "why/bts0041.why" line = "1583" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po15.why">
-      <location file = "why/bts0041.why" line = "1594" begin = "62" end = "63"/>
+      <location file = "why/bts0041.why" line = "1583" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po16.why">
@@ -2880,7 +2861,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "451" begin = "9" end = "462"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "448" begin = "9" end = "462"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po4.why">
@@ -2892,7 +2873,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "451" begin = "9" end = "462"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "448" begin = "9" end = "462"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po7.why">
@@ -3044,7 +3025,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -3099,7 +3110,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -3118,6 +3133,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

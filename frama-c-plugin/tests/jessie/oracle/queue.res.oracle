@@ -66,7 +66,6 @@ invariant q_invariant :
 unit push(int8 c)
   requires (C_23 : (q.full == 0));
 behavior default:
-  assumes true;
   assigns q.empty,
   q.full,
   q.last,
@@ -95,7 +94,6 @@ behavior default:
 int8 pop()
   requires (C_49 : (q.empty == 0));
 behavior default:
-  assumes true;
   assigns q.empty,
   q.full,
   q.first;
@@ -129,7 +127,6 @@ int32 test(queue[..] q1)
                       (C_61 : (\offset_max(q1) >= 0))) &&
                      (C_62 : (q.empty == 0))));
 behavior default:
-  assumes true;
   ensures (C_63 : (\result == \old(q1.empty)));
 {  
    (var int8 c_0);
@@ -717,25 +714,24 @@ parameter pop :
          and (JC_86:
              q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
-    and ((true = true) ->
-         (JC_79:
-         ((JC_74:
-          ((JC_72: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
-          and (JC_73:
-              eq_int(integer_of_int8(result),
-              integer_of_int8(select(char_P_char_M_q_4,
-                              shift(select(queue_contents_q_2, q),
-                              integer_of_int32(select(queue_first_q_2@, q@)))))))))
-         and (JC_78:
-             (((JC_75:
-               not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
-               queue_first_q_2, pset_singleton(q@)))
-              and (JC_76:
-                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                  queue_empty_q_2, pset_singleton(q@))))
-             and (JC_77:
-                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                 queue_full_q_2, pset_singleton(q@))))))))) }
+    and (JC_79:
+        ((JC_74:
+         ((JC_72: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+         and (JC_73:
+             eq_int(integer_of_int8(result),
+             integer_of_int8(select(char_P_char_M_q_4,
+                             shift(select(queue_contents_q_2, q),
+                             integer_of_int32(select(queue_first_q_2@, q@)))))))))
+        and (JC_78:
+            (((JC_75:
+              not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
+              queue_first_q_2, pset_singleton(q@)))
+             and (JC_76:
+                 not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
+                 queue_empty_q_2, pset_singleton(q@))))
+            and (JC_77:
+                not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
+                queue_full_q_2, pset_singleton(q@)))))))) }
 
 parameter pop_requires :
  tt:unit ->
@@ -755,25 +751,24 @@ parameter pop_requires :
          and (JC_86:
              q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
-    and ((true = true) ->
-         (JC_79:
-         ((JC_74:
-          ((JC_72: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
-          and (JC_73:
-              eq_int(integer_of_int8(result),
-              integer_of_int8(select(char_P_char_M_q_4,
-                              shift(select(queue_contents_q_2, q),
-                              integer_of_int32(select(queue_first_q_2@, q@)))))))))
-         and (JC_78:
-             (((JC_75:
-               not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
-               queue_first_q_2, pset_singleton(q@)))
-              and (JC_76:
-                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                  queue_empty_q_2, pset_singleton(q@))))
-             and (JC_77:
-                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                 queue_full_q_2, pset_singleton(q@))))))))) }
+    and (JC_79:
+        ((JC_74:
+         ((JC_72: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+         and (JC_73:
+             eq_int(integer_of_int8(result),
+             integer_of_int8(select(char_P_char_M_q_4,
+                             shift(select(queue_contents_q_2, q),
+                             integer_of_int32(select(queue_first_q_2@, q@)))))))))
+        and (JC_78:
+            (((JC_75:
+              not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
+              queue_first_q_2, pset_singleton(q@)))
+             and (JC_76:
+                 not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
+                 queue_empty_q_2, pset_singleton(q@))))
+            and (JC_77:
+                not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
+                queue_full_q_2, pset_singleton(q@)))))))) }
 
 parameter push :
  c:int8 ->
@@ -786,34 +781,31 @@ parameter push :
          and (JC_46:
              q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
-    and ((true = true) ->
-         (JC_39:
-         ((JC_33:
-          ((JC_31:
-           eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
-          and (JC_32:
-              eq_int(integer_of_int8(select(char_P_char_M_q_4,
-                                     shift(select(queue_contents_q_2, q),
-                                     integer_of_int32(select(queue_last_q_2@,
-                                                      q@))))),
-              integer_of_int8(c)))))
-         and (JC_38:
-             ((((JC_34:
-                not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
-                char_P_char_M_q_4,
-                pset_range(pset_deref(queue_contents_q_2@,
-                           pset_singleton(q@)),
-                integer_of_int32(select(queue_last_q_2@, q@)),
-                integer_of_int32(select(queue_last_q_2@, q@)))))
-               and (JC_35:
-                   not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
-                   queue_last_q_2, pset_singleton(q@))))
-              and (JC_36:
-                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                  queue_empty_q_2, pset_singleton(q@))))
-             and (JC_37:
-                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                 queue_full_q_2, pset_singleton(q@))))))))) }
+    and (JC_39:
+        ((JC_33:
+         ((JC_31: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+         and (JC_32:
+             eq_int(integer_of_int8(select(char_P_char_M_q_4,
+                                    shift(select(queue_contents_q_2, q),
+                                    integer_of_int32(select(queue_last_q_2@,
+                                                     q@))))),
+             integer_of_int8(c)))))
+        and (JC_38:
+            ((((JC_34:
+               not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
+               char_P_char_M_q_4,
+               pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
+               integer_of_int32(select(queue_last_q_2@, q@)),
+               integer_of_int32(select(queue_last_q_2@, q@)))))
+              and (JC_35:
+                  not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
+                  queue_last_q_2, pset_singleton(q@))))
+             and (JC_36:
+                 not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
+                 queue_empty_q_2, pset_singleton(q@))))
+            and (JC_37:
+                not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
+                queue_full_q_2, pset_singleton(q@)))))))) }
 
 parameter push_requires :
  c:int8 ->
@@ -833,34 +825,31 @@ parameter push_requires :
          and (JC_46:
              q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
-    and ((true = true) ->
-         (JC_39:
-         ((JC_33:
-          ((JC_31:
-           eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
-          and (JC_32:
-              eq_int(integer_of_int8(select(char_P_char_M_q_4,
-                                     shift(select(queue_contents_q_2, q),
-                                     integer_of_int32(select(queue_last_q_2@,
-                                                      q@))))),
-              integer_of_int8(c)))))
-         and (JC_38:
-             ((((JC_34:
-                not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
-                char_P_char_M_q_4,
-                pset_range(pset_deref(queue_contents_q_2@,
-                           pset_singleton(q@)),
-                integer_of_int32(select(queue_last_q_2@, q@)),
-                integer_of_int32(select(queue_last_q_2@, q@)))))
-               and (JC_35:
-                   not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
-                   queue_last_q_2, pset_singleton(q@))))
-              and (JC_36:
-                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                  queue_empty_q_2, pset_singleton(q@))))
-             and (JC_37:
-                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                 queue_full_q_2, pset_singleton(q@))))))))) }
+    and (JC_39:
+        ((JC_33:
+         ((JC_31: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+         and (JC_32:
+             eq_int(integer_of_int8(select(char_P_char_M_q_4,
+                                    shift(select(queue_contents_q_2, q),
+                                    integer_of_int32(select(queue_last_q_2@,
+                                                     q@))))),
+             integer_of_int8(c)))))
+        and (JC_38:
+            ((((JC_34:
+               not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
+               char_P_char_M_q_4,
+               pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
+               integer_of_int32(select(queue_last_q_2@, q@)),
+               integer_of_int32(select(queue_last_q_2@, q@)))))
+              and (JC_35:
+                  not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
+                  queue_last_q_2, pset_singleton(q@))))
+             and (JC_36:
+                 not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
+                 queue_empty_q_2, pset_singleton(q@))))
+            and (JC_37:
+                not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
+                queue_full_q_2, pset_singleton(q@)))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -887,10 +876,9 @@ parameter test :
            and (JC_117:
                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
-      and ((true = true) ->
-           (JC_110:
-           eq_int(integer_of_int32(result),
-           integer_of_uint32(select(queue_empty_q1_3@, q1@)))))) }
+      and (JC_110:
+          eq_int(integer_of_int32(result),
+          integer_of_uint32(select(queue_empty_q1_3@, q1@))))) }
 
 parameter test_requires :
  q1:queue pointer ->
@@ -916,10 +904,9 @@ parameter test_requires :
            and (JC_117:
                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
-      and ((true = true) ->
-           (JC_110:
-           eq_int(integer_of_int32(result),
-           integer_of_uint32(select(queue_empty_q1_3@, q1@)))))) }
+      and (JC_110:
+          eq_int(integer_of_int32(result),
+          integer_of_uint32(select(queue_empty_q1_3@, q1@))))) }
 
 parameter uint1_of_integer_ :
  x:int ->
@@ -933,14 +920,13 @@ parameter uint32_of_integer_ :
 
 let pop_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_62:
-        ((JC_58: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
-        and ((JC_59: valid_t(char_P_t_1_alloc_table))
-            and ((JC_60: valid_q(queue_q_2_alloc_table))
-                and (JC_61:
-                    q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
-                    queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))) }
+  { (JC_62:
+    ((JC_58: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+    and ((JC_59: valid_t(char_P_t_1_alloc_table))
+        and ((JC_60: valid_q(queue_q_2_alloc_table))
+            and (JC_61:
+                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   (let return = ref (any_int8 void) in
   try
@@ -1136,14 +1122,13 @@ let pop_safety =
 
 let push_ensures_default =
  fun (c : int8) ->
-  { ((true = true)
-    and (JC_20:
-        ((JC_16: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
-        and ((JC_17: valid_t(char_P_t_1_alloc_table))
-            and ((JC_18: valid_q(queue_q_2_alloc_table))
-                and (JC_19:
-                    q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
-                    queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))) }
+  { (JC_20:
+    ((JC_16: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+    and ((JC_17: valid_t(char_P_t_1_alloc_table))
+        and ((JC_18: valid_q(queue_q_2_alloc_table))
+            and (JC_19:
+                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   try
    begin
@@ -1351,18 +1336,17 @@ let push_safety =
 
 let test_ensures_default =
  fun (q1 : queue pointer) (queue_q1_3_alloc_table : queue alloc_table) (queue_empty_q1_3 : (queue, uint32) memory) ->
-  { ((true = true)
-    and (JC_107:
-        ((JC_103:
-         ((JC_100: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
-         and ((JC_101: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
-             and (JC_102:
-                 eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
-        and ((JC_104: valid_t(char_P_t_1_alloc_table))
-            and ((JC_105: valid_q(queue_q_2_alloc_table))
-                and (JC_106:
-                    q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
-                    queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))) }
+  { (JC_107:
+    ((JC_103:
+     ((JC_100: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
+     and ((JC_101: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
+         and (JC_102:
+             eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
+    and ((JC_104: valid_t(char_P_t_1_alloc_table))
+        and ((JC_105: valid_q(queue_q_2_alloc_table))
+            and (JC_106:
+                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1521,12 +1505,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/queue_po23.why">
-      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "78" begin = "18" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "77" begin = "18" end = "72"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queue_po24.why">
-      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "78" begin = "18" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "77" begin = "18" end = "72"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1802,7 +1786,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1857,7 +1871,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1876,6 +1894,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

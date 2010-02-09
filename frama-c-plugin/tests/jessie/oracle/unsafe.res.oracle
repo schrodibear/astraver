@@ -42,22 +42,20 @@ int_P[0..9] t;
 invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 9))
 
-int32 f(int32 i_1)
+int32 f(int32 i_0)
 behavior default:
-  assumes true;
   ensures (C_5 : true);
 {  
    (var int32 __retres);
    
-   {  (C_4 : (__retres = (C_3 : (t + (C_2 : ((C_1 : (i_1 - i_1)) :> int32))).int_M)));
+   {  (C_4 : (__retres = (C_3 : (t + (C_2 : ((C_1 : (i_0 - i_0)) :> int32))).int_M)));
       
       (return __retres)
    }
 }
 
-int32 g(int32 i_2)
+int32 g(int32 i_1)
 behavior default:
-  assumes true;
   ensures (C_8 : true);
 {  
    (var int32 __retres_0);
@@ -68,22 +66,20 @@ behavior default:
    }
 }
 
-int32 h(int32 i)
+int32 h(int32 i_2)
 behavior default:
-  assumes true;
   ensures (C_11 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_10 : (__retres_1 = (C_9 : (t + i).int_M)));
+   {  (C_10 : (__retres_1 = (C_9 : (t + i_2).int_M)));
       
       (return __retres_1)
    }
 }
 
-int32 h2(int32 i_0)
+int32 h2(int32 i)
 behavior default:
-  assumes true;
   ensures (C_14 : true);
 {  
    (var int32 __retres_2);
@@ -542,45 +538,45 @@ parameter int_P_t_1_alloc_table : int_P alloc_table ref
 parameter int_P_int_M_t_1 : (int_P, int32) memory ref
 
 parameter f :
- i_1:int32 ->
+ i_0:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_12: valid_t(int_P_t_1_alloc_table)) }
 
 parameter f_requires :
- i_1:int32 ->
+ i_0:int32 ->
   { (JC_5: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_12: valid_t(int_P_t_1_alloc_table)) }
 
 parameter g :
- i_2:int32 ->
+ i_1:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_22: valid_t(int_P_t_1_alloc_table)) }
 
 parameter g_requires :
- i_2:int32 ->
+ i_1:int32 ->
   { (JC_15: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_22: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h :
- i:int32 ->
+ i_2:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_31: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h2 :
- i_0:int32 ->
+ i:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_40: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h2_requires :
- i_0:int32 ->
+ i:int32 ->
   { (JC_33: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_40: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h_requires :
- i:int32 ->
+ i_2:int32 ->
   { (JC_24: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_31: valid_t(int_P_t_1_alloc_table)) }
@@ -602,8 +598,8 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let f_ensures_default =
- fun (i_1 : int32) ->
-  { ((true = true) and (JC_7: valid_t(int_P_t_1_alloc_table))) }
+ fun (i_0 : int32) ->
+  { (JC_7: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -618,8 +614,8 @@ let f_ensures_default =
                                                                     (safe_int32_of_integer_ 
                                                                     (C_1:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 i_1)) 
-                                                                    (integer_of_int32 i_1)))))))))) in
+                                                                    (integer_of_int32 i_0)) 
+                                                                    (integer_of_int32 i_0)))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -632,7 +628,7 @@ let f_ensures_default =
   { (JC_9: true) }
 
 let f_safety =
- fun (i_1 : int32) ->
+ fun (i_0 : int32) ->
   { (JC_7: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -648,8 +644,8 @@ let f_safety =
                                                        (JC_13:
                                                        (int32_of_integer_ 
                                                         (C_1:
-                                                        ((sub_int (integer_of_int32 i_1)) 
-                                                         (integer_of_int32 i_1))))))))))) in
+                                                        ((sub_int (integer_of_int32 i_0)) 
+                                                         (integer_of_int32 i_0))))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -662,8 +658,8 @@ let f_safety =
   { (JC_11: valid_t(int_P_t_1_alloc_table)) }
 
 let g_ensures_default =
- fun (i_2 : int32) ->
-  { ((true = true) and (JC_17: valid_t(int_P_t_1_alloc_table))) }
+ fun (i_1 : int32) ->
+  { (JC_17: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -686,7 +682,7 @@ let g_ensures_default =
   { (JC_19: true) }
 
 let g_safety =
- fun (i_2 : int32) ->
+ fun (i_1 : int32) ->
   { (JC_17: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -710,8 +706,8 @@ let g_safety =
   { (JC_21: valid_t(int_P_t_1_alloc_table)) }
 
 let h2_ensures_default =
- fun (i_0 : int32) ->
-  { ((true = true) and (JC_35: valid_t(int_P_t_1_alloc_table))) }
+ fun (i : int32) ->
+  { (JC_35: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -734,7 +730,7 @@ let h2_ensures_default =
   { (JC_37: true) }
 
 let h2_safety =
- fun (i_0 : int32) ->
+ fun (i : int32) ->
   { (JC_35: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -758,8 +754,8 @@ let h2_safety =
   { (JC_39: valid_t(int_P_t_1_alloc_table)) }
 
 let h_ensures_default =
- fun (i : int32) ->
-  { ((true = true) and (JC_26: valid_t(int_P_t_1_alloc_table))) }
+ fun (i_2 : int32) ->
+  { (JC_26: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -769,7 +765,7 @@ let h_ensures_default =
      begin
        (let jessie_17 = (__retres_1 := (C_9:
                                        ((safe_acc_ !int_P_int_M_t_1) 
-                                        ((shift t) (integer_of_int32 i))))) in
+                                        ((shift t) (integer_of_int32 i_2))))) in
        void);
       (return := !__retres_1);
       (raise Return)
@@ -782,7 +778,7 @@ let h_ensures_default =
   { (JC_28: true) }
 
 let h_safety =
- fun (i : int32) ->
+ fun (i_2 : int32) ->
   { (JC_26: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -794,7 +790,7 @@ let h_safety =
        (let jessie_14 = (__retres_1 := (C_9:
                                        (JC_32:
                                        ((((offset_acc_ !int_P_t_1_alloc_table) !int_P_int_M_t_1) t) 
-                                        (integer_of_int32 i))))) in
+                                        (integer_of_int32 i_2))))) in
        void);
       (return := !__retres_1);
       (raise Return)
@@ -1006,7 +1002,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1061,7 +1087,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1080,6 +1110,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

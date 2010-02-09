@@ -54,7 +54,6 @@ unit g(int_P[..] p_0)
   requires (C_3 : ((C_4 : (\offset_min(p_0) <= 0)) &&
                     (C_5 : (\offset_max(p_0) >= 0))));
 behavior default:
-  assumes true;
   assigns p_0.int_M;
   ensures (C_6 : (p_0.int_M == 1));
 {  
@@ -68,7 +67,6 @@ int_P[0] x;
 
 unit f1()
 behavior default:
-  assumes true;
   assigns x.int_M;
   ensures (C_9 : (x.int_M == 1));
 {  
@@ -80,7 +78,6 @@ behavior default:
 
 unit f2()
 behavior default:
-  assumes true;
   assigns x.int_M;
   ensures (C_11 : (x.int_M == 1));
 {  
@@ -96,7 +93,6 @@ unit f4()
   requires (C_19 : ((C_20 : (\offset_min(plas) <= 0)) &&
                      (C_21 : (\offset_max(plas) >= 0))));
 behavior default:
-  assumes true;
   assigns plas.c1.int_M,
   plas.c2.int_M;
   ensures (C_22 : ((C_23 : (plas.c1.int_M == 1)) &&
@@ -121,7 +117,6 @@ unit h(int_xP[..] p)
                      ((C_33 : (\offset_min(p.int_xM) <= 0)) &&
                        (C_34 : (\offset_max(p.int_xM) >= 0)))));
 behavior default:
-  assumes true;
   assigns p.int_xM.int_M;
   ensures (C_35 : (p.int_xM.int_M == 2));
 {  
@@ -891,12 +886,11 @@ parameter f1 :
   { } unit reads int_P_int_M_x_1,int_P_t_3_alloc_table,int_P_x_1_alloc_table
   writes int_P_int_M_x_1
   { ((JC_38: valid_t(int_P_t_3_alloc_table))
-    and ((true = true) ->
-         (JC_36:
-         ((JC_34: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
-         and (JC_35:
-             not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
-             int_P_int_M_x_1, pset_singleton(x@))))))) }
+    and (JC_36:
+        ((JC_34: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
+        and (JC_35:
+            not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+            int_P_int_M_x_1, pset_singleton(x@)))))) }
 
 parameter f1_requires :
  tt:unit ->
@@ -904,24 +898,22 @@ parameter f1_requires :
   reads int_P_int_M_x_1,int_P_t_3_alloc_table,int_P_x_1_alloc_table
   writes int_P_int_M_x_1
   { ((JC_38: valid_t(int_P_t_3_alloc_table))
-    and ((true = true) ->
-         (JC_36:
-         ((JC_34: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
-         and (JC_35:
-             not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
-             int_P_int_M_x_1, pset_singleton(x@))))))) }
+    and (JC_36:
+        ((JC_34: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
+        and (JC_35:
+            not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+            int_P_int_M_x_1, pset_singleton(x@)))))) }
 
 parameter f2 :
  tt:unit ->
   { } unit reads int_P_int_M_x_1,int_P_t_3_alloc_table,int_P_x_1_alloc_table
   writes int_P_int_M_x_1
   { ((JC_50: valid_t(int_P_t_3_alloc_table))
-    and ((true = true) ->
-         (JC_48:
-         ((JC_46: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
-         and (JC_47:
-             not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
-             int_P_int_M_x_1, pset_singleton(x@))))))) }
+    and (JC_48:
+        ((JC_46: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
+        and (JC_47:
+            not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+            int_P_int_M_x_1, pset_singleton(x@)))))) }
 
 parameter f2_requires :
  tt:unit ->
@@ -929,12 +921,11 @@ parameter f2_requires :
   reads int_P_int_M_x_1,int_P_t_3_alloc_table,int_P_x_1_alloc_table
   writes int_P_int_M_x_1
   { ((JC_50: valid_t(int_P_t_3_alloc_table))
-    and ((true = true) ->
-         (JC_48:
-         ((JC_46: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
-         and (JC_47:
-             not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
-             int_P_int_M_x_1, pset_singleton(x@))))))) }
+    and (JC_48:
+        ((JC_46: eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), (1)))
+        and (JC_47:
+            not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+            int_P_int_M_x_1, pset_singleton(x@)))))) }
 
 parameter int_P_plas_2_alloc_table : int_P alloc_table ref
 
@@ -946,24 +937,23 @@ parameter f4 :
   reads __anonstruct_las_1_c1_plas_2,__anonstruct_las_1_c2_plas_2,__anonstruct_las_1_plas_2_alloc_table,int_P_int_M_plas_2,int_P_plas_2_alloc_table,int_P_t_3_alloc_table
   writes int_P_int_M_plas_2
   { ((JC_76: valid_t(int_P_t_3_alloc_table))
-    and ((true = true) ->
-         (JC_74:
-         ((JC_72:
-          ((JC_70:
-           eq_int(integer_of_int32(select(int_P_int_M_plas_2,
-                                   select(__anonstruct_las_1_c1_plas_2, plas))),
-           (1)))
-          and (JC_71:
-              eq_int(integer_of_int32(select(int_P_int_M_plas_2,
-                                      select(__anonstruct_las_1_c2_plas_2,
-                                      plas))),
-              (1)))))
-         and (JC_73:
-             not_assigns(int_P_plas_2_alloc_table@, int_P_int_M_plas_2@,
-             int_P_int_M_plas_2,
-             pset_union(pset_deref(__anonstruct_las_1_c2_plas_2@,
-                        pset_singleton(plas@)),
-             pset_deref(__anonstruct_las_1_c1_plas_2@, pset_singleton(plas@))))))))) }
+    and (JC_74:
+        ((JC_72:
+         ((JC_70:
+          eq_int(integer_of_int32(select(int_P_int_M_plas_2,
+                                  select(__anonstruct_las_1_c1_plas_2, plas))),
+          (1)))
+         and (JC_71:
+             eq_int(integer_of_int32(select(int_P_int_M_plas_2,
+                                     select(__anonstruct_las_1_c2_plas_2,
+                                     plas))),
+             (1)))))
+        and (JC_73:
+            not_assigns(int_P_plas_2_alloc_table@, int_P_int_M_plas_2@,
+            int_P_int_M_plas_2,
+            pset_union(pset_deref(__anonstruct_las_1_c2_plas_2@,
+                       pset_singleton(plas@)),
+            pset_deref(__anonstruct_las_1_c1_plas_2@, pset_singleton(plas@)))))))) }
 
 parameter f4_requires :
  tt:unit ->
@@ -978,24 +968,23 @@ parameter f4_requires :
   reads __anonstruct_las_1_c1_plas_2,__anonstruct_las_1_c2_plas_2,__anonstruct_las_1_plas_2_alloc_table,int_P_int_M_plas_2,int_P_plas_2_alloc_table,int_P_t_3_alloc_table
   writes int_P_int_M_plas_2
   { ((JC_76: valid_t(int_P_t_3_alloc_table))
-    and ((true = true) ->
-         (JC_74:
-         ((JC_72:
-          ((JC_70:
-           eq_int(integer_of_int32(select(int_P_int_M_plas_2,
-                                   select(__anonstruct_las_1_c1_plas_2, plas))),
-           (1)))
-          and (JC_71:
-              eq_int(integer_of_int32(select(int_P_int_M_plas_2,
-                                      select(__anonstruct_las_1_c2_plas_2,
-                                      plas))),
-              (1)))))
-         and (JC_73:
-             not_assigns(int_P_plas_2_alloc_table@, int_P_int_M_plas_2@,
-             int_P_int_M_plas_2,
-             pset_union(pset_deref(__anonstruct_las_1_c2_plas_2@,
-                        pset_singleton(plas@)),
-             pset_deref(__anonstruct_las_1_c1_plas_2@, pset_singleton(plas@))))))))) }
+    and (JC_74:
+        ((JC_72:
+         ((JC_70:
+          eq_int(integer_of_int32(select(int_P_int_M_plas_2,
+                                  select(__anonstruct_las_1_c1_plas_2, plas))),
+          (1)))
+         and (JC_71:
+             eq_int(integer_of_int32(select(int_P_int_M_plas_2,
+                                     select(__anonstruct_las_1_c2_plas_2,
+                                     plas))),
+             (1)))))
+        and (JC_73:
+            not_assigns(int_P_plas_2_alloc_table@, int_P_int_M_plas_2@,
+            int_P_int_M_plas_2,
+            pset_union(pset_deref(__anonstruct_las_1_c2_plas_2@,
+                       pset_singleton(plas@)),
+            pset_deref(__anonstruct_las_1_c1_plas_2@, pset_singleton(plas@)))))))) }
 
 parameter g :
  p_0:int_P pointer ->
@@ -1004,13 +993,12 @@ parameter g :
     { } unit reads int_P_int_M_p_0_4,int_P_t_3_alloc_table
     writes int_P_int_M_p_0_4
     { ((JC_25: valid_t(int_P_t_3_alloc_table))
-      and ((true = true) ->
-           (JC_23:
-           ((JC_21:
-            eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
-           and (JC_22:
-               not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
-               int_P_int_M_p_0_4, pset_singleton(p_0@))))))) }
+      and (JC_23:
+          ((JC_21:
+           eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+          and (JC_22:
+              not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
+              int_P_int_M_p_0_4, pset_singleton(p_0@)))))) }
 
 parameter g_requires :
  p_0:int_P pointer ->
@@ -1024,13 +1012,12 @@ parameter g_requires :
     unit reads int_P_int_M_p_0_4,int_P_t_3_alloc_table
     writes int_P_int_M_p_0_4
     { ((JC_25: valid_t(int_P_t_3_alloc_table))
-      and ((true = true) ->
-           (JC_23:
-           ((JC_21:
-            eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
-           and (JC_22:
-               not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
-               int_P_int_M_p_0_4, pset_singleton(p_0@))))))) }
+      and (JC_23:
+          ((JC_21:
+           eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+          and (JC_22:
+              not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
+              int_P_int_M_p_0_4, pset_singleton(p_0@)))))) }
 
 parameter h :
  p:int_xP pointer ->
@@ -1041,16 +1028,15 @@ parameter h :
       { } unit reads int_P_int_M_int_xM_6,int_P_t_3_alloc_table
       writes int_P_int_M_int_xM_6
       { ((JC_108: valid_t(int_P_t_3_alloc_table))
-        and ((true = true) ->
-             (JC_106:
-             ((JC_104:
-              eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                                      select(int_xP_int_xM_p_5, p))),
-              (2)))
-             and (JC_105:
-                 not_assigns(int_P_int_xM_6_alloc_table@,
-                 int_P_int_M_int_xM_6@, int_P_int_M_int_xM_6,
-                 pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@)))))))) }
+        and (JC_106:
+            ((JC_104:
+             eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
+                                     select(int_xP_int_xM_p_5, p))),
+             (2)))
+            and (JC_105:
+                not_assigns(int_P_int_xM_6_alloc_table@,
+                int_P_int_M_int_xM_6@, int_P_int_M_int_xM_6,
+                pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@))))))) }
 
 parameter h_requires :
  p:int_xP pointer ->
@@ -1074,16 +1060,15 @@ parameter h_requires :
       unit reads int_P_int_M_int_xM_6,int_P_t_3_alloc_table
       writes int_P_int_M_int_xM_6
       { ((JC_108: valid_t(int_P_t_3_alloc_table))
-        and ((true = true) ->
-             (JC_106:
-             ((JC_104:
-              eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                                      select(int_xP_int_xM_p_5, p))),
-              (2)))
-             and (JC_105:
-                 not_assigns(int_P_int_xM_6_alloc_table@,
-                 int_P_int_M_int_xM_6@, int_P_int_M_int_xM_6,
-                 pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@)))))))) }
+        and (JC_106:
+            ((JC_104:
+             eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
+                                     select(int_xP_int_xM_p_5, p))),
+             (2)))
+            and (JC_105:
+                not_assigns(int_P_int_xM_6_alloc_table@,
+                int_P_int_M_int_xM_6@, int_P_int_M_int_xM_6,
+                pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1103,7 +1088,7 @@ parameter safe_int8_of_integer_ :
 
 let f1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_29: valid_t(int_P_t_3_alloc_table))) }
+  { (JC_29: valid_t(int_P_t_3_alloc_table)) }
   (init:
   try
    begin
@@ -1149,7 +1134,7 @@ let f1_safety =
 
 let f2_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_41: valid_t(int_P_t_3_alloc_table))) }
+  { (JC_41: valid_t(int_P_t_3_alloc_table)) }
   (init:
   try
    begin
@@ -1192,16 +1177,13 @@ let f2_safety =
 
 let f4_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_63:
-        ((JC_61:
-         ((JC_59:
-          le_int(offset_min(__anonstruct_las_1_plas_2_alloc_table, plas),
-          (0)))
-         and (JC_60:
-             ge_int(offset_max(__anonstruct_las_1_plas_2_alloc_table, plas),
-             (0)))))
-        and (JC_62: valid_t(int_P_t_3_alloc_table))))) }
+  { (JC_63:
+    ((JC_61:
+     ((JC_59:
+      le_int(offset_min(__anonstruct_las_1_plas_2_alloc_table, plas), (0)))
+     and (JC_60:
+         ge_int(offset_max(__anonstruct_las_1_plas_2_alloc_table, plas), (0)))))
+    and (JC_62: valid_t(int_P_t_3_alloc_table)))) }
   (init:
   try
    begin
@@ -1297,12 +1279,11 @@ let f4_safety =
 
 let g_ensures_default =
  fun (p_0 : int_P pointer) (int_P_int_M_p_0_4 : (int_P, int32) memory ref) (int_P_p_0_4_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_16:
-        ((JC_14:
-         ((JC_12: le_int(offset_min(int_P_p_0_4_alloc_table, p_0), (0)))
-         and (JC_13: ge_int(offset_max(int_P_p_0_4_alloc_table, p_0), (0)))))
-        and (JC_15: valid_t(int_P_t_3_alloc_table))))) }
+  { (JC_16:
+    ((JC_14:
+     ((JC_12: le_int(offset_min(int_P_p_0_4_alloc_table, p_0), (0)))
+     and (JC_13: ge_int(offset_max(int_P_p_0_4_alloc_table, p_0), (0)))))
+    and (JC_15: valid_t(int_P_t_3_alloc_table)))) }
   (init:
   try
    begin
@@ -1353,20 +1334,19 @@ let g_safety =
 
 let h_ensures_default =
  fun (p : int_xP pointer) (int_P_int_M_int_xM_6 : (int_P, int32) memory ref) (int_P_int_xM_6_alloc_table : int_P alloc_table) (int_xP_p_5_alloc_table : int_xP alloc_table) (int_xP_int_xM_p_5 : (int_xP, int_P pointer) memory) ->
-  { ((true = true)
-    and (JC_99:
-        ((JC_97:
-         ((JC_93: le_int(offset_min(int_xP_p_5_alloc_table, p), (0)))
-         and ((JC_94: ge_int(offset_max(int_xP_p_5_alloc_table, p), (0)))
-             and ((JC_95:
-                  le_int(offset_min(int_P_int_xM_6_alloc_table,
-                         select(int_xP_int_xM_p_5, p)),
-                  (0)))
-                 and (JC_96:
-                     ge_int(offset_max(int_P_int_xM_6_alloc_table,
-                            select(int_xP_int_xM_p_5, p)),
-                     (0)))))))
-        and (JC_98: valid_t(int_P_t_3_alloc_table))))) }
+  { (JC_99:
+    ((JC_97:
+     ((JC_93: le_int(offset_min(int_xP_p_5_alloc_table, p), (0)))
+     and ((JC_94: ge_int(offset_max(int_xP_p_5_alloc_table, p), (0)))
+         and ((JC_95:
+              le_int(offset_min(int_P_int_xM_6_alloc_table,
+                     select(int_xP_int_xM_p_5, p)),
+              (0)))
+             and (JC_96:
+                 ge_int(offset_max(int_P_int_xM_6_alloc_table,
+                        select(int_xP_int_xM_p_5, p)),
+                 (0)))))))
+    and (JC_98: valid_t(int_P_t_3_alloc_table)))) }
   (init:
   try
    begin
@@ -1448,12 +1428,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po28.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "122" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "117" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po29.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "122" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "117" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1473,12 +1453,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po22.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "55" begin = "14" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "54" begin = "14" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po23.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "55" begin = "14" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "54" begin = "14" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1518,12 +1498,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po14.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "100" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "96" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po15.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "100" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "96" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1538,12 +1518,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po18.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "101" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "97" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po19.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "101" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "97" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1567,12 +1547,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po5.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "81" begin = "14" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "78" begin = "14" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po6.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "81" begin = "14" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.jessie/ref_glob.jc" line = "78" begin = "14" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1744,7 +1724,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1799,7 +1809,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1818,6 +1832,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

@@ -64,7 +64,6 @@ invariant s_const :
 
 int32 f()
 behavior default:
-  assumes true;
   ensures (C_12 : (\result == 7));
 {  
    (var int32 y);
@@ -83,7 +82,6 @@ behavior default:
 
 int32 g()
 behavior default:
-  assumes true;
   ensures (C_23 : (\result == 4));
 {  
    (var int_P[0..1] t_0);
@@ -107,7 +105,6 @@ behavior default:
 
 int32 h()
 behavior default:
-  assumes true;
   ensures (C_41 : (\result == 12));
 {  
    (var int_P[0..2] u);
@@ -755,7 +752,7 @@ parameter f :
      and ((JC_33: t_const(int_P_int_M_t_1))
          and ((JC_34: valid_s(S_s_2_alloc_table))
              and (JC_35: s_const(S_b_s_2, int_P_int_M_s_2))))))
-    and ((true = true) -> (JC_26: eq_int(integer_of_int32(result), (7))))) }
+    and (JC_26: eq_int(integer_of_int32(result), (7)))) }
 
 parameter f_requires :
  tt:unit ->
@@ -771,7 +768,7 @@ parameter f_requires :
      and ((JC_33: t_const(int_P_int_M_t_1))
          and ((JC_34: valid_s(S_s_2_alloc_table))
              and (JC_35: s_const(S_b_s_2, int_P_int_M_s_2))))))
-    and ((true = true) -> (JC_26: eq_int(integer_of_int32(result), (7))))) }
+    and (JC_26: eq_int(integer_of_int32(result), (7)))) }
 
 parameter g :
  tt:unit ->
@@ -782,7 +779,7 @@ parameter g :
      and ((JC_59: t_const(int_P_int_M_t_1))
          and ((JC_60: valid_s(S_s_2_alloc_table))
              and (JC_61: s_const(S_b_s_2, int_P_int_M_s_2))))))
-    and ((true = true) -> (JC_52: eq_int(integer_of_int32(result), (4))))) }
+    and (JC_52: eq_int(integer_of_int32(result), (4)))) }
 
 parameter g_requires :
  tt:unit ->
@@ -798,7 +795,7 @@ parameter g_requires :
      and ((JC_59: t_const(int_P_int_M_t_1))
          and ((JC_60: valid_s(S_s_2_alloc_table))
              and (JC_61: s_const(S_b_s_2, int_P_int_M_s_2))))))
-    and ((true = true) -> (JC_52: eq_int(integer_of_int32(result), (4))))) }
+    and (JC_52: eq_int(integer_of_int32(result), (4)))) }
 
 parameter h :
  tt:unit ->
@@ -809,7 +806,7 @@ parameter h :
      and ((JC_86: t_const(int_P_int_M_t_1))
          and ((JC_87: valid_s(S_s_2_alloc_table))
              and (JC_88: s_const(S_b_s_2, int_P_int_M_s_2))))))
-    and ((true = true) -> (JC_79: eq_int(integer_of_int32(result), (12))))) }
+    and (JC_79: eq_int(integer_of_int32(result), (12)))) }
 
 parameter h_requires :
  tt:unit ->
@@ -825,7 +822,7 @@ parameter h_requires :
      and ((JC_86: t_const(int_P_int_M_t_1))
          and ((JC_87: valid_s(S_s_2_alloc_table))
              and (JC_88: s_const(S_b_s_2, int_P_int_M_s_2))))))
-    and ((true = true) -> (JC_79: eq_int(integer_of_int32(result), (12))))) }
+    and (JC_79: eq_int(integer_of_int32(result), (12)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -845,12 +842,11 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_23:
-        ((JC_19: valid_t(int_P_t_1_alloc_table))
-        and ((JC_20: t_const(int_P_int_M_t_1))
-            and ((JC_21: valid_s(S_s_2_alloc_table))
-                and (JC_22: s_const(S_b_s_2, int_P_int_M_s_2))))))) }
+  { (JC_23:
+    ((JC_19: valid_t(int_P_t_1_alloc_table))
+    and ((JC_20: t_const(int_P_int_M_t_1))
+        and ((JC_21: valid_s(S_s_2_alloc_table))
+            and (JC_22: s_const(S_b_s_2, int_P_int_M_s_2)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -958,12 +954,11 @@ let f_safety =
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_49:
-        ((JC_45: valid_t(int_P_t_1_alloc_table))
-        and ((JC_46: t_const(int_P_int_M_t_1))
-            and ((JC_47: valid_s(S_s_2_alloc_table))
-                and (JC_48: s_const(S_b_s_2, int_P_int_M_s_2))))))) }
+  { (JC_49:
+    ((JC_45: valid_t(int_P_t_1_alloc_table))
+    and ((JC_46: t_const(int_P_int_M_t_1))
+        and ((JC_47: valid_s(S_s_2_alloc_table))
+            and (JC_48: s_const(S_b_s_2, int_P_int_M_s_2)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1093,12 +1088,11 @@ let g_safety =
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_76:
-        ((JC_72: valid_t(int_P_t_1_alloc_table))
-        and ((JC_73: t_const(int_P_int_M_t_1))
-            and ((JC_74: valid_s(S_s_2_alloc_table))
-                and (JC_75: s_const(S_b_s_2, int_P_int_M_s_2))))))) }
+  { (JC_76:
+    ((JC_72: valid_t(int_P_t_1_alloc_table))
+    and ((JC_73: t_const(int_P_int_M_t_1))
+        and ((JC_74: valid_s(S_s_2_alloc_table))
+            and (JC_75: s_const(S_b_s_2, int_P_int_M_s_2)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1279,7 +1273,7 @@ why --project [...] why/init.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/init_po18.why">
-      <location file = "why/init.why" line = "1064" begin = "32" end = "160"/>
+      <location file = "why/init.why" line = "1061" begin = "32" end = "160"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/init_po19.why">
@@ -1303,7 +1297,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/init_po23.why">
-      <location file = "why/init.why" line = "1114" begin = "13" end = "54"/>
+      <location file = "why/init.why" line = "1111" begin = "13" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1336,11 +1330,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/init_po11.why">
-      <location file = "why/init.why" line = "911" begin = "34" end = "168"/>
+      <location file = "why/init.why" line = "909" begin = "34" end = "168"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/init_po12.why">
-      <location file = "why/init.why" line = "939" begin = "13" end = "58"/>
+      <location file = "why/init.why" line = "937" begin = "13" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1550,7 +1544,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1605,7 +1629,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1624,6 +1652,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

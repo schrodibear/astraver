@@ -47,7 +47,6 @@ invariant valid_t :
 unit f()
   requires (C_7 : (b == 0));
 behavior default:
-  assumes true;
   ensures (C_8 : (b == 1));
 {  
    (var int32 tmp);
@@ -517,7 +516,7 @@ parameter f :
  tt:unit ->
   { } unit reads b,int_P_t_1_alloc_table writes b,int_P_int_M_t_1
   { ((JC_13: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_11: eq_int(integer_of_int32(b), (1))))) }
+    and (JC_11: eq_int(integer_of_int32(b), (1)))) }
 
 parameter f_requires :
  tt:unit ->
@@ -526,7 +525,7 @@ parameter f_requires :
     and (JC_3: valid_t(int_P_t_1_alloc_table))))}
   unit reads b,int_P_t_1_alloc_table writes b,int_P_int_M_t_1
   { ((JC_13: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_11: eq_int(integer_of_int32(b), (1))))) }
+    and (JC_11: eq_int(integer_of_int32(b), (1)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -546,10 +545,9 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_8:
-        ((JC_6: eq_int(integer_of_int32(b), (0)))
-        and (JC_7: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_8:
+    ((JC_6: eq_int(integer_of_int32(b), (0)))
+    and (JC_7: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -653,12 +651,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/incr_po4.why">
-      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "54" begin = "17" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "53" begin = "17" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/incr_po5.why">
-      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "54" begin = "17" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "53" begin = "17" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -813,7 +811,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -868,7 +896,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -887,6 +919,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

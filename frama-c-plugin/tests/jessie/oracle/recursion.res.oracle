@@ -50,7 +50,6 @@ axiomatic IsList {
 _List[..] cons(int32 elem, _List[..] x)
   requires (C_7 : is_list{Here}(x));
 behavior default:
-  assumes true;
   ensures (C_8 : ((C_9 : is_list{Here}(\result)) &&
                    (C_10 : (list_length{Here}(\result) ==
                              (list_length{Here}(x) + 1)))));
@@ -513,11 +512,10 @@ parameter cons :
       _List_elem_0_result_4:(_List, int32) memory ref ->
        { } _List pointer reads _List_result_4_alloc_table
        writes _List_elem_0_result_4,_List_next_result_4,_List_result_4_alloc_table,_List_result_4_tag_table
-       { ((true = true) ->
-          (JC_10:
-          ((JC_8: is_list(result))
-          and (JC_9:
-              eq_int(list_length(result), add_int(list_length(x_1), (1))))))) }
+       { (JC_10:
+         ((JC_8: is_list(result))
+         and (JC_9:
+             eq_int(list_length(result), add_int(list_length(x_1), (1)))))) }
 
 parameter cons_requires :
  elem:int32 ->
@@ -528,11 +526,10 @@ parameter cons_requires :
       _List_elem_0_result_4:(_List, int32) memory ref ->
        { (JC_1: is_list(x_1))} _List pointer reads _List_result_4_alloc_table
        writes _List_elem_0_result_4,_List_next_result_4,_List_result_4_alloc_table,_List_result_4_tag_table
-       { ((true = true) ->
-          (JC_10:
-          ((JC_8: is_list(result))
-          and (JC_9:
-              eq_int(list_length(result), add_int(list_length(x_1), (1))))))) }
+       { (JC_10:
+         ((JC_8: is_list(result))
+         and (JC_9:
+             eq_int(list_length(result), add_int(list_length(x_1), (1)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -552,7 +549,7 @@ parameter safe_int8_of_integer_ :
 
 let cons_ensures_default =
  fun (elem : int32) (x_1 : _List pointer) (_List_result_4_alloc_table : _List alloc_table ref) (_List_result_4_tag_table : _List tag_table ref) (_List_elem_0_result_4 : (_List, int32) memory ref) (_List_next_result_4 : (_List, _List pointer) memory ref) ->
-  { ((true = true) and (JC_3: is_list(x_1))) }
+  { (JC_3: is_list(x_1)) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -643,22 +640,22 @@ why --project [...] why/recursion.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/recursion_po4.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "54" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "53" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/recursion_po5.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "54" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "53" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/recursion_po6.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "55" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "54" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/recursion_po7.why">
-      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "55" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/recursion.jessie/recursion.jc" line = "54" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -817,7 +814,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -872,7 +899,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -891,6 +922,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

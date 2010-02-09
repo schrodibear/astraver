@@ -44,7 +44,6 @@ invariant valid_ga :
 
 unit init()
 behavior default:
-  assumes true;
   ensures (C_10 : (\forall int32 i;
                     (((0 <= i) && (i < 10)) ==> ((ga + i).int_M == i))));
 {  
@@ -76,7 +75,6 @@ behavior default:
 
 unit initp()
 behavior default:
-  assumes true;
   ensures (C_22 : (\forall int32 i_0;
                     (((0 <= i_0) && (i_0 < 10)) ==>
                       ((ga + i_0).int_M == i_0))));
@@ -112,7 +110,6 @@ behavior default:
 
 unit initparith()
 behavior default:
-  assumes true;
   ensures (C_37 : (\forall int32 i_1;
                     (((0 <= i_1) && (i_1 < 10)) ==>
                       ((ga + i_1).int_M == i_1))));
@@ -606,84 +603,78 @@ parameter init_0 :
   { } unit reads int_P_ga_1_alloc_table,int_P_int_M_ga_1
   writes int_P_int_M_ga_1
   { ((JC_11: valid_ga(int_P_ga_1_alloc_table))
-    and ((true = true) ->
-         (JC_9:
-         (forall i:int32.
-          ((le_int((0), integer_of_int32(i))
-           and lt_int(integer_of_int32(i), (10))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_ga_1,
-                                   shift(ga, integer_of_int32(i)))),
-           integer_of_int32(i))))))) }
+    and (JC_9:
+        (forall i:int32.
+         ((le_int((0), integer_of_int32(i))
+          and lt_int(integer_of_int32(i), (10))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_ga_1,
+                                  shift(ga, integer_of_int32(i)))),
+          integer_of_int32(i)))))) }
 
 parameter init_0_requires :
  tt:unit ->
   { (JC_4: valid_ga(int_P_ga_1_alloc_table))} unit
   reads int_P_ga_1_alloc_table,int_P_int_M_ga_1 writes int_P_int_M_ga_1
   { ((JC_11: valid_ga(int_P_ga_1_alloc_table))
-    and ((true = true) ->
-         (JC_9:
-         (forall i:int32.
-          ((le_int((0), integer_of_int32(i))
-           and lt_int(integer_of_int32(i), (10))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_ga_1,
-                                   shift(ga, integer_of_int32(i)))),
-           integer_of_int32(i))))))) }
+    and (JC_9:
+        (forall i:int32.
+         ((le_int((0), integer_of_int32(i))
+          and lt_int(integer_of_int32(i), (10))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_ga_1,
+                                  shift(ga, integer_of_int32(i)))),
+          integer_of_int32(i)))))) }
 
 parameter initp :
  tt:unit ->
   { } unit reads int_P_ga_1_alloc_table,int_P_int_M_ga_1
   writes int_P_int_M_ga_1
   { ((JC_33: valid_ga(int_P_ga_1_alloc_table))
-    and ((true = true) ->
-         (JC_31:
-         (forall i_0_0:int32.
-          ((le_int((0), integer_of_int32(i_0_0))
-           and lt_int(integer_of_int32(i_0_0), (10))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_ga_1,
-                                   shift(ga, integer_of_int32(i_0_0)))),
-           integer_of_int32(i_0_0))))))) }
+    and (JC_31:
+        (forall i_0_0:int32.
+         ((le_int((0), integer_of_int32(i_0_0))
+          and lt_int(integer_of_int32(i_0_0), (10))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_ga_1,
+                                  shift(ga, integer_of_int32(i_0_0)))),
+          integer_of_int32(i_0_0)))))) }
 
 parameter initp_requires :
  tt:unit ->
   { (JC_26: valid_ga(int_P_ga_1_alloc_table))} unit
   reads int_P_ga_1_alloc_table,int_P_int_M_ga_1 writes int_P_int_M_ga_1
   { ((JC_33: valid_ga(int_P_ga_1_alloc_table))
-    and ((true = true) ->
-         (JC_31:
-         (forall i_0_0:int32.
-          ((le_int((0), integer_of_int32(i_0_0))
-           and lt_int(integer_of_int32(i_0_0), (10))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_ga_1,
-                                   shift(ga, integer_of_int32(i_0_0)))),
-           integer_of_int32(i_0_0))))))) }
+    and (JC_31:
+        (forall i_0_0:int32.
+         ((le_int((0), integer_of_int32(i_0_0))
+          and lt_int(integer_of_int32(i_0_0), (10))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_ga_1,
+                                  shift(ga, integer_of_int32(i_0_0)))),
+          integer_of_int32(i_0_0)))))) }
 
 parameter initparith :
  tt:unit ->
   { } unit reads int_P_ga_1_alloc_table,int_P_int_M_ga_1
   writes int_P_int_M_ga_1
   { ((JC_55: valid_ga(int_P_ga_1_alloc_table))
-    and ((true = true) ->
-         (JC_53:
-         (forall i_1:int32.
-          ((le_int((0), integer_of_int32(i_1))
-           and lt_int(integer_of_int32(i_1), (10))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_ga_1,
-                                   shift(ga, integer_of_int32(i_1)))),
-           integer_of_int32(i_1))))))) }
+    and (JC_53:
+        (forall i_1:int32.
+         ((le_int((0), integer_of_int32(i_1))
+          and lt_int(integer_of_int32(i_1), (10))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_ga_1,
+                                  shift(ga, integer_of_int32(i_1)))),
+          integer_of_int32(i_1)))))) }
 
 parameter initparith_requires :
  tt:unit ->
   { (JC_48: valid_ga(int_P_ga_1_alloc_table))} unit
   reads int_P_ga_1_alloc_table,int_P_int_M_ga_1 writes int_P_int_M_ga_1
   { ((JC_55: valid_ga(int_P_ga_1_alloc_table))
-    and ((true = true) ->
-         (JC_53:
-         (forall i_1:int32.
-          ((le_int((0), integer_of_int32(i_1))
-           and lt_int(integer_of_int32(i_1), (10))) ->
-           eq_int(integer_of_int32(select(int_P_int_M_ga_1,
-                                   shift(ga, integer_of_int32(i_1)))),
-           integer_of_int32(i_1))))))) }
+    and (JC_53:
+        (forall i_1:int32.
+         ((le_int((0), integer_of_int32(i_1))
+          and lt_int(integer_of_int32(i_1), (10))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_ga_1,
+                                  shift(ga, integer_of_int32(i_1)))),
+          integer_of_int32(i_1)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -703,7 +694,7 @@ parameter safe_int8_of_integer_ :
 
 let init_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_6: valid_ga(int_P_ga_1_alloc_table))) }
+  { (JC_6: valid_ga(int_P_ga_1_alloc_table)) }
   (init:
   try
    begin
@@ -892,7 +883,7 @@ let init_safety =
 
 let initp_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_28: valid_ga(int_P_ga_1_alloc_table))) }
+  { (JC_28: valid_ga(int_P_ga_1_alloc_table)) }
   (init:
   try
    begin
@@ -1095,7 +1086,7 @@ let initp_safety =
 
 let initparith_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_50: valid_ga(int_P_ga_1_alloc_table))) }
+  { (JC_50: valid_ga(int_P_ga_1_alloc_table)) }
   (init:
   try
    begin
@@ -1321,12 +1312,12 @@ why --project [...] why/array_ptr.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_ptr_po30.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "133" begin = "24" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "130" begin = "24" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_ptr_po31.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "133" begin = "24" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "130" begin = "24" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1341,11 +1332,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_ptr_po34.why">
-      <location file = "why/array_ptr.why" line = "1075" begin = "62" end = "63"/>
+      <location file = "why/array_ptr.why" line = "1069" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/array_ptr_po35.why">
-      <location file = "why/array_ptr.why" line = "1075" begin = "62" end = "63"/>
+      <location file = "why/array_ptr.why" line = "1069" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1384,12 +1375,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_ptr_po17.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "96" begin = "24" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "94" begin = "24" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_ptr_po18.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "96" begin = "24" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "94" begin = "24" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1404,11 +1395,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_ptr_po21.why">
-      <location file = "why/array_ptr.why" line = "864" begin = "62" end = "63"/>
+      <location file = "why/array_ptr.why" line = "858" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/array_ptr_po22.why">
-      <location file = "why/array_ptr.why" line = "864" begin = "62" end = "63"/>
+      <location file = "why/array_ptr.why" line = "858" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1439,12 +1430,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_ptr_po6.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "60" begin = "23" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "59" begin = "23" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_ptr_po7.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "60" begin = "23" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "59" begin = "23" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1459,11 +1450,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_ptr_po10.why">
-      <location file = "why/array_ptr.why" line = "664" begin = "61" end = "62"/>
+      <location file = "why/array_ptr.why" line = "658" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/array_ptr_po11.why">
-      <location file = "why/array_ptr.why" line = "664" begin = "61" end = "62"/>
+      <location file = "why/array_ptr.why" line = "658" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1633,7 +1624,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1688,7 +1709,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1707,6 +1732,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

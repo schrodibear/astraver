@@ -47,7 +47,6 @@ invariant valid___string__d_ :
 
 unit Copy(int_P[..] p, int_P[..] q)
 behavior default:
-  assumes true;
   ensures (C_4 : true);
 {  
    {  (C_3 : ((C_2 : q.int_M) = (C_1 : p.int_M)));
@@ -58,7 +57,6 @@ behavior default:
 
 int32 foo(int_P[..] a)
 behavior default:
-  assumes true;
   ensures (C_9 : true);
 {  
    (var int32 i);
@@ -72,14 +70,12 @@ behavior default:
 
 int32 printf()
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_10 : true);
 ;
 
 int32 main()
 behavior default:
-  assumes true;
   ensures (C_22 : true);
 {  
    (var int_P[0..1] a_0);
@@ -645,8 +641,7 @@ parameter safe_int8_of_integer_ :
 
 let Copy_ensures_default =
  fun (p : int_P pointer) (q : int_P pointer) (int_P_int_M_q_3 : (int_P, int32) memory ref) (int_P_p_2_alloc_table : int_P alloc_table) (int_P_q_3_alloc_table : int_P alloc_table) (int_P_int_M_p_2 : (int_P, int32) memory) ->
-  { ((true = true)
-    and (JC_7: valid___string__d_(char_P___string__d__1_alloc_table))) }
+  { (JC_7: valid___string__d_(char_P___string__d__1_alloc_table)) }
   (init:
   try
    begin
@@ -692,8 +687,7 @@ let Copy_safety =
 
 let foo_ensures_default =
  fun (a : int_P pointer) (int_P_int_M_a_4 : (int_P, int32) memory ref) (int_P_a_4_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_17: valid___string__d_(char_P___string__d__1_alloc_table))) }
+  { (JC_17: valid___string__d_(char_P___string__d__1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -753,8 +747,7 @@ let foo_safety =
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_38: valid___string__d_(char_P___string__d__1_alloc_table))) }
+  { (JC_38: valid___string__d_(char_P___string__d__1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try

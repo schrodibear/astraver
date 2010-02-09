@@ -43,7 +43,6 @@ int32 y;
 
 unit f1()
 behavior default:
-  assumes true;
   ensures (C_2 : (x == 0));
 {  
    {  (C_1 : (x = 0));
@@ -55,7 +54,6 @@ behavior default:
 unit f2()
   requires (C_6 : (x == 0));
 behavior default:
-  assumes true;
   ensures (C_7 : (x == 1));
 {  
    {  (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))));
@@ -67,7 +65,6 @@ behavior default:
 unit f3()
   requires (C_11 : (x == 0));
 behavior default:
-  assumes true;
   ensures (C_12 : (x == 1));
 {  
    {  (C_10 : (x = (C_9 : ((C_8 : (x + 1)) :> int32))));
@@ -79,7 +76,6 @@ behavior default:
 unit f4()
   requires (C_18 : (x == 0));
 behavior default:
-  assumes true;
   ensures (C_19 : ((C_20 : (x == 1)) && (C_21 : (y == 0))));
 {  
    (var int32 tmp);
@@ -95,7 +91,6 @@ behavior default:
 unit f5()
   requires (C_26 : (x == 0));
 behavior default:
-  assumes true;
   ensures (C_27 : ((C_28 : (x == 1)) && (C_29 : (y == 1))));
 {  
    {  
@@ -110,7 +105,6 @@ behavior default:
 unit f6()
   requires (C_33 : (x == 1));
 behavior default:
-  assumes true;
   ensures (C_34 : (x == 3));
 {  
    {  (C_32 : (x = (C_31 : ((C_30 : (x + 2)) :> int32))));
@@ -122,7 +116,6 @@ behavior default:
 unit f7a()
   requires (C_37 : (x == 0));
 behavior default:
-  assumes true;
   ensures (C_38 : (y == 1));
 {  
    {  (if (x == 0) then (C_36 : (y = 1)) else (C_35 : (y = 2)));
@@ -134,7 +127,6 @@ behavior default:
 unit f7b()
   requires (C_41 : (x != 0));
 behavior default:
-  assumes true;
   ensures (C_42 : (y == 2));
 {  
    {  (if (x == 0) then (C_40 : (y = 1)) else (C_39 : (y = 2)));
@@ -151,7 +143,6 @@ invariant valid_t :
 unit t1()
   requires (C_45 : ((t + 0).int_M == 1));
 behavior default:
-  assumes true;
   ensures (C_46 : (y == 1));
 {  
    {  (C_44 : (y = (C_43 : (t + 0).int_M)));
@@ -163,7 +154,6 @@ behavior default:
 unit t2()
   requires (C_53 : ((C_54 : (x == 0)) && (C_55 : ((t + 0).int_M == 1))));
 behavior default:
-  assumes true;
   ensures (C_56 : (y == 1));
 {  
    (var int32 tmp_0);
@@ -183,7 +173,6 @@ behavior default:
 unit t3()
   requires (C_62 : ((C_63 : (x == 0)) && (C_64 : ((t + 1).int_M == 1))));
 behavior default:
-  assumes true;
   ensures (C_65 : (y == 1));
 {  
    {  
@@ -646,20 +635,20 @@ parameter f1 :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_19: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_17: eq_int(integer_of_int32(x), (0))))) }
+    and (JC_17: eq_int(integer_of_int32(x), (0)))) }
 
 parameter f1_requires :
  tt:unit ->
   { (JC_12: valid_t(int_P_t_1_alloc_table))} unit
   reads int_P_t_1_alloc_table,x writes x
   { ((JC_19: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_17: eq_int(integer_of_int32(x), (0))))) }
+    and (JC_17: eq_int(integer_of_int32(x), (0)))) }
 
 parameter f2 :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_31: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_29: eq_int(integer_of_int32(x), (1))))) }
+    and (JC_29: eq_int(integer_of_int32(x), (1)))) }
 
 parameter f2_requires :
  tt:unit ->
@@ -668,13 +657,13 @@ parameter f2_requires :
     and (JC_21: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_31: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_29: eq_int(integer_of_int32(x), (1))))) }
+    and (JC_29: eq_int(integer_of_int32(x), (1)))) }
 
 parameter f3 :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_44: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_42: eq_int(integer_of_int32(x), (1))))) }
+    and (JC_42: eq_int(integer_of_int32(x), (1)))) }
 
 parameter f3_requires :
  tt:unit ->
@@ -683,7 +672,7 @@ parameter f3_requires :
     and (JC_34: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_44: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_42: eq_int(integer_of_int32(x), (1))))) }
+    and (JC_42: eq_int(integer_of_int32(x), (1)))) }
 
 parameter y : int32 ref
 
@@ -691,10 +680,9 @@ parameter f4 :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_61: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) ->
-         (JC_59:
-         ((JC_57: eq_int(integer_of_int32(x), (1)))
-         and (JC_58: eq_int(integer_of_int32(y), (0))))))) }
+    and (JC_59:
+        ((JC_57: eq_int(integer_of_int32(x), (1)))
+        and (JC_58: eq_int(integer_of_int32(y), (0)))))) }
 
 parameter f4_requires :
  tt:unit ->
@@ -703,19 +691,17 @@ parameter f4_requires :
     and (JC_47: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_61: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) ->
-         (JC_59:
-         ((JC_57: eq_int(integer_of_int32(x), (1)))
-         and (JC_58: eq_int(integer_of_int32(y), (0))))))) }
+    and (JC_59:
+        ((JC_57: eq_int(integer_of_int32(x), (1)))
+        and (JC_58: eq_int(integer_of_int32(y), (0)))))) }
 
 parameter f5 :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_78: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) ->
-         (JC_76:
-         ((JC_74: eq_int(integer_of_int32(x), (1)))
-         and (JC_75: eq_int(integer_of_int32(y), (1))))))) }
+    and (JC_76:
+        ((JC_74: eq_int(integer_of_int32(x), (1)))
+        and (JC_75: eq_int(integer_of_int32(y), (1)))))) }
 
 parameter f5_requires :
  tt:unit ->
@@ -724,16 +710,15 @@ parameter f5_requires :
     and (JC_64: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_78: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) ->
-         (JC_76:
-         ((JC_74: eq_int(integer_of_int32(x), (1)))
-         and (JC_75: eq_int(integer_of_int32(y), (1))))))) }
+    and (JC_76:
+        ((JC_74: eq_int(integer_of_int32(x), (1)))
+        and (JC_75: eq_int(integer_of_int32(y), (1)))))) }
 
 parameter f6 :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_91: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_89: eq_int(integer_of_int32(x), (3))))) }
+    and (JC_89: eq_int(integer_of_int32(x), (3)))) }
 
 parameter f6_requires :
  tt:unit ->
@@ -742,13 +727,13 @@ parameter f6_requires :
     and (JC_81: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x writes x
   { ((JC_91: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_89: eq_int(integer_of_int32(x), (3))))) }
+    and (JC_89: eq_int(integer_of_int32(x), (3)))) }
 
 parameter f7a :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x,y writes y
   { ((JC_104: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_102: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_102: eq_int(integer_of_int32(y), (1)))) }
 
 parameter f7a_requires :
  tt:unit ->
@@ -757,13 +742,13 @@ parameter f7a_requires :
     and (JC_94: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x,y writes y
   { ((JC_104: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_102: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_102: eq_int(integer_of_int32(y), (1)))) }
 
 parameter f7b :
  tt:unit ->
   { } unit reads int_P_t_1_alloc_table,x,y writes y
   { ((JC_116: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_114: eq_int(integer_of_int32(y), (2))))) }
+    and (JC_114: eq_int(integer_of_int32(y), (2)))) }
 
 parameter f7b_requires :
  tt:unit ->
@@ -772,7 +757,7 @@ parameter f7b_requires :
     and (JC_106: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_t_1_alloc_table,x,y writes y
   { ((JC_116: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_114: eq_int(integer_of_int32(y), (2))))) }
+    and (JC_114: eq_int(integer_of_int32(y), (2)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -796,7 +781,7 @@ parameter t1 :
  tt:unit ->
   { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,y writes y
   { ((JC_128: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_126: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_126: eq_int(integer_of_int32(y), (1)))) }
 
 parameter t1_requires :
  tt:unit ->
@@ -806,13 +791,13 @@ parameter t1_requires :
     and (JC_118: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,y writes y
   { ((JC_128: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_126: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_126: eq_int(integer_of_int32(y), (1)))) }
 
 parameter t2 :
  tt:unit ->
   { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_144: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_142: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_142: eq_int(integer_of_int32(y), (1)))) }
 
 parameter t2_requires :
  tt:unit ->
@@ -825,13 +810,13 @@ parameter t2_requires :
     and (JC_132: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_144: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_142: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_142: eq_int(integer_of_int32(y), (1)))) }
 
 parameter t3 :
  tt:unit ->
   { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_162: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_160: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_160: eq_int(integer_of_int32(y), (1)))) }
 
 parameter t3_requires :
  tt:unit ->
@@ -844,11 +829,11 @@ parameter t3_requires :
     and (JC_150: valid_t(int_P_t_1_alloc_table))))}
   unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
   { ((JC_162: valid_t(int_P_t_1_alloc_table))
-    and ((true = true) -> (JC_160: eq_int(integer_of_int32(y), (1))))) }
+    and (JC_160: eq_int(integer_of_int32(y), (1)))) }
 
 let f1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_14: valid_t(int_P_t_1_alloc_table))) }
+  { (JC_14: valid_t(int_P_t_1_alloc_table)) }
   (init:
   try
    begin
@@ -884,10 +869,9 @@ let f1_safety =
 
 let f2_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_26:
-        ((JC_24: eq_int(integer_of_int32(x), (0)))
-        and (JC_25: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_26:
+    ((JC_24: eq_int(integer_of_int32(x), (0)))
+    and (JC_25: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -932,10 +916,9 @@ let f2_safety =
 
 let f3_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_39:
-        ((JC_37: eq_int(integer_of_int32(x), (0)))
-        and (JC_38: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_39:
+    ((JC_37: eq_int(integer_of_int32(x), (0)))
+    and (JC_38: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -980,10 +963,9 @@ let f3_safety =
 
 let f4_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_52:
-        ((JC_50: eq_int(integer_of_int32(x), (0)))
-        and (JC_51: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_52:
+    ((JC_50: eq_int(integer_of_int32(x), (0)))
+    and (JC_51: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1042,10 +1024,9 @@ let f4_safety =
 
 let f5_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_69:
-        ((JC_67: eq_int(integer_of_int32(x), (0)))
-        and (JC_68: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_69:
+    ((JC_67: eq_int(integer_of_int32(x), (0)))
+    and (JC_68: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1098,10 +1079,9 @@ let f5_safety =
 
 let f6_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_86:
-        ((JC_84: eq_int(integer_of_int32(x), (1)))
-        and (JC_85: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_86:
+    ((JC_84: eq_int(integer_of_int32(x), (1)))
+    and (JC_85: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1146,10 +1126,9 @@ let f6_safety =
 
 let f7a_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_99:
-        ((JC_97: eq_int(integer_of_int32(x), (0)))
-        and (JC_98: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_99:
+    ((JC_97: eq_int(integer_of_int32(x), (0)))
+    and (JC_98: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1195,10 +1174,9 @@ let f7a_safety =
 
 let f7b_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_111:
-        ((JC_109: neq_int(integer_of_int32(x), (0)))
-        and (JC_110: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_111:
+    ((JC_109: neq_int(integer_of_int32(x), (0)))
+    and (JC_110: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1244,12 +1222,10 @@ let f7b_safety =
 
 let t1_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_123:
-        ((JC_121:
-         eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))),
-         (1)))
-        and (JC_122: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_123:
+    ((JC_121:
+     eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))), (1)))
+    and (JC_122: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1292,14 +1268,13 @@ let t1_safety =
 
 let t2_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_139:
-        ((JC_137:
-         ((JC_135: eq_int(integer_of_int32(x), (0)))
-         and (JC_136:
-             eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))),
-             (1)))))
-        and (JC_138: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_139:
+    ((JC_137:
+     ((JC_135: eq_int(integer_of_int32(x), (0)))
+     and (JC_136:
+         eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))),
+         (1)))))
+    and (JC_138: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1389,14 +1364,13 @@ let t2_safety =
 
 let t3_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_157:
-        ((JC_155:
-         ((JC_153: eq_int(integer_of_int32(x), (0)))
-         and (JC_154:
-             eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (1)))),
-             (1)))))
-        and (JC_156: valid_t(int_P_t_1_alloc_table))))) }
+  { (JC_157:
+    ((JC_155:
+     ((JC_153: eq_int(integer_of_int32(x), (0)))
+     and (JC_154:
+         eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (1)))),
+         (1)))))
+    and (JC_156: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
@@ -1820,7 +1794,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1875,7 +1879,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1894,6 +1902,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

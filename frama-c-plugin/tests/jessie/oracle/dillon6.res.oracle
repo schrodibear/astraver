@@ -48,7 +48,6 @@ unit g(int_P[..] p)
   requires (C_1 : ((C_2 : (\offset_min(p) <= 0)) &&
                     (C_3 : (\offset_max(p) >= 0))));
 behavior default:
-  assumes true;
   assigns p.int_M;
   ensures (C_4 : true);
 ;
@@ -60,7 +59,6 @@ invariant valid_v :
 
 unit f()
 behavior default:
-  assumes true;
   ensures (C_7 : true);
 {  
    {  (C_6 : g((C_5 : v.a)));
@@ -695,10 +693,9 @@ parameter g :
    int_P_p_2_alloc_table:int_P alloc_table ->
     { } unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_p_2
     { ((JC_20: valid_v(__anonstruct_las_1_v_1_alloc_table))
-      and ((true = true) ->
-           (JC_18:
-           not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
-           int_P_int_M_p_2, pset_singleton(p@))))) }
+      and (JC_18:
+          not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
+          int_P_int_M_p_2, pset_singleton(p@)))) }
 
 parameter g_requires :
  p:int_P pointer ->
@@ -711,10 +708,9 @@ parameter g_requires :
       and (JC_6: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
     unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_p_2
     { ((JC_20: valid_v(__anonstruct_las_1_v_1_alloc_table))
-      and ((true = true) ->
-           (JC_18:
-           not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
-           int_P_int_M_p_2, pset_singleton(p@))))) }
+      and (JC_18:
+          not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
+          int_P_int_M_p_2, pset_singleton(p@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -734,7 +730,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_23: valid_v(__anonstruct_las_1_v_1_alloc_table))) }
+  { (JC_23: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
    begin
@@ -779,12 +775,12 @@ why --project [...] why/dillon6.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/dillon6_po1.why">
-      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "59" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "57" begin = "13" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon6_po2.why">
-      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "59" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/dillon6.jessie/dillon6.jc" line = "57" begin = "13" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -933,7 +929,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -988,7 +1014,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1007,6 +1037,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

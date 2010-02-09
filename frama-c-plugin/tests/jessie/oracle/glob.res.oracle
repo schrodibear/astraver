@@ -38,7 +38,6 @@ predicate gzero{L}() =
 
 unit f()
 behavior default:
-  assumes true;
   ensures (C_2 : ((C_3 : gzero()) && (C_4 : (g == 0))));
 {  
    {  (C_1 : (g = 0));
@@ -49,7 +48,6 @@ behavior default:
 
 unit h()
 behavior default:
-  assumes true;
   ensures (C_6 : ((C_7 : gzero()) && (C_8 : (g == 0))));
 {  
    {  (C_5 : f());
@@ -380,28 +378,24 @@ parameter g : int32 ref
 parameter f :
  tt:unit ->
   { } unit reads g writes g
-  { ((true = true) ->
-     (JC_10: ((JC_8: gzero(g)) and (JC_9: eq_int(integer_of_int32(g), (0)))))) }
+  { (JC_10: ((JC_8: gzero(g)) and (JC_9: eq_int(integer_of_int32(g), (0))))) }
 
 parameter f_requires :
  tt:unit ->
   { } unit reads g writes g
-  { ((true = true) ->
-     (JC_10: ((JC_8: gzero(g)) and (JC_9: eq_int(integer_of_int32(g), (0)))))) }
+  { (JC_10: ((JC_8: gzero(g)) and (JC_9: eq_int(integer_of_int32(g), (0))))) }
 
 parameter h :
  tt:unit ->
   { } unit reads g writes g
-  { ((true = true) ->
-     (JC_22:
-     ((JC_20: gzero(g)) and (JC_21: eq_int(integer_of_int32(g), (0)))))) }
+  { (JC_22:
+    ((JC_20: gzero(g)) and (JC_21: eq_int(integer_of_int32(g), (0))))) }
 
 parameter h_requires :
  tt:unit ->
   { } unit reads g writes g
-  { ((true = true) ->
-     (JC_22:
-     ((JC_20: gzero(g)) and (JC_21: eq_int(integer_of_int32(g), (0)))))) }
+  { (JC_22:
+    ((JC_20: gzero(g)) and (JC_21: eq_int(integer_of_int32(g), (0))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -421,7 +415,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   try
    begin
@@ -457,7 +451,7 @@ let f_safety =
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { (true = true) }
+  { (JC_16: true) }
   (init:
   try
    begin
@@ -656,7 +650,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -711,7 +735,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -730,6 +758,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

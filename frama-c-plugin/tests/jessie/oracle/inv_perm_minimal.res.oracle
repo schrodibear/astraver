@@ -46,7 +46,6 @@ unit safety(int_P[..] t, int32 n)
                                  ((1 <= (t + k_1).int_M) &&
                                    ((t + k_1).int_M <= n)))))));
 behavior default:
-  assumes true;
   ensures (C_54 : true);
 {  
    (var int32 m);
@@ -614,24 +613,22 @@ parameter safety_requires :
 
 let safety_ensures_default =
  fun (t : int_P pointer) (n : int32) (int_P_int_M_t_1 : (int_P, int32) memory ref) (int_P_t_1_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_11:
-        ((JC_7: ge_int(integer_of_int32(n), (1)))
-        and ((JC_8: le_int(offset_min(int_P_t_1_alloc_table, t), (1)))
-            and ((JC_9:
-                 ge_int(offset_max(int_P_t_1_alloc_table, t),
-                 integer_of_int32(n)))
-                and (JC_10:
-                    (forall k_1:int32.
-                     ((le_int((1), integer_of_int32(k_1))
-                      and le_int(integer_of_int32(k_1), integer_of_int32(n))) ->
-                      (le_int((1),
-                       integer_of_int32(select(int_P_int_M_t_1,
-                                        shift(t, integer_of_int32(k_1)))))
-                      and le_int(integer_of_int32(select(int_P_int_M_t_1,
-                                                  shift(t,
-                                                  integer_of_int32(k_1)))),
-                          integer_of_int32(n))))))))))) }
+  { (JC_11:
+    ((JC_7: ge_int(integer_of_int32(n), (1)))
+    and ((JC_8: le_int(offset_min(int_P_t_1_alloc_table, t), (1)))
+        and ((JC_9:
+             ge_int(offset_max(int_P_t_1_alloc_table, t),
+             integer_of_int32(n)))
+            and (JC_10:
+                (forall k_1:int32.
+                 ((le_int((1), integer_of_int32(k_1))
+                  and le_int(integer_of_int32(k_1), integer_of_int32(n))) ->
+                  (le_int((1),
+                   integer_of_int32(select(int_P_int_M_t_1,
+                                    shift(t, integer_of_int32(k_1)))))
+                  and le_int(integer_of_int32(select(int_P_int_M_t_1,
+                                              shift(t, integer_of_int32(k_1)))),
+                      integer_of_int32(n)))))))))) }
   (init:
   try
    begin
@@ -1300,12 +1297,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po26.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "95" begin = "39" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "94" begin = "39" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po27.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "95" begin = "39" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "94" begin = "39" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1330,11 +1327,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po32.why">
-      <location file = "why/inv_perm_minimal.why" line = "922" begin = "77" end = "78"/>
+      <location file = "why/inv_perm_minimal.why" line = "920" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po33.why">
-      <location file = "why/inv_perm_minimal.why" line = "922" begin = "77" end = "78"/>
+      <location file = "why/inv_perm_minimal.why" line = "920" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po34.why">
@@ -1348,12 +1345,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po36.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "107" begin = "27" end = "219"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "106" begin = "27" end = "219"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po37.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "107" begin = "27" end = "219"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "106" begin = "27" end = "219"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1368,11 +1365,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po40.why">
-      <location file = "why/inv_perm_minimal.why" line = "854" begin = "62" end = "63"/>
+      <location file = "why/inv_perm_minimal.why" line = "852" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po41.why">
-      <location file = "why/inv_perm_minimal.why" line = "854" begin = "62" end = "63"/>
+      <location file = "why/inv_perm_minimal.why" line = "852" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1614,7 +1611,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1669,7 +1696,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1688,6 +1719,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

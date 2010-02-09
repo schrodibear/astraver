@@ -33,7 +33,6 @@ type void_P = [void_P]
 float my_cos1(float x_1)
   requires (C_6 : (\real_abs((x_1 :> real)) <= 0x1p-5));
 behavior default:
-  assumes true;
   ensures (C_7 : (\real_abs(((\result :> real) - \cos((x_1 :> real)))) <=
                    0x1p-23));
 {  
@@ -61,7 +60,6 @@ float my_cos2(float x)
   requires (C_13 : ((C_14 : (\real_abs((x :> real)) <= 0x1p-5)) &&
                      (C_15 : (\single_round_error(x) == 0.0))));
 behavior default:
-  assumes true;
   ensures (C_16 : (\real_abs(((\result :> real) - \cos((x :> real)))) <=
                     0x1p-23));
 {  
@@ -85,7 +83,6 @@ float my_cos3(float x_2)
   requires (C_22 : ((C_23 : (\real_abs(\single_exact(x_2)) <= 0x1p-5)) &&
                      (C_24 : (\single_round_error(x_2) <= 0x1p-20))));
 behavior default:
-  assumes true;
   ensures (C_25 : ((C_26 : (\real_abs((\single_exact(\result) -
                                         \cos(\single_exact(x_2)))) <=
                              0x1p-24)) &&
@@ -112,7 +109,6 @@ behavior default:
 float my_cos4(float x_0)
   requires (C_33 : (\real_abs((x_0 :> real)) <= 0.07));
 behavior default:
-  assumes true;
   ensures (C_34 : (\real_abs(((\result :> real) - \cos((x_0 :> real)))) <=
                     0x1p-20));
 {  
@@ -427,26 +423,23 @@ parameter int8_of_integer_ :
 parameter my_cos1 :
  x_1:single ->
   { } single
-  { ((true = true) ->
-     (JC_6:
-     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
-     0x1p-23))) }
+  { (JC_6:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
+    0x1p-23)) }
 
 parameter my_cos1_requires :
  x_1:single ->
   { (JC_1: le_real(abs_real(single_value(x_1)), 0x1p-5))} single
-  { ((true = true) ->
-     (JC_6:
-     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
-     0x1p-23))) }
+  { (JC_6:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
+    0x1p-23)) }
 
 parameter my_cos2 :
  x:single ->
   { } single
-  { ((true = true) ->
-     (JC_28:
-     le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
-     0x1p-23))) }
+  { (JC_28:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
+    0x1p-23)) }
 
 parameter my_cos2_requires :
  x:single ->
@@ -454,22 +447,20 @@ parameter my_cos2_requires :
     ((JC_19: le_real(abs_real(single_value(x)), 0x1p-5))
     and (JC_20: eq_real(single_round_error(x), 0.0))))}
   single
-  { ((true = true) ->
-     (JC_28:
-     le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
-     0x1p-23))) }
+  { (JC_28:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
+    0x1p-23)) }
 
 parameter my_cos3 :
  x_2:single ->
   { } single
-  { ((true = true) ->
-     (JC_54:
-     ((JC_52:
-      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
-      0x1p-24))
-     and (JC_53:
-         le_real(single_round_error(result),
-         add_real(single_round_error(x_2), 0x3p-24)))))) }
+  { (JC_54:
+    ((JC_52:
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
+     0x1p-24))
+    and (JC_53:
+        le_real(single_round_error(result),
+        add_real(single_round_error(x_2), 0x3p-24))))) }
 
 parameter my_cos3_requires :
  x_2:single ->
@@ -477,37 +468,34 @@ parameter my_cos3_requires :
     ((JC_41: le_real(abs_real(single_exact(x_2)), 0x1p-5))
     and (JC_42: le_real(single_round_error(x_2), 0x1p-20))))}
   single
-  { ((true = true) ->
-     (JC_54:
-     ((JC_52:
-      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
-      0x1p-24))
-     and (JC_53:
-         le_real(single_round_error(result),
-         add_real(single_round_error(x_2), 0x3p-24)))))) }
+  { (JC_54:
+    ((JC_52:
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
+     0x1p-24))
+    and (JC_53:
+        le_real(single_round_error(result),
+        add_real(single_round_error(x_2), 0x3p-24))))) }
 
 parameter my_cos4 :
  x_0:single ->
   { } single
-  { ((true = true) ->
-     (JC_72:
-     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
-     0x1p-20))) }
+  { (JC_72:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
+    0x1p-20)) }
 
 parameter my_cos4_requires :
  x_0:single ->
   { (JC_67: le_real(abs_real(single_value(x_0)), 0.07))} single
-  { ((true = true) ->
-     (JC_72:
-     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
-     0x1p-20))) }
+  { (JC_72:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
+    0x1p-20)) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let my_cos1_ensures_default =
  fun (x_1 : single) ->
-  { ((true = true) and (JC_3: le_real(abs_real(single_value(x_1)), 0x1p-5))) }
+  { (JC_3: le_real(abs_real(single_value(x_1)), 0x1p-5)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -596,10 +584,9 @@ let my_cos1_safety =
 
 let my_cos2_ensures_default =
  fun (x : single) ->
-  { ((true = true)
-    and (JC_25:
-        ((JC_23: le_real(abs_real(single_value(x)), 0x1p-5))
-        and (JC_24: eq_real(single_round_error(x), 0.0))))) }
+  { (JC_25:
+    ((JC_23: le_real(abs_real(single_value(x)), 0x1p-5))
+    and (JC_24: eq_real(single_round_error(x), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -676,10 +663,9 @@ let my_cos2_safety =
 
 let my_cos3_ensures_default =
  fun (x_2 : single) ->
-  { ((true = true)
-    and (JC_47:
-        ((JC_45: le_real(abs_real(single_exact(x_2)), 0x1p-5))
-        and (JC_46: le_real(single_round_error(x_2), 0x1p-20))))) }
+  { (JC_47:
+    ((JC_45: le_real(abs_real(single_exact(x_2)), 0x1p-5))
+    and (JC_46: le_real(single_round_error(x_2), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -761,7 +747,7 @@ let my_cos3_safety =
 
 let my_cos4_ensures_default =
  fun (x_0 : single) ->
-  { ((true = true) and (JC_69: le_real(abs_real(single_value(x_0)), 0.07))) }
+  { (JC_69: le_real(abs_real(single_value(x_0)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -857,7 +843,7 @@ why --project [...] why/my_cosine.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/my_cosine_po25.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "125" begin = "37" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "121" begin = "37" end = "51"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -867,7 +853,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/my_cosine_po27.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "127" begin = "48" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "123" begin = "48" end = "62"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -897,7 +883,7 @@ text = "FPOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/my_cosine_po18.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "91" begin = "30" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "88" begin = "30" end = "44"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -907,7 +893,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/my_cosine_po20.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "93" begin = "41" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "90" begin = "41" end = "55"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -941,7 +927,7 @@ text = "FPOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/my_cosine_po10.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "64" begin = "28" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "62" begin = "28" end = "42"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -951,7 +937,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/my_cosine_po12.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "65" begin = "55" end = "69"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "63" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -981,7 +967,7 @@ text = "FPOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/my_cosine_po3.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "46" begin = "33" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "45" begin = "33" end = "47"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -991,7 +977,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/my_cosine_po5.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "48" begin = "43" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "47" begin = "43" end = "57"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -1160,7 +1146,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1215,7 +1231,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1234,6 +1254,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

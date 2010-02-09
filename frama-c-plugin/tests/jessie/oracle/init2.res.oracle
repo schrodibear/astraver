@@ -60,7 +60,6 @@ int32 laconstante;
 
 int32 f()
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_2 : (((((C_6 : (ls.c.a == 1)) && (C_7 : (varglo == 123))) &&
                      (C_8 : (\result == 4))) &&
@@ -756,34 +755,30 @@ parameter f :
   { } int32
   reads __anonstruct_lastruct1_1_a_ls_1,__anonstruct_lastruct2_2_c_ls_1,__anonstruct_lastruct2_2_ls_1_alloc_table
   { ((JC_21: valid_ls(__anonstruct_lastruct2_2_ls_1_alloc_table))
-    and ((true = true) ->
-         (JC_18:
-         ((JC_13:
-          eq_int(integer_of_int32(select(__anonstruct_lastruct1_1_a_ls_1,
-                                  select(__anonstruct_lastruct2_2_c_ls_1, ls))),
-          (1)))
-         and ((JC_14: eq_int(integer_of_int32(varglo), (123)))
-             and ((JC_15: eq_int(integer_of_int32(result), (4)))
-                 and ((JC_16:
-                      eq_int(integer_of___anonenum_lenum_3(le), (34)))
-                     and (JC_17: eq_int(integer_of_int32(laconstante), (7)))))))))) }
+    and (JC_18:
+        ((JC_13:
+         eq_int(integer_of_int32(select(__anonstruct_lastruct1_1_a_ls_1,
+                                 select(__anonstruct_lastruct2_2_c_ls_1, ls))),
+         (1)))
+        and ((JC_14: eq_int(integer_of_int32(varglo), (123)))
+            and ((JC_15: eq_int(integer_of_int32(result), (4)))
+                and ((JC_16: eq_int(integer_of___anonenum_lenum_3(le), (34)))
+                    and (JC_17: eq_int(integer_of_int32(laconstante), (7))))))))) }
 
 parameter f_requires :
  tt:unit ->
   { (JC_2: valid_ls(__anonstruct_lastruct2_2_ls_1_alloc_table))} int32
   reads __anonstruct_lastruct1_1_a_ls_1,__anonstruct_lastruct2_2_c_ls_1,__anonstruct_lastruct2_2_ls_1_alloc_table
   { ((JC_21: valid_ls(__anonstruct_lastruct2_2_ls_1_alloc_table))
-    and ((true = true) ->
-         (JC_18:
-         ((JC_13:
-          eq_int(integer_of_int32(select(__anonstruct_lastruct1_1_a_ls_1,
-                                  select(__anonstruct_lastruct2_2_c_ls_1, ls))),
-          (1)))
-         and ((JC_14: eq_int(integer_of_int32(varglo), (123)))
-             and ((JC_15: eq_int(integer_of_int32(result), (4)))
-                 and ((JC_16:
-                      eq_int(integer_of___anonenum_lenum_3(le), (34)))
-                     and (JC_17: eq_int(integer_of_int32(laconstante), (7)))))))))) }
+    and (JC_18:
+        ((JC_13:
+         eq_int(integer_of_int32(select(__anonstruct_lastruct1_1_a_ls_1,
+                                 select(__anonstruct_lastruct2_2_c_ls_1, ls))),
+         (1)))
+        and ((JC_14: eq_int(integer_of_int32(varglo), (123)))
+            and ((JC_15: eq_int(integer_of_int32(result), (4)))
+                and ((JC_16: eq_int(integer_of___anonenum_lenum_3(le), (34)))
+                    and (JC_17: eq_int(integer_of_int32(laconstante), (7))))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -807,8 +802,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_4: valid_ls(__anonstruct_lastruct2_2_ls_1_alloc_table))) }
+  { (JC_4: valid_ls(__anonstruct_lastruct2_2_ls_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1028,7 +1022,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1083,7 +1107,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1102,6 +1130,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

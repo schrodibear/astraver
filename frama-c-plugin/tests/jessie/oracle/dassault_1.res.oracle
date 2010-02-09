@@ -67,7 +67,6 @@ invariant valid_y :
 
 int32 f()
 behavior default:
-  assumes true;
   ensures (C_10 : (\result == ((x.a.d.b + 0).c + (y.b + 1).c)));
 {  
    (var int32 __retres);
@@ -1025,16 +1024,15 @@ parameter f :
   { ((JC_18:
      ((JC_16: valid_x(las_x_1_alloc_table))
      and (JC_17: valid_y(las2_y_2_alloc_table))))
-    and ((true = true) ->
-         (JC_12:
-         eq_int(integer_of_int32(result),
-         add_int(integer_of_int32(select(las3_c_x_1,
-                                  shift(select(las2_b_x_1,
-                                        select(las1_d_x_1,
-                                        select(las_a_x_1, x))),
-                                  (0)))),
-         integer_of_int32(select(las3_c_y_2,
-                          shift(select(las2_b_y_2, y), (1))))))))) }
+    and (JC_12:
+        eq_int(integer_of_int32(result),
+        add_int(integer_of_int32(select(las3_c_x_1,
+                                 shift(select(las2_b_x_1,
+                                       select(las1_d_x_1,
+                                       select(las_a_x_1, x))),
+                                 (0)))),
+        integer_of_int32(select(las3_c_y_2,
+                         shift(select(las2_b_y_2, y), (1)))))))) }
 
 parameter f_requires :
  tt:unit ->
@@ -1046,16 +1044,15 @@ parameter f_requires :
   { ((JC_18:
      ((JC_16: valid_x(las_x_1_alloc_table))
      and (JC_17: valid_y(las2_y_2_alloc_table))))
-    and ((true = true) ->
-         (JC_12:
-         eq_int(integer_of_int32(result),
-         add_int(integer_of_int32(select(las3_c_x_1,
-                                  shift(select(las2_b_x_1,
-                                        select(las1_d_x_1,
-                                        select(las_a_x_1, x))),
-                                  (0)))),
-         integer_of_int32(select(las3_c_y_2,
-                          shift(select(las2_b_y_2, y), (1))))))))) }
+    and (JC_12:
+        eq_int(integer_of_int32(result),
+        add_int(integer_of_int32(select(las3_c_x_1,
+                                 shift(select(las2_b_x_1,
+                                       select(las1_d_x_1,
+                                       select(las_a_x_1, x))),
+                                 (0)))),
+        integer_of_int32(select(las3_c_y_2,
+                         shift(select(las2_b_y_2, y), (1)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1075,10 +1072,9 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { ((true = true)
-    and (JC_9:
-        ((JC_7: valid_x(las_x_1_alloc_table))
-        and (JC_8: valid_y(las2_y_2_alloc_table))))) }
+  { (JC_9:
+    ((JC_7: valid_x(las_x_1_alloc_table))
+    and (JC_8: valid_y(las2_y_2_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1333,7 +1329,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -1388,7 +1414,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1407,6 +1437,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

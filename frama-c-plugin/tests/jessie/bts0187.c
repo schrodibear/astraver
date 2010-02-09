@@ -1,4 +1,4 @@
-/* Frama-C BTS 0258
+/* Frama-C BTS 0187
 
 yields:
 

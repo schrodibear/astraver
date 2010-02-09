@@ -33,16 +33,15 @@ type void_P = [void_P]
 
 type __anonenum_1 = 5..5
 
-int32 f1(int32 x_2)
+int32 f1(int32 x_1)
 behavior default:
-  assumes true;
-  ensures (C_7 : ((x_2 == 4) ==> (\result == 2)));
+  ensures (C_7 : ((x_1 == 4) ==> (\result == 2)));
 {  
    (var int32 y);
    
    {  
       {  
-         switch (x_2) {
+         switch (x_1) {
            case 0:
            case 1:
            {  (C_1 : (y = 1));
@@ -74,10 +73,9 @@ behavior default:
    }
 }
 
-int32 f1a(int32 x_5)
+int32 f1a(int32 x_4)
 behavior default:
-  assumes true;
-  ensures (C_17 : ((x_5 == 4) ==> (\result == 2)));
+  ensures (C_17 : ((x_4 == 4) ==> (\result == 2)));
 {  
    (var int32 y_0);
    
@@ -85,7 +83,7 @@ behavior default:
    
    {  
       {  
-         switch (x_5) {
+         switch (x_4) {
            case 0:
            case 1:
            {  (C_8 : (y_0 = 1));
@@ -120,16 +118,15 @@ behavior default:
    }
 }
 
-int32 f2(int32 x_0)
+int32 f2(int32 x)
 behavior default:
-  assumes true;
   ensures (C_22 : (\result == 4));
 {  
    (var int32 y_1);
    
    {  
       {  
-         switch (x_0) {
+         switch (x) {
            case 0:
            case 1:
            {  (C_18 : (y_1 = 1))
@@ -152,16 +149,15 @@ behavior default:
    }
 }
 
-int32 f3(int32 x_4)
+int32 f3(int32 x_3)
 behavior default:
-  assumes true;
   ensures (C_27 : (\result == 4));
 {  
    (var int32 y_2);
    
    {  
       {  
-         switch (x_4) {
+         switch (x_3) {
            case 0:
            case 1:
            {  (C_23 : (y_2 = 1))
@@ -183,9 +179,8 @@ behavior default:
    }
 }
 
-int32 f4(int32 x)
+int32 f4(int32 x_6)
 behavior default:
-  assumes true;
   ensures (C_30 : (\result == 0));
 {  
    (var int32 y_3);
@@ -193,10 +188,10 @@ behavior default:
    {  (C_28 : (y_3 = 0));
       
       {  
-         switch (x) {
+         switch (x_6) {
            case 0:
            {  ();
-              (if (x == 0) then 
+              (if (x_6 == 0) then 
               (goto switch_4_break) else ());
               (C_29 : (y_3 = 1))
            }
@@ -208,24 +203,23 @@ behavior default:
    }
 }
 
-int32 f5(int32 x_3)
+int32 f5(int32 x_2)
 behavior default:
-  assumes true;
-  ensures (C_33 : ((x_3 == 1) ==> (\result == 1)));
+  ensures (C_33 : ((x_2 == 1) ==> (\result == 1)));
 {  
    (var int32 y_4);
    
    {  (C_31 : (y_4 = 0));
       
       {  
-         switch (x_3) {
+         switch (x_2) {
            case 1:
            {  
               {  
                  loop 
                  while (true)
                  {  
-                    {  (if (x_3 > 0) then () else 
+                    {  (if (x_2 > 0) then () else 
                        (goto while_6_break));
                        
                        (goto while_6_break)
@@ -242,17 +236,16 @@ behavior default:
    }
 }
 
-int32 f6(int32 x_6)
+int32 f6(int32 x_5)
 behavior default:
-  assumes true;
-  ensures (C_36 : ((x_6 == 2) ==> (\result == 1)));
+  ensures (C_36 : ((x_5 == 2) ==> (\result == 1)));
 {  
    (var int32 y_5);
    
    {  (C_34 : (y_5 = 0));
       
       {  
-         switch (x_6) {
+         switch (x_5) {
            case 2:
            {  (C_35 : (y_5 = 1))
            }
@@ -263,17 +256,16 @@ behavior default:
    }
 }
 
-int32 f7(int32 x_1)
+int32 f7(int32 x_0)
 behavior default:
-  assumes true;
-  ensures (C_39 : ((x_1 == 5) ==> (\result == 1)));
+  ensures (C_39 : ((x_0 == 5) ==> (\result == 1)));
 {  
    (var int32 y_6);
    
    {  (C_37 : (y_6 = 0));
       
       {  
-         switch (x_1) {
+         switch (x_0) {
            case 5:
            {  (C_38 : (y_6 = 1))
            }
@@ -647,114 +639,92 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f1 :
- x_2:int32 ->
+ x_1:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_6:
-     (eq_int(integer_of_int32(x_2), (4)) ->
-      eq_int(integer_of_int32(result), (2))))) }
+  { (JC_6:
+    (eq_int(integer_of_int32(x_1), (4)) ->
+     eq_int(integer_of_int32(result), (2)))) }
 
 parameter f1_requires :
- x_2:int32 ->
+ x_1:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_6:
-     (eq_int(integer_of_int32(x_2), (4)) ->
-      eq_int(integer_of_int32(result), (2))))) }
+  { (JC_6:
+    (eq_int(integer_of_int32(x_1), (4)) ->
+     eq_int(integer_of_int32(result), (2)))) }
 
 parameter f1a :
- x_5:int32 ->
+ x_4:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_14:
-     (eq_int(integer_of_int32(x_5), (4)) ->
-      eq_int(integer_of_int32(result), (2))))) }
+  { (JC_14:
+    (eq_int(integer_of_int32(x_4), (4)) ->
+     eq_int(integer_of_int32(result), (2)))) }
 
 parameter f1a_requires :
- x_5:int32 ->
+ x_4:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_14:
-     (eq_int(integer_of_int32(x_5), (4)) ->
-      eq_int(integer_of_int32(result), (2))))) }
+  { (JC_14:
+    (eq_int(integer_of_int32(x_4), (4)) ->
+     eq_int(integer_of_int32(result), (2)))) }
 
 parameter f2 :
- x_0:int32 ->
-  { } int32
-  { ((true = true) -> (JC_22: eq_int(integer_of_int32(result), (4)))) }
+ x:int32 -> { } int32 { (JC_22: eq_int(integer_of_int32(result), (4))) }
 
 parameter f2_requires :
- x_0:int32 ->
-  { } int32
-  { ((true = true) -> (JC_22: eq_int(integer_of_int32(result), (4)))) }
+ x:int32 -> { } int32 { (JC_22: eq_int(integer_of_int32(result), (4))) }
 
 parameter f3 :
- x_4:int32 ->
-  { } int32
-  { ((true = true) -> (JC_30: eq_int(integer_of_int32(result), (4)))) }
+ x_3:int32 -> { } int32 { (JC_30: eq_int(integer_of_int32(result), (4))) }
 
 parameter f3_requires :
- x_4:int32 ->
-  { } int32
-  { ((true = true) -> (JC_30: eq_int(integer_of_int32(result), (4)))) }
+ x_3:int32 -> { } int32 { (JC_30: eq_int(integer_of_int32(result), (4))) }
 
 parameter f4 :
- x:int32 ->
-  { } int32
-  { ((true = true) -> (JC_38: eq_int(integer_of_int32(result), (0)))) }
+ x_6:int32 -> { } int32 { (JC_38: eq_int(integer_of_int32(result), (0))) }
 
 parameter f4_requires :
- x:int32 ->
-  { } int32
-  { ((true = true) -> (JC_38: eq_int(integer_of_int32(result), (0)))) }
+ x_6:int32 -> { } int32 { (JC_38: eq_int(integer_of_int32(result), (0))) }
 
 parameter f5 :
- x_3:int32 ->
+ x_2:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_46:
-     (eq_int(integer_of_int32(x_3), (1)) ->
-      eq_int(integer_of_int32(result), (1))))) }
+  { (JC_46:
+    (eq_int(integer_of_int32(x_2), (1)) ->
+     eq_int(integer_of_int32(result), (1)))) }
 
 parameter f5_requires :
- x_3:int32 ->
+ x_2:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_46:
-     (eq_int(integer_of_int32(x_3), (1)) ->
-      eq_int(integer_of_int32(result), (1))))) }
+  { (JC_46:
+    (eq_int(integer_of_int32(x_2), (1)) ->
+     eq_int(integer_of_int32(result), (1)))) }
 
 parameter f6 :
- x_6:int32 ->
+ x_5:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_60:
-     (eq_int(integer_of_int32(x_6), (2)) ->
-      eq_int(integer_of_int32(result), (1))))) }
+  { (JC_60:
+    (eq_int(integer_of_int32(x_5), (2)) ->
+     eq_int(integer_of_int32(result), (1)))) }
 
 parameter f6_requires :
- x_6:int32 ->
+ x_5:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_60:
-     (eq_int(integer_of_int32(x_6), (2)) ->
-      eq_int(integer_of_int32(result), (1))))) }
+  { (JC_60:
+    (eq_int(integer_of_int32(x_5), (2)) ->
+     eq_int(integer_of_int32(result), (1)))) }
 
 parameter f7 :
- x_1:int32 ->
+ x_0:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_68:
-     (eq_int(integer_of_int32(x_1), (5)) ->
-      eq_int(integer_of_int32(result), (1))))) }
+  { (JC_68:
+    (eq_int(integer_of_int32(x_0), (5)) ->
+     eq_int(integer_of_int32(result), (1)))) }
 
 parameter f7_requires :
- x_1:int32 ->
+ x_0:int32 ->
   { } int32
-  { ((true = true) ->
-     (JC_68:
-     (eq_int(integer_of_int32(x_1), (5)) ->
-      eq_int(integer_of_int32(result), (1))))) }
+  { (JC_68:
+    (eq_int(integer_of_int32(x_0), (5)) ->
+     eq_int(integer_of_int32(result), (1)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -776,8 +746,8 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let f1_ensures_default =
- fun (x_2 : int32) ->
-  { (true = true) }
+ fun (x_1 : int32) ->
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -786,10 +756,10 @@ let f1_ensures_default =
      begin
        try
         (let jessie_58 = begin
-                           (let jessie_2 = x_2 in
+                           (let jessie_2 = x_1 in
                            begin
                              (if (((eq_int_ (integer_of_int32 jessie_2)) (1)) || 
-                                 (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false))
+                                 ((eq_int_ (integer_of_int32 jessie_2)) (0)))
                              then
                               (let jessie_47 = (C_1:
                                                begin
@@ -811,7 +781,7 @@ let f1_ensures_default =
                             (if (((eq_int_ (integer_of_int32 jessie_2)) (4)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (2)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (1)) || 
-                                (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false))))
+                                ((eq_int_ (integer_of_int32 jessie_2)) (0)))))
                             then
                              (let jessie_50 = (C_3:
                                               begin
@@ -828,7 +798,7 @@ let f1_ensures_default =
                                 (((eq_int_ (integer_of_int32 jessie_2)) (4)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (2)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (1)) || 
-                                (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false)))))
+                                ((eq_int_ (integer_of_int32 jessie_2)) (0))))))
                             then
                              (let jessie_53 = (C_4:
                                               begin
@@ -841,7 +811,7 @@ let f1_ensures_default =
                                               end) in
                              void)
                             else void);
-                            (if (true || false)
+                            (if true
                             then
                              (let jessie_57 = begin
                                                 void;
@@ -875,11 +845,11 @@ let f1_ensures_default =
    Return ->
    !return end))
   { (JC_5:
-    (eq_int(integer_of_int32(x_2), (4)) ->
+    (eq_int(integer_of_int32(x_1), (4)) ->
      eq_int(integer_of_int32(result), (2)))) }
 
 let f1_safety =
- fun (x_2 : int32) ->
+ fun (x_1 : int32) ->
   { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -889,10 +859,10 @@ let f1_safety =
      begin
        try
         (let jessie_40 = begin
-                           (let jessie_2 = x_2 in
+                           (let jessie_2 = x_1 in
                            begin
                              (if (((eq_int_ (integer_of_int32 jessie_2)) (1)) || 
-                                 (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false))
+                                 ((eq_int_ (integer_of_int32 jessie_2)) (0)))
                              then
                               (let jessie_29 = (C_1:
                                                begin
@@ -914,7 +884,7 @@ let f1_safety =
                             (if (((eq_int_ (integer_of_int32 jessie_2)) (4)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (2)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (1)) || 
-                                (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false))))
+                                ((eq_int_ (integer_of_int32 jessie_2)) (0)))))
                             then
                              (let jessie_32 = (C_3:
                                               begin
@@ -931,7 +901,7 @@ let f1_safety =
                                 (((eq_int_ (integer_of_int32 jessie_2)) (4)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (2)) || 
                                 (((eq_int_ (integer_of_int32 jessie_2)) (1)) || 
-                                (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false)))))
+                                ((eq_int_ (integer_of_int32 jessie_2)) (0))))))
                             then
                              (let jessie_35 = (C_4:
                                               begin
@@ -944,7 +914,7 @@ let f1_safety =
                                               end) in
                              void)
                             else void);
-                            (if (true || false)
+                            (if true
                             then
                              (let jessie_39 = begin
                                                 void;
@@ -980,8 +950,8 @@ let f1_safety =
   { true }
 
 let f1a_ensures_default =
- fun (x_5 : int32) ->
-  { (true = true) }
+ fun (x_4 : int32) ->
+  { (JC_12: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -992,10 +962,10 @@ let f1a_ensures_default =
       (let jessie_108 = begin
                           try
                            (let jessie_103 = begin
-                                               (let jessie_6 = x_5 in
+                                               (let jessie_6 = x_4 in
                                                begin
                                                  (if (((eq_int_ (integer_of_int32 jessie_6)) (1)) || 
-                                                     (((eq_int_ (integer_of_int32 jessie_6)) (0)) || false))
+                                                     ((eq_int_ (integer_of_int32 jessie_6)) (0)))
                                                  then
                                                   (let jessie_90 = (C_8:
                                                                    begin
@@ -1021,7 +991,7 @@ let f1a_ensures_default =
                                                 (if (((eq_int_ (integer_of_int32 jessie_6)) (4)) || 
                                                     (((eq_int_ (integer_of_int32 jessie_6)) (2)) || 
                                                     (((eq_int_ (integer_of_int32 jessie_6)) (1)) || 
-                                                    (((eq_int_ (integer_of_int32 jessie_6)) (0)) || false))))
+                                                    ((eq_int_ (integer_of_int32 jessie_6)) (0)))))
                                                 then
                                                  (let jessie_95 = (C_10:
                                                                   begin
@@ -1046,7 +1016,7 @@ let f1a_ensures_default =
                                                     (((eq_int_ (integer_of_int32 jessie_6)) (4)) || 
                                                     (((eq_int_ (integer_of_int32 jessie_6)) (2)) || 
                                                     (((eq_int_ (integer_of_int32 jessie_6)) (1)) || 
-                                                    (((eq_int_ (integer_of_int32 jessie_6)) (0)) || false)))))
+                                                    ((eq_int_ (integer_of_int32 jessie_6)) (0))))))
                                                 then
                                                  (let jessie_100 = (C_12:
                                                                    begin
@@ -1068,7 +1038,7 @@ let f1a_ensures_default =
                                                                    end) in
                                                  void)
                                                 else void);
-                                                (if (true || false)
+                                                (if true
                                                 then
                                                  (let jessie_102 = begin
                                                                      void;
@@ -1112,11 +1082,11 @@ let f1a_ensures_default =
    Return ->
    !return end))
   { (JC_13:
-    (eq_int(integer_of_int32(x_5), (4)) ->
+    (eq_int(integer_of_int32(x_4), (4)) ->
      eq_int(integer_of_int32(result), (2)))) }
 
 let f1a_safety =
- fun (x_5 : int32) ->
+ fun (x_4 : int32) ->
   { (JC_12: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1128,10 +1098,10 @@ let f1a_safety =
       (let jessie_83 = begin
                          try
                           (let jessie_78 = begin
-                                             (let jessie_6 = x_5 in
+                                             (let jessie_6 = x_4 in
                                              begin
                                                (if (((eq_int_ (integer_of_int32 jessie_6)) (1)) || 
-                                                   (((eq_int_ (integer_of_int32 jessie_6)) (0)) || false))
+                                                   ((eq_int_ (integer_of_int32 jessie_6)) (0)))
                                                then
                                                 (let jessie_65 = (C_8:
                                                                  begin
@@ -1155,7 +1125,7 @@ let f1a_safety =
                                               (if (((eq_int_ (integer_of_int32 jessie_6)) (4)) || 
                                                   (((eq_int_ (integer_of_int32 jessie_6)) (2)) || 
                                                   (((eq_int_ (integer_of_int32 jessie_6)) (1)) || 
-                                                  (((eq_int_ (integer_of_int32 jessie_6)) (0)) || false))))
+                                                  ((eq_int_ (integer_of_int32 jessie_6)) (0)))))
                                               then
                                                (let jessie_70 = (C_10:
                                                                 begin
@@ -1179,7 +1149,7 @@ let f1a_safety =
                                                   (((eq_int_ (integer_of_int32 jessie_6)) (4)) || 
                                                   (((eq_int_ (integer_of_int32 jessie_6)) (2)) || 
                                                   (((eq_int_ (integer_of_int32 jessie_6)) (1)) || 
-                                                  (((eq_int_ (integer_of_int32 jessie_6)) (0)) || false)))))
+                                                  ((eq_int_ (integer_of_int32 jessie_6)) (0))))))
                                               then
                                                (let jessie_75 = (C_12:
                                                                 begin
@@ -1199,7 +1169,7 @@ let f1a_safety =
                                                                 end) in
                                                void)
                                               else void);
-                                              (if (true || false)
+                                              (if true
                                               then
                                                (let jessie_77 = begin
                                                                   void;
@@ -1244,18 +1214,18 @@ let f1a_safety =
   { true }
 
 let f2_ensures_default =
- fun (x_0 : int32) ->
-  { (true = true) }
+ fun (x : int32) ->
+  { (JC_20: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let y_1 = ref (any_int32 void) in
      begin
-       (let jessie_8 = x_0 in
+       (let jessie_8 = x in
        begin
-         (if (((eq_int_ (integer_of_int32 jessie_8)) (1)) || (((eq_int_ 
-                                                                (integer_of_int32 jessie_8)) (0)) || false))
+         (if (((eq_int_ (integer_of_int32 jessie_8)) (1)) || ((eq_int_ 
+                                                               (integer_of_int32 jessie_8)) (0)))
          then
           (let jessie_122 = (C_18:
                             begin
@@ -1267,8 +1237,8 @@ let f2_ensures_default =
                                                                (integer_of_int32 jessie_8)) (2)) || 
                                                             (((eq_int_ 
                                                                (integer_of_int32 jessie_8)) (1)) || 
-                                                            (((eq_int_ 
-                                                               (integer_of_int32 jessie_8)) (0)) || false))))
+                                                            ((eq_int_ 
+                                                              (integer_of_int32 jessie_8)) (0)))))
         then
          (let jessie_124 = (C_19:
                            begin
@@ -1282,8 +1252,8 @@ let f2_ensures_default =
                                                                (integer_of_int32 jessie_8)) (2)) || 
                                                             (((eq_int_ 
                                                                (integer_of_int32 jessie_8)) (1)) || 
-                                                            (((eq_int_ 
-                                                               (integer_of_int32 jessie_8)) (0)) || false)))))
+                                                            ((eq_int_ 
+                                                              (integer_of_int32 jessie_8)) (0))))))
         then
          (let jessie_126 = (C_20:
                            begin
@@ -1291,7 +1261,7 @@ let f2_ensures_default =
                            end) in
          void)
         else void);
-        (if (true || false)
+        (if true
         then
          (let jessie_128 = begin
                              void;
@@ -1314,7 +1284,7 @@ let f2_ensures_default =
   { (JC_21: eq_int(integer_of_int32(result), (4))) }
 
 let f2_safety =
- fun (x_0 : int32) ->
+ fun (x : int32) ->
   { (JC_20: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1322,10 +1292,10 @@ let f2_safety =
    begin
      (let y_1 = ref (any_int32 void) in
      begin
-       (let jessie_8 = x_0 in
+       (let jessie_8 = x in
        begin
-         (if (((eq_int_ (integer_of_int32 jessie_8)) (1)) || (((eq_int_ 
-                                                                (integer_of_int32 jessie_8)) (0)) || false))
+         (if (((eq_int_ (integer_of_int32 jessie_8)) (1)) || ((eq_int_ 
+                                                               (integer_of_int32 jessie_8)) (0)))
          then
           (let jessie_112 = (C_18:
                             begin
@@ -1337,8 +1307,8 @@ let f2_safety =
                                                                (integer_of_int32 jessie_8)) (2)) || 
                                                             (((eq_int_ 
                                                                (integer_of_int32 jessie_8)) (1)) || 
-                                                            (((eq_int_ 
-                                                               (integer_of_int32 jessie_8)) (0)) || false))))
+                                                            ((eq_int_ 
+                                                              (integer_of_int32 jessie_8)) (0)))))
         then
          (let jessie_114 = (C_19:
                            begin
@@ -1352,8 +1322,8 @@ let f2_safety =
                                                                (integer_of_int32 jessie_8)) (2)) || 
                                                             (((eq_int_ 
                                                                (integer_of_int32 jessie_8)) (1)) || 
-                                                            (((eq_int_ 
-                                                               (integer_of_int32 jessie_8)) (0)) || false)))))
+                                                            ((eq_int_ 
+                                                              (integer_of_int32 jessie_8)) (0))))))
         then
          (let jessie_116 = (C_20:
                            begin
@@ -1361,7 +1331,7 @@ let f2_safety =
                            end) in
          void)
         else void);
-        (if (true || false)
+        (if true
         then
          (let jessie_118 = begin
                              void;
@@ -1384,18 +1354,18 @@ let f2_safety =
   { true }
 
 let f3_ensures_default =
- fun (x_4 : int32) ->
-  { (true = true) }
+ fun (x_3 : int32) ->
+  { (JC_28: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let y_2 = ref (any_int32 void) in
      begin
-       (let jessie_10 = x_4 in
+       (let jessie_10 = x_3 in
        begin
-         (if (((eq_int_ (integer_of_int32 jessie_10)) (1)) || (((eq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (0)) || false))
+         (if (((eq_int_ (integer_of_int32 jessie_10)) (1)) || ((eq_int_ 
+                                                                (integer_of_int32 jessie_10)) (0)))
          then
           (let jessie_142 = (C_23:
                             begin
@@ -1403,8 +1373,8 @@ let f3_ensures_default =
                             end) in
           void)
          else void);
-        (if ((((neq_int_ (integer_of_int32 jessie_10)) (3)) && (((neq_int_ 
-                                                                  (integer_of_int32 jessie_10)) (2)) && true)) || false)
+        (if (((neq_int_ (integer_of_int32 jessie_10)) (3)) && ((neq_int_ 
+                                                                (integer_of_int32 jessie_10)) (2)))
         then
          (let jessie_144 = begin
                              void;
@@ -1415,10 +1385,10 @@ let f3_ensures_default =
                            end in
          void)
         else void);
-        (if (((eq_int_ (integer_of_int32 jessie_10)) (3)) || ((((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (3)) && 
-                                                              (((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (2)) && true)) || false))
+        (if (((eq_int_ (integer_of_int32 jessie_10)) (3)) || (((neq_int_ 
+                                                                (integer_of_int32 jessie_10)) (3)) && 
+                                                             ((neq_int_ 
+                                                               (integer_of_int32 jessie_10)) (2))))
         then
          (let jessie_146 = (C_25:
                            begin
@@ -1428,10 +1398,10 @@ let f3_ensures_default =
         else void);
         (if (((eq_int_ (integer_of_int32 jessie_10)) (2)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_10)) (3)) || 
-                                                             ((((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (3)) && 
-                                                              (((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (2)) && true)) || false)))
+                                                             (((neq_int_ 
+                                                                (integer_of_int32 jessie_10)) (3)) && 
+                                                             ((neq_int_ 
+                                                               (integer_of_int32 jessie_10)) (2)))))
         then
          (let jessie_148 = (C_26:
                            begin
@@ -1451,7 +1421,7 @@ let f3_ensures_default =
   { (JC_29: eq_int(integer_of_int32(result), (4))) }
 
 let f3_safety =
- fun (x_4 : int32) ->
+ fun (x_3 : int32) ->
   { (JC_28: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1459,10 +1429,10 @@ let f3_safety =
    begin
      (let y_2 = ref (any_int32 void) in
      begin
-       (let jessie_10 = x_4 in
+       (let jessie_10 = x_3 in
        begin
-         (if (((eq_int_ (integer_of_int32 jessie_10)) (1)) || (((eq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (0)) || false))
+         (if (((eq_int_ (integer_of_int32 jessie_10)) (1)) || ((eq_int_ 
+                                                                (integer_of_int32 jessie_10)) (0)))
          then
           (let jessie_132 = (C_23:
                             begin
@@ -1470,8 +1440,8 @@ let f3_safety =
                             end) in
           void)
          else void);
-        (if ((((neq_int_ (integer_of_int32 jessie_10)) (3)) && (((neq_int_ 
-                                                                  (integer_of_int32 jessie_10)) (2)) && true)) || false)
+        (if (((neq_int_ (integer_of_int32 jessie_10)) (3)) && ((neq_int_ 
+                                                                (integer_of_int32 jessie_10)) (2)))
         then
          (let jessie_134 = begin
                              void;
@@ -1482,10 +1452,10 @@ let f3_safety =
                            end in
          void)
         else void);
-        (if (((eq_int_ (integer_of_int32 jessie_10)) (3)) || ((((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (3)) && 
-                                                              (((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (2)) && true)) || false))
+        (if (((eq_int_ (integer_of_int32 jessie_10)) (3)) || (((neq_int_ 
+                                                                (integer_of_int32 jessie_10)) (3)) && 
+                                                             ((neq_int_ 
+                                                               (integer_of_int32 jessie_10)) (2))))
         then
          (let jessie_136 = (C_25:
                            begin
@@ -1495,10 +1465,10 @@ let f3_safety =
         else void);
         (if (((eq_int_ (integer_of_int32 jessie_10)) (2)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_10)) (3)) || 
-                                                             ((((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (3)) && 
-                                                              (((neq_int_ 
-                                                                 (integer_of_int32 jessie_10)) (2)) && true)) || false)))
+                                                             (((neq_int_ 
+                                                                (integer_of_int32 jessie_10)) (3)) && 
+                                                             ((neq_int_ 
+                                                               (integer_of_int32 jessie_10)) (2)))))
         then
          (let jessie_138 = (C_26:
                            begin
@@ -1518,8 +1488,8 @@ let f3_safety =
   { true }
 
 let f4_ensures_default =
- fun (x : int32) ->
-  { (true = true) }
+ fun (x_6 : int32) ->
+  { (JC_36: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1530,12 +1500,12 @@ let f4_ensures_default =
        (let jessie_159 = (y_3 := (safe_int32_of_integer_ (0))) in void);
       try
        (let jessie_164 = begin
-                           (let jessie_13 = x in
-                           (if (((eq_int_ (integer_of_int32 jessie_13)) (0)) || false)
+                           (let jessie_13 = x_6 in
+                           (if ((eq_int_ (integer_of_int32 jessie_13)) (0))
                            then
                             (let jessie_163 = begin
                                                 void;
-                                               (if ((eq_int_ (integer_of_int32 x)) (0))
+                                               (if ((eq_int_ (integer_of_int32 x_6)) (0))
                                                then
                                                 (let jessie_161 = (raise
                                                                    (Goto_switch_4_break_exc
@@ -1567,7 +1537,7 @@ let f4_ensures_default =
   { (JC_37: eq_int(integer_of_int32(result), (0))) }
 
 let f4_safety =
- fun (x : int32) ->
+ fun (x_6 : int32) ->
   { (JC_36: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1579,12 +1549,12 @@ let f4_safety =
        (let jessie_151 = (y_3 := (safe_int32_of_integer_ (0))) in void);
       try
        (let jessie_156 = begin
-                           (let jessie_13 = x in
-                           (if (((eq_int_ (integer_of_int32 jessie_13)) (0)) || false)
+                           (let jessie_13 = x_6 in
+                           (if ((eq_int_ (integer_of_int32 jessie_13)) (0))
                            then
                             (let jessie_155 = begin
                                                 void;
-                                               (if ((eq_int_ (integer_of_int32 x)) (0))
+                                               (if ((eq_int_ (integer_of_int32 x_6)) (0))
                                                then
                                                 (let jessie_153 = (raise
                                                                    (Goto_switch_4_break_exc
@@ -1616,8 +1586,8 @@ let f4_safety =
   { true }
 
 let f5_ensures_default =
- fun (x_3 : int32) ->
-  { (true = true) }
+ fun (x_2 : int32) ->
+  { (JC_44: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1626,8 +1596,8 @@ let f5_ensures_default =
      (C_31:
      begin
        (let jessie_177 = (y_4 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_18 = x_3 in
-      (if (((eq_int_ (integer_of_int32 jessie_18)) (1)) || false)
+      (let jessie_18 = x_2 in
+      (if ((eq_int_ (integer_of_int32 jessie_18)) (1))
       then
        (let jessie_184 = begin
                            try
@@ -1643,7 +1613,7 @@ let f5_ensures_default =
                                                      (let jessie_180 = 
                                                      begin
                                                        (if ((gt_int_ 
-                                                             (integer_of_int32 x_3)) (0))
+                                                             (integer_of_int32 x_2)) (0))
                                                        then void
                                                        else
                                                         (let jessie_179 = 
@@ -1690,11 +1660,11 @@ let f5_ensures_default =
    Return ->
    !return end))
   { (JC_45:
-    (eq_int(integer_of_int32(x_3), (1)) ->
+    (eq_int(integer_of_int32(x_2), (1)) ->
      eq_int(integer_of_int32(result), (1)))) }
 
 let f5_safety =
- fun (x_3 : int32) ->
+ fun (x_2 : int32) ->
   { (JC_44: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1704,8 +1674,8 @@ let f5_safety =
      (C_31:
      begin
        (let jessie_167 = (y_4 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_18 = x_3 in
-      (if (((eq_int_ (integer_of_int32 jessie_18)) (1)) || false)
+      (let jessie_18 = x_2 in
+      (if ((eq_int_ (integer_of_int32 jessie_18)) (1))
       then
        (let jessie_174 = begin
                            try
@@ -1722,7 +1692,7 @@ let f5_safety =
                                                      (let jessie_170 = 
                                                      begin
                                                        (if ((gt_int_ 
-                                                             (integer_of_int32 x_3)) (0))
+                                                             (integer_of_int32 x_2)) (0))
                                                        then void
                                                        else
                                                         (let jessie_169 = 
@@ -1771,8 +1741,8 @@ let f5_safety =
   { true }
 
 let f6_ensures_default =
- fun (x_6 : int32) ->
-  { (true = true) }
+ fun (x_5 : int32) ->
+  { (JC_58: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1781,8 +1751,8 @@ let f6_ensures_default =
      (C_34:
      begin
        (let jessie_193 = (y_5 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_20 = x_6 in
-      (if (((eq_int_ (integer_of_int32 jessie_20)) (2)) || false)
+      (let jessie_20 = x_5 in
+      (if ((eq_int_ (integer_of_int32 jessie_20)) (2))
       then
        (let jessie_196 = (C_35:
                          begin
@@ -1799,11 +1769,11 @@ let f6_ensures_default =
    Return ->
    !return end))
   { (JC_59:
-    (eq_int(integer_of_int32(x_6), (2)) ->
+    (eq_int(integer_of_int32(x_5), (2)) ->
      eq_int(integer_of_int32(result), (1)))) }
 
 let f6_safety =
- fun (x_6 : int32) ->
+ fun (x_5 : int32) ->
   { (JC_58: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1813,8 +1783,8 @@ let f6_safety =
      (C_34:
      begin
        (let jessie_187 = (y_5 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_20 = x_6 in
-      (if (((eq_int_ (integer_of_int32 jessie_20)) (2)) || false)
+      (let jessie_20 = x_5 in
+      (if ((eq_int_ (integer_of_int32 jessie_20)) (2))
       then
        (let jessie_190 = (C_35:
                          begin
@@ -1833,8 +1803,8 @@ let f6_safety =
   { true }
 
 let f7_ensures_default =
- fun (x_1 : int32) ->
-  { (true = true) }
+ fun (x_0 : int32) ->
+  { (JC_66: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1843,8 +1813,8 @@ let f7_ensures_default =
      (C_37:
      begin
        (let jessie_205 = (y_6 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_22 = x_1 in
-      (if (((eq_int_ (integer_of_int32 jessie_22)) (5)) || false)
+      (let jessie_22 = x_0 in
+      (if ((eq_int_ (integer_of_int32 jessie_22)) (5))
       then
        (let jessie_208 = (C_38:
                          begin
@@ -1861,11 +1831,11 @@ let f7_ensures_default =
    Return ->
    !return end))
   { (JC_67:
-    (eq_int(integer_of_int32(x_1), (5)) ->
+    (eq_int(integer_of_int32(x_0), (5)) ->
      eq_int(integer_of_int32(result), (1)))) }
 
 let f7_safety =
- fun (x_1 : int32) ->
+ fun (x_0 : int32) ->
   { (JC_66: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1875,8 +1845,8 @@ let f7_safety =
      (C_37:
      begin
        (let jessie_199 = (y_6 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_22 = x_1 in
-      (if (((eq_int_ (integer_of_int32 jessie_22)) (5)) || false)
+      (let jessie_22 = x_0 in
+      (if ((eq_int_ (integer_of_int32 jessie_22)) (5))
       then
        (let jessie_202 = (C_38:
                          begin
@@ -2113,7 +2083,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2168,7 +2168,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2187,6 +2191,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

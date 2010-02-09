@@ -34,7 +34,6 @@ type void_P = [void_P]
 
 unit abs1(int_P[..] p)
 behavior default:
-  assumes true;
   ensures (C_6 : (p.int_M >= 0));
 {  
    {  (if ((C_5 : p.int_M) < 0) then (C_4 : ((C_3 : p.int_M) = (C_2 : 
@@ -48,7 +47,6 @@ unit abs2(int_P[..] p_0)
   requires (C_12 : ((C_13 : (\offset_min(p_0) <= 0)) &&
                      (C_14 : (\offset_max(p_0) >= 0))));
 behavior default:
-  assumes true;
   ensures (C_15 : (p_0.int_M >= 0));
 {  
    {  (if ((C_11 : p_0.int_M) < 0) then (C_10 : ((C_9 : p_0.int_M) = 
@@ -301,21 +299,21 @@ parameter abs1 :
   int_P_int_M_p_1:(int_P, int) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { ((true = true) -> (JC_6: ge_int(select(int_P_int_M_p_1, p), (0)))) }
+    { (JC_6: ge_int(select(int_P_int_M_p_1, p), (0))) }
 
 parameter abs1_requires :
  p:int_P pointer ->
   int_P_int_M_p_1:(int_P, int) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { ((true = true) -> (JC_6: ge_int(select(int_P_int_M_p_1, p), (0)))) }
+    { (JC_6: ge_int(select(int_P_int_M_p_1, p), (0))) }
 
 parameter abs2 :
  p_0:int_P pointer ->
   int_P_int_M_p_0_2:(int_P, int) memory ref ->
    int_P_p_0_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { ((true = true) -> (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0)))) }
+    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
 
 parameter abs2_requires :
  p_0:int_P pointer ->
@@ -325,7 +323,7 @@ parameter abs2_requires :
       ((JC_12: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
       and (JC_13: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))}
     unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { ((true = true) -> (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0)))) }
+    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -463,7 +461,7 @@ parameter alloc_struct_void_P_requires :
 
 let abs1_ensures_default =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   try
    begin
@@ -515,10 +513,9 @@ let abs1_safety =
 
 let abs2_ensures_default =
  fun (p_0 : int_P pointer) (int_P_int_M_p_0_2 : (int_P, int) memory ref) (int_P_p_0_2_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_18:
-        ((JC_16: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-        and (JC_17: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))) }
+  { (JC_18:
+    ((JC_16: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
+    and (JC_17: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0))))) }
   (init:
   try
    begin
@@ -789,7 +786,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -844,7 +871,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -863,6 +894,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 

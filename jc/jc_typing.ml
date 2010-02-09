@@ -2257,9 +2257,9 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     (* old statements *)
     | JCNEassert(behav,asrt,e1) ->
         unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
-    | JCNEcontract(req,_dec,behs,e) ->
+    | JCNEcontract(req,dec,behs,e) ->
 	let requires = Option_misc.map (assertion env) req in
-	let decreases = Option_misc.map (fun t -> term env t,None) req in
+	let decreases = Option_misc.map (fun (t,rel) -> term env t,rel) dec in
 	let e = expr env e in
 	let vi_result = var (e#typ) "\\result" in
 	let behs = List.map (behavior env vi_result) behs in

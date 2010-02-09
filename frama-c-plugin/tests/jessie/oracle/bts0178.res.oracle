@@ -39,7 +39,6 @@ type void_P = [void_P]
 
 unit g(int_P[..] j, int_P[..] k)
 behavior default:
-  assumes true;
   ensures (C_8 : true);
 {  
    (var int32 tmp);
@@ -54,7 +53,6 @@ behavior default:
 
 unit f(int_P[..] vector, int32 size_0)
 behavior default:
-  assumes true;
   ensures (C_15 : true);
 {  
    (var int32 i);
@@ -573,7 +571,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (vector : int_P pointer) (size_0 : int32) (int_P_int_M_vector_3 : (int_P, int32) memory ref) (int_P_vector_3_alloc_table : int_P alloc_table) ->
-  { (true = true) }
+  { (JC_16: true) }
   (init:
   try
    begin
@@ -644,7 +642,7 @@ let f_safety =
 
 let g_ensures_default =
  fun (j : int_P pointer) (k : int_P pointer) (int_P_int_M_j_1 : (int_P, int32) memory ref) (int_P_int_M_k_2 : (int_P, int32) memory ref) (int_P_j_1_alloc_table : int_P alloc_table) (int_P_k_2_alloc_table : int_P alloc_table) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   try
    begin

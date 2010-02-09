@@ -43,7 +43,6 @@ unit Swap(int_P[..] p, int_P[..] q)
                     ((C_13 : (\offset_min(q) <= 0)) &&
                       (C_14 : (\offset_max(q) >= 0)))));
 behavior default:
-  assumes true;
   assigns p.int_M,
   q.int_M;
   ensures (C_15 : ((C_16 : (p.int_M == \old(q.int_M))) &&
@@ -63,7 +62,6 @@ unit foo(int_P[..] a, int32 k)
   requires (C_21 : ((C_22 : (\offset_min(a) <= 0)) &&
                      (C_23 : (\offset_max(a) >= k))));
 behavior default:
-  assumes true;
   ensures (C_24 : true);
 {  
    {  (C_20 : Swap((C_18 : (a + 0)), (C_19 : (a + k))));
@@ -378,22 +376,21 @@ parameter Swap :
       int_P_p_1_alloc_table:int_P alloc_table ->
        { } unit reads int_P_int_M_p_1,int_P_int_M_q_2
        writes int_P_int_M_p_1,int_P_int_M_q_2
-       { ((true = true) ->
-          (JC_26:
-          ((JC_22:
-           ((JC_20:
-            eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
-            integer_of_int32(select(int_P_int_M_q_2@, q@))))
-           and (JC_21:
-               eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
-               integer_of_int32(select(int_P_int_M_p_1@, p@))))))
-          and (JC_25:
-              ((JC_23:
-               not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
-               int_P_int_M_p_1, pset_singleton(p@)))
-              and (JC_24:
-                  not_assigns(int_P_q_2_alloc_table@, int_P_int_M_q_2@,
-                  int_P_int_M_q_2, pset_singleton(q@)))))))) }
+       { (JC_26:
+         ((JC_22:
+          ((JC_20:
+           eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
+           integer_of_int32(select(int_P_int_M_q_2@, q@))))
+          and (JC_21:
+              eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
+              integer_of_int32(select(int_P_int_M_p_1@, p@))))))
+         and (JC_25:
+             ((JC_23:
+              not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
+              int_P_int_M_p_1, pset_singleton(p@)))
+             and (JC_24:
+                 not_assigns(int_P_q_2_alloc_table@, int_P_int_M_q_2@,
+                 int_P_int_M_q_2, pset_singleton(q@))))))) }
 
 parameter Swap_requires :
  p:int_P pointer ->
@@ -410,22 +407,21 @@ parameter Swap_requires :
                      ge_int(offset_max(int_P_q_2_alloc_table, q), (0)))))))}
        unit reads int_P_int_M_p_1,int_P_int_M_q_2
        writes int_P_int_M_p_1,int_P_int_M_q_2
-       { ((true = true) ->
-          (JC_26:
-          ((JC_22:
-           ((JC_20:
-            eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
-            integer_of_int32(select(int_P_int_M_q_2@, q@))))
-           and (JC_21:
-               eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
-               integer_of_int32(select(int_P_int_M_p_1@, p@))))))
-          and (JC_25:
-              ((JC_23:
-               not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
-               int_P_int_M_p_1, pset_singleton(p@)))
-              and (JC_24:
-                  not_assigns(int_P_q_2_alloc_table@, int_P_int_M_q_2@,
-                  int_P_int_M_q_2, pset_singleton(q@)))))))) }
+       { (JC_26:
+         ((JC_22:
+          ((JC_20:
+           eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
+           integer_of_int32(select(int_P_int_M_q_2@, q@))))
+          and (JC_21:
+              eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
+              integer_of_int32(select(int_P_int_M_p_1@, p@))))))
+         and (JC_25:
+             ((JC_23:
+              not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
+              int_P_int_M_p_1, pset_singleton(p@)))
+             and (JC_24:
+                 not_assigns(int_P_q_2_alloc_table@, int_P_int_M_q_2@,
+                 int_P_int_M_q_2, pset_singleton(q@))))))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -601,13 +597,11 @@ parameter safe_int8_of_integer_ :
 
 let Swap_ensures_default =
  fun (p : int_P pointer) (q : int_P pointer) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_int_M_q_2 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) (int_P_q_2_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_11:
-        ((JC_7: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-        and ((JC_8: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
-            and ((JC_9: le_int(offset_min(int_P_q_2_alloc_table, q), (0)))
-                and (JC_10:
-                    ge_int(offset_max(int_P_q_2_alloc_table, q), (0)))))))) }
+  { (JC_11:
+    ((JC_7: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and ((JC_8: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
+        and ((JC_9: le_int(offset_min(int_P_q_2_alloc_table, q), (0)))
+            and (JC_10: ge_int(offset_max(int_P_q_2_alloc_table, q), (0))))))) }
   (init:
   try
    begin
@@ -700,11 +694,10 @@ let Swap_safety =
 
 let foo_ensures_default =
  fun (a : int_P pointer) (k : int32) (int_P_int_M_a_3 : (int_P, int32) memory ref) (int_P_a_3_alloc_table : int_P alloc_table) ->
-  { ((true = true)
-    and (JC_39:
-        ((JC_37: le_int(offset_min(int_P_a_3_alloc_table, a), (0)))
-        and (JC_38:
-            ge_int(offset_max(int_P_a_3_alloc_table, a), integer_of_int32(k)))))) }
+  { (JC_39:
+    ((JC_37: le_int(offset_min(int_P_a_3_alloc_table, a), (0)))
+    and (JC_38:
+        ge_int(offset_max(int_P_a_3_alloc_table, a), integer_of_int32(k))))) }
   (init:
   try
    begin

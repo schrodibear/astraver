@@ -194,7 +194,6 @@ lemma iset_c_min_elt_help :
 integer t1(integer a_0, integer b_0, integer c_0)
   decreases (C_26 : card(iset(a_0)));
 behavior default:
-  assumes true;
   ensures (C_25 : true);
 {  
    (var integer d);
@@ -320,7 +319,6 @@ predicate sorted{L}(int_xP[..] s_17, integer a_6, integer b_5) =
 integer min_elt(integer x)
   requires (C_27 : (x != 0));
 behavior default:
-  assumes true;
   assigns \nothing;
   ensures (C_28 : (\result == min_elt(iset(x))));
 ;
@@ -328,7 +326,6 @@ behavior default:
 unit store_solution()
   requires (C_29 : solution{Here}(col));
 behavior default:
-  assumes true;
   assigns s,
   ((sol + s).int_xM + [0..(N - 1)]).int_M;
   ensures (C_30 : ((C_31 : (s == (\old(s) + 1))) &&
@@ -362,7 +359,6 @@ integer t3(integer a, integer b, integer c)
                            (C_90 : partial_solution{Here}(k, col)))))));
   decreases (C_100 : card(iset(a)));
 behavior default:
-  assumes true;
   assigns (col + [k..]).int_M,
   s,
   k,
@@ -469,7 +465,6 @@ integer queens(integer n)
   requires (C_109 : (((C_111 : (n == N)) && (C_112 : (s == 0))) &&
                       (C_113 : (k == 0))));
 behavior default:
-  assumes true;
   ensures (C_114 : (((C_116 : (\result == s)) &&
                       (C_117 : sorted{Here}(sol, 0, s))) &&
                      (C_118 : (\forall int_P[..] t_4;
@@ -482,13 +477,13 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_101 : (n >= 0)));
-         
-         (assert for default: (C_102 : (n < 32)));
+         (assert for default: (C_104 : (-1 <= (2147483647 >>> n))));
          
          (assert for default: (C_103 : (-1 >= 0)));
          
-         (assert for default: (C_104 : (-1 <= (2147483647 >>> n))));
+         (assert for default: (C_102 : (n < 32)));
+         
+         (assert for default: (C_101 : (n >= 0)));
          (C_108 : (tmp_1 = (C_107 : t3((C_106 : (~ (C_105 : (-1 << n)))), 0,
                                        0))))
       };
@@ -1274,13 +1269,12 @@ parameter int_xP_int_xM : (int_xP, int_P pointer) memory ref
 parameter k : int ref
 
 parameter min_elt_0 :
- x_1:int ->
-  { } int { ((true = true) -> (JC_33: eq_int(result, min_elt(iset(x_1))))) }
+ x_1:int -> { } int { (JC_33: eq_int(result, min_elt(iset(x_1)))) }
 
 parameter min_elt_0_requires :
  x_1:int ->
   { (JC_27: neq_int(x_1, (0)))} int
-  { ((true = true) -> (JC_33: eq_int(result, min_elt(iset(x_1))))) }
+  { (JC_33: eq_int(result, min_elt(iset(x_1)))) }
 
 parameter s : int ref
 
@@ -1288,19 +1282,18 @@ parameter queens :
  n_0:int ->
   { } int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
   writes int_P_int_M,k,s
-  { ((true = true) ->
-     (JC_143:
-     ((JC_140: eq_int(result, s))
-     and ((JC_141: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
-         and (JC_142:
-             (forall t_4:int_P pointer.
-              (solution(t_4, int_P_int_M)
-              <-> (exists i_24:int.
-                   (le_int((0), i_24)
-                   and (lt_int(i_24, result)
-                       and eq_sol(t_4,
-                           select(int_xP_int_xM, shift(sol, i_24)),
-                           int_P_int_M))))))))))) }
+  { (JC_143:
+    ((JC_140: eq_int(result, s))
+    and ((JC_141: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
+        and (JC_142:
+            (forall t_4:int_P pointer.
+             (solution(t_4, int_P_int_M)
+             <-> (exists i_24:int.
+                  (le_int((0), i_24)
+                  and (lt_int(i_24, result)
+                      and eq_sol(t_4,
+                          select(int_xP_int_xM, shift(sol, i_24)),
+                          int_P_int_M)))))))))) }
 
 parameter queens_requires :
  n_0:int ->
@@ -1309,51 +1302,48 @@ parameter queens_requires :
     and ((JC_127: eq_int(s, (0))) and (JC_128: eq_int(k, (0))))))}
   int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
   writes int_P_int_M,k,s
-  { ((true = true) ->
-     (JC_143:
-     ((JC_140: eq_int(result, s))
-     and ((JC_141: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
-         and (JC_142:
-             (forall t_4:int_P pointer.
-              (solution(t_4, int_P_int_M)
-              <-> (exists i_24:int.
-                   (le_int((0), i_24)
-                   and (lt_int(i_24, result)
-                       and eq_sol(t_4,
-                           select(int_xP_int_xM, shift(sol, i_24)),
-                           int_P_int_M))))))))))) }
+  { (JC_143:
+    ((JC_140: eq_int(result, s))
+    and ((JC_141: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
+        and (JC_142:
+            (forall t_4:int_P pointer.
+             (solution(t_4, int_P_int_M)
+             <-> (exists i_24:int.
+                  (le_int((0), i_24)
+                  and (lt_int(i_24, result)
+                      and eq_sol(t_4,
+                          select(int_xP_int_xM, shift(sol, i_24)),
+                          int_P_int_M)))))))))) }
 
 parameter store_solution :
  tt:unit ->
   { } unit reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,s
   writes int_P_int_M,s
-  { ((true = true) ->
-     (JC_50:
-     ((JC_48:
-      ((JC_46: eq_int(s, add_int(s@, (1))))
-      and (JC_47:
-          eq_sol(select(int_xP_int_xM, shift(sol, s@)), col, int_P_int_M))))
-     and (JC_49:
-         not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
-         pset_range(pset_deref(int_xP_int_xM@,
-                    pset_range(pset_singleton(sol@), s@, s@)),
-         (0), sub_int(N, (1)))))))) }
+  { (JC_50:
+    ((JC_48:
+     ((JC_46: eq_int(s, add_int(s@, (1))))
+     and (JC_47:
+         eq_sol(select(int_xP_int_xM, shift(sol, s@)), col, int_P_int_M))))
+    and (JC_49:
+        not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
+        pset_range(pset_deref(int_xP_int_xM@,
+                   pset_range(pset_singleton(sol@), s@, s@)),
+        (0), sub_int(N, (1))))))) }
 
 parameter store_solution_requires :
  tt:unit ->
   { (JC_37: solution(col, int_P_int_M))} unit
   reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,s writes int_P_int_M,s
-  { ((true = true) ->
-     (JC_50:
-     ((JC_48:
-      ((JC_46: eq_int(s, add_int(s@, (1))))
-      and (JC_47:
-          eq_sol(select(int_xP_int_xM, shift(sol, s@)), col, int_P_int_M))))
-     and (JC_49:
-         not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
-         pset_range(pset_deref(int_xP_int_xM@,
-                    pset_range(pset_singleton(sol@), s@, s@)),
-         (0), sub_int(N, (1)))))))) }
+  { (JC_50:
+    ((JC_48:
+     ((JC_46: eq_int(s, add_int(s@, (1))))
+     and (JC_47:
+         eq_sol(select(int_xP_int_xM, shift(sol, s@)), col, int_P_int_M))))
+    and (JC_49:
+        not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
+        pset_range(pset_deref(int_xP_int_xM@,
+                   pset_range(pset_singleton(sol@), s@, s@)),
+        (0), sub_int(N, (1))))))) }
 
 parameter t1 : a_0_0:int -> b_0_0:int -> c_0:int -> { } int { true }
 
@@ -1365,28 +1355,27 @@ parameter t3 :
    c:int ->
     { } int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
     writes int_P_int_M,k,s
-    { ((true = true) ->
-       (JC_86:
-       ((JC_84:
-        ((JC_79: eq_int(result, sub_int(s, s@)))
-        and ((JC_80: ge_int(result, (0)))
-            and ((JC_81: eq_int(k, k@))
-                and ((JC_82: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
-                    and (JC_83:
-                        (forall t_3:int_P pointer.
-                         ((solution(t_3, int_P_int_M)
-                          and eq_prefix(col, t_3, k, int_P_int_M))
-                         <-> (exists i_23:int.
-                              (le_int(s@, i_23)
-                              and (lt_int(i_23, s)
-                                  and eq_sol(t_3,
-                                      select(int_xP_int_xM, shift(sol, i_23)),
-                                      int_P_int_M))))))))))))
-       and (JC_85:
-           not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
-           pset_union(pset_all(pset_deref(int_xP_int_xM@,
-                               pset_range_right(pset_singleton(sol@), s@))),
-           pset_range_right(pset_singleton(col@), k@))))))) }
+    { (JC_86:
+      ((JC_84:
+       ((JC_79: eq_int(result, sub_int(s, s@)))
+       and ((JC_80: ge_int(result, (0)))
+           and ((JC_81: eq_int(k, k@))
+               and ((JC_82: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
+                   and (JC_83:
+                       (forall t_3:int_P pointer.
+                        ((solution(t_3, int_P_int_M)
+                         and eq_prefix(col, t_3, k, int_P_int_M))
+                        <-> (exists i_23:int.
+                             (le_int(s@, i_23)
+                             and (lt_int(i_23, s)
+                                 and eq_sol(t_3,
+                                     select(int_xP_int_xM, shift(sol, i_23)),
+                                     int_P_int_M))))))))))))
+      and (JC_85:
+          not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
+          pset_union(pset_all(pset_deref(int_xP_int_xM@,
+                              pset_range_right(pset_singleton(sol@), s@))),
+          pset_range_right(pset_singleton(col@), k@)))))) }
 
 parameter t3_requires :
  a_1:int ->
@@ -1428,35 +1417,33 @@ parameter t3_requires :
                           and (JC_59: partial_solution(k, col, int_P_int_M)))))))))}
     int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
     writes int_P_int_M,k,s
-    { ((true = true) ->
-       (JC_86:
-       ((JC_84:
-        ((JC_79: eq_int(result, sub_int(s, s@)))
-        and ((JC_80: ge_int(result, (0)))
-            and ((JC_81: eq_int(k, k@))
-                and ((JC_82: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
-                    and (JC_83:
-                        (forall t_3:int_P pointer.
-                         ((solution(t_3, int_P_int_M)
-                          and eq_prefix(col, t_3, k, int_P_int_M))
-                         <-> (exists i_23:int.
-                              (le_int(s@, i_23)
-                              and (lt_int(i_23, s)
-                                  and eq_sol(t_3,
-                                      select(int_xP_int_xM, shift(sol, i_23)),
-                                      int_P_int_M))))))))))))
-       and (JC_85:
-           not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
-           pset_union(pset_all(pset_deref(int_xP_int_xM@,
-                               pset_range_right(pset_singleton(sol@), s@))),
-           pset_range_right(pset_singleton(col@), k@))))))) }
+    { (JC_86:
+      ((JC_84:
+       ((JC_79: eq_int(result, sub_int(s, s@)))
+       and ((JC_80: ge_int(result, (0)))
+           and ((JC_81: eq_int(k, k@))
+               and ((JC_82: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
+                   and (JC_83:
+                       (forall t_3:int_P pointer.
+                        ((solution(t_3, int_P_int_M)
+                         and eq_prefix(col, t_3, k, int_P_int_M))
+                        <-> (exists i_23:int.
+                             (le_int(s@, i_23)
+                             and (lt_int(i_23, s)
+                                 and eq_sol(t_3,
+                                     select(int_xP_int_xM, shift(sol, i_23)),
+                                     int_P_int_M))))))))))))
+      and (JC_85:
+          not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
+          pset_union(pset_all(pset_deref(int_xP_int_xM@,
+                              pset_range_right(pset_singleton(sol@), s@))),
+          pset_range_right(pset_singleton(col@), k@)))))) }
 
 let queens_ensures_default =
  fun (n_0 : int) ->
-  { ((true = true)
-    and (JC_134:
-        ((JC_131: eq_int(n_0, N))
-        and ((JC_132: eq_int(s, (0))) and (JC_133: eq_int(k, (0))))))) }
+  { (JC_134:
+    ((JC_131: eq_int(n_0, N))
+    and ((JC_132: eq_int(s, (0))) and (JC_133: eq_int(k, (0)))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1464,15 +1451,15 @@ let queens_ensures_default =
      (let tmp_1 = ref (any_int void) in
      begin
        (let jessie_123 = begin
-                           (assert { (JC_151: ge_int(n_0, (0))) }; void);
-                          (assert { (JC_152: lt_int(n_0, (32))) }; void);
+                           (assert
+                           { (JC_151:
+                             le_int(neg_int((1)), asr((2147483647), n_0))) };
+                           void);
                           (assert
-                          { (JC_153: ge_int(neg_int((1)), (0))) };
+                          { (JC_152: ge_int(neg_int((1)), (0))) };
                           void);
-                          (assert
-                          { (JC_154:
-                            le_int(neg_int((1)), asr((2147483647), n_0))) };
-                          void);
+                          (assert { (JC_153: lt_int(n_0, (32))) }; void);
+                          (assert { (JC_154: ge_int(n_0, (0))) }; void);
                           (C_108:
                           begin
                             (tmp_1 := (C_107:
@@ -1521,12 +1508,12 @@ let queens_safety =
      (let tmp_1 = ref (any_int void) in
      begin
        (let jessie_117 = begin
-                           [ { } unit { (JC_146: ge_int(n_0, (0))) } ];
-                          [ { } unit { (JC_147: lt_int(n_0, (32))) } ];
-                          [ { } unit { (JC_148: ge_int(neg_int((1)), (0))) } ];
-                          [ { } unit
-                            { (JC_149:
-                              le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+                           [ { } unit
+                             { (JC_146:
+                               le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+                          [ { } unit { (JC_147: ge_int(neg_int((1)), (0))) } ];
+                          [ { } unit { (JC_148: lt_int(n_0, (32))) } ];
+                          [ { } unit { (JC_149: ge_int(n_0, (0))) } ];
                           (C_108:
                           begin
                             (tmp_1 := (C_107:
@@ -1554,7 +1541,7 @@ let queens_safety =
 
 let t1_ensures_default =
  fun (a_0_0 : int) (b_0_0 : int) (c_0 : int) ->
-  { (true = true) }
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1831,42 +1818,40 @@ let t1_safety =
 
 let t3_ensures_default =
  fun (a_1 : int) (b_1 : int) (c : int) ->
-  { ((true = true)
-    and (JC_69:
-        ((JC_62: le_int((0), k))
-        and ((JC_63: eq_int(add_int(k, card(iset(a_1))), N))
-            and ((JC_64: le_int((0), s))
-                and ((JC_65:
-                     (forall i_20:int.
-                      (in_(i_20, iset(a_1))
-                      <-> (le_int((0), i_20)
-                          and (lt_int(i_20, N)
-                              and (forall j_3:int.
-                                   ((le_int((0), j_3) and lt_int(j_3, k)) ->
-                                    neq_int(i_20,
-                                    select(int_P_int_M, shift(col, j_3))))))))))
-                    and ((JC_66:
-                         (forall i_21:int.
-                          (ge_int(i_21, (0)) ->
-                           (in_(i_21, iset(b_1))
-                           <-> (exists j_4:int.
-                                (le_int((0), j_4)
-                                and (lt_int(j_4, k)
+  { (JC_69:
+    ((JC_62: le_int((0), k))
+    and ((JC_63: eq_int(add_int(k, card(iset(a_1))), N))
+        and ((JC_64: le_int((0), s))
+            and ((JC_65:
+                 (forall i_20:int.
+                  (in_(i_20, iset(a_1))
+                  <-> (le_int((0), i_20)
+                      and (lt_int(i_20, N)
+                          and (forall j_3:int.
+                               ((le_int((0), j_3) and lt_int(j_3, k)) ->
+                                neq_int(i_20,
+                                select(int_P_int_M, shift(col, j_3))))))))))
+                and ((JC_66:
+                     (forall i_21:int.
+                      (ge_int(i_21, (0)) ->
+                       (in_(i_21, iset(b_1))
+                       <-> (exists j_4:int.
+                            (le_int((0), j_4)
+                            and (lt_int(j_4, k)
+                                and eq_int(select(int_P_int_M,
+                                           shift(col, j_4)),
+                                    sub_int(add_int(i_21, j_4), k)))))))))
+                    and ((JC_67:
+                         (forall i_22:int.
+                          (ge_int(i_22, (0)) ->
+                           (in_(i_22, iset(c))
+                           <-> (exists j_5:int.
+                                (le_int((0), j_5)
+                                and (lt_int(j_5, k)
                                     and eq_int(select(int_P_int_M,
-                                               shift(col, j_4)),
-                                        sub_int(add_int(i_21, j_4), k)))))))))
-                        and ((JC_67:
-                             (forall i_22:int.
-                              (ge_int(i_22, (0)) ->
-                               (in_(i_22, iset(c))
-                               <-> (exists j_5:int.
-                                    (le_int((0), j_5)
-                                    and (lt_int(j_5, k)
-                                        and eq_int(select(int_P_int_M,
-                                                   shift(col, j_5)),
-                                            sub_int(add_int(i_22, k), j_5)))))))))
-                            and (JC_68:
-                                partial_solution(k, col, int_P_int_M)))))))))) }
+                                               shift(col, j_5)),
+                                        sub_int(add_int(i_22, k), j_5)))))))))
+                        and (JC_68: partial_solution(k, col, int_P_int_M))))))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -2367,21 +2352,21 @@ why --project [...] why/queens.why
   <lemma name="dont_bother_me_I_am_a_ghost_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po1.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "267" begin = "0" end = "125"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "266" begin = "0" end = "125"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dont_bother_me_I_am_a_ghost_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po2.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "271" begin = "0" end = "188"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "270" begin = "0" end = "188"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dont_bother_me_I_am_a_ghost_3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po3.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "277" begin = "0" end = "125"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "276" begin = "0" end = "125"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -2395,24 +2380,24 @@ why --project [...] why/queens.why
   <lemma name="partial_solution_eq_prefix">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po5.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "294" begin = "0" end = "230"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "293" begin = "0" end = "230"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="partial_solution_eq_prefix">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "294" begin = "0" end = "230"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "293" begin = "0" end = "230"/>
   </function>
   <function name="iset_c_min_elt_help">
     <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "182" begin = "0" end = "97"/>
   </function>
   <function name="dont_bother_me_I_am_a_ghost_3">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "277" begin = "0" end = "125"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "276" begin = "0" end = "125"/>
   </function>
   <function name="dont_bother_me_I_am_a_ghost_2">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "271" begin = "0" end = "188"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "270" begin = "0" end = "188"/>
   </function>
   <function name="dont_bother_me_I_am_a_ghost_1">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "267" begin = "0" end = "125"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "266" begin = "0" end = "125"/>
   </function>
   <function name="Function t3">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -2423,12 +2408,12 @@ why --project [...] why/queens.why
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po65.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "437" begin = "27" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "433" begin = "27" end = "148"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queens_po66.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "437" begin = "27" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "433" begin = "27" end = "148"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2438,11 +2423,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1800" begin = "67" end = "476"/>
+      <location file = "why/queens.why" line = "1790" begin = "67" end = "476"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1800" begin = "67" end = "476"/>
+      <location file = "why/queens.why" line = "1790" begin = "67" end = "476"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2553,11 +2538,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po42.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "388" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po43.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "388" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po44.why">
@@ -2601,11 +2586,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po54.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "388" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po55.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "388" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po56.why">
@@ -2651,11 +2636,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1278" begin = "65" end = "464"/>
+      <location file = "why/queens.why" line = "1270" begin = "65" end = "464"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1278" begin = "65" end = "464"/>
+      <location file = "why/queens.why" line = "1270" begin = "65" end = "464"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po32.why">
@@ -2924,7 +2909,37 @@ logic neg_real : real -> real
 
 logic real_of_int : int -> real
 
-logic int_of_real : real -> int
+axiom real_of_int_zero: (real_of_int(0) = 0.0)
+
+axiom real_of_int_one: (real_of_int(1) = 1.0)
+
+axiom real_of_int_add:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x + y)) = (real_of_int(x) + real_of_int(y)))))
+
+axiom real_of_int_sub:
+  (forall x:int.
+    (forall y:int.
+      (real_of_int((x - y)) = (real_of_int(x) - real_of_int(y)))))
+
+logic truncate_real_to_int : real -> int
+
+axiom truncate_down_pos:
+  (forall x:real.
+    ((x >= 0.0) ->
+     ((real_of_int(truncate_real_to_int(x)) <= x) and
+      (x < real_of_int((truncate_real_to_int(x) + 1))))))
+
+axiom truncate_up_neg:
+  (forall x:real.
+    ((x <= 0.0) ->
+     ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
+      (x <= real_of_int(truncate_real_to_int(x))))))
+
+logic floor_real_to_int : real -> int
+
+logic ceil_real_to_int : real -> int
 
 logic lt_real_bool : real, real -> bool
 
@@ -2979,7 +2994,11 @@ axiom real_min_is_some:
   (forall x:real.
     (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
+function sqr_real(x: real) : real = (x * x)
+
 logic sqrt_real : real -> real
+
+axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2998,6 +3017,8 @@ logic log : real -> real
 logic log10 : real -> real
 
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
 
 logic cos : real -> real
 
