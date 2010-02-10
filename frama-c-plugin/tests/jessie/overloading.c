@@ -2,11 +2,12 @@
 
 //@ lemma l: \abs(1.5) == 1.5 && \abs(-2) == 2;
 
-//@ logic integer sqr(integer x) = x * x;
+// remark: \sqr is already available
+//@ logic integer square(integer x) = x * x;
 
-//@ logic real sqr(real x) = x * x;
+//@ logic real square(real x) = x * x;
  
-//@ lemma l2: sqr(1.5) == 2.25 && sqr(-5) == 25;
+//@ lemma l2: square(1.5) == 2.25 && square(-5) == 25;
 
 //@ predicate is_pos(integer x) = x > 0;
 

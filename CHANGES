@@ -1,4 +1,5 @@
 
+  o [Jessie] support for "let x = t in a" when a is an assertion
   o [Frama-C plugin] support for statement contracts, fixes bug 0399
   o [Jessie] fixed bug 0391
   o [Jessie/Krakatoa/Frama-C plugin] fixed bug with labels inside \old

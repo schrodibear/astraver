@@ -1235,14 +1235,6 @@ let make_rel_bin_op loc (op: [< comparison_op]) e1 e2 =
             JCArelation(e1, rel_bin_op t op, e2)
           else
             typing_error loc "terms should have the same type for == and !="
-(*        (* non propositional operators *)
-    | `Badd | `Bsub | `Bmul | `Bdiv | `Bmod | `Bbw_and | `Bbw_or | `Bbw_xor
-    | `Blogical_shift_right | `Barith_shift_right | `Bshift_left 
-        -> assert false
-        (* already recognized as connectives *)
-    | `Bland | `Blor -> assert false 
-    | `Bimplies -> assert false
-    | `Biff -> assert false*)
 
 let tag env hierarchy t =
   let check_hierarchy loc st =
@@ -1344,7 +1336,23 @@ let rec assertion env e =
         let te1 = ft e1 and te2 = fa e2 and te3 = fa e3 in
         Jc_type_var.add uenv e1#pos te1#typ (JCTnative Tboolean);
         JCAif(te1,te2,te3)
-    | JCNElet _ -> assert false (* TODO *)
+    | JCNElet(ty,id,Some e1,e2) -> 
+	let te1 = ft e1 in
+	let ty1 =
+	  match ty with
+	    | None -> te1#typ
+	    | Some ty ->
+		let ty = type_type ty in
+		if comparable_types ty te1#typ then ty
+		else not_the_good_type e1#pos te1#typ
+		  "type not compatible with declared type"
+	in
+        let vi = var ty1 id in
+        let env = (id, vi) :: env in
+	let te2 = assertion env e2 in
+	JCAlet(vi,te1,te2)
+    | JCNElet(_ty,_id,None,_e2) -> 
+	assert false (* TODO *)
     | JCNEmatch(arg, pel) ->
         let targ = ft arg in
         let tpal = List.map
@@ -2127,57 +2135,6 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	  | JCTpointer (JCroot _, _, _)  -> assert false (* TODO *)
 	  | JCTtype_var _|JCTlogic _|JCTany|JCTnull -> assert false (* TODO *)
 	end
- (*
-        let te1 = fe e1 in
-	if t = "integer" then
-	  if is_real te1#typ then
-	    integer_type, te1#region, JCEreal_cast(te1,Real_to_integer)
-	  else if is_integer te1#typ then
-	    integer_type, te1#region, te1#node
-	  else
-	    typing_error e#pos "bad cast to integer"
-	else if t = "real" then
-	  if is_integer te1#typ then
-	    real_type, te1#region, JCEreal_cast(te1,Integer_to_real)
-	  else if is_real te1#typ then 
-	    real_type, te1#region, te1#node
-	  else
-	    typing_error e#pos "bad cast to real"
-        else begin try
-          let ri = Hashtbl.find enum_types_table t in
-          if is_integer te1#typ then
-            JCTenum ri, te1#region, JCErange_cast(te1, ri)
-          else if is_real te1#typ then
-	    let cast = NExpr.mkcast ~expr:e1 ~typ:"integer" () in
-	    let e = fe cast in
-	    JCTenum ri, te1#region, JCErange_cast(e, ri)
-          else
-            typing_error e#pos "numeric type expected"
-        with Not_found ->
-          let st = find_struct_info e#pos t in
-          match te1#typ with
-            | JCTpointer(st1, a, b) ->
-                if superstruct st st1 then
-		  (te1#typ,
-                   te1#region,
-                   te1#node)
-                else if substruct st st1 then
-                  (JCTpointer(JCtag(st, []), a, b),
-                   te1#region,
-                   JCEcast(te1, st))
-                else if same_hierarchy (JCtag(st, [])) st1 then
-                  typing_error e#pos "invalid cast"
-		else
-		  (* bitwise cast *)
-                  (Region.make_bitwise te1#region;
-		   JCTpointer(JCtag(st, []), a, b),
-                   te1#region,
-                   JCEbitwise_cast(te1, st))
-            | _ ->
-                typing_error e#pos
-                  "only structures or numeric types can be cast"
-        end
- *)
     | JCNEif(e1,e2,e3) ->
         let te1 = fe e1 and te2 = fe e2 and te3 = fe e3 in
         begin match te1#typ with
@@ -2770,6 +2727,7 @@ match a#node with
   | JCAinstanceof (_, _, _) -> assert false (* TODO *)
   | JCAat (_, _) -> assert false (* TODO *)
   | JCAold _ -> assert false (* TODO *)
+  | JCAlet (_, _,_) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
 
 let check_positivity loc pi a =
@@ -2853,6 +2811,7 @@ let rec occurrences table a =
   | JCAinstanceof (_, _, _) -> assert false (* TODO *)
   | JCAold p 
   | JCAat (p, _) -> occurrences table p
+  | JCAlet (_, _, _) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
 
 let rec list_assoc_data lab l =

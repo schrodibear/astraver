@@ -1106,6 +1106,8 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         let tag1' = ftag tag1 in
         let tag2' = ftag tag2 in
         LPred("subtag", [ tag1'; tag2' ])
+    | JCAlet(vi,t,p) ->
+	LLet(vi.jc_var_info_final_name,ft t, fa p)
     | JCAmatch(arg, pal) ->
         let arg' = ft arg in
         (* TODO: use a temporary variable for arg' *)
@@ -2138,11 +2140,6 @@ and expr e =
 	  | Float_to_real ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos real_type e1#typ e1 e1'
-(*
-          | Real_to_integer ->
-              coerce ~check_int_overflow:(safety_checking())
-                e#mark e#pos integer_type e1#typ e1 e1'
-*)
           | Round(f,_rm) ->
               coerce ~check_int_overflow:(safety_checking() 
 					    (* no safe version in the full model*) 

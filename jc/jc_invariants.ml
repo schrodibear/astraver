@@ -284,6 +284,9 @@ let rec assertion this p =
     | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->
 	tag this t1;
 	tag this t2
+    | JCAlet(_vi,t, p) ->
+	term this t;
+	assertion this p
     | JCAmatch(t, pal) ->
 	term this t;
 	List.iter (fun (_, a) -> assertion this a) pal
@@ -334,6 +337,8 @@ let rec assertion_memories aux a = match a#node with
   | JCAmutable(t, _, _) -> term_memories aux t
   | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) -> 
       tag_memories (tag_memories aux t2) t1
+  | JCAlet(_vi,t,p) ->
+      term_memories (assertion_memories aux p) t
   | JCAmatch(t, pal) ->
       term_memories (List.fold_left assertion_memories aux (List.map snd pal)) t
 

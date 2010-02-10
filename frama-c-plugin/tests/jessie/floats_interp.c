@@ -17,7 +17,7 @@ Proof :
 
   x[i] - x[i-1] >= LOWER
 
-division does not overflow if  
+computation of ..* .. / .. does not overflow if  
 
 ((2 UPPER)^2) / LOWER is <= max_double = 2^1024 - 1 
 
@@ -33,55 +33,70 @@ ie 2u+l < 1022
 
 
 
-/*@ predicate min_step{L}(double t[], integer a, integer b) = 
-  @    \forall integer i; a < i <= b ==> t[i] - t[i-1] >= LOWER;
+/*@ predicate min_step{L}(double t[], integer a, integer b, real bound) = 
+  @    \forall integer i; a < i <= b ==> t[i] - t[i-1] >= bound;
   @*/
 
 /*@ lemma min_step_increasing{L}:
-  @   \forall double t[], integer a, b;
-  @     min_step(t,a,b) ==> \forall integer i,j; 
+  @   \forall double t[], integer a, b, real bound;
+  @     bound >= 0.0 && min_step(t,a,b,bound) ==> 
+  @     \forall integer i,j; 
   @          a <= i <= j <= b ==> t[i] <= t[j];
   @*/
 
-//@ predicate bounded(double z) = -UPPER <= z <= UPPER;
+//@ predicate bounded(double z, real bound) = -bound <= z <= bound;
 
-/*@ predicate array_bounded{L}(double t[],int n) = 
-  @   \forall integer i; 0 <= i < n ==> bounded(t[i]);
+/*@ predicate array_bounded{L}(double t[],int n, real bound) = 
+  @   \forall integer i; 0 <= i < n ==> bounded(t[i],bound);
   @*/
 
 //@ ghost int i_interp;
 
 /*@ requires n >= 1 && \valid_range(x,0,n-1) && \valid_range(y,0,n-1);
-  @ requires min_step(x,0,n-1);
-  @ requires bounded(z);
-  @ requires array_bounded(x,n) ;
-  @ requires array_bounded(y,n);
+  @ requires min_step(x,0,n-1,LOWER);
+  @ requires bounded(z,UPPER);
+  @ requires array_bounded(x,n,UPPER) ;
+  @ requires array_bounded(y,n,UPPER);
   @ assigns i_interp;
-  @ ensures z <= x[0] ==> \result == y[0];
-  @ ensures z > x[n-1] ==> \result == y[n-1];
-  @ // ensures x[0] < z <= x[n-1] ==> 
-  @ //           x[i_interp-1] < z <= x[i_interp] && 
-  @ //           \min(y[i_interp-1],y[i_interp]) <= \result <= 
-  @ //           \max(y[i_interp-1],y[i_interp]);
+  @ behavior too_low:
+  @   assumes z <= x[0];
+  @   ensures \result == y[0];
+  @ behavior too_high:
+  @   assumes z > x[n-1];
+  @   ensures \result == y[n-1];
+  @ behavior in_interval:
+  @   assumes x[0] < z <= x[n-1]; 
+  @   ensures 1 <= i_interp <= n-1;
+  @   ensures x[i_interp-1] < z <= x[i_interp] ;
+  @   ensures 
+  @     \let v = (y[i_interp] - y[i_interp-1])/(x[i_interp]-x[i_interp-1]) ;
+  @     \let exact_result = y[i_interp] + v*(z - x[i_interp-1]) ;
+  @     \abs(\result - exact_result) <= 1.0;
   @*/
 double interp_lin(double x[], double y[], int n, double z) {
   int i;
   if (z <= x[0]) return y[0];
 
   /*@ loop invariant 1 <= i <= n;
-    @ loop invariant z > x[i-1];
+    @ loop invariant \forall integer j; 0 <= j < i ==> z > x[j];
     @ loop variant n-i;
     @*/
   for (i=1; i<n; i++) {if (z <= x[i]) break;}
   if (i==n) return y[n-1];
-  //@ assert bounded(x[i-1]);
-  //@ assert bounded(x[i]);
-  //@ assert bounded(y[i-1]);
-  //@ assert bounded(y[i]);
-  //@ assert x[i] - x[i-1] >= LOWER;
-  //@ assert \abs(z - x[i-1]) <= 2.0 * UPPER;
-  //@ assert \abs(y[i] - y[i-1]) <= 2.0 * UPPER;
-   return y[i-1]+(z-x[i-1])*(y[i]-y[i-1])/(x[i]-x[i-1]);
+  //@ ghost i_interp = i;
+  double xim1 = x[i-1];
+  //@ assert bounded(xim1,UPPER);
+  double xi = x[i];
+  //@ assert bounded(xi,UPPER);
+  //@ assert xi - xim1 >= LOWER;
+  double yim1 = y[i-1];
+  //@ assert bounded(yim1,UPPER);
+  double yi = y[i];
+  //@ assert bounded(yi,UPPER);
+  // @ assert \abs(yi - yim1) <= 2.0 * UPPER;
+  double v = (yi-yim1)/(xi-xim1);
+  // @ assert \abs(z - xim1) <= 2.0 * UPPER;
+  return yi+v*(z-xim1);
 }
 
 /* 

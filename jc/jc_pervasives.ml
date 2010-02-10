@@ -613,6 +613,7 @@ module AssertionOrd = struct
   type t = assertion
 
   let assertion_num a = match a#node with
+	(* are these supposed to be prime numbers ? *)
     | JCAtrue -> 1
     | JCAfalse -> 3
     | JCArelation _ -> 5
@@ -627,12 +628,12 @@ module AssertionOrd = struct
     | JCAinstanceof  _ -> 41
     | JCAbool_term _ -> 43
     | JCAif _ -> 47
-	(* ??? are these supposed to be prime numbers ? *)
-    | JCAmutable _ -> 49
-    | JCAeqtype _ -> 51
-    | JCAat _ -> 53
-    | JCAmatch _ -> 59
-    | JCAsubtype _ -> 61
+    | JCAmutable _ -> 53
+    | JCAeqtype _ -> 59
+    | JCAat _ -> 61
+    | JCAlet _ -> 67
+    | JCAmatch _ -> 71
+    | JCAsubtype _ -> 73
 
   let rec compare a1 a2 =
     match a1#node, a2#node with
@@ -747,6 +748,8 @@ let rec is_constant_assertion a =
 	is_constant_term t &&
 	  is_constant_assertion a1 &&
 	  is_constant_assertion a2
+    | JCAlet(_vi,t, p) ->
+	is_constant_term t && is_constant_assertion p
     | JCAmatch (t, pal) ->
 	is_constant_term t &&
 	  (List.fold_left (fun acc (_, a) -> acc && is_constant_assertion a)

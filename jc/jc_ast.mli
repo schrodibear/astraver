@@ -136,7 +136,6 @@ type rounding_mode =
 
 type real_conversion = 
   | Integer_to_real 
-      (* nonsense | Real_to_integer *)
   | Double_to_real
   | Float_to_real
   | Round of float_format * rounding_mode 
@@ -449,6 +448,7 @@ type 'li assertion_node =
   | JCAmutable of 'li term * struct_info * 'li tag
   | JCAeqtype of 'li tag * 'li tag * struct_info option
   | JCAsubtype of 'li tag * 'li tag * struct_info option
+  | JCAlet of var_info * 'li term * 'li assertion
   | JCAmatch of 'li term * (pattern * 'li assertion) list
 
 and 'li assertion = 'li assertion_node c_assertion

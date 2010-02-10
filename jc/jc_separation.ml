@@ -148,7 +148,8 @@ let single_assertion _rresult a =
 	   List.iter2 Region.unify param_regions arg_regions
        | JCAtrue | JCAfalse | JCArelation _  | JCAeqtype _ 
        | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
-       | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
+       | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ 
+       | JCAlet _ | JCAmatch _
        | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
 	   ()
 

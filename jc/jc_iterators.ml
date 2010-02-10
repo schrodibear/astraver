@@ -553,6 +553,9 @@ let rec iter_term_and_assertion ft fa a =
                                 | JCAPatP a -> iter_term_and_assertion ft fa a))
           trigs;
         iter_term_and_assertion ft fa a1
+    | JCAlet(_vi,t,p) ->
+	iter_term ft t;
+	iter_term_and_assertion ft fa p
     | JCAmatch(t, pal) ->
 	iter_term ft t;
 	List.iter (fun (_, a) -> iter_term_and_assertion ft fa a) pal
@@ -636,6 +639,9 @@ let rec fold_term_in_assertion f acc a =
 	fold_term_in_assertion f acc a2
     | JCAnot a1 | JCAquantifier(_,_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_term_in_assertion f acc a1
+    | JCAlet(_vi,t, p) ->
+	let acc = fold_term f acc t in
+	fold_term_in_assertion f acc p
     | JCAmatch(t, pal) ->
 	let acc = fold_term f acc t in
 	List.fold_left (fun acc (_, a) -> fold_term_in_assertion f acc a)
@@ -703,6 +709,9 @@ let rec fold_sub_term_and_assertion itt ita ft fa acc a =
           | JCAPatP a -> ita ft fa acc a in
         let acc = List.fold_left (List.fold_left pat) acc trigs in
         ita ft fa acc a1
+    | JCAlet(_vi,t, p) ->
+	let acc = itt ft acc t in
+	ita ft fa acc p
     | JCAmatch(t, pal) ->
 	let acc = itt ft acc t in
 	List.fold_left (fun acc (_, a) -> ita ft fa acc a)
@@ -920,6 +929,8 @@ let rec map_term_in_assertion f a =
 	JCAold(map_term_in_assertion f a1)
     | JCAat(a1,lab) ->
 	JCAat(map_term_in_assertion f a1,lab)
+    | JCAlet(vi, t, p) ->
+	JCAlet(vi,map_term f t,map_term_in_assertion f p)
     | JCAmatch(t, pal) ->
 	JCAmatch(map_term f t,
 		 List.map (fun (p, a) -> p, map_term_in_assertion f a) pal)

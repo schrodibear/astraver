@@ -1116,6 +1116,8 @@ let single_assertion ef a =
 	  (tag ef lab ta (* Yannick: really effect on tag here? *)
 	     (Some (struct_root st)) t#region)
 	  (JCtag(st, []))
+    | JCAlet(_vi,_t,_p) ->
+	true,ef
     | JCAmatch(_t,pal) ->
 	true,
 	List.fold_left pattern ef (List.map fst pal)

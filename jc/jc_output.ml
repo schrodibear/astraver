@@ -121,9 +121,6 @@ let real_conversion fmt rc =
     | Integer_to_real -> fprintf fmt "real"
     | Double_to_real -> fprintf fmt "double_value"
     | Float_to_real -> fprintf fmt "single_value"
-(*
-    | Real_to_integer -> fprintf fmt "integer"
-*)
     | Round(_f,_m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
          (* TODO ? parameter rounding mode *)
 	assert false
@@ -245,17 +242,6 @@ let rec assertion fmt a =
 	  assertion a
     | JCArelation (t1, op, t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
-(*
-    | JCAapp (op, ([t1;t2] as l)) ->
-	begin
-	  try
-	    let s = lbin_op op in
-	    fprintf fmt "@[(%a %s %a)@]" term t1 s term t2
-	  with Not_found ->
-	    fprintf fmt "@[%s(%a)@]" op.jc_logic_info_name
-	      (print_list comma term) l 
-	end
-*)
     | JCAapp app ->
 	 fprintf fmt "@[%s(%a)@]" app.jc_app_fun.jc_logic_info_name
 	      (print_list comma term) app.jc_app_args 
@@ -284,6 +270,10 @@ let rec assertion fmt a =
         fprintf fmt "mutable(TODO)"
     | JCAeqtype _ -> assert false (* TODO *)
     | JCAsubtype _ -> assert false (* TODO *)
+    | JCAlet (vi, t, p) ->
+	fprintf fmt "@[<v 2>let %s =@ %a in@ %a@]" vi.jc_var_info_name
+          term t
+	  assertion p
     | JCAmatch (t, pal) ->
 	fprintf fmt "@[<v 2>match %a with@ " term t;
 	List.iter
