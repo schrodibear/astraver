@@ -403,7 +403,7 @@ let fun_def f ta fa ft term_coerce params =
 			   List.fold_right 
 			     (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' 
 			 in 
-			 (id#name, a')) l)]
+			 (get_unique_name id#name, a')) l)]
       | Some _, JCInductive _ -> assert false
       | None, JCTerm _ -> assert false 
       | Some _, JCAssertion _ -> assert false

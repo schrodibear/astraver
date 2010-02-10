@@ -159,7 +159,39 @@ Admitted.
 (*Why logic*) Definition real_of_int : Z -> R.
 Admitted.
 
-(*Why logic*) Definition int_of_real : R -> Z.
+(*Why axiom*) Lemma real_of_int_zero : (eq (IZR 0) (0)%R).
+Admitted.
+
+(*Why axiom*) Lemma real_of_int_one : (eq (IZR 1) (1)%R).
+Admitted.
+
+(*Why axiom*) Lemma real_of_int_add :
+  (forall (x:Z), (forall (y:Z), (eq (IZR (x + y)) (Rplus (IZR x) (IZR y))))).
+Admitted.
+
+(*Why axiom*) Lemma real_of_int_sub :
+  (forall (x:Z), (forall (y:Z), (eq (IZR (x - y)) (Rminus (IZR x) (IZR y))))).
+Admitted.
+
+(*Why logic*) Definition truncate_real_to_int : R -> Z.
+Admitted.
+
+(*Why axiom*) Lemma truncate_down_pos :
+  (forall (x:R),
+   ((Rge x (0)%R) -> (Rle (IZR (truncate_real_to_int x)) x) /\
+    (Rlt x (IZR ((truncate_real_to_int x) + 1))))).
+Admitted.
+
+(*Why axiom*) Lemma truncate_up_neg :
+  (forall (x:R),
+   ((Rle x (0)%R) -> (Rlt (IZR ((truncate_real_to_int x) - 1)) x) /\
+    (Rle x (IZR (truncate_real_to_int x))))).
+Admitted.
+
+(*Why logic*) Definition floor_real_to_int : R -> Z.
+Admitted.
+
+(*Why logic*) Definition ceil_real_to_int : R -> Z.
 Admitted.
 
 (*Why logic*) Definition lt_real_bool : R -> R -> bool.
@@ -230,7 +262,21 @@ Admitted.
    (forall (y:R), (eq (real_min x y) x) \/ (eq (real_min x y) y))).
 Admitted.
 
+(*Why function*) Definition sqr_real  (x:R) := (Rmult x x).
+
 (*Why logic*) Definition sqrt_real : R -> R.
+Admitted.
+
+(*Why axiom*) Lemma sqrt_pos :
+  (forall (x:R), ((Rge x (0)%R) -> (Rge (sqrt x) (0)%R))).
+Admitted.
+
+(*Why axiom*) Lemma sqrt_sqr :
+  (forall (x:R), ((Rge x (0)%R) -> (eq (sqr_real (sqrt x)) x))).
+Admitted.
+
+(*Why axiom*) Lemma sqr_sqrt :
+  (forall (x:R), ((Rge x (0)%R) -> (eq (sqrt (Rmult x x)) x))).
 Admitted.
 
 (*Why logic*) Definition pow_real : R -> R -> R.
@@ -257,6 +303,10 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma log_exp : (forall (x:R), (eq (log (exp x)) x)).
+Admitted.
+
+(*Why axiom*) Lemma exp_log :
+  (forall (x:R), ((Rgt x (0)%R) -> (eq (exp (log x)) x))).
 Admitted.
 
 (*Why logic*) Definition cos : R -> R.

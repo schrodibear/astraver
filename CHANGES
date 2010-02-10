@@ -1,7 +1,8 @@
 
   o [Jessie] support for "let x = t in a" when a is an assertion
   o [Frama-C plugin] support for statement contracts, fixes bug 0399
-  o [Jessie] fixed bug 0391
+  o [Jessie] fixed bugs 0391 and 0401 (avoid name clash with axiom
+    names and inductive case names)
   o [Jessie/Krakatoa/Frama-C plugin] fixed bug with labels inside \old
     and \at.  Moreover, label Pre is now allowed in function
     contracts, as specified in ACSL.    

@@ -440,6 +440,9 @@ and wp_desc info d q =
     | Any k as d ->
 	let q' = optpost_app (post_named info.t_loc) k.c_post in
 	let w = opaque_wp q' q info in
+	(* BUG! k.c_pre should already contain, as pre and post, Ast.assertion and not Types.assertion *)
+	(* we thus add a approximate location for them, as the loc for the whole Any *)
+	(* but this breaks the localization of VCs ... *)
 	let pre = List.map (pre_named info.t_loc) k.c_pre in
 	let l = List.map (fun a -> (a.a_loc,a.a_value)) pre in
 	let lab = info.t_userlabel in

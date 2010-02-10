@@ -524,6 +524,7 @@ let rec interp_decl ?(_prelude=false) d =
 	let l =
 	  List.map (fun (loc,i,p) ->
 		      let p = Ltyping.predicate lab env p in
+		      if is_global_logic i then raise_located loc (Clash i);
 		      check_clausal_form loc id p;
 		      (i,p))
 	    indcases
