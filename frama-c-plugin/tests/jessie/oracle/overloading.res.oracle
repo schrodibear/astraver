@@ -33,14 +33,14 @@ type void_P = [void_P]
 lemma l :
 ((\real_abs(1.5) == 1.5) && (\integer_abs((- 2)) == 2))
 
-logic integer sqr_integer(integer x) =
+logic integer square_integer(integer x) =
 (x * x)
 
-logic real sqr_real(real x_0) =
+logic real square_real(real x_0) =
 (x_0 * x_0)
 
 lemma l2 :
-((sqr_real(1.5) == 2.25) && (sqr_integer((- 5)) == 25))
+((square_real(1.5) == 2.25) && (square_integer((- 5)) == 25))
 
 predicate is_pos_integer(integer x_1) =
 (x_1 > 0)
@@ -143,15 +143,17 @@ predicate is_pos_real(x_2:real) = gt_real(x_2, 0.0)
 
 goal l : (eq_real(abs_real(1.5), 1.5) and eq_int(abs_int(neg_int((2))), (2)))
 
-function sqr_real_0(x_0:real) : real = mul_real(x_0, x_0)
+function square_real(x_0:real) : real = mul_real(x_0, x_0)
 
-function sqr_integer(x:int) : int = mul_int(x, x)
+function square_integer(x:int) : int = mul_int(x, x)
 
 goal l2 :
- (eq_real(sqr_real_0(1.5), 2.25) and eq_int(sqr_integer(neg_int((5))), (25)))
+ (eq_real(square_real(1.5), 2.25)
+ and eq_int(square_integer(neg_int((5))), (25)))
 
 axiom l2_as_axiom :
- (eq_real(sqr_real_0(1.5), 2.25) and eq_int(sqr_integer(neg_int((5))), (25)))
+ (eq_real(square_real(1.5), 2.25)
+ and eq_int(square_integer(neg_int((5))), (25)))
 
 goal l3 : (is_pos_real(1.5) and (not is_pos_integer(neg_int((5)))))
 
@@ -412,7 +414,7 @@ why --project [...] why/overloading.why
   <lemma name="l2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/overloading_po2.why">
-      <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "66"/>
+      <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "72"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -427,7 +429,7 @@ why --project [...] why/overloading.why
     <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "45" begin = "0" end = "58"/>
   </function>
   <function name="l2">
-    <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "66"/>
+    <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "72"/>
   </function>
   <function name="l">
     <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "27" begin = "0" end = "65"/>
@@ -667,7 +669,11 @@ function sqr_real(x: real) : real = (x * x)
 
 logic sqrt_real : real -> real
 
+axiom sqrt_pos: (forall x:real. ((x >= 0.0) -> (sqrt_real(x) >= 0.0)))
+
 axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
+
+axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -2051,11 +2057,12 @@ predicate is_pos_integer(x_1: int) = (x_1 > 0)
 
 predicate is_pos_real(x_2: real) = (x_2 > 0.0)
 
-function sqr_real_0(x_0: real) : real = (x_0 * x_0)
+function square_real(x_0: real) : real = (x_0 * x_0)
 
-function sqr_integer(x: int) : int = (x * x)
+function square_integer(x: int) : int = (x * x)
 
-axiom l2_as_axiom: ((sqr_real_0(1.5) = 2.25) and (sqr_integer((-5)) = 25))
+axiom l2_as_axiom:
+  ((square_real(1.5) = 2.25) and (square_integer((-5)) = 25))
 
 axiom l3_as_axiom: (is_pos_real(1.5) and (not is_pos_integer((-5))))
 

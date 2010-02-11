@@ -977,7 +977,11 @@ function sqr_real(x: real) : real = (x * x)
 
 logic sqrt_real : real -> real
 
+axiom sqrt_pos: (forall x:real. ((x >= 0.0) -> (sqrt_real(x) >= 0.0)))
+
 axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
+
+axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
 logic pow_real : real, real -> real
 
