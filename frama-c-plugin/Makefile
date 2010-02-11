@@ -59,7 +59,7 @@ unexport $(FRAMAC_MAKE)
 all::  $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend why_all
 
 .PHONY: why_all $(WHY_DISTRIB)/depend $(WHY_DISTRIB)/clean
-why_all: $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend
+why_all: $(WHY_DISTRIB)/Makefile $(WHY_DISTRIB)/.depend $(PLUGIN_DIR)/interp.cmi
 	$(MAKE) -C $(dir $<) -j 1 all-without-frama-c-plugin
 
 $(WHY_DISTRIB)/depend: $(WHY_DISTRIB)/Makefile
@@ -78,11 +78,14 @@ tests:: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBES
 
 endif
 
-$(PLUGIN_DIR)/interp.cmo: $(WHY_DISTRIB)/jc/jc.cmo
+$(PLUGIN_DIR)/interp.cmo: $(PLUGIN_DIR)/interp.cmi $(WHY_DISTRIB)/jc/jc.cmo
 
 $(PLUGIN_DIR)/interp.cmi: $(WHY_DISTRIB)/jc/jc.cmi
 
-$(PLUGIN_DIR)/interp.cmx: $(WHY_DISTRIB)/jc/jc.cmx
+$(PLUGIN_DIR)/interp.cmx: $(PLUGIN_DIR)/interp.cmi $(WHY_DISTRIB)/jc/jc.cmx
+
+$(WHY_DISTRIB)/jc/jc.cmo: $(WHY_DISTRIB)/jc/jc.cmi
+$(WHY_DISTRIB)/jc/jc.cmx: $(WHY_DISTRIB)/jc/jc.cmi
 
 $(PLUGIN_DIR)/jessie_config.ml:
 	echo "let jessie_local = false" > $@
