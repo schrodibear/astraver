@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.139 2010-02-09 13:48:24 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.140 2010-02-11 08:05:24 marche Exp $ */
 
 %{
 
@@ -744,17 +744,6 @@ expression:
     { locate (JCPEbinary ($1, `Bge, $3)) }
 | expression LTCOLON IDENTIFIER
     { locate (JCPEinstanceof($1, $3)) }
-/*
-| expression COLONGT IDENTIFIER
-    { locate (JCPEcast($1, $3)) }
-| expression COLONGT REAL
-    { locate (JCPEcast($1, "real")) }
-| expression COLONGT INTEGER
-    { locate (JCPEcast($1, "integer")) }
-*/
-/* COLOGT est maintenant dans primary_expr */
-/*| expression COLONGT type_expr
-    { locate (JCPEcast($1, $3)) }*/
 | expression EQEQ expression 
     { locate (JCPEbinary ($1, `Beq, $3)) }
 | expression BANGEQ expression 
@@ -871,32 +860,6 @@ declaration:
 /**************/
 /* expressions */
 /**************/
-
-/*
-case_expression:
-| CASE CONSTANT COLON expression_list 
-    { Case $2, $4 }
-;
-
-default_expression:
-| DEFAULT COLON expression_list
-    { Default, $3 }
-;
-
-case_expression_list: 
-|  
-    { [] }
-| case_expression case_expression_list 
-    { $1 :: $2 }
-;
-
-default_case_expression_list:
-| case_expression_list default_expression
-    { $1 @ [$2] }
-| case_expression_list
-    { $1 }
-;
-*/
 
 compound_expr:
 | LBRACE expression_list RBRACE
@@ -1121,14 +1084,6 @@ indcases:
 | CASE identifier label_binders COLON expression SEMICOLON indcases
     { ($2,$3,$5)::$7 }
 ;
-
-/*
-logic_rec_definitions:
-| logic_definition AND logic_rec_definitions %prec PRECTYPE
-    { $1::$3 }
-| logic_definition AND logic_definition %prec PRECTYPE
-    { $1::[$3] }
-*/
 
 /************/
 /* patterns */
