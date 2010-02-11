@@ -2335,7 +2335,7 @@ and expr e =
 		if safety_checking() && this_comp = current_comp then
                   try
 		  let cur_measure,cur_r = get_measure_for (get_current_function()) in
-                  let cur_measure = 
+                  let cur_measure_why = 
                     term ~type_safe:true ~global_assertion:true
                       ~relocate:false LabelPre LabelPre cur_measure 
                   in
@@ -2350,18 +2350,31 @@ and expr e =
                          VarMap.add vi (LVar tmp) acc)
                       VarMap.empty f.jc_fun_info_parameters arg_types_asserts
                   in
-                  let this_measure = 
+                  let this_measure_why = 
                     term ~subst ~type_safe:true ~global_assertion:true
                       ~relocate:false LabelHere LabelHere this_measure 
                   in
-		  let r =
+		  let r,ty =
 		    assert (this_r = cur_r);
 		    match this_r with
-		      | None -> "zwf_zero"
-		      | Some li -> li.jc_logic_info_name
+		      | None -> "zwf_zero", integer_type
+		      | Some li -> 
+                          match li.jc_logic_info_parameters with
+                              v1::_ -> li.jc_logic_info_name,v1.jc_var_info_type
+                            | _ -> assert false
 		  in
+                  let this_measure_why = 
+                    term_coerce 
+                      ~type_safe:false ~global_assertion:false 
+                      LabelHere this_measure#pos ty this_measure#typ this_measure this_measure_why
+                  in
+                  let cur_measure_why =
+                    term_coerce 
+                      ~type_safe:false ~global_assertion:false 
+                      LabelHere cur_measure#pos ty cur_measure#typ cur_measure cur_measure_why
+                  in
 		  let pre =
-		    LPred(r,[this_measure;cur_measure])
+		    LPred(r,[this_measure_why;cur_measure_why])
 		  in
 		  make_check ~mark:e#mark ~kind:VarDecr e#pos 
 		    (Assert(`ASSERT,pre,call))		  

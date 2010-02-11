@@ -71,7 +71,7 @@ ie 2u+l < 1022
   @   ensures 
   @     \let v = (y[i_interp] - y[i_interp-1])/(x[i_interp]-x[i_interp-1]) ;
   @     \let exact_result = y[i_interp] + v*(z - x[i_interp-1]) ;
-  @     \abs(\result - exact_result) <= 1.0;
+  @     \abs(\result - exact_result) <= 0x1p-10 ;
   @*/
 double interp_lin(double x[], double y[], int n, double z) {
   int i;
