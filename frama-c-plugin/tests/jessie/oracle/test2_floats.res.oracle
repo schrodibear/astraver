@@ -40,7 +40,7 @@ behavior default:
 
 double poly()
 behavior default:
-  ensures (C_10 : ((\result :> real) == 0.0));
+  ensures (C_10 : ((\result :> real) == 0x1p-52));
 {  
    (var double x_0);
    
@@ -347,10 +347,10 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter poly :
- tt:unit -> { } double { (JC_16: eq_real(double_value(result), 0.0)) }
+ tt:unit -> { } double { (JC_16: eq_real(double_value(result), 0x1p-52)) }
 
 parameter poly_requires :
- tt:unit -> { } double { (JC_16: eq_real(double_value(result), 0.0)) }
+ tt:unit -> { } double { (JC_16: eq_real(double_value(result), 0x1p-52)) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -416,7 +416,7 @@ let poly_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_15: eq_real(double_value(result), 0.0)) }
+  { (JC_15: eq_real(double_value(result), 0x1p-52)) }
 
 let poly_safety =
  fun (tt : unit) ->
@@ -524,7 +524,7 @@ text = "FPOverflow"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/test2_floats_po1.why">
-      <location file = "PPCHOME/tests/jessie/test2_floats.c" line = "12" begin = "12" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/test2_floats.c" line = "12" begin = "12" end = "30"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

@@ -9,7 +9,7 @@
 double sqrt(double x);
 
 
-/*@ ensures \result == 0.0; 
+/*@ ensures \result == 0x1p-52;
   @*/
 double poly() {
   double x = sqrt(2.0)/2.0;
@@ -18,7 +18,7 @@ double poly() {
 
 /* 
 Local Variables:
-compile-command: "LC_ALL=C make test2_floats"                            
+compile-command: "LC_ALL=C make test2_floats"
 End:
 */
 
