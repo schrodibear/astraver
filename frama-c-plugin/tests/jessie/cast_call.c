@@ -19,6 +19,6 @@ void g() {
 
 /* 
 Local Variables:
-compile-command: "LC_ALL=C make -j cast_call"
+compile-command: "LC_ALL=C make cast_call"
 End:
 */

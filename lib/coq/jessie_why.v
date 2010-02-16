@@ -377,11 +377,11 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A768:Set) (a:(alloc_table A768)) (p:(pointer A768))
+(*Why predicate*) Definition valid (A682:Set) (a:(alloc_table A682)) (p:(pointer A682))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
-(*Why predicate*) Definition same_block (A769:Set) (p:(pointer A769)) (q:(pointer A769))
+(*Why predicate*) Definition same_block (A683:Set) (p:(pointer A683)) (q:(pointer A683))
   := (base_block p) = (base_block q).
 Implicit Arguments same_block.
 
@@ -643,12 +643,12 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A816:Set) (ps1:(pset A816)) (ps2:(pset A816))
-  := (forall (p:(pointer A816)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A730:Set) (ps1:(pset A730)) (ps2:(pset A730))
+  := (forall (p:(pointer A730)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
-(*Why predicate*) Definition pset_included (A817:Set) (ps1:(pset A817)) (ps2:(pset A817))
-  := (forall (p:(pointer A817)), ((in_pset p ps1) -> (in_pset p ps2))).
+(*Why predicate*) Definition pset_included (A731:Set) (ps1:(pset A731)) (ps2:(pset A731))
+  := (forall (p:(pointer A731)), ((in_pset p ps1) -> (in_pset p ps2))).
 Implicit Arguments pset_included.
 
 (*Why axiom*) Lemma pset_included_self :
@@ -786,8 +786,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A837:Set) (A836:Set) (a:(alloc_table A836)) (m1:(memory A836 A837)) (m2:(memory A836 A837)) (l:(pset A836))
-  := (forall (p:(pointer A836)),
+(*Why predicate*) Definition not_assigns (A751:Set) (A750:Set) (a:(alloc_table A750)) (m1:(memory A750 A751)) (m2:(memory A750 A751)) (l:(pset A750))
+  := (forall (p:(pointer A750)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -889,7 +889,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A856:Set) (a:(tag_table A856)) (p:(pointer A856)) (t:(tag_id A856))
+(*Why predicate*) Definition instanceof (A770:Set) (a:(tag_table A770)) (p:(pointer A770)) (t:(tag_id A770))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -916,8 +916,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A861:Set) (t:(tag_id A861))
-  := (parenttag t (@bottom_tag A861)).
+(*Why predicate*) Definition root_tag (A775:Set) (t:(tag_id A775))
+  := (parenttag t (@bottom_tag A775)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -929,7 +929,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A863:Set) (tag_table:(tag_table A863)) (mutable:(memory A863 (tag_id A863))) (this:(pointer A863))
+(*Why predicate*) Definition fully_packed (A777:Set) (tag_table:(tag_table A777)) (mutable:(memory A777 (tag_id A777))) (this:(pointer A777))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -1002,7 +1002,7 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why predicate*) Definition alloc_fresh (A865:Set) (a:(alloc_table A865)) (p:(pointer A865)) (n:Z)
+(*Why predicate*) Definition alloc_fresh (A779:Set) (a:(alloc_table A779)) (p:(pointer A779)) (n:Z)
   := (forall (i:Z), (0 <= i /\ i < n -> ~(valid a (shift p i)))).
 Implicit Arguments alloc_fresh.
 
@@ -1064,225 +1064,5 @@ Admitted.
       (forall (p:(pointer A1)),
        ((valid a1 p) /\ ~(in_pset p l) -> (offset_max a1 p) =
         (offset_max a2 p))))))).
-Admitted.
-
-(*Why type*) Definition bitvector: Set.
-Admitted.
-
-(*Why logic*) Definition concat_bitvector :
-  bitvector -> bitvector -> bitvector.
-Admitted.
-
-(*Why logic*) Definition offset_min_bytes :
-  forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Z -> Z.
-Admitted.
-Implicit Arguments offset_min_bytes.
-
-(*Why logic*) Definition offset_max_bytes :
-  forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Z -> Z.
-Admitted.
-Implicit Arguments offset_max_bytes.
-
-(*Why axiom*) Lemma offset_min_bytes_def :
-  forall (A1:Set),
-  (forall (a:(alloc_table A1)),
-   (forall (p:(pointer A1)),
-    (forall (s:Z),
-     (0 < s -> (offset_min a p) <= (s * (offset_min_bytes a p s)) /\
-      (s * (offset_min_bytes a p s) - s) < (offset_min a p))))).
-Admitted.
-
-(*Why axiom*) Lemma offset_max_bytes_def :
-  forall (A1:Set),
-  (forall (a:(alloc_table A1)),
-   (forall (p:(pointer A1)),
-    (forall (s:Z),
-     (0 < s -> (s * (offset_max_bytes a p s) + s - 1) <= (offset_max a p) /\
-      (offset_max a p) < (s * (offset_max_bytes a p s) + s + s - 1))))).
-Admitted.
-
-(*Why logic*) Definition extract_bytes : bitvector -> Z -> Z -> bitvector.
-Admitted.
-
-(*Why logic*) Definition replace_bytes :
-  bitvector -> Z -> Z -> bitvector -> bitvector.
-Admitted.
-
-(*Why axiom*) Lemma select_store_eq_union :
-  (forall (o1:Z),
-   (forall (s1:Z),
-    (forall (o2:Z),
-     (forall (s2:Z),
-      (forall (v1:bitvector),
-       (forall (v2:bitvector),
-        (o1 = o2 /\ s1 = s2 ->
-         (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2) = v2))))))).
-Admitted.
-
-(*Why axiom*) Lemma select_store_neq_union :
-  (forall (o1:Z),
-   (forall (s1:Z),
-    (forall (o2:Z),
-     (forall (s2:Z),
-      (forall (v1:bitvector),
-       (forall (v2:bitvector),
-        ((o2 + s2) <= o1 \/ (o1 + s2) <= o2 ->
-         (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2) =
-         (extract_bytes v1 o2 s2)))))))).
-Admitted.
-
-(*Why axiom*) Lemma concat_replace_bytes_up :
-  (forall (o1:Z),
-   (forall (s1:Z),
-    (forall (o2:Z),
-     (forall (s2:Z),
-      (forall (v1:bitvector),
-       (forall (v2:bitvector),
-        (forall (v3:bitvector),
-         ((o1 + s1) = o2 ->
-          (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3) =
-          (replace_bytes v1 o1 (s1 + s2) (concat_bitvector v2 v3)))))))))).
-Admitted.
-
-(*Why axiom*) Lemma concat_replace_bytes_down :
-  (forall (o1:Z),
-   (forall (s1:Z),
-    (forall (o2:Z),
-     (forall (s2:Z),
-      (forall (v1:bitvector),
-       (forall (v2:bitvector),
-        (forall (v3:bitvector),
-         ((o2 + s2) = o1 ->
-          (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3) =
-          (replace_bytes v1 o2 (s1 + s2) (concat_bitvector v3 v2)))))))))).
-Admitted.
-
-(*Why axiom*) Lemma concat_extract_bytes :
-  (forall (o1:Z),
-   (forall (s1:Z),
-    (forall (o2:Z),
-     (forall (s2:Z),
-      (forall (v:bitvector),
-       ((o1 + s1) = o2 ->
-        (concat_bitvector (extract_bytes v o1 s1) (extract_bytes v o2 s2)) =
-        (extract_bytes v o1 (s1 + s2)))))))).
-Admitted.
-
-(*Why logic*) Definition select_bytes :
-  forall (A1:Set), (memory A1 bitvector) -> (pointer A1) -> Z
-  -> Z -> bitvector.
-Admitted.
-Implicit Arguments select_bytes.
-
-(*Why logic*) Definition store_bytes :
-  forall (A1:Set), (memory A1 bitvector) -> (pointer A1) -> Z -> Z
-  -> bitvector -> (memory A1 bitvector).
-Admitted.
-Implicit Arguments store_bytes.
-
-(*Why axiom*) Lemma select_store_eq_bytes :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p1:(pointer A1)),
-    (forall (p2:(pointer A1)),
-     (forall (o1:Z),
-      (forall (s1:Z),
-       (forall (o2:Z),
-        (forall (s2:Z),
-         (forall (v:bitvector),
-          (p1 = p2 /\ o1 = o2 /\ s1 = s2 ->
-           (select_bytes (store_bytes m p1 o1 s1 v) p2 o2 s2) = v))))))))).
-Admitted.
-
-(*Why axiom*) Lemma select_store_neq_bytes :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p1:(pointer A1)),
-    (forall (p2:(pointer A1)),
-     (forall (o1:Z),
-      (forall (s1:Z),
-       (forall (o2:Z),
-        (forall (s2:Z),
-         (forall (v:bitvector),
-          ((pset_disjoint
-            (pset_range (pset_singleton p1) o1 (o1 + s1)) (pset_range
-                                                           (pset_singleton p2) o2 
-                                                           (o2 + s2))) ->
-           (select_bytes (store_bytes m p1 o1 s1 v) p2 o2 s2) =
-           (select_bytes m p2 o2 s2)))))))))).
-Admitted.
-
-(*Why axiom*) Lemma shift_store_bytes :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p:(pointer A1)),
-    (forall (i:Z),
-     (forall (o:Z),
-      (forall (s:Z),
-       (forall (v:bitvector),
-        (store_bytes m (shift p i) o s v) = (store_bytes m p (o + i) s v))))))).
-Admitted.
-
-(*Why axiom*) Lemma shift_select_bytes :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p:(pointer A1)),
-    (forall (i:Z),
-     (forall (o:Z),
-      (forall (s:Z),
-       (forall (v:bitvector),
-        (select_bytes m (shift p i) o s) = (select_bytes m p (o + i) s))))))).
-Admitted.
-
-(*Why axiom*) Lemma concat_store_bytes_up :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p:(pointer A1)),
-    (forall (o1:Z),
-     (forall (s1:Z),
-      (forall (o2:Z),
-       (forall (s2:Z),
-        (forall (v1:bitvector),
-         (forall (v2:bitvector),
-          ((o1 + s1) = o2 ->
-           (store_bytes (store_bytes m p o1 s1 v1) p o2 s2 v2) =
-           (store_bytes m p o1 (s1 + s2) (concat_bitvector v1 v2))))))))))).
-Admitted.
-
-(*Why axiom*) Lemma concat_store_bytes_down :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p:(pointer A1)),
-    (forall (o1:Z),
-     (forall (s1:Z),
-      (forall (o2:Z),
-       (forall (s2:Z),
-        (forall (v1:bitvector),
-         (forall (v2:bitvector),
-          ((o2 + s2) = o1 ->
-           (store_bytes (store_bytes m p o1 s1 v1) p o2 s2 v2) =
-           (store_bytes m p o2 (s1 + s2) (concat_bitvector v2 v1))))))))))).
-Admitted.
-
-(*Why axiom*) Lemma concat_select_bytes :
-  forall (A1:Set),
-  (forall (m:(memory A1 bitvector)),
-   (forall (p:(pointer A1)),
-    (forall (o1:Z),
-     (forall (s1:Z),
-      (forall (o2:Z),
-       (forall (s2:Z),
-        ((o1 + s1) = o2 ->
-         (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2)) =
-         (select_bytes m p o1 (s1 + s2))))))))).
-Admitted.
-
-(*Why logic*) Definition integer_of_bitvector : bitvector -> Z.
-Admitted.
-
-(*Why logic*) Definition bitvector_of_integer : Z -> bitvector.
-Admitted.
-
-(*Why logic*) Definition real_of_bitvector : bitvector -> R.
 Admitted.
 

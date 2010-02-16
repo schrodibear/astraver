@@ -1,4 +1,4 @@
-File "why/bts0399.why", line 384, characters 22-104:
+File "why/bts0399.why", line 344, characters 22-104:
 warning: mutable y is not declared in effect; added as read
-File "why/bts0399.why", line 444, characters 23-224:
+File "why/bts0399.why", line 404, characters 23-224:
 warning: mutable y_0 is not declared in effect; added as read

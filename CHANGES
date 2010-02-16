@@ -1,5 +1,6 @@
 
-  o [Jessie] fixed bug 0370: missing corecion on decreasing measures
+  o [Jessie] is now compiled with apron by default, if available.
+  o [Jessie] fixed bug 0370: missing coercion on decreasing measures
   o [Jessie] support for "let x = t in a" when a is an assertion
   o [Frama-C plugin] support for statement contracts, fixes bug 0399
   o [Jessie] fixed bugs 0391 and 0401 (avoid name clash with axiom

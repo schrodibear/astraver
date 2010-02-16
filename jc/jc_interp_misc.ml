@@ -77,6 +77,7 @@ let mod_of_enum ri = "mod_" ^ ri.jc_enum_info_name ^ "_of_integer"
 let fun_any_enum ri = "any_" ^ ri.jc_enum_info_name
 let eq_of_enum ri = "eq_" ^ ri.jc_enum_info_name
 
+
 let logic_bitvector_of_enum ri = "bitvector_of_" ^ ri.jc_enum_info_name
 let logic_enum_of_bitvector ri = ri.jc_enum_info_name  ^ "_of_bitvector"
 

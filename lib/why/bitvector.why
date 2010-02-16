@@ -32,6 +32,15 @@ axiom bv_one_nth:
 function bv_zero32() : bitvector = bv_zero(32)
 function bv_one32() : bitvector = bv_one(32)
 
+
+predicate bv_eq(b1:bitvector,b2:bitvector) =
+    bv_length(b1) = bv_length(b2) and
+    forall n:int. 0 <= n < bv_length(b1) -> bv_nth(b1,n) = bv_nth(b2,n)
+
+axiom bv_eq_ext :
+  forall b1,b2:bitvector (* trigger [ b1 = b2 ] does not work *) . 
+    bv_eq(b1,b2) -> b1 = b2
+
 (* and, or, not *)
 
 logic bv_and : bitvector, bitvector -> bitvector
@@ -45,10 +54,31 @@ axiom bv_and_length:
     bv_length(b1) = n and bv_length(b2) = n ->	
     bv_length(bv_and(b1,b2)) = n 
 
-goal test1:
-  forall b:bitvector.
-    b = bv_and(bv_zero32,bv_one32) ->
-    bv_nth(b,1) = false
+goal test_and_1:
+  let b = bv_and(bv_zero32,bv_one32) in bv_nth(b,1) = false
+
+let test_and_2 () =
+  let x3 = [ { } bitvector { 
+bv_length(result) = 32 and
+bv_nth(result,0) = true and
+bv_nth(result,1) = true and
+forall n:int. n >= 2 -> bv_nth(result,n) = false
+} ]
+  in
+  let x1 = [ { } bitvector { 
+bv_length(result) = 32 and
+bv_nth(result,0) = true and
+forall n:int. n >= 1 -> bv_nth(result,n) = false
+} ]
+  in 
+  (* not proved by any prover: 
+     assert { bv_and(x3,x1) = x1 }; *)
+  assert { bv_eq(bv_and(x3,x1),x1) };
+  (* easy from assert above and axiom bv_eq_ext: *)
+  assert { bv_and(x3,x1) = x1 }; 
+  void
+
+
 
 
 (* shift *)
@@ -70,14 +100,10 @@ axiom lsr_nth_high:
       bv_nth(lsr(b,s),n) = false
 
 goal test2:
-  forall b:bitvector.
-    b = lsr(bv_one32,16) ->
-    bv_nth(b,15) = true
+  let b = lsr(bv_one32,16) in bv_nth(b,15) = true
      
 goal test3:
-  forall b:bitvector.
-    b = lsr(bv_one32,16) ->
-    bv_nth(b,16) = false
+  let b = lsr(bv_one32,16) in bv_nth(b,16) = false
      
 logic asr : bitvector, int -> bitvector
 
@@ -96,19 +122,13 @@ axiom asr_nth_high:
       bv_nth(asr(b,s),n) = bv_nth(b,bv_length(b)-1)
 
 goal test4:
-  forall b:bitvector.
-    b = asr(bv_one32,16) ->
-    bv_nth(b,15) = true
+  let b = asr(bv_one32,16) in bv_nth(b,15) = true
      
 goal test5:
-  forall b:bitvector.
-    b = asr(bv_one32,16) ->
-    bv_nth(b,16) = true
+  let b = asr(bv_one32,16) in bv_nth(b,16) = true
 
 goal test6:
-  forall b:bitvector.
-    b = asr(lsr(bv_one32,1),16) ->
-    bv_nth(b,16) = false
+  let b = asr(lsr(bv_one32,1),16) in bv_nth(b,16) = false
      
 logic lsl : bitvector, int -> bitvector
 

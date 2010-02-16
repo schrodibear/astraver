@@ -412,6 +412,8 @@ let main () =
 	|  Jc_env.FMmultirounding ->
 	     Jc_options.add_to_libfiles "floats_multi_rounding.why"
     end;
+    if !Region.some_bitwise_region then
+      Jc_options.add_to_libfiles "jessie_bitvectors.why";
     Jc_make.makefile filename
       
     | _ -> Jc_options.usage ()

@@ -3558,6 +3558,26 @@ let tr_enum_type ri (* to_int of_int *) acc =
     Prod_type("", Base_type(simple_logic_type "unit"),
               Annot_type(LTrue,Base_type lt,[],[],LTrue,[]))
   in
+  let bv_conv =
+    if !Region.some_bitwise_region then
+      [Logic(false,logic_bitvector_of_enum ri,["",lt],bitvector_type) ;
+       Logic(false,logic_enum_of_bitvector ri,["",bitvector_type],lt) ;
+       Axiom((logic_enum_of_bitvector ri)^"_of_"^(logic_bitvector_of_enum ri),
+	   LForall("x",lt, [],
+		   LPred(equality_op_for_type (JCTenum ri),
+                         [LApp(logic_enum_of_bitvector ri,
+                               [LApp(logic_bitvector_of_enum ri, 
+                                     [LVar "x"])]);
+                          LVar "x"])));
+       Axiom((logic_bitvector_of_enum ri)^"_of_"^(logic_enum_of_bitvector ri),
+	   LForall("x",bitvector_type, [],
+		   LPred("eq", (* TODO: equality for bitvectors ? *)
+                         [LApp(logic_bitvector_of_enum ri,
+                               [LApp(logic_enum_of_bitvector ri, 
+                                     [LVar "x"])]);
+                          LVar "x"]))) ]
+    else []
+  in
   Type(name,[])
   :: Logic(false,logic_int_of_enum ri,
            [("",lt)],why_integer_type)
@@ -3623,23 +3643,8 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                      [LApp(logic_enum_of_int ri, 
                                            [LVar "x"])]) ; 
                                 LVar "x"]))))
-  :: Logic(false,logic_bitvector_of_enum ri,["",lt],bitvector_type)
-  :: Logic(false,logic_enum_of_bitvector ri,["",bitvector_type],lt)
-  :: Axiom((logic_enum_of_bitvector ri)^"_of_"^(logic_bitvector_of_enum ri),
-	   LForall("x",lt, [],
-		   LPred(equality_op_for_type (JCTenum ri),
-                         [LApp(logic_enum_of_bitvector ri,
-                               [LApp(logic_bitvector_of_enum ri, 
-                                     [LVar "x"])]);
-                          LVar "x"])))
-  :: Axiom((logic_bitvector_of_enum ri)^"_of_"^(logic_enum_of_bitvector ri),
-	   LForall("x",bitvector_type, [],
-		   LPred("eq", (* TODO: equality for bitvectors ? *)
-                         [LApp(logic_bitvector_of_enum ri,
-                               [LApp(logic_enum_of_bitvector ri, 
-                                     [LVar "x"])]);
-                          LVar "x"])))
-  :: acc
+  :: bv_conv
+  @ acc
 
 let tr_enum_type_pair ri1 ri2 acc =
   (* Information from first enum *)
@@ -3721,10 +3726,11 @@ let tr_root rt acc =
     if root_is_union rt then
       (* Declarations of field memories. *)
       let acc = 
-	if root_is_plain_union rt 
-	  && !Jc_options.separation_sem = SepRegions then acc else
+	if root_is_plain_union rt && !Jc_options.separation_sem = SepRegions 
+        then acc 
+        else
             let mem = bitvector_type in
-              Param(false,union_memory_name rt,Ref_type(Base_type mem)) :: acc
+            Param(false,union_memory_name rt,Ref_type(Base_type mem)) :: acc
       in
 	(* Validity parameters *)
 	make_valid_pred ~equal:true ac pc 
@@ -3767,6 +3773,7 @@ let tr_root rt acc =
   in
   let lt = tr_base_type (JCTpointer(pc,None,None)) in
   let conv = 
+    if !Region.some_bitwise_region then
     [Logic(false,logic_bitvector_of_variant rt,["",lt],bitvector_type);
      Logic(false,logic_variant_of_bitvector rt,["",bitvector_type],lt);
      Axiom((logic_variant_of_bitvector rt)^"_of_"^(logic_bitvector_of_variant rt),
@@ -3784,6 +3791,8 @@ let tr_root rt acc =
                                        [LVar "x"])]);
                           LVar "x"])))
     ]
+    else 
+      []
   in
   let tag_table =
     Param(

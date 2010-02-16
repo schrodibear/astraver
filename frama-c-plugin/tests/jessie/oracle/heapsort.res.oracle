@@ -549,54 +549,9 @@ axiom access_update_neq :
       eq_int(integer_of_int32(access(update(a_2, i_2, v_1), j)),
       integer_of_int32(access(a_2, j))))))))
 
-logic bitvector_of_char_P: char_P pointer -> bitvector
-
-logic char_P_of_bitvector: bitvector -> char_P pointer
-
-axiom bitvector_of_char_P_of_char_P_of_bitvector :
- (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32: int32 -> bitvector
-
-logic int32_of_bitvector: bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector :
- (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8: int8 -> bitvector
-
-logic int8_of_bitvector: bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector :
- (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
-
-logic bitvector_of_int_P: int_P pointer -> bitvector
-
-logic int_P_of_bitvector: bitvector -> int_P pointer
-
-axiom bitvector_of_int_P_of_int_P_of_bitvector :
- (forall x:bitvector. (bitvector_of_int_P(int_P_of_bitvector(x)) = x))
-
-logic bitvector_of_uint32: uint32 -> bitvector
-
-logic uint32_of_bitvector: bitvector -> uint32
-
-axiom bitvector_of_uint32_of_uint32_of_bitvector :
- (forall x:bitvector. (bitvector_of_uint32(uint32_of_bitvector(x)) = x))
-
-logic bitvector_of_void_P: void_P pointer -> bitvector
-
-logic void_P_of_bitvector: bitvector -> void_P pointer
-
-axiom bitvector_of_void_P_of_void_P_of_bitvector :
- (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
-
-axiom char_P_of_bitvector_of_bitvector_of_char_P :
- (forall x:char_P pointer. (char_P_of_bitvector(bitvector_of_char_P(x)) = x))
 
 logic char_P_of_pointer_address: unit pointer -> char_P pointer
 
@@ -710,9 +665,6 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
-axiom int32_of_bitvector_of_bitvector_of_int32 :
- (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -725,9 +677,6 @@ axiom int8_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
 
-axiom int8_of_bitvector_of_bitvector_of_int8 :
- (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
 axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
@@ -735,9 +684,6 @@ axiom int8_range :
 logic int_P_tag:  -> int_P tag_id
 
 axiom int_P_int : (int_of_tag(int_P_tag) = (1))
-
-axiom int_P_of_bitvector_of_bitvector_of_int_P :
- (forall x:int_P pointer. (int_P_of_bitvector(bitvector_of_int_P(x)) = x))
 
 logic int_P_of_pointer_address: unit pointer -> int_P pointer
 
@@ -841,9 +787,6 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
-axiom uint32_of_bitvector_of_bitvector_of_uint32 :
- (forall x:uint32. eq_uint32(uint32_of_bitvector(bitvector_of_uint32(x)), x))
-
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
@@ -915,9 +858,6 @@ predicate valid_struct_void_P(p:void_P pointer,
 logic void_P_tag:  -> void_P tag_id
 
 axiom void_P_int : (int_of_tag(void_P_tag) = (1))
-
-axiom void_P_of_bitvector_of_bitvector_of_void_P :
- (forall x:void_P pointer. (void_P_of_bitvector(bitvector_of_void_P(x)) = x))
 
 axiom void_P_of_pointer_address_of_pointer_addr :
  (forall p:void_P pointer.
@@ -2693,11 +2633,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "1186" begin = "55" end = "89"/>
+      <location file = "why/heapsort.why" line = "1126" begin = "55" end = "89"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "1186" begin = "55" end = "89"/>
+      <location file = "why/heapsort.why" line = "1126" begin = "55" end = "89"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2786,11 +2726,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "1305" begin = "56" end = "91"/>
+      <location file = "why/heapsort.why" line = "1245" begin = "56" end = "91"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "1305" begin = "56" end = "91"/>
+      <location file = "why/heapsort.why" line = "1245" begin = "56" end = "91"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3670,195 +3610,6 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
-type bitvector
-
-logic concat_bitvector : bitvector, bitvector -> bitvector
-
-logic offset_min_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
-
-logic offset_max_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
-
-axiom offset_min_bytes_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer.
-      (forall s:int [offset_min_bytes(a, p, s)].
-        ((0 < s) ->
-         ((offset_min(a, p) <= (s * offset_min_bytes(a, p, s))) and
-          (((s * offset_min_bytes(a, p, s)) - s) < offset_min(a, p)))))))
-
-axiom offset_max_bytes_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer.
-      (forall s:int [offset_max_bytes(a, p, s)].
-        ((0 < s) ->
-         (((((s * offset_max_bytes(a, p, s)) + s) - 1) <= offset_max(a,
-          p)) and (offset_max(a, p) < ((((s * offset_max_bytes(a, p,
-          s)) + s) + s) - 1)))))))
-
-logic extract_bytes : bitvector, int, int -> bitvector
-
-logic replace_bytes : bitvector, int, int, bitvector -> bitvector
-
-axiom select_store_eq_union:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
-              v2), o2, s2)].
-              (((o1 = o2) and (s1 = s2)) -> (extract_bytes(replace_bytes(v1,
-               o1, s1, v2), o2, s2) = v2))))))))
-
-axiom select_store_neq_union:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
-              v2), o2, s2)].
-              ((((o2 + s2) <= o1) or ((o1 + s2) <= o2)) ->
-               (extract_bytes(replace_bytes(v1, o1, s1, v2), o2,
-               s2) = extract_bytes(v1, o2, s2)))))))))
-
-axiom concat_replace_bytes_up:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector.
-              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
-                v2), o2, s2, v3)].
-                (((o1 + s1) = o2) -> (replace_bytes(replace_bytes(v1, o1, s1,
-                 v2), o2, s2, v3) = replace_bytes(v1, o1, (s1 + s2),
-                 concat_bitvector(v2, v3)))))))))))
-
-axiom concat_replace_bytes_down:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector.
-              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
-                v2), o2, s2, v3)].
-                (((o2 + s2) = o1) -> (replace_bytes(replace_bytes(v1, o1, s1,
-                 v2), o2, s2, v3) = replace_bytes(v1, o2, (s1 + s2),
-                 concat_bitvector(v3, v2)))))))))))
-
-axiom concat_extract_bytes:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v:bitvector [concat_bitvector(extract_bytes(v, o1, s1),
-            extract_bytes(v, o2, s2))].
-            (((o1 + s1) = o2) -> (concat_bitvector(extract_bytes(v, o1, s1),
-             extract_bytes(v, o2, s2)) = extract_bytes(v, o1, (s1 + s2)))))))))
-
-logic select_bytes : ('a1, bitvector) memory, 'a1 pointer, int,
-int -> bitvector
-
-logic store_bytes : ('a1, bitvector) memory, 'a1 pointer, int, int,
-bitvector -> ('a1, bitvector) memory
-
-axiom select_store_eq_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p1:'a1 pointer.
-      (forall p2:'a1 pointer.
-        (forall o1:int.
-          (forall s1:int.
-            (forall o2:int.
-              (forall s2:int.
-                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
-                  v), p2, o2, s2)].
-                  (((p1 = p2) and ((o1 = o2) and (s1 = s2))) ->
-                   (select_bytes(store_bytes(m, p1, o1, s1, v), p2, o2,
-                   s2) = v))))))))))
-
-axiom select_store_neq_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p1:'a1 pointer.
-      (forall p2:'a1 pointer.
-        (forall o1:int.
-          (forall s1:int.
-            (forall o2:int.
-              (forall s2:int.
-                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
-                  v), p2, o2, s2)].
-                  (pset_disjoint(pset_range(pset_singleton(p1), o1,
-                   (o1 + s1)), pset_range(pset_singleton(p2), o2,
-                   (o2 + s2))) -> (select_bytes(store_bytes(m, p1, o1, s1,
-                   v), p2, o2, s2) = select_bytes(m, p2, o2, s2)))))))))))
-
-axiom shift_store_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall i:int.
-        (forall o:int.
-          (forall s:int.
-            (forall v:bitvector [store_bytes(m, shift(p, i), o, s, v)].
-              (store_bytes(m, shift(p, i), o, s, v) = store_bytes(m, p,
-              (o + i), s, v))))))))
-
-axiom shift_select_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall i:int.
-        (forall o:int.
-          (forall s:int.
-            (forall v:bitvector [select_bytes(m, shift(p, i), o, s)].
-              (select_bytes(m, shift(p, i), o, s) = select_bytes(m, p,
-              (o + i), s))))))))
-
-axiom concat_store_bytes_up:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int.
-              (forall v1:bitvector.
-                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
-                  v1), p, o2, s2, v2)].
-                  (((o1 + s1) = o2) -> (store_bytes(store_bytes(m, p, o1, s1,
-                   v1), p, o2, s2, v2) = store_bytes(m, p, o1, (s1 + s2),
-                   concat_bitvector(v1, v2))))))))))))
-
-axiom concat_store_bytes_down:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int.
-              (forall v1:bitvector.
-                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
-                  v1), p, o2, s2, v2)].
-                  (((o2 + s2) = o1) -> (store_bytes(store_bytes(m, p, o1, s1,
-                   v1), p, o2, s2, v2) = store_bytes(m, p, o2, (s1 + s2),
-                   concat_bitvector(v2, v1))))))))))))
-
-axiom concat_select_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int [concat_bitvector(select_bytes(m, p, o1, s1),
-              select_bytes(m, p, o2, s2))].
-              (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
-               s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
-               (s1 + s2))))))))))
-
-logic integer_of_bitvector : bitvector -> int
-
-logic bitvector_of_integer : int -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
 type char_P
 
 type int32
@@ -4010,55 +3761,9 @@ axiom access_update_neq:
           ((i_2 <> j) -> (integer_of_int32(access(update(a_2, i_2, v_1),
            j)) = integer_of_int32(access(a_2, j))))))))
 
-logic bitvector_of_char_P : char_P pointer -> bitvector
-
-logic char_P_of_bitvector : bitvector -> char_P pointer
-
-axiom bitvector_of_char_P_of_char_P_of_bitvector:
-  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32 : int32 -> bitvector
-
-logic int32_of_bitvector : bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8 : int8 -> bitvector
-
-logic int8_of_bitvector : bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
-
-logic bitvector_of_int_P : int_P pointer -> bitvector
-
-logic int_P_of_bitvector : bitvector -> int_P pointer
-
-axiom bitvector_of_int_P_of_int_P_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int_P(int_P_of_bitvector(x)) = x))
-
-logic bitvector_of_uint32 : uint32 -> bitvector
-
-logic uint32_of_bitvector : bitvector -> uint32
-
-axiom bitvector_of_uint32_of_uint32_of_bitvector:
-  (forall x:bitvector. (bitvector_of_uint32(uint32_of_bitvector(x)) = x))
-
-logic bitvector_of_void_P : void_P pointer -> bitvector
-
-logic void_P_of_bitvector : bitvector -> void_P pointer
-
-axiom bitvector_of_void_P_of_void_P_of_bitvector:
-  (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
-
-axiom char_P_of_bitvector_of_bitvector_of_char_P:
-  (forall x:char_P pointer.
-    (char_P_of_bitvector(bitvector_of_char_P(x)) = x))
 
 logic char_P_of_pointer_address : unit pointer -> char_P pointer
 
@@ -4126,9 +3831,6 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
-axiom int32_of_bitvector_of_bitvector_of_int32:
-  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -4141,9 +3843,6 @@ axiom int8_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
 
-axiom int8_of_bitvector_of_bitvector_of_int8:
-  (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
@@ -4151,9 +3850,6 @@ axiom int8_range:
 logic int_P_tag : int_P tag_id
 
 axiom int_P_int: (int_of_tag(int_P_tag) = 1)
-
-axiom int_P_of_bitvector_of_bitvector_of_int_P:
-  (forall x:int_P pointer. (int_P_of_bitvector(bitvector_of_int_P(x)) = x))
 
 logic int_P_of_pointer_address : unit pointer -> int_P pointer
 
@@ -4242,10 +3938,6 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
-axiom uint32_of_bitvector_of_bitvector_of_uint32:
-  (forall x:uint32. eq_uint32(uint32_of_bitvector(bitvector_of_uint32(x)),
-    x))
-
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
@@ -4298,10 +3990,6 @@ predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
 logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
-
-axiom void_P_of_bitvector_of_bitvector_of_void_P:
-  (forall x:void_P pointer.
-    (void_P_of_bitvector(bitvector_of_void_P(x)) = x))
 
 axiom void_P_of_pointer_address_of_pointer_addr:
   (forall p:void_P pointer.

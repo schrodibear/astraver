@@ -88,47 +88,9 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic bitvector_of_char_P: char_P pointer -> bitvector
-
-logic char_P_of_bitvector: bitvector -> char_P pointer
-
-axiom bitvector_of_char_P_of_char_P_of_bitvector :
- (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32: int32 -> bitvector
-
-logic int32_of_bitvector: bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector :
- (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8: int8 -> bitvector
-
-logic int8_of_bitvector: bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector :
- (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
-
-logic bitvector_of_int_P: int_P pointer -> bitvector
-
-logic int_P_of_bitvector: bitvector -> int_P pointer
-
-axiom bitvector_of_int_P_of_int_P_of_bitvector :
- (forall x:bitvector. (bitvector_of_int_P(int_P_of_bitvector(x)) = x))
-
-logic bitvector_of_void_P: void_P pointer -> bitvector
-
-logic void_P_of_bitvector: bitvector -> void_P pointer
-
-axiom bitvector_of_void_P_of_void_P_of_bitvector :
- (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
-
-axiom char_P_of_bitvector_of_bitvector_of_char_P :
- (forall x:char_P pointer. (char_P_of_bitvector(bitvector_of_char_P(x)) = x))
 
 logic char_P_of_pointer_address: unit pointer -> char_P pointer
 
@@ -162,9 +124,6 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
-axiom int32_of_bitvector_of_bitvector_of_int32 :
- (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -177,9 +136,6 @@ axiom int8_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
 
-axiom int8_of_bitvector_of_bitvector_of_int8 :
- (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
 axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
@@ -187,9 +143,6 @@ axiom int8_range :
 logic int_P_tag:  -> int_P tag_id
 
 axiom int_P_int : (int_of_tag(int_P_tag) = (1))
-
-axiom int_P_of_bitvector_of_bitvector_of_int_P :
- (forall x:int_P pointer. (int_P_of_bitvector(bitvector_of_int_P(x)) = x))
 
 logic int_P_of_pointer_address: unit pointer -> int_P pointer
 
@@ -352,9 +305,6 @@ predicate valid_struct_void_P(p:void_P pointer,
 logic void_P_tag:  -> void_P tag_id
 
 axiom void_P_int : (int_of_tag(void_P_tag) = (1))
-
-axiom void_P_of_bitvector_of_bitvector_of_void_P :
- (forall x:void_P pointer. (void_P_of_bitvector(bitvector_of_void_P(x)) = x))
 
 axiom void_P_of_pointer_address_of_pointer_addr :
  (forall p:void_P pointer.
