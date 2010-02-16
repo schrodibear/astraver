@@ -1,8 +1,3 @@
-[kernel...] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD asm_memset2.c"
-Producing Jessie files in subdir asm_memset2.jessie
-File asm_memset2.jessie/asm_memset2.jc written.
-File asm_memset2.jessie/asm_memset2.cloc written.
-Fatal error: exception Assert_failure("src/fastwp.ml", 45, 17)
-Raised at file "list.ml", line 144, characters 16-25
-make[2]: *** [why/asm_memset2.wpr] Erreur 2
-make[1]: *** [asm_memset2.regtest] Erreur 2
+Fatal error: exception Assert_failure("src/fastwp.ml", 43, 17)
+make: *** [why/asm_memset2.wpr] Error 2
+make: *** [asm_memset2.regtest] Error 2

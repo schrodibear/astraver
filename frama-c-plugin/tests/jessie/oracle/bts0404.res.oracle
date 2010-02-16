@@ -1,8 +1,8 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0258.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0258.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0404.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0404.c"
 [jessie] Starting Jessie translation
-bts0258.c:15:[jessie] failure: Unexpected failure.
-                  Please submit bug report (Ref. "interp.ml:684:14").
+bts0404.c:16:[jessie] failure: Unexpected failure.
+                  Please submit bug report (Ref. "norm.ml:1128:50").
 [kernel] The full backtrace is:
          Raised at file "src/kernel/log.ml", line 554, characters 30-31
          Called from file "src/kernel/log.ml", line 548, characters 2-9

@@ -658,6 +658,108 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter struct_char_P_alloc_of_bitvector :
+ char_P_alloc_table:char_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes char_P_alloc_table
+   { (forall p:char_P pointer.
+      (eq_int(offset_min(char_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (1)))
+      and eq_int(offset_max(char_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (1))))) }
+
+parameter struct_char_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  char_P_alloc_table:char_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:char_P pointer.
+      (eq_int(offset_min(char_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (1)))
+      and eq_int(offset_max(char_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (1))))) }
+
+parameter struct_char_P_mem_of_bitvector :
+ char_P_char_M:(char_P, int8) memory ref ->
+  bitvector:(unit, bitvector) memory ->
+   { } unit writes char_P_char_M
+   { (forall p0:char_P pointer.
+      eq_int8(select(char_P_char_M, p0),
+      int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                        (1))))) }
+
+parameter struct_char_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  char_P_char_M:(char_P, int8) memory ->
+   { } unit writes bitvector
+   { (forall p0:char_P pointer.
+      eq_int8(select(char_P_char_M, p0),
+      int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                        (1))))) }
+
+parameter struct_int_P_alloc_of_bitvector :
+ int_P_alloc_table:int_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes int_P_alloc_table
+   { (forall p:int_P pointer.
+      (eq_int(offset_min(int_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
+      and eq_int(offset_max(int_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
+
+parameter struct_int_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  int_P_alloc_table:int_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:int_P pointer.
+      (eq_int(offset_min(int_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
+      and eq_int(offset_max(int_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
+
+parameter struct_int_P_mem_of_bitvector :
+ int_P_int_M:(int_P, int32) memory ref ->
+  bitvector:(unit, bitvector) memory ->
+   { } unit writes int_P_int_M
+   { (forall p0:int_P pointer.
+      eq_int32(select(int_P_int_M, p0),
+      int32_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                         (4))))) }
+
+parameter struct_int_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  int_P_int_M:(int_P, int32) memory ->
+   { } unit writes bitvector
+   { (forall p0:int_P pointer.
+      eq_int32(select(int_P_int_M, p0),
+      int32_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                         (4))))) }
+
+parameter struct_void_P_alloc_of_bitvector :
+ void_P_alloc_table:void_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes void_P_alloc_table
+   { (forall p:void_P pointer.
+      (eq_int(offset_min(void_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(void_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_void_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  void_P_alloc_table:void_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:void_P pointer.
+      (eq_int(offset_min(void_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(void_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_void_P_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_void_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
 parameter zero :
  x:U pointer ->
   int_P_pM_2_alloc_table:int_P alloc_table ref ->

@@ -1590,6 +1590,278 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter struct__Decomp2_alloc_of_bitvector :
+ _Decomp2_alloc_table:_Decomp2 alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes _Decomp2_alloc_table
+   { (forall p:_Decomp2 pointer.
+      (eq_int(offset_min(_Decomp2_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (2)))
+      and eq_int(offset_max(_Decomp2_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (2))))) }
+
+parameter struct__Decomp2_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  _Decomp2_alloc_table:_Decomp2 alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:_Decomp2 pointer.
+      (eq_int(offset_min(_Decomp2_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (2)))
+      and eq_int(offset_max(_Decomp2_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (2))))) }
+
+parameter struct__Decomp2_mem_of_bitvector :
+ _Decomp2_c1:(_Decomp2, int8) memory ref ->
+  _Decomp2_c2:(_Decomp2, int8) memory ref ->
+   bitvector:(unit, bitvector) memory ->
+    { } unit writes _Decomp2_c1,_Decomp2_c2
+    { ((forall p0:_Decomp2 pointer.
+        eq_int8(select(_Decomp2_c1, p0),
+        int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                          (1)))))
+      and (forall p1:_Decomp2 pointer.
+           eq_int8(select(_Decomp2_c2, p1),
+           int8_of_bitvector(select_bytes(bitvector, pointer_address(p1),
+                             (1), (1)))))) }
+
+parameter struct__Decomp2_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  _Decomp2_c1:(_Decomp2, int8) memory ->
+   _Decomp2_c2:(_Decomp2, int8) memory ->
+    { } unit writes bitvector
+    { ((forall p0:_Decomp2 pointer.
+        eq_int8(select(_Decomp2_c1, p0),
+        int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                          (1)))))
+      and (forall p1:_Decomp2 pointer.
+           eq_int8(select(_Decomp2_c2, p1),
+           int8_of_bitvector(select_bytes(bitvector, pointer_address(p1),
+                             (1), (1)))))) }
+
+parameter struct__Decomp_alloc_of_bitvector :
+ _Decomp_alloc_table:_Decomp alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes _Decomp_alloc_table
+   { (forall p:_Decomp pointer.
+      (eq_int(offset_min(_Decomp_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
+      and eq_int(offset_max(_Decomp_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
+
+parameter struct__Decomp_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  _Decomp_alloc_table:_Decomp alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:_Decomp pointer.
+      (eq_int(offset_min(_Decomp_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
+      and eq_int(offset_max(_Decomp_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
+
+parameter struct__Decomp_mem_of_bitvector :
+ _Decomp_c1_0:(_Decomp, int8) memory ref ->
+  _Decomp_c2_0:(_Decomp, int8) memory ref ->
+   _Decomp_c3:(_Decomp, int8) memory ref ->
+    _Decomp_c4:(_Decomp, int8) memory ref ->
+     bitvector:(unit, bitvector) memory ->
+      { } unit writes _Decomp_c1_0,_Decomp_c2_0,_Decomp_c3,_Decomp_c4
+      { ((((forall p0:_Decomp pointer.
+            eq_int8(select(_Decomp_c1_0, p0),
+            int8_of_bitvector(select_bytes(bitvector, pointer_address(p0),
+                              (0), (1)))))
+          and (forall p1:_Decomp pointer.
+               eq_int8(select(_Decomp_c2_0, p1),
+               int8_of_bitvector(select_bytes(bitvector, pointer_address(p1),
+                                 (1), (1))))))
+         and (forall p2:_Decomp pointer.
+              eq_int8(select(_Decomp_c3, p2),
+              int8_of_bitvector(select_bytes(bitvector, pointer_address(p2),
+                                (2), (1))))))
+        and (forall p3:_Decomp pointer.
+             eq_int8(select(_Decomp_c4, p3),
+             int8_of_bitvector(select_bytes(bitvector, pointer_address(p3),
+                               (3), (1)))))) }
+
+parameter struct__Decomp_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  _Decomp_c1_0:(_Decomp, int8) memory ->
+   _Decomp_c2_0:(_Decomp, int8) memory ->
+    _Decomp_c3:(_Decomp, int8) memory ->
+     _Decomp_c4:(_Decomp, int8) memory ->
+      { } unit writes bitvector
+      { ((((forall p0:_Decomp pointer.
+            eq_int8(select(_Decomp_c1_0, p0),
+            int8_of_bitvector(select_bytes(bitvector, pointer_address(p0),
+                              (0), (1)))))
+          and (forall p1:_Decomp pointer.
+               eq_int8(select(_Decomp_c2_0, p1),
+               int8_of_bitvector(select_bytes(bitvector, pointer_address(p1),
+                                 (1), (1))))))
+         and (forall p2:_Decomp pointer.
+              eq_int8(select(_Decomp_c3, p2),
+              int8_of_bitvector(select_bytes(bitvector, pointer_address(p2),
+                                (2), (1))))))
+        and (forall p3:_Decomp pointer.
+             eq_int8(select(_Decomp_c4, p3),
+             int8_of_bitvector(select_bytes(bitvector, pointer_address(p3),
+                               (3), (1)))))) }
+
+parameter struct__S1_alloc_of_bitvector :
+ _S1_alloc_table:_S1 alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes _S1_alloc_table
+   { (forall p:_S1 pointer.
+      (eq_int(offset_min(_S1_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (8)))
+      and eq_int(offset_max(_S1_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (8))))) }
+
+parameter struct__S1_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  _S1_alloc_table:_S1 alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:_S1 pointer.
+      (eq_int(offset_min(_S1_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (8)))
+      and eq_int(offset_max(_S1_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (8))))) }
+
+parameter struct__S1_mem_of_bitvector :
+ _S1_c_1:(_S1, int8) memory ref ->
+  _S1_i_2:(_S1, int32) memory ref ->
+   _S1_padding_1:(_S1, padding) memory ref ->
+    bitvector:(unit, bitvector) memory ->
+     { } unit writes _S1_c_1,_S1_i_2,_S1_padding_1
+     { ((forall p0:_S1 pointer.
+         eq_int8(select(_S1_c_1, p0),
+         int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                           (1)))))
+       and (forall p1:_S1 pointer.
+            eq_int32(select(_S1_i_2, p1),
+            int32_of_bitvector(select_bytes(bitvector, pointer_address(p1),
+                               (4), (4)))))) }
+
+parameter struct__S1_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  _S1_c_1:(_S1, int8) memory ->
+   _S1_i_2:(_S1, int32) memory ->
+    _S1_padding_1:(_S1, padding) memory ->
+     { } unit writes bitvector
+     { ((forall p0:_S1 pointer.
+         eq_int8(select(_S1_c_1, p0),
+         int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                           (1)))))
+       and (forall p1:_S1 pointer.
+            eq_int32(select(_S1_i_2, p1),
+            int32_of_bitvector(select_bytes(bitvector, pointer_address(p1),
+                               (4), (4)))))) }
+
+parameter struct__S2_alloc_of_bitvector :
+ _S2_alloc_table:_S2 alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes _S2_alloc_table
+   { (forall p:_S2 pointer.
+      (eq_int(offset_min(_S2_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (8)))
+      and eq_int(offset_max(_S2_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (8))))) }
+
+parameter struct__S2_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  _S2_alloc_table:_S2 alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:_S2 pointer.
+      (eq_int(offset_min(_S2_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (8)))
+      and eq_int(offset_max(_S2_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (8))))) }
+
+parameter struct__S2_mem_of_bitvector :
+ _S2_c_2:(_S2, int8) memory ref ->
+  _S2_f:(_S2, real) memory ref ->
+   _S2_padding_2:(_S2, padding) memory ref ->
+    bitvector:(unit, bitvector) memory ->
+     { } unit writes _S2_c_2,_S2_f,_S2_padding_2
+     { (forall p0:_S2 pointer.
+        eq_int8(select(_S2_c_2, p0),
+        int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                          (1))))) }
+
+parameter struct__S2_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  _S2_c_2:(_S2, int8) memory ->
+   _S2_f:(_S2, real) memory ->
+    _S2_padding_2:(_S2, padding) memory ->
+     { } unit writes bitvector
+     { (forall p0:_S2 pointer.
+        eq_int8(select(_S2_c_2, p0),
+        int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                          (1))))) }
+
+parameter struct_char_P_alloc_of_bitvector :
+ char_P_alloc_table:char_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes char_P_alloc_table
+   { (forall p:char_P pointer.
+      (eq_int(offset_min(char_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (1)))
+      and eq_int(offset_max(char_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (1))))) }
+
+parameter struct_char_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  char_P_alloc_table:char_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:char_P pointer.
+      (eq_int(offset_min(char_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (1)))
+      and eq_int(offset_max(char_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (1))))) }
+
+parameter struct_char_P_mem_of_bitvector :
+ char_P_char_M:(char_P, int8) memory ref ->
+  bitvector:(unit, bitvector) memory ->
+   { } unit writes char_P_char_M
+   { (forall p0:char_P pointer.
+      eq_int8(select(char_P_char_M, p0),
+      int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                        (1))))) }
+
+parameter struct_char_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  char_P_char_M:(char_P, int8) memory ->
+   { } unit writes bitvector
+   { (forall p0:char_P pointer.
+      eq_int8(select(char_P_char_M, p0),
+      int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                        (1))))) }
+
+parameter struct_void_P_alloc_of_bitvector :
+ void_P_alloc_table:void_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes void_P_alloc_table
+   { (forall p:void_P pointer.
+      (eq_int(offset_min(void_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(void_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_void_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  void_P_alloc_table:void_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:void_P pointer.
+      (eq_int(offset_min(void_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(void_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_void_P_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_void_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
 parameter test :
  tt:unit -> { } int32 { (JC_69: eq_int(integer_of_int32(result), (1))) }
 
@@ -2710,11 +2982,11 @@ why --project [...] why/union.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po53.why">
-      <location file = "why/union.why" line = "2412" begin = "33" end = "162"/>
+      <location file = "why/union.why" line = "2684" begin = "33" end = "162"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po54.why">
-      <location file = "why/union.why" line = "2456" begin = "12" end = "51"/>
+      <location file = "why/union.why" line = "2728" begin = "12" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2875,7 +3147,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po3.why">
-      <location file = "why/union.why" line = "1700" begin = "34" end = "172"/>
+      <location file = "why/union.why" line = "1972" begin = "34" end = "172"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po4.why">
@@ -2884,7 +3156,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po5.why">
-      <location file = "why/union.why" line = "1712" begin = "35" end = "175"/>
+      <location file = "why/union.why" line = "1984" begin = "35" end = "175"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po6.why">
@@ -2893,16 +3165,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po7.why">
-      <location file = "why/union.why" line = "1724" begin = "42" end = "198"/>
+      <location file = "why/union.why" line = "1996" begin = "42" end = "198"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po8.why">
-      <location file = "why/union.why" line = "1967" begin = "20" end = "69"/>
+      <location file = "why/union.why" line = "2239" begin = "20" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/union_po9.why">
-      <location file = "why/union.why" line = "1970" begin = "21" end = "70"/>
+      <location file = "why/union.why" line = "2242" begin = "21" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

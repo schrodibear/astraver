@@ -1,9 +1,9 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only simple_union.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD simple_union.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only reverse_endian.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD reverse_endian.c"
 [jessie] Starting Jessie translation
-[jessie] Producing Jessie files in subdir simple_union.jessie
-[jessie] File simple_union.jessie/simple_union.jc written.
-[jessie] File simple_union.jessie/simple_union.cloc written.
+[jessie] Producing Jessie files in subdir reverse_endian.jessie
+[jessie] File reverse_endian.jessie/reverse_endian.jc written.
+[jessie] File reverse_endian.jessie/reverse_endian.cloc written.
 # IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
@@ -20,7 +20,11 @@ type int16 = -32768..32767
 
 type int8 = -128..127
 
-type int32 = -2147483648..2147483647
+tag short_P = {
+  int16 short_M: 16;
+}
+
+type short_P = [short_P]
 
 tag char_P = {
   int8 char_M: 8;
@@ -33,62 +37,36 @@ tag void_P = {
 
 type void_P = [void_P]
 
-tag __anonstruct_s_1 = {
-  int16 s1: 16; 
-  int16 s2: 16;
-}
-
-type __anonstruct_s_1 = [__anonstruct_s_1]
-
-type U = [U & iP & sP]
-
-tag U = {
-  padding padding: 32;
-}
-
-tag iP = {
-  int32 iM: 32;
-}
-
-tag sP = {
-  __anonstruct_s_1[0] sM: 32;
-}
-
-unit zero(U[..] x)
-  requires (C_6 : ((C_7 : (\offset_min(x) <= 0)) &&
-                    (C_8 : (\offset_max(x) >= 0))));
+unit reverse_endian(short_P[..] s)
+  requires (C_12 : ((C_13 : (\offset_min(s) <= 0)) &&
+                     (C_14 : (\offset_max(s) >= 0))));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_15 : (s.short_M ==
+                    ((256 * (\old(s.short_M) % 256)) +
+                      (\old(s.short_M) / 256))));
 {  
-   {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));
-      
-      {  
-         (assert for default: (C_4 : ((x :> sP[0]).sM.s1 == 0)));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_5 : ((x :> sP[0]).sM.s2 == 0)));
-         ()
-      };
+   (var char_P[..] c);
+   
+   (var int8 tmp);
+   
+   {  (C_2 : (c = (C_1 : (s :> char_P[..]))));
+      (C_4 : (tmp = (C_3 : c.char_M)));
+      (C_8 : ((C_7 : c.char_M) = (C_6 : (C_5 : (c + 1)).char_M)));
+      (C_11 : ((C_10 : (C_9 : (c + 1)).char_M) = tmp));
       
       (return ())
    }
 }
-WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs simple_union.jessie/simple_union.cloc simple_union.jessie/simple_union.jc
-type U
-
-type __anonstruct_s_1
-
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs reverse_endian.jessie/reverse_endian.cloc reverse_endian.jessie/reverse_endian.jc
 type char_P
 
 type int16
 
-type int32
-
 type int8
 
 type padding
+
+type short_P
 
 type void_P
 
@@ -98,76 +76,12 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic U_tag:  -> U tag_id
-
-axiom U_int : (int_of_tag(U_tag) = (1))
-
-logic U_of_bitvector: bitvector -> U pointer
-
-logic bitvector_of_U: U pointer -> bitvector
-
-axiom U_of_bitvector_of_bitvector_of_U :
- (forall x:U pointer. (U_of_bitvector(bitvector_of_U(x)) = x))
-
-logic U_of_pointer_address: unit pointer -> U pointer
-
-axiom U_of_pointer_address_of_pointer_addr :
- (forall p:U pointer. (p = U_of_pointer_address(pointer_address(p))))
-
-axiom U_parenttag_bottom : parenttag(U_tag, bottom_tag)
-
-logic iP_tag:  -> U tag_id
-
-logic sP_tag:  -> U tag_id
-
-axiom U_tags :
- (forall x:U pointer.
-  (forall U_tag_table:U tag_table.
-   (instanceof(U_tag_table, x, U_tag)
-   or (instanceof(U_tag_table, x, iP_tag)
-      or instanceof(U_tag_table, x, sP_tag)))))
-
-logic __anonstruct_s_1_tag:  -> __anonstruct_s_1 tag_id
-
-axiom __anonstruct_s_1_int : (int_of_tag(__anonstruct_s_1_tag) = (1))
-
-logic __anonstruct_s_1_of_bitvector: bitvector -> __anonstruct_s_1 pointer
-
-logic bitvector_of___anonstruct_s_1: __anonstruct_s_1 pointer -> bitvector
-
-axiom __anonstruct_s_1_of_bitvector_of_bitvector_of___anonstruct_s_1 :
- (forall x:__anonstruct_s_1 pointer.
-  (__anonstruct_s_1_of_bitvector(bitvector_of___anonstruct_s_1(x)) = x))
-
-logic __anonstruct_s_1_of_pointer_address: unit pointer -> __anonstruct_s_1 pointer
-
-axiom __anonstruct_s_1_of_pointer_address_of_pointer_addr :
- (forall p:__anonstruct_s_1 pointer.
-  (p = __anonstruct_s_1_of_pointer_address(pointer_address(p))))
-
-axiom __anonstruct_s_1_parenttag_bottom :
- parenttag(__anonstruct_s_1_tag, bottom_tag)
-
-axiom __anonstruct_s_1_tags :
- (forall x:__anonstruct_s_1 pointer.
-  (forall __anonstruct_s_1_tag_table:__anonstruct_s_1 tag_table.
-   instanceof(__anonstruct_s_1_tag_table, x, __anonstruct_s_1_tag)))
-
-axiom bitvector_of_U_of_U_of_bitvector :
- (forall x:bitvector. (bitvector_of_U(U_of_bitvector(x)) = x))
-
-axiom bitvector_of___anonstruct_s_1_of___anonstruct_s_1_of_bitvector :
- (forall x:bitvector.
-  (bitvector_of___anonstruct_s_1(__anonstruct_s_1_of_bitvector(x)) = x))
-
 logic bitvector_of_char_P: char_P pointer -> bitvector
 
 logic char_P_of_bitvector: bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector :
  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_iM: int32 -> bitvector
 
 logic bitvector_of_int16: int16 -> bitvector
 
@@ -176,13 +90,6 @@ logic int16_of_bitvector: bitvector -> int16
 axiom bitvector_of_int16_of_int16_of_bitvector :
  (forall x:bitvector. (bitvector_of_int16(int16_of_bitvector(x)) = x))
 
-logic bitvector_of_int32: int32 -> bitvector
-
-logic int32_of_bitvector: bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector :
- (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
 logic bitvector_of_int8: int8 -> bitvector
 
 logic int8_of_bitvector: bitvector -> int8
@@ -190,7 +97,12 @@ logic int8_of_bitvector: bitvector -> int8
 axiom bitvector_of_int8_of_int8_of_bitvector :
  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
-logic bitvector_of_sM: __anonstruct_s_1 pointer -> bitvector
+logic bitvector_of_short_P: short_P pointer -> bitvector
+
+logic short_P_of_bitvector: bitvector -> short_P pointer
+
+axiom bitvector_of_short_P_of_short_P_of_bitvector :
+ (forall x:bitvector. (bitvector_of_short_P(short_P_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P: void_P pointer -> bitvector
 
@@ -225,26 +137,11 @@ predicate eq_int16(x:int16,
  y:int16) =
  eq_int(integer_of_int16(x), integer_of_int16(y))
 
-logic integer_of_int32: int32 -> int
-
-predicate eq_int32(x:int32,
- y:int32) =
- eq_int(integer_of_int32(x), integer_of_int32(y))
-
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8,
  y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic iM_of_bitvector: bitvector -> int32
-
-axiom iM_of_bitvector_of_bitvector_of_iM :
- (forall x:int32. eq_int32(iM_of_bitvector(bitvector_of_iM(x)), x))
-
-axiom iP_int : (int_of_tag(iP_tag) = (2))
-
-axiom iP_parenttag_bottom : parenttag(iP_tag, bottom_tag)
 
 logic int16_of_integer: int -> int16
 
@@ -261,21 +158,6 @@ axiom int16_range :
   (le_int((-32768), integer_of_int16(x))
   and le_int(integer_of_int16(x), (32767))))
 
-logic int32_of_integer: int -> int32
-
-axiom int32_coerce :
- (forall x:int.
-  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
-   eq_int(integer_of_int32(int32_of_integer(x)), x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32 :
- (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range :
- (forall x:int32.
-  (le_int((-2147483648), integer_of_int32(x))
-  and le_int(integer_of_int32(x), (2147483647))))
-
 logic int8_of_integer: int -> int8
 
 axiom int8_coerce :
@@ -290,83 +172,68 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_root_U(p:U pointer,
- a:int,
- U_alloc_table:U alloc_table) =
- (offset_min(U_alloc_table, p) <= a)
-
-predicate left_valid_struct___anonstruct_s_1(p:__anonstruct_s_1 pointer,
- a:int,
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table) =
- (offset_min(__anonstruct_s_1_alloc_table, p) <= a)
-
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
+
+predicate left_valid_struct_short_P(p:short_P pointer,
+ a:int,
+ short_P_alloc_table:short_P alloc_table) =
+ (offset_min(short_P_alloc_table, p) <= a)
 
 predicate left_valid_struct_void_P(p:void_P pointer,
  a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-axiom pointer_addr_of_U_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(U_of_pointer_address(p))))
-
-axiom pointer_addr_of___anonstruct_s_1_of_pointer_address :
- (forall p:unit pointer.
-  (p = pointer_address(__anonstruct_s_1_of_pointer_address(p))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+
+logic short_P_of_pointer_address: unit pointer -> short_P pointer
+
+axiom pointer_addr_of_short_P_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(short_P_of_pointer_address(p))))
 
 logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_root_U(p:U pointer,
- b:int,
- U_alloc_table:U alloc_table) =
- (offset_max(U_alloc_table, p) >= b)
-
-predicate right_valid_struct___anonstruct_s_1(p:__anonstruct_s_1 pointer,
- b:int,
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table) =
- (offset_max(__anonstruct_s_1_alloc_table, p) >= b)
-
 predicate right_valid_struct_char_P(p:char_P pointer,
  b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
+
+predicate right_valid_struct_short_P(p:short_P pointer,
+ b:int,
+ short_P_alloc_table:short_P alloc_table) =
+ (offset_max(short_P_alloc_table, p) >= b)
 
 predicate right_valid_struct_void_P(p:void_P pointer,
  b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-logic sM_of_bitvector: bitvector -> __anonstruct_s_1 pointer
+logic short_P_tag:  -> short_P tag_id
 
-axiom sM_of_bitvector_of_bitvector_of_sM :
- (forall x:__anonstruct_s_1 pointer.
-  (sM_of_bitvector(bitvector_of_sM(x)) = x))
+axiom short_P_int : (int_of_tag(short_P_tag) = (1))
 
-axiom sP_int : (int_of_tag(sP_tag) = (3))
+axiom short_P_of_bitvector_of_bitvector_of_short_P :
+ (forall x:short_P pointer.
+  (short_P_of_bitvector(bitvector_of_short_P(x)) = x))
 
-axiom sP_parenttag_bottom : parenttag(sP_tag, bottom_tag)
+axiom short_P_of_pointer_address_of_pointer_addr :
+ (forall p:short_P pointer.
+  (p = short_P_of_pointer_address(pointer_address(p))))
 
-predicate strict_valid_root_U(p:U pointer,
- a:int,
- b:int,
- U_alloc_table:U alloc_table) =
- ((offset_min(U_alloc_table, p) = a) and (offset_max(U_alloc_table, p) = b))
+axiom short_P_parenttag_bottom : parenttag(short_P_tag, bottom_tag)
 
-predicate strict_valid_root___anonstruct_s_1(p:__anonstruct_s_1 pointer,
- a:int,
- b:int,
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table) =
- ((offset_min(__anonstruct_s_1_alloc_table, p) = a)
- and (offset_max(__anonstruct_s_1_alloc_table, p) = b))
+axiom short_P_tags :
+ (forall x:short_P pointer.
+  (forall short_P_tag_table:short_P tag_table.
+   instanceof(short_P_tag_table, x, short_P_tag)))
 
 predicate strict_valid_root_char_P(p:char_P pointer,
  a:int,
@@ -375,19 +242,19 @@ predicate strict_valid_root_char_P(p:char_P pointer,
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
+predicate strict_valid_root_short_P(p:short_P pointer,
+ a:int,
+ b:int,
+ short_P_alloc_table:short_P alloc_table) =
+ ((offset_min(short_P_alloc_table, p) = a)
+ and (offset_max(short_P_alloc_table, p) = b))
+
 predicate strict_valid_root_void_P(p:void_P pointer,
  a:int,
  b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
-
-predicate strict_valid_struct___anonstruct_s_1(p:__anonstruct_s_1 pointer,
- a:int,
- b:int,
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table) =
- ((offset_min(__anonstruct_s_1_alloc_table, p) = a)
- and (offset_max(__anonstruct_s_1_alloc_table, p) = b))
 
 predicate strict_valid_struct_char_P(p:char_P pointer,
  a:int,
@@ -396,6 +263,13 @@ predicate strict_valid_struct_char_P(p:char_P pointer,
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
+predicate strict_valid_struct_short_P(p:short_P pointer,
+ a:int,
+ b:int,
+ short_P_alloc_table:short_P alloc_table) =
+ ((offset_min(short_P_alloc_table, p) = a)
+ and (offset_max(short_P_alloc_table, p) = b))
+
 predicate strict_valid_struct_void_P(p:void_P pointer,
  a:int,
  b:int,
@@ -403,21 +277,14 @@ predicate strict_valid_struct_void_P(p:void_P pointer,
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_root_U(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) <= a)
- and (offset_max(bitvector_alloc_table, p) >= b))
-
-predicate valid_bitvector_struct___anonstruct_s_1(p:unit pointer,
+predicate valid_bitvector_struct_char_P(p:unit pointer,
  a:int,
  b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
+predicate valid_bitvector_struct_short_P(p:unit pointer,
  a:int,
  b:int,
  bitvector_alloc_table:unit alloc_table) =
@@ -431,26 +298,19 @@ predicate valid_bitvector_struct_void_P(p:unit pointer,
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_U(p:U pointer,
- a:int,
- b:int,
- U_alloc_table:U alloc_table) =
- ((offset_min(U_alloc_table, p) <= a)
- and (offset_max(U_alloc_table, p) >= b))
-
-predicate valid_root___anonstruct_s_1(p:__anonstruct_s_1 pointer,
- a:int,
- b:int,
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table) =
- ((offset_min(__anonstruct_s_1_alloc_table, p) <= a)
- and (offset_max(__anonstruct_s_1_alloc_table, p) >= b))
-
 predicate valid_root_char_P(p:char_P pointer,
  a:int,
  b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_root_short_P(p:short_P pointer,
+ a:int,
+ b:int,
+ short_P_alloc_table:short_P alloc_table) =
+ ((offset_min(short_P_alloc_table, p) <= a)
+ and (offset_max(short_P_alloc_table, p) >= b))
 
 predicate valid_root_void_P(p:void_P pointer,
  a:int,
@@ -459,19 +319,19 @@ predicate valid_root_void_P(p:void_P pointer,
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct___anonstruct_s_1(p:__anonstruct_s_1 pointer,
- a:int,
- b:int,
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table) =
- ((offset_min(__anonstruct_s_1_alloc_table, p) <= a)
- and (offset_max(__anonstruct_s_1_alloc_table, p) >= b))
-
 predicate valid_struct_char_P(p:char_P pointer,
  a:int,
  b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_struct_short_P(p:short_P pointer,
+ a:int,
+ b:int,
+ short_P_alloc_table:short_P alloc_table) =
+ ((offset_min(short_P_alloc_table, p) <= a)
+ and (offset_max(short_P_alloc_table, p) >= b))
 
 predicate valid_struct_void_P(p:void_P pointer,
  a:int,
@@ -498,50 +358,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter U_alloc_table : U alloc_table ref
-
-parameter U_tag_table : U tag_table ref
-
-parameter __anonstruct_s_1_alloc_table : __anonstruct_s_1 alloc_table ref
-
-parameter __anonstruct_s_1_tag_table : __anonstruct_s_1 tag_table ref
-
-parameter alloc_bitvector_root_U :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_root_U(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_root_U_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_root_U(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct___anonstruct_s_1 :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct___anonstruct_s_1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct___anonstruct_s_1_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct___anonstruct_s_1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -556,6 +372,24 @@ parameter alloc_bitvector_struct_char_P_requires :
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
    { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_short_P :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_short_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_short_P_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_short_P(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
@@ -577,50 +411,6 @@ parameter alloc_bitvector_struct_void_P_requires :
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_root_U :
- n:int ->
-  U_alloc_table:U alloc_table ref ->
-   { } U pointer writes U_alloc_table
-   { (strict_valid_root_U(result, (0), sub_int(n, (1)), U_alloc_table)
-     and (alloc_extends(U_alloc_table@, U_alloc_table)
-         and alloc_fresh(U_alloc_table@, result, n))) }
-
-parameter alloc_root_U_requires :
- n:int ->
-  U_alloc_table:U alloc_table ref ->
-   { ge_int(n, (0))} U pointer writes U_alloc_table
-   { (strict_valid_root_U(result, (0), sub_int(n, (1)), U_alloc_table)
-     and (alloc_extends(U_alloc_table@, U_alloc_table)
-         and alloc_fresh(U_alloc_table@, result, n))) }
-
-parameter alloc_struct___anonstruct_s_1 :
- n:int ->
-  __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table ref ->
-   __anonstruct_s_1_tag_table:__anonstruct_s_1 tag_table ref ->
-    { } __anonstruct_s_1 pointer
-    writes __anonstruct_s_1_alloc_table,__anonstruct_s_1_tag_table
-    { (strict_valid_struct___anonstruct_s_1(result, (0), sub_int(n, (1)),
-       __anonstruct_s_1_alloc_table)
-      and (alloc_extends(__anonstruct_s_1_alloc_table@,
-           __anonstruct_s_1_alloc_table)
-          and (alloc_fresh(__anonstruct_s_1_alloc_table@, result, n)
-              and instanceof(__anonstruct_s_1_tag_table, result,
-                  __anonstruct_s_1_tag)))) }
-
-parameter alloc_struct___anonstruct_s_1_requires :
- n:int ->
-  __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table ref ->
-   __anonstruct_s_1_tag_table:__anonstruct_s_1 tag_table ref ->
-    { ge_int(n, (0))} __anonstruct_s_1 pointer
-    writes __anonstruct_s_1_alloc_table,__anonstruct_s_1_tag_table
-    { (strict_valid_struct___anonstruct_s_1(result, (0), sub_int(n, (1)),
-       __anonstruct_s_1_alloc_table)
-      and (alloc_extends(__anonstruct_s_1_alloc_table@,
-           __anonstruct_s_1_alloc_table)
-          and (alloc_fresh(__anonstruct_s_1_alloc_table@, result, n)
-              and instanceof(__anonstruct_s_1_tag_table, result,
-                  __anonstruct_s_1_tag)))) }
 
 parameter char_P_alloc_table : char_P alloc_table ref
 
@@ -648,6 +438,33 @@ parameter alloc_struct_char_P_requires :
       and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
           and (alloc_fresh(char_P_alloc_table@, result, n)
               and instanceof(char_P_tag_table, result, char_P_tag)))) }
+
+parameter short_P_alloc_table : short_P alloc_table ref
+
+parameter short_P_tag_table : short_P tag_table ref
+
+parameter alloc_struct_short_P :
+ n:int ->
+  short_P_alloc_table:short_P alloc_table ref ->
+   short_P_tag_table:short_P tag_table ref ->
+    { } short_P pointer writes short_P_alloc_table,short_P_tag_table
+    { (strict_valid_struct_short_P(result, (0), sub_int(n, (1)),
+       short_P_alloc_table)
+      and (alloc_extends(short_P_alloc_table@, short_P_alloc_table)
+          and (alloc_fresh(short_P_alloc_table@, result, n)
+              and instanceof(short_P_tag_table, result, short_P_tag)))) }
+
+parameter alloc_struct_short_P_requires :
+ n:int ->
+  short_P_alloc_table:short_P alloc_table ref ->
+   short_P_tag_table:short_P tag_table ref ->
+    { ge_int(n, (0))} short_P pointer
+    writes short_P_alloc_table,short_P_tag_table
+    { (strict_valid_struct_short_P(result, (0), sub_int(n, (1)),
+       short_P_alloc_table)
+      and (alloc_extends(short_P_alloc_table@, short_P_alloc_table)
+          and (alloc_fresh(short_P_alloc_table@, result, n)
+              and instanceof(short_P_tag_table, result, short_P_tag)))) }
 
 parameter void_P_alloc_table : void_P alloc_table ref
 
@@ -678,8 +495,6 @@ parameter alloc_struct_void_P_requires :
 
 parameter any_int16 : unit -> { } int16 { true }
 
-parameter any_int32 : unit -> { } int32 { true }
-
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter int16_of_integer_ :
@@ -687,72 +502,43 @@ parameter int16_of_integer_ :
   { (le_int((-32768), x) and le_int(x, (32767)))} int16
   { eq_int(integer_of_int16(result), x) }
 
-parameter int32_of_integer_ :
- x:int ->
-  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
-  { eq_int(integer_of_int32(result), x) }
-
 parameter int8_of_integer_ :
  x:int ->
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
+parameter reverse_endian :
+ s:short_P pointer ->
+  short_P_short_M_s_1:(short_P, int16) memory ref ->
+   short_P_s_1_alloc_table:short_P alloc_table ->
+    { } unit reads short_P_short_M_s_1 writes short_P_short_M_s_1
+    { (JC_10:
+      eq_int(integer_of_int16(select(short_P_short_M_s_1, s)),
+      add_int(mul_int((256),
+              mod_int(integer_of_int16(select(short_P_short_M_s_1@, s@)),
+              (256))),
+      div_int(integer_of_int16(select(short_P_short_M_s_1@, s@)), (256))))) }
+
+parameter reverse_endian_requires :
+ s:short_P pointer ->
+  short_P_short_M_s_1:(short_P, int16) memory ref ->
+   short_P_s_1_alloc_table:short_P alloc_table ->
+    { (JC_3:
+      ((JC_1: le_int(offset_min(short_P_s_1_alloc_table, s), (0)))
+      and (JC_2: ge_int(offset_max(short_P_s_1_alloc_table, s), (0)))))}
+    unit reads short_P_short_M_s_1 writes short_P_short_M_s_1
+    { (JC_10:
+      eq_int(integer_of_int16(select(short_P_short_M_s_1, s)),
+      add_int(mul_int((256),
+              mod_int(integer_of_int16(select(short_P_short_M_s_1@, s@)),
+              (256))),
+      div_int(integer_of_int16(select(short_P_short_M_s_1@, s@)), (256))))) }
+
 parameter safe_int16_of_integer_ :
  x:int -> { } int16 { eq_int(integer_of_int16(result), x) }
 
-parameter safe_int32_of_integer_ :
- x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
-
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
-
-parameter struct___anonstruct_s_1_alloc_of_bitvector :
- __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes __anonstruct_s_1_alloc_table
-   { (forall p:__anonstruct_s_1 pointer.
-      (eq_int(offset_min(__anonstruct_s_1_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
-      and eq_int(offset_max(__anonstruct_s_1_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
-
-parameter struct___anonstruct_s_1_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  __anonstruct_s_1_alloc_table:__anonstruct_s_1 alloc_table ->
-   { } unit writes bitvector_alloc_table
-   { (forall p:__anonstruct_s_1 pointer.
-      (eq_int(offset_min(__anonstruct_s_1_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
-      and eq_int(offset_max(__anonstruct_s_1_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
-
-parameter struct___anonstruct_s_1_mem_of_bitvector :
- __anonstruct_s_1_s1:(__anonstruct_s_1, int16) memory ref ->
-  __anonstruct_s_1_s2:(__anonstruct_s_1, int16) memory ref ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes __anonstruct_s_1_s1,__anonstruct_s_1_s2
-    { ((forall p0:__anonstruct_s_1 pointer.
-        eq_int16(select(__anonstruct_s_1_s1, p0),
-        int16_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
-                           (2)))))
-      and (forall p1:__anonstruct_s_1 pointer.
-           eq_int16(select(__anonstruct_s_1_s2, p1),
-           int16_of_bitvector(select_bytes(bitvector, pointer_address(p1),
-                              (2), (2)))))) }
-
-parameter struct___anonstruct_s_1_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref ->
-  __anonstruct_s_1_s1:(__anonstruct_s_1, int16) memory ->
-   __anonstruct_s_1_s2:(__anonstruct_s_1, int16) memory ->
-    { } unit writes bitvector
-    { ((forall p0:__anonstruct_s_1 pointer.
-        eq_int16(select(__anonstruct_s_1_s1, p0),
-        int16_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
-                           (2)))))
-      and (forall p1:__anonstruct_s_1 pointer.
-           eq_int16(select(__anonstruct_s_1_s2, p1),
-           int16_of_bitvector(select_bytes(bitvector, pointer_address(p1),
-                              (2), (2)))))) }
 
 parameter struct_char_P_alloc_of_bitvector :
  char_P_alloc_table:char_P alloc_table ref ->
@@ -792,6 +578,44 @@ parameter struct_char_P_mem_to_bitvector :
       int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
                         (1))))) }
 
+parameter struct_short_P_alloc_of_bitvector :
+ short_P_alloc_table:short_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes short_P_alloc_table
+   { (forall p:short_P pointer.
+      (eq_int(offset_min(short_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (2)))
+      and eq_int(offset_max(short_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (2))))) }
+
+parameter struct_short_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  short_P_alloc_table:short_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:short_P pointer.
+      (eq_int(offset_min(short_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (2)))
+      and eq_int(offset_max(short_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (2))))) }
+
+parameter struct_short_P_mem_of_bitvector :
+ short_P_short_M:(short_P, int16) memory ref ->
+  bitvector:(unit, bitvector) memory ->
+   { } unit writes short_P_short_M
+   { (forall p0:short_P pointer.
+      eq_int16(select(short_P_short_M, p0),
+      int16_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                         (2))))) }
+
+parameter struct_short_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  short_P_short_M:(short_P, int16) memory ->
+   { } unit writes bitvector
+   { (forall p0:short_P pointer.
+      eq_int16(select(short_P_short_M, p0),
+      int16_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                         (2))))) }
+
 parameter struct_void_P_alloc_of_bitvector :
  void_P_alloc_table:void_P alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
@@ -818,102 +642,108 @@ parameter struct_void_P_mem_of_bitvector :
 parameter struct_void_P_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
-parameter zero :
- x:U pointer ->
-  U_fields_x_1:(U, bitvector) memory ref ->
-   U_x_1_alloc_table:U alloc_table ->
-    { } unit reads U_fields_x_1 writes U_fields_x_1 { true }
-
-parameter zero_requires :
- x:U pointer ->
-  U_fields_x_1:(U, bitvector) memory ref ->
-   U_x_1_alloc_table:U alloc_table ->
-    { (JC_3:
-      ((JC_1: le_int(offset_min(U_x_1_alloc_table, x), (0)))
-      and (JC_2: ge_int(offset_max(U_x_1_alloc_table, x), (0)))))}
-    unit reads U_fields_x_1 writes U_fields_x_1 { true }
-
-let zero_ensures_default =
- fun (x : U pointer) (U_fields_x_1 : (U, bitvector) memory ref) (U_x_1_alloc_table : U alloc_table) ->
+let reverse_endian_ensures_default =
+ fun (s : unit pointer) (bitvector_s_1 : (unit, bitvector) memory ref) (bitvector_s_1_alloc_table : unit alloc_table) ->
   { (JC_7:
-    ((JC_5: le_int(offset_min(U_x_1_alloc_table, x), (0)))
-    and (JC_6: ge_int(offset_max(U_x_1_alloc_table, x), (0))))) }
+    ((JC_5: le_int(offset_min_bytes(bitvector_s_1_alloc_table, s, (2)), (0)))
+    and (JC_6:
+        ge_int(offset_max_bytes(bitvector_s_1_alloc_table, s, (2)), (0))))) }
   (init:
   try
    begin
-     (C_3:
+     (let c = ref (any_pointer void) in
+     (let tmp = ref (any_int8 void) in
+     (C_2:
      begin
-       (let jessie_16 = (let jessie_10 = (safe_int32_of_integer_ (0)) in
-                        (let jessie_11 = (C_1: x) in
-                        (let jessie_12 = ((((replace_bytes ((safe_acc_ !U_fields_x_1) 
-                                                            (C_1:
-                                                            jessie_11))) (0)) (4)) 
-                                          (bitvector_of_int32 jessie_10)) in
-                        (let jessie_15 = (C_1: jessie_11) in
-                        (((safe_upd_ U_fields_x_1) jessie_15) jessie_12))))) in
-       void);
-      (assert
-      { (JC_17:
-        eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(U_fields_x_1,
-                                                                 x),
-                                                   (0), (2)))),
-        (0))) };
-      void);
-      void;
-      (assert
-      { (JC_18:
-        eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(U_fields_x_1,
-                                                                 x),
-                                                   (2), (2)))),
-        (0))) };
-      void);
-      void;
-      (raise Return)
-     end);
+       (let jessie_14 = (c := (C_1: s)) in void);
+      (C_4:
+      begin
+        (let jessie_16 = (tmp := (C_3:
+                                 (int8_of_bitvector ((((safe_acc_bytes_ !bitvector_s_1) !c) (0)) (1))))) in
+        void);
+       (C_8:
+       begin
+         (let jessie_20 = (let jessie_18 = (C_6:
+                                           (int8_of_bitvector ((((safe_acc_bytes_ !bitvector_s_1) 
+                                                                 (C_5:
+                                                                 ((shift !c) (1)))) (0)) (1)))) in
+                          (let jessie_19 = !c in
+                          (let jessie_18 = (bitvector_of_int8 jessie_18) in
+                          (((((safe_upd_bytes_ bitvector_s_1) jessie_19) (0)) (1)) jessie_18)))) in
+         void);
+        (C_11:
+        begin
+          (let jessie_24 = (let jessie_22 = !tmp in
+                           (let jessie_23 = (C_9: ((shift !c) (1))) in
+                           (let jessie_22 = (bitvector_of_int8 jessie_22) in
+                           (((((safe_upd_bytes_ bitvector_s_1) jessie_23) (0)) (1)) jessie_22)))) in
+          void);
+         (raise Return)
+        end)
+       end)
+      end)
+     end)));
     (raise Return)
    end
    with
    Return ->
    void end)
-  { (JC_9: true) }
+  { (JC_9:
+    eq_int(integer_of_int16(int16_of_bitvector(select_bytes(bitvector_s_1, s,
+                                               (0), (2)))),
+    add_int(mul_int((256),
+            mod_int(integer_of_int16(int16_of_bitvector(select_bytes(bitvector_s_1@,
+                                                        s@, (0), (2)))),
+            (256))),
+    div_int(integer_of_int16(int16_of_bitvector(select_bytes(bitvector_s_1@,
+                                                s@, (0), (2)))),
+    (256))))) }
 
-let zero_safety =
- fun (x : U pointer) (U_fields_x_1 : (U, bitvector) memory ref) (U_x_1_alloc_table : U alloc_table) ->
+let reverse_endian_safety =
+ fun (s : unit pointer) (bitvector_s_1 : (unit, bitvector) memory ref) (bitvector_s_1_alloc_table : unit alloc_table) ->
   { (JC_7:
-    ((JC_5: le_int(offset_min(U_x_1_alloc_table, x), (0)))
-    and (JC_6: ge_int(offset_max(U_x_1_alloc_table, x), (0))))) }
+    ((JC_5: le_int(offset_min_bytes(bitvector_s_1_alloc_table, s, (2)), (0)))
+    and (JC_6:
+        ge_int(offset_max_bytes(bitvector_s_1_alloc_table, s, (2)), (0))))) }
   (init:
   try
    begin
-     (C_3:
+     (let c = ref (any_pointer void) in
+     (let tmp = ref (any_int8 void) in
+     (C_2:
      begin
-       (let jessie_8 = (let jessie_2 = (safe_int32_of_integer_ (0)) in
-                       (let jessie_3 = (C_1: x) in
-                       (let jessie_4 = ((((replace_bytes (JC_13:
-                                                         (((acc_ U_x_1_alloc_table) !U_fields_x_1) 
-                                                          (C_1:
-                                                          jessie_3)))) (0)) (4)) 
-                                        (bitvector_of_int32 jessie_2)) in
-                       (let jessie_7 = (C_1: jessie_3) in
-                       (JC_14:
-                       ((((upd_ U_x_1_alloc_table) U_fields_x_1) jessie_7) jessie_4)))))) in
-       void);
-      [ { } unit reads U_fields_x_1
-        { (JC_15:
-          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(U_fields_x_1,
-                                                                   x),
-                                                     (0), (2)))),
-          (0))) } ];
-      void;
-      [ { } unit reads U_fields_x_1
-        { (JC_16:
-          eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(U_fields_x_1,
-                                                                   x),
-                                                     (2), (2)))),
-          (0))) } ];
-      void;
-      (raise Return)
-     end);
+       (let jessie_2 = (c := (C_1: s)) in void);
+      (C_4:
+      begin
+        (let jessie_4 = (tmp := (C_3:
+                                (int8_of_bitvector (JC_13:
+                                                   (((((acc_bytes_ bitvector_s_1_alloc_table) !bitvector_s_1) !c) (0)) (1)))))) in
+        void);
+       (C_8:
+       begin
+         (let jessie_8 = (let jessie_6 = (C_6:
+                                         (int8_of_bitvector (JC_14:
+                                                            (((((acc_bytes_ bitvector_s_1_alloc_table) !bitvector_s_1) 
+                                                               (C_5:
+                                                               ((shift !c) (1)))) (0)) (1))))) in
+                         (let jessie_7 = !c in
+                         (let jessie_6 = (bitvector_of_int8 jessie_6) in
+                         (JC_15:
+                         ((((((upd_bytes_ bitvector_s_1_alloc_table) bitvector_s_1) jessie_7) (0)) (1)) jessie_6))))) in
+         void);
+        (C_11:
+        begin
+          (let jessie_12 = (let jessie_10 = !tmp in
+                           (let jessie_11 = (C_9: ((shift !c) (1))) in
+                           (let jessie_10 = (bitvector_of_int8 jessie_10) in
+                           (JC_16:
+                           ((((((upd_bytes_ bitvector_s_1_alloc_table) bitvector_s_1) jessie_11) (0)) (1)) jessie_10))))) in
+          void);
+         (raise Return)
+        end)
+       end)
+      end)
+     end)));
     (raise Return)
    end
    with
@@ -922,41 +752,57 @@ let zero_safety =
   { true }
 
 
-WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C simple_union.jessie --quiet -f simple_union.makefile project
-why --project [...] why/simple_union.why
-<project name="simple_union" context="why/simple_union_ctx.why">
-  <function name="Function zero">
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C reverse_endian.jessie --quiet -f reverse_endian.makefile project
+why --project [...] why/reverse_endian.why
+<project name="reverse_endian" context="why/reverse_endian_ctx.why">
+  <function name="Function reverse_endian">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/simple_union_po3.why">
-      <location file = "PPCHOME/tests/jessie/simple_union.jessie/simple_union.jc" line = "57" begin = "14" end = "49"/>
+    <goal why_file="why/reverse_endian_po2.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.c" line = "8" begin = "2" end = "6"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/simple_union_po4.why">
-      <location file = "PPCHOME/tests/jessie/simple_union.jessie/simple_union.jc" line = "57" begin = "14" end = "49"/>
+    <goal why_file="why/reverse_endian_po3.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.c" line = "8" begin = "2" end = "6"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/simple_union_po5.why">
-      <location file = "PPCHOME/tests/jessie/simple_union.jessie/simple_union.jc" line = "57" begin = "14" end = "49"/>
+    <goal why_file="why/reverse_endian_po4.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.c" line = "9" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/simple_union_po6.why">
-      <location file = "PPCHOME/tests/jessie/simple_union.jessie/simple_union.jc" line = "57" begin = "14" end = "49"/>
+    <goal why_file="why/reverse_endian_po5.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.c" line = "9" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/reverse_endian_po6.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.jessie/reverse_endian.jc" line = "48" begin = "14" end = "63"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/reverse_endian_po7.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.jessie/reverse_endian.jc" line = "48" begin = "14" end = "63"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/reverse_endian_po8.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.jessie/reverse_endian.jc" line = "49" begin = "15" end = "52"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/reverse_endian_po9.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.jessie/reverse_endian.jc" line = "49" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/simple_union_po1.why">
-      <location file = "PPCHOME/tests/jessie/simple_union.c" line = "10" begin = "13" end = "25"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/simple_union_po2.why">
-      <location file = "PPCHOME/tests/jessie/simple_union.c" line = "11" begin = "13" end = "25"/>
-      <explain kind = "Assert"/>
+    <goal why_file="why/reverse_endian_po1.why">
+      <location file = "PPCHOME/tests/jessie/reverse_endian.c" line = "4" begin = "12" end = "59"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1934,83 +1780,17 @@ logic bitvector_of_integer : int -> bitvector
 
 logic real_of_bitvector : bitvector -> real
 
-type U
-
-type __anonstruct_s_1
-
 type char_P
 
 type int16
-
-type int32
 
 type int8
 
 type padding
 
+type short_P
+
 type void_P
-
-logic U_tag : U tag_id
-
-axiom U_int: (int_of_tag(U_tag) = 1)
-
-logic U_of_bitvector : bitvector -> U pointer
-
-logic bitvector_of_U : U pointer -> bitvector
-
-axiom U_of_bitvector_of_bitvector_of_U:
-  (forall x:U pointer. (U_of_bitvector(bitvector_of_U(x)) = x))
-
-logic U_of_pointer_address : unit pointer -> U pointer
-
-axiom U_of_pointer_address_of_pointer_addr:
-  (forall p:U pointer. (p = U_of_pointer_address(pointer_address(p))))
-
-axiom U_parenttag_bottom: parenttag(U_tag, bottom_tag)
-
-logic iP_tag : U tag_id
-
-logic sP_tag : U tag_id
-
-axiom U_tags:
-  (forall x:U pointer.
-    (forall U_tag_table:U tag_table.
-      (instanceof(U_tag_table, x, U_tag) or
-       (instanceof(U_tag_table, x, iP_tag) or instanceof(U_tag_table, x,
-        sP_tag)))))
-
-logic __anonstruct_s_1_tag : __anonstruct_s_1 tag_id
-
-axiom __anonstruct_s_1_int: (int_of_tag(__anonstruct_s_1_tag) = 1)
-
-logic __anonstruct_s_1_of_bitvector : bitvector -> __anonstruct_s_1 pointer
-
-logic bitvector_of___anonstruct_s_1 : __anonstruct_s_1 pointer -> bitvector
-
-axiom __anonstruct_s_1_of_bitvector_of_bitvector_of___anonstruct_s_1:
-  (forall x:__anonstruct_s_1 pointer.
-    (__anonstruct_s_1_of_bitvector(bitvector_of___anonstruct_s_1(x)) = x))
-
-logic __anonstruct_s_1_of_pointer_address : unit pointer -> __anonstruct_s_1 pointer
-
-axiom __anonstruct_s_1_of_pointer_address_of_pointer_addr:
-  (forall p:__anonstruct_s_1 pointer.
-    (p = __anonstruct_s_1_of_pointer_address(pointer_address(p))))
-
-axiom __anonstruct_s_1_parenttag_bottom: parenttag(__anonstruct_s_1_tag,
-  bottom_tag)
-
-axiom __anonstruct_s_1_tags:
-  (forall x:__anonstruct_s_1 pointer.
-    (forall __anonstruct_s_1_tag_table:__anonstruct_s_1 tag_table.
-      instanceof(__anonstruct_s_1_tag_table, x, __anonstruct_s_1_tag)))
-
-axiom bitvector_of_U_of_U_of_bitvector:
-  (forall x:bitvector. (bitvector_of_U(U_of_bitvector(x)) = x))
-
-axiom bitvector_of___anonstruct_s_1_of___anonstruct_s_1_of_bitvector:
-  (forall x:bitvector.
-    (bitvector_of___anonstruct_s_1(__anonstruct_s_1_of_bitvector(x)) = x))
 
 logic bitvector_of_char_P : char_P pointer -> bitvector
 
@@ -2019,21 +1799,12 @@ logic char_P_of_bitvector : bitvector -> char_P pointer
 axiom bitvector_of_char_P_of_char_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
 
-logic bitvector_of_iM : int32 -> bitvector
-
 logic bitvector_of_int16 : int16 -> bitvector
 
 logic int16_of_bitvector : bitvector -> int16
 
 axiom bitvector_of_int16_of_int16_of_bitvector:
   (forall x:bitvector. (bitvector_of_int16(int16_of_bitvector(x)) = x))
-
-logic bitvector_of_int32 : int32 -> bitvector
-
-logic int32_of_bitvector : bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
 logic bitvector_of_int8 : int8 -> bitvector
 
@@ -2042,7 +1813,12 @@ logic int8_of_bitvector : bitvector -> int8
 axiom bitvector_of_int8_of_int8_of_bitvector:
   (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
-logic bitvector_of_sM : __anonstruct_s_1 pointer -> bitvector
+logic bitvector_of_short_P : short_P pointer -> bitvector
+
+logic short_P_of_bitvector : bitvector -> short_P pointer
+
+axiom bitvector_of_short_P_of_short_P_of_bitvector:
+  (forall x:bitvector. (bitvector_of_short_P(short_P_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P : void_P pointer -> bitvector
 
@@ -2077,24 +1853,10 @@ logic integer_of_int16 : int16 -> int
 predicate eq_int16(x: int16, y: int16) =
   (integer_of_int16(x) = integer_of_int16(y))
 
-logic integer_of_int32 : int32 -> int
-
-predicate eq_int32(x: int32, y: int32) =
-  (integer_of_int32(x) = integer_of_int32(y))
-
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
-
-logic iM_of_bitvector : bitvector -> int32
-
-axiom iM_of_bitvector_of_bitvector_of_iM:
-  (forall x:int32. eq_int32(iM_of_bitvector(bitvector_of_iM(x)), x))
-
-axiom iP_int: (int_of_tag(iP_tag) = 2)
-
-axiom iP_parenttag_bottom: parenttag(iP_tag, bottom_tag)
 
 logic int16_of_integer : int -> int16
 
@@ -2110,21 +1872,6 @@ axiom int16_range:
   (forall x:int16.
     (((-32768) <= integer_of_int16(x)) and (integer_of_int16(x) <= 32767)))
 
-logic int32_of_integer : int -> int32
-
-axiom int32_coerce:
-  (forall x:int.
-    ((((-2147483648) <= x) and (x <= 2147483647)) ->
-     (integer_of_int32(int32_of_integer(x)) = x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32:
-  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range:
-  (forall x:int32.
-    (((-2147483648) <= integer_of_int32(x)) and
-     (integer_of_int32(x) <= 2147483647)))
-
 logic int8_of_integer : int -> int8
 
 axiom int8_coerce:
@@ -2139,31 +1886,27 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-predicate left_valid_root_U(p: U pointer, a: int,
-  U_alloc_table: U alloc_table) = (offset_min(U_alloc_table, p) <= a)
-
-predicate left_valid_struct___anonstruct_s_1(p: __anonstruct_s_1 pointer,
-  a: int, __anonstruct_s_1_alloc_table: __anonstruct_s_1 alloc_table) =
-  (offset_min(__anonstruct_s_1_alloc_table, p) <= a)
-
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
   p) <= a)
+
+predicate left_valid_struct_short_P(p: short_P pointer, a: int,
+  short_P_alloc_table: short_P alloc_table) =
+  (offset_min(short_P_alloc_table, p) <= a)
 
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_U_of_pointer_address:
-  (forall p:unit pointer. (p = pointer_address(U_of_pointer_address(p))))
-
-axiom pointer_addr_of___anonstruct_s_1_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(__anonstruct_s_1_of_pointer_address(p))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
+
+logic short_P_of_pointer_address : unit pointer -> short_P pointer
+
+axiom pointer_addr_of_short_P_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(short_P_of_pointer_address(p))))
 
 logic void_P_of_pointer_address : unit pointer -> void_P pointer
 
@@ -2171,78 +1914,73 @@ axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_root_U(p: U pointer, b: int,
-  U_alloc_table: U alloc_table) = (offset_max(U_alloc_table, p) >= b)
-
-predicate right_valid_struct___anonstruct_s_1(p: __anonstruct_s_1 pointer,
-  b: int, __anonstruct_s_1_alloc_table: __anonstruct_s_1 alloc_table) =
-  (offset_max(__anonstruct_s_1_alloc_table, p) >= b)
-
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_short_P(p: short_P pointer, b: int,
+  short_P_alloc_table: short_P alloc_table) =
+  (offset_max(short_P_alloc_table, p) >= b)
 
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
 
-logic sM_of_bitvector : bitvector -> __anonstruct_s_1 pointer
+logic short_P_tag : short_P tag_id
 
-axiom sM_of_bitvector_of_bitvector_of_sM:
-  (forall x:__anonstruct_s_1 pointer.
-    (sM_of_bitvector(bitvector_of_sM(x)) = x))
+axiom short_P_int: (int_of_tag(short_P_tag) = 1)
 
-axiom sP_int: (int_of_tag(sP_tag) = 3)
+axiom short_P_of_bitvector_of_bitvector_of_short_P:
+  (forall x:short_P pointer.
+    (short_P_of_bitvector(bitvector_of_short_P(x)) = x))
 
-axiom sP_parenttag_bottom: parenttag(sP_tag, bottom_tag)
+axiom short_P_of_pointer_address_of_pointer_addr:
+  (forall p:short_P pointer.
+    (p = short_P_of_pointer_address(pointer_address(p))))
 
-predicate strict_valid_root_U(p: U pointer, a: int, b: int,
-  U_alloc_table: U alloc_table) =
-  ((offset_min(U_alloc_table, p) = a) and (offset_max(U_alloc_table, p) = b))
+axiom short_P_parenttag_bottom: parenttag(short_P_tag, bottom_tag)
 
-predicate strict_valid_root___anonstruct_s_1(p: __anonstruct_s_1 pointer,
-  a: int, b: int,
-  __anonstruct_s_1_alloc_table: __anonstruct_s_1 alloc_table) =
-  ((offset_min(__anonstruct_s_1_alloc_table, p) = a) and
-   (offset_max(__anonstruct_s_1_alloc_table, p) = b))
+axiom short_P_tags:
+  (forall x:short_P pointer.
+    (forall short_P_tag_table:short_P tag_table.
+      instanceof(short_P_tag_table, x, short_P_tag)))
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) = a) and
    (offset_max(char_P_alloc_table, p) = b))
 
+predicate strict_valid_root_short_P(p: short_P pointer, a: int, b: int,
+  short_P_alloc_table: short_P alloc_table) =
+  ((offset_min(short_P_alloc_table, p) = a) and
+   (offset_max(short_P_alloc_table, p) = b))
+
 predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
-
-predicate strict_valid_struct___anonstruct_s_1(p: __anonstruct_s_1 pointer,
-  a: int, b: int,
-  __anonstruct_s_1_alloc_table: __anonstruct_s_1 alloc_table) =
-  ((offset_min(__anonstruct_s_1_alloc_table, p) = a) and
-   (offset_max(__anonstruct_s_1_alloc_table, p) = b))
 
 predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) = a) and
    (offset_max(char_P_alloc_table, p) = b))
 
+predicate strict_valid_struct_short_P(p: short_P pointer, a: int, b: int,
+  short_P_alloc_table: short_P alloc_table) =
+  ((offset_min(short_P_alloc_table, p) = a) and
+   (offset_max(short_P_alloc_table, p) = b))
+
 predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_root_U(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) <= a) and
-   (offset_max(bitvector_alloc_table, p) >= b))
-
-predicate valid_bitvector_struct___anonstruct_s_1(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_short_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
@@ -2252,35 +1990,30 @@ predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_U(p: U pointer, a: int, b: int,
-  U_alloc_table: U alloc_table) =
-  ((offset_min(U_alloc_table, p) <= a) and (offset_max(U_alloc_table,
-   p) >= b))
-
-predicate valid_root___anonstruct_s_1(p: __anonstruct_s_1 pointer, a: int,
-  b: int, __anonstruct_s_1_alloc_table: __anonstruct_s_1 alloc_table) =
-  ((offset_min(__anonstruct_s_1_alloc_table, p) <= a) and
-   (offset_max(__anonstruct_s_1_alloc_table, p) >= b))
-
 predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) <= a) and
    (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_root_short_P(p: short_P pointer, a: int, b: int,
+  short_P_alloc_table: short_P alloc_table) =
+  ((offset_min(short_P_alloc_table, p) <= a) and
+   (offset_max(short_P_alloc_table, p) >= b))
 
 predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) <= a) and
    (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct___anonstruct_s_1(p: __anonstruct_s_1 pointer, a: int,
-  b: int, __anonstruct_s_1_alloc_table: __anonstruct_s_1 alloc_table) =
-  ((offset_min(__anonstruct_s_1_alloc_table, p) <= a) and
-   (offset_max(__anonstruct_s_1_alloc_table, p) >= b))
-
 predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) <= a) and
    (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_struct_short_P(p: short_P pointer, a: int, b: int,
+  short_P_alloc_table: short_P alloc_table) =
+  ((offset_min(short_P_alloc_table, p) <= a) and
+   (offset_max(short_P_alloc_table, p) >= b))
 
 predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
