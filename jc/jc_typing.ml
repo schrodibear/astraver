@@ -2775,7 +2775,7 @@ let rec term_occurrences table t =
     | JCTmatch (_, _) -> assert false (* TODO *)
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)
-    | JCTreal_cast (_, _) -> assert false (* TODO *)
+    | JCTreal_cast (t, _) -> term_occurrences table t
     | JCTbitwise_cast (_, _, _) -> assert false (* TODO *)
     | JCTcast (_, _, _) -> assert false (* TODO *)
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
