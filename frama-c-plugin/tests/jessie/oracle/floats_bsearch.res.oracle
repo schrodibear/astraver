@@ -81,17 +81,17 @@ behavior failure:
       
       {  
          loop 
-         behavior default:
-           invariant (C_8 : ((C_9 : (0 <= l)) && (C_10 : (u <= (n - 1)))));
          behavior failure:
-           invariant (C_7 : (\forall integer k_0;
+           invariant (C_10 : (\forall integer k;
+                               (((u < k) && (k <= (n - 1))) ==>
+                                 \lt_double(v, (t + k).double_M))));
+         behavior default:
+           invariant (C_6 : ((C_7 : (0 <= l)) && (C_8 : (u <= (n - 1)))));
+         behavior failure:
+           invariant (C_5 : (\forall integer k_0;
                               (((0 <= k_0) && (k_0 < l)) ==>
                                 \lt_double((t + k_0).double_M, v))));
-         behavior failure:
-           invariant (C_6 : (\forall integer k;
-                              (((u < k) && (k <= (n - 1))) ==>
-                                \lt_double(v, (t + k).double_M))));
-         variant (C_5 : (u - l));
+         variant (C_9 : (u - l));
          while (true)
          {  
             {  (if (l <= u) then () else 
@@ -889,24 +889,23 @@ let binary_search_ensures_failure =
                                              while true do
                                              { invariant
                                                  ((JC_57:
-                                                  (forall k:int.
-                                                   ((lt_int(integer_of_int32(u),
-                                                     k)
-                                                    and le_int(k,
-                                                        sub_int(integer_of_int32(n),
-                                                        (1)))) ->
-                                                    lt_double(v,
-                                                    select(double_P_double_M_t_2,
-                                                    shift(t_0, k))))))
+                                                  (forall k_0:int.
+                                                   ((le_int((0), k_0)
+                                                    and lt_int(k_0,
+                                                        integer_of_int32(l))) ->
+                                                    lt_double(select(double_P_double_M_t_2,
+                                                              shift(t_0, k_0)),
+                                                    v))))
                                                  and (JC_58:
-                                                     (forall k_0:int.
-                                                      ((le_int((0), k_0)
-                                                       and lt_int(k_0,
-                                                           integer_of_int32(l))) ->
-                                                       lt_double(select(double_P_double_M_t_2,
-                                                                 shift(t_0,
-                                                                 k_0)),
-                                                       v)))))
+                                                     (forall k:int.
+                                                      ((lt_int(integer_of_int32(u),
+                                                        k)
+                                                       and le_int(k,
+                                                           sub_int(integer_of_int32(n),
+                                                           (1)))) ->
+                                                       lt_double(v,
+                                                       select(double_P_double_M_t_2,
+                                                       shift(t_0, k)))))))
                                                 }
                                               begin
                                                 [ { } unit reads l,u
@@ -1521,19 +1520,19 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Normal behavior `failure'">
     <goal why_file="why/floats_bsearch_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "29" begin = "10" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "26" begin = "10" end = "72"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_bsearch_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "26" begin = "10" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "29" begin = "10" end = "74"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_bsearch_po10.why">
-      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "29" begin = "10" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "26" begin = "10" end = "72"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_bsearch_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "26" begin = "10" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/floats_bsearch.c" line = "29" begin = "10" end = "74"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_bsearch_po12.why">

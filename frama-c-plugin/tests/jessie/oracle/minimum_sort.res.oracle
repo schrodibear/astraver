@@ -150,19 +150,19 @@ behavior permutation:
                
                {  
                   loop 
+                  behavior permutation:
+                    invariant (C_45 : Permut{Pre, Here}(t, 0, (n - 1)));
                   behavior default:
-                    invariant (C_41 : ((C_42 : (i_0 < j_0)) &&
-                                        ((C_44 : (i_0 <= mi)) &&
-                                          (C_45 : (mi < n)))));
+                    invariant (C_39 : ((C_40 : (i_0 < j_0)) &&
+                                        ((C_42 : (i_0 <= mi)) &&
+                                          (C_43 : (mi < n)))));
                   behavior sorted:
-                    invariant (C_38 : ((C_39 : (mv == (t + mi).int_M)) &&
-                                        (C_40 : (\forall integer k_0;
+                    invariant (C_36 : ((C_37 : (mv == (t + mi).int_M)) &&
+                                        (C_38 : (\forall integer k_0;
                                                   (((i_0 <= k_0) &&
                                                      (k_0 < j_0)) ==>
                                                     ((t + k_0).int_M >= mv))))));
-                  behavior permutation:
-                    invariant (C_37 : Permut{Pre, Here}(t, 0, (n - 1)));
-                  variant (C_36 : (n - j_0));
+                  variant (C_44 : (n - j_0));
                   while (true)
                   {  
                      {  (if (j_0 < n) then () else 

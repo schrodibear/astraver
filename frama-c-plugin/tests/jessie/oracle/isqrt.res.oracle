@@ -421,9 +421,9 @@ behavior default:
       {  
          (assert for default: (C_30 : (1 <= (2147483647 >>> s))));
          
-         (assert for default: (C_29 : (s < 32)));
+         (assert for default: (C_29 : (s >= 0)));
          
-         (assert for default: (C_28 : (s >= 0)));
+         (assert for default: (C_28 : (s < 32)));
          (C_33 : (g0 = (C_32 : ((C_31 : (1 << s)) :> int32))))
       };
       
@@ -1680,13 +1680,13 @@ let isqrt_ensures_default =
                                              void);
                                             (assert
                                             { (JC_45:
-                                              lt_int(integer_of_int32(s_33),
-                                              (32))) };
+                                              ge_int(integer_of_int32(s_33),
+                                              (0))) };
                                             void);
                                             (assert
                                             { (JC_46:
-                                              ge_int(integer_of_int32(s_33),
-                                              (0))) };
+                                              lt_int(integer_of_int32(s_33),
+                                              (32))) };
                                             void);
                                             (C_33:
                                             begin
@@ -1963,12 +1963,12 @@ let isqrt_safety =
                                                  integer_of_int32(s_33)))) } ];
                                             [ { } unit reads s_33
                                               { (JC_22:
-                                                lt_int(integer_of_int32(s_33),
-                                                (32))) } ];
-                                            [ { } unit reads s_33
-                                              { (JC_23:
                                                 ge_int(integer_of_int32(s_33),
                                                 (0))) } ];
+                                            [ { } unit reads s_33
+                                              { (JC_23:
+                                                lt_int(integer_of_int32(s_33),
+                                                (32))) } ];
                                             (C_33:
                                             begin
                                               (g0 := (C_32:

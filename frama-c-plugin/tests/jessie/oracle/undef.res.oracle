@@ -556,11 +556,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_59 : (x_24 <= 0)));
+         (assert for default: (C_59 : (32 < 32)));
          
          (assert for default: (C_58 : (x_24 >= 0)));
          
-         (assert for default: (C_57 : (32 < 32)));
+         (assert for default: (C_57 : (x_24 <= 0)));
          (C_62 : (__retres_10 = (C_61 : ((C_60 : (x_24 * 4294967296)) :> int32))))
       };
       
@@ -576,11 +576,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_66 : (x_34 <= (2147483647 >>> -1))));
+         (assert for default: (C_66 : (-1 >= 0)));
          
          (assert for default: (C_65 : (x_34 >= 0)));
          
-         (assert for default: (C_64 : (-1 >= 0)));
+         (assert for default: (C_64 : (x_34 <= (2147483647 >>> -1))));
          (C_69 : (__retres_11 = (C_68 : ((C_67 : (x_34 << -1)) :> int32))))
       };
       
@@ -608,13 +608,13 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_76 : (x_14 <= (2147483647 >>> y_9))));
+         (assert for default: (C_76 : (y_9 >= 0)));
          
-         (assert for default: (C_75 : (x_14 >= 0)));
+         (assert for default: (C_75 : (y_9 < 32)));
          
-         (assert for default: (C_74 : (y_9 < 32)));
+         (assert for default: (C_74 : (x_14 >= 0)));
          
-         (assert for default: (C_73 : (y_9 >= 0)));
+         (assert for default: (C_73 : (x_14 <= (2147483647 >>> y_9))));
          (C_79 : (__retres_13 = (C_78 : ((C_77 : (x_14 << y_9)) :> int32))))
       };
       
@@ -643,9 +643,9 @@ behavior default:
                        (goto return_label)
                     } else 
                     {  
-                       (assert for default: (C_82 : (y_15 < 32)));
+                       (assert for default: (C_82 : (y_15 >= 0)));
                        
-                       (assert for default: (C_81 : (y_15 >= 0)));
+                       (assert for default: (C_81 : (y_15 < 32)));
                        (if (x_22 >
                              (C_92 : ((C_91 : (2147483647 >>> y_15)) :> int32))) then 
                        {  (C_90 : (__retres_14 = 0));
@@ -654,15 +654,15 @@ behavior default:
                        } else 
                        {  
                           {  
-                             (assert for default: (C_86 : (x_22 <=
+                             (assert for default: (C_86 : (y_15 >= 0)));
+                             
+                             (assert for default: (C_85 : (y_15 < 32)));
+                             
+                             (assert for default: (C_84 : (x_22 >= 0)));
+                             
+                             (assert for default: (C_83 : (x_22 <=
                                                             (2147483647 >>>
                                                               y_15))));
-                             
-                             (assert for default: (C_85 : (x_22 >= 0)));
-                             
-                             (assert for default: (C_84 : (y_15 < 32)));
-                             
-                             (assert for default: (C_83 : (y_15 >= 0)));
                              (C_89 : (__retres_14 = (C_88 : ((C_87 : 
                                                              (x_22 <<
                                                                y_15)) :> int32))))
@@ -774,9 +774,9 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_128 : (y_28 < 32)));
+         (assert for default: (C_128 : (y_28 >= 0)));
          
-         (assert for default: (C_127 : (y_28 >= 0)));
+         (assert for default: (C_127 : (y_28 < 32)));
          (C_131 : (__retres_20 = (C_130 : ((C_129 : (x_40 >>> y_28)) :> int32))))
       };
       
@@ -802,9 +802,9 @@ behavior default:
              } else 
              {  
                 {  
-                   (assert for default: (C_134 : (y_7 < 32)));
+                   (assert for default: (C_134 : (y_7 >= 0)));
                    
-                   (assert for default: (C_133 : (y_7 >= 0)));
+                   (assert for default: (C_133 : (y_7 < 32)));
                    (C_137 : (__retres_21 = (C_136 : ((C_135 : (x_10 >>> y_7)) :> int32))))
                 };
                 
@@ -6839,10 +6839,11 @@ let shift_left_signed_safe_ensures_default =
                              begin
                                (assert
                                { (JC_452:
-                                 lt_int(integer_of_int32(y_15), (32))) };
+                                 ge_int(integer_of_int32(y_15), (0))) };
                                void);
                               (assert
-                              { (JC_453: ge_int(integer_of_int32(y_15), (0))) };
+                              { (JC_453:
+                                lt_int(integer_of_int32(y_15), (32))) };
                               void);
                               (if ((gt_int_ (integer_of_int32 x_22)) 
                                    (integer_of_int32 (C_92:
@@ -6867,24 +6868,24 @@ let shift_left_signed_safe_ensures_default =
                                                    begin
                                                      (assert
                                                      { (JC_454:
-                                                       le_int(integer_of_int32(x_22),
-                                                       asr((2147483647),
-                                                       integer_of_int32(y_15)))) };
+                                                       ge_int(integer_of_int32(y_15),
+                                                       (0))) };
                                                      void);
                                                     (assert
                                                     { (JC_455:
-                                                      ge_int(integer_of_int32(x_22),
-                                                      (0))) };
-                                                    void);
-                                                    (assert
-                                                    { (JC_456:
                                                       lt_int(integer_of_int32(y_15),
                                                       (32))) };
                                                     void);
                                                     (assert
-                                                    { (JC_457:
-                                                      ge_int(integer_of_int32(y_15),
+                                                    { (JC_456:
+                                                      ge_int(integer_of_int32(x_22),
                                                       (0))) };
+                                                    void);
+                                                    (assert
+                                                    { (JC_457:
+                                                      le_int(integer_of_int32(x_22),
+                                                      asr((2147483647),
+                                                      integer_of_int32(y_15)))) };
                                                     void);
                                                     (C_89:
                                                     begin
@@ -6977,10 +6978,10 @@ let shift_left_signed_safe_safety =
                              begin
                                [ { } unit
                                  { (JC_444:
-                                   lt_int(integer_of_int32(y_15), (32))) } ];
+                                   ge_int(integer_of_int32(y_15), (0))) } ];
                               [ { } unit
                                 { (JC_445:
-                                  ge_int(integer_of_int32(y_15), (0))) } ];
+                                  lt_int(integer_of_int32(y_15), (32))) } ];
                               (if ((gt_int_ (integer_of_int32 x_22)) 
                                    (integer_of_int32 (C_92:
                                                      (JC_446:
@@ -7005,21 +7006,21 @@ let shift_left_signed_safe_safety =
                                                    begin
                                                      [ { } unit
                                                        { (JC_447:
-                                                         le_int(integer_of_int32(x_22),
-                                                         asr((2147483647),
-                                                         integer_of_int32(y_15)))) } ];
+                                                         ge_int(integer_of_int32(y_15),
+                                                         (0))) } ];
                                                     [ { } unit
                                                       { (JC_448:
-                                                        ge_int(integer_of_int32(x_22),
-                                                        (0))) } ];
-                                                    [ { } unit
-                                                      { (JC_449:
                                                         lt_int(integer_of_int32(y_15),
                                                         (32))) } ];
                                                     [ { } unit
-                                                      { (JC_450:
-                                                        ge_int(integer_of_int32(y_15),
+                                                      { (JC_449:
+                                                        ge_int(integer_of_int32(x_22),
                                                         (0))) } ];
+                                                    [ { } unit
+                                                      { (JC_450:
+                                                        le_int(integer_of_int32(x_22),
+                                                        asr((2147483647),
+                                                        integer_of_int32(y_15)))) } ];
                                                     (C_89:
                                                     begin
                                                       (__retres_14 := 
@@ -7072,18 +7073,18 @@ let shift_left_signed_unsafe_ensures_default =
      begin
        (let jessie_145 = begin
                            (assert
-                           { (JC_423:
-                             le_int(integer_of_int32(x_14),
-                             asr((2147483647), integer_of_int32(y_9)))) };
+                           { (JC_423: ge_int(integer_of_int32(y_9), (0))) };
                            void);
                           (assert
-                          { (JC_424: ge_int(integer_of_int32(x_14), (0))) };
+                          { (JC_424: lt_int(integer_of_int32(y_9), (32))) };
                           void);
                           (assert
-                          { (JC_425: lt_int(integer_of_int32(y_9), (32))) };
+                          { (JC_425: ge_int(integer_of_int32(x_14), (0))) };
                           void);
                           (assert
-                          { (JC_426: ge_int(integer_of_int32(y_9), (0))) };
+                          { (JC_426:
+                            le_int(integer_of_int32(x_14),
+                            asr((2147483647), integer_of_int32(y_9)))) };
                           void);
                           (C_79:
                           begin
@@ -7119,15 +7120,15 @@ let shift_left_signed_unsafe_safety =
      begin
        (let jessie_142 = begin
                            [ { } unit
-                             { (JC_418:
-                               le_int(integer_of_int32(x_14),
-                               asr((2147483647), integer_of_int32(y_9)))) } ];
+                             { (JC_418: ge_int(integer_of_int32(y_9), (0))) } ];
                           [ { } unit
-                            { (JC_419: ge_int(integer_of_int32(x_14), (0))) } ];
+                            { (JC_419: lt_int(integer_of_int32(y_9), (32))) } ];
                           [ { } unit
-                            { (JC_420: lt_int(integer_of_int32(y_9), (32))) } ];
+                            { (JC_420: ge_int(integer_of_int32(x_14), (0))) } ];
                           [ { } unit
-                            { (JC_421: ge_int(integer_of_int32(y_9), (0))) } ];
+                            { (JC_421:
+                              le_int(integer_of_int32(x_14),
+                              asr((2147483647), integer_of_int32(y_9)))) } ];
                           (C_79:
                           begin
                             (__retres_13 := (C_78:
@@ -7164,13 +7165,13 @@ let shift_left_signed_wrong_1_ensures_default =
      (let __retres_10 = ref (any_int32 void) in
      begin
        (let jessie_127 = begin
-                           (assert
-                           { (JC_360: le_int(integer_of_int32(x_24), (0))) };
-                           void);
+                           (assert { (JC_360: lt_int((32), (32))) }; void);
                           (assert
                           { (JC_361: ge_int(integer_of_int32(x_24), (0))) };
                           void);
-                          (assert { (JC_362: lt_int((32), (32))) }; void);
+                          (assert
+                          { (JC_362: le_int(integer_of_int32(x_24), (0))) };
+                          void);
                           (C_62:
                           begin
                             (__retres_10 := (C_61:
@@ -7203,11 +7204,11 @@ let shift_left_signed_wrong_1_safety =
      (let __retres_10 = ref (any_int32 void) in
      begin
        (let jessie_124 = begin
-                           [ { } unit
-                             { (JC_356: le_int(integer_of_int32(x_24), (0))) } ];
+                           [ { } unit { (JC_356: lt_int((32), (32))) } ];
                           [ { } unit
                             { (JC_357: ge_int(integer_of_int32(x_24), (0))) } ];
-                          [ { } unit { (JC_358: lt_int((32), (32))) } ];
+                          [ { } unit
+                            { (JC_358: le_int(integer_of_int32(x_24), (0))) } ];
                           (C_62:
                           begin
                             (__retres_10 := (C_61:
@@ -7244,15 +7245,15 @@ let shift_left_signed_wrong_2_ensures_default =
      begin
        (let jessie_133 = begin
                            (assert
-                           { (JC_383:
-                             le_int(integer_of_int32(x_34),
-                             asr((2147483647), neg_int((1))))) };
+                           { (JC_383: ge_int(neg_int((1)), (0))) };
                            void);
                           (assert
                           { (JC_384: ge_int(integer_of_int32(x_34), (0))) };
                           void);
                           (assert
-                          { (JC_385: ge_int(neg_int((1)), (0))) };
+                          { (JC_385:
+                            le_int(integer_of_int32(x_34),
+                            asr((2147483647), neg_int((1))))) };
                           void);
                           (C_69:
                           begin
@@ -7287,13 +7288,13 @@ let shift_left_signed_wrong_2_safety =
      (let __retres_11 = ref (any_int32 void) in
      begin
        (let jessie_130 = begin
-                           [ { } unit
-                             { (JC_379:
-                               le_int(integer_of_int32(x_34),
-                               asr((2147483647), neg_int((1))))) } ];
+                           [ { } unit { (JC_379: ge_int(neg_int((1)), (0))) } ];
                           [ { } unit
                             { (JC_380: ge_int(integer_of_int32(x_34), (0))) } ];
-                          [ { } unit { (JC_381: ge_int(neg_int((1)), (0))) } ];
+                          [ { } unit
+                            { (JC_381:
+                              le_int(integer_of_int32(x_34),
+                              asr((2147483647), neg_int((1))))) } ];
                           (C_69:
                           begin
                             (__retres_11 := (C_68:
@@ -7678,16 +7679,16 @@ let shift_right_signed_safe_ensures_default =
                                                                     (assert
                                                                     { 
                                                                     (JC_596:
-                                                                    lt_int(
+                                                                    ge_int(
                                                                     integer_of_int32(y_7),
-                                                                    (32))) };
+                                                                    (0))) };
                                                                     void);
                                                                    (assert
                                                                    { 
                                                                    (JC_597:
-                                                                   ge_int(
+                                                                   lt_int(
                                                                    integer_of_int32(y_7),
-                                                                   (0))) };
+                                                                   (32))) };
                                                                    void);
                                                                    (C_137:
                                                                    begin
@@ -7770,15 +7771,15 @@ let shift_right_signed_safe_safety =
                                                                     [ 
                                                                     { } unit
                                                                     { (JC_593:
-                                                                    lt_int(
-                                                                    integer_of_int32(y_7),
-                                                                    (32))) } ];
-                                                                   [ 
-                                                                   { } unit
-                                                                   { (JC_594:
                                                                     ge_int(
                                                                     integer_of_int32(y_7),
                                                                     (0))) } ];
+                                                                   [ 
+                                                                   { } unit
+                                                                   { (JC_594:
+                                                                    lt_int(
+                                                                    integer_of_int32(y_7),
+                                                                    (32))) } ];
                                                                    (C_137:
                                                                    begin
                                                                      
@@ -7832,10 +7833,10 @@ let shift_right_signed_unsafe_ensures_default =
      begin
        (let jessie_229 = begin
                            (assert
-                           { (JC_574: lt_int(integer_of_int32(y_28), (32))) };
+                           { (JC_574: ge_int(integer_of_int32(y_28), (0))) };
                            void);
                           (assert
-                          { (JC_575: ge_int(integer_of_int32(y_28), (0))) };
+                          { (JC_575: lt_int(integer_of_int32(y_28), (32))) };
                           void);
                           (C_131:
                           begin
@@ -7871,9 +7872,9 @@ let shift_right_signed_unsafe_safety =
      begin
        (let jessie_226 = begin
                            [ { } unit
-                             { (JC_571: lt_int(integer_of_int32(y_28), (32))) } ];
+                             { (JC_571: ge_int(integer_of_int32(y_28), (0))) } ];
                           [ { } unit
-                            { (JC_572: ge_int(integer_of_int32(y_28), (0))) } ];
+                            { (JC_572: lt_int(integer_of_int32(y_28), (32))) } ];
                           (C_131:
                           begin
                             (__retres_20 := (C_130:

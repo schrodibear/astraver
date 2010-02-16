@@ -212,21 +212,21 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((((((C_8 : (low <= i)) && (C_9 : (i <= high))) &&
-                                 (C_10 : Permut(contents{Here}(a_0),
-                                                \at(contents{Pre}(a_0),Pre),
-                                                low, high))) &&
-                                (C_11 : (\forall int32 k_2;
+           invariant (C_2 : ((((((C_7 : (low <= i)) && (C_8 : (i <= high))) &&
+                                 (C_9 : Permut(contents{Here}(a_0),
+                                               \at(contents{Pre}(a_0),Pre),
+                                               low, high))) &&
+                                (C_10 : (\forall int32 k_2;
                                           (((low < k_2) && (k_2 <= high)) ==>
                                             Hnode{Here}(a_0, k_2, high))))) &&
-                               (C_12 : ((low < i) ==>
+                               (C_11 : ((low < i) ==>
                                          Hnode{Here}(a_0, low, high)))) &&
-                              (C_13 : ((low <= ((i - 1) / 2)) ==>
+                              (C_12 : ((low <= ((i - 1) / 2)) ==>
                                         ((a_0 + ((i - 1) / 2)).int_M >= v)))));
          behavior default:
            
            assigns (a_0 + [low..high]).int_M;
-         variant (C_2 : (high - i));
+         variant (C_13 : (high - i));
          while (true)
          {  
             {  
@@ -2542,11 +2542,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
@@ -2578,11 +2578,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">

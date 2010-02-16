@@ -1247,7 +1247,12 @@ object(self)
 	in
 	let app = within_bounds ~strict:false v off in
 	let cur_stmt = the self#current_stmt in
-	Annotations.add_alarm cur_stmt ~before:true Alarms.Other_alarm app
+	Annotations.add_alarm 
+	  cur_stmt
+	  [ Jessie_options.Analysis.self ] 
+	  ~before:true 
+	  Alarms.Other_alarm 
+	  app
     end;
     DoChildren
 
@@ -1267,12 +1272,19 @@ object(self)
 		  let rel1 = within_bounds ~strict:true v off in
 		  let supst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
 		  Annotations.add_alarm
-		    supst ~before:true Alarms.Other_alarm rel1;
-
+		    supst
+		    [ Jessie_options.Analysis.self ] 
+		    ~before:true 
+		    Alarms.Other_alarm 
+		    rel1;
 		  let rel2 = reach_upper_bound ~loose:false v off in
 		  let eqst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
 		  Annotations.add_alarm
-		    eqst ~before:true Alarms.Other_alarm rel2;
+		    eqst
+		    [ Jessie_options.Analysis.self ] 
+		    ~before:true 
+		    Alarms.Other_alarm 
+		    rel2;
 
 		  (* Rather add skip statement as blocks may be empty *)
 		  if neg then
@@ -1306,11 +1318,16 @@ object(self)
 		  let rel =
 		    Logic_const.new_predicate (Logic_const.prel (Req,lvt,e'))
 		  in
-		  let prel = Logic_const.pred_of_id_pred
-		    { rel with ip_name = [ name_of_hint_assertion ] }
+		  let prel = 
+		    Logic_const.pred_of_id_pred
+		      { rel with ip_name = [ name_of_hint_assertion ] }
 		  in
 		  Annotations.add_alarm
-		    s ~before:false Alarms.Other_alarm prel;
+		    s 
+		    [ Jessie_options.Analysis.self ] 
+		    ~before:false 
+		    Alarms.Other_alarm 
+		    prel;
 		  (* Further help ATP by asserting that index should be
 		     positive *)
 (* 		  let rel = *)
@@ -1326,7 +1343,11 @@ object(self)
 		     be the new length of a string *)
 		  let rel = reach_upper_bound ~loose:true v off in
 		  Annotations.add_alarm
-		    s ~before:false Alarms.Other_alarm rel
+		    s
+		    [ Jessie_options.Analysis.self ] 
+		    ~before:false 
+		    Alarms.Other_alarm 
+		    rel
 	  else ();
 	  s
       | Instr(Set((Var v1,NoOffset),e,_loc)) ->
@@ -1385,7 +1406,11 @@ object(self)
 		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
 		in
 		Annotations.add_alarm
-		  cur_stmt ~before:true Alarms.Shift_alarm check
+		  cur_stmt
+		  [ Jessie_options.Analysis.self ]
+		  ~before:true
+		  Alarms.Shift_alarm 
+		  check
 	  end
 	else ();
 	(* Check that shift has not too big a right operand. *)
@@ -1399,7 +1424,11 @@ object(self)
 		!Db.Properties.Interp.force_exp_to_predicate locUnknown check
 	      in
 	      Annotations.add_alarm
-		cur_stmt ~before:true Alarms.Shift_alarm check
+		cur_stmt
+		[ Jessie_options.Analysis.self ] 
+		~before:true
+		Alarms.Shift_alarm 
+		check
 	end;
 	(* Check that signed left shift has a positive left operand *)
 	if is_left_shift && isSignedInteger ty1 then
@@ -1411,7 +1440,11 @@ object(self)
 		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
 		in
 		Annotations.add_alarm
-		  cur_stmt ~before:true Alarms.Shift_alarm check
+		  cur_stmt
+		  [ Jessie_options.Analysis.self ] 
+		  ~before:true
+		  Alarms.Shift_alarm 
+		  check
 	  end
 	else ();
 	(* Check that signed left shift has not a left operand that is bigger
@@ -1434,7 +1467,11 @@ object(self)
 		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
 		in
 		Annotations.add_alarm
-		  cur_stmt ~before:true Alarms.Shift_alarm check
+		  cur_stmt
+		  [ Jessie_options.Analysis.self ] 
+		  ~before:true 
+		  Alarms.Shift_alarm 
+		  check
 	    | _ ->
 		let max_int = constant_expr max_int in
 		let max_left = new_exp (BinOp(Shiftrt,max_int,e2',intType)) in
@@ -1443,7 +1480,11 @@ object(self)
 		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
 		in
 		Annotations.add_alarm
-		  cur_stmt ~before:true Alarms.Shift_alarm check
+		  cur_stmt 
+		  [ Jessie_options.Analysis.self ] 
+		  ~before:true 
+		  Alarms.Shift_alarm 
+		  check
 	  end
 	else ();
 	DoChildren

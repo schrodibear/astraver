@@ -187,15 +187,15 @@ behavior default:
                {  
                   loop 
                   behavior default:
+                    
+                    assigns (Y + [(i * LDY)..((i * LDY) + (k - 1))]).double_M;
+                  behavior default:
                     invariant (C_8 : (((C_10 : (0 <= k)) &&
                                         (C_11 : (k <= K_0))) &&
                                        (C_12 : temporary_is_exact_int_mat_bounded_by{Here}(
                                        Y, LDY, i, K_0, k,
                                        (((1 - p_1) * (p_1 - 1)) * M),
                                        (p_1 - 1)))));
-                  behavior default:
-                    
-                    assigns (Y + [(i * LDY)..((i * LDY) + (k - 1))]).double_M;
                   while (true)
                   {  
                      {  (if (k < K_0) then () else 

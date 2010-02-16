@@ -132,6 +132,9 @@ behavior default:
       {  
          loop 
          behavior default:
+           
+           assigns (b + [0..(j - 1)]).int_M;
+         behavior default:
            invariant (C_10 : ((C_11 : (0 <= i)) && (C_12 : (i <= length))));
          behavior default:
            invariant (C_9 : (j <= i));
@@ -149,9 +152,6 @@ behavior default:
            invariant (C_3 : (j ==
                               spec_remove_copy{Pre,
                               Here}(a, (i - 1), b, (j - 1), value)));
-         behavior default:
-           
-           assigns (b + [0..(j - 1)]).int_M;
          while (true)
          {  
             {  (if (i < length) then () else 

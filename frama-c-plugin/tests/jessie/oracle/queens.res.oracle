@@ -477,13 +477,13 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_104 : (-1 <= (2147483647 >>> n))));
+         (assert for default: (C_104 : (n >= 0)));
          
-         (assert for default: (C_103 : (-1 >= 0)));
+         (assert for default: (C_103 : (n < 32)));
          
-         (assert for default: (C_102 : (n < 32)));
+         (assert for default: (C_102 : (-1 >= 0)));
          
-         (assert for default: (C_101 : (n >= 0)));
+         (assert for default: (C_101 : (-1 <= (2147483647 >>> n))));
          (C_108 : (tmp_1 = (C_107 : t3((C_106 : (~ (C_105 : (-1 << n)))), 0,
                                        0))))
       };
@@ -1451,15 +1451,15 @@ let queens_ensures_default =
      (let tmp_1 = ref (any_int void) in
      begin
        (let jessie_123 = begin
-                           (assert
-                           { (JC_151:
-                             le_int(neg_int((1)), asr((2147483647), n_0))) };
-                           void);
+                           (assert { (JC_151: ge_int(n_0, (0))) }; void);
+                          (assert { (JC_152: lt_int(n_0, (32))) }; void);
                           (assert
-                          { (JC_152: ge_int(neg_int((1)), (0))) };
+                          { (JC_153: ge_int(neg_int((1)), (0))) };
                           void);
-                          (assert { (JC_153: lt_int(n_0, (32))) }; void);
-                          (assert { (JC_154: ge_int(n_0, (0))) }; void);
+                          (assert
+                          { (JC_154:
+                            le_int(neg_int((1)), asr((2147483647), n_0))) };
+                          void);
                           (C_108:
                           begin
                             (tmp_1 := (C_107:
@@ -1508,12 +1508,12 @@ let queens_safety =
      (let tmp_1 = ref (any_int void) in
      begin
        (let jessie_117 = begin
-                           [ { } unit
-                             { (JC_146:
-                               le_int(neg_int((1)), asr((2147483647), n_0))) } ];
-                          [ { } unit { (JC_147: ge_int(neg_int((1)), (0))) } ];
-                          [ { } unit { (JC_148: lt_int(n_0, (32))) } ];
-                          [ { } unit { (JC_149: ge_int(n_0, (0))) } ];
+                           [ { } unit { (JC_146: ge_int(n_0, (0))) } ];
+                          [ { } unit { (JC_147: lt_int(n_0, (32))) } ];
+                          [ { } unit { (JC_148: ge_int(neg_int((1)), (0))) } ];
+                          [ { } unit
+                            { (JC_149:
+                              le_int(neg_int((1)), asr((2147483647), n_0))) } ];
                           (C_108:
                           begin
                             (tmp_1 := (C_107:

@@ -666,9 +666,9 @@ behavior default:
          {  
             (assert for default: (C_192 : (1 <= (2147483647 >>> (tmp_1 - 2)))));
             
-            (assert for default: (C_191 : ((tmp_1 - 2) < 32)));
+            (assert for default: (C_191 : ((tmp_1 - 2) >= 0)));
             
-            (assert for default: (C_190 : ((tmp_1 - 2) >= 0)));
+            (assert for default: (C_190 : ((tmp_1 - 2) < 32)));
             (C_199 : (ones_2 = (C_198 : ((C_197 : ((C_196 : ((C_195 : 
                                                              (1 <<
                                                                (C_194 : (
@@ -802,11 +802,11 @@ behavior default:
       (C_265 : printf());
       
       {  
-         (assert for default: (C_268 : (1 <= (2147483647 >>> n_1))));
+         (assert for default: (C_268 : (n_1 >= 0)));
          
          (assert for default: (C_267 : (n_1 < 32)));
          
-         (assert for default: (C_266 : (n_1 >= 0)));
+         (assert for default: (C_266 : (1 <= (2147483647 >>> n_1))));
          (C_273 : (x_8 = (C_272 : ((C_271 : ((C_270 : ((C_269 : (1 << n_1)) :> int32)) -
                                               1)) :> uint32))))
       };
@@ -3180,15 +3180,15 @@ let main_ensures_default =
          (let jessie_359 = (JC_799: (printf void)) in void);
         (let jessie_361 = begin
                             (assert
-                            { (JC_800:
-                              le_int((1),
-                              asr((2147483647), integer_of_int32(n_1_0)))) };
+                            { (JC_800: ge_int(integer_of_int32(n_1_0), (0))) };
                             void);
                            (assert
                            { (JC_801: lt_int(integer_of_int32(n_1_0), (32))) };
                            void);
                            (assert
-                           { (JC_802: ge_int(integer_of_int32(n_1_0), (0))) };
+                           { (JC_802:
+                             le_int((1),
+                             asr((2147483647), integer_of_int32(n_1_0)))) };
                            void);
                            (C_273:
                            begin
@@ -3427,13 +3427,14 @@ let main_safety =
         (let jessie_314 = begin
                             [ { } unit reads n_1_0
                               { (JC_775:
-                                le_int((1),
-                                asr((2147483647), integer_of_int32(n_1_0)))) } ];
+                                ge_int(integer_of_int32(n_1_0), (0))) } ];
                            [ { } unit reads n_1_0
                              { (JC_776:
                                lt_int(integer_of_int32(n_1_0), (32))) } ];
                            [ { } unit reads n_1_0
-                             { (JC_777: ge_int(integer_of_int32(n_1_0), (0))) } ];
+                             { (JC_777:
+                               le_int((1),
+                               asr((2147483647), integer_of_int32(n_1_0)))) } ];
                            (C_273:
                            begin
                              (x_8 := (C_272:
@@ -5552,13 +5553,13 @@ let snoob3_ensures_default =
                            void);
                            (assert
                            { (JC_529:
-                             lt_int(sub_int(integer_of_int32(tmp_1), (2)),
-                             (32))) };
+                             ge_int(sub_int(integer_of_int32(tmp_1), (2)),
+                             (0))) };
                            void);
                            (assert
                            { (JC_530:
-                             ge_int(sub_int(integer_of_int32(tmp_1), (2)),
-                             (0))) };
+                             lt_int(sub_int(integer_of_int32(tmp_1), (2)),
+                             (32))) };
                            void);
                            (C_199:
                            begin
@@ -5679,12 +5680,12 @@ let snoob3_safety =
                                sub_int(integer_of_int32(tmp_1), (2))))) } ];
                            [ { } unit reads tmp_1
                              { (JC_521:
-                               lt_int(sub_int(integer_of_int32(tmp_1), (2)),
-                               (32))) } ];
-                           [ { } unit reads tmp_1
-                             { (JC_522:
                                ge_int(sub_int(integer_of_int32(tmp_1), (2)),
                                (0))) } ];
+                           [ { } unit reads tmp_1
+                             { (JC_522:
+                               lt_int(sub_int(integer_of_int32(tmp_1), (2)),
+                               (32))) } ];
                            (C_199:
                            begin
                              (ones_2 := (C_198:
@@ -6360,11 +6361,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po366.why">
-      <location file = "why/hd_snoob.why" line = "5119" begin = "64" end = "65"/>
+      <location file = "why/hd_snoob.why" line = "5120" begin = "64" end = "65"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po367.why">
-      <location file = "why/hd_snoob.why" line = "5119" begin = "64" end = "65"/>
+      <location file = "why/hd_snoob.why" line = "5120" begin = "64" end = "65"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po368.why">
@@ -8216,11 +8217,11 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po117.why">
-      <location file = "why/hd_snoob.why" line = "2629" begin = "70" end = "71"/>
+      <location file = "why/hd_snoob.why" line = "2630" begin = "70" end = "71"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po118.why">
-      <location file = "why/hd_snoob.why" line = "2629" begin = "70" end = "71"/>
+      <location file = "why/hd_snoob.why" line = "2630" begin = "70" end = "71"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po119.why">

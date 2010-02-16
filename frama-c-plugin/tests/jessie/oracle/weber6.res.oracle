@@ -64,17 +64,17 @@ behavior not_equal:
       
       {  
          loop 
-         behavior default:
-           invariant (C_4 : ((C_5 : ((a - first1) <= 0)) &&
-                              (C_6 : ((first1 - last1) <= 0))));
          behavior equal:
-           invariant (C_3 : (\forall integer i_0;
+           invariant (C_6 : (\forall integer i_0;
                               (((0 <= k) && (k < (first1 - a))) ==>
                                 ((first1 + k).int_M == (first2 + k).int_M))));
          behavior not_equal:
-           invariant (C_2 : (\exists integer i;
+           invariant (C_5 : (\exists integer i;
                               (((0 <= k) && (k < (first1 - a))) ==>
                                 ((first1 + k).int_M != (first2 + k).int_M))));
+         behavior default:
+           invariant (C_2 : ((C_3 : ((a - first1) <= 0)) &&
+                              (C_4 : ((first1 - last1) <= 0))));
          while (true)
          {  
             {  (if (first1 != last1) then () else 

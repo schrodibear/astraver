@@ -62,15 +62,15 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_4 : ((C_5 : (0 <= i)) && (C_6 : (i <= n))));
-         behavior default:
-           invariant (C_3 : (\forall int32 m_0;
+           invariant (C_6 : (\forall int32 m_0;
                               (((0 <= m_0) && (m_0 < n)) ==>
                                 ((b + m_0).int_M == \at((b + m_0).int_M,Pre)))));
          behavior default:
-           invariant (C_2 : (\forall int32 m;
+           invariant (C_5 : (\forall int32 m;
                               (((0 <= m) && (m < i)) ==>
                                 ((a + m).int_M == (b + m).int_M))));
+         behavior default:
+           invariant (C_2 : ((C_3 : (0 <= i)) && (C_4 : (i <= n))));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -625,34 +625,33 @@ let array_cpy_ensures_default =
                           (loop_2:
                           while true do
                           { invariant
-                              ((JC_32:
-                               (forall m:int32.
-                                ((le_int((0), integer_of_int32(m))
-                                 and lt_int(integer_of_int32(m),
-                                     integer_of_int32(i_0))) ->
-                                 eq_int(integer_of_int32(select(int_P_int_M_a_3,
-                                                         shift(a_0,
-                                                         integer_of_int32(m)))),
-                                 integer_of_int32(select(int_P_int_M_b_4,
-                                                  shift(b_0,
-                                                  integer_of_int32(m))))))))
-                              and ((JC_33:
-                                   (forall m_0:int32.
-                                    ((le_int((0), integer_of_int32(m_0))
-                                     and lt_int(integer_of_int32(m_0),
-                                         integer_of_int32(n))) ->
-                                     eq_int(integer_of_int32(select(int_P_int_M_b_4,
-                                                             shift(b_0,
-                                                             integer_of_int32(m_0)))),
-                                     integer_of_int32(select(int_P_int_M_b_4@init,
-                                                      shift(b_0@init,
-                                                      integer_of_int32(m_0@init))))))))
+                              ((JC_34:
+                               ((JC_32: le_int((0), integer_of_int32(i_0)))
+                               and (JC_33:
+                                   le_int(integer_of_int32(i_0),
+                                   integer_of_int32(n)))))
+                              and ((JC_35:
+                                   (forall m:int32.
+                                    ((le_int((0), integer_of_int32(m))
+                                     and lt_int(integer_of_int32(m),
+                                         integer_of_int32(i_0))) ->
+                                     eq_int(integer_of_int32(select(int_P_int_M_a_3,
+                                                             shift(a_0,
+                                                             integer_of_int32(m)))),
+                                     integer_of_int32(select(int_P_int_M_b_4,
+                                                      shift(b_0,
+                                                      integer_of_int32(m))))))))
                                   and (JC_36:
-                                      ((JC_34:
-                                       le_int((0), integer_of_int32(i_0)))
-                                      and (JC_35:
-                                          le_int(integer_of_int32(i_0),
-                                          integer_of_int32(n)))))))
+                                      (forall m_0:int32.
+                                       ((le_int((0), integer_of_int32(m_0))
+                                        and lt_int(integer_of_int32(m_0),
+                                            integer_of_int32(n))) ->
+                                        eq_int(integer_of_int32(select(int_P_int_M_b_4,
+                                                                shift(b_0,
+                                                                integer_of_int32(m_0)))),
+                                        integer_of_int32(select(int_P_int_M_b_4@init,
+                                                         shift(b_0@init,
+                                                         integer_of_int32(m_0@init))))))))))
                              }
                            begin
                              [ { } unit { true } ];
@@ -759,34 +758,35 @@ let array_cpy_safety =
                           { invariant (JC_27: true) variant (0) }
                            begin
                              [ { } unit reads i_0,int_P_int_M_a_3
-                               { ((JC_21:
-                                  (forall m:int32.
-                                   ((le_int((0), integer_of_int32(m))
-                                    and lt_int(integer_of_int32(m),
-                                        integer_of_int32(i_0))) ->
-                                    eq_int(integer_of_int32(select(int_P_int_M_a_3,
-                                                            shift(a_0,
-                                                            integer_of_int32(m)))),
-                                    integer_of_int32(select(int_P_int_M_b_4,
-                                                     shift(b_0,
-                                                     integer_of_int32(m))))))))
-                                 and ((JC_22:
-                                      (forall m_0:int32.
-                                       ((le_int((0), integer_of_int32(m_0))
-                                        and lt_int(integer_of_int32(m_0),
-                                            integer_of_int32(n))) ->
-                                        eq_int(integer_of_int32(select(int_P_int_M_b_4,
-                                                                shift(b_0,
-                                                                integer_of_int32(m_0)))),
-                                        integer_of_int32(select(int_P_int_M_b_4@init,
-                                                         shift(b_0@init,
-                                                         integer_of_int32(m_0@init))))))))
+                               { ((JC_23:
+                                  ((JC_21:
+                                   le_int((0), integer_of_int32(i_0)))
+                                  and (JC_22:
+                                      le_int(integer_of_int32(i_0),
+                                      integer_of_int32(n)))))
+                                 and ((JC_24:
+                                      (forall m:int32.
+                                       ((le_int((0), integer_of_int32(m))
+                                        and lt_int(integer_of_int32(m),
+                                            integer_of_int32(i_0))) ->
+                                        eq_int(integer_of_int32(select(int_P_int_M_a_3,
+                                                                shift(a_0,
+                                                                integer_of_int32(m)))),
+                                        integer_of_int32(select(int_P_int_M_b_4,
+                                                         shift(b_0,
+                                                         integer_of_int32(m))))))))
                                      and (JC_25:
-                                         ((JC_23:
-                                          le_int((0), integer_of_int32(i_0)))
-                                         and (JC_24:
-                                             le_int(integer_of_int32(i_0),
-                                             integer_of_int32(n))))))) } ];
+                                         (forall m_0:int32.
+                                          ((le_int((0),
+                                            integer_of_int32(m_0))
+                                           and lt_int(integer_of_int32(m_0),
+                                               integer_of_int32(n))) ->
+                                           eq_int(integer_of_int32(select(int_P_int_M_b_4,
+                                                                   shift(b_0,
+                                                                   integer_of_int32(m_0)))),
+                                           integer_of_int32(select(int_P_int_M_b_4@init,
+                                                            shift(b_0@init,
+                                                            integer_of_int32(m_0@init)))))))))) } ];
                             try
                              (let jessie_15 = begin
                                                 (let jessie_14 = begin
@@ -895,37 +895,37 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/weber1_po14.why">
-      <location file = "why/weber1.why" line = "669" begin = "61" end = "62"/>
+      <location file = "why/weber1.why" line = "668" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber1_po15.why">
-      <location file = "why/weber1.why" line = "669" begin = "61" end = "62"/>
+      <location file = "why/weber1.why" line = "668" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/weber1_po1.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "16" begin = "22" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "22" end = "28"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber1_po2.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "22" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "27" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber1_po3.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "27" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "16" begin = "22" end = "64"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber1_po4.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "16" begin = "22" end = "64"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber1_po5.why">
       <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "22" end = "28"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/weber1_po6.why">
+    <goal why_file="why/weber1_po5.why">
       <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "27" end = "33"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber1_po6.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "16" begin = "22" end = "64"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber1_po7.why">

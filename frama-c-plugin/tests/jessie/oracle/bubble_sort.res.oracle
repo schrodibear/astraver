@@ -181,29 +181,29 @@ behavior permutation:
                {  
                   loop 
                   behavior sorted:
-                    invariant (C_50 : (fixed_up == up));
+                    invariant (C_48 : ((C_49 : (0 <= down)) &&
+                                        (C_50 : (down < length))));
                   behavior sorted:
-                    invariant (C_47 : ((C_48 : (0 <= down)) &&
-                                        (C_49 : (down < length))));
+                    invariant (C_43 : ((C_44 : (0 <= down)) &&
+                                        ((C_46 : (down <= up)) &&
+                                          (C_47 : (up < length)))));
                   behavior sorted:
-                    invariant (C_42 : ((C_43 : (0 <= down)) &&
-                                        ((C_45 : (down <= up)) &&
-                                          (C_46 : (up < length)))));
+                    invariant (C_42 : sorted{Here}(a, 0, (down - 1)));
                   behavior sorted:
-                    invariant (C_41 : sorted{Here}(a, 0, (down - 1)));
+                    invariant (C_41 : sorted{Here}(a, down, up));
                   behavior sorted:
-                    invariant (C_40 : sorted{Here}(a, down, up));
-                  behavior sorted:
-                    invariant (C_39 : (\forall integer k_1;
+                    invariant (C_40 : (\forall integer k_1;
                                         (((up < k_1) && (k_1 < length)) ==>
                                           ((a + k_1).int_M ==
                                             \at((a + k_1).int_M,Pre)))));
                   behavior sorted:
-                    invariant (C_38 : (((0 < down) && (down < up)) ==>
+                    invariant (C_39 : (((0 < down) && (down < up)) ==>
                                         ((a + (down - 1)).int_M <=
                                           (a + (down + 1)).int_M)));
                   behavior permutation:
-                    invariant (C_37 : Permut{Pre, Here}(a, 0, (length - 1)));
+                    invariant (C_38 : Permut{Pre, Here}(a, 0, (length - 1)));
+                  behavior sorted:
+                    invariant (C_37 : (fixed_up == up));
                   while (true)
                   {  
                      {  (if (0 < down) then (if ((C_56 : (C_55 : (a + down)).int_M) <
@@ -1827,25 +1827,31 @@ let bubble_sort_ensures_sorted =
                                                          while true do
                                                          { invariant
                                                              ((JC_114:
-                                                              ((lt_int((0),
-                                                                integer_of_int32(down))
-                                                               and lt_int(
+                                                              eq_int(
+                                                              integer_of_int32(fixed_up),
+                                                              integer_of_int32(up)))
+                                                             and ((JC_115:
+                                                                  ((lt_int((0),
+                                                                    integer_of_int32(down))
+                                                                   and 
+                                                                   lt_int(
                                                                    integer_of_int32(down),
                                                                    integer_of_int32(up))) ->
-                                                               le_int(
-                                                               integer_of_int32(
-                                                               select(int_P_int_M_a_5,
-                                                               shift(a_2,
-                                                               sub_int(
-                                                               integer_of_int32(down),
-                                                               (1))))),
-                                                               integer_of_int32(
-                                                               select(int_P_int_M_a_5,
-                                                               shift(a_2,
-                                                               add_int(
-                                                               integer_of_int32(down),
-                                                               (1))))))))
-                                                             and ((JC_115:
+                                                                   le_int(
+                                                                   integer_of_int32(
+                                                                   select(int_P_int_M_a_5,
+                                                                   shift(a_2,
+                                                                   sub_int(
+                                                                   integer_of_int32(down),
+                                                                   (1))))),
+                                                                   integer_of_int32(
+                                                                   select(int_P_int_M_a_5,
+                                                                   shift(a_2,
+                                                                   add_int(
+                                                                   integer_of_int32(down),
+                                                                   (1))))))))
+                                                                 and 
+                                                                 ((JC_116:
                                                                   (forall k_1:int.
                                                                    ((
                                                                     lt_int(
@@ -1864,13 +1870,13 @@ let bubble_sort_ensures_sorted =
                                                                     shift(a_2@init,
                                                                     k_1@init)))))))
                                                                  and 
-                                                                 ((JC_116:
+                                                                 ((JC_117:
                                                                   sorted(a_2,
                                                                   integer_of_int32(down),
                                                                   integer_of_int32(up),
                                                                   int_P_int_M_a_5))
                                                                  and 
-                                                                 ((JC_117:
+                                                                 ((JC_118:
                                                                   sorted(a_2,
                                                                   (0),
                                                                   sub_int(
@@ -1878,35 +1884,30 @@ let bubble_sort_ensures_sorted =
                                                                   (1)),
                                                                   int_P_int_M_a_5))
                                                                  and 
-                                                                 ((JC_121:
-                                                                  ((JC_118:
+                                                                 ((JC_122:
+                                                                  ((JC_119:
                                                                    le_int((0),
                                                                    integer_of_int32(down)))
                                                                   and 
-                                                                  ((JC_119:
+                                                                  ((JC_120:
                                                                    le_int(
                                                                    integer_of_int32(down),
                                                                    integer_of_int32(up)))
                                                                   and 
-                                                                  (JC_120:
+                                                                  (JC_121:
                                                                   lt_int(
                                                                   integer_of_int32(up),
                                                                   integer_of_int32(length))))))
                                                                  and 
-                                                                 ((JC_124:
-                                                                  ((JC_122:
-                                                                   le_int((0),
-                                                                   integer_of_int32(down)))
-                                                                  and 
-                                                                  (JC_123:
-                                                                  lt_int(
-                                                                  integer_of_int32(down),
-                                                                  integer_of_int32(length)))))
-                                                                 and 
                                                                  (JC_125:
-                                                                 eq_int(
-                                                                 integer_of_int32(fixed_up),
-                                                                 integer_of_int32(up)))))))))
+                                                                 ((JC_123:
+                                                                  le_int((0),
+                                                                  integer_of_int32(down)))
+                                                                 and 
+                                                                 (JC_124:
+                                                                 lt_int(
+                                                                 integer_of_int32(down),
+                                                                 integer_of_int32(length)))))))))))
                                                             }
                                                           begin
                                                             [ { } unit
@@ -2715,8 +2716,13 @@ why --project [...] why/bubble_sort.why
   <function name="Function swap">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/bubble_sort_po65.why">
+    <goal why_file="why/bubble_sort_po64.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "55" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po65.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "56" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2726,7 +2732,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po67.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "56" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "105" begin = "14" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2736,7 +2742,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po69.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "105" begin = "14" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2745,18 +2751,13 @@ text = "PointerDeref"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/bubble_sort_po71.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "15" end = "51"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/bubble_sort_po63.why">
+    <goal why_file="why/bubble_sort_po62.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "50" begin = "10" end = "83"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/bubble_sort_po64.why">
+    <goal why_file="why/bubble_sort_po63.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "52" begin = "10" end = "34"/>
       <explain kind = "Post"/>
     </goal>
@@ -2765,6 +2766,11 @@ text = "PointerDeref"/>
   <function name="Function bubble_sort">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/bubble_sort_po46.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
     <goal why_file="why/bubble_sort_po47.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
@@ -2773,7 +2779,7 @@ text = "PointerDeref"/>
     <goal why_file="why/bubble_sort_po48.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po49.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
@@ -2783,7 +2789,7 @@ text = "ArithOverflow"/>
     <goal why_file="why/bubble_sort_po50.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po51.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
@@ -2791,9 +2797,9 @@ text = "ArithOverflow"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po52.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "109" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "116" begin = "4" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po53.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "116" begin = "4" end = "8"/>
@@ -2801,9 +2807,9 @@ text = "PointerDeref"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po54.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "116" begin = "4" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po55.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
@@ -2821,9 +2827,9 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po58.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "124" begin = "3" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po59.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "124" begin = "3" end = "7"/>
@@ -2831,16 +2837,11 @@ text = "UserCall"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po60.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "124" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po61.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "86" begin = "1" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/bubble_sort_po62.why">
+    <goal why_file="why/bubble_sort_po61.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "86" begin = "1" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -2872,31 +2873,31 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po15.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po16.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "103" begin = "19" end = "85"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "103" begin = "19" end = "85"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po19.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po20.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po21.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po22.why">
@@ -2968,34 +2969,30 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po39.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "98" begin = "19" end = "33"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po40.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "129" begin = "25" end = "41"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/bubble_sort_po41.why">
+    <goal why_file="why/bubble_sort_po40.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "81" begin = "18" end = "83"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/bubble_sort_po42.why">
+    <goal why_file="why/bubble_sort_po41.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "80" begin = "18" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/bubble_sort_po43.why">
+    <goal why_file="why/bubble_sort_po42.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "24"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/bubble_sort_po44.why">
+    <goal why_file="why/bubble_sort_po43.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "22" end = "34"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/bubble_sort_po45.why">
+    <goal why_file="why/bubble_sort_po44.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/bubble_sort_po46.why">
+    <goal why_file="why/bubble_sort_po45.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "65" begin = "10" end = "32"/>
       <explain kind = "Post"/>
     </goal>

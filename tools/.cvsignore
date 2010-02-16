@@ -15,3 +15,4 @@ toolstat_pars.ml
 toolstat_pars.mli
 *.cmi
 *.cmx
+make_float_model.opt
