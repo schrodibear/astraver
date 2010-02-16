@@ -1,7 +1,3 @@
-/* run.config
-   DONTRUN: cast not supported yet
-*/
-
 #pragma SeparationPolicy(Regions)
 
 /*@ axiom little_endian_low_byte_short{L}: 

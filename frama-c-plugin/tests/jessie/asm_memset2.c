@@ -1,9 +1,3 @@
-/* run.config
-   COMMENT: don't run this test while it raises an assertion
-   DONTRUN:
- */
-
-
 /*@ lemma div4 :
   @   \forall integer x; x >= 0 ==> 4*(x/4) <= x;
   @*/

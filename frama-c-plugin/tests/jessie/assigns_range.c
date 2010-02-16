@@ -1,8 +1,3 @@
-/* run.config
-   COMMENT: typing error in the .jc generated file (label `Post' not found)
-   DONTRUN:
- */
-
 /**************************************************************************/
 /*                                                                        */
 /*  The Why/Caduceus/Krakatoa tool suite for program certification        */

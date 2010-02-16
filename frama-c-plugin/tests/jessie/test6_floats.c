@@ -1,7 +1,3 @@
-/* run.config
-   DONTRUN: bug typing : "cannot cast to logic type"
- */
-
 #pragma JessieFloatModel(strict)
 
 

@@ -3364,9 +3364,13 @@ let type_variant d = match d#node with
         jc_root_info_hroots = [];
         jc_root_info_kind = 
 	  (match d#node with 
-     | JCDvariant_type _ -> Rvariant
-	     | JCDunion_type(_,true,_) -> RdiscrUnion
-	     | JCDunion_type(_,false,_) -> RplainUnion
+             | JCDvariant_type _ -> Rvariant
+	     | JCDunion_type(_,true,_) -> 
+                 Region.some_bitwise_region := true;
+                 RdiscrUnion
+	     | JCDunion_type(_,false,_) -> 
+                 Region.some_bitwise_region := true;
+                 RplainUnion
 	     | _ -> assert false
 	  );
 	jc_root_info_union_size_in_bytes = 0;

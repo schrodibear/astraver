@@ -1,7 +1,3 @@
-/* run.config
-   DONTRUN: cast not supported yet
-*/
-
 #pragma SeparationPolicy(Regions)
 
 /*@ requires \valid(s);

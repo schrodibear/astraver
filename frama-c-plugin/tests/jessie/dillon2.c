@@ -1,6 +1,4 @@
-/* run.config
-   DONTRUN: FS#394
-*/
+
 typedef struct { int a; } las;
 las * p;
 //@ logic las** p_ref{L} = &p;

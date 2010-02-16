@@ -1,6 +1,3 @@
-/* run.config
-   DONTRUN: this bug is still open.
-*/
 /* Frama-C BTS 0258
 
 yields:

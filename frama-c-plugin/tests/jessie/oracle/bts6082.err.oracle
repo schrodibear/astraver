@@ -1,5 +1,2 @@
-Producing Jessie files in subdir bts6082.jessie
-File bts6082.jessie/bts6082.jc written.
-File bts6082.jessie/bts6082.cloc written.
-File "bts6082.jessie/bts6082.jc", line 1137, characters 7-14: unsupported goto (backward or to some inner block)
+File "bts6082.jessie/bts6082.jc", line 788, characters 7-14: unsupported goto (backward or to some inner block)
 make: *** [bts6082.regtest] Error 1

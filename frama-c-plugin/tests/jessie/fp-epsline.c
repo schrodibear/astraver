@@ -1,9 +1,3 @@
-/* run.config
-   COMMENT: todo
-   DONTRUN:
- */
-
-
 #pragma JessieFloatModel(strict)
 
 // #include <float.h>
@@ -11,11 +5,11 @@
 // BUG a corriger
 //@ logic integer signr(real x) = x >= 0.0 ? 1 : -1 ;
 
-// @ logic int sign(real x)
+//@ logic int sign(real x)
 
-// @ axiom sign_pos : \forall real x; x >= 0.0 => sign(x) == 1
+//@ axiom sign_pos : \forall real x; x >= 0.0 => sign(x) == 1
 
-// @ axiom sign_neg : \forall real x; x < 0.0 => sign(x) == -1
+//@ axiom sign_neg : \forall real x; x < 0.0 => sign(x) == -1
  
 
 // Sign (0 is positive)

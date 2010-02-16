@@ -1,7 +1,3 @@
-/* run.config
-   DONTRUN: Jessie Makefile failed
-*/
-
 /* Frama-C BTS 0404
 
 

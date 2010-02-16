@@ -1,6 +1,3 @@
-/* run.config
-   DONTRUN: union no working yet
-*/
 
 typedef union {
   int i;

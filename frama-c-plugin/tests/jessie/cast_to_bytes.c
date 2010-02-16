@@ -1,8 +1,5 @@
-/* run.config
-   DONTRUN: cast no working yet
-*/
-#pragma JessieIntegerModel(modulo)
 
+#pragma JessieIntegerModel(modulo)
 #pragma JessieTerminationPolicy(user)
 
 

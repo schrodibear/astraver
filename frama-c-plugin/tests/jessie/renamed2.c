@@ -1,6 +1,4 @@
-/* run.config
-   DONTRUN: cast problem
-*/
+
 typedef struct {
 int I0;
 int I1;

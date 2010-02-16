@@ -1,7 +1,3 @@
-/* run.config
-   DONTRUN: axioms not inside axiomatic
-*/
-
 struct int_struct {
   char c1;  
   char c2; 

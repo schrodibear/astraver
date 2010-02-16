@@ -1,6 +1,3 @@
-/* run.config
-   DONTRUN: cast no working yet
-*/
 
 int X,Y,Z1,Z2,T,U1,U2,V,W1,W2;
 int a,b;
