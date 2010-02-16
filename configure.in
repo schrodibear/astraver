@@ -257,8 +257,13 @@ if test "$enable_apron" = "yes" ; then
 	 enable_apron="no (APRON library cannot be found, see above)"
       fi		     
    fi
+fi
+
+if test "$enable_apron" = "yes" ; then
    APRONLIBS="-cclib ' -lpolka_caml -lpolkaMPQ -loct_caml -loctMPQ -lbox_caml -lboxMPQ -lapron_caml -lapron -lgmp_caml -lmpfr -lgmp -lbigarray -lcamlidl' bigarray.cmxa gmp.cmxa apron.cmxa box.cmxa polka.cmxa"
    ATPCMO=atp/atp.cmo
+else	
+   APRONLIB=""
 fi
 
 # Frama-C
