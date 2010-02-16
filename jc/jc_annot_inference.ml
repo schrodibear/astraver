@@ -732,7 +732,8 @@ let atp_of_asrt a =
 	    | None -> err ()
 	  end
       | JCArelation _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ | JCAsubtype _ ->
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAlet _ 
+      | JCAmatch _ | JCAsubtype _ ->
 	  err ()
     with Failure "atp_of_asrt" | Failure "atp_of_term" -> 
       let s = Vwp.variable_for_assertion a in
@@ -1262,7 +1263,8 @@ let rec not_asrt a =
     | JCAnot a -> a#node
     | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAapp _ | JCArelation _
     | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ ->
+    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAlet _ 
+    | JCAmatch _ ->
 	JCAnot a
   in
   new assertion_with ~node:anode a
@@ -1317,7 +1319,8 @@ let rec linstr_of_assertion env a =
 	end
     | JCArelation _ | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAapp _ 
     | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> 
+    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ 
+    | JCAlet _-> 
 	env, Dnf.true_
 	
 let linstr_of_expr env e = 
@@ -1484,7 +1487,8 @@ let mkpresentable a =
       | JCAtrue | JCAfalse | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _
       | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _
       | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> a
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ 
+      | JCAlet _ -> a
   in
   linasrt_of_assertion a
 
@@ -1527,7 +1531,8 @@ let mkconsistent a =
       | JCAtrue | JCAfalse | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _
       | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _
       | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> 
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ 
+      | JCAlet _ -> 
 	  Some a
   in
   let conjuncts = conjuncts a in
@@ -2854,7 +2859,8 @@ let simple_test_assertion mgr a pre =
 	  end
       | JCAimplies _ | JCAiff _
       | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> env,Dnf.true_
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ 
+      | JCAlet _ -> env,Dnf.true_
   in
   let env, dnf = extract_environment_and_dnf env a in
   let pre = Abstract1.change_environment mgr pre env false in
@@ -4050,6 +4056,7 @@ let rec nb_conj_atoms a = match a#node with
   | JCAtrue | JCAfalse | JCArelation _ | JCAapp _  
   | JCAimplies _ | JCAiff _ | JCAquantifier _ | JCAinstanceof _ 
   | JCAbool_term _ | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _
+  | JCAlet _ 
   | JCAor _ | JCAnot _ | JCAold _ | JCAat _ | JCAsubtype _ -> 1
       
 
