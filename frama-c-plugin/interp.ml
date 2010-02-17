@@ -681,7 +681,11 @@ let term_lhost pos = function
        with Not_found ->
          mkexpr (JCPEvar v.lv_name) pos)
   | TResult _ -> mkexpr (JCPEvar "\\result") pos
-  | TMem _ -> assert false (* Should have been rewritten *)
+  | TMem _ -> 
+      unsupported "this kind of memory access is not currently supported"
+(*
+         Loc.report_position pos
+*)
 
 let isLogicConstant t = match t.term_node with
     TConst _ -> true

@@ -1,16 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0258.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0258.c"
 [jessie] Starting Jessie translation
-bts0258.c:15:[jessie] failure: Unexpected failure.
-                  Please submit bug report (Ref. "interp.ml:684:14").
-[kernel] The full backtrace is:
-         Raised at file "src/kernel/log.ml", line 554, characters 30-31
-         Called from file "src/kernel/log.ml", line 548, characters 2-9
-         Re-raised at file "src/kernel/log.ml", line 551, characters 8-9
-         Called from file "src/lib/type.ml", line 736, characters 40-45
-         Called from file "queue.ml", line 134, characters 6-20
-         Called from file "src/kernel/boot.ml", line 50, characters 4-20
-         Called from file "src/kernel/cmdline.ml", line 111, characters 4-8
-         
-         Plug-in jessie aborted because of an internal error.
-         Please report as 'crash' at http://bts.frama-c.com
+bts0258.c:15:[jessie] failure: this kind of memory access is not currently supported
+[jessie] warning: Unsupported feature(s).
+                  Jessie plugin can not be used on your code.
