@@ -576,16 +576,16 @@ let string_of_int_model p =
 
 let string_of_float_rounding_mode p =
   match p with
-    | Jc_env.FRMnearest -> "nearest"
-    | Jc_env.FRMdownward -> "downward"
-    | Jc_env.FRMupward -> "up"
-    | Jc_env.FRMtowardzero -> "to_zero"
-    | Jc_env.FRMtowardawayzero -> "nearest_away"
+    | Jc_env.FRMNearestEven -> "nearesteven"
+    | Jc_env.FRMDown -> "down"
+    | Jc_env.FRMUp -> "up"
+    | Jc_env.FRMToZero -> "tozero"
+    | Jc_env.FRMNearestAway -> "nearestaway"
 
 let string_of_float_model p =
   match p with
-    | Jc_env.FMreal -> "real"
-    | Jc_env.FMstrict -> "strict"
+    | Jc_env.FMmath -> "math"
+    | Jc_env.FMdefensive -> "defensive"
     | Jc_env.FMfull-> "full"
     | Jc_env.FMmultirounding-> "multirounding"
 

@@ -89,7 +89,7 @@ type _S1 = [_S1]
 tag _S2 = {
   int8 c_2: 8; 
   padding padding_2: 24; 
-  real f: 32;
+  float f: 32;
 }
 
 type _S2 = [_S2]
@@ -1778,7 +1778,7 @@ parameter struct__S2_alloc_to_bitvector :
 
 parameter struct__S2_mem_of_bitvector :
  _S2_c_2:(_S2, int8) memory ref ->
-  _S2_f:(_S2, real) memory ref ->
+  _S2_f:(_S2, single) memory ref ->
    _S2_padding_2:(_S2, padding) memory ref ->
     bitvector:(unit, bitvector) memory ->
      { } unit writes _S2_c_2,_S2_f,_S2_padding_2
@@ -1790,7 +1790,7 @@ parameter struct__S2_mem_of_bitvector :
 parameter struct__S2_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref ->
   _S2_c_2:(_S2, int8) memory ->
-   _S2_f:(_S2, real) memory ->
+   _S2_f:(_S2, single) memory ->
     _S2_padding_2:(_S2, padding) memory ->
      { } unit writes bitvector
      { (forall p0:_S2 pointer.
@@ -4046,6 +4046,201 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type mode =
+  | nearest_even
+  | to_zero
+  | up
+  | down
+  | nearest_away
+
+type double
+
+logic round_double : mode, real -> real
+
+logic round_double_logic : mode, real -> double
+
+logic double_value : double -> real
+
+logic double_exact : double -> real
+
+logic double_model : double -> real
+
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
+
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
+
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
+
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
+
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
+
+type single
+
+logic round_single : mode, real -> real
+
+logic round_single_logic : mode, real -> single
+
+logic single_value : single -> real
+
+logic single_exact : single -> real
+
+logic single_model : single -> real
+
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
+
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
+
+function max_single() : real = 0x1.FFFFFEp127
+
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
+
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
+
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
+
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
+
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
+
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
+
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
+
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
 
 type bitvector
 

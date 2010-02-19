@@ -1,4 +1,3 @@
-#pragma JessieFloatModel(strict)
 
 //@ ensures \result == 7.0;
 double test1() {

@@ -1,8 +1,6 @@
 
 // 100% proved by gappa
 
-#pragma JessieFloatModel(strict)
-
 int main() {
   double tmp= 0x1p53;
   double x = tmp * (tmp - 2.0);

@@ -1,5 +1,5 @@
 #pragma JessieFloatModel(full)
-#pragma JessieFloatRoundingMode(downward)
+#pragma JessieFloatRoundingMode(down)
 
 
 /*@ requires !\is_NaN(x) && !\is_NaN(y);

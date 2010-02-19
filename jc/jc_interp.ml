@@ -49,6 +49,8 @@ open Format
 open Num
 open Pp
 
+let unsupported = Jc_typing.typing_error 
+
 (******************************************************************************)
 (*                            source positioning                              *)
 (******************************************************************************)
@@ -181,8 +183,8 @@ let term_unary_op: expr_unary_op -> string = function
 
 let float_model_has_safe_functions () =
   match !Jc_options.float_model with
-    | FMstrict | FMmultirounding -> true
-    | FMreal | FMfull -> false
+    | FMdefensive | FMmultirounding -> true
+    | FMmath | FMfull -> false
  
 
 let float_format f =
@@ -208,19 +210,19 @@ let float_operator f t =
 
 let logic_current_rounding_mode () =
   match !Jc_options.current_rounding_mode with
-    | FRMnearest -> LVar "nearest_even"
-    | FRMdownward -> LVar "down"
-    | FRMupward -> LVar "up"
-    | FRMtowardzero -> LVar "to_zero"
-    | FRMtowardawayzero -> LVar "nearest_away"
+    | FRMNearestEven -> LVar "nearest_even"
+    | FRMDown -> LVar "down"
+    | FRMUp -> LVar "up"
+    | FRMToZero -> LVar "to_zero"
+    | FRMNearestAway -> LVar "nearest_away"
 
 let current_rounding_mode () =
   match !Jc_options.current_rounding_mode with
-    | FRMnearest -> Var "nearest_even"
-    | FRMdownward -> Var "down"
-    | FRMupward -> Var "up"
-    | FRMtowardzero -> Var "to_zero"
-    | FRMtowardawayzero -> Var "nearest_away"
+    | FRMNearestEven -> Var "nearest_even"
+    | FRMDown -> Var "down"
+    | FRMUp -> Var "up"
+    | FRMToZero -> Var "to_zero"
+    | FRMNearestAway -> Var "nearest_away"
 
 let bin_op: expr_bin_op -> string = function
     (* integer *)
@@ -1852,13 +1854,17 @@ and make_deref_bytes mark pos e fi =
 	begin
 	  match t with
 	    | Treal  -> 
-		make_app logic_real_of_bitvector [e']
-	    | Tgenfloat _ -> assert false (* TODO *)
-	    | Tstring -> assert false (* TODO *)
+		unsupported pos "bit-dependent cast over real numbers"
+	    | Tgenfloat _ -> 
+		unsupported pos "bit-dependent cast over floating-point values"
+	    | Tstring -> 
+		unsupported pos "bit-dependent cast over strings"
 	    | Tinteger ->
-		make_app logic_integer_of_bitvector [e']                
-	    | Tboolean -> assert false (* TODO *)
-	    | Tunit  -> assert false (* TODO *)
+		unsupported pos "bit-dependent cast over integers"
+	    | Tboolean -> 
+		unsupported pos "bit-dependent cast over booleans"
+	    | Tunit  ->
+		unsupported pos "bit-dependent cast over type unit"
 	end
     | JCTtype_var _ -> assert false (* TODO *)
     | JCTpointer (_, _, _) -> assert false (* TODO *)

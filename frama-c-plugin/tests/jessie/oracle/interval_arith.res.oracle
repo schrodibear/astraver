@@ -10,7 +10,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # AnnotationPolicy = None
 # AbstractDomain = Pol
 # FloatModel = full
-# FloatRoundingMode = downward
+# FloatRoundingMode = down
 
 axiomatic Padding {
 

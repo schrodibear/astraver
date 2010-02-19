@@ -1,5 +1,3 @@
-#pragma JessieFloatModel(strict)
-
 
 #define UPPER 0x1p340
 #define LOWER 0x1p-341

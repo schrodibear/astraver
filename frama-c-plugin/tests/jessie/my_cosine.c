@@ -1,6 +1,4 @@
 
-#pragma JessieFloatModel(strict)
-
 /*@ requires \abs(x) <= 0x1p-5; 
   @ ensures \abs(\result - \cos(x)) <= 0x1p-23;  
   @*/

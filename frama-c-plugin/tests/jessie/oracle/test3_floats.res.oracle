@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# FloatModel = strict
 
 axiomatic Padding {
 
@@ -480,34 +479,34 @@ why --project [...] why/test3_floats.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test3_floats_po4.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.jessie/test3_floats.jc" line = "50" begin = "41" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.jessie/test3_floats.jc" line = "49" begin = "41" end = "54"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test3_floats_po5.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "14" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/test3_floats_po6.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "14" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/test3_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "14" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/test3_floats_po8.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "14" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/test3_floats_po3.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "13" begin = "12" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "11" begin = "12" end = "26"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -516,14 +515,14 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test3_floats_po2.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "9" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "7" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/test3_floats_po1.why">
-      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "5" begin = "12" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/test3_floats.c" line = "3" begin = "12" end = "26"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

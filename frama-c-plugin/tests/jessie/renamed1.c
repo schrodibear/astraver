@@ -398,7 +398,7 @@ void F7(void)
 /* Code invariant:
      V35 <= V33 - 2;
 
-Thus the condition bellow can be replaced by an equal.
+Thus the condition below can be replaced by an equal.
 */
      if (V35 >= V33 - 2)
      {V24 = (float )*ptr_bas_loc;

@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# FloatModel = strict
 
 axiomatic Padding {
 
@@ -415,38 +414,38 @@ why --project [...] why/bts0329.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0329_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "39" begin = "26" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "38" begin = "26" end = "40"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/bts0329_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "13" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/bts0329_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "40" begin = "53" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "39" begin = "53" end = "67"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/bts0329_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "13" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/bts0329_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "15" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "13" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0329_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "11" begin = "12" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "9" begin = "12" end = "62"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0329_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "12" begin = "11" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "10" begin = "11" end = "61"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

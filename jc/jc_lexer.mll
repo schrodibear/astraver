@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.94 2009-12-08 16:38:49 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.95 2010-02-19 15:51:08 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -139,8 +139,8 @@
 	  begin
 	    Jc_options.float_model := 
 	      (match v with
-	         | "real" -> Jc_env.FMreal
-		 | "strict" -> Jc_env.FMstrict
+	         | "math" -> Jc_env.FMmath
+		 | "defensive" -> Jc_env.FMdefensive
 		 | "full" -> Jc_env.FMfull
 		 | "multirounding" -> Jc_env.FMmultirounding
 		 | _ -> lex_error lexbuf ("unknown float model " ^ v))
@@ -149,11 +149,11 @@
 	  begin
 	    Jc_options.current_rounding_mode :=
 	      (match v with
-		 | "nearest" -> Jc_env.FRMnearest
-		 | "downward" -> Jc_env.FRMdownward
-		 | "upward" -> Jc_env.FRMupward
-		 | "towardzero" -> Jc_env.FRMtowardzero
-		 | "towardawayzero" -> Jc_env.FRMtowardawayzero 
+		 | "nearestEven" -> Jc_env.FRMNearestEven
+		 | "down" -> Jc_env.FRMDown
+		 | "up" -> Jc_env.FRMUp
+		 | "toZero" -> Jc_env.FRMToZero
+		 | "nearestAway" -> Jc_env.FRMNearestAway 
 		 | _ -> lex_error lexbuf ("unknown float rounding mode " ^ v))
 	  end 
       | "FloatInstructionSet" ->

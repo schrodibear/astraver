@@ -44,9 +44,10 @@ type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
 
 type int_model = IMbounded | IMmodulo
 
-type float_model = FMreal | FMstrict | FMfull | FMmultirounding
+type float_model = FMmath | FMdefensive | FMfull | FMmultirounding
 
-type float_rounding_mode = FRMdownward | FRMnearest | FRMupward | FRMtowardzero | FRMtowardawayzero
+type float_rounding_mode = 
+    FRMDown | FRMNearestEven | FRMUp | FRMToZero | FRMNearestAway
 
 type float_instruction_set = FISstrictIEEE754 | FISx87
 

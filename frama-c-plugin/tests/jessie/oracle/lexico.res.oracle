@@ -2,4 +2,4 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD lexico.c"
 lexico.c:4:[kernel] user error: syntax error while parsing annotation
 [kernel] user error: skipping file "lexico.c" that has errors.
-[kernel] Frama-C aborted because of invalid user input(s).
+[kernel] Frama-C aborted because of an invalid user input.

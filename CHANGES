@@ -1,4 +1,6 @@
 
+  o [Jessie, Frama-C plugin] the "defensive" model for floating-point 
+    computations is now the default
   o [Jessie] is now compiled with apron by default, if available.
   o [Jessie] fixed bug 0370: missing coercion on decreasing measures
   o [Jessie] support for "let x = t in a" when a is an assertion

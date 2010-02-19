@@ -79,35 +79,35 @@ behavior default:
 predicate R(real x, real y) =
 ((0.0 <= y) && ((y - x) >= 1.0))
 
-integer f(real y)
+integer f(double y)
   decreases (C_34 : y) for R;
 behavior default:
   ensures (C_33 : true);
 {  
    (var integer n_1);
    
-   (var real x);
+   (var double x);
    
    (var integer __retres_1);
    
    {  (C_21 : (n_1 = 0));
       (C_22 : (x = y));
-      (if (x <= 1.0) then 
+      (if (x <= (1.0 :> double)) then 
       {  (C_23 : (__retres_1 = n_1));
          
          (goto return_label)
       } else ());
-      (C_26 : (n_1 = (C_25 : f((C_24 : (x - 2.0))))));
+      (C_26 : (n_1 = (C_25 : f((C_24 : (x - (2.0 :> double)))))));
       
       {  
          loop 
          variant (C_27 : x) for R;
          while (true)
          {  
-            {  (if (x >= 10.0) then () else 
+            {  (if (x >= (10.0 :> double)) then () else 
                (goto while_0_break));
                (C_29 : (n_1 = (C_28 : (n_1 + 1))));
-               (C_31 : (x = (C_30 : (x - 1.0))))
+               (C_31 : (x = (C_30 : (x - (1.0 :> double)))))
             }
          };
          (while_0_break : ())
@@ -360,9 +360,9 @@ parameter even : n:int -> { } int { true }
 
 parameter even_requires : n:int -> { (JC_1: ge_int(n, (0)))} int { true }
 
-parameter f : y_0:real -> { } int { true }
+parameter f : y_0:double -> { } int { true }
 
-parameter f_requires : y_0:real -> { } int { true }
+parameter f_requires : y_0:double -> { } int { true }
 
 parameter odd : n_0:int -> { } int { true }
 
@@ -484,14 +484,14 @@ let even_safety =
   { true }
 
 let f_ensures_default =
- fun (y_0 : real) ->
+ fun (y_0 : double) ->
   { (JC_30: true) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
      (let n_1 = ref (any_int void) in
-     (let x_0 = ref (any_real void) in
+     (let x_0 = ref (any_double void) in
      (let __retres_1 = ref (any_int void) in
      try
       (let jessie_99 = (C_21:
@@ -500,7 +500,7 @@ let f_ensures_default =
                         (C_22:
                         begin
                           (let jessie_83 = (x_0 := y_0) in void);
-                         (if ((le_real_ !x_0) 1.0)
+                         (if ((le_double !x_0) ((double_of_real_safe nearest_even) 1.0))
                          then
                           (let jessie_86 = (C_23:
                                            begin
@@ -515,14 +515,16 @@ let f_ensures_default =
                            (let jessie_89 = (n_1 := (C_25:
                                                     (let jessie_88 = 
                                                     (C_24:
-                                                    ((sub_real !x_0) 2.0)) in
-                                                    (JC_43: (f jessie_88))))) in
+                                                    (JC_49:
+                                                    (((sub_double_safe nearest_even) !x_0) 
+                                                     ((double_of_real_safe nearest_even) 2.0)))) in
+                                                    (JC_50: (f jessie_88))))) in
                            void);
                           try
                            (let jessie_96 = begin
                                               (loop_2:
                                               while true do
-                                              { invariant (JC_45: true)  }
+                                              { invariant (JC_52: true)  }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -531,7 +533,8 @@ let f_ensures_default =
                                                                     begin
                                                                       
                                                                     (if 
-                                                                    ((ge_real_ !x_0) 10.0)
+                                                                    ((ge_double !x_0) 
+                                                                    ((double_of_real_safe nearest_even) 10.0))
                                                                     then void
                                                                     else
                                                                     (let jessie_90 = 
@@ -552,7 +555,9 @@ let f_ensures_default =
                                                                       
                                                                     (x_0 := 
                                                                     (C_30:
-                                                                    ((sub_real !x_0) 1.0)));
+                                                                    (JC_54:
+                                                                    (((sub_double_safe nearest_even) !x_0) 
+                                                                    ((double_of_real_safe nearest_even) 1.0)))));
                                                                     !x_0
                                                                     end)
                                                                     end)
@@ -596,14 +601,14 @@ let f_ensures_default =
   { (JC_31: true) }
 
 let f_safety =
- fun (y_0 : real) ->
+ fun (y_0 : double) ->
   { (JC_30: true) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
      (let n_1 = ref (any_int void) in
-     (let x_0 = ref (any_real void) in
+     (let x_0 = ref (any_double void) in
      (let __retres_1 = ref (any_int void) in
      try
       (let jessie_78 = (C_21:
@@ -612,7 +617,8 @@ let f_safety =
                         (C_22:
                         begin
                           (let jessie_62 = (x_0 := y_0) in void);
-                         (if ((le_real_ !x_0) 1.0)
+                         (if ((le_double !x_0) (JC_35:
+                                               ((double_of_real nearest_even) 1.0)))
                          then
                           (let jessie_65 = (C_23:
                                            begin
@@ -627,20 +633,23 @@ let f_safety =
                            (let jessie_68 = (n_1 := (C_25:
                                                     (let jessie_67 = 
                                                     (C_24:
-                                                    ((sub_real !x_0) 2.0)) in
-                                                    (JC_38:
+                                                    (JC_37:
+                                                    (((sub_double nearest_even) !x_0) 
+                                                     (JC_36:
+                                                     ((double_of_real nearest_even) 2.0))))) in
+                                                    (JC_41:
                                                     (assert
-                                                    { R((JC_37 : jessie_67),
-                                                      (JC_36 : y_0)) };
-                                                    (JC_35:
+                                                    { R(double_value((JC_40 : jessie_67)),
+                                                      double_value((JC_39 : y_0))) };
+                                                    (JC_38:
                                                     (f_requires jessie_67))))))) in
                            void);
                           try
                            (let jessie_75 = begin
                                               (loop_1:
                                               while true do
-                                              { invariant (JC_40: true)
-                                                variant (JC_42 : x_0) for R }
+                                              { invariant (JC_43: true)
+                                                variant (JC_48 : x_0) for R }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -649,7 +658,9 @@ let f_safety =
                                                                     begin
                                                                       
                                                                     (if 
-                                                                    ((ge_real_ !x_0) 10.0)
+                                                                    ((ge_double !x_0) 
+                                                                    (JC_45:
+                                                                    ((double_of_real nearest_even) 10.0)))
                                                                     then void
                                                                     else
                                                                     (let jessie_69 = 
@@ -670,7 +681,10 @@ let f_safety =
                                                                       
                                                                     (x_0 := 
                                                                     (C_30:
-                                                                    ((sub_real !x_0) 1.0)));
+                                                                    (JC_47:
+                                                                    (((sub_double nearest_even) !x_0) 
+                                                                    (JC_46:
+                                                                    ((double_of_real nearest_even) 1.0))))));
                                                                     !x_0
                                                                     end)
                                                                     end)
@@ -846,15 +860,15 @@ why --project [...] why/decreases.why
   <function name="Function odd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/decreases_po7.why">
-      <location file = "why/decreases.why" line = "687" begin = "57" end = "158"/>
+    <goal why_file="why/decreases_po13.why">
+      <location file = "why/decreases.why" line = "701" begin = "57" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/decreases_po8.why">
-      <location file = "why/decreases.why" line = "687" begin = "57" end = "158"/>
+    <goal why_file="why/decreases_po14.why">
+      <location file = "why/decreases.why" line = "701" begin = "57" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/decreases_po9.why">
+    <goal why_file="why/decreases_po15.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "23" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
@@ -865,15 +879,45 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po4.why">
-      <location file = "why/decreases.why" line = "513" begin = "54" end = "145"/>
-      <explain kind = "Assert"/>
+      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "89" begin = "16" end = "31"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
     </goal>
     <goal why_file="why/decreases_po5.why">
+      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "94" begin = "44" end = "59"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/decreases_po6.why">
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "36" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/decreases_po7.why">
+      <location file = "why/decreases.why" line = "522" begin = "54" end = "173"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/decreases_po8.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/decreases_po6.why">
+    <goal why_file="why/decreases_po9.why">
+      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "101" begin = "25" end = "41"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/decreases_po10.why">
+      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "104" begin = "41" end = "56"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/decreases_po11.why">
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "40" begin = "10" end = "11"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/decreases_po12.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "37" begin = "19" end = "20"/>
       <explain kind = "VarDecr"/>
     </goal>
@@ -1681,6 +1725,201 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type mode =
+  | nearest_even
+  | to_zero
+  | up
+  | down
+  | nearest_away
+
+type double
+
+logic round_double : mode, real -> real
+
+logic round_double_logic : mode, real -> double
+
+logic double_value : double -> real
+
+logic double_exact : double -> real
+
+logic double_model : double -> real
+
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
+
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
+
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
+
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
+
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
+
+type single
+
+logic round_single : mode, real -> real
+
+logic round_single_logic : mode, real -> single
+
+logic single_value : single -> real
+
+logic single_exact : single -> real
+
+logic single_model : single -> real
+
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
+
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
+
+function max_single() : real = 0x1.FFFFFEp127
+
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
+
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
+
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
+
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
+
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
+
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
+
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
+
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
 
 type char_P
 

@@ -1,2 +1,2 @@
-File "bts0406.jessie/bts0406.jc", line 29, characters 2-126: typing error: axiom toto should contain at least one occurrence of a symbol declared in axiomatic U
+File "bts0406.jessie/bts0406.jc", line 28, characters 2-126: typing error: axiom toto should contain at least one occurrence of a symbol declared in axiomatic U
 make: *** [bts0406.regtest] Error 1

@@ -1,4 +1,3 @@
-# pragma JessieFloatModel(strict)
 
 #define NMAX 1000000
 #define NMAXR 1000000.0
@@ -18,8 +17,9 @@ TODO:
 
 //@ lemma real_of_int_succ: \forall integer n; n+1 == n + 1.0;
 
-//@ lemma inf_mult : 
-      \forall real x,y,z; x<=y && 0<=z ==> x*z <= y*z;
+/*@ lemma inf_mult : 
+  @    \forall real x,y,z; x<=y && 0<=z ==> x*z <= y*z;
+  @*/
 
 #define A 1.49012e-09 
 // A is a bound of (float)0.1 - 0.1

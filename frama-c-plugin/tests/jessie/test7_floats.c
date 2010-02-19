@@ -1,5 +1,3 @@
-#pragma JessieFloatModel(strict)
-
 
 /***** polynomial approximation of exp *****/ 
 /********** minmax approximation ***********/

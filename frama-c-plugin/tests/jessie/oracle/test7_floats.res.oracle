@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# FloatModel = strict
 
 axiomatic Padding {
 
@@ -452,53 +451,53 @@ why --project [...] why/test7_floats.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test7_floats_po3.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "47" begin = "41" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "46" begin = "41" end = "65"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po4.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "48" begin = "50" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "47" begin = "50" end = "73"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po5.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "17" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po6.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "17" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "50" begin = "50" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "49" begin = "50" end = "74"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po8.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "17" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po9.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "17" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po10.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "17" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/test7_floats_po1.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "14" begin = "13" end = "109"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "12" begin = "13" end = "109"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/test7_floats_po2.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "10" begin = "12" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.c" line = "8" begin = "12" end = "45"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

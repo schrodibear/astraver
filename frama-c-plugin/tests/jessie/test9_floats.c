@@ -1,5 +1,3 @@
-#pragma JessieFloatModel(strict)
-
 
 /***** rationnal approximation of exp *****/ 
 /********** minmax approximation ***********/

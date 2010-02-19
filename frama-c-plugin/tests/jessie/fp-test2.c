@@ -1,7 +1,6 @@
 
 // 100% proved by gappa
 
-#pragma JessieFloatModel(strict)
 //#pragma JessieFloatInstructionSet(x87)
 
 /* to enforce 387 instructions, use :

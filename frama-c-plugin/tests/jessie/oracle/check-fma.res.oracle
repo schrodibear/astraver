@@ -2,7 +2,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD check-fma.c"
 [jessie] Starting Jessie translation
 [kernel] No code for function printf, default assigns generated
-check-fma.c:14:[jessie] warning: skipping all arguments of implicit prototype printf
+check-fma.c:12:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir check-fma.jessie
 [jessie] File check-fma.jessie/check-fma.jc written.
 [jessie] File check-fma.jessie/check-fma.cloc written.
@@ -11,7 +11,6 @@ check-fma.c:14:[jessie] warning: skipping all arguments of implicit prototype pr
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# FloatModel = strict
 
 axiomatic Padding {
 
@@ -560,57 +559,57 @@ why --project [...] why/check-fma.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/check-fma_po4.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "54" begin = "20" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "53" begin = "20" end = "38"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po5.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "55" begin = "46" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "54" begin = "46" end = "61"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po6.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "8" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "6" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po7.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "8" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "6" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po8.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "62" begin = "35" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "61" begin = "35" end = "50"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po9.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "8" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po10.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po11.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/check-fma_po1.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "9" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "7" begin = "13" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/check-fma_po2.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "11" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "9" begin = "13" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/check-fma_po3.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "13" begin = "13" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "11" begin = "13" end = "23"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

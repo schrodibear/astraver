@@ -1,12 +1,14 @@
 /* Frama-C BTS 0273 
 
-Status: closed
+Status: reopened
 
 yields:
 
 Uncaught exception: File "jc/jc_interp.ml", line 1819, characters 1-7: Assertion failed
 
 Fixed in Why 2.21
+
+Reappeared in WHY 2.23+: bit dependent cast over floats
 
 */
 

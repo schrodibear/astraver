@@ -1,8 +1,3 @@
-/* run.config
- */
-
-#pragma JessieFloatModel(strict)
-
 
 /*@ axiomatic Truncate {
   @   logic integer truncate(real x);

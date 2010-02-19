@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# FloatModel = strict
 
 axiomatic Padding {
 
@@ -393,14 +392,14 @@ why --project [...] why/test10_floats.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test10_floats_po2.why">
-      <location file = "PPCHOME/tests/jessie/test10_floats.c" line = "9" begin = "1" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/test10_floats.c" line = "8" begin = "1" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/test10_floats_po1.why">
-      <location file = "PPCHOME/tests/jessie/test10_floats.c" line = "5" begin = "10" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/test10_floats.c" line = "4" begin = "10" end = "26"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

@@ -1,5 +1,3 @@
-#pragma JessieFloatModel(strict)
-
 
 /*@ axiomatic KillingProp {
   @    predicate my_killing_prop(double uc, double up, integer n); 

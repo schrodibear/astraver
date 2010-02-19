@@ -1,8 +1,3 @@
-/* run.config
- */
-
-#pragma JessieFloatModel(strict)
-
 
 /*@ ensures \result == (double)(\sqrt(x));
   @*/

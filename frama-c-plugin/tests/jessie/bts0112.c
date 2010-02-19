@@ -19,8 +19,6 @@ Fixed in Why 2.22
 
 
 
-# pragma JessieFloatModel(strict)
-
 typedef double fp;
 #define FP_ESPILON DBL_EPSILON
 

@@ -19,7 +19,7 @@ axiomatic Padding {
 type int8 = -128..127
 
 tag float_P = {
-  real float_M: 32;
+  float float_M: 32;
 }
 
 type float_P = [float_P]
@@ -36,14 +36,14 @@ tag void_P = {
 type void_P = [void_P]
 
 tag __anonstruct_ts_1 = {
-  real f0: 32; 
-  real f1: 32; 
-  real f2: 32;
+  float f0: 32; 
+  float f1: 32; 
+  float f2: 32;
 }
 
 type __anonstruct_ts_1 = [__anonstruct_ts_1]
 
-real v;
+float v;
 
 axiomatic MyCast {
 
@@ -53,8 +53,9 @@ axiomatic MyCast {
   (\forall __anonstruct_ts_1[..] p_0;
     (\forall float_P[..] t_0;
       (simulated_cast{L}(p_0, t_0) ==>
-        (((p_0.f0 == (t_0 + 0).float_M) && (p_0.f1 == (t_0 + 1).float_M)) &&
-          (p_0.f2 == (t_0 + 2).float_M)))))
+        ((((p_0.f0 :> real) == ((t_0 + 0).float_M :> real)) &&
+           ((p_0.f1 :> real) == ((t_0 + 1).float_M :> real))) &&
+          ((p_0.f2 :> real) == ((t_0 + 2).float_M :> real))))))
    
   axiom b{L} :
   (\forall __anonstruct_ts_1[..] p_1;
@@ -76,7 +77,7 @@ unit f(float_P[..] d)
                     (C_7 : (\offset_max(d) >= 2))));
 behavior default:
   assigns v;
-  ensures (C_8 : (v == (d + 1).float_M));
+  ensures (C_8 : ((v :> real) == ((d + 1).float_M :> real)));
 {  
    {  (C_4 : (v = (C_3 : (C_2 : (d + 1)).float_M)));
       
@@ -86,14 +87,14 @@ behavior default:
 
 unit main()
 behavior default:
-  ensures (C_18 : (v == 9.0));
+  ensures (C_18 : ((v :> real) == 9.0));
 {  
    (var __anonstruct_ts_1[0] x_0);
    
    (var float_P[..] tmp);
    
    {  (C_10 : (x_0 = (C_9 : (new __anonstruct_ts_1[1]))));
-      (C_13 : ((C_12 : x_0.f1) = (C_11 : (9.0 :> real))));
+      (C_13 : ((C_12 : x_0.f1) = (C_11 : ((9.0 :> double) :> float))));
       (C_15 : (tmp = (C_14 : simulated_cast_to_float_ptr(x_0))));
       (C_16 : f(tmp));
       
@@ -144,38 +145,41 @@ logic simulated_cast: __anonstruct_ts_1 pointer,
  float_P pointer,
  float_P alloc_table,
  __anonstruct_ts_1 alloc_table,
- (__anonstruct_ts_1, real) memory,
- (__anonstruct_ts_1, real) memory,
- (__anonstruct_ts_1, real) memory,
- (float_P, real) memory -> prop
+ (__anonstruct_ts_1, single) memory,
+ (__anonstruct_ts_1, single) memory,
+ (__anonstruct_ts_1, single) memory,
+ (float_P, single) memory -> prop
 
 axiom a :
  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
   (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
-   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, real) memory.
-    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, real) memory.
-     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, real) memory.
-      (forall float_P_float_M_t_2_at_L:(float_P, real) memory.
+   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
+    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
+     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory.
+      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
        (forall p_0:__anonstruct_ts_1 pointer.
         (forall t_0:float_P pointer.
          (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
           __anonstruct_ts_1_p_1_alloc_table_at_L,
           __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
           __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L) ->
-          (eq_real(select(__anonstruct_ts_1_f0_p_1_at_L, p_0),
-           select(float_P_float_M_t_2_at_L, shift(t_0, (0))))
-          and (eq_real(select(__anonstruct_ts_1_f1_p_1_at_L, p_0),
-               select(float_P_float_M_t_2_at_L, shift(t_0, (1))))
-              and eq_real(select(__anonstruct_ts_1_f2_p_1_at_L, p_0),
-                  select(float_P_float_M_t_2_at_L, shift(t_0, (2)))))))))))))))
+          (eq_real(single_value(select(__anonstruct_ts_1_f0_p_1_at_L, p_0)),
+           single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (0)))))
+          and (eq_real(single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
+                                    p_0)),
+               single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (1)))))
+              and eq_real(single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
+                                       p_0)),
+                  single_value(select(float_P_float_M_t_2_at_L,
+                               shift(t_0, (2))))))))))))))))
 
 axiom b :
  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
   (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
-   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, real) memory.
-    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, real) memory.
-     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, real) memory.
-      (forall float_P_float_M_t_2_at_L:(float_P, real) memory.
+   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
+    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
+     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory.
+      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
        (forall p_1:__anonstruct_ts_1 pointer.
         (forall t_1:float_P pointer.
          ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
@@ -639,24 +643,28 @@ parameter alloc_struct_void_P_requires :
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter v : real ref
+parameter v : single ref
 
 parameter f :
  d:float_P pointer ->
   float_P_d_6_alloc_table:float_P alloc_table ->
-   float_P_float_M_d_6:(float_P, real) memory ->
+   float_P_float_M_d_6:(float_P, single) memory ->
     { } unit reads v writes v
-    { (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
+    { (JC_21:
+      eq_real(single_value(v),
+      single_value(select(float_P_float_M_d_6, shift(d, (1)))))) }
 
 parameter f_requires :
  d:float_P pointer ->
   float_P_d_6_alloc_table:float_P alloc_table ->
-   float_P_float_M_d_6:(float_P, real) memory ->
+   float_P_float_M_d_6:(float_P, single) memory ->
     { (JC_13:
       ((JC_11: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
       and (JC_12: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))}
     unit reads v writes v
-    { (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
+    { (JC_21:
+      eq_real(single_value(v),
+      single_value(select(float_P_float_M_d_6, shift(d, (1)))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -664,10 +672,12 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter main :
- tt:unit -> { } unit reads v writes v { (JC_31: eq_real(v, 9.0)) }
+ tt:unit ->
+  { } unit reads v writes v { (JC_31: eq_real(single_value(v), 9.0)) }
 
 parameter main_requires :
- tt:unit -> { } unit reads v writes v { (JC_31: eq_real(v, 9.0)) }
+ tt:unit ->
+  { } unit reads v writes v { (JC_31: eq_real(single_value(v), 9.0)) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -676,10 +686,10 @@ parameter simulated_cast_to_float_ptr :
  x:__anonstruct_ts_1 pointer ->
   float_P_result_4_alloc_table:float_P alloc_table ->
    __anonstruct_ts_1_x_3_alloc_table:__anonstruct_ts_1 alloc_table ->
-    __anonstruct_ts_1_f2_x_3:(__anonstruct_ts_1, real) memory ->
-     __anonstruct_ts_1_f1_x_3:(__anonstruct_ts_1, real) memory ->
-      __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, real) memory ->
-       float_P_float_M_result_4:(float_P, real) memory ->
+    __anonstruct_ts_1_f2_x_3:(__anonstruct_ts_1, single) memory ->
+     __anonstruct_ts_1_f1_x_3:(__anonstruct_ts_1, single) memory ->
+      __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, single) memory ->
+       float_P_float_M_result_4:(float_P, single) memory ->
         { } float_P pointer
         { (JC_7:
           simulated_cast(x, result, float_P_result_4_alloc_table,
@@ -691,10 +701,10 @@ parameter simulated_cast_to_float_ptr_requires :
  x:__anonstruct_ts_1 pointer ->
   float_P_result_4_alloc_table:float_P alloc_table ->
    __anonstruct_ts_1_x_3_alloc_table:__anonstruct_ts_1 alloc_table ->
-    __anonstruct_ts_1_f2_x_3:(__anonstruct_ts_1, real) memory ->
-     __anonstruct_ts_1_f1_x_3:(__anonstruct_ts_1, real) memory ->
-      __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, real) memory ->
-       float_P_float_M_result_4:(float_P, real) memory ->
+    __anonstruct_ts_1_f2_x_3:(__anonstruct_ts_1, single) memory ->
+     __anonstruct_ts_1_f1_x_3:(__anonstruct_ts_1, single) memory ->
+      __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, single) memory ->
+       float_P_float_M_result_4:(float_P, single) memory ->
         { } float_P pointer
         { (JC_7:
           simulated_cast(x, result, float_P_result_4_alloc_table,
@@ -703,7 +713,7 @@ parameter simulated_cast_to_float_ptr_requires :
           float_P_float_M_result_4)) }
 
 let f_ensures_default =
- fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, real) memory) ->
+ fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, single) memory) ->
   { (JC_17:
     ((JC_15: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
     and (JC_16: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
@@ -723,10 +733,12 @@ let f_ensures_default =
    with
    Return ->
    void end)
-  { (JC_19: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
+  { (JC_19:
+    eq_real(single_value(v),
+    single_value(select(float_P_float_M_d_6, shift(d, (1)))))) }
 
 let f_safety =
- fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, real) memory) ->
+ fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, single) memory) ->
   { (JC_17:
     ((JC_15: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
     and (JC_16: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
@@ -766,12 +778,14 @@ let main_ensures_default =
      (C_10:
      begin
        (let jessie_18 = (x_0 := (C_9:
-                                (JC_38:
+                                (JC_40:
                                 (((alloc_struct___anonstruct_ts_1 (1)) __anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_x_0_11_tag_table)))) in
        void);
       (C_13:
       begin
-        (let jessie_24 = (let jessie_20 = (C_11: 9.0) in
+        (let jessie_24 = (let jessie_20 = (C_11:
+                                          ((double_to_single nearest_even) 
+                                           ((double_of_real_safe nearest_even) 9.0))) in
                          (let jessie_23 = !x_0 in
                          (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_23) jessie_20))) in
         void);
@@ -779,13 +793,13 @@ let main_ensures_default =
        begin
          (let jessie_27 = (tmp := (C_14:
                                   (let jessie_26 = !x_0 in
-                                  (JC_39:
+                                  (JC_41:
                                   (((((((simulated_cast_to_float_ptr jessie_26) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
          void);
         (C_16:
         begin
           (let jessie_28 = !tmp in
-          (JC_40:
+          (JC_42:
           (((f jessie_28) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12)));
          (C_17:
          begin
@@ -801,7 +815,7 @@ let main_ensures_default =
    with
    Return ->
    void end)
-  { (JC_30: eq_real(v, 9.0)) }
+  { (JC_30: eq_real(single_value(v), 9.0)) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -832,7 +846,11 @@ let main_safety =
        void);
       (C_13:
       begin
-        (let jessie_12 = (let jessie_8 = (C_11: 9.0) in
+        (let jessie_12 = (let jessie_8 = (C_11:
+                                         (JC_37:
+                                         ((double_to_single nearest_even) 
+                                          (JC_36:
+                                          ((double_of_real nearest_even) 9.0))))) in
                          (let jessie_11 = !x_0 in
                          (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_11) jessie_8))) in
         void);
@@ -840,13 +858,13 @@ let main_safety =
        begin
          (let jessie_15 = (tmp := (C_14:
                                   (let jessie_14 = !x_0 in
-                                  (JC_36:
+                                  (JC_38:
                                   (((((((simulated_cast_to_float_ptr_requires jessie_14) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
          void);
         (C_16:
         begin
           (let jessie_16 = !tmp in
-          (JC_37:
+          (JC_39:
           (((f_requires jessie_16) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12)));
          (C_17:
          begin
@@ -877,21 +895,26 @@ why --project [...] why/dillon7.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/dillon7_po6.why">
-      <location file = "why/dillon7.why" line = "722" begin = "33" end = "177"/>
+      <location file = "why/dillon7.why" line = "735" begin = "33" end = "177"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon7_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "92" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "91" begin = "42" end = "57"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "FPOverflow"/>
     </goal>
     <goal why_file="why/dillon7_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "92" begin = "14" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "93" begin = "14" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po9.why">
-      <location file = "why/dillon7.why" line = "747" begin = "12" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "93" begin = "14" end = "20"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/dillon7_po10.why">
+      <location file = "why/dillon7.why" line = "764" begin = "12" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1709,6 +1732,201 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type mode =
+  | nearest_even
+  | to_zero
+  | up
+  | down
+  | nearest_away
+
+type double
+
+logic round_double : mode, real -> real
+
+logic round_double_logic : mode, real -> double
+
+logic double_value : double -> real
+
+logic double_exact : double -> real
+
+logic double_model : double -> real
+
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
+
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
+
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
+
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
+
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
+
+type single
+
+logic round_single : mode, real -> real
+
+logic round_single_logic : mode, real -> single
+
+logic single_value : single -> real
+
+logic single_exact : single -> real
+
+logic single_model : single -> real
+
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
+
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
+
+function max_single() : real = 0x1.FFFFFEp127
+
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
+
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
+
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
+
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
+
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
+
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
+
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
+
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
+
 type __anonstruct_ts_1
 
 type char_P
@@ -1741,18 +1959,19 @@ axiom __anonstruct_ts_1_tags:
 
 logic simulated_cast : __anonstruct_ts_1 pointer, float_P pointer,
 float_P alloc_table, __anonstruct_ts_1 alloc_table, (__anonstruct_ts_1,
-real) memory, (__anonstruct_ts_1, real) memory, (__anonstruct_ts_1,
-real) memory, (float_P, real) memory -> prop
+single) memory, (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1,
+single) memory, (float_P, single) memory -> prop
 
 axiom a:
   (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
     (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
-      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, real) memory.
+      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
+        single) memory.
         (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1,
-          real) memory.
+          single) memory.
           (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
-            real) memory.
-            (forall float_P_float_M_t_2_at_L:(float_P, real) memory.
+            single) memory.
+            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
               (forall p_0:__anonstruct_ts_1 pointer.
                 (forall t_0:float_P pointer.
                   (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
@@ -1761,23 +1980,26 @@ axiom a:
                    __anonstruct_ts_1_f1_p_1_at_L,
                    __anonstruct_ts_1_f0_p_1_at_L,
                    float_P_float_M_t_2_at_L) ->
-                   ((select(__anonstruct_ts_1_f0_p_1_at_L,
-                    p_0) = select(float_P_float_M_t_2_at_L, shift(t_0,
-                    0))) and
-                    ((select(__anonstruct_ts_1_f1_p_1_at_L,
-                     p_0) = select(float_P_float_M_t_2_at_L, shift(t_0,
-                     1))) and (select(__anonstruct_ts_1_f2_p_1_at_L,
-                     p_0) = select(float_P_float_M_t_2_at_L, shift(t_0, 2))))))))))))))
+                   ((single_value(select(__anonstruct_ts_1_f0_p_1_at_L,
+                    p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                    shift(t_0, 0)))) and
+                    ((single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
+                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                     shift(t_0, 1)))) and
+                     (single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
+                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                     shift(t_0, 2)))))))))))))))
 
 axiom b:
   (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
     (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
-      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, real) memory.
+      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
+        single) memory.
         (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1,
-          real) memory.
+          single) memory.
           (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
-            real) memory.
-            (forall float_P_float_M_t_2_at_L:(float_P, real) memory.
+            single) memory.
+            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
               (forall p_1:__anonstruct_ts_1 pointer.
                 (forall t_1:float_P pointer.
                   ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,

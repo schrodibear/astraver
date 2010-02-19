@@ -4,8 +4,6 @@ Status: resolved
 
 */
 
-#pragma JessieFloatModel(strict)
-
 /*@ requires \abs(\exact(x)) <= 0x1p-5 
   @     && \round_error(x) <= 0x1p-20;  
   @ ensures \abs(\exact(\result) - \cos(\exact(x))) <= 0x1p-24

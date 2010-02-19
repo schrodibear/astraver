@@ -10,7 +10,7 @@ Uncaught exception: File "jc/jc_interp.ml", line 1831, characters 19-25: Asserti
 
 */
 
-#pragma JessieIntegerModel(math)
+// #pragma JessieIntegerModel(math)
 #pragma JessieTerminationPolicy(user)
 
 #include <jessie_prolog.h>

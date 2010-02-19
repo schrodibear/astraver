@@ -61,7 +61,8 @@ let libdir =
 
 let has_floats = ref false
 
-let float_model : float_model ref = ref FMreal
+let float_model : float_model ref = ref FMdefensive
+
 let float_instruction_set : float_instruction_set ref = ref FISstrictIEEE754
 
 let libfiles = ref ["jessie.why"]
@@ -87,7 +88,7 @@ let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 let annotation_sem = ref AnnotNone
 let ai_domain = ref AbsNone
 
-let current_rounding_mode = ref FRMnearest
+let current_rounding_mode = ref FRMNearestEven
 
 let termination_policy = ref Jc_env.TPalways
 

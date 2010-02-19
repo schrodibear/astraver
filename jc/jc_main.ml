@@ -402,15 +402,16 @@ let main () =
       we first have to update Jc_options.libfiles depending on the current
       pragmas
     *)
-    begin
-      match !Jc_options.float_model with
-	| Jc_env.FMreal -> ()
-	| Jc_env.FMstrict ->
-	    Jc_options.add_to_libfiles "floats_strict.why"
-	| Jc_env.FMfull ->
-	    Jc_options.add_to_libfiles "floats_full.why"
-	|  Jc_env.FMmultirounding ->
-	     Jc_options.add_to_libfiles "floats_multi_rounding.why"
+    if !Jc_options.has_floats then
+      begin
+        match !Jc_options.float_model with
+	  | Jc_env.FMmath -> ()
+	  | Jc_env.FMdefensive ->
+	      Jc_options.add_to_libfiles "floats_strict.why"
+	  | Jc_env.FMfull ->
+	      Jc_options.add_to_libfiles "floats_full.why"
+	  |  Jc_env.FMmultirounding ->
+	       Jc_options.add_to_libfiles "floats_multi_rounding.why"
     end;
     if !Region.some_bitwise_region then
       Jc_options.add_to_libfiles "jessie_bitvectors.why";

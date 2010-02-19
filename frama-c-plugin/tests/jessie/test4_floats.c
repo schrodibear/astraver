@@ -1,7 +1,3 @@
-/* run.config
- */
-
-#pragma JessieFloatModel(strict)
 
 /*@ requires \abs(x) <= 0x2.p-3;
   @ ensures

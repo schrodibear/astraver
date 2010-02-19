@@ -192,7 +192,7 @@ type int_model = IMexact | IMbounded | IMmodulo
 
 let int_model = ref IMbounded
 
-let float_model = ref `Real
+let float_model = ref `Defensive
 
 let rec name_with_profile s prof =
   match prof with
@@ -212,6 +212,20 @@ let translated_names_table = Hashtbl.create 257
 
 exception CtePredicate of bool
 
+
+let full_model_function linfo name default =
+  match !float_model with
+    | `Math ->
+	warning "\\%s always %b in mode JessieFloatModel(math)" name default;
+	raise (CtePredicate default)
+    | `Defensive | `Full | `Multirounding ->
+	begin
+	  match (List.hd linfo.l_profile).lv_type with
+	    | Ctype x when x == doubleType -> "\\double_" ^ name
+	    | Ctype x when x == floatType -> "\\single_" ^ name
+	    | _ -> assert false
+	end
+ 
 let translated_name linfo largs =
 (*
   Format.eprintf "Jessie.interp: linfo = %s(%a)(%d)@."
@@ -319,75 +333,15 @@ let translated_name linfo largs =
 		| _ -> assert false
 	    end
 	| "\\is_finite" ->
-           begin
-	   match !float_model with
-	      | `Real ->
-		  warning "\\is_finite always true in mode JessieFloatModel(real)";
-		  raise (CtePredicate true)
-              | `Strict | `Full | `Multirounding ->
-	                begin
-	      		match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\double_is_finite"
-			| Ctype x when x == floatType -> "\\single_is_finite"
-			| _ -> assert false
-	    		end
-	   end
+            full_model_function linfo "is_finite" true
 	| "\\is_infinite" ->
-            begin
-	      match !float_model with
-		| `Real ->
-		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
-		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding ->
-		    begin
-		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\double_is_infinite"
-			| Ctype x when x == floatType -> "\\single_is_infinite"
-			| _ -> assert false
-		    end
-	    end
+            full_model_function linfo "is_infinite" false
 	| "\\is_NaN" ->
-            begin
-	      match !float_model with
-		| `Real ->
-		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
-		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding ->
-		    begin
-		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\double_is_NaN"
-			| Ctype x when x == floatType -> "\\single_is_NaN"
-			| _ -> assert false
-		    end
-	    end
+            full_model_function linfo "is_NaN" false
 	| "\\is_minus_infinity" ->
-            begin
-	      match !float_model with
-		| `Real ->
-		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
-		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding ->
-		    begin
-		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\double_is_minus_infinity"
-			| Ctype x when x == floatType -> "\\single_is_minus_infinity"
-			| _ -> assert false
-		    end
-	    end
+            full_model_function linfo "is_minus_infinity" false
 	| "\\is_plus_infinity" ->
-            begin
-	      match !float_model with
-		| `Real ->
-		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
-		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding ->
-		    begin
-		      match (List.hd linfo.l_profile).lv_type with
-			| Ctype x when x == doubleType -> "\\double_is_plus_infinity"
-			| Ctype x when x == floatType -> "\\single_is_plus_infinity"
-			| _ -> assert false
-		    end
-	    end
+            full_model_function linfo "is_plus_infinity" false
 	| "\\le_float" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
@@ -493,9 +447,11 @@ let type_conversion ty1 ty2 =
         type_conversion_table (sig1,sig2) (ty1,ty2,ty1_to_ty2,ty2_to_ty1);
       ty1_to_ty2,ty2_to_ty1
 
+(*
 type float_rounding_mode = [ `Downward | `Nearest | `Upward | `Towardzero | `Towardawayzero ]
 
 let float_rounding_mode : float_rounding_mode ref = ref `Nearest
+*)
 
 let ctype ?bitsize ty =
   let tnode = match unrollType ty with
@@ -510,15 +466,16 @@ let ctype ?bitsize ty =
     | TFloat(fk,_attr) ->
         begin
           match !float_model with
-            | `Real ->
-                (* RealMode floats interpreted as reals *)
+            | `Math ->
+                (* Mode "math": floats interpreted as reals *)
                 JCPTnative Treal
-            | `Strict | `Full | `Multirounding ->
+            | `Defensive | `Full | `Multirounding ->
                   begin
                     match fk with
                       | FFloat -> JCPTnative (Tgenfloat `Float)
                       | FDouble -> JCPTnative (Tgenfloat `Double)
-                      | FLongDouble -> failwith "Jessie does not handle long double yet"
+                      | FLongDouble -> 
+                          unsupported "Jessie does not handle long double yet"
                   end
         end
     | TPtr(_elemty,_attr) ->
@@ -602,8 +559,8 @@ let rec const ~in_code pos = function
       let s = strip_float_suffix s in
       begin match in_code,!float_model with
         | false,_ 
-	| true, `Real -> JCPEconst(JCCreal s)
-        | true, (`Strict | `Full | `Multirounding) ->
+	| true, `Math -> JCPEconst(JCCreal s)
+        | true, (`Defensive | `Full | `Multirounding) ->
             (* add a cast to float or double depending on the value of fk *)
             JCPEcast(mkexpr (JCPEconst(JCCreal s)) pos, mktype (JCPTnative (native_type_of_fkind fk)))
       end
@@ -697,8 +654,8 @@ let product f t1 t2 =
 
 let rec coerce_floats t =
   match !float_model with
-    | `Real -> terms t
-    | `Strict | `Full | `Multirounding ->
+    | `Math -> terms t
+    | `Defensive | `Full | `Multirounding ->
         if isLogicFloatType t.term_type then
           List.map
             (fun e ->
@@ -1533,8 +1490,9 @@ let rec expr pos e =
 
     | CastE(ty,e') 
         when isIntegralType ty && isFloatingType (typeOf e') ->
+        let e = locate (mkexpr (JCPEcast(expr e',mktype (JCPTnative Treal))) pos) in
 	let e = 
-	  locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[expr e'])) pos)
+	  locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[e])) pos)
 	in e#node
 
     | CastE(ty,e') when isIntegralType ty && isArithmeticType (typeOf e') ->
@@ -2739,13 +2697,16 @@ let pragma = function
             end
         | "JessieFloatModel" ->
             begin match String.lowercase arg with
-              | "real" -> float_model := `Real;
-		  [Jc_output.JCfloat_model Jc_env.FMreal]
-              | "strict" -> float_model := `Strict;
-		  [Jc_output.JCfloat_model Jc_env.FMstrict]
-              | "full" -> float_model := `Full;
+              | "math" -> float_model := `Math;
+		  [Jc_output.JCfloat_model Jc_env.FMmath]
+              | "defensive" -> 
+                  float_model := `Defensive;
+		  [Jc_output.JCfloat_model Jc_env.FMdefensive]
+              | "full" -> 
+                  float_model := `Full;
 		  [Jc_output.JCfloat_model Jc_env.FMfull]
-              | "multirounding" -> float_model := `Multirounding;
+              | "multirounding" -> 
+                  float_model := `Multirounding;
 		  [Jc_output.JCfloat_model Jc_env.FMmultirounding]
               | s ->
                   Jessie_options.warning ~current:true
@@ -2754,17 +2715,21 @@ let pragma = function
             end;
         | "JessieFloatRoundingMode" ->
             begin match String.lowercase arg with
-              | "nearest" ->
-                  float_rounding_mode := `Nearest;
-                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMnearest]
-              | "downward" -> float_rounding_mode := `Downward;
-                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMdownward]
-              | "upward" -> float_rounding_mode := `Upward;
-                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMupward]
-              | "towardzero" -> float_rounding_mode := `Towardzero;
-                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMtowardzero]
-              | "towardawayzero" -> float_rounding_mode := `Towardawayzero;
-                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMtowardawayzero]
+              | "nearesteven" ->
+                  (* float_rounding_mode := `NearestEven; *)
+                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMNearestEven]
+              | "down" -> 
+                  (* float_rounding_mode := `Downward; *)
+                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMDown]
+              | "up" -> 
+                  (* float_rounding_mode := `Upward; *)
+                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMUp]
+              | "tozero" -> 
+                  (* float_rounding_mode := `Towardzero; *)
+                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMToZero]
+              | "nearestaway" -> 
+                  (* float_rounding_mode := `Towardawayzero; *)
+                  [Jc_output.JCfloat_rounding_mode Jc_env.FRMNearestAway]
               | s ->
                   Jessie_options.warning ~current:true
 		    "pragma %s: identifier %s is not a valid value (ignored)" name s; []

@@ -61,9 +61,11 @@ val type_only : bool
 val wp_only : bool
 
 val fast_wp : bool
+(*
 val black : bool
 val white : bool
 val wbb : bool
+*)
 val split_user_conj : bool
 val split_bool_op : bool
 val lvlmax : int

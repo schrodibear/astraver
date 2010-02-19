@@ -1,5 +1,3 @@
-#pragma JessieFloatModel(strict)
-
 
 /*@ requires y/2.0 <= x <= 2.0*y; 
   @ ensures \result == x-y;
