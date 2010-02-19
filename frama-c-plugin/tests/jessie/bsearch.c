@@ -1,6 +1,6 @@
-//@ lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y; 
+//@ lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y;
 
-/*@ predicate sorted{L}(long t[], integer a, integer b) = 
+/*@ predicate sorted{L}(long *t, integer a, integer b) =
   @    \forall integer i,j; a <= i <= j <= b ==> t[i] <= t[j];
   @*/
 
@@ -10,14 +10,14 @@
   @   ensures \result >= 0 ==> t[\result] == v;
   @ behavior failure:
   @   assumes sorted(t,0,n-1);
-  @   ensures \result == -1 ==> 
+  @   ensures \result == -1 ==>
   @     \forall integer k; 0 <= k < n ==> t[k] != v;
   @*/
 int binary_search(long t[], int n, long v) {
   int l = 0, u = n-1;
   /*@ loop invariant
     @   0 <= l && u <= n-1;
-    @ for failure: 
+    @ for failure:
     @   loop invariant
     @   \forall integer k; 0 <= k < n && t[k] == v ==> l <= k <= u;
     @ loop variant u-l;
@@ -31,7 +31,7 @@ int binary_search(long t[], int n, long v) {
   return -1;
 }
 
-/* 
+/*
 Local Variables:
 compile-command: "PPCHOME=../.. LC_ALL=C make bsearch"
 End:

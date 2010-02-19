@@ -3,23 +3,23 @@ typedef float TYP ;
 
 /* Tentatives de plusieurs théories : en espérant que cette dernière est correcte */
 
-/*@ 
+/*@
 
-inductive incr{L}(TYP t[],integer i,integer j){
+inductive incr{L}(TYP *t,integer i,integer j){
 
-  case incr_ok{L}: 
-    \forall TYP t[]; \forall integer i,j; 
+  case incr_ok{L}:
+    \forall TYP *t; \forall integer i,j;
        i<j ==> t[i] <= t[i+1] ==> incr{L}(t,i+1,j) ==> incr{L}(t,i,j);
 
-  case incr_alone{L}: \forall TYP t[];\forall integer i; incr{L}(t,i,i);
+  case incr_alone{L}: \forall TYP *t;\forall integer i; incr{L}(t,i,i);
 
 }
 
 */
 
 
-/*@ predicate incr2{L}(TYP t[],integer i,integer j) =
-  @   \forall integer k; i <= k < j ==> t[k] <= t[k+1]; 
+/*@ predicate incr2{L}(TYP *t,integer i,integer j) =
+  @   \forall integer k; i <= k < j ==> t[k] <= t[k+1];
   @*/
 
 void f()

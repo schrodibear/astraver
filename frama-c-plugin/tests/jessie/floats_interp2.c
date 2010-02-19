@@ -15,36 +15,36 @@ Proof :
 
   x[i] - x[i-1] >= LOWER
 
-computation of ..* .. / .. does not overflow if  
+computation of ..* .. / .. does not overflow if
 
-((2 UPPER)^2) / LOWER is <= max_double = 2^1024 - 1 
+((2 UPPER)^2) / LOWER is <= max_double = 2^1024 - 1
 
 ie (2^{u+1} ^ 2) / 2^(-l) < 2^1024
 
 ie 2u+2 + l < 1024
 
 ie 2u+l < 1022
- 
+
 
 
 */
 
 
 
-/*@ predicate min_step{L}(double t[], integer a, integer b, real bound) = 
+/*@ predicate min_step{L}(double *t, integer a, integer b, real bound) =
   @    \forall integer i; a < i <= b ==> t[i] - t[i-1] >= bound;
   @*/
 
 /*@ lemma min_step_increasing{L}:
-  @   \forall double t[], integer a, b, real bound;
-  @     bound >= 0.0 && min_step(t,a,b,bound) ==> 
-  @     \forall integer i,j; 
+  @   \forall double *t, integer a, b, real bound;
+  @     bound >= 0.0 && min_step(t,a,b,bound) ==>
+  @     \forall integer i,j;
   @          a <= i <= j <= b ==> t[i] <= t[j];
   @*/
 
 //@ predicate bounded(double z, real bound) = -bound <= z <= bound;
 
-/*@ predicate array_bounded{L}(double t[],int n, real bound) = 
+/*@ predicate array_bounded{L}(double *t,int n, real bound) =
   @   \forall integer i; 0 <= i < n ==> bounded(t[i],bound);
   @*/
 
@@ -63,10 +63,10 @@ ie 2u+l < 1022
   @   assumes z > x[n-1];
   @   ensures \result == y[n-1];
   @ behavior in_interval:
-  @   assumes x[0] < z <= x[n-1]; 
+  @   assumes x[0] < z <= x[n-1];
   @   ensures 1 <= i_interp <= n-1;
   @   ensures x[i_interp-1] < z <= x[i_interp] ;
-  @   ensures 
+  @   ensures
   @     \let k = (z - x[i_interp-1])/(x[i_interp]-x[i_interp-1]) ;
   @     \let exact_result = y[i_interp] + k*(y[i_interp] - y[i_interp-1]) ;
   @     \abs(\result - exact_result) <= 0x1p-10 ;
@@ -96,7 +96,7 @@ double interp_lin(double x[], double y[], int n, double z) {
   return yi+k*(yi-yim1);
 }
 
-/* 
+/*
 Local Variables:
 compile-command: "PPCHOME=../.. LC_ALL=C make floats_interp2"
 End:

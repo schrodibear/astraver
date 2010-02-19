@@ -1,4 +1,4 @@
-/* Frama-C BTS 0038
+/* Frama-C BTS 0032
 
 Status: open
 
@@ -27,7 +27,7 @@ void main(void)
 }
 
 
-/* 
+/*
 Local Variables:
 compile-command: "LC_ALL=C frama-c -jessie bts0032.c"
 End:

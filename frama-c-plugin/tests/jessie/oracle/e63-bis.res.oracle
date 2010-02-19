@@ -19,7 +19,7 @@ axiomatic Padding {
 type int8 = -128..127
 
 tag float_P = {
-  real float_M: 32;
+  float float_M: 32;
 }
 
 type float_P = [float_P]
@@ -40,7 +40,8 @@ case incr_ok{L}: (\forall float_P[..] t_0;
                    (\forall integer i_0;
                      (\forall integer j_0;
                        ((i_0 < j_0) ==>
-                         (((t_0 + i_0).float_M <= (t_0 + (i_0 + 1)).float_M) ==>
+                         ((((t_0 + i_0).float_M :> real) <=
+                            ((t_0 + (i_0 + 1)).float_M :> real)) ==>
                            (incr{L}(t_0, (i_0 + 1), j_0) ==>
                              incr{L}(t_0, i_0, j_0)))))));
   
@@ -54,12 +55,12 @@ predicate incr2{L}(float_P[..] t_2, integer i_2, integer j_1) =
 (\forall integer k1;
   (\forall integer k2;
     (((i_2 <= k1) && ((k1 <= k2) && (k2 <= j_1))) ==>
-      ((t_2 + k1).float_M <= (t_2 + k2).float_M))))
+      (((t_2 + k1).float_M :> real) <= ((t_2 + k2).float_M :> real)))))
 
 predicate incr3{L}(float_P[..] t_3, integer i_3, integer j_2) =
 (\forall integer k;
   (((i_3 <= k) && (k < j_2)) ==>
-    ((t_3 + k).float_M <= (t_3 + (k + 1)).float_M)))
+    (((t_3 + k).float_M :> real) <= ((t_3 + (k + 1)).float_M :> real))))
 
 unit f()
 behavior default:
@@ -70,102 +71,102 @@ behavior default:
    {  (C_2 : (t = (C_1 : (new float_P[20]))));
       
       {  
-         (assert for default: (C_3 : ((t + 0).float_M == 0.)));
+         (assert for default: (C_3 : (((t + 0).float_M :> real) == 0.)));
          ()
       };
       
       {  
-         (assert for default: (C_4 : ((t + 1).float_M == 1.)));
+         (assert for default: (C_4 : (((t + 1).float_M :> real) == 1.)));
          ()
       };
       
       {  
-         (assert for default: (C_5 : ((t + 2).float_M == 2.)));
+         (assert for default: (C_5 : (((t + 2).float_M :> real) == 2.)));
          ()
       };
       
       {  
-         (assert for default: (C_6 : ((t + 3).float_M == 3.)));
+         (assert for default: (C_6 : (((t + 3).float_M :> real) == 3.)));
          ()
       };
       
       {  
-         (assert for default: (C_7 : ((t + 4).float_M == 4.)));
+         (assert for default: (C_7 : (((t + 4).float_M :> real) == 4.)));
          ()
       };
       
       {  
-         (assert for default: (C_8 : ((t + 5).float_M == 5.)));
+         (assert for default: (C_8 : (((t + 5).float_M :> real) == 5.)));
          ()
       };
       
       {  
-         (assert for default: (C_9 : ((t + 6).float_M == 6.)));
+         (assert for default: (C_9 : (((t + 6).float_M :> real) == 6.)));
          ()
       };
       
       {  
-         (assert for default: (C_10 : ((t + 7).float_M == 7.)));
+         (assert for default: (C_10 : (((t + 7).float_M :> real) == 7.)));
          ()
       };
       
       {  
-         (assert for default: (C_11 : ((t + 8).float_M == 8.)));
+         (assert for default: (C_11 : (((t + 8).float_M :> real) == 8.)));
          ()
       };
       
       {  
-         (assert for default: (C_12 : ((t + 9).float_M == 9.)));
+         (assert for default: (C_12 : (((t + 9).float_M :> real) == 9.)));
          ()
       };
       
       {  
-         (assert for default: (C_13 : ((t + 10).float_M == 10.)));
+         (assert for default: (C_13 : (((t + 10).float_M :> real) == 10.)));
          ()
       };
       
       {  
-         (assert for default: (C_14 : ((t + 11).float_M == 11.)));
+         (assert for default: (C_14 : (((t + 11).float_M :> real) == 11.)));
          ()
       };
       
       {  
-         (assert for default: (C_15 : ((t + 12).float_M == 12.)));
+         (assert for default: (C_15 : (((t + 12).float_M :> real) == 12.)));
          ()
       };
       
       {  
-         (assert for default: (C_16 : ((t + 13).float_M == 13.)));
+         (assert for default: (C_16 : (((t + 13).float_M :> real) == 13.)));
          ()
       };
       
       {  
-         (assert for default: (C_17 : ((t + 14).float_M == 14.)));
+         (assert for default: (C_17 : (((t + 14).float_M :> real) == 14.)));
          ()
       };
       
       {  
-         (assert for default: (C_18 : ((t + 15).float_M == 15.)));
+         (assert for default: (C_18 : (((t + 15).float_M :> real) == 15.)));
          ()
       };
       
       {  
-         (assert for default: (C_19 : ((t + 16).float_M == 16.)));
+         (assert for default: (C_19 : (((t + 16).float_M :> real) == 16.)));
          ()
       };
       
       {  
-         (assert for default: (C_20 : ((t + 17).float_M == 17.)));
+         (assert for default: (C_20 : (((t + 17).float_M :> real) == 17.)));
          ()
       };
       
       {  
-         (assert for default: (C_21 : ((t + 18).float_M == 18.)));
+         (assert for default: (C_21 : (((t + 18).float_M :> real) == 18.)));
          ()
       };
       
       {  
-         (assert for default: (C_22 : ((t + 19).float_M == 19.)));
+         (assert for default: (C_22 : (((t + 19).float_M :> real) == 19.)));
          ()
       };
       
@@ -247,19 +248,20 @@ axiom float_P_tags :
   (forall float_P_tag_table:float_P tag_table.
    instanceof(float_P_tag_table, x, float_P_tag)))
 
-inductive incr: float_P pointer, int, int, (float_P, real) memory -> prop =
- | incr_ok: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
+inductive incr: float_P pointer, int, int, (float_P, single) memory -> prop =
+ | incr_ok: (forall float_P_float_M_t_1_at_L:(float_P, single) memory.
              (forall t_0:float_P pointer.
               (forall i_0:int.
                (forall j_0:int.
                 (lt_int(i_0, j_0) ->
-                 (le_real(select(float_P_float_M_t_1_at_L, shift(t_0, i_0)),
-                  select(float_P_float_M_t_1_at_L,
-                  shift(t_0, add_int(i_0, (1))))) ->
+                 (le_real(single_value(select(float_P_float_M_t_1_at_L,
+                                       shift(t_0, i_0))),
+                  single_value(select(float_P_float_M_t_1_at_L,
+                               shift(t_0, add_int(i_0, (1)))))) ->
                   (incr(t_0, add_int(i_0, (1)), j_0,
                    float_P_float_M_t_1_at_L) ->
                    incr(t_0, i_0, j_0, float_P_float_M_t_1_at_L))))))))
- | incr_alone: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
+ | incr_alone: (forall float_P_float_M_t_1_at_L:(float_P, single) memory.
                 (forall t_1:float_P pointer.
                  (forall i_1:int.
                   incr(t_1, i_1, i_1, float_P_float_M_t_1_at_L))))
@@ -267,21 +269,22 @@ inductive incr: float_P pointer, int, int, (float_P, real) memory -> prop =
 predicate incr2(t_2:float_P pointer,
  i_2:int,
  j_1:int,
- float_P_float_M_t_2_2_at_L:(float_P, real) memory) =
+ float_P_float_M_t_2_2_at_L:(float_P, single) memory) =
  (forall k1:int.
   (forall k2:int.
    ((le_int(i_2, k1) and (le_int(k1, k2) and le_int(k2, j_1))) ->
-    le_real(select(float_P_float_M_t_2_2_at_L, shift(t_2, k1)),
-    select(float_P_float_M_t_2_2_at_L, shift(t_2, k2))))))
+    le_real(single_value(select(float_P_float_M_t_2_2_at_L, shift(t_2, k1))),
+    single_value(select(float_P_float_M_t_2_2_at_L, shift(t_2, k2)))))))
 
 predicate incr3(t_3:float_P pointer,
  i_3:int,
  j_2:int,
- float_P_float_M_t_3_3_at_L:(float_P, real) memory) =
+ float_P_float_M_t_3_3_at_L:(float_P, single) memory) =
  (forall k:int.
   ((le_int(i_3, k) and lt_int(k, j_2)) ->
-   le_real(select(float_P_float_M_t_3_3_at_L, shift(t_3, k)),
-   select(float_P_float_M_t_3_3_at_L, shift(t_3, add_int(k, (1)))))))
+   le_real(single_value(select(float_P_float_M_t_3_3_at_L, shift(t_3, k))),
+   single_value(select(float_P_float_M_t_3_3_at_L,
+                shift(t_3, add_int(k, (1))))))))
 
 logic int8_of_integer: int -> int8
 
@@ -622,83 +625,123 @@ let f_ensures_default =
                                (((alloc_struct_float_P (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table)))) in
        void);
       (assert
-      { (JC_35: eq_real(select(float_P_float_M_t_6, shift(t_4, (0))), 0.)) };
+      { (JC_35:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (0)))),
+        0.)) };
       void);
       void;
       (assert
-      { (JC_36: eq_real(select(float_P_float_M_t_6, shift(t_4, (1))), 1.)) };
+      { (JC_36:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (1)))),
+        1.)) };
       void);
       void;
       (assert
-      { (JC_37: eq_real(select(float_P_float_M_t_6, shift(t_4, (2))), 2.)) };
+      { (JC_37:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (2)))),
+        2.)) };
       void);
       void;
       (assert
-      { (JC_38: eq_real(select(float_P_float_M_t_6, shift(t_4, (3))), 3.)) };
+      { (JC_38:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (3)))),
+        3.)) };
       void);
       void;
       (assert
-      { (JC_39: eq_real(select(float_P_float_M_t_6, shift(t_4, (4))), 4.)) };
+      { (JC_39:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (4)))),
+        4.)) };
       void);
       void;
       (assert
-      { (JC_40: eq_real(select(float_P_float_M_t_6, shift(t_4, (5))), 5.)) };
+      { (JC_40:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (5)))),
+        5.)) };
       void);
       void;
       (assert
-      { (JC_41: eq_real(select(float_P_float_M_t_6, shift(t_4, (6))), 6.)) };
+      { (JC_41:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (6)))),
+        6.)) };
       void);
       void;
       (assert
-      { (JC_42: eq_real(select(float_P_float_M_t_6, shift(t_4, (7))), 7.)) };
+      { (JC_42:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (7)))),
+        7.)) };
       void);
       void;
       (assert
-      { (JC_43: eq_real(select(float_P_float_M_t_6, shift(t_4, (8))), 8.)) };
+      { (JC_43:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (8)))),
+        8.)) };
       void);
       void;
       (assert
-      { (JC_44: eq_real(select(float_P_float_M_t_6, shift(t_4, (9))), 9.)) };
+      { (JC_44:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (9)))),
+        9.)) };
       void);
       void;
       (assert
-      { (JC_45: eq_real(select(float_P_float_M_t_6, shift(t_4, (10))), 10.)) };
+      { (JC_45:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (10)))),
+        10.)) };
       void);
       void;
       (assert
-      { (JC_46: eq_real(select(float_P_float_M_t_6, shift(t_4, (11))), 11.)) };
+      { (JC_46:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (11)))),
+        11.)) };
       void);
       void;
       (assert
-      { (JC_47: eq_real(select(float_P_float_M_t_6, shift(t_4, (12))), 12.)) };
+      { (JC_47:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (12)))),
+        12.)) };
       void);
       void;
       (assert
-      { (JC_48: eq_real(select(float_P_float_M_t_6, shift(t_4, (13))), 13.)) };
+      { (JC_48:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (13)))),
+        13.)) };
       void);
       void;
       (assert
-      { (JC_49: eq_real(select(float_P_float_M_t_6, shift(t_4, (14))), 14.)) };
+      { (JC_49:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (14)))),
+        14.)) };
       void);
       void;
       (assert
-      { (JC_50: eq_real(select(float_P_float_M_t_6, shift(t_4, (15))), 15.)) };
+      { (JC_50:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (15)))),
+        15.)) };
       void);
       void;
       (assert
-      { (JC_51: eq_real(select(float_P_float_M_t_6, shift(t_4, (16))), 16.)) };
+      { (JC_51:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (16)))),
+        16.)) };
       void);
       void;
       (assert
-      { (JC_52: eq_real(select(float_P_float_M_t_6, shift(t_4, (17))), 17.)) };
+      { (JC_52:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (17)))),
+        17.)) };
       void);
       void;
       (assert
-      { (JC_53: eq_real(select(float_P_float_M_t_6, shift(t_4, (18))), 18.)) };
+      { (JC_53:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (18)))),
+        18.)) };
       void);
       void;
       (assert
-      { (JC_54: eq_real(select(float_P_float_M_t_6, shift(t_4, (19))), 19.)) };
+      { (JC_54:
+        eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
+        19.)) };
       void);
       void;
       (assert { (JC_55: incr3(t_4, (0), (4), float_P_float_M_t_6)) }; void);
@@ -742,74 +785,104 @@ let f_safety =
                                jessie_1)))) in
        void);
       [ { } unit reads t_4
-        { (JC_11: eq_real(select(float_P_float_M_t_6, shift(t_4, (0))), 0.)) } ];
+        { (JC_11:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (0)))),
+          0.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_12: eq_real(select(float_P_float_M_t_6, shift(t_4, (1))), 1.)) } ];
+        { (JC_12:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (1)))),
+          1.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_13: eq_real(select(float_P_float_M_t_6, shift(t_4, (2))), 2.)) } ];
+        { (JC_13:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (2)))),
+          2.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_14: eq_real(select(float_P_float_M_t_6, shift(t_4, (3))), 3.)) } ];
+        { (JC_14:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (3)))),
+          3.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_15: eq_real(select(float_P_float_M_t_6, shift(t_4, (4))), 4.)) } ];
+        { (JC_15:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (4)))),
+          4.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_16: eq_real(select(float_P_float_M_t_6, shift(t_4, (5))), 5.)) } ];
+        { (JC_16:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (5)))),
+          5.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_17: eq_real(select(float_P_float_M_t_6, shift(t_4, (6))), 6.)) } ];
+        { (JC_17:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (6)))),
+          6.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_18: eq_real(select(float_P_float_M_t_6, shift(t_4, (7))), 7.)) } ];
+        { (JC_18:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (7)))),
+          7.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_19: eq_real(select(float_P_float_M_t_6, shift(t_4, (8))), 8.)) } ];
+        { (JC_19:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (8)))),
+          8.)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_20: eq_real(select(float_P_float_M_t_6, shift(t_4, (9))), 9.)) } ];
+        { (JC_20:
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (9)))),
+          9.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_21:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (10))), 10.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (10)))),
+          10.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_22:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (11))), 11.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (11)))),
+          11.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_23:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (12))), 12.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (12)))),
+          12.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_24:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (13))), 13.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (13)))),
+          13.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_25:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (14))), 14.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (14)))),
+          14.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_26:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (15))), 15.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (15)))),
+          15.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_27:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (16))), 16.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (16)))),
+          16.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_28:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (17))), 17.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (17)))),
+          17.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_29:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (18))), 18.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (18)))),
+          18.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_30:
-          eq_real(select(float_P_float_M_t_6, shift(t_4, (19))), 19.)) } ];
+          eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
+          19.)) } ];
       void;
       [ { } unit reads t_4
         { (JC_31: incr3(t_4, (0), (4), float_P_float_M_t_6)) } ];
@@ -845,11 +918,11 @@ why --project [...] why/e63-bis.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "546" begin = "33" end = "165"/>
+      <location file = "why/e63-bis.why" line = "588" begin = "33" end = "165"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "632" begin = "9" end = "54"/>
+      <location file = "why/e63-bis.why" line = "704" begin = "9" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1734,6 +1807,201 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type mode =
+  | nearest_even
+  | to_zero
+  | up
+  | down
+  | nearest_away
+
+type double
+
+logic round_double : mode, real -> real
+
+logic round_double_logic : mode, real -> double
+
+logic double_value : double -> real
+
+logic double_exact : double -> real
+
+logic double_model : double -> real
+
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
+
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
+
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
+
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
+
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
+
+type single
+
+logic round_single : mode, real -> real
+
+logic round_single_logic : mode, real -> single
+
+logic single_value : single -> real
+
+logic single_exact : single -> real
+
+logic single_model : single -> real
+
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
+
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
+
+function max_single() : real = 0x1.FFFFFEp127
+
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
+
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
+
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
+
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
+
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
+
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
+
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
+
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
+
 type char_P
 
 type float_P
@@ -1783,19 +2051,20 @@ axiom float_P_tags:
     (forall float_P_tag_table:float_P tag_table.
       instanceof(float_P_tag_table, x, float_P_tag)))
 
-inductive incr: float_P pointer, int, int, (float_P, real) memory -> prop =
-  | incr_ok: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
+inductive incr: float_P pointer, int, int, (float_P, single) memory -> prop =
+  | incr_ok: (forall float_P_float_M_t_1_at_L:(float_P, single) memory.
                (forall t_0:float_P pointer.
                  (forall i_0:int.
                    (forall j_0:int.
                      ((i_0 < j_0) ->
-                      ((select(float_P_float_M_t_1_at_L, shift(t_0,
-                       i_0)) <= select(float_P_float_M_t_1_at_L, shift(t_0,
-                       (i_0 + 1)))) ->
+                      ((single_value(select(float_P_float_M_t_1_at_L,
+                       shift(t_0,
+                       i_0))) <= single_value(select(float_P_float_M_t_1_at_L,
+                       shift(t_0, (i_0 + 1))))) ->
                        (incr(t_0, (i_0 + 1), j_0,
                         float_P_float_M_t_1_at_L) -> incr(t_0, i_0, j_0,
                         float_P_float_M_t_1_at_L))))))))
-  | incr_alone: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
+  | incr_alone: (forall float_P_float_M_t_1_at_L:(float_P, single) memory.
                   (forall t_1:float_P pointer.
                     (forall i_1:int. incr(t_1, i_1, i_1,
                       float_P_float_M_t_1_at_L))))
@@ -1803,19 +2072,21 @@ inductive incr: float_P pointer, int, int, (float_P, real) memory -> prop =
 
 
 predicate incr2(t_2: float_P pointer, i_2: int, j_1: int,
-  float_P_float_M_t_2_2_at_L: (float_P, real) memory) =
+  float_P_float_M_t_2_2_at_L: (float_P, single) memory) =
   (forall k1:int.
     (forall k2:int.
       (((i_2 <= k1) and ((k1 <= k2) and (k2 <= j_1))) ->
-       (select(float_P_float_M_t_2_2_at_L, shift(t_2,
-       k1)) <= select(float_P_float_M_t_2_2_at_L, shift(t_2, k2))))))
+       (single_value(select(float_P_float_M_t_2_2_at_L, shift(t_2,
+       k1))) <= single_value(select(float_P_float_M_t_2_2_at_L, shift(t_2,
+       k2)))))))
 
 predicate incr3(t_3: float_P pointer, i_3: int, j_2: int,
-  float_P_float_M_t_3_3_at_L: (float_P, real) memory) =
+  float_P_float_M_t_3_3_at_L: (float_P, single) memory) =
   (forall k:int.
-    (((i_3 <= k) and (k < j_2)) -> (select(float_P_float_M_t_3_3_at_L,
-     shift(t_3, k)) <= select(float_P_float_M_t_3_3_at_L, shift(t_3,
-     (k + 1))))))
+    (((i_3 <= k) and (k < j_2)) ->
+     (single_value(select(float_P_float_M_t_3_3_at_L, shift(t_3,
+     k))) <= single_value(select(float_P_float_M_t_3_3_at_L, shift(t_3,
+     (k + 1)))))))
 
 logic int8_of_integer : int -> int8
 

@@ -25,18 +25,18 @@
 # pragma JessieIntegerModel(math)
 
 /*@ axiomatic Sum {
-  @   // sum(t,i,j) denotes t[i]+...+t[j-1] 
-  @   logic integer sum{L}(int t[], integer i, integer j);
+  @   // sum(t,i,j) denotes t[i]+...+t[j-1]
+  @   logic integer sum{L}(int *t, integer i, integer j);
   @        // reads i,j,t,t[..] ;
   @   axiom sum1{L} :
-  @     \forall int t[], integer i; sum(t,i,i) == 0;
+  @     \forall int *t, integer i; sum(t,i,i) == 0;
   @   axiom sum2{L} :
-  @     \forall int t[], integer i, j; 
-  @       sum(t,i,j+1) == sum(t,i,j) + t[j]; 
+  @     \forall int *t, integer i, j;
+  @       sum(t,i,j+1) == sum(t,i,j) + t[j];
   @   axiom sum3{L} :
-  @     \forall int t[], integer i, j, k;
+  @     \forall int *t, integer i, j, k;
   @       i <= j <= k ==>
-  @         sum(t,i,k) == sum(t,i,j) + sum(t,j,k); 
+  @         sum(t,i,k) == sum(t,i,j) + sum(t,j,k);
   @ }
   @*/
 
@@ -73,9 +73,8 @@ void test2(int t[],int n) {
   }
 }
 
-/* 
+/*
 Local Variables:
 compile-command: "PPCHOME=../.. LC_ALL=C make sum2"
 End:
 */
-
