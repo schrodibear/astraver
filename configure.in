@@ -3,6 +3,7 @@
 #  The Why platform for program certification                            #
 #  Copyright (C) 2002-2008                                               #
 #    Romain BARDOU                                                       #
+#    Sylvie BOLDO
 #    Jean-François COUCHOT                                               #
 #    Mehdi DOGGUY                                                        #
 #    Jean-Christophe FILLIÂTRE                                           #
@@ -352,7 +353,7 @@ else
 	   8.2*|trunk)
  	      if test -f "$COQLIB/user-contrib/AllFloat.vo"; then
 	        AC_MSG_RESULT(yes)
-	  	WHYFLOATS="lib/coq/JessieFloats.vo lib/coq/floats_strict.vo"
+	  	WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/JessieFloats.vo lib/coq/floats_strict.vo"
 		COQFLOATSMSG=yes
 	      else
 	        AC_MSG_RESULT(no)
@@ -363,6 +364,9 @@ else
 	        AC_MSG_RESULT(yes)
 	  	WHYFLOATS="$WHYFLOATS lib/coq/JessieGappa.vo"
 		COQGAPPAMSG=yes
+		if  test -f "$COQLIB/user-contrib/AllFloat.vo"; then
+		  WHYFLOATS="$WHYFLOATS lib/coq/Why2Gappa.vo"
+		fi
 	      else
 	        AC_MSG_RESULT(no)
 	        COQGAPPAMSG="no (Coq library Gappa_tactic.vo not found)"
