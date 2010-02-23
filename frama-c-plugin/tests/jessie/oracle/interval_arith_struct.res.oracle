@@ -2840,7 +2840,7 @@ why --project [...] why/interval_arith_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po22.why">
-      <location file = "why/interval_arith_struct.why" line = "1805" begin = "37" end = "197"/>
+      <location file = "why/interval_arith_struct.why" line = "1763" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po23.why">
@@ -2849,7 +2849,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po24.why">
-      <location file = "why/interval_arith_struct.why" line = "1817" begin = "38" end = "200"/>
+      <location file = "why/interval_arith_struct.why" line = "1775" begin = "38" end = "200"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po25.why">
@@ -2858,7 +2858,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po26.why">
-      <location file = "why/interval_arith_struct.why" line = "1829" begin = "37" end = "197"/>
+      <location file = "why/interval_arith_struct.why" line = "1787" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po27.why">
@@ -2867,7 +2867,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po28.why">
-      <location file = "why/interval_arith_struct.why" line = "1841" begin = "46" end = "226"/>
+      <location file = "why/interval_arith_struct.why" line = "1799" begin = "46" end = "226"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po29.why">
@@ -3541,17 +3541,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po163.why">
-      <location file = "why/interval_arith_struct.why" line = "2349" begin = "14" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "2307" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po164.why">
-      <location file = "why/interval_arith_struct.why" line = "2352" begin = "15" end = "81"/>
+      <location file = "why/interval_arith_struct.why" line = "2310" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po165.why">
-      <location file = "why/interval_arith_struct.why" line = "2355" begin = "16" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "2313" begin = "16" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3606,7 +3606,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po3.why">
-      <location file = "why/interval_arith_struct.why" line = "866" begin = "36" end = "193"/>
+      <location file = "why/interval_arith_struct.why" line = "824" begin = "36" end = "193"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po4.why">
@@ -3615,7 +3615,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po5.why">
-      <location file = "why/interval_arith_struct.why" line = "878" begin = "35" end = "190"/>
+      <location file = "why/interval_arith_struct.why" line = "836" begin = "35" end = "190"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po6.why">
@@ -3624,7 +3624,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po7.why">
-      <location file = "why/interval_arith_struct.why" line = "890" begin = "34" end = "185"/>
+      <location file = "why/interval_arith_struct.why" line = "848" begin = "34" end = "185"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po8.why">
@@ -3633,21 +3633,21 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po9.why">
-      <location file = "why/interval_arith_struct.why" line = "902" begin = "43" end = "216"/>
+      <location file = "why/interval_arith_struct.why" line = "860" begin = "43" end = "216"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po10.why">
-      <location file = "why/interval_arith_struct.why" line = "985" begin = "16" end = "82"/>
+      <location file = "why/interval_arith_struct.why" line = "943" begin = "16" end = "82"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po11.why">
-      <location file = "why/interval_arith_struct.why" line = "988" begin = "17" end = "81"/>
+      <location file = "why/interval_arith_struct.why" line = "946" begin = "17" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po12.why">
-      <location file = "why/interval_arith_struct.why" line = "991" begin = "18" end = "78"/>
+      <location file = "why/interval_arith_struct.why" line = "949" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

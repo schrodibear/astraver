@@ -225,7 +225,7 @@ let full_model_function linfo name default =
 	    | Ctype x when x == floatType -> "\\single_" ^ name
 	    | _ -> assert false
 	end
- 
+
 let translated_name linfo largs =
 (*
   Format.eprintf "Jessie.interp: linfo = %s(%a)(%d)@."
@@ -474,7 +474,7 @@ let ctype ?bitsize ty =
                     match fk with
                       | FFloat -> JCPTnative (Tgenfloat `Float)
                       | FDouble -> JCPTnative (Tgenfloat `Double)
-                      | FLongDouble -> 
+                      | FLongDouble ->
                           unsupported "Jessie does not handle long double yet"
                   end
         end
@@ -517,6 +517,8 @@ let ctype ?bitsize ty =
 
 let ltype = function
   | Ctype ty -> ctype ty
+  | Ltype (s,[]) when s.lt_name = Utf8_logic.boolean ->
+      mktype (JCPTidentifier ("boolean",[]))
   | Ltype (s,[]) -> mktype (JCPTidentifier (s.lt_name,[]))
   | Linteger -> mktype (JCPTnative Tinteger)
   | Lreal -> mktype (JCPTnative Treal)
@@ -541,13 +543,13 @@ let strip_float_suffix s =
       | 'f' | 'F' | 'l' | 'L' -> String.sub s 0 l
       | _ -> s
 
-       
+
 let rec const ~in_code pos = function
-  | CInt64(_,_,Some s) -> 
+  | CInt64(_,_,Some s) ->
       (* Use the textual representation if available *)
       JCPEconst(JCCinteger s)
 
-  | CInt64(i,_ik,None) -> 
+  | CInt64(i,_ik,None) ->
       JCPEconst(JCCinteger(Int64.to_string i))
 
   | CStr _ | CWStr _ -> assert false (* Should have been rewritten *)
@@ -558,7 +560,7 @@ let rec const ~in_code pos = function
       (* Use the textual representation if available *)
       let s = strip_float_suffix s in
       begin match in_code,!float_model with
-        | false,_ 
+        | false,_
 	| true, `Math -> JCPEconst(JCCreal s)
         | true, (`Defensive | `Full | `Multirounding) ->
             (* add a cast to float or double depending on the value of fk *)
@@ -638,7 +640,7 @@ let term_lhost pos = function
        with Not_found ->
          mkexpr (JCPEvar v.lv_name) pos)
   | TResult _ -> mkexpr (JCPEvar "\\result") pos
-  | TMem _ -> 
+  | TMem _ ->
       unsupported "this kind of memory access is not currently supported"
 (*
          Loc.report_position pos
@@ -668,7 +670,8 @@ and terms t =
   let enode = match constFoldTermNodeAtTop t.term_node with
     | TConst c -> [const ~in_code:false t.term_loc c]
 
-    | TDataCons({ctor_type = {lt_name = "boolean"}} as d,_args) ->
+    | TDataCons({ctor_type = {lt_name = name}} as d,_args)
+        when name = Utf8_logic.boolean ->
         [JCPEconst (JCCboolean (d.ctor_name = "\\true"))]
 
     | TDataCons(ctor,args) ->
@@ -738,7 +741,7 @@ and terms t =
              (coerce_floats t1)
              (coerce_floats t2)
 
-    | TCastE(ty,t) 
+    | TCastE(ty,t)
         when isIntegralType ty && isLogicRealType t.term_type ->
           List.map (fun x -> JCPEapp("\\truncate_real_to_int",[],[x])) (terms t)
 
@@ -1367,41 +1370,41 @@ let built_behavior_ids l =
   in
   List.map (fun i -> new identifier i) l
 
-let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a = 
+let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
   let a, is_after =
     match a with
       | Before ca -> ca,false
       | After ca -> ca,true
   in
   let push s =
-    if is_after 
+    if is_after
     then (acc_assert_before,s::acc_assert_after,contract)
     else (s::acc_assert_before,acc_assert_after,contract)
   in
   match a with
      | User annot ->
-         begin 
+         begin
            match annot.annot_content with
              | AAssert (behav,p,status) ->
                  let behav = built_behavior_ids behav in
                  let asrt = assertion status in
-                 push  
-                   (mkexpr 
+                 push
+                   (mkexpr
                       (JCPEassert (behav,asrt,locate ~pos (named_pred p))) pos)
              | AInvariant(_behav,is_loop_inv,_p) ->
                  if is_loop_inv then acc (* should be handled elsewhere *)
-                 else unsupported "general code invariant"                 
+                 else unsupported "general code invariant"
 (*
                 let behav = built_behavior_ids behav in
-                push 
-                  (mkexpr 
+                push
+                  (mkexpr
                      (JCPEassert
                         (behav,Aassert,locate ~pos (named_pred p))) pos)
 *)
             | APragma _ -> assert false
             | AAssigns (_, _) -> acc (* should be handled elsewhere *)
             | AVariant _ -> acc (* should be handled elsewhere *)
-            | AStmtSpec s -> 
+            | AStmtSpec s ->
                 begin
                   match contract with
                     | None -> (acc_assert_before,acc_assert_after,Some s)
@@ -1417,17 +1420,17 @@ let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
               in
               let p = remove_pred_name p name_of_hint_assertion in
               let behav = built_behavior_ids behav in
-              push 
-                (mkexpr 
-                   (JCPEassert 
+              push
+                (mkexpr
+                   (JCPEassert
                       (behav,asrt,locate ~alarm ~pos (named_pred p))) pos)
           | AInvariant(_behav,is_loop_inv,_p) ->
               if is_loop_inv then acc (* should be handled elsewhere *)
               else unsupported "general code invariant"
                 (*
               let behav = built_behavior_ids behav in
-              push 
-                (mkexpr 
+              push
+                (mkexpr
                    (JCPEassert
                       (behav,Aassert,locate ~alarm ~pos (named_pred p))) pos)
                 *)
@@ -1488,10 +1491,10 @@ let rec expr pos e =
         in
         e#node
 
-    | CastE(ty,e') 
+    | CastE(ty,e')
         when isIntegralType ty && isFloatingType (typeOf e') ->
         let e = locate (mkexpr (JCPEcast(expr e',mktype (JCPTnative Treal))) pos) in
-	let e = 
+	let e =
 	  locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[e])) pos)
 	in e#node
 
@@ -1907,7 +1910,7 @@ let rec instruction = function
 
   | Skip _pos -> JCPEconst JCCvoid
 
-  | Code_annot _ -> assert false 
+  | Code_annot _ -> assert false
 
 let rec statement s =
   let pos = get_stmtLoc s.skind in
@@ -1930,7 +1933,7 @@ let rec statement s =
 
   let assert_before, assert_after, contract =
     List.fold_left (code_annot pos)
-      ([],[],None) 
+      ([],[],None)
       (Annotations.get_filter (fun _ -> true) s)
   in
   let snode = match s.skind with
@@ -2081,13 +2084,13 @@ let rec statement s =
   let s =
     match contract with
       | None -> s
-      | Some sp -> 
+      | Some sp ->
           let sp,_cba,_dba = spec sp in
           let requires, decreases, behaviors =
             List.fold_left
               (fun (r,d,b) c ->
                  match c with
-                   | JCCrequires p -> 
+                   | JCCrequires p ->
                        begin match r with
                          | None -> (Some p,d,b)
                          | Some _ -> notimplemented "multiple requires on statement contract"
@@ -2101,7 +2104,7 @@ let rec statement s =
               (None,None,[])
               sp
           in
-          mkexpr 
+          mkexpr
             (JCPEcontract(requires, decreases, behaviors, s))
             pos
   in
@@ -2699,13 +2702,13 @@ let pragma = function
             begin match String.lowercase arg with
               | "math" -> float_model := `Math;
 		  [Jc_output.JCfloat_model Jc_env.FMmath]
-              | "defensive" -> 
+              | "defensive" ->
                   float_model := `Defensive;
 		  [Jc_output.JCfloat_model Jc_env.FMdefensive]
-              | "full" -> 
+              | "full" ->
                   float_model := `Full;
 		  [Jc_output.JCfloat_model Jc_env.FMfull]
-              | "multirounding" -> 
+              | "multirounding" ->
                   float_model := `Multirounding;
 		  [Jc_output.JCfloat_model Jc_env.FMmultirounding]
               | s ->
@@ -2718,16 +2721,16 @@ let pragma = function
               | "nearesteven" ->
                   (* float_rounding_mode := `NearestEven; *)
                   [Jc_output.JCfloat_rounding_mode Jc_env.FRMNearestEven]
-              | "down" -> 
+              | "down" ->
                   (* float_rounding_mode := `Downward; *)
                   [Jc_output.JCfloat_rounding_mode Jc_env.FRMDown]
-              | "up" -> 
+              | "up" ->
                   (* float_rounding_mode := `Upward; *)
                   [Jc_output.JCfloat_rounding_mode Jc_env.FRMUp]
-              | "tozero" -> 
+              | "tozero" ->
                   (* float_rounding_mode := `Towardzero; *)
                   [Jc_output.JCfloat_rounding_mode Jc_env.FRMToZero]
-              | "nearestaway" -> 
+              | "nearestaway" ->
                   (* float_rounding_mode := `Towardawayzero; *)
                   [Jc_output.JCfloat_rounding_mode Jc_env.FRMNearestAway]
               | s ->
