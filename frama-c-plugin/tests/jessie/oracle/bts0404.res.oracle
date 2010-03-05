@@ -9,8 +9,8 @@ bts0404.c:16:[jessie] failure: Unexpected failure.
          Re-raised at file "src/kernel/log.ml", line 500, characters 8-9
          Called from file "src/lib/type.ml", line 736, characters 40-45
          Called from file "queue.ml", line 134, characters 6-20
-         Called from file "src/kernel/boot.ml", line 48, characters 4-20
-         Called from file "src/kernel/cmdline.ml", line 165, characters 4-8
+         Called from file "src/kernel/boot.ml", line 49, characters 4-20
+         Called from file "src/kernel/cmdline.ml", line 169, characters 4-8
          
          Plug-in jessie aborted because of an internal error.
          Please report as 'crash' at http://bts.frama-c.com
