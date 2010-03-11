@@ -42,8 +42,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : (0 <= n));
-         variant (C_2 : n);
+           invariant (C_2 : (0 <= n));
+         variant (C_3 : n);
          while (true)
          {  
             {  (if (n > 0) then () else 
@@ -76,8 +76,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_12 : (i <= 10));
-         variant (C_11 : (10 - i));
+           invariant (C_11 : (i <= 10));
+         variant (C_12 : (10 - i));
          while (true)
          {  
             {  (if (i < 10) then () else 
@@ -109,8 +109,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_20 : ((C_21 : (i_0 <= 7)) && (C_22 : (i_0 != 6))));
-         variant (C_19 : (7 - i_0));
+           invariant (C_19 : ((C_20 : (i_0 <= 7)) && (C_21 : (i_0 != 6))));
+         variant (C_22 : (7 - i_0));
          while (true)
          {  
             {  (if (i_0 < 6) then () else 

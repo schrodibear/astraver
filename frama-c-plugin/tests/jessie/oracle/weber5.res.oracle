@@ -72,17 +72,17 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_11 : ((C_12 : ((b - result) <= 0)) &&
-                               (C_13 : ((result - (b + length)) <= 0))));
+           invariant (C_13 : ((result - b) == (first - a)));
          behavior default:
-           invariant (C_10 : (\forall integer k;
-                               (((0 <= k) && (k < (first - a))) ==>
-                                 ((a + k).int_M == (b + k).int_M))));
+           invariant (C_10 : ((C_11 : ((a - first) <= 0)) &&
+                               (C_12 : ((first - last) <= 0))));
          behavior default:
-           invariant (C_7 : ((C_8 : ((a - first) <= 0)) &&
-                              (C_9 : ((first - last) <= 0))));
+           invariant (C_9 : (\forall integer k;
+                              (((0 <= k) && (k < (first - a))) ==>
+                                ((a + k).int_M == (b + k).int_M))));
          behavior default:
-           invariant (C_6 : ((result - b) == (first - a)));
+           invariant (C_6 : ((C_7 : ((b - result) <= 0)) &&
+                              (C_8 : ((result - (b + length)) <= 0))));
          while (true)
          {  
             {  (if (first != last) then () else 
@@ -614,38 +614,37 @@ let copy_int_array_ensures_default =
                             (loop_2:
                             while true do
                             { invariant
-                                ((JC_35:
-                                 eq_int(sub_pointer(mutable_result_0, b_0),
-                                 sub_pointer(mutable_first, a_0)))
+                                ((JC_37:
+                                 ((JC_35:
+                                  le_int(sub_pointer(b_0, mutable_result_0),
+                                  (0)))
+                                 and (JC_36:
+                                     le_int(sub_pointer(mutable_result_0,
+                                            shift(b_0,
+                                            integer_of_int32(length))),
+                                     (0)))))
                                 and ((JC_38:
-                                     ((JC_36:
-                                      le_int(sub_pointer(a_0, mutable_first),
-                                      (0)))
-                                     and (JC_37:
-                                         le_int(sub_pointer(mutable_first,
-                                                last),
-                                         (0)))))
-                                    and ((JC_39:
-                                         (forall k:int.
-                                          ((le_int((0), k)
-                                           and lt_int(k,
-                                               sub_pointer(mutable_first,
-                                               a_0))) ->
-                                           eq_int(integer_of_int32(select(int_P_int_M_first_3,
-                                                                   shift(a_0,
-                                                                   k))),
-                                           integer_of_int32(select(int_P_int_M_result_5,
-                                                            shift(b_0, k)))))))
+                                     (forall k:int.
+                                      ((le_int((0), k)
+                                       and lt_int(k,
+                                           sub_pointer(mutable_first, a_0))) ->
+                                       eq_int(integer_of_int32(select(int_P_int_M_first_3,
+                                                               shift(a_0, k))),
+                                       integer_of_int32(select(int_P_int_M_result_5,
+                                                        shift(b_0, k)))))))
+                                    and ((JC_41:
+                                         ((JC_39:
+                                          le_int(sub_pointer(a_0,
+                                                 mutable_first),
+                                          (0)))
+                                         and (JC_40:
+                                             le_int(sub_pointer(mutable_first,
+                                                    last),
+                                             (0)))))
                                         and (JC_42:
-                                            ((JC_40:
-                                             le_int(sub_pointer(b_0,
-                                                    mutable_result_0),
-                                             (0)))
-                                            and (JC_41:
-                                                le_int(sub_pointer(mutable_result_0,
-                                                       shift(b_0,
-                                                       integer_of_int32(length))),
-                                                (0))))))))
+                                            eq_int(sub_pointer(mutable_result_0,
+                                                   b_0),
+                                            sub_pointer(mutable_first, a_0))))))
                                }
                              begin
                                [ { } unit { true } ];
@@ -789,39 +788,40 @@ let copy_int_array_safety =
                              begin
                                [ { } unit
                                  reads a_0,b_0,int_P_int_M_result_5,length,mutable_first,mutable_result_0
-                                 { ((JC_22:
-                                    eq_int(sub_pointer(mutable_result_0, b_0),
-                                    sub_pointer(mutable_first, a_0)))
+                                 { ((JC_24:
+                                    ((JC_22:
+                                     le_int(sub_pointer(b_0,
+                                            mutable_result_0),
+                                     (0)))
+                                    and (JC_23:
+                                        le_int(sub_pointer(mutable_result_0,
+                                               shift(b_0,
+                                               integer_of_int32(length))),
+                                        (0)))))
                                    and ((JC_25:
-                                        ((JC_23:
-                                         le_int(sub_pointer(a_0,
-                                                mutable_first),
-                                         (0)))
-                                        and (JC_24:
-                                            le_int(sub_pointer(mutable_first,
-                                                   last),
-                                            (0)))))
-                                       and ((JC_26:
-                                            (forall k:int.
-                                             ((le_int((0), k)
-                                              and lt_int(k,
-                                                  sub_pointer(mutable_first,
-                                                  a_0))) ->
-                                              eq_int(integer_of_int32(
-                                                     select(int_P_int_M_first_3,
-                                                     shift(a_0, k))),
-                                              integer_of_int32(select(int_P_int_M_result_5,
-                                                               shift(b_0, k)))))))
+                                        (forall k:int.
+                                         ((le_int((0), k)
+                                          and lt_int(k,
+                                              sub_pointer(mutable_first, a_0))) ->
+                                          eq_int(integer_of_int32(select(int_P_int_M_first_3,
+                                                                  shift(a_0,
+                                                                  k))),
+                                          integer_of_int32(select(int_P_int_M_result_5,
+                                                           shift(b_0, k)))))))
+                                       and ((JC_28:
+                                            ((JC_26:
+                                             le_int(sub_pointer(a_0,
+                                                    mutable_first),
+                                             (0)))
+                                            and (JC_27:
+                                                le_int(sub_pointer(mutable_first,
+                                                       last),
+                                                (0)))))
                                            and (JC_29:
-                                               ((JC_27:
-                                                le_int(sub_pointer(b_0,
-                                                       mutable_result_0),
-                                                (0)))
-                                               and (JC_28:
-                                                   le_int(sub_pointer(mutable_result_0,
-                                                          shift(b_0,
-                                                          integer_of_int32(length))),
-                                                   (0)))))))) } ];
+                                               eq_int(sub_pointer(mutable_result_0,
+                                                      b_0),
+                                               sub_pointer(mutable_first,
+                                               a_0)))))) } ];
                               try
                                (let jessie_25 = begin
                                                   (let jessie_24 = begin
@@ -918,7 +918,7 @@ why --project [...] why/weber5.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber5_po14.why">
-      <location file = "why/weber5.why" line = "673" begin = "56" end = "90"/>
+      <location file = "why/weber5.why" line = "672" begin = "56" end = "90"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -958,61 +958,61 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po22.why">
-      <location file = "why/weber5.why" line = "679" begin = "63" end = "64"/>
+      <location file = "why/weber5.why" line = "678" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber5_po23.why">
-      <location file = "why/weber5.why" line = "679" begin = "63" end = "64"/>
+      <location file = "why/weber5.why" line = "678" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/weber5_po1.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "22" begin = "20" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "23" begin = "20" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber5_po2.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "20" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "23" begin = "25" end = "43"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber5_po3.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "25" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "24" begin = "20" end = "72"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber5_po4.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "24" begin = "20" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "20" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber5_po5.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "23" begin = "20" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "25" end = "38"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber5_po6.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "23" begin = "25" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "22" begin = "20" end = "43"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber5_po7.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "22" begin = "20" end = "43"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber5_po8.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "20" end = "30"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber5_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "25" end = "38"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber5_po10.why">
-      <location file = "PPCHOME/tests/jessie/weber5.c" line = "24" begin = "20" end = "72"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber5_po11.why">
       <location file = "PPCHOME/tests/jessie/weber5.c" line = "23" begin = "20" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/weber5_po12.why">
+    <goal why_file="why/weber5_po8.why">
       <location file = "PPCHOME/tests/jessie/weber5.c" line = "23" begin = "25" end = "43"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber5_po9.why">
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "24" begin = "20" end = "72"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber5_po10.why">
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "20" end = "30"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber5_po11.why">
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "21" begin = "25" end = "38"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber5_po12.why">
+      <location file = "PPCHOME/tests/jessie/weber5.c" line = "22" begin = "20" end = "43"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber5_po13.why">

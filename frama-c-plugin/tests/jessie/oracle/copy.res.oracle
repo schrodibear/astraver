@@ -56,11 +56,11 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((C_4 : (i <= n)) &&
-                              (C_5 : (\forall int32 k;
+           invariant (C_2 : ((C_3 : (i <= n)) &&
+                              (C_4 : (\forall int32 k;
                                        (((i <= k) && (k < n)) ==>
                                          ((t2 + k).int_M == (t1 + k).int_M))))));
-         variant (C_2 : i);
+         variant (C_5 : i);
          while (true)
          {  
             {  

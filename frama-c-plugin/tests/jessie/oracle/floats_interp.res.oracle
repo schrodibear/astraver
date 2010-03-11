@@ -134,8 +134,8 @@ behavior in_interval:
                                (((0 <= j_0) && (j_0 < i)) ==>
                                  ((z :> real) > ((x + j_0).double_M :> real)))));
          behavior default:
-           invariant (C_7 : ((C_8 : (1 <= i)) && (C_9 : (i <= n))));
-         variant (C_10 : (n - i));
+           invariant (C_8 : ((C_9 : (1 <= i)) && (C_10 : (i <= n))));
+         variant (C_7 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 

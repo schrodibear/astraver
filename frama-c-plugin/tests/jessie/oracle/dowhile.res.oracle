@@ -46,9 +46,9 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_4 : ((C_5 : (x == (10 - i))) &&
-                              ((C_7 : (10 >= i)) && (C_8 : (i > 0)))));
-         variant (C_3 : i);
+           invariant (C_3 : ((C_4 : (x == (10 - i))) &&
+                              ((C_6 : (10 >= i)) && (C_7 : (i > 0)))));
+         variant (C_8 : i);
          while (true)
          {  
             {  (C_11 : (x = (C_10 : ((C_9 : (x + 1)) :> int32))));

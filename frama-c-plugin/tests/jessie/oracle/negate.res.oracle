@@ -52,12 +52,12 @@ behavior default:
            
            assigns (t + [0..(i - 1)]).int_M;
          behavior default:
-           invariant (C_2 : (((C_4 : (0 <= i)) && (C_5 : (i <= n))) &&
-                              (C_6 : (\forall integer k;
+           invariant (C_3 : (((C_5 : (0 <= i)) && (C_6 : (i <= n))) &&
+                              (C_7 : (\forall integer k;
                                        (((0 <= k) && (k < i)) ==>
                                          ((t + k).int_M ==
                                            (- \at((t + k).int_M,Pre))))))));
-         variant (C_7 : (n - i));
+         variant (C_2 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 

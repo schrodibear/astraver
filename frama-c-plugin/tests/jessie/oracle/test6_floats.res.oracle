@@ -69,17 +69,17 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_5 : (((((C_9 : (2 <= i)) && (C_10 : (i <= (N + 1)))) &&
-                                (C_11 : (\double_exact(ucur) ==
+           invariant (C_4 : (((((C_8 : (2 <= i)) && (C_9 : (i <= (N + 1)))) &&
+                                (C_10 : (\double_exact(ucur) ==
                                           ((u0 :> real) +
                                             ((i - 1) *
                                               ((u1 :> real) - (u0 :> real))))))) &&
-                               (C_12 : (\double_exact(uprev) ==
+                               (C_11 : (\double_exact(uprev) ==
                                          ((u0 :> real) +
                                            ((i - 2) *
                                              ((u1 :> real) - (u0 :> real))))))) &&
-                              (C_13 : my_killing_prop(ucur, uprev, (i - 2)))));
-         variant (C_4 : (N - i));
+                              (C_12 : my_killing_prop(ucur, uprev, (i - 2)))));
+         variant (C_13 : (N - i));
          while (true)
          {  
             {  (if (i <= N) then () else 

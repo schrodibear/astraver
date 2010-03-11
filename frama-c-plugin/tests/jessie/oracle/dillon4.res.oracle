@@ -78,16 +78,16 @@ behavior default:
          loop 
          behavior default:
            
-           assigns tmp_1;
+           assigns i;
          behavior default:
-           invariant (C_2 : (((C_4 : (0 <= i)) && (C_5 : (i <= 5))) &&
-                              (C_6 : (((0 <= i) && (i <= 5)) ==>
+           invariant (C_3 : (((C_5 : (0 <= i)) && (C_6 : (i <= 5))) &&
+                              (C_7 : (((0 <= i) && (i <= 5)) ==>
                                        (5 >=
                                          cpt{Here}(t, (u :> real), 0, (i - 1)))))));
          behavior default:
            
-           assigns i;
-         variant (C_7 : (5 - i));
+           assigns tmp_1;
+         variant (C_2 : (5 - i));
          while (true)
          {  
             {  (if (i < 5) then () else 

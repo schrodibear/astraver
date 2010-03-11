@@ -128,18 +128,18 @@ behavior bezoutProperty:
       
       {  
          loop 
-         behavior bezoutProperty:
-           invariant (C_10 : ((C_11 : (((a * \at(x,Pre)) + (b * \at(y,Pre))) ==
-                                        x)) &&
-                               (C_12 : (((c * \at(x,Pre)) + (d * \at(y,Pre))) ==
-                                         y))));
-         behavior default:
-           invariant (C_6 : ((C_7 : (x >= 0)) && (C_8 : (y >= 0))));
          behavior resultIsGcd:
-           invariant (C_5 : (\forall integer d_1;
-                              (isGcd(x, y, d_1) ==>
-                                \at(isGcd(x, y, d_1),Pre))));
-         variant (C_9 : y);
+           invariant (C_12 : (\forall integer d_1;
+                               (isGcd(x, y, d_1) ==>
+                                 \at(isGcd(x, y, d_1),Pre))));
+         behavior default:
+           invariant (C_9 : ((C_10 : (x >= 0)) && (C_11 : (y >= 0))));
+         behavior bezoutProperty:
+           invariant (C_5 : ((C_6 : (((a * \at(x,Pre)) + (b * \at(y,Pre))) ==
+                                      x)) &&
+                              (C_7 : (((c * \at(x,Pre)) + (d * \at(y,Pre))) ==
+                                       y))));
+         variant (C_8 : y);
          while (true)
          {  
             {  (if (y > 0) then () else 

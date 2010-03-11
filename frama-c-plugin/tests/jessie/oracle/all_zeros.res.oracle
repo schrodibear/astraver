@@ -53,12 +53,12 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_2 : (((C_4 : (0 <= n_0)) &&
-                               (C_5 : (n_0 <= \at(n_0,Pre)))) &&
-                              (C_6 : (\forall int32 i;
+           invariant (C_1 : (((C_3 : (0 <= n_0)) &&
+                               (C_4 : (n_0 <= \at(n_0,Pre)))) &&
+                              (C_5 : (\forall int32 i;
                                        (((n_0 <= i) && (i < \at(n_0,Pre))) ==>
                                          ((t_0 + i).int_M == 0))))));
-         variant (C_1 : n_0);
+         variant (C_6 : n_0);
          while (true)
          {  
             {  (C_9 : (n_0 = (C_8 : ((C_7 : (n_0 - 1)) :> int32))));
@@ -96,11 +96,11 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_22 : (((C_24 : (0 <= k)) && (C_25 : (k <= n))) &&
-                               (C_26 : (\forall integer i_1;
+           invariant (C_21 : (((C_23 : (0 <= k)) && (C_24 : (k <= n))) &&
+                               (C_25 : (\forall integer i_1;
                                          (((0 <= i_1) && (i_1 < k)) ==>
                                            ((t + i_1).int_M == 0))))));
-         variant (C_21 : (n - k));
+         variant (C_26 : (n - k));
          while (true)
          {  (if (k < n) then 
             {  
@@ -142,11 +142,11 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_43 : (((C_45 : (0 <= k_0)) && (C_46 : (k_0 <= n_1))) &&
-                               (C_47 : (\forall integer i_3;
+           invariant (C_42 : (((C_44 : (0 <= k_0)) && (C_45 : (k_0 <= n_1))) &&
+                               (C_46 : (\forall integer i_3;
                                          (((0 <= i_3) && (i_3 < k_0)) ==>
                                            ((t_1 + i_3).int_M == 0))))));
-         variant (C_42 : (n_1 - k_0));
+         variant (C_47 : (n_1 - k_0));
          while (true)
          {  
             {  (if (k_0 < n_1) then () else 

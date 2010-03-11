@@ -199,22 +199,22 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_5 : ((((C_8 : (0 <= i)) && (C_9 : (i <= size))) &&
-                               (C_10 : ((i == size) ==>
-                                         (is_heap(tree_of_array{Here}(
-                                                  heap, 0, size)) &&
-                                           (model() == model{Pre}()))))) &&
-                              (C_11 : ((i < size) ==>
+           
+           assigns (heap + [..]).int_M;
+         behavior default:
+           invariant (C_4 : ((((C_7 : (0 <= i)) && (C_8 : (i <= size))) &&
+                               (C_9 : ((i == size) ==>
+                                        (is_heap(tree_of_array{Here}(
+                                                 heap, 0, size)) &&
+                                          (model() == model{Pre}()))))) &&
+                              (C_10 : ((i < size) ==>
                                         (is_heap(tree_of_array{Here}(
                                                  heap, 0, (size + 1))) &&
                                           (bag_of_tree(tree_of_array{Here}(
                                                        heap, 0, (size + 1))) ==
                                             add_bag((heap + i).int_M,
                                                     \at(model(),Pre))))))));
-         behavior default:
-           
-           assigns (heap + [..]).int_M;
-         variant (C_4 : i);
+         variant (C_11 : i);
          while (true)
          {  
             {  (if (i > 0) then () else 
@@ -281,11 +281,11 @@ behavior default:
          {  
             loop 
             behavior default:
-              invariant (C_42 : ((C_43 : (0 <= i_0)) &&
-                                  (C_44 : (i_0 <= size))));
-            behavior default:
               
               assigns (heap + [..]).int_M;
+            behavior default:
+              invariant (C_42 : ((C_43 : (0 <= i_0)) &&
+                                  (C_44 : (i_0 <= size))));
             variant (C_41 : (size - i_0));
             while (true)
             {  
@@ -2035,11 +2035,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po57.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1711"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1711"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
@@ -2067,11 +2067,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po65.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1711"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1714"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "9" end = "1711"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">

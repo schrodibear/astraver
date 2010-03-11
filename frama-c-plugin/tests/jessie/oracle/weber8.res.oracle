@@ -58,14 +58,14 @@ behavior is_not_empty:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((((C_6 : ((first - it) <= 0)) &&
-                                (C_7 : ((it - last) <= 0))) &&
-                               (C_8 : (\base_block(first) == \base_block(it)))) &&
-                              (C_9 : (\base_block(last) == \base_block(it)))));
-         behavior default:
-           invariant (C_2 : (\forall integer k;
+           invariant (C_9 : (\forall integer k;
                               (((0 <= k) && (k < (it - first))) ==>
                                 ((first + k).int_M == value))));
+         behavior default:
+           invariant (C_2 : ((((C_5 : ((first - it) <= 0)) &&
+                                (C_6 : ((it - last) <= 0))) &&
+                               (C_7 : (\base_block(first) == \base_block(it)))) &&
+                              (C_8 : (\base_block(last) == \base_block(it)))));
          while (true)
          {  
             {  (if (it != last) then () else 
@@ -546,20 +546,19 @@ let fill_ensures_default =
                           (loop_2:
                           while true do
                           { invariant
-                              ((JC_29:
-                               (forall k:int.
-                                ((le_int((0), k)
-                                 and lt_int(k, sub_pointer(it, first))) ->
-                                 eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                         shift(first, k))),
-                                 integer_of_int32(value)))))
+                              ((JC_33:
+                               ((JC_29: le_int(sub_pointer(first, it), (0)))
+                               and ((JC_30:
+                                    le_int(sub_pointer(it, last), (0)))
+                                   and ((JC_31: same_block(first, it))
+                                       and (JC_32: same_block(last, it))))))
                               and (JC_34:
-                                  ((JC_30:
-                                   le_int(sub_pointer(first, it), (0)))
-                                  and ((JC_31:
-                                       le_int(sub_pointer(it, last), (0)))
-                                      and ((JC_32: same_block(first, it))
-                                          and (JC_33: same_block(last, it)))))))
+                                  (forall k:int.
+                                   ((le_int((0), k)
+                                    and lt_int(k, sub_pointer(it, first))) ->
+                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                            shift(first, k))),
+                                    integer_of_int32(value))))))
                              }
                            begin
                              [ { } unit { true } ];
@@ -649,21 +648,21 @@ let fill_ensures_is_not_empty =
                           { invariant (JC_45: true)  }
                            begin
                              [ { } unit reads int_P_int_M_first_1,it
-                               { ((JC_38:
-                                  (forall k:int.
-                                   ((le_int((0), k)
-                                    and lt_int(k, sub_pointer(it, first))) ->
-                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                            shift(first, k))),
-                                    integer_of_int32(value)))))
+                               { ((JC_42:
+                                  ((JC_38:
+                                   le_int(sub_pointer(first, it), (0)))
+                                  and ((JC_39:
+                                       le_int(sub_pointer(it, last), (0)))
+                                      and ((JC_40: same_block(first, it))
+                                          and (JC_41: same_block(last, it))))))
                                  and (JC_43:
-                                     ((JC_39:
-                                      le_int(sub_pointer(first, it), (0)))
-                                     and ((JC_40:
-                                          le_int(sub_pointer(it, last), (0)))
-                                         and ((JC_41: same_block(first, it))
-                                             and (JC_42:
-                                                 same_block(last, it))))))) } ];
+                                     (forall k:int.
+                                      ((le_int((0), k)
+                                       and lt_int(k, sub_pointer(it, first))) ->
+                                       eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                               shift(first,
+                                                               k))),
+                                       integer_of_int32(value)))))) } ];
                             try
                              (let jessie_47 = begin
                                                 (let jessie_46 = begin
@@ -754,21 +753,21 @@ let fill_safety =
                           { invariant (JC_26: true) variant (0) }
                            begin
                              [ { } unit reads int_P_int_M_first_1,it
-                               { ((JC_19:
-                                  (forall k:int.
-                                   ((le_int((0), k)
-                                    and lt_int(k, sub_pointer(it, first))) ->
-                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                            shift(first, k))),
-                                    integer_of_int32(value)))))
+                               { ((JC_23:
+                                  ((JC_19:
+                                   le_int(sub_pointer(first, it), (0)))
+                                  and ((JC_20:
+                                       le_int(sub_pointer(it, last), (0)))
+                                      and ((JC_21: same_block(first, it))
+                                          and (JC_22: same_block(last, it))))))
                                  and (JC_24:
-                                     ((JC_20:
-                                      le_int(sub_pointer(first, it), (0)))
-                                     and ((JC_21:
-                                          le_int(sub_pointer(it, last), (0)))
-                                         and ((JC_22: same_block(first, it))
-                                             and (JC_23:
-                                                 same_block(last, it))))))) } ];
+                                     (forall k:int.
+                                      ((le_int((0), k)
+                                       and lt_int(k, sub_pointer(it, first))) ->
+                                       eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                               shift(first,
+                                                               k))),
+                                       integer_of_int32(value)))))) } ];
                             try
                              (let jessie_17 = begin
                                                 (let jessie_16 = begin
@@ -840,7 +839,7 @@ why --project [...] why/weber8.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber8_po12.why">
-      <location file = "why/weber8.why" line = "688" begin = "68" end = "90"/>
+      <location file = "why/weber8.why" line = "687" begin = "68" end = "90"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -855,11 +854,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber8_po15.why">
-      <location file = "why/weber8.why" line = "666" begin = "61" end = "62"/>
+      <location file = "why/weber8.why" line = "665" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber8_po16.why">
-      <location file = "why/weber8.why" line = "666" begin = "61" end = "62"/>
+      <location file = "why/weber8.why" line = "665" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -871,43 +870,43 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/weber8_po1.why">
-      <location file = "PPCHOME/tests/jessie/weber8.c" line = "16" begin = "20" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/weber8.c" line = "13" begin = "20" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber8_po2.why">
-      <location file = "PPCHOME/tests/jessie/weber8.c" line = "13" begin = "20" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/weber8.c" line = "13" begin = "29" end = "39"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber8_po3.why">
-      <location file = "PPCHOME/tests/jessie/weber8.c" line = "13" begin = "29" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/weber8.c" line = "14" begin = "20" end = "55"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber8_po4.why">
-      <location file = "PPCHOME/tests/jessie/weber8.c" line = "14" begin = "20" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/weber8.c" line = "15" begin = "20" end = "54"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber8_po5.why">
-      <location file = "PPCHOME/tests/jessie/weber8.c" line = "15" begin = "20" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/weber8.c" line = "16" begin = "20" end = "80"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber8_po6.why">
-      <location file = "PPCHOME/tests/jessie/weber8.c" line = "16" begin = "20" end = "80"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber8_po7.why">
       <location file = "PPCHOME/tests/jessie/weber8.c" line = "13" begin = "20" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/weber8_po8.why">
+    <goal why_file="why/weber8_po7.why">
       <location file = "PPCHOME/tests/jessie/weber8.c" line = "13" begin = "29" end = "39"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/weber8_po9.why">
+    <goal why_file="why/weber8_po8.why">
       <location file = "PPCHOME/tests/jessie/weber8.c" line = "14" begin = "20" end = "55"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/weber8_po10.why">
+    <goal why_file="why/weber8_po9.why">
       <location file = "PPCHOME/tests/jessie/weber8.c" line = "15" begin = "20" end = "54"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber8_po10.why">
+      <location file = "PPCHOME/tests/jessie/weber8.c" line = "16" begin = "20" end = "80"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>

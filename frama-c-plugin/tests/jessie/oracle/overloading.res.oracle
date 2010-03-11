@@ -36,20 +36,20 @@ lemma l :
 logic integer square_integer(integer x) =
 (x * x)
 
-logic real square_real(real x_0) =
+logic real square_0(real x_0) =
 (x_0 * x_0)
 
 lemma l2 :
-((square_real(1.5) == 2.25) && (square_integer((- 5)) == 25))
+((square_0(1.5) == 2.25) && (square_integer((- 5)) == 25))
 
 predicate is_pos_integer(integer x_1) =
 (x_1 > 0)
 
-predicate is_pos_real(real x_2) =
+predicate is_pos_0(real x_2) =
 (x_2 > 0.0)
 
 lemma l3 :
-(is_pos_real(1.5) && (! is_pos_integer((- 5))))
+(is_pos_0(1.5) && (! is_pos_integer((- 5))))
 
 unit f(float x, double y)
   requires (C_1 : ((C_2 : \single_is_finite(x)) &&
@@ -110,27 +110,27 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate is_pos_integer(x_1:int) = gt_int(x_1, (0))
+predicate is_pos_0(x_2:real) = gt_real(x_2, 0.0)
 
-predicate is_pos_real(x_2:real) = gt_real(x_2, 0.0)
+predicate is_pos_integer(x_1:int) = gt_int(x_1, (0))
 
 goal l : (eq_real(abs_real(1.5), 1.5) and eq_int(abs_int(neg_int((2))), (2)))
 
-function square_real(x_0:real) : real = mul_real(x_0, x_0)
+function square_0(x_0:real) : real = mul_real(x_0, x_0)
 
 function square_integer(x:int) : int = mul_int(x, x)
 
 goal l2 :
- (eq_real(square_real(1.5), 2.25)
+ (eq_real(square_0(1.5), 2.25)
  and eq_int(square_integer(neg_int((5))), (25)))
 
 axiom l2_as_axiom :
- (eq_real(square_real(1.5), 2.25)
+ (eq_real(square_0(1.5), 2.25)
  and eq_int(square_integer(neg_int((5))), (25)))
 
-goal l3 : (is_pos_real(1.5) and (not is_pos_integer(neg_int((5)))))
+goal l3 : (is_pos_0(1.5) and (not is_pos_integer(neg_int((5)))))
 
-axiom l3_as_axiom : (is_pos_real(1.5) and (not is_pos_integer(neg_int((5)))))
+axiom l3_as_axiom : (is_pos_0(1.5) and (not is_pos_integer(neg_int((5)))))
 
 axiom l_as_axiom :
  (eq_real(abs_real(1.5), 1.5) and eq_int(abs_int(neg_int((2))), (2)))
@@ -384,22 +384,22 @@ why --project [...] why/overloading.why
   <lemma name="l2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/overloading_po2.why">
-      <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "69"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="l3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/overloading_po3.why">
-      <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "45" begin = "0" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "45" begin = "0" end = "55"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="l3">
-    <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "45" begin = "0" end = "58"/>
+    <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "45" begin = "0" end = "55"/>
   </function>
   <function name="l2">
-    <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "72"/>
+    <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "36" begin = "0" end = "69"/>
   </function>
   <function name="l">
     <location file = "PPCHOME/tests/jessie/overloading.jessie/overloading.jc" line = "27" begin = "0" end = "65"/>
@@ -1806,18 +1806,17 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
+predicate is_pos_0(x_2: real) = (x_2 > 0.0)
+
 predicate is_pos_integer(x_1: int) = (x_1 > 0)
 
-predicate is_pos_real(x_2: real) = (x_2 > 0.0)
-
-function square_real(x_0: real) : real = (x_0 * x_0)
+function square_0(x_0: real) : real = (x_0 * x_0)
 
 function square_integer(x: int) : int = (x * x)
 
-axiom l2_as_axiom:
-  ((square_real(1.5) = 2.25) and (square_integer((-5)) = 25))
+axiom l2_as_axiom: ((square_0(1.5) = 2.25) and (square_integer((-5)) = 25))
 
-axiom l3_as_axiom: (is_pos_real(1.5) and (not is_pos_integer((-5))))
+axiom l3_as_axiom: (is_pos_0(1.5) and (not is_pos_integer((-5))))
 
 axiom l_as_axiom: ((abs_real(1.5) = 1.5) and (abs_int((-2)) = 2))
 

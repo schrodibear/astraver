@@ -61,12 +61,12 @@ behavior is_empty:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((C_4 : ((a - first) <= 0)) &&
-                              (C_5 : ((first - last) <= 0))));
-         behavior default:
-           invariant (C_2 : (\forall integer k;
+           invariant (C_5 : (\forall integer k;
                               (((0 <= k) && (k < (first - a))) ==>
                                 ((a + k).int_M == value))));
+         behavior default:
+           invariant (C_2 : ((C_3 : ((a - first) <= 0)) &&
+                              (C_4 : ((first - last) <= 0))));
          while (true)
          {  
             {  (if (first != last) then () else 
@@ -551,19 +551,20 @@ let fill_int_array_ensures_default =
                           (loop_2:
                           while true do
                           { invariant
-                              ((JC_27:
-                               (forall k:int.
-                                ((le_int((0), k)
-                                 and lt_int(k, sub_pointer(mutable_first, a))) ->
-                                 eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                         shift(a, k))),
-                                 integer_of_int32(value)))))
+                              ((JC_29:
+                               ((JC_27:
+                                le_int(sub_pointer(a, mutable_first), (0)))
+                               and (JC_28:
+                                   le_int(sub_pointer(mutable_first, last),
+                                   (0)))))
                               and (JC_30:
-                                  ((JC_28:
-                                   le_int(sub_pointer(a, mutable_first), (0)))
-                                  and (JC_29:
-                                      le_int(sub_pointer(mutable_first, last),
-                                      (0))))))
+                                  (forall k:int.
+                                   ((le_int((0), k)
+                                    and lt_int(k,
+                                        sub_pointer(mutable_first, a))) ->
+                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                            shift(a, k))),
+                                    integer_of_int32(value))))))
                              }
                            begin
                              [ { } unit { true } ];
@@ -656,22 +657,20 @@ let fill_int_array_ensures_is_empty =
                            begin
                              [ { } unit
                                reads a,int_P_int_M_first_1,mutable_first
-                               { ((JC_41:
-                                  (forall k:int.
-                                   ((le_int((0), k)
-                                    and lt_int(k,
-                                        sub_pointer(mutable_first, a))) ->
-                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                            shift(a, k))),
-                                    integer_of_int32(value)))))
+                               { ((JC_43:
+                                  ((JC_41:
+                                   le_int(sub_pointer(a, mutable_first), (0)))
+                                  and (JC_42:
+                                      le_int(sub_pointer(mutable_first, last),
+                                      (0)))))
                                  and (JC_44:
-                                     ((JC_42:
-                                      le_int(sub_pointer(a, mutable_first),
-                                      (0)))
-                                     and (JC_43:
-                                         le_int(sub_pointer(mutable_first,
-                                                last),
-                                         (0)))))) } ];
+                                     (forall k:int.
+                                      ((le_int((0), k)
+                                       and lt_int(k,
+                                           sub_pointer(mutable_first, a))) ->
+                                       eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                               shift(a, k))),
+                                       integer_of_int32(value)))))) } ];
                             try
                              (let jessie_62 = begin
                                                 (let jessie_61 = begin
@@ -761,22 +760,20 @@ let fill_int_array_ensures_is_not_empty =
                            begin
                              [ { } unit
                                reads a,int_P_int_M_first_1,mutable_first
-                               { ((JC_34:
-                                  (forall k:int.
-                                   ((le_int((0), k)
-                                    and lt_int(k,
-                                        sub_pointer(mutable_first, a))) ->
-                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                            shift(a, k))),
-                                    integer_of_int32(value)))))
+                               { ((JC_36:
+                                  ((JC_34:
+                                   le_int(sub_pointer(a, mutable_first), (0)))
+                                  and (JC_35:
+                                      le_int(sub_pointer(mutable_first, last),
+                                      (0)))))
                                  and (JC_37:
-                                     ((JC_35:
-                                      le_int(sub_pointer(a, mutable_first),
-                                      (0)))
-                                     and (JC_36:
-                                         le_int(sub_pointer(mutable_first,
-                                                last),
-                                         (0)))))) } ];
+                                     (forall k:int.
+                                      ((le_int((0), k)
+                                       and lt_int(k,
+                                           sub_pointer(mutable_first, a))) ->
+                                       eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                               shift(a, k))),
+                                       integer_of_int32(value)))))) } ];
                             try
                              (let jessie_47 = begin
                                                 (let jessie_46 = begin
@@ -868,22 +865,20 @@ let fill_int_array_safety =
                            begin
                              [ { } unit
                                reads a,int_P_int_M_first_1,mutable_first
-                               { ((JC_19:
-                                  (forall k:int.
-                                   ((le_int((0), k)
-                                    and lt_int(k,
-                                        sub_pointer(mutable_first, a))) ->
-                                    eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                                            shift(a, k))),
-                                    integer_of_int32(value)))))
+                               { ((JC_21:
+                                  ((JC_19:
+                                   le_int(sub_pointer(a, mutable_first), (0)))
+                                  and (JC_20:
+                                      le_int(sub_pointer(mutable_first, last),
+                                      (0)))))
                                  and (JC_22:
-                                     ((JC_20:
-                                      le_int(sub_pointer(a, mutable_first),
-                                      (0)))
-                                     and (JC_21:
-                                         le_int(sub_pointer(mutable_first,
-                                                last),
-                                         (0)))))) } ];
+                                     (forall k:int.
+                                      ((le_int((0), k)
+                                       and lt_int(k,
+                                           sub_pointer(mutable_first, a))) ->
+                                       eq_int(integer_of_int32(select(int_P_int_M_first_1,
+                                                               shift(a, k))),
+                                       integer_of_int32(value)))))) } ];
                             try
                              (let jessie_17 = begin
                                                 (let jessie_16 = begin
@@ -955,7 +950,7 @@ why --project [...] why/weber3.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber3_po8.why">
-      <location file = "why/weber3.why" line = "802" begin = "68" end = "101"/>
+      <location file = "why/weber3.why" line = "797" begin = "68" end = "101"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -970,11 +965,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber3_po11.why">
-      <location file = "why/weber3.why" line = "778" begin = "61" end = "62"/>
+      <location file = "why/weber3.why" line = "775" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber3_po12.why">
-      <location file = "why/weber3.why" line = "778" begin = "61" end = "62"/>
+      <location file = "why/weber3.why" line = "775" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -986,27 +981,27 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/weber3_po1.why">
-      <location file = "PPCHOME/tests/jessie/weber3.c" line = "17" begin = "20" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/weber3.c" line = "16" begin = "20" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber3_po2.why">
-      <location file = "PPCHOME/tests/jessie/weber3.c" line = "16" begin = "20" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/weber3.c" line = "16" begin = "25" end = "38"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber3_po3.why">
-      <location file = "PPCHOME/tests/jessie/weber3.c" line = "16" begin = "25" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/weber3.c" line = "17" begin = "20" end = "73"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber3_po4.why">
-      <location file = "PPCHOME/tests/jessie/weber3.c" line = "17" begin = "20" end = "73"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber3_po5.why">
       <location file = "PPCHOME/tests/jessie/weber3.c" line = "16" begin = "20" end = "30"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/weber3_po6.why">
+    <goal why_file="why/weber3_po5.why">
       <location file = "PPCHOME/tests/jessie/weber3.c" line = "16" begin = "25" end = "38"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber3_po6.why">
+      <location file = "PPCHOME/tests/jessie/weber3.c" line = "17" begin = "20" end = "73"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>

@@ -213,8 +213,8 @@ behavior default:
          {  
             loop 
             behavior default:
-              invariant (C_9 : included(iset(e), \at(iset(e),L)));
-            variant (C_8 : card(iset(e)));
+              invariant (C_8 : included(iset(e), \at(iset(e),L)));
+            variant (C_9 : card(iset(e)));
             while (true)
             {  
                {  (C_12 : (d = (C_11 : (e & (C_10 : (- e))))));
@@ -391,14 +391,26 @@ behavior default:
          {  
             loop 
             behavior default:
-              invariant (C_42 : (((((((C_48 : included(iset(e_0),
+              
+              assigns ((sol + [s..]).int_xM + [..]).int_M;
+            behavior default:
+              
+              assigns k;
+            behavior default:
+              
+              assigns s;
+            behavior default:
+              
+              assigns (col + [k..]).int_M;
+            behavior default:
+              invariant (C_41 : (((((((C_47 : included(iset(e_0),
                                                        \at(iset(e_0),L))) &&
-                                       (C_49 : (f_0 == (s - \at(s,L))))) &&
-                                      (C_50 : (f_0 >= 0))) &&
-                                     (C_51 : (k == \at(k,L)))) &&
-                                    (C_52 : partial_solution{Here}(k, col))) &&
-                                   (C_53 : sorted{Here}(sol, \at(s,L), s))) &&
-                                  (C_54 : (\forall int_P[..] t_2;
+                                       (C_48 : (f_0 == (s - \at(s,L))))) &&
+                                      (C_49 : (f_0 >= 0))) &&
+                                     (C_50 : (k == \at(k,L)))) &&
+                                    (C_51 : partial_solution{Here}(k, col))) &&
+                                   (C_52 : sorted{Here}(sol, \at(s,L), s))) &&
+                                  (C_53 : (\forall int_P[..] t_2;
                                             ((solution{Here}(t_2) &&
                                                (\exists integer di;
                                                  ((in_(di,
@@ -412,19 +424,7 @@ behavior default:
                                                    (i_19 < s)) &&
                                                   eq_sol{Here}(t_2,
                                                                (sol + i_19).int_xM))))))));
-            behavior default:
-              
-              assigns (col + [k..]).int_M;
-            behavior default:
-              
-              assigns s;
-            behavior default:
-              
-              assigns k;
-            behavior default:
-              
-              assigns ((sol + [s..]).int_xM + [..]).int_M;
-            variant (C_41 : card(iset(e_0)));
+            variant (C_54 : card(iset(e_0)));
             while (true)
             {  
                {  (C_57 : (d_0 = (C_56 : (e_0 & (C_55 : (- e_0))))));
@@ -1891,11 +1891,12 @@ let t3_ensures_default =
                                    and ((JC_119:
                                         not_assigns(int_P_alloc_table@loop_4,
                                         int_P_int_M@loop_4, int_P_int_M,
-                                        pset_union(pset_range_right(pset_singleton(col),
-                                                   k),
-                                        pset_all(pset_deref(int_xP_int_xM,
-                                                 pset_range_right(pset_singleton(sol),
-                                                 s))))))
+                                        pset_union(pset_all(pset_deref(int_xP_int_xM,
+                                                            pset_range_right(
+                                                            pset_singleton(sol),
+                                                            s))),
+                                        pset_range_right(pset_singleton(col),
+                                        k))))
                                        and (JC_120:
                                            not_assigns(int_P_alloc_table@init,
                                            int_P_int_M@init, int_P_int_M,
@@ -2383,11 +2384,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1750" begin = "67" end = "476"/>
+      <location file = "why/queens.why" line = "1751" begin = "67" end = "476"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1750" begin = "67" end = "476"/>
+      <location file = "why/queens.why" line = "1751" begin = "67" end = "476"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po70.why">

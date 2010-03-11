@@ -84,8 +84,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((c + nbits(x)) == nbits(\at(x,Pre))));
-         variant (C_2 : nbits(x));
+           invariant (C_2 : ((c + nbits(x)) == nbits(\at(x,Pre))));
+         variant (C_3 : nbits(x));
          while (true)
          {  
             {  (C_8 : (d = (C_7 : ((C_6 : (x &

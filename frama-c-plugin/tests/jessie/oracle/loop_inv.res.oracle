@@ -44,8 +44,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_2 : (i >= 0));
-         variant (C_1 : i);
+           invariant (C_1 : (i >= 0));
+         variant (C_2 : i);
          while (true)
          {  
             {  (if (i > 0) then () else 

@@ -64,20 +64,20 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_17 : ((C_18 : (0 <= i)) && (C_19 : (i <= n))));
+           invariant (C_17 : ((C_18 : (0 <= e)) && (C_19 : (e <= (n - 1)))));
          behavior default:
-           invariant (C_14 : ((C_15 : (0 <= e)) && (C_16 : (e <= (n - 1)))));
+           invariant (C_14 : ((C_15 : (0 <= i)) && (C_16 : (i <= n))));
          behavior default:
-           invariant (C_13 : (p == (\at(p,Pre) + i)));
+           invariant (C_8 : (((C_10 : (\offset_min(\at(p,Pre)) <= e)) &&
+                               (C_11 : (\offset_max(\at(p,Pre)) >= e))) &&
+                              (C_12 : ((\at(p,Pre) + e).int_M == res))));
          behavior default:
-           invariant (C_12 : (\forall integer j;
-                               (((0 <= j) && (j < i)) ==>
-                                 (res >= (\at(p,Pre) + j).int_M))));
+           invariant (C_7 : (\forall integer j;
+                              (((0 <= j) && (j < i)) ==>
+                                (res >= (\at(p,Pre) + j).int_M))));
          behavior default:
-           invariant (C_7 : (((C_9 : (\offset_min(\at(p,Pre)) <= e)) &&
-                               (C_10 : (\offset_max(\at(p,Pre)) >= e))) &&
-                              (C_11 : ((\at(p,Pre) + e).int_M == res))));
-         variant (C_6 : (n - i));
+           invariant (C_6 : (p == (\at(p,Pre) + i)));
+         variant (C_13 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -579,21 +579,10 @@ let max_seq_ensures_default =
                              (loop_2:
                              while true do
                              { invariant
-                                 ((JC_44:
-                                  ((JC_41:
-                                   le_int(offset_min(int_P_p_1_alloc_table,
-                                          mutable_p@init),
-                                   integer_of_int32(e_0)))
-                                  and ((JC_42:
-                                       ge_int(offset_max(int_P_p_1_alloc_table,
-                                              mutable_p@init),
-                                       integer_of_int32(e_0)))
-                                      and (JC_43:
-                                          eq_int(integer_of_int32(select(int_P_int_M_p_1,
-                                                                  shift(mutable_p@init,
-                                                                  integer_of_int32(e_0)))),
-                                          integer_of_int32(res))))))
-                                 and ((JC_45:
+                                 ((JC_41:
+                                  (mutable_p = shift(mutable_p@init,
+                                               integer_of_int32(i_0))))
+                                 and ((JC_42:
                                       (forall j:int.
                                        ((le_int((0), j)
                                         and lt_int(j, integer_of_int32(i_0))) ->
@@ -602,23 +591,35 @@ let max_seq_ensures_default =
                                                          shift(mutable_p@init,
                                                          j)))))))
                                      and ((JC_46:
-                                          (mutable_p = shift(mutable_p@init,
-                                                       integer_of_int32(i_0))))
+                                          ((JC_43:
+                                           le_int(offset_min(int_P_p_1_alloc_table,
+                                                  mutable_p@init),
+                                           integer_of_int32(e_0)))
+                                          and ((JC_44:
+                                               ge_int(offset_max(int_P_p_1_alloc_table,
+                                                      mutable_p@init),
+                                               integer_of_int32(e_0)))
+                                              and (JC_45:
+                                                  eq_int(integer_of_int32(
+                                                         select(int_P_int_M_p_1,
+                                                         shift(mutable_p@init,
+                                                         integer_of_int32(e_0)))),
+                                                  integer_of_int32(res))))))
                                          and ((JC_49:
                                               ((JC_47:
                                                le_int((0),
-                                               integer_of_int32(e_0)))
+                                               integer_of_int32(i_0)))
                                               and (JC_48:
-                                                  le_int(integer_of_int32(e_0),
-                                                  sub_int(integer_of_int32(n),
-                                                  (1))))))
+                                                  le_int(integer_of_int32(i_0),
+                                                  integer_of_int32(n)))))
                                              and (JC_52:
                                                  ((JC_50:
                                                   le_int((0),
-                                                  integer_of_int32(i_0)))
+                                                  integer_of_int32(e_0)))
                                                  and (JC_51:
-                                                     le_int(integer_of_int32(i_0),
-                                                     integer_of_int32(n)))))))))
+                                                     le_int(integer_of_int32(e_0),
+                                                     sub_int(integer_of_int32(n),
+                                                     (1))))))))))
                                 }
                               begin
                                 [ { } unit { true } ];
@@ -764,22 +765,10 @@ let max_seq_safety =
                                                 integer_of_int32(i_0))) }
                               begin
                                 [ { } unit reads e_0,i_0,mutable_p,res
-                                  { ((JC_25:
-                                     ((JC_22:
-                                      le_int(offset_min(int_P_p_1_alloc_table,
-                                             mutable_p@init),
-                                      integer_of_int32(e_0)))
-                                     and ((JC_23:
-                                          ge_int(offset_max(int_P_p_1_alloc_table,
-                                                 mutable_p@init),
-                                          integer_of_int32(e_0)))
-                                         and (JC_24:
-                                             eq_int(integer_of_int32(
-                                                    select(int_P_int_M_p_1,
-                                                    shift(mutable_p@init,
-                                                    integer_of_int32(e_0)))),
-                                             integer_of_int32(res))))))
-                                    and ((JC_26:
+                                  { ((JC_22:
+                                     (mutable_p = shift(mutable_p@init,
+                                                  integer_of_int32(i_0))))
+                                    and ((JC_23:
                                          (forall j:int.
                                           ((le_int((0), j)
                                            and lt_int(j,
@@ -789,23 +778,35 @@ let max_seq_safety =
                                                             shift(mutable_p@init,
                                                             j)))))))
                                         and ((JC_27:
-                                             (mutable_p = shift(mutable_p@init,
-                                                          integer_of_int32(i_0))))
+                                             ((JC_24:
+                                              le_int(offset_min(int_P_p_1_alloc_table,
+                                                     mutable_p@init),
+                                              integer_of_int32(e_0)))
+                                             and ((JC_25:
+                                                  ge_int(offset_max(int_P_p_1_alloc_table,
+                                                         mutable_p@init),
+                                                  integer_of_int32(e_0)))
+                                                 and (JC_26:
+                                                     eq_int(integer_of_int32(
+                                                            select(int_P_int_M_p_1,
+                                                            shift(mutable_p@init,
+                                                            integer_of_int32(e_0)))),
+                                                     integer_of_int32(res))))))
                                             and ((JC_30:
                                                  ((JC_28:
                                                   le_int((0),
-                                                  integer_of_int32(e_0)))
+                                                  integer_of_int32(i_0)))
                                                  and (JC_29:
-                                                     le_int(integer_of_int32(e_0),
-                                                     sub_int(integer_of_int32(n),
-                                                     (1))))))
+                                                     le_int(integer_of_int32(i_0),
+                                                     integer_of_int32(n)))))
                                                 and (JC_33:
                                                     ((JC_31:
                                                      le_int((0),
-                                                     integer_of_int32(i_0)))
+                                                     integer_of_int32(e_0)))
                                                     and (JC_32:
-                                                        le_int(integer_of_int32(i_0),
-                                                        integer_of_int32(n))))))))) } ];
+                                                        le_int(integer_of_int32(e_0),
+                                                        sub_int(integer_of_int32(n),
+                                                        (1)))))))))) } ];
                                try
                                 (let jessie_21 = begin
                                                    (let jessie_20 = begin
@@ -958,75 +959,75 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/max_seq_po1.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "15" begin = "21" end = "38"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po2.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "16" begin = "21" end = "77"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po3.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "45" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po4.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "16" begin = "21" end = "77"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po5.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "15" begin = "21" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "45" end = "65"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po6.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "13" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po7.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "26" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "13" begin = "26" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po8.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "13" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po9.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "13" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "26" end = "34"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/max_seq_po10.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/max_seq_po11.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/max_seq_po12.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "45" end = "65"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/max_seq_po13.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "16" begin = "21" end = "77"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/max_seq_po14.why">
       <location file = "PPCHOME/tests/jessie/max_seq.c" line = "15" begin = "21" end = "38"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/max_seq_po11.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "16" begin = "21" end = "77"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/max_seq_po12.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/max_seq_po13.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/max_seq_po14.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "45" end = "65"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/max_seq_po15.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "21" end = "27"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/max_seq_po16.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "26" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/max_seq_po17.why">
       <location file = "PPCHOME/tests/jessie/max_seq.c" line = "13" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/max_seq_po18.why">
+    <goal why_file="why/max_seq_po16.why">
       <location file = "PPCHOME/tests/jessie/max_seq.c" line = "13" begin = "26" end = "32"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/max_seq_po17.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "21" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/max_seq_po18.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "14" begin = "26" end = "34"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/max_seq_po19.why">

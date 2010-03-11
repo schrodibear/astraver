@@ -81,8 +81,8 @@ behavior failure:
                                  ((t + k).long_M == v)) ==>
                                 ((l <= k) && (k <= u)))));
          behavior default:
-           invariant (C_5 : ((C_6 : (0 <= l)) && (C_7 : (u <= (n - 1)))));
-         variant (C_8 : (u - l));
+           invariant (C_6 : ((C_7 : (0 <= l)) && (C_8 : (u <= (n - 1)))));
+         variant (C_5 : (u - l));
          while (true)
          {  
             {  (if (l <= u) then () else 

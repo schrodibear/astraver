@@ -102,12 +102,12 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_5 : (((((C_9 : (0 <= i)) && (C_10 : (i <= length))) &&
-                                (C_11 : (0 <= count))) &&
-                               (C_12 : (count <= i))) &&
-                              (C_13 : (count ==
+           invariant (C_4 : (((((C_8 : (0 <= i)) && (C_9 : (i <= length))) &&
+                                (C_10 : (0 <= count))) &&
+                               (C_11 : (count <= i))) &&
+                              (C_12 : (count ==
                                         num_of_pos{Here}(0, (i - 1), t)))));
-         variant (C_4 : (length - i));
+         variant (C_13 : (length - i));
          while (true)
          {  
             {  (if (i < length) then () else 
@@ -129,12 +129,12 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_27 : (((((C_31 : (0 <= i)) && (C_32 : (i <= length))) &&
-                                 (C_33 : (0 <= count))) &&
-                                (C_34 : (count <= i))) &&
-                               (C_35 : (count ==
+           invariant (C_26 : (((((C_30 : (0 <= i)) && (C_31 : (i <= length))) &&
+                                 (C_32 : (0 <= count))) &&
+                                (C_33 : (count <= i))) &&
+                               (C_34 : (count ==
                                          num_of_pos{Here}(0, (i - 1), t)))));
-         variant (C_26 : (length - i));
+         variant (C_35 : (length - i));
          while (true)
          {  
             {  (if (i < length) then () else 

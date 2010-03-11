@@ -212,21 +212,21 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_2 : ((((((C_7 : (low <= i)) && (C_8 : (i <= high))) &&
-                                 (C_9 : Permut(contents{Here}(a_0),
-                                               \at(contents{Pre}(a_0),Pre),
-                                               low, high))) &&
-                                (C_10 : (\forall int32 k_2;
+           invariant (C_3 : ((((((C_8 : (low <= i)) && (C_9 : (i <= high))) &&
+                                 (C_10 : Permut(contents{Here}(a_0),
+                                                \at(contents{Pre}(a_0),Pre),
+                                                low, high))) &&
+                                (C_11 : (\forall int32 k_2;
                                           (((low < k_2) && (k_2 <= high)) ==>
                                             Hnode{Here}(a_0, k_2, high))))) &&
-                               (C_11 : ((low < i) ==>
+                               (C_12 : ((low < i) ==>
                                          Hnode{Here}(a_0, low, high)))) &&
-                              (C_12 : ((low <= ((i - 1) / 2)) ==>
+                              (C_13 : ((low <= ((i - 1) / 2)) ==>
                                         ((a_0 + ((i - 1) / 2)).int_M >= v)))));
          behavior default:
            
            assigns (a_0 + [low..high]).int_M;
-         variant (C_13 : (high - i));
+         variant (C_2 : (high - i));
          while (true)
          {  
             {  
@@ -286,12 +286,12 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_58 : ((((C_61 : (0 <= i_0)) && (C_62 : (i_0 < n))) &&
-                                (C_63 : Permut(contents{Here}(a),
+           invariant (C_57 : ((((C_60 : (0 <= i_0)) && (C_61 : (i_0 < n))) &&
+                                (C_62 : Permut(contents{Here}(a),
                                                \at(contents{Pre}(a),Pre), 0,
                                                (n - 1)))) &&
-                               (C_64 : H{Here}(a, i_0, (n - 1)))));
-         variant (C_57 : i_0);
+                               (C_63 : H{Here}(a, i_0, (n - 1)))));
+         variant (C_64 : i_0);
          while (true)
          {  
             {  (if (i_0 >= 1) then () else 
@@ -310,19 +310,19 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_81 : ((((((C_86 : (0 <= i_0)) && (C_87 : (i_0 < n))) &&
-                                  (C_88 : Permut(contents{Here}(a),
+           invariant (C_80 : ((((((C_85 : (0 <= i_0)) && (C_86 : (i_0 < n))) &&
+                                  (C_87 : Permut(contents{Here}(a),
                                                  \at(contents{Pre}(a),Pre),
                                                  0, (n - 1)))) &&
-                                 (C_89 : H{Here}(a, 0, i_0))) &&
-                                (C_90 : Sorted{Here}(a, (i_0 + 1), (n - 1)))) &&
-                               (C_91 : (\forall int32 k1;
+                                 (C_88 : H{Here}(a, 0, i_0))) &&
+                                (C_89 : Sorted{Here}(a, (i_0 + 1), (n - 1)))) &&
+                               (C_90 : (\forall int32 k1;
                                          (\forall int32 k2;
                                            (((0 <= k1) && (k1 <= i_0)) ==>
                                              (((i_0 < k2) && (k2 < n)) ==>
                                                ((a + k1).int_M <=
                                                  (a + k2).int_M))))))));
-         variant (C_80 : i_0);
+         variant (C_91 : i_0);
          while (true)
          {  
             {  (if (i_0 >= 1) then () else 
@@ -2482,11 +2482,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
@@ -2518,11 +2518,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2535"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">

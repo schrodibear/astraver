@@ -73,16 +73,16 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_7 : (((((C_11 : (0 <= l)) && (C_12 : (u <= (n - 1)))) &&
-                                ((C_14 : ((- 1) <= p)) &&
-                                  (C_15 : (p <= (n - 1))))) &&
-                               (C_16 : ((p == (- 1)) ==>
+           invariant (C_6 : (((((C_10 : (0 <= l)) && (C_11 : (u <= (n - 1)))) &&
+                                ((C_13 : ((- 1) <= p)) &&
+                                  (C_14 : (p <= (n - 1))))) &&
+                               (C_15 : ((p == (- 1)) ==>
                                          (\forall int32 k;
                                            (((0 <= k) && (k < n)) ==>
                                              (((t + k).int_M == v) ==>
                                                ((l <= k) && (k <= u)))))))) &&
-                              (C_17 : ((p >= 0) ==> ((t + p).int_M == v)))));
-         variant (C_6 : (u - l));
+                              (C_16 : ((p >= 0) ==> ((t + p).int_M == v)))));
+         variant (C_17 : (u - l));
          while (true)
          {  
             {  (if (l <= u) then () else 

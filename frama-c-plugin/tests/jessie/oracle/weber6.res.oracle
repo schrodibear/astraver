@@ -65,16 +65,16 @@ behavior not_equal:
       {  
          loop 
          behavior equal:
-           invariant (C_6 : (\forall integer i_0;
+           invariant (C_6 : (\forall integer i;
                               (((0 <= k) && (k < (first1 - a))) ==>
                                 ((first1 + k).int_M == (first2 + k).int_M))));
+         behavior default:
+           invariant (C_3 : ((C_4 : ((a - first1) <= 0)) &&
+                              (C_5 : ((first1 - last1) <= 0))));
          behavior not_equal:
-           invariant (C_5 : (\exists integer i;
+           invariant (C_2 : (\exists integer i_0;
                               (((0 <= k) && (k < (first1 - a))) ==>
                                 ((first1 + k).int_M != (first2 + k).int_M))));
-         behavior default:
-           invariant (C_2 : ((C_3 : ((a - first1) <= 0)) &&
-                              (C_4 : ((first1 - last1) <= 0))));
          while (true)
          {  
             {  (if (first1 != last1) then () else 
@@ -729,7 +729,7 @@ let equal_int_array_ensures_equal =
                                             while true do
                                             { invariant
                                                 (JC_37:
-                                                (forall i_0:int.
+                                                (forall i:int.
                                                  ((le_int((0),
                                                    integer_of_int32(k))
                                                   and lt_int(integer_of_int32(k),
@@ -883,7 +883,7 @@ let equal_int_array_ensures_not_equal =
                                             while true do
                                             { invariant
                                                 (JC_44:
-                                                (exists i:int.
+                                                (exists i_0:int.
                                                  ((le_int((0),
                                                    integer_of_int32(k))
                                                   and lt_int(integer_of_int32(k),

@@ -72,11 +72,11 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n))));
-         behavior default:
-           invariant (C_4 : (\real_abs(((t :> real) - (i * 0.1))) <=
+           invariant (C_6 : (\real_abs(((t :> real) - (i * 0.1))) <=
                               (i * (0x1p-8 + 1.49012e-09))));
-         variant (C_3 : (n - i));
+         behavior default:
+           invariant (C_3 : ((C_4 : (0 <= i)) && (C_5 : (i <= n))));
+         variant (C_7 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -560,19 +560,18 @@ let f_single_ensures_default =
                            (loop_2:
                            while true do
                            { invariant
-                               ((JC_36:
-                                le_real(abs_real(sub_real(single_value(t),
-                                                 mul_real(real_of_int(
-                                                          integer_of_int32(i_0)),
-                                                 0.1))),
-                                mul_real(real_of_int(integer_of_int32(i_0)),
-                                add_real(0x1p-8, 1.49012e-09))))
+                               ((JC_38:
+                                ((JC_36: le_int((0), integer_of_int32(i_0)))
+                                and (JC_37:
+                                    le_int(integer_of_int32(i_0),
+                                    integer_of_int32(n)))))
                                and (JC_39:
-                                   ((JC_37:
-                                    le_int((0), integer_of_int32(i_0)))
-                                   and (JC_38:
-                                       le_int(integer_of_int32(i_0),
-                                       integer_of_int32(n))))))
+                                   le_real(abs_real(sub_real(single_value(t),
+                                                    mul_real(real_of_int(
+                                                             integer_of_int32(i_0)),
+                                                    0.1))),
+                                   mul_real(real_of_int(integer_of_int32(i_0)),
+                                   add_real(0x1p-8, 1.49012e-09)))))
                               }
                             begin
                               [ { } unit { true } ];
@@ -710,19 +709,19 @@ let f_single_safety =
                                               integer_of_int32(i_0))) }
                             begin
                               [ { } unit reads i_0,t
-                                { ((JC_21:
-                                   le_real(abs_real(sub_real(single_value(t),
-                                                    mul_real(real_of_int(
-                                                             integer_of_int32(i_0)),
-                                                    0.1))),
-                                   mul_real(real_of_int(integer_of_int32(i_0)),
-                                   add_real(0x1p-8, 1.49012e-09))))
+                                { ((JC_23:
+                                   ((JC_21:
+                                    le_int((0), integer_of_int32(i_0)))
+                                   and (JC_22:
+                                       le_int(integer_of_int32(i_0),
+                                       integer_of_int32(n)))))
                                   and (JC_24:
-                                      ((JC_22:
-                                       le_int((0), integer_of_int32(i_0)))
-                                      and (JC_23:
-                                          le_int(integer_of_int32(i_0),
-                                          integer_of_int32(n)))))) } ];
+                                      le_real(abs_real(sub_real(single_value(t),
+                                                       mul_real(real_of_int(
+                                                                integer_of_int32(i_0)),
+                                                       0.1))),
+                                      mul_real(real_of_int(integer_of_int32(i_0)),
+                                      add_real(0x1p-8, 1.49012e-09))))) } ];
                              try
                               (let jessie_13 = begin
                                                  (let jessie_12 = begin
@@ -994,15 +993,15 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/floats_loop_po5.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "45" begin = "21" end = "68"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/floats_loop_po6.why">
       <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "44" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
-    <goal why_file="why/floats_loop_po7.why">
+    <goal why_file="why/floats_loop_po6.why">
       <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "44" begin = "26" end = "32"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/floats_loop_po7.why">
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "45" begin = "21" end = "68"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_loop_po8.why">
@@ -1018,15 +1017,15 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_loop_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "45" begin = "21" end = "68"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/floats_loop_po12.why">
       <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "44" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/floats_loop_po13.why">
+    <goal why_file="why/floats_loop_po12.why">
       <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "44" begin = "26" end = "32"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/floats_loop_po13.why">
+      <location file = "PPCHOME/tests/jessie/floats_loop.c" line = "45" begin = "21" end = "68"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_loop_po14.why">

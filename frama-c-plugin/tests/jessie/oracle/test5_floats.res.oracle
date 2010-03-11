@@ -49,15 +49,15 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_4 : (((y :> real) < 0x2.0p24) ==>
-                              (((x :> real) - (y :> real)) == 1.0)));
+           
+           assigns y;
          behavior default:
            
            assigns x;
          behavior default:
-           
-           assigns y;
-         variant (C_3 : (16777216 - truncate((y :> real))));
+           invariant (C_3 : (((y :> real) < 0x2.0p24) ==>
+                              (((x :> real) - (y :> real)) == 1.0)));
+         variant (C_4 : (16777216 - truncate((y :> real))));
          while (true)
          {  
             {  (if (y != x) then () else 

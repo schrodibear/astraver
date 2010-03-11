@@ -425,10 +425,10 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_12 : ((C_13 : (0 <= i)) && (C_14 : (i <= 12))));
-         behavior default:
            
            assigns (a + [..]).int_M;
+         behavior default:
+           invariant (C_12 : ((C_13 : (0 <= i)) && (C_14 : (i <= 12))));
          while (true)
          {  
             {  (if (i < 12) then () else 
@@ -456,10 +456,10 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 <= 12))));
-         behavior default:
            
            assigns (c + [..]).char_xM;
+         behavior default:
+           invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 <= 12))));
          while (true)
          {  
             {  (if (i_0 < 12) then () else 
@@ -503,10 +503,10 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_34 : (0 <= j));
-         behavior default:
            
            assigns (a_0 + [..]).int_M;
+         behavior default:
+           invariant (C_34 : (0 <= j));
          while (true)
          {  
             {  (if (j < aLength) then () else 

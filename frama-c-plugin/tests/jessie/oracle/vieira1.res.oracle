@@ -105,10 +105,10 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((C_4 : sumone{Pre,
+           invariant (C_2 : ((C_3 : sumone{Pre,
                              Here}((0 :> int32), a, b, k, a, b, n)) &&
-                              ((C_6 : (0 <= k)) && (C_7 : (k <= n)))));
-         variant (C_2 : (n - k));
+                              ((C_5 : (0 <= k)) && (C_6 : (k <= n)))));
+         variant (C_7 : (n - k));
          while (true)
          {  
             {  (if (k < n) then () else 
