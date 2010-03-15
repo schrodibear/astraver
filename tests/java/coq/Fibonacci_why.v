@@ -31,15 +31,10 @@ Admitted.
 (*Why axiom*) Lemma Object_int : (int_of_tag Object_tag) = 1.
 Admitted.
 
-(*Why logic*) Definition Object_of_bitvector : bitvector -> (pointer Object).
 Admitted.
 
-(*Why logic*) Definition bitvector_of_Object : (pointer Object) -> bitvector.
 Admitted.
 
-(*Why axiom*) Lemma Object_of_bitvector_of_bitvector_of_Object :
-  (forall (x:(pointer Object)),
-   (Object_of_bitvector (bitvector_of_Object x)) = x).
 Admitted.
 
 (*Why logic*) Definition Object_of_pointer_address :
@@ -75,21 +70,12 @@ Admitted.
   (parenttag Throwable_tag Object_tag).
 Admitted.
 
-(*Why axiom*) Lemma bitvector_of_Object_of_Object_of_bitvector :
-  (forall (x:bitvector), (bitvector_of_Object (Object_of_bitvector x)) = x).
 Admitted.
 
-(*Why logic*) Definition bitvector_of_interface :
-  (pointer interface) -> bitvector.
 Admitted.
 
-(*Why logic*) Definition interface_of_bitvector :
-  bitvector -> (pointer interface).
 Admitted.
 
-(*Why axiom*) Lemma bitvector_of_interface_of_interface_of_bitvector :
-  (forall (x:bitvector),
-   (bitvector_of_interface (interface_of_bitvector x)) = x).
 Admitted.
 
 (*Why logic*) Definition interface_tag : (tag_id interface).
@@ -98,9 +84,6 @@ Admitted.
 (*Why axiom*) Lemma interface_int : (int_of_tag interface_tag) = 1.
 Admitted.
 
-(*Why axiom*) Lemma interface_of_bitvector_of_bitvector_of_interface :
-  (forall (x:(pointer interface)),
-   (interface_of_bitvector (bitvector_of_interface x)) = x).
 Admitted.
 
 (*Why logic*) Definition interface_of_pointer_address :

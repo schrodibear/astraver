@@ -65,7 +65,7 @@ let float_model : float_model ref = ref FMdefensive
 
 let float_instruction_set : float_instruction_set ref = ref FISstrictIEEE754
 
-let libfiles = ref ["jessie.why"]
+let libfiles = ref []
 
 let add_to_libfiles s = libfiles := s :: !libfiles
 let get_libfiles () = List.rev !libfiles

@@ -542,13 +542,6 @@ predicate Non_null_Object(x:Object pointer,
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
-logic Object_of_bitvector: bitvector -> Object pointer
-
-logic bitvector_of_Object: Object pointer -> bitvector
-
-axiom Object_of_bitvector_of_bitvector_of_Object :
- (forall x:Object pointer. (Object_of_bitvector(bitvector_of_Object(x)) = x))
-
 logic Object_of_pointer_address: unit pointer -> Object pointer
 
 axiom Object_of_pointer_address_of_pointer_addr :
@@ -578,26 +571,11 @@ logic Throwable_tag:  -> Object tag_id
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
-axiom bitvector_of_Object_of_Object_of_bitvector :
- (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
-
-logic bitvector_of_interface: interface pointer -> bitvector
-
-logic interface_of_bitvector: bitvector -> interface pointer
-
-axiom bitvector_of_interface_of_interface_of_bitvector :
- (forall x:bitvector.
-  (bitvector_of_interface(interface_of_bitvector(x)) = x))
-
 function f(n:int, PreAndOld_y_at_L:int) : int = add_int(n, PreAndOld_y_at_L)
 
 logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
-
-axiom interface_of_bitvector_of_bitvector_of_interface :
- (forall x:interface pointer.
-  (interface_of_bitvector(bitvector_of_interface(x)) = x))
 
 logic interface_of_pointer_address: unit pointer -> interface pointer
 
@@ -1430,7 +1408,11 @@ function sqr_real(x: real) : real = (x * x)
 
 logic sqrt_real : real -> real
 
+axiom sqrt_pos: (forall x:real. ((x >= 0.0) -> (sqrt_real(x) >= 0.0)))
+
 axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
+
+axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -1979,195 +1961,6 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
-type bitvector
-
-logic concat_bitvector : bitvector, bitvector -> bitvector
-
-logic offset_min_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
-
-logic offset_max_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
-
-axiom offset_min_bytes_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer.
-      (forall s:int [offset_min_bytes(a, p, s)].
-        ((0 < s) ->
-         ((offset_min(a, p) <= (s * offset_min_bytes(a, p, s))) and
-          (((s * offset_min_bytes(a, p, s)) - s) < offset_min(a, p)))))))
-
-axiom offset_max_bytes_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer.
-      (forall s:int [offset_max_bytes(a, p, s)].
-        ((0 < s) ->
-         (((((s * offset_max_bytes(a, p, s)) + s) - 1) <= offset_max(a,
-          p)) and (offset_max(a, p) < ((((s * offset_max_bytes(a, p,
-          s)) + s) + s) - 1)))))))
-
-logic extract_bytes : bitvector, int, int -> bitvector
-
-logic replace_bytes : bitvector, int, int, bitvector -> bitvector
-
-axiom select_store_eq_union:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
-              v2), o2, s2)].
-              (((o1 = o2) and (s1 = s2)) -> (extract_bytes(replace_bytes(v1,
-               o1, s1, v2), o2, s2) = v2))))))))
-
-axiom select_store_neq_union:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
-              v2), o2, s2)].
-              ((((o2 + s2) <= o1) or ((o1 + s2) <= o2)) ->
-               (extract_bytes(replace_bytes(v1, o1, s1, v2), o2,
-               s2) = extract_bytes(v1, o2, s2)))))))))
-
-axiom concat_replace_bytes_up:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector.
-              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
-                v2), o2, s2, v3)].
-                (((o1 + s1) = o2) -> (replace_bytes(replace_bytes(v1, o1, s1,
-                 v2), o2, s2, v3) = replace_bytes(v1, o1, (s1 + s2),
-                 concat_bitvector(v2, v3)))))))))))
-
-axiom concat_replace_bytes_down:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector.
-              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
-                v2), o2, s2, v3)].
-                (((o2 + s2) = o1) -> (replace_bytes(replace_bytes(v1, o1, s1,
-                 v2), o2, s2, v3) = replace_bytes(v1, o2, (s1 + s2),
-                 concat_bitvector(v3, v2)))))))))))
-
-axiom concat_extract_bytes:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v:bitvector [concat_bitvector(extract_bytes(v, o1, s1),
-            extract_bytes(v, o2, s2))].
-            (((o1 + s1) = o2) -> (concat_bitvector(extract_bytes(v, o1, s1),
-             extract_bytes(v, o2, s2)) = extract_bytes(v, o1, (s1 + s2)))))))))
-
-logic select_bytes : ('a1, bitvector) memory, 'a1 pointer, int,
-int -> bitvector
-
-logic store_bytes : ('a1, bitvector) memory, 'a1 pointer, int, int,
-bitvector -> ('a1, bitvector) memory
-
-axiom select_store_eq_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p1:'a1 pointer.
-      (forall p2:'a1 pointer.
-        (forall o1:int.
-          (forall s1:int.
-            (forall o2:int.
-              (forall s2:int.
-                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
-                  v), p2, o2, s2)].
-                  (((p1 = p2) and ((o1 = o2) and (s1 = s2))) ->
-                   (select_bytes(store_bytes(m, p1, o1, s1, v), p2, o2,
-                   s2) = v))))))))))
-
-axiom select_store_neq_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p1:'a1 pointer.
-      (forall p2:'a1 pointer.
-        (forall o1:int.
-          (forall s1:int.
-            (forall o2:int.
-              (forall s2:int.
-                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
-                  v), p2, o2, s2)].
-                  (pset_disjoint(pset_range(pset_singleton(p1), o1,
-                   (o1 + s1)), pset_range(pset_singleton(p2), o2,
-                   (o2 + s2))) -> (select_bytes(store_bytes(m, p1, o1, s1,
-                   v), p2, o2, s2) = select_bytes(m, p2, o2, s2)))))))))))
-
-axiom shift_store_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall i:int.
-        (forall o:int.
-          (forall s:int.
-            (forall v:bitvector [store_bytes(m, shift(p, i), o, s, v)].
-              (store_bytes(m, shift(p, i), o, s, v) = store_bytes(m, p,
-              (o + i), s, v))))))))
-
-axiom shift_select_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall i:int.
-        (forall o:int.
-          (forall s:int.
-            (forall v:bitvector [select_bytes(m, shift(p, i), o, s)].
-              (select_bytes(m, shift(p, i), o, s) = select_bytes(m, p,
-              (o + i), s))))))))
-
-axiom concat_store_bytes_up:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int.
-              (forall v1:bitvector.
-                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
-                  v1), p, o2, s2, v2)].
-                  (((o1 + s1) = o2) -> (store_bytes(store_bytes(m, p, o1, s1,
-                   v1), p, o2, s2, v2) = store_bytes(m, p, o1, (s1 + s2),
-                   concat_bitvector(v1, v2))))))))))))
-
-axiom concat_store_bytes_down:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int.
-              (forall v1:bitvector.
-                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
-                  v1), p, o2, s2, v2)].
-                  (((o2 + s2) = o1) -> (store_bytes(store_bytes(m, p, o1, s1,
-                   v1), p, o2, s2, v2) = store_bytes(m, p, o2, (s1 + s2),
-                   concat_bitvector(v2, v1))))))))))))
-
-axiom concat_select_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int [concat_bitvector(select_bytes(m, p, o1, s1),
-              select_bytes(m, p, o2, s2))].
-              (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
-               s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
-               (s1 + s2))))))))))
-
-logic integer_of_bitvector : bitvector -> int
-
-logic bitvector_of_integer : int -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
 type Object
 
 type interface
@@ -2183,14 +1976,6 @@ predicate Non_null_Object(x: Object pointer,
   x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
-
-logic Object_of_bitvector : bitvector -> Object pointer
-
-logic bitvector_of_Object : Object pointer -> bitvector
-
-axiom Object_of_bitvector_of_bitvector_of_Object:
-  (forall x:Object pointer.
-    (Object_of_bitvector(bitvector_of_Object(x)) = x))
 
 logic Object_of_pointer_address : unit pointer -> Object pointer
 
@@ -2217,26 +2002,11 @@ logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
-axiom bitvector_of_Object_of_Object_of_bitvector:
-  (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
-
-logic bitvector_of_interface : interface pointer -> bitvector
-
-logic interface_of_bitvector : bitvector -> interface pointer
-
-axiom bitvector_of_interface_of_interface_of_bitvector:
-  (forall x:bitvector.
-    (bitvector_of_interface(interface_of_bitvector(x)) = x))
-
 function f(n: int, PreAndOld_y_at_L: int) : int = (n + PreAndOld_y_at_L)
 
 logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
-
-axiom interface_of_bitvector_of_bitvector_of_interface:
-  (forall x:interface pointer.
-    (interface_of_bitvector(bitvector_of_interface(x)) = x))
 
 logic interface_of_pointer_address : unit pointer -> interface pointer
 
@@ -2613,10 +2383,22 @@ why -simplify [...] why/PreAndOld.why
  (FORALL (x) (EQ (sqr_real x) (real_mul x x))))
 
 (BG_PUSH
+ ;; Why axiom sqrt_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (ge_real (real_sqrt x) real_constant_0_0e) |@true|))))
+
+(BG_PUSH
  ;; Why axiom sqrt_sqr
  (FORALL (x)
  (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
  (EQ (sqr_real (real_sqrt x)) x))))
+
+(BG_PUSH
+ ;; Why axiom sqr_sqrt
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (real_sqrt (real_mul x x)) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_pos
@@ -3071,174 +2853,6 @@ why -simplify [...] why/PreAndOld.why
  (EQ (offset_max a1 p) (offset_max a2 p)))))))
 
 (BG_PUSH
- ;; Why axiom offset_min_bytes_def
- (FORALL (a p s)
- (IMPLIES (< 0 s)
- (AND (<= (offset_min a p) (* s (offset_min_bytes a p s)))
- (< (- (* s (offset_min_bytes a p s)) s) (offset_min a p)))))
-
- (FORALL (s)
- (IMPLIES (< 0 s)
- (FORALL (a p)
- (AND (<= (offset_min a p) (* s (offset_min_bytes a p s)))
- (< (- (* s (offset_min_bytes a p s)) s) (offset_min a p)))))))
-
-(BG_PUSH
- ;; Why axiom offset_max_bytes_def
- (FORALL (a p s)
- (IMPLIES (< 0 s)
- (AND (<= (- (+ (* s (offset_max_bytes a p s)) s) 1) (offset_max a p))
- (< (offset_max a p) (- (+ (+ (* s (offset_max_bytes a p s)) s) s) 1)))))
-
- (FORALL (s)
- (IMPLIES (< 0 s)
- (FORALL (a p)
- (AND (<= (- (+ (* s (offset_max_bytes a p s)) s) 1) (offset_max a p))
- (< (offset_max a p) (- (+ (+ (* s (offset_max_bytes a p s)) s) s) 1)))))))
-
-(BG_PUSH
- ;; Why axiom select_store_eq_union
- (FORALL (o1 s1 o2 s2 v1 v2)
- (IMPLIES (AND (EQ o1 o2) (EQ s1 s2))
- (EQ (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2) v2)))
-
- (FORALL (o1 s1 o2 s2)
- (IMPLIES (AND (EQ o1 o2) (EQ s1 s2))
- (FORALL (v1 v2) (EQ (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2) v2)))))
-
-(BG_PUSH
- ;; Why axiom select_store_neq_union
- (FORALL (o1 s1 o2 s2 v1 v2)
- (IMPLIES (OR (<= (+ o2 s2) o1) (<= (+ o1 s2) o2))
- (EQ (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2)
- (extract_bytes v1 o2 s2))))
-
- (FORALL (o1 o2 s2)
- (IMPLIES (OR (<= (+ o2 s2) o1) (<= (+ o1 s2) o2))
- (FORALL (s1 v1 v2)
- (EQ (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2)
- (extract_bytes v1 o2 s2))))))
-
-(BG_PUSH
- ;; Why axiom concat_replace_bytes_up
- (FORALL (o1 s1 o2 s2 v1 v2 v3)
- (IMPLIES (EQ (+ o1 s1) o2)
- (EQ (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3)
- (replace_bytes v1 o1 (+ s1 s2) (concat_bitvector v2 v3)))))
-
- (FORALL (o1 s1 o2)
- (IMPLIES (EQ (+ o1 s1) o2)
- (FORALL (s2 v1 v2 v3)
- (EQ (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3)
- (replace_bytes v1 o1 (+ s1 s2) (concat_bitvector v2 v3)))))))
-
-(BG_PUSH
- ;; Why axiom concat_replace_bytes_down
- (FORALL (o1 s1 o2 s2 v1 v2 v3)
- (IMPLIES (EQ (+ o2 s2) o1)
- (EQ (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3)
- (replace_bytes v1 o2 (+ s1 s2) (concat_bitvector v3 v2)))))
-
- (FORALL (o1 o2 s2)
- (IMPLIES (EQ (+ o2 s2) o1)
- (FORALL (s1 v1 v2 v3)
- (EQ (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3)
- (replace_bytes v1 o2 (+ s1 s2) (concat_bitvector v3 v2)))))))
-
-(BG_PUSH
- ;; Why axiom concat_extract_bytes
- (FORALL (o1 s1 o2 s2 v)
- (IMPLIES (EQ (+ o1 s1) o2)
- (EQ (concat_bitvector (extract_bytes v o1 s1) (extract_bytes v o2 s2))
- (extract_bytes v o1 (+ s1 s2)))))
-
- (FORALL (o1 s1 o2)
- (IMPLIES (EQ (+ o1 s1) o2)
- (FORALL (s2 v)
- (EQ (concat_bitvector (extract_bytes v o1 s1) (extract_bytes v o2 s2))
- (extract_bytes v o1 (+ s1 s2)))))))
-
-(BG_PUSH
- ;; Why axiom select_store_eq_bytes
- (FORALL (m p1 p2 o1 s1 o2 s2 v)
- (IMPLIES (AND (EQ p1 p2) (AND (EQ o1 o2) (EQ s1 s2)))
- (EQ (select_bytes (store_bytes m p1 o1 s1 v) p2 o2 s2) v)))
-
- (FORALL (p1 p2 o1 s1 o2 s2)
- (IMPLIES (AND (EQ p1 p2) (AND (EQ o1 o2) (EQ s1 s2)))
- (FORALL (m v) (EQ (select_bytes (store_bytes m p1 o1 s1 v) p2 o2 s2) v)))))
-
-(BG_PUSH
- ;; Why axiom select_store_neq_bytes
- (FORALL (m p1 p2 o1 s1 o2 s2 v)
- (IMPLIES
- (pset_disjoint
- (pset_range (pset_singleton p1) o1 (+ o1 s1)) (pset_range
-                                               (pset_singleton p2) o2 
-                                               (+ o2 s2)))
- (EQ (select_bytes (store_bytes m p1 o1 s1 v) p2 o2 s2)
- (select_bytes m p2 o2 s2))))
-
- (FORALL (p1 p2 o1 s1 o2 s2)
- (IMPLIES
- (pset_disjoint
- (pset_range (pset_singleton p1) o1 (+ o1 s1)) (pset_range
-                                               (pset_singleton p2) o2 
-                                               (+ o2 s2)))
- (FORALL (m v)
- (EQ (select_bytes (store_bytes m p1 o1 s1 v) p2 o2 s2)
- (select_bytes m p2 o2 s2))))))
-
-(BG_PUSH
- ;; Why axiom shift_store_bytes
- (FORALL (m p i o s v)
- (EQ (store_bytes m (shift p i) o s v) (store_bytes m p (+ o i) s v))))
-
-(BG_PUSH
- ;; Why axiom shift_select_bytes
- (FORALL (m p i o s v)
- (EQ (select_bytes m (shift p i) o s) (select_bytes m p (+ o i) s))))
-
-(BG_PUSH
- ;; Why axiom concat_store_bytes_up
- (FORALL (m p o1 s1 o2 s2 v1 v2)
- (IMPLIES (EQ (+ o1 s1) o2)
- (EQ (store_bytes (store_bytes m p o1 s1 v1) p o2 s2 v2)
- (store_bytes m p o1 (+ s1 s2) (concat_bitvector v1 v2)))))
-
- (FORALL (o1 s1 o2)
- (IMPLIES (EQ (+ o1 s1) o2)
- (FORALL (m p s2 v1 v2)
- (EQ (store_bytes (store_bytes m p o1 s1 v1) p o2 s2 v2)
- (store_bytes m p o1 (+ s1 s2) (concat_bitvector v1 v2)))))))
-
-(BG_PUSH
- ;; Why axiom concat_store_bytes_down
- (FORALL (m p o1 s1 o2 s2 v1 v2)
- (IMPLIES (EQ (+ o2 s2) o1)
- (EQ (store_bytes (store_bytes m p o1 s1 v1) p o2 s2 v2)
- (store_bytes m p o2 (+ s1 s2) (concat_bitvector v2 v1)))))
-
- (FORALL (o1 o2 s2)
- (IMPLIES (EQ (+ o2 s2) o1)
- (FORALL (m p s1 v1 v2)
- (EQ (store_bytes (store_bytes m p o1 s1 v1) p o2 s2 v2)
- (store_bytes m p o2 (+ s1 s2) (concat_bitvector v2 v1)))))))
-
-(BG_PUSH
- ;; Why axiom concat_select_bytes
- (FORALL (m p o1 s1 o2 s2)
- (IMPLIES (EQ (+ o1 s1) o2)
- (EQ (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2))
- (select_bytes m p o1 (+ s1 s2)))))
-
- (FORALL (o1 s1 o2)
- (IMPLIES (EQ (+ o1 s1) o2)
- (FORALL (m p s2)
- (EQ (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2))
- (select_bytes m p o1 (+ s1 s2)))))))
-
-(BG_PUSH
  ;; Why axiom Exception_parenttag_Object
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
@@ -3248,10 +2862,6 @@ why -simplify [...] why/PreAndOld.why
 (BG_PUSH
  ;; Why axiom Object_int
  (EQ (int_of_tag Object_tag) 1))
-
-(BG_PUSH
- ;; Why axiom Object_of_bitvector_of_bitvector_of_Object
- (FORALL (x) (EQ (Object_of_bitvector (bitvector_of_Object x)) x)))
 
 (BG_PUSH
  ;; Why axiom Object_of_pointer_address_of_pointer_addr
@@ -3278,14 +2888,6 @@ why -simplify [...] why/PreAndOld.why
  (EQ (parenttag Throwable_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why axiom bitvector_of_Object_of_Object_of_bitvector
- (FORALL (x) (EQ (bitvector_of_Object (Object_of_bitvector x)) x)))
-
-(BG_PUSH
- ;; Why axiom bitvector_of_interface_of_interface_of_bitvector
- (FORALL (x) (EQ (bitvector_of_interface (interface_of_bitvector x)) x)))
-
-(BG_PUSH
  ;; Why axiom f_def
  (FORALL (n PreAndOld_y_at_L)
  (EQ (f n PreAndOld_y_at_L) (+ n PreAndOld_y_at_L))))
@@ -3293,10 +2895,6 @@ why -simplify [...] why/PreAndOld.why
 (BG_PUSH
  ;; Why axiom interface_int
  (EQ (int_of_tag interface_tag) 1))
-
-(BG_PUSH
- ;; Why axiom interface_of_bitvector_of_bitvector_of_interface
- (FORALL (x) (EQ (interface_of_bitvector (bitvector_of_interface x)) x)))
 
 (BG_PUSH
  ;; Why axiom interface_of_pointer_address_of_pointer_addr
@@ -3708,7 +3306,11 @@ function sqr_real(x: real) : real = (x * x)
 
 logic sqrt_real : real -> real
 
+axiom sqrt_pos: (forall x:real. ((x >= 0.0) -> (sqrt_real(x) >= 0.0)))
+
 axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
+
+axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
 logic pow_real : real, real -> real
 
@@ -4257,195 +3859,6 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
-type bitvector
-
-logic concat_bitvector : bitvector, bitvector -> bitvector
-
-logic offset_min_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
-
-logic offset_max_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
-
-axiom offset_min_bytes_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer.
-      (forall s:int [offset_min_bytes(a, p, s)].
-        ((0 < s) ->
-         ((offset_min(a, p) <= (s * offset_min_bytes(a, p, s))) and
-          (((s * offset_min_bytes(a, p, s)) - s) < offset_min(a, p)))))))
-
-axiom offset_max_bytes_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer.
-      (forall s:int [offset_max_bytes(a, p, s)].
-        ((0 < s) ->
-         (((((s * offset_max_bytes(a, p, s)) + s) - 1) <= offset_max(a,
-          p)) and (offset_max(a, p) < ((((s * offset_max_bytes(a, p,
-          s)) + s) + s) - 1)))))))
-
-logic extract_bytes : bitvector, int, int -> bitvector
-
-logic replace_bytes : bitvector, int, int, bitvector -> bitvector
-
-axiom select_store_eq_union:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
-              v2), o2, s2)].
-              (((o1 = o2) and (s1 = s2)) -> (extract_bytes(replace_bytes(v1,
-               o1, s1, v2), o2, s2) = v2))))))))
-
-axiom select_store_neq_union:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
-              v2), o2, s2)].
-              ((((o2 + s2) <= o1) or ((o1 + s2) <= o2)) ->
-               (extract_bytes(replace_bytes(v1, o1, s1, v2), o2,
-               s2) = extract_bytes(v1, o2, s2)))))))))
-
-axiom concat_replace_bytes_up:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector.
-              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
-                v2), o2, s2, v3)].
-                (((o1 + s1) = o2) -> (replace_bytes(replace_bytes(v1, o1, s1,
-                 v2), o2, s2, v3) = replace_bytes(v1, o1, (s1 + s2),
-                 concat_bitvector(v2, v3)))))))))))
-
-axiom concat_replace_bytes_down:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v1:bitvector.
-            (forall v2:bitvector.
-              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
-                v2), o2, s2, v3)].
-                (((o2 + s2) = o1) -> (replace_bytes(replace_bytes(v1, o1, s1,
-                 v2), o2, s2, v3) = replace_bytes(v1, o2, (s1 + s2),
-                 concat_bitvector(v3, v2)))))))))))
-
-axiom concat_extract_bytes:
-  (forall o1:int.
-    (forall s1:int.
-      (forall o2:int.
-        (forall s2:int.
-          (forall v:bitvector [concat_bitvector(extract_bytes(v, o1, s1),
-            extract_bytes(v, o2, s2))].
-            (((o1 + s1) = o2) -> (concat_bitvector(extract_bytes(v, o1, s1),
-             extract_bytes(v, o2, s2)) = extract_bytes(v, o1, (s1 + s2)))))))))
-
-logic select_bytes : ('a1, bitvector) memory, 'a1 pointer, int,
-int -> bitvector
-
-logic store_bytes : ('a1, bitvector) memory, 'a1 pointer, int, int,
-bitvector -> ('a1, bitvector) memory
-
-axiom select_store_eq_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p1:'a1 pointer.
-      (forall p2:'a1 pointer.
-        (forall o1:int.
-          (forall s1:int.
-            (forall o2:int.
-              (forall s2:int.
-                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
-                  v), p2, o2, s2)].
-                  (((p1 = p2) and ((o1 = o2) and (s1 = s2))) ->
-                   (select_bytes(store_bytes(m, p1, o1, s1, v), p2, o2,
-                   s2) = v))))))))))
-
-axiom select_store_neq_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p1:'a1 pointer.
-      (forall p2:'a1 pointer.
-        (forall o1:int.
-          (forall s1:int.
-            (forall o2:int.
-              (forall s2:int.
-                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
-                  v), p2, o2, s2)].
-                  (pset_disjoint(pset_range(pset_singleton(p1), o1,
-                   (o1 + s1)), pset_range(pset_singleton(p2), o2,
-                   (o2 + s2))) -> (select_bytes(store_bytes(m, p1, o1, s1,
-                   v), p2, o2, s2) = select_bytes(m, p2, o2, s2)))))))))))
-
-axiom shift_store_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall i:int.
-        (forall o:int.
-          (forall s:int.
-            (forall v:bitvector [store_bytes(m, shift(p, i), o, s, v)].
-              (store_bytes(m, shift(p, i), o, s, v) = store_bytes(m, p,
-              (o + i), s, v))))))))
-
-axiom shift_select_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall i:int.
-        (forall o:int.
-          (forall s:int.
-            (forall v:bitvector [select_bytes(m, shift(p, i), o, s)].
-              (select_bytes(m, shift(p, i), o, s) = select_bytes(m, p,
-              (o + i), s))))))))
-
-axiom concat_store_bytes_up:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int.
-              (forall v1:bitvector.
-                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
-                  v1), p, o2, s2, v2)].
-                  (((o1 + s1) = o2) -> (store_bytes(store_bytes(m, p, o1, s1,
-                   v1), p, o2, s2, v2) = store_bytes(m, p, o1, (s1 + s2),
-                   concat_bitvector(v1, v2))))))))))))
-
-axiom concat_store_bytes_down:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int.
-              (forall v1:bitvector.
-                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
-                  v1), p, o2, s2, v2)].
-                  (((o2 + s2) = o1) -> (store_bytes(store_bytes(m, p, o1, s1,
-                   v1), p, o2, s2, v2) = store_bytes(m, p, o2, (s1 + s2),
-                   concat_bitvector(v2, v1))))))))))))
-
-axiom concat_select_bytes:
-  (forall m:('a1, bitvector) memory.
-    (forall p:'a1 pointer.
-      (forall o1:int.
-        (forall s1:int.
-          (forall o2:int.
-            (forall s2:int [concat_bitvector(select_bytes(m, p, o1, s1),
-              select_bytes(m, p, o2, s2))].
-              (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
-               s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
-               (s1 + s2))))))))))
-
-logic integer_of_bitvector : bitvector -> int
-
-logic bitvector_of_integer : int -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
 type Object
 
 type interface
@@ -4461,14 +3874,6 @@ predicate Non_null_Object(x: Object pointer,
   x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
-
-logic Object_of_bitvector : bitvector -> Object pointer
-
-logic bitvector_of_Object : Object pointer -> bitvector
-
-axiom Object_of_bitvector_of_bitvector_of_Object:
-  (forall x:Object pointer.
-    (Object_of_bitvector(bitvector_of_Object(x)) = x))
 
 logic Object_of_pointer_address : unit pointer -> Object pointer
 
@@ -4495,26 +3900,11 @@ logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
-axiom bitvector_of_Object_of_Object_of_bitvector:
-  (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
-
-logic bitvector_of_interface : interface pointer -> bitvector
-
-logic interface_of_bitvector : bitvector -> interface pointer
-
-axiom bitvector_of_interface_of_interface_of_bitvector:
-  (forall x:bitvector.
-    (bitvector_of_interface(interface_of_bitvector(x)) = x))
-
 function f(n: int, PreAndOld_y_at_L: int) : int = (n + PreAndOld_y_at_L)
 
 logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
-
-axiom interface_of_bitvector_of_bitvector_of_interface:
-  (forall x:interface pointer.
-    (interface_of_bitvector(bitvector_of_interface(x)) = x))
 
 logic interface_of_pointer_address : unit pointer -> interface pointer
 
