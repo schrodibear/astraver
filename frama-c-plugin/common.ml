@@ -354,13 +354,13 @@ let unique_name_generator is_exception =
 	Hashtbl.add unique_names s (ref 0); s
   in aux 
 
-let unique_name (*, is_used_name*) =
-  let u = unique_name_generator is_predefined_name in
-  (fun s -> let s' = u s in s') 
+let unique_name =
+(*  let u = *)unique_name_generator is_predefined_name 
+(* in (fun s -> let s' = u s in s') *)
 
-let unique_logic_name (*, is_used_logic_name*) =
-  let u = unique_name_generator (fun _ -> false) in
-  (fun s -> let s' = u s in s')
+let unique_logic_name =
+(*  let u = *) unique_name_generator (fun _ -> false) 
+(* in (fun s -> let s' = u s in s')*)
 
 let unique_name_if_empty s =
   if s = "" then unique_name "unnamed" else s
