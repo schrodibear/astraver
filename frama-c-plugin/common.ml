@@ -320,7 +320,10 @@ let name_of_realloc = "realloc"
 
 let predefined_name =
   [ (* coding functions *)
-    name_of_assert; name_of_malloc; name_of_calloc; name_of_realloc;
+    name_of_assert; 
+    name_of_malloc; 
+    name_of_calloc; 
+    name_of_realloc;
     name_of_free;
   ]
 
@@ -349,23 +352,15 @@ let unique_name_generator is_exception =
 	   incr count; s)
       with Not_found ->
 	Hashtbl.add unique_names s (ref 0); s
-  and check s =
-    try
-      let _ = Hashtbl.find unique_names s in true
-    with Not_found -> false
-  in aux, check
+  in aux 
 
-let unique_name, is_used_name =
-  let u,i = unique_name_generator is_predefined_name in
-  (fun s -> let s' = u s in
-   s'),
-  i
+let unique_name (*, is_used_name*) =
+  let u = unique_name_generator is_predefined_name in
+  (fun s -> let s' = u s in s') 
 
-let unique_logic_name, is_used_logic_name =
-  let u,i = unique_name_generator (fun _ -> false) in
-  (fun s -> let s' = u s in
-   s'),
-  i
+let unique_logic_name (*, is_used_logic_name*) =
+  let u = unique_name_generator (fun _ -> false) in
+  (fun s -> let s' = u s in s')
 
 let unique_name_if_empty s =
   if s = "" then unique_name "unnamed" else s
@@ -398,11 +393,13 @@ let jessie_reserved_names =
 let () = List.iter (ignore $ unique_name) jessie_reserved_names
 let () = List.iter (ignore $ unique_logic_name) jessie_reserved_names
 
+(*
 let reserved_name name =
   if List.mem name jessie_reserved_names then name else unique_name name
 
 let reserved_logic_name name =
   if List.mem name jessie_reserved_names then name else unique_logic_name name
+*)
 
 (* Type name *)
 
@@ -445,7 +442,7 @@ let logic_type_name ty =
   Parameters.UseUnicode.set old_mode;
   filter_alphanumeric name [('*','x')] '_'
 
-let name_of_padding_type = reserved_logic_name "padding"
+let name_of_padding_type = (*reserved_logic_name*) "padding"
 
 let name_of_string_declspec = "valid_string"
 

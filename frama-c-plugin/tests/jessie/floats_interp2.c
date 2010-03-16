@@ -29,12 +29,14 @@ ie 2u+l < 1022
 
 */
 
+                  
 
 
 /*@ predicate min_step{L}(double *t, integer a, integer b, real bound) =
   @    \forall integer i; a < i <= b ==> t[i] - t[i-1] >= bound;
   @*/
 
+// Coq needed
 /*@ lemma min_step_increasing{L}:
   @   \forall double *t, integer a, b, real bound;
   @     bound >= 0.0 && min_step(t,a,b,bound) ==>
@@ -46,6 +48,23 @@ ie 2u+l < 1022
 
 /*@ predicate array_bounded{L}(double *t,int n, real bound) =
   @   \forall integer i; 0 <= i < n ==> bounded(t[i],bound);
+  @*/
+
+// Coq needed
+/*@ lemma div_bounds :
+  @   \forall real a,b;
+  @   0.0 < b && 0.0 <= a <= b ==> 0.0 <= a/b <= 1.0;
+  @*/
+
+// known by Gappa
+//@ lemma round_0 : \round_double(\NearestEven,0.0) == 0.0;
+//@ lemma round_1 : \round_double(\NearestEven,1.0) == 1.0;
+
+// proved by SMT provers from the 3 lemmas above, and monotonicity of rounding
+// which is in floats_common.why
+/*@ lemma round_div :
+  @   \forall real a,b;
+  @   0.0 < b && 0.0 <= a <= b ==> 0.0 <= \round_double(\NearestEven,a/b) <= 1.0;
   @*/
 
 //@ ghost int i_interp;
@@ -91,7 +110,14 @@ double interp_lin(double x[], double y[], int n, double z) {
   //@ assert bounded(yim1,UPPER);
   double yi = y[i];
   //@ assert bounded(yi,UPPER);
-  double k = (z-xim1)/(xi-xim1);
+  //@ assert xim1 <= z <= xi;
+  double b = xi - xim1;
+  //@ assert LOWER <= b;
+  //@ assert 0.0 < b;
+  double a = z - xim1;
+  //@ assert 0 <= z - xim1 <= xi - xim1;
+  //@ assert 0.0 <= a <= b;
+  double k = a/b;
   //@ assert 0.0 <= k <= 1.0;
   return yi+k*(yi-yim1);
 }

@@ -1,0 +1,17 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only dillon2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD dillon2.c"
+[jessie] Starting Jessie translation
+dillon2.c:17:[kernel] failure: typeOfLval: Mem on a non-pointer (@10)
+dillon2.c:17:[jessie] failure: Unexpected exception.
+                  Please submit bug report (Ref. "Log.AbortFatal("kernel")").
+[kernel] The full backtrace is:
+         Raised at file "src/kernel/log.ml", line 503, characters 30-31
+         Called from file "src/kernel/log.ml", line 497, characters 2-9
+         Re-raised at file "src/kernel/log.ml", line 500, characters 8-9
+         Called from file "src/lib/type.ml", line 736, characters 40-45
+         Called from file "queue.ml", line 134, characters 6-20
+         Called from file "src/kernel/boot.ml", line 49, characters 4-20
+         Called from file "src/kernel/cmdline.ml", line 169, characters 4-8
+         
+         Plug-in jessie aborted because of an internal error.
+         Please report as 'crash' at http://bts.frama-c.com

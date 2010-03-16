@@ -1596,6 +1596,12 @@ axiom bounded_real_no_overflow_double:
     (forall x:real.
       ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
 
+axiom round_double_monotonic:
+  (forall x:real.
+    (forall y:real.
+      (forall m:mode.
+        ((x <= y) -> (round_double(m, x) <= round_double(m, y))))))
+
 type single
 
 logic round_single : mode, real -> real

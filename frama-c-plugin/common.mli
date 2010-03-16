@@ -65,9 +65,6 @@ val unique_logic_name : string -> string
 
 val unique_name_if_empty : string -> string
 
-val is_used_name : string -> bool
-
-val is_used_logic_name : string -> bool
 
 (* ????? *)
 

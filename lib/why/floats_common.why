@@ -43,6 +43,9 @@ predicate no_overflow_double(m:mode,x:real) =
 axiom bounded_real_no_overflow_double : forall m:mode. forall x:real. 
       abs_real(x) <= max_double -> no_overflow_double(m,x)
 
+axiom round_double_monotonic: 
+  forall x,y:real. forall m:mode.
+   x <= y -> round_double(m,x) <= round_double(m,y)
 
 (* About the single format *)
 type single

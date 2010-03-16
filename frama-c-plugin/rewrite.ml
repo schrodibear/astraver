@@ -120,7 +120,11 @@ let logic_names_overloading = Hashtbl.create 257
 
 let rename_entities file =
   let add_variable v =
-    v.vname <- unique_name v.vname;
+    let s = unique_name v.vname in
+(*
+    Format.eprintf "Renaming variable %s into %s@." v.vname s;
+*)
+    v.vname <- s;
     match v.vlogic_var_assoc with
       | None -> ()
       | Some lv -> lv.lv_name <- v.vname

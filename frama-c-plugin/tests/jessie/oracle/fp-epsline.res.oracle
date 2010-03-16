@@ -1,10 +1,10 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only abs.c
-[kernel] warning: cannot load plug-in `Mthread' (incompatible with Beryllium-20090902+dev).
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD abs.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fp-epsline.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fp-epsline.c"
 [jessie] Starting Jessie translation
-[jessie] Producing Jessie files in subdir abs.jessie
-[jessie] File abs.jessie/abs.jc written.
-[jessie] File abs.jessie/abs.cloc written.
+[jessie] Producing Jessie files in subdir fp-epsline.jessie
+[jessie] File fp-epsline.jessie/fp-epsline.jc written.
+[jessie] File fp-epsline.jessie/fp-epsline.cloc written.
+# IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -16,14 +16,10 @@ axiomatic Padding {
   
 }
 
-tag int_P = {
-  integer int_M: 32;
-}
-
-type int_P = [int_P]
+type int8 = -128..127
 
 tag char_P = {
-  integer char_M: 8;
+  int8 char_M: 8;
 }
 
 type char_P = [char_P]
@@ -33,33 +29,78 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit abs1(int_P[..] p)
+logic integer signr(real x) =
+(if (x >= 0.0) then 1 else (- 1))
+
+double sign(double x, double M)
+  requires (C_8 : (\double_round_error(x) <= (M :> real)));
 behavior default:
-  ensures (C_6 : (p.int_M >= 0));
+  ensures (C_9 : (((\result :> real) != 0) ==>
+                   ((\result :> real) == signr(\double_exact(x)))));
 {  
-   {  (if ((C_5 : p.int_M) < 0) then (C_4 : ((C_3 : p.int_M) = (C_2 : 
-                                                               (- (C_1 : p.int_M))))) else ());
-      
-      (return ())
+   (var double __retres);
+   
+   {  (if (x >= M) then 
+      {  (C_2 : (__retres = (C_1 : (1 :> double))));
+         
+         (goto return_label)
+      } else ());
+      (if (x <= (C_5 : (- M))) then 
+      {  (C_4 : (__retres = (C_3 : (-1 :> double))));
+         
+         (goto return_label)
+      } else ());
+      (C_7 : (__retres = (C_6 : (0 :> double))));
+      (return_label : 
+      (return __retres))
    }
 }
 
-unit abs2(int_P[..] p_0)
-  requires (C_12 : ((C_13 : (\offset_min(p_0) <= 0)) &&
-                     (C_14 : (\offset_max(p_0) >= 0))));
+double M22;
+
+invariant M22_value :
+((M22 :> real) == 0x1p-45)
+
+double eps_line(double sx, double sy, double vx, double vy)
+  requires (C_22 : ((((((((C_29 : (\double_round_error(sx) == 0)) &&
+                           (C_30 : (\double_round_error(sy) == 0))) &&
+                          (C_31 : (\double_round_error(vx) == 0))) &&
+                         (C_32 : (\double_round_error(vy) == 0))) &&
+                        (C_33 : (\real_abs((sx :> real)) <= 100.0))) &&
+                       (C_34 : (\real_abs((sy :> real)) <= 100.0))) &&
+                      (C_35 : (\real_abs((vx :> real)) <= 1.0))) &&
+                     (C_36 : (\real_abs((vy :> real)) <= 1.0))));
 behavior default:
-  ensures (C_15 : (p_0.int_M >= 0));
+  ensures (C_37 : (((\result :> real) != 0) ==>
+                    ((\result :> real) ==
+                      (signr(((\double_exact(sx) * \double_exact(vx)) +
+                               (\double_exact(sy) * \double_exact(vy)))) *
+                        signr(((\double_exact(sx) * \double_exact(vy)) -
+                                (\double_exact(sy) * \double_exact(vx))))))));
 {  
-   {  (if ((C_11 : p_0.int_M) < 0) then (C_10 : ((C_9 : p_0.int_M) = 
-                                        (C_8 : (- (C_7 : p_0.int_M))))) else ());
+   (var double tmp);
+   
+   (var double tmp_0);
+   
+   (var double __retres_0);
+   
+   {  
+      {  (C_14 : (tmp = (C_13 : sign((C_12 : ((C_11 : (sx * vx)) +
+                                               (C_10 : (sy * vy)))),
+                                     M22))));
+         (C_19 : (tmp_0 = (C_18 : sign((C_17 : ((C_16 : (sx * vy)) -
+                                                 (C_15 : (sy * vx)))),
+                                       M22))))
+      };
+      (C_21 : (__retres_0 = (C_20 : (tmp * tmp_0))));
       
-      (return ())
+      (return __retres_0)
    }
 }
-WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs abs.jessie/abs.cloc abs.jessie/abs.jc
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs fp-epsline.jessie/fp-epsline.cloc fp-epsline.jessie/fp-epsline.jc
 type char_P
 
-type int_P
+type int8
 
 type padding
 
@@ -68,6 +109,10 @@ type void_P
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
+
+logic M22:  -> double
+
+predicate M22_value() = eq_real(double_value(M22), 0x1p-45)
 
 exception Return_label_exc of unit
 
@@ -88,31 +133,27 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-logic int_P_tag:  -> int_P tag_id
+logic integer_of_int8: int8 -> int
 
-axiom int_P_int : (int_of_tag(int_P_tag) = (1))
+predicate eq_int8(x:int8,
+ y:int8) =
+ eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic int_P_of_pointer_address: unit pointer -> int_P pointer
+logic int8_of_integer: int -> int8
 
-axiom int_P_of_pointer_address_of_pointer_addr :
- (forall p:int_P pointer. (p = int_P_of_pointer_address(pointer_address(p))))
+axiom int8_coerce :
+ (forall x:int.
+  ((le_int((-128), x) and le_int(x, (127))) ->
+   eq_int(integer_of_int8(int8_of_integer(x)), x)))
 
-axiom int_P_parenttag_bottom : parenttag(int_P_tag, bottom_tag)
-
-axiom int_P_tags :
- (forall x:int_P pointer.
-  (forall int_P_tag_table:int_P tag_table.
-   instanceof(int_P_tag_table, x, int_P_tag)))
+axiom int8_range :
+ (forall x:int8.
+  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
-
-predicate left_valid_struct_int_P(p:int_P pointer,
- a:int,
- int_P_alloc_table:int_P alloc_table) =
- (offset_min(int_P_alloc_table, p) <= a)
 
 predicate left_valid_struct_void_P(p:void_P pointer,
  a:int,
@@ -121,9 +162,6 @@ predicate left_valid_struct_void_P(p:void_P pointer,
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
-
-axiom pointer_addr_of_int_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
 
 logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
@@ -135,15 +173,13 @@ predicate right_valid_struct_char_P(p:char_P pointer,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_P(p:int_P pointer,
- b:int,
- int_P_alloc_table:int_P alloc_table) =
- (offset_max(int_P_alloc_table, p) >= b)
-
 predicate right_valid_struct_void_P(p:void_P pointer,
  b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
+
+function signr(x:real) : int =
+ (if ge_real_bool(x, 0.0) then (1) else neg_int((1)))
 
 predicate strict_valid_root_char_P(p:char_P pointer,
  a:int,
@@ -151,13 +187,6 @@ predicate strict_valid_root_char_P(p:char_P pointer,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
-
-predicate strict_valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) = a)
- and (offset_max(int_P_alloc_table, p) = b))
 
 predicate strict_valid_root_void_P(p:void_P pointer,
  a:int,
@@ -173,13 +202,6 @@ predicate strict_valid_struct_char_P(p:char_P pointer,
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) = a)
- and (offset_max(int_P_alloc_table, p) = b))
-
 predicate strict_valid_struct_void_P(p:void_P pointer,
  a:int,
  b:int,
@@ -188,13 +210,6 @@ predicate strict_valid_struct_void_P(p:void_P pointer,
  and (offset_max(void_P_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_int_P(p:unit pointer,
  a:int,
  b:int,
  bitvector_alloc_table:unit alloc_table) =
@@ -215,13 +230,6 @@ predicate valid_root_char_P(p:char_P pointer,
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) <= a)
- and (offset_max(int_P_alloc_table, p) >= b))
-
 predicate valid_root_void_P(p:void_P pointer,
  a:int,
  b:int,
@@ -235,13 +243,6 @@ predicate valid_struct_char_P(p:char_P pointer,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
-
-predicate valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) <= a)
- and (offset_max(int_P_alloc_table, p) >= b))
 
 predicate valid_struct_void_P(p:void_P pointer,
  a:int,
@@ -265,37 +266,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter abs1 :
- p:int_P pointer ->
-  int_P_int_M_p_1:(int_P, int) memory ref ->
-   int_P_p_1_alloc_table:int_P alloc_table ->
-    { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_6: ge_int(select(int_P_int_M_p_1, p), (0))) }
-
-parameter abs1_requires :
- p:int_P pointer ->
-  int_P_int_M_p_1:(int_P, int) memory ref ->
-   int_P_p_1_alloc_table:int_P alloc_table ->
-    { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_6: ge_int(select(int_P_int_M_p_1, p), (0))) }
-
-parameter abs2 :
- p_0:int_P pointer ->
-  int_P_int_M_p_0_2:(int_P, int) memory ref ->
-   int_P_p_0_2_alloc_table:int_P alloc_table ->
-    { } unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
-
-parameter abs2_requires :
- p_0:int_P pointer ->
-  int_P_int_M_p_0_2:(int_P, int) memory ref ->
-   int_P_p_0_2_alloc_table:int_P alloc_table ->
-    { (JC_14:
-      ((JC_12: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-      and (JC_13: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))}
-    unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -310,24 +280,6 @@ parameter alloc_bitvector_struct_char_P_requires :
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
    { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_int_P :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_int_P_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
@@ -377,32 +329,6 @@ parameter alloc_struct_char_P_requires :
           and (alloc_fresh(char_P_alloc_table@, result, n)
               and instanceof(char_P_tag_table, result, char_P_tag)))) }
 
-parameter int_P_alloc_table : int_P alloc_table ref
-
-parameter int_P_tag_table : int_P tag_table ref
-
-parameter alloc_struct_int_P :
- n:int ->
-  int_P_alloc_table:int_P alloc_table ref ->
-   int_P_tag_table:int_P tag_table ref ->
-    { } int_P pointer writes int_P_alloc_table,int_P_tag_table
-    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
-       int_P_alloc_table)
-      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
-          and (alloc_fresh(int_P_alloc_table@, result, n)
-              and instanceof(int_P_tag_table, result, int_P_tag)))) }
-
-parameter alloc_struct_int_P_requires :
- n:int ->
-  int_P_alloc_table:int_P alloc_table ref ->
-   int_P_tag_table:int_P tag_table ref ->
-    { ge_int(n, (0))} int_P pointer writes int_P_alloc_table,int_P_tag_table
-    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
-       int_P_alloc_table)
-      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
-          and (alloc_fresh(int_P_alloc_table@, result, n)
-              and instanceof(int_P_tag_table, result, int_P_tag)))) }
-
 parameter void_P_alloc_table : void_P alloc_table ref
 
 parameter void_P_tag_table : void_P tag_table ref
@@ -430,186 +356,446 @@ parameter alloc_struct_void_P_requires :
           and (alloc_fresh(void_P_alloc_table@, result, n)
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
-let abs1_ensures_default =
- fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_4: true) }
+parameter any_int8 : unit -> { } int8 { true }
+
+parameter eps_line :
+ sx:double ->
+  sy:double ->
+   vx:double ->
+    vy:double ->
+     { } double
+     { ((JC_47: M22_value)
+       and (JC_45:
+           (neq_real(double_value(result), 0.0) ->
+            eq_real(double_value(result),
+            real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
+                                               double_exact(vx)),
+                                      mul_real(double_exact(sy),
+                                      double_exact(vy)))),
+                        signr(sub_real(mul_real(double_exact(sx),
+                                       double_exact(vy)),
+                              mul_real(double_exact(sy), double_exact(vx)))))))))) }
+
+parameter eps_line_requires :
+ sx:double ->
+  sy:double ->
+   vx:double ->
+    vy:double ->
+     { (JC_30:
+       ((JC_28:
+        ((JC_20: eq_real(double_round_error(sx), 0.0))
+        and ((JC_21: eq_real(double_round_error(sy), 0.0))
+            and ((JC_22: eq_real(double_round_error(vx), 0.0))
+                and ((JC_23: eq_real(double_round_error(vy), 0.0))
+                    and ((JC_24: le_real(abs_real(double_value(sx)), 100.0))
+                        and ((JC_25:
+                             le_real(abs_real(double_value(sy)), 100.0))
+                            and ((JC_26:
+                                 le_real(abs_real(double_value(vx)), 1.0))
+                                and (JC_27:
+                                    le_real(abs_real(double_value(vy)), 1.0))))))))))
+       and (JC_29: M22_value)))}
+     double
+     { ((JC_47: M22_value)
+       and (JC_45:
+           (neq_real(double_value(result), 0.0) ->
+            eq_real(double_value(result),
+            real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
+                                               double_exact(vx)),
+                                      mul_real(double_exact(sy),
+                                      double_exact(vy)))),
+                        signr(sub_real(mul_real(double_exact(sx),
+                                       double_exact(vy)),
+                              mul_real(double_exact(sy), double_exact(vx)))))))))) }
+
+parameter int8_of_integer_ :
+ x:int ->
+  { (le_int((-128), x) and le_int(x, (127)))} int8
+  { eq_int(integer_of_int8(result), x) }
+
+parameter safe_int8_of_integer_ :
+ x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter sign :
+ x_0:double ->
+  M:double ->
+   { } double
+   { ((JC_14: M22_value)
+     and (JC_12:
+         (neq_real(double_value(result), 0.0) ->
+          eq_real(double_value(result),
+          real_of_int(signr(double_exact(x_0))))))) }
+
+parameter sign_requires :
+ x_0:double ->
+  M:double ->
+   { (JC_5:
+     ((JC_3: le_real(double_round_error(x_0), double_value(M)))
+     and (JC_4: M22_value)))}
+   double
+   { ((JC_14: M22_value)
+     and (JC_12:
+         (neq_real(double_value(result), 0.0) ->
+          eq_real(double_value(result),
+          real_of_int(signr(double_exact(x_0))))))) }
+
+let eps_line_ensures_default =
+ fun (sx : double) (sy : double) (vx : double) (vy : double) ->
+  { (JC_42:
+    ((JC_40:
+     ((JC_32: eq_real(double_round_error(sx), 0.0))
+     and ((JC_33: eq_real(double_round_error(sy), 0.0))
+         and ((JC_34: eq_real(double_round_error(vx), 0.0))
+             and ((JC_35: eq_real(double_round_error(vy), 0.0))
+                 and ((JC_36: le_real(abs_real(double_value(sx)), 100.0))
+                     and ((JC_37: le_real(abs_real(double_value(sy)), 100.0))
+                         and ((JC_38:
+                              le_real(abs_real(double_value(vx)), 1.0))
+                             and (JC_39:
+                                 le_real(abs_real(double_value(vy)), 1.0))))))))))
+    and (JC_41: M22_value))) }
   (init:
+  (let return = ref (any_double void) in
   try
    begin
-     (if ((lt_int_ (C_5: ((safe_acc_ !int_P_int_M_p_1) p))) (0))
-     then
-      (C_4:
-      (let jessie_12 = (let jessie_8 = (C_2:
-                                       (neg_int (C_1:
-                                                ((safe_acc_ !int_P_int_M_p_1) p)))) in
-                       (let jessie_11 = p in
-                       (((safe_upd_ int_P_int_M_p_1) jessie_11) jessie_8))) in
-      void))
-     else void);
-    (raise Return);
-    (raise Return)
+     (let tmp = ref (any_double void) in
+     (let tmp_0 = ref (any_double void) in
+     (let __retres_0 = ref (any_double void) in
+     begin
+       (let jessie_40 = (C_14:
+                        begin
+                          (let jessie_36 = (tmp := (C_13:
+                                                   (let jessie_35 = (C_12:
+                                                                    (JC_59:
+                                                                    (((add_double_safe nearest_even) 
+                                                                    (C_11:
+                                                                    (JC_57:
+                                                                    (((mul_double_safe nearest_even) sx) vx)))) 
+                                                                    (C_10:
+                                                                    (JC_58:
+                                                                    (((mul_double_safe nearest_even) sy) vy)))))) in
+                                                   (let jessie_34 = M22 in
+                                                   (JC_60:
+                                                   ((sign jessie_35) jessie_34)))))) in
+                          void);
+                         (C_19:
+                         begin
+                           (tmp_0 := (C_18:
+                                     (let jessie_39 = (C_17:
+                                                      (JC_63:
+                                                      (((sub_double_safe nearest_even) 
+                                                        (C_16:
+                                                        (JC_61:
+                                                        (((mul_double_safe nearest_even) sx) vy)))) 
+                                                       (C_15:
+                                                       (JC_62:
+                                                       (((mul_double_safe nearest_even) sy) vx)))))) in
+                                     (let jessie_38 = M22 in
+                                     (JC_64: ((sign jessie_39) jessie_38))))));
+                          !tmp_0
+                         end)
+                        end) in
+       void);
+      (C_21:
+      begin
+        (let jessie_42 = (__retres_0 := (C_20:
+                                        (JC_65:
+                                        (((mul_double_safe nearest_even) !tmp) !tmp_0)))) in
+        void);
+       (return := !__retres_0);
+       (raise Return)
+      end)
+     end)));
+    absurd 
    end
    with
    Return ->
-   void end)
-  { (JC_5: ge_int(select(int_P_int_M_p_1, p), (0))) }
+   !return end))
+  { (JC_44:
+    (neq_real(double_value(result), 0.0) ->
+     eq_real(double_value(result),
+     real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
+                                        double_exact(vx)),
+                               mul_real(double_exact(sy), double_exact(vy)))),
+                 signr(sub_real(mul_real(double_exact(sx), double_exact(vy)),
+                       mul_real(double_exact(sy), double_exact(vx))))))))) }
 
-let abs1_safety =
- fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_4: true) }
+let eps_line_safety =
+ fun (sx : double) (sy : double) (vx : double) (vy : double) ->
+  { (JC_42:
+    ((JC_40:
+     ((JC_32: eq_real(double_round_error(sx), 0.0))
+     and ((JC_33: eq_real(double_round_error(sy), 0.0))
+         and ((JC_34: eq_real(double_round_error(vx), 0.0))
+             and ((JC_35: eq_real(double_round_error(vy), 0.0))
+                 and ((JC_36: le_real(abs_real(double_value(sx)), 100.0))
+                     and ((JC_37: le_real(abs_real(double_value(sy)), 100.0))
+                         and ((JC_38:
+                              le_real(abs_real(double_value(vx)), 1.0))
+                             and (JC_39:
+                                 le_real(abs_real(double_value(vy)), 1.0))))))))))
+    and (JC_41: M22_value))) }
   (init:
+  (let return = ref (any_double void) in
   try
    begin
-     (if ((lt_int_ (C_5:
-                   (JC_9:
-                   (((acc_ int_P_p_1_alloc_table) !int_P_int_M_p_1) p)))) (0))
-     then
-      (C_4:
-      (let jessie_6 = (let jessie_2 = (C_2:
-                                      (neg_int (C_1:
-                                               (JC_10:
-                                               (((acc_ int_P_p_1_alloc_table) !int_P_int_M_p_1) p))))) in
-                      (let jessie_5 = p in
-                      (JC_11:
-                      ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_5) jessie_2)))) in
-      void))
-     else void);
-    (raise Return);
-    (raise Return)
+     (let tmp = ref (any_double void) in
+     (let tmp_0 = ref (any_double void) in
+     (let __retres_0 = ref (any_double void) in
+     begin
+       (let jessie_29 = (C_14:
+                        begin
+                          (let jessie_25 = (tmp := (C_13:
+                                                   (let jessie_24 = (C_12:
+                                                                    (JC_50:
+                                                                    (((add_double nearest_even) 
+                                                                    (C_11:
+                                                                    (JC_48:
+                                                                    (((mul_double nearest_even) sx) vx)))) 
+                                                                    (C_10:
+                                                                    (JC_49:
+                                                                    (((mul_double nearest_even) sy) vy)))))) in
+                                                   (let jessie_23 = M22 in
+                                                   (JC_51:
+                                                   ((sign_requires jessie_24) jessie_23)))))) in
+                          void);
+                         (C_19:
+                         begin
+                           (tmp_0 := (C_18:
+                                     (let jessie_28 = (C_17:
+                                                      (JC_54:
+                                                      (((sub_double nearest_even) 
+                                                        (C_16:
+                                                        (JC_52:
+                                                        (((mul_double nearest_even) sx) vy)))) 
+                                                       (C_15:
+                                                       (JC_53:
+                                                       (((mul_double nearest_even) sy) vx)))))) in
+                                     (let jessie_27 = M22 in
+                                     (JC_55:
+                                     ((sign_requires jessie_28) jessie_27))))));
+                          !tmp_0
+                         end)
+                        end) in
+       void);
+      (C_21:
+      begin
+        (let jessie_31 = (__retres_0 := (C_20:
+                                        (JC_56:
+                                        (((mul_double nearest_even) !tmp) !tmp_0)))) in
+        void);
+       (return := !__retres_0);
+       (raise Return)
+      end)
+     end)));
+    absurd 
    end
    with
    Return ->
-   void end)
-  { true }
+   !return end))
+  { (JC_46: M22_value) }
 
-let abs2_ensures_default =
- fun (p_0 : int_P pointer) (int_P_int_M_p_0_2 : (int_P, int) memory ref) (int_P_p_0_2_alloc_table : int_P alloc_table) ->
-  { (JC_18:
-    ((JC_16: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-    and (JC_17: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0))))) }
+let sign_ensures_default =
+ fun (x_0 : double) (M : double) ->
+  { (JC_9:
+    ((JC_7: le_real(double_round_error(x_0), double_value(M)))
+    and (JC_8: M22_value))) }
   (init:
+  (let return = ref (any_double void) in
   try
    begin
-     (if ((lt_int_ (C_11: ((safe_acc_ !int_P_int_M_p_0_2) p_0))) (0))
-     then
-      (C_10:
-      (let jessie_24 = (let jessie_20 = (C_8:
-                                        (neg_int (C_7:
-                                                 ((safe_acc_ !int_P_int_M_p_0_2) p_0)))) in
-                       (let jessie_23 = p_0 in
-                       (((safe_upd_ int_P_int_M_p_0_2) jessie_23) jessie_20))) in
-      void))
-     else void);
-    (raise Return);
-    (raise Return)
+     (let __retres = ref (any_double void) in
+     try
+      (let jessie_20 = begin
+                         (if ((ge_double x_0) M)
+                         then
+                          (let jessie_14 = (C_2:
+                                           begin
+                                             (let jessie_13 = (__retres := 
+                                                               (C_1:
+                                                               ((double_of_real_safe nearest_even) 1.0))) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
+                          void)
+                         else void);
+                        (if ((le_double x_0) (C_5: (JC_19: (neg_double M))))
+                        then
+                         (let jessie_17 = (C_4:
+                                          begin
+                                            (let jessie_16 = (__retres := 
+                                                              (C_3:
+                                                              ((double_of_real_safe nearest_even) 
+                                                               (real_of_int 
+                                                                (neg_int (1)))))) in
+                                            void);
+                                           (raise (Return_label_exc void))
+                                          end) in
+                         void)
+                        else void);
+                        (C_7:
+                        begin
+                          (let jessie_19 = (__retres := (C_6:
+                                                        ((double_of_real_safe nearest_even) 0.0))) in
+                          void);
+                         (raise (Return_label_exc void))
+                        end)
+                       end in
+      void)
+      with
+      Return_label_exc jessie_1 ->
+      (return_label: begin   (return := !__retres); (raise Return) end) end);
+    absurd 
    end
    with
    Return ->
-   void end)
-  { (JC_20: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
+   !return end))
+  { (JC_11:
+    (neq_real(double_value(result), 0.0) ->
+     eq_real(double_value(result), real_of_int(signr(double_exact(x_0)))))) }
 
-let abs2_safety =
- fun (p_0 : int_P pointer) (int_P_int_M_p_0_2 : (int_P, int) memory ref) (int_P_p_0_2_alloc_table : int_P alloc_table) ->
-  { (JC_18:
-    ((JC_16: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-    and (JC_17: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0))))) }
+let sign_safety =
+ fun (x_0 : double) (M : double) ->
+  { (JC_9:
+    ((JC_7: le_real(double_round_error(x_0), double_value(M)))
+    and (JC_8: M22_value))) }
   (init:
+  (let return = ref (any_double void) in
   try
    begin
-     (if ((lt_int_ (C_11:
-                   (JC_24:
-                   (((acc_ int_P_p_0_2_alloc_table) !int_P_int_M_p_0_2) p_0)))) (0))
-     then
-      (C_10:
-      (let jessie_18 = (let jessie_14 = (C_8:
-                                        (neg_int (C_7:
-                                                 (JC_25:
-                                                 (((acc_ int_P_p_0_2_alloc_table) !int_P_int_M_p_0_2) p_0))))) in
-                       (let jessie_17 = p_0 in
-                       (JC_26:
-                       ((((upd_ int_P_p_0_2_alloc_table) int_P_int_M_p_0_2) jessie_17) jessie_14)))) in
-      void))
-     else void);
-    (raise Return);
-    (raise Return)
+     (let __retres = ref (any_double void) in
+     try
+      (let jessie_10 = begin
+                         (if ((ge_double x_0) M)
+                         then
+                          (let jessie_4 = (C_2:
+                                          begin
+                                            (let jessie_3 = (__retres := 
+                                                             (C_1:
+                                                             (JC_15:
+                                                             ((double_of_real nearest_even) 1.0)))) in
+                                            void);
+                                           (raise (Return_label_exc void))
+                                          end) in
+                          void)
+                         else void);
+                        (if ((le_double x_0) (C_5: (JC_16: (neg_double M))))
+                        then
+                         (let jessie_7 = (C_4:
+                                         begin
+                                           (let jessie_6 = (__retres := 
+                                                            (C_3:
+                                                            (JC_17:
+                                                            ((double_of_real nearest_even) 
+                                                             (real_of_int 
+                                                              (neg_int (1))))))) in
+                                           void);
+                                          (raise (Return_label_exc void))
+                                         end) in
+                         void)
+                        else void);
+                        (C_7:
+                        begin
+                          (let jessie_9 = (__retres := (C_6:
+                                                       (JC_18:
+                                                       ((double_of_real nearest_even) 0.0)))) in
+                          void);
+                         (raise (Return_label_exc void))
+                        end)
+                       end in
+      void)
+      with
+      Return_label_exc jessie_1 ->
+      (return_label: begin   (return := !__retres); (raise Return) end) end);
+    absurd 
    end
    with
    Return ->
-   void end)
-  { true }
+   !return end))
+  { (JC_13: M22_value) }
 
 
-WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C abs.jessie --quiet -f abs.makefile project
-why --project [...] why/abs.why
-<project name="abs" context="why/abs_ctx.why">
-  <function name="Function abs2">
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-epsline.jessie --quiet -f fp-epsline.makefile project
+why --project [...] why/fp-epsline.why
+<project name="fp-epsline" context="why/fp-epsline_ctx.why">
+  <function name="Function sign">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/abs_po9.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "2" end = "4"/>
+    <goal why_file="why/fp-epsline_po12.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "12" begin = "4" end = "10"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/abs_po10.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
+    <goal why_file="why/fp-epsline_po13.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "14" begin = "4" end = "10"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/abs_po11.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
+    <goal why_file="why/fp-epsline_po14.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/abs_po12.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/abs_po8.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "36" begin = "12" end = "19"/>
+    <goal why_file="why/fp-epsline_po11.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "8" begin = "12" end = "56"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
-  <function name="Function abs1">
+  <function name="Function eps_line">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/abs_po2.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "30" begin = "2" end = "4"/>
+    <goal why_file="why/fp-epsline_po2.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/abs_po3.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "30" begin = "2" end = "4"/>
+    <goal why_file="why/fp-epsline_po3.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/abs_po4.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "30" begin = "14" end = "15"/>
+    <goal why_file="why/fp-epsline_po4.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/abs_po5.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "30" begin = "14" end = "15"/>
+    <goal why_file="why/fp-epsline_po5.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "UserCall"/>
     </goal>
-    <goal why_file="why/abs_po6.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "30" begin = "14" end = "15"/>
+    <goal why_file="why/fp-epsline_po6.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/abs_po7.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "30" begin = "14" end = "15"/>
+    <goal why_file="why/fp-epsline_po7.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/fp-epsline_po8.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/fp-epsline_po9.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/fp-epsline_po10.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "39" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/abs_po1.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "28" begin = "12" end = "19"/>
+    <goal why_file="why/fp-epsline_po1.why">
+      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "33" begin = "7" end = "162"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1399,13 +1585,218 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type mode =
+  | nearest_even
+  | to_zero
+  | up
+  | down
+  | nearest_away
+
+type double
+
+logic round_double : mode, real -> real
+
+logic round_double_logic : mode, real -> double
+
+logic double_value : double -> real
+
+logic double_exact : double -> real
+
+logic double_model : double -> real
+
+function double_round_error(x: double) : real =
+  abs_real((double_value(x) - double_exact(x)))
+
+function double_total_error(x: double) : real =
+  abs_real((double_value(x) - double_model(x)))
+
+function max_double() : real = 0x1.FFFFFFFFFFFFFp1023
+
+predicate no_overflow_double(m: mode, x: real) = (abs_real(round_double(m,
+  x)) <= max_double)
+
+axiom bounded_real_no_overflow_double:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_double) -> no_overflow_double(m, x))))
+
+axiom round_double_monotonic:
+  (forall x:real.
+    (forall y:real.
+      (forall m:mode.
+        ((x <= y) -> (round_double(m, x) <= round_double(m, y))))))
+
+type single
+
+logic round_single : mode, real -> real
+
+logic round_single_logic : mode, real -> single
+
+logic single_value : single -> real
+
+logic single_exact : single -> real
+
+logic single_model : single -> real
+
+function single_round_error(x: single) : real =
+  abs_real((single_value(x) - single_exact(x)))
+
+function single_total_error(x: single) : real =
+  abs_real((single_value(x) - single_model(x)))
+
+function max_single() : real = 0x1.FFFFFEp127
+
+predicate no_overflow_single(m: mode, x: real) = (abs_real(round_single(m,
+  x)) <= max_single)
+
+axiom bounded_real_no_overflow_single:
+  (forall m:mode.
+    (forall x:real.
+      ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
+
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
+
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
+
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
+
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
+
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
+
+axiom round_single_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_single(m1, round_single(m2,
+        x)) = round_single(m2, x)))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom double_to_single_val:
+  (forall m:mode.
+    (forall s:single. (double_value(single_to_double(m,
+      s)) = single_value(s))))
+
+axiom single_to_double_val:
+  (forall m:mode.
+    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
+      double_value(d)))))
+
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
+
 type char_P
 
-type int_P
+type int8
 
 type padding
 
 type void_P
+
+logic M22 : double
+
+predicate M22_value() = (double_value(M22) = 0x1.p-45)
 
 logic char_P_tag : char_P tag_id
 
@@ -1424,29 +1815,24 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-logic int_P_tag : int_P tag_id
+logic integer_of_int8 : int8 -> int
 
-axiom int_P_int: (int_of_tag(int_P_tag) = 1)
+predicate eq_int8(x: int8, y: int8) =
+  (integer_of_int8(x) = integer_of_int8(y))
 
-logic int_P_of_pointer_address : unit pointer -> int_P pointer
+logic int8_of_integer : int -> int8
 
-axiom int_P_of_pointer_address_of_pointer_addr:
-  (forall p:int_P pointer.
-    (p = int_P_of_pointer_address(pointer_address(p))))
+axiom int8_coerce:
+  (forall x:int.
+    ((((-128) <= x) and (x <= 127)) ->
+     (integer_of_int8(int8_of_integer(x)) = x)))
 
-axiom int_P_parenttag_bottom: parenttag(int_P_tag, bottom_tag)
-
-axiom int_P_tags:
-  (forall x:int_P pointer.
-    (forall int_P_tag_table:int_P tag_table. instanceof(int_P_tag_table, x,
-      int_P_tag)))
+axiom int8_range:
+  (forall x:int8.
+    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
-  p) <= a)
-
-predicate left_valid_struct_int_P(p: int_P pointer, a: int,
-  int_P_alloc_table: int_P alloc_table) = (offset_min(int_P_alloc_table,
   p) <= a)
 
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
@@ -1456,9 +1842,6 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
-
-axiom pointer_addr_of_int_P_of_pointer_address:
-  (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
 
 logic void_P_of_pointer_address : unit pointer -> void_P pointer
 
@@ -1470,23 +1853,16 @@ predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_int_P(p: int_P pointer, b: int,
-  int_P_alloc_table: int_P alloc_table) = (offset_max(int_P_alloc_table,
-  p) >= b)
-
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
+
+function signr(x: real) : int = ite(ge_real_bool(x, 0.0), 1, (-1))
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) = a) and
    (offset_max(char_P_alloc_table, p) = b))
-
-predicate strict_valid_root_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
-   p) = b))
 
 predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
@@ -1498,22 +1874,12 @@ predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
   ((offset_min(char_P_alloc_table, p) = a) and
    (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
-   p) = b))
-
 predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_int_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
@@ -1528,11 +1894,6 @@ predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
   ((offset_min(char_P_alloc_table, p) <= a) and
    (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
-   p) >= b))
-
 predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) <= a) and
@@ -1542,11 +1903,6 @@ predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) <= a) and
    (offset_max(char_P_alloc_table, p) >= b))
-
-predicate valid_struct_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
-   p) >= b))
 
 predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
