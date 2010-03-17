@@ -1,1 +1,2 @@
-make: *** [dillon2.regtest] Error 4
+File "dillon2.jessie/dillon2.jc", line 68, characters 10-17: typing error: invalid memory location
+make: *** [dillon2.regtest] Error 1

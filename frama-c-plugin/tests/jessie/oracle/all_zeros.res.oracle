@@ -37,14 +37,15 @@ tag void_P = {
 
 type void_P = [void_P]
 
-int32 all_zeros(int_P[..] t, int32 n)
-  requires (C_14 : (((C_16 : (\offset_min(t) <= 0)) &&
-                      (C_17 : (\offset_max(t) >= n))) &&
-                     (C_18 : (n >= 0))));
+int32 all_zeros(int_P[..] t_0, int32 n_0)
+  requires (C_14 : (((C_16 : (\offset_min(t_0) <= 0)) &&
+                      (C_17 : (\offset_max(t_0) >= n_0))) &&
+                     (C_18 : (n_0 >= 0))));
 behavior default:
   ensures (C_19 : ((\result != 0) <==>
                     (\forall integer i_0;
-                      (((0 <= i_0) && (i_0 < n)) ==> ((t + i_0).int_M == 0)))));
+                      (((0 <= i_0) && (i_0 < n_0)) ==>
+                        ((t_0 + i_0).int_M == 0)))));
 {  
    (var int32 __retres);
    
@@ -52,37 +53,37 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_1 : (((C_3 : (0 <= n)) && (C_4 : (n <= \at(n,Pre)))) &&
+           invariant (C_1 : (((C_3 : (0 <= n_0)) &&
+                               (C_4 : (n_0 <= \at(n_0,Pre)))) &&
                               (C_5 : (\forall int32 i;
-                                       (((n <= i) && (i < \at(n,Pre))) ==>
-                                         ((t + i).int_M == 0))))));
-         variant (C_6 : n);
+                                       (((n_0 <= i) && (i < \at(n_0,Pre))) ==>
+                                         ((t_0 + i).int_M == 0))))));
+         variant (C_6 : n_0);
          while (true)
          {  
-            {  (C_9 : (n = (C_8 : ((C_7 : (n - 1)) :> int32))));
-               (if (n >= 0) then (if (! ((C_11 : (C_10 : (t + n)).int_M) !=
-                                          0)) then () else 
-                                 (goto while_0_break)) else 
+            {  (C_9 : (n_0 = (C_8 : ((C_7 : (n_0 - 1)) :> int32))));
+               (if (n_0 >= 0) then (if (! ((C_11 : (C_10 : (t_0 + n_0)).int_M) !=
+                                            0)) then () else 
+                                   (goto while_0_break)) else 
                (goto while_0_break))
             }
          };
          (while_0_break : ())
       };
-      (C_13 : (__retres = (C_12 : ((if (n < 0) then 1 else 0) :> int32))));
+      (C_13 : (__retres = (C_12 : ((if (n_0 < 0) then 1 else 0) :> int32))));
       
       (return __retres)
    }
 }
 
-int32 all_zeros_1(int_P[..] t_1, int32 n_1)
-  requires (C_35 : (((C_37 : (\offset_min(t_1) <= 0)) &&
-                      (C_38 : (\offset_max(t_1) >= n_1))) &&
-                     (C_39 : (n_1 >= 0))));
+int32 all_zeros_1(int_P[..] t, int32 n)
+  requires (C_35 : (((C_37 : (\offset_min(t) <= 0)) &&
+                      (C_38 : (\offset_max(t) >= n))) &&
+                     (C_39 : (n >= 0))));
 behavior default:
   ensures (C_40 : ((\result != 0) <==>
                     (\forall integer i_2;
-                      (((0 <= i_2) && (i_2 < n_1)) ==>
-                        ((t_1 + i_2).int_M == 0)))));
+                      (((0 <= i_2) && (i_2 < n)) ==> ((t + i_2).int_M == 0)))));
 {  
    (var int32 k);
    
@@ -95,13 +96,13 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_21 : (((C_23 : (0 <= k)) && (C_24 : (k <= n_1))) &&
+           invariant (C_21 : (((C_23 : (0 <= k)) && (C_24 : (k <= n))) &&
                                (C_25 : (\forall integer i_1;
                                          (((0 <= i_1) && (i_1 < k)) ==>
-                                           ((t_1 + i_1).int_M == 0))))));
-         variant (C_26 : (n_1 - k));
+                                           ((t + i_1).int_M == 0))))));
+         variant (C_26 : (n - k));
          while (true)
-         {  (if (k < n_1) then 
+         {  (if (k < n) then 
             {  
                {  
                   {  (C_27 : (tmp = k));
@@ -109,28 +110,28 @@ behavior default:
                   };
                   ()
                };
-               (if ((C_32 : (C_31 : (t_1 + tmp)).int_M) != 0) then 
+               (if ((C_32 : (C_31 : (t + tmp)).int_M) != 0) then 
                (goto while_1_break) else ())
             } else 
             (goto while_1_break))
          };
          (while_1_break : ())
       };
-      (C_34 : (__retres_0 = (C_33 : ((if (k == n_1) then 1 else 0) :> int32))));
+      (C_34 : (__retres_0 = (C_33 : ((if (k == n) then 1 else 0) :> int32))));
       
       (return __retres_0)
    }
 }
 
-int32 all_zeros_0(int_P[..] t_0, int32 n_0)
-  requires (C_55 : (((C_57 : (\offset_min(t_0) <= 0)) &&
-                      (C_58 : (\offset_max(t_0) >= n_0))) &&
-                     (C_59 : (n_0 >= 0))));
+int32 all_zeros_0(int_P[..] t_1, int32 n_1)
+  requires (C_55 : (((C_57 : (\offset_min(t_1) <= 0)) &&
+                      (C_58 : (\offset_max(t_1) >= n_1))) &&
+                     (C_59 : (n_1 >= 0))));
 behavior default:
   ensures (C_60 : ((\result != 0) <==>
                     (\forall integer i_4;
-                      (((0 <= i_4) && (i_4 < n_0)) ==>
-                        ((t_0 + i_4).int_M == 0)))));
+                      (((0 <= i_4) && (i_4 < n_1)) ==>
+                        ((t_1 + i_4).int_M == 0)))));
 {  
    (var int32 k_0);
    
@@ -141,16 +142,16 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_42 : (((C_44 : (0 <= k_0)) && (C_45 : (k_0 <= n_0))) &&
+           invariant (C_42 : (((C_44 : (0 <= k_0)) && (C_45 : (k_0 <= n_1))) &&
                                (C_46 : (\forall integer i_3;
                                          (((0 <= i_3) && (i_3 < k_0)) ==>
-                                           ((t_0 + i_3).int_M == 0))))));
-         variant (C_47 : (n_0 - k_0));
+                                           ((t_1 + i_3).int_M == 0))))));
+         variant (C_47 : (n_1 - k_0));
          while (true)
          {  
-            {  (if (k_0 < n_0) then () else 
+            {  (if (k_0 < n_1) then () else 
                (goto while_2_break));
-               (if ((C_50 : (C_49 : (t_0 + k_0)).int_M) != 0) then 
+               (if ((C_50 : (C_49 : (t_1 + k_0)).int_M) != 0) then 
                {  (C_48 : (__retres_1 = 0));
                   
                   (goto return_label)
@@ -420,102 +421,102 @@ axiom void_P_tags :
    instanceof(void_P_tag_table, x, void_P_tag)))
 
 parameter all_zeros :
- t:int_P pointer ->
-  n:int32 ->
-   int_P_t_1_alloc_table:int_P alloc_table ->
-    int_P_int_M_t_1:(int_P, int32) memory ->
+ t_0:int_P pointer ->
+  n_0:int32 ->
+   int_P_t_0_1_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_0_1:(int_P, int32) memory ->
      { } int32
      { (JC_12:
        (neq_int(integer_of_int32(result), (0))
        <-> (forall i_0:int.
-            ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(n))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, i_0))),
+            ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(n_0))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_t_0_1,
+                                     shift(t_0, i_0))),
              (0)))))) }
 
 parameter all_zeros_0 :
- t_0:int_P pointer ->
-  n_0:int32 ->
-   int_P_t_0_3_alloc_table:int_P alloc_table ->
-    int_P_int_M_t_0_3:(int_P, int32) memory ->
+ t_1:int_P pointer ->
+  n_1:int32 ->
+   int_P_t_1_3_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_1_3:(int_P, int32) memory ->
      { } int32
      { (JC_76:
        (neq_int(integer_of_int32(result), (0))
        <-> (forall i_4:int.
-            ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_0))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_t_0_3,
-                                     shift(t_0, i_4))),
+            ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_1))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_t_1_3,
+                                     shift(t_1, i_4))),
              (0)))))) }
 
 parameter all_zeros_0_requires :
- t_0:int_P pointer ->
-  n_0:int32 ->
-   int_P_t_0_3_alloc_table:int_P alloc_table ->
-    int_P_int_M_t_0_3:(int_P, int32) memory ->
+ t_1:int_P pointer ->
+  n_1:int32 ->
+   int_P_t_1_3_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_1_3:(int_P, int32) memory ->
      { (JC_68:
-       ((JC_65: le_int(offset_min(int_P_t_0_3_alloc_table, t_0), (0)))
+       ((JC_65: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
        and ((JC_66:
-            ge_int(offset_max(int_P_t_0_3_alloc_table, t_0),
-            integer_of_int32(n_0)))
-           and (JC_67: ge_int(integer_of_int32(n_0), (0))))))}
+            ge_int(offset_max(int_P_t_1_3_alloc_table, t_1),
+            integer_of_int32(n_1)))
+           and (JC_67: ge_int(integer_of_int32(n_1), (0))))))}
      int32
      { (JC_76:
        (neq_int(integer_of_int32(result), (0))
        <-> (forall i_4:int.
-            ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_0))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_t_0_3,
-                                     shift(t_0, i_4))),
+            ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_1))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_t_1_3,
+                                     shift(t_1, i_4))),
              (0)))))) }
 
 parameter all_zeros_1 :
- t_1:int_P pointer ->
-  n_1:int32 ->
-   int_P_t_1_2_alloc_table:int_P alloc_table ->
-    int_P_int_M_t_1_2:(int_P, int32) memory ->
+ t:int_P pointer ->
+  n:int32 ->
+   int_P_t_2_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_2:(int_P, int32) memory ->
      { } int32
      { (JC_44:
        (neq_int(integer_of_int32(result), (0))
        <-> (forall i_2:int.
-            ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n_1))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_t_1_2,
-                                     shift(t_1, i_2))),
+            ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, i_2))),
              (0)))))) }
 
 parameter all_zeros_1_requires :
- t_1:int_P pointer ->
-  n_1:int32 ->
-   int_P_t_1_2_alloc_table:int_P alloc_table ->
-    int_P_int_M_t_1_2:(int_P, int32) memory ->
+ t:int_P pointer ->
+  n:int32 ->
+   int_P_t_2_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_2:(int_P, int32) memory ->
      { (JC_36:
-       ((JC_33: le_int(offset_min(int_P_t_1_2_alloc_table, t_1), (0)))
+       ((JC_33: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
        and ((JC_34:
-            ge_int(offset_max(int_P_t_1_2_alloc_table, t_1),
-            integer_of_int32(n_1)))
-           and (JC_35: ge_int(integer_of_int32(n_1), (0))))))}
+            ge_int(offset_max(int_P_t_2_alloc_table, t), integer_of_int32(n)))
+           and (JC_35: ge_int(integer_of_int32(n), (0))))))}
      int32
      { (JC_44:
        (neq_int(integer_of_int32(result), (0))
        <-> (forall i_2:int.
-            ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n_1))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_t_1_2,
-                                     shift(t_1, i_2))),
+            ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, i_2))),
              (0)))))) }
 
 parameter all_zeros_requires :
- t:int_P pointer ->
-  n:int32 ->
-   int_P_t_1_alloc_table:int_P alloc_table ->
-    int_P_int_M_t_1:(int_P, int32) memory ->
+ t_0:int_P pointer ->
+  n_0:int32 ->
+   int_P_t_0_1_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_0_1:(int_P, int32) memory ->
      { (JC_4:
-       ((JC_1: le_int(offset_min(int_P_t_1_alloc_table, t), (0)))
+       ((JC_1: le_int(offset_min(int_P_t_0_1_alloc_table, t_0), (0)))
        and ((JC_2:
-            ge_int(offset_max(int_P_t_1_alloc_table, t), integer_of_int32(n)))
-           and (JC_3: ge_int(integer_of_int32(n), (0))))))}
+            ge_int(offset_max(int_P_t_0_1_alloc_table, t_0),
+            integer_of_int32(n_0)))
+           and (JC_3: ge_int(integer_of_int32(n_0), (0))))))}
      int32
      { (JC_12:
        (neq_int(integer_of_int32(result), (0))
        <-> (forall i_0:int.
-            ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(n))) ->
-             eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, i_0))),
+            ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(n_0))) ->
+             eq_int(integer_of_int32(select(int_P_int_M_t_0_1,
+                                     shift(t_0, i_0))),
              (0)))))) }
 
 parameter alloc_bitvector_struct_char_P :
@@ -673,13 +674,13 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let all_zeros_0_ensures_default =
- fun (t_0 : int_P pointer) (n_0 : int32) (int_P_t_0_3_alloc_table : int_P alloc_table) (int_P_int_M_t_0_3 : (int_P, int32) memory) ->
+ fun (t_1 : int_P pointer) (n_1 : int32) (int_P_t_1_3_alloc_table : int_P alloc_table) (int_P_int_M_t_1_3 : (int_P, int32) memory) ->
   { (JC_73:
-    ((JC_70: le_int(offset_min(int_P_t_0_3_alloc_table, t_0), (0)))
+    ((JC_70: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
     and ((JC_71:
-         ge_int(offset_max(int_P_t_0_3_alloc_table, t_0),
-         integer_of_int32(n_0)))
-        and (JC_72: ge_int(integer_of_int32(n_0), (0)))))) }
+         ge_int(offset_max(int_P_t_1_3_alloc_table, t_1),
+         integer_of_int32(n_1)))
+        and (JC_72: ge_int(integer_of_int32(n_1), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -702,15 +703,15 @@ let all_zeros_0_ensures_default =
                                                  integer_of_int32(k_0)))
                                                 and ((JC_90:
                                                      le_int(integer_of_int32(k_0),
-                                                     integer_of_int32(n_0)))
+                                                     integer_of_int32(n_1)))
                                                     and (JC_91:
                                                         (forall i_3:int.
                                                          ((le_int((0), i_3)
                                                           and lt_int(i_3,
                                                               integer_of_int32(k_0))) ->
                                                           eq_int(integer_of_int32(
-                                                                 select(int_P_int_M_t_0_3,
-                                                                 shift(t_0,
+                                                                 select(int_P_int_M_t_1_3,
+                                                                 shift(t_1,
                                                                  i_3))),
                                                           (0))))))))
                                                }
@@ -723,7 +724,7 @@ let all_zeros_0_ensures_default =
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !k_0)) 
-                                                                    (integer_of_int32 n_0))
+                                                                    (integer_of_int32 n_1))
                                                                     then void
                                                                     else
                                                                     (let jessie_71 = 
@@ -735,9 +736,9 @@ let all_zeros_0_ensures_default =
                                                                    ((neq_int_ 
                                                                     (integer_of_int32 
                                                                     (C_50:
-                                                                    ((safe_acc_ int_P_int_M_t_0_3) 
+                                                                    ((safe_acc_ int_P_int_M_t_1_3) 
                                                                     (C_49:
-                                                                    ((shift t_0) 
+                                                                    ((shift t_1) 
                                                                     (integer_of_int32 !k_0))))))) (0))
                                                                    then
                                                                     (let jessie_74 = 
@@ -804,18 +805,18 @@ let all_zeros_0_ensures_default =
   { (JC_75:
     (neq_int(integer_of_int32(result), (0))
     <-> (forall i_4:int.
-         ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_0))) ->
-          eq_int(integer_of_int32(select(int_P_int_M_t_0_3, shift(t_0, i_4))),
+         ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_1))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_t_1_3, shift(t_1, i_4))),
           (0)))))) }
 
 let all_zeros_0_safety =
- fun (t_0 : int_P pointer) (n_0 : int32) (int_P_t_0_3_alloc_table : int_P alloc_table) (int_P_int_M_t_0_3 : (int_P, int32) memory) ->
+ fun (t_1 : int_P pointer) (n_1 : int32) (int_P_t_1_3_alloc_table : int_P alloc_table) (int_P_int_M_t_1_3 : (int_P, int32) memory) ->
   { (JC_73:
-    ((JC_70: le_int(offset_min(int_P_t_0_3_alloc_table, t_0), (0)))
+    ((JC_70: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
     and ((JC_71:
-         ge_int(offset_max(int_P_t_0_3_alloc_table, t_0),
-         integer_of_int32(n_0)))
-        and (JC_72: ge_int(integer_of_int32(n_0), (0)))))) }
+         ge_int(offset_max(int_P_t_1_3_alloc_table, t_1),
+         integer_of_int32(n_1)))
+        and (JC_72: ge_int(integer_of_int32(n_1), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -833,7 +834,7 @@ let all_zeros_0_safety =
                                             while true do
                                             { invariant (JC_84: true)
                                               variant (JC_88 : sub_int(
-                                                               integer_of_int32(n_0),
+                                                               integer_of_int32(n_1),
                                                                integer_of_int32(k_0))) }
                                              begin
                                                [ { } unit reads k_0
@@ -843,7 +844,7 @@ let all_zeros_0_safety =
                                                     integer_of_int32(k_0)))
                                                    and ((JC_80:
                                                         le_int(integer_of_int32(k_0),
-                                                        integer_of_int32(n_0)))
+                                                        integer_of_int32(n_1)))
                                                        and (JC_81:
                                                            (forall i_3:int.
                                                             ((le_int((0),
@@ -851,8 +852,8 @@ let all_zeros_0_safety =
                                                              and lt_int(i_3,
                                                                  integer_of_int32(k_0))) ->
                                                              eq_int(integer_of_int32(
-                                                                    select(int_P_int_M_t_0_3,
-                                                                    shift(t_0,
+                                                                    select(int_P_int_M_t_1_3,
+                                                                    shift(t_1,
                                                                     i_3))),
                                                              (0)))))))) } ];
                                               try
@@ -862,7 +863,7 @@ let all_zeros_0_safety =
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !k_0)) 
-                                                                    (integer_of_int32 n_0))
+                                                                    (integer_of_int32 n_1))
                                                                     then void
                                                                     else
                                                                     (let jessie_57 = 
@@ -875,7 +876,7 @@ let all_zeros_0_safety =
                                                                     (integer_of_int32 
                                                                     (C_50:
                                                                     (JC_86:
-                                                                    ((((offset_acc_ int_P_t_0_3_alloc_table) int_P_int_M_t_0_3) t_0) 
+                                                                    ((((offset_acc_ int_P_t_1_3_alloc_table) int_P_int_M_t_1_3) t_1) 
                                                                     (integer_of_int32 !k_0)))))) (0))
                                                                    then
                                                                     (let jessie_60 = 
@@ -943,13 +944,12 @@ let all_zeros_0_safety =
   { true }
 
 let all_zeros_1_ensures_default =
- fun (t_1 : int_P pointer) (n_1 : int32) (int_P_t_1_2_alloc_table : int_P alloc_table) (int_P_int_M_t_1_2 : (int_P, int32) memory) ->
+ fun (t : int_P pointer) (n : int32) (int_P_t_2_alloc_table : int_P alloc_table) (int_P_int_M_t_2 : (int_P, int32) memory) ->
   { (JC_41:
-    ((JC_38: le_int(offset_min(int_P_t_1_2_alloc_table, t_1), (0)))
+    ((JC_38: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
     and ((JC_39:
-         ge_int(offset_max(int_P_t_1_2_alloc_table, t_1),
-         integer_of_int32(n_1)))
-        and (JC_40: ge_int(integer_of_int32(n_1), (0)))))) }
+         ge_int(offset_max(int_P_t_2_alloc_table, t), integer_of_int32(n)))
+        and (JC_40: ge_int(integer_of_int32(n), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -969,14 +969,13 @@ let all_zeros_1_ensures_default =
                               ((JC_58: le_int((0), integer_of_int32(k)))
                               and ((JC_59:
                                    le_int(integer_of_int32(k),
-                                   integer_of_int32(n_1)))
+                                   integer_of_int32(n)))
                                   and (JC_60:
                                       (forall i_1:int.
                                        ((le_int((0), i_1)
                                         and lt_int(i_1, integer_of_int32(k))) ->
-                                        eq_int(integer_of_int32(select(int_P_int_M_t_1_2,
-                                                                shift(t_1,
-                                                                i_1))),
+                                        eq_int(integer_of_int32(select(int_P_int_M_t_2,
+                                                                shift(t, i_1))),
                                         (0))))))))
                              }
                            begin
@@ -984,7 +983,7 @@ let all_zeros_1_ensures_default =
                             try
                              (let jessie_50 = begin
                                                 (if ((lt_int_ (integer_of_int32 !k)) 
-                                                     (integer_of_int32 n_1))
+                                                     (integer_of_int32 n))
                                                 then
                                                  begin
                                                    (let jessie_47 = (C_27:
@@ -1009,9 +1008,9 @@ let all_zeros_1_ensures_default =
                                                   void;
                                                   (if ((neq_int_ (integer_of_int32 
                                                                   (C_32:
-                                                                  ((safe_acc_ int_P_int_M_t_1_2) 
+                                                                  ((safe_acc_ int_P_int_M_t_2) 
                                                                    (C_31:
-                                                                   ((shift t_1) 
+                                                                   ((shift t) 
                                                                     (integer_of_int32 !tmp))))))) (0))
                                                   then
                                                    (let jessie_48 = (raise
@@ -1046,7 +1045,7 @@ let all_zeros_1_ensures_default =
         (let jessie_53 = (__retres_0 := (C_33:
                                         (safe_int32_of_integer_ (if ((eq_int_ 
                                                                     (integer_of_int32 !k)) 
-                                                                    (integer_of_int32 n_1))
+                                                                    (integer_of_int32 n))
                                                                 then (1)
                                                                 else (0))))) in
         void);
@@ -1062,18 +1061,17 @@ let all_zeros_1_ensures_default =
   { (JC_43:
     (neq_int(integer_of_int32(result), (0))
     <-> (forall i_2:int.
-         ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n_1))) ->
-          eq_int(integer_of_int32(select(int_P_int_M_t_1_2, shift(t_1, i_2))),
+         ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, i_2))),
           (0)))))) }
 
 let all_zeros_1_safety =
- fun (t_1 : int_P pointer) (n_1 : int32) (int_P_t_1_2_alloc_table : int_P alloc_table) (int_P_int_M_t_1_2 : (int_P, int32) memory) ->
+ fun (t : int_P pointer) (n : int32) (int_P_t_2_alloc_table : int_P alloc_table) (int_P_int_M_t_2 : (int_P, int32) memory) ->
   { (JC_41:
-    ((JC_38: le_int(offset_min(int_P_t_1_2_alloc_table, t_1), (0)))
+    ((JC_38: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
     and ((JC_39:
-         ge_int(offset_max(int_P_t_1_2_alloc_table, t_1),
-         integer_of_int32(n_1)))
-        and (JC_40: ge_int(integer_of_int32(n_1), (0)))))) }
+         ge_int(offset_max(int_P_t_2_alloc_table, t), integer_of_int32(n)))
+        and (JC_40: ge_int(integer_of_int32(n), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1089,7 +1087,7 @@ let all_zeros_1_safety =
                           (loop_3:
                           while true do
                           { invariant (JC_52: true)
-                            variant (JC_56 : sub_int(integer_of_int32(n_1),
+                            variant (JC_56 : sub_int(integer_of_int32(n),
                                              integer_of_int32(k))) }
                            begin
                              [ { } unit reads k
@@ -1097,20 +1095,20 @@ let all_zeros_1_safety =
                                  ((JC_47: le_int((0), integer_of_int32(k)))
                                  and ((JC_48:
                                       le_int(integer_of_int32(k),
-                                      integer_of_int32(n_1)))
+                                      integer_of_int32(n)))
                                      and (JC_49:
                                          (forall i_1:int.
                                           ((le_int((0), i_1)
                                            and lt_int(i_1,
                                                integer_of_int32(k))) ->
-                                           eq_int(integer_of_int32(select(int_P_int_M_t_1_2,
-                                                                   shift(t_1,
+                                           eq_int(integer_of_int32(select(int_P_int_M_t_2,
+                                                                   shift(t,
                                                                    i_1))),
                                            (0)))))))) } ];
                             try
                              (let jessie_37 = begin
                                                 (if ((lt_int_ (integer_of_int32 !k)) 
-                                                     (integer_of_int32 n_1))
+                                                     (integer_of_int32 n))
                                                 then
                                                  begin
                                                    (let jessie_34 = (C_27:
@@ -1137,7 +1135,7 @@ let all_zeros_1_safety =
                                                   (if ((neq_int_ (integer_of_int32 
                                                                   (C_32:
                                                                   (JC_55:
-                                                                  ((((offset_acc_ int_P_t_1_2_alloc_table) int_P_int_M_t_1_2) t_1) 
+                                                                  ((((offset_acc_ int_P_t_2_alloc_table) int_P_int_M_t_2) t) 
                                                                    (integer_of_int32 !tmp)))))) (0))
                                                   then
                                                    (let jessie_35 = (raise
@@ -1173,7 +1171,7 @@ let all_zeros_1_safety =
                                         (JC_57:
                                         (int32_of_integer_ (if ((eq_int_ 
                                                                  (integer_of_int32 !k)) 
-                                                                (integer_of_int32 n_1))
+                                                                (integer_of_int32 n))
                                                            then (1)
                                                            else (0)))))) in
         void);
@@ -1189,13 +1187,14 @@ let all_zeros_1_safety =
   { true }
 
 let all_zeros_ensures_default =
- fun (t : int_P pointer) (n : int32) (int_P_t_1_alloc_table : int_P alloc_table) (int_P_int_M_t_1 : (int_P, int32) memory) ->
+ fun (t_0 : int_P pointer) (n_0 : int32) (int_P_t_0_1_alloc_table : int_P alloc_table) (int_P_int_M_t_0_1 : (int_P, int32) memory) ->
   { (JC_9:
-    ((JC_6: le_int(offset_min(int_P_t_1_alloc_table, t), (0)))
+    ((JC_6: le_int(offset_min(int_P_t_0_1_alloc_table, t_0), (0)))
     and ((JC_7:
-         ge_int(offset_max(int_P_t_1_alloc_table, t), integer_of_int32(n)))
-        and (JC_8: ge_int(integer_of_int32(n), (0)))))) }
-  (let mutable_n = ref n in
+         ge_int(offset_max(int_P_t_0_1_alloc_table, t_0),
+         integer_of_int32(n_0)))
+        and (JC_8: ge_int(integer_of_int32(n_0), (0)))))) }
+  (let mutable_n_0 = ref n_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1209,18 +1208,18 @@ let all_zeros_ensures_default =
                            { invariant
                                (JC_29:
                                ((JC_26:
-                                le_int((0), integer_of_int32(mutable_n)))
+                                le_int((0), integer_of_int32(mutable_n_0)))
                                and ((JC_27:
-                                    le_int(integer_of_int32(mutable_n),
-                                    integer_of_int32(mutable_n@init)))
+                                    le_int(integer_of_int32(mutable_n_0),
+                                    integer_of_int32(mutable_n_0@init)))
                                    and (JC_28:
                                        (forall i:int32.
-                                        ((le_int(integer_of_int32(mutable_n),
+                                        ((le_int(integer_of_int32(mutable_n_0),
                                           integer_of_int32(i))
                                          and lt_int(integer_of_int32(i),
-                                             integer_of_int32(mutable_n@init))) ->
-                                         eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                                                 shift(t,
+                                             integer_of_int32(mutable_n_0@init))) ->
+                                         eq_int(integer_of_int32(select(int_P_int_M_t_0_1,
+                                                                 shift(t_0,
                                                                  integer_of_int32(i)))),
                                          (0))))))))
                               }
@@ -1230,22 +1229,22 @@ let all_zeros_ensures_default =
                               (let jessie_24 = begin
                                                  (C_9:
                                                  begin
-                                                   (let jessie_21 = (mutable_n := 
+                                                   (let jessie_21 = (mutable_n_0 := 
                                                                     (C_8:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_7:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 !mutable_n)) (1)))))) in
+                                                                    (integer_of_int32 !mutable_n_0)) (1)))))) in
                                                    void);
-                                                  (if ((ge_int_ (integer_of_int32 !mutable_n)) (0))
+                                                  (if ((ge_int_ (integer_of_int32 !mutable_n_0)) (0))
                                                   then
                                                    (if (not ((neq_int_ 
                                                               (integer_of_int32 
                                                                (C_11:
-                                                               ((safe_acc_ int_P_int_M_t_1) 
+                                                               ((safe_acc_ int_P_int_M_t_0_1) 
                                                                 (C_10:
-                                                                ((shift t) 
-                                                                 (integer_of_int32 !mutable_n))))))) (0)))
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !mutable_n_0))))))) (0)))
                                                    then void
                                                    else
                                                     (let jessie_22 = 
@@ -1279,7 +1278,7 @@ let all_zeros_ensures_default =
       begin
         (let jessie_27 = (__retres := (C_12:
                                       (safe_int32_of_integer_ (if ((lt_int_ 
-                                                                    (integer_of_int32 !mutable_n)) (0))
+                                                                    (integer_of_int32 !mutable_n_0)) (0))
                                                               then (1)
                                                               else (0))))) in
         void);
@@ -1295,18 +1294,19 @@ let all_zeros_ensures_default =
   { (JC_11:
     (neq_int(integer_of_int32(result), (0))
     <-> (forall i_0:int.
-         ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(n))) ->
-          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, i_0))),
+         ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(n_0))) ->
+          eq_int(integer_of_int32(select(int_P_int_M_t_0_1, shift(t_0, i_0))),
           (0)))))) }
 
 let all_zeros_safety =
- fun (t : int_P pointer) (n : int32) (int_P_t_1_alloc_table : int_P alloc_table) (int_P_int_M_t_1 : (int_P, int32) memory) ->
+ fun (t_0 : int_P pointer) (n_0 : int32) (int_P_t_0_1_alloc_table : int_P alloc_table) (int_P_int_M_t_0_1 : (int_P, int32) memory) ->
   { (JC_9:
-    ((JC_6: le_int(offset_min(int_P_t_1_alloc_table, t), (0)))
+    ((JC_6: le_int(offset_min(int_P_t_0_1_alloc_table, t_0), (0)))
     and ((JC_7:
-         ge_int(offset_max(int_P_t_1_alloc_table, t), integer_of_int32(n)))
-        and (JC_8: ge_int(integer_of_int32(n), (0)))))) }
-  (let mutable_n = ref n in
+         ge_int(offset_max(int_P_t_0_1_alloc_table, t_0),
+         integer_of_int32(n_0)))
+        and (JC_8: ge_int(integer_of_int32(n_0), (0)))))) }
+  (let mutable_n_0 = ref n_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1318,45 +1318,45 @@ let all_zeros_safety =
                            (loop_1:
                            while true do
                            { invariant (JC_20: true)
-                             variant integer_of_int32((JC_24 : mutable_n)) }
+                             variant integer_of_int32((JC_24 : mutable_n_0)) }
                             begin
-                              [ { } unit reads mutable_n
+                              [ { } unit reads mutable_n_0
                                 { (JC_18:
                                   ((JC_15:
-                                   le_int((0), integer_of_int32(mutable_n)))
+                                   le_int((0), integer_of_int32(mutable_n_0)))
                                   and ((JC_16:
-                                       le_int(integer_of_int32(mutable_n),
-                                       integer_of_int32(mutable_n@init)))
+                                       le_int(integer_of_int32(mutable_n_0),
+                                       integer_of_int32(mutable_n_0@init)))
                                       and (JC_17:
                                           (forall i:int32.
-                                           ((le_int(integer_of_int32(mutable_n),
+                                           ((le_int(integer_of_int32(mutable_n_0),
                                              integer_of_int32(i))
                                             and lt_int(integer_of_int32(i),
-                                                integer_of_int32(mutable_n@init))) ->
-                                            eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                                                    shift(t,
+                                                integer_of_int32(mutable_n_0@init))) ->
+                                            eq_int(integer_of_int32(select(int_P_int_M_t_0_1,
+                                                                    shift(t_0,
                                                                     integer_of_int32(i)))),
                                             (0)))))))) } ];
                              try
                               (let jessie_15 = begin
                                                  (C_9:
                                                  begin
-                                                   (let jessie_12 = (mutable_n := 
+                                                   (let jessie_12 = (mutable_n_0 := 
                                                                     (C_8:
                                                                     (JC_22:
                                                                     (int32_of_integer_ 
                                                                     (C_7:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 !mutable_n)) (1))))))) in
+                                                                    (integer_of_int32 !mutable_n_0)) (1))))))) in
                                                    void);
-                                                  (if ((ge_int_ (integer_of_int32 !mutable_n)) (0))
+                                                  (if ((ge_int_ (integer_of_int32 !mutable_n_0)) (0))
                                                   then
                                                    (if (not ((neq_int_ 
                                                               (integer_of_int32 
                                                                (C_11:
                                                                (JC_23:
-                                                               ((((offset_acc_ int_P_t_1_alloc_table) int_P_int_M_t_1) t) 
-                                                                (integer_of_int32 !mutable_n)))))) (0)))
+                                                               ((((offset_acc_ int_P_t_0_1_alloc_table) int_P_int_M_t_0_1) t_0) 
+                                                                (integer_of_int32 !mutable_n_0)))))) (0)))
                                                    then void
                                                    else
                                                     (let jessie_13 = 
@@ -1391,7 +1391,7 @@ let all_zeros_safety =
         (let jessie_18 = (__retres := (C_12:
                                       (JC_25:
                                       (int32_of_integer_ (if ((lt_int_ 
-                                                               (integer_of_int32 !mutable_n)) (0))
+                                                               (integer_of_int32 !mutable_n_0)) (0))
                                                          then (1)
                                                          else (0)))))) in
         void);
@@ -1578,11 +1578,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po43.why">
-      <location file = "why/all_zeros.why" line = "1153" begin = "37" end = "74"/>
+      <location file = "why/all_zeros.why" line = "1152" begin = "37" end = "76"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po44.why">
-      <location file = "why/all_zeros.why" line = "1153" begin = "37" end = "74"/>
+      <location file = "why/all_zeros.why" line = "1152" begin = "37" end = "76"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po45.why">

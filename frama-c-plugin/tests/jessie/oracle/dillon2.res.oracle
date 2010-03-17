@@ -1,17 +1,82 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only dillon2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD dillon2.c"
 [jessie] Starting Jessie translation
-dillon2.c:17:[kernel] failure: typeOfLval: Mem on a non-pointer (@10)
-dillon2.c:17:[jessie] failure: Unexpected exception.
-                  Please submit bug report (Ref. "Log.AbortFatal("kernel")").
-[kernel] The full backtrace is:
-         Raised at file "src/kernel/log.ml", line 503, characters 30-31
-         Called from file "src/kernel/log.ml", line 497, characters 2-9
-         Re-raised at file "src/kernel/log.ml", line 500, characters 8-9
-         Called from file "src/lib/type.ml", line 736, characters 40-45
-         Called from file "queue.ml", line 134, characters 6-20
-         Called from file "src/kernel/boot.ml", line 49, characters 4-20
-         Called from file "src/kernel/cmdline.ml", line 169, characters 4-8
-         
-         Plug-in jessie aborted because of an internal error.
-         Please report as 'crash' at http://bts.frama-c.com
+[jessie] Producing Jessie files in subdir dillon2.jessie
+[jessie] File dillon2.jessie/dillon2.jc written.
+[jessie] File dillon2.jessie/dillon2.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int32 = -2147483648..2147483647
+
+type int8 = -128..127
+
+tag int_P = {
+  int32 int_M: 32;
+}
+
+type int_P = [int_P]
+
+tag las_xP = {
+  __anonstruct_las_1[..] las_xM: 32;
+}
+
+type las_xP = [las_xP]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+tag __anonstruct_las_1 = {
+  int32 a: 32;
+}
+
+type __anonstruct_las_1 = [__anonstruct_las_1]
+
+las_xP[0] p;
+
+logic las_xP[..] p_ref{L}() =
+p
+
+unit f3()
+  requires (C_4 : ((C_5 : (\offset_min(p.las_xM) <= 0)) &&
+                    (C_6 : (\offset_max(p.las_xM) >= 0))));
+behavior default:
+  assigns p.las_xM.a;
+  ensures (C_7 : true);
+{  
+   {  (C_3 : ((C_2 : (C_1 : p.las_xM).a) = 5));
+      
+      (return ())
+   }
+}
+
+unit g3(int_P[..] p_0)
+  requires (C_9 : ((C_10 : (\offset_min(p_0) <= 0)) &&
+                    (C_11 : (\offset_max(p_0) >= 0))));
+behavior default:
+  assigns p_ref().las_xM.a;
+  ensures (C_12 : true);
+{  
+   {  (C_8 : f3());
+      
+      (return ())
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs dillon2.jessie/dillon2.cloc dillon2.jessie/dillon2.jc

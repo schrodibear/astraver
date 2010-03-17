@@ -35,7 +35,7 @@ open Jc_fenv
 
 open Format
 
-let parse_file f = 
+let parse_file f =
   try
     let c = open_in f in
     let d = Jc_lexer.parse f c in
@@ -53,7 +53,7 @@ let compute_regions logic_components components =
     Hashtbl.iter Jc_separation.axiom Jc_typing.lemmas_table;
     Hashtbl.iter
       (fun _id data ->
-	 List.iter 
+	 List.iter
 	   (function Jc_typing.ABaxiom(pos,id,labs,a) ->
 	      Jc_separation.axiom id (pos,(* is_axiom = *)true,[],labs,a)
 	   ) data.Jc_typing.axiomatics_decls
@@ -68,7 +68,7 @@ let compute_effects logic_components components =
   Array.iter Jc_effect.function_effects components
 
 let main () =
-  let files = Jc_options.files () in 
+  let files = Jc_options.files () in
   try match files with [file] ->
     let filename = Filename.chop_extension file in
 
@@ -108,23 +108,23 @@ let main () =
     Jc_options.lprintf "Computation of call graph@.";
     Hashtbl.iter (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
       Jc_typing.logic_functions_table;
-    Hashtbl.iter 
-      (fun _ (f,_loc,s,b) -> 
+    Hashtbl.iter
+      (fun _ (f,_loc,s,b) ->
 	 Option_misc.iter (Jc_callgraph.compute_calls f s) b
       ) Jc_typing.functions_table;
 
-    let logic_components = 
+    let logic_components =
       Jc_callgraph.compute_logic_components Jc_typing.logic_functions_table
     in
-    let components = 
+    let components =
       Jc_callgraph.compute_components Jc_typing.functions_table
     in
 
     (* update field "component" of functions *)
     Array.iteri
-      (fun i l -> List.iter (fun fi -> fi.jc_fun_info_component <- i) l) 
+      (fun i l -> List.iter (fun fi -> fi.jc_fun_info_component <- i) l)
       components;
-    
+
     (* (optional) phase 5: inference of annotations *)
     if !Jc_options.annotation_sem <> AnnotNone then
       begin
@@ -148,14 +148,14 @@ let main () =
 	  end
 	else
 	  (* intraprocedural inference of annotations otherwise *)
-	  Hashtbl.iter 
+	  Hashtbl.iter
 	    (fun _ (f, loc, s, b) -> Jc_ai.code_function (f, loc, s, b))
 	    Jc_typing.functions_table;
       end;
 
     (* phase 6: add invariants *)
     Jc_options.lprintf "Adding invariants@.";
-    let vil = 
+    let vil =
       Hashtbl.fold (fun _tag (vi, _eo) acc -> vi :: acc)
 	Jc_typing.variables_table []
     in
@@ -183,10 +183,10 @@ let main () =
     (*                    PART 3: GENERATION OF WHY CODE                     *)
     (*************************************************************************)
 
-    let push_decls, fold_decls, pop_decls = 
+    let push_decls, fold_decls, pop_decls =
       let decls = ref [] in
-      (fun f -> decls := f !decls), 
-      (fun f acc -> let d,acc = f (!decls,acc) in decls := d; acc), 
+      (fun f -> decls := f !decls),
+      (fun f acc -> let d,acc = f (!decls,acc) in decls := d; acc),
       (fun () -> !decls)
     in
 
@@ -218,51 +218,51 @@ let main () =
 
     (* production phase 2.2: translate memories *)
     Jc_options.lprintf "Translate memories@.";
-    let regions = 
+    let regions =
       fold_decls
-	(Hashtbl.fold 
-	   (fun _ (fi,r) (acc,regions) -> 
+	(Hashtbl.fold
+	   (fun _ (fi,r) (acc,regions) ->
 	      let r = Region.representative r in
-	      let acc = 
-		if RegionSet.mem r regions then acc else 
-		  Jc_interp.tr_region r acc 
+	      let acc =
+		if RegionSet.mem r regions then acc else
+		  Jc_interp.tr_region r acc
 	      in
 	      Jc_interp.tr_memory (fi,r) acc,RegionSet.add r regions)
 	   Jc_effect.constant_memories
 	) (RegionSet.singleton dummy_region)
     in
-    
+
     (* production phase 2.3: translate allocation tables *)
     Jc_options.lprintf "Translate allocation tables@.";
     let regions =
       fold_decls
-	(Hashtbl.fold 
-	   (fun _ (a,r) (acc,regions) -> 
+	(Hashtbl.fold
+	   (fun _ (a,r) (acc,regions) ->
 	      let r = Region.representative r in
-	      let acc = 
+	      let acc =
 		if RegionSet.mem r regions then acc else
-		  Jc_interp.tr_region r acc 
+		  Jc_interp.tr_region r acc
 	      in
 	      Jc_interp.tr_alloc_table (a,r) acc, RegionSet.add r regions)
 	   Jc_effect.constant_alloc_tables
 	) regions
-    in	       	  
+    in
 
     (* production phase 2.4: translate tag tables *)
     Jc_options.lprintf "Translate tag tables@.";
     let _ =
       fold_decls
-	(Hashtbl.fold 
-	   (fun _ (a,r) (acc,regions) -> 
+	(Hashtbl.fold
+	   (fun _ (a,r) (acc,regions) ->
 	      let r = Region.representative r in
-	      let acc = 
+	      let acc =
 		if RegionSet.mem r regions then acc else
-		  Jc_interp.tr_region r acc 
+		  Jc_interp.tr_region r acc
 	      in
 	      Jc_interp.tr_tag_table (a,r) acc, RegionSet.add r regions)
 	   Jc_effect.constant_tag_tables
 	) regions
-    in	       	  
+    in
 
     (* production phase 3: generation of Why exceptions *)
     Jc_options.lprintf "Translate exceptions@.";
@@ -274,18 +274,18 @@ let main () =
     (* Yannick: why here and not together with translation of types? *)
     Jc_options.lprintf "Translate enumerated types@.";
     push_decls
-      (Hashtbl.fold 
+      (Hashtbl.fold
 	 (fun _ ri acc -> Jc_interp.tr_enum_type ri acc)
 	 Jc_typing.enum_types_table);
-    let enumlist = 
+    let enumlist =
       Hashtbl.fold (fun _ ri acc -> ri::acc) Jc_typing.enum_types_table []
     in
-    let rec treat_enum_pairs pairs acc = 
+    let rec treat_enum_pairs pairs acc =
       match pairs with
 	| [] -> acc
 	| ri1 :: rest ->
-	    let acc = 
-	      List.fold_left 
+	    let acc =
+	      List.fold_left
 		(fun acc ri2 ->
 		   Jc_interp.tr_enum_type_pair ri1 ri2 acc) acc rest
 	    in
@@ -300,8 +300,8 @@ let main () =
 
     (* production phase 4.1: generation of Why logic functions *)
     Jc_options.lprintf "Translate logic functions@.";
-    push_decls 
-      (Hashtbl.fold 
+    push_decls
+      (Hashtbl.fold
 	 (fun _ (li, p) acc ->
 	    Jc_options.lprintf "Logic function %s@." li.jc_logic_info_name;
 	    Jc_frame.tr_logic_fun li p acc)
@@ -309,8 +309,8 @@ let main () =
 
     (* production phase 4.2: generation of axiomatic logic decls*)
     Jc_options.lprintf "Translate axiomatic declarations@.";
-    push_decls 
-      (Hashtbl.fold 
+    push_decls
+      (Hashtbl.fold
 	 (fun a data acc ->
 	    Jc_options.lprintf "Axiomatic %s@." a;
 	    List.fold_left Jc_interp.tr_axiomatic_decl acc data.Jc_typing.axiomatics_decls)
@@ -320,7 +320,7 @@ let main () =
     (* production phase 4.3: generation of lemmas *)
     Jc_options.lprintf "Translate lemmas@.";
     push_decls
-      (Hashtbl.fold 
+      (Hashtbl.fold
 	 (fun id (loc,is_axiom,_,labels,p) acc ->
 	    Jc_interp.tr_axiom loc id is_axiom labels p acc)
 	 Jc_typing.lemmas_table);
@@ -333,19 +333,19 @@ let main () =
     (* production phase 7: generation of Why functions *)
     Jc_options.lprintf "Translate functions@.";
     push_decls
-      (Hashtbl.fold 
+      (Hashtbl.fold
 	 (fun _ (f,loc,s,b) acc ->
 	    Jc_options.lprintf "Pre-treatement Function %s@." f.jc_fun_info_name;
 	    Jc_interp.pre_tr_fun f loc s b acc)
 	 Jc_typing.functions_table);
     push_decls
-      (Hashtbl.fold 
+      (Hashtbl.fold
 	 (fun _ (f,loc,s,b) acc ->
 	    Jc_options.lprintf "Function %s@." f.jc_fun_info_name;
 	    Jc_interp.tr_fun f loc s b acc)
 	 Jc_typing.functions_table);
     push_decls
-      (Hashtbl.fold 
+      (Hashtbl.fold
 	 (fun n (fname,param_name_assoc) acc ->
 	    Jc_interp.tr_specialized_fun n fname param_name_assoc acc)
 	 Jc_interp_misc.specialized_functions);
@@ -383,14 +383,14 @@ let main () =
 
     (* output phase 1: produce Why file *)
     Jc_options.lprintf "Produce Why file@.";
-    Pp.print_in_file 
+    Pp.print_in_file
       (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls decls)
       (Lib.file_subdir "why" (filename ^ ".why"));
 
     (* output phase 2: produce locs file *)
     Jc_options.lprintf "Produce locs file@.";
-    let cout_locs,fmt_locs = 
-      Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc")) 
+    let cout_locs,fmt_locs =
+      Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc"))
     in
     Jc_interp.print_locs fmt_locs;
     Output.print_pos fmt_locs; (* Generated annotations. *)
@@ -402,7 +402,7 @@ let main () =
       we first have to update Jc_options.libfiles depending on the current
       pragmas
     *)
-    Jc_options.add_to_libfiles 
+    Jc_options.add_to_libfiles
       (if !Region.some_bitwise_region then
          "jessie_bitvectors.why" else "jessie.why");
     if !Jc_options.has_floats then
@@ -417,7 +417,7 @@ let main () =
 	       Jc_options.add_to_libfiles "floats_multi_rounding.why"
     end;
     Jc_make.makefile filename
-      
+
     | _ -> Jc_options.usage ()
   with
     | Jc_typing.Typing_error(l,s) when not Jc_options.debug ->
@@ -429,16 +429,16 @@ let main () =
     | Assert_failure(f,l,c) as exn when not Jc_options.debug ->
  	eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
  	raise exn
-	  
-let _ = 
+
+let _ =
   Sys.catch_break true;
-  (* Yannick: [Printexc.catch] deprecated, normal system error seems ok, 
+  (* Yannick: [Printexc.catch] deprecated, normal system error seems ok,
      remove call? *)
   if Jc_options.debug then main () else Printexc.catch main ()
 
-  
+
 (*
-  Local Variables: 
+  Local Variables:
   compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-  End: 
+  End:
 *)

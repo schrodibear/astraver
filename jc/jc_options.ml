@@ -49,12 +49,12 @@ let close_log () =
 
 (*s environment variables *)
 
-let libdir = 
+let libdir =
   try
     let v = Sys.getenv "WHYLIB" in
     lprintf "WHYLIB is set to %s@." v;
     v
-  with Not_found -> 
+  with Not_found ->
     let p = Version.libdir in
     lprintf "WHYLIB is not set, using %s as default@." p;
     p
@@ -107,7 +107,7 @@ let files () = List.rev !files_
 let pos_files = ref []
 let pos_table = Hashtbl.create 97
 
-let version () = 
+let version () =
   Printf.printf "This is Jessie version %s, compiled on %s
 Copyright (c) 2006-2008 - INRIA team-project ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
@@ -116,21 +116,21 @@ This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 
 let usage = "jessie [options] files"
 
-let _ = 
-  Arg.parse 
-      [ "-parse-only", Arg.Set parse_only, 
+let _ =
+  Arg.parse
+      [ "-parse-only", Arg.Set parse_only,
 	  "  stops after parsing";
-        "-type-only", Arg.Set type_only, 
+        "-type-only", Arg.Set type_only,
 	  "  stops after typing";
-        "-user-annot-only", Arg.Set user_annot_only, 
+        "-user-annot-only", Arg.Set user_annot_only,
 	  "  check only user-defined annotations (i.e. safety is assumed)";
-        "-print-call-graph", Arg.Set print_graph, 
+        "-print-call-graph", Arg.Set print_graph,
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
 	"-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
 	  "  <f> reads source locations from file f" ;
-        "-behavior", Arg.String (fun s -> behavior := s), 
+        "-behavior", Arg.String (fun s -> behavior := s),
 	  "  verify only specified behavior (safety, default or user-defined behavior)";
 
         "-why-opt", Arg.String add_why_opt,
@@ -166,21 +166,21 @@ let _ =
 	     | s -> raise (Arg.Bad ("Unknown mode: "^s))),
 	  "  <kind>  sets the semantics of invariants (available modes: none, ownership, arguments)";
 *)
-	"-all-offsets", Arg.Set verify_all_offsets, 
+	"-all-offsets", Arg.Set verify_all_offsets,
 	  "  generate vcs for all pointer offsets";
-	"-invariants-only", Arg.Set verify_invariants_only, 
+	"-invariants-only", Arg.Set verify_invariants_only,
 	  "  verify invariants only (Arguments policy)";
-	"-verify", Arg.String (function s -> verify := s::!verify), 
+	"-verify", Arg.String (function s -> verify := s::!verify),
 	  "  verify only these functions";
         "-gen_frame_rule_with_ft", Arg.Set gen_frame_rule_with_ft,
         "Experimental : Generate frame rule for predicates and logic functions using only their definitions";
       ]
       add_file usage
 
-let () = 
+let () =
   if !trust_ai && !int_model = IMmodulo then
     (Format.eprintf "cannot trust abstract interpretation \
-in modulo integer model"; 
+in modulo integer model";
      assert false)
 
 let usage () =
@@ -210,13 +210,13 @@ let behavior = !behavior
 let gen_frame_rule_with_ft = !gen_frame_rule_with_ft
 let () = if gen_frame_rule_with_ft then libfiles := "mybag.why"::!libfiles
 
-let verify_behavior s = 
+let verify_behavior s =
   behavior = "" || behavior = s
 
-let set_int_model im = 
+let set_int_model im =
   if im = IMmodulo && trust_ai then
     (Format.eprintf "cannot trust abstract interpretation \
-in modulo integer model"; 
+in modulo integer model";
      assert false)
   else
     int_model := im
@@ -228,16 +228,16 @@ let set_float_model fm = float_model := fm
 
 exception Jc_error of Loc.position * string
 
-let jc_error l f = 
-  Format.ksprintf 
+let jc_error l f =
+  Format.ksprintf
     (fun s -> raise (Jc_error(l, s))) f
 
 let parsing_error l f =
-  Format.ksprintf 
-    (fun s -> 
+  Format.ksprintf
+    (fun s ->
        let s = if s="" then s else " ("^s^")" in
        raise (Jc_error(l, "syntax error" ^ s))) f
-  
+
 (*s pos table *)
 
 let kind_of_ident = function
@@ -254,7 +254,7 @@ let kind_of_ident = function
 
 let () =
   List.iter
-    (fun f -> 
+    (fun f ->
        let l = Rc.from_file f in
        List.iter
 	 (fun (id,fs) ->
@@ -266,7 +266,7 @@ let () =
 		     | "line", Rc.RCint l -> (f,l,b,e,k,o)
 		     | "begin", Rc.RCint b -> (f,l,b,e,k,o)
 		     | "end", Rc.RCint e -> (f,l,b,e,k,o)
-		     | "kind", Rc.RCident s -> 
+		     | "kind", Rc.RCident s ->
 			 let k =
 			   try
 			     Some (kind_of_ident s)
@@ -294,7 +294,7 @@ let position_of_label name =
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "unset LANG; make -C .. bin/jessie.byte"
-End: 
+End:
 *)
