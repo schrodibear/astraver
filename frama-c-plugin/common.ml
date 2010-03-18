@@ -348,17 +348,19 @@ let unique_name_generator is_exception =
 	if Hashtbl.mem unique_names s then
 	  aux s
 	else
-	  (Hashtbl.add unique_names s (ref 0);
+	  ((* Hashtbl.add unique_names s (ref 0); *)
 	   incr count; s)
       with Not_found ->
-	Hashtbl.add unique_names s (ref 0); s
-  in aux 
+	(* Hashtbl.add unique_names s (ref 0);*) s
+  in 
+  let add s = Hashtbl.add unique_names s (ref 0) in
+  aux, add
 
-let unique_name =
+let unique_name, add_unique_name =
 (*  let u = *)unique_name_generator is_predefined_name 
 (* in (fun s -> let s' = u s in s') *)
 
-let unique_logic_name =
+let unique_logic_name, add_unique_logic_name =
 (*  let u = *) unique_name_generator (fun _ -> false) 
 (* in (fun s -> let s' = u s in s')*)
 
@@ -390,8 +392,8 @@ let jessie_reserved_names =
     (* w *) "while"; "with";
   ]
 
-let () = List.iter (ignore $ unique_name) jessie_reserved_names
-let () = List.iter (ignore $ unique_logic_name) jessie_reserved_names
+let () = List.iter add_unique_name jessie_reserved_names
+let () = List.iter add_unique_logic_name jessie_reserved_names
 
 (*
 let reserved_name name =

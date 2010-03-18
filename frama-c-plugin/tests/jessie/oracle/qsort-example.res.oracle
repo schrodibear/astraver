@@ -1,0 +1,19 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only qsort-example.c
+[kernel] warning: cannot load plug-in `Mthread' (incompatible with Beryllium-20090902+dev).
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD qsort-example.c"
+[jessie] Starting Jessie translation
+[kernel] No code for function qsort, default assigns generated
+[kernel] No code for function assert, default assigns generated
+qsort-example.c:39:[jessie] failure: Unexpected failure.
+                  Please submit bug report (Ref. "norm.ml:1111:8").
+[kernel] The full backtrace is:
+         Raised at file "src/kernel/log.ml", line 503, characters 30-31
+         Called from file "src/kernel/log.ml", line 497, characters 2-9
+         Re-raised at file "src/kernel/log.ml", line 500, characters 8-9
+         Called from file "src/lib/type.ml", line 736, characters 40-45
+         Called from file "queue.ml", line 134, characters 6-20
+         Called from file "src/kernel/boot.ml", line 49, characters 4-20
+         Called from file "src/kernel/cmdline.ml", line 169, characters 4-8
+         
+         Plug-in jessie aborted because of an internal error.
+         Please report as 'crash' at http://bts.frama-c.com
