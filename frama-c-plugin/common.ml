@@ -348,10 +348,10 @@ let unique_name_generator is_exception =
 	if Hashtbl.mem unique_names s then
 	  aux s
 	else
-	  ((* Hashtbl.add unique_names s (ref 0); *)
+	  (Hashtbl.add unique_names s (ref 0); 
 	   incr count; s)
       with Not_found ->
-	(* Hashtbl.add unique_names s (ref 0);*) s
+	Hashtbl.add unique_names s (ref 0); s
   in 
   let add s = Hashtbl.add unique_names s (ref 0) in
   aux, add

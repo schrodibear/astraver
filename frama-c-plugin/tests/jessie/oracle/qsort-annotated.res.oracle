@@ -1,5 +1,4 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only qsort-annotated.c
-[kernel] warning: cannot load plug-in `Mthread' (incompatible with Beryllium-20090902+dev).
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD qsort-annotated.c"
 qsort-annotated.c:34:[kernel] user error: syntax error while parsing annotation
 [kernel] user error: skipping file "qsort-annotated.c" that has errors.
