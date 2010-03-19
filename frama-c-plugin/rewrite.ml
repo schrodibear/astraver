@@ -148,13 +148,18 @@ let rename_entities file =
 	 | Dtype(infos) ->
 	     Dtype({ infos with
                        lt_name = unique_logic_name infos.lt_name;
-                       lt_ctors =
+                       lt_def =
                        opt_map
-                         (List.map
-                            (fun x ->
-                               { x with ctor_name =
-                                   unique_logic_name x.ctor_name}))
-                         infos.lt_ctors;})
+                         (function
+                              | LTsum cons ->
+                                  LTsum(
+                                    List.map
+                                      (fun x ->
+                                         { x with ctor_name =
+                                             unique_logic_name x.ctor_name})
+                                      cons)
+                              | (LTsyn _) as def -> def)
+                         infos.lt_def;})
 	 | Dlemma(name,is_axiom,labels,poly,property) ->
 	     Dlemma(unique_logic_name name,is_axiom,labels,poly,property)
 	 | Dtype_annot _info | Dinvariant _info ->
@@ -1251,11 +1256,11 @@ object(self)
 	in
 	let app = within_bounds ~strict:false v off in
 	let cur_stmt = the self#current_stmt in
-	Annotations.add_alarm 
+	Annotations.add_alarm
 	  cur_stmt
-	  [ Jessie_options.Analysis.self ] 
-	  ~before:true 
-	  Alarms.Other_alarm 
+	  [ Jessie_options.Analysis.self ]
+	  ~before:true
+	  Alarms.Other_alarm
 	  app
     end;
     DoChildren
@@ -1277,17 +1282,17 @@ object(self)
 		  let supst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
 		  Annotations.add_alarm
 		    supst
-		    [ Jessie_options.Analysis.self ] 
-		    ~before:true 
-		    Alarms.Other_alarm 
+		    [ Jessie_options.Analysis.self ]
+		    ~before:true
+		    Alarms.Other_alarm
 		    rel1;
 		  let rel2 = reach_upper_bound ~loose:false v off in
 		  let eqst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
 		  Annotations.add_alarm
 		    eqst
-		    [ Jessie_options.Analysis.self ] 
-		    ~before:true 
-		    Alarms.Other_alarm 
+		    [ Jessie_options.Analysis.self ]
+		    ~before:true
+		    Alarms.Other_alarm
 		    rel2;
 
 		  (* Rather add skip statement as blocks may be empty *)
@@ -1322,15 +1327,15 @@ object(self)
 		  let rel =
 		    Logic_const.new_predicate (Logic_const.prel (Req,lvt,e'))
 		  in
-		  let prel = 
+		  let prel =
 		    Logic_const.pred_of_id_pred
 		      { rel with ip_name = [ name_of_hint_assertion ] }
 		  in
 		  Annotations.add_alarm
-		    s 
-		    [ Jessie_options.Analysis.self ] 
-		    ~before:false 
-		    Alarms.Other_alarm 
+		    s
+		    [ Jessie_options.Analysis.self ]
+		    ~before:false
+		    Alarms.Other_alarm
 		    prel;
 		  (* Further help ATP by asserting that index should be
 		     positive *)
@@ -1348,9 +1353,9 @@ object(self)
 		  let rel = reach_upper_bound ~loose:true v off in
 		  Annotations.add_alarm
 		    s
-		    [ Jessie_options.Analysis.self ] 
-		    ~before:false 
-		    Alarms.Other_alarm 
+		    [ Jessie_options.Analysis.self ]
+		    ~before:false
+		    Alarms.Other_alarm
 		    rel
 	  else ();
 	  s
@@ -1413,7 +1418,7 @@ object(self)
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
 		  ~before:true
-		  Alarms.Shift_alarm 
+		  Alarms.Shift_alarm
 		  check
 	  end
 	else ();
@@ -1429,9 +1434,9 @@ object(self)
 	      in
 	      Annotations.add_alarm
 		cur_stmt
-		[ Jessie_options.Analysis.self ] 
+		[ Jessie_options.Analysis.self ]
 		~before:true
-		Alarms.Shift_alarm 
+		Alarms.Shift_alarm
 		check
 	end;
 	(* Check that signed left shift has a positive left operand *)
@@ -1445,9 +1450,9 @@ object(self)
 		in
 		Annotations.add_alarm
 		  cur_stmt
-		  [ Jessie_options.Analysis.self ] 
+		  [ Jessie_options.Analysis.self ]
 		  ~before:true
-		  Alarms.Shift_alarm 
+		  Alarms.Shift_alarm
 		  check
 	  end
 	else ();
@@ -1472,9 +1477,9 @@ object(self)
 		in
 		Annotations.add_alarm
 		  cur_stmt
-		  [ Jessie_options.Analysis.self ] 
-		  ~before:true 
-		  Alarms.Shift_alarm 
+		  [ Jessie_options.Analysis.self ]
+		  ~before:true
+		  Alarms.Shift_alarm
 		  check
 	    | _ ->
 		let max_int = constant_expr max_int in
@@ -1484,10 +1489,10 @@ object(self)
 		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
 		in
 		Annotations.add_alarm
-		  cur_stmt 
-		  [ Jessie_options.Analysis.self ] 
-		  ~before:true 
-		  Alarms.Shift_alarm 
+		  cur_stmt
+		  [ Jessie_options.Analysis.self ]
+		  ~before:true
+		  Alarms.Shift_alarm
 		  check
 	  end
 	else ();

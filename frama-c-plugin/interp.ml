@@ -515,7 +515,9 @@ let ctype ?bitsize ty =
   in
   mktype tnode
 
-let ltype = function
+let ltype t =
+  (* Expand synonym types before translation. *)
+  match Logic_utils.unroll_type t with
   | Ctype ty -> ctype ty
   | Ltype (s,[]) when s.lt_name = Utf8_logic.boolean ->
       mktype (JCPTidentifier ("boolean",[]))
@@ -2309,14 +2311,17 @@ let rec annotation is_axiomatic annot pos = match annot with
       in
       (*NB: axioms stating that two values beginning with different
         symbols are different are not generated. *)
-      let axiomatic = match info.lt_ctors with
+      let axiomatic = match info.lt_def with
           None -> [mydecl]
-        | Some ctors -> mydecl::axiomatic ctors
+        | Some (LTsum cons) -> mydecl::axiomatic cons
+        | Some (LTsyn _) -> [] (* We'll expand the type anyway *)
       in
-      if is_axiomatic then axiomatic
-      else
-        [JCDaxiomatic (info.lt_name ^ "_axiomatic",
-                       List.map (fun x -> mkdecl x pos) axiomatic)]
+      (match axiomatic with
+           [] -> []
+         | _ when is_axiomatic -> axiomatic
+         | _ ->
+             [JCDaxiomatic (info.lt_name ^ "_axiomatic",
+                            List.map (fun x -> mkdecl x pos) axiomatic)])
 
   | Dtype _info ->
       (* TODO *)
