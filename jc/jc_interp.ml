@@ -2222,7 +2222,7 @@ and expr e =
 		  in
 		  match body with
 		    | JCTerm _ -> true
-		    | JCReads _ -> false
+		    | JCNone | JCReads _ -> false
 		    | JCAssertion _ | JCInductive _ -> assert false
                 with Not_found -> false
 	      in

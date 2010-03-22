@@ -6,37 +6,6 @@
 
 include "floats_common.why"
 
-(* Axioms about rounding, in single precision *)
-(*
-axiom round_single_down_le: forall x:real. 
-      round_single(down,x) <= x
-axiom round_up_single_ge: forall x:real. 
-      round_single(up,x) >= x
-axiom round_down_single_neg: forall x:real. 
-     round_single(down,-x) = -round_single(up,x)
-axiom round_up_single_neg: forall x:real. 
-     round_single(up,-x) = -round_single(down,x)
-axiom round_single_idempotent:
-      forall m1:mode. forall m2:mode. forall x:real. 
-      round_single(m1,round_single(m2,x)) = round_single(m2,x)
-*)
-
-(* Axioms about rounding, in double precision *)
-axiom round_double_down_le: forall x:real. 
-      round_double(down,x) <= x
-(*
-axiom round_up_double_ge: forall x:real. 
-      round_double(up,x) >= x
-*)
-(*
-axiom round_down_double_neg: forall x:real. 
-     round_double(down,-x) = -round_double(up,x)
-axiom round_up_double_neg: forall x:real. 
-     round_double(up,-x) = -round_double(down,x)
-axiom round_double_idempotent:
-      forall m1:mode. forall m2:mode. forall x:real. 
-      round_double(m1,round_double(m2,x)) = round_double(m2,x)
-*)
 
 function min_single() : real =  0x1p-149
 function min_double() : real =  0x1p-1074

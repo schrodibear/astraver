@@ -370,26 +370,12 @@ let fun_def f ta fa ft term_coerce params =
             [logic;axiom]
           else
             [Function(false, f.jc_logic_info_final_name, params, ty', t')]
-      | ty_opt, JCReads _r -> (* Logic *)
+      | ty_opt, (JCNone | JCReads _) -> (* Logic *)
           let ty' = match ty_opt with
 	    | None -> simple_logic_type prop_type
 	    | Some ty -> tr_base_type ty
           in
           [Logic(false, f.jc_logic_info_final_name, params, ty')]
-(*
-      | ty_opt, JCAxiomatic l  ->
-          let ty' = match ty_opt with
-	    | None -> simple_logic_type prop_type
-	    | Some ty -> tr_base_type ty
-          in
-	  let acc =
-	    List.fold_right
-	      (fun (id,a) acc -> 
-		 tr_axiom id#pos id#name ~is_axiom:true f.jc_logic_info_labels a acc)
-	      l acc 
-	  in
-	  Logic(false, f.jc_logic_info_final_name, params, ty') :: acc
-*)
       | None, JCInductive l  ->
 	  [Inductive(false, f.jc_logic_info_final_name, params,  
 		    List.map 
@@ -411,7 +397,7 @@ let fun_def f ta fa ft term_coerce params =
 let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
     match ta with 
       |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
-      | JCReads [] -> acc (* TODO: diff "reads \nothing" and nothing *)
+      | JCNone -> acc 
       | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
@@ -476,7 +462,7 @@ let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
    TODO: use computed effects instead *)
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
-      | JCReads [] -> acc (* TODO: diff "reads \nothing" and nothing *)
+      | JCNone -> acc 
       | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
@@ -543,6 +529,7 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 (* TODO: use computed effects instead*)
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
+      | JCNone -> acc
       | JCReads ps ->
     let alloc_params_reads = 
       talloc_table_params ~label_in_name:true f.jc_logic_info_effects

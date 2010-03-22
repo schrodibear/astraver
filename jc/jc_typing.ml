@@ -2412,6 +2412,7 @@ let rec type_labels_in_decl d = match d#node with
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
 *)
       type_labels labels ~result_label:None (default_label labels) body
+  | JCDlogic(_, _, _, _labels, _, JCnone) -> ()
   | JCDlogic(_, _, _, labels, _, JCreads el) ->
 (*
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
@@ -2975,98 +2976,98 @@ let rec decl_aux ~only_types ~axiomatic acc d =
     | JCDfun (_ty, id, _pl, specs, body) -> 
 	if not only_types then
 	  begin
-	if in_axiomatic then
-	  typing_error loc "not allowed inside axiomatic specification";
-        let loc = match Jc_options.position_of_label id#name with
-	  | Some loc -> loc
-	  | None -> id#pos 
-	in
-        let param_env, fi = get_fundecl id#name in
-        let vi = fi.jc_fun_info_result in
-        let s = List.fold_right 
-                  (clause param_env vi) specs 
-                  { jc_fun_requires = assertion_true;
-                    jc_fun_free_requires = assertion_true;
-		    jc_fun_decreases = None;
-                    jc_fun_default_behavior = 
-		      Loc.dummy_position ,"default", default_behavior;
-                    jc_fun_behavior = [] }
-        in
-	reset_return_label ();
-        let b = Option_misc.map 
-	  (unit_expr $ expr (("\\result",vi)::param_env)) body 
-	in
-	fi.jc_fun_info_has_return_label <- get_return_label ();
-        Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b);
-	acc
+	    if in_axiomatic then
+	      typing_error loc "not allowed inside axiomatic specification";
+            let loc = match Jc_options.position_of_label id#name with
+	      | Some loc -> loc
+	      | None -> id#pos 
+	    in
+            let param_env, fi = get_fundecl id#name in
+            let vi = fi.jc_fun_info_result in
+            let s = List.fold_right 
+              (clause param_env vi) specs 
+              { jc_fun_requires = assertion_true;
+                jc_fun_free_requires = assertion_true;
+		jc_fun_decreases = None;
+                jc_fun_default_behavior = 
+		  Loc.dummy_position ,"default", default_behavior;
+                jc_fun_behavior = [] }
+            in
+	    reset_return_label ();
+            let b = Option_misc.map 
+	      (unit_expr $ expr (("\\result",vi)::param_env)) body 
+	    in
+	    fi.jc_fun_info_has_return_label <- get_return_label ();
+            Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b);
+	    acc
 	  end
 	else 
 	  acc
     | JCDenum_type(id,min,max) ->
 	if only_types then
 	  begin
-	if in_axiomatic then
-	  typing_error loc "not allowed inside axiomatic specification";
-	begin
-	  try
-	    let _ = Hashtbl.find enum_types_table id in
-	    typing_error d#pos "duplicate range type `%s'" id
-	  with Not_found ->
-            let ri =
-              { jc_enum_info_name = id;
-		jc_enum_info_min = min;
-		jc_enum_info_max = max;
-              }
-            in
-	    (*
-              let to_int = make_logic_fun ("integer_of_"^id) integer_type in
-              let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
-              let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
-	    *)
-            Hashtbl.add enum_types_table id (ri (*,to_int,to_int_,of_int*));
-	    (*
-              Hashtbl.add enum_conversion_logic_functions_table to_int id;
-              Hashtbl.add enum_conversion_functions_table to_int_ id;
-              Hashtbl.add enum_conversion_functions_table of_int id
-	    *)
-	    acc
-	end
+	    if in_axiomatic then
+	      typing_error loc "not allowed inside axiomatic specification";
+	    begin
+	      try
+	        let _ = Hashtbl.find enum_types_table id in
+	        typing_error d#pos "duplicate range type `%s'" id
+	      with Not_found ->
+                let ri =
+                  { jc_enum_info_name = id;
+		    jc_enum_info_min = min;
+		    jc_enum_info_max = max;
+                  }
+                in
+	        (*
+                  let to_int = make_logic_fun ("integer_of_"^id) integer_type in
+                  let to_int_ = make_fun_info ("integer_of_"^id) integer_type in
+                  let of_int = make_fun_info (id^"_of_integer") (JCTenum ri) in
+	        *)
+                Hashtbl.add enum_types_table id (ri (*,to_int,to_int_,of_int*));
+	        (*
+                  Hashtbl.add enum_conversion_logic_functions_table to_int id;
+                  Hashtbl.add enum_conversion_functions_table to_int_ id;
+                  Hashtbl.add enum_conversion_functions_table of_int id
+	        *)
+	        acc
+	    end
 	  end
 	else 
 	  acc
     | JCDtag(id, _, _parent, _fields, inv) ->
 	if not only_types then
 	  begin
-	Jc_options.lprintf "Typing tag %s@." id;
-	if in_axiomatic then
-	  typing_error loc "not allowed inside axiomatic specification";
-        let struct_info, _ = Hashtbl.find structs_table id in
-        (* declare invariants as logical functions *)
-        let invariants =
-          List.fold_left
-            (fun acc (id, x, e) ->
-               if !Jc_common_options.inv_sem = InvNone then
-                 typing_error id#pos
-                   "use of structure invariants requires declaration \
+	    Jc_options.lprintf "Typing tag %s@." id;
+	    if in_axiomatic then
+	      typing_error loc "not allowed inside axiomatic specification";
+            let struct_info, _ = Hashtbl.find structs_table id in
+            (* declare invariants as logical functions *)
+            let invariants =
+              List.fold_left
+                (fun acc (id, x, e) ->
+                   if !Jc_common_options.inv_sem = InvNone then
+                     typing_error id#pos
+                       "use of structure invariants requires declaration \
 of an invariant policy";
-               let vi =
-                 var (JCTpointer (JCtag(struct_info, []), Some zero,
-                                  Some zero)) x in
-               let p = assertion [(x, vi)] e in
-               let pi = make_pred id#name in
-               pi.jc_logic_info_parameters <- [vi];
-               pi.jc_logic_info_labels <- [LabelHere];
-               eprintf "generating logic fun %s with one default label@."
-                 pi.jc_logic_info_name;
-               Hashtbl.replace logic_functions_table 
-                 pi.jc_logic_info_tag (pi, JCAssertion p);
-               Hashtbl.replace logic_functions_env id#name pi;
-               (pi, p) :: acc)
-            []
-            inv
-        in 
-        Hashtbl.replace structs_table id (struct_info, invariants);
-	acc
+                   let vi =
+                     var (JCTpointer (JCtag(struct_info, []), Some zero,
+                                      Some zero)) x in
+                   let p = assertion [(x, vi)] e in
+                   let pi = make_pred id#name in
+                   pi.jc_logic_info_parameters <- [vi];
+                   pi.jc_logic_info_labels <- [LabelHere];
+                   eprintf "generating logic fun %s with one default label@."
+                     pi.jc_logic_info_name;
+                   Hashtbl.replace logic_functions_table 
+                     pi.jc_logic_info_tag (pi, JCAssertion p);
+                   Hashtbl.replace logic_functions_env id#name pi;
+                   (pi, p) :: acc)
+                []
+                inv
+            in 
+            Hashtbl.replace structs_table id (struct_info, invariants);
+	    acc
 	  end
 	else 
 	  acc
@@ -3074,139 +3075,143 @@ of an invariant policy";
     | JCDvariant_type(_id, _tags) -> acc
     | JCDunion_type(_id,_discr,_tags) -> acc
 
-(*    | JCDrectypes(pdecls) ->
-        (* first pass: adding structure names *)
-        List.iter (fun d -> match d.jc_pdecl_node with
-                     | JCDstructtype(id,_,_,_) ->
-                         (* parent type may not be declared yet *)
-                         ignore (add_typedecl d (id,None))
-                     | _ -> assert false
-                  ) pdecls;
-        (* second pass: adding structure fields *)
-        List.iter (fun d -> match d.jc_pdecl_node with
-                     | JCDstructtype(id,parent,fields,_) ->
-                         let root,struct_info = add_typedecl d (id,parent) in
-                         let env = List.map (field struct_info root) fields in
-                         struct_info.jc_struct_info_fields <- env;
-                         Hashtbl.replace structs_table id (struct_info,[])
-                     | _ -> assert false
-                  ) pdecls;
-        (* third pass: typing invariants *)
-        List.iter decl pdecls*)
+    (*    | JCDrectypes(pdecls) ->
+    (* first pass: adding structure names *)
+          List.iter (fun d -> match d.jc_pdecl_node with
+          | JCDstructtype(id,_,_,_) ->
+    (* parent type may not be declared yet *)
+          ignore (add_typedecl d (id,None))
+          | _ -> assert false
+          ) pdecls;
+    (* second pass: adding structure fields *)
+          List.iter (fun d -> match d.jc_pdecl_node with
+          | JCDstructtype(id,parent,fields,_) ->
+          let root,struct_info = add_typedecl d (id,parent) in
+          let env = List.map (field struct_info root) fields in
+          struct_info.jc_struct_info_fields <- env;
+          Hashtbl.replace structs_table id (struct_info,[])
+          | _ -> assert false
+          ) pdecls;
+    (* third pass: typing invariants *)
+          List.iter decl pdecls*)
 
     | JCDlogic_type(id,l) ->
 	if only_types then
 	  begin
-	Jc_options.lprintf "Typing logic type declaration %s@." id;
-        begin 
-          try
-            let _ = Hashtbl.find logic_type_table id in
-            typing_error d#pos "duplicate logic type `%s'" id 
-          with Not_found ->
-            let l = List.map Jc_type_var.type_var_from_string l in
-            Hashtbl.add logic_type_table id (id,l);
-	    acc
-        end
+	    Jc_options.lprintf "Typing logic type declaration %s@." id;
+            begin 
+              try
+                let _ = Hashtbl.find logic_type_table id in
+                typing_error d#pos "duplicate logic type `%s'" id 
+              with Not_found ->
+                let l = List.map Jc_type_var.type_var_from_string l in
+                Hashtbl.add logic_type_table id (id,l);
+	        acc
+            end
 	  end
 	else 
 	  acc
     | JCDlemma(id,is_axiom,poly_args,labels,e) ->
 	if not only_types then
 	  begin
-	Jc_options.lprintf "Typing lemma/axiom %s@." id;
-	if is_axiom && not in_axiomatic then
-	  typing_error loc "allowed only inside axiomatic specification";
-(*
-	let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-*)
-        let poly_args = add_poly_args poly_args in
-        let te = assertion [] e in
-        let te = Jc_type_var.subst_type_in_assertion uenv te in
-        if in_axiomatic && is_axiom then
-	  (ABaxiom(d#pos,id,labels,te))::acc
-	else
-	  begin
-	    Hashtbl.add lemmas_table id (d#pos,is_axiom,poly_args,labels,te);
-	    acc
-	  end
+	    Jc_options.lprintf "Typing lemma/axiom %s@." id;
+	    if is_axiom && not in_axiomatic then
+	      typing_error loc "allowed only inside axiomatic specification";
+            (*
+	      let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+            *)
+            let poly_args = add_poly_args poly_args in
+            let te = assertion [] e in
+            let te = Jc_type_var.subst_type_in_assertion uenv te in
+            if in_axiomatic && is_axiom then
+	      (ABaxiom(d#pos,id,labels,te))::acc
+	    else
+	      begin
+	        Hashtbl.add lemmas_table id (d#pos,is_axiom,poly_args,labels,te);
+	        acc
+	      end
 	  end
 	else 
 	  acc
     | JCDglobal_inv(id, e) ->
 	if not only_types then
 	  begin
-	if in_axiomatic then
-	  typing_error loc "not allowed inside axiomatic specification";
-        let a = assertion [] e in
-        let li = make_pred id in
-        if !Jc_common_options.inv_sem = InvArguments then 
-          Hashtbl.replace logic_functions_table 
-            li.jc_logic_info_tag (li, JCAssertion a);
-        Hashtbl.add global_invariants_table li a;
-	acc
+	    if in_axiomatic then
+	      typing_error loc "not allowed inside axiomatic specification";
+            let a = assertion [] e in
+            let li = make_pred id in
+            if !Jc_common_options.inv_sem = InvArguments then 
+              Hashtbl.replace logic_functions_table 
+                li.jc_logic_info_tag (li, JCAssertion a);
+            Hashtbl.add global_invariants_table li a;
+	    acc
 	  end
 	else 
 	  acc
     | JCDexception(id,tyopt) ->
 	if not only_types then
 	  begin
-	if in_axiomatic then
-	  typing_error loc "not allowed inside axiomatic specification";
-        let tt = Option_misc.map type_type tyopt in
-        Hashtbl.add exceptions_table id (exception_info tt id);
-	acc
+	    if in_axiomatic then
+	      typing_error loc "not allowed inside axiomatic specification";
+            let tt = Option_misc.map type_type tyopt in
+            Hashtbl.add exceptions_table id (exception_info tt id);
+	    acc
 	  end
 	else 
 	  acc
     | JCDlogic_var (_ty, _id, _body) -> assert false
-(*         let ty, vi = add_logic_constdecl (ty, id) in *)
-(*         let t = Option_misc.map  *)
-(* 	  (function body -> *)
-(* 	     let t = term [] body in *)
-(*              if not (subtype t#typ ty) then *)
-(*                typing_error d#pos *)
-(*                  "inferred type differs from declared type" *)
-(*              else (t,mintype t#pos t#typ ty) *)
-(* 	  ) body *)
-(*         in *)
-(*         Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t) *)
+        (*         let ty, vi = add_logic_constdecl (ty, id) in *)
+        (*         let t = Option_misc.map  *)
+        (* 	  (function body -> *)
+        (* 	     let t = term [] body in *)
+        (*              if not (subtype t#typ ty) then *)
+        (*                typing_error d#pos *)
+        (*                  "inferred type differs from declared type" *)
+        (*              else (t,mintype t#pos t#typ ty) *)
+        (* 	  ) body *)
+        (*         in *)
+        (*         Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t) *)
     | JCDlogic (None, id, poly_args, labels, pl, body) ->
 	if not only_types then
 	  begin
-(*
-	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-*)
+            (*
+	      let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+            *)
             let param_env,_ty,pi = add_logic_fundecl (None,id,poly_args,labels,pl) in
             create_if_pragma_before id;
             let p = match body with
-          | JCreads reads ->
-	      if not in_axiomatic then
-		typing_error loc "allowed only inside axiomatic specification";
-              JCReads (
-                (List.map 
-                   (fun a -> 
-                      let _,_,tl = 
-                        location param_env a 
-                      in tl)) reads)
-          | JCexpr body ->
-              JCAssertion(assertion param_env body)
-		(*
-		  | JCaxiomatic l ->
-		  JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
-		*)
-	  | JCinductive l ->
-	      JCInductive(List.map 
-			    (fun (id,labels,e) -> 
-(*
-			       let labels = match labels with 
-				   [] -> [ LabelHere ] 
-				 | _ -> labels 
-			       in
-*)
-			       let a = assertion param_env e in
-				 check_positivity a#pos pi a;
-			       (id,labels,a)) 
-			    l)
+              | JCnone ->
+	          if not in_axiomatic then
+		    typing_error loc "allowed only inside axiomatic specification";
+                  JCNone
+              | JCreads reads ->
+	          if not in_axiomatic then
+		    typing_error loc "allowed only inside axiomatic specification";
+                  JCReads (
+                    (List.map 
+                       (fun a -> 
+                          let _,_,tl = 
+                            location param_env a 
+                          in tl)) reads)
+              | JCexpr body ->
+                  JCAssertion(assertion param_env body)
+		    (*
+		      | JCaxiomatic l ->
+		      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
+		    *)
+	      | JCinductive l ->
+	          JCInductive(List.map 
+			        (fun (id,labels,e) -> 
+                                   (*
+			             let labels = match labels with 
+				     [] -> [ LabelHere ] 
+				     | _ -> labels 
+			             in
+                                   *)
+			           let a = assertion param_env e in
+				   check_positivity a#pos pi a;
+			           (id,labels,a)) 
+			        l)
             in
 	    update_axiomatic axiomatic pi;
             Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
@@ -3217,14 +3222,14 @@ of an invariant policy";
     | JCDlogic (Some ty, id, poly_args, labels, pl, body) ->
 	if not only_types then
 	  begin
-(*
-	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-*)
+            (*
+	      let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+            *)
             let param_env, ty, pi = add_logic_fundecl (Some ty,id,poly_args,labels,pl) in
             create_if_pragma_before id;
             let ty = match ty with Some ty -> ty | None -> assert false in
             let t = match body with
-              | JCreads [] -> JCReads []
+              | JCnone -> JCNone
               | JCreads reads ->
 		  if not in_axiomatic then
 		    typing_error loc "allowed only inside axiomatic specification";
@@ -3235,17 +3240,17 @@ of an invariant policy";
 			  in tl)) reads)
               | JCexpr body ->
 		  let t = term param_env body in
-		    if pl = [] && not (subtype t#typ ty) 
-		      || pl <> [] && not (subtype_strict t#typ ty) then 
-			typing_error d#pos
-			  "inferred type differs from declared type" 
-		    else 
-		      begin
-			if pl = [] then
-			  (* constant *)
-			  Hashtbl.add logic_constants_table pi.jc_logic_info_tag (pi, t);
-			JCTerm t
-		      end
+		  if pl = [] && not (subtype t#typ ty) 
+		    || pl <> [] && not (subtype_strict t#typ ty) then 
+		      typing_error d#pos
+			"inferred type differs from declared type" 
+		  else 
+		    begin
+		      if pl = [] then
+			(* constant *)
+			Hashtbl.add logic_constants_table pi.jc_logic_info_tag (pi, t);
+		      JCTerm t
+		    end
 		      (*
 			| JCaxiomatic l ->
 			JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)

@@ -283,6 +283,7 @@ let logic_function f =
   in
   let rresult = f.jc_logic_info_result_region in
   begin match ta with
+    | JCNone -> ()
     | JCTerm t -> 
 	begin 
 	  term rresult t;

@@ -1,7 +1,7 @@
 
 typedef struct { int a; } las;
 las * p;
-//@ logic las** p_ref{L} = &p;
+//@ logic las** p_ref = &p;
  
 /*@
 requires \valid(p);

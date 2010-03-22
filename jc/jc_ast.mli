@@ -229,6 +229,7 @@ type 'expr clause =
   | JCCbehavior of 'expr pbehavior
 
 type 'expr reads_or_expr =
+  | JCnone
   | JCreads of 'expr list
   | JCexpr of 'expr
   | JCinductive of (identifier * label list * 'expr) list
@@ -459,6 +460,7 @@ and 'li trigger = 'li tpattern list
 type 'li term_or_assertion =
   | JCAssertion of 'li assertion
   | JCTerm of 'li term
+  | JCNone
   | JCReads of 'li location list
   | JCInductive of (identifier * label list * 'li assertion) list
 

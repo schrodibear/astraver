@@ -641,6 +641,7 @@ let clause = function
     
 (** From parsed reads-or-expr to normalized reads-or-expr *)
 let reads_or_expr = function
+  | JCnone -> JCnone
   | JCreads elist -> JCreads(List.map expr elist)
   | JCexpr e -> JCexpr(expr e)
 (*

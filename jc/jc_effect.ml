@@ -1568,6 +1568,7 @@ let logic_fun_effects f =
   in
   let ef = f.jc_logic_info_effects in
   let ef = match ta with
+    | JCNone -> ef
     | JCTerm t -> term ef t 
     | JCAssertion a -> assertion ef a
     | JCInductive l ->

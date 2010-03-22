@@ -520,6 +520,8 @@ let term_or_assertion fmt = function
       fprintf fmt "=@\n%a" assertion a
   | JCTerm t ->
       fprintf fmt "=@\n%a" term t
+  | JCNone -> 
+      fprintf fmt ";"
   | JCReads [] -> 
       fprintf fmt "reads \\nothing;"
   | JCReads locs -> 

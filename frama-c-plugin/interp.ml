@@ -878,7 +878,7 @@ and terms t =
         begin
           let v = def.l_var_info in
           match def.l_body, def.l_profile with
-              LBterm t, [] ->
+            | LBterm t, [] ->
                 let jc_def = term t in
                 let jc_body = term body in
                 let typ = ltype v.lv_type in
@@ -889,7 +889,7 @@ and terms t =
                 [JCPElet(None,v.lv_name, Some jc_def, jc_body)]
             | (LBterm _ | LBpred _), _::_ ->
                 Extlib.not_yet_implemented "local function definition"
-            | (LBreads _ | LBinductive _), _ ->
+            | (LBnone | LBreads _ | LBinductive _), _ ->
                 Jessie_options.fatal "Unexpected definition for local variable"
         end
     | TCoerce(_t,_typ) ->
@@ -1079,7 +1079,7 @@ and pred p =
 	begin
           let v = def.l_var_info in
           match def.l_body, def.l_profile with
-              LBterm t, [] ->
+            | LBterm t, [] ->
                 let jc_def = term t in
                 let jc_body = pred body in
                 let typ = ltype v.lv_type in
@@ -1090,7 +1090,7 @@ and pred p =
                 JCPElet(None,v.lv_name, Some jc_def, jc_body)
             | (LBterm _ | LBpred _), _::_ ->
                 Extlib.not_yet_implemented "local function definition"
-            | (LBreads _ | LBinductive _), _ ->
+            | (LBnone | LBreads _ | LBinductive _), _ ->
                 Jessie_options.fatal "Unexpected definition for local variable"
         end
 
@@ -2141,6 +2141,7 @@ let rec annotation is_axiomatic annot pos = match annot with
         let params = List.map logic_variable info.l_profile in
         let body =
           match info.l_body with
+            | LBnone -> JCnone
           | LBreads reads_tsets ->
               let reads =
                 List.flatten
@@ -2160,7 +2161,7 @@ let rec annotation is_axiomatic annot pos = match annot with
         (match info.l_type, info.l_labels, params with
              Some t, [], [] ->
                let def = match body with
-                   JCreads _ | JCinductive _ -> None
+                 | JCnone | JCreads _ | JCinductive _ -> None
                  | JCexpr t -> Some t
                in
                [JCDlogic_var (ltype t, name,def)]

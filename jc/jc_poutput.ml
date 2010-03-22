@@ -351,7 +351,9 @@ let invariant fmt (id, vi, a) =
     id#name vi pexpr a
 
 let reads_or_expr fmt = function
-  | JCreads [] -> ()
+  | JCnone -> ()
+  | JCreads [] ->
+      fprintf fmt "@ reads \\nothing;" 
   | JCreads el -> 
       fprintf fmt "@ reads %a;" (print_list comma pexpr) el
   | JCexpr e -> 
