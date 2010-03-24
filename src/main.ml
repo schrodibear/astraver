@@ -3,14 +3,14 @@
 (*  The Why platform for program certification                            *)
 (*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
-(*    Jean-François COUCHOT                                               *)
+(*    Jean-FranÃ§ois COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
-(*    Jean-Christophe FILLIÂTRE                                           *)
+(*    Jean-Christophe FILLIÃ‚TRE                                           *)
 (*    Thierry HUBERT                                                      *)
-(*    Claude MARCHÉ                                                       *)
+(*    Claude MARCHÃ‰                                                       *)
 (*    Yannick MOY                                                         *)
 (*    Christine PAULIN                                                    *)
-(*    Yann RÉGIS-GIANAS                                                   *)
+(*    Yann RÃ‰GIS-GIANAS                                                   *)
 (*    Nicolas ROUSSET                                                     *)
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
@@ -60,7 +60,7 @@ let reset () =
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
     | Harvey | Simplify | Zenon | Z3 | CVCLite  | Gappa 
-    | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> ()
+    | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject -> ()
 
 let add_loc = function
   | Dtype (loc, s, _)
@@ -96,6 +96,7 @@ let push_decl _vloc d =
 	  | MultiWhy (* // Moy -> Marche NO destroy eclipse plugin
 			-> Pretty.push_or_output_decl *)
 	  | Why | WhyProject -> Pretty.push_decl ~ergo:false
+          | Why3 -> Why3.push_decl
 	  | Ergo -> Pretty.push_decl ~ergo:true
 	  | Dispatcher -> 
 (*
@@ -160,7 +161,7 @@ let push_parameter id _v tv = match prover () with
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
   | Harvey | Simplify | Zenon | Z3 | SmtLib | Gappa 
-  | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> 
+  | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject | Why3 -> 
       ()
 
 let output is_last fwe =
@@ -190,7 +191,8 @@ let output is_last fwe =
 	  (* output project, used by GWhy/Coq column *)
 	  Options.gui_project := Some(Pretty.output_project fwe)
 *)
-    | Ergo | Why -> Pretty.output_file fwe
+    | Ergo | Why
+    | Why3 -> Why3.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
     | WhyProject -> ignore(Pretty.output_project fwe)
   end
@@ -219,6 +221,7 @@ let encode q =
     | Z3 -> Z3.push_decl d
     | CVCLite -> Cvcl.push_decl d
     | SmtLib -> Smtlib.push_decl d
+    | Why3 -> Why3.push_decl d
   in
   Queue.iter callEncoding q 
  
@@ -417,11 +420,13 @@ let rec check_unquantified_clausal_form loc id a =
 	let (_pos1,neg1) = occurrences id p1 in
 	if neg1 > 0 then 
 	  raise_located loc 
-	    (AnyMessage "inductive predicate has a negative occurrence in this case")
+	    (AnyMessage 
+               "inductive predicate has a negative occurrence in this case")
     | Papp(pi,_,_) -> 
 	if pi != id then
 	  raise_located loc 
-	    (AnyMessage "head of clause does not contain the inductive predicate")
+	    (AnyMessage 
+               "head of clause does not contain the inductive predicate")
     | _ -> 
 	  raise_located loc 
 	    (AnyMessage "this case is not in clausal form")
@@ -495,7 +500,8 @@ let rec interp_decl ?(_prelude=false) d =
 	    end
 	  else
 	    begin
-	      push_decl ("","",Loc.dummy_floc) (Dlogic (Loc.extract loc, id, t));
+	      push_decl ("","",Loc.dummy_floc) 
+                (Dlogic (Loc.extract loc, id, t));
 	    end 
 	in
 	List.iter add ids
@@ -516,7 +522,8 @@ let rec interp_decl ?(_prelude=false) d =
 	if is_global_logic id then raise_located loc (Clash id);
 	let pl = 
 	  match Ltyping.logic_type t with
-	    | Function _ -> raise_located loc (AnyMessage "only predicates can be inductively defined")
+	    | Function _ -> raise_located loc 
+                (AnyMessage "only predicates can be inductively defined")
 	    | Predicate l -> l
 	in
 	(* add id first because indcases contain id, without generalization *)
@@ -551,7 +558,8 @@ let rec interp_decl ?(_prelude=false) d =
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let p = generalize_predicate p in
-	push_decl ("","",Loc.dummy_floc) (Daxiom (Loc.extract loc, Ident.string id, p))
+	push_decl ("","",Loc.dummy_floc) 
+          (Daxiom (Loc.extract loc, Ident.string id, p))
 
     | Goal (loc, id, p) ->
 	let env = Env.empty_logic () in
@@ -571,7 +579,8 @@ let rec interp_decl ?(_prelude=false) d =
 	in
 	let (l,xpl,id,s) = 
 	  if Options.pruning_hyp_v != -1 then
-	    (Hypotheses_filtering.reduce (l, xpl, Ident.string id, s) declarationQueue)
+	    (Hypotheses_filtering.reduce (l, xpl, Ident.string id, s) 
+               declarationQueue)
 	  else	  
 	    (l, xpl, Ident.string id, s) 
 	in
@@ -664,7 +673,7 @@ let deal_channel parsef cin =
 
 let single_file () = match prover () with
   | Simplify | Harvey | Zenon | Z3 | CVCLite | Gappa | Dispatcher 
-  | SmtLib | Ergo | Why | MultiWhy | WhyProject -> true
+  | SmtLib | Ergo | Why | MultiWhy | WhyProject | Why3 -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
 let deal_file is_last f =

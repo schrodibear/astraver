@@ -131,7 +131,7 @@ let coq_version =
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3
-  | Ergo | Why | MultiWhy | Dispatcher | WhyProject
+  | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
 
 let prover_ = ref (Coq coq_version)
 
@@ -283,6 +283,7 @@ Prover selection:
   --zenon     selects the Zenon prover
  or generic Why outputs formats:
   --why       selects the Why pretty-printer
+  --why3       selects the Why3 pretty-printer
   --multi-why selects the Why pretty-printer, with one file per goal
   --project   selects the Why project format, with one file per goal
 
@@ -364,6 +365,7 @@ let files =
     | ("-z3" | "--z3") :: args -> prover_ := Z3; parse args
     | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
+    | ("-why3" | "--why3") :: args -> prover_ := Why3; parse args
     | ("-multi-why" | "--multi-why") :: args -> prover_ := MultiWhy; parse args
     | ("-project" | "--project") :: args -> prover_ := WhyProject; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
