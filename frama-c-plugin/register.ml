@@ -96,55 +96,55 @@ let run () =
     if file.globals = [] then
       Jessie_options.abort "Nothing to process. There was probably an error before.";
     (* Phase 1: various preprocessing steps before C to Jessie translation *)
-    
+
     (* Enforce the prototype of malloc to exist before visiting anything.
      * It might be useful for allocation pointers from arrays
      *)
     ignore (Common.malloc_function ());
     ignore (Common.free_function ());
-    
+
     (* Rewrite ranges in logic annotations by comprehesion *)
     !Db.Properties.Interp.from_range_to_comprehension
       (Cil.inplace_visit ()) (FCProject.current ()) file;
     if checking then check_types file;
-    
+
     (* Phase 2: C-level rewriting to facilitate analysis *)
-    
+
     Rewrite.rewrite file;
     if checking then check_types file;
-    
+
     if Jessie_options.debug_atleast 1 then print_to_stdout file;
-    
+
     (* Phase 3: Caduceus-like normalization that rewrites C-level AST into
      * Jessie-like AST, still in Cil (in order to use Cil visitors)
      *)
-    
+
     Norm.normalize file;
     Retype.retype file;
     if checking then check_types file;
-    
+
     (* Phase 4: various postprocessing steps, still on Cil AST *)
-    
+
     (* Rewrite ranges back in logic annotations *)
     !Db.Properties.Interp.from_comprehension_to_range
       (Cil.inplace_visit ()) (FCProject.current ()) file;
-    
+
     if Jessie_options.debug_atleast 1 then print_to_stdout file;
-    
+
     (* Phase 5: C to Jessie translation, should be quite straighforward at this
      * stage (after normalization)
      *)
-    
+
     let pragmas = Interp.pragmas file in
     let pfile = Interp.file file in
-    
+
     (* Phase 6: pretty-printing of Jessie program *)
-    
+
     let sys_command cmd =
       if Sys.command cmd <> 0 then
 	(Jessie_options.error "Jessie subprocess failed: %s" cmd; raise Exit)
     in
-    
+
     let projname = Jessie_options.ProjectName.get () in
     let projname =
       if projname <> "" then projname else
@@ -161,10 +161,10 @@ let run () =
     let jessie_subdir = projname ^ ".jessie" in
     Lib.mkdir_p jessie_subdir;
     Jessie_options.feedback "Producing Jessie files in subdir %s" jessie_subdir;
-    
+
     (* basename is 'file' *)
     let basename = Filename.basename projname in
-    
+
     (* filename is 'file.jc' *)
     let filename = basename ^ ".jc" in
     let () = Pp.print_in_file
@@ -174,23 +174,23 @@ let run () =
       (Filename.concat jessie_subdir filename)
     in
     Jessie_options.feedback "File %s/%s written." jessie_subdir filename;
-    
+
     (* Phase 7: produce source-to-source correspondance file *)
-    
+
     (* locname is 'file.cloc' *)
     let locname = basename ^ ".cloc" in
     Pp.print_in_file Output.print_pos (Filename.concat jessie_subdir locname);
     Jessie_options.feedback "File %s/%s written." jessie_subdir locname;
-    
+
     if Jessie_options.GenOnly.get () then () else
-      
+
       (* Phase 8: call Jessie to Why translation *)
-      
-      let why_opt = 
+
+      let why_opt =
 	let res = ref "" in
 	Jessie_options.WhyOpt.iter
-	  (fun s -> 
-	     res := Format.sprintf "%s%s-why-opt %S" 
+	  (fun s ->
+	     res := Format.sprintf "%s%s-why-opt %S"
 	       !res
 	       (if !res = "" then "" else " ")
 	       s);
@@ -203,8 +203,8 @@ let run () =
 	  "-behavior " ^ Jessie_options.Behavior.get ()
 	else ""
       in
-      let verbose_opt = 
-	if Jessie_options.verbose_atleast 1 then " -v " else " " 
+      let verbose_opt =
+	if Jessie_options.verbose_atleast 1 then " -v " else " "
       in
       let env_opt =
 	if Jessie_options.debug_atleast 1 then
@@ -224,11 +224,11 @@ let run () =
 	if Jessie_options.CpuLimit.get () <> 0 then
           if Jessie_options.Atp.get () = "gui" then
 	    begin
-              Jessie_options.error "Jessie: option -jessie-cpu-limit requires to set also -jessie-atp"; 
+              Jessie_options.error "Jessie: option -jessie-cpu-limit requires to set also -jessie-atp";
               raise Exit
             end
           else
-	    ("TIMEOUT=" ^ (string_of_int (Jessie_options.CpuLimit.get ())) 
+	    ("TIMEOUT=" ^ (string_of_int (Jessie_options.CpuLimit.get ()))
              ^ " ")
 	else ""
       in
@@ -239,8 +239,8 @@ let run () =
       in
       Jessie_options.feedback "Calling Jessie tool in subdir %s" jessie_subdir;
       Sys.chdir jessie_subdir;
-      
-      
+
+
       let cmd =
 	make_command
 	  [ env_opt; jessie_cmd; "-why-opt -split-user-conj";
@@ -249,21 +249,21 @@ let run () =
       in
       (*      Format.eprintf "CMD=%S" cmd; *)
       sys_command cmd;
-      
+
       (* Phase 9: call Why to VP translation *)
-      
+
       let makefile = basename ^ ".makefile" in
-      
+
       (* temporarily, we launch proving tools of the Why platform,
 	 either graphic or script-based
       *)
-      
+
       Jessie_options.feedback "Calling VCs generator.";
       sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ (Jessie_options.Atp.get ()));
       flush_all ()
-	
+
   with Exit -> ()
-    
+
 (* ************************************************************************* *)
 (* Plug Jessie to the Frama-C platform *)
 (* ************************************************************************* *)
@@ -289,6 +289,7 @@ Please submit `feature request' report."
 let run_and_catch_error =
   Dynamic.register "Jessie.run_analysis"
     (Type.func Type.unit Type.unit)
+    ~plugin:"jessie"
     ~journalize:true
     run_and_catch_error
 

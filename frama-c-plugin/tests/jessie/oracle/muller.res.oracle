@@ -266,6 +266,30 @@ predicate left_valid_struct_void_P(p:void_P pointer,
 
 logic num_of_pos: int, int, int_P pointer, (int_P, int32) memory -> int
 
+axiom no_assign_num_of_pos_0 :
+ (forall tmp:int_P pset.
+  (forall tmpmem:(int_P, int32) memory.
+   (forall tmpalloc:int_P alloc_table.
+    (forall int_P_int_M_t_1:(int_P, int32) memory.
+     (forall t:int_P pointer.
+      (forall j:int.
+       (forall i:int.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc, int_P_int_M_t_1, tmpmem, tmp)) ->
+         (num_of_pos(i, j, t, int_P_int_M_t_1) = num_of_pos(i, j, t, tmpmem))))))))))
+
+axiom no_update_num_of_pos_0 :
+ (forall tmp:int_P pointer.
+  (forall tmpval:int32.
+   (forall int_P_int_M_t_1:(int_P, int32) memory.
+    (forall t:int_P pointer.
+     (forall j:int.
+      (forall i:int.
+       ((not in_pset(tmp, pset_empty)) ->
+        (num_of_pos(i, j, t, int_P_int_M_t_1) = num_of_pos(i, j, t,
+                                                store(int_P_int_M_t_1, tmp,
+                                                tmpval))))))))))
+
 axiom num_of_pos_empty :
  (forall int_P_int_M_t_1:(int_P, int32) memory.
   (forall i_0:int.
@@ -1506,6 +1530,9 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
+axiom truncate_int:
+  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
+
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1517,6 +1544,24 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
+
+axiom real_of_truncate:
+  (forall x:real.
+    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
+     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
+
+axiom truncate_monotonic:
+  (forall x:real.
+    (forall y:real.
+      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
+
+axiom truncate_monotonic_int1:
+  (forall x:real.
+    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
+
+axiom truncate_monotonic_int2:
+  (forall x:real.
+    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -2224,6 +2269,30 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   p) <= a)
 
 logic num_of_pos : int, int, int_P pointer, (int_P, int32) memory -> int
+
+axiom no_assign_num_of_pos_0:
+  (forall tmp:int_P pset.
+    (forall tmpmem:(int_P, int32) memory.
+      (forall tmpalloc:int_P alloc_table.
+        (forall int_P_int_M_t_1:(int_P, int32) memory.
+          (forall t:int_P pointer.
+            (forall j:int.
+              (forall i:int.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  int_P_int_M_t_1, tmpmem, tmp)) ->
+                 (num_of_pos(i, j, t, int_P_int_M_t_1) = num_of_pos(i, j, t,
+                 tmpmem))))))))))
+
+axiom no_update_num_of_pos_0:
+  (forall tmp:int_P pointer.
+    (forall tmpval:int32.
+      (forall int_P_int_M_t_1:(int_P, int32) memory.
+        (forall t:int_P pointer.
+          (forall j:int.
+            (forall i:int.
+              ((not in_pset(tmp, pset_empty)) -> (num_of_pos(i, j, t,
+               int_P_int_M_t_1) = num_of_pos(i, j, t, store(int_P_int_M_t_1,
+               tmp, tmpval))))))))))
 
 axiom num_of_pos_empty:
   (forall int_P_int_M_t_1:(int_P, int32) memory.

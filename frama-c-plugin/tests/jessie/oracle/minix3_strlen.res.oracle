@@ -641,6 +641,458 @@ function minimum(i_25:int,
  j_1:int) : int =
  (if lt_int_bool(i_25, j_1) then i_25 else j_1)
 
+axiom no_assign_memchr_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
+     (forall n_2:int.
+      (forall c:int.
+       (forall s:char_P pointer.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc, char_P_char_M_s_3_at_L, tmpmem, tmp)) ->
+         (memchr(s, c, n_2, char_P_char_M_s_3_at_L) = memchr(s, c, n_2,
+                                                      tmpmem))))))))))
+
+axiom no_assign_memcmp_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+     (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+      (forall n:int.
+       (forall s2:char_P pointer.
+        (forall s1:char_P pointer.
+         ((pset_disjoint(tmp, pset_empty)
+          and not_assigns(tmpalloc, char_P_char_M_s2_2_at_L, tmpmem, tmp)) ->
+          (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
+           char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n, tmpmem,
+                                      char_P_char_M_s1_1_at_L)))))))))))
+
+axiom no_assign_memcmp_1 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+     (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+      (forall n:int.
+       (forall s2:char_P pointer.
+        (forall s1:char_P pointer.
+         ((pset_disjoint(tmp, pset_empty)
+          and not_assigns(tmpalloc, char_P_char_M_s1_1_at_L, tmpmem, tmp)) ->
+          (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
+           char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+                                      char_P_char_M_s2_2_at_L, tmpmem)))))))))))
+
+axiom no_assign_memset_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s_1_4_at_L:(char_P, int8) memory.
+     (forall n_4:int.
+      (forall c_1:int.
+       (forall s_1:char_P pointer.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc, char_P_char_M_s_1_4_at_L, tmpmem, tmp)) ->
+         (memset(s_1, c_1, n_4, char_P_char_M_s_1_4_at_L) = memset(s_1, c_1,
+                                                            n_4, tmpmem))))))))))
+
+logic strchr: char_P pointer, int, (char_P, int8) memory -> bool
+
+axiom no_assign_strchr_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
+     (forall c_3:int.
+      (forall s_15:char_P pointer.
+       ((pset_disjoint(tmp, pset_empty)
+        and not_assigns(tmpalloc, char_P_char_M_s_15_10_at_L, tmpmem, tmp)) ->
+        (strchr(s_15, c_3, char_P_char_M_s_15_10_at_L) = strchr(s_15, c_3,
+                                                         tmpmem)))))))))
+
+logic strcmp: char_P pointer,
+ char_P pointer,
+ (char_P, int8) memory,
+ (char_P, int8) memory -> int
+
+axiom no_assign_strcmp_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+     (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+      (forall s2_6:char_P pointer.
+       (forall s1_6:char_P pointer.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc, char_P_char_M_s2_6_7_at_L, tmpmem, tmp)) ->
+         (strcmp(s1_6, s2_6, char_P_char_M_s2_6_7_at_L,
+          char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6, tmpmem,
+                                       char_P_char_M_s1_6_6_at_L))))))))))
+
+axiom no_assign_strcmp_1 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+     (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+      (forall s2_6:char_P pointer.
+       (forall s1_6:char_P pointer.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc, char_P_char_M_s1_6_6_at_L, tmpmem, tmp)) ->
+         (strcmp(s1_6, s2_6, char_P_char_M_s2_6_7_at_L,
+          char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6,
+                                       char_P_char_M_s2_6_7_at_L, tmpmem))))))))))
+
+axiom no_assign_strlen_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+     (forall s_3:char_P pointer.
+      ((pset_disjoint(tmp, pset_empty)
+       and not_assigns(tmpalloc, char_P_char_M_s_3_5_at_L, tmpmem, tmp)) ->
+       (strlen(s_3, char_P_char_M_s_3_5_at_L) = strlen(s_3, tmpmem))))))))
+
+logic strncmp: char_P pointer,
+ char_P pointer,
+ int,
+ (char_P, int8) memory,
+ (char_P, int8) memory -> int
+
+axiom no_assign_strncmp_0 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+     (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+      (forall n_10:int.
+       (forall s2_9:char_P pointer.
+        (forall s1_9:char_P pointer.
+         ((pset_disjoint(tmp, pset_empty)
+          and not_assigns(tmpalloc, char_P_char_M_s2_9_9_at_L, tmpmem, tmp)) ->
+          (strncmp(s1_9, s2_9, n_10, char_P_char_M_s2_9_9_at_L,
+           char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10, tmpmem,
+                                        char_P_char_M_s1_9_8_at_L)))))))))))
+
+axiom no_assign_strncmp_1 :
+ (forall tmp:char_P pset.
+  (forall tmpmem:(char_P, int8) memory.
+   (forall tmpalloc:char_P alloc_table.
+    (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+     (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+      (forall n_10:int.
+       (forall s2_9:char_P pointer.
+        (forall s1_9:char_P pointer.
+         ((pset_disjoint(tmp, pset_empty)
+          and not_assigns(tmpalloc, char_P_char_M_s1_9_8_at_L, tmpmem, tmp)) ->
+          (strncmp(s1_9, s2_9, n_10, char_P_char_M_s2_9_9_at_L,
+           char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                                        char_P_char_M_s2_9_9_at_L, tmpmem)))))))))))
+
+logic wcscmp: unsigned_short_P pointer,
+ unsigned_short_P pointer,
+ (unsigned_short_P, uint16) memory,
+ (unsigned_short_P, uint16) memory -> int
+
+axiom no_assign_wcscmp_0 :
+ (forall tmp:unsigned_short_P pset.
+  (forall tmpmem:(unsigned_short_P, uint16) memory.
+   (forall tmpalloc:unsigned_short_P alloc_table.
+    (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P, uint16) memory.
+     (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P, uint16) memory.
+      (forall s2_11:unsigned_short_P pointer.
+       (forall s1_11:unsigned_short_P pointer.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc,
+             unsigned_short_P_unsigned_short_M_s2_11_13_at_L, tmpmem, tmp)) ->
+         (wcscmp(s1_11, s2_11,
+          unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+          unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+                                                             s2_11, tmpmem,
+                                                             unsigned_short_P_unsigned_short_M_s1_11_12_at_L))))))))))
+
+axiom no_assign_wcscmp_1 :
+ (forall tmp:unsigned_short_P pset.
+  (forall tmpmem:(unsigned_short_P, uint16) memory.
+   (forall tmpalloc:unsigned_short_P alloc_table.
+    (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P, uint16) memory.
+     (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P, uint16) memory.
+      (forall s2_11:unsigned_short_P pointer.
+       (forall s1_11:unsigned_short_P pointer.
+        ((pset_disjoint(tmp, pset_empty)
+         and not_assigns(tmpalloc,
+             unsigned_short_P_unsigned_short_M_s1_11_12_at_L, tmpmem, tmp)) ->
+         (wcscmp(s1_11, s2_11,
+          unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+          unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+                                                             s2_11,
+                                                             unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                                                             tmpmem))))))))))
+
+logic wcslen: unsigned_short_P pointer,
+ (unsigned_short_P, uint16) memory -> int
+
+axiom no_assign_wcslen_0 :
+ (forall tmp:unsigned_short_P pset.
+  (forall tmpmem:(unsigned_short_P, uint16) memory.
+   (forall tmpalloc:unsigned_short_P alloc_table.
+    (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+     (forall s_17:unsigned_short_P pointer.
+      ((pset_disjoint(tmp, pset_empty)
+       and not_assigns(tmpalloc,
+           unsigned_short_P_unsigned_short_M_s_17_11_at_L, tmpmem, tmp)) ->
+       (wcslen(s_17, unsigned_short_P_unsigned_short_M_s_17_11_at_L) = 
+       wcslen(s_17, tmpmem))))))))
+
+logic wcsncmp: unsigned_short_P pointer,
+ unsigned_short_P pointer,
+ int,
+ (unsigned_short_P, uint16) memory,
+ (unsigned_short_P, uint16) memory -> int
+
+axiom no_assign_wcsncmp_0 :
+ (forall tmp:unsigned_short_P pset.
+  (forall tmpmem:(unsigned_short_P, uint16) memory.
+   (forall tmpalloc:unsigned_short_P alloc_table.
+    (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P, uint16) memory.
+     (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P, uint16) memory.
+      (forall n_12:int.
+       (forall s2_13:unsigned_short_P pointer.
+        (forall s1_13:unsigned_short_P pointer.
+         ((pset_disjoint(tmp, pset_empty)
+          and not_assigns(tmpalloc,
+              unsigned_short_P_unsigned_short_M_s2_13_15_at_L, tmpmem, tmp)) ->
+          (wcsncmp(s1_13, s2_13, n_12,
+           unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+           unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                                                              s2_13, n_12,
+                                                              tmpmem,
+                                                              unsigned_short_P_unsigned_short_M_s1_13_14_at_L)))))))))))
+
+axiom no_assign_wcsncmp_1 :
+ (forall tmp:unsigned_short_P pset.
+  (forall tmpmem:(unsigned_short_P, uint16) memory.
+   (forall tmpalloc:unsigned_short_P alloc_table.
+    (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P, uint16) memory.
+     (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P, uint16) memory.
+      (forall n_12:int.
+       (forall s2_13:unsigned_short_P pointer.
+        (forall s1_13:unsigned_short_P pointer.
+         ((pset_disjoint(tmp, pset_empty)
+          and not_assigns(tmpalloc,
+              unsigned_short_P_unsigned_short_M_s1_13_14_at_L, tmpmem, tmp)) ->
+          (wcsncmp(s1_13, s2_13, n_12,
+           unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+           unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                                                              s2_13, n_12,
+                                                              unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                                                              tmpmem)))))))))))
+
+axiom no_update_memchr_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
+    (forall n_2:int.
+     (forall c:int.
+      (forall s:char_P pointer.
+       ((not in_pset(tmp, pset_empty)) ->
+        (memchr(s, c, n_2, char_P_char_M_s_3_at_L) = memchr(s, c, n_2,
+                                                     store(char_P_char_M_s_3_at_L,
+                                                     tmp, tmpval))))))))))
+
+axiom no_update_memcmp_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+     (forall n:int.
+      (forall s2:char_P pointer.
+       (forall s1:char_P pointer.
+        ((not in_pset(tmp, pset_empty)) ->
+         (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L, char_P_char_M_s1_1_at_L) = 
+         memcmp(s1, s2, n, store(char_P_char_M_s2_2_at_L, tmp, tmpval),
+         char_P_char_M_s1_1_at_L))))))))))
+
+axiom no_update_memcmp_1 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+     (forall n:int.
+      (forall s2:char_P pointer.
+       (forall s1:char_P pointer.
+        ((not in_pset(tmp, pset_empty)) ->
+         (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L, char_P_char_M_s1_1_at_L) = 
+         memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
+         store(char_P_char_M_s1_1_at_L, tmp, tmpval)))))))))))
+
+axiom no_update_memset_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s_1_4_at_L:(char_P, int8) memory.
+    (forall n_4:int.
+     (forall c_1:int.
+      (forall s_1:char_P pointer.
+       ((not in_pset(tmp, pset_empty)) ->
+        (memset(s_1, c_1, n_4, char_P_char_M_s_1_4_at_L) = memset(s_1, c_1,
+                                                           n_4,
+                                                           store(char_P_char_M_s_1_4_at_L,
+                                                           tmp, tmpval))))))))))
+
+axiom no_update_strchr_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
+    (forall c_3:int.
+     (forall s_15:char_P pointer.
+      ((not in_pset(tmp, pset_empty)) ->
+       (strchr(s_15, c_3, char_P_char_M_s_15_10_at_L) = strchr(s_15, c_3,
+                                                        store(char_P_char_M_s_15_10_at_L,
+                                                        tmp, tmpval)))))))))
+
+axiom no_update_strcmp_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+     (forall s2_6:char_P pointer.
+      (forall s1_6:char_P pointer.
+       ((not in_pset(tmp, pset_empty)) ->
+        (strcmp(s1_6, s2_6, char_P_char_M_s2_6_7_at_L,
+         char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6,
+                                      store(char_P_char_M_s2_6_7_at_L, tmp,
+                                      tmpval), char_P_char_M_s1_6_6_at_L)))))))))
+
+axiom no_update_strcmp_1 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+     (forall s2_6:char_P pointer.
+      (forall s1_6:char_P pointer.
+       ((not in_pset(tmp, pset_empty)) ->
+        (strcmp(s1_6, s2_6, char_P_char_M_s2_6_7_at_L,
+         char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6,
+                                      char_P_char_M_s2_6_7_at_L,
+                                      store(char_P_char_M_s1_6_6_at_L, tmp,
+                                      tmpval))))))))))
+
+axiom no_update_strlen_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_3:char_P pointer.
+     ((not in_pset(tmp, pset_empty)) ->
+      (strlen(s_3, char_P_char_M_s_3_5_at_L) = strlen(s_3,
+                                               store(char_P_char_M_s_3_5_at_L,
+                                               tmp, tmpval))))))))
+
+axiom no_update_strncmp_0 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+     (forall n_10:int.
+      (forall s2_9:char_P pointer.
+       (forall s1_9:char_P pointer.
+        ((not in_pset(tmp, pset_empty)) ->
+         (strncmp(s1_9, s2_9, n_10, char_P_char_M_s2_9_9_at_L,
+          char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                                       store(char_P_char_M_s2_9_9_at_L, tmp,
+                                       tmpval), char_P_char_M_s1_9_8_at_L))))))))))
+
+axiom no_update_strncmp_1 :
+ (forall tmp:char_P pointer.
+  (forall tmpval:int8.
+   (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+     (forall n_10:int.
+      (forall s2_9:char_P pointer.
+       (forall s1_9:char_P pointer.
+        ((not in_pset(tmp, pset_empty)) ->
+         (strncmp(s1_9, s2_9, n_10, char_P_char_M_s2_9_9_at_L,
+          char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                                       char_P_char_M_s2_9_9_at_L,
+                                       store(char_P_char_M_s1_9_8_at_L, tmp,
+                                       tmpval)))))))))))
+
+axiom no_update_wcscmp_0 :
+ (forall tmp:unsigned_short_P pointer.
+  (forall tmpval:uint16.
+   (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P, uint16) memory.
+    (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P, uint16) memory.
+     (forall s2_11:unsigned_short_P pointer.
+      (forall s1_11:unsigned_short_P pointer.
+       ((not in_pset(tmp, pset_empty)) ->
+        (wcscmp(s1_11, s2_11,
+         unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+         unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+                                                            s2_11,
+                                                            store(unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                                                            tmp, tmpval),
+                                                            unsigned_short_P_unsigned_short_M_s1_11_12_at_L)))))))))
+
+axiom no_update_wcscmp_1 :
+ (forall tmp:unsigned_short_P pointer.
+  (forall tmpval:uint16.
+   (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P, uint16) memory.
+    (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P, uint16) memory.
+     (forall s2_11:unsigned_short_P pointer.
+      (forall s1_11:unsigned_short_P pointer.
+       ((not in_pset(tmp, pset_empty)) ->
+        (wcscmp(s1_11, s2_11,
+         unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+         unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+                                                            s2_11,
+                                                            unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                                                            store(unsigned_short_P_unsigned_short_M_s1_11_12_at_L,
+                                                            tmp, tmpval))))))))))
+
+axiom no_update_wcslen_0 :
+ (forall tmp:unsigned_short_P pointer.
+  (forall tmpval:uint16.
+   (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+    (forall s_17:unsigned_short_P pointer.
+     ((not in_pset(tmp, pset_empty)) ->
+      (wcslen(s_17, unsigned_short_P_unsigned_short_M_s_17_11_at_L) = 
+      wcslen(s_17,
+      store(unsigned_short_P_unsigned_short_M_s_17_11_at_L, tmp, tmpval))))))))
+
+axiom no_update_wcsncmp_0 :
+ (forall tmp:unsigned_short_P pointer.
+  (forall tmpval:uint16.
+   (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P, uint16) memory.
+    (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P, uint16) memory.
+     (forall n_12:int.
+      (forall s2_13:unsigned_short_P pointer.
+       (forall s1_13:unsigned_short_P pointer.
+        ((not in_pset(tmp, pset_empty)) ->
+         (wcsncmp(s1_13, s2_13, n_12,
+          unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+          unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                                                             s2_13, n_12,
+                                                             store(unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                                                             tmp, tmpval),
+                                                             unsigned_short_P_unsigned_short_M_s1_13_14_at_L))))))))))
+
+axiom no_update_wcsncmp_1 :
+ (forall tmp:unsigned_short_P pointer.
+  (forall tmpval:uint16.
+   (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P, uint16) memory.
+    (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P, uint16) memory.
+     (forall n_12:int.
+      (forall s2_13:unsigned_short_P pointer.
+       (forall s1_13:unsigned_short_P pointer.
+        ((not in_pset(tmp, pset_empty)) ->
+         (wcsncmp(s1_13, s2_13, n_12,
+          unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+          unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                                                             s2_13, n_12,
+                                                             unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                                                             store(unsigned_short_P_unsigned_short_M_s1_13_14_at_L,
+                                                             tmp, tmpval)))))))))))
+
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -670,8 +1122,6 @@ predicate right_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-logic strchr: char_P pointer, int, (char_P, int8) memory -> bool
-
 axiom strchr_def :
  (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
   (forall s_16:char_P pointer.
@@ -683,11 +1133,6 @@ axiom strchr_def :
              and eq_int(integer_of_int8(select(char_P_char_M_s_15_10_at_L,
                                         shift(s_16, i_13))),
                  c_4))))))))
-
-logic strcmp: char_P pointer,
- char_P pointer,
- (char_P, int8) memory,
- (char_P, int8) memory -> int
 
 axiom strcmp_range :
  (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
@@ -879,12 +1324,6 @@ axiom strlen_zero :
              (0)))) ->
      eq_int(i_6, strlen(s_10, char_P_char_M_s_3_5_at_L))))))
 
-logic strncmp: char_P pointer,
- char_P pointer,
- int,
- (char_P, int8) memory,
- (char_P, int8) memory -> int
-
 axiom strncmp_zero :
  (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
   (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
@@ -1023,9 +1462,6 @@ predicate valid_struct_void_P(p:void_P pointer,
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-logic wcslen: unsigned_short_P pointer,
- (unsigned_short_P, uint16) memory -> int
-
 predicate valid_wstring(s_30:unsigned_short_P pointer,
  unsigned_short_P_s_30_18_alloc_table_at_L:unsigned_short_P alloc_table,
  unsigned_short_P_unsigned_short_M_s_30_18_at_L:(unsigned_short_P, uint16) memory) =
@@ -1056,11 +1492,6 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
-
-logic wcscmp: unsigned_short_P pointer,
- unsigned_short_P pointer,
- (unsigned_short_P, uint16) memory,
- (unsigned_short_P, uint16) memory -> int
 
 axiom wcscmp_zero :
  (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P, uint16) memory.
@@ -1211,12 +1642,6 @@ axiom wcslen_zero :
              (0)))) ->
      eq_int(integer_of_int32(i_18),
      wcslen(s_23, unsigned_short_P_unsigned_short_M_s_17_11_at_L))))))
-
-logic wcsncmp: unsigned_short_P pointer,
- unsigned_short_P pointer,
- int,
- (unsigned_short_P, uint16) memory,
- (unsigned_short_P, uint16) memory -> int
 
 axiom wcsncmp_zero :
  (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P, uint16) memory.
@@ -1619,15 +2044,15 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strlen_po3.why">
-      <location file = "why/minix3_strlen.why" line = "1125" begin = "61" end = "62"/>
+      <location file = "why/minix3_strlen.why" line = "1550" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po4.why">
-      <location file = "why/minix3_strlen.why" line = "1125" begin = "61" end = "62"/>
+      <location file = "why/minix3_strlen.why" line = "1550" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po5.why">
-      <location file = "why/minix3_strlen.why" line = "1177" begin = "60" end = "84"/>
+      <location file = "why/minix3_strlen.why" line = "1602" begin = "60" end = "84"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1802,6 +2227,9 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
+axiom truncate_int:
+  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
+
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1813,6 +2241,24 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
+
+axiom real_of_truncate:
+  (forall x:real.
+    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
+     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
+
+axiom truncate_monotonic:
+  (forall x:real.
+    (forall y:real.
+      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
+
+axiom truncate_monotonic_int1:
+  (forall x:real.
+    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
+
+axiom truncate_monotonic_int2:
+  (forall x:real.
+    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -2627,6 +3073,451 @@ axiom memset_def:
 function minimum(i_25: int, j_1: int) : int = ite(lt_int_bool(i_25, j_1),
   i_25, j_1)
 
+axiom no_assign_memchr_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
+          (forall n_2:int.
+            (forall c:int.
+              (forall s:char_P pointer.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  char_P_char_M_s_3_at_L, tmpmem, tmp)) ->
+                 (memchr(s, c, n_2, char_P_char_M_s_3_at_L) = memchr(s, c,
+                 n_2, tmpmem))))))))))
+
+axiom no_assign_memcmp_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+          (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+            (forall n:int.
+              (forall s2:char_P pointer.
+                (forall s1:char_P pointer.
+                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                    char_P_char_M_s2_2_at_L, tmpmem, tmp)) ->
+                   (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
+                   char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n, tmpmem,
+                   char_P_char_M_s1_1_at_L)))))))))))
+
+axiom no_assign_memcmp_1:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+          (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+            (forall n:int.
+              (forall s2:char_P pointer.
+                (forall s1:char_P pointer.
+                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                    char_P_char_M_s1_1_at_L, tmpmem, tmp)) ->
+                   (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
+                   char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+                   char_P_char_M_s2_2_at_L, tmpmem)))))))))))
+
+axiom no_assign_memset_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s_1_4_at_L:(char_P, int8) memory.
+          (forall n_4:int.
+            (forall c_1:int.
+              (forall s_1:char_P pointer.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  char_P_char_M_s_1_4_at_L, tmpmem, tmp)) ->
+                 (memset(s_1, c_1, n_4,
+                 char_P_char_M_s_1_4_at_L) = memset(s_1, c_1, n_4, tmpmem))))))))))
+
+logic strchr : char_P pointer, int, (char_P, int8) memory -> bool
+
+axiom no_assign_strchr_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
+          (forall c_3:int.
+            (forall s_15:char_P pointer.
+              ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                char_P_char_M_s_15_10_at_L, tmpmem, tmp)) ->
+               (strchr(s_15, c_3, char_P_char_M_s_15_10_at_L) = strchr(s_15,
+               c_3, tmpmem)))))))))
+
+logic strcmp : char_P pointer, char_P pointer, (char_P, int8) memory,
+(char_P, int8) memory -> int
+
+axiom no_assign_strcmp_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+          (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+            (forall s2_6:char_P pointer.
+              (forall s1_6:char_P pointer.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  char_P_char_M_s2_6_7_at_L, tmpmem, tmp)) ->
+                 (strcmp(s1_6, s2_6, char_P_char_M_s2_6_7_at_L,
+                 char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6, tmpmem,
+                 char_P_char_M_s1_6_6_at_L))))))))))
+
+axiom no_assign_strcmp_1:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+          (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+            (forall s2_6:char_P pointer.
+              (forall s1_6:char_P pointer.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  char_P_char_M_s1_6_6_at_L, tmpmem, tmp)) ->
+                 (strcmp(s1_6, s2_6, char_P_char_M_s2_6_7_at_L,
+                 char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6,
+                 char_P_char_M_s2_6_7_at_L, tmpmem))))))))))
+
+axiom no_assign_strlen_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+          (forall s_3:char_P pointer.
+            ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+              char_P_char_M_s_3_5_at_L, tmpmem, tmp)) ->
+             (strlen(s_3, char_P_char_M_s_3_5_at_L) = strlen(s_3, tmpmem))))))))
+
+logic strncmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
+(char_P, int8) memory -> int
+
+axiom no_assign_strncmp_0:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+          (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+            (forall n_10:int.
+              (forall s2_9:char_P pointer.
+                (forall s1_9:char_P pointer.
+                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                    char_P_char_M_s2_9_9_at_L, tmpmem, tmp)) ->
+                   (strncmp(s1_9, s2_9, n_10, char_P_char_M_s2_9_9_at_L,
+                   char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                   tmpmem, char_P_char_M_s1_9_8_at_L)))))))))))
+
+axiom no_assign_strncmp_1:
+  (forall tmp:char_P pset.
+    (forall tmpmem:(char_P, int8) memory.
+      (forall tmpalloc:char_P alloc_table.
+        (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+          (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+            (forall n_10:int.
+              (forall s2_9:char_P pointer.
+                (forall s1_9:char_P pointer.
+                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                    char_P_char_M_s1_9_8_at_L, tmpmem, tmp)) ->
+                   (strncmp(s1_9, s2_9, n_10, char_P_char_M_s2_9_9_at_L,
+                   char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                   char_P_char_M_s2_9_9_at_L, tmpmem)))))))))))
+
+logic wcscmp : unsigned_short_P pointer, unsigned_short_P pointer,
+(unsigned_short_P, uint16) memory, (unsigned_short_P, uint16) memory -> int
+
+axiom no_assign_wcscmp_0:
+  (forall tmp:unsigned_short_P pset.
+    (forall tmpmem:(unsigned_short_P, uint16) memory.
+      (forall tmpalloc:unsigned_short_P alloc_table.
+        (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P,
+            uint16) memory.
+            (forall s2_11:unsigned_short_P pointer.
+              (forall s1_11:unsigned_short_P pointer.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  unsigned_short_P_unsigned_short_M_s2_11_13_at_L, tmpmem,
+                  tmp)) ->
+                 (wcscmp(s1_11, s2_11,
+                 unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                 unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+                 s2_11, tmpmem,
+                 unsigned_short_P_unsigned_short_M_s1_11_12_at_L))))))))))
+
+axiom no_assign_wcscmp_1:
+  (forall tmp:unsigned_short_P pset.
+    (forall tmpmem:(unsigned_short_P, uint16) memory.
+      (forall tmpalloc:unsigned_short_P alloc_table.
+        (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P,
+            uint16) memory.
+            (forall s2_11:unsigned_short_P pointer.
+              (forall s1_11:unsigned_short_P pointer.
+                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                  unsigned_short_P_unsigned_short_M_s1_11_12_at_L, tmpmem,
+                  tmp)) ->
+                 (wcscmp(s1_11, s2_11,
+                 unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                 unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+                 s2_11, unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                 tmpmem))))))))))
+
+logic wcslen : unsigned_short_P pointer, (unsigned_short_P,
+uint16) memory -> int
+
+axiom no_assign_wcslen_0:
+  (forall tmp:unsigned_short_P pset.
+    (forall tmpmem:(unsigned_short_P, uint16) memory.
+      (forall tmpalloc:unsigned_short_P alloc_table.
+        (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall s_17:unsigned_short_P pointer.
+            ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+              unsigned_short_P_unsigned_short_M_s_17_11_at_L, tmpmem, tmp)) ->
+             (wcslen(s_17,
+             unsigned_short_P_unsigned_short_M_s_17_11_at_L) = wcslen(s_17,
+             tmpmem))))))))
+
+logic wcsncmp : unsigned_short_P pointer, unsigned_short_P pointer, int,
+(unsigned_short_P, uint16) memory, (unsigned_short_P, uint16) memory -> int
+
+axiom no_assign_wcsncmp_0:
+  (forall tmp:unsigned_short_P pset.
+    (forall tmpmem:(unsigned_short_P, uint16) memory.
+      (forall tmpalloc:unsigned_short_P alloc_table.
+        (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P,
+            uint16) memory.
+            (forall n_12:int.
+              (forall s2_13:unsigned_short_P pointer.
+                (forall s1_13:unsigned_short_P pointer.
+                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                    unsigned_short_P_unsigned_short_M_s2_13_15_at_L, tmpmem,
+                    tmp)) ->
+                   (wcsncmp(s1_13, s2_13, n_12,
+                   unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                   unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                   s2_13, n_12, tmpmem,
+                   unsigned_short_P_unsigned_short_M_s1_13_14_at_L)))))))))))
+
+axiom no_assign_wcsncmp_1:
+  (forall tmp:unsigned_short_P pset.
+    (forall tmpmem:(unsigned_short_P, uint16) memory.
+      (forall tmpalloc:unsigned_short_P alloc_table.
+        (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P,
+            uint16) memory.
+            (forall n_12:int.
+              (forall s2_13:unsigned_short_P pointer.
+                (forall s1_13:unsigned_short_P pointer.
+                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                    unsigned_short_P_unsigned_short_M_s1_13_14_at_L, tmpmem,
+                    tmp)) ->
+                   (wcsncmp(s1_13, s2_13, n_12,
+                   unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                   unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                   s2_13, n_12,
+                   unsigned_short_P_unsigned_short_M_s2_13_15_at_L, tmpmem)))))))))))
+
+axiom no_update_memchr_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
+        (forall n_2:int.
+          (forall c:int.
+            (forall s:char_P pointer.
+              ((not in_pset(tmp, pset_empty)) -> (memchr(s, c, n_2,
+               char_P_char_M_s_3_at_L) = memchr(s, c, n_2,
+               store(char_P_char_M_s_3_at_L, tmp, tmpval))))))))))
+
+axiom no_update_memcmp_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+        (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+          (forall n:int.
+            (forall s2:char_P pointer.
+              (forall s1:char_P pointer.
+                ((not in_pset(tmp, pset_empty)) -> (memcmp(s1, s2, n,
+                 char_P_char_M_s2_2_at_L,
+                 char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+                 store(char_P_char_M_s2_2_at_L, tmp, tmpval),
+                 char_P_char_M_s1_1_at_L))))))))))
+
+axiom no_update_memcmp_1:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+        (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+          (forall n:int.
+            (forall s2:char_P pointer.
+              (forall s1:char_P pointer.
+                ((not in_pset(tmp, pset_empty)) -> (memcmp(s1, s2, n,
+                 char_P_char_M_s2_2_at_L,
+                 char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+                 char_P_char_M_s2_2_at_L, store(char_P_char_M_s1_1_at_L, tmp,
+                 tmpval)))))))))))
+
+axiom no_update_memset_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s_1_4_at_L:(char_P, int8) memory.
+        (forall n_4:int.
+          (forall c_1:int.
+            (forall s_1:char_P pointer.
+              ((not in_pset(tmp, pset_empty)) -> (memset(s_1, c_1, n_4,
+               char_P_char_M_s_1_4_at_L) = memset(s_1, c_1, n_4,
+               store(char_P_char_M_s_1_4_at_L, tmp, tmpval))))))))))
+
+axiom no_update_strchr_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
+        (forall c_3:int.
+          (forall s_15:char_P pointer.
+            ((not in_pset(tmp, pset_empty)) -> (strchr(s_15, c_3,
+             char_P_char_M_s_15_10_at_L) = strchr(s_15, c_3,
+             store(char_P_char_M_s_15_10_at_L, tmp, tmpval)))))))))
+
+axiom no_update_strcmp_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+        (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+          (forall s2_6:char_P pointer.
+            (forall s1_6:char_P pointer.
+              ((not in_pset(tmp, pset_empty)) -> (strcmp(s1_6, s2_6,
+               char_P_char_M_s2_6_7_at_L,
+               char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6,
+               store(char_P_char_M_s2_6_7_at_L, tmp, tmpval),
+               char_P_char_M_s1_6_6_at_L)))))))))
+
+axiom no_update_strcmp_1:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+        (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+          (forall s2_6:char_P pointer.
+            (forall s1_6:char_P pointer.
+              ((not in_pset(tmp, pset_empty)) -> (strcmp(s1_6, s2_6,
+               char_P_char_M_s2_6_7_at_L,
+               char_P_char_M_s1_6_6_at_L) = strcmp(s1_6, s2_6,
+               char_P_char_M_s2_6_7_at_L, store(char_P_char_M_s1_6_6_at_L,
+               tmp, tmpval))))))))))
+
+axiom no_update_strlen_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+        (forall s_3:char_P pointer.
+          ((not in_pset(tmp, pset_empty)) -> (strlen(s_3,
+           char_P_char_M_s_3_5_at_L) = strlen(s_3,
+           store(char_P_char_M_s_3_5_at_L, tmp, tmpval))))))))
+
+axiom no_update_strncmp_0:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+        (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+          (forall n_10:int.
+            (forall s2_9:char_P pointer.
+              (forall s1_9:char_P pointer.
+                ((not in_pset(tmp, pset_empty)) -> (strncmp(s1_9, s2_9, n_10,
+                 char_P_char_M_s2_9_9_at_L,
+                 char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                 store(char_P_char_M_s2_9_9_at_L, tmp, tmpval),
+                 char_P_char_M_s1_9_8_at_L))))))))))
+
+axiom no_update_strncmp_1:
+  (forall tmp:char_P pointer.
+    (forall tmpval:int8.
+      (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+        (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+          (forall n_10:int.
+            (forall s2_9:char_P pointer.
+              (forall s1_9:char_P pointer.
+                ((not in_pset(tmp, pset_empty)) -> (strncmp(s1_9, s2_9, n_10,
+                 char_P_char_M_s2_9_9_at_L,
+                 char_P_char_M_s1_9_8_at_L) = strncmp(s1_9, s2_9, n_10,
+                 char_P_char_M_s2_9_9_at_L, store(char_P_char_M_s1_9_8_at_L,
+                 tmp, tmpval)))))))))))
+
+axiom no_update_wcscmp_0:
+  (forall tmp:unsigned_short_P pointer.
+    (forall tmpval:uint16.
+      (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P,
+        uint16) memory.
+        (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall s2_11:unsigned_short_P pointer.
+            (forall s1_11:unsigned_short_P pointer.
+              ((not in_pset(tmp, pset_empty)) -> (wcscmp(s1_11, s2_11,
+               unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+               unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+               s2_11, store(unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+               tmp, tmpval),
+               unsigned_short_P_unsigned_short_M_s1_11_12_at_L)))))))))
+
+axiom no_update_wcscmp_1:
+  (forall tmp:unsigned_short_P pointer.
+    (forall tmpval:uint16.
+      (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P,
+        uint16) memory.
+        (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall s2_11:unsigned_short_P pointer.
+            (forall s1_11:unsigned_short_P pointer.
+              ((not in_pset(tmp, pset_empty)) -> (wcscmp(s1_11, s2_11,
+               unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+               unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcscmp(s1_11,
+               s2_11, unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+               store(unsigned_short_P_unsigned_short_M_s1_11_12_at_L, tmp,
+               tmpval))))))))))
+
+axiom no_update_wcslen_0:
+  (forall tmp:unsigned_short_P pointer.
+    (forall tmpval:uint16.
+      (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+        uint16) memory.
+        (forall s_17:unsigned_short_P pointer.
+          ((not in_pset(tmp, pset_empty)) -> (wcslen(s_17,
+           unsigned_short_P_unsigned_short_M_s_17_11_at_L) = wcslen(s_17,
+           store(unsigned_short_P_unsigned_short_M_s_17_11_at_L, tmp,
+           tmpval))))))))
+
+axiom no_update_wcsncmp_0:
+  (forall tmp:unsigned_short_P pointer.
+    (forall tmpval:uint16.
+      (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P,
+        uint16) memory.
+        (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall n_12:int.
+            (forall s2_13:unsigned_short_P pointer.
+              (forall s1_13:unsigned_short_P pointer.
+                ((not in_pset(tmp, pset_empty)) -> (wcsncmp(s1_13, s2_13,
+                 n_12, unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                 unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                 s2_13, n_12,
+                 store(unsigned_short_P_unsigned_short_M_s2_13_15_at_L, tmp,
+                 tmpval), unsigned_short_P_unsigned_short_M_s1_13_14_at_L))))))))))
+
+axiom no_update_wcsncmp_1:
+  (forall tmp:unsigned_short_P pointer.
+    (forall tmpval:uint16.
+      (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P,
+        uint16) memory.
+        (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P,
+          uint16) memory.
+          (forall n_12:int.
+            (forall s2_13:unsigned_short_P pointer.
+              (forall s1_13:unsigned_short_P pointer.
+                ((not in_pset(tmp, pset_empty)) -> (wcsncmp(s1_13, s2_13,
+                 n_12, unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                 unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = wcsncmp(s1_13,
+                 s2_13, n_12,
+                 unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                 store(unsigned_short_P_unsigned_short_M_s1_13_14_at_L, tmp,
+                 tmpval)))))))))))
+
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -2655,8 +3546,6 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
 
-logic strchr : char_P pointer, int, (char_P, int8) memory -> bool
-
 axiom strchr_def:
   (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
     (forall s_16:char_P pointer.
@@ -2667,9 +3556,6 @@ axiom strchr_def:
             ((i_13 <= strlen(s_16, char_P_char_M_s_15_10_at_L)) and
              (integer_of_int8(select(char_P_char_M_s_15_10_at_L, shift(s_16,
              i_13))) = c_4))))))))
-
-logic strcmp : char_P pointer, char_P pointer, (char_P, int8) memory,
-(char_P, int8) memory -> int
 
 axiom strcmp_range:
   (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
@@ -2833,9 +3719,6 @@ axiom strlen_zero:
            i_6))) = 0))) ->
          (i_6 = strlen(s_10, char_P_char_M_s_3_5_at_L))))))
 
-logic strncmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
-(char_P, int8) memory -> int
-
 axiom strncmp_zero:
   (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
@@ -2951,9 +3834,6 @@ predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) <= a) and
    (offset_max(void_P_alloc_table, p) >= b))
 
-logic wcslen : unsigned_short_P pointer, (unsigned_short_P,
-uint16) memory -> int
-
 predicate valid_wstring(s_30: unsigned_short_P pointer,
   unsigned_short_P_s_30_18_alloc_table_at_L: unsigned_short_P alloc_table,
   unsigned_short_P_unsigned_short_M_s_30_18_at_L: (unsigned_short_P,
@@ -2985,9 +3865,6 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
-
-logic wcscmp : unsigned_short_P pointer, unsigned_short_P pointer,
-(unsigned_short_P, uint16) memory, (unsigned_short_P, uint16) memory -> int
 
 axiom wcscmp_zero:
   (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P,
@@ -3131,9 +4008,6 @@ axiom wcslen_zero:
            shift(s_23, integer_of_int32(i_18)))) = 0))) ->
          (integer_of_int32(i_18) = wcslen(s_23,
          unsigned_short_P_unsigned_short_M_s_17_11_at_L))))))
-
-logic wcsncmp : unsigned_short_P pointer, unsigned_short_P pointer, int,
-(unsigned_short_P, uint16) memory, (unsigned_short_P, uint16) memory -> int
 
 axiom wcsncmp_zero:
   (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P,

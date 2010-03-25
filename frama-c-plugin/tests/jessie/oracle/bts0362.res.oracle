@@ -178,6 +178,30 @@ predicate left_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
+logic s: int_P pointer, int, (int_P, int32) memory -> int
+
+axiom no_assign_s_0 :
+ (forall tmp:int_P pset.
+  (forall tmpmem:(int_P, int32) memory.
+   (forall tmpalloc:int_P alloc_table.
+    (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+     (forall i:int.
+      (forall a:int_P pointer.
+       ((pset_disjoint(tmp, pset_empty)
+        and not_assigns(tmpalloc, int_P_int_M_a_1_at_L, tmpmem, tmp)) ->
+        (s(a, i, int_P_int_M_a_1_at_L) = s(a, i, tmpmem)))))))))
+
+axiom no_update_s_0 :
+ (forall tmp:int_P pointer.
+  (forall tmpval:int32.
+   (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+    (forall i:int.
+     (forall a:int_P pointer.
+      ((not in_pset(tmp, pset_empty)) ->
+       (s(a, i, int_P_int_M_a_1_at_L) = s(a, i,
+                                        store(int_P_int_M_a_1_at_L, tmp,
+                                        tmpval)))))))))
+
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -203,8 +227,6 @@ predicate right_valid_struct_void_P(p:void_P pointer,
  b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
-
-logic s: int_P pointer, int, (int_P, int32) memory -> int
 
 axiom s_base :
  (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
@@ -764,6 +786,9 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
+axiom truncate_int:
+  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
+
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -775,6 +800,24 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
+
+axiom real_of_truncate:
+  (forall x:real.
+    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
+     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
+
+axiom truncate_monotonic:
+  (forall x:real.
+    (forall y:real.
+      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
+
+axiom truncate_monotonic_int1:
+  (forall x:real.
+    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
+
+axiom truncate_monotonic_int2:
+  (forall x:real.
+    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -1481,6 +1524,29 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
+logic s : int_P pointer, int, (int_P, int32) memory -> int
+
+axiom no_assign_s_0:
+  (forall tmp:int_P pset.
+    (forall tmpmem:(int_P, int32) memory.
+      (forall tmpalloc:int_P alloc_table.
+        (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+          (forall i:int.
+            (forall a:int_P pointer.
+              ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+                int_P_int_M_a_1_at_L, tmpmem, tmp)) ->
+               (s(a, i, int_P_int_M_a_1_at_L) = s(a, i, tmpmem)))))))))
+
+axiom no_update_s_0:
+  (forall tmp:int_P pointer.
+    (forall tmpval:int32.
+      (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+        (forall i:int.
+          (forall a:int_P pointer.
+            ((not in_pset(tmp, pset_empty)) -> (s(a, i,
+             int_P_int_M_a_1_at_L) = s(a, i, store(int_P_int_M_a_1_at_L, tmp,
+             tmpval)))))))))
+
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -1505,8 +1571,6 @@ predicate right_valid_struct_int_P(p: int_P pointer, b: int,
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
-
-logic s : int_P pointer, int, (int_P, int32) memory -> int
 
 axiom s_base:
   (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.

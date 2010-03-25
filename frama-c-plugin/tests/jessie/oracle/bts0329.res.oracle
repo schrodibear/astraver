@@ -609,6 +609,9 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
+axiom truncate_int:
+  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
+
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -620,6 +623,24 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
+
+axiom real_of_truncate:
+  (forall x:real.
+    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
+     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
+
+axiom truncate_monotonic:
+  (forall x:real.
+    (forall y:real.
+      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
+
+axiom truncate_monotonic_int1:
+  (forall x:real.
+    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
+
+axiom truncate_monotonic_int2:
+  (forall x:real.
+    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -1276,6 +1297,28 @@ axiom round_double_monotonic:
       (forall m:mode.
         ((x <= y) -> (round_double(m, x) <= round_double(m, y))))))
 
+axiom exact_round_double_for_integers:
+  (forall i:int.
+    (forall m:mode.
+      ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
+       (round_double(m, real_of_int(i)) = real_of_int(i)))))
+
+axiom round_double_idempotent:
+  (forall m1:mode.
+    (forall m2:mode.
+      (forall x:real. (round_double(m1, round_double(m2,
+        x)) = round_double(m2, x)))))
+
+axiom round_down_double_neg:
+  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+
+axiom round_up_double_neg:
+  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+
+axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+
+axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+
 type single
 
 logic round_single : mode, real -> real
@@ -1304,19 +1347,17 @@ axiom bounded_real_no_overflow_single:
     (forall x:real.
       ((abs_real(x) <= max_single) -> no_overflow_single(m, x))))
 
-logic single_to_double : mode, single -> double
+axiom round_single_monotonic:
+  (forall x:real.
+    (forall y:real.
+      (forall m:mode.
+        ((x <= y) -> (round_single(m, x) <= round_single(m, y))))))
 
-logic double_to_single : mode, double -> single
-
-axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
-
-axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
-
-axiom round_down_single_neg:
-  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
-
-axiom round_up_single_neg:
-  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
+axiom exact_round_single_for_integers:
+  (forall i:int.
+    (forall m:mode.
+      ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
+       real_of_int(i)) = real_of_int(i)))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -1324,21 +1365,19 @@ axiom round_single_idempotent:
       (forall x:real. (round_single(m1, round_single(m2,
         x)) = round_single(m2, x)))))
 
-axiom round_double_down_le: (forall x:real. (round_double(down, x) <= x))
+axiom round_down_single_neg:
+  (forall x:real. (round_single(down, (-x)) = (-round_single(up, x))))
 
-axiom round_up_double_ge: (forall x:real. (round_double(up, x) >= x))
+axiom round_up_single_neg:
+  (forall x:real. (round_single(up, (-x)) = (-round_single(down, x))))
 
-axiom round_down_double_neg:
-  (forall x:real. (round_double(down, (-x)) = (-round_double(up, x))))
+axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
-axiom round_up_double_neg:
-  (forall x:real. (round_double(up, (-x)) = (-round_double(down, x))))
+axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-axiom round_double_idempotent:
-  (forall m1:mode.
-    (forall m2:mode.
-      (forall x:real. (round_double(m1, round_double(m2,
-        x)) = round_double(m2, x)))))
+logic single_to_double : mode, single -> double
+
+logic double_to_single : mode, double -> single
 
 axiom double_to_single_val:
   (forall m:mode.
