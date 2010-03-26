@@ -287,13 +287,14 @@ Please submit `feature request' report."
 	  (Printexc.to_string exn)
 
 let run_and_catch_error =
-  Dynamic.register "Jessie.run_analysis"
+  Dynamic.register
+    "run_analysis"
     (Type.func Type.unit Type.unit)
-    ~plugin:"jessie"
+    ~plugin:"Jessie"
     ~journalize:true
     run_and_catch_error
 
-let main _fmt = if Jessie_options.Analysis.get () then run_and_catch_error ()
+let main () = if Jessie_options.Analysis.get () then run_and_catch_error ()
 let () = Db.Main.extend main
 
 (*
