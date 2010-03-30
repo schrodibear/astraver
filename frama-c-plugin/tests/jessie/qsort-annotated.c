@@ -49,7 +49,8 @@ theory ComparatorTheory<X> {
   predicate leq{L}(X x, X y) = eq{L}(x,y) || lt{L}(x,y); 
 
   predicate sorted{L}(X *a, integer l, integer h) =
-    \forall integer i; l <= i < h ==> leq{L}(\at(a[i],L),\at(a[i+1],L));
+    \forall integer i,j; l <= i <= j <= h ==> 
+         leq{L}(\at(a[i],L),\at(a[j],L));
 
 }
 
@@ -60,22 +61,26 @@ theory ComparatorTheory<X> {
 
 #include <stdlib.h>
 
-/*@ requires size == sizeof(X);
-  @ ensures Permut{Old,Here}(base,0,nmemb-1); 
+/*@ contract int Comparable<X>< th instantiating ComparatorTheory<X> > 
+                  (const X *x, const X *y) =
+     ensures (th.lt(x,y) <==> \result < 0) &&
+             (th.eq(x,y) <==> \result == 0) &&
+             (th.lt(y,x) <==> \result > 0);    
+
+ */ 
+
+/*@ parameter type X;
+  @ parameter ComparatorTheory<X> th;
+  @ requires size == sizeof(X);
+  @ requires compar implements Comparable<X><th> 
+  @ ensures Permut{Old,Here}((X*)base,0,nmemb-1); 
   @ ensures th.sorted(base,0,nmemb-1); 
   @*/
 void qsort
-  /*@ <X> < th instantiating ComparatorTheory<X> > */ 
-  (void* base /* as X* */, 
+  (void* base, 
    size_t nmemb, 
    size_t size,
    int(*compar)(const void *, const void *)
-   /* as
-      int(*compar)(const X *x, const Y *y);
-        ensures (th.lt(x,y) <==> \result < 0) &&
-           (th.eq(x,y) <==> \result == 0) &&
-              (th.lt(y,x) <==> \result > 0);    
-   */
    );
 
 
@@ -103,7 +108,8 @@ int compare_by_year(const struct date *x, const struct date *y) {
 }
 
 
-int compare_for_qsort(const void *x, const void *y) {
+int compare_for_qsort(const void *x /* as struct date* */, 
+		      const void *y /* as struct date* */) {
   return compare_by_year((struct date *)x,(struct date *)y);
 }
 

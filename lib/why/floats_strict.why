@@ -136,6 +136,12 @@ parameter single_of_real_safe : m:mode -> x:real ->
   single
   { no_overflow_single(m,x) and
     single_of_real_post(m,x,result) }
+parameter single_of_real_exact : x:real ->
+  { }
+  single
+  { single_value(result) = x and
+    single_exact(result) = x and
+    single_model(result) = x }
 
 parameter add_single : m:mode -> x:single -> y:single -> 
   { no_overflow_single(m,single_value(x) + single_value(y)) }
@@ -209,6 +215,12 @@ parameter double_of_real_safe : m:mode -> x:real ->
   double
   { no_overflow_double(m,x) and
     double_of_real_post(m,x,result) }
+parameter double_of_real_exact : x:real ->
+  { }
+  double
+  { double_value(result) = x and
+    double_exact(result) = x and
+    double_model(result) = x }
 
 parameter add_double : m:mode -> x:double -> y:double -> 
   { no_overflow_double(m,double_value(x) + double_value(y)) }

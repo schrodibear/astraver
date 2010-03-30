@@ -26,14 +26,18 @@ inductive Permut{L1,L2}<X>(X *a, integer l, integer h){
 #include <stdlib.h>
 
 /*@ requires size == sizeof(X);
-  @ ensures Permut{Old,Here}(base,0,nmemb-1); 
+  @ ensures Permut{Old,Here}<X>(base,0,nmemb-1); 
   @*/
 void qsort
   /*@ <X> */ 
-  (void* base /* as X* */, 
+(void *base , 
    size_t nmemb, 
    size_t size,
    int(*compar)(const void *, const void *));
+
+
+
+
 
 
 
