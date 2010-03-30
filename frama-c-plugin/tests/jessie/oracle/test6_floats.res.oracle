@@ -485,12 +485,12 @@ let comput_seq_ensures_default =
                             (loop_2:
                             while true do
                             { invariant
-                                (JC_43:
-                                ((JC_38: le_int((2), integer_of_int32(i)))
-                                and ((JC_39:
+                                (JC_42:
+                                ((JC_37: le_int((2), integer_of_int32(i)))
+                                and ((JC_38:
                                      le_int(integer_of_int32(i),
                                      add_int(integer_of_int32(N), (1))))
-                                    and ((JC_40:
+                                    and ((JC_39:
                                          eq_real(double_exact(ucur),
                                          add_real(double_value(u0),
                                          mul_real(real_of_int(sub_int(
@@ -498,7 +498,7 @@ let comput_seq_ensures_default =
                                                               (1))),
                                          sub_real(double_value(u1),
                                          double_value(u0))))))
-                                        and ((JC_41:
+                                        and ((JC_40:
                                              eq_real(double_exact(uprev),
                                              add_real(double_value(u0),
                                              mul_real(real_of_int(sub_int(
@@ -506,7 +506,7 @@ let comput_seq_ensures_default =
                                                                   (2))),
                                              sub_real(double_value(u1),
                                              double_value(u0))))))
-                                            and (JC_42:
+                                            and (JC_41:
                                                 my_killing_prop(ucur, uprev,
                                                 sub_int(integer_of_int32(i),
                                                 (2)))))))))
@@ -534,14 +534,14 @@ let comput_seq_ensures_default =
                                                                     (let jessie_32 = 
                                                                     (tmp := 
                                                                     (C_15:
-                                                                    (JC_47:
+                                                                    (JC_46:
                                                                     (((mul_double_safe nearest_even) 
                                                                     (C_14:
-                                                                    ((double_of_real_safe nearest_even) 2.0))) !ucur)))) in
+                                                                    (double_of_real_exact 2.0))) !ucur)))) in
                                                                     void);
                                                                     (assert
                                                                     { 
-                                                                    (JC_48:
+                                                                    (JC_47:
                                                                     eq_real(
                                                                     double_value(tmp),
                                                                     mul_real(2.0,
@@ -554,7 +554,7 @@ let comput_seq_ensures_default =
                                                                     (let jessie_34 = 
                                                                     (tmp := 
                                                                     (C_18:
-                                                                    (JC_49:
+                                                                    (JC_48:
                                                                     (((sub_double_safe nearest_even) !tmp) !uprev)))) in
                                                                     void);
                                                                     (C_20:
@@ -662,7 +662,7 @@ let comput_seq_safety =
                             (loop_1:
                             while true do
                             { invariant (JC_30: true)
-                              variant (JC_37 : sub_int(integer_of_int32(N),
+                              variant (JC_36 : sub_int(integer_of_int32(N),
                                                integer_of_int32(i))) }
                              begin
                                [ { } unit reads i,ucur,uprev
@@ -713,16 +713,15 @@ let comput_seq_safety =
                                                                     (let jessie_12 = 
                                                                     (tmp := 
                                                                     (C_15:
-                                                                    (JC_33:
+                                                                    (JC_32:
                                                                     (((mul_double nearest_even) 
                                                                     (C_14:
-                                                                    (JC_32:
-                                                                    ((double_of_real nearest_even) 2.0)))) !ucur)))) in
+                                                                    (double_of_real_exact 2.0))) !ucur)))) in
                                                                     void);
                                                                     [ 
                                                                     { } unit
                                                                     reads tmp,ucur
-                                                                    { (JC_34:
+                                                                    { (JC_33:
                                                                     eq_real(
                                                                     double_value(tmp),
                                                                     mul_real(2.0,
@@ -734,7 +733,7 @@ let comput_seq_safety =
                                                                     (let jessie_14 = 
                                                                     (tmp := 
                                                                     (C_18:
-                                                                    (JC_35:
+                                                                    (JC_34:
                                                                     (((sub_double nearest_even) !tmp) !uprev)))) in
                                                                     void);
                                                                     (C_20:
@@ -754,7 +753,7 @@ let comput_seq_safety =
                                                                       
                                                                     (i := 
                                                                     (C_23:
-                                                                    (JC_36:
+                                                                    (JC_35:
                                                                     (int32_of_integer_ 
                                                                     (C_22:
                                                                     ((add_int 
@@ -808,14 +807,14 @@ why --project [...] why/test6_floats.why
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test6_floats_po15.why">
-      <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "26" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "28" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test6_floats_po16.why">
-      <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "28" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "25" begin = "2" end = "5"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/test6_floats_po17.why">
       <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "25" begin = "2" end = "5"/>
@@ -823,15 +822,10 @@ text = "FPOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/test6_floats_po18.why">
-      <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "25" begin = "2" end = "5"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/test6_floats_po19.why">
       <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "23" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/test6_floats_po20.why">
+    <goal why_file="why/test6_floats_po19.why">
       <location file = "PPCHOME/tests/jessie/test6_floats.c" line = "23" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
     </goal>
@@ -1050,9 +1044,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1064,24 +1055,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

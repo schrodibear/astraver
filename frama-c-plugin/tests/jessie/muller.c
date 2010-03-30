@@ -1,8 +1,8 @@
 #pragma SeparationPolicy(Regions)
 
 /*@ axiomatic NumOfPos {
-  @  logic integer num_of_pos{Here}(integer i,integer j,int *t);
-  @    // reads t[i];
+  @  logic integer num_of_pos{Here}(integer i,integer j,int *t)
+  @    reads t[i];
   @  axiom num_of_pos_empty{Here} :
   @    \forall integer i, integer j, int *t;
   @       i > j ==> num_of_pos(i,j,t) == 0;

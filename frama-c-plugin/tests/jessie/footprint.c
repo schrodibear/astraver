@@ -1,8 +1,7 @@
 
 /*@ axiomatic P { 
-  @  predicate p{L}(int *x);
-  @   // reads *x;
-  @ axiom p_footprint{L} : \forall int* x; p(x) && *x ==> p(x) && *x;
+  @  predicate p{L}(int *x) reads *x;
+  @  axiom p_footprint{L} : \forall int* x; p(x) && *x ==> p(x) && *x;
   @ }
   @*/
 

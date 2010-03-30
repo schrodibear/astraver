@@ -261,93 +261,6 @@ predicate left_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-logic sumone: int,
- int_P pointer,
- int_P pointer,
- int,
- int_P pointer,
- int_P pointer,
- int,
- (int_P, int32) memory,
- (int_P, int32) memory -> prop
-
-axiom no_assign_sumone_0 :
- (forall tmp:int_P pset.
-  (forall tmpmem:(int_P, int32) memory.
-   (forall tmpalloc:int_P alloc_table.
-    (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-     (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-      (forall n:int.
-       (forall b2:int_P pointer.
-        (forall a2:int_P pointer.
-         (forall k2:int.
-          (forall b1:int_P pointer.
-           (forall a1:int_P pointer.
-            (forall k1:int.
-             ((pset_disjoint(tmp, pset_empty)
-              and not_assigns(tmpalloc, int_P_int_M_a1_1_at_L2, tmpmem, tmp)) ->
-              (sumone(k1, a1, b1, k2, a2, b2, n, int_P_int_M_a1_1_at_L2,
-               int_P_int_M_a1_1_at_L1)
-              <-> sumone(k1, a1, b1, k2, a2, b2, n, tmpmem,
-                  int_P_int_M_a1_1_at_L1)))))))))))))))
-
-axiom no_assign_sumone_1 :
- (forall tmp:int_P pset.
-  (forall tmpmem:(int_P, int32) memory.
-   (forall tmpalloc:int_P alloc_table.
-    (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-     (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-      (forall n:int.
-       (forall b2:int_P pointer.
-        (forall a2:int_P pointer.
-         (forall k2:int.
-          (forall b1:int_P pointer.
-           (forall a1:int_P pointer.
-            (forall k1:int.
-             ((pset_disjoint(tmp, pset_empty)
-              and not_assigns(tmpalloc, int_P_int_M_a1_1_at_L1, tmpmem, tmp)) ->
-              (sumone(k1, a1, b1, k2, a2, b2, n, int_P_int_M_a1_1_at_L2,
-               int_P_int_M_a1_1_at_L1)
-              <-> sumone(k1, a1, b1, k2, a2, b2, n, int_P_int_M_a1_1_at_L2,
-                  tmpmem)))))))))))))))
-
-axiom no_update_sumone_0 :
- (forall tmp:int_P pointer.
-  (forall tmpval:int32.
-   (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-    (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-     (forall n:int.
-      (forall b2:int_P pointer.
-       (forall a2:int_P pointer.
-        (forall k2:int.
-         (forall b1:int_P pointer.
-          (forall a1:int_P pointer.
-           (forall k1:int.
-            ((not in_pset(tmp, pset_empty)) ->
-             (sumone(k1, a1, b1, k2, a2, b2, n, int_P_int_M_a1_1_at_L2,
-              int_P_int_M_a1_1_at_L1)
-             <-> sumone(k1, a1, b1, k2, a2, b2, n,
-                 store(int_P_int_M_a1_1_at_L2, tmp, tmpval),
-                 int_P_int_M_a1_1_at_L1))))))))))))))
-
-axiom no_update_sumone_1 :
- (forall tmp:int_P pointer.
-  (forall tmpval:int32.
-   (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-    (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-     (forall n:int.
-      (forall b2:int_P pointer.
-       (forall a2:int_P pointer.
-        (forall k2:int.
-         (forall b1:int_P pointer.
-          (forall a1:int_P pointer.
-           (forall k1:int.
-            ((not in_pset(tmp, pset_empty)) ->
-             (sumone(k1, a1, b1, k2, a2, b2, n, int_P_int_M_a1_1_at_L2,
-              int_P_int_M_a1_1_at_L1)
-             <-> sumone(k1, a1, b1, k2, a2, b2, n, int_P_int_M_a1_1_at_L2,
-                 store(int_P_int_M_a1_1_at_L1, tmp, tmpval)))))))))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -415,6 +328,16 @@ predicate strict_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
+
+logic sumone: int,
+ int_P pointer,
+ int_P pointer,
+ int,
+ int_P pointer,
+ int_P pointer,
+ int,
+ (int_P, int32) memory,
+ (int_P, int32) memory -> prop
 
 axiom sumone_end :
  (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
@@ -1292,11 +1215,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vieira1_po29.why">
-      <location file = "why/vieira1.why" line = "960" begin = "63" end = "64"/>
+      <location file = "why/vieira1.why" line = "883" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vieira1_po30.why">
-      <location file = "why/vieira1.why" line = "960" begin = "63" end = "64"/>
+      <location file = "why/vieira1.why" line = "883" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1510,9 +1433,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1524,24 +1444,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -2248,89 +2150,6 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-logic sumone : int, int_P pointer, int_P pointer, int, int_P pointer,
-int_P pointer, int, (int_P, int32) memory, (int_P, int32) memory -> prop
-
-axiom no_assign_sumone_0:
-  (forall tmp:int_P pset.
-    (forall tmpmem:(int_P, int32) memory.
-      (forall tmpalloc:int_P alloc_table.
-        (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-          (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-            (forall n:int.
-              (forall b2:int_P pointer.
-                (forall a2:int_P pointer.
-                  (forall k2:int.
-                    (forall b1:int_P pointer.
-                      (forall a1:int_P pointer.
-                        (forall k1:int.
-                          ((pset_disjoint(tmp, pset_empty) and
-                            not_assigns(tmpalloc, int_P_int_M_a1_1_at_L2,
-                            tmpmem, tmp)) ->
-                           (sumone(k1, a1, b1, k2, a2, b2, n,
-                            int_P_int_M_a1_1_at_L2,
-                            int_P_int_M_a1_1_at_L1) <-> sumone(k1, a1, b1,
-                            k2, a2, b2, n, tmpmem, int_P_int_M_a1_1_at_L1)))))))))))))))
-
-axiom no_assign_sumone_1:
-  (forall tmp:int_P pset.
-    (forall tmpmem:(int_P, int32) memory.
-      (forall tmpalloc:int_P alloc_table.
-        (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-          (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-            (forall n:int.
-              (forall b2:int_P pointer.
-                (forall a2:int_P pointer.
-                  (forall k2:int.
-                    (forall b1:int_P pointer.
-                      (forall a1:int_P pointer.
-                        (forall k1:int.
-                          ((pset_disjoint(tmp, pset_empty) and
-                            not_assigns(tmpalloc, int_P_int_M_a1_1_at_L1,
-                            tmpmem, tmp)) ->
-                           (sumone(k1, a1, b1, k2, a2, b2, n,
-                            int_P_int_M_a1_1_at_L2,
-                            int_P_int_M_a1_1_at_L1) <-> sumone(k1, a1, b1,
-                            k2, a2, b2, n, int_P_int_M_a1_1_at_L2, tmpmem)))))))))))))))
-
-axiom no_update_sumone_0:
-  (forall tmp:int_P pointer.
-    (forall tmpval:int32.
-      (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-        (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-          (forall n:int.
-            (forall b2:int_P pointer.
-              (forall a2:int_P pointer.
-                (forall k2:int.
-                  (forall b1:int_P pointer.
-                    (forall a1:int_P pointer.
-                      (forall k1:int.
-                        ((not in_pset(tmp, pset_empty)) ->
-                         (sumone(k1, a1, b1, k2, a2, b2, n,
-                          int_P_int_M_a1_1_at_L2, int_P_int_M_a1_1_at_L1) <->
-                          sumone(k1, a1, b1, k2, a2, b2, n,
-                          store(int_P_int_M_a1_1_at_L2, tmp, tmpval),
-                          int_P_int_M_a1_1_at_L1))))))))))))))
-
-axiom no_update_sumone_1:
-  (forall tmp:int_P pointer.
-    (forall tmpval:int32.
-      (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-        (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-          (forall n:int.
-            (forall b2:int_P pointer.
-              (forall a2:int_P pointer.
-                (forall k2:int.
-                  (forall b1:int_P pointer.
-                    (forall a1:int_P pointer.
-                      (forall k1:int.
-                        ((not in_pset(tmp, pset_empty)) ->
-                         (sumone(k1, a1, b1, k2, a2, b2, n,
-                          int_P_int_M_a1_1_at_L2, int_P_int_M_a1_1_at_L1) <->
-                          sumone(k1, a1, b1, k2, a2, b2, n,
-                          int_P_int_M_a1_1_at_L2,
-                          store(int_P_int_M_a1_1_at_L1, tmp, tmpval)))))))))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -2385,6 +2204,9 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
+
+logic sumone : int, int_P pointer, int_P pointer, int, int_P pointer,
+int_P pointer, int, (int_P, int32) memory, (int_P, int32) memory -> prop
 
 axiom sumone_end:
   (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.

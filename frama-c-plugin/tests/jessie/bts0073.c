@@ -1,6 +1,10 @@
 /* Frama-C BTS 0073
 
-Status: closed
+File "jc/jc_separation.ml", line 96, characters 28-28:
+Uncaught exception: File "jc/jc_separation.ml", line 96, characters 28-34: Assertion failed
+
+
+Status: reopened
 
 
 */
@@ -24,6 +28,6 @@ axiomatic myaxioms{
 
 /* 
 Local Variables:
-compile-command: "LC_ALL=C frama-c -jessie bts0073.c"
+compile-command: "make bts0073"
 End:
 */

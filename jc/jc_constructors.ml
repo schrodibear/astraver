@@ -406,7 +406,7 @@ module PDecl = struct
   let mklogic_def ?typ ~name ?(poly_args = []) ?(labels = []) ?(params = []) 
       ?reads ?body ?inductive = 
     let roe = match reads, body, inductive with
-      | None, None, None -> JCreads []
+      | None, None, None -> JCnone
       | Some r, None, None -> JCreads r
       | None, Some b, None -> JCexpr b
       | None, None, Some l -> JCinductive l 

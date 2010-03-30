@@ -34,7 +34,8 @@ type void_P = [void_P]
 
 axiomatic Sum {
 
-  logic integer sum{L}(int_P[..] t, integer i, integer j)
+  logic integer sum{L}(int_P[..] t, integer i, integer j) reads i, j, t,
+  (t + [..]).int_M;
    
   axiom sum1{L} :
   (\forall int_P[..] t_0;
@@ -211,7 +212,7 @@ axiom no_assign_sum_0 :
      (forall j:int.
       (forall i:int.
        (forall t:int_P pointer.
-        ((pset_disjoint(tmp, pset_empty)
+        ((pset_disjoint(tmp, pset_all(pset_singleton(t)))
          and not_assigns(tmpalloc, int_P_int_M_t_1_at_L, tmpmem, tmp)) ->
          (sum(t, i, j, int_P_int_M_t_1_at_L) = sum(t, i, j, tmpmem))))))))))
 
@@ -222,7 +223,7 @@ axiom no_update_sum_0 :
     (forall j:int.
      (forall i:int.
       (forall t:int_P pointer.
-       ((not in_pset(tmp, pset_empty)) ->
+       ((not in_pset(tmp, pset_all(pset_singleton(t)))) ->
         (sum(t, i, j, int_P_int_M_t_1_at_L) = sum(t, i, j,
                                               store(int_P_int_M_t_1_at_L,
                                               tmp, tmpval))))))))))
@@ -995,12 +996,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po24.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "116" begin = "24" end = "432"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "117" begin = "24" end = "432"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po25.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "116" begin = "24" end = "432"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "117" begin = "24" end = "432"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1027,7 +1028,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum2_po15.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "105" begin = "9" end = "984"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "106" begin = "9" end = "984"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum2_po16.why">
@@ -1043,7 +1044,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum2_po19.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "105" begin = "9" end = "984"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "106" begin = "9" end = "984"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum2_po20.why">
@@ -1268,9 +1269,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1282,24 +1280,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -1979,8 +1959,8 @@ axiom no_assign_sum_0:
           (forall j:int.
             (forall i:int.
               (forall t:int_P pointer.
-                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                  int_P_int_M_t_1_at_L, tmpmem, tmp)) ->
+                ((pset_disjoint(tmp, pset_all(pset_singleton(t))) and
+                  not_assigns(tmpalloc, int_P_int_M_t_1_at_L, tmpmem, tmp)) ->
                  (sum(t, i, j, int_P_int_M_t_1_at_L) = sum(t, i, j, tmpmem))))))))))
 
 axiom no_update_sum_0:
@@ -1990,8 +1970,8 @@ axiom no_update_sum_0:
         (forall j:int.
           (forall i:int.
             (forall t:int_P pointer.
-              ((not in_pset(tmp, pset_empty)) -> (sum(t, i, j,
-               int_P_int_M_t_1_at_L) = sum(t, i, j,
+              ((not in_pset(tmp, pset_all(pset_singleton(t)))) -> (sum(t, i,
+               j, int_P_int_M_t_1_at_L) = sum(t, i, j,
                store(int_P_int_M_t_1_at_L, tmp, tmpval))))))))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:

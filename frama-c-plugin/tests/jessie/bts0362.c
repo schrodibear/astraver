@@ -1,3 +1,12 @@
+/* Frama-C BTS 0362
+
+read effects were computed wrong
+
+Status: Closed 
+
+
+*/
+
 /*@ axiomatic s_axioms {
     // compute the sum a[0]+...+a[i]:
     logic integer s{L}(int* a,integer i);
@@ -17,3 +26,11 @@ M:
     //@ assert \forall int *c; s{Here}(c,8) == s{M}(c,8);
     //@ assert                 s{Here}(b,8) == s{M}(b,8);
 }
+
+
+/*
+Local Variables:
+compile-command: "make bts0362"
+End:
+*/
+

@@ -19,8 +19,8 @@ struct Proc *pid2pcb(unsigned int);
 struct Proc *ready_list;
 
 /*@ axiomatic ListLength {
-  @  logic int list_length{State}(struct Proc *p);
-  @      // reads p->next, p->next->next;
+  @  logic int list_length{State}(struct Proc *p)
+  @      reads p->next, p->next->next;
   @
   @  axiom list_length_zero{State}:
   @   \forall struct Proc *p; list_length(p) == 0 <==> p == NULL;
@@ -36,8 +36,8 @@ struct Proc *ready_list;
   @*/
 
 /*@ axiomatic Reachable {
-  @   predicate reachable{State}(struct Proc *p, struct Proc *q);
-  @        // reads p->next;
+  @   predicate reachable{State}(struct Proc *p, struct Proc *q)
+  @        reads p->next;
   @   axiom reachable_def{State}:
   @    \forall struct Proc *p, *q; reachable(p,q) ==> 
   @     p == q || reachable(p->next,q);

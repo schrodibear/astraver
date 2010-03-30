@@ -803,6 +803,8 @@ and
 
 (* in double *)
 
+(* Parameters in double precision *)
+
 parameter double_of_real : m:mode -> x:real ->
 { }
 double
@@ -815,6 +817,27 @@ double
   and double_exact(result) = x	
   and double_model(result) = x
 }
+
+(*
+parameter double_of_real : m:mode -> x:real ->
+  { no_overflow_double(m,x) }
+  double
+  { double_of_real_post(m,x,result) }
+parameter double_of_real_safe : m:mode -> x:real ->
+  { }
+  double
+  { no_overflow_double(m,x) and
+    double_of_real_post(m,x,result) }
+*)
+
+parameter double_of_real_exact : x:real ->
+  { }
+  double
+  { double_is_finite(result) and
+    double_value(result) = x and
+    double_exact(result) = x and
+    double_model(result) = x }
+
 
 
 

@@ -358,18 +358,16 @@ let f_ensures_default =
      (let y = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_16 = (x_0 := ((single_of_real_safe nearest_even) 1.0)) in
-       void);
+       (let jessie_16 = (x_0 := (single_of_real_exact 1.0)) in void);
       (C_2:
       begin
-        (let jessie_18 = (y := ((single_of_real_safe nearest_even) 0.0)) in
-        void);
+        (let jessie_18 = (y := (single_of_real_exact 0.0)) in void);
        try
         (let jessie_25 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               (JC_21:
+                               (JC_18:
                                (lt_real(single_value(y), 0x2.0p24) ->
                                 eq_real(sub_real(single_value(x_0),
                                         single_value(y)),
@@ -400,9 +398,9 @@ let f_ensures_default =
                                                                       
                                                                     (x_0 := 
                                                                     (C_6:
-                                                                    (JC_25:
+                                                                    (JC_22:
                                                                     (((add_single_safe nearest_even) !x_0) 
-                                                                    ((single_of_real_safe nearest_even) 1.0)))));
+                                                                    (single_of_real_exact 1.0)))));
                                                                     !x_0
                                                                     end)
                                                                    end)
@@ -425,9 +423,9 @@ let f_ensures_default =
         Goto_while_0_break_exc jessie_1 ->
         (while_0_break: void) end;
        (assert
-       { (JC_28:
-         ((JC_26: eq_real(single_value(x_0), single_value(y)))
-         and (JC_27: eq_real(single_value(y), 0x2.0p24)))) };
+       { (JC_25:
+         ((JC_23: eq_real(single_value(x_0), single_value(y)))
+         and (JC_24: eq_real(single_value(y), 0x2.0p24)))) };
        void);
        void;
        (raise Return)
@@ -450,22 +448,20 @@ let f_safety =
      (let y = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_5 = (x_0 := (JC_9: ((single_of_real nearest_even) 1.0))) in
-       void);
+       (let jessie_5 = (x_0 := (single_of_real_exact 1.0)) in void);
       (C_2:
       begin
-        (let jessie_7 = (y := (JC_10: ((single_of_real nearest_even) 0.0))) in
-        void);
+        (let jessie_7 = (y := (single_of_real_exact 0.0)) in void);
        try
         (let jessie_14 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_13: true)
-                             variant (JC_17 : sub_int((16777216),
+                           { invariant (JC_11: true)
+                             variant (JC_14 : sub_int((16777216),
                                               truncate(single_value(y)))) }
                             begin
                               [ { } unit reads x_0,y
-                                { (JC_11:
+                                { (JC_9:
                                   (lt_real(single_value(y), 0x2.0p24) ->
                                    eq_real(sub_real(single_value(x_0),
                                            single_value(y)),
@@ -493,10 +489,9 @@ let f_safety =
                                                                       
                                                                     (x_0 := 
                                                                     (C_6:
-                                                                    (JC_16:
+                                                                    (JC_13:
                                                                     (((add_single nearest_even) !x_0) 
-                                                                    (JC_15:
-                                                                    ((single_of_real nearest_even) 1.0))))));
+                                                                    (single_of_real_exact 1.0)))));
                                                                     !x_0
                                                                     end)
                                                                    end)
@@ -519,9 +514,9 @@ let f_safety =
         Goto_while_0_break_exc jessie_1 ->
         (while_0_break: void) end;
        [ { } unit reads x_0,y
-         { (JC_20:
-           ((JC_18: eq_real(single_value(x_0), single_value(y)))
-           and (JC_19: eq_real(single_value(y), 0x2.0p24)))) } ];
+         { (JC_17:
+           ((JC_15: eq_real(single_value(x_0), single_value(y)))
+           and (JC_16: eq_real(single_value(y), 0x2.0p24)))) } ];
        void;
        (raise Return)
       end)
@@ -541,30 +536,15 @@ why --project [...] why/test5_floats.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test5_floats_po5.why">
-      <location file = "PPCHOME/tests/jessie/test5_floats.jessie/test5_floats.jc" line = "40" begin = "18" end = "32"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test5_floats_po6.why">
-      <location file = "PPCHOME/tests/jessie/test5_floats.jessie/test5_floats.jc" line = "41" begin = "18" end = "32"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test5_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test5_floats.jessie/test5_floats.jc" line = "60" begin = "39" end = "53"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test5_floats_po8.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "16" begin = "26" end = "27"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test5_floats_po9.why">
+    <goal why_file="why/test5_floats_po6.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "14" begin = "19" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/test5_floats_po10.why">
+    <goal why_file="why/test5_floats_po7.why">
       <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "14" begin = "19" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
@@ -747,9 +727,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -761,24 +738,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

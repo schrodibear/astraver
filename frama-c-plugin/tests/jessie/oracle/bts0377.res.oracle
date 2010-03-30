@@ -546,14 +546,14 @@ let f_ensures_default =
      (C_2:
      begin
        (let jessie_604 = (t := (C_1:
-                               (JC_212:
+                               (JC_162:
                                (((alloc_struct_float_P (100)) float_P_t_1_alloc_table) float_P_t_1_tag_table)))) in
        void);
       (C_5:
       begin
         (let jessie_610 = (let jessie_606 = (C_3:
                                             ((double_to_single nearest_even) 
-                                             ((double_of_real_safe nearest_even) 0.))) in
+                                             (double_of_real_exact 0.))) in
                           (let jessie_609 = ((shift !t) (0)) in
                           (((safe_upd_ float_P_float_M_t_1) jessie_609) jessie_606))) in
         void);
@@ -561,7 +561,7 @@ let f_ensures_default =
        begin
          (let jessie_616 = (let jessie_612 = (C_6:
                                              ((double_to_single nearest_even) 
-                                              ((double_of_real_safe nearest_even) 1.))) in
+                                              (double_of_real_exact 1.))) in
                            (let jessie_615 = ((shift !t) (1)) in
                            (((safe_upd_ float_P_float_M_t_1) jessie_615) jessie_612))) in
          void);
@@ -569,7 +569,7 @@ let f_ensures_default =
         begin
           (let jessie_622 = (let jessie_618 = (C_9:
                                               ((double_to_single nearest_even) 
-                                               ((double_of_real_safe nearest_even) 2.))) in
+                                               (double_of_real_exact 2.))) in
                             (let jessie_621 = ((shift !t) (2)) in
                             (((safe_upd_ float_P_float_M_t_1) jessie_621) jessie_618))) in
           void);
@@ -577,7 +577,7 @@ let f_ensures_default =
          begin
            (let jessie_628 = (let jessie_624 = (C_12:
                                                ((double_to_single nearest_even) 
-                                                ((double_of_real_safe nearest_even) 3.))) in
+                                                (double_of_real_exact 3.))) in
                              (let jessie_627 = ((shift !t) (3)) in
                              (((safe_upd_ float_P_float_M_t_1) jessie_627) jessie_624))) in
            void);
@@ -585,7 +585,7 @@ let f_ensures_default =
           begin
             (let jessie_634 = (let jessie_630 = (C_15:
                                                 ((double_to_single nearest_even) 
-                                                 ((double_of_real_safe nearest_even) 4.))) in
+                                                 (double_of_real_exact 4.))) in
                               (let jessie_633 = ((shift !t) (4)) in
                               (((safe_upd_ float_P_float_M_t_1) jessie_633) jessie_630))) in
             void);
@@ -633,7 +633,7 @@ let f_ensures_default =
                 begin
                   (let jessie_670 = (let jessie_666 = (C_33:
                                                       ((double_to_single nearest_even) 
-                                                       ((double_of_real_safe nearest_even) 0.))) in
+                                                       (double_of_real_exact 0.))) in
                                     (let jessie_669 = ((shift !t) (10)) in
                                     (((safe_upd_ float_P_float_M_t_1) jessie_669) jessie_666))) in
                   void);
@@ -641,7 +641,7 @@ let f_ensures_default =
                  begin
                    (let jessie_676 = (let jessie_672 = (C_36:
                                                        ((double_to_single nearest_even) 
-                                                        ((double_of_real_safe nearest_even) 1.))) in
+                                                        (double_of_real_exact 1.))) in
                                      (let jessie_675 = ((shift !t) (11)) in
                                      (((safe_upd_ float_P_float_M_t_1) jessie_675) jessie_672))) in
                    void);
@@ -649,7 +649,7 @@ let f_ensures_default =
                   begin
                     (let jessie_682 = (let jessie_678 = (C_39:
                                                         ((double_to_single nearest_even) 
-                                                         ((double_of_real_safe nearest_even) 2.))) in
+                                                         (double_of_real_exact 2.))) in
                                       (let jessie_681 = ((shift !t) (12)) in
                                       (((safe_upd_ float_P_float_M_t_1) jessie_681) jessie_678))) in
                     void);
@@ -657,7 +657,7 @@ let f_ensures_default =
                    begin
                      (let jessie_688 = (let jessie_684 = (C_42:
                                                          ((double_to_single nearest_even) 
-                                                          ((double_of_real_safe nearest_even) 3.))) in
+                                                          (double_of_real_exact 3.))) in
                                        (let jessie_687 = ((shift !t) (13)) in
                                        (((safe_upd_ float_P_float_M_t_1) jessie_687) jessie_684))) in
                      void);
@@ -665,7 +665,7 @@ let f_ensures_default =
                     begin
                       (let jessie_694 = (let jessie_690 = (C_45:
                                                           ((double_to_single nearest_even) 
-                                                           ((double_of_real_safe nearest_even) 4.))) in
+                                                           (double_of_real_exact 4.))) in
                                         (let jessie_693 = ((shift !t) (14)) in
                                         (((safe_upd_ float_P_float_M_t_1) jessie_693) jessie_690))) in
                       void);
@@ -713,7 +713,7 @@ let f_ensures_default =
                           begin
                             (let jessie_730 = (let jessie_726 = (C_63:
                                                                 ((double_to_single nearest_even) 
-                                                                 ((double_of_real_safe nearest_even) 0.))) in
+                                                                 (double_of_real_exact 0.))) in
                                               (let jessie_729 = ((shift !t) (20)) in
                                               (((safe_upd_ float_P_float_M_t_1) jessie_729) jessie_726))) in
                             void);
@@ -721,7 +721,7 @@ let f_ensures_default =
                            begin
                              (let jessie_736 = (let jessie_732 = (C_66:
                                                                  ((double_to_single nearest_even) 
-                                                                  ((double_of_real_safe nearest_even) 1.))) in
+                                                                  (double_of_real_exact 1.))) in
                                                (let jessie_735 = ((shift !t) (21)) in
                                                (((safe_upd_ float_P_float_M_t_1) jessie_735) jessie_732))) in
                              void);
@@ -729,7 +729,7 @@ let f_ensures_default =
                             begin
                               (let jessie_742 = (let jessie_738 = (C_69:
                                                                   ((double_to_single nearest_even) 
-                                                                   ((double_of_real_safe nearest_even) 2.))) in
+                                                                   (double_of_real_exact 2.))) in
                                                 (let jessie_741 = ((shift !t) (22)) in
                                                 (((safe_upd_ float_P_float_M_t_1) jessie_741) jessie_738))) in
                               void);
@@ -737,7 +737,7 @@ let f_ensures_default =
                              begin
                                (let jessie_748 = (let jessie_744 = (C_72:
                                                                    ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 3.))) in
+                                                                    (double_of_real_exact 3.))) in
                                                  (let jessie_747 = ((shift !t) (23)) in
                                                  (((safe_upd_ float_P_float_M_t_1) jessie_747) jessie_744))) in
                                void);
@@ -745,7 +745,7 @@ let f_ensures_default =
                               begin
                                 (let jessie_754 = (let jessie_750 = (C_75:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 4.))) in
+                                                                    (double_of_real_exact 4.))) in
                                                   (let jessie_753 = ((shift !t) (24)) in
                                                   (((safe_upd_ float_P_float_M_t_1) jessie_753) jessie_750))) in
                                 void);
@@ -804,7 +804,7 @@ let f_ensures_default =
                                       (let jessie_790 = (let jessie_786 = 
                                                         (C_93:
                                                         ((double_to_single nearest_even) 
-                                                         ((double_of_real_safe nearest_even) 0.))) in
+                                                         (double_of_real_exact 0.))) in
                                                         (let jessie_789 = 
                                                         ((shift !t) (30)) in
                                                         (((safe_upd_ float_P_float_M_t_1) jessie_789) jessie_786))) in
@@ -814,7 +814,7 @@ let f_ensures_default =
                                        (let jessie_796 = (let jessie_792 = 
                                                          (C_96:
                                                          ((double_to_single nearest_even) 
-                                                          ((double_of_real_safe nearest_even) 1.))) in
+                                                          (double_of_real_exact 1.))) in
                                                          (let jessie_795 = 
                                                          ((shift !t) (31)) in
                                                          (((safe_upd_ float_P_float_M_t_1) jessie_795) jessie_792))) in
@@ -824,7 +824,7 @@ let f_ensures_default =
                                         (let jessie_802 = (let jessie_798 = 
                                                           (C_99:
                                                           ((double_to_single nearest_even) 
-                                                           ((double_of_real_safe nearest_even) 2.))) in
+                                                           (double_of_real_exact 2.))) in
                                                           (let jessie_801 = 
                                                           ((shift !t) (32)) in
                                                           (((safe_upd_ float_P_float_M_t_1) jessie_801) jessie_798))) in
@@ -834,7 +834,7 @@ let f_ensures_default =
                                          (let jessie_808 = (let jessie_804 = 
                                                            (C_102:
                                                            ((double_to_single nearest_even) 
-                                                            ((double_of_real_safe nearest_even) 3.))) in
+                                                            (double_of_real_exact 3.))) in
                                                            (let jessie_807 = 
                                                            ((shift !t) (33)) in
                                                            (((safe_upd_ float_P_float_M_t_1) jessie_807) jessie_804))) in
@@ -844,7 +844,7 @@ let f_ensures_default =
                                           (let jessie_814 = (let jessie_810 = 
                                                             (C_105:
                                                             ((double_to_single nearest_even) 
-                                                             ((double_of_real_safe nearest_even) 4.))) in
+                                                             (double_of_real_exact 4.))) in
                                                             (let jessie_813 = 
                                                             ((shift !t) (34)) in
                                                             (((safe_upd_ float_P_float_M_t_1) jessie_813) jessie_810))) in
@@ -904,7 +904,7 @@ let f_ensures_default =
                                                 (let jessie_850 = (let jessie_846 = 
                                                                   (C_123:
                                                                   ((double_to_single nearest_even) 
-                                                                   ((double_of_real_safe nearest_even) 0.))) in
+                                                                   (double_of_real_exact 0.))) in
                                                                   (let jessie_849 = 
                                                                   ((shift !t) (40)) in
                                                                   (((safe_upd_ float_P_float_M_t_1) jessie_849) jessie_846))) in
@@ -914,7 +914,7 @@ let f_ensures_default =
                                                  (let jessie_856 = (let jessie_852 = 
                                                                    (C_126:
                                                                    ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 1.))) in
+                                                                    (double_of_real_exact 1.))) in
                                                                    (let jessie_855 = 
                                                                    ((shift !t) (41)) in
                                                                    (((safe_upd_ float_P_float_M_t_1) jessie_855) jessie_852))) in
@@ -924,7 +924,7 @@ let f_ensures_default =
                                                   (let jessie_862 = (let jessie_858 = 
                                                                     (C_129:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 2.))) in
+                                                                    (double_of_real_exact 2.))) in
                                                                     (let jessie_861 = 
                                                                     ((shift !t) (42)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_861) jessie_858))) in
@@ -935,7 +935,7 @@ let f_ensures_default =
                                                    (let jessie_864 = 
                                                    (C_132:
                                                    ((double_to_single nearest_even) 
-                                                    ((double_of_real_safe nearest_even) 3.))) in
+                                                    (double_of_real_exact 3.))) in
                                                    (let jessie_867 = 
                                                    ((shift !t) (43)) in
                                                    (((safe_upd_ float_P_float_M_t_1) jessie_867) jessie_864))) in
@@ -946,7 +946,7 @@ let f_ensures_default =
                                                     (let jessie_870 = 
                                                     (C_135:
                                                     ((double_to_single nearest_even) 
-                                                     ((double_of_real_safe nearest_even) 4.))) in
+                                                     (double_of_real_exact 4.))) in
                                                     (let jessie_873 = 
                                                     ((shift !t) (44)) in
                                                     (((safe_upd_ float_P_float_M_t_1) jessie_873) jessie_870))) in
@@ -1012,7 +1012,7 @@ let f_ensures_default =
                                                           (let jessie_906 = 
                                                           (C_153:
                                                           ((double_to_single nearest_even) 
-                                                           ((double_of_real_safe nearest_even) 0.))) in
+                                                           (double_of_real_exact 0.))) in
                                                           (let jessie_909 = 
                                                           ((shift !t) (50)) in
                                                           (((safe_upd_ float_P_float_M_t_1) jessie_909) jessie_906))) in
@@ -1023,7 +1023,7 @@ let f_ensures_default =
                                                            (let jessie_912 = 
                                                            (C_156:
                                                            ((double_to_single nearest_even) 
-                                                            ((double_of_real_safe nearest_even) 1.))) in
+                                                            (double_of_real_exact 1.))) in
                                                            (let jessie_915 = 
                                                            ((shift !t) (51)) in
                                                            (((safe_upd_ float_P_float_M_t_1) jessie_915) jessie_912))) in
@@ -1034,7 +1034,7 @@ let f_ensures_default =
                                                             (let jessie_918 = 
                                                             (C_159:
                                                             ((double_to_single nearest_even) 
-                                                             ((double_of_real_safe nearest_even) 2.))) in
+                                                             (double_of_real_exact 2.))) in
                                                             (let jessie_921 = 
                                                             ((shift !t) (52)) in
                                                             (((safe_upd_ float_P_float_M_t_1) jessie_921) jessie_918))) in
@@ -1045,7 +1045,7 @@ let f_ensures_default =
                                                              (let jessie_924 = 
                                                              (C_162:
                                                              ((double_to_single nearest_even) 
-                                                              ((double_of_real_safe nearest_even) 3.))) in
+                                                              (double_of_real_exact 3.))) in
                                                              (let jessie_927 = 
                                                              ((shift !t) (53)) in
                                                              (((safe_upd_ float_P_float_M_t_1) jessie_927) jessie_924))) in
@@ -1056,7 +1056,7 @@ let f_ensures_default =
                                                               (let jessie_930 = 
                                                               (C_165:
                                                               ((double_to_single nearest_even) 
-                                                               ((double_of_real_safe nearest_even) 4.))) in
+                                                               (double_of_real_exact 4.))) in
                                                               (let jessie_933 = 
                                                               ((shift !t) (54)) in
                                                               (((safe_upd_ float_P_float_M_t_1) jessie_933) jessie_930))) in
@@ -1122,7 +1122,7 @@ let f_ensures_default =
                                                                     (let jessie_966 = 
                                                                     (C_183:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 0.))) in
+                                                                    (double_of_real_exact 0.))) in
                                                                     (let jessie_969 = 
                                                                     ((shift !t) (60)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_969) jessie_966))) in
@@ -1134,7 +1134,7 @@ let f_ensures_default =
                                                                     (let jessie_972 = 
                                                                     (C_186:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 1.))) in
+                                                                    (double_of_real_exact 1.))) in
                                                                     (let jessie_975 = 
                                                                     ((shift !t) (61)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_975) jessie_972))) in
@@ -1146,7 +1146,7 @@ let f_ensures_default =
                                                                     (let jessie_978 = 
                                                                     (C_189:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 2.))) in
+                                                                    (double_of_real_exact 2.))) in
                                                                     (let jessie_981 = 
                                                                     ((shift !t) (62)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_981) jessie_978))) in
@@ -1158,7 +1158,7 @@ let f_ensures_default =
                                                                     (let jessie_984 = 
                                                                     (C_192:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 3.))) in
+                                                                    (double_of_real_exact 3.))) in
                                                                     (let jessie_987 = 
                                                                     ((shift !t) (63)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_987) jessie_984))) in
@@ -1170,7 +1170,7 @@ let f_ensures_default =
                                                                     (let jessie_990 = 
                                                                     (C_195:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 4.))) in
+                                                                    (double_of_real_exact 4.))) in
                                                                     (let jessie_993 = 
                                                                     ((shift !t) (64)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_993) jessie_990))) in
@@ -1242,7 +1242,7 @@ let f_ensures_default =
                                                                     (let jessie_1026 = 
                                                                     (C_213:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 0.))) in
+                                                                    (double_of_real_exact 0.))) in
                                                                     (let jessie_1029 = 
                                                                     ((shift !t) (70)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1029) jessie_1026))) in
@@ -1254,7 +1254,7 @@ let f_ensures_default =
                                                                     (let jessie_1032 = 
                                                                     (C_216:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 1.))) in
+                                                                    (double_of_real_exact 1.))) in
                                                                     (let jessie_1035 = 
                                                                     ((shift !t) (71)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1035) jessie_1032))) in
@@ -1266,7 +1266,7 @@ let f_ensures_default =
                                                                     (let jessie_1038 = 
                                                                     (C_219:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 2.))) in
+                                                                    (double_of_real_exact 2.))) in
                                                                     (let jessie_1041 = 
                                                                     ((shift !t) (72)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1041) jessie_1038))) in
@@ -1278,7 +1278,7 @@ let f_ensures_default =
                                                                     (let jessie_1044 = 
                                                                     (C_222:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 3.))) in
+                                                                    (double_of_real_exact 3.))) in
                                                                     (let jessie_1047 = 
                                                                     ((shift !t) (73)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1047) jessie_1044))) in
@@ -1290,7 +1290,7 @@ let f_ensures_default =
                                                                     (let jessie_1050 = 
                                                                     (C_225:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 4.))) in
+                                                                    (double_of_real_exact 4.))) in
                                                                     (let jessie_1053 = 
                                                                     ((shift !t) (74)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1053) jessie_1050))) in
@@ -1362,7 +1362,7 @@ let f_ensures_default =
                                                                     (let jessie_1086 = 
                                                                     (C_243:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 0.))) in
+                                                                    (double_of_real_exact 0.))) in
                                                                     (let jessie_1089 = 
                                                                     ((shift !t) (80)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1089) jessie_1086))) in
@@ -1374,7 +1374,7 @@ let f_ensures_default =
                                                                     (let jessie_1092 = 
                                                                     (C_246:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 1.))) in
+                                                                    (double_of_real_exact 1.))) in
                                                                     (let jessie_1095 = 
                                                                     ((shift !t) (81)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1095) jessie_1092))) in
@@ -1386,7 +1386,7 @@ let f_ensures_default =
                                                                     (let jessie_1098 = 
                                                                     (C_249:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 2.))) in
+                                                                    (double_of_real_exact 2.))) in
                                                                     (let jessie_1101 = 
                                                                     ((shift !t) (82)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1101) jessie_1098))) in
@@ -1398,7 +1398,7 @@ let f_ensures_default =
                                                                     (let jessie_1104 = 
                                                                     (C_252:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 3.))) in
+                                                                    (double_of_real_exact 3.))) in
                                                                     (let jessie_1107 = 
                                                                     ((shift !t) (83)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1107) jessie_1104))) in
@@ -1410,7 +1410,7 @@ let f_ensures_default =
                                                                     (let jessie_1110 = 
                                                                     (C_255:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 4.))) in
+                                                                    (double_of_real_exact 4.))) in
                                                                     (let jessie_1113 = 
                                                                     ((shift !t) (84)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1113) jessie_1110))) in
@@ -1482,7 +1482,7 @@ let f_ensures_default =
                                                                     (let jessie_1146 = 
                                                                     (C_273:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 0.))) in
+                                                                    (double_of_real_exact 0.))) in
                                                                     (let jessie_1149 = 
                                                                     ((shift !t) (90)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1149) jessie_1146))) in
@@ -1494,7 +1494,7 @@ let f_ensures_default =
                                                                     (let jessie_1152 = 
                                                                     (C_276:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 1.))) in
+                                                                    (double_of_real_exact 1.))) in
                                                                     (let jessie_1155 = 
                                                                     ((shift !t) (91)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1155) jessie_1152))) in
@@ -1506,7 +1506,7 @@ let f_ensures_default =
                                                                     (let jessie_1158 = 
                                                                     (C_279:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 2.))) in
+                                                                    (double_of_real_exact 2.))) in
                                                                     (let jessie_1161 = 
                                                                     ((shift !t) (92)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1161) jessie_1158))) in
@@ -1518,7 +1518,7 @@ let f_ensures_default =
                                                                     (let jessie_1164 = 
                                                                     (C_282:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 3.))) in
+                                                                    (double_of_real_exact 3.))) in
                                                                     (let jessie_1167 = 
                                                                     ((shift !t) (93)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1167) jessie_1164))) in
@@ -1530,7 +1530,7 @@ let f_ensures_default =
                                                                     (let jessie_1170 = 
                                                                     (C_285:
                                                                     ((double_to_single nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 4.))) in
+                                                                    (double_of_real_exact 4.))) in
                                                                     (let jessie_1173 = 
                                                                     ((shift !t) (94)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_1173) jessie_1170))) in
@@ -1597,7 +1597,7 @@ let f_ensures_default =
                                                                     void);
                                                                     (assert
                                                                     { 
-                                                                    (JC_213:
+                                                                    (JC_163:
                                                                     eq_real(
                                                                     single_value(
                                                                     select(float_P_float_M_t_1,
@@ -1746,59 +1746,54 @@ let f_safety =
       (C_5:
       begin
         (let jessie_8 = (let jessie_4 = (C_3:
-                                        (JC_12:
+                                        (JC_11:
                                         ((double_to_single nearest_even) 
-                                         (JC_11:
-                                         ((double_of_real nearest_even) 0.))))) in
+                                         (double_of_real_exact 0.)))) in
                         (let jessie_7 = ((shift !t) (0)) in
                         (((safe_upd_ float_P_float_M_t_1) jessie_7) jessie_4))) in
         void);
        (C_8:
        begin
          (let jessie_14 = (let jessie_10 = (C_6:
-                                           (JC_14:
+                                           (JC_12:
                                            ((double_to_single nearest_even) 
-                                            (JC_13:
-                                            ((double_of_real nearest_even) 1.))))) in
+                                            (double_of_real_exact 1.)))) in
                           (let jessie_13 = ((shift !t) (1)) in
                           (((safe_upd_ float_P_float_M_t_1) jessie_13) jessie_10))) in
          void);
         (C_11:
         begin
           (let jessie_20 = (let jessie_16 = (C_9:
-                                            (JC_16:
+                                            (JC_13:
                                             ((double_to_single nearest_even) 
-                                             (JC_15:
-                                             ((double_of_real nearest_even) 2.))))) in
+                                             (double_of_real_exact 2.)))) in
                            (let jessie_19 = ((shift !t) (2)) in
                            (((safe_upd_ float_P_float_M_t_1) jessie_19) jessie_16))) in
           void);
          (C_14:
          begin
            (let jessie_26 = (let jessie_22 = (C_12:
-                                             (JC_18:
+                                             (JC_14:
                                              ((double_to_single nearest_even) 
-                                              (JC_17:
-                                              ((double_of_real nearest_even) 3.))))) in
+                                              (double_of_real_exact 3.)))) in
                             (let jessie_25 = ((shift !t) (3)) in
                             (((safe_upd_ float_P_float_M_t_1) jessie_25) jessie_22))) in
            void);
           (C_17:
           begin
             (let jessie_32 = (let jessie_28 = (C_15:
-                                              (JC_20:
+                                              (JC_15:
                                               ((double_to_single nearest_even) 
-                                               (JC_19:
-                                               ((double_of_real nearest_even) 4.))))) in
+                                               (double_of_real_exact 4.)))) in
                              (let jessie_31 = ((shift !t) (4)) in
                              (((safe_upd_ float_P_float_M_t_1) jessie_31) jessie_28))) in
             void);
            (C_20:
            begin
              (let jessie_38 = (let jessie_34 = (C_18:
-                                               (JC_22:
+                                               (JC_17:
                                                ((double_to_single nearest_even) 
-                                                (JC_21:
+                                                (JC_16:
                                                 ((double_of_real nearest_even) 5.))))) in
                               (let jessie_37 = ((shift !t) (5)) in
                               (((safe_upd_ float_P_float_M_t_1) jessie_37) jessie_34))) in
@@ -1806,9 +1801,9 @@ let f_safety =
             (C_23:
             begin
               (let jessie_44 = (let jessie_40 = (C_21:
-                                                (JC_24:
+                                                (JC_19:
                                                 ((double_to_single nearest_even) 
-                                                 (JC_23:
+                                                 (JC_18:
                                                  ((double_of_real nearest_even) 6.))))) in
                                (let jessie_43 = ((shift !t) (6)) in
                                (((safe_upd_ float_P_float_M_t_1) jessie_43) jessie_40))) in
@@ -1816,9 +1811,9 @@ let f_safety =
              (C_26:
              begin
                (let jessie_50 = (let jessie_46 = (C_24:
-                                                 (JC_26:
+                                                 (JC_21:
                                                  ((double_to_single nearest_even) 
-                                                  (JC_25:
+                                                  (JC_20:
                                                   ((double_of_real nearest_even) 7.))))) in
                                 (let jessie_49 = ((shift !t) (7)) in
                                 (((safe_upd_ float_P_float_M_t_1) jessie_49) jessie_46))) in
@@ -1826,9 +1821,9 @@ let f_safety =
               (C_29:
               begin
                 (let jessie_56 = (let jessie_52 = (C_27:
-                                                  (JC_28:
+                                                  (JC_23:
                                                   ((double_to_single nearest_even) 
-                                                   (JC_27:
+                                                   (JC_22:
                                                    ((double_of_real nearest_even) 8.))))) in
                                  (let jessie_55 = ((shift !t) (8)) in
                                  (((safe_upd_ float_P_float_M_t_1) jessie_55) jessie_52))) in
@@ -1836,9 +1831,9 @@ let f_safety =
                (C_32:
                begin
                  (let jessie_62 = (let jessie_58 = (C_30:
-                                                   (JC_30:
+                                                   (JC_25:
                                                    ((double_to_single nearest_even) 
-                                                    (JC_29:
+                                                    (JC_24:
                                                     ((double_of_real nearest_even) 9.))))) in
                                   (let jessie_61 = ((shift !t) (9)) in
                                   (((safe_upd_ float_P_float_M_t_1) jessie_61) jessie_58))) in
@@ -1846,59 +1841,54 @@ let f_safety =
                 (C_35:
                 begin
                   (let jessie_68 = (let jessie_64 = (C_33:
-                                                    (JC_32:
+                                                    (JC_26:
                                                     ((double_to_single nearest_even) 
-                                                     (JC_31:
-                                                     ((double_of_real nearest_even) 0.))))) in
+                                                     (double_of_real_exact 0.)))) in
                                    (let jessie_67 = ((shift !t) (10)) in
                                    (((safe_upd_ float_P_float_M_t_1) jessie_67) jessie_64))) in
                   void);
                  (C_38:
                  begin
                    (let jessie_74 = (let jessie_70 = (C_36:
-                                                     (JC_34:
+                                                     (JC_27:
                                                      ((double_to_single nearest_even) 
-                                                      (JC_33:
-                                                      ((double_of_real nearest_even) 1.))))) in
+                                                      (double_of_real_exact 1.)))) in
                                     (let jessie_73 = ((shift !t) (11)) in
                                     (((safe_upd_ float_P_float_M_t_1) jessie_73) jessie_70))) in
                    void);
                   (C_41:
                   begin
                     (let jessie_80 = (let jessie_76 = (C_39:
-                                                      (JC_36:
+                                                      (JC_28:
                                                       ((double_to_single nearest_even) 
-                                                       (JC_35:
-                                                       ((double_of_real nearest_even) 2.))))) in
+                                                       (double_of_real_exact 2.)))) in
                                      (let jessie_79 = ((shift !t) (12)) in
                                      (((safe_upd_ float_P_float_M_t_1) jessie_79) jessie_76))) in
                     void);
                    (C_44:
                    begin
                      (let jessie_86 = (let jessie_82 = (C_42:
-                                                       (JC_38:
+                                                       (JC_29:
                                                        ((double_to_single nearest_even) 
-                                                        (JC_37:
-                                                        ((double_of_real nearest_even) 3.))))) in
+                                                        (double_of_real_exact 3.)))) in
                                       (let jessie_85 = ((shift !t) (13)) in
                                       (((safe_upd_ float_P_float_M_t_1) jessie_85) jessie_82))) in
                      void);
                     (C_47:
                     begin
                       (let jessie_92 = (let jessie_88 = (C_45:
-                                                        (JC_40:
+                                                        (JC_30:
                                                         ((double_to_single nearest_even) 
-                                                         (JC_39:
-                                                         ((double_of_real nearest_even) 4.))))) in
+                                                         (double_of_real_exact 4.)))) in
                                        (let jessie_91 = ((shift !t) (14)) in
                                        (((safe_upd_ float_P_float_M_t_1) jessie_91) jessie_88))) in
                       void);
                      (C_50:
                      begin
                        (let jessie_98 = (let jessie_94 = (C_48:
-                                                         (JC_42:
+                                                         (JC_32:
                                                          ((double_to_single nearest_even) 
-                                                          (JC_41:
+                                                          (JC_31:
                                                           ((double_of_real nearest_even) 5.))))) in
                                         (let jessie_97 = ((shift !t) (15)) in
                                         (((safe_upd_ float_P_float_M_t_1) jessie_97) jessie_94))) in
@@ -1906,9 +1896,9 @@ let f_safety =
                       (C_53:
                       begin
                         (let jessie_104 = (let jessie_100 = (C_51:
-                                                            (JC_44:
+                                                            (JC_34:
                                                             ((double_to_single nearest_even) 
-                                                             (JC_43:
+                                                             (JC_33:
                                                              ((double_of_real nearest_even) 6.))))) in
                                           (let jessie_103 = ((shift !t) (16)) in
                                           (((safe_upd_ float_P_float_M_t_1) jessie_103) jessie_100))) in
@@ -1916,9 +1906,9 @@ let f_safety =
                        (C_56:
                        begin
                          (let jessie_110 = (let jessie_106 = (C_54:
-                                                             (JC_46:
+                                                             (JC_36:
                                                              ((double_to_single nearest_even) 
-                                                              (JC_45:
+                                                              (JC_35:
                                                               ((double_of_real nearest_even) 7.))))) in
                                            (let jessie_109 = ((shift !t) (17)) in
                                            (((safe_upd_ float_P_float_M_t_1) jessie_109) jessie_106))) in
@@ -1926,9 +1916,9 @@ let f_safety =
                         (C_59:
                         begin
                           (let jessie_116 = (let jessie_112 = (C_57:
-                                                              (JC_48:
+                                                              (JC_38:
                                                               ((double_to_single nearest_even) 
-                                                               (JC_47:
+                                                               (JC_37:
                                                                ((double_of_real nearest_even) 8.))))) in
                                             (let jessie_115 = ((shift !t) (18)) in
                                             (((safe_upd_ float_P_float_M_t_1) jessie_115) jessie_112))) in
@@ -1936,9 +1926,9 @@ let f_safety =
                          (C_62:
                          begin
                            (let jessie_122 = (let jessie_118 = (C_60:
-                                                               (JC_50:
+                                                               (JC_40:
                                                                ((double_to_single nearest_even) 
-                                                                (JC_49:
+                                                                (JC_39:
                                                                 ((double_of_real nearest_even) 9.))))) in
                                              (let jessie_121 = ((shift !t) (19)) in
                                              (((safe_upd_ float_P_float_M_t_1) jessie_121) jessie_118))) in
@@ -1946,50 +1936,45 @@ let f_safety =
                           (C_65:
                           begin
                             (let jessie_128 = (let jessie_124 = (C_63:
-                                                                (JC_52:
+                                                                (JC_41:
                                                                 ((double_to_single nearest_even) 
-                                                                 (JC_51:
-                                                                 ((double_of_real nearest_even) 0.))))) in
+                                                                 (double_of_real_exact 0.)))) in
                                               (let jessie_127 = ((shift !t) (20)) in
                                               (((safe_upd_ float_P_float_M_t_1) jessie_127) jessie_124))) in
                             void);
                            (C_68:
                            begin
                              (let jessie_134 = (let jessie_130 = (C_66:
-                                                                 (JC_54:
+                                                                 (JC_42:
                                                                  ((double_to_single nearest_even) 
-                                                                  (JC_53:
-                                                                  ((double_of_real nearest_even) 1.))))) in
+                                                                  (double_of_real_exact 1.)))) in
                                                (let jessie_133 = ((shift !t) (21)) in
                                                (((safe_upd_ float_P_float_M_t_1) jessie_133) jessie_130))) in
                              void);
                             (C_71:
                             begin
                               (let jessie_140 = (let jessie_136 = (C_69:
-                                                                  (JC_56:
+                                                                  (JC_43:
                                                                   ((double_to_single nearest_even) 
-                                                                   (JC_55:
-                                                                   ((double_of_real nearest_even) 2.))))) in
+                                                                   (double_of_real_exact 2.)))) in
                                                 (let jessie_139 = ((shift !t) (22)) in
                                                 (((safe_upd_ float_P_float_M_t_1) jessie_139) jessie_136))) in
                               void);
                              (C_74:
                              begin
                                (let jessie_146 = (let jessie_142 = (C_72:
-                                                                   (JC_58:
+                                                                   (JC_44:
                                                                    ((double_to_single nearest_even) 
-                                                                    (JC_57:
-                                                                    ((double_of_real nearest_even) 3.))))) in
+                                                                    (double_of_real_exact 3.)))) in
                                                  (let jessie_145 = ((shift !t) (23)) in
                                                  (((safe_upd_ float_P_float_M_t_1) jessie_145) jessie_142))) in
                                void);
                               (C_77:
                               begin
                                 (let jessie_152 = (let jessie_148 = (C_75:
-                                                                    (JC_60:
+                                                                    (JC_45:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_59:
-                                                                    ((double_of_real nearest_even) 4.))))) in
+                                                                    (double_of_real_exact 4.)))) in
                                                   (let jessie_151 = ((shift !t) (24)) in
                                                   (((safe_upd_ float_P_float_M_t_1) jessie_151) jessie_148))) in
                                 void);
@@ -1997,9 +1982,9 @@ let f_safety =
                                begin
                                  (let jessie_158 = (let jessie_154 = 
                                                    (C_78:
-                                                   (JC_62:
+                                                   (JC_47:
                                                    ((double_to_single nearest_even) 
-                                                    (JC_61:
+                                                    (JC_46:
                                                     ((double_of_real nearest_even) 5.))))) in
                                                    (let jessie_157 = 
                                                    ((shift !t) (25)) in
@@ -2009,9 +1994,9 @@ let f_safety =
                                 begin
                                   (let jessie_164 = (let jessie_160 = 
                                                     (C_81:
-                                                    (JC_64:
+                                                    (JC_49:
                                                     ((double_to_single nearest_even) 
-                                                     (JC_63:
+                                                     (JC_48:
                                                      ((double_of_real nearest_even) 6.))))) in
                                                     (let jessie_163 = 
                                                     ((shift !t) (26)) in
@@ -2021,9 +2006,9 @@ let f_safety =
                                  begin
                                    (let jessie_170 = (let jessie_166 = 
                                                      (C_84:
-                                                     (JC_66:
+                                                     (JC_51:
                                                      ((double_to_single nearest_even) 
-                                                      (JC_65:
+                                                      (JC_50:
                                                       ((double_of_real nearest_even) 7.))))) in
                                                      (let jessie_169 = 
                                                      ((shift !t) (27)) in
@@ -2033,9 +2018,9 @@ let f_safety =
                                   begin
                                     (let jessie_176 = (let jessie_172 = 
                                                       (C_87:
-                                                      (JC_68:
+                                                      (JC_53:
                                                       ((double_to_single nearest_even) 
-                                                       (JC_67:
+                                                       (JC_52:
                                                        ((double_of_real nearest_even) 8.))))) in
                                                       (let jessie_175 = 
                                                       ((shift !t) (28)) in
@@ -2045,9 +2030,9 @@ let f_safety =
                                    begin
                                      (let jessie_182 = (let jessie_178 = 
                                                        (C_90:
-                                                       (JC_70:
+                                                       (JC_55:
                                                        ((double_to_single nearest_even) 
-                                                        (JC_69:
+                                                        (JC_54:
                                                         ((double_of_real nearest_even) 9.))))) in
                                                        (let jessie_181 = 
                                                        ((shift !t) (29)) in
@@ -2057,10 +2042,9 @@ let f_safety =
                                     begin
                                       (let jessie_188 = (let jessie_184 = 
                                                         (C_93:
-                                                        (JC_72:
+                                                        (JC_56:
                                                         ((double_to_single nearest_even) 
-                                                         (JC_71:
-                                                         ((double_of_real nearest_even) 0.))))) in
+                                                         (double_of_real_exact 0.)))) in
                                                         (let jessie_187 = 
                                                         ((shift !t) (30)) in
                                                         (((safe_upd_ float_P_float_M_t_1) jessie_187) jessie_184))) in
@@ -2069,10 +2053,9 @@ let f_safety =
                                      begin
                                        (let jessie_194 = (let jessie_190 = 
                                                          (C_96:
-                                                         (JC_74:
+                                                         (JC_57:
                                                          ((double_to_single nearest_even) 
-                                                          (JC_73:
-                                                          ((double_of_real nearest_even) 1.))))) in
+                                                          (double_of_real_exact 1.)))) in
                                                          (let jessie_193 = 
                                                          ((shift !t) (31)) in
                                                          (((safe_upd_ float_P_float_M_t_1) jessie_193) jessie_190))) in
@@ -2081,10 +2064,9 @@ let f_safety =
                                       begin
                                         (let jessie_200 = (let jessie_196 = 
                                                           (C_99:
-                                                          (JC_76:
+                                                          (JC_58:
                                                           ((double_to_single nearest_even) 
-                                                           (JC_75:
-                                                           ((double_of_real nearest_even) 2.))))) in
+                                                           (double_of_real_exact 2.)))) in
                                                           (let jessie_199 = 
                                                           ((shift !t) (32)) in
                                                           (((safe_upd_ float_P_float_M_t_1) jessie_199) jessie_196))) in
@@ -2093,10 +2075,9 @@ let f_safety =
                                        begin
                                          (let jessie_206 = (let jessie_202 = 
                                                            (C_102:
-                                                           (JC_78:
+                                                           (JC_59:
                                                            ((double_to_single nearest_even) 
-                                                            (JC_77:
-                                                            ((double_of_real nearest_even) 3.))))) in
+                                                            (double_of_real_exact 3.)))) in
                                                            (let jessie_205 = 
                                                            ((shift !t) (33)) in
                                                            (((safe_upd_ float_P_float_M_t_1) jessie_205) jessie_202))) in
@@ -2105,10 +2086,9 @@ let f_safety =
                                         begin
                                           (let jessie_212 = (let jessie_208 = 
                                                             (C_105:
-                                                            (JC_80:
+                                                            (JC_60:
                                                             ((double_to_single nearest_even) 
-                                                             (JC_79:
-                                                             ((double_of_real nearest_even) 4.))))) in
+                                                             (double_of_real_exact 4.)))) in
                                                             (let jessie_211 = 
                                                             ((shift !t) (34)) in
                                                             (((safe_upd_ float_P_float_M_t_1) jessie_211) jessie_208))) in
@@ -2117,9 +2097,9 @@ let f_safety =
                                          begin
                                            (let jessie_218 = (let jessie_214 = 
                                                              (C_108:
-                                                             (JC_82:
+                                                             (JC_62:
                                                              ((double_to_single nearest_even) 
-                                                              (JC_81:
+                                                              (JC_61:
                                                               ((double_of_real nearest_even) 5.))))) in
                                                              (let jessie_217 = 
                                                              ((shift !t) (35)) in
@@ -2129,9 +2109,9 @@ let f_safety =
                                           begin
                                             (let jessie_224 = (let jessie_220 = 
                                                               (C_111:
-                                                              (JC_84:
+                                                              (JC_64:
                                                               ((double_to_single nearest_even) 
-                                                               (JC_83:
+                                                               (JC_63:
                                                                ((double_of_real nearest_even) 6.))))) in
                                                               (let jessie_223 = 
                                                               ((shift !t) (36)) in
@@ -2141,9 +2121,9 @@ let f_safety =
                                            begin
                                              (let jessie_230 = (let jessie_226 = 
                                                                (C_114:
-                                                               (JC_86:
+                                                               (JC_66:
                                                                ((double_to_single nearest_even) 
-                                                                (JC_85:
+                                                                (JC_65:
                                                                 ((double_of_real nearest_even) 7.))))) in
                                                                (let jessie_229 = 
                                                                ((shift !t) (37)) in
@@ -2153,9 +2133,9 @@ let f_safety =
                                             begin
                                               (let jessie_236 = (let jessie_232 = 
                                                                 (C_117:
-                                                                (JC_88:
+                                                                (JC_68:
                                                                 ((double_to_single nearest_even) 
-                                                                 (JC_87:
+                                                                 (JC_67:
                                                                  ((double_of_real nearest_even) 8.))))) in
                                                                 (let jessie_235 = 
                                                                 ((shift !t) (38)) in
@@ -2165,9 +2145,9 @@ let f_safety =
                                              begin
                                                (let jessie_242 = (let jessie_238 = 
                                                                  (C_120:
-                                                                 (JC_90:
+                                                                 (JC_70:
                                                                  ((double_to_single nearest_even) 
-                                                                  (JC_89:
+                                                                  (JC_69:
                                                                   ((double_of_real nearest_even) 9.))))) in
                                                                  (let jessie_241 = 
                                                                  ((shift !t) (39)) in
@@ -2177,10 +2157,9 @@ let f_safety =
                                               begin
                                                 (let jessie_248 = (let jessie_244 = 
                                                                   (C_123:
-                                                                  (JC_92:
+                                                                  (JC_71:
                                                                   ((double_to_single nearest_even) 
-                                                                   (JC_91:
-                                                                   ((double_of_real nearest_even) 0.))))) in
+                                                                   (double_of_real_exact 0.)))) in
                                                                   (let jessie_247 = 
                                                                   ((shift !t) (40)) in
                                                                   (((safe_upd_ float_P_float_M_t_1) jessie_247) jessie_244))) in
@@ -2189,10 +2168,9 @@ let f_safety =
                                                begin
                                                  (let jessie_254 = (let jessie_250 = 
                                                                    (C_126:
-                                                                   (JC_94:
+                                                                   (JC_72:
                                                                    ((double_to_single nearest_even) 
-                                                                    (JC_93:
-                                                                    ((double_of_real nearest_even) 1.))))) in
+                                                                    (double_of_real_exact 1.)))) in
                                                                    (let jessie_253 = 
                                                                    ((shift !t) (41)) in
                                                                    (((safe_upd_ float_P_float_M_t_1) jessie_253) jessie_250))) in
@@ -2201,10 +2179,9 @@ let f_safety =
                                                 begin
                                                   (let jessie_260 = (let jessie_256 = 
                                                                     (C_129:
-                                                                    (JC_96:
+                                                                    (JC_73:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_95:
-                                                                    ((double_of_real nearest_even) 2.))))) in
+                                                                    (double_of_real_exact 2.)))) in
                                                                     (let jessie_259 = 
                                                                     ((shift !t) (42)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_259) jessie_256))) in
@@ -2214,10 +2191,9 @@ let f_safety =
                                                    (let jessie_266 = 
                                                    (let jessie_262 = 
                                                    (C_132:
-                                                   (JC_98:
+                                                   (JC_74:
                                                    ((double_to_single nearest_even) 
-                                                    (JC_97:
-                                                    ((double_of_real nearest_even) 3.))))) in
+                                                    (double_of_real_exact 3.)))) in
                                                    (let jessie_265 = 
                                                    ((shift !t) (43)) in
                                                    (((safe_upd_ float_P_float_M_t_1) jessie_265) jessie_262))) in
@@ -2227,10 +2203,9 @@ let f_safety =
                                                     (let jessie_272 = 
                                                     (let jessie_268 = 
                                                     (C_135:
-                                                    (JC_100:
+                                                    (JC_75:
                                                     ((double_to_single nearest_even) 
-                                                     (JC_99:
-                                                     ((double_of_real nearest_even) 4.))))) in
+                                                     (double_of_real_exact 4.)))) in
                                                     (let jessie_271 = 
                                                     ((shift !t) (44)) in
                                                     (((safe_upd_ float_P_float_M_t_1) jessie_271) jessie_268))) in
@@ -2240,9 +2215,9 @@ let f_safety =
                                                      (let jessie_278 = 
                                                      (let jessie_274 = 
                                                      (C_138:
-                                                     (JC_102:
+                                                     (JC_77:
                                                      ((double_to_single nearest_even) 
-                                                      (JC_101:
+                                                      (JC_76:
                                                       ((double_of_real nearest_even) 5.))))) in
                                                      (let jessie_277 = 
                                                      ((shift !t) (45)) in
@@ -2253,9 +2228,9 @@ let f_safety =
                                                       (let jessie_284 = 
                                                       (let jessie_280 = 
                                                       (C_141:
-                                                      (JC_104:
+                                                      (JC_79:
                                                       ((double_to_single nearest_even) 
-                                                       (JC_103:
+                                                       (JC_78:
                                                        ((double_of_real nearest_even) 6.))))) in
                                                       (let jessie_283 = 
                                                       ((shift !t) (46)) in
@@ -2266,9 +2241,9 @@ let f_safety =
                                                        (let jessie_290 = 
                                                        (let jessie_286 = 
                                                        (C_144:
-                                                       (JC_106:
+                                                       (JC_81:
                                                        ((double_to_single nearest_even) 
-                                                        (JC_105:
+                                                        (JC_80:
                                                         ((double_of_real nearest_even) 7.))))) in
                                                        (let jessie_289 = 
                                                        ((shift !t) (47)) in
@@ -2279,9 +2254,9 @@ let f_safety =
                                                         (let jessie_296 = 
                                                         (let jessie_292 = 
                                                         (C_147:
-                                                        (JC_108:
+                                                        (JC_83:
                                                         ((double_to_single nearest_even) 
-                                                         (JC_107:
+                                                         (JC_82:
                                                          ((double_of_real nearest_even) 8.))))) in
                                                         (let jessie_295 = 
                                                         ((shift !t) (48)) in
@@ -2292,9 +2267,9 @@ let f_safety =
                                                          (let jessie_302 = 
                                                          (let jessie_298 = 
                                                          (C_150:
-                                                         (JC_110:
+                                                         (JC_85:
                                                          ((double_to_single nearest_even) 
-                                                          (JC_109:
+                                                          (JC_84:
                                                           ((double_of_real nearest_even) 9.))))) in
                                                          (let jessie_301 = 
                                                          ((shift !t) (49)) in
@@ -2305,10 +2280,9 @@ let f_safety =
                                                           (let jessie_308 = 
                                                           (let jessie_304 = 
                                                           (C_153:
-                                                          (JC_112:
+                                                          (JC_86:
                                                           ((double_to_single nearest_even) 
-                                                           (JC_111:
-                                                           ((double_of_real nearest_even) 0.))))) in
+                                                           (double_of_real_exact 0.)))) in
                                                           (let jessie_307 = 
                                                           ((shift !t) (50)) in
                                                           (((safe_upd_ float_P_float_M_t_1) jessie_307) jessie_304))) in
@@ -2318,10 +2292,9 @@ let f_safety =
                                                            (let jessie_314 = 
                                                            (let jessie_310 = 
                                                            (C_156:
-                                                           (JC_114:
+                                                           (JC_87:
                                                            ((double_to_single nearest_even) 
-                                                            (JC_113:
-                                                            ((double_of_real nearest_even) 1.))))) in
+                                                            (double_of_real_exact 1.)))) in
                                                            (let jessie_313 = 
                                                            ((shift !t) (51)) in
                                                            (((safe_upd_ float_P_float_M_t_1) jessie_313) jessie_310))) in
@@ -2331,10 +2304,9 @@ let f_safety =
                                                             (let jessie_320 = 
                                                             (let jessie_316 = 
                                                             (C_159:
-                                                            (JC_116:
+                                                            (JC_88:
                                                             ((double_to_single nearest_even) 
-                                                             (JC_115:
-                                                             ((double_of_real nearest_even) 2.))))) in
+                                                             (double_of_real_exact 2.)))) in
                                                             (let jessie_319 = 
                                                             ((shift !t) (52)) in
                                                             (((safe_upd_ float_P_float_M_t_1) jessie_319) jessie_316))) in
@@ -2344,10 +2316,9 @@ let f_safety =
                                                              (let jessie_326 = 
                                                              (let jessie_322 = 
                                                              (C_162:
-                                                             (JC_118:
+                                                             (JC_89:
                                                              ((double_to_single nearest_even) 
-                                                              (JC_117:
-                                                              ((double_of_real nearest_even) 3.))))) in
+                                                              (double_of_real_exact 3.)))) in
                                                              (let jessie_325 = 
                                                              ((shift !t) (53)) in
                                                              (((safe_upd_ float_P_float_M_t_1) jessie_325) jessie_322))) in
@@ -2357,10 +2328,9 @@ let f_safety =
                                                               (let jessie_332 = 
                                                               (let jessie_328 = 
                                                               (C_165:
-                                                              (JC_120:
+                                                              (JC_90:
                                                               ((double_to_single nearest_even) 
-                                                               (JC_119:
-                                                               ((double_of_real nearest_even) 4.))))) in
+                                                               (double_of_real_exact 4.)))) in
                                                               (let jessie_331 = 
                                                               ((shift !t) (54)) in
                                                               (((safe_upd_ float_P_float_M_t_1) jessie_331) jessie_328))) in
@@ -2370,9 +2340,9 @@ let f_safety =
                                                                (let jessie_338 = 
                                                                (let jessie_334 = 
                                                                (C_168:
-                                                               (JC_122:
+                                                               (JC_92:
                                                                ((double_to_single nearest_even) 
-                                                                (JC_121:
+                                                                (JC_91:
                                                                 ((double_of_real nearest_even) 5.))))) in
                                                                (let jessie_337 = 
                                                                ((shift !t) (55)) in
@@ -2383,9 +2353,9 @@ let f_safety =
                                                                 (let jessie_344 = 
                                                                 (let jessie_340 = 
                                                                 (C_171:
-                                                                (JC_124:
+                                                                (JC_94:
                                                                 ((double_to_single nearest_even) 
-                                                                 (JC_123:
+                                                                 (JC_93:
                                                                  ((double_of_real nearest_even) 6.))))) in
                                                                 (let jessie_343 = 
                                                                 ((shift !t) (56)) in
@@ -2396,9 +2366,9 @@ let f_safety =
                                                                  (let jessie_350 = 
                                                                  (let jessie_346 = 
                                                                  (C_174:
-                                                                 (JC_126:
+                                                                 (JC_96:
                                                                  ((double_to_single nearest_even) 
-                                                                  (JC_125:
+                                                                  (JC_95:
                                                                   ((double_of_real nearest_even) 7.))))) in
                                                                  (let jessie_349 = 
                                                                  ((shift !t) (57)) in
@@ -2409,9 +2379,9 @@ let f_safety =
                                                                   (let jessie_356 = 
                                                                   (let jessie_352 = 
                                                                   (C_177:
-                                                                  (JC_128:
+                                                                  (JC_98:
                                                                   ((double_to_single nearest_even) 
-                                                                   (JC_127:
+                                                                   (JC_97:
                                                                    ((double_of_real nearest_even) 8.))))) in
                                                                   (let jessie_355 = 
                                                                   ((shift !t) (58)) in
@@ -2422,9 +2392,9 @@ let f_safety =
                                                                    (let jessie_362 = 
                                                                    (let jessie_358 = 
                                                                    (C_180:
-                                                                   (JC_130:
+                                                                   (JC_100:
                                                                    ((double_to_single nearest_even) 
-                                                                    (JC_129:
+                                                                    (JC_99:
                                                                     ((double_of_real nearest_even) 9.))))) in
                                                                    (let jessie_361 = 
                                                                    ((shift !t) (59)) in
@@ -2435,10 +2405,9 @@ let f_safety =
                                                                     (let jessie_368 = 
                                                                     (let jessie_364 = 
                                                                     (C_183:
-                                                                    (JC_132:
+                                                                    (JC_101:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_131:
-                                                                    ((double_of_real nearest_even) 0.))))) in
+                                                                    (double_of_real_exact 0.)))) in
                                                                     (let jessie_367 = 
                                                                     ((shift !t) (60)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_367) jessie_364))) in
@@ -2449,10 +2418,9 @@ let f_safety =
                                                                     (let jessie_374 = 
                                                                     (let jessie_370 = 
                                                                     (C_186:
-                                                                    (JC_134:
+                                                                    (JC_102:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_133:
-                                                                    ((double_of_real nearest_even) 1.))))) in
+                                                                    (double_of_real_exact 1.)))) in
                                                                     (let jessie_373 = 
                                                                     ((shift !t) (61)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_373) jessie_370))) in
@@ -2463,10 +2431,9 @@ let f_safety =
                                                                     (let jessie_380 = 
                                                                     (let jessie_376 = 
                                                                     (C_189:
-                                                                    (JC_136:
+                                                                    (JC_103:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_135:
-                                                                    ((double_of_real nearest_even) 2.))))) in
+                                                                    (double_of_real_exact 2.)))) in
                                                                     (let jessie_379 = 
                                                                     ((shift !t) (62)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_379) jessie_376))) in
@@ -2477,10 +2444,9 @@ let f_safety =
                                                                     (let jessie_386 = 
                                                                     (let jessie_382 = 
                                                                     (C_192:
-                                                                    (JC_138:
+                                                                    (JC_104:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_137:
-                                                                    ((double_of_real nearest_even) 3.))))) in
+                                                                    (double_of_real_exact 3.)))) in
                                                                     (let jessie_385 = 
                                                                     ((shift !t) (63)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_385) jessie_382))) in
@@ -2491,10 +2457,9 @@ let f_safety =
                                                                     (let jessie_392 = 
                                                                     (let jessie_388 = 
                                                                     (C_195:
-                                                                    (JC_140:
+                                                                    (JC_105:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_139:
-                                                                    ((double_of_real nearest_even) 4.))))) in
+                                                                    (double_of_real_exact 4.)))) in
                                                                     (let jessie_391 = 
                                                                     ((shift !t) (64)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_391) jessie_388))) in
@@ -2505,9 +2470,9 @@ let f_safety =
                                                                     (let jessie_398 = 
                                                                     (let jessie_394 = 
                                                                     (C_198:
-                                                                    (JC_142:
+                                                                    (JC_107:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_141:
+                                                                    (JC_106:
                                                                     ((double_of_real nearest_even) 5.))))) in
                                                                     (let jessie_397 = 
                                                                     ((shift !t) (65)) in
@@ -2519,9 +2484,9 @@ let f_safety =
                                                                     (let jessie_404 = 
                                                                     (let jessie_400 = 
                                                                     (C_201:
-                                                                    (JC_144:
+                                                                    (JC_109:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_143:
+                                                                    (JC_108:
                                                                     ((double_of_real nearest_even) 6.))))) in
                                                                     (let jessie_403 = 
                                                                     ((shift !t) (66)) in
@@ -2533,9 +2498,9 @@ let f_safety =
                                                                     (let jessie_410 = 
                                                                     (let jessie_406 = 
                                                                     (C_204:
-                                                                    (JC_146:
+                                                                    (JC_111:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_145:
+                                                                    (JC_110:
                                                                     ((double_of_real nearest_even) 7.))))) in
                                                                     (let jessie_409 = 
                                                                     ((shift !t) (67)) in
@@ -2547,9 +2512,9 @@ let f_safety =
                                                                     (let jessie_416 = 
                                                                     (let jessie_412 = 
                                                                     (C_207:
-                                                                    (JC_148:
+                                                                    (JC_113:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_147:
+                                                                    (JC_112:
                                                                     ((double_of_real nearest_even) 8.))))) in
                                                                     (let jessie_415 = 
                                                                     ((shift !t) (68)) in
@@ -2561,9 +2526,9 @@ let f_safety =
                                                                     (let jessie_422 = 
                                                                     (let jessie_418 = 
                                                                     (C_210:
-                                                                    (JC_150:
+                                                                    (JC_115:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_149:
+                                                                    (JC_114:
                                                                     ((double_of_real nearest_even) 9.))))) in
                                                                     (let jessie_421 = 
                                                                     ((shift !t) (69)) in
@@ -2575,10 +2540,9 @@ let f_safety =
                                                                     (let jessie_428 = 
                                                                     (let jessie_424 = 
                                                                     (C_213:
-                                                                    (JC_152:
+                                                                    (JC_116:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_151:
-                                                                    ((double_of_real nearest_even) 0.))))) in
+                                                                    (double_of_real_exact 0.)))) in
                                                                     (let jessie_427 = 
                                                                     ((shift !t) (70)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_427) jessie_424))) in
@@ -2589,10 +2553,9 @@ let f_safety =
                                                                     (let jessie_434 = 
                                                                     (let jessie_430 = 
                                                                     (C_216:
-                                                                    (JC_154:
+                                                                    (JC_117:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_153:
-                                                                    ((double_of_real nearest_even) 1.))))) in
+                                                                    (double_of_real_exact 1.)))) in
                                                                     (let jessie_433 = 
                                                                     ((shift !t) (71)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_433) jessie_430))) in
@@ -2603,10 +2566,9 @@ let f_safety =
                                                                     (let jessie_440 = 
                                                                     (let jessie_436 = 
                                                                     (C_219:
-                                                                    (JC_156:
+                                                                    (JC_118:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_155:
-                                                                    ((double_of_real nearest_even) 2.))))) in
+                                                                    (double_of_real_exact 2.)))) in
                                                                     (let jessie_439 = 
                                                                     ((shift !t) (72)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_439) jessie_436))) in
@@ -2617,10 +2579,9 @@ let f_safety =
                                                                     (let jessie_446 = 
                                                                     (let jessie_442 = 
                                                                     (C_222:
-                                                                    (JC_158:
+                                                                    (JC_119:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_157:
-                                                                    ((double_of_real nearest_even) 3.))))) in
+                                                                    (double_of_real_exact 3.)))) in
                                                                     (let jessie_445 = 
                                                                     ((shift !t) (73)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_445) jessie_442))) in
@@ -2631,10 +2592,9 @@ let f_safety =
                                                                     (let jessie_452 = 
                                                                     (let jessie_448 = 
                                                                     (C_225:
-                                                                    (JC_160:
+                                                                    (JC_120:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_159:
-                                                                    ((double_of_real nearest_even) 4.))))) in
+                                                                    (double_of_real_exact 4.)))) in
                                                                     (let jessie_451 = 
                                                                     ((shift !t) (74)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_451) jessie_448))) in
@@ -2645,9 +2605,9 @@ let f_safety =
                                                                     (let jessie_458 = 
                                                                     (let jessie_454 = 
                                                                     (C_228:
-                                                                    (JC_162:
+                                                                    (JC_122:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_161:
+                                                                    (JC_121:
                                                                     ((double_of_real nearest_even) 5.))))) in
                                                                     (let jessie_457 = 
                                                                     ((shift !t) (75)) in
@@ -2659,9 +2619,9 @@ let f_safety =
                                                                     (let jessie_464 = 
                                                                     (let jessie_460 = 
                                                                     (C_231:
-                                                                    (JC_164:
+                                                                    (JC_124:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_163:
+                                                                    (JC_123:
                                                                     ((double_of_real nearest_even) 6.))))) in
                                                                     (let jessie_463 = 
                                                                     ((shift !t) (76)) in
@@ -2673,9 +2633,9 @@ let f_safety =
                                                                     (let jessie_470 = 
                                                                     (let jessie_466 = 
                                                                     (C_234:
-                                                                    (JC_166:
+                                                                    (JC_126:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_165:
+                                                                    (JC_125:
                                                                     ((double_of_real nearest_even) 7.))))) in
                                                                     (let jessie_469 = 
                                                                     ((shift !t) (77)) in
@@ -2687,9 +2647,9 @@ let f_safety =
                                                                     (let jessie_476 = 
                                                                     (let jessie_472 = 
                                                                     (C_237:
-                                                                    (JC_168:
+                                                                    (JC_128:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_167:
+                                                                    (JC_127:
                                                                     ((double_of_real nearest_even) 8.))))) in
                                                                     (let jessie_475 = 
                                                                     ((shift !t) (78)) in
@@ -2701,9 +2661,9 @@ let f_safety =
                                                                     (let jessie_482 = 
                                                                     (let jessie_478 = 
                                                                     (C_240:
-                                                                    (JC_170:
+                                                                    (JC_130:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_169:
+                                                                    (JC_129:
                                                                     ((double_of_real nearest_even) 9.))))) in
                                                                     (let jessie_481 = 
                                                                     ((shift !t) (79)) in
@@ -2715,10 +2675,9 @@ let f_safety =
                                                                     (let jessie_488 = 
                                                                     (let jessie_484 = 
                                                                     (C_243:
-                                                                    (JC_172:
+                                                                    (JC_131:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_171:
-                                                                    ((double_of_real nearest_even) 0.))))) in
+                                                                    (double_of_real_exact 0.)))) in
                                                                     (let jessie_487 = 
                                                                     ((shift !t) (80)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_487) jessie_484))) in
@@ -2729,10 +2688,9 @@ let f_safety =
                                                                     (let jessie_494 = 
                                                                     (let jessie_490 = 
                                                                     (C_246:
-                                                                    (JC_174:
+                                                                    (JC_132:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_173:
-                                                                    ((double_of_real nearest_even) 1.))))) in
+                                                                    (double_of_real_exact 1.)))) in
                                                                     (let jessie_493 = 
                                                                     ((shift !t) (81)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_493) jessie_490))) in
@@ -2743,10 +2701,9 @@ let f_safety =
                                                                     (let jessie_500 = 
                                                                     (let jessie_496 = 
                                                                     (C_249:
-                                                                    (JC_176:
+                                                                    (JC_133:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_175:
-                                                                    ((double_of_real nearest_even) 2.))))) in
+                                                                    (double_of_real_exact 2.)))) in
                                                                     (let jessie_499 = 
                                                                     ((shift !t) (82)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_499) jessie_496))) in
@@ -2757,10 +2714,9 @@ let f_safety =
                                                                     (let jessie_506 = 
                                                                     (let jessie_502 = 
                                                                     (C_252:
-                                                                    (JC_178:
+                                                                    (JC_134:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_177:
-                                                                    ((double_of_real nearest_even) 3.))))) in
+                                                                    (double_of_real_exact 3.)))) in
                                                                     (let jessie_505 = 
                                                                     ((shift !t) (83)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_505) jessie_502))) in
@@ -2771,10 +2727,9 @@ let f_safety =
                                                                     (let jessie_512 = 
                                                                     (let jessie_508 = 
                                                                     (C_255:
-                                                                    (JC_180:
+                                                                    (JC_135:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_179:
-                                                                    ((double_of_real nearest_even) 4.))))) in
+                                                                    (double_of_real_exact 4.)))) in
                                                                     (let jessie_511 = 
                                                                     ((shift !t) (84)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_511) jessie_508))) in
@@ -2785,9 +2740,9 @@ let f_safety =
                                                                     (let jessie_518 = 
                                                                     (let jessie_514 = 
                                                                     (C_258:
-                                                                    (JC_182:
+                                                                    (JC_137:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_181:
+                                                                    (JC_136:
                                                                     ((double_of_real nearest_even) 5.))))) in
                                                                     (let jessie_517 = 
                                                                     ((shift !t) (85)) in
@@ -2799,9 +2754,9 @@ let f_safety =
                                                                     (let jessie_524 = 
                                                                     (let jessie_520 = 
                                                                     (C_261:
-                                                                    (JC_184:
+                                                                    (JC_139:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_183:
+                                                                    (JC_138:
                                                                     ((double_of_real nearest_even) 6.))))) in
                                                                     (let jessie_523 = 
                                                                     ((shift !t) (86)) in
@@ -2813,9 +2768,9 @@ let f_safety =
                                                                     (let jessie_530 = 
                                                                     (let jessie_526 = 
                                                                     (C_264:
-                                                                    (JC_186:
+                                                                    (JC_141:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_185:
+                                                                    (JC_140:
                                                                     ((double_of_real nearest_even) 7.))))) in
                                                                     (let jessie_529 = 
                                                                     ((shift !t) (87)) in
@@ -2827,9 +2782,9 @@ let f_safety =
                                                                     (let jessie_536 = 
                                                                     (let jessie_532 = 
                                                                     (C_267:
-                                                                    (JC_188:
+                                                                    (JC_143:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_187:
+                                                                    (JC_142:
                                                                     ((double_of_real nearest_even) 8.))))) in
                                                                     (let jessie_535 = 
                                                                     ((shift !t) (88)) in
@@ -2841,9 +2796,9 @@ let f_safety =
                                                                     (let jessie_542 = 
                                                                     (let jessie_538 = 
                                                                     (C_270:
-                                                                    (JC_190:
+                                                                    (JC_145:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_189:
+                                                                    (JC_144:
                                                                     ((double_of_real nearest_even) 9.))))) in
                                                                     (let jessie_541 = 
                                                                     ((shift !t) (89)) in
@@ -2855,10 +2810,9 @@ let f_safety =
                                                                     (let jessie_548 = 
                                                                     (let jessie_544 = 
                                                                     (C_273:
-                                                                    (JC_192:
+                                                                    (JC_146:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_191:
-                                                                    ((double_of_real nearest_even) 0.))))) in
+                                                                    (double_of_real_exact 0.)))) in
                                                                     (let jessie_547 = 
                                                                     ((shift !t) (90)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_547) jessie_544))) in
@@ -2869,10 +2823,9 @@ let f_safety =
                                                                     (let jessie_554 = 
                                                                     (let jessie_550 = 
                                                                     (C_276:
-                                                                    (JC_194:
+                                                                    (JC_147:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_193:
-                                                                    ((double_of_real nearest_even) 1.))))) in
+                                                                    (double_of_real_exact 1.)))) in
                                                                     (let jessie_553 = 
                                                                     ((shift !t) (91)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_553) jessie_550))) in
@@ -2883,10 +2836,9 @@ let f_safety =
                                                                     (let jessie_560 = 
                                                                     (let jessie_556 = 
                                                                     (C_279:
-                                                                    (JC_196:
+                                                                    (JC_148:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_195:
-                                                                    ((double_of_real nearest_even) 2.))))) in
+                                                                    (double_of_real_exact 2.)))) in
                                                                     (let jessie_559 = 
                                                                     ((shift !t) (92)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_559) jessie_556))) in
@@ -2897,10 +2849,9 @@ let f_safety =
                                                                     (let jessie_566 = 
                                                                     (let jessie_562 = 
                                                                     (C_282:
-                                                                    (JC_198:
+                                                                    (JC_149:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_197:
-                                                                    ((double_of_real nearest_even) 3.))))) in
+                                                                    (double_of_real_exact 3.)))) in
                                                                     (let jessie_565 = 
                                                                     ((shift !t) (93)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_565) jessie_562))) in
@@ -2911,10 +2862,9 @@ let f_safety =
                                                                     (let jessie_572 = 
                                                                     (let jessie_568 = 
                                                                     (C_285:
-                                                                    (JC_200:
+                                                                    (JC_150:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_199:
-                                                                    ((double_of_real nearest_even) 4.))))) in
+                                                                    (double_of_real_exact 4.)))) in
                                                                     (let jessie_571 = 
                                                                     ((shift !t) (94)) in
                                                                     (((safe_upd_ float_P_float_M_t_1) jessie_571) jessie_568))) in
@@ -2925,9 +2875,9 @@ let f_safety =
                                                                     (let jessie_578 = 
                                                                     (let jessie_574 = 
                                                                     (C_288:
-                                                                    (JC_202:
+                                                                    (JC_152:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_201:
+                                                                    (JC_151:
                                                                     ((double_of_real nearest_even) 5.))))) in
                                                                     (let jessie_577 = 
                                                                     ((shift !t) (95)) in
@@ -2939,9 +2889,9 @@ let f_safety =
                                                                     (let jessie_584 = 
                                                                     (let jessie_580 = 
                                                                     (C_291:
-                                                                    (JC_204:
+                                                                    (JC_154:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_203:
+                                                                    (JC_153:
                                                                     ((double_of_real nearest_even) 6.))))) in
                                                                     (let jessie_583 = 
                                                                     ((shift !t) (96)) in
@@ -2953,9 +2903,9 @@ let f_safety =
                                                                     (let jessie_590 = 
                                                                     (let jessie_586 = 
                                                                     (C_294:
-                                                                    (JC_206:
+                                                                    (JC_156:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_205:
+                                                                    (JC_155:
                                                                     ((double_of_real nearest_even) 7.))))) in
                                                                     (let jessie_589 = 
                                                                     ((shift !t) (97)) in
@@ -2967,9 +2917,9 @@ let f_safety =
                                                                     (let jessie_596 = 
                                                                     (let jessie_592 = 
                                                                     (C_297:
-                                                                    (JC_208:
+                                                                    (JC_158:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_207:
+                                                                    (JC_157:
                                                                     ((double_of_real nearest_even) 8.))))) in
                                                                     (let jessie_595 = 
                                                                     ((shift !t) (98)) in
@@ -2981,9 +2931,9 @@ let f_safety =
                                                                     (let jessie_602 = 
                                                                     (let jessie_598 = 
                                                                     (C_300:
-                                                                    (JC_210:
+                                                                    (JC_160:
                                                                     ((double_to_single nearest_even) 
-                                                                    (JC_209:
+                                                                    (JC_159:
                                                                     ((double_of_real nearest_even) 9.))))) in
                                                                     (let jessie_601 = 
                                                                     ((shift !t) (99)) in
@@ -2992,7 +2942,7 @@ let f_safety =
                                                                     [ 
                                                                     { } unit
                                                                     reads float_P_float_M_t_1,t
-                                                                    { (JC_211:
+                                                                    { (JC_161:
                                                                     eq_real(
                                                                     single_value(
                                                                     select(float_P_float_M_t_1,
@@ -3132,507 +3082,257 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0377_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "39" begin = "48" end = "62"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "40" begin = "48" end = "62"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "41" begin = "50" end = "64"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "42" begin = "51" end = "65"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "43" begin = "51" end = "65"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po9.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "44" begin = "51" end = "65"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po10.why">
+    <goal why_file="why/bts0377_po5.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "45" begin = "51" end = "65"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po11.why">
+    <goal why_file="why/bts0377_po6.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "46" begin = "51" end = "65"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po12.why">
+    <goal why_file="why/bts0377_po7.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "47" begin = "51" end = "65"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po13.why">
+    <goal why_file="why/bts0377_po8.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "48" begin = "51" end = "65"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po14.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "49" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "50" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po16.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "51" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "52" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "53" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po19.why">
+    <goal why_file="why/bts0377_po9.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "54" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po20.why">
+    <goal why_file="why/bts0377_po10.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "55" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po21.why">
+    <goal why_file="why/bts0377_po11.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "56" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po22.why">
+    <goal why_file="why/bts0377_po12.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "57" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po23.why">
+    <goal why_file="why/bts0377_po13.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "58" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "59" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po25.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "60" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "61" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "62" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "63" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po29.why">
+    <goal why_file="why/bts0377_po14.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "64" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po30.why">
+    <goal why_file="why/bts0377_po15.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "65" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po31.why">
+    <goal why_file="why/bts0377_po16.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "66" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po32.why">
+    <goal why_file="why/bts0377_po17.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "67" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po33.why">
+    <goal why_file="why/bts0377_po18.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "68" begin = "52" end = "66"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "69" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "70" begin = "52" end = "66"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "71" begin = "54" end = "68"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po37.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "72" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "73" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po39.why">
+    <goal why_file="why/bts0377_po19.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "74" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po40.why">
+    <goal why_file="why/bts0377_po20.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "75" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po41.why">
+    <goal why_file="why/bts0377_po21.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "76" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po42.why">
+    <goal why_file="why/bts0377_po22.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "77" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po43.why">
+    <goal why_file="why/bts0377_po23.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "78" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po44.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "79" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "80" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po46.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "81" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po47.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "82" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po48.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "83" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po49.why">
+    <goal why_file="why/bts0377_po24.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "84" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po50.why">
+    <goal why_file="why/bts0377_po25.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "85" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po51.why">
+    <goal why_file="why/bts0377_po26.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "86" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po52.why">
+    <goal why_file="why/bts0377_po27.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "87" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po53.why">
+    <goal why_file="why/bts0377_po28.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "88" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po54.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "89" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po55.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "90" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "91" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "92" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "93" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po59.why">
+    <goal why_file="why/bts0377_po29.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "94" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po60.why">
+    <goal why_file="why/bts0377_po30.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "95" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po61.why">
+    <goal why_file="why/bts0377_po31.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "96" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po62.why">
+    <goal why_file="why/bts0377_po32.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "97" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po63.why">
+    <goal why_file="why/bts0377_po33.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "98" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po64.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "99" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po65.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "100" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po66.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "101" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po67.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "102" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po68.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "103" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po69.why">
+    <goal why_file="why/bts0377_po34.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "104" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po70.why">
+    <goal why_file="why/bts0377_po35.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "105" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po71.why">
+    <goal why_file="why/bts0377_po36.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "106" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po72.why">
+    <goal why_file="why/bts0377_po37.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "107" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po73.why">
+    <goal why_file="why/bts0377_po38.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "108" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po74.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "109" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po75.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "110" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po76.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "111" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po77.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "112" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po78.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "113" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po79.why">
+    <goal why_file="why/bts0377_po39.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "114" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po80.why">
+    <goal why_file="why/bts0377_po40.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "115" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po81.why">
+    <goal why_file="why/bts0377_po41.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "116" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po82.why">
+    <goal why_file="why/bts0377_po42.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "117" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po83.why">
+    <goal why_file="why/bts0377_po43.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "118" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po84.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "119" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po85.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "120" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po86.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "121" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po87.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "122" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po88.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "123" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po89.why">
+    <goal why_file="why/bts0377_po44.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "124" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po90.why">
+    <goal why_file="why/bts0377_po45.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "125" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po91.why">
+    <goal why_file="why/bts0377_po46.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "126" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po92.why">
+    <goal why_file="why/bts0377_po47.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "127" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po93.why">
+    <goal why_file="why/bts0377_po48.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "128" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po94.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "129" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po95.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "130" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po96.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "131" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po97.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "132" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po98.why">
-      <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "133" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0377_po99.why">
+    <goal why_file="why/bts0377_po49.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "134" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po100.why">
+    <goal why_file="why/bts0377_po50.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "135" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po101.why">
+    <goal why_file="why/bts0377_po51.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "136" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po102.why">
+    <goal why_file="why/bts0377_po52.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "137" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po103.why">
+    <goal why_file="why/bts0377_po53.why">
       <location file = "PPCHOME/tests/jessie/bts0377.jessie/bts0377.jc" line = "138" begin = "55" end = "69"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/bts0377_po104.why">
-      <location file = "why/bts0377.why" line = "2849" begin = "69" end = "112"/>
+    <goal why_file="why/bts0377_po54.why">
+      <location file = "why/bts0377.why" line = "2799" begin = "69" end = "112"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3803,9 +3503,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -3817,24 +3514,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

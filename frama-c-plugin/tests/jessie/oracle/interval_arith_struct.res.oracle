@@ -1553,25 +1553,25 @@ let mul_ensures_default =
      (C_90:
      begin
        (let jessie_385 = (x_1_1 := (C_89:
-                                   (JC_169:
+                                   (JC_149:
                                    (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_x_1_19_alloc_table) __anonstruct_interval_1_x_1_19_tag_table)))) in
        void);
       (C_92:
       begin
         (let jessie_387 = (y_1_1 := (C_91:
-                                    (JC_170:
+                                    (JC_150:
                                     (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_y_1_20_alloc_table) __anonstruct_interval_1_y_1_20_tag_table)))) in
         void);
        (C_94:
        begin
          (let jessie_389 = (z_0 := (C_93:
-                                   (JC_171:
+                                   (JC_151:
                                    (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_z_0_21_alloc_table) __anonstruct_interval_1_z_0_21_tag_table)))) in
          void);
         (C_96:
         begin
           (let jessie_391 = (__cil_tmp_0 := (C_95:
-                                            (JC_172:
+                                            (JC_152:
                                             (((alloc_struct___anonstruct_interval_1 (1)) __anonstruct_interval_1_result_9_alloc_table) __anonstruct_interval_1_result_9_tag_table)))) in
           void);
          (let jessie_403 = (C_99:
@@ -1610,23 +1610,19 @@ let mul_ensures_default =
          void);
          (let jessie_611 = (if ((lt_double (C_238:
                                            ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1))) 
-                                (JC_173:
-                                ((double_of_real down) 0.0)))
+                                (double_of_real_exact 0.0))
                            then
                             (if ((gt_double (C_237:
                                             ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
-                                 (JC_174:
-                                 ((double_of_real down) 0.0)))
+                                 (double_of_real_exact 0.0))
                             then
                              (if ((lt_double (C_236:
                                              ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
-                                  (JC_175:
-                                  ((double_of_real down) 0.0)))
+                                  (double_of_real_exact 0.0))
                              then
                               (if ((gt_double (C_235:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_176:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                begin
                                  (let jessie_423 = (C_216:
@@ -1639,7 +1635,7 @@ let mul_ensures_default =
                                                                (let jessie_417 = 
                                                                (C_214:
                                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                               (JC_177:
+                                                               (JC_153:
                                                                ((mul_dn jessie_418) jessie_417)))))) in
                                                      void);
                                                     (C_220:
@@ -1651,7 +1647,7 @@ let mul_ensures_default =
                                                                   (let jessie_421 = 
                                                                   (C_218:
                                                                   ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                                  (JC_178:
+                                                                  (JC_154:
                                                                   ((mul_dn jessie_422) jessie_421))))));
                                                      !tmp_0_0
                                                     end)
@@ -1663,7 +1659,7 @@ let mul_ensures_default =
                                                     (C_221:
                                                     (let jessie_426 = !tmp_0_0 in
                                                     (let jessie_425 = !tmp_1 in
-                                                    (JC_179:
+                                                    (JC_155:
                                                     ((min jessie_426) jessie_425))))) in
                                                     (let jessie_430 = !z_0 in
                                                     (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_430) jessie_427))) in
@@ -1678,7 +1674,7 @@ let mul_ensures_default =
                                                                  (let jessie_433 = 
                                                                  (C_225:
                                                                  ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                                 (JC_180:
+                                                                 (JC_156:
                                                                  ((mul_up jessie_434) jessie_433)))))) in
                                                      void);
                                                     (C_231:
@@ -1690,7 +1686,7 @@ let mul_ensures_default =
                                                                 (let jessie_437 = 
                                                                 (C_229:
                                                                 ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                                (JC_181:
+                                                                (JC_157:
                                                                 ((mul_up jessie_438) jessie_437))))));
                                                      !tmp_2
                                                     end)
@@ -1700,7 +1696,7 @@ let mul_ensures_default =
                                  (let jessie_443 = (C_232:
                                                    (let jessie_442 = !tmp_2 in
                                                    (let jessie_441 = !tmp_1_0 in
-                                                   (JC_182:
+                                                   (JC_158:
                                                    ((max jessie_442) jessie_441))))) in
                                  (let jessie_446 = !z_0 in
                                  begin
@@ -1720,7 +1716,7 @@ let mul_ensures_default =
                                                    (let jessie_448 = 
                                                    (C_204:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_183:
+                                                   (JC_159:
                                                    ((mul_dn jessie_449) jessie_448))))) in
                                                    (let jessie_453 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_453) jessie_450))) in
@@ -1731,7 +1727,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_456 = (C_209:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_184:
+                                                  (JC_160:
                                                   ((mul_up jessie_457) jessie_456))))) in
                                 (let jessie_461 = !z_0 in
                                 begin
@@ -1742,8 +1738,7 @@ let mul_ensures_default =
                              else
                               (if ((gt_double (C_202:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_185:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_196:
                                begin
@@ -1755,7 +1750,7 @@ let mul_ensures_default =
                                                    (let jessie_463 = 
                                                    (C_193:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_186:
+                                                   (JC_161:
                                                    ((mul_dn jessie_464) jessie_463))))) in
                                                    (let jessie_468 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_468) jessie_465))) in
@@ -1766,7 +1761,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_471 = (C_198:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_187:
+                                                  (JC_162:
                                                   ((mul_up jessie_472) jessie_471))))) in
                                 (let jessie_476 = !z_0 in
                                 begin
@@ -1778,14 +1773,12 @@ let mul_ensures_default =
                                (C_189:
                                begin
                                  (let jessie_482 = (let jessie_478 = 
-                                                   (JC_188:
-                                                   ((double_of_real down) 0.0)) in
+                                                   (double_of_real_exact 0.0) in
                                                    (let jessie_481 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_481) jessie_478))) in
                                  void);
                                 (C_191:
-                                (let jessie_484 = (JC_189:
-                                                  ((double_of_real down) 0.0)) in
+                                (let jessie_484 = (double_of_real_exact 0.0) in
                                 (let jessie_487 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_487) jessie_484);
@@ -1795,13 +1788,11 @@ let mul_ensures_default =
                             else
                              (if ((lt_double (C_187:
                                              ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
-                                  (JC_190:
-                                  ((double_of_real down) 0.0)))
+                                  (double_of_real_exact 0.0))
                              then
                               (if ((gt_double (C_186:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_191:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_180:
                                begin
@@ -1813,7 +1804,7 @@ let mul_ensures_default =
                                                    (let jessie_489 = 
                                                    (C_177:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_192:
+                                                   (JC_163:
                                                    ((mul_dn jessie_490) jessie_489))))) in
                                                    (let jessie_494 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_494) jessie_491))) in
@@ -1824,7 +1815,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_497 = (C_182:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_193:
+                                                  (JC_164:
                                                   ((mul_up jessie_498) jessie_497))))) in
                                 (let jessie_502 = !z_0 in
                                 begin
@@ -1843,7 +1834,7 @@ let mul_ensures_default =
                                                    (let jessie_504 = 
                                                    (C_167:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_194:
+                                                   (JC_165:
                                                    ((mul_dn jessie_505) jessie_504))))) in
                                                    (let jessie_509 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_509) jessie_506))) in
@@ -1854,7 +1845,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_512 = (C_172:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_195:
+                                                  (JC_166:
                                                   ((mul_up jessie_513) jessie_512))))) in
                                 (let jessie_517 = !z_0 in
                                 begin
@@ -1865,8 +1856,7 @@ let mul_ensures_default =
                              else
                               (if ((gt_double (C_165:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_196:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_159:
                                begin
@@ -1878,7 +1868,7 @@ let mul_ensures_default =
                                                    (let jessie_519 = 
                                                    (C_156:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_197:
+                                                   (JC_167:
                                                    ((mul_dn jessie_520) jessie_519))))) in
                                                    (let jessie_524 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_524) jessie_521))) in
@@ -1889,7 +1879,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_527 = (C_161:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_198:
+                                                  (JC_168:
                                                   ((mul_up jessie_528) jessie_527))))) in
                                 (let jessie_532 = !z_0 in
                                 begin
@@ -1901,14 +1891,12 @@ let mul_ensures_default =
                                (C_152:
                                begin
                                  (let jessie_538 = (let jessie_534 = 
-                                                   (JC_199:
-                                                   ((double_of_real down) 0.0)) in
+                                                   (double_of_real_exact 0.0) in
                                                    (let jessie_537 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_537) jessie_534))) in
                                  void);
                                 (C_154:
-                                (let jessie_540 = (JC_200:
-                                                  ((double_of_real down) 0.0)) in
+                                (let jessie_540 = (double_of_real_exact 0.0) in
                                 (let jessie_543 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_543) jessie_540);
@@ -1918,18 +1906,15 @@ let mul_ensures_default =
                            else
                             (if ((gt_double (C_150:
                                             ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
-                                 (JC_201:
-                                 ((double_of_real down) 0.0)))
+                                 (double_of_real_exact 0.0))
                             then
                              (if ((lt_double (C_149:
                                              ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
-                                  (JC_202:
-                                  ((double_of_real down) 0.0)))
+                                  (double_of_real_exact 0.0))
                              then
                               (if ((gt_double (C_148:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_203:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_142:
                                begin
@@ -1941,7 +1926,7 @@ let mul_ensures_default =
                                                    (let jessie_545 = 
                                                    (C_139:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_204:
+                                                   (JC_169:
                                                    ((mul_dn jessie_546) jessie_545))))) in
                                                    (let jessie_550 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_550) jessie_547))) in
@@ -1952,7 +1937,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_553 = (C_144:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_205:
+                                                  (JC_170:
                                                   ((mul_up jessie_554) jessie_553))))) in
                                 (let jessie_558 = !z_0 in
                                 begin
@@ -1971,7 +1956,7 @@ let mul_ensures_default =
                                                    (let jessie_560 = 
                                                    (C_129:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_206:
+                                                   (JC_171:
                                                    ((mul_dn jessie_561) jessie_560))))) in
                                                    (let jessie_565 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_565) jessie_562))) in
@@ -1982,7 +1967,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_568 = (C_134:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_207:
+                                                  (JC_172:
                                                   ((mul_up jessie_569) jessie_568))))) in
                                 (let jessie_573 = !z_0 in
                                 begin
@@ -1993,8 +1978,7 @@ let mul_ensures_default =
                              else
                               (if ((gt_double (C_127:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_208:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_121:
                                begin
@@ -2006,7 +1990,7 @@ let mul_ensures_default =
                                                    (let jessie_575 = 
                                                    (C_118:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_209:
+                                                   (JC_173:
                                                    ((mul_dn jessie_576) jessie_575))))) in
                                                    (let jessie_580 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_580) jessie_577))) in
@@ -2017,7 +2001,7 @@ let mul_ensures_default =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_583 = (C_123:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_210:
+                                                  (JC_174:
                                                   ((mul_up jessie_584) jessie_583))))) in
                                 (let jessie_588 = !z_0 in
                                 begin
@@ -2029,14 +2013,12 @@ let mul_ensures_default =
                                (C_114:
                                begin
                                  (let jessie_594 = (let jessie_590 = 
-                                                   (JC_211:
-                                                   ((double_of_real down) 0.0)) in
+                                                   (double_of_real_exact 0.0) in
                                                    (let jessie_593 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_593) jessie_590))) in
                                  void);
                                 (C_116:
-                                (let jessie_596 = (JC_212:
-                                                  ((double_of_real down) 0.0)) in
+                                (let jessie_596 = (double_of_real_exact 0.0) in
                                 (let jessie_599 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_599) jessie_596);
@@ -2046,14 +2028,12 @@ let mul_ensures_default =
                             else
                              (C_110:
                              begin
-                               (let jessie_605 = (let jessie_601 = (JC_213:
-                                                                   ((double_of_real down) 0.0)) in
+                               (let jessie_605 = (let jessie_601 = (double_of_real_exact 0.0) in
                                                  (let jessie_604 = !z_0 in
                                                  (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_604) jessie_601))) in
                                void);
                               (C_112:
-                              (let jessie_607 = (JC_214:
-                                                ((double_of_real down) 0.0)) in
+                              (let jessie_607 = (double_of_real_exact 0.0) in
                               (let jessie_610 = !z_0 in
                               begin
                                 (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_610) jessie_607);
@@ -2225,23 +2205,19 @@ let mul_safety =
          void);
          (let jessie_370 = (if ((lt_double (C_238:
                                            ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1))) 
-                                (JC_127:
-                                ((double_of_real down) 0.0)))
+                                (double_of_real_exact 0.0))
                            then
                             (if ((gt_double (C_237:
                                             ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
-                                 (JC_128:
-                                 ((double_of_real down) 0.0)))
+                                 (double_of_real_exact 0.0))
                             then
                              (if ((lt_double (C_236:
                                              ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
-                                  (JC_129:
-                                  ((double_of_real down) 0.0)))
+                                  (double_of_real_exact 0.0))
                              then
                               (if ((gt_double (C_235:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_130:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                begin
                                  (let jessie_182 = (C_216:
@@ -2254,7 +2230,7 @@ let mul_safety =
                                                                (let jessie_176 = 
                                                                (C_214:
                                                                ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                               (JC_131:
+                                                               (JC_127:
                                                                ((mul_dn_requires jessie_177) jessie_176)))))) in
                                                      void);
                                                     (C_220:
@@ -2266,7 +2242,7 @@ let mul_safety =
                                                                   (let jessie_180 = 
                                                                   (C_218:
                                                                   ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                                  (JC_132:
+                                                                  (JC_128:
                                                                   ((mul_dn_requires jessie_181) jessie_180))))));
                                                      !tmp_0_0
                                                     end)
@@ -2278,7 +2254,7 @@ let mul_safety =
                                                     (C_221:
                                                     (let jessie_185 = !tmp_0_0 in
                                                     (let jessie_184 = !tmp_1 in
-                                                    (JC_133:
+                                                    (JC_129:
                                                     ((min_requires jessie_185) jessie_184))))) in
                                                     (let jessie_189 = !z_0 in
                                                     (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_189) jessie_186))) in
@@ -2293,7 +2269,7 @@ let mul_safety =
                                                                  (let jessie_192 = 
                                                                  (C_225:
                                                                  ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                                 (JC_134:
+                                                                 (JC_130:
                                                                  ((mul_up_requires jessie_193) jessie_192)))))) in
                                                      void);
                                                     (C_231:
@@ -2305,7 +2281,7 @@ let mul_safety =
                                                                 (let jessie_196 = 
                                                                 (C_229:
                                                                 ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                                (JC_135:
+                                                                (JC_131:
                                                                 ((mul_up_requires jessie_197) jessie_196))))));
                                                      !tmp_2
                                                     end)
@@ -2315,7 +2291,7 @@ let mul_safety =
                                  (let jessie_202 = (C_232:
                                                    (let jessie_201 = !tmp_2 in
                                                    (let jessie_200 = !tmp_1_0 in
-                                                   (JC_136:
+                                                   (JC_132:
                                                    ((max_requires jessie_201) jessie_200))))) in
                                  (let jessie_205 = !z_0 in
                                  begin
@@ -2335,7 +2311,7 @@ let mul_safety =
                                                    (let jessie_207 = 
                                                    (C_204:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_137:
+                                                   (JC_133:
                                                    ((mul_dn_requires jessie_208) jessie_207))))) in
                                                    (let jessie_212 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_212) jessie_209))) in
@@ -2346,7 +2322,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_215 = (C_209:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_138:
+                                                  (JC_134:
                                                   ((mul_up_requires jessie_216) jessie_215))))) in
                                 (let jessie_220 = !z_0 in
                                 begin
@@ -2357,8 +2333,7 @@ let mul_safety =
                              else
                               (if ((gt_double (C_202:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_139:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_196:
                                begin
@@ -2370,7 +2345,7 @@ let mul_safety =
                                                    (let jessie_222 = 
                                                    (C_193:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_140:
+                                                   (JC_135:
                                                    ((mul_dn_requires jessie_223) jessie_222))))) in
                                                    (let jessie_227 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_227) jessie_224))) in
@@ -2381,7 +2356,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_230 = (C_198:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_141:
+                                                  (JC_136:
                                                   ((mul_up_requires jessie_231) jessie_230))))) in
                                 (let jessie_235 = !z_0 in
                                 begin
@@ -2393,14 +2368,12 @@ let mul_safety =
                                (C_189:
                                begin
                                  (let jessie_241 = (let jessie_237 = 
-                                                   (JC_142:
-                                                   ((double_of_real down) 0.0)) in
+                                                   (double_of_real_exact 0.0) in
                                                    (let jessie_240 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_240) jessie_237))) in
                                  void);
                                 (C_191:
-                                (let jessie_243 = (JC_143:
-                                                  ((double_of_real down) 0.0)) in
+                                (let jessie_243 = (double_of_real_exact 0.0) in
                                 (let jessie_246 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_246) jessie_243);
@@ -2410,13 +2383,11 @@ let mul_safety =
                             else
                              (if ((lt_double (C_187:
                                              ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
-                                  (JC_144:
-                                  ((double_of_real down) 0.0)))
+                                  (double_of_real_exact 0.0))
                              then
                               (if ((gt_double (C_186:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_145:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_180:
                                begin
@@ -2428,7 +2399,7 @@ let mul_safety =
                                                    (let jessie_248 = 
                                                    (C_177:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_146:
+                                                   (JC_137:
                                                    ((mul_dn_requires jessie_249) jessie_248))))) in
                                                    (let jessie_253 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_253) jessie_250))) in
@@ -2439,7 +2410,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_256 = (C_182:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_147:
+                                                  (JC_138:
                                                   ((mul_up_requires jessie_257) jessie_256))))) in
                                 (let jessie_261 = !z_0 in
                                 begin
@@ -2458,7 +2429,7 @@ let mul_safety =
                                                    (let jessie_263 = 
                                                    (C_167:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_148:
+                                                   (JC_139:
                                                    ((mul_dn_requires jessie_264) jessie_263))))) in
                                                    (let jessie_268 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_268) jessie_265))) in
@@ -2469,7 +2440,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_271 = (C_172:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_149:
+                                                  (JC_140:
                                                   ((mul_up_requires jessie_272) jessie_271))))) in
                                 (let jessie_276 = !z_0 in
                                 begin
@@ -2480,8 +2451,7 @@ let mul_safety =
                              else
                               (if ((gt_double (C_165:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_150:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_159:
                                begin
@@ -2493,7 +2463,7 @@ let mul_safety =
                                                    (let jessie_278 = 
                                                    (C_156:
                                                    ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                   (JC_151:
+                                                   (JC_141:
                                                    ((mul_dn_requires jessie_279) jessie_278))))) in
                                                    (let jessie_283 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_283) jessie_280))) in
@@ -2504,7 +2474,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_286 = (C_161:
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                  (JC_152:
+                                                  (JC_142:
                                                   ((mul_up_requires jessie_287) jessie_286))))) in
                                 (let jessie_291 = !z_0 in
                                 begin
@@ -2516,14 +2486,12 @@ let mul_safety =
                                (C_152:
                                begin
                                  (let jessie_297 = (let jessie_293 = 
-                                                   (JC_153:
-                                                   ((double_of_real down) 0.0)) in
+                                                   (double_of_real_exact 0.0) in
                                                    (let jessie_296 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_296) jessie_293))) in
                                  void);
                                 (C_154:
-                                (let jessie_299 = (JC_154:
-                                                  ((double_of_real down) 0.0)) in
+                                (let jessie_299 = (double_of_real_exact 0.0) in
                                 (let jessie_302 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_302) jessie_299);
@@ -2533,18 +2501,15 @@ let mul_safety =
                            else
                             (if ((gt_double (C_150:
                                             ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1))) 
-                                 (JC_155:
-                                 ((double_of_real down) 0.0)))
+                                 (double_of_real_exact 0.0))
                             then
                              (if ((lt_double (C_149:
                                              ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1))) 
-                                  (JC_156:
-                                  ((double_of_real down) 0.0)))
+                                  (double_of_real_exact 0.0))
                              then
                               (if ((gt_double (C_148:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_157:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_142:
                                begin
@@ -2556,7 +2521,7 @@ let mul_safety =
                                                    (let jessie_304 = 
                                                    (C_139:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_158:
+                                                   (JC_143:
                                                    ((mul_dn_requires jessie_305) jessie_304))))) in
                                                    (let jessie_309 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_309) jessie_306))) in
@@ -2567,7 +2532,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_312 = (C_144:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_159:
+                                                  (JC_144:
                                                   ((mul_up_requires jessie_313) jessie_312))))) in
                                 (let jessie_317 = !z_0 in
                                 begin
@@ -2586,7 +2551,7 @@ let mul_safety =
                                                    (let jessie_319 = 
                                                    (C_129:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_160:
+                                                   (JC_145:
                                                    ((mul_dn_requires jessie_320) jessie_319))))) in
                                                    (let jessie_324 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_324) jessie_321))) in
@@ -2597,7 +2562,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_l_x_1_19) !x_1_1)) in
                                                   (let jessie_327 = (C_134:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_161:
+                                                  (JC_146:
                                                   ((mul_up_requires jessie_328) jessie_327))))) in
                                 (let jessie_332 = !z_0 in
                                 begin
@@ -2608,8 +2573,7 @@ let mul_safety =
                              else
                               (if ((gt_double (C_127:
                                               ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1))) 
-                                   (JC_162:
-                                   ((double_of_real down) 0.0)))
+                                   (double_of_real_exact 0.0))
                               then
                                (C_121:
                                begin
@@ -2621,7 +2585,7 @@ let mul_safety =
                                                    (let jessie_334 = 
                                                    (C_118:
                                                    ((safe_acc_ !__anonstruct_interval_1_l_y_1_20) !y_1_1)) in
-                                                   (JC_163:
+                                                   (JC_147:
                                                    ((mul_dn_requires jessie_335) jessie_334))))) in
                                                    (let jessie_339 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_339) jessie_336))) in
@@ -2632,7 +2596,7 @@ let mul_safety =
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_x_1_19) !x_1_1)) in
                                                   (let jessie_342 = (C_123:
                                                                     ((safe_acc_ !__anonstruct_interval_1_u_y_1_20) !y_1_1)) in
-                                                  (JC_164:
+                                                  (JC_148:
                                                   ((mul_up_requires jessie_343) jessie_342))))) in
                                 (let jessie_347 = !z_0 in
                                 begin
@@ -2644,14 +2608,12 @@ let mul_safety =
                                (C_114:
                                begin
                                  (let jessie_353 = (let jessie_349 = 
-                                                   (JC_165:
-                                                   ((double_of_real down) 0.0)) in
+                                                   (double_of_real_exact 0.0) in
                                                    (let jessie_352 = !z_0 in
                                                    (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_352) jessie_349))) in
                                  void);
                                 (C_116:
-                                (let jessie_355 = (JC_166:
-                                                  ((double_of_real down) 0.0)) in
+                                (let jessie_355 = (double_of_real_exact 0.0) in
                                 (let jessie_358 = !z_0 in
                                 begin
                                   (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_358) jessie_355);
@@ -2661,14 +2623,12 @@ let mul_safety =
                             else
                              (C_110:
                              begin
-                               (let jessie_364 = (let jessie_360 = (JC_167:
-                                                                   ((double_of_real down) 0.0)) in
+                               (let jessie_364 = (let jessie_360 = (double_of_real_exact 0.0) in
                                                  (let jessie_363 = !z_0 in
                                                  (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_363) jessie_360))) in
                                void);
                               (C_112:
-                              (let jessie_366 = (JC_168:
-                                                ((double_of_real down) 0.0)) in
+                              (let jessie_366 = (double_of_real_exact 0.0) in
                               (let jessie_369 = !z_0 in
                               begin
                                 (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_369) jessie_366);
@@ -2840,7 +2800,7 @@ why --project [...] why/interval_arith_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po22.why">
-      <location file = "why/interval_arith_struct.why" line = "1763" begin = "37" end = "197"/>
+      <location file = "why/interval_arith_struct.why" line = "1743" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po23.why">
@@ -2849,7 +2809,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po24.why">
-      <location file = "why/interval_arith_struct.why" line = "1775" begin = "38" end = "200"/>
+      <location file = "why/interval_arith_struct.why" line = "1755" begin = "38" end = "200"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po25.why">
@@ -2858,7 +2818,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po26.why">
-      <location file = "why/interval_arith_struct.why" line = "1787" begin = "37" end = "197"/>
+      <location file = "why/interval_arith_struct.why" line = "1767" begin = "37" end = "197"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po27.why">
@@ -2867,7 +2827,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po28.why">
-      <location file = "why/interval_arith_struct.why" line = "1799" begin = "46" end = "226"/>
+      <location file = "why/interval_arith_struct.why" line = "1779" begin = "46" end = "226"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po29.why">
@@ -3541,17 +3501,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po163.why">
-      <location file = "why/interval_arith_struct.why" line = "2307" begin = "14" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "2267" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po164.why">
-      <location file = "why/interval_arith_struct.why" line = "2310" begin = "15" end = "81"/>
+      <location file = "why/interval_arith_struct.why" line = "2270" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po165.why">
-      <location file = "why/interval_arith_struct.why" line = "2313" begin = "16" end = "80"/>
+      <location file = "why/interval_arith_struct.why" line = "2273" begin = "16" end = "80"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3818,9 +3778,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -3832,24 +3789,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

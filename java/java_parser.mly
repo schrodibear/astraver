@@ -1140,9 +1140,11 @@ kml_global_decl:
 
 reads_clause:
 | READS expr_comma_list
-    { $2 }
+    { Some $2 }
+| READS BSNOTHING
+    { Some [] }
 | /* epsilon */ 
-    { [] }
+    { None }
 ;
  
 indcases:

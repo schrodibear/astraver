@@ -67,7 +67,7 @@ axiom cast_pointer:
 
 (*
 
-example 2: wild pointer arithmetic
+example 2 of Xavier Leroy: wild pointer arithmetic
 
 
 

@@ -566,7 +566,7 @@ type logic_def_body =
   | `Builtin ]
 
 type logic_decl_body =
-  [ logic_def_body | `Reads of Java_tast.term list ]
+  [ logic_def_body | `None | `Reads of Java_tast.term list ]
 
 type axiomatic_defs =
   | Adecl of  Java_env.java_logic_info * logic_decl_body
@@ -4010,6 +4010,8 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	  end
 	    
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
+	if not in_axiomatic then
+	  typing_error loc "logics without def not allowed outside axiomatics";
 	let labels_env,current_label,tlabels = labels_env labels in
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
         let env = 
@@ -4036,15 +4038,13 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
                   (Some (type_type package_env type_env false ty)) 
                   tlabels pl 
 	in
-        let r = List.map (location env) reads in
         Hashtbl.add logics_env id fi;
 	Java_options.lprintf "Adding logic function '%s' in the logic environment@." id;
-	if in_axiomatic then
-	  Adecl(fi,`Reads r)::acc
-	else
-	  begin
-	    typing_error loc "logics without def not allowed outside axiomatics"; 
-	  end
+        let body = match reads with
+          | Some r -> `Reads (List.map (location env) r)
+          | None -> `None
+        in
+	Adecl(fi,body)::acc
 
     | JPTlogic_def ((_loc, id), ret_type, labels, params, body) -> 
 	let labels_env,current_label,tlabels = labels_env labels in

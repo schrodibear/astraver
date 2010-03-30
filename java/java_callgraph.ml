@@ -212,6 +212,7 @@ let compute_logic_calls f (t : [< Java_typing.logic_decl_body]) =
     match t with
       | `Term t -> term [] t 
       | `Assertion a -> assertion [] a 
+      | `None -> []
       | `Reads r -> List.fold_left term [] r 
       | `Inductive l ->
 	  List.fold_left

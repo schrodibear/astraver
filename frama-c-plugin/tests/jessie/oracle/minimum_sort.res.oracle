@@ -82,35 +82,35 @@ predicate Sorted{L}(int_P[..] a_5, integer l_4, integer h_4) =
   (((l_4 <= i_1) && (i_1 < h_4)) ==>
     ((a_5 + i_1).int_M <= (a_5 + (i_1 + 1)).int_M)))
 
-unit swap(int_P[..] t, integer i, integer j)
-  requires (C_12 : (((C_14 : (\offset_min(t) <= i)) &&
-                      (C_15 : (\offset_max(t) >= i))) &&
-                     ((C_17 : (\offset_min(t) <= j)) &&
-                       (C_18 : (\offset_max(t) >= j)))));
+unit swap(int_P[..] t_0, integer i, integer j)
+  requires (C_12 : (((C_14 : (\offset_min(t_0) <= i)) &&
+                      (C_15 : (\offset_max(t_0) >= i))) &&
+                     ((C_17 : (\offset_min(t_0) <= j)) &&
+                       (C_18 : (\offset_max(t_0) >= j)))));
 behavior default:
-  assigns (t + i).int_M,
-  (t + j).int_M;
-  ensures (C_19 : Swap{Old, Here}(t, i, j));
+  assigns (t_0 + i).int_M,
+  (t_0 + j).int_M;
+  ensures (C_19 : Swap{Old, Here}(t_0, i, j));
 {  
    (var integer tmp);
    
-   {  (C_3 : (tmp = (C_2 : (C_1 : (t + i)).int_M)));
-      (C_8 : ((C_7 : (C_6 : (t + i)).int_M) = (C_5 : (C_4 : (t + j)).int_M)));
-      (C_11 : ((C_10 : (C_9 : (t + j)).int_M) = tmp));
+   {  (C_3 : (tmp = (C_2 : (C_1 : (t_0 + i)).int_M)));
+      (C_8 : ((C_7 : (C_6 : (t_0 + i)).int_M) = (C_5 : (C_4 : (t_0 + j)).int_M)));
+      (C_11 : ((C_10 : (C_9 : (t_0 + j)).int_M) = tmp));
       
       (return ())
    }
 }
 
-unit min_sort(int_P[..] t_0, integer n)
-  requires (C_57 : ((C_58 : (\offset_min(t_0) <= 0)) &&
-                     (C_59 : (\offset_max(t_0) >= (n - 1)))));
+unit min_sort(int_P[..] t, integer n)
+  requires (C_57 : ((C_58 : (\offset_min(t) <= 0)) &&
+                     (C_59 : (\offset_max(t) >= (n - 1)))));
 behavior default:
   ensures (C_60 : true);
 behavior sorted:
-  ensures (C_61 : Sorted{Here}(t_0, 0, (n - 1)));
+  ensures (C_61 : Sorted{Here}(t, 0, (n - 1)));
 behavior permutation:
-  ensures (C_62 : Permut{Old, Here}(t_0, 0, (n - 1)));
+  ensures (C_62 : Permut{Old, Here}(t, 0, (n - 1)));
 {  
    (var integer i_0);
    
@@ -127,16 +127,16 @@ behavior permutation:
       {  
          loop 
          behavior permutation:
-           invariant (C_27 : Permut{Pre, Here}(t_0, 0, (n - 1)));
+           invariant (C_27 : Permut{Pre, Here}(t, 0, (n - 1)));
          behavior sorted:
-           invariant (C_24 : ((C_25 : Sorted{Here}(t_0, 0, i_0)) &&
+           invariant (C_24 : ((C_25 : Sorted{Here}(t, 0, i_0)) &&
                                (C_26 : (\forall integer k1;
                                          (\forall integer k2;
                                            (((0 <= k1) &&
                                               ((k1 < i_0) &&
                                                 ((i_0 <= k2) && (k2 < n)))) ==>
-                                             ((t_0 + k1).int_M <=
-                                               (t_0 + k2).int_M)))))));
+                                             ((t + k1).int_M <=
+                                               (t + k2).int_M)))))));
          behavior default:
            invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 < n))));
          variant (C_28 : (n - i_0));
@@ -144,39 +144,39 @@ behavior permutation:
          {  
             {  (if (i_0 < (C_29 : (n - 1))) then () else 
                (goto while_0_break));
-               (C_32 : (mv = (C_31 : (C_30 : (t_0 + i_0)).int_M)));
+               (C_32 : (mv = (C_31 : (C_30 : (t + i_0)).int_M)));
                (C_33 : (mi = i_0));
                (C_35 : (j_0 = (C_34 : (i_0 + 1))));
                
                {  
                   loop 
                   behavior sorted:
-                    invariant (C_43 : ((C_44 : (mv == (t_0 + mi).int_M)) &&
+                    invariant (C_43 : ((C_44 : (mv == (t + mi).int_M)) &&
                                         (C_45 : (\forall integer k_0;
                                                   (((i_0 <= k_0) &&
                                                      (k_0 < j_0)) ==>
-                                                    ((t_0 + k_0).int_M >= mv))))));
+                                                    ((t + k_0).int_M >= mv))))));
                   behavior default:
                     invariant (C_38 : ((C_39 : (i_0 < j_0)) &&
                                         ((C_41 : (i_0 <= mi)) &&
                                           (C_42 : (mi < n)))));
                   behavior permutation:
-                    invariant (C_36 : Permut{Pre, Here}(t_0, 0, (n - 1)));
+                    invariant (C_36 : Permut{Pre, Here}(t, 0, (n - 1)));
                   variant (C_37 : (n - j_0));
                   while (true)
                   {  
                      {  (if (j_0 < n) then () else 
                         (goto while_1_break));
-                        (if ((C_51 : (C_50 : (t_0 + j_0)).int_M) < mv) then 
+                        (if ((C_51 : (C_50 : (t + j_0)).int_M) < mv) then 
                         {  (C_46 : (mi = j_0));
-                           (C_49 : (mv = (C_48 : (C_47 : (t_0 + j_0)).int_M)))
+                           (C_49 : (mv = (C_48 : (C_47 : (t + j_0)).int_M)))
                         } else ());
                         (C_53 : (j_0 = (C_52 : (j_0 + 1))))
                      }
                   };
                   (while_1_break : ())
                };
-               (C_54 : swap(t_0, i_0, mi));
+               (C_54 : swap(t, i_0, mi));
                (C_56 : (i_0 = (C_55 : (i_0 + 1))))
             }
          };
@@ -603,72 +603,72 @@ parameter alloc_struct_void_P_requires :
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
 parameter min_sort :
- t_0:int_P pointer ->
+ t:int_P pointer ->
   n:int ->
-   int_P_int_M_t_0_5:(int_P, int) memory ref ->
-    int_P_t_0_5_alloc_table:int_P alloc_table ->
-     { } unit reads int_P_int_M_t_0_5 writes int_P_int_M_t_0_5
+   int_P_int_M_t_5:(int_P, int) memory ref ->
+    int_P_t_5_alloc_table:int_P alloc_table ->
+     { } unit reads int_P_int_M_t_5 writes int_P_int_M_t_5
      { ((JC_40:
-        Permut(t_0, (0), sub_int(n, (1)), int_P_int_M_t_0_5,
-        int_P_int_M_t_0_5@))
-       and (JC_38: Sorted(t_0, (0), sub_int(n, (1)), int_P_int_M_t_0_5))) }
+        Permut(t, (0), sub_int(n, (1)), int_P_int_M_t_5, int_P_int_M_t_5@))
+       and (JC_38: Sorted(t, (0), sub_int(n, (1)), int_P_int_M_t_5))) }
 
 parameter min_sort_requires :
- t_0:int_P pointer ->
+ t:int_P pointer ->
   n:int ->
-   int_P_int_M_t_0_5:(int_P, int) memory ref ->
-    int_P_t_0_5_alloc_table:int_P alloc_table ->
+   int_P_int_M_t_5:(int_P, int) memory ref ->
+    int_P_t_5_alloc_table:int_P alloc_table ->
      { (JC_27:
-       ((JC_25: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+       ((JC_25: le_int(offset_min(int_P_t_5_alloc_table, t), (0)))
        and (JC_26:
-           ge_int(offset_max(int_P_t_0_5_alloc_table, t_0), sub_int(n, (1))))))}
-     unit reads int_P_int_M_t_0_5 writes int_P_int_M_t_0_5
+           ge_int(offset_max(int_P_t_5_alloc_table, t), sub_int(n, (1))))))}
+     unit reads int_P_int_M_t_5 writes int_P_int_M_t_5
      { ((JC_40:
-        Permut(t_0, (0), sub_int(n, (1)), int_P_int_M_t_0_5,
-        int_P_int_M_t_0_5@))
-       and (JC_38: Sorted(t_0, (0), sub_int(n, (1)), int_P_int_M_t_0_5))) }
+        Permut(t, (0), sub_int(n, (1)), int_P_int_M_t_5, int_P_int_M_t_5@))
+       and (JC_38: Sorted(t, (0), sub_int(n, (1)), int_P_int_M_t_5))) }
 
 parameter swap :
- t:int_P pointer ->
+ t_0:int_P pointer ->
   i_0:int ->
    j_0:int ->
-    int_P_int_M_t_4:(int_P, int) memory ref ->
-     int_P_t_4_alloc_table:int_P alloc_table ->
-      { } unit reads int_P_int_M_t_4 writes int_P_int_M_t_4
+    int_P_int_M_t_0_4:(int_P, int) memory ref ->
+     int_P_t_0_4_alloc_table:int_P alloc_table ->
+      { } unit reads int_P_int_M_t_0_4 writes int_P_int_M_t_0_4
       { (JC_18:
-        ((JC_16: Swap(t, i_0, j_0, int_P_int_M_t_4, int_P_int_M_t_4@))
+        ((JC_16: Swap(t_0, i_0, j_0, int_P_int_M_t_0_4, int_P_int_M_t_0_4@))
         and (JC_17:
-            not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
-            int_P_int_M_t_4,
-            pset_union(pset_range(pset_singleton(t@), j_0@, j_0@),
-            pset_range(pset_singleton(t@), i_0@, i_0@)))))) }
+            not_assigns(int_P_t_0_4_alloc_table@, int_P_int_M_t_0_4@,
+            int_P_int_M_t_0_4,
+            pset_union(pset_range(pset_singleton(t_0@), j_0@, j_0@),
+            pset_range(pset_singleton(t_0@), i_0@, i_0@)))))) }
 
 parameter swap_requires :
- t:int_P pointer ->
+ t_0:int_P pointer ->
   i_0:int ->
    j_0:int ->
-    int_P_int_M_t_4:(int_P, int) memory ref ->
-     int_P_t_4_alloc_table:int_P alloc_table ->
+    int_P_int_M_t_0_4:(int_P, int) memory ref ->
+     int_P_t_0_4_alloc_table:int_P alloc_table ->
       { (JC_5:
-        ((JC_1: le_int(offset_min(int_P_t_4_alloc_table, t), i_0))
-        and ((JC_2: ge_int(offset_max(int_P_t_4_alloc_table, t), i_0))
-            and ((JC_3: le_int(offset_min(int_P_t_4_alloc_table, t), j_0))
-                and (JC_4: ge_int(offset_max(int_P_t_4_alloc_table, t), j_0))))))}
-      unit reads int_P_int_M_t_4 writes int_P_int_M_t_4
+        ((JC_1: le_int(offset_min(int_P_t_0_4_alloc_table, t_0), i_0))
+        and ((JC_2: ge_int(offset_max(int_P_t_0_4_alloc_table, t_0), i_0))
+            and ((JC_3:
+                 le_int(offset_min(int_P_t_0_4_alloc_table, t_0), j_0))
+                and (JC_4:
+                    ge_int(offset_max(int_P_t_0_4_alloc_table, t_0), j_0))))))}
+      unit reads int_P_int_M_t_0_4 writes int_P_int_M_t_0_4
       { (JC_18:
-        ((JC_16: Swap(t, i_0, j_0, int_P_int_M_t_4, int_P_int_M_t_4@))
+        ((JC_16: Swap(t_0, i_0, j_0, int_P_int_M_t_0_4, int_P_int_M_t_0_4@))
         and (JC_17:
-            not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
-            int_P_int_M_t_4,
-            pset_union(pset_range(pset_singleton(t@), j_0@, j_0@),
-            pset_range(pset_singleton(t@), i_0@, i_0@)))))) }
+            not_assigns(int_P_t_0_4_alloc_table@, int_P_int_M_t_0_4@,
+            int_P_int_M_t_0_4,
+            pset_union(pset_range(pset_singleton(t_0@), j_0@, j_0@),
+            pset_range(pset_singleton(t_0@), i_0@, i_0@)))))) }
 
 let min_sort_ensures_default =
- fun (t_0 : int_P pointer) (n : int) (int_P_int_M_t_0_5 : (int_P, int) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
+ fun (t : int_P pointer) (n : int) (int_P_int_M_t_5 : (int_P, int) memory ref) (int_P_t_5_alloc_table : int_P alloc_table) ->
   { (JC_31:
-    ((JC_29: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+    ((JC_29: le_int(offset_min(int_P_t_5_alloc_table, t), (0)))
     and (JC_30:
-        ge_int(offset_max(int_P_t_0_5_alloc_table, t_0), sub_int(n, (1)))))) }
+        ge_int(offset_max(int_P_t_5_alloc_table, t), sub_int(n, (1)))))) }
   (init:
   try
    begin
@@ -720,9 +720,9 @@ let min_sort_ensures_default =
                                                                     (let jessie_68 = 
                                                                     (mv := 
                                                                     (C_31:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_30:
-                                                                    ((shift t_0) !i_0_1))))) in
+                                                                    ((shift t) !i_0_1))))) in
                                                                     void);
                                                                     (C_33:
                                                                     begin
@@ -784,9 +784,9 @@ let min_sort_ensures_default =
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (C_51:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_50:
-                                                                    ((shift t_0) !j_0_1))))) !mv)
+                                                                    ((shift t) !j_0_1))))) !mv)
                                                                     then
                                                                     (let jessie_77 = 
                                                                     (C_46:
@@ -800,9 +800,9 @@ let min_sort_ensures_default =
                                                                       
                                                                     (mv := 
                                                                     (C_48:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_47:
-                                                                    ((shift t_0) !j_0_1)))));
+                                                                    ((shift t) !j_0_1)))));
                                                                     !mv
                                                                     end)
                                                                     end) in
@@ -840,11 +840,11 @@ let min_sort_ensures_default =
                                                                     (C_54:
                                                                     begin
                                                                       
-                                                                    (let jessie_84 = t_0 in
+                                                                    (let jessie_84 = t in
                                                                     (let jessie_83 = !i_0_1 in
                                                                     (let jessie_82 = !mi in
                                                                     (JC_73:
-                                                                    (((((swap jessie_84) jessie_83) jessie_82) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
+                                                                    (((((swap jessie_84) jessie_83) jessie_82) int_P_int_M_t_5) int_P_t_5_alloc_table)))));
                                                                     (C_56:
                                                                     begin
                                                                       
@@ -892,11 +892,11 @@ let min_sort_ensures_default =
   { (JC_33: true) }
 
 let min_sort_ensures_permutation =
- fun (t_0 : int_P pointer) (n : int) (int_P_int_M_t_0_5 : (int_P, int) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
+ fun (t : int_P pointer) (n : int) (int_P_int_M_t_5 : (int_P, int) memory ref) (int_P_t_5_alloc_table : int_P alloc_table) ->
   { (JC_31:
-    ((JC_29: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+    ((JC_29: le_int(offset_min(int_P_t_5_alloc_table, t), (0)))
     and (JC_30:
-        ge_int(offset_max(int_P_t_0_5_alloc_table, t_0), sub_int(n, (1)))))) }
+        ge_int(offset_max(int_P_t_5_alloc_table, t), sub_int(n, (1)))))) }
   (init:
   try
    begin
@@ -920,10 +920,10 @@ let min_sort_ensures_permutation =
                                                while true do
                                                { invariant
                                                    (JC_94:
-                                                   Permut(t_0, (0),
+                                                   Permut(t, (0),
                                                    sub_int(n, (1)),
-                                                   int_P_int_M_t_0_5,
-                                                   int_P_int_M_t_0_5@init))
+                                                   int_P_int_M_t_5,
+                                                   int_P_int_M_t_5@init))
                                                   }
                                                 begin
                                                   [ { } unit reads i_0_1
@@ -955,9 +955,9 @@ let min_sort_ensures_permutation =
                                                                     (let jessie_122 = 
                                                                     (mv := 
                                                                     (C_31:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_30:
-                                                                    ((shift t_0) !i_0_1))))) in
+                                                                    ((shift t) !i_0_1))))) in
                                                                     void);
                                                                     (C_33:
                                                                     begin
@@ -981,12 +981,12 @@ let min_sort_ensures_permutation =
                                                                     while true do
                                                                     { invariant
                                                                     (JC_101:
-                                                                    Permut(t_0,
+                                                                    Permut(t,
                                                                     (0),
                                                                     sub_int(n,
                                                                     (1)),
-                                                                    int_P_int_M_t_0_5,
-                                                                    int_P_int_M_t_0_5@init))
+                                                                    int_P_int_M_t_5,
+                                                                    int_P_int_M_t_5@init))
                                                                      }
                                                                     begin
                                                                       
@@ -1026,9 +1026,9 @@ let min_sort_ensures_permutation =
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (C_51:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_50:
-                                                                    ((shift t_0) !j_0_1))))) !mv)
+                                                                    ((shift t) !j_0_1))))) !mv)
                                                                     then
                                                                     (let jessie_131 = 
                                                                     (C_46:
@@ -1042,9 +1042,9 @@ let min_sort_ensures_permutation =
                                                                       
                                                                     (mv := 
                                                                     (C_48:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_47:
-                                                                    ((shift t_0) !j_0_1)))));
+                                                                    ((shift t) !j_0_1)))));
                                                                     !mv
                                                                     end)
                                                                     end) in
@@ -1082,11 +1082,11 @@ let min_sort_ensures_permutation =
                                                                     (C_54:
                                                                     begin
                                                                       
-                                                                    (let jessie_138 = t_0 in
+                                                                    (let jessie_138 = t in
                                                                     (let jessie_137 = !i_0_1 in
                                                                     (let jessie_136 = !mi in
                                                                     (JC_109:
-                                                                    (((((swap jessie_138) jessie_137) jessie_136) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
+                                                                    (((((swap jessie_138) jessie_137) jessie_136) int_P_int_M_t_5) int_P_t_5_alloc_table)))));
                                                                     (C_56:
                                                                     begin
                                                                       
@@ -1132,14 +1132,14 @@ let min_sort_ensures_permutation =
    Return ->
    void end)
   { (JC_39:
-    Permut(t_0, (0), sub_int(n, (1)), int_P_int_M_t_0_5, int_P_int_M_t_0_5@)) }
+    Permut(t, (0), sub_int(n, (1)), int_P_int_M_t_5, int_P_int_M_t_5@)) }
 
 let min_sort_ensures_sorted =
- fun (t_0 : int_P pointer) (n : int) (int_P_int_M_t_0_5 : (int_P, int) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
+ fun (t : int_P pointer) (n : int) (int_P_int_M_t_5 : (int_P, int) memory ref) (int_P_t_5_alloc_table : int_P alloc_table) ->
   { (JC_31:
-    ((JC_29: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+    ((JC_29: le_int(offset_min(int_P_t_5_alloc_table, t), (0)))
     and (JC_30:
-        ge_int(offset_max(int_P_t_0_5_alloc_table, t_0), sub_int(n, (1)))))) }
+        ge_int(offset_max(int_P_t_5_alloc_table, t), sub_int(n, (1)))))) }
   (init:
   try
    begin
@@ -1164,8 +1164,8 @@ let min_sort_ensures_sorted =
                                                { invariant
                                                    (JC_76:
                                                    ((JC_74:
-                                                    Sorted(t_0, (0), i_0_1,
-                                                    int_P_int_M_t_0_5))
+                                                    Sorted(t, (0), i_0_1,
+                                                    int_P_int_M_t_5))
                                                    and (JC_75:
                                                        (forall k1:int.
                                                         (forall k2:int.
@@ -1177,11 +1177,10 @@ let min_sort_ensures_sorted =
                                                                   and 
                                                                   lt_int(k2,
                                                                   n)))) ->
-                                                          le_int(select(int_P_int_M_t_0_5,
-                                                                 shift(t_0,
-                                                                 k1)),
-                                                          select(int_P_int_M_t_0_5,
-                                                          shift(t_0, k2)))))))))
+                                                          le_int(select(int_P_int_M_t_5,
+                                                                 shift(t, k1)),
+                                                          select(int_P_int_M_t_5,
+                                                          shift(t, k2)))))))))
                                                   }
                                                 begin
                                                   [ { } unit reads i_0_1
@@ -1213,9 +1212,9 @@ let min_sort_ensures_sorted =
                                                                     (let jessie_95 = 
                                                                     (mv := 
                                                                     (C_31:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_30:
-                                                                    ((shift t_0) !i_0_1))))) in
+                                                                    ((shift t) !i_0_1))))) in
                                                                     void);
                                                                     (C_33:
                                                                     begin
@@ -1242,8 +1241,8 @@ let min_sort_ensures_sorted =
                                                                     (
                                                                     (JC_83:
                                                                     eq_int(mv,
-                                                                    select(int_P_int_M_t_0_5,
-                                                                    shift(t_0,
+                                                                    select(int_P_int_M_t_5,
+                                                                    shift(t,
                                                                     mi))))
                                                                     and 
                                                                     (JC_84:
@@ -1255,8 +1254,8 @@ let min_sort_ensures_sorted =
                                                                     lt_int(k_0,
                                                                     j_0_1)) ->
                                                                     ge_int(
-                                                                    select(int_P_int_M_t_0_5,
-                                                                    shift(t_0,
+                                                                    select(int_P_int_M_t_5,
+                                                                    shift(t,
                                                                     k_0)),
                                                                     mv))))))
                                                                      }
@@ -1298,9 +1297,9 @@ let min_sort_ensures_sorted =
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (C_51:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_50:
-                                                                    ((shift t_0) !j_0_1))))) !mv)
+                                                                    ((shift t) !j_0_1))))) !mv)
                                                                     then
                                                                     (let jessie_104 = 
                                                                     (C_46:
@@ -1314,9 +1313,9 @@ let min_sort_ensures_sorted =
                                                                       
                                                                     (mv := 
                                                                     (C_48:
-                                                                    ((safe_acc_ !int_P_int_M_t_0_5) 
+                                                                    ((safe_acc_ !int_P_int_M_t_5) 
                                                                     (C_47:
-                                                                    ((shift t_0) !j_0_1)))));
+                                                                    ((shift t) !j_0_1)))));
                                                                     !mv
                                                                     end)
                                                                     end) in
@@ -1354,11 +1353,11 @@ let min_sort_ensures_sorted =
                                                                     (C_54:
                                                                     begin
                                                                       
-                                                                    (let jessie_111 = t_0 in
+                                                                    (let jessie_111 = t in
                                                                     (let jessie_110 = !i_0_1 in
                                                                     (let jessie_109 = !mi in
                                                                     (JC_93:
-                                                                    (((((swap jessie_111) jessie_110) jessie_109) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
+                                                                    (((((swap jessie_111) jessie_110) jessie_109) int_P_int_M_t_5) int_P_t_5_alloc_table)))));
                                                                     (C_56:
                                                                     begin
                                                                       
@@ -1403,14 +1402,14 @@ let min_sort_ensures_sorted =
    with
    Return ->
    void end)
-  { (JC_37: Sorted(t_0, (0), sub_int(n, (1)), int_P_int_M_t_0_5)) }
+  { (JC_37: Sorted(t, (0), sub_int(n, (1)), int_P_int_M_t_5)) }
 
 let min_sort_safety =
- fun (t_0 : int_P pointer) (n : int) (int_P_int_M_t_0_5 : (int_P, int) memory ref) (int_P_t_0_5_alloc_table : int_P alloc_table) ->
+ fun (t : int_P pointer) (n : int) (int_P_int_M_t_5 : (int_P, int) memory ref) (int_P_t_5_alloc_table : int_P alloc_table) ->
   { (JC_31:
-    ((JC_29: le_int(offset_min(int_P_t_0_5_alloc_table, t_0), (0)))
+    ((JC_29: le_int(offset_min(int_P_t_5_alloc_table, t), (0)))
     and (JC_30:
-        ge_int(offset_max(int_P_t_0_5_alloc_table, t_0), sub_int(n, (1)))))) }
+        ge_int(offset_max(int_P_t_5_alloc_table, t), sub_int(n, (1)))))) }
   (init:
   try
    begin
@@ -1465,7 +1464,7 @@ let min_sort_safety =
                                                                     (mv := 
                                                                     (C_31:
                                                                     (JC_47:
-                                                                    ((((offset_acc_ int_P_t_0_5_alloc_table) !int_P_int_M_t_0_5) t_0) !i_0_1)))) in
+                                                                    ((((offset_acc_ int_P_t_5_alloc_table) !int_P_int_M_t_5) t) !i_0_1)))) in
                                                                     void);
                                                                     (C_33:
                                                                     begin
@@ -1532,7 +1531,7 @@ let min_sort_safety =
                                                                     ((lt_int_ 
                                                                     (C_51:
                                                                     (JC_55:
-                                                                    ((((offset_acc_ int_P_t_0_5_alloc_table) !int_P_int_M_t_0_5) t_0) !j_0_1)))) !mv)
+                                                                    ((((offset_acc_ int_P_t_5_alloc_table) !int_P_int_M_t_5) t) !j_0_1)))) !mv)
                                                                     then
                                                                     (let jessie_50 = 
                                                                     (C_46:
@@ -1547,7 +1546,7 @@ let min_sort_safety =
                                                                     (mv := 
                                                                     (C_48:
                                                                     (JC_56:
-                                                                    ((((offset_acc_ int_P_t_0_5_alloc_table) !int_P_int_M_t_0_5) t_0) !j_0_1))));
+                                                                    ((((offset_acc_ int_P_t_5_alloc_table) !int_P_int_M_t_5) t) !j_0_1))));
                                                                     !mv
                                                                     end)
                                                                     end) in
@@ -1585,11 +1584,11 @@ let min_sort_safety =
                                                                     (C_54:
                                                                     begin
                                                                       
-                                                                    (let jessie_57 = t_0 in
+                                                                    (let jessie_57 = t in
                                                                     (let jessie_56 = !i_0_1 in
                                                                     (let jessie_55 = !mi in
                                                                     (JC_58:
-                                                                    (((((swap_requires jessie_57) jessie_56) jessie_55) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
+                                                                    (((((swap_requires jessie_57) jessie_56) jessie_55) int_P_int_M_t_5) int_P_t_5_alloc_table)))));
                                                                     (C_56:
                                                                     begin
                                                                       
@@ -1637,12 +1636,13 @@ let min_sort_safety =
   { true }
 
 let swap_ensures_default =
- fun (t : int_P pointer) (i_0 : int) (j_0 : int) (int_P_int_M_t_4 : (int_P, int) memory ref) (int_P_t_4_alloc_table : int_P alloc_table) ->
+ fun (t_0 : int_P pointer) (i_0 : int) (j_0 : int) (int_P_int_M_t_0_4 : (int_P, int) memory ref) (int_P_t_0_4_alloc_table : int_P alloc_table) ->
   { (JC_11:
-    ((JC_7: le_int(offset_min(int_P_t_4_alloc_table, t), i_0))
-    and ((JC_8: ge_int(offset_max(int_P_t_4_alloc_table, t), i_0))
-        and ((JC_9: le_int(offset_min(int_P_t_4_alloc_table, t), j_0))
-            and (JC_10: ge_int(offset_max(int_P_t_4_alloc_table, t), j_0)))))) }
+    ((JC_7: le_int(offset_min(int_P_t_0_4_alloc_table, t_0), i_0))
+    and ((JC_8: ge_int(offset_max(int_P_t_0_4_alloc_table, t_0), i_0))
+        and ((JC_9: le_int(offset_min(int_P_t_0_4_alloc_table, t_0), j_0))
+            and (JC_10:
+                ge_int(offset_max(int_P_t_0_4_alloc_table, t_0), j_0)))))) }
   (init:
   try
    begin
@@ -1650,23 +1650,23 @@ let swap_ensures_default =
      (C_3:
      begin
        (let jessie_23 = (tmp := (C_2:
-                                ((safe_acc_ !int_P_int_M_t_4) (C_1:
-                                                              ((shift t) i_0))))) in
+                                ((safe_acc_ !int_P_int_M_t_0_4) (C_1:
+                                                                ((shift t_0) i_0))))) in
        void);
       (C_8:
       begin
         (let jessie_29 = (let jessie_25 = (C_5:
-                                          ((safe_acc_ !int_P_int_M_t_4) 
+                                          ((safe_acc_ !int_P_int_M_t_0_4) 
                                            (C_4:
-                                           ((shift t) j_0)))) in
-                         (let jessie_28 = (C_6: ((shift t) i_0)) in
-                         (((safe_upd_ int_P_int_M_t_4) jessie_28) jessie_25))) in
+                                           ((shift t_0) j_0)))) in
+                         (let jessie_28 = (C_6: ((shift t_0) i_0)) in
+                         (((safe_upd_ int_P_int_M_t_0_4) jessie_28) jessie_25))) in
         void);
        (C_11:
        begin
          (let jessie_35 = (let jessie_31 = !tmp in
-                          (let jessie_34 = (C_9: ((shift t) j_0)) in
-                          (((safe_upd_ int_P_int_M_t_4) jessie_34) jessie_31))) in
+                          (let jessie_34 = (C_9: ((shift t_0) j_0)) in
+                          (((safe_upd_ int_P_int_M_t_0_4) jessie_34) jessie_31))) in
          void);
         (raise Return)
        end)
@@ -1678,20 +1678,21 @@ let swap_ensures_default =
    Return ->
    void end)
   { (JC_15:
-    ((JC_13: Swap(t, i_0, j_0, int_P_int_M_t_4, int_P_int_M_t_4@))
+    ((JC_13: Swap(t_0, i_0, j_0, int_P_int_M_t_0_4, int_P_int_M_t_0_4@))
     and (JC_14:
-        not_assigns(int_P_t_4_alloc_table@, int_P_int_M_t_4@,
-        int_P_int_M_t_4,
-        pset_union(pset_range(pset_singleton(t@), j_0@, j_0@),
-        pset_range(pset_singleton(t@), i_0@, i_0@)))))) }
+        not_assigns(int_P_t_0_4_alloc_table@, int_P_int_M_t_0_4@,
+        int_P_int_M_t_0_4,
+        pset_union(pset_range(pset_singleton(t_0@), j_0@, j_0@),
+        pset_range(pset_singleton(t_0@), i_0@, i_0@)))))) }
 
 let swap_safety =
- fun (t : int_P pointer) (i_0 : int) (j_0 : int) (int_P_int_M_t_4 : (int_P, int) memory ref) (int_P_t_4_alloc_table : int_P alloc_table) ->
+ fun (t_0 : int_P pointer) (i_0 : int) (j_0 : int) (int_P_int_M_t_0_4 : (int_P, int) memory ref) (int_P_t_0_4_alloc_table : int_P alloc_table) ->
   { (JC_11:
-    ((JC_7: le_int(offset_min(int_P_t_4_alloc_table, t), i_0))
-    and ((JC_8: ge_int(offset_max(int_P_t_4_alloc_table, t), i_0))
-        and ((JC_9: le_int(offset_min(int_P_t_4_alloc_table, t), j_0))
-            and (JC_10: ge_int(offset_max(int_P_t_4_alloc_table, t), j_0)))))) }
+    ((JC_7: le_int(offset_min(int_P_t_0_4_alloc_table, t_0), i_0))
+    and ((JC_8: ge_int(offset_max(int_P_t_0_4_alloc_table, t_0), i_0))
+        and ((JC_9: le_int(offset_min(int_P_t_0_4_alloc_table, t_0), j_0))
+            and (JC_10:
+                ge_int(offset_max(int_P_t_0_4_alloc_table, t_0), j_0)))))) }
   (init:
   try
    begin
@@ -1700,27 +1701,27 @@ let swap_safety =
      begin
        (let jessie_9 = (tmp := (C_2:
                                (JC_21:
-                               ((((offset_acc_ int_P_t_4_alloc_table) !int_P_int_M_t_4) t) i_0)))) in
+                               ((((offset_acc_ int_P_t_0_4_alloc_table) !int_P_int_M_t_0_4) t_0) i_0)))) in
        void);
       (C_8:
       begin
         (let jessie_15 = (let jessie_11 = (C_5:
                                           (JC_22:
-                                          ((((offset_acc_ int_P_t_4_alloc_table) !int_P_int_M_t_4) t) j_0))) in
-                         (let jessie_12 = t in
+                                          ((((offset_acc_ int_P_t_0_4_alloc_table) !int_P_int_M_t_0_4) t_0) j_0))) in
+                         (let jessie_12 = t_0 in
                          (let jessie_13 = i_0 in
                          (let jessie_14 = ((shift jessie_12) jessie_13) in
                          (JC_23:
-                         (((((offset_upd_ int_P_t_4_alloc_table) int_P_int_M_t_4) jessie_12) jessie_13) jessie_11)))))) in
+                         (((((offset_upd_ int_P_t_0_4_alloc_table) int_P_int_M_t_0_4) jessie_12) jessie_13) jessie_11)))))) in
         void);
        (C_11:
        begin
          (let jessie_21 = (let jessie_17 = !tmp in
-                          (let jessie_18 = t in
+                          (let jessie_18 = t_0 in
                           (let jessie_19 = j_0 in
                           (let jessie_20 = ((shift jessie_18) jessie_19) in
                           (JC_24:
-                          (((((offset_upd_ int_P_t_4_alloc_table) int_P_int_M_t_4) jessie_18) jessie_19) jessie_17)))))) in
+                          (((((offset_upd_ int_P_t_0_4_alloc_table) int_P_int_M_t_0_4) jessie_18) jessie_19) jessie_17)))))) in
          void);
         (raise Return)
        end)
@@ -1756,22 +1757,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po42.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "92" begin = "14" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "92" begin = "14" end = "79"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po43.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "92" begin = "14" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "92" begin = "14" end = "79"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po44.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po45.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1829,22 +1830,22 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minimum_sort_po31.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/minimum_sort_po32.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/minimum_sort_po33.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/minimum_sort_po34.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "173" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2111,9 +2112,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -2125,24 +2123,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

@@ -502,20 +502,28 @@ let float_of_real f x =
   match f with
     | `Float -> 
 	begin match x with
-	  | "0.5" | "0.0" | "1.0" | "2.0" | "3.0" -> x
+	  | "0.5" 
+          | "0.0" | "1.0" | "2.0" | "3.0" | "4.0" -> x
+          | "0." | "1." | "2." | "3." | "4." -> x
 	  | "0.1" -> "0x0.199999Ap0" 
-	  | _ ->
-	      Format.eprintf"real constant: %s@." x;
-	      assert false
+	  | _ -> 
+              (*
+                Format.eprintf"real constant: %s@." x;
+              *)
+              raise Not_found
 	end
     | `Double -> 
 	begin match x with
-	  | "0.5" | "0.0" | "1.0" | "2.0" | "3.0" -> x
+	  | "0.5" 
+          | "0.0" | "1.0" | "2.0" | "3.0" | "4.0" -> x
+          | "0." | "1." | "2." | "3." | "4." -> x
 	  | _ -> 
-	      Format.eprintf"real constant: %s@." x;
-	      assert false
+              (*
+	        Format.eprintf"real constant: %s@." x;
+              *)
+              raise Not_found
 	end
-    | `Binary80 -> assert false
+    | `Binary80 -> raise Not_found
 
 let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
   let rec aux a b = 
@@ -556,13 +564,15 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
 	end
     | JCTnative (Tgenfloat f), JCTnative Treal ->
 	begin
-	  match e' with
-	    | LConst (Prim_real x) -> 
-		LApp ((float_format f)^"_of_real_exact", 
-		      [LConst (Prim_real (float_of_real f x))])
-	    | _ ->
-		LApp ("round_"^(float_format f)^"_logic", 
-		      [ logic_current_rounding_mode () ; e' ])
+          try
+	    match e' with
+	      | LConst (Prim_real x) -> 
+		  LApp ((float_format f)^"_of_real_exact", 
+		        [LConst (Prim_real (float_of_real f x))])
+	      | _ -> raise Not_found
+          with Not_found ->
+	    LApp ("round_"^(float_format f)^"_logic", 
+		  [ logic_current_rounding_mode () ; e' ])
 	end
     | JCTnative (Tgenfloat _f), (JCTnative Tinteger | JCTenum _) ->
         term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
@@ -682,19 +692,21 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
             [ current_rounding_mode () ; e' ]
     | JCTnative (Tgenfloat f), JCTnative Treal ->
 	begin
-	  match e' with
-	    | Cte (Prim_real x) ->
-		let s = float_of_real f x in
-		make_app ((float_format f)^"_of_real_exact") 
+          try
+	    match e' with
+	      | Cte (Prim_real x) ->
+		  let s = float_of_real f x in
+		  make_app ((float_format f)^"_of_real_exact") 
 		  [ Cte (Prim_real s) ]		
-	    | _ ->
-	if check_int_overflow then
-	  make_guarded_app ~mark FPoverflow pos
-	    ((float_format f)^"_of_real") 
-	    [ current_rounding_mode () ; e' ]
-	else
-	  make_app ((float_format f)^"_of_real_safe")
-	    [ current_rounding_mode () ; e' ]
+	      | _ -> raise Not_found
+          with Not_found ->
+	    if check_int_overflow then
+	      make_guarded_app ~mark FPoverflow pos
+	        ((float_format f)^"_of_real") 
+	        [ current_rounding_mode () ; e' ]
+	    else
+	      make_app ((float_format f)^"_of_real_safe")
+	        [ current_rounding_mode () ; e' ]
 	end
     | JCTnative Treal, JCTnative (Tgenfloat f) ->
 	make_app ((float_format f)^"_value") [ e' ]

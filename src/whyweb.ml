@@ -614,7 +614,7 @@ wprint "<center><a href=\"%s\">Save Project</a></center>
 	      if op
 	      then wprint "<tr><td><a href=\"%s#%d\">-</a>" no !current_line
 	      else wprint "<tr><td><a href=\"%s#%d\">+</a>" no !current_line;
-	      wprint "%d : <a href=\"%s#%d\">%s</a></td>" !indice nt !current_line f.function_name;
+              wprint "%d : <a href=\"%s#%d\">%s</a></td>" !indice nt !current_line f.function_name;
 	      List.iter (fun (prover,launch) ->
 			   if (function_validity prover f)
 			   then validity launch "valid"

@@ -284,92 +284,6 @@ predicate left_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-logic spec_remove_copy: int_P pointer,
- int,
- int_P pointer,
- int,
- int32,
- (int_P, int32) memory,
- (int_P, int32) memory -> int
-
-axiom no_assign_spec_remove_copy_0 :
- (forall tmp:int_P pset.
-  (forall tmpmem:(int_P, int32) memory.
-   (forall tmpalloc:int_P alloc_table.
-    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-     (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-      (forall value:int32.
-       (forall j:int.
-        (forall b_0:int_P pointer.
-         (forall i_0:int.
-          (forall a_0:int_P pointer.
-           ((pset_disjoint(tmp, pset_empty)
-            and not_assigns(tmpalloc, int_P_int_M_b_0_4_at_Lb, tmpmem, tmp)) ->
-            (spec_remove_copy(a_0, i_0, b_0, j, value,
-             int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0,
-                                                                 i_0, b_0, j,
-                                                                 value,
-                                                                 tmpmem,
-                                                                 int_P_int_M_a_0_3_at_La)))))))))))))
-
-axiom no_assign_spec_remove_copy_1 :
- (forall tmp:int_P pset.
-  (forall tmpmem:(int_P, int32) memory.
-   (forall tmpalloc:int_P alloc_table.
-    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-     (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-      (forall value:int32.
-       (forall j:int.
-        (forall b_0:int_P pointer.
-         (forall i_0:int.
-          (forall a_0:int_P pointer.
-           ((pset_disjoint(tmp, pset_empty)
-            and not_assigns(tmpalloc, int_P_int_M_a_0_3_at_La, tmpmem, tmp)) ->
-            (spec_remove_copy(a_0, i_0, b_0, j, value,
-             int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0,
-                                                                 i_0, b_0, j,
-                                                                 value,
-                                                                 int_P_int_M_b_0_4_at_Lb,
-                                                                 tmpmem)))))))))))))
-
-axiom no_update_spec_remove_copy_0 :
- (forall tmp:int_P pointer.
-  (forall tmpval:int32.
-   (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-    (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-     (forall value:int32.
-      (forall j:int.
-       (forall b_0:int_P pointer.
-        (forall i_0:int.
-         (forall a_0:int_P pointer.
-          ((not in_pset(tmp, pset_empty)) ->
-           (spec_remove_copy(a_0, i_0, b_0, j, value,
-            int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0,
-                                                                i_0, b_0, j,
-                                                                value,
-                                                                store(int_P_int_M_b_0_4_at_Lb,
-                                                                tmp, tmpval),
-                                                                int_P_int_M_a_0_3_at_La))))))))))))
-
-axiom no_update_spec_remove_copy_1 :
- (forall tmp:int_P pointer.
-  (forall tmpval:int32.
-   (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-    (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-     (forall value:int32.
-      (forall j:int.
-       (forall b_0:int_P pointer.
-        (forall i_0:int.
-         (forall a_0:int_P pointer.
-          ((not in_pset(tmp, pset_empty)) ->
-           (spec_remove_copy(a_0, i_0, b_0, j, value,
-            int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0,
-                                                                i_0, b_0, j,
-                                                                value,
-                                                                int_P_int_M_b_0_4_at_Lb,
-                                                                store(int_P_int_M_a_0_3_at_La,
-                                                                tmp, tmpval)))))))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -380,6 +294,14 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+
+logic spec_remove_copy: int_P pointer,
+ int,
+ int_P pointer,
+ int,
+ int32,
+ (int_P, int32) memory,
+ (int_P, int32) memory -> int
 
 axiom remove_copy_empty :
  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
@@ -1279,11 +1201,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/remove_copy_array_po36.why">
-      <location file = "why/remove_copy_array.why" line = "904" begin = "62" end = "63"/>
+      <location file = "why/remove_copy_array.why" line = "826" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/remove_copy_array_po37.why">
-      <location file = "why/remove_copy_array.why" line = "904" begin = "62" end = "63"/>
+      <location file = "why/remove_copy_array.why" line = "826" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1549,9 +1471,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1563,24 +1482,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -2293,79 +2194,6 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-logic spec_remove_copy : int_P pointer, int, int_P pointer, int, int32,
-(int_P, int32) memory, (int_P, int32) memory -> int
-
-axiom no_assign_spec_remove_copy_0:
-  (forall tmp:int_P pset.
-    (forall tmpmem:(int_P, int32) memory.
-      (forall tmpalloc:int_P alloc_table.
-        (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-          (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-            (forall value:int32.
-              (forall j:int.
-                (forall b_0:int_P pointer.
-                  (forall i_0:int.
-                    (forall a_0:int_P pointer.
-                      ((pset_disjoint(tmp, pset_empty) and
-                        not_assigns(tmpalloc, int_P_int_M_b_0_4_at_Lb,
-                        tmpmem, tmp)) ->
-                       (spec_remove_copy(a_0, i_0, b_0, j, value,
-                       int_P_int_M_b_0_4_at_Lb,
-                       int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0, i_0,
-                       b_0, j, value, tmpmem, int_P_int_M_a_0_3_at_La)))))))))))))
-
-axiom no_assign_spec_remove_copy_1:
-  (forall tmp:int_P pset.
-    (forall tmpmem:(int_P, int32) memory.
-      (forall tmpalloc:int_P alloc_table.
-        (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-          (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-            (forall value:int32.
-              (forall j:int.
-                (forall b_0:int_P pointer.
-                  (forall i_0:int.
-                    (forall a_0:int_P pointer.
-                      ((pset_disjoint(tmp, pset_empty) and
-                        not_assigns(tmpalloc, int_P_int_M_a_0_3_at_La,
-                        tmpmem, tmp)) ->
-                       (spec_remove_copy(a_0, i_0, b_0, j, value,
-                       int_P_int_M_b_0_4_at_Lb,
-                       int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0, i_0,
-                       b_0, j, value, int_P_int_M_b_0_4_at_Lb, tmpmem)))))))))))))
-
-axiom no_update_spec_remove_copy_0:
-  (forall tmp:int_P pointer.
-    (forall tmpval:int32.
-      (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-        (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-          (forall value:int32.
-            (forall j:int.
-              (forall b_0:int_P pointer.
-                (forall i_0:int.
-                  (forall a_0:int_P pointer.
-                    ((not in_pset(tmp, pset_empty)) -> (spec_remove_copy(a_0,
-                     i_0, b_0, j, value, int_P_int_M_b_0_4_at_Lb,
-                     int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0, i_0,
-                     b_0, j, value, store(int_P_int_M_b_0_4_at_Lb, tmp,
-                     tmpval), int_P_int_M_a_0_3_at_La))))))))))))
-
-axiom no_update_spec_remove_copy_1:
-  (forall tmp:int_P pointer.
-    (forall tmpval:int32.
-      (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-        (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-          (forall value:int32.
-            (forall j:int.
-              (forall b_0:int_P pointer.
-                (forall i_0:int.
-                  (forall a_0:int_P pointer.
-                    ((not in_pset(tmp, pset_empty)) -> (spec_remove_copy(a_0,
-                     i_0, b_0, j, value, int_P_int_M_b_0_4_at_Lb,
-                     int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_0, i_0,
-                     b_0, j, value, int_P_int_M_b_0_4_at_Lb,
-                     store(int_P_int_M_a_0_3_at_La, tmp, tmpval)))))))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -2378,6 +2206,9 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
+
+logic spec_remove_copy : int_P pointer, int, int_P pointer, int, int32,
+(int_P, int32) memory, (int_P, int32) memory -> int
 
 axiom remove_copy_empty:
   (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.

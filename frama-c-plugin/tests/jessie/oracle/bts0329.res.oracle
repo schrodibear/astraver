@@ -347,14 +347,14 @@ let cosine1a_ensures_default =
      (C_4:
      begin
        (let jessie_5 = (r := (C_3:
-                             (JC_24:
-                             (((sub_single_safe nearest_even) ((single_of_real_safe nearest_even) 1.0)) 
+                             (JC_22:
+                             (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
                               (C_2:
-                              (JC_23:
+                              (JC_21:
                               (((mul_single_safe nearest_even) (C_1:
-                                                               (JC_22:
+                                                               (JC_20:
                                                                (((mul_single_safe nearest_even) x) x)))) 
-                               ((single_of_real_safe nearest_even) 0.5)))))))) in
+                               (single_of_real_exact 0.5)))))))) in
        void);
       (return := !r);
       (raise Return)
@@ -385,16 +385,14 @@ let cosine1a_safety =
      (C_4:
      begin
        (let jessie_2 = (r := (C_3:
-                             (JC_21:
-                             (((sub_single nearest_even) (JC_17:
-                                                         ((single_of_real nearest_even) 1.0))) 
+                             (JC_19:
+                             (((sub_single nearest_even) (single_of_real_exact 1.0)) 
                               (C_2:
-                              (JC_20:
+                              (JC_18:
                               (((mul_single nearest_even) (C_1:
-                                                          (JC_18:
+                                                          (JC_17:
                                                           (((mul_single nearest_even) x) x)))) 
-                               (JC_19:
-                               ((single_of_real nearest_even) 0.5))))))))) in
+                               (single_of_real_exact 0.5)))))))) in
        void);
       (return := !r);
       (raise Return)
@@ -414,7 +412,7 @@ why --project [...] why/bts0329.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0329_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "38" begin = "26" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "13" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -424,16 +422,6 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/bts0329_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.jessie/bts0329.jc" line = "39" begin = "53" end = "67"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0329_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0329.c" line = "13" begin = "2" end = "7"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0329_po7.why">
       <location file = "PPCHOME/tests/jessie/bts0329.c" line = "13" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
@@ -609,9 +597,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -623,24 +608,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

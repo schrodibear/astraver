@@ -30,8 +30,8 @@
 
 /*@ axiomatic MemCmp {
   @
-  @ logic integer memcmp{L}(char *s1, char *s2, integer n);
-  @ // reads s1[0..n - 1], s2[0..n - 1];
+  @ logic integer memcmp{L}(char *s1, char *s2, integer n)
+  @   reads s1[0..n - 1], s2[0..n - 1];
   @
   @ axiom memcmp_range{L}:
   @   \forall char *s1, *s2; \forall integer n;
@@ -46,8 +46,8 @@
   @*/
 
 /*@ axiomatic MemChr {
-  @ logic boolean memchr{L}(char *s, integer c, integer n);
-  @ // reads s[0..n - 1];
+  @ logic boolean memchr{L}(char *s, integer c, integer n)
+  @   reads s[0..n - 1];
   @ // Returns [true] iff array [s] contains character [c]
   @
   @ axiom memchr_def{L}:
@@ -57,8 +57,8 @@
   @*/
 
 /*@ axiomatic MemSet {
-  @ logic boolean memset{L}(char *s, integer c, integer n);
-  @ // reads s[0..n - 1];
+  @ logic boolean memset{L}(char *s, integer c, integer n)
+  @    reads s[0..n - 1];
   @ // Returns [true] iff array [s] contains only character [c]
   @
   @ axiom memset_def{L}:
@@ -68,8 +68,8 @@
   @*/
 
 /*@ axiomatic StrLen {
-  @ logic integer strlen{L}(char *s);
-  @ // reads s[0..];
+  @ logic integer strlen{L}(char *s)
+  @    reads s[0..];
   @
   @ axiom strlen_pos_or_null{L}:
   @   \forall char* s; \forall integer i;
@@ -137,8 +137,8 @@
   @*/
 
 /*@ axiomatic StrCmp {
-  @ logic integer strcmp{L}(char *s1, char *s2);
-  @ // reads s1[0..strlen(s1)], s2[0..strlen(s2)];
+  @ logic integer strcmp{L}(char *s1, char *s2)
+  @    reads s1[0..strlen(s1)], s2[0..strlen(s2)];
   @
   @ axiom strcmp_range{L}:
   @   \forall char *s1, *s2; INT_MIN <= strcmp(s1,s2) <= INT_MAX;
@@ -152,8 +152,8 @@
   @*/
 
 /*@ axiomatic StrNCmp {
-  @ logic integer strncmp{L}(char *s1, char *s2, integer n);
-  @ // reads s1[0..n-1], s2[0..n-1];
+  @ logic integer strncmp{L}(char *s1, char *s2, integer n)
+  @    reads s1[0..n-1], s2[0..n-1];
   @
   @ axiom strncmp_zero{L}:
   @   \forall char *s1, *s2; \forall integer n;
@@ -164,8 +164,8 @@
   @*/
 
 /*@ axiomatic StrChr {
-  @ logic boolean strchr{L}(char *s, integer c);
-  @ // reads s[0..strlen(s)];
+  @ logic boolean strchr{L}(char *s, integer c)
+  @    reads s[0..strlen(s)];
   @ // Returns [true] iff string [s] contains character [c]
   @
   @ axiom strchr_def{L}:
@@ -175,8 +175,7 @@
   @*/
 
 /*@ axiomatic WcsLen {
-  @ logic integer wcslen{L}(wchar_t *s);
-  @ // reads s[0..];
+  @ logic integer wcslen{L}(wchar_t *s) reads s[0..];
   @
   @ axiom wcslen_pos_or_null{L}:
   @   \forall wchar_t* s; \forall integer i;
@@ -222,8 +221,8 @@
   @*/
 
 /*@ axiomatic WcsCmp {
-  @ logic integer wcscmp{L}(wchar_t *s1, wchar_t *s2);
-  @ // reads s1[0..wcslen(s1)], s2[0..wcslen(s2)];
+  @ logic integer wcscmp{L}(wchar_t *s1, wchar_t *s2)
+  @   reads s1[0..wcslen(s1)], s2[0..wcslen(s2)];
   @
   @ axiom wcscmp_zero{L}:
   @   \forall wchar_t *s1, *s2;
@@ -234,8 +233,8 @@
   @*/
 
 /*@ axiomatic WcsNCmp {
-  @ logic integer wcsncmp{L}(wchar_t *s1, wchar_t *s2, integer n);
-  @ // reads s1[0..n-1], s2[0..n-1];
+  @ logic integer wcsncmp{L}(wchar_t *s1, wchar_t *s2, integer n)
+  @    reads s1[0..n-1], s2[0..n-1];
   @
   @ axiom wcsncmp_zero{L}:
   @   \forall wchar_t *s1, *s2; \forall integer n;

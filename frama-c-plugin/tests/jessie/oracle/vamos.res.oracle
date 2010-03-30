@@ -55,7 +55,7 @@ Proc[..] ready_list;
 
 axiomatic ListLength {
 
-  logic int32 list_length{State}(Proc[..] p)
+  logic int32 list_length{State}(Proc[..] p) reads p.next, p.next.next;
    
   axiom list_length_zero{State} :
   (\forall Proc[..] p_0;
@@ -77,7 +77,7 @@ axiomatic ListLength {
 
 axiomatic Reachable {
 
-  predicate reachable{State}(Proc[..] p_3, Proc[..] q)
+  predicate reachable{State}(Proc[..] p_3, Proc[..] q) reads p_3.next;
    
   axiom reachable_def{State} :
   (\forall Proc[..] p_4;
@@ -289,25 +289,19 @@ predicate left_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-logic list_length: Proc pointer,
- Proc alloc_table,
- (Proc, Proc pointer) memory -> int32
+logic list_length: Proc pointer, (Proc, Proc pointer) memory -> int32
 
 axiom list_length_pos :
  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
   (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
    (forall p_1:Proc pointer.
-    (gt_int(integer_of_int32(list_length(p_1, Proc_p_4_alloc_table_at_State,
-                             Proc_next_p_4_at_State)),
-     (0)) ->
+    (gt_int(integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)), (0)) ->
      (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_1), (0))
      and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_1), (0))
          and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
                                                  p_1),
-                                     Proc_p_4_alloc_table_at_State,
                                      Proc_next_p_4_at_State)),
              sub_int(integer_of_int32(list_length(p_1,
-                                      Proc_p_4_alloc_table_at_State,
                                       Proc_next_p_4_at_State)),
              (1)))))))))
 
@@ -315,41 +309,33 @@ axiom list_length_remove :
  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
   (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
    (forall p_2:Proc pointer.
-    (gt_int(integer_of_int32(list_length(p_2, Proc_p_4_alloc_table_at_State,
-                             Proc_next_p_4_at_State)),
-     (0)) ->
+    (gt_int(integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)), (0)) ->
      (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_2), (0))
      and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_2), (0))
          and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
                                                  p_2),
-                                     Proc_p_4_alloc_table_at_State,
                                      Proc_next_p_4_at_State)),
              sub_int(integer_of_int32(list_length(p_2,
-                                      Proc_p_4_alloc_table_at_State,
                                       Proc_next_p_4_at_State)),
              (1)))))))))
 
 axiom list_length_zero :
- (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-   (forall p_0:Proc pointer.
-    (eq_int(integer_of_int32(list_length(p_0, Proc_p_4_alloc_table_at_State,
-                             Proc_next_p_4_at_State)),
-     (0))
-    <-> (p_0 = null)))))
+ (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+  (forall p_0:Proc pointer.
+   (eq_int(integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)), (0))
+   <-> (p_0 = null))))
 
 axiom no_assign_list_length_0 :
  (forall tmp:Proc pset.
   (forall tmpmem:(Proc, Proc pointer) memory.
    (forall tmpalloc:Proc alloc_table.
     (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-     (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-      (forall p:Proc pointer.
-       ((pset_disjoint(tmp, pset_empty)
-        and not_assigns(tmpalloc, Proc_next_p_4_at_State, tmpmem, tmp)) ->
-        (list_length(p, Proc_p_4_alloc_table_at_State,
-         Proc_next_p_4_at_State) = list_length(p,
-                                   Proc_p_4_alloc_table_at_State, tmpmem)))))))))
+     (forall p:Proc pointer.
+      ((pset_disjoint(tmp,
+        pset_union(pset_deref(Proc_next_p_4_at_State, pset_singleton(p)),
+        pset_singleton(p)))
+       and not_assigns(tmpalloc, Proc_next_p_4_at_State, tmpmem, tmp)) ->
+       (list_length(p, Proc_next_p_4_at_State) = list_length(p, tmpmem))))))))
 
 logic reachable: Proc pointer,
  Proc pointer,
@@ -362,7 +348,7 @@ axiom no_assign_reachable_0 :
     (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
      (forall q:Proc pointer.
       (forall p_3:Proc pointer.
-       ((pset_disjoint(tmp, pset_empty)
+       ((pset_disjoint(tmp, pset_singleton(p_3))
         and not_assigns(tmpalloc, Proc_next_p_3_5_at_State, tmpmem, tmp)) ->
         (reachable(p_3, q, Proc_next_p_3_5_at_State)
         <-> reachable(p_3, q, tmpmem)))))))))
@@ -371,12 +357,13 @@ axiom no_update_list_length_0 :
  (forall tmp:Proc pointer.
   (forall tmpval:Proc pointer.
    (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-    (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-     (forall p:Proc pointer.
-      ((not in_pset(tmp, pset_empty)) ->
-       (list_length(p, Proc_p_4_alloc_table_at_State, Proc_next_p_4_at_State) = 
-       list_length(p, Proc_p_4_alloc_table_at_State,
-       store(Proc_next_p_4_at_State, tmp, tmpval)))))))))
+    (forall p:Proc pointer.
+     ((not in_pset(tmp,
+           pset_union(pset_deref(Proc_next_p_4_at_State, pset_singleton(p)),
+           pset_singleton(p)))) ->
+      (list_length(p, Proc_next_p_4_at_State) = list_length(p,
+                                                store(Proc_next_p_4_at_State,
+                                                tmp, tmpval))))))))
 
 axiom no_update_reachable_0 :
  (forall tmp:Proc pointer.
@@ -384,7 +371,7 @@ axiom no_update_reachable_0 :
    (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
     (forall q:Proc pointer.
      (forall p_3:Proc pointer.
-      ((not in_pset(tmp, pset_empty)) ->
+      ((not in_pset(tmp, pset_singleton(p_3))) ->
        (reachable(p_3, q, Proc_next_p_3_5_at_State)
        <-> reachable(p_3, q, store(Proc_next_p_3_5_at_State, tmp, tmpval)))))))))
 
@@ -742,9 +729,7 @@ parameter process_kill :
 parameter process_kill_requires :
  pid:uint32 ->
   { (JC_15:
-    ge_int(integer_of_int32(list_length(ready_list,
-                            Proc_ready_list_1_alloc_table,
-                            Proc_next_ready_list_1)),
+    ge_int(integer_of_int32(list_length(ready_list, Proc_next_ready_list_1)),
     (0)))}
   int32
   reads Proc_next_ready_list_1,Proc_pid_0_ready_list_1,Proc_priority_ready_list_1,Proc_ready_list_1_alloc_table,max_prio,ready_list
@@ -767,16 +752,14 @@ parameter uint32_of_integer_ :
 let process_kill_ensures_default =
  fun (pid : uint32) ->
   { (JC_17:
-    ge_int(integer_of_int32(list_length(ready_list,
-                            Proc_ready_list_1_alloc_table,
-                            Proc_next_ready_list_1)),
+    ge_int(integer_of_int32(list_length(ready_list, Proc_next_ready_list_1)),
     (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (let Proc_priority_process_16 = (any_memory void) in
-     (let Proc_process_16_alloc_table = (any_alloc_table void) in
+     (let Proc_priority_process_19 = (any_memory void) in
+     (let Proc_process_19_alloc_table = (any_alloc_table void) in
      (let found = ref (any_int32 void) in
      (let proc_id = ref (any_uint32 void) in
      (let proc_id2 = ref (any_uint32 void) in
@@ -801,7 +784,7 @@ let process_kill_ensures_default =
          (let jessie_67 = (process := (C_8:
                                       (let jessie_66 = !proc_id in
                                       (JC_48:
-                                      ((pid2pcb jessie_66) Proc_process_16_alloc_table))))) in
+                                      ((pid2pcb jessie_66) Proc_process_19_alloc_table))))) in
          void);
         (C_10:
         begin
@@ -820,24 +803,20 @@ let process_kill_ensures_default =
                                     (JC_53:
                                     ((JC_49:
                                      ge_int(integer_of_int32(list_length(ready_list,
-                                                             Proc_ready_list_1_alloc_table,
                                                              Proc_next_ready_list_1)),
                                      (0)))
                                     and ((JC_50:
                                          ge_int(integer_of_int32(list_length(ready_list_elem,
-                                                                 Proc_ready_list_1_alloc_table,
                                                                  Proc_next_ready_list_1)),
                                          (0)))
                                         and ((JC_51:
                                              ge_int(integer_of_int32(
                                                     list_length(prev_elem,
-                                                    Proc_ready_list_1_alloc_table,
                                                     Proc_next_ready_list_1)),
                                              (0)))
                                             and (JC_52:
                                                 ge_int(integer_of_int32(
                                                        list_length(highest_search,
-                                                       Proc_ready_list_1_alloc_table,
                                                        Proc_next_ready_list_1)),
                                                 (0)))))))
                                    }
@@ -911,7 +890,7 @@ let process_kill_ensures_default =
                                                             (if ((eq_int_ 
                                                                   (integer_of_int32 
                                                                    (C_39:
-                                                                   ((safe_acc_ Proc_priority_process_16) !process)))) 
+                                                                   ((safe_acc_ Proc_priority_process_19) !process)))) 
                                                                  (integer_of_int32 !max_prio))
                                                             then
                                                              (let jessie_103 = 
@@ -936,7 +915,6 @@ let process_kill_ensures_default =
                                                                     ge_int(
                                                                     integer_of_int32(
                                                                     list_length(highest_search,
-                                                                    Proc_ready_list_1_alloc_table,
                                                                     Proc_next_ready_list_1)),
                                                                     (0)))
                                                                      }
@@ -1078,16 +1056,14 @@ let process_kill_ensures_default =
 let process_kill_safety =
  fun (pid : uint32) ->
   { (JC_17:
-    ge_int(integer_of_int32(list_length(ready_list,
-                            Proc_ready_list_1_alloc_table,
-                            Proc_next_ready_list_1)),
+    ge_int(integer_of_int32(list_length(ready_list, Proc_next_ready_list_1)),
     (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (let Proc_priority_process_16 = (any_memory void) in
-     (let Proc_process_16_alloc_table = (any_alloc_table void) in
+     (let Proc_priority_process_19 = (any_memory void) in
+     (let Proc_process_19_alloc_table = (any_alloc_table void) in
      (let found = ref (any_int32 void) in
      (let proc_id = ref (any_uint32 void) in
      (let proc_id2 = ref (any_uint32 void) in
@@ -1112,7 +1088,7 @@ let process_kill_safety =
          (let jessie_13 = (process := (C_8:
                                       (let jessie_12 = !proc_id in
                                       (JC_24:
-                                      ((pid2pcb_requires jessie_12) Proc_process_16_alloc_table))))) in
+                                      ((pid2pcb_requires jessie_12) Proc_process_19_alloc_table))))) in
          void);
         (C_10:
         begin
@@ -1130,28 +1106,24 @@ let process_kill_safety =
                                { invariant (JC_31: true) variant (0) }
                                 begin
                                   [ { } unit
-                                    reads Proc_next_ready_list_1,Proc_ready_list_1_alloc_table,highest_search,prev_elem,ready_list,ready_list_elem
+                                    reads Proc_next_ready_list_1,highest_search,prev_elem,ready_list,ready_list_elem
                                     { (JC_29:
                                       ((JC_25:
                                        ge_int(integer_of_int32(list_length(ready_list,
-                                                               Proc_ready_list_1_alloc_table,
                                                                Proc_next_ready_list_1)),
                                        (0)))
                                       and ((JC_26:
                                            ge_int(integer_of_int32(list_length(ready_list_elem,
-                                                                   Proc_ready_list_1_alloc_table,
                                                                    Proc_next_ready_list_1)),
                                            (0)))
                                           and ((JC_27:
                                                ge_int(integer_of_int32(
                                                       list_length(prev_elem,
-                                                      Proc_ready_list_1_alloc_table,
                                                       Proc_next_ready_list_1)),
                                                (0)))
                                               and (JC_28:
                                                   ge_int(integer_of_int32(
                                                          list_length(highest_search,
-                                                         Proc_ready_list_1_alloc_table,
                                                          Proc_next_ready_list_1)),
                                                   (0))))))) } ];
                                  try
@@ -1229,7 +1201,7 @@ let process_kill_safety =
                                                                 (integer_of_int32 
                                                                  (C_39:
                                                                  (JC_39:
-                                                                 (((acc_ Proc_process_16_alloc_table) Proc_priority_process_16) !process))))) 
+                                                                 (((acc_ Proc_process_19_alloc_table) Proc_priority_process_19) !process))))) 
                                                                (integer_of_int32 !max_prio))
                                                           then
                                                            (let jessie_49 = 
@@ -1256,12 +1228,11 @@ let process_kill_safety =
                                                                  begin
                                                                    [ 
                                                                    { } unit
-                                                                   reads Proc_next_ready_list_1,Proc_ready_list_1_alloc_table,highest_search
+                                                                   reads Proc_next_ready_list_1,highest_search
                                                                    { (JC_40:
                                                                     ge_int(
                                                                     integer_of_int32(
                                                                     list_length(highest_search,
-                                                                    Proc_ready_list_1_alloc_table,
                                                                     Proc_next_ready_list_1)),
                                                                     (0))) } ];
                                                                   try
@@ -1416,7 +1387,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po12.why">
-      <location file = "why/vamos.why" line = "985" begin = "60" end = "95"/>
+      <location file = "why/vamos.why" line = "957" begin = "60" end = "95"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1441,7 +1412,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po17.why">
-      <location file = "why/vamos.why" line = "1021" begin = "63" end = "92"/>
+      <location file = "why/vamos.why" line = "993" begin = "63" end = "92"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1496,7 +1467,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po28.why">
-      <location file = "why/vamos.why" line = "1099" begin = "69" end = "103"/>
+      <location file = "why/vamos.why" line = "1070" begin = "69" end = "103"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1531,11 +1502,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po35.why">
-      <location file = "why/vamos.why" line = "1079" begin = "75" end = "76"/>
+      <location file = "why/vamos.why" line = "1051" begin = "75" end = "76"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po36.why">
-      <location file = "why/vamos.why" line = "1079" begin = "75" end = "76"/>
+      <location file = "why/vamos.why" line = "1051" begin = "75" end = "76"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po37.why">
@@ -1549,11 +1520,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po39.why">
-      <location file = "why/vamos.why" line = "954" begin = "66" end = "67"/>
+      <location file = "why/vamos.why" line = "930" begin = "66" end = "67"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po40.why">
-      <location file = "why/vamos.why" line = "954" begin = "66" end = "67"/>
+      <location file = "why/vamos.why" line = "930" begin = "66" end = "67"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1755,9 +1726,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1769,24 +1737,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -2501,54 +2451,48 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-logic list_length : Proc pointer, Proc alloc_table, (Proc,
-Proc pointer) memory -> int32
+logic list_length : Proc pointer, (Proc, Proc pointer) memory -> int32
 
 axiom list_length_pos:
   (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
     (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
       (forall p_1:Proc pointer.
-        ((integer_of_int32(list_length(p_1, Proc_p_4_alloc_table_at_State,
-         Proc_next_p_4_at_State)) > 0) ->
+        ((integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)) > 0) ->
          ((offset_min(Proc_p_4_alloc_table_at_State, p_1) <= 0) and
           ((offset_max(Proc_p_4_alloc_table_at_State, p_1) >= 0) and
            (integer_of_int32(list_length(select(Proc_next_p_4_at_State, p_1),
-           Proc_p_4_alloc_table_at_State,
            Proc_next_p_4_at_State)) = (integer_of_int32(list_length(p_1,
-           Proc_p_4_alloc_table_at_State, Proc_next_p_4_at_State)) - 1))))))))
+           Proc_next_p_4_at_State)) - 1))))))))
 
 axiom list_length_remove:
   (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
     (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
       (forall p_2:Proc pointer.
-        ((integer_of_int32(list_length(p_2, Proc_p_4_alloc_table_at_State,
-         Proc_next_p_4_at_State)) > 0) ->
+        ((integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)) > 0) ->
          ((offset_min(Proc_p_4_alloc_table_at_State, p_2) <= 0) and
           ((offset_max(Proc_p_4_alloc_table_at_State, p_2) >= 0) and
            (integer_of_int32(list_length(select(Proc_next_p_4_at_State, p_2),
-           Proc_p_4_alloc_table_at_State,
            Proc_next_p_4_at_State)) = (integer_of_int32(list_length(p_2,
-           Proc_p_4_alloc_table_at_State, Proc_next_p_4_at_State)) - 1))))))))
+           Proc_next_p_4_at_State)) - 1))))))))
 
 axiom list_length_zero:
-  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-    (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-      (forall p_0:Proc pointer.
-        ((integer_of_int32(list_length(p_0, Proc_p_4_alloc_table_at_State,
-         Proc_next_p_4_at_State)) = 0) <-> (p_0 = null)))))
+  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+    (forall p_0:Proc pointer.
+      ((integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)) = 0) <->
+       (p_0 = null))))
 
 axiom no_assign_list_length_0:
   (forall tmp:Proc pset.
     (forall tmpmem:(Proc, Proc pointer) memory.
       (forall tmpalloc:Proc alloc_table.
         (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-          (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-            (forall p:Proc pointer.
-              ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                Proc_next_p_4_at_State, tmpmem, tmp)) ->
-               (list_length(p, Proc_p_4_alloc_table_at_State,
-               Proc_next_p_4_at_State) = list_length(p,
-               Proc_p_4_alloc_table_at_State, tmpmem)))))))))
+          (forall p:Proc pointer.
+            ((pset_disjoint(tmp,
+              pset_union(pset_deref(Proc_next_p_4_at_State,
+              pset_singleton(p)), pset_singleton(p))) and
+              not_assigns(tmpalloc, Proc_next_p_4_at_State, tmpmem, tmp)) ->
+             (list_length(p, Proc_next_p_4_at_State) = list_length(p,
+             tmpmem))))))))
 
 logic reachable : Proc pointer, Proc pointer, (Proc,
 Proc pointer) memory -> prop
@@ -2560,8 +2504,8 @@ axiom no_assign_reachable_0:
         (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
           (forall q:Proc pointer.
             (forall p_3:Proc pointer.
-              ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                Proc_next_p_3_5_at_State, tmpmem, tmp)) ->
+              ((pset_disjoint(tmp, pset_singleton(p_3)) and
+                not_assigns(tmpalloc, Proc_next_p_3_5_at_State, tmpmem, tmp)) ->
                (reachable(p_3, q, Proc_next_p_3_5_at_State) <->
                 reachable(p_3, q, tmpmem)))))))))
 
@@ -2569,13 +2513,11 @@ axiom no_update_list_length_0:
   (forall tmp:Proc pointer.
     (forall tmpval:Proc pointer.
       (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-        (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-          (forall p:Proc pointer.
-            ((not in_pset(tmp, pset_empty)) -> (list_length(p,
-             Proc_p_4_alloc_table_at_State,
-             Proc_next_p_4_at_State) = list_length(p,
-             Proc_p_4_alloc_table_at_State, store(Proc_next_p_4_at_State,
-             tmp, tmpval)))))))))
+        (forall p:Proc pointer.
+          ((not in_pset(tmp, pset_union(pset_deref(Proc_next_p_4_at_State,
+           pset_singleton(p)), pset_singleton(p)))) -> (list_length(p,
+           Proc_next_p_4_at_State) = list_length(p,
+           store(Proc_next_p_4_at_State, tmp, tmpval))))))))
 
 axiom no_update_reachable_0:
   (forall tmp:Proc pointer.
@@ -2583,7 +2525,7 @@ axiom no_update_reachable_0:
       (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
         (forall q:Proc pointer.
           (forall p_3:Proc pointer.
-            ((not in_pset(tmp, pset_empty)) ->
+            ((not in_pset(tmp, pset_singleton(p_3))) ->
              (reachable(p_3, q, Proc_next_p_3_5_at_State) <-> reachable(p_3,
               q, store(Proc_next_p_3_5_at_State, tmp, tmpval)))))))))
 

@@ -458,8 +458,7 @@ let gen_no_update_axioms f ta _fa _ft _term_coerce params acc =
       ) (0,acc) params)
 
 let gen_no_assign_axioms f ta _fa _ft _term_coerce params acc =
-(* WRONG when JCreads [], it does not distinghishes between no reads and reads \nothing
-   TODO: use computed effects instead *)
+(* TODO: when JCNone, use computed effects instead *)
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
       | JCNone -> acc 

@@ -1568,7 +1568,6 @@ let logic_fun_effects f =
   in
   let ef = f.jc_logic_info_effects in
   let ef = match ta with
-    | JCNone -> ef
     | JCTerm t -> term ef t 
     | JCAssertion a -> assertion ef a
     | JCInductive l ->
@@ -1578,7 +1577,7 @@ let logic_fun_effects f =
 	in
 	List.fold_left (fun acc (_id,_labels,a) -> 
 			  effects_from_assertion f ax_effects acc a) ef l
-    | JCReads [] ->
+    | JCNone ->
 	begin match f.jc_logic_info_axiomatic with
 	  | Some a ->
 	      (* axiomatic def in a *)
@@ -1587,9 +1586,7 @@ let logic_fun_effects f =
 	      (* not allowed outside axiomatics *)
 	end
     | JCReads loclist ->
-(*
-	assert (1==0); (* cause obsolete *)
-*)	List.fold_left
+	List.fold_left
 	  (fun ef loc ->
 	     let fef = location ~in_assigns:false empty_fun_effect loc in
 	     ef_union ef fef.jc_reads 

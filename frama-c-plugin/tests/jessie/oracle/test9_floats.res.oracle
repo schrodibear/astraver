@@ -334,24 +334,23 @@ let monexp_ensures_default =
      (C_6:
      begin
        (let jessie_5 = (__retres := (C_5:
-                                    (JC_22:
+                                    (JC_21:
                                     (((div_double_safe nearest_even) 
                                       (C_4:
-                                      (JC_19:
+                                      (JC_18:
                                       (((add_double_safe nearest_even) 
                                         ((double_of_real_safe nearest_even) 1.017021247)) 
                                        (C_3:
-                                       (JC_18:
+                                       (JC_17:
                                        (((mul_double_safe nearest_even) 
                                          ((double_of_real_safe nearest_even) 0.5175411565)) x))))))) 
                                      (C_2:
-                                     (JC_21:
+                                     (JC_20:
                                      (((sub_double_safe nearest_even) 
-                                       ((double_of_real_safe nearest_even) 1.0)) 
-                                      (C_1:
-                                      (JC_20:
-                                      (((mul_double_safe nearest_even) 
-                                        ((double_of_real_safe nearest_even) 0.4397882839)) x)))))))))) in
+                                       (double_of_real_exact 1.0)) (C_1:
+                                                                   (JC_19:
+                                                                   (((mul_double_safe nearest_even) 
+                                                                    ((double_of_real_safe nearest_even) 0.4397882839)) x)))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -376,7 +375,7 @@ let monexp_safety =
      (C_6:
      begin
        (let jessie_2 = (__retres := (C_5:
-                                    (JC_17:
+                                    (JC_16:
                                     (((div_double nearest_even) (C_4:
                                                                 (JC_12:
                                                                 (((add_double nearest_even) 
@@ -388,12 +387,11 @@ let monexp_safety =
                                                                    (JC_10:
                                                                    ((double_of_real nearest_even) 0.5175411565))) x))))))) 
                                      (C_2:
-                                     (JC_16:
-                                     (((sub_double nearest_even) (JC_13:
-                                                                 ((double_of_real nearest_even) 1.0))) 
+                                     (JC_15:
+                                     (((sub_double nearest_even) (double_of_real_exact 1.0)) 
                                       (C_1:
-                                      (JC_15:
-                                      (((mul_double nearest_even) (JC_14:
+                                      (JC_14:
+                                      (((mul_double nearest_even) (JC_13:
                                                                   ((double_of_real nearest_even) 0.4397882839))) x)))))))))) in
        void);
       (return := !__retres);
@@ -434,12 +432,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po6.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.jessie/test9_floats.jc" line = "37" begin = "42" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.jessie/test9_floats.jc" line = "38" begin = "51" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.jessie/test9_floats.jc" line = "38" begin = "51" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -454,11 +452,6 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po10.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test9_floats_po11.why">
       <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
@@ -630,9 +623,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -644,24 +634,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

@@ -39,7 +39,7 @@ type void_P = [void_P]
 
 axiomatic P {
 
-  predicate p{L}(int_P[..] x)
+  predicate p{L}(int_P[..] x) reads x.int_M;
    
   axiom p_footprint{L} :
   (\forall int_P[..] x_0;
@@ -194,7 +194,7 @@ axiom no_assign_p_0 :
    (forall tmpalloc:int_P alloc_table.
     (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
      (forall x:int_P pointer.
-      ((pset_disjoint(tmp, pset_empty)
+      ((pset_disjoint(tmp, pset_singleton(x))
        and not_assigns(tmpalloc, int_P_int_M_x_1_at_L, tmpmem, tmp)) ->
        (p(x, int_P_int_M_x_1_at_L) <-> p(x, tmpmem))))))))
 
@@ -203,7 +203,7 @@ axiom no_update_p_0 :
   (forall tmpval:int32.
    (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
     (forall x:int_P pointer.
-     ((not in_pset(tmp, pset_empty)) ->
+     ((not in_pset(tmp, pset_singleton(x))) ->
       (p(x, int_P_int_M_x_1_at_L)
       <-> p(x, store(int_P_int_M_x_1_at_L, tmp, tmpval))))))))
 
@@ -693,11 +693,11 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/footprint_po5.why">
-      <location file = "PPCHOME/tests/jessie/footprint.c" line = "22" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/footprint.c" line = "21" begin = "13" end = "17"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/footprint_po6.why">
-      <location file = "PPCHOME/tests/jessie/footprint.c" line = "20" begin = "5" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/footprint.c" line = "19" begin = "5" end = "6"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -718,11 +718,11 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/footprint_po1.why">
-      <location file = "PPCHOME/tests/jessie/footprint.c" line = "14" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/footprint.c" line = "13" begin = "13" end = "17"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/footprint_po2.why">
-      <location file = "PPCHOME/tests/jessie/footprint.c" line = "12" begin = "5" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/footprint.c" line = "11" begin = "5" end = "6"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -886,9 +886,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -900,24 +897,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -1632,7 +1611,7 @@ axiom no_assign_p_0:
       (forall tmpalloc:int_P alloc_table.
         (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
           (forall x:int_P pointer.
-            ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
+            ((pset_disjoint(tmp, pset_singleton(x)) and not_assigns(tmpalloc,
               int_P_int_M_x_1_at_L, tmpmem, tmp)) ->
              (p(x, int_P_int_M_x_1_at_L) <-> p(x, tmpmem))))))))
 
@@ -1641,7 +1620,7 @@ axiom no_update_p_0:
     (forall tmpval:int32.
       (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
         (forall x:int_P pointer.
-          ((not in_pset(tmp, pset_empty)) ->
+          ((not in_pset(tmp, pset_singleton(x))) ->
            (p(x, int_P_int_M_x_1_at_L) <-> p(x, store(int_P_int_M_x_1_at_L,
             tmp, tmpval))))))))
 

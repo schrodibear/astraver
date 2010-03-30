@@ -500,7 +500,7 @@ let f_ensures_default =
                         (C_22:
                         begin
                           (let jessie_83 = (x_0 := y_0) in void);
-                         (if ((le_double !x_0) ((double_of_real_safe nearest_even) 1.0))
+                         (if ((le_double !x_0) (double_of_real_exact 1.0))
                          then
                           (let jessie_86 = (C_23:
                                            begin
@@ -515,16 +515,16 @@ let f_ensures_default =
                            (let jessie_89 = (n_1 := (C_25:
                                                     (let jessie_88 = 
                                                     (C_24:
-                                                    (JC_49:
+                                                    (JC_46:
                                                     (((sub_double_safe nearest_even) !x_0) 
-                                                     ((double_of_real_safe nearest_even) 2.0)))) in
-                                                    (JC_50: (f jessie_88))))) in
+                                                     (double_of_real_exact 2.0)))) in
+                                                    (JC_47: (f jessie_88))))) in
                            void);
                           try
                            (let jessie_96 = begin
                                               (loop_2:
                                               while true do
-                                              { invariant (JC_52: true)  }
+                                              { invariant (JC_49: true)  }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -555,9 +555,9 @@ let f_ensures_default =
                                                                       
                                                                     (x_0 := 
                                                                     (C_30:
-                                                                    (JC_54:
+                                                                    (JC_51:
                                                                     (((sub_double_safe nearest_even) !x_0) 
-                                                                    ((double_of_real_safe nearest_even) 1.0)))));
+                                                                    (double_of_real_exact 1.0)))));
                                                                     !x_0
                                                                     end)
                                                                     end)
@@ -617,8 +617,7 @@ let f_safety =
                         (C_22:
                         begin
                           (let jessie_62 = (x_0 := y_0) in void);
-                         (if ((le_double !x_0) (JC_35:
-                                               ((double_of_real nearest_even) 1.0)))
+                         (if ((le_double !x_0) (double_of_real_exact 1.0))
                          then
                           (let jessie_65 = (C_23:
                                            begin
@@ -633,23 +632,22 @@ let f_safety =
                            (let jessie_68 = (n_1 := (C_25:
                                                     (let jessie_67 = 
                                                     (C_24:
-                                                    (JC_37:
+                                                    (JC_35:
                                                     (((sub_double nearest_even) !x_0) 
-                                                     (JC_36:
-                                                     ((double_of_real nearest_even) 2.0))))) in
-                                                    (JC_41:
+                                                     (double_of_real_exact 2.0)))) in
+                                                    (JC_39:
                                                     (assert
-                                                    { R(double_value((JC_40 : jessie_67)),
-                                                      double_value((JC_39 : y_0))) };
-                                                    (JC_38:
+                                                    { R(double_value((JC_38 : jessie_67)),
+                                                      double_value((JC_37 : y_0))) };
+                                                    (JC_36:
                                                     (f_requires jessie_67))))))) in
                            void);
                           try
                            (let jessie_75 = begin
                                               (loop_1:
                                               while true do
-                                              { invariant (JC_43: true)
-                                                variant (JC_48 : x_0) for R }
+                                              { invariant (JC_41: true)
+                                                variant (JC_45 : x_0) for R }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -659,7 +657,7 @@ let f_safety =
                                                                       
                                                                     (if 
                                                                     ((ge_double !x_0) 
-                                                                    (JC_45:
+                                                                    (JC_43:
                                                                     ((double_of_real nearest_even) 10.0)))
                                                                     then void
                                                                     else
@@ -681,10 +679,9 @@ let f_safety =
                                                                       
                                                                     (x_0 := 
                                                                     (C_30:
-                                                                    (JC_47:
+                                                                    (JC_44:
                                                                     (((sub_double nearest_even) !x_0) 
-                                                                    (JC_46:
-                                                                    ((double_of_real nearest_even) 1.0))))));
+                                                                    (double_of_real_exact 1.0)))));
                                                                     !x_0
                                                                     end)
                                                                     end)
@@ -860,15 +857,15 @@ why --project [...] why/decreases.why
   <function name="Function odd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/decreases_po13.why">
-      <location file = "why/decreases.why" line = "701" begin = "57" end = "158"/>
+    <goal why_file="why/decreases_po10.why">
+      <location file = "why/decreases.why" line = "698" begin = "57" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/decreases_po14.why">
-      <location file = "why/decreases.why" line = "701" begin = "57" end = "158"/>
+    <goal why_file="why/decreases_po11.why">
+      <location file = "why/decreases.why" line = "698" begin = "57" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/decreases_po15.why">
+    <goal why_file="why/decreases_po12.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "23" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
@@ -879,45 +876,30 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po4.why">
-      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "89" begin = "16" end = "31"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/decreases_po5.why">
-      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "94" begin = "44" end = "59"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/decreases_po6.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "36" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/decreases_po7.why">
-      <location file = "why/decreases.why" line = "522" begin = "54" end = "173"/>
+    <goal why_file="why/decreases_po5.why">
+      <location file = "why/decreases.why" line = "520" begin = "54" end = "173"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/decreases_po8.why">
+    <goal why_file="why/decreases_po6.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/decreases_po9.why">
+    <goal why_file="why/decreases_po7.why">
       <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "101" begin = "25" end = "41"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/decreases_po10.why">
-      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "104" begin = "41" end = "56"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/decreases_po11.why">
+    <goal why_file="why/decreases_po8.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "40" begin = "10" end = "11"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/decreases_po12.why">
+    <goal why_file="why/decreases_po9.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "37" begin = "19" end = "20"/>
       <explain kind = "VarDecr"/>
     </goal>
@@ -1100,9 +1082,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1114,24 +1093,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

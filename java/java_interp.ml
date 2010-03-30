@@ -2055,6 +2055,7 @@ let tr_logic_fun fi (b : logic_decl_body) acc =
 		 assertion a)) l) 
 	  ()
     | `Term t -> def_ ~body:(term t) ()
+    | `None -> def_ ()
     | `Reads l -> 
 	let logic_label = default_label fi.java_logic_info_labels in
         def_ ~reads:(List.map (location logic_label) l) ()

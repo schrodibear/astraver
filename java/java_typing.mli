@@ -89,6 +89,7 @@ type logic_def_body =
 
 type logic_decl_body =
   [ logic_def_body 
+  | `None
   | `Reads of Java_tast.term list ]
 
 val logic_defs_table : 

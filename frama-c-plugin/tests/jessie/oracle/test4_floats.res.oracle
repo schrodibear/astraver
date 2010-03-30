@@ -30,28 +30,20 @@ tag void_P = {
 type void_P = [void_P]
 
 double monexp(double x)
-  requires (C_7 : (\real_abs((x :> real)) <= 0x2.p-3));
+  requires (C_6 : (\real_abs((x :> real)) <= 0x2.p-3));
 behavior default:
-  ensures (C_8 : ((C_9 : (\double_model(\result) == \exp(\double_model(x)))) &&
-                   (C_10 : ((\double_round_error(x) == 0.0) ==>
-                             ((\double_round_error(\result) <= 0x2.p-52) &&
-                               (\double_total_error(\result) <=
-                                 (\double_total_error(x) + 0x2.p-51)))))));
+  ensures (C_7 : ((C_8 : (\double_model(\result) == \exp(\double_model(x)))) &&
+                   (C_9 : ((\double_round_error(x) == 0.0) ==>
+                            ((\double_round_error(\result) <= 0x2.p-52) &&
+                              (\double_total_error(\result) <=
+                                (\double_total_error(x) + 0x2.p-51)))))));
 {  
    (var double y);
    
-   {  
-      {  
-         (assert for default: (C_1 : (round2 : (((2.0 :> double) :> real) ==
-                                                 2.0))));
-         ()
-      };
-      
-      {  (C_6 : (y = (C_5 : ((1.0 :> double) +
-                              (C_4 : (x *
-                                       (C_3 : ((1.0 :> double) +
-                                                (C_2 : (x / (2.0 :> double)))))))))))
-      };
+   {  (C_5 : (y = (C_4 : ((1.0 :> double) +
+                           (C_3 : (x *
+                                    (C_2 : ((1.0 :> double) +
+                                             (C_1 : (x / (2.0 :> double)))))))))));
       
       (return y)
    }
@@ -348,33 +340,25 @@ let monexp_ensures_default =
   try
    begin
      (let y = ref (any_double void) in
+     (C_5:
      begin
-       (assert
-       { (JC_21:
-         eq_real(double_value(round_double_logic(nearest_even, 2.0)), 2.0)) };
+       (let jessie_5 = (y := (C_4:
+                             (JC_20:
+                             (((add_double_safe nearest_even) (double_of_real_exact 1.0)) 
+                              (C_3:
+                              (JC_19:
+                              (((mul_double_safe nearest_even) x) (C_2:
+                                                                  (JC_18:
+                                                                  (((add_double_safe nearest_even) 
+                                                                    (double_of_real_exact 1.0)) 
+                                                                   (C_1:
+                                                                   (JC_17:
+                                                                   (((div_double_safe nearest_even) x) 
+                                                                    (double_of_real_exact 2.0)))))))))))))) in
        void);
-      void;
-      (let jessie_5 = (C_6:
-                      begin
-                        (y := (C_5:
-                              (JC_25:
-                              (((add_double_safe nearest_even) ((double_of_real_safe nearest_even) 1.0)) 
-                               (C_4:
-                               (JC_24:
-                               (((mul_double_safe nearest_even) x) (C_3:
-                                                                   (JC_23:
-                                                                   (((add_double_safe nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 1.0)) 
-                                                                    (C_2:
-                                                                    (JC_22:
-                                                                    (((div_double_safe nearest_even) x) 
-                                                                    ((double_of_real_safe nearest_even) 2.0))))))))))))));
-                       !y
-                      end) in
-      void);
       (return := !y);
       (raise Return)
-     end);
+     end));
     absurd 
    end
    with
@@ -396,35 +380,25 @@ let monexp_safety =
   try
    begin
      (let y = ref (any_double void) in
+     (C_5:
      begin
-       [ { } unit
-         { (JC_13:
-           eq_real(double_value(round_double_logic(nearest_even, 2.0)), 2.0)) } ];
-      void;
-      (let jessie_2 = (C_6:
-                      begin
-                        (y := (C_5:
-                              (JC_20:
-                              (((add_double nearest_even) (JC_14:
-                                                          ((double_of_real nearest_even) 1.0))) 
-                               (C_4:
-                               (JC_19:
-                               (((mul_double nearest_even) x) (C_3:
-                                                              (JC_18:
-                                                              (((add_double nearest_even) 
-                                                                (JC_15:
-                                                                ((double_of_real nearest_even) 1.0))) 
-                                                               (C_2:
-                                                               (JC_17:
-                                                               (((div_double nearest_even) x) 
-                                                                (JC_16:
-                                                                ((double_of_real nearest_even) 2.0)))))))))))))));
-                       !y
-                      end) in
-      void);
+       (let jessie_2 = (y := (C_4:
+                             (JC_16:
+                             (((add_double nearest_even) (double_of_real_exact 1.0)) 
+                              (C_3:
+                              (JC_15:
+                              (((mul_double nearest_even) x) (C_2:
+                                                             (JC_14:
+                                                             (((add_double nearest_even) 
+                                                               (double_of_real_exact 1.0)) 
+                                                              (C_1:
+                                                              (JC_13:
+                                                              (((div_double nearest_even) x) 
+                                                               (double_of_real_exact 2.0)))))))))))))) in
+       void);
       (return := !y);
       (raise Return)
-     end);
+     end));
     absurd 
    end
    with
@@ -439,56 +413,42 @@ why --project [...] why/test4_floats.why
   <function name="Function monexp">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/test4_floats_po4.why">
+      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "10" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
     <goal why_file="why/test4_floats_po5.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.jessie/test4_floats.jc" line = "44" begin = "29" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "10" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test4_floats_po6.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.jessie/test4_floats.jc" line = "47" begin = "60" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "10" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test4_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "11" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "10" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test4_floats_po8.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "11" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test4_floats_po9.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "11" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test4_floats_po10.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "11" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test4_floats_po11.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "11" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "10" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/test4_floats_po1.why">
-      <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "10" begin = "21" end = "39"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/test4_floats_po2.why">
       <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "4" begin = "7" end = "41"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/test4_floats_po3.why">
+    <goal why_file="why/test4_floats_po2.why">
       <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "5" begin = "7" end = "127"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/test4_floats_po4.why">
+    <goal why_file="why/test4_floats_po3.why">
       <location file = "PPCHOME/tests/jessie/test4_floats.c" line = "5" begin = "7" end = "127"/>
       <explain kind = "Post"/>
     </goal>
@@ -653,9 +613,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -667,24 +624,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

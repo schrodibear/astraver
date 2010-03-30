@@ -47,8 +47,8 @@
 /*** contents function *******************************************************/
 
 /*@ axiomatic ArrayContents {
-  @   logic int_array contents{L}(int* a) ;
-  @     // reads a[..];
+  @   logic int_array contents{L}(int* a) 
+  @     reads a[..];
   @  axiom access_contents{L} : 
   @   \forall int* a; \forall integer i; 
   @        access(contents(a), i) == a[i];

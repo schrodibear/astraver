@@ -498,11 +498,11 @@ assigns:
 
 reads:
 | 
-    { [] }
+    { JCnone }
 | READS argument_expression_list SEMICOLON
-    { $2 }
+    { JCreads $2 }
 | READS BSNOTHING SEMICOLON
-    { [] }
+    { JCreads [] }
 ;
 
 function_definition: 
@@ -1066,14 +1066,14 @@ logic_declaration:
     { locate (JCDlogic_type($3,$4)) }
 /* remove this comment if removed from logic_definition
 | LOGIC type_expr IDENTIFIER 
-    { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
+    { locate (JCDlogic(Some $2, $3, [], [], JCnone)) }
 */
 | PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads
     { let p = lparams $5 in
-      locate (JCDlogic(None, $2, $3, $4, p, JCreads $6)) }
+      locate (JCDlogic(None, $2, $3, $4, p, $6)) }
 | LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters reads
 	{ let p = lparams $6 in
-	  locate (JCDlogic(Some $2, $3, $4, $5, p, JCreads $7)) }
+	  locate (JCDlogic(Some $2, $3, $4, $5, p, $7)) }
 | AXIOM identifier logic_type_arg label_binders COLON expression
     { locate( JCDlemma($2#name,true,$3,$4,$6)) }
 ;

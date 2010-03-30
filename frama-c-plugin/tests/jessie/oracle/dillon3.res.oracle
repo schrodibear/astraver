@@ -494,18 +494,18 @@ let f4_ensures_default =
      (C_16:
      begin
        (let jessie_26 = (tab := (C_15:
-                                (JC_38:
+                                (JC_36:
                                 (((alloc_struct_double_P (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table)))) in
        void);
       (C_18:
       begin
-        (let jessie_32 = (let jessie_28 = ((double_of_real_safe nearest_even) 1.0) in
+        (let jessie_32 = (let jessie_28 = (double_of_real_exact 1.0) in
                          (let jessie_31 = ((shift !tab) (0)) in
                          (((safe_upd_ double_P_double_M_tab_2) jessie_31) jessie_28))) in
         void);
        (C_20:
        begin
-         (let jessie_38 = (let jessie_34 = ((double_of_real_safe nearest_even) 2.0) in
+         (let jessie_38 = (let jessie_34 = (double_of_real_exact 2.0) in
                           (let jessie_37 = ((shift !tab) (1)) in
                           (((safe_upd_ double_P_double_M_tab_2) jessie_37) jessie_34))) in
          void);
@@ -513,7 +513,7 @@ let f4_ensures_default =
         begin
           (let jessie_41 = (r := (C_21:
                                  (let jessie_40 = !tab in
-                                 (JC_39:
+                                 (JC_37:
                                  (((g4 jessie_40) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
           void);
          (C_23:
@@ -559,15 +559,13 @@ let f4_safety =
        void);
       (C_18:
       begin
-        (let jessie_14 = (let jessie_10 = (JC_35:
-                                          ((double_of_real nearest_even) 1.0)) in
+        (let jessie_14 = (let jessie_10 = (double_of_real_exact 1.0) in
                          (let jessie_13 = ((shift !tab) (0)) in
                          (((safe_upd_ double_P_double_M_tab_2) jessie_13) jessie_10))) in
         void);
        (C_20:
        begin
-         (let jessie_20 = (let jessie_16 = (JC_36:
-                                           ((double_of_real nearest_even) 2.0)) in
+         (let jessie_20 = (let jessie_16 = (double_of_real_exact 2.0) in
                           (let jessie_19 = ((shift !tab) (1)) in
                           (((safe_upd_ double_P_double_M_tab_2) jessie_19) jessie_16))) in
          void);
@@ -575,7 +573,7 @@ let f4_safety =
         begin
           (let jessie_23 = (r := (C_21:
                                  (let jessie_22 = !tab in
-                                 (JC_37:
+                                 (JC_35:
                                  (((g4_requires jessie_22) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
           void);
          (C_23:
@@ -672,6 +670,16 @@ why --project [...] why/dillon3.why
   <function name="Function g4">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/dillon3_po9.why">
+      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "11" begin = "0" end = "1"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/dillon3_po10.why">
+      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "11" begin = "0" end = "1"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
     <goal why_file="why/dillon3_po11.why">
       <location file = "PPCHOME/tests/jessie/dillon3.c" line = "11" begin = "0" end = "1"/>
       <explain kind = "Pre"
@@ -680,21 +688,11 @@ text = "PointerDeref"/>
     <goal why_file="why/dillon3_po12.why">
       <location file = "PPCHOME/tests/jessie/dillon3.c" line = "11" begin = "0" end = "1"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/dillon3_po13.why">
-      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "11" begin = "0" end = "1"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/dillon3_po14.why">
-      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "11" begin = "0" end = "1"/>
-      <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/dillon3_po10.why">
+    <goal why_file="why/dillon3_po8.why">
       <location file = "PPCHOME/tests/jessie/dillon3.c" line = "6" begin = "8" end = "34"/>
       <explain kind = "Post"/>
     </goal>
@@ -713,14 +711,14 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon3_po3.why">
-      <location file = "PPCHOME/tests/jessie/dillon3.jessie/dillon3.jc" line = "61" begin = "45" end = "60"/>
+      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "21" begin = "0" end = "1"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon3_po4.why">
-      <location file = "PPCHOME/tests/jessie/dillon3.jessie/dillon3.jc" line = "62" begin = "45" end = "60"/>
+      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "21" begin = "0" end = "1"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon3_po5.why">
       <location file = "PPCHOME/tests/jessie/dillon3.c" line = "21" begin = "0" end = "1"/>
@@ -733,17 +731,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon3_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "21" begin = "0" end = "1"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/dillon3_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon3.c" line = "21" begin = "0" end = "1"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/dillon3_po9.why">
-      <location file = "why/dillon3.why" line = "506" begin = "12" end = "60"/>
+      <location file = "why/dillon3.why" line = "504" begin = "12" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -908,9 +896,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -922,24 +907,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

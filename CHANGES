@@ -1,4 +1,7 @@
 
+
+  o [Jessie, Frama-C plugin] make the right difference between 
+    "reads \nothing" and no reads clause at all
   o [Jessie, Frama-C plugin] the "defensive" model for floating-point 
     computations is now the default
   o [Jessie] is now compiled with apron by default, if available.

@@ -39,7 +39,7 @@ type void_P = [void_P]
 
 axiomatic PermutSize {
 
-  logic int32 permut_size{Here}(int_P[..] arr)
+  logic int32 permut_size{Here}(int_P[..] arr) reads (arr + [0..]).int_M;
    
   axiom permut_valid{Here} :
   (\forall int_P[..] arr_0;
@@ -189,59 +189,47 @@ predicate left_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-logic permut_size: int_P pointer,
- int_P alloc_table,
- (int_P, int32) memory -> int32
+logic permut_size: int_P pointer, (int_P, int32) memory -> int32
 
 axiom no_assign_permut_size_0 :
  (forall tmp:int_P pset.
   (forall tmpmem:(int_P, int32) memory.
    (forall tmpalloc:int_P alloc_table.
     (forall int_P_int_M_arr_1:(int_P, int32) memory.
-     (forall int_P_arr_1_alloc_table:int_P alloc_table.
-      (forall arr:int_P pointer.
-       ((pset_disjoint(tmp, pset_empty)
-        and not_assigns(tmpalloc, int_P_int_M_arr_1, tmpmem, tmp)) ->
-        (permut_size(arr, int_P_arr_1_alloc_table, int_P_int_M_arr_1) = 
-        permut_size(arr, int_P_arr_1_alloc_table, tmpmem)))))))))
+     (forall arr:int_P pointer.
+      ((pset_disjoint(tmp, pset_range_right(pset_singleton(arr), (0)))
+       and not_assigns(tmpalloc, int_P_int_M_arr_1, tmpmem, tmp)) ->
+       (permut_size(arr, int_P_int_M_arr_1) = permut_size(arr, tmpmem))))))))
 
 axiom no_update_permut_size_0 :
  (forall tmp:int_P pointer.
   (forall tmpval:int32.
    (forall int_P_int_M_arr_1:(int_P, int32) memory.
-    (forall int_P_arr_1_alloc_table:int_P alloc_table.
-     (forall arr:int_P pointer.
-      ((not in_pset(tmp, pset_empty)) ->
-       (permut_size(arr, int_P_arr_1_alloc_table, int_P_int_M_arr_1) = 
-       permut_size(arr, int_P_arr_1_alloc_table,
-       store(int_P_int_M_arr_1, tmp, tmpval)))))))))
+    (forall arr:int_P pointer.
+     ((not in_pset(tmp, pset_range_right(pset_singleton(arr), (0)))) ->
+      (permut_size(arr, int_P_int_M_arr_1) = permut_size(arr,
+                                             store(int_P_int_M_arr_1, tmp,
+                                             tmpval))))))))
 
 axiom permut_bound :
- (forall int_P_arr_1_alloc_table:int_P alloc_table.
-  (forall int_P_int_M_arr_1:(int_P, int32) memory.
-   (forall i:int.
-    (forall arr_1:int_P pointer.
-     ((le_int((0), i)
-      and le_int(i,
-          integer_of_int32(permut_size(arr_1, int_P_arr_1_alloc_table,
-                           int_P_int_M_arr_1)))) ->
-      (le_int((0),
-       integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))))
-      and le_int(integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))),
-          integer_of_int32(permut_size(arr_1, int_P_arr_1_alloc_table,
-                           int_P_int_M_arr_1)))))))))
+ (forall int_P_int_M_arr_1:(int_P, int32) memory.
+  (forall i:int.
+   (forall arr_1:int_P pointer.
+    ((le_int((0), i)
+     and le_int(i, integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1)))) ->
+     (le_int((0),
+      integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))))
+     and le_int(integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))),
+         integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1))))))))
 
 axiom permut_valid :
  (forall int_P_arr_1_alloc_table:int_P alloc_table.
   (forall int_P_int_M_arr_1:(int_P, int32) memory.
    (forall arr_0_0:int_P pointer.
-    (le_int((0),
-     integer_of_int32(permut_size(arr_0_0, int_P_arr_1_alloc_table,
-                      int_P_int_M_arr_1))) ->
+    (le_int((0), integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))) ->
      (le_int(offset_min(int_P_arr_1_alloc_table, arr_0_0), (0))
      and ge_int(offset_max(int_P_arr_1_alloc_table, arr_0_0),
-         integer_of_int32(permut_size(arr_0_0, int_P_arr_1_alloc_table,
-                          int_P_int_M_arr_1))))))))
+         integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))))))))
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
@@ -549,9 +537,7 @@ parameter permut_search_requires :
    int_P_arr_2_alloc_table:int_P alloc_table ->
     int_P_int_M_arr_2:(int_P, int32) memory ->
      { (JC_1:
-       le_int((0),
-       integer_of_int32(permut_size(arr_0, int_P_arr_2_alloc_table,
-                        int_P_int_M_arr_2))))}
+       le_int((0), integer_of_int32(permut_size(arr_0, int_P_int_M_arr_2))))}
      int32 { true }
 
 parameter safe_int32_of_integer_ :
@@ -563,9 +549,7 @@ parameter safe_int8_of_integer_ :
 let permut_search_ensures_default =
  fun (arr_0 : int_P pointer) (v : int32) (int_P_arr_2_alloc_table : int_P alloc_table) (int_P_int_M_arr_2 : (int_P, int32) memory) ->
   { (JC_3:
-    le_int((0),
-    integer_of_int32(permut_size(arr_0, int_P_arr_2_alloc_table,
-                     int_P_int_M_arr_2)))) }
+    le_int((0), integer_of_int32(permut_size(arr_0, int_P_int_M_arr_2)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -585,7 +569,6 @@ let permut_search_ensures_default =
                             and (JC_18:
                                 le_int(integer_of_int32(idx),
                                 integer_of_int32(permut_size(arr_0,
-                                                 int_P_arr_2_alloc_table,
                                                  int_P_int_M_arr_2))))))
                            }
                          begin
@@ -651,9 +634,7 @@ let permut_search_ensures_default =
 let permut_search_safety =
  fun (arr_0 : int_P pointer) (v : int32) (int_P_arr_2_alloc_table : int_P alloc_table) (int_P_int_M_arr_2 : (int_P, int32) memory) ->
   { (JC_3:
-    le_int((0),
-    integer_of_int32(permut_size(arr_0, int_P_arr_2_alloc_table,
-                     int_P_int_M_arr_2)))) }
+    le_int((0), integer_of_int32(permut_size(arr_0, int_P_int_M_arr_2)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -675,7 +656,6 @@ let permut_search_safety =
                                and (JC_10:
                                    le_int(integer_of_int32(idx),
                                    integer_of_int32(permut_size(arr_0,
-                                                    int_P_arr_2_alloc_table,
                                                     int_P_int_M_arr_2)))))) } ];
                           try
                            (let jessie_11 = begin
@@ -741,49 +721,49 @@ why --project [...] why/permut_search2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/permut_search2_po5.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "18" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "17" begin = "4" end = "6"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search2_po6.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "18" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "17" begin = "4" end = "6"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search2_po7.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "19" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "18" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search2_po8.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "19" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "18" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search2_po9.why">
-      <location file = "why/permut_search2.why" line = "580" begin = "59" end = "60"/>
+      <location file = "why/permut_search2.why" line = "561" begin = "59" end = "60"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/permut_search2_po10.why">
-      <location file = "why/permut_search2.why" line = "580" begin = "59" end = "60"/>
+      <location file = "why/permut_search2.why" line = "561" begin = "59" end = "60"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/permut_search2_po1.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "16" begin = "21" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "15" begin = "21" end = "29"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/permut_search2_po2.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "16" begin = "26" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "15" begin = "26" end = "49"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/permut_search2_po3.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "16" begin = "21" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "15" begin = "21" end = "29"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/permut_search2_po4.why">
-      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "16" begin = "26" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/permut_search2.c" line = "15" begin = "26" end = "49"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
@@ -947,9 +927,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -961,24 +938,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 
@@ -1685,54 +1644,46 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-logic permut_size : int_P pointer, int_P alloc_table, (int_P,
-int32) memory -> int32
+logic permut_size : int_P pointer, (int_P, int32) memory -> int32
 
 axiom no_assign_permut_size_0:
   (forall tmp:int_P pset.
     (forall tmpmem:(int_P, int32) memory.
       (forall tmpalloc:int_P alloc_table.
         (forall int_P_int_M_arr_1:(int_P, int32) memory.
-          (forall int_P_arr_1_alloc_table:int_P alloc_table.
-            (forall arr:int_P pointer.
-              ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                int_P_int_M_arr_1, tmpmem, tmp)) ->
-               (permut_size(arr, int_P_arr_1_alloc_table,
-               int_P_int_M_arr_1) = permut_size(arr, int_P_arr_1_alloc_table,
-               tmpmem)))))))))
+          (forall arr:int_P pointer.
+            ((pset_disjoint(tmp, pset_range_right(pset_singleton(arr),
+              0)) and not_assigns(tmpalloc, int_P_int_M_arr_1, tmpmem, tmp)) ->
+             (permut_size(arr, int_P_int_M_arr_1) = permut_size(arr, tmpmem))))))))
 
 axiom no_update_permut_size_0:
   (forall tmp:int_P pointer.
     (forall tmpval:int32.
       (forall int_P_int_M_arr_1:(int_P, int32) memory.
-        (forall int_P_arr_1_alloc_table:int_P alloc_table.
-          (forall arr:int_P pointer.
-            ((not in_pset(tmp, pset_empty)) -> (permut_size(arr,
-             int_P_arr_1_alloc_table, int_P_int_M_arr_1) = permut_size(arr,
-             int_P_arr_1_alloc_table, store(int_P_int_M_arr_1, tmp, tmpval)))))))))
+        (forall arr:int_P pointer.
+          ((not in_pset(tmp, pset_range_right(pset_singleton(arr), 0))) ->
+           (permut_size(arr, int_P_int_M_arr_1) = permut_size(arr,
+           store(int_P_int_M_arr_1, tmp, tmpval))))))))
 
 axiom permut_bound:
-  (forall int_P_arr_1_alloc_table:int_P alloc_table.
-    (forall int_P_int_M_arr_1:(int_P, int32) memory.
-      (forall i:int.
-        (forall arr_1:int_P pointer.
-          (((0 <= i) and (i <= integer_of_int32(permut_size(arr_1,
-            int_P_arr_1_alloc_table, int_P_int_M_arr_1)))) ->
-           ((0 <= integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
-            i)))) and (integer_of_int32(select(int_P_int_M_arr_1,
-            shift(arr_1, i))) <= integer_of_int32(permut_size(arr_1,
-            int_P_arr_1_alloc_table, int_P_int_M_arr_1)))))))))
+  (forall int_P_int_M_arr_1:(int_P, int32) memory.
+    (forall i:int.
+      (forall arr_1:int_P pointer.
+        (((0 <= i) and (i <= integer_of_int32(permut_size(arr_1,
+          int_P_int_M_arr_1)))) ->
+         ((0 <= integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
+          i)))) and (integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
+          i))) <= integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1))))))))
 
 axiom permut_valid:
   (forall int_P_arr_1_alloc_table:int_P alloc_table.
     (forall int_P_int_M_arr_1:(int_P, int32) memory.
       (forall arr_0_0:int_P pointer.
-        ((0 <= integer_of_int32(permut_size(arr_0_0, int_P_arr_1_alloc_table,
-         int_P_int_M_arr_1))) ->
+        ((0 <= integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))) ->
          ((offset_min(int_P_arr_1_alloc_table, arr_0_0) <= 0) and
           (offset_max(int_P_arr_1_alloc_table,
           arr_0_0) >= integer_of_int32(permut_size(arr_0_0,
-          int_P_arr_1_alloc_table, int_P_int_M_arr_1))))))))
+          int_P_int_M_arr_1))))))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.

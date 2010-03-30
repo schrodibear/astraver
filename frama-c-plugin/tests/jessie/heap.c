@@ -93,8 +93,8 @@
 /**** trees encoded in arrays *********************************************/
 
 /*@ axiomatic TreeOfArray {
-  @   logic tree tree_of_array{L}(int *t, integer root, integer bound);
-  @      // reads t[..];
+  @   logic tree tree_of_array{L}(int *t, integer root, integer bound)
+  @      reads t[..];
   @   axiom tree_of_array_def_1{L}:
   @     \forall int *t; \forall integer root, bound;
   @       root >= bound ==> tree_of_array(t, root, bound) == Empty;

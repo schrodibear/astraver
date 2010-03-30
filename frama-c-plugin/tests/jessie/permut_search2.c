@@ -1,6 +1,5 @@
 /*@ axiomatic PermutSize {
-  @  logic int permut_size{Here}(int *arr); 
-  @    // reads arr[0..];
+  @  logic int permut_size{Here}(int *arr) reads arr[0..];
   @  axiom permut_valid{Here}:
   @    \forall int *arr; 
   @      0 <= permut_size(arr) ==> \valid_range(arr,0,permut_size(arr));

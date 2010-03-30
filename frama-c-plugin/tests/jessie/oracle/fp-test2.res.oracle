@@ -443,35 +443,35 @@ let main_ensures_default =
        (C_5:
        begin
          (let jessie_22 = (a := (C_4:
-                                (JC_32:
+                                (JC_30:
                                 (((sub_double_safe nearest_even) !tmp1) 
-                                 ((double_of_real_safe nearest_even) 1.0))))) in
+                                 (double_of_real_exact 1.0))))) in
          void);
         (C_7:
         begin
           (let jessie_24 = (b := (C_6:
-                                 (JC_33:
+                                 (JC_31:
                                  (((add_double_safe nearest_even) !tmp2) 
-                                  ((double_of_real_safe nearest_even) 1.0))))) in
+                                  (double_of_real_exact 1.0))))) in
           void);
          (C_9:
          begin
            (let jessie_26 = (c := (C_8:
-                                  (JC_34:
+                                  (JC_32:
                                   (((mul_double_safe nearest_even) !tmp1) !tmp2)))) in
            void);
           (C_12:
           begin
             (let jessie_28 = (res := (C_11:
-                                     (JC_36:
+                                     (JC_34:
                                      (((sub_double_safe nearest_even) 
                                        (C_10:
-                                       (JC_35:
+                                       (JC_33:
                                        (((mul_double_safe nearest_even) !a) !b)))) !c)))) in
             void);
-           (assert { (JC_37: eq_real(double_value(res), 0.0)) }; void);
+           (assert { (JC_35: eq_real(double_value(res), 0.0)) }; void);
            void;
-           (let jessie_29 = (C_14: (JC_38: (printf void))) in void);
+           (let jessie_29 = (C_14: (JC_36: (printf void))) in void);
            (C_15:
            begin
              (let jessie_31 = (__retres := (safe_int32_of_integer_ (0))) in
@@ -520,34 +520,32 @@ let main_safety =
        (C_5:
        begin
          (let jessie_6 = (a := (C_4:
-                               (JC_24:
-                               (((sub_double nearest_even) !tmp1) (JC_23:
-                                                                  ((double_of_real nearest_even) 1.0)))))) in
+                               (JC_23:
+                               (((sub_double nearest_even) !tmp1) (double_of_real_exact 1.0))))) in
          void);
         (C_7:
         begin
           (let jessie_8 = (b := (C_6:
-                                (JC_26:
-                                (((add_double nearest_even) !tmp2) (JC_25:
-                                                                   ((double_of_real nearest_even) 1.0)))))) in
+                                (JC_24:
+                                (((add_double nearest_even) !tmp2) (double_of_real_exact 1.0))))) in
           void);
          (C_9:
          begin
            (let jessie_10 = (c := (C_8:
-                                  (JC_27:
+                                  (JC_25:
                                   (((mul_double nearest_even) !tmp1) !tmp2)))) in
            void);
           (C_12:
           begin
             (let jessie_12 = (res := (C_11:
-                                     (JC_29:
+                                     (JC_27:
                                      (((sub_double nearest_even) (C_10:
-                                                                 (JC_28:
+                                                                 (JC_26:
                                                                  (((mul_double nearest_even) !a) !b)))) !c)))) in
             void);
-           [ { } unit reads res { (JC_30: eq_real(double_value(res), 0.0)) } ];
+           [ { } unit reads res { (JC_28: eq_real(double_value(res), 0.0)) } ];
            void;
-           (let jessie_13 = (C_14: (JC_31: (printf_requires void))) in void);
+           (let jessie_13 = (C_14: (JC_29: (printf_requires void))) in void);
            (C_15:
            begin
              (let jessie_15 = (__retres := (safe_int32_of_integer_ (0))) in
@@ -587,36 +585,26 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po4.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "60" begin = "33" end = "48"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/fp-test2_po5.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po6.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "61" begin = "33" end = "48"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/fp-test2_po7.why">
+    <goal why_file="why/fp-test2_po5.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "16" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po8.why">
+    <goal why_file="why/fp-test2_po6.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "17" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po9.why">
+    <goal why_file="why/fp-test2_po7.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/fp-test2_po10.why">
+    <goal why_file="why/fp-test2_po8.why">
       <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
@@ -788,9 +776,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -802,24 +787,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

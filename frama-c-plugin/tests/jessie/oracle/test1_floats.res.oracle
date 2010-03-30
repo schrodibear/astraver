@@ -449,56 +449,56 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter cosine1a :
  x_0:single ->
   { } single
-  { (JC_54:
-    ((JC_52:
+  { (JC_50:
+    ((JC_48:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0)))),
      0x1p-24))
-    and (JC_53:
+    and (JC_49:
         le_real(single_round_error(result),
         add_real(single_round_error(x_0), 0x3p-24))))) }
 
 parameter cosine1a_requires :
  x_0:single ->
-  { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_0), 0x1p-20))))}
+  { (JC_39:
+    ((JC_37: le_real(abs_real(single_exact(x_0)), 0x1p-5))
+    and (JC_38: le_real(single_round_error(x_0), 0x1p-20))))}
   single
-  { (JC_54:
-    ((JC_52:
+  { (JC_50:
+    ((JC_48:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0)))),
      0x1p-24))
-    and (JC_53:
+    and (JC_49:
         le_real(single_round_error(result),
         add_real(single_round_error(x_0), 0x3p-24))))) }
 
 parameter cosine1b :
  x_2:single ->
   { } single
-  { (JC_78:
+  { (JC_72:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-20)) }
 
 parameter cosine1b_requires :
  x_2:single ->
-  { (JC_73: le_real(abs_real(single_value(x_2)), 0.07))} single
-  { (JC_78:
+  { (JC_67: le_real(abs_real(single_value(x_2)), 0.07))} single
+  { (JC_72:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-20)) }
 
 parameter cosine2 :
  x:single ->
   { } single
-  { (JC_28:
+  { (JC_26:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
     0x1p-23)) }
 
 parameter cosine2_requires :
  x:single ->
-  { (JC_21:
-    ((JC_19: le_real(abs_real(single_value(x)), 0x1p-5))
-    and (JC_20: eq_real(single_round_error(x), 0.0))))}
+  { (JC_19:
+    ((JC_17: le_real(abs_real(single_value(x)), 0x1p-5))
+    and (JC_18: eq_real(single_round_error(x), 0.0))))}
   single
-  { (JC_28:
+  { (JC_26:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
     0x1p-23)) }
 
@@ -526,9 +526,9 @@ parameter safe_int8_of_integer_ :
 
 let cosine1a_ensures_default =
  fun (x_0 : single) ->
-  { (JC_47:
-    ((JC_45: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_46: le_real(single_round_error(x_0), 0x1p-20)))) }
+  { (JC_43:
+    ((JC_41: le_real(abs_real(single_exact(x_0)), 0x1p-5))
+    and (JC_42: le_real(single_round_error(x_0), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -536,31 +536,31 @@ let cosine1a_ensures_default =
      (let r_0 = ref (any_single void) in
      begin
        (assert
-       { (JC_66: le_real(abs_real(single_value(x_0)), 0x1.0002p-5)) };
+       { (JC_60: le_real(abs_real(single_value(x_0)), 0x1.0002p-5)) };
        void);
       void;
       (let jessie_17 = (C_21:
                        begin
                          (r_0 := (C_20:
-                                 (JC_69:
-                                 (((sub_single_safe nearest_even) ((single_of_real_safe nearest_even) 1.0)) 
+                                 (JC_63:
+                                 (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
                                   (C_19:
-                                  (JC_68:
+                                  (JC_62:
                                   (((mul_single_safe nearest_even) (C_18:
-                                                                   (JC_67:
+                                                                   (JC_61:
                                                                    (((mul_single_safe nearest_even) x_0) x_0)))) 
-                                   ((single_of_real_safe nearest_even) 0.5))))))));
+                                   (single_of_real_exact 0.5))))))));
                         !r_0
                        end) in
       void);
       (assert
-      { (JC_70:
+      { (JC_64:
         le_real(abs_real(sub_real(single_exact(r_0), cos(single_exact(x_0)))),
         0x1p-24)) };
       void);
       void;
       (assert
-      { (JC_71:
+      { (JC_65:
         le_real(abs_real(sub_real(sub_real(1.0,
                                   mul_real(mul_real(single_value(x_0),
                                            single_value(x_0)),
@@ -570,7 +570,7 @@ let cosine1a_ensures_default =
       void);
       void;
       (assert
-      { (JC_72:
+      { (JC_66:
         le_real(abs_real(sub_real(single_value(r_0), cos(single_value(x_0)))),
         0x1p-23)) };
       void);
@@ -583,19 +583,19 @@ let cosine1a_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_51:
-    ((JC_49:
+  { (JC_47:
+    ((JC_45:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0)))),
      0x1p-24))
-    and (JC_50:
+    and (JC_46:
         le_real(single_round_error(result),
         add_real(single_round_error(x_0), 0x3p-24))))) }
 
 let cosine1a_safety =
  fun (x_0 : single) ->
-  { (JC_47:
-    ((JC_45: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_46: le_real(single_round_error(x_0), 0x1p-20)))) }
+  { (JC_43:
+    ((JC_41: le_real(abs_real(single_exact(x_0)), 0x1p-5))
+    and (JC_42: le_real(single_round_error(x_0), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -603,32 +603,30 @@ let cosine1a_safety =
      (let r_0 = ref (any_single void) in
      begin
        [ { } unit
-         { (JC_57: le_real(abs_real(single_value(x_0)), 0x1.0002p-5)) } ];
+         { (JC_53: le_real(abs_real(single_value(x_0)), 0x1.0002p-5)) } ];
       void;
       (let jessie_14 = (C_21:
                        begin
                          (r_0 := (C_20:
-                                 (JC_62:
-                                 (((sub_single nearest_even) (JC_58:
-                                                             ((single_of_real nearest_even) 1.0))) 
+                                 (JC_56:
+                                 (((sub_single nearest_even) (single_of_real_exact 1.0)) 
                                   (C_19:
-                                  (JC_61:
+                                  (JC_55:
                                   (((mul_single nearest_even) (C_18:
-                                                              (JC_59:
+                                                              (JC_54:
                                                               (((mul_single nearest_even) x_0) x_0)))) 
-                                   (JC_60:
-                                   ((single_of_real nearest_even) 0.5)))))))));
+                                   (single_of_real_exact 0.5))))))));
                         !r_0
                        end) in
       void);
       [ { } unit reads r_0
-        { (JC_63:
+        { (JC_57:
           le_real(abs_real(sub_real(single_exact(r_0),
                            cos(single_exact(x_0)))),
           0x1p-24)) } ];
       void;
       [ { } unit
-        { (JC_64:
+        { (JC_58:
           le_real(abs_real(sub_real(sub_real(1.0,
                                     mul_real(mul_real(single_value(x_0),
                                              single_value(x_0)),
@@ -637,7 +635,7 @@ let cosine1a_safety =
           0x1p-24)) } ];
       void;
       [ { } unit reads r_0
-        { (JC_65:
+        { (JC_59:
           le_real(abs_real(sub_real(single_value(r_0),
                            cos(single_value(x_0)))),
           0x1p-23)) } ];
@@ -654,7 +652,7 @@ let cosine1a_safety =
 
 let cosine1b_ensures_default =
  fun (x_2 : single) ->
-  { (JC_75: le_real(abs_real(single_value(x_2)), 0.07)) }
+  { (JC_69: le_real(abs_real(single_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -662,7 +660,7 @@ let cosine1b_ensures_default =
      (let __retres_0 = ref (any_single void) in
      begin
        (assert
-       { (JC_87:
+       { (JC_79:
          le_real(abs_real(sub_real(sub_real(1.0,
                                    mul_real(mul_real(single_value(x_2),
                                             single_value(x_2)),
@@ -674,16 +672,16 @@ let cosine1b_ensures_default =
       (C_35:
       begin
         (let jessie_23 = (__retres_0 := (C_34:
-                                        (JC_90:
+                                        (JC_82:
                                         (((sub_single_safe nearest_even) 
-                                          ((single_of_real_safe nearest_even) 1.0)) 
+                                          (single_of_real_exact 1.0)) 
                                          (C_33:
-                                         (JC_89:
+                                         (JC_81:
                                          (((mul_single_safe nearest_even) 
                                            (C_32:
-                                           (JC_88:
+                                           (JC_80:
                                            (((mul_single_safe nearest_even) x_2) x_2)))) 
-                                          ((single_of_real_safe nearest_even) 0.5)))))))) in
+                                          (single_of_real_exact 0.5)))))))) in
         void);
        (return := !__retres_0);
        (raise Return)
@@ -694,13 +692,13 @@ let cosine1b_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_77:
+  { (JC_71:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-20)) }
 
 let cosine1b_safety =
  fun (x_2 : single) ->
-  { (JC_75: le_real(abs_real(single_value(x_2)), 0.07)) }
+  { (JC_69: le_real(abs_real(single_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -708,7 +706,7 @@ let cosine1b_safety =
      (let __retres_0 = ref (any_single void) in
      begin
        [ { } unit
-         { (JC_81:
+         { (JC_75:
            le_real(abs_real(sub_real(sub_real(1.0,
                                      mul_real(mul_real(single_value(x_2),
                                               single_value(x_2)),
@@ -719,17 +717,15 @@ let cosine1b_safety =
       (C_35:
       begin
         (let jessie_20 = (__retres_0 := (C_34:
-                                        (JC_86:
-                                        (((sub_single nearest_even) (JC_82:
-                                                                    ((single_of_real nearest_even) 1.0))) 
+                                        (JC_78:
+                                        (((sub_single nearest_even) (single_of_real_exact 1.0)) 
                                          (C_33:
-                                         (JC_85:
+                                         (JC_77:
                                          (((mul_single nearest_even) 
                                            (C_32:
-                                           (JC_83:
+                                           (JC_76:
                                            (((mul_single nearest_even) x_2) x_2)))) 
-                                          (JC_84:
-                                          ((single_of_real nearest_even) 0.5))))))))) in
+                                          (single_of_real_exact 0.5)))))))) in
         void);
        (return := !__retres_0);
        (raise Return)
@@ -744,9 +740,9 @@ let cosine1b_safety =
 
 let cosine2_ensures_default =
  fun (x : single) ->
-  { (JC_25:
-    ((JC_23: le_real(abs_real(single_value(x)), 0x1p-5))
-    and (JC_24: eq_real(single_round_error(x), 0.0)))) }
+  { (JC_23:
+    ((JC_21: le_real(abs_real(single_value(x)), 0x1p-5))
+    and (JC_22: eq_real(single_round_error(x), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -755,17 +751,17 @@ let cosine2_ensures_default =
      (C_11:
      begin
        (let jessie_11 = (r := (C_10:
-                              (JC_39:
-                              (((sub_single_safe nearest_even) ((single_of_real_safe nearest_even) 1.0)) 
+                              (JC_35:
+                              (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
                                (C_9:
-                               (JC_38:
+                               (JC_34:
                                (((mul_single_safe nearest_even) (C_8:
-                                                                (JC_37:
+                                                                (JC_33:
                                                                 (((mul_single_safe nearest_even) x) x)))) 
-                                ((single_of_real_safe nearest_even) 0.5)))))))) in
+                                (single_of_real_exact 0.5)))))))) in
        void);
       (assert
-      { (JC_40:
+      { (JC_36:
         le_real(abs_real(sub_real(single_exact(r), cos(single_value(x)))),
         0x1p-24)) };
       void);
@@ -778,15 +774,15 @@ let cosine2_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_27:
+  { (JC_25:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x)))),
     0x1p-23)) }
 
 let cosine2_safety =
  fun (x : single) ->
-  { (JC_25:
-    ((JC_23: le_real(abs_real(single_value(x)), 0x1p-5))
-    and (JC_24: eq_real(single_round_error(x), 0.0)))) }
+  { (JC_23:
+    ((JC_21: le_real(abs_real(single_value(x)), 0x1p-5))
+    and (JC_22: eq_real(single_round_error(x), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -795,19 +791,17 @@ let cosine2_safety =
      (C_11:
      begin
        (let jessie_8 = (r := (C_10:
-                             (JC_35:
-                             (((sub_single nearest_even) (JC_31:
-                                                         ((single_of_real nearest_even) 1.0))) 
+                             (JC_31:
+                             (((sub_single nearest_even) (single_of_real_exact 1.0)) 
                               (C_9:
-                              (JC_34:
+                              (JC_30:
                               (((mul_single nearest_even) (C_8:
-                                                          (JC_32:
+                                                          (JC_29:
                                                           (((mul_single nearest_even) x) x)))) 
-                               (JC_33:
-                               ((single_of_real nearest_even) 0.5))))))))) in
+                               (single_of_real_exact 0.5)))))))) in
        void);
       [ { } unit reads r
-        { (JC_36:
+        { (JC_32:
           le_real(abs_real(sub_real(single_exact(r), cos(single_value(x)))),
           0x1p-24)) } ];
       void;
@@ -831,7 +825,7 @@ let moncos_ensures_default =
      (let __retres = ref (any_single void) in
      begin
        (assert
-       { (JC_15:
+       { (JC_13:
          le_real(abs_real(sub_real(sub_real(1.0,
                                    mul_real(mul_real(single_value(x_1),
                                             single_value(x_1)),
@@ -843,16 +837,15 @@ let moncos_ensures_default =
       (C_5:
       begin
         (let jessie_5 = (__retres := (C_4:
-                                     (JC_18:
+                                     (JC_16:
                                      (((sub_single_safe nearest_even) 
-                                       ((single_of_real_safe nearest_even) 1.0)) 
-                                      (C_3:
-                                      (JC_17:
-                                      (((mul_single_safe nearest_even) 
-                                        (C_2:
-                                        (JC_16:
-                                        (((mul_single_safe nearest_even) x_1) x_1)))) 
-                                       ((single_of_real_safe nearest_even) 0.5)))))))) in
+                                       (single_of_real_exact 1.0)) (C_3:
+                                                                   (JC_15:
+                                                                   (((mul_single_safe nearest_even) 
+                                                                    (C_2:
+                                                                    (JC_14:
+                                                                    (((mul_single_safe nearest_even) x_1) x_1)))) 
+                                                                    (single_of_real_exact 0.5)))))))) in
         void);
        (return := !__retres);
        (raise Return)
@@ -888,16 +881,14 @@ let moncos_safety =
       (C_5:
       begin
         (let jessie_2 = (__retres := (C_4:
-                                     (JC_14:
-                                     (((sub_single nearest_even) (JC_10:
-                                                                 ((single_of_real nearest_even) 1.0))) 
+                                     (JC_12:
+                                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
                                       (C_3:
-                                      (JC_13:
+                                      (JC_11:
                                       (((mul_single nearest_even) (C_2:
-                                                                  (JC_11:
+                                                                  (JC_10:
                                                                   (((mul_single nearest_even) x_1) x_1)))) 
-                                       (JC_12:
-                                       ((single_of_real nearest_even) 0.5))))))))) in
+                                       (single_of_real_exact 0.5)))))))) in
         void);
        (return := !__retres);
        (raise Return)
@@ -937,38 +928,28 @@ why --project [...] why/test1_floats.why
   <function name="Function moncos">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/test1_floats_po30.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "44" begin = "33" end = "47"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po31.why">
+    <goal why_file="why/test1_floats_po24.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "7" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test1_floats_po32.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "46" begin = "43" end = "57"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po33.why">
+    <goal why_file="why/test1_floats_po25.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "7" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test1_floats_po34.why">
+    <goal why_file="why/test1_floats_po26.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "7" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/test1_floats_po28.why">
+    <goal why_file="why/test1_floats_po22.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "6" begin = "13" end = "53"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/test1_floats_po29.why">
+    <goal why_file="why/test1_floats_po23.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "3" begin = "12" end = "46"/>
       <explain kind = "Post"/>
     </goal>
@@ -977,38 +958,28 @@ text = "FPOverflow"/>
   <function name="Function cosine2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/test1_floats_po23.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "61" begin = "28" end = "42"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po24.why">
+    <goal why_file="why/test1_floats_po19.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "15" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test1_floats_po25.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "62" begin = "55" end = "69"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po26.why">
+    <goal why_file="why/test1_floats_po20.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "15" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/test1_floats_po27.why">
+    <goal why_file="why/test1_floats_po21.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "15" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/test1_floats_po21.why">
+    <goal why_file="why/test1_floats_po17.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "16" begin = "13" end = "49"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/test1_floats_po22.why">
+    <goal why_file="why/test1_floats_po18.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "12" begin = "12" end = "46"/>
       <explain kind = "Post"/>
     </goal>
@@ -1017,38 +988,28 @@ text = "FPOverflow"/>
   <function name="Function cosine1b">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/test1_floats_po14.why">
+      <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "51" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/test1_floats_po15.why">
+      <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "51" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
     <goal why_file="why/test1_floats_po16.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "156" begin = "37" end = "51"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po17.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "51" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po18.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "158" begin = "48" end = "62"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po19.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "51" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po20.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "51" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/test1_floats_po14.why">
+    <goal why_file="why/test1_floats_po12.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "50" begin = "13" end = "55"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/test1_floats_po15.why">
+    <goal why_file="why/test1_floats_po13.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "47" begin = "12" end = "46"/>
       <explain kind = "Post"/>
     </goal>
@@ -1058,7 +1019,7 @@ text = "FPOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test1_floats_po9.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "105" begin = "33" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "34" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -1068,16 +1029,6 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test1_floats_po11.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.jessie/test1_floats.jc" line = "107" begin = "44" end = "58"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po12.why">
-      <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "34" begin = "2" end = "7"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/test1_floats_po13.why">
       <location file = "PPCHOME/tests/jessie/test1_floats.c" line = "34" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
@@ -1269,9 +1220,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -1283,24 +1231,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

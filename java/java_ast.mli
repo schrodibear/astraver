@@ -297,7 +297,7 @@ type type_declaration =
   | JPTannot of Lexing.position * string
   | JPTlemma of identifier * bool * identifier list * pexpr
   | JPTlogic_type_decl of identifier 
-  | JPTlogic_reads of identifier * type_expr option * identifier list * parameter list * pexpr list 
+  | JPTlogic_reads of identifier * type_expr option * identifier list * parameter list * pexpr list option
   | JPTlogic_def of identifier * type_expr option * identifier list * parameter list * pexpr 
   | JPTinductive of identifier * identifier list * parameter list * (identifier * identifier list * pexpr) list
   | JPTaxiomatic of identifier * type_declaration list

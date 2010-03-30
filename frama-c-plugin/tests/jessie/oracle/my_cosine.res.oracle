@@ -339,7 +339,7 @@ let my_cos1_ensures_default =
      (let __retres = ref (any_single void) in
      begin
        (assert
-       { (JC_15:
+       { (JC_13:
          le_real(abs_real(sub_real(sub_real(1.0,
                                    mul_real(mul_real(single_value(x),
                                             single_value(x)),
@@ -351,16 +351,15 @@ let my_cos1_ensures_default =
       (C_5:
       begin
         (let jessie_5 = (__retres := (C_4:
-                                     (JC_18:
+                                     (JC_16:
                                      (((sub_single_safe nearest_even) 
-                                       ((single_of_real_safe nearest_even) 1.0)) 
-                                      (C_3:
-                                      (JC_17:
-                                      (((mul_single_safe nearest_even) 
-                                        (C_2:
-                                        (JC_16:
-                                        (((mul_single_safe nearest_even) x) x)))) 
-                                       ((single_of_real_safe nearest_even) 0.5)))))))) in
+                                       (single_of_real_exact 1.0)) (C_3:
+                                                                   (JC_15:
+                                                                   (((mul_single_safe nearest_even) 
+                                                                    (C_2:
+                                                                    (JC_14:
+                                                                    (((mul_single_safe nearest_even) x) x)))) 
+                                                                    (single_of_real_exact 0.5)))))))) in
         void);
        (return := !__retres);
        (raise Return)
@@ -396,16 +395,14 @@ let my_cos1_safety =
       (C_5:
       begin
         (let jessie_2 = (__retres := (C_4:
-                                     (JC_14:
-                                     (((sub_single nearest_even) (JC_10:
-                                                                 ((single_of_real nearest_even) 1.0))) 
+                                     (JC_12:
+                                     (((sub_single nearest_even) (single_of_real_exact 1.0)) 
                                       (C_3:
-                                      (JC_13:
+                                      (JC_11:
                                       (((mul_single nearest_even) (C_2:
-                                                                  (JC_11:
+                                                                  (JC_10:
                                                                   (((mul_single nearest_even) x) x)))) 
-                                       (JC_12:
-                                       ((single_of_real nearest_even) 0.5))))))))) in
+                                       (single_of_real_exact 0.5)))))))) in
         void);
        (return := !__retres);
        (raise Return)
@@ -426,38 +423,28 @@ why --project [...] why/my_cosine.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/my_cosine_po3.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "44" begin = "33" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "11" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/my_cosine_po4.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "7" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "11" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/my_cosine_po5.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.jessie/my_cosine.jc" line = "45" begin = "60" end = "74"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/my_cosine_po6.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "7" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/my_cosine_po7.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "7" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "11" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/my_cosine_po1.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "6" begin = "13" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "10" begin = "13" end = "53"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/my_cosine_po2.why">
-      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "3" begin = "12" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/my_cosine.c" line = "7" begin = "12" end = "46"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -621,9 +608,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -635,24 +619,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

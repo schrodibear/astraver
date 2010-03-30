@@ -11,7 +11,7 @@ float Sterbenz(float x, float y) {
   @ ensures \result == 1.0;
   @*/
 double f(double x) { 
-  return Sterbenz(x,Sterbenz(x,1.f));
+  return Sterbenz(x,Sterbenz(x,1.0f));
 }
 
 

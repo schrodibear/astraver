@@ -7,7 +7,6 @@
   @ */
 
 double monexp(double x) {
-  //@ assert round2: (double)2.0 == 2.0;
   double y=1.0+x*(1.0+x/2.0);
   //*@ \set_model y exp(\model(x)); */
   return y;

@@ -364,8 +364,8 @@ parameter eps_line :
    vx:double ->
     vy:double ->
      { } double
-     { ((JC_47: M22_value)
-       and (JC_45:
+     { ((JC_45: M22_value)
+       and (JC_43:
            (neq_real(double_value(result), 0.0) ->
             eq_real(double_value(result),
             real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
@@ -381,23 +381,23 @@ parameter eps_line_requires :
   sy:double ->
    vx:double ->
     vy:double ->
-     { (JC_30:
-       ((JC_28:
-        ((JC_20: eq_real(double_round_error(sx), 0.0))
-        and ((JC_21: eq_real(double_round_error(sy), 0.0))
-            and ((JC_22: eq_real(double_round_error(vx), 0.0))
-                and ((JC_23: eq_real(double_round_error(vy), 0.0))
-                    and ((JC_24: le_real(abs_real(double_value(sx)), 100.0))
-                        and ((JC_25:
+     { (JC_28:
+       ((JC_26:
+        ((JC_18: eq_real(double_round_error(sx), 0.0))
+        and ((JC_19: eq_real(double_round_error(sy), 0.0))
+            and ((JC_20: eq_real(double_round_error(vx), 0.0))
+                and ((JC_21: eq_real(double_round_error(vy), 0.0))
+                    and ((JC_22: le_real(abs_real(double_value(sx)), 100.0))
+                        and ((JC_23:
                              le_real(abs_real(double_value(sy)), 100.0))
-                            and ((JC_26:
+                            and ((JC_24:
                                  le_real(abs_real(double_value(vx)), 1.0))
-                                and (JC_27:
+                                and (JC_25:
                                     le_real(abs_real(double_value(vy)), 1.0))))))))))
-       and (JC_29: M22_value)))}
+       and (JC_27: M22_value)))}
      double
-     { ((JC_47: M22_value)
-       and (JC_45:
+     { ((JC_45: M22_value)
+       and (JC_43:
            (neq_real(double_value(result), 0.0) ->
             eq_real(double_value(result),
             real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
@@ -441,19 +441,19 @@ parameter sign_requires :
 
 let eps_line_ensures_default =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
-  { (JC_42:
-    ((JC_40:
-     ((JC_32: eq_real(double_round_error(sx), 0.0))
-     and ((JC_33: eq_real(double_round_error(sy), 0.0))
-         and ((JC_34: eq_real(double_round_error(vx), 0.0))
-             and ((JC_35: eq_real(double_round_error(vy), 0.0))
-                 and ((JC_36: le_real(abs_real(double_value(sx)), 100.0))
-                     and ((JC_37: le_real(abs_real(double_value(sy)), 100.0))
-                         and ((JC_38:
+  { (JC_40:
+    ((JC_38:
+     ((JC_30: eq_real(double_round_error(sx), 0.0))
+     and ((JC_31: eq_real(double_round_error(sy), 0.0))
+         and ((JC_32: eq_real(double_round_error(vx), 0.0))
+             and ((JC_33: eq_real(double_round_error(vy), 0.0))
+                 and ((JC_34: le_real(abs_real(double_value(sx)), 100.0))
+                     and ((JC_35: le_real(abs_real(double_value(sy)), 100.0))
+                         and ((JC_36:
                               le_real(abs_real(double_value(vx)), 1.0))
-                             and (JC_39:
+                             and (JC_37:
                                  le_real(abs_real(double_value(vy)), 1.0))))))))))
-    and (JC_41: M22_value))) }
+    and (JC_39: M22_value))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -466,32 +466,32 @@ let eps_line_ensures_default =
                         begin
                           (let jessie_36 = (tmp := (C_13:
                                                    (let jessie_35 = (C_12:
-                                                                    (JC_59:
+                                                                    (JC_57:
                                                                     (((add_double_safe nearest_even) 
                                                                     (C_11:
-                                                                    (JC_57:
+                                                                    (JC_55:
                                                                     (((mul_double_safe nearest_even) sx) vx)))) 
                                                                     (C_10:
-                                                                    (JC_58:
+                                                                    (JC_56:
                                                                     (((mul_double_safe nearest_even) sy) vy)))))) in
                                                    (let jessie_34 = M22 in
-                                                   (JC_60:
+                                                   (JC_58:
                                                    ((sign jessie_35) jessie_34)))))) in
                           void);
                          (C_19:
                          begin
                            (tmp_0 := (C_18:
                                      (let jessie_39 = (C_17:
-                                                      (JC_63:
+                                                      (JC_61:
                                                       (((sub_double_safe nearest_even) 
                                                         (C_16:
-                                                        (JC_61:
+                                                        (JC_59:
                                                         (((mul_double_safe nearest_even) sx) vy)))) 
                                                        (C_15:
-                                                       (JC_62:
+                                                       (JC_60:
                                                        (((mul_double_safe nearest_even) sy) vx)))))) in
                                      (let jessie_38 = M22 in
-                                     (JC_64: ((sign jessie_39) jessie_38))))));
+                                     (JC_62: ((sign jessie_39) jessie_38))))));
                           !tmp_0
                          end)
                         end) in
@@ -499,7 +499,7 @@ let eps_line_ensures_default =
       (C_21:
       begin
         (let jessie_42 = (__retres_0 := (C_20:
-                                        (JC_65:
+                                        (JC_63:
                                         (((mul_double_safe nearest_even) !tmp) !tmp_0)))) in
         void);
        (return := !__retres_0);
@@ -511,7 +511,7 @@ let eps_line_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_44:
+  { (JC_42:
     (neq_real(double_value(result), 0.0) ->
      eq_real(double_value(result),
      real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
@@ -522,19 +522,19 @@ let eps_line_ensures_default =
 
 let eps_line_safety =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
-  { (JC_42:
-    ((JC_40:
-     ((JC_32: eq_real(double_round_error(sx), 0.0))
-     and ((JC_33: eq_real(double_round_error(sy), 0.0))
-         and ((JC_34: eq_real(double_round_error(vx), 0.0))
-             and ((JC_35: eq_real(double_round_error(vy), 0.0))
-                 and ((JC_36: le_real(abs_real(double_value(sx)), 100.0))
-                     and ((JC_37: le_real(abs_real(double_value(sy)), 100.0))
-                         and ((JC_38:
+  { (JC_40:
+    ((JC_38:
+     ((JC_30: eq_real(double_round_error(sx), 0.0))
+     and ((JC_31: eq_real(double_round_error(sy), 0.0))
+         and ((JC_32: eq_real(double_round_error(vx), 0.0))
+             and ((JC_33: eq_real(double_round_error(vy), 0.0))
+                 and ((JC_34: le_real(abs_real(double_value(sx)), 100.0))
+                     and ((JC_35: le_real(abs_real(double_value(sy)), 100.0))
+                         and ((JC_36:
                               le_real(abs_real(double_value(vx)), 1.0))
-                             and (JC_39:
+                             and (JC_37:
                                  le_real(abs_real(double_value(vy)), 1.0))))))))))
-    and (JC_41: M22_value))) }
+    and (JC_39: M22_value))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -547,32 +547,32 @@ let eps_line_safety =
                         begin
                           (let jessie_25 = (tmp := (C_13:
                                                    (let jessie_24 = (C_12:
-                                                                    (JC_50:
+                                                                    (JC_48:
                                                                     (((add_double nearest_even) 
                                                                     (C_11:
-                                                                    (JC_48:
+                                                                    (JC_46:
                                                                     (((mul_double nearest_even) sx) vx)))) 
                                                                     (C_10:
-                                                                    (JC_49:
+                                                                    (JC_47:
                                                                     (((mul_double nearest_even) sy) vy)))))) in
                                                    (let jessie_23 = M22 in
-                                                   (JC_51:
+                                                   (JC_49:
                                                    ((sign_requires jessie_24) jessie_23)))))) in
                           void);
                          (C_19:
                          begin
                            (tmp_0 := (C_18:
                                      (let jessie_28 = (C_17:
-                                                      (JC_54:
+                                                      (JC_52:
                                                       (((sub_double nearest_even) 
                                                         (C_16:
-                                                        (JC_52:
+                                                        (JC_50:
                                                         (((mul_double nearest_even) sx) vy)))) 
                                                        (C_15:
-                                                       (JC_53:
+                                                       (JC_51:
                                                        (((mul_double nearest_even) sy) vx)))))) in
                                      (let jessie_27 = M22 in
-                                     (JC_55:
+                                     (JC_53:
                                      ((sign_requires jessie_28) jessie_27))))));
                           !tmp_0
                          end)
@@ -581,7 +581,7 @@ let eps_line_safety =
       (C_21:
       begin
         (let jessie_31 = (__retres_0 := (C_20:
-                                        (JC_56:
+                                        (JC_54:
                                         (((mul_double nearest_even) !tmp) !tmp_0)))) in
         void);
        (return := !__retres_0);
@@ -593,7 +593,7 @@ let eps_line_safety =
    with
    Return ->
    !return end))
-  { (JC_46: M22_value) }
+  { (JC_44: M22_value) }
 
 let sign_ensures_default =
  fun (x_0 : double) (M : double) ->
@@ -613,13 +613,13 @@ let sign_ensures_default =
                                            begin
                                              (let jessie_13 = (__retres := 
                                                                (C_1:
-                                                               ((double_of_real_safe nearest_even) 1.0))) in
+                                                               (double_of_real_exact 1.0))) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
                           void)
                          else void);
-                        (if ((le_double x_0) (C_5: (JC_19: (neg_double M))))
+                        (if ((le_double x_0) (C_5: (JC_17: (neg_double M))))
                         then
                          (let jessie_17 = (C_4:
                                           begin
@@ -636,7 +636,7 @@ let sign_ensures_default =
                         (C_7:
                         begin
                           (let jessie_19 = (__retres := (C_6:
-                                                        ((double_of_real_safe nearest_even) 0.0))) in
+                                                        (double_of_real_exact 0.0))) in
                           void);
                          (raise (Return_label_exc void))
                         end)
@@ -672,20 +672,19 @@ let sign_safety =
                                           begin
                                             (let jessie_3 = (__retres := 
                                                              (C_1:
-                                                             (JC_15:
-                                                             ((double_of_real nearest_even) 1.0)))) in
+                                                             (double_of_real_exact 1.0))) in
                                             void);
                                            (raise (Return_label_exc void))
                                           end) in
                           void)
                          else void);
-                        (if ((le_double x_0) (C_5: (JC_16: (neg_double M))))
+                        (if ((le_double x_0) (C_5: (JC_15: (neg_double M))))
                         then
                          (let jessie_7 = (C_4:
                                          begin
                                            (let jessie_6 = (__retres := 
                                                             (C_3:
-                                                            (JC_17:
+                                                            (JC_16:
                                                             ((double_of_real nearest_even) 
                                                              (real_of_int 
                                                               (neg_int (1))))))) in
@@ -697,8 +696,7 @@ let sign_safety =
                         (C_7:
                         begin
                           (let jessie_9 = (__retres := (C_6:
-                                                       (JC_18:
-                                                       ((double_of_real nearest_even) 0.0)))) in
+                                                       (double_of_real_exact 0.0))) in
                           void);
                          (raise (Return_label_exc void))
                         end)
@@ -722,17 +720,7 @@ why --project [...] why/fp-epsline.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/fp-epsline_po12.why">
-      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "12" begin = "4" end = "10"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/fp-epsline_po13.why">
       <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "14" begin = "4" end = "10"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/fp-epsline_po14.why">
-      <location file = "PPCHOME/tests/jessie/fp-epsline.c" line = "15" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -959,9 +947,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -973,24 +958,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

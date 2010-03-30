@@ -1172,17 +1172,13 @@ let mul_ensures_default =
      (let tmp_1_0 = ref (any_double void) in
      (let tmp_2 = ref (any_double void) in
      begin
-       (let jessie_228 = (if ((lt_double xl_1) (JC_191:
-                                               ((double_of_real down) 0.0)))
+       (let jessie_228 = (if ((lt_double xl_1) (double_of_real_exact 0.0))
                          then
-                          (if ((gt_double xu_1) (JC_192:
-                                                ((double_of_real down) 0.0)))
+                          (if ((gt_double xu_1) (double_of_real_exact 0.0))
                           then
-                           (if ((lt_double yl) (JC_193:
-                                               ((double_of_real down) 0.0)))
+                           (if ((lt_double yl) (double_of_real_exact 0.0))
                            then
-                            (if ((gt_double yu) (JC_194:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              begin
                                (let jessie_144 = (C_115:
@@ -1191,7 +1187,7 @@ let mul_ensures_default =
                                                    (tmp_1 := (C_114:
                                                              (let jessie_139 = xu_1 in
                                                              (let jessie_138 = yl in
-                                                             (JC_195:
+                                                             (JC_171:
                                                              ((mul_dn jessie_139) jessie_138)))))) in
                                                    void);
                                                   (C_117:
@@ -1199,7 +1195,7 @@ let mul_ensures_default =
                                                     (tmp_0_0 := (C_116:
                                                                 (let jessie_143 = xl_1 in
                                                                 (let jessie_142 = yu in
-                                                                (JC_196:
+                                                                (JC_172:
                                                                 ((mul_dn jessie_143) jessie_142))))));
                                                    !tmp_0_0
                                                   end)
@@ -1210,7 +1206,7 @@ let mul_ensures_default =
                                 (let jessie_148 = (zl := (C_118:
                                                          (let jessie_147 = !tmp_0_0 in
                                                          (let jessie_146 = !tmp_1 in
-                                                         (JC_197:
+                                                         (JC_173:
                                                          ((min jessie_147) jessie_146)))))) in
                                 void);
                                (let jessie_156 = (C_121:
@@ -1219,7 +1215,7 @@ let mul_ensures_default =
                                                    (tmp_1_0 := (C_120:
                                                                (let jessie_151 = xu_1 in
                                                                (let jessie_150 = yu in
-                                                               (JC_198:
+                                                               (JC_174:
                                                                ((mul_up jessie_151) jessie_150)))))) in
                                                    void);
                                                   (C_123:
@@ -1227,7 +1223,7 @@ let mul_ensures_default =
                                                     (tmp_2 := (C_122:
                                                               (let jessie_155 = xl_1 in
                                                               (let jessie_154 = yl in
-                                                              (JC_199:
+                                                              (JC_175:
                                                               ((mul_up jessie_155) jessie_154))))));
                                                    !tmp_2
                                                   end)
@@ -1238,7 +1234,7 @@ let mul_ensures_default =
                                  (zu := (C_124:
                                         (let jessie_159 = !tmp_2 in
                                         (let jessie_158 = !tmp_1_0 in
-                                        (JC_200:
+                                        (JC_176:
                                         ((max jessie_159) jessie_158))))));
                                 !zu
                                end)
@@ -1250,7 +1246,7 @@ let mul_ensures_default =
                                (let jessie_163 = (zl := (C_110:
                                                         (let jessie_162 = xu_1 in
                                                         (let jessie_161 = yl in
-                                                        (JC_201:
+                                                        (JC_177:
                                                         ((mul_dn jessie_162) jessie_161)))))) in
                                void);
                               (C_113:
@@ -1258,21 +1254,20 @@ let mul_ensures_default =
                                 (zu := (C_112:
                                        (let jessie_166 = xl_1 in
                                        (let jessie_165 = yl in
-                                       (JC_202:
+                                       (JC_178:
                                        ((mul_up jessie_166) jessie_165))))));
                                !zu
                               end)
                              end))
                            else
-                            (if ((gt_double yu) (JC_203:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_107:
                              begin
                                (let jessie_170 = (zl := (C_106:
                                                         (let jessie_169 = xl_1 in
                                                         (let jessie_168 = yu in
-                                                        (JC_204:
+                                                        (JC_179:
                                                         ((mul_dn jessie_169) jessie_168)))))) in
                                void);
                               (C_109:
@@ -1280,7 +1275,7 @@ let mul_ensures_default =
                                 (zu := (C_108:
                                        (let jessie_173 = xu_1 in
                                        (let jessie_172 = yu in
-                                       (JC_205:
+                                       (JC_180:
                                        ((mul_up jessie_173) jessie_172))))));
                                !zu
                               end)
@@ -1288,28 +1283,24 @@ let mul_ensures_default =
                             else
                              (C_104:
                              begin
-                               (let jessie_175 = (zl := (JC_206:
-                                                        ((double_of_real down) 0.0))) in
+                               (let jessie_175 = (zl := (double_of_real_exact 0.0)) in
                                void);
                               (C_105:
                               begin
-                                (zu := (JC_207: ((double_of_real down) 0.0)));
-                               !zu
+                                (zu := (double_of_real_exact 0.0)); !zu
                               end)
                              end)))
                           else
-                           (if ((lt_double yl) (JC_208:
-                                               ((double_of_real down) 0.0)))
+                           (if ((lt_double yl) (double_of_real_exact 0.0))
                            then
-                            (if ((gt_double yu) (JC_209:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_101:
                              begin
                                (let jessie_180 = (zl := (C_100:
                                                         (let jessie_179 = xl_1 in
                                                         (let jessie_178 = yu in
-                                                        (JC_210:
+                                                        (JC_181:
                                                         ((mul_dn jessie_179) jessie_178)))))) in
                                void);
                               (C_103:
@@ -1317,7 +1308,7 @@ let mul_ensures_default =
                                 (zu := (C_102:
                                        (let jessie_183 = xl_1 in
                                        (let jessie_182 = yl in
-                                       (JC_211:
+                                       (JC_182:
                                        ((mul_up jessie_183) jessie_182))))));
                                !zu
                               end)
@@ -1328,7 +1319,7 @@ let mul_ensures_default =
                                (let jessie_187 = (zl := (C_96:
                                                         (let jessie_186 = xu_1 in
                                                         (let jessie_185 = yu in
-                                                        (JC_212:
+                                                        (JC_183:
                                                         ((mul_dn jessie_186) jessie_185)))))) in
                                void);
                               (C_99:
@@ -1336,21 +1327,20 @@ let mul_ensures_default =
                                 (zu := (C_98:
                                        (let jessie_190 = xl_1 in
                                        (let jessie_189 = yl in
-                                       (JC_213:
+                                       (JC_184:
                                        ((mul_up jessie_190) jessie_189))))));
                                !zu
                               end)
                              end))
                            else
-                            (if ((gt_double yu) (JC_214:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_93:
                              begin
                                (let jessie_194 = (zl := (C_92:
                                                         (let jessie_193 = xl_1 in
                                                         (let jessie_192 = yu in
-                                                        (JC_215:
+                                                        (JC_185:
                                                         ((mul_dn jessie_193) jessie_192)))))) in
                                void);
                               (C_95:
@@ -1358,7 +1348,7 @@ let mul_ensures_default =
                                 (zu := (C_94:
                                        (let jessie_197 = xu_1 in
                                        (let jessie_196 = yl in
-                                       (JC_216:
+                                       (JC_186:
                                        ((mul_up jessie_197) jessie_196))))));
                                !zu
                               end)
@@ -1366,31 +1356,26 @@ let mul_ensures_default =
                             else
                              (C_90:
                              begin
-                               (let jessie_199 = (zl := (JC_217:
-                                                        ((double_of_real down) 0.0))) in
+                               (let jessie_199 = (zl := (double_of_real_exact 0.0)) in
                                void);
                               (C_91:
                               begin
-                                (zu := (JC_218: ((double_of_real down) 0.0)));
-                               !zu
+                                (zu := (double_of_real_exact 0.0)); !zu
                               end)
                              end))))
                          else
-                          (if ((gt_double xu_1) (JC_219:
-                                                ((double_of_real down) 0.0)))
+                          (if ((gt_double xu_1) (double_of_real_exact 0.0))
                           then
-                           (if ((lt_double yl) (JC_220:
-                                               ((double_of_real down) 0.0)))
+                           (if ((lt_double yl) (double_of_real_exact 0.0))
                            then
-                            (if ((gt_double yu) (JC_221:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_87:
                              begin
                                (let jessie_204 = (zl := (C_86:
                                                         (let jessie_203 = xu_1 in
                                                         (let jessie_202 = yl in
-                                                        (JC_222:
+                                                        (JC_187:
                                                         ((mul_dn jessie_203) jessie_202)))))) in
                                void);
                               (C_89:
@@ -1398,7 +1383,7 @@ let mul_ensures_default =
                                 (zu := (C_88:
                                        (let jessie_207 = xu_1 in
                                        (let jessie_206 = yu in
-                                       (JC_223:
+                                       (JC_188:
                                        ((mul_up jessie_207) jessie_206))))));
                                !zu
                               end)
@@ -1409,7 +1394,7 @@ let mul_ensures_default =
                                (let jessie_211 = (zl := (C_82:
                                                         (let jessie_210 = xu_1 in
                                                         (let jessie_209 = yl in
-                                                        (JC_224:
+                                                        (JC_189:
                                                         ((mul_dn jessie_210) jessie_209)))))) in
                                void);
                               (C_85:
@@ -1417,21 +1402,20 @@ let mul_ensures_default =
                                 (zu := (C_84:
                                        (let jessie_214 = xl_1 in
                                        (let jessie_213 = yu in
-                                       (JC_225:
+                                       (JC_190:
                                        ((mul_up jessie_214) jessie_213))))));
                                !zu
                               end)
                              end))
                            else
-                            (if ((gt_double yu) (JC_226:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_79:
                              begin
                                (let jessie_218 = (zl := (C_78:
                                                         (let jessie_217 = xl_1 in
                                                         (let jessie_216 = yl in
-                                                        (JC_227:
+                                                        (JC_191:
                                                         ((mul_dn jessie_217) jessie_216)))))) in
                                void);
                               (C_81:
@@ -1439,7 +1423,7 @@ let mul_ensures_default =
                                 (zu := (C_80:
                                        (let jessie_221 = xu_1 in
                                        (let jessie_220 = yu in
-                                       (JC_228:
+                                       (JC_192:
                                        ((mul_up jessie_221) jessie_220))))));
                                !zu
                               end)
@@ -1447,25 +1431,21 @@ let mul_ensures_default =
                             else
                              (C_76:
                              begin
-                               (let jessie_223 = (zl := (JC_229:
-                                                        ((double_of_real down) 0.0))) in
+                               (let jessie_223 = (zl := (double_of_real_exact 0.0)) in
                                void);
                               (C_77:
                               begin
-                                (zu := (JC_230: ((double_of_real down) 0.0)));
-                               !zu
+                                (zu := (double_of_real_exact 0.0)); !zu
                               end)
                              end)))
                           else
                            (C_74:
                            begin
-                             (let jessie_226 = (zl := (JC_231:
-                                                      ((double_of_real down) 0.0))) in
+                             (let jessie_226 = (zl := (double_of_real_exact 0.0)) in
                              void);
                             (C_75:
                             begin
-                              (zu := (JC_232: ((double_of_real down) 0.0)));
-                             !zu
+                              (zu := (double_of_real_exact 0.0)); !zu
                             end)
                            end))) in
        void);
@@ -1496,17 +1476,13 @@ let mul_safety =
      (let tmp_1_0 = ref (any_double void) in
      (let tmp_2 = ref (any_double void) in
      begin
-       (let jessie_136 = (if ((lt_double xl_1) (JC_149:
-                                               ((double_of_real down) 0.0)))
+       (let jessie_136 = (if ((lt_double xl_1) (double_of_real_exact 0.0))
                          then
-                          (if ((gt_double xu_1) (JC_150:
-                                                ((double_of_real down) 0.0)))
+                          (if ((gt_double xu_1) (double_of_real_exact 0.0))
                           then
-                           (if ((lt_double yl) (JC_151:
-                                               ((double_of_real down) 0.0)))
+                           (if ((lt_double yl) (double_of_real_exact 0.0))
                            then
-                            (if ((gt_double yu) (JC_152:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              begin
                                (let jessie_52 = (C_115:
@@ -1515,7 +1491,7 @@ let mul_safety =
                                                                     (C_114:
                                                                     (let jessie_47 = xu_1 in
                                                                     (let jessie_46 = yl in
-                                                                    (JC_153:
+                                                                    (JC_149:
                                                                     ((mul_dn_requires jessie_47) jessie_46)))))) in
                                                   void);
                                                  (C_117:
@@ -1523,7 +1499,7 @@ let mul_safety =
                                                    (tmp_0_0 := (C_116:
                                                                (let jessie_51 = xl_1 in
                                                                (let jessie_50 = yu in
-                                                               (JC_154:
+                                                               (JC_150:
                                                                ((mul_dn_requires jessie_51) jessie_50))))));
                                                   !tmp_0_0
                                                  end)
@@ -1534,7 +1510,7 @@ let mul_safety =
                                 (let jessie_56 = (zl := (C_118:
                                                         (let jessie_55 = !tmp_0_0 in
                                                         (let jessie_54 = !tmp_1 in
-                                                        (JC_155:
+                                                        (JC_151:
                                                         ((min_requires jessie_55) jessie_54)))))) in
                                 void);
                                (let jessie_64 = (C_121:
@@ -1543,7 +1519,7 @@ let mul_safety =
                                                                     (C_120:
                                                                     (let jessie_59 = xu_1 in
                                                                     (let jessie_58 = yu in
-                                                                    (JC_156:
+                                                                    (JC_152:
                                                                     ((mul_up_requires jessie_59) jessie_58)))))) in
                                                   void);
                                                  (C_123:
@@ -1551,7 +1527,7 @@ let mul_safety =
                                                    (tmp_2 := (C_122:
                                                              (let jessie_63 = xl_1 in
                                                              (let jessie_62 = yl in
-                                                             (JC_157:
+                                                             (JC_153:
                                                              ((mul_up_requires jessie_63) jessie_62))))));
                                                   !tmp_2
                                                  end)
@@ -1562,7 +1538,7 @@ let mul_safety =
                                  (zu := (C_124:
                                         (let jessie_67 = !tmp_2 in
                                         (let jessie_66 = !tmp_1_0 in
-                                        (JC_158:
+                                        (JC_154:
                                         ((max_requires jessie_67) jessie_66))))));
                                 !zu
                                end)
@@ -1574,7 +1550,7 @@ let mul_safety =
                                (let jessie_71 = (zl := (C_110:
                                                        (let jessie_70 = xu_1 in
                                                        (let jessie_69 = yl in
-                                                       (JC_159:
+                                                       (JC_155:
                                                        ((mul_dn_requires jessie_70) jessie_69)))))) in
                                void);
                               (C_113:
@@ -1582,21 +1558,20 @@ let mul_safety =
                                 (zu := (C_112:
                                        (let jessie_74 = xl_1 in
                                        (let jessie_73 = yl in
-                                       (JC_160:
+                                       (JC_156:
                                        ((mul_up_requires jessie_74) jessie_73))))));
                                !zu
                               end)
                              end))
                            else
-                            (if ((gt_double yu) (JC_161:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_107:
                              begin
                                (let jessie_78 = (zl := (C_106:
                                                        (let jessie_77 = xl_1 in
                                                        (let jessie_76 = yu in
-                                                       (JC_162:
+                                                       (JC_157:
                                                        ((mul_dn_requires jessie_77) jessie_76)))))) in
                                void);
                               (C_109:
@@ -1604,7 +1579,7 @@ let mul_safety =
                                 (zu := (C_108:
                                        (let jessie_81 = xu_1 in
                                        (let jessie_80 = yu in
-                                       (JC_163:
+                                       (JC_158:
                                        ((mul_up_requires jessie_81) jessie_80))))));
                                !zu
                               end)
@@ -1612,28 +1587,24 @@ let mul_safety =
                             else
                              (C_104:
                              begin
-                               (let jessie_83 = (zl := (JC_164:
-                                                       ((double_of_real down) 0.0))) in
+                               (let jessie_83 = (zl := (double_of_real_exact 0.0)) in
                                void);
                               (C_105:
                               begin
-                                (zu := (JC_165: ((double_of_real down) 0.0)));
-                               !zu
+                                (zu := (double_of_real_exact 0.0)); !zu
                               end)
                              end)))
                           else
-                           (if ((lt_double yl) (JC_166:
-                                               ((double_of_real down) 0.0)))
+                           (if ((lt_double yl) (double_of_real_exact 0.0))
                            then
-                            (if ((gt_double yu) (JC_167:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_101:
                              begin
                                (let jessie_88 = (zl := (C_100:
                                                        (let jessie_87 = xl_1 in
                                                        (let jessie_86 = yu in
-                                                       (JC_168:
+                                                       (JC_159:
                                                        ((mul_dn_requires jessie_87) jessie_86)))))) in
                                void);
                               (C_103:
@@ -1641,7 +1612,7 @@ let mul_safety =
                                 (zu := (C_102:
                                        (let jessie_91 = xl_1 in
                                        (let jessie_90 = yl in
-                                       (JC_169:
+                                       (JC_160:
                                        ((mul_up_requires jessie_91) jessie_90))))));
                                !zu
                               end)
@@ -1652,7 +1623,7 @@ let mul_safety =
                                (let jessie_95 = (zl := (C_96:
                                                        (let jessie_94 = xu_1 in
                                                        (let jessie_93 = yu in
-                                                       (JC_170:
+                                                       (JC_161:
                                                        ((mul_dn_requires jessie_94) jessie_93)))))) in
                                void);
                               (C_99:
@@ -1660,21 +1631,20 @@ let mul_safety =
                                 (zu := (C_98:
                                        (let jessie_98 = xl_1 in
                                        (let jessie_97 = yl in
-                                       (JC_171:
+                                       (JC_162:
                                        ((mul_up_requires jessie_98) jessie_97))))));
                                !zu
                               end)
                              end))
                            else
-                            (if ((gt_double yu) (JC_172:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_93:
                              begin
                                (let jessie_102 = (zl := (C_92:
                                                         (let jessie_101 = xl_1 in
                                                         (let jessie_100 = yu in
-                                                        (JC_173:
+                                                        (JC_163:
                                                         ((mul_dn_requires jessie_101) jessie_100)))))) in
                                void);
                               (C_95:
@@ -1682,7 +1652,7 @@ let mul_safety =
                                 (zu := (C_94:
                                        (let jessie_105 = xu_1 in
                                        (let jessie_104 = yl in
-                                       (JC_174:
+                                       (JC_164:
                                        ((mul_up_requires jessie_105) jessie_104))))));
                                !zu
                               end)
@@ -1690,31 +1660,26 @@ let mul_safety =
                             else
                              (C_90:
                              begin
-                               (let jessie_107 = (zl := (JC_175:
-                                                        ((double_of_real down) 0.0))) in
+                               (let jessie_107 = (zl := (double_of_real_exact 0.0)) in
                                void);
                               (C_91:
                               begin
-                                (zu := (JC_176: ((double_of_real down) 0.0)));
-                               !zu
+                                (zu := (double_of_real_exact 0.0)); !zu
                               end)
                              end))))
                          else
-                          (if ((gt_double xu_1) (JC_177:
-                                                ((double_of_real down) 0.0)))
+                          (if ((gt_double xu_1) (double_of_real_exact 0.0))
                           then
-                           (if ((lt_double yl) (JC_178:
-                                               ((double_of_real down) 0.0)))
+                           (if ((lt_double yl) (double_of_real_exact 0.0))
                            then
-                            (if ((gt_double yu) (JC_179:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_87:
                              begin
                                (let jessie_112 = (zl := (C_86:
                                                         (let jessie_111 = xu_1 in
                                                         (let jessie_110 = yl in
-                                                        (JC_180:
+                                                        (JC_165:
                                                         ((mul_dn_requires jessie_111) jessie_110)))))) in
                                void);
                               (C_89:
@@ -1722,7 +1687,7 @@ let mul_safety =
                                 (zu := (C_88:
                                        (let jessie_115 = xu_1 in
                                        (let jessie_114 = yu in
-                                       (JC_181:
+                                       (JC_166:
                                        ((mul_up_requires jessie_115) jessie_114))))));
                                !zu
                               end)
@@ -1733,7 +1698,7 @@ let mul_safety =
                                (let jessie_119 = (zl := (C_82:
                                                         (let jessie_118 = xu_1 in
                                                         (let jessie_117 = yl in
-                                                        (JC_182:
+                                                        (JC_167:
                                                         ((mul_dn_requires jessie_118) jessie_117)))))) in
                                void);
                               (C_85:
@@ -1741,21 +1706,20 @@ let mul_safety =
                                 (zu := (C_84:
                                        (let jessie_122 = xl_1 in
                                        (let jessie_121 = yu in
-                                       (JC_183:
+                                       (JC_168:
                                        ((mul_up_requires jessie_122) jessie_121))))));
                                !zu
                               end)
                              end))
                            else
-                            (if ((gt_double yu) (JC_184:
-                                                ((double_of_real down) 0.0)))
+                            (if ((gt_double yu) (double_of_real_exact 0.0))
                             then
                              (C_79:
                              begin
                                (let jessie_126 = (zl := (C_78:
                                                         (let jessie_125 = xl_1 in
                                                         (let jessie_124 = yl in
-                                                        (JC_185:
+                                                        (JC_169:
                                                         ((mul_dn_requires jessie_125) jessie_124)))))) in
                                void);
                               (C_81:
@@ -1763,7 +1727,7 @@ let mul_safety =
                                 (zu := (C_80:
                                        (let jessie_129 = xu_1 in
                                        (let jessie_128 = yu in
-                                       (JC_186:
+                                       (JC_170:
                                        ((mul_up_requires jessie_129) jessie_128))))));
                                !zu
                               end)
@@ -1771,25 +1735,21 @@ let mul_safety =
                             else
                              (C_76:
                              begin
-                               (let jessie_131 = (zl := (JC_187:
-                                                        ((double_of_real down) 0.0))) in
+                               (let jessie_131 = (zl := (double_of_real_exact 0.0)) in
                                void);
                               (C_77:
                               begin
-                                (zu := (JC_188: ((double_of_real down) 0.0)));
-                               !zu
+                                (zu := (double_of_real_exact 0.0)); !zu
                               end)
                              end)))
                           else
                            (C_74:
                            begin
-                             (let jessie_134 = (zl := (JC_189:
-                                                      ((double_of_real down) 0.0))) in
+                             (let jessie_134 = (zl := (double_of_real_exact 0.0)) in
                              void);
                             (C_75:
                             begin
-                              (zu := (JC_190: ((double_of_real down) 0.0)));
-                             !zu
+                              (zu := (double_of_real_exact 0.0)); !zu
                             end)
                            end))) in
        void);
@@ -3184,9 +3144,6 @@ axiom real_of_int_sub:
 
 logic truncate_real_to_int : real -> int
 
-axiom truncate_int:
-  (forall i:int. (truncate_real_to_int(real_of_int(i)) = i))
-
 axiom truncate_down_pos:
   (forall x:real.
     ((x >= 0.0) ->
@@ -3198,24 +3155,6 @@ axiom truncate_up_neg:
     ((x <= 0.0) ->
      ((real_of_int((truncate_real_to_int(x) - 1)) < x) and
       (x <= real_of_int(truncate_real_to_int(x))))))
-
-axiom real_of_truncate:
-  (forall x:real.
-    (((x - 1.0) <= real_of_int(truncate_real_to_int(x))) and
-     (real_of_int(truncate_real_to_int(x)) <= (x + 1.0))))
-
-axiom truncate_monotonic:
-  (forall x:real.
-    (forall y:real.
-      ((x <= y) -> (truncate_real_to_int(x) <= truncate_real_to_int(y)))))
-
-axiom truncate_monotonic_int1:
-  (forall x:real.
-    (forall i:int. ((x <= real_of_int(i)) -> (truncate_real_to_int(x) <= i))))
-
-axiom truncate_monotonic_int2:
-  (forall x:real.
-    (forall i:int. ((real_of_int(i) <= x) -> (i <= truncate_real_to_int(x)))))
 
 logic floor_real_to_int : real -> int
 

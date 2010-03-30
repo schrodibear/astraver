@@ -26,8 +26,8 @@
 
 /*@ axiomatic Sum {
   @   // sum(t,i,j) denotes t[i]+...+t[j-1]
-  @   logic integer sum{L}(int *t, integer i, integer j);
-  @        // reads i,j,t,t[..] ;
+  @   logic integer sum{L}(int *t, integer i, integer j)
+  @        reads i,j,t,t[..] ;
   @   axiom sum1{L} :
   @     \forall int *t, integer i; sum(t,i,i) == 0;
   @   axiom sum2{L} :
