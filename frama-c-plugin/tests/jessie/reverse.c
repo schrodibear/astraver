@@ -1,4 +1,5 @@
 
+/* fails if not given # pragma SeparationPolicy(none) */
 
 /* in-place list reversal */
 

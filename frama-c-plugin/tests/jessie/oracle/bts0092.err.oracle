@@ -1,4 +1,4 @@
-File "why/bts0092.why", line 338, characters 5-24:
+File "why/bts0092.why", line 297, characters 4-23:
 Unbound variable char_P_char_M_foo_6
-make[2]: *** [why/bts0092.wpr] Error 1
-make[1]: *** [bts0092.regtest] Error 2
+make: *** [why/bts0092.wpr] Error 1
+make: *** [bts0092.regtest] Error 2

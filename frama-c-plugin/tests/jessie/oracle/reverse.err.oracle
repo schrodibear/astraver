@@ -1,3 +1,2 @@
-Warning: recursive definition of linked_path in generated file
-Warning: recursive definition of linked_path in generated file
-Warning: recursive definition of linked_path in generated file
+File "reverse.jessie/reverse.jc", line 76, characters 11-23: Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)
+make: *** [reverse.regtest] Error 1

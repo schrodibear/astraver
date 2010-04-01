@@ -32,6 +32,6 @@ int main() {
 
 /* 
 Local Variables:
-compile-command: "LC_ALL=C frama-c -jessie bts0038.c"
+compile-command: "make bts0038"
 End:
 */

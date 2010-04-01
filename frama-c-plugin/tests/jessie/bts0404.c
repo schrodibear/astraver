@@ -5,7 +5,6 @@ Status: open
 
 */
 
-// typedef struct abstract_seq_call {int bidon;} SEQ_CALL;
 typedef struct abstract_seq_call {int bidon;} SEQ_CALL;
 
 /*@ axiomatic Seq_call {
