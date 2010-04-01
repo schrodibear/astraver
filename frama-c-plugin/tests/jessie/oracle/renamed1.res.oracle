@@ -1356,33 +1356,33 @@ parameter main :
   { } unit
   reads G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G4,G5,G6,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,float_P_float_M_G10_4,float_P_float_M_G11_5,float_P_float_M_G8_2,float_P_float_M_G9_3,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table,int_P_int_M_G13_6,ptr_bas_loc_ram
   writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G34,G4,G5,G6,G7,int_P_int_M_G3_1,ptr_bas_loc_ram
-  { (JC_494:
-    ((JC_488: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_489: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_490: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_491: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_492: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_493: valid_G13(int_P_G13_6_alloc_table)))))))) }
+  { (JC_492:
+    ((JC_486: valid_G3(int_P_G3_1_alloc_table))
+    and ((JC_487: valid_G8(float_P_G8_2_alloc_table))
+        and ((JC_488: valid_G9(float_P_G9_3_alloc_table))
+            and ((JC_489: valid_G10(float_P_G10_4_alloc_table))
+                and ((JC_490: valid_G11(float_P_G11_5_alloc_table))
+                    and (JC_491: valid_G13(int_P_G13_6_alloc_table)))))))) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_469:
-    ((JC_463: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_464: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_465: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_466: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_467: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_468: valid_G13(int_P_G13_6_alloc_table))))))))}
+  { (JC_467:
+    ((JC_461: valid_G3(int_P_G3_1_alloc_table))
+    and ((JC_462: valid_G8(float_P_G8_2_alloc_table))
+        and ((JC_463: valid_G9(float_P_G9_3_alloc_table))
+            and ((JC_464: valid_G10(float_P_G10_4_alloc_table))
+                and ((JC_465: valid_G11(float_P_G11_5_alloc_table))
+                    and (JC_466: valid_G13(int_P_G13_6_alloc_table))))))))}
   unit
   reads G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G4,G5,G6,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,float_P_float_M_G10_4,float_P_float_M_G11_5,float_P_float_M_G8_2,float_P_float_M_G9_3,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table,int_P_int_M_G13_6,ptr_bas_loc_ram
   writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G34,G4,G5,G6,G7,int_P_int_M_G3_1,ptr_bas_loc_ram
-  { (JC_494:
-    ((JC_488: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_489: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_490: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_491: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_492: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_493: valid_G13(int_P_G13_6_alloc_table)))))))) }
+  { (JC_492:
+    ((JC_486: valid_G3(int_P_G3_1_alloc_table))
+    and ((JC_487: valid_G8(float_P_G8_2_alloc_table))
+        and ((JC_488: valid_G9(float_P_G9_3_alloc_table))
+            and ((JC_489: valid_G10(float_P_G10_4_alloc_table))
+                and ((JC_490: valid_G11(float_P_G11_5_alloc_table))
+                    and (JC_491: valid_G13(int_P_G13_6_alloc_table)))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -2537,7 +2537,7 @@ let F7_ensures_default =
                                                             (loop_2:
                                                             while true do
                                                             { invariant
-                                                                (JC_440:
+                                                                (JC_438:
                                                                 true)
                                                                }
                                                              begin
@@ -2584,19 +2584,19 @@ let F7_ensures_default =
                                                                     (let jessie_359 = 
                                                                     (V27 := 
                                                                     (C_131:
-                                                                    (JC_446:
-                                                                    (((add_single_safe nearest_even) 
-                                                                    (C_130:
                                                                     (JC_444:
                                                                     (((add_single_safe nearest_even) 
-                                                                    (C_129:
+                                                                    (C_130:
                                                                     (JC_442:
+                                                                    (((add_single_safe nearest_even) 
+                                                                    (C_129:
+                                                                    (JC_440:
                                                                     (((sub_single_safe nearest_even) !V24) !V26)))) 
                                                                     (C_128:
-                                                                    (JC_443:
+                                                                    (JC_441:
                                                                     (((mul_single_safe nearest_even) !V31) !V28))))))) 
                                                                     (C_127:
-                                                                    (JC_445:
+                                                                    (JC_443:
                                                                     (((mul_single_safe nearest_even) !V32) !V29))))))) in
                                                                     void);
                                                                     (let jessie_362 = 
@@ -2611,7 +2611,7 @@ let F7_ensures_default =
                                                                       
                                                                     (V30 := 
                                                                     (C_135:
-                                                                    (JC_447:
+                                                                    (JC_445:
                                                                     (((add_single_safe nearest_even) !V30) !V27))));
                                                                     !V30
                                                                     end)
@@ -2621,7 +2621,7 @@ let F7_ensures_default =
                                                                       
                                                                     (V30 := 
                                                                     (C_133:
-                                                                    (JC_448:
+                                                                    (JC_446:
                                                                     (((sub_single_safe nearest_even) !V30) !V27))));
                                                                     !V30
                                                                     end)) in
@@ -2708,19 +2708,19 @@ let F7_ensures_default =
                                          begin
                                            (let jessie_378 = (V27 := 
                                                               (C_166:
-                                                              (JC_453:
+                                                              (JC_451:
                                                               (((add_single_safe nearest_even) 
                                                                 (C_165:
-                                                                (JC_451:
+                                                                (JC_449:
                                                                 (((add_single_safe nearest_even) 
                                                                   (C_164:
-                                                                  (JC_449:
+                                                                  (JC_447:
                                                                   (((sub_single_safe nearest_even) !V24) !V26)))) 
                                                                  (C_163:
-                                                                 (JC_450:
+                                                                 (JC_448:
                                                                  (((mul_single_safe nearest_even) !V31) !V28))))))) 
                                                                (C_162:
-                                                               (JC_452:
+                                                               (JC_450:
                                                                (((mul_single_safe nearest_even) !V32) !V29))))))) in
                                            void);
                                           (let jessie_381 = (if ((ge_double 
@@ -2734,10 +2734,10 @@ let F7_ensures_default =
                                                                 (C_178:
                                                                 ((double_to_single nearest_even) 
                                                                  (C_177:
-                                                                 (JC_455:
+                                                                 (JC_453:
                                                                  (((add_double_safe nearest_even) 
                                                                    (C_176:
-                                                                   (JC_454:
+                                                                   (JC_452:
                                                                    (((mul_double_safe nearest_even) 
                                                                     (double_of_real_exact 2.0)) 
                                                                     (C_175:
@@ -2753,10 +2753,10 @@ let F7_ensures_default =
                                                                 (C_172:
                                                                 ((double_to_single nearest_even) 
                                                                  (C_171:
-                                                                 (JC_457:
+                                                                 (JC_455:
                                                                  (((sub_double_safe nearest_even) 
                                                                    (C_170:
-                                                                   (JC_456:
+                                                                   (JC_454:
                                                                    (((mul_double_safe nearest_even) 
                                                                     (double_of_real_exact 2.0)) 
                                                                     (C_169:
@@ -2770,13 +2770,13 @@ let F7_ensures_default =
                                           begin
                                             (let jessie_383 = (V30 := 
                                                                (C_183:
-                                                               (JC_460:
+                                                               (JC_458:
                                                                (((div_single_safe nearest_even) 
                                                                  (C_182:
-                                                                 (JC_459:
+                                                                 (JC_457:
                                                                  (((mul_single_safe nearest_even) 
                                                                    (C_181:
-                                                                   (JC_458:
+                                                                   (JC_456:
                                                                    (((mul_single_safe nearest_even) !G22) !G19)))) !V30)))) !G20)))) in
                                             void);
                                            (C_188:
@@ -2785,16 +2785,16 @@ let F7_ensures_default =
                                                                 (C_187:
                                                                 ((double_to_single nearest_even) 
                                                                  (C_186:
-                                                                 (JC_461:
+                                                                 (JC_459:
                                                                  (((mul_double_safe nearest_even) 
                                                                    (C_185:
                                                                    ((single_to_double nearest_even) !V30))) 
-                                                                  ((double_of_real_safe nearest_even) 64.0))))))) in
+                                                                  (double_of_real_exact 64.0))))))) in
                                              void);
                                             (let jessie_397 = (if ((le_double 
                                                                     (C_195:
                                                                     ((single_to_double nearest_even) !V30))) 
-                                                                   ((double_of_real_safe nearest_even) 65535.0))
+                                                                   (double_of_real_exact 65535.0))
                                                               then
                                                                (C_194:
                                                                (let jessie_388 = 
@@ -2828,7 +2828,7 @@ let F7_ensures_default =
                                               (let jessie_400 = (V37 := 
                                                                  (C_196:
                                                                  (let jessie_399 = !G15 in
-                                                                 (JC_462:
+                                                                 (JC_460:
                                                                  (F5 jessie_399))))) in
                                               void);
                                              (C_200:
@@ -3324,27 +3324,25 @@ let F7_safety =
                                            begin
                                              (let jessie_279 = (V30 := 
                                                                 (C_187:
-                                                                (JC_430:
+                                                                (JC_429:
                                                                 ((double_to_single nearest_even) 
                                                                  (C_186:
-                                                                 (JC_429:
+                                                                 (JC_428:
                                                                  (((mul_double nearest_even) 
                                                                    (C_185:
                                                                    (JC_427:
                                                                    ((single_to_double nearest_even) !V30)))) 
-                                                                  (JC_428:
-                                                                  ((double_of_real nearest_even) 64.0))))))))) in
+                                                                  (double_of_real_exact 64.0)))))))) in
                                              void);
                                             (let jessie_291 = (if ((le_double 
                                                                     (C_195:
-                                                                    (JC_431:
+                                                                    (JC_430:
                                                                     ((single_to_double nearest_even) !V30)))) 
-                                                                   (JC_432:
-                                                                   ((double_of_real nearest_even) 65535.0)))
+                                                                   (double_of_real_exact 65535.0))
                                                               then
                                                                (C_194:
                                                                (let jessie_282 = 
-                                                               (JC_433:
+                                                               (JC_431:
                                                                (int32_of_integer_ 
                                                                 (C_192:
                                                                 (let jessie_281 = 
@@ -3357,7 +3355,7 @@ let F7_safety =
                                                                (let jessie_285 = 
                                                                ((shift jessie_283) jessie_284) in
                                                                begin
-                                                                 (JC_434:
+                                                                 (JC_432:
                                                                  (((((offset_upd_ !int_P_G3_1_alloc_table) int_P_int_M_G3_1) jessie_283) jessie_284) jessie_282));
                                                                 jessie_282
                                                                end)))))
@@ -3371,7 +3369,7 @@ let F7_safety =
                                                                (let jessie_290 = 
                                                                ((shift jessie_288) jessie_289) in
                                                                begin
-                                                                 (JC_435:
+                                                                 (JC_433:
                                                                  (((((offset_upd_ !int_P_G3_1_alloc_table) int_P_int_M_G3_1) jessie_288) jessie_289) jessie_287));
                                                                 jessie_287
                                                                end)))))) in
@@ -3381,14 +3379,14 @@ let F7_safety =
                                               (let jessie_294 = (V37 := 
                                                                  (C_196:
                                                                  (let jessie_293 = !G15 in
-                                                                 (JC_436:
+                                                                 (JC_434:
                                                                  (F5_requires jessie_293))))) in
                                               void);
                                              (C_200:
                                              begin
                                                (let jessie_296 = (G6 := 
                                                                   (C_199:
-                                                                  (JC_437:
+                                                                  (JC_435:
                                                                   (int32_of_integer_ 
                                                                    (C_198:
                                                                    ((bw_or 
@@ -3426,7 +3424,7 @@ let F7_safety =
                                         (C_147:
                                         begin
                                           (let jessie_302 = (G23 := (C_146:
-                                                                    (JC_438:
+                                                                    (JC_436:
                                                                     (int32_of_integer_ 
                                                                     (C_145:
                                                                     ((add_int 
@@ -3522,13 +3520,13 @@ let F7_safety =
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_477:
-    ((JC_471: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_472: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_473: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_474: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_475: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_476: valid_G13(int_P_G13_6_alloc_table)))))))) }
+  { (JC_475:
+    ((JC_469: valid_G3(int_P_G3_1_alloc_table))
+    and ((JC_470: valid_G8(float_P_G8_2_alloc_table))
+        and ((JC_471: valid_G9(float_P_G9_3_alloc_table))
+            and ((JC_472: valid_G10(float_P_G10_4_alloc_table))
+                and ((JC_473: valid_G11(float_P_G11_5_alloc_table))
+                    and (JC_474: valid_G13(int_P_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -3541,8 +3539,8 @@ let main_ensures_default =
                                                     (double_of_real_exact 1.0))) in
                                  (let jessie_447 = (C_208:
                                                    ((double_to_single nearest_even) 
-                                                    ((double_of_real_safe nearest_even) 1000.0))) in
-                                 (JC_506:
+                                                    (double_of_real_exact 1000.0))) in
+                                 (JC_503:
                                  ((Frama_C_float_interval jessie_448) jessie_447)))))) in
        void);
       (C_212:
@@ -3550,12 +3548,12 @@ let main_ensures_default =
         (let jessie_453 = (G5 := (C_211:
                                  (let jessie_452 = (safe_int32_of_integer_ (10)) in
                                  (let jessie_451 = (safe_int32_of_integer_ (2000)) in
-                                 (JC_507:
+                                 (JC_504:
                                  ((Frama_C_interval jessie_452) jessie_451)))))) in
         void);
        (C_213:
        begin
-         (JC_508: (F6 void));
+         (JC_505: (F6 void));
         (C_214:
         begin
           (let jessie_455 = (V38 := (safe_int32_of_integer_ (0))) in void);
@@ -3563,7 +3561,7 @@ let main_ensures_default =
           (let jessie_460 = begin
                               (loop_4:
                               while true do
-                              { invariant (JC_510: true)  }
+                              { invariant (JC_507: true)  }
                                begin
                                  [ { } unit { true } ];
                                 try
@@ -3582,7 +3580,7 @@ let main_ensures_default =
                                                         void));
                                                       (C_215:
                                                       begin
-                                                        (JC_512: (F7 void));
+                                                        (JC_509: (F7 void));
                                                        (C_218:
                                                        begin
                                                          (V38 := (C_217:
@@ -3621,17 +3619,17 @@ let main_ensures_default =
    with
    Return ->
    void end)
-  { (JC_479: true) }
+  { (JC_477: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_477:
-    ((JC_471: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_472: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_473: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_474: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_475: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_476: valid_G13(int_P_G13_6_alloc_table)))))))) }
+  { (JC_475:
+    ((JC_469: valid_G3(int_P_G3_1_alloc_table))
+    and ((JC_470: valid_G8(float_P_G8_2_alloc_table))
+        and ((JC_471: valid_G9(float_P_G9_3_alloc_table))
+            and ((JC_472: valid_G10(float_P_G10_4_alloc_table))
+                and ((JC_473: valid_G11(float_P_G11_5_alloc_table))
+                    and (JC_474: valid_G13(int_P_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -3640,15 +3638,14 @@ let main_safety =
      begin
        (let jessie_434 = (G20 := (C_209:
                                  (let jessie_433 = (C_207:
-                                                   (JC_497:
+                                                   (JC_494:
                                                    ((double_to_single nearest_even) 
                                                     (double_of_real_exact 1.0)))) in
                                  (let jessie_432 = (C_208:
-                                                   (JC_496:
+                                                   (JC_493:
                                                    ((double_to_single nearest_even) 
-                                                    (JC_495:
-                                                    ((double_of_real nearest_even) 1000.0))))) in
-                                 (JC_498:
+                                                    (double_of_real_exact 1000.0)))) in
+                                 (JC_495:
                                  ((Frama_C_float_interval_requires jessie_433) jessie_432)))))) in
        void);
       (C_212:
@@ -3656,12 +3653,12 @@ let main_safety =
         (let jessie_438 = (G5 := (C_211:
                                  (let jessie_437 = (safe_int32_of_integer_ (10)) in
                                  (let jessie_436 = (safe_int32_of_integer_ (2000)) in
-                                 (JC_499:
+                                 (JC_496:
                                  ((Frama_C_interval_requires jessie_437) jessie_436)))))) in
         void);
        (C_213:
        begin
-         (JC_500: (F6_requires void));
+         (JC_497: (F6_requires void));
         (C_214:
         begin
           (let jessie_440 = (V38 := (safe_int32_of_integer_ (0))) in void);
@@ -3669,7 +3666,7 @@ let main_safety =
           (let jessie_445 = begin
                               (loop_3:
                               while true do
-                              { invariant (JC_502: true) variant (0) }
+                              { invariant (JC_499: true) variant (0) }
                                begin
                                  [ { } unit { true } ];
                                 try
@@ -3688,12 +3685,12 @@ let main_safety =
                                                         void));
                                                       (C_215:
                                                       begin
-                                                        (JC_504:
+                                                        (JC_501:
                                                         (F7_requires void));
                                                        (C_218:
                                                        begin
                                                          (V38 := (C_217:
-                                                                 (JC_505:
+                                                                 (JC_502:
                                                                  (int32_of_integer_ 
                                                                   (C_216:
                                                                   ((add_int 
@@ -3729,13 +3726,13 @@ let main_safety =
    with
    Return ->
    void end)
-  { (JC_487:
-    ((JC_481: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_482: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_483: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_484: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_485: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_486: valid_G13(int_P_G13_6_alloc_table)))))))) }
+  { (JC_485:
+    ((JC_479: valid_G3(int_P_G3_1_alloc_table))
+    and ((JC_480: valid_G8(float_P_G8_2_alloc_table))
+        and ((JC_481: valid_G9(float_P_G9_3_alloc_table))
+            and ((JC_482: valid_G10(float_P_G10_4_alloc_table))
+                and ((JC_483: valid_G11(float_P_G11_5_alloc_table))
+                    and (JC_484: valid_G13(int_P_G13_6_alloc_table)))))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C renamed1.jessie --quiet -f renamed1.makefile project
@@ -3744,10 +3741,20 @@ why --project [...] why/renamed1.why
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/renamed1_po171.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "418" begin = "64" end = "82"/>
+    <goal why_file="why/renamed1_po169.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/renamed1_po170.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/renamed1_po171.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po172.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
@@ -3760,17 +3767,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po174.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "443" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po175.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "443" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po176.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "442" begin = "3" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "443" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3785,17 +3792,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po179.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "443" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "420" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po180.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "443" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "420" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po181.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "443" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "420" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3810,17 +3817,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po184.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "420" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "429" begin = "24" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po185.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "420" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "429" begin = "24" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po186.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "420" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "429" begin = "24" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3835,55 +3842,40 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po189.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "429" begin = "24" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "448" begin = "4" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po190.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "429" begin = "24" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "448" begin = "4" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po191.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "429" begin = "24" end = "28"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "why/renamed1.why" line = "3224" begin = "66" end = "67"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po192.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "448" begin = "4" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "why/renamed1.why" line = "3224" begin = "66" end = "67"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po193.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "448" begin = "4" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po194.why">
-      <location file = "why/renamed1.why" line = "3227" begin = "66" end = "67"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po195.why">
-      <location file = "why/renamed1.why" line = "3227" begin = "66" end = "67"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po196.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po197.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/renamed1_po198.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/renamed1_po199.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/renamed1_po200.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
       <explain kind = "Post"/>
     </goal>
@@ -4091,49 +4083,49 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po148.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "382" begin = "49" end = "65"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/renamed1_po149.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "411" begin = "5" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/renamed1_po150.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "383" begin = "46" end = "65"/>
+    <goal why_file="why/renamed1_po149.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "412" begin = "35" end = "37"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/renamed1_po150.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "412" begin = "35" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po151.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "412" begin = "35" end = "37"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po152.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "412" begin = "35" end = "37"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po153.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "412" begin = "35" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "413" begin = "11" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po154.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "412" begin = "35" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "413" begin = "11" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po155.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "413" begin = "11" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "415" begin = "5" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po156.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "413" begin = "11" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "415" begin = "5" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po157.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "415" begin = "5" end = "8"/>
@@ -4151,34 +4143,32 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po160.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "415" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "416" begin = "5" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po161.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "415" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "416" begin = "5" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po162.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "416" begin = "5" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "421" begin = "11" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po163.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "416" begin = "5" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "421" begin = "11" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po164.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "421" begin = "11" end = "14"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po165.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "421" begin = "11" end = "14"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po166.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
@@ -4189,14 +4179,6 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/renamed1_po168.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/renamed1_po169.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/renamed1_po170.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
       <explain kind = "Post"/>
     </goal>

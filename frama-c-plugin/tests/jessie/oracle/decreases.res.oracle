@@ -515,16 +515,16 @@ let f_ensures_default =
                            (let jessie_89 = (n_1 := (C_25:
                                                     (let jessie_88 = 
                                                     (C_24:
-                                                    (JC_46:
+                                                    (JC_45:
                                                     (((sub_double_safe nearest_even) !x_0) 
                                                      (double_of_real_exact 2.0)))) in
-                                                    (JC_47: (f jessie_88))))) in
+                                                    (JC_46: (f jessie_88))))) in
                            void);
                           try
                            (let jessie_96 = begin
                                               (loop_2:
                                               while true do
-                                              { invariant (JC_49: true)  }
+                                              { invariant (JC_48: true)  }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -534,7 +534,7 @@ let f_ensures_default =
                                                                       
                                                                     (if 
                                                                     ((ge_double !x_0) 
-                                                                    ((double_of_real_safe nearest_even) 10.0))
+                                                                    (double_of_real_exact 10.0))
                                                                     then void
                                                                     else
                                                                     (let jessie_90 = 
@@ -555,7 +555,7 @@ let f_ensures_default =
                                                                       
                                                                     (x_0 := 
                                                                     (C_30:
-                                                                    (JC_51:
+                                                                    (JC_50:
                                                                     (((sub_double_safe nearest_even) !x_0) 
                                                                     (double_of_real_exact 1.0)))));
                                                                     !x_0
@@ -647,7 +647,7 @@ let f_safety =
                                               (loop_1:
                                               while true do
                                               { invariant (JC_41: true)
-                                                variant (JC_45 : x_0) for R }
+                                                variant (JC_44 : x_0) for R }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -657,8 +657,7 @@ let f_safety =
                                                                       
                                                                     (if 
                                                                     ((ge_double !x_0) 
-                                                                    (JC_43:
-                                                                    ((double_of_real nearest_even) 10.0)))
+                                                                    (double_of_real_exact 10.0))
                                                                     then void
                                                                     else
                                                                     (let jessie_69 = 
@@ -679,7 +678,7 @@ let f_safety =
                                                                       
                                                                     (x_0 := 
                                                                     (C_30:
-                                                                    (JC_44:
+                                                                    (JC_43:
                                                                     (((sub_double nearest_even) !x_0) 
                                                                     (double_of_real_exact 1.0)))));
                                                                     !x_0
@@ -857,15 +856,15 @@ why --project [...] why/decreases.why
   <function name="Function odd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/decreases_po9.why">
+      <location file = "why/decreases.why" line = "697" begin = "57" end = "158"/>
+      <explain kind = "Assert"/>
+    </goal>
     <goal why_file="why/decreases_po10.why">
-      <location file = "why/decreases.why" line = "698" begin = "57" end = "158"/>
+      <location file = "why/decreases.why" line = "697" begin = "57" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/decreases_po11.why">
-      <location file = "why/decreases.why" line = "698" begin = "57" end = "158"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/decreases_po12.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "23" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
@@ -890,16 +889,11 @@ text = "FPOverflow"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/decreases_po7.why">
-      <location file = "PPCHOME/tests/jessie/decreases.jessie/decreases.jc" line = "101" begin = "25" end = "41"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/decreases_po8.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "40" begin = "10" end = "11"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
-    <goal why_file="why/decreases_po9.why">
+    <goal why_file="why/decreases_po8.why">
       <location file = "PPCHOME/tests/jessie/decreases.c" line = "37" begin = "19" end = "20"/>
       <explain kind = "VarDecr"/>
     </goal>

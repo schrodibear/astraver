@@ -499,31 +499,29 @@ let tr_struct st acc =
 
 let float_of_real f x =
   (* TODO: Mpfr.settofr etc *)
-  match f with
-    | `Float -> 
-	begin match x with
-	  | "0.5" 
-          | "0.0" | "1.0" | "2.0" | "3.0" | "4.0" -> x
-          | "0." | "1." | "2." | "3." | "4." -> x
-	  | "0.1" -> "0x0.199999Ap0" 
-	  | _ -> 
-              (*
-                Format.eprintf"real constant: %s@." x;
-              *)
-              raise Not_found
-	end
-    | `Double -> 
-	begin match x with
-	  | "0.5" 
-          | "0.0" | "1.0" | "2.0" | "3.0" | "4.0" -> x
-          | "0." | "1." | "2." | "3." | "4." -> x
-	  | _ -> 
-              (*
-	        Format.eprintf"real constant: %s@." x;
-              *)
-              raise Not_found
-	end
-    | `Binary80 -> raise Not_found
+  if Str.string_match (Str.regexp "\\([0-9]+\\)\\.0*$") x 0 then
+    let s = Str.matched_group 1 x in
+    match f with
+      | `Float -> 
+          if String.length s <= 7 (* x < 10^7 < 2^24 *) then x
+          else
+            (*
+              Format.eprintf"real constant: %s@." x;
+            *)
+            raise Not_found
+     | `Double -> 
+          if String.length s <= 15 (* x < 10^15 < 2^53 *) then x
+          else
+            (*
+              Format.eprintf"real constant: %s@." x;
+            *)
+            raise Not_found
+     | `Binary80 -> raise Not_found
+  else
+    match f,x with
+      | _ , "0.5" -> x
+      | `Float, "0.1" -> "0x0.199999Ap0"
+      | _ -> raise Not_found
 
 let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
   let rec aux a b = 

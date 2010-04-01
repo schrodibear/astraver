@@ -72,7 +72,7 @@ module Termtbl = Hashtbl.Make(HashedTerm)
 (* fields of the float model *)
 type float_field = Rounded | Exact | Model
 (* formats of the float model *)
-type float_fmt = Single | Double | Binary80
+type float_fmt = Int | Single | Double | Binary80
 (* modes of the float model *)
 type mode = RndNE | RndZR | RndUP | RndDN | RndNA
 
@@ -106,6 +106,7 @@ exception NotGappa
 (* compilation to Gappa formulas *)
 
 let real_of_int = Ident.create "real_of_int"
+let truncate_real_to_int = Ident.create "truncate_real_to_int"
 
 let rnd_ne = Ident.create "nearest_even"
 let rnd_zr = Ident.create "to_zero"
@@ -260,9 +261,14 @@ let rec term = function
       Gmul (term t1, term t2)
   | Tapp (id, [t1; t2], _) when id == t_div_real ->
       Gdiv (term t1, term t2)
-  (* conversions *)
+  (* conversion int -> real *)
   | Tapp (id, [t], _) when id == real_of_int ->
       term t
+  (* conversion real -> int by truncate, i.e. towards zero *)
+  | Tapp (id, [t], _) when id == truncate_real_to_int ->
+      let mode = RndZR in
+      Hashtbl.replace rnd_table (Int, mode) ();
+      Grnd (Int, mode, term t)
 
   (* [Jessie] rounding *)
   | Tapp (id, [Tapp (m, [], _); t], _)
@@ -557,6 +563,7 @@ let get_format = function
   | Single -> "ieee_32"
   | Double -> "ieee_64"
   | Binary80 -> "x86_80"
+  | Int -> "int"
 
 let get_mode = function
   | RndNE -> "ne"
@@ -570,7 +577,8 @@ let rec print_term fmt = function
   | Gfld (Rounded, x) -> fprintf fmt "float_%s" x
   | Gfld (Exact,   x) -> fprintf fmt "exact_%s" x
   | Gfld (Model,   x) -> fprintf fmt "model_%s" x
-  | Grnd (f, m, t) -> fprintf fmt "rnd_%s%s(%a)" (get_format f) (get_mode m) print_term t
+  | Grnd (f, m, t) -> 
+      fprintf fmt "rnd_%s%s(%a)" (get_format f) (get_mode m) print_term t
   | Gcst c -> fprintf fmt "%s" c
   | Gneg t -> fprintf fmt "(-%a)" print_term t
   | Gadd (t1, t2) -> fprintf fmt "(%a + %a)" print_term t1 print_term t2
@@ -615,10 +623,16 @@ let print_equation fmt (e, x, t) =
   fprintf fmt "@[%s%s = %a;@]" e x print_term t
 
 let print_obligation fmt (eq,p) =
-  Hashtbl.iter (fun (f, m) () ->
-    let f = get_format f in
-    let m = get_mode m in
-    fprintf fmt "@@rnd_%s%s = float<%s, %s>;@\n" f m f m) rnd_table;
+  Hashtbl.iter 
+    (fun (f, m) () ->
+       let m = get_mode m in
+       match f with 
+         | Int ->
+             fprintf fmt "@@rnd_int%s = int<%s>;@\n" m m 
+         | _ ->
+             let f = get_format f in
+             fprintf fmt "@@rnd_%s%s = float<%s, %s>;@\n" f m f m) 
+    rnd_table;
   fprintf fmt "@\n%a@\n@\n" (print_list newline print_equation) eq;
   fprintf fmt "{ @[%a@] }@." print_pred p
 
