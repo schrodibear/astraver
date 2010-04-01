@@ -54,7 +54,7 @@ S[0] y;
 invariant valid_y :
 ((\offset_min(y) <= 0) && (\offset_max(y) >= 0))
 
-predicate p{L}(S[0] a) =
+predicate p{L}(S[..] a) =
 ((a.b + 0).int_M >= 0)
 
 unit f()
@@ -745,7 +745,7 @@ why --project [...] why/separation4.why
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/separation4_po1.why">
-      <location file = "PPCHOME/tests/jessie/separation4.c" line = "38" begin = "12" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/separation4.c" line = "38" begin = "12" end = "17"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

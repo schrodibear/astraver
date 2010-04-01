@@ -1,5 +1,7 @@
 
 
+  o [Frama-C plugin] logic functions do not accept struct or union as 
+    parameters
   o [Jessie, Frama-C plugin] make the right difference between 
     "reads \nothing" and no reads clause at all
   o [Jessie, Frama-C plugin] the "defensive" model for floating-point 

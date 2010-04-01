@@ -90,10 +90,13 @@ let single_term rresult t =
 	       let assoc = RegionList.duplicate regions in
 	       app.jc_app_region_assoc <- assoc;
 	       let param_regions = 
-		 List.map (fun vi -> 
-			     if is_dummy_region vi.jc_var_info_region then dummy_region else
-			       try RegionList.assoc vi.jc_var_info_region assoc
-			       with Not_found -> assert false)
+		 List.map 
+                   (fun vi -> 
+		      if is_dummy_region vi.jc_var_info_region then dummy_region else
+			try RegionList.assoc vi.jc_var_info_region assoc
+			with Not_found -> 
+                   	  Jc_options.jc_error t#pos "Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)";
+)
 		   li.jc_logic_info_parameters
 	       in
 	       let result_region = 

@@ -1,16 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0404.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0404.c"
 [jessie] Starting Jessie translation
-bts0404.c:16:[jessie] failure: Unexpected failure.
-                  Please submit bug report (Ref. "norm.ml:1128:50").
-[kernel] The full backtrace is:
-         Raised at file "src/kernel/log.ml", line 505, characters 30-31
-         Called from file "src/kernel/log.ml", line 499, characters 2-9
-         Re-raised at file "src/kernel/log.ml", line 502, characters 8-9
-         Called from file "src/lib/type.ml", line 745, characters 40-45
-         Called from file "queue.ml", line 134, characters 6-20
-         Called from file "src/kernel/boot.ml", line 49, characters 4-20
-         Called from file "src/kernel/cmdline.ml", line 169, characters 4-8
-         
-         Plug-in jessie aborted because of an internal error.
-         Please report as 'crash' at http://bts.frama-c.com
+bts0404.c:15:[jessie] failure: Jessie plugin does not support struct or union as parameter to logic functions. Please use a pointer instead.
+[jessie] warning: Unsupported feature(s).
+                  Jessie plugin can not be used on your code.

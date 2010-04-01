@@ -32,10 +32,10 @@ S;
 
 S x,y;
 
-/*@ predicate p{L}(S a) = a.b[0] >= 0; */
+/*@ predicate p{L}(S *a) = a->b[0] >= 0; */
 
-/*@ requires p(x);
-  @ ensures p(x);
+/*@ requires p(&x);
+  @ ensures p(&x);
   @ */
 void f() {
   x.b[0] = 0;

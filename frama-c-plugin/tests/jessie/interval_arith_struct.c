@@ -64,21 +64,21 @@ double mul_up(double x, double y)
 
 
 typedef struct { double l, u; } interval;
-/*@ type invariant is_interval(interval x) = 
-  @       (\is_finite(x.l) || \is_minus_infinity(x.l)) 
+/*@ type invariant is_interval(interval *x) = 
+  @       (\is_finite(x->l) || \is_minus_infinity(x->l)) 
   @       &&
-  @       (\is_finite(x.u) || \is_plus_infinity(x.u));
+  @       (\is_finite(x->u) || \is_plus_infinity(x->u));
   @*/
 
-/*@ predicate in_interval{L}(real a,interval x) = 
-  @           double_le_real(x.l,a) && real_le_double(a,x.u);
+/*@ predicate in_interval{L}(real a,interval *x) = 
+  @           double_le_real(x->l,a) && real_le_double(a,x->u);
   @*/
 
 
 
 /*@ ensures 
-  @    \forall real a,b; in_interval(a,x) && in_interval(b,y) ==>
-  @         in_interval(a+b,\result);    
+  @    \forall real a,b; in_interval(a,&x) && in_interval(b,&y) ==>
+  @         in_interval(a+b,&\result);    
   @*/
 interval add(interval x, interval y)
 {
@@ -90,8 +90,8 @@ interval add(interval x, interval y)
 
 
 /*@ ensures 
-  @   \forall real a,b; in_interval(a,x) && in_interval(b,y) ==>
-  @                     in_interval(a*b,\result); 
+  @   \forall real a,b; in_interval(a,&x) && in_interval(b,&y) ==>
+  @                     in_interval(a*b,&\result); 
   @*/
 interval mul(interval x, interval y)
 {

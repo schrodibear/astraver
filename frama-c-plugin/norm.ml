@@ -332,6 +332,9 @@ class retypeLogicFunctions =
       | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ()
       | Ctype ty ->
           if isStructOrUnionType ty then
+            unsupported "Jessie plugin does not support struct or union as parameter to logic functions. Please use a pointer instead."
+                      (*
+          if isStructOrUnionType ty then
             begin
               varset := LogicVarSet.add lv !varset;
               lv.lv_type <- Ctype(mkTRef ty);
@@ -343,6 +346,7 @@ class retypeLogicFunctions =
                      *)
                     v.vtype <- mkTRef ty
             end
+                      *)
   in
 
   let postaction_term_lval (host,off) =
@@ -1819,6 +1823,6 @@ let normalize file =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.. -j bin/toplevel.byte"
+compile-command: "LC_ALL=C make -C .. byte"
 End:
 *)
