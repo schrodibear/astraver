@@ -931,28 +931,7 @@ let bubble_sort_ensures_default =
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
-                                                                   [ 
-                                                                   { } unit
-                                                                   reads int_P_int_M_a_5,up
-                                                                   { (JC_78:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(up),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                    void;
-                                                                   [ 
-                                                                   { } unit
-                                                                   reads int_P_int_M_a_5
-                                                                   { (JC_79:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                    void;
                                                                    (C_33:
                                                                    begin
@@ -966,14 +945,6 @@ let bubble_sort_ensures_default =
                                                                     (let jessie_68 = 
                                                                     (down := !up) in
                                                                     void);
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_80:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
                                                                     (assert
                                                                     { 
@@ -1038,53 +1009,9 @@ let bubble_sort_ensures_default =
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
                                                                     void));
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_85:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_86:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_87:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_88:
-                                                                    lt_int(
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    integer_of_int32(down)))),
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1))))))) } ];
                                                                     void;
                                                                     (C_63:
                                                                     (let jessie_74 = a_2 in
@@ -1098,64 +1025,10 @@ let bubble_sort_ensures_default =
                                                                     (let jessie_71 = length in
                                                                     (JC_89:
                                                                     ((((((swap jessie_74) jessie_73) jessie_72) jessie_71) int_P_int_M_a_5) int_P_a_5_alloc_table)))))));
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_90:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_91:
-                                                                    le_int(
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1))))),
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    integer_of_int32(down)))))) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_92:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (2)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_93:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_94:
-                                                                    sorted(a_2,
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1)),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
                                                                     (C_71:
                                                                     begin
@@ -1168,37 +1041,8 @@ let bubble_sort_ensures_default =
                                                                     ((sub_int 
                                                                     (integer_of_int32 !down)) (1)))))) in
                                                                     void);
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_95:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_96:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_97:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void
                                                                     end);
                                                                     (raise
@@ -1220,26 +1064,7 @@ let bubble_sort_ensures_default =
                                                                     Goto_while_1_break_exc jessie_1 ->
                                                                     (while_1_break:
                                                                     void) end;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5,up
-                                                                    { (JC_98:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_99:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void;
                                                                     (C_79:
                                                                     begin
@@ -1279,10 +1104,6 @@ let bubble_sort_ensures_default =
         with
         Goto_while_0_break_exc jessie_2 ->
         (while_0_break: void) end;
-       [ { } unit reads int_P_int_M_a_5
-         { (JC_100:
-           Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-           int_P_int_M_a_5, int_P_int_M_a_5@init)) } ];
        void;
        (raise Return)
       end)
@@ -1339,13 +1160,6 @@ let bubble_sort_ensures_permutation =
                                                        (Goto_while_0_break_exc
                                                        void)) in
                                                       void));
-                                                    [ { } unit
-                                                      reads int_P_int_M_a_5,up
-                                                      { (JC_149:
-                                                        sorted(a_2, (0),
-                                                        sub_int(integer_of_int32(up),
-                                                        (1)),
-                                                        int_P_int_M_a_5)) } ];
                                                     void;
                                                     (assert
                                                     { (JC_150:
@@ -1365,13 +1179,6 @@ let bubble_sort_ensures_permutation =
                                                        (let jessie_118 = 
                                                        (down := !up) in
                                                        void);
-                                                      [ { } unit
-                                                        reads down,int_P_int_M_a_5,up
-                                                        { (JC_151:
-                                                          sorted(a_2,
-                                                          integer_of_int32(down),
-                                                          integer_of_int32(up),
-                                                          int_P_int_M_a_5)) } ];
                                                       void;
                                                       [ { } unit reads down
                                                         { (JC_152:
@@ -1443,38 +1250,8 @@ let bubble_sort_ensures_permutation =
                                                                int_P_int_M_a_5@init)) };
                                                              void);
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5
-                                                               { (JC_158:
-                                                                 sorted(a_2,
-                                                                 (0),
-                                                                 sub_int(
-                                                                 integer_of_int32(down),
-                                                                 (1)),
-                                                                 int_P_int_M_a_5)) } ];
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5,up
-                                                               { (JC_159:
-                                                                 sorted(a_2,
-                                                                 integer_of_int32(down),
-                                                                 integer_of_int32(up),
-                                                                 int_P_int_M_a_5)) } ];
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5
-                                                               { (JC_160:
-                                                                 lt_int(
-                                                                 integer_of_int32(
-                                                                 select(int_P_int_M_a_5,
-                                                                 shift(a_2,
-                                                                 integer_of_int32(down)))),
-                                                                 integer_of_int32(
-                                                                 select(int_P_int_M_a_5,
-                                                                 shift(a_2,
-                                                                 sub_int(
-                                                                 integer_of_int32(down),
-                                                                 (1))))))) } ];
                                                              void;
                                                              (C_63:
                                                              (let jessie_124 = a_2 in
@@ -1499,48 +1276,9 @@ let bubble_sort_ensures_permutation =
                                                                int_P_int_M_a_5@init)) };
                                                              void);
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5
-                                                               { (JC_163:
-                                                                 le_int(
-                                                                 integer_of_int32(
-                                                                 select(int_P_int_M_a_5,
-                                                                 shift(a_2,
-                                                                 sub_int(
-                                                                 integer_of_int32(down),
-                                                                 (1))))),
-                                                                 integer_of_int32(
-                                                                 select(int_P_int_M_a_5,
-                                                                 shift(a_2,
-                                                                 integer_of_int32(down)))))) } ];
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5
-                                                               { (JC_164:
-                                                                 sorted(a_2,
-                                                                 (0),
-                                                                 sub_int(
-                                                                 integer_of_int32(down),
-                                                                 (2)),
-                                                                 int_P_int_M_a_5)) } ];
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5,up
-                                                               { (JC_165:
-                                                                 sorted(a_2,
-                                                                 integer_of_int32(down),
-                                                                 integer_of_int32(up),
-                                                                 int_P_int_M_a_5)) } ];
                                                              void;
-                                                             [ { } unit
-                                                               reads down,int_P_int_M_a_5,up
-                                                               { (JC_166:
-                                                                 sorted(a_2,
-                                                                 sub_int(
-                                                                 integer_of_int32(down),
-                                                                 (1)),
-                                                                 integer_of_int32(up),
-                                                                 int_P_int_M_a_5)) } ];
                                                              void;
                                                              (C_71:
                                                              begin
@@ -1552,23 +1290,7 @@ let bubble_sort_ensures_permutation =
                                                                  ((sub_int 
                                                                    (integer_of_int32 !down)) (1)))))) in
                                                                void);
-                                                              [ { } unit
-                                                                reads down,int_P_int_M_a_5
-                                                                { (JC_167:
-                                                                  sorted(a_2,
-                                                                  (0),
-                                                                  sub_int(
-                                                                  integer_of_int32(down),
-                                                                  (1)),
-                                                                  int_P_int_M_a_5)) } ];
                                                               void;
-                                                              [ { } unit
-                                                                reads down,int_P_int_M_a_5,up
-                                                                { (JC_168:
-                                                                  sorted(a_2,
-                                                                  integer_of_int32(down),
-                                                                  integer_of_int32(up),
-                                                                  int_P_int_M_a_5)) } ];
                                                               void;
                                                               (assert
                                                               { (JC_169:
@@ -1600,12 +1322,6 @@ let bubble_sort_ensures_permutation =
                                                        with
                                                        Goto_while_1_break_exc jessie_1 ->
                                                        (while_1_break: void) end;
-                                                      [ { } unit
-                                                        reads int_P_int_M_a_5,up
-                                                        { (JC_170:
-                                                          sorted(a_2, (0),
-                                                          integer_of_int32(up),
-                                                          int_P_int_M_a_5)) } ];
                                                       void;
                                                       (assert
                                                       { (JC_171:
@@ -1742,14 +1458,6 @@ let bubble_sort_ensures_sorted =
                                                       (1)), int_P_int_M_a_5)) };
                                                     void);
                                                     void;
-                                                    [ { } unit
-                                                      reads int_P_int_M_a_5
-                                                      { (JC_111:
-                                                        Permut(a_2, (0),
-                                                        sub_int(integer_of_int32(length),
-                                                        (1)),
-                                                        int_P_int_M_a_5,
-                                                        int_P_int_M_a_5@init)) } ];
                                                     void;
                                                     (C_33:
                                                     begin
@@ -1902,16 +1610,6 @@ let bubble_sort_ensures_sorted =
                                                                 (Goto_while_1_break_exc
                                                                 void)) in
                                                                void));
-                                                             [ { } unit
-                                                               reads int_P_int_M_a_5
-                                                               { (JC_129:
-                                                                 Permut(a_2,
-                                                                 (0),
-                                                                 sub_int(
-                                                                 integer_of_int32(length),
-                                                                 (1)),
-                                                                 int_P_int_M_a_5,
-                                                                 int_P_int_M_a_5@init)) } ];
                                                              void;
                                                              (assert
                                                              { (JC_130:
@@ -1958,16 +1656,6 @@ let bubble_sort_ensures_sorted =
                                                              (let jessie_96 = length in
                                                              (JC_133:
                                                              ((((((swap jessie_99) jessie_98) jessie_97) jessie_96) int_P_int_M_a_5) int_P_a_5_alloc_table)))))));
-                                                             [ { } unit
-                                                               reads int_P_int_M_a_5
-                                                               { (JC_134:
-                                                                 Permut(a_2,
-                                                                 (0),
-                                                                 sub_int(
-                                                                 integer_of_int32(length),
-                                                                 (1)),
-                                                                 int_P_int_M_a_5,
-                                                                 int_P_int_M_a_5@init)) } ];
                                                              void;
                                                              (assert
                                                              { (JC_135:
@@ -2040,16 +1728,6 @@ let bubble_sort_ensures_sorted =
                                                                 int_P_int_M_a_5)) };
                                                               void);
                                                               void;
-                                                              [ { } unit
-                                                                reads int_P_int_M_a_5
-                                                                { (JC_141:
-                                                                  Permut(a_2,
-                                                                  (0),
-                                                                  sub_int(
-                                                                  integer_of_int32(length),
-                                                                  (1)),
-                                                                  int_P_int_M_a_5,
-                                                                  int_P_int_M_a_5@init)) } ];
                                                               void
                                                              end);
                                                              (raise
@@ -2077,14 +1755,6 @@ let bubble_sort_ensures_sorted =
                                                         int_P_int_M_a_5)) };
                                                       void);
                                                       void;
-                                                      [ { } unit
-                                                        reads int_P_int_M_a_5
-                                                        { (JC_143:
-                                                          Permut(a_2, (0),
-                                                          sub_int(integer_of_int32(length),
-                                                          (1)),
-                                                          int_P_int_M_a_5,
-                                                          int_P_int_M_a_5@init)) } ];
                                                       void;
                                                       (C_79:
                                                       begin
@@ -2121,10 +1791,6 @@ let bubble_sort_ensures_sorted =
         with
         Goto_while_0_break_exc jessie_2 ->
         (while_0_break: void) end;
-       [ { } unit reads int_P_int_M_a_5
-         { (JC_144:
-           Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-           int_P_int_M_a_5, int_P_int_M_a_5@init)) } ];
        void;
        (raise Return)
       end)
@@ -2178,28 +1844,7 @@ let bubble_sort_safety =
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
-                                                                   [ 
-                                                                   { } unit
-                                                                   reads int_P_int_M_a_5,up
-                                                                   { (JC_46:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(up),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                    void;
-                                                                   [ 
-                                                                   { } unit
-                                                                   reads int_P_int_M_a_5
-                                                                   { (JC_47:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                    void;
                                                                    (C_33:
                                                                    begin
@@ -2213,14 +1858,6 @@ let bubble_sort_safety =
                                                                     (let jessie_43 = 
                                                                     (down := !up) in
                                                                     void);
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_48:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
                                                                     [ 
                                                                     { } unit
@@ -2284,53 +1921,9 @@ let bubble_sort_safety =
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
                                                                     void));
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_56:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_57:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_58:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_59:
-                                                                    lt_int(
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    integer_of_int32(down)))),
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1))))))) } ];
                                                                     void;
                                                                     (C_63:
                                                                     (let jessie_49 = a_2 in
@@ -2345,64 +1938,10 @@ let bubble_sort_safety =
                                                                     (let jessie_46 = length in
                                                                     (JC_61:
                                                                     ((((((swap_requires jessie_49) jessie_48) jessie_47) jessie_46) int_P_int_M_a_5) int_P_a_5_alloc_table)))))));
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_62:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_63:
-                                                                    le_int(
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1))))),
-                                                                    integer_of_int32(
-                                                                    select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    integer_of_int32(down)))))) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_64:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (2)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_65:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_66:
-                                                                    sorted(a_2,
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1)),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
                                                                     (C_71:
                                                                     begin
@@ -2416,37 +1955,8 @@ let bubble_sort_safety =
                                                                     ((sub_int 
                                                                     (integer_of_int32 !down)) (1))))))) in
                                                                     void);
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5
-                                                                    { (JC_68:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(down),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads down,int_P_int_M_a_5,up
-                                                                    { (JC_69:
-                                                                    sorted(a_2,
-                                                                    integer_of_int32(down),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_70:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void
                                                                     end);
                                                                     (raise
@@ -2468,26 +1978,7 @@ let bubble_sort_safety =
                                                                     Goto_while_1_break_exc jessie_1 ->
                                                                     (while_1_break:
                                                                     void) end;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5,up
-                                                                    { (JC_71:
-                                                                    sorted(a_2,
-                                                                    (0),
-                                                                    integer_of_int32(up),
-                                                                    int_P_int_M_a_5)) } ];
                                                                     void;
-                                                                    [ 
-                                                                    { } unit
-                                                                    reads int_P_int_M_a_5
-                                                                    { (JC_72:
-                                                                    Permut(a_2,
-                                                                    (0),
-                                                                    sub_int(
-                                                                    integer_of_int32(length),
-                                                                    (1)),
-                                                                    int_P_int_M_a_5,
-                                                                    int_P_int_M_a_5@init)) } ];
                                                                     void;
                                                                     (C_79:
                                                                     begin
@@ -2528,10 +2019,6 @@ let bubble_sort_safety =
         with
         Goto_while_0_break_exc jessie_2 ->
         (while_0_break: void) end;
-       [ { } unit reads int_P_int_M_a_5
-         { (JC_74:
-           Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
-           int_P_int_M_a_5, int_P_int_M_a_5@init)) } ];
        void;
        (raise Return)
       end)

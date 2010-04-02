@@ -34,7 +34,7 @@ int f2(int x, int y) {
 
 /* 
 Local Variables:
-compile-command: "LC_ALL=C frama-c -jessie bts0026.c"
+compile-command: "make bts0026"
 End:
 */
 

@@ -39,6 +39,8 @@ val safety_checking : unit -> bool
 
 val in_current_behavior : < name : string; .. > list -> bool
 
+val in_default_behavior : < name : string; .. > list -> bool
+
 val is_current_behavior : string -> bool
 
 val set_current_behavior : string -> unit

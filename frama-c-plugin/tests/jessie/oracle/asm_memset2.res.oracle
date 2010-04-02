@@ -1288,20 +1288,6 @@ let memset_burst4_ensures_aligned_data =
                                                   ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
                                                  jessie_157
                                                 end)));
-                                               [ { } unit
-                                                 reads bitvector_Adresse_1_3,s
-                                                 { (JC_126:
-                                                   (forall k_3:int.
-                                                    ((le_int((0), k_3)
-                                                     and le_int(k_3,
-                                                         sub_int((3),
-                                                         integer_of_uint32(addr_mod4)))) ->
-                                                     eq_int(integer_of_uint8(
-                                                            uint8_of_bitvector(
-                                                            select_bytes(bitvector_Adresse_1_3,
-                                                            shift(s, k_3),
-                                                            (0), (1)))),
-                                                     integer_of_uint8(ValOct_0))))) } ];
                                                void;
                                                (C_54:
                                                begin
@@ -1453,20 +1439,6 @@ let memset_burst4_ensures_default =
                                                 ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
                                                jessie_91
                                               end)));
-                                             [ { } unit
-                                               reads bitvector_Adresse_1_3,s
-                                               { (JC_114:
-                                                 (forall k_3:int.
-                                                  ((le_int((0), k_3)
-                                                   and le_int(k_3,
-                                                       sub_int((3),
-                                                       integer_of_uint32(addr_mod4)))) ->
-                                                   eq_int(integer_of_uint8(
-                                                          uint8_of_bitvector(
-                                                          select_bytes(bitvector_Adresse_1_3,
-                                                          shift(s, k_3), (0),
-                                                          (1)))),
-                                                   integer_of_uint8(ValOct_0))))) } ];
                                              void;
                                              (C_54:
                                              begin
@@ -1794,20 +1766,6 @@ let memset_burst4_ensures_small_data =
                                                   ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
                                                  jessie_113
                                                 end)));
-                                               [ { } unit
-                                                 reads bitvector_Adresse_1_3,s
-                                                 { (JC_118:
-                                                   (forall k_3:int.
-                                                    ((le_int((0), k_3)
-                                                     and le_int(k_3,
-                                                         sub_int((3),
-                                                         integer_of_uint32(addr_mod4)))) ->
-                                                     eq_int(integer_of_uint8(
-                                                            uint8_of_bitvector(
-                                                            select_bytes(bitvector_Adresse_1_3,
-                                                            shift(s, k_3),
-                                                            (0), (1)))),
-                                                     integer_of_uint8(ValOct_0))))) } ];
                                                void;
                                                (C_54:
                                                begin
@@ -1961,20 +1919,6 @@ let memset_burst4_safety =
                                                 ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
                                                jessie_69
                                               end)));
-                                             [ { } unit
-                                               reads bitvector_Adresse_1_3,s
-                                               { (JC_104:
-                                                 (forall k_3:int.
-                                                  ((le_int((0), k_3)
-                                                   and le_int(k_3,
-                                                       sub_int((3),
-                                                       integer_of_uint32(addr_mod4)))) ->
-                                                   eq_int(integer_of_uint8(
-                                                          uint8_of_bitvector(
-                                                          select_bytes(bitvector_Adresse_1_3,
-                                                          shift(s, k_3), (0),
-                                                          (1)))),
-                                                   integer_of_uint8(ValOct_0))))) } ];
                                              void;
                                              (C_54:
                                              begin

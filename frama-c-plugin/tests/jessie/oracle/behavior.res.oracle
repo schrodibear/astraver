@@ -432,9 +432,7 @@ let f_ensures_default =
        (while_0_break: void) end
      else
       (let jessie_17 = begin
-                         [ { } unit reads x
-                           { (JC_19: eq_int(integer_of_int32(x), (1))) } ];
-                        void;
+                         void;
                         (C_2:
                         begin   (x := (safe_int32_of_integer_ (10))); !x end)
                        end in
@@ -581,9 +579,7 @@ let f_safety =
        (while_0_break: void) end
      else
       (let jessie_10 = begin
-                         [ { } unit reads x
-                           { (JC_15: eq_int(integer_of_int32(x), (1))) } ];
-                        void;
+                         void;
                         (C_2:
                         begin   (x := (safe_int32_of_integer_ (10))); !x end)
                        end in

@@ -228,25 +228,16 @@ let safety_checking () = get_current_behavior () = "safety"
 
 let is_current_behavior id = id = get_current_behavior ()
 
-let in_current_behavior = function
-  | [] -> get_current_behavior () = "default"
-(*
-  or true ? no
-eprintf "current_behavior = %s@."  (get_current_behavior ());
-      assert false (* default_checking () *)
-*)
-  | ls -> 
-(*
-      Format.eprintf 
-	"checking if behavior is in current which is %s@." (get_current_behavior());
-*)
-      let b = get_current_behavior () in
-      List.exists (fun behav -> behav#name = b) ls
-(*
-let assume_in_current_behavior = function
-  | [] -> assert false (*not (default_checking ())*)
-  | ls -> List.exists (fun behav -> behav#name = get_current_behavior ()) ls
-*)
+let in_behavior b lb = 
+  match lb with
+    | [] -> b = "default"
+    | _ -> List.exists (fun behav -> behav#name = b) lb
+
+let in_current_behavior b = in_behavior (get_current_behavior ()) b
+
+let in_default_behavior b = in_behavior "default" b
+
+ 
 
 let current_spec : fun_spec option ref = ref None
 let set_current_spec s = current_spec := Some s

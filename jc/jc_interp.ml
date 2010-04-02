@@ -2530,25 +2530,38 @@ and expr e =
         make_guarded_app e#mark Pack e#pos
           (pack_name st) [ e1'; Var (tag_name from_st) ]
     | JCEassert(b,asrt,a) -> 
+(*
+        Format.eprintf "assertion meet, kind %a for behaviors: %a@."
+          Jc_output_misc.asrt_kind asrt
+          (print_list comma Jc_output.identifier) b;
+*)
 	let a' = 
 	  named_assertion 
 	    ~type_safe:false ~global_assertion:false ~relocate:false
 	    LabelHere LabelPre a
 	in
+(*
+        Format.eprintf "assertion to check ?@.";
+*)
 	begin match asrt with
 	  | Aassert | Ahint ->
 	      if in_current_behavior b then
 		Assert(`ASSERT,a',Void)
-	      else (*if assume_in_current_behavior b then *)
+	      else if in_default_behavior b then
 		assumption [ a ] a'
-	      (* else Void *)
+              else 
+                Void
 	  | Aassume ->
-	      (* if assume_in_current_behavior b then *)
+	      if in_current_behavior b || in_default_behavior b then
 		assumption [ a ] a'
-	      (* else Void *)
+	      else Void
           | Acheck ->
+(*
+              (match b with
+                 | [] -> Format.eprintf "check for no behavior@."
+                 | b::_ -> Format.eprintf "check for behavior %s,...@." b#name);
+*)
               if in_current_behavior b then
-	      (* if assume_in_current_behavior b then *)
 		Assert(`CHECK,a',Void)
 	      else Void
 	end

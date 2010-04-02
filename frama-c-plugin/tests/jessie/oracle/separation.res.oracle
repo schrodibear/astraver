@@ -846,13 +846,6 @@ let g_ensures_default =
             (let jessie_65 = !y_1 in
             (JC_50:
             ((((((f jessie_66) jessie_65) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
-           [ { } unit reads int_P_int_M_x_1_5,int_P_int_M_y_1_6,x_1,y_1
-             { (JC_53:
-               ((JC_51:
-                eq_int(integer_of_int32(select(int_P_int_M_x_1_5, x_1)), (0)))
-               and (JC_52:
-                   eq_int(integer_of_int32(select(int_P_int_M_y_1_6, y_1)),
-                   (1))))) } ];
            void;
            (let jessie_78 = (C_28:
                             begin
@@ -875,16 +868,6 @@ let g_ensures_default =
              (let jessie_79 = (C_31: ((shift !a) (1))) in
              (JC_54:
              (((((f_specialized jessie_80) jessie_79) int_P_int_M_a_7) !int_P_a_7_alloc_table) !int_P_a_7_alloc_table))));
-            [ { } unit reads a,int_P_int_M_a_7
-              { (JC_57:
-                ((JC_55:
-                 eq_int(integer_of_int32(select(int_P_int_M_a_7,
-                                         shift(a, (0)))),
-                 (0)))
-                and (JC_56:
-                    eq_int(integer_of_int32(select(int_P_int_M_a_7,
-                                            shift(a, (1)))),
-                    (1))))) } ];
             void;
             (C_36:
             begin
@@ -1107,13 +1090,6 @@ let g_safety =
             (let jessie_31 = !y_1 in
             (JC_38:
             ((((((f_requires jessie_32) jessie_31) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
-           [ { } unit reads int_P_int_M_x_1_5,int_P_int_M_y_1_6,x_1,y_1
-             { (JC_41:
-               ((JC_39:
-                eq_int(integer_of_int32(select(int_P_int_M_x_1_5, x_1)), (0)))
-               and (JC_40:
-                   eq_int(integer_of_int32(select(int_P_int_M_y_1_6, y_1)),
-                   (1))))) } ];
            void;
            (let jessie_44 = (C_28:
                             begin
@@ -1140,16 +1116,6 @@ let g_safety =
                pset_singleton(a)) };
              (JC_42:
              (((((f_requires_specialized jessie_46) jessie_45) int_P_int_M_a_7) !int_P_a_7_alloc_table) !int_P_a_7_alloc_table))))));
-            [ { } unit reads a,int_P_int_M_a_7
-              { (JC_46:
-                ((JC_44:
-                 eq_int(integer_of_int32(select(int_P_int_M_a_7,
-                                         shift(a, (0)))),
-                 (0)))
-                and (JC_45:
-                    eq_int(integer_of_int32(select(int_P_int_M_a_7,
-                                            shift(a, (1)))),
-                    (1))))) } ];
             void;
             (C_36:
             begin
@@ -1299,14 +1265,6 @@ let k_ensures_default =
             (let jessie_191 = !y_2 in
             (JC_119:
             ((((((h jessie_192) jessie_191) int_P_int_M_y_2_12) int_P_int_M_x_2_11) !int_P_y_2_12_alloc_table) !int_P_x_2_11_alloc_table))));
-           [ { } unit reads int_P_int_M_x_2_11,int_P_int_M_y_2_12,x_2,y_2
-             { (JC_122:
-               ((JC_120:
-                eq_int(integer_of_int32(select(int_P_int_M_x_2_11, x_2)),
-                (0)))
-               and (JC_121:
-                   eq_int(integer_of_int32(select(int_P_int_M_y_2_12, y_2)),
-                   (1))))) } ];
            void;
            (let jessie_204 = (C_70:
                              begin
@@ -1329,16 +1287,6 @@ let k_ensures_default =
              (let jessie_205 = (C_73: ((shift !a_0) (1))) in
              (JC_123:
              (((((h_specialized jessie_206) jessie_205) int_P_int_M_a_0_13) !int_P_a_0_13_alloc_table) !int_P_a_0_13_alloc_table))));
-            [ { } unit reads a_0,int_P_int_M_a_0_13
-              { (JC_126:
-                ((JC_124:
-                 eq_int(integer_of_int32(select(int_P_int_M_a_0_13,
-                                         shift(a_0, (0)))),
-                 (0)))
-                and (JC_125:
-                    eq_int(integer_of_int32(select(int_P_int_M_a_0_13,
-                                            shift(a_0, (1)))),
-                    (1))))) } ];
             void;
             (C_78:
             begin
@@ -1562,14 +1510,6 @@ let k_safety =
             (let jessie_157 = !y_2 in
             (JC_107:
             ((((((h_requires jessie_158) jessie_157) int_P_int_M_y_2_12) int_P_int_M_x_2_11) !int_P_y_2_12_alloc_table) !int_P_x_2_11_alloc_table))));
-           [ { } unit reads int_P_int_M_x_2_11,int_P_int_M_y_2_12,x_2,y_2
-             { (JC_110:
-               ((JC_108:
-                eq_int(integer_of_int32(select(int_P_int_M_x_2_11, x_2)),
-                (0)))
-               and (JC_109:
-                   eq_int(integer_of_int32(select(int_P_int_M_y_2_12, y_2)),
-                   (1))))) } ];
            void;
            (let jessie_170 = (C_70:
                              begin
@@ -1596,16 +1536,6 @@ let k_safety =
                pset_singleton(a_0)) };
              (JC_111:
              (((((h_requires_specialized jessie_172) jessie_171) int_P_int_M_a_0_13) !int_P_a_0_13_alloc_table) !int_P_a_0_13_alloc_table))))));
-            [ { } unit reads a_0,int_P_int_M_a_0_13
-              { (JC_115:
-                ((JC_113:
-                 eq_int(integer_of_int32(select(int_P_int_M_a_0_13,
-                                         shift(a_0, (0)))),
-                 (0)))
-                and (JC_114:
-                    eq_int(integer_of_int32(select(int_P_int_M_a_0_13,
-                                            shift(a_0, (1)))),
-                    (1))))) } ];
             void;
             (C_78:
             begin
@@ -1647,7 +1577,7 @@ why --project [...] why/separation.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po37.why">
-      <location file = "why/separation.why" line = "1355" begin = "35" end = "173"/>
+      <location file = "why/separation.why" line = "1303" begin = "35" end = "173"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po38.why">
@@ -1656,7 +1586,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po39.why">
-      <location file = "why/separation.why" line = "1367" begin = "36" end = "176"/>
+      <location file = "why/separation.why" line = "1315" begin = "36" end = "176"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po40.why">
@@ -1665,7 +1595,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po41.why">
-      <location file = "why/separation.why" line = "1379" begin = "37" end = "179"/>
+      <location file = "why/separation.why" line = "1327" begin = "37" end = "179"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po42.why">
@@ -1689,7 +1619,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po46.why">
-      <location file = "why/separation.why" line = "1432" begin = "15" end = "107"/>
+      <location file = "why/separation.why" line = "1372" begin = "15" end = "107"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po47.why">
@@ -1713,17 +1643,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po51.why">
-      <location file = "why/separation.why" line = "1449" begin = "15" end = "61"/>
+      <location file = "why/separation.why" line = "1379" begin = "15" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po52.why">
-      <location file = "why/separation.why" line = "1452" begin = "16" end = "62"/>
+      <location file = "why/separation.why" line = "1382" begin = "16" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po53.why">
-      <location file = "why/separation.why" line = "1455" begin = "17" end = "63"/>
+      <location file = "why/separation.why" line = "1385" begin = "17" end = "63"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1791,7 +1721,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po9.why">
-      <location file = "why/separation.why" line = "900" begin = "34" end = "168"/>
+      <location file = "why/separation.why" line = "883" begin = "34" end = "168"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po10.why">
@@ -1800,7 +1730,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po11.why">
-      <location file = "why/separation.why" line = "912" begin = "35" end = "171"/>
+      <location file = "why/separation.why" line = "895" begin = "35" end = "171"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po12.why">
@@ -1809,7 +1739,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po13.why">
-      <location file = "why/separation.why" line = "924" begin = "34" end = "166"/>
+      <location file = "why/separation.why" line = "907" begin = "34" end = "166"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po14.why">
@@ -1833,7 +1763,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po18.why">
-      <location file = "why/separation.why" line = "976" begin = "15" end = "103"/>
+      <location file = "why/separation.why" line = "952" begin = "15" end = "103"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po19.why">
@@ -1857,17 +1787,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po23.why">
-      <location file = "why/separation.why" line = "993" begin = "15" end = "60"/>
+      <location file = "why/separation.why" line = "959" begin = "15" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po24.why">
-      <location file = "why/separation.why" line = "996" begin = "16" end = "61"/>
+      <location file = "why/separation.why" line = "962" begin = "16" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po25.why">
-      <location file = "why/separation.why" line = "999" begin = "17" end = "58"/>
+      <location file = "why/separation.why" line = "965" begin = "17" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

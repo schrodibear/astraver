@@ -387,17 +387,11 @@ let f_ensures_default =
   (init:
   try
    begin
-     [ { } unit reads x
-       { (JC_17:
-         (eq_int(integer_of_int32(x), (1))
-         or eq_int(integer_of_int32(x), (2)))) } ];
-    void;
+     void;
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
      (let jessie_4 = begin
-                       [ { } unit reads x
-                         { (JC_18: eq_int(integer_of_int32(x), (1))) } ];
-                      void;
+                       void;
                       (C_5:
                       begin
                         (x := (C_4:
@@ -408,7 +402,6 @@ let f_ensures_default =
                      end in
      void)
     else void);
-    [ { } unit reads x { (JC_19: eq_int(integer_of_int32(x), (2))) } ];
     void;
     (raise Return);
     (raise Return)
@@ -473,9 +466,7 @@ let f_ensures_two =
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
      (let jessie_8 = begin
-                       [ { } unit reads x
-                         { (JC_24: eq_int(integer_of_int32(x), (1))) } ];
-                      void;
+                       void;
                       (C_5:
                       begin
                         (x := (C_4:
@@ -502,17 +493,11 @@ let f_safety =
   (init:
   try
    begin
-     [ { } unit reads x
-       { (JC_13:
-         (eq_int(integer_of_int32(x), (1))
-         or eq_int(integer_of_int32(x), (2)))) } ];
-    void;
+     void;
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
      (let jessie_2 = begin
-                       [ { } unit reads x
-                         { (JC_14: eq_int(integer_of_int32(x), (1))) } ];
-                      void;
+                       void;
                       (C_5:
                       begin
                         (x := (C_4:
@@ -524,7 +509,6 @@ let f_safety =
                      end in
      void)
     else void);
-    [ { } unit reads x { (JC_16: eq_int(integer_of_int32(x), (2))) } ];
     void;
     (raise Return);
     (raise Return)
