@@ -87,7 +87,7 @@ ie 2u+l < 1022
   @   ensures x[i_interp-1] < z <= x[i_interp] ;
   @   ensures
   @     \let k = (z - x[i_interp-1])/(x[i_interp]-x[i_interp-1]) ;
-  @     \let exact_result = y[i_interp] + k*(y[i_interp] - y[i_interp-1]) ;
+  @     \let exact_result = y[i_interp-1] + k*(y[i_interp] - y[i_interp-1]) ;
   @     \abs(\result - exact_result) <= 0x1p-10 ;
   @*/
 double interp_lin(double x[], double y[], int n, double z) {
@@ -103,23 +103,32 @@ double interp_lin(double x[], double y[], int n, double z) {
   //@ ghost i_interp = i;
   double xim1 = x[i-1];
   //@ assert bounded(xim1,UPPER);
-  double xi = x[i];
-  //@ assert bounded(xi,UPPER);
-  //@ assert xi - xim1 >= LOWER;
+  //@ assert bounded(x[i],UPPER);
+  //@ assert x[i] - xim1 >= LOWER;
   double yim1 = y[i-1];
   //@ assert bounded(yim1,UPPER);
   double yi = y[i];
   //@ assert bounded(yi,UPPER);
-  //@ assert xim1 <= z <= xi;
-  double b = xi - xim1;
+  //@ assert xim1 <= z <= x[i];
+  double b = x[i] - xim1;
   //@ assert LOWER <= b;
   //@ assert 0.0 < b;
   double a = z - xim1;
-  //@ assert 0 <= z - xim1 <= xi - xim1;
+  //@ assert 0 <= z - xim1 <= x[i] - xim1;
   //@ assert 0.0 <= a <= b;
   double k = a/b;
   //@ assert 0.0 <= k <= 1.0;
-  return yi+k*(yi-yim1);
+  double r = yim1+k*(yi-yim1);
+  /*@ assert
+    @     \let k2 = (z - x[i-1])/(x[i]-x[i-1]) ;
+    @     0.0 <= k2 <= 1.0 ;
+    @*/
+  /*@ assert
+    @     \let k2 = (z - x[i-1])/(x[i]-x[i-1]) ;
+    @     \let exact_result = y[i-1] + k2*(y[i] - y[i-1]) ;
+    @     \abs(r - exact_result) <= 0x1p-10 ;
+    @*/
+  return r;
 }
 
 /*

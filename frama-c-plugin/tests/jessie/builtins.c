@@ -7,3 +7,7 @@
 
 // @ lemma cos_sin: \forall real x; \sqr(\cos(x)) + \sqr(\sin(x)) == 1.0;
  
+
+//@ lemma cos_pi: \cos(\pi) == -1.0;
+ 
+
