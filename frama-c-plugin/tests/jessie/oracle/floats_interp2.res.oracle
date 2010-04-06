@@ -84,52 +84,50 @@ lemma round_div :
 int32 i_interp;
 
 double interp_lin(double_P[..] x, double_P[..] y, int32 n, double z)
-  requires (C_68 : (((C_70 : (n >= 1)) &&
-                      ((C_72 : (\offset_min(x) <= 0)) &&
-                        (C_73 : (\offset_max(x) >= (n - 1))))) &&
-                     ((C_75 : (\offset_min(y) <= 0)) &&
-                       (C_76 : (\offset_max(y) >= (n - 1))))));
-  requires (C_77 : min_step{Here}(x, 0, (n - 1), 0x1p-900));
-  requires (C_78 : bounded(z, 0x1p1022));
-  requires (C_79 : array_bounded{Here}(x, n, 0x1p1022));
-  requires (C_80 : array_bounded{Here}(y, n, 0x1p1022));
+  requires (C_70 : (((C_72 : (n >= 1)) &&
+                      ((C_74 : (\offset_min(x) <= 0)) &&
+                        (C_75 : (\offset_max(x) >= (n - 1))))) &&
+                     ((C_77 : (\offset_min(y) <= 0)) &&
+                       (C_78 : (\offset_max(y) >= (n - 1))))));
+  requires (C_79 : min_step{Here}(x, 0, (n - 1), 0x1p-900));
+  requires (C_80 : bounded(z, 0x1p1022));
+  requires (C_81 : array_bounded{Here}(x, n, 0x1p1022));
+  requires (C_82 : array_bounded{Here}(y, n, 0x1p1022));
 behavior default:
   assigns i_interp;
-  ensures (C_81 : true);
+  ensures (C_83 : true);
 behavior too_low:
   assumes ((z :> real) <= ((x + 0).double_M :> real));
-  ensures (C_82 : ((\result :> real) == ((y + 0).double_M :> real)));
+  ensures (C_84 : ((\result :> real) == ((y + 0).double_M :> real)));
 behavior too_high:
   assumes ((z :> real) > ((x + (n - 1)).double_M :> real));
-  ensures (C_83 : ((\result :> real) == ((y + (n - 1)).double_M :> real)));
+  ensures (C_85 : ((\result :> real) == ((y + (n - 1)).double_M :> real)));
 behavior in_interval:
   assumes ((((x + 0).double_M :> real) < (z :> real)) &&
             ((z :> real) <= ((x + (n - 1)).double_M :> real)));
-  ensures (C_84 : (((C_86 : (1 <= i_interp)) &&
-                     (C_87 : (i_interp <= (n - 1)))) &&
-                    (((C_90 : (((x + (i_interp - 1)).double_M :> real) <
+  ensures (C_86 : (((C_88 : (1 <= i_interp)) &&
+                     (C_89 : (i_interp <= (n - 1)))) &&
+                    (((C_92 : (((x + (i_interp - 1)).double_M :> real) <
                                 (z :> real))) &&
-                       (C_91 : ((z :> real) <=
+                       (C_93 : ((z :> real) <=
                                  ((x + i_interp).double_M :> real)))) &&
-                      (C_92 : (let real k =
+                      (C_94 : (let real k =
                               (((z :> real) -
                                  ((x + (i_interp - 1)).double_M :> real)) /
                                 (((x + i_interp).double_M :> real) -
                                   ((x + (i_interp - 1)).double_M :> real)))
-                              in (let real exact_result =
-                                 (((y + i_interp).double_M :> real) +
+                              in (let real exact_result_0 =
+                                 (((y + (i_interp - 1)).double_M :> real) +
                                    (k *
                                      (((y + i_interp).double_M :> real) -
                                        ((y + (i_interp - 1)).double_M :> real))))
                                  in (\real_abs(((\result :> real) -
-                                                 exact_result)) <=
+                                                 exact_result_0)) <=
                                       0x1p-10)))))));
 {  
    (var int32 i);
    
    (var double xim1);
-   
-   (var double xi);
    
    (var double yim1);
    
@@ -140,6 +138,8 @@ behavior in_interval:
    (var double a);
    
    (var double k);
+   
+   (var double r);
    
    (var double __retres);
    
@@ -153,12 +153,12 @@ behavior in_interval:
       {  
          loop 
          behavior default:
-           invariant (C_11 : (\forall integer j_0;
+           invariant (C_10 : (\forall integer j_0;
                                (((0 <= j_0) && (j_0 < i)) ==>
                                  ((z :> real) > ((x + j_0).double_M :> real)))));
          behavior default:
-           invariant (C_8 : ((C_9 : (1 <= i)) && (C_10 : (i <= n))));
-         variant (C_7 : (n - i));
+           invariant (C_7 : ((C_8 : (1 <= i)) && (C_9 : (i <= n))));
+         variant (C_11 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -185,86 +185,115 @@ behavior in_interval:
          ()
       };
       
-      {  (C_31 : (xi = (C_30 : (C_29 : (x + i)).double_M)))
-      };
-      
       {  
-         (assert for default: (C_32 : bounded(xi, 0x1p1022)));
+         (assert for default: (C_29 : bounded((x + i).double_M, 0x1p1022)));
          ()
       };
       
       {  
-         (assert for default: (C_33 : (((xi :> real) - (xim1 :> real)) >=
+         (assert for default: (C_30 : ((((x + i).double_M :> real) -
+                                         (xim1 :> real)) >=
                                         0x1p-900)));
          ()
       };
       
-      {  (C_38 : (yim1 = (C_37 : (C_36 : (y +
-                                           (C_35 : ((C_34 : (i - 1)) :> int32)))).double_M)))
+      {  (C_35 : (yim1 = (C_34 : (C_33 : (y +
+                                           (C_32 : ((C_31 : (i - 1)) :> int32)))).double_M)))
       };
       
       {  
-         (assert for default: (C_39 : bounded(yim1, 0x1p1022)));
+         (assert for default: (C_36 : bounded(yim1, 0x1p1022)));
          ()
       };
       
-      {  (C_42 : (yi = (C_41 : (C_40 : (y + i)).double_M)))
+      {  (C_39 : (yi = (C_38 : (C_37 : (y + i)).double_M)))
       };
       
       {  
-         (assert for default: (C_43 : bounded(yi, 0x1p1022)));
+         (assert for default: (C_40 : bounded(yi, 0x1p1022)));
          ()
       };
       
       {  
-         (assert for default: (C_44 : ((C_45 : ((xim1 :> real) <=
+         (assert for default: (C_41 : ((C_42 : ((xim1 :> real) <=
                                                  (z :> real))) &&
-                                        (C_46 : ((z :> real) <= (xi :> real))))));
+                                        (C_43 : ((z :> real) <=
+                                                  ((x + i).double_M :> real))))));
          ()
       };
       
-      {  (C_48 : (b = (C_47 : (xi - xim1))))
+      {  (C_47 : (b = (C_46 : ((C_45 : (C_44 : (x + i)).double_M) - xim1))))
       };
       
       {  
-         (assert for default: (C_49 : (0x1p-900 <= (b :> real))));
+         (assert for default: (C_48 : (0x1p-900 <= (b :> real))));
          ()
       };
       
       {  
-         (assert for default: (C_50 : (0.0 < (b :> real))));
+         (assert for default: (C_49 : (0.0 < (b :> real))));
          ()
       };
       
-      {  (C_52 : (a = (C_51 : (z - xim1))))
+      {  (C_51 : (a = (C_50 : (z - xim1))))
       };
       
       {  
-         (assert for default: (C_53 : ((C_54 : (0 <=
+         (assert for default: (C_52 : ((C_53 : (0 <=
                                                  ((z :> real) -
                                                    (xim1 :> real)))) &&
-                                        (C_55 : (((z :> real) -
+                                        (C_54 : (((z :> real) -
                                                    (xim1 :> real)) <=
-                                                  ((xi :> real) -
+                                                  (((x + i).double_M :> real) -
                                                     (xim1 :> real)))))));
          ()
       };
       
       {  
-         (assert for default: (C_56 : ((C_57 : (0.0 <= (a :> real))) &&
-                                        (C_58 : ((a :> real) <= (b :> real))))));
+         (assert for default: (C_55 : ((C_56 : (0.0 <= (a :> real))) &&
+                                        (C_57 : ((a :> real) <= (b :> real))))));
          ()
       };
       
-      {  (C_60 : (k = (C_59 : (a / b))))
+      {  (C_59 : (k = (C_58 : (a / b))))
       };
       
       {  
-         (assert for default: (C_61 : ((C_62 : (0.0 <= (k :> real))) &&
-                                        (C_63 : ((k :> real) <= 1.0)))));
+         (assert for default: (C_60 : ((C_61 : (0.0 <= (k :> real))) &&
+                                        (C_62 : ((k :> real) <= 1.0)))));
          ()
       };
-      (C_67 : (__retres = (C_66 : (yi + (C_65 : (k * (C_64 : (yi - yim1))))))));
+      
+      {  (C_66 : (r = (C_65 : (yim1 + (C_64 : (k * (C_63 : (yi - yim1))))))))
+      };
+      
+      {  
+         (assert for default: (C_67 : (let real k2 =
+                                      (((z :> real) -
+                                         ((x + (i - 1)).double_M :> real)) /
+                                        (((x + i).double_M :> real) -
+                                          ((x + (i - 1)).double_M :> real)))
+                                      in ((0.0 <= k2) && (k2 <= 1.0)))));
+         ()
+      };
+      
+      {  
+         (assert for default: (C_68 : (let real k2_0 =
+                                      (((z :> real) -
+                                         ((x + (i - 1)).double_M :> real)) /
+                                        (((x + i).double_M :> real) -
+                                          ((x + (i - 1)).double_M :> real)))
+                                      in (let real exact_result =
+                                         (((y + (i - 1)).double_M :> real) +
+                                           (k2_0 *
+                                             (((y + i).double_M :> real) -
+                                               ((y + (i - 1)).double_M :> real))))
+                                         in (\real_abs(((r :> real) -
+                                                         exact_result)) <=
+                                              0x1p-10)))));
+         ()
+      };
+      (C_69 : (__retres = r));
       (return_label : 
       (return __retres))
    }
@@ -807,10 +836,11 @@ parameter interp_lin :
                                                 shift(x,
                                                 sub_int(integer_of_int32(i_interp),
                                                 (1))))))) in
-                              (let exact_result =
+                              (let exact_result_0 =
                                     add_real(double_value(select(double_P_double_M_y_4,
                                                           shift(y,
-                                                          integer_of_int32(i_interp)))),
+                                                          sub_int(integer_of_int32(i_interp),
+                                                          (1))))),
                                     mul_real(k,
                                     sub_real(double_value(select(double_P_double_M_y_4,
                                                           shift(y,
@@ -820,7 +850,7 @@ parameter interp_lin :
                                                  sub_int(integer_of_int32(i_interp),
                                                  (1)))))))) in
                                le_real(abs_real(sub_real(double_value(result),
-                                                exact_result)),
+                                                exact_result_0)),
                                0x1p-10))))))))))
            and ((gt_real(double_value(z_0@),
                  double_value(select(double_P_double_M_x_3@,
@@ -903,10 +933,11 @@ parameter interp_lin_requires :
                                                 shift(x,
                                                 sub_int(integer_of_int32(i_interp),
                                                 (1))))))) in
-                              (let exact_result =
+                              (let exact_result_0 =
                                     add_real(double_value(select(double_P_double_M_y_4,
                                                           shift(y,
-                                                          integer_of_int32(i_interp)))),
+                                                          sub_int(integer_of_int32(i_interp),
+                                                          (1))))),
                                     mul_real(k,
                                     sub_real(double_value(select(double_P_double_M_y_4,
                                                           shift(y,
@@ -916,7 +947,7 @@ parameter interp_lin_requires :
                                                  sub_int(integer_of_int32(i_interp),
                                                  (1)))))))) in
                                le_real(abs_real(sub_real(double_value(result),
-                                                exact_result)),
+                                                exact_result_0)),
                                0x1p-10))))))))))
            and ((gt_real(double_value(z_0@),
                  double_value(select(double_P_double_M_x_3@,
@@ -968,12 +999,12 @@ let interp_lin_ensures_default =
    begin
      (let i_2 = ref (any_int32 void) in
      (let xim1 = ref (any_double void) in
-     (let xi = ref (any_double void) in
      (let yim1 = ref (any_double void) in
      (let yi = ref (any_double void) in
      (let b_3 = ref (any_double void) in
      (let a_3 = ref (any_double void) in
      (let k_0 = ref (any_double void) in
+     (let r = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
       (let jessie_71 = begin
@@ -1003,14 +1034,14 @@ let interp_lin_ensures_default =
                                              (loop_2:
                                              while true do
                                              { invariant
-                                                 ((JC_92:
-                                                  ((JC_90:
+                                                 ((JC_94:
+                                                  ((JC_92:
                                                    le_int((1),
                                                    integer_of_int32(i_2)))
-                                                  and (JC_91:
+                                                  and (JC_93:
                                                       le_int(integer_of_int32(i_2),
                                                       integer_of_int32(n_0)))))
-                                                 and (JC_93:
+                                                 and (JC_95:
                                                      (forall j_0:int.
                                                       ((le_int((0), j_0)
                                                        and lt_int(j_0,
@@ -1119,134 +1150,196 @@ let interp_lin_ensures_default =
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
                             void);
                            (assert
-                           { (JC_97: bounded(xim1, 0x1p1022)) };
+                           { (JC_99: bounded(xim1, 0x1p1022)) };
                            void);
-                           void;
-                           (let jessie_58 = (C_31:
-                                            begin
-                                              (xi := (C_30:
-                                                     ((safe_acc_ double_P_double_M_x_3) 
-                                                      (C_29:
-                                                      ((shift x) (integer_of_int32 !i_2))))));
-                                             !xi
-                                            end) in
-                           void);
-                           (assert { (JC_98: bounded(xi, 0x1p1022)) }; void);
                            void;
                            (assert
-                           { (JC_99:
-                             ge_real(sub_real(double_value(xi),
+                           { (JC_100:
+                             bounded(select(double_P_double_M_x_3,
+                                     shift(x, integer_of_int32(i_2))),
+                             0x1p1022)) };
+                           void);
+                           void;
+                           (assert
+                           { (JC_101:
+                             ge_real(sub_real(double_value(select(double_P_double_M_x_3,
+                                                           shift(x,
+                                                           integer_of_int32(i_2)))),
                                      double_value(xim1)),
                              0x1p-900)) };
                            void);
                            void;
-                           (let jessie_60 = (C_38:
+                           (let jessie_58 = (C_35:
                                             begin
-                                              (yim1 := (C_37:
+                                              (yim1 := (C_34:
                                                        ((safe_acc_ double_P_double_M_y_4) 
-                                                        (C_36:
+                                                        (C_33:
                                                         ((shift y) (integer_of_int32 
-                                                                    (C_35:
+                                                                    (C_32:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_34:
+                                                                    (C_31:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1)))))))))));
                                              !yim1
                                             end) in
                            void);
                            (assert
-                           { (JC_100: bounded(yim1, 0x1p1022)) };
+                           { (JC_102: bounded(yim1, 0x1p1022)) };
                            void);
                            void;
-                           (let jessie_62 = (C_42:
+                           (let jessie_60 = (C_39:
                                             begin
-                                              (yi := (C_41:
+                                              (yi := (C_38:
                                                      ((safe_acc_ double_P_double_M_y_4) 
-                                                      (C_40:
+                                                      (C_37:
                                                       ((shift y) (integer_of_int32 !i_2))))));
                                              !yi
                                             end) in
                            void);
-                           (assert { (JC_101: bounded(yi, 0x1p1022)) }; void);
+                           (assert { (JC_103: bounded(yi, 0x1p1022)) }; void);
                            void;
                            (assert
-                           { (JC_104:
-                             ((JC_102:
+                           { (JC_106:
+                             ((JC_104:
                               le_real(double_value(xim1), double_value(z_0)))
-                             and (JC_103:
-                                 le_real(double_value(z_0), double_value(xi))))) };
+                             and (JC_105:
+                                 le_real(double_value(z_0),
+                                 double_value(select(double_P_double_M_x_3,
+                                              shift(x, integer_of_int32(i_2)))))))) };
                            void);
                            void;
-                           (let jessie_64 = (C_48:
+                           (let jessie_62 = (C_47:
                                             begin
-                                              (b_3 := (C_47:
-                                                      (JC_105:
-                                                      (((sub_double_safe nearest_even) !xi) !xim1))));
+                                              (b_3 := (C_46:
+                                                      (JC_107:
+                                                      (((sub_double_safe nearest_even) 
+                                                        (C_45:
+                                                        ((safe_acc_ double_P_double_M_x_3) 
+                                                         (C_44:
+                                                         ((shift x) (integer_of_int32 !i_2)))))) !xim1))));
                                              !b_3
                                             end) in
                            void);
                            (assert
-                           { (JC_106: le_real(0x1p-900, double_value(b_3))) };
+                           { (JC_108: le_real(0x1p-900, double_value(b_3))) };
                            void);
                            void;
                            (assert
-                           { (JC_107: lt_real(0.0, double_value(b_3))) };
+                           { (JC_109: lt_real(0.0, double_value(b_3))) };
                            void);
                            void;
-                           (let jessie_66 = (C_52:
+                           (let jessie_64 = (C_51:
                                             begin
-                                              (a_3 := (C_51:
-                                                      (JC_108:
+                                              (a_3 := (C_50:
+                                                      (JC_110:
                                                       (((sub_double_safe nearest_even) z_0) !xim1))));
                                              !a_3
                                             end) in
                            void);
                            (assert
-                           { (JC_111:
-                             ((JC_109:
+                           { (JC_113:
+                             ((JC_111:
                               le_real(0.0,
                               sub_real(double_value(z_0), double_value(xim1))))
-                             and (JC_110:
+                             and (JC_112:
                                  le_real(sub_real(double_value(z_0),
                                          double_value(xim1)),
-                                 sub_real(double_value(xi),
+                                 sub_real(double_value(select(double_P_double_M_x_3,
+                                                       shift(x,
+                                                       integer_of_int32(i_2)))),
                                  double_value(xim1)))))) };
                            void);
                            void;
                            (assert
-                           { (JC_114:
-                             ((JC_112: le_real(0.0, double_value(a_3)))
-                             and (JC_113:
+                           { (JC_116:
+                             ((JC_114: le_real(0.0, double_value(a_3)))
+                             and (JC_115:
                                  le_real(double_value(a_3),
                                  double_value(b_3))))) };
                            void);
                            void;
-                           (let jessie_68 = (C_60:
+                           (let jessie_66 = (C_59:
                                             begin
-                                              (k_0 := (C_59:
-                                                      (JC_115:
+                                              (k_0 := (C_58:
+                                                      (JC_117:
                                                       (((div_double_safe nearest_even) !a_3) !b_3))));
                                              !k_0
                                             end) in
                            void);
                            (assert
-                           { (JC_118:
-                             ((JC_116: le_real(0.0, double_value(k_0)))
-                             and (JC_117: le_real(double_value(k_0), 1.0)))) };
+                           { (JC_120:
+                             ((JC_118: le_real(0.0, double_value(k_0)))
+                             and (JC_119: le_real(double_value(k_0), 1.0)))) };
                            void);
                            void;
-                           (C_67:
+                           (let jessie_68 = (C_66:
+                                            begin
+                                              (r := (C_65:
+                                                    (JC_123:
+                                                    (((add_double_safe nearest_even) !yim1) 
+                                                     (C_64:
+                                                     (JC_122:
+                                                     (((mul_double_safe nearest_even) !k_0) 
+                                                      (C_63:
+                                                      (JC_121:
+                                                      (((sub_double_safe nearest_even) !yi) !yim1))))))))));
+                                             !r
+                                            end) in
+                           void);
+                           (assert
+                           { (JC_124:
+                             (let k2 =
+                                   div_real(sub_real(double_value(z_0),
+                                            double_value(select(double_P_double_M_x_3,
+                                                         shift(x,
+                                                         sub_int(integer_of_int32(i_2),
+                                                         (1)))))),
+                                   sub_real(double_value(select(double_P_double_M_x_3,
+                                                         shift(x,
+                                                         integer_of_int32(i_2)))),
+                                   double_value(select(double_P_double_M_x_3,
+                                                shift(x,
+                                                sub_int(integer_of_int32(i_2),
+                                                (1))))))) in
+                              (le_real(0.0, k2) and le_real(k2, 1.0)))) };
+                           void);
+                           void;
+                           (assert
+                           { (JC_125:
+                             (let k2_0 =
+                                   div_real(sub_real(double_value(z_0),
+                                            double_value(select(double_P_double_M_x_3,
+                                                         shift(x,
+                                                         sub_int(integer_of_int32(i_2),
+                                                         (1)))))),
+                                   sub_real(double_value(select(double_P_double_M_x_3,
+                                                         shift(x,
+                                                         integer_of_int32(i_2)))),
+                                   double_value(select(double_P_double_M_x_3,
+                                                shift(x,
+                                                sub_int(integer_of_int32(i_2),
+                                                (1))))))) in
+                              (let exact_result =
+                                    add_real(double_value(select(double_P_double_M_y_4,
+                                                          shift(y,
+                                                          sub_int(integer_of_int32(i_2),
+                                                          (1))))),
+                                    mul_real(k2_0,
+                                    sub_real(double_value(select(double_P_double_M_y_4,
+                                                          shift(y,
+                                                          integer_of_int32(i_2)))),
+                                    double_value(select(double_P_double_M_y_4,
+                                                 shift(y,
+                                                 sub_int(integer_of_int32(i_2),
+                                                 (1)))))))) in
+                               le_real(abs_real(sub_real(double_value(r),
+                                                exact_result)),
+                               0x1p-10)))) };
+                           void);
+                           void;
+                           (C_69:
                            begin
-                             (let jessie_70 = (__retres := (C_66:
-                                                           (JC_121:
-                                                           (((add_double_safe nearest_even) !yi) 
-                                                            (C_65:
-                                                            (JC_120:
-                                                            (((mul_double_safe nearest_even) !k_0) 
-                                                             (C_64:
-                                                             (JC_119:
-                                                             (((sub_double_safe nearest_even) !yi) !yim1)))))))))) in
-                             void);
+                             (let jessie_70 = (__retres := !r) in void);
                             (raise (Return_label_exc void))
                            end)
                           end)
@@ -1299,12 +1392,12 @@ let interp_lin_ensures_in_interval =
    begin
      (let i_2 = ref (any_int32 void) in
      (let xim1 = ref (any_double void) in
-     (let xi = ref (any_double void) in
      (let yim1 = ref (any_double void) in
      (let yi = ref (any_double void) in
      (let b_3 = ref (any_double void) in
      (let a_3 = ref (any_double void) in
      (let k_0 = ref (any_double void) in
+     (let r = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
       (let jessie_173 = begin
@@ -1333,17 +1426,17 @@ let interp_lin_ensures_in_interval =
                            (let jessie_151 = begin
                                                (loop_5:
                                                while true do
-                                               { invariant (JC_191: true)  }
+                                               { invariant (JC_199: true)  }
                                                 begin
                                                   [ { } unit reads i_2
-                                                    { ((JC_188:
-                                                       ((JC_186:
+                                                    { ((JC_196:
+                                                       ((JC_194:
                                                         le_int((1),
                                                         integer_of_int32(i_2)))
-                                                       and (JC_187:
+                                                       and (JC_195:
                                                            le_int(integer_of_int32(i_2),
                                                            integer_of_int32(n_0)))))
-                                                      and (JC_189:
+                                                      and (JC_197:
                                                           (forall j_0:int.
                                                            ((le_int((0), j_0)
                                                             and lt_int(j_0,
@@ -1450,132 +1543,192 @@ let interp_lin_ensures_in_interval =
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
                              void);
                             [ { } unit reads xim1
-                              { (JC_193: bounded(xim1, 0x1p1022)) } ];
+                              { (JC_201: bounded(xim1, 0x1p1022)) } ];
                             void;
-                            (let jessie_160 = (C_31:
-                                              begin
-                                                (xi := (C_30:
-                                                       ((safe_acc_ double_P_double_M_x_3) 
-                                                        (C_29:
-                                                        ((shift x) (integer_of_int32 !i_2))))));
-                                               !xi
-                                              end) in
-                            void);
-                            [ { } unit reads xi
-                              { (JC_194: bounded(xi, 0x1p1022)) } ];
+                            [ { } unit reads i_2
+                              { (JC_202:
+                                bounded(select(double_P_double_M_x_3,
+                                        shift(x, integer_of_int32(i_2))),
+                                0x1p1022)) } ];
                             void;
-                            [ { } unit reads xi,xim1
-                              { (JC_195:
-                                ge_real(sub_real(double_value(xi),
+                            [ { } unit reads i_2,xim1
+                              { (JC_203:
+                                ge_real(sub_real(double_value(select(double_P_double_M_x_3,
+                                                              shift(x,
+                                                              integer_of_int32(i_2)))),
                                         double_value(xim1)),
                                 0x1p-900)) } ];
                             void;
-                            (let jessie_162 = (C_38:
+                            (let jessie_160 = (C_35:
                                               begin
-                                                (yim1 := (C_37:
+                                                (yim1 := (C_34:
                                                          ((safe_acc_ double_P_double_M_y_4) 
-                                                          (C_36:
+                                                          (C_33:
                                                           ((shift y) 
                                                            (integer_of_int32 
-                                                            (C_35:
+                                                            (C_32:
                                                             (safe_int32_of_integer_ 
-                                                             (C_34:
+                                                             (C_31:
                                                              ((sub_int 
                                                                (integer_of_int32 !i_2)) (1)))))))))));
                                                !yim1
                                               end) in
                             void);
                             [ { } unit reads yim1
-                              { (JC_196: bounded(yim1, 0x1p1022)) } ];
+                              { (JC_204: bounded(yim1, 0x1p1022)) } ];
                             void;
-                            (let jessie_164 = (C_42:
+                            (let jessie_162 = (C_39:
                                               begin
-                                                (yi := (C_41:
+                                                (yi := (C_38:
                                                        ((safe_acc_ double_P_double_M_y_4) 
-                                                        (C_40:
+                                                        (C_37:
                                                         ((shift y) (integer_of_int32 !i_2))))));
                                                !yi
                                               end) in
                             void);
                             [ { } unit reads yi
-                              { (JC_197: bounded(yi, 0x1p1022)) } ];
+                              { (JC_205: bounded(yi, 0x1p1022)) } ];
                             void;
-                            [ { } unit reads xi,xim1
-                              { (JC_200:
-                                ((JC_198:
+                            [ { } unit reads i_2,xim1
+                              { (JC_208:
+                                ((JC_206:
                                  le_real(double_value(xim1),
                                  double_value(z_0)))
-                                and (JC_199:
+                                and (JC_207:
                                     le_real(double_value(z_0),
-                                    double_value(xi))))) } ];
+                                    double_value(select(double_P_double_M_x_3,
+                                                 shift(x,
+                                                 integer_of_int32(i_2)))))))) } ];
                             void;
-                            (let jessie_166 = (C_48:
+                            (let jessie_164 = (C_47:
                                               begin
-                                                (b_3 := (C_47:
-                                                        (JC_201:
-                                                        (((sub_double_safe nearest_even) !xi) !xim1))));
+                                                (b_3 := (C_46:
+                                                        (JC_209:
+                                                        (((sub_double_safe nearest_even) 
+                                                          (C_45:
+                                                          ((safe_acc_ double_P_double_M_x_3) 
+                                                           (C_44:
+                                                           ((shift x) 
+                                                            (integer_of_int32 !i_2)))))) !xim1))));
                                                !b_3
                                               end) in
                             void);
                             [ { } unit reads b_3
-                              { (JC_202:
+                              { (JC_210:
                                 le_real(0x1p-900, double_value(b_3))) } ];
                             void;
                             [ { } unit reads b_3
-                              { (JC_203: lt_real(0.0, double_value(b_3))) } ];
+                              { (JC_211: lt_real(0.0, double_value(b_3))) } ];
                             void;
-                            (let jessie_168 = (C_52:
+                            (let jessie_166 = (C_51:
                                               begin
-                                                (a_3 := (C_51:
-                                                        (JC_204:
+                                                (a_3 := (C_50:
+                                                        (JC_212:
                                                         (((sub_double_safe nearest_even) z_0) !xim1))));
                                                !a_3
                                               end) in
                             void);
-                            [ { } unit reads xi,xim1
-                              { (JC_207:
-                                ((JC_205:
+                            [ { } unit reads i_2,xim1
+                              { (JC_215:
+                                ((JC_213:
                                  le_real(0.0,
                                  sub_real(double_value(z_0),
                                  double_value(xim1))))
-                                and (JC_206:
+                                and (JC_214:
                                     le_real(sub_real(double_value(z_0),
                                             double_value(xim1)),
-                                    sub_real(double_value(xi),
+                                    sub_real(double_value(select(double_P_double_M_x_3,
+                                                          shift(x,
+                                                          integer_of_int32(i_2)))),
                                     double_value(xim1)))))) } ];
                             void;
                             [ { } unit reads a_3,b_3
-                              { (JC_210:
-                                ((JC_208: le_real(0.0, double_value(a_3)))
-                                and (JC_209:
+                              { (JC_218:
+                                ((JC_216: le_real(0.0, double_value(a_3)))
+                                and (JC_217:
                                     le_real(double_value(a_3),
                                     double_value(b_3))))) } ];
                             void;
-                            (let jessie_170 = (C_60:
+                            (let jessie_168 = (C_59:
                                               begin
-                                                (k_0 := (C_59:
-                                                        (JC_211:
+                                                (k_0 := (C_58:
+                                                        (JC_219:
                                                         (((div_double_safe nearest_even) !a_3) !b_3))));
                                                !k_0
                                               end) in
                             void);
                             [ { } unit reads k_0
-                              { (JC_214:
-                                ((JC_212: le_real(0.0, double_value(k_0)))
-                                and (JC_213: le_real(double_value(k_0), 1.0)))) } ];
+                              { (JC_222:
+                                ((JC_220: le_real(0.0, double_value(k_0)))
+                                and (JC_221: le_real(double_value(k_0), 1.0)))) } ];
                             void;
-                            (C_67:
+                            (let jessie_170 = (C_66:
+                                              begin
+                                                (r := (C_65:
+                                                      (JC_225:
+                                                      (((add_double_safe nearest_even) !yim1) 
+                                                       (C_64:
+                                                       (JC_224:
+                                                       (((mul_double_safe nearest_even) !k_0) 
+                                                        (C_63:
+                                                        (JC_223:
+                                                        (((sub_double_safe nearest_even) !yi) !yim1))))))))));
+                                               !r
+                                              end) in
+                            void);
+                            [ { } unit reads i_2
+                              { (JC_226:
+                                (let k2 =
+                                      div_real(sub_real(double_value(z_0),
+                                               double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1)))))),
+                                      sub_real(double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_x_3,
+                                                   shift(x,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1))))))) in
+                                 (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
+                            void;
+                            [ { } unit reads i_2,r
+                              { (JC_227:
+                                (let k2_0 =
+                                      div_real(sub_real(double_value(z_0),
+                                               double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1)))))),
+                                      sub_real(double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_x_3,
+                                                   shift(x,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1))))))) in
+                                 (let exact_result =
+                                       add_real(double_value(select(double_P_double_M_y_4,
+                                                             shift(y,
+                                                             sub_int(
+                                                             integer_of_int32(i_2),
+                                                             (1))))),
+                                       mul_real(k2_0,
+                                       sub_real(double_value(select(double_P_double_M_y_4,
+                                                             shift(y,
+                                                             integer_of_int32(i_2)))),
+                                       double_value(select(double_P_double_M_y_4,
+                                                    shift(y,
+                                                    sub_int(integer_of_int32(i_2),
+                                                    (1)))))))) in
+                                  le_real(abs_real(sub_real(double_value(r),
+                                                   exact_result)),
+                                  0x1p-10)))) } ];
+                            void;
+                            (C_69:
                             begin
-                              (let jessie_172 = (__retres := (C_66:
-                                                             (JC_217:
-                                                             (((add_double_safe nearest_even) !yi) 
-                                                              (C_65:
-                                                              (JC_216:
-                                                              (((mul_double_safe nearest_even) !k_0) 
-                                                               (C_64:
-                                                               (JC_215:
-                                                               (((sub_double_safe nearest_even) !yi) !yim1)))))))))) in
-                              void);
+                              (let jessie_172 = (__retres := !r) in void);
                              (raise (Return_label_exc void))
                             end)
                            end)
@@ -1619,10 +1772,11 @@ let interp_lin_ensures_in_interval =
                                        shift(x,
                                        sub_int(integer_of_int32(i_interp),
                                        (1))))))) in
-                     (let exact_result =
+                     (let exact_result_0 =
                            add_real(double_value(select(double_P_double_M_y_4,
                                                  shift(y,
-                                                 integer_of_int32(i_interp)))),
+                                                 sub_int(integer_of_int32(i_interp),
+                                                 (1))))),
                            mul_real(k,
                            sub_real(double_value(select(double_P_double_M_y_4,
                                                  shift(y,
@@ -1632,7 +1786,7 @@ let interp_lin_ensures_in_interval =
                                         sub_int(integer_of_int32(i_interp),
                                         (1)))))))) in
                       le_real(abs_real(sub_real(double_value(result),
-                                       exact_result)),
+                                       exact_result_0)),
                       0x1p-10))))))))) }
 
 let interp_lin_ensures_too_high =
@@ -1668,12 +1822,12 @@ let interp_lin_ensures_too_high =
    begin
      (let i_2 = ref (any_int32 void) in
      (let xim1 = ref (any_double void) in
-     (let xi = ref (any_double void) in
      (let yim1 = ref (any_double void) in
      (let yi = ref (any_double void) in
      (let b_3 = ref (any_double void) in
      (let a_3 = ref (any_double void) in
      (let k_0 = ref (any_double void) in
+     (let r = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
       (let jessie_139 = begin
@@ -1702,17 +1856,17 @@ let interp_lin_ensures_too_high =
                            (let jessie_117 = begin
                                                (loop_4:
                                                while true do
-                                               { invariant (JC_159: true)  }
+                                               { invariant (JC_165: true)  }
                                                 begin
                                                   [ { } unit reads i_2
-                                                    { ((JC_156:
-                                                       ((JC_154:
+                                                    { ((JC_162:
+                                                       ((JC_160:
                                                         le_int((1),
                                                         integer_of_int32(i_2)))
-                                                       and (JC_155:
+                                                       and (JC_161:
                                                            le_int(integer_of_int32(i_2),
                                                            integer_of_int32(n_0)))))
-                                                      and (JC_157:
+                                                      and (JC_163:
                                                           (forall j_0:int.
                                                            ((le_int((0), j_0)
                                                             and lt_int(j_0,
@@ -1819,132 +1973,192 @@ let interp_lin_ensures_too_high =
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
                              void);
                             [ { } unit reads xim1
-                              { (JC_161: bounded(xim1, 0x1p1022)) } ];
+                              { (JC_167: bounded(xim1, 0x1p1022)) } ];
                             void;
-                            (let jessie_126 = (C_31:
-                                              begin
-                                                (xi := (C_30:
-                                                       ((safe_acc_ double_P_double_M_x_3) 
-                                                        (C_29:
-                                                        ((shift x) (integer_of_int32 !i_2))))));
-                                               !xi
-                                              end) in
-                            void);
-                            [ { } unit reads xi
-                              { (JC_162: bounded(xi, 0x1p1022)) } ];
+                            [ { } unit reads i_2
+                              { (JC_168:
+                                bounded(select(double_P_double_M_x_3,
+                                        shift(x, integer_of_int32(i_2))),
+                                0x1p1022)) } ];
                             void;
-                            [ { } unit reads xi,xim1
-                              { (JC_163:
-                                ge_real(sub_real(double_value(xi),
+                            [ { } unit reads i_2,xim1
+                              { (JC_169:
+                                ge_real(sub_real(double_value(select(double_P_double_M_x_3,
+                                                              shift(x,
+                                                              integer_of_int32(i_2)))),
                                         double_value(xim1)),
                                 0x1p-900)) } ];
                             void;
-                            (let jessie_128 = (C_38:
+                            (let jessie_126 = (C_35:
                                               begin
-                                                (yim1 := (C_37:
+                                                (yim1 := (C_34:
                                                          ((safe_acc_ double_P_double_M_y_4) 
-                                                          (C_36:
+                                                          (C_33:
                                                           ((shift y) 
                                                            (integer_of_int32 
-                                                            (C_35:
+                                                            (C_32:
                                                             (safe_int32_of_integer_ 
-                                                             (C_34:
+                                                             (C_31:
                                                              ((sub_int 
                                                                (integer_of_int32 !i_2)) (1)))))))))));
                                                !yim1
                                               end) in
                             void);
                             [ { } unit reads yim1
-                              { (JC_164: bounded(yim1, 0x1p1022)) } ];
+                              { (JC_170: bounded(yim1, 0x1p1022)) } ];
                             void;
-                            (let jessie_130 = (C_42:
+                            (let jessie_128 = (C_39:
                                               begin
-                                                (yi := (C_41:
+                                                (yi := (C_38:
                                                        ((safe_acc_ double_P_double_M_y_4) 
-                                                        (C_40:
+                                                        (C_37:
                                                         ((shift y) (integer_of_int32 !i_2))))));
                                                !yi
                                               end) in
                             void);
                             [ { } unit reads yi
-                              { (JC_165: bounded(yi, 0x1p1022)) } ];
+                              { (JC_171: bounded(yi, 0x1p1022)) } ];
                             void;
-                            [ { } unit reads xi,xim1
-                              { (JC_168:
-                                ((JC_166:
+                            [ { } unit reads i_2,xim1
+                              { (JC_174:
+                                ((JC_172:
                                  le_real(double_value(xim1),
                                  double_value(z_0)))
-                                and (JC_167:
+                                and (JC_173:
                                     le_real(double_value(z_0),
-                                    double_value(xi))))) } ];
+                                    double_value(select(double_P_double_M_x_3,
+                                                 shift(x,
+                                                 integer_of_int32(i_2)))))))) } ];
                             void;
-                            (let jessie_132 = (C_48:
+                            (let jessie_130 = (C_47:
                                               begin
-                                                (b_3 := (C_47:
-                                                        (JC_169:
-                                                        (((sub_double_safe nearest_even) !xi) !xim1))));
+                                                (b_3 := (C_46:
+                                                        (JC_175:
+                                                        (((sub_double_safe nearest_even) 
+                                                          (C_45:
+                                                          ((safe_acc_ double_P_double_M_x_3) 
+                                                           (C_44:
+                                                           ((shift x) 
+                                                            (integer_of_int32 !i_2)))))) !xim1))));
                                                !b_3
                                               end) in
                             void);
                             [ { } unit reads b_3
-                              { (JC_170:
+                              { (JC_176:
                                 le_real(0x1p-900, double_value(b_3))) } ];
                             void;
                             [ { } unit reads b_3
-                              { (JC_171: lt_real(0.0, double_value(b_3))) } ];
+                              { (JC_177: lt_real(0.0, double_value(b_3))) } ];
                             void;
-                            (let jessie_134 = (C_52:
+                            (let jessie_132 = (C_51:
                                               begin
-                                                (a_3 := (C_51:
-                                                        (JC_172:
+                                                (a_3 := (C_50:
+                                                        (JC_178:
                                                         (((sub_double_safe nearest_even) z_0) !xim1))));
                                                !a_3
                                               end) in
                             void);
-                            [ { } unit reads xi,xim1
-                              { (JC_175:
-                                ((JC_173:
+                            [ { } unit reads i_2,xim1
+                              { (JC_181:
+                                ((JC_179:
                                  le_real(0.0,
                                  sub_real(double_value(z_0),
                                  double_value(xim1))))
-                                and (JC_174:
+                                and (JC_180:
                                     le_real(sub_real(double_value(z_0),
                                             double_value(xim1)),
-                                    sub_real(double_value(xi),
+                                    sub_real(double_value(select(double_P_double_M_x_3,
+                                                          shift(x,
+                                                          integer_of_int32(i_2)))),
                                     double_value(xim1)))))) } ];
                             void;
                             [ { } unit reads a_3,b_3
-                              { (JC_178:
-                                ((JC_176: le_real(0.0, double_value(a_3)))
-                                and (JC_177:
+                              { (JC_184:
+                                ((JC_182: le_real(0.0, double_value(a_3)))
+                                and (JC_183:
                                     le_real(double_value(a_3),
                                     double_value(b_3))))) } ];
                             void;
-                            (let jessie_136 = (C_60:
+                            (let jessie_134 = (C_59:
                                               begin
-                                                (k_0 := (C_59:
-                                                        (JC_179:
+                                                (k_0 := (C_58:
+                                                        (JC_185:
                                                         (((div_double_safe nearest_even) !a_3) !b_3))));
                                                !k_0
                                               end) in
                             void);
                             [ { } unit reads k_0
-                              { (JC_182:
-                                ((JC_180: le_real(0.0, double_value(k_0)))
-                                and (JC_181: le_real(double_value(k_0), 1.0)))) } ];
+                              { (JC_188:
+                                ((JC_186: le_real(0.0, double_value(k_0)))
+                                and (JC_187: le_real(double_value(k_0), 1.0)))) } ];
                             void;
-                            (C_67:
+                            (let jessie_136 = (C_66:
+                                              begin
+                                                (r := (C_65:
+                                                      (JC_191:
+                                                      (((add_double_safe nearest_even) !yim1) 
+                                                       (C_64:
+                                                       (JC_190:
+                                                       (((mul_double_safe nearest_even) !k_0) 
+                                                        (C_63:
+                                                        (JC_189:
+                                                        (((sub_double_safe nearest_even) !yi) !yim1))))))))));
+                                               !r
+                                              end) in
+                            void);
+                            [ { } unit reads i_2
+                              { (JC_192:
+                                (let k2 =
+                                      div_real(sub_real(double_value(z_0),
+                                               double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1)))))),
+                                      sub_real(double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_x_3,
+                                                   shift(x,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1))))))) in
+                                 (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
+                            void;
+                            [ { } unit reads i_2,r
+                              { (JC_193:
+                                (let k2_0 =
+                                      div_real(sub_real(double_value(z_0),
+                                               double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1)))))),
+                                      sub_real(double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_x_3,
+                                                   shift(x,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1))))))) in
+                                 (let exact_result =
+                                       add_real(double_value(select(double_P_double_M_y_4,
+                                                             shift(y,
+                                                             sub_int(
+                                                             integer_of_int32(i_2),
+                                                             (1))))),
+                                       mul_real(k2_0,
+                                       sub_real(double_value(select(double_P_double_M_y_4,
+                                                             shift(y,
+                                                             integer_of_int32(i_2)))),
+                                       double_value(select(double_P_double_M_y_4,
+                                                    shift(y,
+                                                    sub_int(integer_of_int32(i_2),
+                                                    (1)))))))) in
+                                  le_real(abs_real(sub_real(double_value(r),
+                                                   exact_result)),
+                                  0x1p-10)))) } ];
+                            void;
+                            (C_69:
                             begin
-                              (let jessie_138 = (__retres := (C_66:
-                                                             (JC_185:
-                                                             (((add_double_safe nearest_even) !yi) 
-                                                              (C_65:
-                                                              (JC_184:
-                                                              (((mul_double_safe nearest_even) !k_0) 
-                                                               (C_64:
-                                                               (JC_183:
-                                                               (((sub_double_safe nearest_even) !yi) !yim1)))))))))) in
-                              void);
+                              (let jessie_138 = (__retres := !r) in void);
                              (raise (Return_label_exc void))
                             end)
                            end)
@@ -1997,12 +2211,12 @@ let interp_lin_ensures_too_low =
    begin
      (let i_2 = ref (any_int32 void) in
      (let xim1 = ref (any_double void) in
-     (let xi = ref (any_double void) in
      (let yim1 = ref (any_double void) in
      (let yi = ref (any_double void) in
      (let b_3 = ref (any_double void) in
      (let a_3 = ref (any_double void) in
      (let k_0 = ref (any_double void) in
+     (let r = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
       (let jessie_105 = begin
@@ -2031,17 +2245,17 @@ let interp_lin_ensures_too_low =
                            (let jessie_83 = begin
                                               (loop_3:
                                               while true do
-                                              { invariant (JC_127: true)  }
+                                              { invariant (JC_131: true)  }
                                                begin
                                                  [ { } unit reads i_2
-                                                   { ((JC_124:
-                                                      ((JC_122:
+                                                   { ((JC_128:
+                                                      ((JC_126:
                                                        le_int((1),
                                                        integer_of_int32(i_2)))
-                                                      and (JC_123:
+                                                      and (JC_127:
                                                           le_int(integer_of_int32(i_2),
                                                           integer_of_int32(n_0)))))
-                                                     and (JC_125:
+                                                     and (JC_129:
                                                          (forall j_0:int.
                                                           ((le_int((0), j_0)
                                                            and lt_int(j_0,
@@ -2147,131 +2361,191 @@ let interp_lin_ensures_too_low =
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
                              void);
                             [ { } unit reads xim1
-                              { (JC_129: bounded(xim1, 0x1p1022)) } ];
+                              { (JC_133: bounded(xim1, 0x1p1022)) } ];
                             void;
-                            (let jessie_92 = (C_31:
-                                             begin
-                                               (xi := (C_30:
-                                                      ((safe_acc_ double_P_double_M_x_3) 
-                                                       (C_29:
-                                                       ((shift x) (integer_of_int32 !i_2))))));
-                                              !xi
-                                             end) in
-                            void);
-                            [ { } unit reads xi
-                              { (JC_130: bounded(xi, 0x1p1022)) } ];
+                            [ { } unit reads i_2
+                              { (JC_134:
+                                bounded(select(double_P_double_M_x_3,
+                                        shift(x, integer_of_int32(i_2))),
+                                0x1p1022)) } ];
                             void;
-                            [ { } unit reads xi,xim1
-                              { (JC_131:
-                                ge_real(sub_real(double_value(xi),
+                            [ { } unit reads i_2,xim1
+                              { (JC_135:
+                                ge_real(sub_real(double_value(select(double_P_double_M_x_3,
+                                                              shift(x,
+                                                              integer_of_int32(i_2)))),
                                         double_value(xim1)),
                                 0x1p-900)) } ];
                             void;
-                            (let jessie_94 = (C_38:
+                            (let jessie_92 = (C_35:
                                              begin
-                                               (yim1 := (C_37:
+                                               (yim1 := (C_34:
                                                         ((safe_acc_ double_P_double_M_y_4) 
-                                                         (C_36:
+                                                         (C_33:
                                                          ((shift y) (integer_of_int32 
-                                                                    (C_35:
+                                                                    (C_32:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_34:
+                                                                    (C_31:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1)))))))))));
                                               !yim1
                                              end) in
                             void);
                             [ { } unit reads yim1
-                              { (JC_132: bounded(yim1, 0x1p1022)) } ];
+                              { (JC_136: bounded(yim1, 0x1p1022)) } ];
                             void;
-                            (let jessie_96 = (C_42:
+                            (let jessie_94 = (C_39:
                                              begin
-                                               (yi := (C_41:
+                                               (yi := (C_38:
                                                       ((safe_acc_ double_P_double_M_y_4) 
-                                                       (C_40:
+                                                       (C_37:
                                                        ((shift y) (integer_of_int32 !i_2))))));
                                               !yi
                                              end) in
                             void);
                             [ { } unit reads yi
-                              { (JC_133: bounded(yi, 0x1p1022)) } ];
+                              { (JC_137: bounded(yi, 0x1p1022)) } ];
                             void;
-                            [ { } unit reads xi,xim1
-                              { (JC_136:
-                                ((JC_134:
+                            [ { } unit reads i_2,xim1
+                              { (JC_140:
+                                ((JC_138:
                                  le_real(double_value(xim1),
                                  double_value(z_0)))
-                                and (JC_135:
+                                and (JC_139:
                                     le_real(double_value(z_0),
-                                    double_value(xi))))) } ];
+                                    double_value(select(double_P_double_M_x_3,
+                                                 shift(x,
+                                                 integer_of_int32(i_2)))))))) } ];
                             void;
-                            (let jessie_98 = (C_48:
+                            (let jessie_96 = (C_47:
                                              begin
-                                               (b_3 := (C_47:
-                                                       (JC_137:
-                                                       (((sub_double_safe nearest_even) !xi) !xim1))));
+                                               (b_3 := (C_46:
+                                                       (JC_141:
+                                                       (((sub_double_safe nearest_even) 
+                                                         (C_45:
+                                                         ((safe_acc_ double_P_double_M_x_3) 
+                                                          (C_44:
+                                                          ((shift x) 
+                                                           (integer_of_int32 !i_2)))))) !xim1))));
                                               !b_3
                                              end) in
                             void);
                             [ { } unit reads b_3
-                              { (JC_138:
+                              { (JC_142:
                                 le_real(0x1p-900, double_value(b_3))) } ];
                             void;
                             [ { } unit reads b_3
-                              { (JC_139: lt_real(0.0, double_value(b_3))) } ];
+                              { (JC_143: lt_real(0.0, double_value(b_3))) } ];
                             void;
-                            (let jessie_100 = (C_52:
-                                              begin
-                                                (a_3 := (C_51:
-                                                        (JC_140:
-                                                        (((sub_double_safe nearest_even) z_0) !xim1))));
-                                               !a_3
-                                              end) in
+                            (let jessie_98 = (C_51:
+                                             begin
+                                               (a_3 := (C_50:
+                                                       (JC_144:
+                                                       (((sub_double_safe nearest_even) z_0) !xim1))));
+                                              !a_3
+                                             end) in
                             void);
-                            [ { } unit reads xi,xim1
-                              { (JC_143:
-                                ((JC_141:
+                            [ { } unit reads i_2,xim1
+                              { (JC_147:
+                                ((JC_145:
                                  le_real(0.0,
                                  sub_real(double_value(z_0),
                                  double_value(xim1))))
-                                and (JC_142:
+                                and (JC_146:
                                     le_real(sub_real(double_value(z_0),
                                             double_value(xim1)),
-                                    sub_real(double_value(xi),
+                                    sub_real(double_value(select(double_P_double_M_x_3,
+                                                          shift(x,
+                                                          integer_of_int32(i_2)))),
                                     double_value(xim1)))))) } ];
                             void;
                             [ { } unit reads a_3,b_3
-                              { (JC_146:
-                                ((JC_144: le_real(0.0, double_value(a_3)))
-                                and (JC_145:
+                              { (JC_150:
+                                ((JC_148: le_real(0.0, double_value(a_3)))
+                                and (JC_149:
                                     le_real(double_value(a_3),
                                     double_value(b_3))))) } ];
                             void;
-                            (let jessie_102 = (C_60:
+                            (let jessie_100 = (C_59:
                                               begin
-                                                (k_0 := (C_59:
-                                                        (JC_147:
+                                                (k_0 := (C_58:
+                                                        (JC_151:
                                                         (((div_double_safe nearest_even) !a_3) !b_3))));
                                                !k_0
                                               end) in
                             void);
                             [ { } unit reads k_0
-                              { (JC_150:
-                                ((JC_148: le_real(0.0, double_value(k_0)))
-                                and (JC_149: le_real(double_value(k_0), 1.0)))) } ];
+                              { (JC_154:
+                                ((JC_152: le_real(0.0, double_value(k_0)))
+                                and (JC_153: le_real(double_value(k_0), 1.0)))) } ];
                             void;
-                            (C_67:
+                            (let jessie_102 = (C_66:
+                                              begin
+                                                (r := (C_65:
+                                                      (JC_157:
+                                                      (((add_double_safe nearest_even) !yim1) 
+                                                       (C_64:
+                                                       (JC_156:
+                                                       (((mul_double_safe nearest_even) !k_0) 
+                                                        (C_63:
+                                                        (JC_155:
+                                                        (((sub_double_safe nearest_even) !yi) !yim1))))))))));
+                                               !r
+                                              end) in
+                            void);
+                            [ { } unit reads i_2
+                              { (JC_158:
+                                (let k2 =
+                                      div_real(sub_real(double_value(z_0),
+                                               double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1)))))),
+                                      sub_real(double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_x_3,
+                                                   shift(x,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1))))))) in
+                                 (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
+                            void;
+                            [ { } unit reads i_2,r
+                              { (JC_159:
+                                (let k2_0 =
+                                      div_real(sub_real(double_value(z_0),
+                                               double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1)))))),
+                                      sub_real(double_value(select(double_P_double_M_x_3,
+                                                            shift(x,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_x_3,
+                                                   shift(x,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1))))))) in
+                                 (let exact_result =
+                                       add_real(double_value(select(double_P_double_M_y_4,
+                                                             shift(y,
+                                                             sub_int(
+                                                             integer_of_int32(i_2),
+                                                             (1))))),
+                                       mul_real(k2_0,
+                                       sub_real(double_value(select(double_P_double_M_y_4,
+                                                             shift(y,
+                                                             integer_of_int32(i_2)))),
+                                       double_value(select(double_P_double_M_y_4,
+                                                    shift(y,
+                                                    sub_int(integer_of_int32(i_2),
+                                                    (1)))))))) in
+                                  le_real(abs_real(sub_real(double_value(r),
+                                                   exact_result)),
+                                  0x1p-10)))) } ];
+                            void;
+                            (C_69:
                             begin
-                              (let jessie_104 = (__retres := (C_66:
-                                                             (JC_153:
-                                                             (((add_double_safe nearest_even) !yi) 
-                                                              (C_65:
-                                                              (JC_152:
-                                                              (((mul_double_safe nearest_even) !k_0) 
-                                                               (C_64:
-                                                               (JC_151:
-                                                               (((sub_double_safe nearest_even) !yi) !yim1)))))))))) in
-                              void);
+                              (let jessie_104 = (__retres := !r) in void);
                              (raise (Return_label_exc void))
                             end)
                            end)
@@ -2321,12 +2595,12 @@ let interp_lin_safety =
    begin
      (let i_2 = ref (any_int32 void) in
      (let xim1 = ref (any_double void) in
-     (let xi = ref (any_double void) in
      (let yim1 = ref (any_double void) in
      (let yi = ref (any_double void) in
      (let b_3 = ref (any_double void) in
      (let a_3 = ref (any_double void) in
      (let k_0 = ref (any_double void) in
+     (let r = ref (any_double void) in
      (let __retres = ref (any_double void) in
      try
       (let jessie_37 = begin
@@ -2474,67 +2748,69 @@ let interp_lin_safety =
                            [ { } unit reads xim1
                              { (JC_61: bounded(xim1, 0x1p1022)) } ];
                            void;
-                           (let jessie_24 = (C_31:
-                                            begin
-                                              (xi := (C_30:
-                                                     (JC_62:
-                                                     ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x) 
-                                                      (integer_of_int32 !i_2)))));
-                                             !xi
-                                            end) in
-                           void);
-                           [ { } unit reads xi
-                             { (JC_63: bounded(xi, 0x1p1022)) } ];
+                           [ { } unit reads i_2
+                             { (JC_62:
+                               bounded(select(double_P_double_M_x_3,
+                                       shift(x, integer_of_int32(i_2))),
+                               0x1p1022)) } ];
                            void;
-                           [ { } unit reads xi,xim1
-                             { (JC_64:
-                               ge_real(sub_real(double_value(xi),
+                           [ { } unit reads i_2,xim1
+                             { (JC_63:
+                               ge_real(sub_real(double_value(select(double_P_double_M_x_3,
+                                                             shift(x,
+                                                             integer_of_int32(i_2)))),
                                        double_value(xim1)),
                                0x1p-900)) } ];
                            void;
-                           (let jessie_26 = (C_38:
+                           (let jessie_24 = (C_35:
                                             begin
-                                              (yim1 := (C_37:
-                                                       (JC_66:
+                                              (yim1 := (C_34:
+                                                       (JC_65:
                                                        ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
                                                         (integer_of_int32 
-                                                         (C_35:
-                                                         (JC_65:
+                                                         (C_32:
+                                                         (JC_64:
                                                          (int32_of_integer_ 
-                                                          (C_34:
+                                                          (C_31:
                                                           ((sub_int (integer_of_int32 !i_2)) (1)))))))))));
                                              !yim1
                                             end) in
                            void);
                            [ { } unit reads yim1
-                             { (JC_67: bounded(yim1, 0x1p1022)) } ];
+                             { (JC_66: bounded(yim1, 0x1p1022)) } ];
                            void;
-                           (let jessie_28 = (C_42:
+                           (let jessie_26 = (C_39:
                                             begin
-                                              (yi := (C_41:
-                                                     (JC_68:
+                                              (yi := (C_38:
+                                                     (JC_67:
                                                      ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
                                                       (integer_of_int32 !i_2)))));
                                              !yi
                                             end) in
                            void);
                            [ { } unit reads yi
-                             { (JC_69: bounded(yi, 0x1p1022)) } ];
+                             { (JC_68: bounded(yi, 0x1p1022)) } ];
                            void;
-                           [ { } unit reads xi,xim1
-                             { (JC_72:
-                               ((JC_70:
+                           [ { } unit reads i_2,xim1
+                             { (JC_71:
+                               ((JC_69:
                                 le_real(double_value(xim1),
                                 double_value(z_0)))
-                               and (JC_71:
+                               and (JC_70:
                                    le_real(double_value(z_0),
-                                   double_value(xi))))) } ];
+                                   double_value(select(double_P_double_M_x_3,
+                                                shift(x,
+                                                integer_of_int32(i_2)))))))) } ];
                            void;
-                           (let jessie_30 = (C_48:
+                           (let jessie_28 = (C_47:
                                             begin
-                                              (b_3 := (C_47:
+                                              (b_3 := (C_46:
                                                       (JC_73:
-                                                      (((sub_double nearest_even) !xi) !xim1))));
+                                                      (((sub_double nearest_even) 
+                                                        (C_45:
+                                                        (JC_72:
+                                                        ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x) 
+                                                         (integer_of_int32 !i_2))))) !xim1))));
                                              !b_3
                                             end) in
                            void);
@@ -2544,15 +2820,15 @@ let interp_lin_safety =
                            [ { } unit reads b_3
                              { (JC_75: lt_real(0.0, double_value(b_3))) } ];
                            void;
-                           (let jessie_32 = (C_52:
+                           (let jessie_30 = (C_51:
                                             begin
-                                              (a_3 := (C_51:
+                                              (a_3 := (C_50:
                                                       (JC_76:
                                                       (((sub_double nearest_even) z_0) !xim1))));
                                              !a_3
                                             end) in
                            void);
-                           [ { } unit reads xi,xim1
+                           [ { } unit reads i_2,xim1
                              { (JC_79:
                                ((JC_77:
                                 le_real(0.0,
@@ -2561,7 +2837,9 @@ let interp_lin_safety =
                                and (JC_78:
                                    le_real(sub_real(double_value(z_0),
                                            double_value(xim1)),
-                                   sub_real(double_value(xi),
+                                   sub_real(double_value(select(double_P_double_M_x_3,
+                                                         shift(x,
+                                                         integer_of_int32(i_2)))),
                                    double_value(xim1)))))) } ];
                            void;
                            [ { } unit reads a_3,b_3
@@ -2571,9 +2849,9 @@ let interp_lin_safety =
                                    le_real(double_value(a_3),
                                    double_value(b_3))))) } ];
                            void;
-                           (let jessie_34 = (C_60:
+                           (let jessie_32 = (C_59:
                                             begin
-                                              (k_0 := (C_59:
+                                              (k_0 := (C_58:
                                                       (JC_83:
                                                       (((div_double nearest_even) !a_3) !b_3))));
                                              !k_0
@@ -2584,18 +2862,72 @@ let interp_lin_safety =
                                ((JC_84: le_real(0.0, double_value(k_0)))
                                and (JC_85: le_real(double_value(k_0), 1.0)))) } ];
                            void;
-                           (C_67:
+                           (let jessie_34 = (C_66:
+                                            begin
+                                              (r := (C_65:
+                                                    (JC_89:
+                                                    (((add_double nearest_even) !yim1) 
+                                                     (C_64:
+                                                     (JC_88:
+                                                     (((mul_double nearest_even) !k_0) 
+                                                      (C_63:
+                                                      (JC_87:
+                                                      (((sub_double nearest_even) !yi) !yim1))))))))));
+                                             !r
+                                            end) in
+                           void);
+                           [ { } unit reads i_2
+                             { (JC_90:
+                               (let k2 =
+                                     div_real(sub_real(double_value(z_0),
+                                              double_value(select(double_P_double_M_x_3,
+                                                           shift(x,
+                                                           sub_int(integer_of_int32(i_2),
+                                                           (1)))))),
+                                     sub_real(double_value(select(double_P_double_M_x_3,
+                                                           shift(x,
+                                                           integer_of_int32(i_2)))),
+                                     double_value(select(double_P_double_M_x_3,
+                                                  shift(x,
+                                                  sub_int(integer_of_int32(i_2),
+                                                  (1))))))) in
+                                (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
+                           void;
+                           [ { } unit reads i_2,r
+                             { (JC_91:
+                               (let k2_0 =
+                                     div_real(sub_real(double_value(z_0),
+                                              double_value(select(double_P_double_M_x_3,
+                                                           shift(x,
+                                                           sub_int(integer_of_int32(i_2),
+                                                           (1)))))),
+                                     sub_real(double_value(select(double_P_double_M_x_3,
+                                                           shift(x,
+                                                           integer_of_int32(i_2)))),
+                                     double_value(select(double_P_double_M_x_3,
+                                                  shift(x,
+                                                  sub_int(integer_of_int32(i_2),
+                                                  (1))))))) in
+                                (let exact_result =
+                                      add_real(double_value(select(double_P_double_M_y_4,
+                                                            shift(y,
+                                                            sub_int(integer_of_int32(i_2),
+                                                            (1))))),
+                                      mul_real(k2_0,
+                                      sub_real(double_value(select(double_P_double_M_y_4,
+                                                            shift(y,
+                                                            integer_of_int32(i_2)))),
+                                      double_value(select(double_P_double_M_y_4,
+                                                   shift(y,
+                                                   sub_int(integer_of_int32(i_2),
+                                                   (1)))))))) in
+                                 le_real(abs_real(sub_real(double_value(r),
+                                                  exact_result)),
+                                 0x1p-10)))) } ];
+                           void;
+                           (C_69:
                            begin
-                             (let jessie_36 = (__retres := (C_66:
-                                                           (JC_89:
-                                                           (((add_double nearest_even) !yi) 
-                                                            (C_65:
-                                                            (JC_88:
-                                                            (((mul_double nearest_even) !k_0) 
-                                                             (C_64:
-                                                             (JC_87:
-                                                             (((sub_double nearest_even) !yi) !yim1)))))))))) in
-                             void);
+                             (let jessie_36 = (__retres := !r) in void);
                             (raise (Return_label_exc void))
                            end)
                           end)
@@ -2670,201 +3002,201 @@ why --project [...] why/floats_interp2.why
   <function name="Function interp_lin">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/floats_interp2_po34.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "2" end = "4"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/floats_interp2_po35.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "2" end = "4"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/floats_interp2_po36.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po37.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po38.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "23" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po39.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "23" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po40.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "23" end = "25"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po41.why">
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "23" end = "25"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/floats_interp2_po42.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/floats_interp2_po42.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "99" begin = "19" end = "22"/>
-      <explain kind = "VarDecr"/>
-    </goal>
     <goal why_file="why/floats_interp2_po43.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "99" begin = "19" end = "22"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po44.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "99" begin = "19" end = "22"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp2_po45.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "99" begin = "19" end = "22"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp2_po46.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po47.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po48.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po49.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po50.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po51.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po52.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "106" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po53.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "106" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po54.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "109" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po55.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "109" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po56.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "109" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po57.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "109" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po58.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "111" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po59.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "111" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po60.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "114" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po61.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "117" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "FPOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po62.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "120" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po63.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "120" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "116" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po64.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "122" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po65.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "122" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po66.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "122" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/floats_interp2_po67.why">
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/floats_interp2_po68.why">
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `too_low'">
-    <goal why_file="why/floats_interp2_po33.why">
+    <goal why_file="why/floats_interp2_po35.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "80" begin = "14" end = "29"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `too_high'">
-    <goal why_file="why/floats_interp2_po32.why">
+    <goal why_file="why/floats_interp2_po34.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "83" begin = "14" end = "31"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `in_interval'">
-    <goal why_file="why/floats_interp2_po27.why">
+    <goal why_file="why/floats_interp2_po29.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "86" begin = "14" end = "27"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/floats_interp2_po28.why">
+    <goal why_file="why/floats_interp2_po30.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "86" begin = "19" end = "34"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/floats_interp2_po29.why">
+    <goal why_file="why/floats_interp2_po31.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "87" begin = "14" end = "31"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/floats_interp2_po30.why">
+    <goal why_file="why/floats_interp2_po32.why">
       <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "87" begin = "30" end = "46"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/floats_interp2_po31.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "89" begin = "8" end = "190"/>
+    <goal why_file="why/floats_interp2_po33.why">
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "89" begin = "8" end = "192"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2898,59 +3230,67 @@ text = "FPOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po13.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "107" begin = "13" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "106" begin = "13" end = "35"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po14.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "13" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "107" begin = "13" end = "36"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po15.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "13" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "109" begin = "13" end = "35"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po16.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "112" begin = "13" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "111" begin = "13" end = "33"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po17.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "13" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "112" begin = "13" end = "22"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po18.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "21" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "112" begin = "21" end = "30"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po19.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "115" begin = "13" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "114" begin = "13" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po20.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "116" begin = "13" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "115" begin = "13" end = "20"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po21.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "118" begin = "13" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "117" begin = "13" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po22.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "118" begin = "18" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "117" begin = "18" end = "41"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po23.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "13" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "118" begin = "13" end = "21"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po24.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "20" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "118" begin = "20" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po25.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "13" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "120" begin = "13" end = "21"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp2_po26.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "20" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "120" begin = "20" end = "28"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/floats_interp2_po27.why">
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "123" begin = "10" end = "75"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/floats_interp2_po28.why">
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "127" begin = "10" end = "152"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -3218,6 +3558,8 @@ logic cos : real -> real
 logic sin : real -> real
 
 logic tan : real -> real
+
+logic pi : real
 
 logic cosh : real -> real
 

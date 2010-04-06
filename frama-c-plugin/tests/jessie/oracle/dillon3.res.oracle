@@ -1001,6 +1001,8 @@ logic sin : real -> real
 
 logic tan : real -> real
 
+logic pi : real
+
 logic cosh : real -> real
 
 logic sinh : real -> real
