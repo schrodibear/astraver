@@ -1,0 +1,4 @@
+File "why/dillon10.why", line 475, characters 6-197:
+warning: mutable int_P_int_M_s_1 is not declared in effect; added as read
+File "why/dillon10.why", line 475, characters 6-197:
+warning: mutable int_P_s_1_alloc_table is not declared in effect; added as read
