@@ -1403,7 +1403,7 @@ let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
                      (JCPEassert
                         (behav,Aassert,locate ~pos (named_pred p))) pos)
 *)
-            | APragma _ -> assert false
+            | APragma _ -> acc (* just ignored *)
             | AAssigns (_, _) -> acc (* should be handled elsewhere *)
             | AVariant _ -> acc (* should be handled elsewhere *)
             | AStmtSpec s ->
