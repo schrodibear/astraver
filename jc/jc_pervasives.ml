@@ -1061,6 +1061,7 @@ let builtin_logic_symbols =
     Some real_type, "\\cos", "cos", [real_type] ;
     Some real_type, "\\sin", "sin", [real_type] ;
     Some real_type, "\\tan", "tan", [real_type] ;
+    Some real_type, "\\pi", "pi", [] ;
     Some real_type, "\\cosh", "cosh", [real_type] ;
     Some real_type, "\\sinh", "sinh", [real_type] ;
     Some real_type, "\\tanh", "tanh", [real_type] ;

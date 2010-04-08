@@ -1,4 +1,10 @@
 
+
+version 2.24, April 12, 2010
+============================
+
+  o [Frama-C plugin] synchronized with Frama-C Boron 20100412
+  o [Jessie] fixed bug 0443 (assigns \nothing and separation analysis)
   o [Jessie] fixed bug with assertions attached to behaviors
   o [Why] support for truncate_real_to_int in Gappa output
   o [Frama-C plugin] logic functions do not accept struct or union as 
@@ -36,7 +42,7 @@
     the user to prevent generation of VCs for termination
 
 version 2.23, December 4, 2009
-===============================
+==============================
 
   o [Why] fixed bug with let construct in logic
   o [Simplify output] fixed bug with function definitions
@@ -71,6 +77,7 @@ version 2.22, November 30, 2009
 
 version 2.21, October 15, 2009
 ==============================
+
   o [GWhy] Fixed 'Not_found' exception if .whyrc absent
   o [Frama-C plugin] Fixed installation problems.
   o [Frama-C plugin] predicates for finiteness of floats (\is_finite,

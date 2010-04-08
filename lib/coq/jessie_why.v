@@ -318,6 +318,9 @@ Admitted.
 (*Why logic*) Definition tan : R -> R.
 Admitted.
 
+(*Why logic*) Definition pi : R.
+Admitted.
+
 (*Why logic*) Definition cosh : R -> R.
 Admitted.
 

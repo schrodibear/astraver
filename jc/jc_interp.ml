@@ -1345,7 +1345,7 @@ let assigns ~type_safe ?region_list before ef locs loc =
 	       (match fi with JCmem_field f -> f.jc_field_info_name 
 		  | _ -> "??");
 *)
-	     acc
+             MemoryMap.add (fi,r) [] acc
 	   end
       ) ef.jc_writes.jc_effect_memories MemoryMap.empty 
   in

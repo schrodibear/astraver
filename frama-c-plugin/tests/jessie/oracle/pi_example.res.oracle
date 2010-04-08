@@ -9,7 +9,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = Pol
-# FloatModel = full
 
 axiomatic Padding {
 
@@ -30,6 +29,40 @@ tag void_P = {
 
 type void_P = [void_P]
 
+float Perimeter1(float radius)
+  requires (C_6 : ((radius :> real) > 0.0));
+  requires (C_7 : ((radius :> real) <= 3.1391));
+behavior default:
+  ensures (C_8 : (\real_abs(((\result :> real) -
+                              ((3.141592654 * 2.0) * (radius :> real)))) <=
+                   0.01));
+{  
+   (var float __retres);
+   
+   {  (C_5 : (__retres = (C_4 : ((C_3 : ((C_2 : ((3.14 :> double) *
+                                                  (2.0 :> double))) *
+                                          (C_1 : (radius :> double)))) :> float))));
+      
+      (return __retres)
+   }
+}
+
+float Perimeter2(float radius_1)
+  requires (C_11 : ((C_12 : (0.0 <= (radius_1 :> real))) &&
+                     (C_13 : ((radius_1 :> real) <= 3.1392))));
+behavior default:
+  ensures (C_14 : (\real_abs(((\result :> real) -
+                               ((3.141592654 * 2.0) * (radius_1 :> real)))) <=
+                    0.01));
+{  
+   (var float __retres_0);
+   
+   {  (C_10 : (__retres_0 = (C_9 : ((6.28 :> float) * radius_1))));
+      
+      (return __retres_0)
+   }
+}
+
 lemma le_mul :
 (\forall real x;
   (\forall real y;
@@ -38,49 +71,31 @@ lemma le_mul :
         ((((0.0 <= x) && (x <= y)) && ((0.0 <= z) && (z <= t))) ==>
           ((x * z) <= (y * t)))))))
 
-float Perimeter(float radius)
-  requires (C_12 : (((C_14 : \single_is_finite(radius)) &&
-                      (C_15 : ((radius :> real) > 0.0))) &&
-                     (C_16 : ((radius :> real) <= 3.0))));
+float Perimeter3(float radius_0)
+  requires (C_19 : ((C_20 : (0.0 <= (radius_0 :> real))) &&
+                     (C_21 : ((radius_0 :> real) <= 3.0))));
 behavior default:
-  ensures (C_17 : ((C_18 : \single_is_finite(\result)) &&
-                    (C_19 : (\real_abs(((\result :> real) -
-                                         ((3.141592654 * 2.0) *
-                                           (radius :> real)))) <=
-                              0.01))));
+  ensures (C_22 : (\real_abs(((\result :> real) -
+                               ((\pi * 2.0) * (radius_0 :> real)))) <=
+                    0.01));
 {  
-   (var float a);
-   
    (var float r);
    
-   {  (C_1 : (a = (6.28 :> float)));
+   {  (C_16 : (r = (C_15 : ((6.28 :> float) * radius_0))));
       
       {  
-         (assert for default: (C_2 : \single_is_finite(a)));
+         (assert for default: (C_17 : (\real_abs(((r :> real) -
+                                                   (6.28 *
+                                                     (radius_0 :> real)))) <=
+                                        0x1p-19)));
          ()
       };
       
       {  
-         (assert for default: (C_3 : ((C_4 : (6.27 <= (a :> real))) &&
-                                       (C_5 : ((a :> real) <= 6.29)))));
-         ()
-      };
-      
-      {  (C_7 : (r = (C_6 : (a * radius))))
-      };
-      
-      {  
-         (assert for default: (C_8 : ((C_9 : (0.0 <=
-                                               ((a :> real) *
-                                                 (radius :> real)))) &&
-                                       (C_10 : (((a :> real) *
-                                                  (radius :> real)) <=
-                                                 (6.29 * 3.0))))));
-         ()
-      };
-      
-      {  
-         (assert for default: (C_11 : \single_is_finite(r)));
+         (assert for default: (C_18 : (\real_abs(((6.28 * (radius_0 :> real)) -
+                                                   ((\pi * 2.0) *
+                                                     (radius_0 :> real)))) <=
+                                        0x1p-4)));
          ()
       };
       
@@ -267,31 +282,66 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter Perimeter :
+parameter Perimeter1 :
  radius:single ->
   { } single
-  { (JC_16:
-    ((JC_14: single_is_finite(result))
-    and (JC_15:
-        le_real(abs_real(sub_real(single_value(result),
-                         mul_real(mul_real(3.141592654, 2.0),
-                         single_value(radius)))),
-        0.01)))) }
+  { (JC_10:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(3.141592654, 2.0),
+                     single_value(radius)))),
+    0.01)) }
 
-parameter Perimeter_requires :
+parameter Perimeter1_requires :
  radius:single ->
-  { (JC_4:
-    ((JC_1: single_is_finite(radius))
-    and ((JC_2: gt_real(single_value(radius), 0.0))
-        and (JC_3: le_real(single_value(radius), 3.0)))))}
+  { (JC_3:
+    ((JC_1: gt_real(single_value(radius), 0.0))
+    and (JC_2: le_real(single_value(radius), 3.1391))))}
   single
-  { (JC_16:
-    ((JC_14: single_is_finite(result))
-    and (JC_15:
-        le_real(abs_real(sub_real(single_value(result),
-                         mul_real(mul_real(3.141592654, 2.0),
-                         single_value(radius)))),
-        0.01)))) }
+  { (JC_10:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(3.141592654, 2.0),
+                     single_value(radius)))),
+    0.01)) }
+
+parameter Perimeter2 :
+ radius_1:single ->
+  { } single
+  { (JC_29:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(3.141592654, 2.0),
+                     single_value(radius_1)))),
+    0.01)) }
+
+parameter Perimeter2_requires :
+ radius_1:single ->
+  { (JC_22:
+    ((JC_20: le_real(0.0, single_value(radius_1)))
+    and (JC_21: le_real(single_value(radius_1), 3.1392))))}
+  single
+  { (JC_29:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(3.141592654, 2.0),
+                     single_value(radius_1)))),
+    0.01)) }
+
+parameter Perimeter3 :
+ radius_0:single ->
+  { } single
+  { (JC_44:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(pi, 2.0), single_value(radius_0)))),
+    0.01)) }
+
+parameter Perimeter3_requires :
+ radius_0:single ->
+  { (JC_37:
+    ((JC_35: le_real(0.0, single_value(radius_0)))
+    and (JC_36: le_real(single_value(radius_0), 3.0))))}
+  single
+  { (JC_44:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(pi, 2.0), single_value(radius_0)))),
+    0.01)) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -393,109 +443,216 @@ parameter int8_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
-let Perimeter_ensures_default =
+let Perimeter1_ensures_default =
  fun (radius : single) ->
-  { (JC_9:
-    ((JC_6: single_is_finite(radius))
-    and ((JC_7: gt_real(single_value(radius), 0.0))
-        and (JC_8: le_real(single_value(radius), 3.0))))) }
+  { (JC_7:
+    ((JC_5: gt_real(single_value(radius), 0.0))
+    and (JC_6: le_real(single_value(radius), 3.1391)))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
-     (let a = ref (any_single void) in
-     (let r = ref (any_single void) in
-     (C_1:
+     (let __retres = ref (any_single void) in
+     (C_5:
      begin
-       (let jessie_7 = (a := (JC_29: ((single_of_real nearest_even) 6.28))) in
+       (let jessie_5 = (__retres := (C_4:
+                                    ((double_to_single nearest_even) 
+                                     (C_3:
+                                     (JC_19:
+                                     (((mul_double_safe nearest_even) 
+                                       (C_2:
+                                       (JC_18:
+                                       (((mul_double_safe nearest_even) 
+                                         ((double_of_real_safe nearest_even) 3.14)) 
+                                        (double_of_real_exact 2.0))))) 
+                                      (C_1:
+                                      ((single_to_double nearest_even) radius)))))))) in
        void);
-      (assert { (JC_30: single_is_finite(a)) }; void);
-      void;
-      (assert
-      { (JC_33:
-        ((JC_31: le_real(6.27, single_value(a)))
-        and (JC_32: le_real(single_value(a), 6.29)))) };
-      void);
-      void;
-      (let jessie_9 = (C_7:
-                      begin
-                        (r := (C_6:
-                              (JC_34:
-                              (((mul_single nearest_even) !a) radius))));
-                       !r
-                      end) in
-      void);
-      (assert
-      { (JC_37:
-        ((JC_35:
-         le_real(0.0, mul_real(single_value(a), single_value(radius))))
-        and (JC_36:
-            le_real(mul_real(single_value(a), single_value(radius)),
-            mul_real(6.29, 3.0))))) };
-      void);
-      void;
-      (assert { (JC_38: single_is_finite(r)) }; void);
-      void;
-      (return := !r);
+      (return := !__retres);
       (raise Return)
-     end)));
+     end));
     absurd 
    end
    with
    Return ->
    !return end))
-  { (JC_13:
-    ((JC_11: single_is_finite(result))
-    and (JC_12:
-        le_real(abs_real(sub_real(single_value(result),
-                         mul_real(mul_real(3.141592654, 2.0),
-                         single_value(radius)))),
-        0.01)))) }
-
-let Perimeter_safety =
- fun (radius : single) ->
   { (JC_9:
-    ((JC_6: single_is_finite(radius))
-    and ((JC_7: gt_real(single_value(radius), 0.0))
-        and (JC_8: le_real(single_value(radius), 3.0))))) }
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(3.141592654, 2.0),
+                     single_value(radius)))),
+    0.01)) }
+
+let Perimeter1_safety =
+ fun (radius : single) ->
+  { (JC_7:
+    ((JC_5: gt_real(single_value(radius), 0.0))
+    and (JC_6: le_real(single_value(radius), 3.1391)))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
-     (let a = ref (any_single void) in
-     (let r = ref (any_single void) in
-     (C_1:
+     (let __retres = ref (any_single void) in
+     (C_5:
      begin
-       (let jessie_2 = (a := (JC_19: ((single_of_real nearest_even) 6.28))) in
+       (let jessie_2 = (__retres := (C_4:
+                                    (JC_17:
+                                    ((double_to_single nearest_even) 
+                                     (C_3:
+                                     (JC_16:
+                                     (((mul_double nearest_even) (C_2:
+                                                                 (JC_14:
+                                                                 (((mul_double nearest_even) 
+                                                                   (JC_13:
+                                                                   ((double_of_real nearest_even) 3.14))) 
+                                                                  (double_of_real_exact 2.0))))) 
+                                      (C_1:
+                                      (JC_15:
+                                      ((single_to_double nearest_even) radius)))))))))) in
        void);
-      [ { } unit reads a { (JC_20: single_is_finite(a)) } ];
-      void;
-      [ { } unit reads a
-        { (JC_23:
-          ((JC_21: le_real(6.27, single_value(a)))
-          and (JC_22: le_real(single_value(a), 6.29)))) } ];
-      void;
-      (let jessie_4 = (C_7:
-                      begin
-                        (r := (C_6:
-                              (JC_24:
-                              (((mul_single nearest_even) !a) radius))));
-                       !r
-                      end) in
+      (return := !__retres);
+      (raise Return)
+     end));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { true }
+
+let Perimeter2_ensures_default =
+ fun (radius_1 : single) ->
+  { (JC_26:
+    ((JC_24: le_real(0.0, single_value(radius_1)))
+    and (JC_25: le_real(single_value(radius_1), 3.1392)))) }
+  (init:
+  (let return = ref (any_single void) in
+  try
+   begin
+     (let __retres_0 = ref (any_single void) in
+     (C_10:
+     begin
+       (let jessie_11 = (__retres_0 := (C_9:
+                                       (JC_34:
+                                       (((mul_single_safe nearest_even) 
+                                         ((single_of_real_safe nearest_even) 6.28)) radius_1)))) in
+       void);
+      (return := !__retres_0);
+      (raise Return)
+     end));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_28:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(3.141592654, 2.0),
+                     single_value(radius_1)))),
+    0.01)) }
+
+let Perimeter2_safety =
+ fun (radius_1 : single) ->
+  { (JC_26:
+    ((JC_24: le_real(0.0, single_value(radius_1)))
+    and (JC_25: le_real(single_value(radius_1), 3.1392)))) }
+  (init:
+  (let return = ref (any_single void) in
+  try
+   begin
+     (let __retres_0 = ref (any_single void) in
+     (C_10:
+     begin
+       (let jessie_8 = (__retres_0 := (C_9:
+                                      (JC_33:
+                                      (((mul_single nearest_even) (JC_32:
+                                                                  ((single_of_real nearest_even) 6.28))) radius_1)))) in
+       void);
+      (return := !__retres_0);
+      (raise Return)
+     end));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { true }
+
+let Perimeter3_ensures_default =
+ fun (radius_0 : single) ->
+  { (JC_41:
+    ((JC_39: le_real(0.0, single_value(radius_0)))
+    and (JC_40: le_real(single_value(radius_0), 3.0)))) }
+  (init:
+  (let return = ref (any_single void) in
+  try
+   begin
+     (let r = ref (any_single void) in
+     (C_16:
+     begin
+       (let jessie_17 = (r := (C_15:
+                              (JC_51:
+                              (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_0)))) in
+       void);
+      (assert
+      { (JC_52:
+        le_real(abs_real(sub_real(single_value(r),
+                         mul_real(6.28, single_value(radius_0)))),
+        0x1p-19)) };
       void);
-      [ { } unit reads a
-        { (JC_27:
-          ((JC_25:
-           le_real(0.0, mul_real(single_value(a), single_value(radius))))
-          and (JC_26:
-              le_real(mul_real(single_value(a), single_value(radius)),
-              mul_real(6.29, 3.0))))) } ];
       void;
-      [ { } unit reads r { (JC_28: single_is_finite(r)) } ];
+      (assert
+      { (JC_53:
+        le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_0)),
+                         mul_real(mul_real(pi, 2.0), single_value(radius_0)))),
+        0x1p-4)) };
+      void);
       void;
       (return := !r);
       (raise Return)
-     end)));
+     end));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_43:
+    le_real(abs_real(sub_real(single_value(result),
+                     mul_real(mul_real(pi, 2.0), single_value(radius_0)))),
+    0.01)) }
+
+let Perimeter3_safety =
+ fun (radius_0 : single) ->
+  { (JC_41:
+    ((JC_39: le_real(0.0, single_value(radius_0)))
+    and (JC_40: le_real(single_value(radius_0), 3.0)))) }
+  (init:
+  (let return = ref (any_single void) in
+  try
+   begin
+     (let r = ref (any_single void) in
+     (C_16:
+     begin
+       (let jessie_14 = (r := (C_15:
+                              (JC_48:
+                              (((mul_single nearest_even) (JC_47:
+                                                          ((single_of_real nearest_even) 6.28))) radius_0)))) in
+       void);
+      [ { } unit reads r
+        { (JC_49:
+          le_real(abs_real(sub_real(single_value(r),
+                           mul_real(6.28, single_value(radius_0)))),
+          0x1p-19)) } ];
+      void;
+      [ { } unit
+        { (JC_50:
+          le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_0)),
+                           mul_real(mul_real(pi, 2.0),
+                           single_value(radius_0)))),
+          0x1p-4)) } ];
+      void;
+      (return := !r);
+      (raise Return)
+     end));
     absurd 
    end
    with
@@ -510,46 +667,85 @@ why --project [...] why/pi_example.why
   <lemma name="le_mul">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/pi_example_po1.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "27" begin = "0" end = "198"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "60" begin = "0" end = "198"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="le_mul">
-    <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "27" begin = "0" end = "198"/>
+    <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "60" begin = "0" end = "198"/>
   </function>
-  <function name="Function Perimeter">
+  <function name="Function Perimeter3">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/pi_example_po12.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "78" begin = "28" end = "43"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/pi_example_po13.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "33" begin = "2" end = "7"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/pi_example_po2.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "15" begin = "13" end = "26"/>
+    <goal why_file="why/pi_example_po9.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "34" begin = "13" end = "45"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/pi_example_po3.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "16" begin = "13" end = "22"/>
+    <goal why_file="why/pi_example_po10.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "35" begin = "13" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/pi_example_po4.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "16" begin = "21" end = "30"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/pi_example_po5.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "18" begin = "13" end = "28"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/pi_example_po6.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "18" begin = "20" end = "42"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/pi_example_po7.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "19" begin = "13" end = "26"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/pi_example_po8.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "8" end = "27"/>
+    <goal why_file="why/pi_example_po11.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "30" begin = "12" end = "50"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/pi_example_po9.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "31" end = "77"/>
+    </behavior>
+  </function>
+  <function name="Function Perimeter2">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/pi_example_po7.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "54" begin = "36" end = "51"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/pi_example_po8.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "20" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    </behavior>
+    <behavior name="Default behavior">
+    <goal why_file="why/pi_example_po6.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "17" begin = "12" end = "58"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+  </function>
+  <function name="Function Perimeter1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/pi_example_po3.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.jessie/pi_example.jc" line = "36" begin = "49" end = "65"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/pi_example_po4.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/pi_example_po5.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    </behavior>
+    <behavior name="Default behavior">
+    <goal why_file="why/pi_example_po2.why">
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "8" begin = "12" end = "58"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1474,509 +1670,91 @@ axiom single_to_double_val:
     (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
       double_value(d)))))
 
-function min_single() : real = 0x1.p-149
-
-function min_double() : real = 0x1.p-1074
-
-type Float_class =
-  | Finite
-  | Infinite
-  | NaN
-
-type sign =
-  | Negative
-  | Positive
-
-logic single_class : single -> Float_class
-
-logic double_class : double -> Float_class
-
-logic single_sign : single -> sign
-
-logic double_sign : double -> sign
-
-inductive same_sign_real_bool: sign, real -> prop =
-  | neg_case: (forall x:real.
-                ((x < 0.0) -> same_sign_real_bool(Negative, x)))
-  | pos_case: (forall x:real.
-                ((x > 0.0) -> same_sign_real_bool(Positive, x)))
-
-
-
-axiom same_sign_real_bool_zero1:
-  (forall b:sign. (not same_sign_real_bool(b, 0.0)))
-
-axiom same_sign_real_bool_zero2:
-  (forall x:real.
-    ((same_sign_real_bool(Negative, x) and same_sign_real_bool(Positive, x)) ->
-     false))
-
-axiom same_sign_real_bool_zero3:
-  (forall b:sign. (forall x:real. (same_sign_real_bool(b, x) -> (x <> 0.0))))
-
-axiom same_sign_real_bool_correct2:
-  (forall b:sign.
-    (forall x:real.
-      (same_sign_real_bool(b, x) -> ((x < 0.0) <-> (b = Negative)))))
-
-axiom same_sign_real_bool_correct3:
-  (forall b:sign.
-    (forall x:real.
-      (same_sign_real_bool(b, x) -> ((x > 0.0) <-> (b = Positive)))))
-
-predicate single_same_sign_real(x: single, y: real) =
-  same_sign_real_bool(single_sign(x), y)
-
-predicate single_same_sign(x: single, y: single) =
-  (single_sign(x) = single_sign(y))
-
-predicate single_diff_sign(x: single, y: single) =
-  (single_sign(x) <> single_sign(y))
-
-predicate single_product_sign(z: single, x: single, y: single) =
-  ((single_same_sign(x, y) -> (single_sign(z) = Positive)) and
-   (single_diff_sign(x, y) -> (single_sign(z) = Negative)))
-
-predicate double_same_sign_real(x: double, y: real) =
-  same_sign_real_bool(double_sign(x), y)
-
-predicate double_same_sign(x: double, y: double) =
-  (double_sign(x) = double_sign(y))
-
-predicate double_diff_sign(x: double, y: double) =
-  (double_sign(x) <> double_sign(y))
-
-predicate double_product_sign(z: double, x: double, y: double) =
-  ((double_same_sign(x, y) -> (double_sign(z) = Positive)) and
-   (double_diff_sign(x, y) -> (double_sign(z) = Negative)))
-
-predicate single_same_class(x: single, y: single) =
-  (single_class(x) = single_class(y))
-
-predicate singlediff_class(x: single, y: single) =
-  (single_class(x) <> single_class(y))
-
-predicate double_same_class(x: double, y: double) =
-  (double_class(x) = double_class(y))
-
-predicate doublediff_class(x: double, y: double) =
-  (double_class(x) <> double_class(y))
-
-axiom single_finite_sign:
-  (forall x:single.
-    (((single_class(x) = Finite) and (single_value(x) <> 0.0)) ->
-     single_same_sign_real(x, single_value(x))))
-
-axiom single_finite_sign_neg1:
-  (forall x:single.
-    (((single_class(x) = Finite) and (single_value(x) < 0.0)) ->
-     (single_sign(x) = Negative)))
-
-axiom single_finite_sign_neg2:
-  (forall x:single.
-    (((single_class(x) = Finite) and
-      ((single_value(x) <> 0.0) and (single_sign(x) = Negative))) ->
-     (single_value(x) < 0.0)))
-
-axiom single_finite_sign_pos1:
-  (forall x:single.
-    (((single_class(x) = Finite) and (single_value(x) > 0.0)) ->
-     (single_sign(x) = Positive)))
-
-axiom single_finite_sign_pos2:
-  (forall x:single.
-    (((single_class(x) = Finite) and
-      ((single_value(x) <> 0.0) and (single_sign(x) = Positive))) ->
-     (single_value(x) > 0.0)))
-
-axiom single_diff_sign_trans:
-  (forall x:single.
-    (forall y:single.
-      (forall z:single.
-        ((single_diff_sign(x, y) and single_diff_sign(y, z)) ->
-         single_same_sign(x, z)))))
-
-axiom single_same_sign_product:
-  (forall x:single.
-    (forall y:single.
-      (((single_class(x) = Finite) and
-        ((single_class(y) = Finite) and single_same_sign(x, y))) ->
-       ((single_value(x) * single_value(y)) >= 0.0))))
-
-axiom single_diff_sign_product:
-  (forall x:single.
-    (forall y:single.
-      (((single_class(x) = Finite) and
-        ((single_class(y) = Finite) and
-         ((single_value(x) * single_value(y)) < 0.0))) ->
-       single_diff_sign(x, y))))
-
-axiom double_finite_sign:
-  (forall x:double.
-    (((double_class(x) = Finite) and (double_value(x) <> 0.0)) ->
-     double_same_sign_real(x, double_value(x))))
-
-axiom double_finite_sign_neg1:
-  (forall x:double.
-    (((double_class(x) = Finite) and (double_value(x) < 0.0)) ->
-     (double_sign(x) = Negative)))
-
-axiom double_finite_sign_neg2:
-  (forall x:double.
-    (((double_class(x) = Finite) and
-      ((double_value(x) <> 0.0) and (double_sign(x) = Negative))) ->
-     (double_value(x) < 0.0)))
-
-axiom double_finite_sign_pos1:
-  (forall x:double.
-    (((double_class(x) = Finite) and (double_value(x) > 0.0)) ->
-     (double_sign(x) = Positive)))
-
-axiom double_finite_sign_pos2:
-  (forall x:double.
-    (((double_class(x) = Finite) and
-      ((double_value(x) <> 0.0) and (double_sign(x) = Positive))) ->
-     (double_value(x) > 0.0)))
-
-axiom double_diff_sign_trans:
-  (forall x:double.
-    (forall y:double.
-      (forall z:double.
-        ((double_diff_sign(x, y) and double_diff_sign(y, z)) ->
-         double_same_sign(x, z)))))
-
-axiom double_same_sign_product:
-  (forall x:double.
-    (forall y:double.
-      (((double_class(x) = Finite) and
-        ((double_class(y) = Finite) and double_same_sign(x, y))) ->
-       ((double_value(x) * double_value(y)) >= 0.0))))
-
-axiom double_diff_sign_product:
-  (forall x:double.
-    (forall y:double.
-      (((double_class(x) = Finite) and
-        ((double_class(y) = Finite) and
-         ((double_value(x) * double_value(y)) < 0.0))) ->
-       double_diff_sign(x, y))))
-
-predicate single_is_finite(x: single) = (single_class(x) = Finite)
-
-predicate single_is_infinite(x: single) = (single_class(x) = Infinite)
-
-predicate single_is_NaN(x: single) = (single_class(x) = NaN)
-
-predicate single_is_not_NaN(x: single) =
-  (single_is_finite(x) or single_is_infinite(x))
-
-predicate single_is_minus_infinity(x: single) =
-  (single_is_infinite(x) and (single_sign(x) = Negative))
-
-predicate single_is_plus_infinity(x: single) =
-  (single_is_infinite(x) and (single_sign(x) = Positive))
-
-predicate single_is_gen_zero(x: single) =
-  (single_is_finite(x) and (single_value(x) = 0.0))
-
-predicate single_is_gen_zero_plus(x: single) =
-  (single_is_gen_zero(x) and (single_sign(x) = Positive))
-
-predicate single_is_gen_zero_minus(x: single) =
-  (single_is_gen_zero(x) and (single_sign(x) = Negative))
-
-predicate double_is_finite(x: double) = (double_class(x) = Finite)
-
-predicate double_is_infinite(x: double) = (double_class(x) = Infinite)
-
-predicate double_is_NaN(x: double) = (double_class(x) = NaN)
-
-predicate double_is_not_NaN(x: double) =
-  (double_is_finite(x) or double_is_infinite(x))
-
-predicate double_is_minus_infinity(x: double) =
-  (double_is_infinite(x) and (double_sign(x) = Negative))
-
-predicate double_is_plus_infinity(x: double) =
-  (double_is_infinite(x) and (double_sign(x) = Positive))
-
-predicate double_is_gen_zero(x: double) =
-  (double_is_finite(x) and (double_value(x) = 0.0))
-
-predicate double_is_gen_zero_plus(x: double) =
-  (double_is_gen_zero(x) and (double_sign(x) = Positive))
-
-predicate double_is_gen_zero_minus(x: double) =
-  (double_is_gen_zero(x) and (double_sign(x) = Negative))
-
-predicate single_overflow_value(m: mode, x: single) =
-  (((m = down) ->
-    (((single_sign(x) = Negative) -> single_is_infinite(x)) and
-     ((single_sign(x) = Positive) ->
-      (single_is_finite(x) and (single_value(x) = max_single))))) and
-   (((m = up) ->
-     (((single_sign(x) = Negative) ->
-       (single_is_finite(x) and (single_value(x) = (-max_single)))) and
-      ((single_sign(x) = Positive) -> single_is_infinite(x)))) and
-    (((m = to_zero) ->
-      (single_is_finite(x) and
-       (((single_sign(x) = Negative) -> (single_value(x) = (-max_single))) and
-        ((single_sign(x) = Positive) -> (single_value(x) = max_single))))) and
-     (((m = nearest_away) or (m = nearest_even)) -> single_is_infinite(x)))))
-
-predicate double_overflow_value(m: mode, x: double) =
-  (((m = down) ->
-    (((double_sign(x) = Negative) -> double_is_infinite(x)) and
-     ((double_sign(x) = Positive) ->
-      (double_is_finite(x) and (double_value(x) = max_double))))) and
-   (((m = up) ->
-     (((double_sign(x) = Negative) ->
-       (double_is_finite(x) and (double_value(x) = (-max_double)))) and
-      ((double_sign(x) = Positive) -> double_is_infinite(x)))) and
-    (((m = to_zero) ->
-      (double_is_finite(x) and
-       (((double_sign(x) = Negative) -> (double_value(x) = (-max_double))) and
-        ((double_sign(x) = Positive) -> (double_value(x) = max_double))))) and
-     (((m = nearest_away) or (m = nearest_even)) -> double_is_infinite(x)))))
-
-predicate single_underflow_value(m: mode, x: single) =
-  (single_is_finite(x) and
-   (((single_sign(x) = Positive) ->
-     ((((m = down) or
-        ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
-       (single_value(x) = 0.0)) and
-      ((m = up) -> (single_value(x) = min_single)))) and
-    ((single_sign(x) = Negative) ->
-     ((((m = up) or
-        ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
-       (single_value(x) = 0.0)) and
-      ((m = down) -> (single_value(x) = (-min_single)))))))
-
-predicate double_underflow_value(m: mode, x: double) =
-  (double_is_finite(x) and
-   (((double_sign(x) = Positive) ->
-     ((((m = down) or
-        ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
-       (double_value(x) = 0.0)) and
-      ((m = up) -> (double_value(x) = min_double)))) and
-    ((double_sign(x) = Negative) ->
-     ((((m = up) or
-        ((m = to_zero) or ((m = nearest_even) or (m = nearest_away)))) ->
-       (double_value(x) = 0.0)) and
-      ((m = down) -> (double_value(x) = (-min_double)))))))
-
-predicate single_sign_zero_result(m: mode, x: single) =
-  ((single_value(x) = 0.0) ->
-   (((m = down) -> (single_sign(x) = Negative)) and
-    ((m <> down) -> (single_sign(x) = Positive))))
-
-predicate double_sign_zero_result(m: mode, x: double) =
-  ((double_value(x) = 0.0) ->
-   (((m = down) -> (double_sign(x) = Negative)) and
-    ((m <> down) -> (double_sign(x) = Positive))))
-
-predicate le_single(x: single, y: single) =
-  ((single_is_finite(x) and
-    (single_is_finite(y) and (single_value(x) <= single_value(y)))) or
-   ((single_is_minus_infinity(x) and single_is_not_NaN(y)) or
-    (single_is_not_NaN(x) and single_is_plus_infinity(y))))
-
-predicate lt_single(x: single, y: single) =
-  ((single_is_finite(x) and
-    (single_is_finite(y) and (single_value(x) < single_value(y)))) or
-   ((single_is_minus_infinity(x) and
-     (single_is_not_NaN(y) and (not single_is_minus_infinity(y)))) or
-    (single_is_not_NaN(x) and
-     ((not single_is_plus_infinity(x)) and single_is_plus_infinity(y)))))
-
-predicate ge_single(x: single, y: single) = le_single(y, x)
-
-predicate gt_single(x: single, y: single) = lt_single(y, x)
-
-predicate eq_single(x: single, y: single) =
-  (single_is_not_NaN(x) and
-   (single_is_not_NaN(y) and
-    ((single_is_finite(x) and
-      (single_is_finite(y) and (single_value(x) = single_value(y)))) or
-     (single_is_infinite(x) and
-      (single_is_infinite(y) and single_same_sign(x, y))))))
-
-predicate ne_single(x: single, y: single) = (not eq_single(x, y))
-
-predicate le_double(x: double, y: double) =
-  ((double_is_finite(x) and
-    (double_is_finite(y) and (double_value(x) <= double_value(y)))) or
-   ((double_is_minus_infinity(x) and double_is_not_NaN(y)) or
-    (double_is_not_NaN(x) and double_is_plus_infinity(y))))
-
-predicate lt_double(x: double, y: double) =
-  ((double_is_finite(x) and
-    (double_is_finite(y) and (double_value(x) < double_value(y)))) or
-   ((double_is_minus_infinity(x) and
-     (double_is_not_NaN(y) and (not double_is_minus_infinity(y)))) or
-    (double_is_not_NaN(x) and
-     ((not double_is_plus_infinity(x)) and double_is_plus_infinity(y)))))
-
-predicate ge_double(x: double, y: double) = le_double(y, x)
-
-predicate gt_double(x: double, y: double) = lt_double(y, x)
-
-predicate eq_double(x: double, y: double) =
-  (double_is_not_NaN(x) and
-   (double_is_not_NaN(y) and
-    ((double_is_finite(x) and
-      (double_is_finite(y) and (double_value(x) = double_value(y)))) or
-     (double_is_infinite(x) and
-      (double_is_infinite(y) and double_same_sign(x, y))))))
-
-predicate ne_double(x: double, y: double) = (not eq_double(x, y))
-
-axiom le_lt_double_trans:
-  (forall x:double.
-    (forall y:double.
-      (forall z:double.
-        ((le_double(x, y) and lt_double(y, z)) -> lt_double(x, z)))))
-
-axiom lt_le_double_trans:
-  (forall x:double.
-    (forall y:double.
-      (forall z:double.
-        ((lt_double(x, y) and le_double(y, z)) -> lt_double(x, z)))))
-
-axiom round_single1:
-  (forall m:mode.
-    (forall x:real.
-      (no_overflow_single(m, x) ->
-       (single_is_finite(round_single_logic(m, x)) and
-        (single_value(round_single_logic(m, x)) = round_single(m, x))))))
-
-axiom round_single2:
-  (forall m:mode.
-    (forall x:real.
-      ((not no_overflow_single(m, x)) ->
-       (single_same_sign_real(round_single_logic(m, x), x) and
-        single_overflow_value(m, round_single_logic(m, x))))))
-
-axiom round_single3:
-  (forall m:mode.
-    (forall x:real. (single_exact(round_single_logic(m, x)) = x)))
-
-axiom round_single4:
-  (forall m:mode.
-    (forall x:real. (single_model(round_single_logic(m, x)) = x)))
-
-axiom single_of_zero:
-  (forall m:mode. single_is_gen_zero(round_single_logic(m, 0.0)))
-
-axiom round_single_logic_le:
-  (forall m:mode.
-    (forall x:real.
-      (single_is_finite(round_single_logic(m, x)) ->
-       (abs_real(single_value(round_single_logic(m, x))) <= max_single))))
-
-axiom round_single_no_overflow:
-  (forall m:mode.
-    (forall x:real.
-      ((abs_real(x) <= max_single) ->
-       (single_is_finite(round_single_logic(m, x)) and
-        (single_value(round_single_logic(m, x)) = round_single(m, x))))))
-
-axiom single_positive_constant:
-  (forall m:mode.
-    (forall x:real.
-      (((min_single <= x) and (x <= max_single)) ->
-       (single_is_finite(round_single_logic(m, x)) and
-        ((single_value(round_single_logic(m, x)) > 0.0) and
-         (single_sign(round_single_logic(m, x)) = Positive))))))
-
-axiom single_negative_constant:
-  (forall m:mode.
-    (forall x:real.
-      ((((-max_single) <= x) and (x <= (-min_single))) ->
-       (single_is_finite(round_single_logic(m, x)) and
-        ((single_value(round_single_logic(m, x)) < 0.0) and
-         (single_sign(round_single_logic(m, x)) = Negative))))))
-
-axiom round_double1:
-  (forall m:mode.
-    (forall x:real.
-      (no_overflow_double(m, x) ->
-       (double_is_finite(round_double_logic(m, x)) and
-        (double_value(round_double_logic(m, x)) = round_double(m, x))))))
-
-axiom round_double2:
-  (forall m:mode.
-    (forall x:real.
-      ((not no_overflow_double(m, x)) ->
-       (double_same_sign_real(round_double_logic(m, x), x) and
-        double_overflow_value(m, round_double_logic(m, x))))))
-
-axiom round_double3:
-  (forall m:mode.
-    (forall x:real. (double_exact(round_double_logic(m, x)) = x)))
-
-axiom round_double4:
-  (forall m:mode.
-    (forall x:real. (double_model(round_double_logic(m, x)) = x)))
-
-axiom double_of_zero:
-  (forall m:mode. double_is_gen_zero(round_double_logic(m, 0.0)))
-
-axiom round_double_logic_le:
-  (forall m:mode.
-    (forall x:real.
-      (double_is_finite(round_double_logic(m, x)) ->
-       (abs_real(double_value(round_double_logic(m, x))) <= max_double))))
-
-axiom round_double_no_overflow:
-  (forall m:mode.
-    (forall x:real.
-      ((abs_real(x) <= max_double) ->
-       (double_is_finite(round_double_logic(m, x)) and
-        (double_value(round_double_logic(m, x)) = round_double(m, x))))))
-
-axiom double_positive_constant:
-  (forall m:mode.
-    (forall x:real.
-      (((min_double <= x) and (x <= max_double)) ->
-       (double_is_finite(round_double_logic(m, x)) and
-        ((double_value(round_double_logic(m, x)) > 0.0) and
-         (double_sign(round_double_logic(m, x)) = Positive))))))
-
-axiom double_negative_constant:
-  (forall m:mode.
-    (forall x:real.
-      ((((-max_double) <= x) and (x <= (-min_double))) ->
-       (double_is_finite(round_double_logic(m, x)) and
-        ((double_value(round_double_logic(m, x)) < 0.0) and
-         (double_sign(round_double_logic(m, x)) = Negative))))))
-
-axiom single_is_gen_zero_comp1:
-  (forall x:single.
-    (forall y:single.
-      ((single_is_gen_zero(x) and
-        ((single_value(x) = single_value(y)) and single_is_finite(y))) ->
-       single_is_gen_zero(y))))
-
-axiom single_is_gen_zero_comp2:
-  (forall x:single.
-    (forall y:single.
-      ((single_is_finite(x) and
-        ((not single_is_gen_zero(x)) and (single_value(x) = single_value(y)))) ->
-       (not single_is_gen_zero(y)))))
-
-axiom double_is_gen_zero_comp1:
-  (forall x:double.
-    (forall y:double.
-      ((double_is_gen_zero(x) and
-        ((double_value(x) = double_value(y)) and double_is_finite(y))) ->
-       double_is_gen_zero(y))))
-
-axiom double_is_gen_zero_comp2:
-  (forall x:double.
-    (forall y:double.
-      ((double_is_finite(x) and
-        ((not double_is_gen_zero(x)) and (double_value(x) = double_value(y)))) ->
-       (not double_is_gen_zero(y)))))
+predicate single_of_real_post(m: mode, x: real, res: single) =
+  ((single_value(res) = round_single(m, x)) and
+   ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate add_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) + single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) + single_exact(y))) and
+    (single_model(res) = (single_model(x) + single_model(y)))))
+
+predicate sub_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) - single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) - single_exact(y))) and
+    (single_model(res) = (single_model(x) - single_model(y)))))
+
+predicate mul_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) * single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) * single_exact(y))) and
+    (single_model(res) = (single_model(x) * single_model(y)))))
+
+predicate div_single_post(m: mode, x: single, y: single, res: single) =
+  ((single_value(res) = round_single(m,
+   (single_value(x) / single_value(y)))) and
+   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
+    (single_model(res) = (single_model(x) / single_model(y)))))
+
+predicate sqrt_single_post(m: mode, x: single, res: single) =
+  ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
+   ((single_exact(res) = sqrt_real(single_exact(x))) and
+    (single_model(res) = sqrt_real(single_model(x)))))
+
+predicate neg_single_post(x: single, res: single) =
+  ((single_value(res) = (-single_value(x))) and
+   ((single_exact(res) = (-single_exact(x))) and
+    (single_model(res) = (-single_model(x)))))
+
+predicate abs_single_post(x: single, res: single) =
+  ((single_value(res) = abs_real(single_value(x))) and
+   ((single_exact(res) = abs_real(single_exact(x))) and
+    (single_model(res) = abs_real(single_model(x)))))
+
+predicate double_of_real_post(m: mode, x: real, res: double) =
+  ((double_value(res) = round_double(m, x)) and
+   ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate add_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) + double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) + double_exact(y))) and
+    (double_model(res) = (double_model(x) + double_model(y)))))
+
+predicate sub_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) - double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) - double_exact(y))) and
+    (double_model(res) = (double_model(x) - double_model(y)))))
+
+predicate mul_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) * double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) * double_exact(y))) and
+    (double_model(res) = (double_model(x) * double_model(y)))))
+
+predicate div_double_post(m: mode, x: double, y: double, res: double) =
+  ((double_value(res) = round_double(m,
+   (double_value(x) / double_value(y)))) and
+   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
+    (double_model(res) = (double_model(x) / double_model(y)))))
+
+predicate sqrt_double_post(m: mode, x: double, res: double) =
+  ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
+   ((double_exact(res) = sqrt_real(double_exact(x))) and
+    (double_model(res) = sqrt_real(double_model(x)))))
+
+predicate neg_double_post(x: double, res: double) =
+  ((double_value(res) = (-double_value(x))) and
+   ((double_exact(res) = (-double_exact(x))) and
+    (double_model(res) = (-double_model(x)))))
+
+predicate abs_double_post(x: double, res: double) =
+  ((double_value(res) = abs_real(double_value(x))) and
+   ((double_exact(res) = abs_real(double_exact(x))) and
+    (double_model(res) = abs_real(double_model(x)))))
 
 type char_P
 

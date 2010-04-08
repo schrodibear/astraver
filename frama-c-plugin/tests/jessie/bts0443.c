@@ -6,7 +6,7 @@ no VC are generated, although the assigns clause is wrong
   
 */
 
-# pragma SeparationPolicy(regions)
+// # pragma SeparationPolicy(none)
 
 int a[1];
 

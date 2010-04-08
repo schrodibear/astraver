@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only test.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test.c"
-test.c:3:[kernel] user error: Error during annotations analysis: unbound logic variable x
-[kernel] user error: skipping file "test.c" that has errors.
-[kernel] Plugin kernel aborted because of invalid user input(s).
