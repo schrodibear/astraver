@@ -27,11 +27,11 @@
 
 //@+ CheckArithOverflow = yes
 
-/*@ lemma mean_property : 
+/* @ lemma mean_property : 
   @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y ;
   @*/
 
-/*@ lemma mean_property_2 : 
+/* @ lemma mean_property_2 : 
   @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; 
   @*/
 
@@ -115,7 +115,7 @@ class BinarySearch {
     // pb with recursive def of type and logic in Jessie
     // @ invariant t_is_sorted: is_sorted(t);
     
-    /*@	requires t.length <= 2147483647 && is_sorted(t);
+    /*@	requires t != null && t.length <= 2147483647 && is_sorted(t);
       @ behavior search_success:
       @   ensures
       @   \result >= 0 ==> t[\result] == v;

@@ -1067,10 +1067,11 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/javacard_api/com/sun/javacard/impl/*.java \
 	lib/images/*.png \
 	atp/*.ml atp/LICENSE.txt atp/Makefile atp/Mk_ml_file \
-	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
-	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml* \
         frama-c-plugin/Makefile frama-c-plugin/configure \
 	frama-c-plugin/*.ml* frama-c-plugin/share/jessie/*.h
+
+#	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
+#	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml* \
 
 # ne pas distribuer ces tests-la	frama-c-plugin/tests/jessie/*.c
 

@@ -245,7 +245,7 @@ fi
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 # apron library
-default_apron=yes
+default_apron=no
 APRONLIBS=
 AC_ARG_ENABLE(apron,[  --enable-apron=[no/yes]  use APRON library for abstract interpretation [default=yes]],,enable_apron=$default_apron)
 
@@ -269,16 +269,27 @@ fi
 
 # Frama-C
 TESTFRAMAC=yes
-AC_ARG_ENABLE(framac-plugin,[  --enable-framac-plugin    disable the compilation of the Frama-C plugin],TESTFRAMAC=no)
-
-if test "$TESTFRAMAC" = no ; then
-	AC_MSG_RESULT(The compilation of the Frama-C plugin is disabled)
-fi
 
 if test "$TESTFRAMAC" = no ; then
    FRAMAC=no   
 else
-   AC_CHECK_PROG(FRAMAC,frama-c,yes,no)
+   AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
+   if test "$FRAMAC" = no ; then
+	AC_MSG_ERROR(Cannot find frama-c.)
+   else
+      # we extract Ocaml version number 
+      FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
+      echo "Frama-c version is $FRAMACVERSION"
+
+      case $FRAMACVERSION in
+        Boron-*) AC_MSG_RESULT(ok)
+                 FRAMAC=yes
+                 ;;
+        *) AC_MSG_ERROR(You need Frama-C version Boron)
+           FRAMAC=no
+           ;;
+      esac
+   fi
 fi
 
 # camlp4 
@@ -491,30 +502,33 @@ chmod a+x bench/bench
 echo
 echo "                 Summary"
 echo "-----------------------------------------"
-echo "OCaml version           : $OCAMLVERSION"
-echo "OCaml library path      : $OCAMLLIB"
-echo "OcamlGraph lib          : $OCAMLGRAPHVER"
-echo "Verbose make            : $VERBOSEMAKE"
-echo "Abstract interpretation : $enable_apron"
-echo "Frama-C plugin          : $FRAMAC"
+echo "OCaml version            : $OCAMLVERSION"
+echo "OCaml library path       : $OCAMLLIB"
+echo "OcamlGraph lib           : $OCAMLGRAPHVER"
+echo "Verbose make             : $VERBOSEMAKE"
+echo "Inference of annotations : $enable_apron"
 if test "$enable_apron" = "yes" ; then
-   echo "    APRON lib           : $APRONLIB"
+   echo "    APRON lib            : $APRONLIB"
 fi
-echo "GWhy                    : $LABLGTK2"
-echo "Coq support             : $COQ"
+echo "Frama-C plugin           : $FRAMAC"
+if test "$FRAMAC" = "yes" ; then
+   echo "    Frama-C version      : $FRAMACVERSION"
+fi
+echo "GWhy                     : $LABLGTK2"
+echo "Coq support              : $COQ"
 if test "$COQ" = "yes" ; then
-   echo "    Version             : $COQVER ($COQVERSION)"
+   echo "    Version              : $COQVER ($COQVERSION)"
    if test "$JESSIELIBCOQ" = ""; then
-      echo "                        : (Jessie Coq proofs disabled, requires >= 8.1)"
+      echo "                         : (Jessie Coq proofs disabled, requires >= 8.1)"
    fi
-   echo "    Lib                 : $COQLIB" 
-   echo "    Floats              : $COQFLOATSMSG"
-   echo "    Gappa               : $COQGAPPAMSG"
+   echo "    Lib                  : $COQLIB" 
+   echo "    Floats               : $COQFLOATSMSG"
+   echo "    Gappa                : $COQGAPPAMSG"
 fi
-# echo "Alt-ergo binary         : $ERGOBIN"
-echo "PVS support             : $PVS"
+echo "PVS support              : $PVS"
 if test "$PVS" = "yes" ; then
-   echo "    Bin                 : $PVSC"
-   echo "    Lib                 : $PVSLIB"
+   echo "    Bin                  : $PVSC"
+   echo "    Lib                  : $PVSLIB"
 fi
-echo "Mizar support           : $MIZAR"
+echo "Mizar support            : $MIZAR"
+echo "Other provers support    : at run-time (use why-config to configure)"

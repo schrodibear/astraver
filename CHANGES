@@ -1,6 +1,6 @@
 
 
-version 2.24, April 12, 2010
+version 2.24, April 14, 2010
 ============================
 
   o [Frama-C plugin] synchronized with Frama-C Boron 20100412
@@ -13,7 +13,6 @@ version 2.24, April 12, 2010
     "reads \nothing" and no reads clause at all
   o [Jessie, Frama-C plugin] the "defensive" model for floating-point 
     computations is now the default
-  o [Jessie] is now compiled with apron by default, if available.
   o [Jessie] fixed bug 0370: missing coercion on decreasing measures
   o [Jessie] support for "let x = t in a" when a is an assertion
   o [Frama-C plugin] support for statement contracts, fixes bug 0399

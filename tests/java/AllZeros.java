@@ -33,6 +33,8 @@ class AllZeros {
 	return t.length;
 
     }
+
+
     /*@ requires t != null;
       @ ensures \result <==> 
       @      \forall integer i; 0 <= i < t.length ==> t[i] == 0; 

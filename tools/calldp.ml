@@ -42,6 +42,7 @@ type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffe
 
 let cpulimit = ref "why-cpulimit"
 
+let is_true_unix_os = Sys.os_type != "Win32"
 
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()
@@ -49,18 +50,35 @@ let remove_file ?(debug=false) f =
 let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
   let t0 = Unix.times () in
   if debug then Format.eprintf "command line: %s@." cmd;
-  let cmd = if timeout = 0
-  then sprintf "%s 2>&1" cmd
-  else sprintf "%s %d %s 2>&1" !cpulimit timeout cmd in
-  let (cin,cout) as p = Unix.open_process cmd in
-  List.iter (Buffer.output_buffer cout) stdin;
-  close_out cout;
-  let out = Lib.channel_contents cin in
-  let ret = Unix.close_process p in
-  let t1 = Unix.times () in
-  let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
-  if debug then Format.eprintf "Calldp : Command output : %s@." out;
-  (cpu_time,ret,out)
+  if is_true_unix_os then
+    begin
+      let cmd = if timeout = 0
+      then sprintf "%s 2>&1" cmd
+      else sprintf "%s %d %s 2>&1" !cpulimit timeout cmd in
+      let (cin,cout) as p = Unix.open_process cmd in
+      List.iter (Buffer.output_buffer cout) stdin;
+      close_out cout;
+      let out = Lib.channel_contents cin in
+      let ret = Unix.close_process p in
+      let t1 = Unix.times () in
+      let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
+      if debug then Format.eprintf "Calldp : Command output : %s@." out;
+      (cpu_time,ret,out)
+    end
+  else
+    begin
+      assert (stdin=[]);
+      let out = Filename.temp_file "out" "" in
+      let cmd = if timeout = 0 
+      then sprintf "%s > %s 2>&1" cmd out
+      else sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
+      let ret = Sys.command cmd in
+      let t1 = Unix.times () in
+      let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
+      if debug then Format.eprintf "Output file %s:@.%s@." out (Lib.file_contents out);
+      (cpu_time,Unix.WEXITED ret,out)
+    end
+
 
 let grep re str =
   let re =
@@ -84,7 +102,7 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
             p.DpConfig.command p.DpConfig.command_switches switch f
           in
           cmd,timed_sys_command ~debug timeout cmd
-      | Some buffers, Some stdin_s, _ ->
+      | Some buffers, Some stdin_s, _ when is_true_unix_os ->
           let cmd = sprintf "%s %s %s %s"
             p.DpConfig.command p.DpConfig.command_switches switch stdin_s
           in

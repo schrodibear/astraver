@@ -130,8 +130,9 @@ let main () =
       printf "------------------------------------------------------@.";
     end;
   if !prover_tips_info then
-    printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@."
-
+    begin
+      printf "See web page http://why.lri.fr/provers.en.html for up-to-date information about provers and their versions@."
+    end
 
 let () = Printexc.catch main ()
 
