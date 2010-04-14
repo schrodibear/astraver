@@ -275,7 +275,7 @@ if test "$TESTFRAMAC" = no ; then
 else
    AC_CHECK_PROG(FRAMAC,frama-c,frama-c,no)
    if test "$FRAMAC" = no ; then
-	AC_MSG_ERROR(Cannot find frama-c.)
+	AC_MSG_WARN(Cannot find frama-c.)
    else
       # we extract Ocaml version number 
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
@@ -285,7 +285,7 @@ else
         Boron-*) AC_MSG_RESULT(ok)
                  FRAMAC=yes
                  ;;
-        *) AC_MSG_ERROR(You need Frama-C version Boron)
+        *) AC_MSG_WARN(You need Frama-C version Boron)
            FRAMAC=no
            ;;
       esac
