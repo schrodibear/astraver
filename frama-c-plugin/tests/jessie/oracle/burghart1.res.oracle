@@ -116,9 +116,8 @@ behavior default:
             {  (if (i < n) then () else 
                (goto while_0_break));
                (if ((C_21 : (C_20 : (a + i)).int_M) != val) then 
-               {  (C_17 : ((C_16 : (C_15 : (b + j)).int_M) = (C_14 : 
-                                                             (C_13 : 
-                                                             (a + i)).int_M)));
+               {  (Before : (C_17 : ((C_16 : (C_15 : (b + j)).int_M) = 
+                            (C_14 : (C_13 : (a + i)).int_M))));
                   (C_19 : (j = (C_18 : (j + 1))))
                } else ());
                (C_23 : (i = (C_22 : (i + 1))))
@@ -705,9 +704,10 @@ let remove_copy_ensures_default =
                                                                     ((shift a_0) !i))))) val_0)
                                                                    then
                                                                     (let jessie_34 = 
-                                                                    (C_17:
+                                                                    (Before:
                                                                     begin
                                                                       
+                                                                    (C_17:
                                                                     (let jessie_32 = 
                                                                     (let jessie_28 = 
                                                                     (C_14:
@@ -718,7 +718,7 @@ let remove_copy_ensures_default =
                                                                     (C_15:
                                                                     ((shift b) !j)) in
                                                                     (((safe_upd_ int_P_int_M_b_3) jessie_31) jessie_28))) in
-                                                                    void);
+                                                                    void));
                                                                     (C_19:
                                                                     begin
                                                                       
@@ -872,9 +872,10 @@ let remove_copy_safety =
                                                                     ((((offset_acc_ int_P_a_2_alloc_table) int_P_int_M_a_2) a_0) !i)))) val_0)
                                                                    then
                                                                     (let jessie_16 = 
-                                                                    (C_17:
+                                                                    (Before:
                                                                     begin
                                                                       
+                                                                    (C_17:
                                                                     (let jessie_14 = 
                                                                     (let jessie_10 = 
                                                                     (C_14:
@@ -886,7 +887,7 @@ let remove_copy_safety =
                                                                     ((shift jessie_11) jessie_12) in
                                                                     (JC_48:
                                                                     (((((offset_upd_ int_P_b_3_alloc_table) int_P_int_M_b_3) jessie_11) jessie_12) jessie_10)))))) in
-                                                                    void);
+                                                                    void));
                                                                     (C_19:
                                                                     begin
                                                                       
@@ -963,12 +964,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/burghart1_po29.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "113" begin = "27" end = "216"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "80" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/burghart1_po30.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "113" begin = "27" end = "216"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "80" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1007,11 +1008,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po7.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1536"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1452"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po8.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1536"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1452"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po9.why">
@@ -1043,11 +1044,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po16.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1536"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1452"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po17.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1536"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "86" begin = "9" end = "1452"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po18.why">

@@ -79,6 +79,7 @@ behavior default:
 {  
    {  (if (x == 0) then 
       (goto l1) else ());
+      (l2 : ());
       (C_13 : (x = (C_12 : ((C_11 : (x + 1)) :> int32))));
       (l1 : 
       (return x))
@@ -670,14 +671,19 @@ let f4_ensures_default =
                           (let jessie_50 = (raise (Goto_l1_exc void)) in
                           void)
                          else void);
-                        (C_13:
+                        (l2:
                         begin
-                          (let jessie_52 = (mutable_x := (C_12:
-                                                         (safe_int32_of_integer_ 
-                                                          (C_11:
-                                                          ((add_int (integer_of_int32 !mutable_x)) (1)))))) in
-                          void);
-                         (raise (Goto_l1_exc void))
+                          void;
+                         (C_13:
+                         begin
+                           (let jessie_52 = (mutable_x := (C_12:
+                                                          (safe_int32_of_integer_ 
+                                                           (C_11:
+                                                           ((add_int 
+                                                             (integer_of_int32 !mutable_x)) (1)))))) in
+                           void);
+                          (raise (Goto_l1_exc void))
+                         end)
                         end)
                        end in
       void)
@@ -708,15 +714,20 @@ let f4_safety =
                           (let jessie_45 = (raise (Goto_l1_exc void)) in
                           void)
                          else void);
-                        (C_13:
+                        (l2:
                         begin
-                          (let jessie_47 = (mutable_x := (C_12:
-                                                         (JC_34:
-                                                         (int32_of_integer_ 
-                                                          (C_11:
-                                                          ((add_int (integer_of_int32 !mutable_x)) (1))))))) in
-                          void);
-                         (raise (Goto_l1_exc void))
+                          void;
+                         (C_13:
+                         begin
+                           (let jessie_47 = (mutable_x := (C_12:
+                                                          (JC_34:
+                                                          (int32_of_integer_ 
+                                                           (C_11:
+                                                           ((add_int 
+                                                             (integer_of_int32 !mutable_x)) (1))))))) in
+                           void);
+                          (raise (Goto_l1_exc void))
+                         end)
                         end)
                        end in
       void)
