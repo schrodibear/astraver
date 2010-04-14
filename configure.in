@@ -111,7 +111,12 @@ case $OSTYPE in
     STRIP='echo "no strip "'
     CPULIMIT=cpulimit-win
     ;;
-  Cygwin|Unix)
+  Cygwin) 
+    EXE=.exe
+    STRIP=strip
+    CPULIMIT=cpulimit-win
+    ;;
+  Unix)
     EXE=
     STRIP=strip
     CPULIMIT=cpulimit
