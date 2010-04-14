@@ -70,21 +70,6 @@ if test "$VERBOSEMAKE" = yes ; then
 	AC_MSG_RESULT(Make will be verbose.)
 fi
 
-# Check for arch/OS
-
-AC_MSG_CHECKING(executable suffix)
-if uname -s | grep -q CYGWIN ; then
-  EXE=.exe
-  STRIP='echo "no strip "'
-  CPULIMIT=cpulimit-win
-  AC_MSG_RESULT(.exe) 
-else
-  EXE=
-  STRIP=strip
-  CPULIMIT=cpulimit
-  AC_MSG_RESULT(<none>)
-fi
-
 # Check for Ocaml compilers
 
 # we first look for ocamlc in the path; if not present, we fail
@@ -114,6 +99,27 @@ esac
 # old way: OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d ' ' | tr -d '\\r'`
 OCAMLLIB=`$OCAMLC -where | tr -d '\\r'`
 echo "ocaml library path is $OCAMLLIB"
+
+
+# Check for arch/OS
+
+AC_MSG_CHECKING(OS dependent settings)
+OSTYPE=`echo 'prerr_endline Sys.os_type;;' | ocaml 2>&1 > /dev/null`
+case $OSTYPE in 
+  Win32) 
+    EXE=.exe
+    STRIP='echo "no strip "'
+    CPULIMIT=cpulimit-win
+    ;;
+  Cygwin|Unix)
+    EXE=
+    STRIP=strip
+    CPULIMIT=cpulimit
+    ;;
+  *) AC_MSG_ERROR(Unknown OS type: $OSTYPE)
+    ;;
+esac
+
 
 # then we look for ocamlopt; if not present, we issue a warning
 # if the version is not the same, we also discard it
@@ -278,12 +284,11 @@ else
 	AC_MSG_WARN(Cannot find frama-c.)
    else
       # we extract Ocaml version number 
+      AC_MSG_CHECKING(Frama-c version)
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
-      echo "Frama-c version is $FRAMACVERSION"
-
+      AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Boron-*) AC_MSG_RESULT(ok)
-                 FRAMAC=yes
+        Boron-*) FRAMAC=yes
                  ;;
         *) AC_MSG_WARN(You need Frama-C version Boron)
            FRAMAC=no

@@ -42,7 +42,7 @@ type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffe
 
 let cpulimit = ref "why-cpulimit"
 
-let is_true_unix_os = Sys.os_type != "Win32"
+let is_true_unix_os = Sys.os_type <> "Win32"
 
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()
