@@ -42,7 +42,11 @@ type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffe
 
 let cpulimit = ref "why-cpulimit"
 
-let is_true_unix_os = Sys.os_type <> "Win32"
+(* Cygwin is nearly a true unix os but it can't use why-cpulimit.c
+(setrlimit(RLIMIT_CPU) isn't implemented) and why-cpulimit-win.c
+doesn't take care of stdin *)
+
+let is_true_unix_os = Sys.os_type = "Unix"
 
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()

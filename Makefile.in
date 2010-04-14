@@ -808,8 +808,8 @@ install-lib: $(JCLIB)
 	cp -f lib/isabelle/caduceus_why.thy $(LIBDIR)/caduceus/isabelle
 	mkdir -p $(LIBDIR)/caduceus/harvey
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
-	cd lib; cp -r java_api $(LIBDIR)/why
-	cd lib; cp -r javacard_api $(LIBDIR)/why
+	cd lib; cp -rf java_api $(LIBDIR)/why
+	cd lib; cp -rf javacard_api $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/why/images
 	cp -f lib/images/*.png $(LIBDIR)/why/images
 #	remove CVS directories
