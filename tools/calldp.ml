@@ -75,8 +75,9 @@ let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
       let ret = Sys.command cmd in
       let t1 = Unix.times () in
       let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
-      if debug then Format.eprintf "Output file %s:@.%s@." out (Lib.file_contents out);
-      (cpu_time,Unix.WEXITED ret,out)
+      let out_content = Lib.file_contents out in
+      if debug then Format.eprintf "Output file %s:@.%s@." out out_content;
+      (cpu_time,Unix.WEXITED ret,out_content)
     end
 
 
@@ -107,7 +108,7 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
             p.DpConfig.command p.DpConfig.command_switches switch stdin_s
           in
           cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
-      | Some buffers, None, Some f ->
+      | Some buffers, _, Some f ->
           let f = Filename.temp_file "" f in
           let cout = open_out f in
           List.iter (Buffer.output_buffer cout) buffers;
