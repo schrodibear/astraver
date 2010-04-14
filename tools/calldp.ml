@@ -48,14 +48,16 @@ doesn't take care of stdin *)
 
 let is_true_unix_os = Sys.os_type = "Unix"
 
+let is_true_cygwin = Sys.os_type = "Cygwin"
+
 let remove_file ?(debug=false) f =
   if not debug then try Sys.remove f with _ -> ()
 
 let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
-  let t0 = Unix.times () in
   if debug then Format.eprintf "command line: %s@." cmd;
   if is_true_unix_os then
     begin
+      let t0 = Unix.times () in
       let cmd = if timeout = 0
       then sprintf "%s 2>&1" cmd
       else sprintf "%s %d %s 2>&1" !cpulimit timeout cmd in
@@ -72,13 +74,14 @@ let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
   else
     begin
       assert (stdin=[]);
+      let t0 = Unix.gettimeofday () in
       let out = Filename.temp_file "out" "" in
       let cmd = if timeout = 0 
       then sprintf "%s > %s 2>&1" cmd out
       else sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
       let ret = Sys.command cmd in
-      let t1 = Unix.times () in
-      let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in
+      let t1 = Unix.gettimeofday () in
+      let cpu_time = t1 -. t0 in
       let out_content = Lib.file_contents out in
       if debug then Format.eprintf "Output file %s:@.%s@." out out_content;
       (cpu_time,Unix.WEXITED ret,out_content)
@@ -114,6 +117,12 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
           cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
       | Some buffers, _, Some f ->
           let f = Filename.temp_file "" f in
+          let f = if is_true_cygwin 
+          then let cin = Unix.open_process_in 
+                     (sprintf "cygpath -am \"%s\"" f) in
+               let f = input_line cin in
+               close_in cin; f
+          else f in
           let cout = open_out f in
           List.iter (Buffer.output_buffer cout) buffers;
           close_out cout;
