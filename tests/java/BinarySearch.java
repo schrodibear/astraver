@@ -33,8 +33,8 @@
   @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y; 
   @*/
 
-/*@ lemma mean_property2 : 
-  @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; 
+/*@ lemma div2_property : 
+  @   \forall integer x; 0 <= x ==> 0 <= x/2 <= x;
   @*/
 
 /*@ predicate is_sorted{L}(int[] t) =
