@@ -104,22 +104,25 @@ echo "ocaml library path is $OCAMLLIB"
 # Check for arch/OS
 
 AC_MSG_CHECKING(OS dependent settings)
-OSTYPE=`echo 'prerr_endline Sys.os_type;;' | ocaml 2>&1 > /dev/null`
+OSTYPE=`echo 'prerr_endline Sys.os_type;;' | ocaml 2>&1 > /dev/null | tr -d '\\r' `
 case $OSTYPE in 
   Win32) 
     EXE=.exe
     STRIP='echo "no strip "'
     CPULIMIT=cpulimit-win
+    AC_MSG_RESULT(Win32)
     ;;
   Cygwin) 
     EXE=.exe
     STRIP=strip
     CPULIMIT=cpulimit-win
+    AC_MSG_RESULT(Cygwin)
     ;;
   Unix)
     EXE=
     STRIP=strip
     CPULIMIT=cpulimit
+    AC_MSG_RESULT(Unix)
     ;;
   *) AC_MSG_ERROR(Unknown OS type: $OSTYPE)
     ;;

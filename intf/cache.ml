@@ -34,7 +34,7 @@ open Cc
 let flags = []
 let max_size = ref 5000 (* maximum cache size *)
 let cache = ref (Hashtbl.create 97)
-let source_file = ref "/tmp/gwhy.cache"
+let source_file = ref (Filename.concat Filename.temp_dir_name "gwhy.cache")
 let active = ref false
 let obligs = ref true
 let ok = ref true
