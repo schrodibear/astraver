@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
     printf("%s: Error: when allocating %d bytes in memory\n", argv[0], (int) s);
     return -1;
   }
+  *p = '\0';
   for (i = 2; i < argc; i++) {
     strncat(p, argv[i], strlen(argv[i])); 
     if (i < argc - 1) strcat(p, " ");
