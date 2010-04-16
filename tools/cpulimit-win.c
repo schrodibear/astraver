@@ -1,7 +1,8 @@
 /**************************************************************************/
 /*                                                                        */
-/*  Copyright (C) 2008                                                    */
-/*    Dillon PARIENTE                                                     */
+/*  Copyright (C) 2008-2010                                               */
+/*    Dillon PARIENTE, 2008                                               */
+/*    Claude Marché, 2010                                                 */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
 /*  modify it under the terms of the GNU Library General Public           */
@@ -14,7 +15,6 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: cpulimit-win.c,v 1.3 2009-12-09 08:28:00 nrousset Exp $ */
 
 #include <windows.h>
 #include <stdio.h>
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   }
   // launches "child" process with command line parameter
   if (!CreateProcess(NULL, p, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
-    printf( "%s: Error: failed when launching <%s>\n", argv[0], p);
+    printf( "%s(Windows): Error: failed when launching <%s>\n", argv[0], p);
     return -1;
   }
   // waits, terminates and frees handles and malloc
