@@ -93,13 +93,7 @@ let () =
        else
 	 Queue.push s files) usage 
     
-let () = 
-  Cvcl_split.debug := !debug; 
-  Simplify_split.debug := !debug;
-  Zenon_split.debug := !debug
-
-let () =
-  if !split then simple := true
+let () = if !split then simple := true
 
 (* stats *)
 
@@ -179,25 +173,27 @@ let wrapper =
   else if !simple then wrapper_simple
   else wrapper_complete
 
+let debug = !debug
+
 let call_ergo f b = 
-  wrapper (Calldp.ergo ~debug:!debug ~timeout:!timeout 
+  wrapper (Calldp.ergo ~debug ~timeout:!timeout 
 	     ~select_hypotheses:!select_hypotheses ~filename:f ~buffers:b ())
 let call_cvcl f b = 
-  wrapper (Calldp.cvcl ~debug:!debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.cvcl ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_simplify f _ = 
-  wrapper (Calldp.simplify ~debug:!debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.simplify ~debug ~timeout:!timeout ~filename:f ())
 let call_yices f b = 
-  wrapper (Calldp.yices ~debug:!debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.yices ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_cvc3 f b = 
-  wrapper (Calldp.cvc3 ~debug:!debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.cvc3 ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_z3 f b = 
-  wrapper (Calldp.z3 ~debug:!debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.z3 ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_rvsat f _ = 
-  wrapper (Calldp.rvsat ~debug:!debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.rvsat ~debug ~timeout:!timeout ~filename:f ())
 let call_zenon f _ = 
-  wrapper (Calldp.zenon ~debug:!debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.zenon ~debug ~timeout:!timeout ~filename:f ())
 let call_harvey f _ = 
-  wrapper (Calldp.harvey ~debug:!debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.harvey ~debug ~timeout:!timeout ~filename:f ())
 
 
 
@@ -231,7 +227,7 @@ let dispatch_prover_by_name cin = function
   | "CVCL" -> Cvcl_split.iter call_cvcl cin
   | "Z3" -> Smtlib_split.iter call_z3 cin
   | "Yices" -> Smtlib_split.iter call_yices cin
-  | "Simplify" -> Simplify_split.iter call_simplify cin
+  | "Simplify" -> Simplify_split.iter ~debug call_simplify cin
   | _ -> assert false
 
 
@@ -254,14 +250,14 @@ let dispatch_prover_by_extension dir_name f =
      Filename.check_suffix f ".sx.all" ||
      Filename.check_suffix f ".simplify"
   then
-    Simplify_split.iter (call_split call_simplify dir_name ".sx") cin
+    Simplify_split.iter ~debug (call_split call_simplify dir_name ".sx") cin
   else 
   if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then
-    Zenon_split.iter (call_split call_zenon dir_name ".znn") f (* TODO: Zenon_split *)
+    Zenon_split.iter ~debug (call_split call_zenon dir_name ".znn") f (* TODO: Zenon_split *)
   else 
   if Filename.check_suffix f ".rv" then
     begin
-      Rv_split.iter  (call_split call_harvey dir_name ".rv") f 
+      Rv_split.iter ~debug (call_split call_harvey dir_name ".rv") f 
     end
   else 
     begin Arg.usage spec usage; exit 1 end;
@@ -351,6 +347,6 @@ unknown VCs:
     !tmaxinvalid
       (!tunknown /. float !nunknown)
     !tmaxunknown;
-  try Sys.remove "out" with _ -> ()
+  Lib.remove_file ~debug "out"
     
 let () = Printexc.catch main ()

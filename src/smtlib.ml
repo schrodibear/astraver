@@ -356,11 +356,10 @@ let output_elem fmt = function
 
 
 
-let output_file ?logic f =
-  let fname = f ^ "_why.smt" in
+let output_file ?logic fname =
   let cout = Options.open_out_file fname in
   let fmt = formatter_of_out_channel cout in
-  fprintf fmt "(benchmark %a@\n" idents (removeChar (Filename.basename f));
+  fprintf fmt "(benchmark %a@\n" idents (removeChar (Filename.basename fname));
   fprintf fmt "  :status unknown@\n";
   begin
     match logic with

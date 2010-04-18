@@ -55,3 +55,6 @@ val file_contents : string -> string
 
 (* return the content of a file *)
 val file_contents_buf : string -> Buffer.t
+
+(* remove file if debug not set, or display appropriate info message *)
+val remove_file : debug:bool -> string -> unit

@@ -636,14 +636,19 @@ let print_obligation fmt (eq,p) =
   fprintf fmt "@\n%a@\n@\n" (print_list newline print_equation) eq;
   fprintf fmt "{ @[%a@] }@." print_pred p
 
-let output_one_file f =
-  let sep = "### DO NOT EDIT ABOVE THIS LINE" in
-  let file = f ^ "_why.gappa" in
-  do_not_edit_above ~file
-    ~before:(fun fmt -> Queue.iter (print_obligation fmt) queue)
-    ~sep
-    ~after:(fun _fmt -> ())
+let print_file fmt = Queue.iter (print_obligation fmt) queue
 
+let output_one_file ~allowedit file =
+  if allowedit then
+    begin
+      let sep = "### DO NOT EDIT ABOVE THIS LINE" in
+      do_not_edit_above ~file
+	~before:print_file
+	~sep
+	~after:(fun _fmt -> ())
+    end
+  else
+      print_in_file print_file file
 
 let output_file fwe =
   let sep = "### DO NOT EDIT ABOVE THIS LINE" in

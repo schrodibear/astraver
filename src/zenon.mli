@@ -34,5 +34,6 @@ val reset : unit -> unit
 val push_decl : Logic_decl.t -> unit
 
 val prelude_done : bool ref
-val output_file : string -> unit
+
+val output_file : allowedit:bool -> string -> unit
 

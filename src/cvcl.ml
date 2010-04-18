@@ -330,13 +330,19 @@ ASSERT (true /= false);
 "
   end
 
-let output_file fwe =
-  let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
-  let file = fwe ^ "_why.cvc" in
-  do_not_edit_below ~file
-    ~before:prelude
-    ~sep
-    ~after:(fun fmt -> 
-	      (*if not no_cvcl_prelude then predefined_symbols fmt;*)
-	      iter (output_elem fmt))
+let print_file fmt =
+  (*if not no_cvcl_prelude then predefined_symbols fmt;*)
+  iter (output_elem fmt)
+
+let output_file ~allowedit file =
+  if allowedit then
+    begin
+      let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
+      do_not_edit_below ~file
+	~before:prelude
+	~sep
+	~after:print_file
+    end
+  else
+    print_in_file print_file file
 

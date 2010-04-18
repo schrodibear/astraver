@@ -430,14 +430,18 @@ let print_elem fmt = function
   | FunctionDef (id, f) -> print_function fmt id f
 *)
 
-let output_file fwe =
-  let sep = ";; DO NOT EDIT BELOW THIS LINE" in
-  let file = fwe ^ "_why.sx" in
-  do_not_edit_below ~file
-    ~before:(fun _fmt -> ())
-    ~sep
-    ~after:(fun fmt -> 
-   Encoding.iter decl_to_elem;
-   fprintf fmt "(BG_PUSH (NEQ |@@true| |@@false|))@\n@\n";
-   Queue.iter (print_elem fmt) queue)
-    
+let print_file fmt =
+  Encoding.iter decl_to_elem;
+  fprintf fmt "(BG_PUSH (NEQ |@@true| |@@false|))@\n@\n";
+  Queue.iter (print_elem fmt) queue
+
+let output_file ~allowedit file =
+  if allowedit then
+    let sep = ";; DO NOT EDIT BELOW THIS LINE" in
+    do_not_edit_below ~file
+      ~before:(fun _fmt -> ())
+      ~sep
+      ~after:print_file
+  else
+    print_in_file print_file file
+

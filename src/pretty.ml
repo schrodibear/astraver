@@ -287,8 +287,11 @@ let print_traces fmt =
        | _ -> ())
 
 let output_file f =
-  print_in_file print_file (Options.out_file (f ^ "_why.why"));
-  if explain_vc then print_in_file print_traces ((Options.out_file (f^"_why")) ^ ".xpl")
+  print_in_file print_file (Options.out_file f)
+(* cannot work as is, pb with temp files
+  if explain_vc && not ergo then 
+    print_in_file print_traces (Options.out_file (f ^ ".xpl"))
+*)
 
 let output_files f =
   eprintf "Starting Multi-Why output with basename %s@." f;

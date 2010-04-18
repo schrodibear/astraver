@@ -56,6 +56,7 @@ let rec detect_prover p cmds =
               let s = ref (input_line ch) in
               while !s = "" do s := input_line ch done;
               close_in ch;
+	      Sys.remove out;
               !s              
             with Not_found | End_of_file  -> ""
           in

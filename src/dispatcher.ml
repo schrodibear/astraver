@@ -140,24 +140,36 @@ let output_file ?encoding p (elems,o) =
       List.iter (push_elem p) elems;
       push_obligation p o
     end;
-  let f = 
-    match p with
-      | Coq -> let (_, _, id, _) = o in id 
-      | _ -> Filename.temp_file "gwhy" "" 
-  in
   match p with
-    | Simplify -> Simplify.output_file f; f ^ "_why.sx"
-    | Harvey -> Harvey.output_file f; f ^ "_why.rv"
-    | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
-    | Zenon -> Zenon.output_file f; f ^ "_why.znn"
+    | Simplify -> 
+	let f = Filename.temp_file "gwhy" "_why.sx" in
+	Simplify.output_file ~allowedit:false f; f
+    | Harvey -> 
+	let f = Filename.temp_file "gwhy" "_why.rv" in
+	Harvey.output_file f; f 
+    | Cvcl -> 
+	let f = Filename.temp_file "gwhy" "_why.cvc" in
+	Cvcl.output_file ~allowedit:false f; f 
+    | Zenon -> 
+	let f = Filename.temp_file "gwhy" "_why.znn" in
+	Zenon.output_file ~allowedit:false f; f 
     | Rvsat | Yices | Cvc3 -> 
-	Smtlib.output_file ~logic:"AUFLIRA" f; f ^ "_why.smt"
-    | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
-    | Ergo | ErgoSelect | SimplifySelect 
-    | GappaSelect -> Pretty.output_file f; f ^ "_why.why"
+	let f = Filename.temp_file "gwhy" "_why.smt" in
+	Smtlib.output_file ~logic:"AUFLIRA" f; f 
+    | Z3 -> 
+	let f = Filename.temp_file "gwhy" "_why.smt" in
+	Smtlib.output_file f; f 
+    | Ergo 
+    | ErgoSelect 
+    | SimplifySelect 
+    | GappaSelect -> 
+	let f = Filename.temp_file "gwhy" "_why.why" in
+	Pretty.output_file f; f 
     | Gappa -> 
-	Gappa.output_one_file f; f ^ "_why.gappa"
+	let f = Filename.temp_file "gwhy" "_why.gappa" in
+	Gappa.output_one_file ~allowedit:false f; f 
     | Coq ->
+	let (_, _, f, _) = o in 
 	let _p = get_project () in 
 	(* if necessary, Pretty.output_project "name ?"; *)
 	(* file should already be generated ?? *)
@@ -165,8 +177,11 @@ let output_file ?encoding p (elems,o) =
 	if debug then Format.printf "Reusing coq file %s_why.v@." f;
 	f ^ "_why.v" 
     | PVS ->
-        Pvs.output_file f; f ^ "_why.pvs"
-
+	assert false (* no PVS in Gwhy *)
+(*
+	let f = Filename.temp_file "gwhy" "_why.pvs" in
+        Pvs.output_file ~allowedit:false f; f 
+*)
 
 	
 
@@ -232,10 +247,9 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename 
 	  DpConfig.Gappa ()
   in
-  if not debug then begin 
-    match p with
-      | Coq -> ()
-      | _ -> (try Sys.remove filename with _ -> () )
+  begin match p with
+    | Coq -> ()
+    | _ -> Lib.remove_file ~debug filename 
   end; 
   r
 

@@ -1,8 +1,9 @@
 
-version 2.24, April 15, 2010
+version 2.24, April 19, 2010
 ============================
 
   o [Frama-C plugin] synchronized with Frama-C Boron 20100412
+  o [Gwhy] better handling of temporary files
   o [Jessie] fixed bug 0443 (assigns \nothing and separation analysis)
   o [Jessie] fixed bug with assertions attached to behaviors
   o [Why] support for truncate_real_to_int in Gappa output

@@ -177,9 +177,9 @@ let output is_last fwe =
     | HolLight -> Holl.output_file fwe
     | Mizar -> Mizar.output_file fwe    
     | Harvey -> Harvey.output_file fwe
-    | Simplify -> Simplify.output_file fwe
-    | CVCLite -> Cvcl.output_file fwe
-    | Zenon -> Zenon.output_file fwe
+    | Simplify -> Simplify.output_file ~allowedit:true fwe
+    | CVCLite -> Cvcl.output_file ~allowedit:true fwe
+    | Zenon -> Zenon.output_file ~allowedit:true fwe
     | Z3 ->  Z3.output_file fwe
     | SmtLib ->  Smtlib.output_file fwe
     | Isabelle -> Isabelle.output_file fwe
@@ -191,7 +191,8 @@ let output is_last fwe =
 	  (* output project, used by GWhy/Coq column *)
 	  Options.gui_project := Some(Pretty.output_project fwe)
 *)
-    | Ergo | Why -> Pretty.output_file fwe 
+    | Ergo -> Pretty.output_file fwe 
+    | Why -> Pretty.output_file fwe 
     | Why3 -> Why3.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
     | WhyProject -> ignore(Pretty.output_project fwe)

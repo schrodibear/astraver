@@ -32,7 +32,7 @@
   open Printf
   open Lexing 
 
-  let debug = ref false
+  let no_remove = ref false
   let callback = ref (fun _ _ -> assert false)
 
   (* we put everything not a goal into [buf] *)
@@ -50,7 +50,7 @@
   let end_file file =
     close_out !outc;
     !callback file [];
-    if not !debug then Sys.remove file
+    Lib.remove_file ~debug:!no_remove file
 
 }
 
@@ -102,8 +102,9 @@ and lisp_print = parse
 
 {
 
-  let iter cb f =
+  let iter ~debug cb f =
     callback := cb;
+    no_remove := debug;
     Buffer.reset buf;
     let c = open_in f in
     let lb = from_channel c in

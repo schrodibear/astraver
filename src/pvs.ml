@@ -629,4 +629,5 @@ let output_file fwe =
     ~sep
     ~after:(fun fmt -> output_theory fmt th_name);
   last_theory := Some th_name
+    
 

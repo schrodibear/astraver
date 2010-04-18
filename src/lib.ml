@@ -92,3 +92,14 @@ let file_contents_buf f =
   with _ -> 
     invalid_arg (Printf.sprintf "(cannot open %s)" f)
       
+
+let remove_file ~debug f =
+  if debug then 
+    Format.eprintf "Debug: not removing temporary file '%s'@." f 
+  else
+    try 
+      Sys.remove f;
+    with _ -> 
+      Format.eprintf "Warning: could not remove temporary file '%s'@." f
+
+

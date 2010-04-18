@@ -30,6 +30,5 @@
 (* Split a Simplify input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)
 
-val iter : (string -> Buffer.t list -> unit) -> in_channel -> unit
+val iter : debug:bool -> (string -> Buffer.t list -> unit) -> in_channel -> unit
 
-val debug : bool ref

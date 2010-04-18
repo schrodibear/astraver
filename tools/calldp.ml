@@ -50,9 +50,6 @@ let is_true_unix_os = Sys.os_type = "Unix"
 
 let is_true_cygwin = Sys.os_type = "Cygwin"
 
-let remove_file ?(debug=false) f =
-  if not debug then try Sys.remove f with _ -> ()
-
 let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
   if debug then Format.eprintf "command line: %s@." cmd;
   if is_true_unix_os then
@@ -83,7 +80,9 @@ let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
       let t1 = Unix.gettimeofday () in
       let cpu_time = t1 -. t0 in
       let out_content = Lib.file_contents out in
-      if debug then Format.eprintf "Output file %s:@.%s@." out out_content;
+      if debug then 
+	Format.eprintf "Output file %s:@.%s@." out out_content
+      else Lib.remove_file ~debug out;
       (cpu_time,Unix.WEXITED ret,out_content)
     end
 
@@ -117,21 +116,27 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
           cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
       | Some buffers, _, Some f ->
           let f = Filename.temp_file "" f in
-          let f = if is_true_cygwin 
-          then let cin = Unix.open_process_in 
-                     (sprintf "cygpath -am \"%s\"" f) in
-               let f = input_line cin in
-               close_in cin; f
-          else f in
-          let cout = open_out f in
+          let f_in = 
+	    if is_true_cygwin then 
+	      let cin = 
+		Unix.open_process_in (sprintf "cygpath -am \"%s\"" f) 
+	      in
+              let f = input_line cin in
+              close_in cin; 
+	      f
+            else f 
+	  in
+          let cout = open_out f_in in
           List.iter (Buffer.output_buffer cout) buffers;
           close_out cout;
           let cmd = sprintf "%s %s %s %s"
-            p.DpConfig.command p.DpConfig.command_switches switch f
+            p.DpConfig.command p.DpConfig.command_switches switch f_in
           in
-          cmd,timed_sys_command ~debug timeout cmd
+          let res = timed_sys_command ~debug timeout cmd in
+	  Lib.remove_file ~debug f_in;
+	  cmd,res
       | _ -> invalid_arg
-          "Calldp.gen_prover_call : filename must be given if the prover can't use stdin."
+          "Calldp.gen_prover_call : filename must be given if the prover can't use stdin"
   in
   match c with
     | Unix.WSTOPPED 24 | Unix.WSIGNALED 24 | Unix.WEXITED 124
@@ -161,27 +166,6 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
 
 let gappa ?(debug=false) ?(timeout=10) ~filename () =
   gen_prover_call ~debug ~timeout ~filename DpConfig.gappa
-(*
-  let p = DpConfig.gappa in
-  let cmd =
-    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f
-  in
-  let t,c,out = timed_sys_command debug timeout cmd in
-  let r =
-    if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *)
-    then Timeout t
-    else
-      let res = file_contents out in
-      if c == 0 then
-        Valid t
-      else if c == 1 && grep p.DpConfig.undecided_regexp res then
-        CannotDecide(t, Some res)
-      else
-        ProverFailure(t, "command failed: " ^ cmd ^ "\n" ^ res)
-  in
-  remove_file ~debug out;
-  r
-*)
 
 let ergo ~select_hypotheses ?(debug=false) ?(timeout=10) ?filename ?buffers () =
   if select_hypotheses then
@@ -210,51 +194,16 @@ let cvc3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
   gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvc3
 
 
+let cvcl ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvcl
+
+
+
+
 let error c t cmd =
   match c with
     | Unix.WSTOPPED 24 | Unix.WSIGNALED 24 -> Timeout t
     | _ -> ProverFailure (t,"command failed: " ^ cmd)
-
-let cvcl ?(debug=false) ?(timeout=10) ?filename ?buffers () =
-  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvcl
-
-(*  let cmd = sprintf "cvcl < %s" f in
-  let t,c,out = timed_sys_command debug timeout cmd in
-  if c <> Unix.WEXITED 0 then error c t cmd
-  else if Sys.command (sprintf "grep -q -w -i Error %s" out) = 0 then
-    ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ out)
-  else
-    let r=
-      let c = Sys.command (sprintf "grep -q -w Valid %s" out) in
-      if c = 0 then Valid t
-      else
-	let c = Sys.command (sprintf "grep -q -w Unknown %s" out)  in
-	if c = 0 then
-	  CannotDecide(t,Some out)
-	else
-	  Invalid (t, Some out)
-    in
-    remove_file ~debug out;
-    r
-*)
-(*
-let simplify ?(debug=false) ?(timeout=10) ~filename ~buffers () =
-  let cmd = sprintf "Simplify %s" f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then error c t cmd
-  else
-    let r =
-      if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
-	Valid t
-      else
-	if Sys.command (sprintf "grep -q -w Invalid %s" out) = 0 then
-	  CannotDecide (t,Some (file_contents out))
-	else
-	  ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
-    in
-    remove_file ~debug out;
-    r
-*)
 
 
 (**
@@ -292,19 +241,6 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
   let t'=
     (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
   let t'',_c,_out = timed_sys_command ~debug (int_of_float t') cmd in
-(*
-  let cmd = sprintf "Simplify %s"  f_for_simplify in
-  let t'',c,out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
-  let result_sort t'' out  =
-    if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
-      Valid t''
-    else
-      if Sys.command (sprintf "grep -q -w Invalid %s" out) = 0 then
-	CannotDecide (t'',Some (file_contents out))
-      else
-	ProverFailure
-	  (t'',"command failed: " ^ cmd ^ "\n" ^ file_contents out) in
-*)
   let r =
     gen_prover_call ~debug ~timeout:(int_of_float (t' -. t''))
       ~filename:file_for_prover prover
@@ -392,85 +328,8 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
 	else
 	  ProverFailure(t,"command failed: " ^ cmd)
     in
-    (*remove_file ~debug out;*)
+    Lib.remove_file ~debug out;
     r
-
-(*
-let yices ?(debug=false) ?(timeout=30) ~filename:f () =
-  let cmd = sprintf "yices  -pc 0 -smt < %s" f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then
-    if c==1 &&
-      Sys.command (sprintf "grep -q -w 'feature not supported' %s" out) = 0 then
-	ProverFailure(t,"command failed: " ^ cmd)
-    else
-      error c t cmd
-  else
-    let r =
-      if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
-	Valid t
-      else
-	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
-	CannotDecide (t, None)
-      else
-	ProverFailure(t,"command failed: " ^ cmd)
-    in
-    remove_file ~debug out;
-    r
-*)
-
-(*
-let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
-  let cmd =
-    sprintf "cvc3 -lang smt < %s" f
-  in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then
-    if c==1 &&
-      Sys.command (sprintf "grep -q -w 'feature not supported' %s" out) = 0 then
-	ProverFailure(t,"command failed: " ^ cmd)
-    else
-      error c t cmd
-  else
-    let r =
-      if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
-	Valid t
-      else if Sys.command (sprintf "grep -q -w sat %s" out) = 0 then
-	CannotDecide (t, None)
-      else if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
-	CannotDecide (t, None)
-      else
-	ProverFailure(t,"command failed: " ^ cmd)
-    in
-    remove_file ~debug out;
-    r
-*)
-
-(*
-let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
-  let cmd = sprintf "z3 -smt %s" f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-(*
-  if c <> 0 then
-    if c==1 &&
-      Sys.command (sprintf "grep -q -w 'feature not supported' %s" out) = 0 then
-	ProverFailure(t,"command failed: " ^ cmd)
-    else
-      error c t cmd
-  else
-*)
-    let r =
-      if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
-	Valid t
-      else
-	if Sys.command (sprintf "grep -q -w unknown %s" out) = 0 then
-	CannotDecide (t, None)
-      else
-	ProverFailure(t,"command failed: " ^ cmd)
-    in
-    remove_file ~debug out;
-    r
-*)
 
 let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "rvc %s" f in
@@ -495,7 +354,7 @@ let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
 	  else
 	    ProverFailure(t,"command failed: " ^ cmd)
       in
-      remove_file ~debug out;
+      Lib.remove_file ~debug out;
       r
   end
 
@@ -518,5 +377,5 @@ let zenon ?(debug=false) ?(timeout=10) ~filename:f () =
       else
 	ProverFailure(t,"command failed: " ^ cmd)
     in
-    remove_file ~debug out;
+    Lib.remove_file ~debug out;
     r

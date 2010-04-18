@@ -32,4 +32,3 @@
 
 val iter : (string -> Buffer.t list -> unit) -> in_channel -> unit
 
-val debug : bool ref

@@ -700,24 +700,26 @@ let do_not_edit_below ~file ~before ~sep ~after =
       file_formatter before cout;
       output_string cout ("\n" ^ sep ^ "\n\n");
       cout
-    end else begin
-      let file = out_file file in
-      let file_bak = file ^ ".bak" in
-      Sys.rename file file_bak;
-      let cin = open_in file_bak in
-      let cout = open_out file in
-      begin try 
-	while true do 
-	  let s = input_line cin in
-	  output_string cout (s ^ "\n");
-	  if s = sep then raise Exit
-	done
-      with
-	| End_of_file -> output_string cout (sep ^ "\n\n")
-	| Exit -> output_string cout "\n"
-      end;
-      cout
-    end
+    end 
+    else 
+      begin
+	let file = out_file file in
+	let file_bak = file ^ ".bak" in
+	Sys.rename file file_bak;
+	let cin = open_in file_bak in
+	let cout = open_out file in
+	begin try 
+	  while true do 
+	    let s = input_line cin in
+	    output_string cout (s ^ "\n");
+	    if s = sep then raise Exit
+	  done
+	with
+	  | End_of_file -> output_string cout (sep ^ "\n\n")
+	  | Exit -> output_string cout "\n"
+	end;
+	cout
+      end
   in
   file_formatter after cout;
   close_out_file cout
