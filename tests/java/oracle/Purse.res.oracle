@@ -6536,6 +6536,7 @@ Object_alloc_table Purse_balance Purse_balance1 (pset_singleton this_7))))))))))
 (balance_non_negative this_7 Purse_balance1)))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/Purse.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Purse_why.sx         : ................. (17/0/0/0/0)
@@ -7931,6 +7932,7 @@ goal cons_Purse_safety_po_1:
   ("JC_165": balance_non_negative(this_7, Purse_balance1))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/Purse.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Purse_why.why             : ................. (17/0/0/0/0)

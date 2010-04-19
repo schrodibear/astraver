@@ -5362,6 +5362,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
                                                             this_0))))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/Creation.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Creation_why.sx      : .........?....... (16/0/1/0/0)
@@ -6689,6 +6690,7 @@ goal cons_Creation_int_int_ensures_normal_po_1:
   Creation_simple_val1, pset_singleton(this_0)))))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/Creation.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Creation_why.why          : .........#....... (16/0/0/1/0)

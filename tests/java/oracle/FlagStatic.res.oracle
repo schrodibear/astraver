@@ -11885,6 +11885,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
 (<= j_0 (offset_max Object_alloc_table t_0)))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/FlagStatic.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/FlagStatic_why.sx    : ............................................................................ (76/0/0/0/0)
@@ -15703,6 +15704,7 @@ goal FlagStatic_swap_safety_po_4:
   (j_0 <= offset_max(Object_alloc_table, t_0))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/FlagStatic.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/FlagStatic_why.why        : .......#....###.......#....##..........................................#.... (68/0/0/8/0)

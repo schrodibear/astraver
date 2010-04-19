@@ -346,7 +346,6 @@ unknown VCs:
     (!tinvalid /. float !ninvalid)
     !tmaxinvalid
       (!tunknown /. float !nunknown)
-    !tmaxunknown;
-  Lib.remove_file ~debug "out"
+    !tmaxunknown
     
 let () = Printexc.catch main ()

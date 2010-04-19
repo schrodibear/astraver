@@ -4844,6 +4844,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ i1 (- i0 1)) (<= i1 (offset_max Object_alloc_table t)))))))))))))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/SideEffects.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SideEffects_why.sx   : ................... (19/0/0/0/0)
@@ -6398,6 +6399,7 @@ goal SideEffects_m1_safety_po_6:
   (i1 <= offset_max(Object_alloc_table, t))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/SideEffects.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/SideEffects_why.why       : ................... (19/0/0/0/0)

@@ -3065,6 +3065,7 @@ why -simplify [...] why/PreAndOld.why
 (IMPLIES (EQ return (+ x_1 PreAndOld_y)) (EQ return (f x_1 PreAndOld_y)))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/PreAndOld.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/PreAndOld_why.sx     : ... (3/0/0/0/0)
@@ -4114,6 +4115,7 @@ goal PreAndOld_g_ensures_default_po_3:
   ("JC_18": ("JC_17": ("JC_17": (return = f(x_1, PreAndOld_y)))))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/PreAndOld.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/PreAndOld_why.why         : ... (3/0/0/0/0)

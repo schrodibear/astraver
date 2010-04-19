@@ -12353,6 +12353,7 @@ why -simplify [...] why/SimpleApplet.why
 (buffer_inv this_68 Object_alloc_table APDU_buffer0)))))))))))))))))))))))))))))))))))))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/SimpleApplet.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SimpleApplet_why.sx  : ..??.???.?? (4/0/7/0/0)
@@ -14180,6 +14181,7 @@ goal cons_APDU_safety_po_1:
   ("JC_442": buffer_inv(this_68, Object_alloc_table, APDU_buffer0))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/SimpleApplet.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/SimpleApplet_why.why      : .....###.?# (6/0/1/4/0)

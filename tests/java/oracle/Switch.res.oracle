@@ -4461,6 +4461,7 @@ why -simplify [...] why/Switch.why
 (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1)))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/Switch.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Switch_why.sx        : .................... (20/0/0/0/0)
@@ -5861,6 +5862,7 @@ goal Switch_test2_ensures_normal_po_16:
   ("JC_32": ((integer_of_int32(n_0) = 0) or (integer_of_int32(n_0) = 1))))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/Switch.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Switch_why.why            : .................... (20/0/0/0/0)

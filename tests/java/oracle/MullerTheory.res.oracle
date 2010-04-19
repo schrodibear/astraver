@@ -8164,6 +8164,7 @@ why -simplify [...] why/MullerTheory.why
                                                                    Object_t_4_7_alloc_table t_4) 1) i_5))))))))))))))))))))))))))))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/MullerTheory.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/MullerTheory_why.sx  : ?.............................................. (46/0/1/0/0)
@@ -11117,6 +11118,7 @@ goal MullerTheory_m_safety_po_16:
   ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/MullerTheory.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/MullerTheory_why.why      : ?.............................................. (46/0/1/0/0)

@@ -3914,6 +3914,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (< i0 i))))))))))
 
 ========== running Simplify ==========
+why -simplify [...] why/Termination.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Termination_why.sx   : ........... (11/0/0/0/0)
@@ -5042,6 +5043,7 @@ goal Termination_loop3_safety_po_2:
   (("JC_59": i0) < ("JC_59": i))
 
 ========== running alt-ergo ==========
+why -alt-ergo [...] why/Termination.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Termination_why.why       : ........... (11/0/0/0/0)
