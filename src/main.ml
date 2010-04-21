@@ -177,22 +177,22 @@ let output is_last fwe =
     | HolLight -> Holl.output_file fwe
     | Mizar -> Mizar.output_file fwe    
     | Harvey -> Harvey.output_file fwe
-    | Simplify -> Simplify.output_file ~allowedit:true fwe
-    | CVCLite -> Cvcl.output_file ~allowedit:true fwe
-    | Zenon -> Zenon.output_file ~allowedit:true fwe
+    | Simplify -> Simplify.output_file ~allowedit:true (fwe ^ "_why.sx")
+    | CVCLite -> Cvcl.output_file ~allowedit:true (fwe ^ "_why.cvc")
+    | Zenon -> Zenon.output_file ~allowedit:true (fwe ^ "_why.znn")
     | Z3 ->  Z3.output_file fwe
-    | SmtLib ->  Smtlib.output_file fwe
+    | SmtLib ->  Smtlib.output_file (fwe ^ "_why.smt")
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
-    | Gappa -> Gappa.output_file fwe
+    | Gappa -> Gappa.output_file (fwe ^ "_why.gappa")
     | Dispatcher -> ()
 (*
 	if prover (* ~ignore_gui:true*)  () = WhyProject then
 	  (* output project, used by GWhy/Coq column *)
 	  Options.gui_project := Some(Pretty.output_project fwe)
 *)
-    | Ergo -> Pretty.output_file fwe 
-    | Why -> Pretty.output_file fwe 
+    | Ergo -> Pretty.output_file (fwe ^ "_why.why")  
+    | Why -> Pretty.output_file (fwe ^ "_why.why") 
     | Why3 -> Why3.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
     | WhyProject -> ignore(Pretty.output_project fwe)

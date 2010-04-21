@@ -1,4 +1,10 @@
 
+version 2.25, April ?, 2010
+============================
+
+  o [Why] fixed mistakes with files extensions, which were introduced
+    by the former fix for GWhy temporary files
+
 version 2.24, April 19, 2010
 ============================
 

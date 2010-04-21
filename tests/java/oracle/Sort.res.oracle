@@ -9053,7 +9053,6 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
 (<= j_1 (offset_max Object_alloc_table t))))))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/Sort.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Sort_why.sx          : ............?......................... (37/0/1/0/0)
@@ -11613,7 +11612,6 @@ goal Sort_swap_safety_po_4:
   (j_1 <= offset_max(Object_alloc_table, t))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/Sort.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Sort_why.why              : .................................#.... (37/0/0/1/0)

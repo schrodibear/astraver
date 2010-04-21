@@ -10382,7 +10382,6 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
                                                              Object_alloc_table t_0) 1) i_5))))))))))))))))))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/Arrays.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Arrays_why.sx        : ......................................................................... (73/0/0/0/0)
@@ -13772,7 +13771,6 @@ goal Arrays_findMax_safety_po_8:
                                                                     t_0) + 1) - i_5)))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/Arrays.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Arrays_why.why            : ......................................................................... (73/0/0/0/0)

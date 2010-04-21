@@ -3222,7 +3222,6 @@ why -simplify [...] why/Literals.why
 (IMPLIES (EQ return result0) (EQ (integer_of_int32 return) 13))))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/Literals.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Literals_why.sx      : . (1/0/0/0/0)
@@ -4339,7 +4338,6 @@ goal Literals_f_ensures_default_po_1:
   ("JC_15": (integer_of_int32(return) = 13))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/Literals.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Literals_why.why          : . (1/0/0/0/0)

@@ -4299,7 +4299,6 @@ why -simplify [...] why/TestNonNull.why
 (st_length Object_alloc_table0))))))))))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/TestNonNull.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/TestNonNull_why.sx   : .......? (7/0/1/0/0)
@@ -5635,7 +5634,6 @@ goal cons_TestNonNull_safety_po_3:
   ("JC_44": st_length(Object_alloc_table0))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/TestNonNull.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/TestNonNull_why.why       : .......# (7/0/0/1/0)

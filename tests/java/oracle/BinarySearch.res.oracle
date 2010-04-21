@@ -7941,7 +7941,6 @@ why -simplify [...] why/BinarySearch.why
                                                   (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/BinarySearch.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/BinarySearch_why.sx  : ??...................?..............#... (36/0/3/1/0)
@@ -10562,7 +10561,6 @@ goal BinarySearch_binary_search_safety_po_20:
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/BinarySearch.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/BinarySearch_why.why      : ........................................ (40/0/0/0/0)

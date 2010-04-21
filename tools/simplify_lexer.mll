@@ -44,11 +44,13 @@
     "FALSE", FALSE;
     "AND", AND;
     "IMPLIES", IMPLIES;
+    "EXPLIES", EXPLIES;
     "IFF", IFF;
     "FORALL", FORALL;
     "EXISTS", EXISTS;
     "MPAT", MPAT;
     "PATS", PATS;
+    "NOPATS", NOPATS;
     "AND", AND;
     "OR", OR;
     "NOT", NOT;

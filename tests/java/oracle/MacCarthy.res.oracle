@@ -4134,7 +4134,6 @@ why -simplify [...] why/MacCarthy.why
 (< (- 101 result) (- 101 n))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/MacCarthy.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/MacCarthy_why.sx     : ........ (8/0/0/0/0)
@@ -5224,7 +5223,6 @@ goal MacCarthy_f91_safety_po_4:
   (("JC_29": (101 - result)) < ("JC_28": (101 - n)))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/MacCarthy.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/MacCarthy_why.why         : ........ (8/0/0/0/0)

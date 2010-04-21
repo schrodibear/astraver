@@ -41,6 +41,9 @@ type predicate =
   | Pand of predicate list
   | Por of predicate list
   | Pimplies of predicate * predicate
+(*
+  | Pexplies of predicate * predicate
+*)
   | Piff of predicate * predicate
   | Pdistinct of term list
   | Pforall of string list * trigger list * predicate

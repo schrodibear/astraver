@@ -32,8 +32,8 @@
 
 %token <string> IDENT
 %token <string> INTEGER
-%token DEFPRED BG_PUSH AT_TRUE TRUE FALSE AND IMPLIES IFF FORALL EXISTS 
-%token MPAT PATS AND OR NOT LBLPOS LBLNEG DISTINCT EQ NEQ LT LE GT GE
+%token DEFPRED BG_PUSH AT_TRUE TRUE FALSE AND IMPLIES EXPLIES IFF FORALL EXISTS 
+%token MPAT PATS NOPATS AND OR NOT LBLPOS LBLNEG DISTINCT EQ NEQ LT LE GT GE
 %token LPAR RPAR EOF
 
 %type <Simplify_ast.t> start
@@ -79,6 +79,7 @@ predicate:
 | LPAR AND list1_predicate RPAR { Pand $3 }
 | LPAR OR list1_predicate RPAR { Por $3 }
 | LPAR IMPLIES predicate predicate RPAR { Pimplies ($3, $4) }
+| LPAR EXPLIES predicate predicate RPAR { Pimplies ($3, $4) }
 | LPAR IFF predicate predicate RPAR { Piff ($3, $4) }
 | LPAR NOT predicate RPAR { Pnot $3 }
 | LPAR EQ term term RPAR { Prel ($3, Eq, $4) }
@@ -90,17 +91,22 @@ predicate:
 | LPAR DISTINCT list1_term RPAR { Pdistinct $3 }
 | LPAR IDENT list1_term RPAR { Prel (Tapp ($2, $3), Eq, at_true) }
 | IDENT { Prel (Tapp ($1, []), Eq, at_true) }
-| LPAR FORALL LPAR list1_ident RPAR LPAR PATS list1_trigger RPAR predicate RPAR
+| LPAR FORALL LPAR list1_ident RPAR LPAR pats list1_trigger RPAR predicate RPAR
     { Pforall ($4, $8, $10) }
 | LPAR FORALL LPAR list1_ident RPAR predicate RPAR
     { Pforall ($4, [], $6) }
-| LPAR EXISTS LPAR list1_ident RPAR LPAR PATS list1_trigger RPAR predicate RPAR
+| LPAR EXISTS LPAR list1_ident RPAR LPAR pats list1_trigger RPAR predicate RPAR
     { Pexists ($4, $8, $10) }
 | LPAR EXISTS LPAR list1_ident RPAR predicate RPAR
     { Pexists ($4, [], $6) }
 | LPAR predicate RPAR { $2 }
 | LPAR LBLPOS IDENT predicate RPAR { Plblpos ($3, $4) }
 | LPAR LBLNEG IDENT predicate RPAR { Plblneg ($3, $4) }
+;
+
+pats:
+| PATS  { () }
+| NOPATS { () }
 ;
 
 list1_trigger:
@@ -111,7 +117,9 @@ list1_trigger:
 trigger:
   LPAR MPAT list1_term RPAR { $3 }
 | term { [$1] }
-;
+/* should be allowed as a pattern
+| LPAR NEQ term term RPAR { [Prel ($3, Neq, $4)] }
+*/;
 
 term:
   LPAR term RPAR { $2 }

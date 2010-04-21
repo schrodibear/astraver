@@ -3745,7 +3745,6 @@ why -simplify [...] why/Fibonacci.why
 (FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (< (- n_0 i0) (- n_0 i))))))))))))))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/Fibonacci.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/Fibonacci_why.sx     : ??............ (12/0/2/0/0)
@@ -4960,7 +4959,6 @@ goal Fibonacci_Fib_safety_po_2:
   (("JC_27": (n_0 - i0)) < ("JC_27": (n_0 - i)))
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/Fibonacci.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Fibonacci_why.why         : ??............ (12/0/2/0/0)

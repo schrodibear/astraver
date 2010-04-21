@@ -5103,7 +5103,6 @@ why -simplify [...] why/AllZeros.why
 (<= (- 0 constant_too_large_2147483648) result)))))))
 
 ========== running Simplify ==========
-why -simplify [...] why/AllZeros.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/AllZeros_why.sx      : .................?? (17/0/2/0/0)
@@ -6737,7 +6736,6 @@ goal AllZeros_should_not_be_proved_safety_po_2:
   ((-2147483648) <= result)
 
 ========== running alt-ergo ==========
-why -alt-ergo [...] why/AllZeros.why
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/AllZeros_why.why          : .................?. (18/0/1/0/0)
