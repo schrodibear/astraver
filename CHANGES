@@ -2,6 +2,7 @@
 version 2.25, April ?, 2010
 ============================
 
+  o [GWhy] fixed some assert failure raised when .gwhyrc is absent
   o [Why] fixed mistakes with files extensions, which were introduced
     by the former fix for GWhy temporary files
 

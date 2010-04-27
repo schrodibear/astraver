@@ -1,5 +1,5 @@
 
-/*@ predicate is_max(int[] t,integer i,integer l) {
+/*@ predicate is_max{L}(int[] t,integer i,integer l) {
   @   0 <= i < l &&
   @      \forall integer j; 0 <= j < l ==> t[j] <= t[i] }
   @*/
