@@ -878,9 +878,10 @@ struct
 
   let rec def_ft_pred ~for_one _f notin ta_conv acc = 
     match ta_conv with 
-        (* Devrait peut-être utiliser la vrai 
+        (* Devrait peut-Ãªtre utiliser la vrai 
            transformation d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> begin 
+          let params = List.map (fun (s,ty) -> ("_JC_"^s,ty)) params in
           let name = ft_name notin f_name in
           Jc_options.lprintf "Generate logic ft : %s :@." name;
           let acc = Logic(false,
@@ -901,7 +902,7 @@ struct
             | _ -> assert false in
           let rec gen_one_pos ~impl acc = function
             | LNamed (_,a) -> gen_one_pos ~impl acc a
-            | LPred (s,lt) -> (* Normalement le predicat inductif défini *)
+            | LPred (s,lt) -> (* Normalement le predicat inductif dÃ©fini *)
                 let asser = make_and_list acc in
                 impl s lt asser
             | _ -> assert false in
@@ -1138,16 +1139,16 @@ struct
     let ft_name = ft.jc_logic_info_name in
     let ft_params_usual,ft_params_model = tr_params_usual_model_aux ft in
     let ft_params_usual = 
-      List.map (fun (x,ty) -> "ft_"^x,ty)  ft_params_usual in
-    let ft_params_model = List.map (fun (x,ty) -> x,ty)  ft_params_model in
+      List.map (fun (x,ty) -> "_JC_ft_"^x,ty)  ft_params_usual in
+    let ft_params_model = List.map (fun (x,ty) -> x,ty)
+      ft_params_model in
     let ft = (ft_name,ft_notin,
               List.map (fun (x,_) -> LVar x)
                 (ft_params_usual @ ft_params_model)) in
     match ta_conv with 
-        (* Devrait peut-être utiliser la vrai transformation 
+        (* Devrait peut-Ãªtre utiliser la vrai transformation 
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> begin 
-
           let rec gen_one_neg notin acc = function
             | LNot _a -> assert false (*gen_one_neg notin acc a*)
             | LPred (_,lt) as e -> 
@@ -1160,7 +1161,7 @@ struct
             | _ -> assert false in
           let rec gen_one_pos ~impl notin acc = function
             | LNamed (_,a) -> gen_one_pos ~impl notin acc a
-            | LPred (s,lt) -> (* Normalement le predicat inductif défini *)
+            | LPred (s,lt) -> (* Normalement le predicat inductif dÃ©fini *)
                 let asser = make_and_list acc in
                 impl notin s lt asser
             | _ -> assert false in
@@ -1174,7 +1175,8 @@ struct
             | (LAnd _ | LOr _) -> assert false 
             | a -> gen_one_pos ~impl notin acc a in
           
-          let name = (gen_ft_name ft_notin ft_name) ^ (notin_name notin f_name) in
+          let name = (gen_ft_name ft_notin ft_name) ^ 
+            (notin_name notin f_name) in
           Jc_options.lprintf "Generate logic notin : %s :@." name;
           let acc = Logic(false,
                           name,
@@ -1194,6 +1196,7 @@ struct
                let asser = Axiom (axiom_name,asser) in
                asser::acc
             ) acc l in
+          let params = List.map (fun (s,ty) -> ("_JC_"^s,ty)) params in
           let conjs = List.map
             (fun (_ident,assertion) ->
                let impl _ _s lt asser = 
@@ -1202,17 +1205,23 @@ struct
                  make_impl (make_and_list eqs) asser in
                gen_one ~impl notin [] assertion) l in
           let conjs = make_and_list conjs in
+          let ft_params_model = List.map (fun (x,ty) -> "_JC_"^x,ty)
+            ft_params_model in
+          let ft = (ft_name,ft_notin,
+                    List.map (fun (x,_) -> LVar x)
+                      (ft_params_usual @ ft_params_model)) in
           let conclu = conv_app_pred ft notin f_name 
             (List.map (fun (x,_) -> LVar x) params) in
           let asser = make_impl conjs conclu in
-          let asser = make_forall_list params [[LPatP conclu]] asser in
+          let asser = make_forall_list params (*[[LPatP conclu]]*) [] asser in
           let asser = make_forall_list ft_params_usual [] asser in
           let axiom_name = "axiom"^"_notin_"^(NotIn.mem_name2 notin)^f_name in
           let asser = Axiom (axiom_name,asser) in
           asser::acc
         end
       | [Predicate (_,f_name,params,assertion)] ->
-          let name = (gen_ft_name ft_notin ft_name) ^ (notin_name notin f_name) in
+          let name = (gen_ft_name ft_notin ft_name) ^
+            (notin_name notin f_name) in
           Jc_options.lprintf "Generate logic notin : %s :@." name;
           let rec gen_one_neg notin acc = function
             | LNot _a -> assert false (*gen_one_neg notin acc a*)
@@ -1229,7 +1238,8 @@ struct
           let lt = List.map (fun (x,_) -> LVar x) params in
           let asser = make_impl (conv_app_pred ft notin f_name lt) asser in
           let asser = make_forall_list params [] asser in
-          let new_pred = Axiom (name,make_forall_list ft_params_usual [] asser) in
+          let new_pred = Axiom (name,make_forall_list 
+                                  ft_params_usual [] asser) in
           new_pred::acc
       | [Function (_bool,f_name,params,_ltype,term)] ->
           let name = (gen_ft_name ft_notin ft_name) 
@@ -1270,7 +1280,7 @@ struct
 
   let rec def_notin_logic notin ta_conv acc = 
     match ta_conv with 
-        (* Devrait peut-être utiliser la vrai transformation 
+        (* Devrait peut-Ãªtre utiliser la vrai transformation 
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,_)] -> begin         
           let name = notin_name notin f_name in
