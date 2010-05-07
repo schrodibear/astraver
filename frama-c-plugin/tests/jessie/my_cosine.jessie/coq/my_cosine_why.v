@@ -142,36 +142,24 @@ Admitted.
 (*Why type*) Definition void_P: Set.
 Admitted.
 
-(*Why logic*) Definition bitvector_of_char_P : (pointer char_P) -> bitvector.
 Admitted.
 
-(*Why logic*) Definition char_P_of_bitvector : bitvector -> (pointer char_P).
 Admitted.
 
-(*Why axiom*) Lemma bitvector_of_char_P_of_char_P_of_bitvector :
-  (forall (x:bitvector), (bitvector_of_char_P (char_P_of_bitvector x)) = x).
 Admitted.
 Dp_hint bitvector_of_char_P_of_char_P_of_bitvector.
 
-(*Why logic*) Definition bitvector_of_int8 : int8 -> bitvector.
 Admitted.
 
-(*Why logic*) Definition int8_of_bitvector : bitvector -> int8.
 Admitted.
 
-(*Why axiom*) Lemma bitvector_of_int8_of_int8_of_bitvector :
-  (forall (x:bitvector), (bitvector_of_int8 (int8_of_bitvector x)) = x).
 Admitted.
 Dp_hint bitvector_of_int8_of_int8_of_bitvector.
 
-(*Why logic*) Definition bitvector_of_void_P : (pointer void_P) -> bitvector.
 Admitted.
 
-(*Why logic*) Definition void_P_of_bitvector : bitvector -> (pointer void_P).
 Admitted.
 
-(*Why axiom*) Lemma bitvector_of_void_P_of_void_P_of_bitvector :
-  (forall (x:bitvector), (bitvector_of_void_P (void_P_of_bitvector x)) = x).
 Admitted.
 Dp_hint bitvector_of_void_P_of_void_P_of_bitvector.
 
@@ -182,9 +170,6 @@ Admitted.
 Admitted.
 Dp_hint char_P_int.
 
-(*Why axiom*) Lemma char_P_of_bitvector_of_bitvector_of_char_P :
-  (forall (x:(pointer char_P)),
-   (char_P_of_bitvector (bitvector_of_char_P x)) = x).
 Admitted.
 Dp_hint char_P_of_bitvector_of_bitvector_of_char_P.
 
@@ -225,8 +210,6 @@ Admitted.
 Admitted.
 Dp_hint int8_coerce.
 
-(*Why axiom*) Lemma int8_of_bitvector_of_bitvector_of_int8 :
-  (forall (x:int8), (eq_int8 (int8_of_bitvector (bitvector_of_int8 x)) x)).
 Admitted.
 Dp_hint int8_of_bitvector_of_bitvector_of_int8.
 
@@ -311,9 +294,6 @@ Admitted.
 Admitted.
 Dp_hint void_P_int.
 
-(*Why axiom*) Lemma void_P_of_bitvector_of_bitvector_of_void_P :
-  (forall (x:(pointer void_P)),
-   (void_P_of_bitvector (bitvector_of_void_P x)) = x).
 Admitted.
 Dp_hint void_P_of_bitvector_of_bitvector_of_void_P.
 
@@ -348,19 +328,18 @@ Parameter single_value: single -> R.
 
 Require Import tactics.
 
-(* Why obligation from file "my_cosine.c", line 8, characters 13-53: *)
+(* Why obligation from file "my_cosine.c", line 10, characters 13-53: *)
 (*Why goal*) Lemma my_cos1_ensures_default_po_1 : 
-  forall (x_1: single),
-  forall (HW_1: true = true /\
-                (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
-  (* JC_15 *)
-  (* JC_15 *)
+  forall (x: single),
+  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x)) (1 / 32)%R)),
+  (* JC_13 *)
+  (* JC_13 *)
   (Rle
    (Rabs
     (Rminus
      (Rminus
-      (1)%R (Rmult (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-     cos (single_value x_1))))
+      (1)%R (Rmult (Rmult (single_value x) (single_value x)) (05 / 10)%R)) (
+     cos (single_value x))))
    (1 / 16777216)%R).
 Proof.
 intuition.
@@ -383,30 +362,31 @@ Parameter sub_single_post : mode -> single -> single -> single -> Prop.
 Parameter mul_single_post : mode -> single -> single -> single -> Prop.
 Parameter single_of_real_post : mode -> R -> single -> Prop.
 
-(* Why obligation from file "my_cosine.c", line 5, characters 12-46: *)
+(* Why obligation from file "my_cosine.c", line 7, characters 12-46: *)
 (*Why goal*) Lemma my_cos1_ensures_default_po_2 : 
-  forall (x_1: single),
-  forall (HW_1: true = true /\
-                (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
-  forall (HW_4: (* JC_15 *)
+  forall (x: single),
+  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x)) (1 / 32)%R)),
+  forall (HW_4: (* JC_13 *)
                 (Rle
                  (Rabs
                   (Rminus
                    (Rminus
                     (1)%R (Rmult
-                           (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-                   cos (single_value x_1))))
+                           (Rmult (single_value x) (single_value x)) (05 / 10)%R)) (
+                   cos (single_value x))))
                  (1 / 16777216)%R)),
   forall (result: single),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
+  forall (HW_5: (eq (single_value result) (1)%R) /\
+                (eq (single_exact result) (1)%R) /\
+                (eq (single_model result) (1)%R)),
   forall (result0: single),
   forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1))) /\
-                (mul_single_post nearest_even x_1 x_1 result0)),
+                 nearest_even (Rmult (single_value x) (single_value x))) /\
+                (mul_single_post nearest_even x x result0)),
   forall (result1: single),
-  forall (HW_7: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
+  forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
+                (eq (single_exact result1) (05 / 10)%R) /\
+                (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
   forall (HW_8: (no_overflow_single
                  nearest_even (Rmult
@@ -422,107 +402,62 @@ Parameter single_of_real_post : mode -> R -> single -> Prop.
   forall (why__return: single),
   forall (HW_11: why__return = __retres),
   (* JC_5 *)
-  (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x_1))))
+  (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x))))
    (1 / 8388608)%R).
 Proof.
 intuition.
 admit.
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 46, characters 33-47: *)
+(* Why obligation from file "my_cosine.c", line 11, characters 2-8: *)
 (*Why goal*) Lemma my_cos1_safety_po_1 : 
-  forall (x_1: single),
-  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
+  forall (x: single),
+  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x)) (1 / 32)%R)),
   forall (HW_4: (* JC_9 *)
                 (Rle
                  (Rabs
                   (Rminus
                    (Rminus
                     (1)%R (Rmult
-                           (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-                   cos (single_value x_1))))
+                           (Rmult (single_value x) (single_value x)) (05 / 10)%R)) (
+                   cos (single_value x))))
                  (1 / 16777216)%R)),
-  (no_overflow_single nearest_even (1)%R).
+  forall (result: single),
+  forall (HW_5: (eq (single_value result) (1)%R) /\
+                (eq (single_exact result) (1)%R) /\
+                (eq (single_model result) (1)%R)),
+  (no_overflow_single nearest_even (Rmult (single_value x) (single_value x))).
 Proof.
 intuition.
 admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 9, characters 2-8: *)
+(* Why obligation from file "my_cosine.c", line 11, characters 2-8: *)
 (*Why goal*) Lemma my_cos1_safety_po_2 : 
-  forall (x_1: single),
-  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
+  forall (x: single),
+  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x)) (1 / 32)%R)),
   forall (HW_4: (* JC_9 *)
                 (Rle
                  (Rabs
                   (Rminus
                    (Rminus
                     (1)%R (Rmult
-                           (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-                   cos (single_value x_1))))
+                           (Rmult (single_value x) (single_value x)) (05 / 10)%R)) (
+                   cos (single_value x))))
                  (1 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
   forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  (no_overflow_single
-   nearest_even (Rmult (single_value x_1) (single_value x_1))).
-Proof.
-intuition.
-admit.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "my_cosine.jc", line 48, characters 43-57: *)
-(*Why goal*) Lemma my_cos1_safety_po_3 : 
-  forall (x_1: single),
-  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
-  forall (HW_4: (* JC_9 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-                   cos (single_value x_1))))
-                 (1 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1)))),
+  forall (HW_5: (eq (single_value result) (1)%R) /\
+                (eq (single_exact result) (1)%R) /\
+                (eq (single_model result) (1)%R)),
+  forall (HW_6: (no_overflow_single
+                 nearest_even (Rmult (single_value x) (single_value x)))),
   forall (result0: single),
-  forall (HW_8: (mul_single_post nearest_even x_1 x_1 result0)),
-  (no_overflow_single nearest_even (05 / 10)%R).
-Proof.
-intuition.
-admit.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "my_cosine.c", line 9, characters 2-8: *)
-(*Why goal*) Lemma my_cos1_safety_po_4 : 
-  forall (x_1: single),
-  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
-  forall (HW_4: (* JC_9 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-                   cos (single_value x_1))))
-                 (1 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1)))),
-  forall (result0: single),
-  forall (HW_8: (mul_single_post nearest_even x_1 x_1 result0)),
-  forall (HW_9: (no_overflow_single nearest_even (05 / 10)%R)),
+  forall (HW_7: (mul_single_post nearest_even x x result0)),
   forall (result1: single),
-  forall (HW_10: (single_of_real_post nearest_even (05 / 10)%R result1)),
+  forall (HW_8: (eq (single_value result1) (05 / 10)%R) /\
+                (eq (single_exact result1) (05 / 10)%R) /\
+                (eq (single_model result1) (05 / 10)%R)),
   (no_overflow_single
    nearest_even (Rmult (single_value result0) (single_value result1))).
 Proof.
@@ -531,36 +466,50 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 9, characters 2-8: *)
-(*Why goal*) Lemma my_cos1_safety_po_5 : 
-  forall (x_1: single),
-  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_1)) (1 / 32)%R)),
+(* Why obligation from file "my_cosine.c", line 11, characters 2-8: *)
+(*Why goal*) Lemma my_cos1_safety_po_3 : 
+  forall (x: single),
+  forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x)) (1 / 32)%R)),
   forall (HW_4: (* JC_9 *)
                 (Rle
                  (Rabs
                   (Rminus
                    (Rminus
                     (1)%R (Rmult
-                           (Rmult (single_value x_1) (single_value x_1)) (05 / 10)%R)) (
-                   cos (single_value x_1))))
+                           (Rmult (single_value x) (single_value x)) (05 / 10)%R)) (
+                   cos (single_value x))))
                  (1 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
   forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1)))),
+  forall (HW_5: (eq (single_value result) (1)%R) /\
+                (eq (single_exact result) (1)%R) /\
+                (eq (single_model result) (1)%R)),
+  forall (HW_6: (no_overflow_single
+                 nearest_even (Rmult (single_value x) (single_value x)))),
   forall (result0: single),
-  forall (HW_8: (mul_single_post nearest_even x_1 x_1 result0)),
-  forall (HW_9: (no_overflow_single nearest_even (05 / 10)%R)),
+  forall (HW_7: (mul_single_post nearest_even x x result0)),
   forall (result1: single),
-  forall (HW_10: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (HW_11: (no_overflow_single
-                  nearest_even (Rmult
-                                (single_value result0) (single_value result1)))),
+  forall (HW_8: (eq (single_value result1) (05 / 10)%R) /\
+                (eq (single_exact result1) (05 / 10)%R) /\
+                (eq (single_model result1) (05 / 10)%R)),
+  forall (HW_9: (no_overflow_single
+                 nearest_even (Rmult
+                               (single_value result0) (single_value result1)))),
   forall (result2: single),
-  forall (HW_12: (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_10: (mul_single_post nearest_even result0 result1 result2)),
   (no_overflow_single
    nearest_even (Rminus (single_value result) (single_value result2))).
+Proof.
+intuition.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+admit.
+(* FILL PROOF HERE *)
+Save.
+
 Proof.
 intuition.
 admit.
@@ -570,603 +519,112 @@ Save.
 Parameter single_exact: single -> R.
 Parameter single_round_error: single -> R.
 
-(* Why obligation from file "my_cosine.c", line 18, characters 13-49: *)
-(*Why goal*) Lemma my_cos2_ensures_default_po_1 : 
-  forall (x: single),
-  forall (HW_1: true = true /\
-                (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  forall (result: single),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
-  forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x) (single_value x))) /\
-                (mul_single_post nearest_even x x result0)),
-  forall (result1: single),
-  forall (HW_6: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
-  forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
-  forall (r: single),
-  forall (HW_9: r = result3),
-  (* JC_40 *)
-  (* JC_40 *)
-  (Rle (Rabs (Rminus (single_exact r) (cos (single_value x))))
-   (1 / 16777216)%R).
 Proof.
 intuition.
 
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 14, characters 12-46: *)
-(*Why goal*) Lemma my_cos2_ensures_default_po_2 : 
-  forall (x: single),
-  forall (HW_1: true = true /\
-                (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  forall (result: single),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
-  forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x) (single_value x))) /\
-                (mul_single_post nearest_even x x result0)),
-  forall (result1: single),
-  forall (HW_6: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
-  forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
-  forall (r: single),
-  forall (HW_9: r = result3),
-  forall (HW_10: (* JC_40 *)
-                 (Rle (Rabs (Rminus (single_exact r) (cos (single_value x))))
-                  (1 / 16777216)%R)),
-  forall (why__return: single),
-  forall (HW_11: why__return = r),
-  (* JC_27 *)
-  (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x))))
-   (1 / 8388608)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 64, characters 28-42: *)
-(*Why goal*) Lemma my_cos2_safety_po_1 : 
-  forall (x: single),
-  forall (HW_1: (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  (no_overflow_single nearest_even (1)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 17, characters 2-7: *)
-(*Why goal*) Lemma my_cos2_safety_po_2 : 
-  forall (x: single),
-  forall (HW_1: (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  (no_overflow_single nearest_even (Rmult (single_value x) (single_value x))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 65, characters 55-69: *)
-(*Why goal*) Lemma my_cos2_safety_po_3 : 
-  forall (x: single),
-  forall (HW_1: (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x) (single_value x)))),
-  forall (result0: single),
-  forall (HW_7: (mul_single_post nearest_even x x result0)),
-  (no_overflow_single nearest_even (05 / 10)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 17, characters 2-7: *)
-(*Why goal*) Lemma my_cos2_safety_po_4 : 
-  forall (x: single),
-  forall (HW_1: (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x) (single_value x)))),
-  forall (result0: single),
-  forall (HW_7: (mul_single_post nearest_even x x result0)),
-  forall (HW_8: (no_overflow_single nearest_even (05 / 10)%R)),
-  forall (result1: single),
-  forall (HW_9: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  (no_overflow_single
-   nearest_even (Rmult (single_value result0) (single_value result1))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 17, characters 2-7: *)
-(*Why goal*) Lemma my_cos2_safety_po_5 : 
-  forall (x: single),
-  forall (HW_1: (* JC_25 *)
-                ((* JC_23 *) (Rle (Rabs (single_value x)) (1 / 32)%R) /\
-                (* JC_24 *) (eq (single_round_error x) (0)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x) (single_value x)))),
-  forall (result0: single),
-  forall (HW_7: (mul_single_post nearest_even x x result0)),
-  forall (HW_8: (no_overflow_single nearest_even (05 / 10)%R)),
-  forall (result1: single),
-  forall (HW_9: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (HW_10: (no_overflow_single
-                  nearest_even (Rmult
-                                (single_value result0) (single_value result1)))),
-  forall (result2: single),
-  forall (HW_11: (mul_single_post nearest_even result0 result1 result2)),
-  (no_overflow_single
-   nearest_even (Rminus (single_value result) (single_value result2))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 30, characters 13-57: *)
-(*Why goal*) Lemma my_cos3_ensures_default_po_1 : 
-  forall (x_2: single),
-  forall (HW_1: true = true /\
-                (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (result: single),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
-  forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2))) /\
-                (mul_single_post nearest_even x_2 x_2 result0)),
-  forall (result1: single),
-  forall (HW_6: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
-  forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
-  forall (r_0: single),
-  forall (HW_9: r_0 = result3),
-  (* JC_66 *)
-  (* JC_66 *)
-  (Rle (Rabs (Rminus (single_exact r_0) (cos (single_exact x_2))))
-   (1 / 16777216)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 25, characters 12-62: *)
-(*Why goal*) Lemma my_cos3_ensures_default_po_2 : 
-  forall (x_2: single),
-  forall (HW_1: true = true /\
-                (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (result: single),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
-  forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2))) /\
-                (mul_single_post nearest_even x_2 x_2 result0)),
-  forall (result1: single),
-  forall (HW_6: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
-  forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
-  forall (r_0: single),
-  forall (HW_9: r_0 = result3),
-  forall (HW_10: (* JC_66 *)
-                 (Rle
-                  (Rabs (Rminus (single_exact r_0) (cos (single_exact x_2))))
-                  (1 / 16777216)%R)),
-  forall (why__return: single),
-  forall (HW_11: why__return = r_0),
-  (* JC_51 *)
-  (* JC_49 *)
-  (* JC_49 *)
-  (Rle (Rabs (Rminus (single_exact why__return) (cos (single_exact x_2))))
-   (1 / 16777216)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 26, characters 11-61: *)
-(*Why goal*) Lemma my_cos3_ensures_default_po_3 : 
-  forall (x_2: single),
-  forall (HW_1: true = true /\
-                (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (result: single),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
-  forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2))) /\
-                (mul_single_post nearest_even x_2 x_2 result0)),
-  forall (result1: single),
-  forall (HW_6: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
-  forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
-  forall (r_0: single),
-  forall (HW_9: r_0 = result3),
-  forall (HW_10: (* JC_66 *)
-                 (Rle
-                  (Rabs (Rminus (single_exact r_0) (cos (single_exact x_2))))
-                  (1 / 16777216)%R)),
-  forall (why__return: single),
-  forall (HW_11: why__return = r_0),
-  (* JC_51 *)
-  (* JC_50 *)
-  (* JC_50 *)
-  (Rle (single_round_error why__return)
-   (Rplus (single_round_error x_2) (3 / 16777216)%R)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 91, characters 30-44: *)
-(*Why goal*) Lemma my_cos3_safety_po_1 : 
-  forall (x_2: single),
-  forall (HW_1: (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  (no_overflow_single nearest_even (1)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 29, characters 2-7: *)
-(*Why goal*) Lemma my_cos3_safety_po_2 : 
-  forall (x_2: single),
-  forall (HW_1: (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  (no_overflow_single
-   nearest_even (Rmult (single_value x_2) (single_value x_2))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 93, characters 41-55: *)
-(*Why goal*) Lemma my_cos3_safety_po_3 : 
-  forall (x_2: single),
-  forall (HW_1: (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2)))),
-  forall (result0: single),
-  forall (HW_7: (mul_single_post nearest_even x_2 x_2 result0)),
-  (no_overflow_single nearest_even (05 / 10)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 29, characters 2-7: *)
-(*Why goal*) Lemma my_cos3_safety_po_4 : 
-  forall (x_2: single),
-  forall (HW_1: (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2)))),
-  forall (result0: single),
-  forall (HW_7: (mul_single_post nearest_even x_2 x_2 result0)),
-  forall (HW_8: (no_overflow_single nearest_even (05 / 10)%R)),
-  forall (result1: single),
-  forall (HW_9: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  (no_overflow_single
-   nearest_even (Rmult (single_value result0) (single_value result1))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 29, characters 2-7: *)
-(*Why goal*) Lemma my_cos3_safety_po_5 : 
-  forall (x_2: single),
-  forall (HW_1: (* JC_47 *)
-                ((* JC_45 *) (Rle (Rabs (single_exact x_2)) (1 / 32)%R) /\
-                (* JC_46 *) (Rle (single_round_error x_2) (1 / 1048576)%R))),
-  forall (HW_4: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_5: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2)))),
-  forall (result0: single),
-  forall (HW_7: (mul_single_post nearest_even x_2 x_2 result0)),
-  forall (HW_8: (no_overflow_single nearest_even (05 / 10)%R)),
-  forall (result1: single),
-  forall (HW_9: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (HW_10: (no_overflow_single
-                  nearest_even (Rmult
-                                (single_value result0) (single_value result1)))),
-  forall (result2: single),
-  forall (HW_11: (mul_single_post nearest_even result0 result1 result2)),
-  (no_overflow_single
-   nearest_even (Rminus (single_value result) (single_value result2))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 38, characters 13-55: *)
-(*Why goal*) Lemma my_cos4_ensures_default_po_1 : 
-  forall (x_0: single),
-  forall (HW_1: true = true /\
-                (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  (* JC_81 *)
-  (* JC_81 *)
-  (Rle
-   (Rabs
-    (Rminus
-     (Rminus
-      (1)%R (Rmult (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-     cos (single_value x_0))))
-   (15 / 16777216)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 35, characters 12-46: *)
-(*Why goal*) Lemma my_cos4_ensures_default_po_2 : 
-  forall (x_0: single),
-  forall (HW_1: true = true /\
-                (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  forall (HW_4: (* JC_81 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-                   cos (single_value x_0))))
-                 (15 / 16777216)%R)),
-  forall (result: single),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R) /\
-                (single_of_real_post nearest_even (1)%R result)),
-  forall (result0: single),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_0) (single_value x_0))) /\
-                (mul_single_post nearest_even x_0 x_0 result0)),
-  forall (result1: single),
-  forall (HW_7: (no_overflow_single nearest_even (05 / 10)%R) /\
-                (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (result2: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
-  forall (result3: single),
-  forall (HW_9: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
-  forall (__retres_0: single),
-  forall (HW_10: __retres_0 = result3),
-  forall (why__return: single),
-  forall (HW_11: why__return = __retres_0),
-  (* JC_71 *)
-  (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x_0))))
-   (1 / 1048576)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 125, characters 37-51: *)
-(*Why goal*) Lemma my_cos4_safety_po_1 : 
-  forall (x_0: single),
-  forall (HW_1: (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  forall (HW_4: (* JC_75 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-                   cos (single_value x_0))))
-                 (15 / 16777216)%R)),
-  (no_overflow_single nearest_even (1)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 39, characters 2-8: *)
-(*Why goal*) Lemma my_cos4_safety_po_2 : 
-  forall (x_0: single),
-  forall (HW_1: (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  forall (HW_4: (* JC_75 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-                   cos (single_value x_0))))
-                 (15 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  (no_overflow_single
-   nearest_even (Rmult (single_value x_0) (single_value x_0))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.jc", line 127, characters 48-62: *)
-(*Why goal*) Lemma my_cos4_safety_po_3 : 
-  forall (x_0: single),
-  forall (HW_1: (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  forall (HW_4: (* JC_75 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-                   cos (single_value x_0))))
-                 (15 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult (single_value x_0) (single_value x_0)))),
-  forall (result0: single),
-  forall (HW_8: (mul_single_post nearest_even x_0 x_0 result0)),
-  (no_overflow_single nearest_even (05 / 10)%R).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 39, characters 2-8: *)
-(*Why goal*) Lemma my_cos4_safety_po_4 : 
-  forall (x_0: single),
-  forall (HW_1: (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  forall (HW_4: (* JC_75 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-                   cos (single_value x_0))))
-                 (15 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult (single_value x_0) (single_value x_0)))),
-  forall (result0: single),
-  forall (HW_8: (mul_single_post nearest_even x_0 x_0 result0)),
-  forall (HW_9: (no_overflow_single nearest_even (05 / 10)%R)),
-  forall (result1: single),
-  forall (HW_10: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  (no_overflow_single
-   nearest_even (Rmult (single_value result0) (single_value result1))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 39, characters 2-8: *)
-(*Why goal*) Lemma my_cos4_safety_po_5 : 
-  forall (x_0: single),
-  forall (HW_1: (* JC_69 *) (Rle (Rabs (single_value x_0)) (007 / 100)%R)),
-  forall (HW_4: (* JC_75 *)
-                (Rle
-                 (Rabs
-                  (Rminus
-                   (Rminus
-                    (1)%R (Rmult
-                           (Rmult (single_value x_0) (single_value x_0)) (05 / 10)%R)) (
-                   cos (single_value x_0))))
-                 (15 / 16777216)%R)),
-  forall (HW_5: (no_overflow_single nearest_even (1)%R)),
-  forall (result: single),
-  forall (HW_6: (single_of_real_post nearest_even (1)%R result)),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult (single_value x_0) (single_value x_0)))),
-  forall (result0: single),
-  forall (HW_8: (mul_single_post nearest_even x_0 x_0 result0)),
-  forall (HW_9: (no_overflow_single nearest_even (05 / 10)%R)),
-  forall (result1: single),
-  forall (HW_10: (single_of_real_post nearest_even (05 / 10)%R result1)),
-  forall (HW_11: (no_overflow_single
-                  nearest_even (Rmult
-                                (single_value result0) (single_value result1)))),
-  forall (result2: single),
-  forall (HW_12: (mul_single_post nearest_even result0 result1 result2)),
-  (no_overflow_single
-   nearest_even (Rminus (single_value result) (single_value result2))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

@@ -2,15 +2,6 @@
 #define NMAX 1000000
 #define NMAXR 1000000.0
 
-/***********
-TODO:
-
-. axiomes sur real_of_int dans real.why
-
-. axiome round(f,m,0.0) == 0.0
-
-**********/
-
 /*@ lemma real_of_int_inf_NMAX: 
   @   \forall integer i; i <= NMAX ==> i <= NMAXR;
   @*/
