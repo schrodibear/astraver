@@ -366,25 +366,28 @@ let compute_needed_predicates () =
 (*****)
 
 
-(******************************************************************************)
-(*                               Logic functions                              *)
-(******************************************************************************)
+(*****************************************************************************)
+(*                              Logic functions                              *)
+(*****************************************************************************)
 
 (* let tr_logic_const vi init acc = *)
 (*   let decl = *)
-(*     Logic (false, vi.jc_var_info_final_name, [], tr_base_type vi.jc_var_info_type) :: acc *)
+(*     Logic (false, vi.jc_var_info_final_name, [], 
+       tr_base_type vi.jc_var_info_type) :: acc *)
 (*   in *)
 (*     match init with *)
 (*       | None -> decl *)
 (*       | Some(t,ty) -> *)
-(*           let t' = term ~type_safe ~global_assertion:true ~relocate:false LabelHere LabelHere t in *)
+(*           let t' = term ~type_safe ~global_assertion:true ~relocate:false
+             LabelHere LabelHere t in *)
 (*           let vi_ty = vi.jc_var_info_type in *)
 (*           let t_ty = t#typ in *)
 (*           (\* eprintf "logic const: max type = %a@." print_type ty; *\) *)
 (*           let pred = *)
 (*             LPred ( *)
 (*               "eq", *)
-(*               [term_coerce Loc.dummy_position ty vi_ty t (LVar vi.jc_var_info_name);  *)
+(*               [term_coerce Loc.dummy_position ty vi_ty t 
+                 (LVar vi.jc_var_info_name);  *)
 (*                term_coerce t#pos ty t_ty t t']) *)
 (*           in *)
 (*         let ax = *)
@@ -406,7 +409,8 @@ let fun_def f ta fa ft term_coerce params =
           let t' = ft t in
 	  let t' = term_coerce t#pos ty t#typ t t' in
           if List.mem f f.jc_logic_info_calls then
-            let logic = Logic(false,f.jc_logic_info_final_name, params, ty') in 
+            let logic = Logic(false,f.jc_logic_info_final_name, params, ty') 
+            in 
             let fstparams = List.map (fun (s,_) -> LVar s) params in
             let axiom =
               Axiom(jc_axiom^f.jc_logic_info_final_name,
@@ -434,7 +438,8 @@ let fun_def f ta fa ft term_coerce params =
 			 in
 			 let a' = 
 			   List.fold_right 
-			     (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' 
+			     (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) 
+                             params a' 
 			 in 
 			 (get_unique_name id#name, a')) l)]
       | Some _, JCInductive _ -> assert false
@@ -590,7 +595,8 @@ let gen_alloc_extend_axioms f ta _fa _ft _term_coerce params acc =
 	 in
 	 let ps = 
 	   List.map 
-	     (collect_pset_locations ~type_safe:false ~global_assertion:true) ps
+	     (collect_pset_locations ~type_safe:false ~global_assertion:true) 
+             ps
 	 in
 	 let ps = location_list' ps in
 	 let valida =
@@ -652,7 +658,8 @@ struct
     
 
   let from_memory for_one (((mc,_distr) as m),label) = 
-    let (s,_,_) = tmemory_param ~label_in_name:true label m (*memory_name (mc,distr)*) in
+    let (s,_,_) = tmemory_param ~label_in_name:true label m
+      (*memory_name (mc,distr)*) in
     if for_one
     then     
       {for_one = true;
@@ -725,7 +732,8 @@ let push_not e =
     | LIff(a,b) -> trad f (LAnd (LImpl(a,b),LImpl(b,a)))
     | LIf(_t,_a,_b) -> assert false (* How to trad this? t is a term *)
     | LLet _ -> assert false (* More difficult *)
-    | LTrue | LFalse |LAnd _ |LOr _ | LNot _ | LForall _ | LExists _ | LPred _ | LNamed _ -> assert false in
+    | LTrue | LFalse |LAnd _ |LOr _ | LNot _ 
+    | LForall _ | LExists _ | LPred _ | LNamed _ -> assert false in
   pos e
 
 module Def_ft_pred : 
@@ -818,20 +826,25 @@ struct
                                         let p = LVar p in
                                         make_impl (ft mb) (make_impl (ft_p p)
                                           (ft (MyBag.make_rem p mb))))) in
-      let acc = Axiom (axiom_name^"1a", make_forall_list params [] assertion)::acc in
+      let acc = Axiom (axiom_name^"1a", 
+                       make_forall_list params [] assertion)::acc in
       (* inverse *)
-       let assertion = LForall (mb,mb_ty,[],
-                               LForall (p,p_ty,[],
-                                        let mb = LVar mb in
-                                        let p = LVar p in
-                                        make_impl (ft (MyBag.make_rem p mb)) (ft mb))) in
-      let acc = Axiom (axiom_name^"1b", make_forall_list params [] assertion)::acc in
-      let assertion = LForall (mb,mb_ty,[],
-                               LForall (p,p_ty,[],
-                                        let mb = LVar mb in
-                                        let p = LVar p in
-                                        make_impl (ft (MyBag.make_rem p mb)) (ft_p p))) in
-      let acc = Axiom (axiom_name^"1c", make_forall_list params [] assertion)::acc in
+       let assertion = 
+         let asser = 
+           let mb = LVar mb in
+           let p = LVar p in
+           make_impl (ft (MyBag.make_rem p mb)) (ft mb) in
+         LForall (mb,mb_ty,[], LForall (p,p_ty,[],asser)) in
+      let acc = 
+        Axiom (axiom_name^"1b", make_forall_list params [] assertion)::acc in
+      let assertion = 
+        let asser =
+          let mb = LVar mb in
+          let p = LVar p in
+          make_impl (ft (MyBag.make_rem p mb)) (ft_p p) in
+        LForall (mb,mb_ty,[], LForall (p,p_ty,[],asser)) in
+      let acc = Axiom (axiom_name^"1c", 
+                       make_forall_list params [] assertion)::acc in
       acc
     else acc in
     (* ft with inter *)
@@ -839,12 +852,13 @@ struct
       let mb1 = "mb1"^mybag_suffix in
       let mb2 = "mb2"^mybag_suffix in
       let mb_ty = NotIn.ty notin in
-      let assertion = LForall (mb1,mb_ty,[],
-                               LForall (mb2,mb_ty,[],
-                                         let mb1 = LVar mb1 in
-                                         let mb2 = LVar mb2 in
-                                         make_equiv (make_and (ft mb1) (ft mb2))
-                                (ft (MyBag.make_inter mb1 mb2)))) in
+      let assertion = 
+        let asser =
+          let mb1 = LVar mb1 in
+          let mb2 = LVar mb2 in
+          make_equiv (make_and (ft mb1) (ft mb2))
+            (ft (MyBag.make_inter mb1 mb2)) in
+        LForall (mb1,mb_ty,[], LForall (mb2,mb_ty,[],asser)) in
       Axiom (axiom_name^"2", make_forall_list params [] assertion)::acc in
     (* ft with all *)
     let acc =         
@@ -854,7 +868,8 @@ struct
 
   let rec def_ft_pred ~for_one ~do_rem _f notin ta_conv acc = 
     match ta_conv with 
-        (* Devrait peut-Ãªtre utiliser la vrai transformation d'inductif en 1 unique axiom*)
+        (* Devrait peut-être utiliser la vrai 
+           transformation d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> begin 
           let name = ft_name notin f_name in
           Jc_options.lprintf "Generate logic : %s :@." name;
@@ -876,7 +891,7 @@ struct
             | _ -> assert false in
           let rec gen_one_pos ~impl acc = function
             | LNamed (_,a) -> gen_one_pos ~impl acc a
-            | LPred (s,lt) -> (* Normalement le predicat inductif dÃ©fini *)
+            | LPred (s,lt) -> (* Normalement le predicat inductif défini *)
                 let asser = make_and_list acc in
                 impl s lt asser
             | _ -> assert false in
@@ -896,9 +911,11 @@ struct
             else acc in
           let acc = List.fold_left 
             (fun acc (ident,assertion) ->
-               let axiom_name = "axiom"^"_ft_"^(NotIn.mem_name2 notin)^f_name^ident in
+               let axiom_name = 
+                 "axiom"^"_ft_"^(NotIn.mem_name2 notin)^f_name^ident in
                Jc_options.lprintf "Generate axiom : %s :@." axiom_name;
-               let impl s lt asser = make_impl (conv_app_pred notin s lt) asser in
+               let impl s lt asser = 
+                 make_impl (conv_app_pred notin s lt) asser in
                let asser = gen_one ~impl [] assertion in
                let asser = LForall (NotIn.name notin,
                                     NotIn.ty notin ,[],asser) in
@@ -908,11 +925,14 @@ struct
           let conjs = List.map
             (fun (_ident,assertion) ->
                let impl _s lt asser = 
-                 let eqs = List.map2 (fun (x,_) y -> make_eq (LVar x) y) params lt in
+                 let eqs = List.map2 
+                   (fun (x,_) y -> make_eq (LVar x) y) params lt in
                  make_impl (make_and_list eqs) asser in
                gen_one ~impl [] assertion) l in
           let conjs = make_and_list conjs in
-          let asser = make_impl conjs (conv_app_pred notin f_name (List.map (fun (x,_) -> LVar x) params)) in
+          let asser = make_impl conjs 
+            (conv_app_pred notin f_name 
+               (List.map (fun (x,_) -> LVar x) params)) in
           let par = (NotIn.name notin,NotIn.ty notin)::params in
           let asser = make_forall_list par [] asser in
           let axiom_name = "axiom"^"_ft_"^(NotIn.mem_name2 notin)^f_name in
@@ -1028,7 +1048,9 @@ struct
     let params = params
       |> List.map fst 
       |> List.map make_var in
-    let sepa = MyBag.make_in (LVar elt) (LApp (notin_name notin_update f_name,params)) in
+    let sepa = 
+      MyBag.make_in (LVar elt) 
+        (LApp (notin_name notin_update f_name,params)) in
     let a =  if framed_prop then
       LImpl(
 	LPred(framed_name,framed_normal_params),
@@ -1040,7 +1062,8 @@ struct
     let a = make_forall_list framed_params [] a in
     let a = LForall (elt,NotIn.ty_elt notin_update,[],
                      LForall (elt_val,NotIn.ty_elt_val notin_update,[],a)) in
-    let axiom_name = "axiom"^"_no_update_"^framed_name^(NotIn.mem_name notin_update) in
+    let axiom_name = "axiom"^"_no_update_"^framed_name^
+      (NotIn.mem_name notin_update) in
     Axiom(axiom_name,a)
 
   (*let def_no_update f_name notin_update params prop =
@@ -1062,7 +1085,8 @@ struct
 
   let rec def_notin _f notin ta_conv acc = 
     match ta_conv with 
-        (* Devrait peut-Ãªtre utiliser la vrai transformation d'inductif en 1 unique axiom*)
+        (* Devrait peut-être utiliser la vrai transformation 
+           d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> begin 
 
           let rec gen_one_neg notin acc = function
@@ -1077,7 +1101,7 @@ struct
             | _ -> assert false in
           let rec gen_one_pos notin acc = function
             | LNamed (_,a) -> gen_one_pos notin acc a
-            | LPred (s,lt) -> (* Normalement le predicat inductif dÃ©fini *)
+            | LPred (s,lt) -> (* Normalement le predicat inductif défini *)
                 let asser = MyBag.make_inter_rem_list acc in
                 make_eq (conv_app_pred notin s lt) asser
             | _ -> assert false in
@@ -1214,10 +1238,10 @@ let tr_logic_fun_aux f ta acc =
         let f_name = f.jc_logic_info_final_name in
         let todos = 
           Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
-        let rewrite_todos acc = function
+        let filter_notin acc = function
           | `Notin mem -> (NotIn.from_memory false mem)::acc
           | _ -> acc in
-        let notin_updates = List.fold_left rewrite_todos [] todos in
+        let notin_updates = List.fold_left filter_notin [] todos in
         let print_todo fmt = function
            | `Ft _ -> fprintf fmt "ft"
            | `Notin _ -> fprintf fmt "notin"
@@ -1265,7 +1289,8 @@ let tr_logic_fun_aux f ta acc =
 (*     List.fold_left (fun acc vi -> *)
 (*       match vi.jc_var_info_type with *)
 (*         | JCTpointer(st,_,_) ->  *)
-(*             LPred("full_separated",[LVar "tmp"; LVar vi.jc_var_info_final_name]) *)
+(*             LPred("full_separated",[LVar "tmp"; 
+               LVar vi.jc_var_info_final_name]) *)
 (*             :: acc *)
 (*         | _ -> acc *)
 (*     ) [] li.jc_logic_info_parameters *)
@@ -1297,7 +1322,8 @@ let tr_logic_fun_aux f ta acc =
 (*                   LApp(li.jc_logic_info_final_name,update_params)])) *)
 (*       in *)
 (*       let a =  *)
-(*         List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads *)
+(*         List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) 
+           a params_reads *)
 (*       in *)
 (*       let structty = match mc with  *)
 (*         | FVfield fi -> JCtag(fi.jc_field_info_struct, []) *)
