@@ -281,6 +281,25 @@ let z3SS = {
   pr_enc = SortedStratified;
   }
 
+let cvc3MI = {
+  pr_id = DpConfig.Cvc3;
+  pr_info = DpConfig.cvc3;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
+  pr_viewcol = None;
+  pr_enc = MonoInst;
+  }
+let z3MI = {
+  pr_id = DpConfig.Z3;
+  pr_info = DpConfig.z3;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
+  pr_viewcol = None;
+  pr_enc = MonoInst;
+  }
+
 
 let coq = {
   pr_id = DpConfig.Coq;
@@ -309,6 +328,8 @@ let all_known_provers = [
   z3SS ; 
   yicesSS; 
   cvc3SS; 
+  z3MI;
+  cvc3MI;
   (*simplify_sstrat;*) 
 (*
   simplify_strat; 

@@ -110,7 +110,7 @@ type monoinstWorldGen =
   | MonoinstGoal
   | MonoinstPremises
 
-let monoinstworldgen = ref MonoinstBuiltin
+let monoinstworldgen = ref MonoinstGoal
 let monoinstoutput_world = ref false
 let monoinstonlymem = ref false
 let monoinstnounit = ref false
