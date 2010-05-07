@@ -179,6 +179,15 @@ let generic full f targets =
        out "@\n";
        out "%%.stat: why/%%.why@\n";
        out "\t@@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
+       
+
+       out "why3: why/%s@\n"
+	 (match targets with f::_ -> f^"_why3.why" | [] -> "");
+       
+       out "why/%%_why3.why:  WHYOPT=-why3@\n";
+       out "why/%%_why3.why: why/%%.why@\n";
+       out "\t@@echo 'why -why3 [...] why/$*.why' \
+            && $(WHY) $(JESSIELIBFILES) why/$*.why@\n";
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

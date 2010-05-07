@@ -47,7 +47,15 @@ let push_decl d =
 
 let iter = Encoding.iter
 
+
+let capitalize s =
+  let is_alpha n = ('a' <= n && n <= 'z') || ('A' <= n && n <= 'Z') in
+  let s = if not (is_alpha s.[0]) then "Un"^s else s in
+  String.capitalize s
+
 let ident = Ident.print
+let ident_capitalize fmt s = 
+  pp_print_string fmt (capitalize (Ident.string s))
 
 let type_vars = Hashtbl.create 17
 
@@ -110,27 +118,24 @@ let rec term fmt = function
       fprintf fmt "Unit.Unit" 
   | Tconst (ConstFloat c) ->
       Print_real.print fmt c
-  | Tvar id | Tderef id | Tapp (id, [], _) -> 
-      ident fmt id
-  | Tapp (id, tl, _) -> 
-      fprintf fmt "%a(%a)" print_builtin id (print_list comma term) tl
+  | Tvar id | Tderef id -> ident fmt id
+  | Tapp (id, tl, instance) -> 
+      let ret_type =
+        let var_subst,logic = Env.find_global_logic id in
+        Env.instantiate_specialized var_subst instance;
+        match logic with
+          | Predicate _ -> assert false
+          | Function (_,ret_type) -> ret_type in
+      begin match tl with
+        | [] -> fprintf fmt "(%a : %a)" ident id pure_type ret_type
+        | _ ->
+            fprintf fmt "(%a(%a) : %a)" 
+              print_builtin id (print_list comma term) tl
+              pure_type ret_type
+      end      
   | Tnamed (User n, t) ->
       fprintf fmt "@[(%S@ %a)@]" n term t
   | Tnamed (_, t) -> term fmt t
-
-let int_relation_string id =
-  if id == t_lt_int then "<" 
-  else if id == t_le_int then "<="
-  else if id == t_gt_int then ">"
-  else if id == t_ge_int then ">="
-  else assert false
-
-let real_relation_string id =
-  if id == t_lt_real then "<" 
-  else if id == t_le_real then "<="
-  else if id == t_gt_real then ">"
-  else if id == t_ge_real then ">="
-  else assert false
 
 let rec predicate fmt = function
   | Pvar id | Papp (id, [], _) -> 
@@ -140,7 +145,7 @@ let rec predicate fmt = function
   | Papp (id, [t1; t2], _) when is_neq id ->
       fprintf fmt "(%a <> %a)" term t1 term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[((0 <= %a) and@ (%a < %a))@]" term b term a term b
+      fprintf fmt "@[(Int.(<=)(0,%a) and@ Int.(<)(%a,%a))@]" term b term a term b
   | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "@[false (* was well_founded(...) *)@]" 
   | Papp (id, l, _) ->
@@ -154,7 +159,7 @@ let rec predicate fmt = function
   | Piff (a, b) -> 
       fprintf fmt "(@[%a <->@ %a@])" predicate a predicate b
   | Pif (a, b, c) -> 
-      fprintf fmt "(@[if %a then@ %a else@ %a@])" 
+      fprintf fmt "(@[if %a = Bool.True then@ %a else@ %a@])" 
 	term a predicate b predicate c
   | Pand (_, _, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" predicate a predicate b
@@ -187,7 +192,7 @@ let rec predicate fmt = function
         let p = tsubst_in_predicate (subst_one n t) p in
         fprintf fmt "@[%a@]" predicate p
   | Pnamed (User n, p) ->
-      fprintf fmt "@[(%S:@ %a)@]" n predicate p
+      fprintf fmt "@[(%S@ %a)@]" n predicate p
   | Pnamed (_, p) -> predicate fmt p
 
 and print_pattern fmt = function
@@ -273,7 +278,7 @@ let decl fmt d =
 	      (print_list comma pure_type) bl 
 	      (print_list newline 
 	         (fun fmt (id,p) -> fprintf fmt "@[| %a: %a@]" 
-                    ident id predicate p)) l
+                    ident_capitalize id predicate p)) l
       end
   | Dfunction_def (_, id, def) ->
       let bl,pt,t = specialize def in
@@ -282,7 +287,7 @@ let decl fmt d =
   | Daxiom (_, id, p) ->
       let p = specialize p in
       fprintf fmt "@[<hov 2>axiom %s:@ %a@]" 
-        (String.capitalize id) predicate p
+        (capitalize id) predicate p
   | Dgoal (_, _expl, id, sq) ->
       let sq = specialize sq in
       fprintf fmt "@[<hov 2>goal %s:@\n%a@]" 
