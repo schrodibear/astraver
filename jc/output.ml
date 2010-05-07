@@ -93,7 +93,7 @@ let rec fprintf_term form t =
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
   | Tnamed(lab,t) -> fprintf form "(%s : %a)" lab fprintf_term t
   | TIf(t1,t2,t3) -> 
-      fprintf form "@[<hv 1>(if %a@ then %a@ else %a)@]" 
+      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]" 
 	fprintf_term t1 fprintf_term t2 fprintf_term t3
 
 type logic_type = 
@@ -247,19 +247,19 @@ let rec fprintf_assertion form a =
       fprintf form "@[(not %a)@]" 
 	fprintf_assertion a1
   | LImpl(a1,a2) -> 
-      fprintf form "@[<hv 1>(%a ->@ %a)@]" 
+      fprintf form "@[<hov 1>(%a ->@ %a)@]" 
 	fprintf_assertion a1 fprintf_assertion a2
   | LIf(t,a1,a2) -> 
-      fprintf form "@[<hv 1>(if %a@ then %a@ else %a)@]" 
+      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]" 
 	fprintf_term t fprintf_assertion a1 fprintf_assertion a2
   | LLet(id,t,a) -> 
-      fprintf form "@[<hv 1>(let @[<hv 1>%s =@ %a in@]@ %a)@]" id
+      fprintf form "@[<hov 1>(let @[<hov 1>%s =@ %a in@]@ %a)@]" id
 	fprintf_term t fprintf_assertion a
   | LForall(id,t,trigs,a) -> 
-      fprintf form "@[<hv 1>(forall %s:%a%a.@ %a)@]" 
+      fprintf form "@[<hov 1>(forall@ %s:@,%a@,%a@,.@ %a)@]" 
 	id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
   | LExists(id,t,trigs,a) -> 
-      fprintf form "@[<hv 1>(exists %s:%a%a.@ %a)@]" 
+      fprintf form "@[<hov 1>(exists %s:%a%a.@ %a)@]" 
 	id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
   | LPred("le",[t1;t2]) ->
       fprintf form "@[(%a <= %a)@]" 
@@ -345,10 +345,10 @@ let rec fprintf_type anon form t =
   match t with
     | Prod_type(id,t1,t2) ->
 	if id="" or anon then
-	  fprintf form "@[<hv 1>%a ->@ %a@]" 
+	  fprintf form "@[<hov 1>%a ->@ %a@]" 
 	    (fprintf_type anon) t1 (fprintf_type anon) t2
 	else
-	  fprintf form "@[<hv 1>%s:%a ->@ %a@]" id
+	  fprintf form "@[<hov 1>%s:%a ->@ %a@]" id
 	    (fprintf_type anon) t1 (fprintf_type anon) t2
     | Base_type t  -> 
 	fprintf_logic_type form t
@@ -356,7 +356,7 @@ let rec fprintf_type anon form t =
 	fprintf form "%a ref" (fprintf_type anon) t
     | Annot_type(p,t,reads,writes,q,signals) ->
 	begin
-	  fprintf form "@[@[<hv 2>{ "; 
+	  fprintf form "@[@[<hov 2>{ "; 
 	  if is_not_true p  
 	  then fprintf_assertion form p;
 	  fprintf form "}@]@ %a@ " (fprintf_type anon) t;
@@ -375,15 +375,15 @@ let rec fprintf_type anon form t =
 	  begin
 	    match signals with
 	      | [] -> 
-		  fprintf form "@[<hv 2>{ %a }@]@]" fprintf_assertion q
+		  fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion q
 	      | l ->
 		  fprintf form 
-		    "raises%a@ @[<hv 2>{ %a@ | %a }@]@]" 
+		    "raises%a@ @[<hov 2>{ %a@ | %a }@]@]" 
 		    (print_list comma (fun fmt (e,_r) -> fprintf fmt " %s" e))
 		    l
 		    fprintf_assertion q
 		    (print_list alt (fun fmt (e,r) -> 
-				       fprintf fmt "@[<hv 2>%s =>@ %a@]" e
+				       fprintf fmt "@[<hov 2>%s =>@ %a@]" e
 					 fprintf_assertion r))
 		    l
 	  end		    
@@ -552,11 +552,11 @@ let rec fprintf_expr form e =
     | Deref(id) -> fprintf form "!%s" id
     | If(e1,e2,e3) ->
 	fprintf form 
-	  "@[<hv 0>(if %a@ @[<hv 1>then@ %a@]@ @[<hv 1>else@ %a@])@]" 
+	  "@[<hov 0>(if %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]" 
 	  fprintf_expr e1 fprintf_expr e2 fprintf_expr e3
     | While(e1,inv,var,e2) ->
 	fprintf form 
-	  "@[<hv 0>while %a do@ @[<hv 1>@[<hv 2>{ @[<hv 2>invariant@ %a@]@ @[<hv 2>%a@] }@]@ %a@]@ done@]" 
+	  "@[<hov 0>while %a do@ @[<hov 1>@[<hov 2>{ @[<hov 2>invariant@ %a@]@ @[<hov 2>%a@] }@]@ %a@]@ done@]" 
 	  fprintf_expr e1 
 	  fprintf_assertion inv
 	  fprintf_variant var
@@ -564,57 +564,57 @@ let rec fprintf_expr form e =
     | Block([]) ->
 	fprintf form "void"
     | Block(el) ->
-	fprintf form "@[<hv 0>begin@ @[<hv 1>  %a@]@ end@]" fprintf_expr_list el
+	fprintf form "@[<hov 0>begin@ @[<hov 1>  %a@]@ end@]" fprintf_expr_list el
     | Assign(id,e) ->
-	fprintf form "@[<hv 1>(%s := %a)@]" 
+	fprintf form "@[<hov 1>(%s := %a)@]" 
 	  id fprintf_expr e
     | Let(id,e1,e2) ->
-	fprintf form "@[<hv 0>(let %s = %a in@ %a)@]" id
+	fprintf form "@[<hov 0>(let %s =@ %a in@ %a)@]" id
 	  fprintf_expr e1 fprintf_expr e2
     | Let_ref(id,e1,e2) ->
-	fprintf form "@[<hv 0>(let %s = ref %a in@ %a)@]" id
+	fprintf form "@[<hov 0>(let %s =@ ref %a in@ %a)@]" id
 	  fprintf_expr e1 fprintf_expr e2
     | App(e1,e2) ->
-	fprintf form "@[<hv 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
+	fprintf form "@[<hov 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
     | Raise(id,None) ->
-	fprintf form "@[<hv 1>(raise@ %s)@]" id
+	fprintf form "@[<hov 1>(raise@ %s)@]" id
     | Raise(id,Some e) ->
-	fprintf form "@[<hv 1>(raise@ (%s@ %a))@]" id fprintf_expr e
+	fprintf form "@[<hov 1>(raise@ (%s@ %a))@]" id fprintf_expr e
     | Try(e1,exc,None,e2) ->
-	fprintf form "@[<hv 1>try@ %a@ with@ %s ->@ %a end@]" 
+	fprintf form "@[<hov 1>try@ %a@ with@ %s ->@ %a end@]" 
 	  fprintf_expr e1 exc fprintf_expr e2
     | Try(e1,exc,Some id,e2) ->
-	fprintf form "@[<hv 1>try@ %a@ with@ %s %s ->@ %a end@]" 
+	fprintf form "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]" 
 	  fprintf_expr e1 exc id fprintf_expr e2
     | Fun(params,pre,body,post,signals) ->
-	fprintf form "@[<hv 1>fun @[";
+	fprintf form "@[<hov 1>fun @[";
 	List.iter 
 	  (fun (x,t) -> fprintf form "(%s : %a) " x (fprintf_type false) t) 
 	  params;
-	fprintf form "@]->@ @[<hv 0>{ "; 
+	fprintf form "@]->@ @[<hov 0>{ "; 
 	if pre <> LTrue 
 	then fprintf_assertion form pre;
 	fprintf form " }@ %a@]@ " fprintf_expr body;
 	begin
 	  match signals with
 	    | [] -> 
-		fprintf form "@[<hv 2>{ %a }@]@]" fprintf_assertion post
+		fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion post
 	     | l ->
-		 fprintf form "@[<hv 2>{ %a@ | %a }@]"
+		 fprintf form "@[<hov 2>{ %a@ | %a }@]"
 		   fprintf_assertion post
 		   (print_list alt
 		      (fun fmt (e,r) -> 
-			 fprintf fmt "@[<hv 2>%s =>@ %a@]" e
+			 fprintf fmt "@[<hov 2>%s =>@ %a@]" e
 			   fprintf_assertion r))
 		  l
 	end		    
 
     | Triple(_,pre,e,LTrue,[]) ->
-	fprintf form "@[<hv 0>(assert { %a };@ (%a))@]" 
+	fprintf form "@[<hov 0>(assert { %a };@ (%a))@]" 
 	  fprintf_assertion pre
 	  fprintf_expr e
     | Triple(o,pre,e,post,exceps) ->
-	fprintf form "@[<hv 0>(assert { %a };@ ((%a)@ " 
+	fprintf form "@[<hov 0>(assert { %a };@ ((%a)@ " 
 	  fprintf_assertion pre
 	  fprintf_expr e;
 	begin
@@ -624,28 +624,28 @@ let rec fprintf_expr form e =
 		  fprintf_assertion post
 	    | l ->
 		(if o then 
-		   fprintf form "@[<hv 2>{{ %a@ | %a }}@]" 
+		   fprintf form "@[<hov 2>{{ %a@ | %a }}@]" 
 		 else
-		   fprintf form "@[<hv 2>{ %a@ | %a }@]")
+		   fprintf form "@[<hov 2>{ %a@ | %a }@]")
 		  fprintf_assertion post
 		  (print_list alt
 		  (fun fmt (e,r) -> 
-		     fprintf fmt "@[<hv 2>%s =>@ %a@]" e
+		     fprintf fmt "@[<hov 2>%s =>@ %a@]" e
 		       fprintf_assertion r))
 		  l
 	end;
 	fprintf form "))@]"
     | Assert(k,p, e) ->
-	fprintf form "@[<hv 0>(%s@ { %a };@ %a)@]" 
+	fprintf form "@[<hov 0>(%s@ { %a };@ %a)@]" 
           (match k with `ASSERT -> "assert" | `CHECK -> "check")
 	  fprintf_assertion p fprintf_expr e
     | Label (s, e) ->
-	fprintf form "@[<hv 0>(%s:@ %a)@]" s fprintf_expr e
+	fprintf form "@[<hov 0>(%s:@ %a)@]" s fprintf_expr e
     | BlackBox(t) ->
-	fprintf form "@[<hv 0>[ %a ]@]" 
+	fprintf form "@[<hov 0>[ %a ]@]" 
 	  (fprintf_type false) t
     | Absurd ->
-	fprintf form "@[<hv 0>absurd@ @]" 
+	fprintf form "@[<hov 0>absurd@ @]" 
     | Loc (_l, e) ->
 	fprintf_expr form e
 	(*
@@ -764,16 +764,16 @@ let fprint_logic_arg form (id,t) =
 let fprintf_why_decl form d =
   match d with
     | Param(b,id,t) ->
-	fprintf form "@[<hv 1>%sparameter %s :@ %a@]@.@." 
+	fprintf form "@[<hov 1>%sparameter %s :@ %a@]@.@." 
 	(if b then "external " else "") id 
 	  (fprintf_type false) t
     | Logic(b,id,args,t) ->
-	fprintf form "@[<hv 1>%slogic %s: %a -> %a@.@."
+	fprintf form "@[<hov 1>%slogic %s: %a -> %a@.@."
 	  (if b then "external " else "") id 
 	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
 	  fprintf_logic_type t 
     | Inductive(b,id,args,cases) ->
-	fprintf form "@[<hv 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
+	fprintf form "@[<hov 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
 	  (if b then "external " else "") id 
 	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
 	  (print_list newline 
@@ -781,20 +781,20 @@ let fprintf_why_decl form d =
 		fprintf form "| %s: @[%a@]" id fprintf_assertion a))
 	  cases
     | Axiom(id,p) ->
-	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 
+	fprintf form "@[<hov 1>axiom %s :@ %a@]@.@." id 
 	  fprintf_assertion p
     | Goal(id,p) ->
-	fprintf form "@[<hv 1>goal %s :@ %a@]@.@." id 
+	fprintf form "@[<hov 1>goal %s :@ %a@]@.@." id 
 	  fprintf_assertion p
     | Def(id,e) ->
-	fprintf form "@[<hv 1>let %s =@ %a@]@.@." id fprintf_expr e
+	fprintf form "@[<hov 1>let %s =@ %a@]@.@." id fprintf_expr e
     | Predicate (b, id, args, p) ->
-	fprintf form "@[<hv 1>%spredicate %s(%a) =@ %a@]@.@."
+	fprintf form "@[<hov 1>%spredicate %s(%a) =@ %a@]@.@."
 	  (if b then "external " else "") id 
 	  (print_list comma fprint_logic_arg) args
 	  fprintf_assertion p
     | Function(b,id,args,t,e) ->
-	fprintf form "@[<hv 1>%sfunction %s(%a) : %a =@ %a@]@.@."
+	fprintf form "@[<hov 1>%sfunction %s(%a) : %a =@ %a@]@.@."
 	  (if b then "external " else "") id 
 	  (print_list comma fprint_logic_arg) args
 	  fprintf_logic_type t 
