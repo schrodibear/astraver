@@ -835,7 +835,7 @@ let rec term env e =
           in
           vi.jc_var_info_type, vi.jc_var_info_region, JCTvar vi
 	with Not_found ->
-          (* François : Où teste-t-on que pi n'a pas d'argument? *)
+          (* François : Où teste-t-on que pi n'a pas d'argument? *)
 	  let pi = 
             try Hashtbl.find logic_functions_env id with Not_found ->
               typing_error e#pos "unbound term identifier %s" id
@@ -2871,19 +2871,25 @@ exception Identifier_Not_found of string
 let create_pragma_gen_sep_logic_aux loc kind id li =
   let translate_param (p,restr) = 
     match p#node,restr with
-      | JCPTnative _,_ -> typing_error loc "A Separation pragma can't reference \"pure\" type"
+      | JCPTnative _,_ -> 
+          typing_error loc "A Separation pragma can't reference \"pure\" type"
       | JCPTidentifier (s,[]),_ -> (* Should be the identifier of a logic *)
           let info = 
             try
               find_logic_info s
             with Not_found -> raise (Identifier_Not_found s)
           in `Logic (info,restr)
-      | JCPTidentifier (_s,_l),_ -> typing_error loc "A Separation pragma can't reference a logic type"
+      | JCPTidentifier (_s,_l),_ -> 
+          typing_error loc "A Separation pragma can't reference a logic type"
       | JCPTpointer (_,[],None,None),[] -> 
           let ty = type_type p in
           `Pointer (newvar ty)
-      | JCPTpointer _, _::_ -> typing_error loc "In a separation pragma pointer can't be at that time restreint to some field"
-      | JCPTpointer _,_ -> failwith "TODO : sorry I'm lazy. But what have you done?" in
+      | JCPTpointer _, _::_ -> 
+          typing_error loc 
+            "In a separation pragma pointer can't\
+             be at that time restreint to some field"
+      | JCPTpointer _,_ -> 
+          failwith "TODO : sorry I'm lazy. But what have you done?" in
   let change_var_name = function
     |`Logic (info,restr) -> 
        let params = info.jc_logic_info_parameters in
@@ -2910,7 +2916,8 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
      which will be replace by the correcte one at the end *)
   let to_def = function
     | `Logic (info,_,params) -> 
-        let param = List.map (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
+        let param = List.map 
+          (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
           params in
         new assertion begin
           match info.jc_logic_info_result_type with
@@ -2919,7 +2926,8 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
                         jc_app_args = param;
                         jc_app_region_assoc = [];
                         jc_app_label_assoc = 
-                    label_assoc loc "bug in the generation" (Some cur_label) info.jc_logic_info_labels []
+                    label_assoc loc "bug in the generation" 
+                      (Some cur_label) info.jc_logic_info_labels []
                        }
             | Some ty -> 
                 let term = new term ~pos:loc
@@ -2935,7 +2943,8 @@ let create_pragma_gen_sep_logic_aux loc kind id li =
         new assertion (make_rel_bin_op loc `Beq t t) in
   let def = JCAssertion (make_and_list (List.map to_def params)) in
   Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
-  Hashtbl.add pragma_gen_sep pi.jc_logic_info_tag (kind,params,(None:Output.why_decl option))
+  Hashtbl.add pragma_gen_sep pi.jc_logic_info_tag
+    (kind,params,(None:Output.why_decl option))
 
 
 let create_pragma_gen_sep_logic loc kind id li =
@@ -3274,15 +3283,19 @@ of an invariant policy";
     | JCDtermination_policy _
     | JCDinvariant_policy _ -> assert false
     | JCDpragma_gen_sep (kind,id,li) -> 
-	if Jc_options.gen_frame_rule_with_ft && not only_types then
+        if Jc_options.gen_frame_rule_with_ft && not only_types then
 	  begin
             let kind = match kind,li with
               | "",_ -> `Sep
               | "inc", [_;_] -> `Inc
               | "cni", [_;_] -> `Cni
 
-              | ("inc"|"cni"), _ -> typing_error loc "A Gen_separation inc or cni pragma should have 2 arguments (%i given)" (List.length li)
-              | _ -> typing_error loc "I dont know that kind of Gen_separation pragma : %s" kind in
+              | ("inc"|"cni"), _ -> 
+                  typing_error loc 
+                    "A Gen_separation inc or cni pragma should \
+                     have 2 arguments (%i given)" (List.length li)
+              | _ -> typing_error loc 
+                  "I dont know that kind of Gen_separation pragma : %s" kind in
             create_pragma_gen_sep_logic loc kind id li
           end;
 	acc
@@ -3294,7 +3307,8 @@ of an invariant policy";
 	    axiomatics_decls = [];
 	  }
 	in
-	data.axiomatics_decls <- List.fold_left (decl_aux ~only_types ~axiomatic:(Some (id,data))) [] l;
+	data.axiomatics_decls <- List.fold_left 
+          (decl_aux ~only_types ~axiomatic:(Some (id,data))) [] l;
 	if not only_types then
 	  begin
 	    check_consistency id data;
