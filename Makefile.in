@@ -260,21 +260,21 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ str.cma $^
 
 # world-why-web
-WWEBCMO = src/lib.cmo src/rc.cmo src/version.cmo src/options.cmo src/loc.cmo\
-	 src/ident.cmo  src/effect.cmo src/pp.cmo \
-	src/option_misc.cmo\
-	src/misc.cmo src/parser.cmo src/lexer.cmo src/report.cmo\
-	 src/env.cmo src/rename.cmo src/explain.cmo src/util.cmo src/xml.cmo\
-	src/project.cmo src/pretty.cmo src/wserver.cmo src/whyweb.cmo
-WWEBCMX = $(WWEBCMO:.cmo=.cmx)
+# WWEBCMO = src/lib.cmo src/rc.cmo src/version.cmo src/options.cmo src/loc.cmo\
+# 	 src/ident.cmo  src/effect.cmo src/pp.cmo \
+# 	src/option_misc.cmo\
+# 	src/misc.cmo src/parser.cmo src/lexer.cmo src/report.cmo\
+# 	 src/env.cmo src/rename.cmo src/explain.cmo src/util.cmo src/xml.cmo\
+# 	src/project.cmo src/pretty.cmo src/wserver.cmo src/whyweb.cmo
+# WWEBCMX = $(WWEBCMO:.cmo=.cmx)
 
-src/wserver.ml: src/wserver.ml4
-	camlp4r pa_ifdef.cmo pr_o.cmo -DUNIX -DNOFORK  -impl $^ -o $@
+# src/wserver.ml: src/wserver.ml4
+# 	camlp4r pa_ifdef.cmo pr_o.cmo -DUNIX -DNOFORK  -impl $^ -o $@
 
-bin/whyweb.opt: $(WWEBCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
-	      $(OFLAGS) -thread -o $@ str.cmxa unix.cmxa threads.cmxa $^
-	$(STRIP)    $@
+# bin/whyweb.opt: $(WWEBCMX)
+# 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
+# 	      $(OFLAGS) -thread -o $@ str.cmxa unix.cmxa threads.cmxa $^
+# 	$(STRIP)    $@
 
 # caduceus
 CCMO = src/lib.cmo src/linenum.cmo \

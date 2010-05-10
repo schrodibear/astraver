@@ -101,7 +101,9 @@ let main () =
       printf "rc file not found, using default values for provers@\n@.";
   end;
   printf "starting autodetection...@.";
-  List.iter (fun (_,(p,l)) -> 
+  List.iter (fun (_,(p,l)) ->
+               (* we reset version because it might have been read in .whyrc *)
+               p.version <- "";
                let l =
                  if List.mem p.command l then l else l@[p.command]
                in

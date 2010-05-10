@@ -332,6 +332,8 @@ rule token = parse
       { token lexbuf }
   | '\n' 
       { newline lexbuf; token lexbuf }
+  | ("/*" | "//") space+ "@"               
+      { lex_error lexbuf "no space allowed between /* and @" }
   | "//@+" space* ((rL | rD)+ as id) space* "=" 
         space* ((rL | rD)+ as v) space* '\n'
       { pragma lexbuf id v; newline lexbuf; token lexbuf } 

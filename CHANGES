@@ -1,4 +1,10 @@
 
+
+  o [Jessie] fixed bug with division by zero in expressions evaluated at 
+    compile-time
+  o [Krakatoa] error message when a comment starts with /*(extra space)@
+  o [WhyConfig] bug fix when detecting a prover which was removed
+
 version 2.26, May 10, 2010
 ==========================
 

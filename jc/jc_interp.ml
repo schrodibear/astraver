@@ -627,8 +627,10 @@ let eval_integral_const e =
             | `Badd, `Integer -> v1 +/ v2
             | `Bsub, `Integer -> v1 -/ v2
             | `Bmul, `Integer -> v1 */ v2
-            | `Bdiv, `Integer -> v1 // v2 (* TODO: or quo_num? *)
-            | `Bmod, `Integer -> mod_num v1 v2
+            | `Bdiv, `Integer -> 
+                if eq_num (mod_num v1 v2) Numconst.zero then quo_num v1 v2 else raise Exit
+            | `Bmod, `Integer -> 
+                mod_num v1 v2
             | (`Badd | `Barith_shift_right | `Bbw_and | `Bbw_or | `Bbw_xor
               | `Bdiv | `Beq | `Bge | `Bgt | `Ble | `Blogical_shift_right
               | `Blt | `Bmod | `Bmul | `Bneq | `Bshift_left | `Bsub), _ ->
@@ -651,7 +653,7 @@ let eval_integral_const e =
       | JCEreturn_void -> raise Exit
 
   in
-  try Some(eval e) with Exit -> None
+  try Some(eval e) with Exit | Division_by_zero -> None
 
 let rec fits_in_enum ri e = 
   match eval_integral_const e with
