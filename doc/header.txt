@@ -14,7 +14,7 @@ Secondary contributors:
   Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)
   Ali AYAD, CNRS & CEA Saclay         (floating-point support)
   Sylvie BOLDO, INRIA                 (floating-point support)
-  Jean-Francois COUCHOT, INRIA        (sort encodings, hypothesis pruning)
+  Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)
   Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)
 
 This software is free software; you can redistribute it and/or
