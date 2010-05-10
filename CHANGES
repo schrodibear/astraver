@@ -1,6 +1,6 @@
 
 version 2.26, May 10, 2010
-============================
+==========================
 
   o [Why] fixed detection of Alt-Ergo
   o [GWhy] fixed some assert failure raised when .gwhyrc is absent

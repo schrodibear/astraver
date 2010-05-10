@@ -38,7 +38,7 @@ open Cc
 let flags = []
 let max_size = ref 5000 (* maximum cache size *)
 let cache = ref (Hashtbl.create 97)
-let source_file = ref (Filename.concat Filename.temp_dir_name "gwhy.cache")
+let source_file = "gwhy.cache"
 let active = ref false
 let obligs = ref true
 let ok = ref true
@@ -63,7 +63,7 @@ let exists p o =
 
 let read_cache () = 
   try
-    let in_channel = open_in_bin !source_file in
+    let in_channel = open_in_bin source_file in
     cache := from_channel in_channel
   with 
     | Sys_error s -> 
@@ -112,15 +112,14 @@ let fool () = Hashtbl.length !cache > !max_size
   (* i mean fool ... cache doesn't want to do his job *)
 let is_full = ref false
 
-let load_cache source =
-  source_file := source;
-  if not (Sys.file_exists !source_file) then
+let load_cache () =
+  if not (Sys.file_exists source_file) then
     begin
-      let xc = Sys.command ("touch " ^ source) in
+      let xc = Sys.command ("touch " ^ source_file) in
       if xc <> 0 then
 	begin
 	  ok := false;
-	  print_endline ("     [...] Error : cannot create cache file "^source^" !"); 
+	  print_endline ("     [...] Error : cannot create cache file "^source_file^" !"); 
 	  flush stdout;
 	end
     end;
@@ -128,7 +127,7 @@ let load_cache source =
   is_full := fool ()
     
 let save () = 
-  let out_channel = open_out_bin !source_file in
+  let out_channel = open_out_bin source_file in
   to_channel out_channel !cache flags;
   close_out out_channel
 

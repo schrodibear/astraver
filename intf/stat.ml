@@ -411,7 +411,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
       in
       let get_result = function
 	| Calldp.Valid _ -> 
-	    Cache.add seq (Model.prover_id p);
+	    if Cache.is_enabled () then Cache.add seq (Model.prover_id p);
 	    model#set ~row ~column:column_p `YES ; 
 	    model#set ~row ~column:column_i !Tools.image_valid ; 1
 	| Calldp.Timeout _ -> 
@@ -1173,7 +1173,7 @@ let main () =
 
   (* Setting special icons for proved obligation in cache *)
   if Cache.is_enabled () then begin
-    load_cache "gwhy.cache";
+    load_cache ();
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
 	(fun _s (_,_,o,seq) -> 
