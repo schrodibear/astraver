@@ -4,9 +4,9 @@
 (*                                                                        *)
 (*  Copyright (C) 2002-2010                                               *)
 (*                                                                        *)
-(*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Jean-Christophe FILLIATRE, CNRS                                     *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
+(*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
 (*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
@@ -30,8 +30,6 @@
 (**************************************************************************)
 
 
-(*s Fast weakest preconditions *)
-
 open Ident
 open Logic
 open Types
@@ -40,6 +38,8 @@ open Misc
 open Util
 open Ast
 open Env
+
+(* Fast weakest preconditions *)
 
 let idmap_union m1 m2 =
   Idmap.fold 
