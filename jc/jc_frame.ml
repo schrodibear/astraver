@@ -422,12 +422,11 @@ let fun_def f ta fa ft term_coerce params =
             let logic = Logic(false,f.jc_logic_info_final_name, params, ty') 
             in 
             let fstparams = List.map (fun (s,_) -> LVar s) params in
+            let app = (LApp(f.jc_logic_info_final_name,fstparams)) in
             let axiom =
               Axiom(jc_axiom^f.jc_logic_info_final_name,
-                    make_forall_list params []
-                      (make_eq 
-                         (LApp(f.jc_logic_info_final_name,fstparams))
-                         t')) in
+                    make_forall_list params [[LPatT app]]
+                      (make_eq app t')) in
             [logic;axiom]
           else
             [Function(false, f.jc_logic_info_final_name, params, ty', t')]
@@ -977,6 +976,9 @@ struct
           let axiom_name = "axiom"^"_ft_"^(NotIn.mem_name2 notin)^f_name in
           Jc_options.lprintf "Generate axiom ft: %s :@." axiom_name;
           let asser = gen_one [] term in
+          let asser = make_equiv asser 
+            (conv_app_pred notin f_name 
+               (List.map (fun (x,_) -> LVar x) params)) in
           let par = (NotIn.name notin,NotIn.ty notin)::params in
           let asser = make_forall_list par [] asser in
           let asser = Axiom (axiom_name,asser) in
@@ -1027,7 +1029,7 @@ sig  val def_notin : 'a ->  NotIn.t ->
      val def_frame_notin : string -> NotIn.t -> 
        (string * Output.logic_type) list -> 
        Output.why_decl list -> NotIn.t -> Output.why_decl list
-     val def_frame : string -> (string * Output.logic_type) list ->
+     val def_frame : string -> bool -> (string * Output.logic_type) list ->
        Output.why_decl list -> NotIn.t  -> Output.why_decl list
      val def_notin_logic : 
        NotIn.t ->
@@ -1222,7 +1224,7 @@ struct
       | [Predicate (_,f_name,params,assertion)] ->
           let name = (gen_ft_name ft_notin ft_name) ^
             (notin_name notin f_name) in
-          Jc_options.lprintf "Generate logic notin : %s :@." name;
+          Jc_options.lprintf "Generate logic notin (pred): %s :@." name;
           let rec gen_one_neg notin acc = function
             | LNot _a -> assert false (*gen_one_neg notin acc a*)
             | LPred (_,lt) as e -> 
@@ -1244,7 +1246,7 @@ struct
       | [Function (_bool,f_name,params,_ltype,term)] ->
           let name = (gen_ft_name ft_notin ft_name) 
             ^ (notin_name notin f_name) in
-          Jc_options.lprintf "Generate logic notin : %s :@." name;
+          Jc_options.lprintf "Generate logic notin (fun): %s :@." name;
           let acc = Logic(false,
                           name,
                           params,
@@ -1257,13 +1259,16 @@ struct
                 | e -> 
                     let acc = term_extract_effect ft notin acc e in
                     let acc = make_and_list acc in
-                    let params = List.map (fun (s,_) -> LVar s) params in
-                    make_impl (conv_app_pred ft notin f_name params) acc in
+                    acc in
           let axiom_name = "axiom"^"_notin_"^(NotIn.mem_name2 notin)^f_name in
           Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
           let asser = gen_one [] term in
-          let par = (NotIn.name notin,NotIn.ty notin)::params in
+          let conclu = conv_app_pred ft notin f_name 
+            (List.map (fun (x,_) -> LVar x) params) in
+          let asser = make_equiv asser conclu in
+          let par = params in
           let asser = make_forall_list par [] asser in
+          let asser = make_forall_list  ft_params_usual [] asser in
           let asser = Axiom (axiom_name,asser) in
           asser::acc
       | [Logic(_bool,f_name,params,_ltype);
@@ -1405,7 +1410,9 @@ let tr_logic_fun_aux f ta acc =
                 List.fold_left (Def_notin.def_frame_ft_elt f_name notin params)
                   acc notin_updates in
         let acc = List.fold_left make_todo acc todos in
-        List.fold_left (Def_notin.def_frame f_name params) acc notin_updates
+        let is_pred = f.jc_logic_info_result_type = None in
+        List.fold_left (Def_notin.def_frame f_name is_pred params) 
+          acc notin_updates
       end
     else acc in
    
