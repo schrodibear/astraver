@@ -727,9 +727,9 @@ let rec translate_assertion env iter_fun d =
 				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]])))) in
       env*)
 (* A function definition can be handled as a function logic definition + an axiom *)
-  | Dinductive_def(_loc, _ident, _inddef) ->
-      failwith "encoding mono: inductive def not yet supported"
-  | Dfunction_def _(*loc, ident, fun_def_sch*) ->
+  | Dinductive_def(_,id,d) ->
+      List.fold_left ta env (PredDefExpansor.inductive_def loc id d)
+  | Dfunction_def (loc, id, d) ->
 (*       let _ = print_endline ident in *)
 (*      let (argl, rt, term) = fun_def_sch.Env.scheme_type in
       let rootexp = (Tapp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
@@ -738,7 +738,7 @@ let rec translate_assertion env iter_fun d =
 		    (Env.generalize_predicate
 		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]])))) in
       env*)
-      assert false
+      List.fold_left ta env (PredDefExpansor.function_def loc id d)
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
       let insts,p_inst = E.give_inst env pred_sch in
