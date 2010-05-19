@@ -1,4 +1,4 @@
 Jc_effect.offset_of_field: fi=i2
-File "jc/jc_effect.ml", line 528, characters 8-8:
-Uncaught exception: File "jc/jc_effect.ml", line 528, characters 8-14: Assertion failed
+File "jc/jc_effect.ml", line 532, characters 8-8:
+Uncaught exception: File "jc/jc_effect.ml", line 532, characters 8-14: Assertion failed
 make: *** [bts0328.regtest] Error 2

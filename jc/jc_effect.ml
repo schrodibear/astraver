@@ -1082,7 +1082,7 @@ let rec single_term ef t =
 	List.fold_left pattern ef (List.map fst ptl)
     | JCTconst _ | JCTrange _ | JCTbinary _ | JCTunary _
     | JCTshift _ | JCTold _ | JCTat _ | JCTaddress _ | JCTbase_block _
-    | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ ->
+    | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTlet _ ->
 	true, ef
 
 and term ef t =

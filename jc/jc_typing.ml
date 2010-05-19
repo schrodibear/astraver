@@ -1079,13 +1079,16 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         in
         let vi = var ty id in
         let te2 = term ((id, vi)::env) e2 in
-        te2#typ, te2#region, te2#node
-    | JCNElet(Some pty, id, None, e2) ->
+        te2#typ, te2#region, JCTlet(vi,te1,te2)
+    | JCNElet(_ (* Some pty *), _id, None, _e2) ->
+        typing_error e#pos "let without initial value"
+(*
         let vi = var (type_type pty) id in
-        let te2 = term ((id, vi)::env) e2 in
-        te2#typ, te2#region, te2#node
+        let te2 = term ((id, vi)::env) e2 in        
+        te2#typ, te2#region, JCTlet(vi,None,te2)
     | JCNElet(None, _, None, _) ->
         typing_error e#pos "let with no initial value must have a type"
+*)
     | JCNEmatch(arg, pel) ->
         let targ = ft arg in
         let rty, tpel = match pel with
@@ -2777,6 +2780,7 @@ let rec term_occurrences table t =
 	  Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc::l)
 	with Not_found -> ()
       end
+    | JCTlet (_, _, _) -> assert false (* TODO *)
     | JCTmatch (_, _) -> assert false (* TODO *)
     | JCTrange (_, _) -> assert false (* TODO *)
     | JCTif (_, _, _) -> assert false (* TODO *)

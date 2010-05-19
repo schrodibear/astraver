@@ -61,6 +61,7 @@ type term =
   | LVarAtLabel of string * string     (*r x@L *)
   | Tnamed of string * term
   | TIf of term * term * term
+  | TLet of string * term * term
 
 let rec iter_term f t =
   match t with
@@ -71,6 +72,8 @@ let rec iter_term f t =
   | Tnamed(_,t) -> iter_term f t
   | TIf(t1,t2,t3) -> 
       iter_term f t1; iter_term f t2; iter_term f t3
+  | TLet(id,t1,t2) -> 
+      f id; iter_term f t1; iter_term f t2
 
 
 let rec fprintf_term form t =
@@ -95,6 +98,9 @@ let rec fprintf_term form t =
   | TIf(t1,t2,t3) -> 
       fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]" 
 	fprintf_term t1 fprintf_term t2 fprintf_term t3
+  | TLet(v,t1,t2) -> 
+      fprintf form "@[<hov 1>(let %s@ = %a@ in %a)@]" v
+	fprintf_term t1 fprintf_term t2 
 
 type logic_type = 
     { logic_type_name : string;

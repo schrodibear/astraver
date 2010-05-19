@@ -31,12 +31,6 @@ Admitted.
 (*Why axiom*) Lemma Object_int : (int_of_tag Object_tag) = 1.
 Admitted.
 
-Admitted.
-
-Admitted.
-
-Admitted.
-
 (*Why logic*) Definition Object_of_pointer_address :
   (pointer unit) -> (pointer Object).
 Admitted.
@@ -70,20 +64,11 @@ Admitted.
   (parenttag Throwable_tag Object_tag).
 Admitted.
 
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
 
 (*Why logic*) Definition interface_tag : (tag_id interface).
 Admitted.
 
 (*Why axiom*) Lemma interface_int : (int_of_tag interface_tag) = 1.
-Admitted.
-
 Admitted.
 
 (*Why logic*) Definition interface_of_pointer_address :

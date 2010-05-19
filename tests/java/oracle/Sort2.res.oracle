@@ -891,6 +891,10 @@ gui stat: Sort2.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/Sort2_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include Sort2.depend
 
 depend: coq/Sort2_why.v
@@ -2365,10 +2369,7 @@ axiom Object_tags :
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
 
-logic Permut: Object pointer,
- int,
- int,
- (Object, int) memory,
+logic Permut: Object pointer, int, int, (Object, int) memory,
  (Object, int) memory -> prop
 
 axiom Permut_refl :
@@ -2377,9 +2378,7 @@ axiom Permut_refl :
    (forall l_1:int.
     (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L, intM_intP_at_L)))))
 
-predicate Swap(a_0:Object pointer,
- i_0:int,
- j:int,
+predicate Swap(a_0:Object pointer, i_0:int, j:int,
  intM_intP_at_L2:(Object, int) memory,
  intM_intP_at_L1:(Object, int) memory) =
  (eq_int(select(intM_intP_at_L1, shift(a_0, i_0)),
@@ -2433,9 +2432,7 @@ logic Sort_tag:  -> Object tag_id
 
 axiom Sort_parenttag_Object : parenttag(Sort_tag, Object_tag)
 
-predicate Sorted(a:Object pointer,
- l:int,
- h:int,
+predicate Sorted(a:Object pointer, l:int, h:int,
  intM_intP_at_L:(Object, int) memory) =
  (forall i:int.
   ((le_int(l, i) and lt_int(i, h)) ->
@@ -2473,38 +2470,31 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Sort(p:Object pointer,
- a:int,
+predicate left_valid_struct_Sort(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_intM(p:Object pointer,
- a:int,
+predicate left_valid_struct_intM(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -2515,197 +2505,140 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Sort(p:Object pointer,
- b:int,
+predicate right_valid_struct_Sort(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_intM(p:Object pointer,
- b:int,
+predicate right_valid_struct_intM(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Sort(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Sort(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Sort(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Sort(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_intM(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_intM(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Sort(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Sort(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -3177,32 +3110,28 @@ parameter non_null_Object :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_30:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
 parameter non_null_Object_requires :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_30:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
 parameter non_null_intM :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
 parameter non_null_intM_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
 let Sort_min_sort_ensures_default =
@@ -3242,150 +3171,99 @@ let Sort_min_sort_ensures_default =
                        Permut(t_0, (0),
                        sub_int(add_int(offset_max(Object_alloc_table, t_0),
                                (1)),
-                       (1)), intM_intP, intM_intP@init))))))
-          }
+                       (1)), intM_intP, intM_intP@init))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_88 = begin
-                             (if (K_49:
-                                 ((lt_int_ !i_3) (K_48:
-                                                 ((sub_int (K_47:
-                                                           (let jessie_65 = t_0 in
-                                                           (JC_103:
-                                                           (java_array_length_intM jessie_65))))) (1)))))
-                             then
-                              begin
-                                (let jessie_67 = (mv := (K_26:
-                                                        ((safe_acc_ !intM_intP) 
-                                                         ((shift t_0) !i_3)))) in
-                                void);
-                               (let jessie_69 = (mi := !i_3) in void);
-                               (let jessie_71 = (j_2 := (K_44:
-                                                        ((add_int !i_3) (1)))) in
-                               void);
-                               try
-                                (loop_4:
-                                while true do
-                                { invariant
-                                    (JC_110:
-                                    ((JC_104: lt_int(i_3, j_2))
-                                    and ((JC_105: le_int(i_3, mi))
-                                        and ((JC_106:
-                                             lt_int(mi,
-                                             add_int(offset_max(Object_alloc_table,
-                                                     t_0),
-                                             (1))))
-                                            and ((JC_107:
-                                                 eq_int(mv,
-                                                 select(intM_intP,
-                                                 shift(t_0, mi))))
-                                                and ((JC_108:
-                                                     (forall k_0:int.
-                                                      ((le_int(i_3, k_0)
-                                                       and lt_int(k_0, j_2)) ->
-                                                       ge_int(select(intM_intP,
-                                                              shift(t_0, k_0)),
-                                                       mv))))
-                                                    and (JC_109:
-                                                        Permut(t_0, (0),
-                                                        sub_int(add_int(
-                                                                offset_max(Object_alloc_table,
-                                                                t_0), (1)),
-                                                        (1)), intM_intP,
-                                                        intM_intP@init))))))))
-                                   }
-                                 begin
-                                   [ { } unit { true } ];
-                                  try
-                                   (let jessie_78 = begin
-                                                      (if (K_43:
-                                                          ((lt_int_ !j_2) 
-                                                           (K_42:
-                                                           (let jessie_72 = t_0 in
-                                                           (JC_114:
-                                                           (java_array_length_intM jessie_72))))))
-                                                      then
-                                                       (if (K_40:
-                                                           ((lt_int_ 
-                                                             (K_39:
-                                                             ((safe_acc_ !intM_intP) 
-                                                              ((shift t_0) !j_2)))) !mv))
-                                                       then
-                                                        (let jessie_76 = 
-                                                        begin
-                                                          (let jessie_74 = 
-                                                          (mi := !j_2) in
-                                                          void);
-                                                         (mv := (K_38:
-                                                                ((safe_acc_ !intM_intP) 
-                                                                 ((shift t_0) !j_2))));
-                                                         !mv
-                                                        end in
-                                                        void)
-                                                       else void)
-                                                      else
-                                                       (let jessie_77 = 
-                                                       (raise
-                                                        (Loop_exit_exc
-                                                        void)) in
-                                                       void));
-                                                     (raise
-                                                      (Loop_continue_exc
-                                                      void))
-                                                    end in
-                                   void)
-                                   with
-                                   Loop_continue_exc jessie_4 ->
-                                   (let jessie_82 = (K_41:
-                                                    (let jessie_2 = !j_2 in
-                                                    begin
-                                                      (let jessie_81 = 
-                                                      (j_2 := ((add_int jessie_2) (1))) in
-                                                      void);
-                                                     jessie_2
-                                                    end)) in
-                                   void) end
-                                 end
-                                done)
-                                with
-                                Loop_exit_exc jessie_3 ->
-                                void end;
-                               (K_45:
-                               (let jessie_86 = this_0 in
-                               (let jessie_85 = t_0 in
-                               (let jessie_84 = !i_3 in
-                               (let jessie_83 = !mi in
-                               (JC_115:
-                               ((((Sort_swap jessie_86) jessie_85) jessie_84) jessie_83)))))))
-                              end
-                             else
-                              (let jessie_87 = (raise (Loop_exit_exc void)) in
-                              void));
-                            (raise (Loop_continue_exc void))
-                           end in
-          void)
-          with
+          (let jessie_88 =
+          begin
+            (if (K_49:
+                ((lt_int_ !i_3) (K_48:
+                                ((sub_int (K_47:
+                                          (let jessie_65 = t_0 in
+                                          (JC_103:
+                                          (java_array_length_intM jessie_65))))) (1)))))
+            then
+             begin
+               (let jessie_67 =
+               (mv := (K_26: ((safe_acc_ !intM_intP) ((shift t_0) !i_3)))) in
+               void); (let jessie_69 = (mi := !i_3) in void);
+              (let jessie_71 = (j_2 := (K_44: ((add_int !i_3) (1)))) in void);
+              try
+               (loop_4:
+               while true do
+               { invariant
+                   (JC_110:
+                   ((JC_104: lt_int(i_3, j_2))
+                   and ((JC_105: le_int(i_3, mi))
+                       and ((JC_106:
+                            lt_int(mi,
+                            add_int(offset_max(Object_alloc_table, t_0), (1))))
+                           and ((JC_107:
+                                eq_int(mv, select(intM_intP, shift(t_0, mi))))
+                               and ((JC_108:
+                                    (forall k_0:int.
+                                     ((le_int(i_3, k_0) and lt_int(k_0, j_2)) ->
+                                      ge_int(select(intM_intP,
+                                             shift(t_0, k_0)),
+                                      mv))))
+                                   and (JC_109:
+                                       Permut(t_0, (0),
+                                       sub_int(add_int(offset_max(Object_alloc_table,
+                                                       t_0),
+                                               (1)),
+                                       (1)), intM_intP, intM_intP@init))))))))
+                  }
+                begin
+                  [ { } unit { true } ];
+                 try
+                  (let jessie_78 =
+                  begin
+                    (if (K_43:
+                        ((lt_int_ !j_2) (K_42:
+                                        (let jessie_72 = t_0 in
+                                        (JC_114:
+                                        (java_array_length_intM jessie_72))))))
+                    then
+                     (if (K_40:
+                         ((lt_int_ (K_39:
+                                   ((safe_acc_ !intM_intP) ((shift t_0) !j_2)))) !mv))
+                     then
+                      (let jessie_76 =
+                      begin
+                        (let jessie_74 = (mi := !j_2) in void);
+                       (mv := (K_38:
+                              ((safe_acc_ !intM_intP) ((shift t_0) !j_2))));
+                       !mv end in void) else void)
+                    else
+                     (let jessie_77 = (raise (Loop_exit_exc void)) in void));
+                   (raise (Loop_continue_exc void)) end in void) with
+                  Loop_continue_exc jessie_4 ->
+                  (let jessie_82 =
+                  (K_41:
+                  (let jessie_2 = !j_2 in
+                  begin
+                    (let jessie_81 = (j_2 := ((add_int jessie_2) (1))) in
+                    void); jessie_2 end)) in void) end end done) with
+               Loop_exit_exc jessie_3 -> void end;
+              (K_45:
+              (let jessie_86 = this_0 in
+              (let jessie_85 = t_0 in
+              (let jessie_84 = !i_3 in
+              (let jessie_83 = !mi in
+              (JC_115:
+              ((((Sort_swap jessie_86) jessie_85) jessie_84) jessie_83)))))))
+             end else (let jessie_87 = (raise (Loop_exit_exc void)) in void));
+           (raise (Loop_continue_exc void)) end in void) with
           Loop_continue_exc jessie_6 ->
-          (let jessie_92 = (K_46:
-                           (let jessie_1 = !i_3 in
-                           begin
-                             (let jessie_91 = (i_3 := ((add_int jessie_1) (1))) in
-                             void);
-                            jessie_1
-                           end)) in
-          void) end
-        end
-       done)
-       with
-       Loop_exit_exc jessie_5 ->
-       void end
-     end))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+          (let jessie_92 =
+          (K_46:
+          (let jessie_1 = !i_3 in
+          begin
+            (let jessie_91 = (i_3 := ((add_int jessie_1) (1))) in void);
+           jessie_1 end)) in void) end end done) with
+       Loop_exit_exc jessie_5 -> void end end)))); (raise Return) end with
+   Return -> void end)
   { (JC_63:
     ((JC_61:
      Sorted(t_0, (0),
@@ -3437,158 +3315,111 @@ let Sort_min_sort_safety =
                                   (1)),
                           (1)), intM_intP, intM_intP@init)))))) } ];
          try
-          (let jessie_58 = begin
-                             (if (K_49:
-                                 ((lt_int_ !i_3) (K_48:
-                                                 ((sub_int (K_47:
-                                                           (let jessie_35 = t_0 in
-                                                           (JC_78:
-                                                           (assert
-                                                           { ge_int(offset_max(Object_alloc_table,
-                                                                    jessie_35),
-                                                             (-1)) };
-                                                           (JC_77:
-                                                           (java_array_length_intM_requires jessie_35))))))) (1)))))
-                             then
-                              begin
-                                (let jessie_37 = (mv := (K_26:
-                                                        (JC_79:
-                                                        ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_3)))) in
-                                void);
-                               (let jessie_39 = (mi := !i_3) in void);
-                               (let jessie_41 = (j_2 := (K_44:
-                                                        ((add_int !i_3) (1)))) in
-                               void);
-                               try
-                                (loop_2:
-                                while true do
-                                { invariant (JC_88: true)  }
-                                 begin
-                                   [ { } unit
-                                     reads Object_alloc_table,i_3,intM_intP,j_2,mi,mv
-                                     { (JC_86:
-                                       ((JC_80: lt_int(i_3, j_2))
-                                       and ((JC_81: le_int(i_3, mi))
-                                           and ((JC_82:
-                                                lt_int(mi,
-                                                add_int(offset_max(Object_alloc_table,
-                                                        t_0),
-                                                (1))))
-                                               and ((JC_83:
-                                                    eq_int(mv,
-                                                    select(intM_intP,
-                                                    shift(t_0, mi))))
-                                                   and ((JC_84:
-                                                        (forall k_0:int.
-                                                         ((le_int(i_3, k_0)
-                                                          and lt_int(k_0,
-                                                              j_2)) ->
-                                                          ge_int(select(intM_intP,
-                                                                 shift(t_0,
-                                                                 k_0)),
-                                                          mv))))
-                                                       and (JC_85:
-                                                           Permut(t_0, (0),
-                                                           sub_int(add_int(
-                                                                   offset_max(Object_alloc_table,
-                                                                   t_0), (1)),
-                                                           (1)), intM_intP,
-                                                           intM_intP@init)))))))) } ];
-                                  try
-                                   (let jessie_48 = begin
-                                                      (if (K_43:
-                                                          ((lt_int_ !j_2) 
-                                                           (K_42:
-                                                           (let jessie_42 = t_0 in
-                                                           (JC_91:
-                                                           (assert
-                                                           { ge_int(offset_max(Object_alloc_table,
-                                                                    jessie_42),
-                                                             (-1)) };
-                                                           (JC_90:
-                                                           (java_array_length_intM_requires jessie_42))))))))
-                                                      then
-                                                       (if (K_40:
-                                                           ((lt_int_ 
-                                                             (K_39:
-                                                             (JC_92:
-                                                             ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2)))) !mv))
-                                                       then
-                                                        (let jessie_46 = 
-                                                        begin
-                                                          (let jessie_44 = 
-                                                          (mi := !j_2) in
-                                                          void);
-                                                         (mv := (K_38:
-                                                                (JC_93:
-                                                                ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2))));
-                                                         !mv
-                                                        end in
-                                                        void)
-                                                       else void)
-                                                      else
-                                                       (let jessie_47 = 
-                                                       (raise
-                                                        (Loop_exit_exc
-                                                        void)) in
-                                                       void));
-                                                     (raise
-                                                      (Loop_continue_exc
-                                                      void))
-                                                    end in
-                                   void)
-                                   with
-                                   Loop_continue_exc jessie_4 ->
-                                   (let jessie_52 = (K_41:
-                                                    (let jessie_2 = !j_2 in
-                                                    begin
-                                                      (let jessie_51 = 
-                                                      (j_2 := ((add_int jessie_2) (1))) in
-                                                      void);
-                                                     jessie_2
-                                                    end)) in
-                                   void) end
-                                 end
-                                done)
-                                with
-                                Loop_exit_exc jessie_3 ->
-                                void end;
-                               (K_45:
-                               (let jessie_56 = this_0 in
-                               (let jessie_55 = t_0 in
-                               (let jessie_54 = !i_3 in
-                               (let jessie_53 = !mi in
-                               (JC_94:
-                               ((((Sort_swap_requires jessie_56) jessie_55) jessie_54) jessie_53)))))))
-                              end
-                             else
-                              (let jessie_57 = (raise (Loop_exit_exc void)) in
-                              void));
-                            (raise (Loop_continue_exc void))
-                           end in
-          void)
-          with
+          (let jessie_58 =
+          begin
+            (if (K_49:
+                ((lt_int_ !i_3) (K_48:
+                                ((sub_int (K_47:
+                                          (let jessie_35 = t_0 in
+                                          (JC_78:
+                                          (assert
+                                          { ge_int(offset_max(Object_alloc_table,
+                                                   jessie_35),
+                                            (-1)) };
+                                          (JC_77:
+                                          (java_array_length_intM_requires jessie_35))))))) (1)))))
+            then
+             begin
+               (let jessie_37 =
+               (mv := (K_26:
+                      (JC_79:
+                      ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_3)))) in
+               void); (let jessie_39 = (mi := !i_3) in void);
+              (let jessie_41 = (j_2 := (K_44: ((add_int !i_3) (1)))) in void);
+              try
+               (loop_2:
+               while true do
+               { invariant (JC_88: true)  }
+                begin
+                  [ { } unit reads Object_alloc_table,i_3,intM_intP,j_2,mi,mv
+                    { (JC_86:
+                      ((JC_80: lt_int(i_3, j_2))
+                      and ((JC_81: le_int(i_3, mi))
+                          and ((JC_82:
+                               lt_int(mi,
+                               add_int(offset_max(Object_alloc_table, t_0),
+                               (1))))
+                              and ((JC_83:
+                                   eq_int(mv,
+                                   select(intM_intP, shift(t_0, mi))))
+                                  and ((JC_84:
+                                       (forall k_0:int.
+                                        ((le_int(i_3, k_0)
+                                         and lt_int(k_0, j_2)) ->
+                                         ge_int(select(intM_intP,
+                                                shift(t_0, k_0)),
+                                         mv))))
+                                      and (JC_85:
+                                          Permut(t_0, (0),
+                                          sub_int(add_int(offset_max(Object_alloc_table,
+                                                          t_0),
+                                                  (1)),
+                                          (1)), intM_intP, intM_intP@init)))))))) } ];
+                 try
+                  (let jessie_48 =
+                  begin
+                    (if (K_43:
+                        ((lt_int_ !j_2) (K_42:
+                                        (let jessie_42 = t_0 in
+                                        (JC_91:
+                                        (assert
+                                        { ge_int(offset_max(Object_alloc_table,
+                                                 jessie_42),
+                                          (-1)) };
+                                        (JC_90:
+                                        (java_array_length_intM_requires jessie_42))))))))
+                    then
+                     (if (K_40:
+                         ((lt_int_ (K_39:
+                                   (JC_92:
+                                   ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2)))) !mv))
+                     then
+                      (let jessie_46 =
+                      begin
+                        (let jessie_44 = (mi := !j_2) in void);
+                       (mv := (K_38:
+                              (JC_93:
+                              ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2))));
+                       !mv end in void) else void)
+                    else
+                     (let jessie_47 = (raise (Loop_exit_exc void)) in void));
+                   (raise (Loop_continue_exc void)) end in void) with
+                  Loop_continue_exc jessie_4 ->
+                  (let jessie_52 =
+                  (K_41:
+                  (let jessie_2 = !j_2 in
+                  begin
+                    (let jessie_51 = (j_2 := ((add_int jessie_2) (1))) in
+                    void); jessie_2 end)) in void) end end done) with
+               Loop_exit_exc jessie_3 -> void end;
+              (K_45:
+              (let jessie_56 = this_0 in
+              (let jessie_55 = t_0 in
+              (let jessie_54 = !i_3 in
+              (let jessie_53 = !mi in
+              (JC_94:
+              ((((Sort_swap_requires jessie_56) jessie_55) jessie_54) jessie_53)))))))
+             end else (let jessie_57 = (raise (Loop_exit_exc void)) in void));
+           (raise (Loop_continue_exc void)) end in void) with
           Loop_continue_exc jessie_6 ->
-          (let jessie_62 = (K_46:
-                           (let jessie_1 = !i_3 in
-                           begin
-                             (let jessie_61 = (i_3 := ((add_int jessie_1) (1))) in
-                             void);
-                            jessie_1
-                           end)) in
-          void) end
-        end
-       done)
-       with
-       Loop_exit_exc jessie_5 ->
-       void end
-     end))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+          (let jessie_62 =
+          (K_46:
+          (let jessie_1 = !i_3 in
+          begin
+            (let jessie_61 = (i_3 := ((add_int jessie_1) (1))) in void);
+           jessie_1 end)) in void) end end done) with
+       Loop_exit_exc jessie_5 -> void end end)))); (raise Return) end with
+   Return -> void end) { true }
 
 let Sort_swap_ensures_default =
  fun (this_2 : Object pointer) (t : Object pointer) (i_2 : int) (j_1 : int) ->
@@ -3607,30 +3438,19 @@ let Sort_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_32 = (let tmp = (K_14:
-                                 ((safe_acc_ !intM_intP) ((shift t) i_2))) in
-                      (K_12:
-                      begin
-                        (let jessie_26 = (let jessie_22 = (K_11:
-                                                          ((safe_acc_ !intM_intP) 
-                                                           ((shift t) j_1))) in
-                                         (let jessie_25 = ((shift t) i_2) in
-                                         (((safe_upd_ intM_intP) jessie_25) jessie_22))) in
-                        void);
-                       (K_13:
-                       (let jessie_28 = tmp in
-                       (let jessie_31 = ((shift t) j_1) in
-                       begin
-                         (((safe_upd_ intM_intP) jessie_31) jessie_28);
-                        jessie_28
-                       end)))
-                      end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_32 =
+     (let tmp = (K_14: ((safe_acc_ !intM_intP) ((shift t) i_2))) in
+     (K_12:
+     begin
+       (let jessie_26 =
+       (let jessie_22 = (K_11: ((safe_acc_ !intM_intP) ((shift t) j_1))) in
+       (let jessie_25 = ((shift t) i_2) in
+       (((safe_upd_ intM_intP) jessie_25) jessie_22))) in void);
+      (K_13:
+      (let jessie_28 = tmp in
+      (let jessie_31 = ((shift t) j_1) in
+      begin   (((safe_upd_ intM_intP) jessie_31) jessie_28); jessie_28 end)))
+     end)) in void); (raise Return) end with Return -> void end)
   { (JC_47:
     ((JC_45: Swap(t, i_2, j_1, intM_intP, intM_intP@))
     and (JC_46:
@@ -3655,38 +3475,32 @@ let Sort_swap_safety =
   (init:
   try
    begin
-     (let jessie_19 = (let tmp = (K_14:
-                                 (JC_53:
-                                 ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
-                      (K_12:
-                      begin
-                        (let jessie_13 = (let jessie_9 = (K_11:
-                                                         (JC_54:
-                                                         ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
-                                         (let jessie_10 = t in
-                                         (let jessie_11 = i_2 in
-                                         (let jessie_12 = ((shift jessie_10) jessie_11) in
-                                         (JC_55:
-                                         (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) jessie_9)))))) in
-                        void);
-                       (K_13:
-                       (let jessie_15 = tmp in
-                       (let jessie_16 = t in
-                       (let jessie_17 = j_1 in
-                       (let jessie_18 = ((shift jessie_16) jessie_17) in
-                       begin
-                         (JC_56:
-                         (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_16) jessie_17) jessie_15));
-                        jessie_15
-                       end)))))
-                      end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+     (let jessie_19 =
+     (let tmp =
+     (K_14:
+     (JC_53: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
+     (K_12:
+     begin
+       (let jessie_13 =
+       (let jessie_9 =
+       (K_11:
+       (JC_54: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
+       (let jessie_10 = t in
+       (let jessie_11 = i_2 in
+       (let jessie_12 = ((shift jessie_10) jessie_11) in
+       (JC_55:
+       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) jessie_9)))))) in
+       void);
+      (K_13:
+      (let jessie_15 = tmp in
+      (let jessie_16 = t in
+      (let jessie_17 = j_1 in
+      (let jessie_18 = ((shift jessie_16) jessie_17) in
+      begin
+        (JC_56:
+        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_16) jessie_17) jessie_15));
+       jessie_15 end))))) end)) in void); (raise Return) end with Return ->
+   void end) { true }
 
 let cons_Object_ensures_default =
  fun (this_14 : Object pointer) ->
@@ -3756,7 +3570,7 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Sort2_po29.why">
-      <location file = "why/Sort2.why" line = "1119" begin = "61" end = "245"/>
+      <location file = "why/Sort2.why" line = "994" begin = "44" end = "194"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Sort2_po30.why">
@@ -9537,7 +9351,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (EQ (Permut
 t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@true|))))))))))))))
 
-;; Sort_min_sort_safety_po_1, File "why/Sort2.why", line 1119, characters 61-245
+;; Sort_min_sort_safety_po_1, File "why/Sort2.why", line 994, characters 44-194
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)

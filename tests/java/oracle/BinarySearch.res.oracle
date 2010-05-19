@@ -541,6 +541,10 @@ gui stat: BinarySearch.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/BinarySearch_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include BinarySearch.depend
 
 depend: coq/BinarySearch_why.v
@@ -1315,30 +1319,25 @@ axiom div2_property_as_axiom :
   (le_int((0), x_0_0) ->
    (le_int((0), div_int(x_0_0, (2))) and le_int(div_int(x_0_0, (2)), x_0_0))))
 
-predicate eq_byte(x:byte,
- y:byte) =
+predicate eq_byte(x:byte, y:byte) =
  eq_int(integer_of_byte(x), integer_of_byte(y))
 
-predicate eq_char(x:char,
- y:char) =
+predicate eq_char(x:char, y:char) =
  eq_int(integer_of_char(x), integer_of_char(y))
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_long: long -> int
 
-predicate eq_long(x:long,
- y:long) =
+predicate eq_long(x:long, y:long) =
  eq_int(integer_of_long(x), integer_of_long(y))
 
 logic integer_of_short: short -> int
 
-predicate eq_short(x:short,
- y:short) =
+predicate eq_short(x:short, y:short) =
  eq_int(integer_of_short(x), integer_of_short(y))
 
 logic int32_of_integer: int -> int32
@@ -1387,38 +1386,31 @@ predicate is_sorted(t:Object pointer,
         le_int(integer_of_int32(select(intM_intP_at_L, shift(t, i))),
         integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_BinarySearch(p:Object pointer,
- a:int,
+predicate left_valid_struct_BinarySearch(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_intM(p:Object pointer,
- a:int,
+predicate left_valid_struct_intM(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -1455,38 +1447,31 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_BinarySearch(p:Object pointer,
- b:int,
+predicate right_valid_struct_BinarySearch(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_intM(p:Object pointer,
- b:int,
+predicate right_valid_struct_intM(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
@@ -1502,162 +1487,112 @@ axiom short_range :
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_BinarySearch(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_BinarySearch(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_BinarySearch(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_BinarySearch(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_intM(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_intM(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_BinarySearch(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_BinarySearch(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -2078,32 +2013,28 @@ parameter non_null_Object :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_30:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
 parameter non_null_Object_requires :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_30:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
 parameter non_null_intM :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
 parameter non_null_intM_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
 parameter safe_byte_of_integer_ :
@@ -2135,11 +2066,12 @@ let BinarySearch_binary_search_ensures_default =
   try
    begin
      (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
-     (let u = ref (K_24:
-                  (safe_int32_of_integer_ ((sub_int (K_23:
-                                                    (let jessie_17 = t_0 in
-                                                    (JC_65:
-                                                    (java_array_length_intM jessie_17))))) (1)))) in
+     (let u =
+     ref (K_24:
+         (safe_int32_of_integer_ ((sub_int (K_23:
+                                           (let jessie_17 = t_0 in
+                                           (JC_65:
+                                           (java_array_length_intM jessie_17))))) (1)))) in
      begin
        try
         (loop_2:
@@ -2150,76 +2082,54 @@ let BinarySearch_binary_search_ensures_default =
             and (JC_67:
                 le_int(integer_of_int32(u),
                 sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
-                (1))))))
-           }
+                (1))))))  }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_25 = begin
-                              (if (K_21:
-                                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
-                              then
-                               (let m = (K_20:
-                                        (safe_int32_of_integer_ ((add_int 
-                                                                  (integer_of_int32 !l)) 
-                                                                 (integer_of_int32 
-                                                                  (K_19:
-                                                                  (safe_int32_of_integer_ 
-                                                                   (JC_72:
-                                                                   ((div_int 
-                                                                    (integer_of_int32 
+           (let jessie_25 =
+           begin
+             (if (K_21:
+                 ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
+             then
+              (let m =
+              (K_20:
+              (safe_int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                       (integer_of_int32 (K_19:
+                                                         (safe_int32_of_integer_ 
+                                                          (JC_72:
+                                                          ((div_int (integer_of_int32 
                                                                     (K_18:
                                                                     (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l)))))) (2))))))))) in
-                               (if (K_17:
-                                   ((lt_int_ (integer_of_int32 (K_16:
-                                                               ((safe_acc_ !intM_intP) 
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 m)))))) 
-                                    (integer_of_int32 v)))
-                               then
-                                (let jessie_20 = (l := (K_15:
-                                                       (safe_int32_of_integer_ 
-                                                        ((add_int (integer_of_int32 m)) (1))))) in
-                                void)
-                               else
-                                (if (K_14:
-                                    ((gt_int_ (integer_of_int32 (K_13:
-                                                                ((safe_acc_ !intM_intP) 
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 m)))))) 
-                                     (integer_of_int32 v)))
-                                then
-                                 (let jessie_22 = (u := (K_12:
-                                                        (safe_int32_of_integer_ 
-                                                         ((sub_int (integer_of_int32 m)) (1))))) in
-                                 void)
-                                else
-                                 begin   (return := m); (raise Return) end)))
-                              else
-                               (let jessie_24 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
+              (if (K_17:
+                  ((lt_int_ (integer_of_int32 (K_16:
+                                              ((safe_acc_ !intM_intP) 
+                                               ((shift t_0) (integer_of_int32 m)))))) 
+                   (integer_of_int32 v)))
+              then
+               (let jessie_20 =
+               (l := (K_15:
+                     (safe_int32_of_integer_ ((add_int (integer_of_int32 m)) (1))))) in
+               void)
+              else
+               (if (K_14:
+                   ((gt_int_ (integer_of_int32 (K_13:
+                                               ((safe_acc_ !intM_intP) 
+                                                ((shift t_0) (integer_of_int32 m)))))) 
+                    (integer_of_int32 v)))
+               then
+                (let jessie_22 =
+                (u := (K_12:
+                      (safe_int32_of_integer_ ((sub_int (integer_of_int32 m)) (1))))) in
+                void) else begin   (return := m); (raise Return) end)))
+             else (let jessie_24 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_37:
     ((JC_35: le_int(neg_int((1)), integer_of_int32(result)))
     and (JC_36:
@@ -2244,11 +2154,12 @@ let BinarySearch_binary_search_ensures_failure =
   try
    begin
      (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
-     (let u = ref (K_24:
-                  (safe_int32_of_integer_ ((sub_int (K_23:
-                                                    (let jessie_41 = t_0 in
-                                                    (JC_81:
-                                                    (java_array_length_intM jessie_41))))) (1)))) in
+     (let u =
+     ref (K_24:
+         (safe_int32_of_integer_ ((sub_int (K_23:
+                                           (let jessie_41 = t_0 in
+                                           (JC_81:
+                                           (java_array_length_intM jessie_41))))) (1)))) in
      begin
        try
         (loop_4:
@@ -2262,8 +2173,7 @@ let BinarySearch_binary_search_ensures_failure =
               (eq_int(integer_of_int32(select(intM_intP, shift(t_0, k_0))),
                integer_of_int32(v)) ->
                (le_int(integer_of_int32(l), k_0)
-               and le_int(k_0, integer_of_int32(u)))))))
-           }
+               and le_int(k_0, integer_of_int32(u)))))))  }
          begin
            [ { } unit reads Object_alloc_table,l,u
              { (JC_85:
@@ -2273,71 +2183,50 @@ let BinarySearch_binary_search_ensures_failure =
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
           try
-           (let jessie_49 = begin
-                              (if (K_21:
-                                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
-                              then
-                               (let m = (K_20:
-                                        (safe_int32_of_integer_ ((add_int 
-                                                                  (integer_of_int32 !l)) 
-                                                                 (integer_of_int32 
-                                                                  (K_19:
-                                                                  (safe_int32_of_integer_ 
-                                                                   (JC_89:
-                                                                   ((div_int 
-                                                                    (integer_of_int32 
+           (let jessie_49 =
+           begin
+             (if (K_21:
+                 ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
+             then
+              (let m =
+              (K_20:
+              (safe_int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                       (integer_of_int32 (K_19:
+                                                         (safe_int32_of_integer_ 
+                                                          (JC_89:
+                                                          ((div_int (integer_of_int32 
                                                                     (K_18:
                                                                     (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l)))))) (2))))))))) in
-                               (if (K_17:
-                                   ((lt_int_ (integer_of_int32 (K_16:
-                                                               ((safe_acc_ !intM_intP) 
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 m)))))) 
-                                    (integer_of_int32 v)))
-                               then
-                                (let jessie_44 = (l := (K_15:
-                                                       (safe_int32_of_integer_ 
-                                                        ((add_int (integer_of_int32 m)) (1))))) in
-                                void)
-                               else
-                                (if (K_14:
-                                    ((gt_int_ (integer_of_int32 (K_13:
-                                                                ((safe_acc_ !intM_intP) 
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 m)))))) 
-                                     (integer_of_int32 v)))
-                                then
-                                 (let jessie_46 = (u := (K_12:
-                                                        (safe_int32_of_integer_ 
-                                                         ((sub_int (integer_of_int32 m)) (1))))) in
-                                 void)
-                                else
-                                 begin   (return := m); (raise Return) end)))
-                              else
-                               (let jessie_48 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
+              (if (K_17:
+                  ((lt_int_ (integer_of_int32 (K_16:
+                                              ((safe_acc_ !intM_intP) 
+                                               ((shift t_0) (integer_of_int32 m)))))) 
+                   (integer_of_int32 v)))
+              then
+               (let jessie_44 =
+               (l := (K_15:
+                     (safe_int32_of_integer_ ((add_int (integer_of_int32 m)) (1))))) in
+               void)
+              else
+               (if (K_14:
+                   ((gt_int_ (integer_of_int32 (K_13:
+                                               ((safe_acc_ !intM_intP) 
+                                                ((shift t_0) (integer_of_int32 m)))))) 
+                    (integer_of_int32 v)))
+               then
+                (let jessie_46 =
+                (u := (K_12:
+                      (safe_int32_of_integer_ ((sub_int (integer_of_int32 m)) (1))))) in
+                void) else begin   (return := m); (raise Return) end)))
+             else (let jessie_48 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_45:
     (eq_int(integer_of_int32(result), neg_int((1))) ->
      (forall k:int.
@@ -2355,11 +2244,12 @@ let BinarySearch_binary_search_ensures_success =
   try
    begin
      (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
-     (let u = ref (K_24:
-                  (safe_int32_of_integer_ ((sub_int (K_23:
-                                                    (let jessie_29 = t_0 in
-                                                    (JC_73:
-                                                    (java_array_length_intM jessie_29))))) (1)))) in
+     (let u =
+     ref (K_24:
+         (safe_int32_of_integer_ ((sub_int (K_23:
+                                           (let jessie_29 = t_0 in
+                                           (JC_73:
+                                           (java_array_length_intM jessie_29))))) (1)))) in
      begin
        try
         (loop_3:
@@ -2374,71 +2264,50 @@ let BinarySearch_binary_search_ensures_success =
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
           try
-           (let jessie_37 = begin
-                              (if (K_21:
-                                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
-                              then
-                               (let m = (K_20:
-                                        (safe_int32_of_integer_ ((add_int 
-                                                                  (integer_of_int32 !l)) 
-                                                                 (integer_of_int32 
-                                                                  (K_19:
-                                                                  (safe_int32_of_integer_ 
-                                                                   (JC_80:
-                                                                   ((div_int 
-                                                                    (integer_of_int32 
+           (let jessie_37 =
+           begin
+             (if (K_21:
+                 ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
+             then
+              (let m =
+              (K_20:
+              (safe_int32_of_integer_ ((add_int (integer_of_int32 !l)) 
+                                       (integer_of_int32 (K_19:
+                                                         (safe_int32_of_integer_ 
+                                                          (JC_80:
+                                                          ((div_int (integer_of_int32 
                                                                     (K_18:
                                                                     (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l)))))) (2))))))))) in
-                               (if (K_17:
-                                   ((lt_int_ (integer_of_int32 (K_16:
-                                                               ((safe_acc_ !intM_intP) 
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 m)))))) 
-                                    (integer_of_int32 v)))
-                               then
-                                (let jessie_32 = (l := (K_15:
-                                                       (safe_int32_of_integer_ 
-                                                        ((add_int (integer_of_int32 m)) (1))))) in
-                                void)
-                               else
-                                (if (K_14:
-                                    ((gt_int_ (integer_of_int32 (K_13:
-                                                                ((safe_acc_ !intM_intP) 
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 m)))))) 
-                                     (integer_of_int32 v)))
-                                then
-                                 (let jessie_34 = (u := (K_12:
-                                                        (safe_int32_of_integer_ 
-                                                         ((sub_int (integer_of_int32 m)) (1))))) in
-                                 void)
-                                else
-                                 begin   (return := m); (raise Return) end)))
-                              else
-                               (let jessie_36 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
+              (if (K_17:
+                  ((lt_int_ (integer_of_int32 (K_16:
+                                              ((safe_acc_ !intM_intP) 
+                                               ((shift t_0) (integer_of_int32 m)))))) 
+                   (integer_of_int32 v)))
+              then
+               (let jessie_32 =
+               (l := (K_15:
+                     (safe_int32_of_integer_ ((add_int (integer_of_int32 m)) (1))))) in
+               void)
+              else
+               (if (K_14:
+                   ((gt_int_ (integer_of_int32 (K_13:
+                                               ((safe_acc_ !intM_intP) 
+                                                ((shift t_0) (integer_of_int32 m)))))) 
+                    (integer_of_int32 v)))
+               then
+                (let jessie_34 =
+                (u := (K_12:
+                      (safe_int32_of_integer_ ((sub_int (integer_of_int32 m)) (1))))) in
+                void) else begin   (return := m); (raise Return) end)))
+             else (let jessie_36 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_43:
     (ge_int(integer_of_int32(result), (0)) ->
      eq_int(integer_of_int32(select(intM_intP,
@@ -2454,17 +2323,18 @@ let BinarySearch_binary_search_safety =
   try
    begin
      (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
-     (let u = ref (K_24:
-                  (JC_49:
-                  (int32_of_integer_ ((sub_int (K_23:
-                                               (let jessie_5 = t_0 in
-                                               (JC_48:
-                                               (assert
-                                               { ge_int(offset_max(Object_alloc_table,
-                                                        jessie_5),
-                                                 (-1)) };
-                                               (JC_47:
-                                               (java_array_length_intM_requires jessie_5))))))) (1))))) in
+     (let u =
+     ref (K_24:
+         (JC_49:
+         (int32_of_integer_ ((sub_int (K_23:
+                                      (let jessie_5 = t_0 in
+                                      (JC_48:
+                                      (assert
+                                      { ge_int(offset_max(Object_alloc_table,
+                                               jessie_5),
+                                        (-1)) };
+                                      (JC_47:
+                                      (java_array_length_intM_requires jessie_5))))))) (1))))) in
      begin
        try
         (loop_1:
@@ -2480,76 +2350,58 @@ let BinarySearch_binary_search_safety =
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
           try
-           (let jessie_13 = begin
-                              (if (K_21:
-                                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
-                              then
-                               (let m = (K_20:
-                                        (JC_59:
-                                        (int32_of_integer_ ((add_int 
-                                                             (integer_of_int32 !l)) 
-                                                            (integer_of_int32 
-                                                             (K_19:
-                                                             (JC_58:
-                                                             (int32_of_integer_ 
-                                                              (JC_57:
-                                                              ((div_int_ 
-                                                                (integer_of_int32 
-                                                                 (K_18:
-                                                                 (JC_56:
-                                                                 (int32_of_integer_ 
-                                                                  ((sub_int 
+           (let jessie_13 =
+           begin
+             (if (K_21:
+                 ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
+             then
+              (let m =
+              (K_20:
+              (JC_59:
+              (int32_of_integer_ ((add_int (integer_of_int32 !l)) (integer_of_int32 
+                                                                   (K_19:
+                                                                   (JC_58:
+                                                                   (int32_of_integer_ 
+                                                                    (JC_57:
+                                                                    ((div_int_ 
+                                                                    (integer_of_int32 
+                                                                    (K_18:
+                                                                    (JC_56:
+                                                                    (int32_of_integer_ 
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !u)) 
-                                                                   (integer_of_int32 !l))))))) (2))))))))))) in
-                               (if (K_17:
-                                   ((lt_int_ (integer_of_int32 (K_16:
-                                                               (JC_60:
-                                                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
-                                                                (integer_of_int32 m)))))) 
-                                    (integer_of_int32 v)))
-                               then
-                                (let jessie_8 = (l := (K_15:
-                                                      (JC_61:
-                                                      (int32_of_integer_ 
-                                                       ((add_int (integer_of_int32 m)) (1)))))) in
-                                void)
-                               else
-                                (if (K_14:
-                                    ((gt_int_ (integer_of_int32 (K_13:
-                                                                (JC_62:
-                                                                ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
-                                                                 (integer_of_int32 m)))))) 
-                                     (integer_of_int32 v)))
-                                then
-                                 (let jessie_10 = (u := (K_12:
-                                                        (JC_63:
-                                                        (int32_of_integer_ 
-                                                         ((sub_int (integer_of_int32 m)) (1)))))) in
-                                 void)
-                                else
-                                 begin   (return := m); (raise Return) end)))
-                              else
-                               (let jessie_12 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
+                                                                    (integer_of_int32 !l))))))) (2))))))))))) in
+              (if (K_17:
+                  ((lt_int_ (integer_of_int32 (K_16:
+                                              (JC_60:
+                                              ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
+                                               (integer_of_int32 m)))))) 
+                   (integer_of_int32 v)))
+              then
+               (let jessie_8 =
+               (l := (K_15:
+                     (JC_61:
+                     (int32_of_integer_ ((add_int (integer_of_int32 m)) (1)))))) in
+               void)
+              else
+               (if (K_14:
+                   ((gt_int_ (integer_of_int32 (K_13:
+                                               (JC_62:
+                                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
+                                                (integer_of_int32 m)))))) 
+                    (integer_of_int32 v)))
+               then
+                (let jessie_10 =
+                (u := (K_12:
+                      (JC_63:
+                      (int32_of_integer_ ((sub_int (integer_of_int32 m)) (1)))))) in
+                void) else begin   (return := m); (raise Return) end)))
+             else (let jessie_12 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 
 let cons_BinarySearch_ensures_default =
@@ -2593,7 +2445,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po21.why">
-      <location file = "why/BinarySearch.why" line = "1247" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "1113" begin = "40" end = "181"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po22.why">
@@ -7094,7 +6946,7 @@ why -simplify [...] why/BinarySearch.why
     (select intM_intP (shift t_0 (integer_of_int32 return))))
 (integer_of_int32 v)))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 1247, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 1113, characters 40-181
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_0 0 Object_alloc_table)

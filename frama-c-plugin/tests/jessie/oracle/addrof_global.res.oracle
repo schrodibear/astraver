@@ -150,14 +150,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic i:  -> int_P pointer
@@ -218,23 +216,19 @@ axiom int_xP_tags :
   (forall int_xP_tag_table:int_xP tag_table.
    instanceof(int_xP_tag_table, x, int_xP_tag)))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_int_P(p:int_P pointer,
- a:int,
+predicate left_valid_struct_int_P(p:int_P pointer, a:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_min(int_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_int_xP(p:int_xP pointer,
- a:int,
+predicate left_valid_struct_int_xP(p:int_xP pointer, a:int,
  int_xP_alloc_table:int_xP alloc_table) =
  (offset_min(int_xP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -252,162 +246,118 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_P(p:int_P pointer,
- b:int,
+predicate right_valid_struct_int_P(p:int_P pointer, b:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_max(int_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_xP(p:int_xP pointer,
- b:int,
+predicate right_valid_struct_int_xP(p:int_xP pointer, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  (offset_max(int_xP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_root_int_xP(p:int_xP pointer,
- a:int,
- b:int,
+predicate strict_valid_root_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) = a)
  and (offset_max(int_xP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_xP(p:int_xP pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) = a)
  and (offset_max(int_xP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_int_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_xP(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_int_xP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_root_int_xP(p:int_xP pointer,
- a:int,
- b:int,
+predicate valid_root_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) <= a)
  and (offset_max(int_xP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_struct_int_xP(p:int_xP pointer,
- a:int,
- b:int,
+predicate valid_struct_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) <= a)
  and (offset_max(int_xP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -747,14 +697,8 @@ let fi_ensures_default =
        (let jessie_16 = (C_7: ((safe_acc_ !int_P_int_M_i_1) i)) in
        (JC_23:
        ((((gi jessie_17) jessie_16) int_P_int_M_i_1) !int_P_i_1_alloc_table))));
-      (return := (C_9: ((safe_acc_ !int_P_int_M_i_1) i)));
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      (return := (C_9: ((safe_acc_ !int_P_int_M_i_1) i))); (raise Return) end);
+    absurd  end with Return -> !return end))
   { (JC_18: eq_int(integer_of_int32(result), (0))) }
 
 let fi_safety =
@@ -770,15 +714,8 @@ let fi_safety =
        (let jessie_13 = (C_7: ((safe_acc_ !int_P_int_M_i_1) i)) in
        (JC_22:
        ((((gi_requires jessie_14) jessie_13) int_P_int_M_i_1) !int_P_i_1_alloc_table))));
-      (return := (C_9: ((safe_acc_ !int_P_int_M_i_1) i)));
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+      (return := (C_9: ((safe_acc_ !int_P_int_M_i_1) i))); (raise Return) end);
+    absurd  end with Return -> !return end)) { true }
 
 let fp_ensures_default =
  fun (tt : unit) ->
@@ -795,24 +732,15 @@ let fp_ensures_default =
        ((((((gp jessie_53) jessie_52) int_P_int_M_p_7) int_xP_int_xM_p_2) !int_xP_p_2_alloc_table) !int_P_p_7_alloc_table))));
       (assert
       { (JC_64: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (0))) };
-      void);
-      void;
+      void); void;
       (C_36:
       begin
-        (let jessie_59 = (let jessie_55 = (safe_int32_of_integer_ (0)) in
-                         (let jessie_58 = (C_34:
-                                          ((safe_acc_ !int_xP_int_xM_p_2) p)) in
-                         (((safe_upd_ int_P_int_M_p_7) jessie_58) jessie_55))) in
-        void);
-       (return := (C_37: ((safe_acc_ !int_P_int_M_i_1) i)));
-       (raise Return)
-      end)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+        (let jessie_59 =
+        (let jessie_55 = (safe_int32_of_integer_ (0)) in
+        (let jessie_58 = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
+        (((safe_upd_ int_P_int_M_p_7) jessie_58) jessie_55))) in void);
+       (return := (C_37: ((safe_acc_ !int_P_int_M_i_1) i))); (raise Return)
+      end) end); absurd  end with Return -> !return end))
   { (JC_56: eq_int(integer_of_int32(result), (0))) }
 
 let fp_safety =
@@ -833,21 +761,13 @@ let fp_safety =
       void;
       (C_36:
       begin
-        (let jessie_50 = (let jessie_46 = (safe_int32_of_integer_ (0)) in
-                         (let jessie_49 = (C_34:
-                                          ((safe_acc_ !int_xP_int_xM_p_2) p)) in
-                         (JC_62:
-                         ((((upd_ !int_P_p_7_alloc_table) int_P_int_M_p_7) jessie_49) jessie_46)))) in
-        void);
-       (return := (C_37: ((safe_acc_ !int_P_int_M_i_1) i)));
-       (raise Return)
-      end)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+        (let jessie_50 =
+        (let jessie_46 = (safe_int32_of_integer_ (0)) in
+        (let jessie_49 = (C_34: ((safe_acc_ !int_xP_int_xM_p_2) p)) in
+        (JC_62:
+        ((((upd_ !int_P_p_7_alloc_table) int_P_int_M_p_7) jessie_49) jessie_46)))) in
+        void); (return := (C_37: ((safe_acc_ !int_P_int_M_i_1) i)));
+       (raise Return) end) end); absurd  end with Return -> !return end))
   { true }
 
 let gi_ensures_default =
@@ -860,17 +780,11 @@ let gi_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_12 = (let jessie_8 = i_0_0 in
-                        (let jessie_11 = p_0_0 in
-                        (((safe_upd_ int_P_int_M_p_0_0_3) jessie_11) jessie_8))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_12 =
+       (let jessie_8 = i_0_0 in
+       (let jessie_11 = p_0_0 in
+       (((safe_upd_ int_P_int_M_p_0_0_3) jessie_11) jessie_8))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_9:
     eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
     integer_of_int32(i_0_0@))) }
@@ -885,18 +799,12 @@ let gi_safety =
    begin
      (C_2:
      begin
-       (let jessie_6 = (let jessie_2 = i_0_0 in
-                       (let jessie_5 = p_0_0 in
-                       (JC_13:
-                       ((((upd_ int_P_p_0_0_3_alloc_table) int_P_int_M_p_0_0_3) jessie_5) jessie_2)))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_6 =
+       (let jessie_2 = i_0_0 in
+       (let jessie_5 = p_0_0 in
+       (JC_13:
+       ((((upd_ int_P_p_0_0_3_alloc_table) int_P_int_M_p_0_0_3) jessie_5) jessie_2)))) in
+       void); (raise Return) end); (raise Return) end with Return -> void end)
   { true }
 
 let gp_ensures_default =
@@ -921,26 +829,17 @@ let gp_ensures_default =
    begin
      (C_14:
      begin
-       (let jessie_36 = (let jessie_32 = (C_11:
-                                         ((safe_acc_ !int_P_int_M_i_0_5) i_0)) in
-                        (let jessie_35 = (C_12:
-                                         ((safe_acc_ !int_xP_int_xM_p_0_4) p_0)) in
-                        (((safe_upd_ int_P_int_M_i_0_5) jessie_35) jessie_32))) in
-       void);
+       (let jessie_36 =
+       (let jessie_32 = (C_11: ((safe_acc_ !int_P_int_M_i_0_5) i_0)) in
+       (let jessie_35 = (C_12: ((safe_acc_ !int_xP_int_xM_p_0_4) p_0)) in
+       (((safe_upd_ int_P_int_M_i_0_5) jessie_35) jessie_32))) in void);
       (C_16:
       begin
-        (let jessie_42 = (let jessie_38 = i_0 in
-                         (let jessie_41 = p_0 in
-                         (((safe_upd_ int_xP_int_xM_p_0_4) jessie_41) jessie_38))) in
-        void);
-       (raise Return)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+        (let jessie_42 =
+        (let jessie_38 = i_0 in
+        (let jessie_41 = p_0 in
+        (((safe_upd_ int_xP_int_xM_p_0_4) jessie_41) jessie_38))) in void);
+       (raise Return) end) end); (raise Return) end with Return -> void end)
   { (JC_42:
     ((JC_40:
      eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
@@ -970,31 +869,25 @@ let gp_safety =
    begin
      (C_14:
      begin
-       (let jessie_24 = (let jessie_20 = (C_11:
-                                         (JC_48:
-                                         (((acc_ int_P_i_0_5_alloc_table) !int_P_int_M_i_0_5) i_0))) in
-                        (let jessie_23 = (C_12:
-                                         (JC_49:
-                                         (((acc_ int_xP_p_0_4_alloc_table) !int_xP_int_xM_p_0_4) p_0))) in
-                        (JC_50:
-                        ((((upd_ int_P_i_0_5_alloc_table) int_P_int_M_i_0_5) jessie_23) jessie_20)))) in
+       (let jessie_24 =
+       (let jessie_20 =
+       (C_11:
+       (JC_48: (((acc_ int_P_i_0_5_alloc_table) !int_P_int_M_i_0_5) i_0))) in
+       (let jessie_23 =
+       (C_12:
+       (JC_49: (((acc_ int_xP_p_0_4_alloc_table) !int_xP_int_xM_p_0_4) p_0))) in
+       (JC_50:
+       ((((upd_ int_P_i_0_5_alloc_table) int_P_int_M_i_0_5) jessie_23) jessie_20)))) in
        void);
       (C_16:
       begin
-        (let jessie_30 = (let jessie_26 = i_0 in
-                         (let jessie_29 = p_0 in
-                         (JC_51:
-                         ((((upd_ int_xP_p_0_4_alloc_table) int_xP_int_xM_p_0_4) jessie_29) jessie_26)))) in
-        void);
-       (raise Return)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+        (let jessie_30 =
+        (let jessie_26 = i_0 in
+        (let jessie_29 = p_0 in
+        (JC_51:
+        ((((upd_ int_xP_p_0_4_alloc_table) int_xP_int_xM_p_0_4) jessie_29) jessie_26)))) in
+        void); (raise Return) end) end); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C addrof_global.jessie --quiet -f addrof_global.makefile project

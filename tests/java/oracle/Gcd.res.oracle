@@ -649,6 +649,10 @@ gui stat: Gcd.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/Gcd_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include Gcd.depend
 
 depend: coq/Gcd_why.v
@@ -1388,13 +1392,10 @@ axiom div_mod_property_as_axiom :
    ((ge_int(x_6, (0)) and gt_int(y_6, (0))) ->
     eq_int(mod_int(x_6, y_6), sub_int(x_6, mul_int(y_6, div_int(x_6, y_6)))))))
 
-predicate divides(x_5:int,
- y_5:int) =
+predicate divides(x_5:int, y_5:int) =
  (exists q:int. eq_int(y_5, mul_int(q, x_5)))
 
-predicate isGcd(a:int,
- b:int,
- d:int) =
+predicate isGcd(a:int, b:int, d:int) =
  (divides(d, a)
  and (divides(d, b)
      and (forall z_4:int.
@@ -1437,33 +1438,27 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Gcd(p:Object pointer,
- a:int,
+predicate left_valid_struct_Gcd(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -1508,174 +1503,124 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Gcd(p:Object pointer,
- b:int,
+predicate right_valid_struct_Gcd(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Gcd(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Gcd(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Gcd(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Gcd(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Gcd(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Gcd(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1964,16 +1909,14 @@ parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 let Gcd_gcd_ensures_bezoutProperty =
@@ -2012,63 +1955,33 @@ let Gcd_gcd_ensures_bezoutProperty =
                                       mul_int(d_1, mutable_y_8@init)),
                                mutable_y_8))))))) } ];
           try
-           (let jessie_93 = begin
-                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
-                              then
-                               (let jessie_91 = (let r = (K_23:
-                                                         (JC_70:
-                                                         ((mod_int !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_22:
-                                                           (JC_71:
-                                                           ((div_int !mutable_x_8) !mutable_y_8))) in
-                                                begin
-                                                  (let jessie_79 = (mutable_x_8 := !mutable_y_8) in
-                                                  void);
-                                                 (let jessie_81 = (mutable_y_8 := r) in
-                                                 void);
-                                                 (let ta = (K_21: !a_3) in
-                                                 (let tb = (K_20: !b_2) in
-                                                 begin
-                                                   (let jessie_85 = (a_3 := !c) in
-                                                   void);
-                                                  (let jessie_87 = (b_2 := !d_1) in
-                                                  void);
-                                                  (let jessie_89 = (c := 
-                                                                    (K_17:
-                                                                    ((sub_int ta) 
-                                                                    (K_16:
-                                                                    ((mul_int !c) q_1))))) in
-                                                  void);
-                                                  (d_1 := (K_19:
-                                                          ((sub_int tb) 
-                                                           (K_18:
-                                                           ((mul_int !d_1) q_1)))));
-                                                  !d_1
-                                                 end))
-                                                end)) in
-                               void)
-                              else
-                               (let jessie_92 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
-      (return := !mutable_x_8);
-      (raise Return)
-     end))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))))
+           (let jessie_93 =
+           begin
+             (if (K_24: ((gt_int_ !mutable_y_8) (0)))
+             then
+              (let jessie_91 =
+              (let r =
+              (K_23: (JC_70: ((mod_int !mutable_x_8) !mutable_y_8))) in
+              (let q_1 =
+              (K_22: (JC_71: ((div_int !mutable_x_8) !mutable_y_8))) in
+              begin
+                (let jessie_79 = (mutable_x_8 := !mutable_y_8) in void);
+               (let jessie_81 = (mutable_y_8 := r) in void);
+               (let ta = (K_21: !a_3) in
+               (let tb = (K_20: !b_2) in
+               begin
+                 (let jessie_85 = (a_3 := !c) in void);
+                (let jessie_87 = (b_2 := !d_1) in void);
+                (let jessie_89 =
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                void);
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                !d_1 end)) end)) in void)
+             else (let jessie_92 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end; (return := !mutable_x_8);
+      (raise Return) end)))); absurd  end with Return -> !return end))))
   { (JC_25:
     (exists a_2:int.
      (exists b_1:int.
@@ -2106,68 +2019,37 @@ let Gcd_gcd_ensures_default =
                         and (JC_43:
                             eq_int(add_int(mul_int(c, mutable_x_8@init),
                                    mul_int(d_1, mutable_y_8@init)),
-                            mutable_y_8)))))))
-           }
+                            mutable_y_8)))))))  }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_47 = begin
-                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
-                              then
-                               (let jessie_45 = (let r = (K_23:
-                                                         (JC_48:
-                                                         ((mod_int !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_22:
-                                                           (JC_49:
-                                                           ((div_int !mutable_x_8) !mutable_y_8))) in
-                                                begin
-                                                  (let jessie_33 = (mutable_x_8 := !mutable_y_8) in
-                                                  void);
-                                                 (let jessie_35 = (mutable_y_8 := r) in
-                                                 void);
-                                                 (let ta = (K_21: !a_3) in
-                                                 (let tb = (K_20: !b_2) in
-                                                 begin
-                                                   (let jessie_39 = (a_3 := !c) in
-                                                   void);
-                                                  (let jessie_41 = (b_2 := !d_1) in
-                                                  void);
-                                                  (let jessie_43 = (c := 
-                                                                    (K_17:
-                                                                    ((sub_int ta) 
-                                                                    (K_16:
-                                                                    ((mul_int !c) q_1))))) in
-                                                  void);
-                                                  (d_1 := (K_19:
-                                                          ((sub_int tb) 
-                                                           (K_18:
-                                                           ((mul_int !d_1) q_1)))));
-                                                  !d_1
-                                                 end))
-                                                end)) in
-                               void)
-                              else
-                               (let jessie_46 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
-      (return := !mutable_x_8);
-      (raise Return)
-     end))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))))
+           (let jessie_47 =
+           begin
+             (if (K_24: ((gt_int_ !mutable_y_8) (0)))
+             then
+              (let jessie_45 =
+              (let r =
+              (K_23: (JC_48: ((mod_int !mutable_x_8) !mutable_y_8))) in
+              (let q_1 =
+              (K_22: (JC_49: ((div_int !mutable_x_8) !mutable_y_8))) in
+              begin
+                (let jessie_33 = (mutable_x_8 := !mutable_y_8) in void);
+               (let jessie_35 = (mutable_y_8 := r) in void);
+               (let ta = (K_21: !a_3) in
+               (let tb = (K_20: !b_2) in
+               begin
+                 (let jessie_39 = (a_3 := !c) in void);
+                (let jessie_41 = (b_2 := !d_1) in void);
+                (let jessie_43 =
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                void);
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                !d_1 end)) end)) in void)
+             else (let jessie_46 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end; (return := !mutable_x_8);
+      (raise Return) end)))); absurd  end with Return -> !return end))))
   { (JC_19: true) }
 
 let Gcd_gcd_ensures_resultIsGcd =
@@ -2206,63 +2088,33 @@ let Gcd_gcd_ensures_resultIsGcd =
                                       mul_int(d_1, mutable_y_8@init)),
                                mutable_y_8))))))) } ];
           try
-           (let jessie_70 = begin
-                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
-                              then
-                               (let jessie_68 = (let r = (K_23:
-                                                         (JC_59:
-                                                         ((mod_int !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_22:
-                                                           (JC_60:
-                                                           ((div_int !mutable_x_8) !mutable_y_8))) in
-                                                begin
-                                                  (let jessie_56 = (mutable_x_8 := !mutable_y_8) in
-                                                  void);
-                                                 (let jessie_58 = (mutable_y_8 := r) in
-                                                 void);
-                                                 (let ta = (K_21: !a_3) in
-                                                 (let tb = (K_20: !b_2) in
-                                                 begin
-                                                   (let jessie_62 = (a_3 := !c) in
-                                                   void);
-                                                  (let jessie_64 = (b_2 := !d_1) in
-                                                  void);
-                                                  (let jessie_66 = (c := 
-                                                                    (K_17:
-                                                                    ((sub_int ta) 
-                                                                    (K_16:
-                                                                    ((mul_int !c) q_1))))) in
-                                                  void);
-                                                  (d_1 := (K_19:
-                                                          ((sub_int tb) 
-                                                           (K_18:
-                                                           ((mul_int !d_1) q_1)))));
-                                                  !d_1
-                                                 end))
-                                                end)) in
-                               void)
-                              else
-                               (let jessie_69 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
-      (return := !mutable_x_8);
-      (raise Return)
-     end))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))))
+           (let jessie_70 =
+           begin
+             (if (K_24: ((gt_int_ !mutable_y_8) (0)))
+             then
+              (let jessie_68 =
+              (let r =
+              (K_23: (JC_59: ((mod_int !mutable_x_8) !mutable_y_8))) in
+              (let q_1 =
+              (K_22: (JC_60: ((div_int !mutable_x_8) !mutable_y_8))) in
+              begin
+                (let jessie_56 = (mutable_x_8 := !mutable_y_8) in void);
+               (let jessie_58 = (mutable_y_8 := r) in void);
+               (let ta = (K_21: !a_3) in
+               (let tb = (K_20: !b_2) in
+               begin
+                 (let jessie_62 = (a_3 := !c) in void);
+                (let jessie_64 = (b_2 := !d_1) in void);
+                (let jessie_66 =
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                void);
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                !d_1 end)) end)) in void)
+             else (let jessie_69 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end; (return := !mutable_x_8);
+      (raise Return) end)))); absurd  end with Return -> !return end))))
   { (JC_23: isGcd(x_8, y_8, result)) }
 
 let Gcd_gcd_safety =
@@ -2301,63 +2153,33 @@ let Gcd_gcd_safety =
                                       mul_int(d_1, mutable_y_8@init)),
                                mutable_y_8))))))) } ];
           try
-           (let jessie_24 = begin
-                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
-                              then
-                               (let jessie_22 = (let r = (K_23:
-                                                         (JC_36:
-                                                         ((mod_int_ !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_22:
-                                                           (JC_37:
-                                                           ((div_int_ !mutable_x_8) !mutable_y_8))) in
-                                                begin
-                                                  (let jessie_10 = (mutable_x_8 := !mutable_y_8) in
-                                                  void);
-                                                 (let jessie_12 = (mutable_y_8 := r) in
-                                                 void);
-                                                 (let ta = (K_21: !a_3) in
-                                                 (let tb = (K_20: !b_2) in
-                                                 begin
-                                                   (let jessie_16 = (a_3 := !c) in
-                                                   void);
-                                                  (let jessie_18 = (b_2 := !d_1) in
-                                                  void);
-                                                  (let jessie_20 = (c := 
-                                                                    (K_17:
-                                                                    ((sub_int ta) 
-                                                                    (K_16:
-                                                                    ((mul_int !c) q_1))))) in
-                                                  void);
-                                                  (d_1 := (K_19:
-                                                          ((sub_int tb) 
-                                                           (K_18:
-                                                           ((mul_int !d_1) q_1)))));
-                                                  !d_1
-                                                 end))
-                                                end)) in
-                               void)
-                              else
-                               (let jessie_23 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_2 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_1 ->
-        void end;
-      (return := !mutable_x_8);
-      (raise Return)
-     end))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))))
+           (let jessie_24 =
+           begin
+             (if (K_24: ((gt_int_ !mutable_y_8) (0)))
+             then
+              (let jessie_22 =
+              (let r =
+              (K_23: (JC_36: ((mod_int_ !mutable_x_8) !mutable_y_8))) in
+              (let q_1 =
+              (K_22: (JC_37: ((div_int_ !mutable_x_8) !mutable_y_8))) in
+              begin
+                (let jessie_10 = (mutable_x_8 := !mutable_y_8) in void);
+               (let jessie_12 = (mutable_y_8 := r) in void);
+               (let ta = (K_21: !a_3) in
+               (let tb = (K_20: !b_2) in
+               begin
+                 (let jessie_16 = (a_3 := !c) in void);
+                (let jessie_18 = (b_2 := !d_1) in void);
+                (let jessie_20 =
+                (c := (K_17: ((sub_int ta) (K_16: ((mul_int !c) q_1))))) in
+                void);
+                (d_1 := (K_19: ((sub_int tb) (K_18: ((mul_int !d_1) q_1)))));
+                !d_1 end)) end)) in void)
+             else (let jessie_23 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_2 -> void end end done) with
+        Loop_exit_exc jessie_1 -> void end; (return := !mutable_x_8);
+      (raise Return) end)))); absurd  end with Return -> !return end))))
   { true }
 
 let cons_Gcd_ensures_default =
@@ -6683,10 +6505,10 @@ goal Gcd_gcd_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ??????????.......?.... (11/0/11/0/0)
+why/Gcd_why.why               : ....????.............. (18/0/4/0/0)
 total   :  22
-valid   :  11 ( 50%)
+valid   :  18 ( 82%)
 invalid :   0 (  0%)
-unknown :  11 ( 50%)
+unknown :   4 ( 18%)
 timeout :   0 (  0%)
 failure :   0 (  0%)

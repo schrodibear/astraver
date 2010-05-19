@@ -300,6 +300,10 @@ gui stat: NameConflicts.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/NameConflicts_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include NameConflicts.depend
 
 depend: coq/NameConflicts_why.v
@@ -734,30 +738,25 @@ axiom char_range :
  (forall x:char.
   (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
 
-predicate eq_byte(x:byte,
- y:byte) =
+predicate eq_byte(x:byte, y:byte) =
  eq_int(integer_of_byte(x), integer_of_byte(y))
 
-predicate eq_char(x:char,
- y:char) =
+predicate eq_char(x:char, y:char) =
  eq_int(integer_of_char(x), integer_of_char(y))
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_long: long -> int
 
-predicate eq_long(x:long,
- y:long) =
+predicate eq_long(x:long, y:long) =
  eq_int(integer_of_long(x), integer_of_long(y))
 
 logic integer_of_short: short -> int
 
-predicate eq_short(x:short,
- y:short) =
+predicate eq_short(x:short, y:short) =
  eq_int(integer_of_short(x), integer_of_short(y))
 
 logic int32_of_integer: int -> int32
@@ -789,33 +788,27 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_NameConflicts(p:Object pointer,
- a:int,
+predicate left_valid_struct_NameConflicts(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -838,33 +831,27 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_NameConflicts(p:Object pointer,
- b:int,
+predicate right_valid_struct_NameConflicts(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
@@ -880,144 +867,100 @@ axiom short_range :
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_NameConflicts(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_NameConflicts(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_NameConflicts(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_NameConflicts(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_NameConflicts(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_NameConflicts(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1352,16 +1295,14 @@ parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter safe_byte_of_integer_ :
@@ -1392,12 +1333,7 @@ let NameConflicts_field_ensures_default =
   try
    begin
      (return := (K_4: ((safe_acc_ !NameConflicts_field) this_0)));
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+    (raise Return); absurd  end with Return -> !return end))
   { (JC_33: true) }
 
 let NameConflicts_field_safety =
@@ -1408,13 +1344,7 @@ let NameConflicts_field_safety =
   try
    begin
      (return := (K_4: ((safe_acc_ !NameConflicts_field) this_0)));
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    (raise Return); absurd  end with Return -> !return end)) { true }
 
 let NameConflicts_m_ensures_default =
  fun (this_1 : Object pointer) ->
@@ -1425,12 +1355,7 @@ let NameConflicts_m_ensures_default =
    begin
      (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_23: true) }
+    absurd  end with Return -> !return end)) { (JC_23: true) }
 
 let NameConflicts_m_ensures_normal =
  fun (this_1 : Object pointer) ->
@@ -1441,11 +1366,7 @@ let NameConflicts_m_ensures_normal =
    begin
      (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+    absurd  end with Return -> !return end))
   { (JC_27: eq_int(integer_of_int32(result), (0))) }
 
 let NameConflicts_m_safety =
@@ -1457,12 +1378,7 @@ let NameConflicts_m_safety =
    begin
      (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    absurd  end with Return -> !return end)) { true }
 
 let NameConflicts_setI_ensures_default =
  fun (this_2 : Object pointer) (i : int32) ->
@@ -1470,20 +1386,12 @@ let NameConflicts_setI_ensures_default =
   (init:
   try
    begin
-     (let jessie_12 = (K_1:
-                      (let jessie_8 = i in
-                      (let jessie_11 = this_2 in
-                      begin
-                        (((safe_upd_ NameConflicts_i) jessie_11) jessie_8);
-                       jessie_8
-                      end))) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_15: true) }
+     (let jessie_12 =
+     (K_1:
+     (let jessie_8 = i in
+     (let jessie_11 = this_2 in
+     begin   (((safe_upd_ NameConflicts_i) jessie_11) jessie_8); jessie_8 end))) in
+     void); (raise Return) end with Return -> void end) { (JC_15: true) }
 
 let NameConflicts_setI_safety =
  fun (this_2 : Object pointer) (i : int32) ->
@@ -1491,20 +1399,12 @@ let NameConflicts_setI_safety =
   (init:
   try
    begin
-     (let jessie_6 = (K_1:
-                     (let jessie_2 = i in
-                     (let jessie_5 = this_2 in
-                     begin
-                       (((safe_upd_ NameConflicts_i) jessie_5) jessie_2);
-                      jessie_2
-                     end))) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+     (let jessie_6 =
+     (K_1:
+     (let jessie_2 = i in
+     (let jessie_5 = this_2 in
+     begin   (((safe_upd_ NameConflicts_i) jessie_5) jessie_2); jessie_2 end))) in
+     void); (raise Return) end with Return -> void end) { true }
 
 let cons_NameConflicts_ensures_default =
  fun (this_3 : Object pointer) ->
@@ -1512,24 +1412,17 @@ let cons_NameConflicts_ensures_default =
   (init:
   try
    begin
-     (let jessie_44 = begin
-                        (let jessie_38 = (let jessie_34 = (safe_int32_of_integer_ (0)) in
-                                         (let jessie_37 = this_3 in
-                                         (((safe_upd_ NameConflicts_i) jessie_37) jessie_34))) in
-                        void);
-                       (let jessie_40 = (safe_int32_of_integer_ (0)) in
-                       (let jessie_43 = this_3 in
-                       begin
-                         (((safe_upd_ NameConflicts_field) jessie_43) jessie_40);
-                        jessie_40
-                       end))
-                      end in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_44 =
+     begin
+       (let jessie_38 =
+       (let jessie_34 = (safe_int32_of_integer_ (0)) in
+       (let jessie_37 = this_3 in
+       (((safe_upd_ NameConflicts_i) jessie_37) jessie_34))) in void);
+      (let jessie_40 = (safe_int32_of_integer_ (0)) in
+      (let jessie_43 = this_3 in
+      begin
+        (((safe_upd_ NameConflicts_field) jessie_43) jessie_40); jessie_40
+      end)) end in void); (raise Return) end with Return -> void end)
   { (JC_41: true) }
 
 let cons_NameConflicts_safety =
@@ -1538,24 +1431,17 @@ let cons_NameConflicts_safety =
   (init:
   try
    begin
-     (let jessie_32 = begin
-                        (let jessie_26 = (let jessie_22 = (safe_int32_of_integer_ (0)) in
-                                         (let jessie_25 = this_3 in
-                                         (((safe_upd_ NameConflicts_i) jessie_25) jessie_22))) in
-                        void);
-                       (let jessie_28 = (safe_int32_of_integer_ (0)) in
-                       (let jessie_31 = this_3 in
-                       begin
-                         (((safe_upd_ NameConflicts_field) jessie_31) jessie_28);
-                        jessie_28
-                       end))
-                      end in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_32 =
+     begin
+       (let jessie_26 =
+       (let jessie_22 = (safe_int32_of_integer_ (0)) in
+       (let jessie_25 = this_3 in
+       (((safe_upd_ NameConflicts_i) jessie_25) jessie_22))) in void);
+      (let jessie_28 = (safe_int32_of_integer_ (0)) in
+      (let jessie_31 = this_3 in
+      begin
+        (((safe_upd_ NameConflicts_field) jessie_31) jessie_28); jessie_28
+      end)) end in void); (raise Return) end with Return -> void end)
   { true }
 
 

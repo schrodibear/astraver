@@ -187,32 +187,27 @@ predicate eq_E2(x:E2, y:E2) = eq_int(integer_of_E2(x), integer_of_E2(y))
 
 logic integer_of_int16: int16 -> int
 
-predicate eq_int16(x:int16,
- y:int16) =
+predicate eq_int16(x:int16, y:int16) =
  eq_int(integer_of_int16(x), integer_of_int16(y))
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int64: int64 -> int
 
-predicate eq_int64(x:int64,
- y:int64) =
+predicate eq_int64(x:int64, y:int64) =
  eq_int(integer_of_int64(x), integer_of_int64(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic integer_of_uint8: uint8 -> int
 
-predicate eq_uint8(x:uint8,
- y:uint8) =
+predicate eq_uint8(x:uint8, y:uint8) =
  eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int16_of_integer: int -> int16
@@ -262,13 +257,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -280,40 +273,30 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
@@ -329,44 +312,32 @@ axiom uint8_range :
  (forall x:uint8.
   (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -593,15 +564,9 @@ let f_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_4 = (e1 := (C_1: (safe_E1_of_integer_ (integer_of_E2 e2)))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_4 =
+       (e1 := (C_1: (safe_E1_of_integer_ (integer_of_E2 e2)))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_5: true) }
 
 let f_safety =
@@ -612,16 +577,9 @@ let f_safety =
    begin
      (C_2:
      begin
-       (let jessie_2 = (e1 := (C_1:
-                              (JC_9: (E1_of_integer_ (integer_of_E2 e2))))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_2 =
+       (e1 := (C_1: (JC_9: (E1_of_integer_ (integer_of_E2 e2))))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
   { true }
 
 let g_ensures_default =
@@ -634,16 +592,9 @@ let g_ensures_default =
    begin
      (C_6:
      begin
-       (let jessie_8 = (c := (C_5:
-                             (safe_uint8_of_integer_ (integer_of_int16 !s)))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_8 =
+       (c := (C_5: (safe_uint8_of_integer_ (integer_of_int16 !s)))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_18: true) }
 
 let g_safety =
@@ -656,17 +607,9 @@ let g_safety =
    begin
      (C_6:
      begin
-       (let jessie_6 = (c := (C_5:
-                             (JC_22:
-                             (uint8_of_integer_ (integer_of_int16 !s))))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_6 =
+       (c := (C_5: (JC_22: (uint8_of_integer_ (integer_of_int16 !s))))) in
+       void); (raise Return) end); (raise Return) end with Return -> void end)
   { true }
 
 let h_ensures_default =
@@ -680,40 +623,28 @@ let h_ensures_default =
        (let jessie_22 = (c := (safe_uint8_of_integer_ (10))) in void);
       (C_13:
       begin
-        (let jessie_24 = (sc := (C_12:
-                                (safe_int8_of_integer_ (integer_of_uint8 !c)))) in
+        (let jessie_24 =
+        (sc := (C_12: (safe_int8_of_integer_ (integer_of_uint8 !c)))) in
         void);
        (C_15:
        begin
-         (let jessie_26 = (s := (C_14:
-                                (safe_int16_of_integer_ (integer_of_int8 c1)))) in
+         (let jessie_26 =
+         (s := (C_14: (safe_int16_of_integer_ (integer_of_int8 c1)))) in
          void);
         (C_17:
         begin
-          (let jessie_28 = (i := (C_16:
-                                 (safe_int32_of_integer_ (integer_of_int16 !s)))) in
+          (let jessie_28 =
+          (i := (C_16: (safe_int32_of_integer_ (integer_of_int16 !s)))) in
           void);
          (C_19:
          begin
            (let jessie_30 = (li := (C_18: !i)) in void);
           (C_21:
           begin
-            (let jessie_32 = (lli := (C_20:
-                                     (safe_int64_of_integer_ (integer_of_int32 !li)))) in
-            void);
-           (raise Return)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_27: true) }
+            (let jessie_32 =
+            (lli := (C_20: (safe_int64_of_integer_ (integer_of_int32 !li)))) in
+            void); (raise Return) end) end) end) end) end) end);
+    (raise Return) end with Return -> void end) { (JC_27: true) }
 
 let h_safety =
  fun (tt : unit) ->
@@ -726,44 +657,29 @@ let h_safety =
        (let jessie_10 = (c := (safe_uint8_of_integer_ (10))) in void);
       (C_13:
       begin
-        (let jessie_12 = (sc := (C_12:
-                                (JC_31:
-                                (int8_of_integer_ (integer_of_uint8 !c))))) in
+        (let jessie_12 =
+        (sc := (C_12: (JC_31: (int8_of_integer_ (integer_of_uint8 !c))))) in
         void);
        (C_15:
        begin
-         (let jessie_14 = (s := (C_14:
-                                (JC_32:
-                                (int16_of_integer_ (integer_of_int8 c1))))) in
+         (let jessie_14 =
+         (s := (C_14: (JC_32: (int16_of_integer_ (integer_of_int8 c1))))) in
          void);
         (C_17:
         begin
-          (let jessie_16 = (i := (C_16:
-                                 (JC_33:
-                                 (int32_of_integer_ (integer_of_int16 !s))))) in
+          (let jessie_16 =
+          (i := (C_16: (JC_33: (int32_of_integer_ (integer_of_int16 !s))))) in
           void);
          (C_19:
          begin
            (let jessie_18 = (li := (C_18: !i)) in void);
           (C_21:
           begin
-            (let jessie_20 = (lli := (C_20:
-                                     (JC_34:
-                                     (int64_of_integer_ (integer_of_int32 !li))))) in
-            void);
-           (raise Return)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+            (let jessie_20 =
+            (lli := (C_20:
+                    (JC_34: (int64_of_integer_ (integer_of_int32 !li))))) in
+            void); (raise Return) end) end) end) end) end) end);
+    (raise Return) end with Return -> void end) { true }
 
 let hh_ensures_default =
  fun (tt : unit) ->
@@ -776,24 +692,15 @@ let hh_ensures_default =
        (let jessie_40 = (i := (safe_int32_of_integer_ (7))) in void);
       (C_25:
       begin
-        (let jessie_42 = (s := (C_24:
-                               (safe_int16_of_integer_ (integer_of_int32 !i)))) in
+        (let jessie_42 =
+        (s := (C_24: (safe_int16_of_integer_ (integer_of_int32 !i)))) in
         void);
        (C_27:
        begin
-         (let jessie_44 = (c := (C_26:
-                                (safe_uint8_of_integer_ (integer_of_int16 !s)))) in
-         void);
-        (raise Return)
-       end)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_39: true) }
+         (let jessie_44 =
+         (c := (C_26: (safe_uint8_of_integer_ (integer_of_int16 !s)))) in
+         void); (raise Return) end) end) end); (raise Return) end with
+   Return -> void end) { (JC_39: true) }
 
 let hh_safety =
  fun (tt : unit) ->
@@ -806,26 +713,15 @@ let hh_safety =
        (let jessie_34 = (i := (safe_int32_of_integer_ (7))) in void);
       (C_25:
       begin
-        (let jessie_36 = (s := (C_24:
-                               (JC_43:
-                               (int16_of_integer_ (integer_of_int32 !i))))) in
+        (let jessie_36 =
+        (s := (C_24: (JC_43: (int16_of_integer_ (integer_of_int32 !i))))) in
         void);
        (C_27:
        begin
-         (let jessie_38 = (c := (C_26:
-                                (JC_44:
-                                (uint8_of_integer_ (integer_of_int16 !s))))) in
-         void);
-        (raise Return)
-       end)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+         (let jessie_38 =
+         (c := (C_26: (JC_44: (uint8_of_integer_ (integer_of_int16 !s))))) in
+         void); (raise Return) end) end) end); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C overflow.jessie --quiet -f overflow.makefile project

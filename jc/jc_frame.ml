@@ -815,6 +815,7 @@ struct
       | LApp (_,lt) -> (trad_app notin e)::
           (List.fold_left (term_extract_effect notin) acc lt)
       | TIf _ -> assert false
+      | TLet _ -> assert false
 
   let rec conv_to_ft notin e = 
     match e with
@@ -1118,6 +1119,7 @@ struct
       | LApp (_,lt) -> (trad_app ft notin e)::
           (List.fold_left (term_extract_effect ft notin) acc lt)
       | TIf _ -> assert false
+      | TLet _ -> assert false
 
   let gen axiom_name f_name gen_framed notin_update params framed_params = 
     let elt = "elt"^tmp_suffix in

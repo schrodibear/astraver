@@ -57,6 +57,7 @@ type term =
   | LVarAtLabel of string * string     (*r x@L *)
   | Tnamed of string * term
   | TIf of term * term * term
+  | TLet of string * term * term
 
 val fprintf_term : Format.formatter -> term -> unit
 

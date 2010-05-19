@@ -1,3 +1,3 @@
-Fatal error: exception Assert_failure("src/fastwp.ml", 43, 17)
+Fatal error: exception Assert_failure("src/fastwp.ml", 48, 17)
 make: *** [why/asm_memset2.wpr] Error 2
 make: *** [asm_memset2.regtest] Error 2

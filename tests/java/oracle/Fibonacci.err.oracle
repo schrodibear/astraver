@@ -3,5 +3,3 @@ Warning: recursive definition of isfib in generated file
 Warning: recursive definition of isfib in generated file
 Warning: recursive definition of isfib in generated file
 Warning: recursive definition of isfib in generated file
-make: *** [coq/Fibonacci_why.vo] Error 1
-make: *** [coq/Fibonacci_why.vo] Error 1

@@ -135,8 +135,7 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -150,13 +149,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -168,85 +165,63 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
 function signr(x:real) : int =
  (if ge_real_bool(x, 0.0) then (1) else neg_int((1)))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -462,55 +437,42 @@ let eps_line_ensures_default =
      (let tmp_0 = ref (any_double void) in
      (let __retres_0 = ref (any_double void) in
      begin
-       (let jessie_40 = (C_14:
-                        begin
-                          (let jessie_36 = (tmp := (C_13:
-                                                   (let jessie_35 = (C_12:
-                                                                    (JC_57:
-                                                                    (((add_double_safe nearest_even) 
-                                                                    (C_11:
-                                                                    (JC_55:
-                                                                    (((mul_double_safe nearest_even) sx) vx)))) 
-                                                                    (C_10:
-                                                                    (JC_56:
-                                                                    (((mul_double_safe nearest_even) sy) vy)))))) in
-                                                   (let jessie_34 = M22 in
-                                                   (JC_58:
-                                                   ((sign jessie_35) jessie_34)))))) in
-                          void);
-                         (C_19:
-                         begin
-                           (tmp_0 := (C_18:
-                                     (let jessie_39 = (C_17:
-                                                      (JC_61:
-                                                      (((sub_double_safe nearest_even) 
-                                                        (C_16:
-                                                        (JC_59:
-                                                        (((mul_double_safe nearest_even) sx) vy)))) 
-                                                       (C_15:
-                                                       (JC_60:
-                                                       (((mul_double_safe nearest_even) sy) vx)))))) in
-                                     (let jessie_38 = M22 in
-                                     (JC_62: ((sign jessie_39) jessie_38))))));
-                          !tmp_0
-                         end)
-                        end) in
-       void);
+       (let jessie_40 =
+       (C_14:
+       begin
+         (let jessie_36 =
+         (tmp := (C_13:
+                 (let jessie_35 =
+                 (C_12:
+                 (JC_57:
+                 (((add_double_safe nearest_even) (C_11:
+                                                  (JC_55:
+                                                  (((mul_double_safe nearest_even) sx) vx)))) 
+                  (C_10: (JC_56: (((mul_double_safe nearest_even) sy) vy)))))) in
+                 (let jessie_34 = M22 in
+                 (JC_58: ((sign jessie_35) jessie_34)))))) in void);
+        (C_19:
+        begin
+          (tmp_0 := (C_18:
+                    (let jessie_39 =
+                    (C_17:
+                    (JC_61:
+                    (((sub_double_safe nearest_even) (C_16:
+                                                     (JC_59:
+                                                     (((mul_double_safe nearest_even) sx) vy)))) 
+                     (C_15:
+                     (JC_60: (((mul_double_safe nearest_even) sy) vx)))))) in
+                    (let jessie_38 = M22 in
+                    (JC_62: ((sign jessie_39) jessie_38)))))); !tmp_0 end)
+       end) in void);
       (C_21:
       begin
-        (let jessie_42 = (__retres_0 := (C_20:
-                                        (JC_63:
-                                        (((mul_double_safe nearest_even) !tmp) !tmp_0)))) in
-        void);
-       (return := !__retres_0);
-       (raise Return)
-      end)
-     end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+        (let jessie_42 =
+        (__retres_0 := (C_20:
+                       (JC_63:
+                       (((mul_double_safe nearest_even) !tmp) !tmp_0)))) in
+        void); (return := !__retres_0); (raise Return) end) end))); absurd 
+   end with Return -> !return end))
   { (JC_42:
     (neq_real(double_value(result), 0.0) ->
      eq_real(double_value(result),
@@ -543,57 +505,40 @@ let eps_line_safety =
      (let tmp_0 = ref (any_double void) in
      (let __retres_0 = ref (any_double void) in
      begin
-       (let jessie_29 = (C_14:
-                        begin
-                          (let jessie_25 = (tmp := (C_13:
-                                                   (let jessie_24 = (C_12:
-                                                                    (JC_48:
-                                                                    (((add_double nearest_even) 
-                                                                    (C_11:
-                                                                    (JC_46:
-                                                                    (((mul_double nearest_even) sx) vx)))) 
-                                                                    (C_10:
-                                                                    (JC_47:
-                                                                    (((mul_double nearest_even) sy) vy)))))) in
-                                                   (let jessie_23 = M22 in
-                                                   (JC_49:
-                                                   ((sign_requires jessie_24) jessie_23)))))) in
-                          void);
-                         (C_19:
-                         begin
-                           (tmp_0 := (C_18:
-                                     (let jessie_28 = (C_17:
-                                                      (JC_52:
-                                                      (((sub_double nearest_even) 
-                                                        (C_16:
-                                                        (JC_50:
-                                                        (((mul_double nearest_even) sx) vy)))) 
-                                                       (C_15:
-                                                       (JC_51:
-                                                       (((mul_double nearest_even) sy) vx)))))) in
-                                     (let jessie_27 = M22 in
-                                     (JC_53:
-                                     ((sign_requires jessie_28) jessie_27))))));
-                          !tmp_0
-                         end)
-                        end) in
-       void);
+       (let jessie_29 =
+       (C_14:
+       begin
+         (let jessie_25 =
+         (tmp := (C_13:
+                 (let jessie_24 =
+                 (C_12:
+                 (JC_48:
+                 (((add_double nearest_even) (C_11:
+                                             (JC_46:
+                                             (((mul_double nearest_even) sx) vx)))) 
+                  (C_10: (JC_47: (((mul_double nearest_even) sy) vy)))))) in
+                 (let jessie_23 = M22 in
+                 (JC_49: ((sign_requires jessie_24) jessie_23)))))) in void);
+        (C_19:
+        begin
+          (tmp_0 := (C_18:
+                    (let jessie_28 =
+                    (C_17:
+                    (JC_52:
+                    (((sub_double nearest_even) (C_16:
+                                                (JC_50:
+                                                (((mul_double nearest_even) sx) vy)))) 
+                     (C_15: (JC_51: (((mul_double nearest_even) sy) vx)))))) in
+                    (let jessie_27 = M22 in
+                    (JC_53: ((sign_requires jessie_28) jessie_27))))));
+         !tmp_0 end) end) in void);
       (C_21:
       begin
-        (let jessie_31 = (__retres_0 := (C_20:
-                                        (JC_54:
-                                        (((mul_double nearest_even) !tmp) !tmp_0)))) in
-        void);
-       (return := !__retres_0);
-       (raise Return)
-      end)
-     end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_44: M22_value) }
+        (let jessie_31 =
+        (__retres_0 := (C_20:
+                       (JC_54: (((mul_double nearest_even) !tmp) !tmp_0)))) in
+        void); (return := !__retres_0); (raise Return) end) end))); absurd 
+   end with Return -> !return end)) { (JC_44: M22_value) }
 
 let sign_ensures_default =
  fun (x_0 : double) (M : double) ->
@@ -606,50 +551,33 @@ let sign_ensures_default =
    begin
      (let __retres = ref (any_double void) in
      try
-      (let jessie_20 = begin
-                         (if ((ge_double x_0) M)
-                         then
-                          (let jessie_14 = (C_2:
-                                           begin
-                                             (let jessie_13 = (__retres := 
-                                                               (C_1:
-                                                               (double_of_real_exact 1.0))) in
-                                             void);
-                                            (raise (Return_label_exc void))
-                                           end) in
-                          void)
-                         else void);
-                        (if ((le_double x_0) (C_5: (JC_17: (neg_double M))))
-                        then
-                         (let jessie_17 = (C_4:
-                                          begin
-                                            (let jessie_16 = (__retres := 
-                                                              (C_3:
-                                                              ((double_of_real_safe nearest_even) 
-                                                               (real_of_int 
-                                                                (neg_int (1)))))) in
-                                            void);
-                                           (raise (Return_label_exc void))
-                                          end) in
-                         void)
-                        else void);
-                        (C_7:
-                        begin
-                          (let jessie_19 = (__retres := (C_6:
-                                                        (double_of_real_exact 0.0))) in
-                          void);
-                         (raise (Return_label_exc void))
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_20 =
+      begin
+        (if ((ge_double x_0) M)
+        then
+         (let jessie_14 =
+         (C_2:
+         begin
+           (let jessie_13 =
+           (__retres := (C_1: (double_of_real_exact 1.0))) in void);
+          (raise (Return_label_exc void)) end) in void) else void);
+       (if ((le_double x_0) (C_5: (JC_17: (neg_double M))))
+       then
+        (let jessie_17 =
+        (C_4:
+        begin
+          (let jessie_16 =
+          (__retres := (C_3:
+                       ((double_of_real_safe nearest_even) (real_of_int 
+                                                            (neg_int (1)))))) in
+          void); (raise (Return_label_exc void)) end) in void) else void);
+       (C_7:
+       begin
+         (let jessie_19 = (__retres := (C_6: (double_of_real_exact 0.0))) in
+         void); (raise (Return_label_exc void)) end) end in void) with
       Return_label_exc jessie_1 ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+    absurd  end with Return -> !return end))
   { (JC_11:
     (neq_real(double_value(result), 0.0) ->
      eq_real(double_value(result), real_of_int(signr(double_exact(x_0)))))) }
@@ -665,52 +593,32 @@ let sign_safety =
    begin
      (let __retres = ref (any_double void) in
      try
-      (let jessie_10 = begin
-                         (if ((ge_double x_0) M)
-                         then
-                          (let jessie_4 = (C_2:
-                                          begin
-                                            (let jessie_3 = (__retres := 
-                                                             (C_1:
-                                                             (double_of_real_exact 1.0))) in
-                                            void);
-                                           (raise (Return_label_exc void))
-                                          end) in
-                          void)
-                         else void);
-                        (if ((le_double x_0) (C_5: (JC_15: (neg_double M))))
-                        then
-                         (let jessie_7 = (C_4:
-                                         begin
-                                           (let jessie_6 = (__retres := 
-                                                            (C_3:
-                                                            (JC_16:
-                                                            ((double_of_real nearest_even) 
-                                                             (real_of_int 
-                                                              (neg_int (1))))))) in
-                                           void);
-                                          (raise (Return_label_exc void))
-                                         end) in
-                         void)
-                        else void);
-                        (C_7:
-                        begin
-                          (let jessie_9 = (__retres := (C_6:
-                                                       (double_of_real_exact 0.0))) in
-                          void);
-                         (raise (Return_label_exc void))
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_10 =
+      begin
+        (if ((ge_double x_0) M)
+        then
+         (let jessie_4 =
+         (C_2:
+         begin
+           (let jessie_3 = (__retres := (C_1: (double_of_real_exact 1.0))) in
+           void); (raise (Return_label_exc void)) end) in void) else void);
+       (if ((le_double x_0) (C_5: (JC_15: (neg_double M))))
+       then
+        (let jessie_7 =
+        (C_4:
+        begin
+          (let jessie_6 =
+          (__retres := (C_3:
+                       (JC_16:
+                       ((double_of_real nearest_even) (real_of_int (neg_int (1))))))) in
+          void); (raise (Return_label_exc void)) end) in void) else void);
+       (C_7:
+       begin
+         (let jessie_9 = (__retres := (C_6: (double_of_real_exact 0.0))) in
+         void); (raise (Return_label_exc void)) end) end in void) with
       Return_label_exc jessie_1 ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_13: M22_value) }
+    absurd  end with Return -> !return end)) { (JC_13: M22_value) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-epsline.jessie --quiet -f fp-epsline.makefile project

@@ -135,13 +135,13 @@ public final class APDU{
    * The APDU will use the buffer byte[]
    * to store data for input and output.
    */
-    private /* @  spec_public @*/ byte[] buffer;
+    private /* spec_public @*/ byte[] buffer;
 
     // Nicolas (for SCID.java)
     //@ invariant buffer_inv: buffer.length >= 37;
 
     // Added by Xavier
-    /* @ invariant 
+    /*  invariant 
       @   (buffer.length > 36) 
       @   && 
       @   (\forall short i; 0 <= i && i < buffer.length ; 

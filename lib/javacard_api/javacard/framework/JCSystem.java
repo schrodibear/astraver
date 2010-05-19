@@ -110,12 +110,12 @@ public final class JCSystem
      * @see #makeTransientObjectArray(short, byte)
      */
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   requires true;
       @   assignable \nothing;
       @   ensures true;
       @*/
-    public static native /* @ pure @*/ byte isTransient(Object theObj);
+    public static native /*  pure @*/ byte isTransient(Object theObj);
 
     /**
      * Create a transient boolean array with the specified array length.
@@ -129,7 +129,7 @@ public final class JCSystem
      * </ul>
      */
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   ensures true;
       @*/
 
@@ -165,7 +165,7 @@ public final class JCSystem
      * </ul>
      */
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   ensures true;
       @*/
     public static native short[] makeTransientShortArray(short length, byte event) throws SystemException;
@@ -182,7 +182,7 @@ public final class JCSystem
      * </ul>
      */
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   ensures true;
       @*/
 
@@ -231,7 +231,7 @@ public final class JCSystem
      * or if <code>offset</code> or <code>length</code> are out of range.
      */
 
-    /* @ // Claude Marche', borrowed from LOOP project specification
+    /*  // Claude Marche', borrowed from LOOP project specification
       @ public behavior 
       @    requires true;
       @  assignable \nothing; 
@@ -247,7 +247,7 @@ public final class JCSystem
       @              buffer != null &&
       @              (offset < 0 || length < 0 || offset+length > buffer.length);
       @*/
-    public static /* @ pure @*/ AID lookupAID( byte[] buffer, short offset, byte length )
+    public static /*  pure @*/ AID lookupAID( byte[] buffer, short offset, byte length )
     throws NullPointerException,          // not in original source
            ArrayIndexOutOfBoundsException // not in original source
     {
@@ -267,7 +267,7 @@ public final class JCSystem
 
     // specs to avoid Why error msg 'Exception TransactionException_exc cannot be raised' (Nicolas)
 
-    /* @ behavior normal:
+    /*  behavior normal:
       @   ensures true;
       @ behavior exc:
       @   signals (TransactionException) true;
@@ -293,7 +293,7 @@ public final class JCSystem
      * @see #commitTransaction()
      */
 
-    /* @ behavior normal:
+    /*  behavior normal:
       @   ensures true;
       @ behavior exc:
       @   signals (TransactionException) true;
@@ -312,7 +312,7 @@ public final class JCSystem
      * @see #abortTransaction()
      */
 
-    /* @ behavior normal:
+    /*  behavior normal:
       @   ensures true;
       @ behavior exc:
       @   signals (TransactionException) true;
@@ -326,11 +326,11 @@ public final class JCSystem
      * @return 1 if transaction in progress, 0 if not.
      */
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   ensures true;
       @*/
 
-    public static native /* @ pure @*/ byte getTransactionDepth();
+    public static native /*  pure @*/ byte getTransactionDepth();
 
     /**
      * Returns the number of bytes left in the commit buffer.

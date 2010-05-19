@@ -487,6 +487,10 @@ gui stat: SideEffects.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/SideEffects_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include SideEffects.depend
 
 depend: coq/SideEffects_why.v
@@ -1113,38 +1117,31 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_SideEffects(p:Object pointer,
- a:int,
+predicate left_valid_struct_SideEffects(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_intM(p:Object pointer,
- a:int,
+predicate left_valid_struct_intM(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -1155,197 +1152,140 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_SideEffects(p:Object pointer,
- b:int,
+predicate right_valid_struct_SideEffects(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_intM(p:Object pointer,
- b:int,
+predicate right_valid_struct_intM(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_SideEffects(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_SideEffects(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_SideEffects(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_SideEffects(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_intM(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_intM(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_SideEffects(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_SideEffects(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1684,32 +1624,28 @@ parameter non_null_Object :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_30:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
 parameter non_null_Object_requires :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_30:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
 parameter non_null_intM :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
 parameter non_null_intM_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
 let SideEffects_m1_ensures_default =
@@ -1724,52 +1660,42 @@ let SideEffects_m1_ensures_default =
      (let i = ref (K_36: (0)) in
      (K_3:
      begin
-       (let jessie_45 = (let jessie_38 = (1) in
-                        (let jessie_41 = ((shift t) (K_2:
-                                                    (let jessie_1 = !i in
-                                                    begin
-                                                      (let jessie_44 = 
-                                                      (i := ((add_int jessie_1) (1))) in
-                                                      void);
-                                                     jessie_1
-                                                    end))) in
-                        (((safe_upd_ intM_intP) jessie_41) jessie_38))) in
-       void);
+       (let jessie_45 =
+       (let jessie_38 = (1) in
+       (let jessie_41 =
+       ((shift t) (K_2:
+                  (let jessie_1 = !i in
+                  begin
+                    (let jessie_44 = (i := ((add_int jessie_1) (1))) in void);
+                   jessie_1 end))) in
+       (((safe_upd_ intM_intP) jessie_41) jessie_38))) in void);
       (K_7:
       begin
         (assert
         { (JC_62:
           ((JC_60: eq_int(select(intM_intP, shift(t, (0))), (1)))
-          and (JC_61: eq_int(i, (1))))) };
-        void);
+          and (JC_61: eq_int(i, (1))))) }; void);
        (K_9:
        begin
-         (let jessie_52 = (let jessie_47 = (2) in
-                          (let jessie_50 = ((shift t) (K_8:
-                                                      begin
-                                                        (i := ((add_int !i) (1)));
-                                                       !i
-                                                      end)) in
-                          (((safe_upd_ intM_intP) jessie_50) jessie_47))) in
-         void);
+         (let jessie_52 =
+         (let jessie_47 = (2) in
+         (let jessie_50 =
+         ((shift t) (K_8: begin   (i := ((add_int !i) (1))); !i end)) in
+         (((safe_upd_ intM_intP) jessie_50) jessie_47))) in void);
         (K_15:
         begin
           (assert
           { (JC_66:
             ((JC_63: eq_int(select(intM_intP, shift(t, (0))), (1)))
             and ((JC_64: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                and (JC_65: eq_int(i, (2)))))) };
-          void);
+                and (JC_65: eq_int(i, (2)))))) }; void);
          (K_17:
          begin
-           (let jessie_59 = (let jessie_54 = (3) in
-                            (let jessie_57 = ((shift t) (K_16:
-                                                        begin
-                                                          (i := ((sub_int !i) (1)));
-                                                         !i
-                                                        end)) in
-                            (((safe_upd_ intM_intP) jessie_57) jessie_54))) in
-           void);
+           (let jessie_59 =
+           (let jessie_54 = (3) in
+           (let jessie_57 =
+           ((shift t) (K_16: begin   (i := ((sub_int !i) (1))); !i end)) in
+           (((safe_upd_ intM_intP) jessie_57) jessie_54))) in void);
           (K_25:
           begin
             (assert
@@ -1777,41 +1703,26 @@ let SideEffects_m1_ensures_default =
               ((JC_67: eq_int(select(intM_intP, shift(t, (0))), (1)))
               and ((JC_68: eq_int(select(intM_intP, shift(t, (2))), (2)))
                   and ((JC_69: eq_int(select(intM_intP, shift(t, (1))), (3)))
-                      and (JC_70: eq_int(i, (1))))))) };
-            void);
+                      and (JC_70: eq_int(i, (1))))))) }; void);
            (K_27:
            begin
-             (let jessie_68 = (let jessie_61 = (4) in
-                              (let jessie_64 = ((shift t) (K_26:
-                                                          (let jessie_2 = !i in
-                                                          begin
-                                                            (let jessie_67 = 
-                                                            (i := ((sub_int jessie_2) (1))) in
-                                                            void);
-                                                           jessie_2
-                                                          end))) in
-                              (((safe_upd_ intM_intP) jessie_64) jessie_61))) in
-             void);
+             (let jessie_68 =
+             (let jessie_61 = (4) in
+             (let jessie_64 =
+             ((shift t) (K_26:
+                        (let jessie_2 = !i in
+                        begin
+                          (let jessie_67 = (i := ((sub_int jessie_2) (1))) in
+                          void); jessie_2 end))) in
+             (((safe_upd_ intM_intP) jessie_64) jessie_61))) in void);
             (K_35:
             (assert
             { (JC_76:
               ((JC_72: eq_int(select(intM_intP, shift(t, (0))), (1)))
               and ((JC_73: eq_int(select(intM_intP, shift(t, (2))), (2)))
                   and ((JC_74: eq_int(select(intM_intP, shift(t, (1))), (4)))
-                      and (JC_75: eq_int(i, (0))))))) };
-            void))
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+                      and (JC_75: eq_int(i, (0))))))) }; void)) end) end) end)
+        end) end) end) end)); (raise Return) end with Return -> void end)
   { (JC_35: true) }
 
 let SideEffects_m1_safety =
@@ -1826,18 +1737,18 @@ let SideEffects_m1_safety =
      (let i = ref (K_36: (0)) in
      (K_3:
      begin
-       (let jessie_12 = (let jessie_5 = (1) in
-                        (let jessie_6 = t in
-                        (let jessie_7 = (K_2:
-                                        (let jessie_1 = !i in
-                                        begin
-                                          (let jessie_11 = (i := ((add_int jessie_1) (1))) in
-                                          void);
-                                         jessie_1
-                                        end)) in
-                        (let jessie_8 = ((shift jessie_6) jessie_7) in
-                        (JC_39:
-                        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_6) jessie_7) jessie_5)))))) in
+       (let jessie_12 =
+       (let jessie_5 = (1) in
+       (let jessie_6 = t in
+       (let jessie_7 =
+       (K_2:
+       (let jessie_1 = !i in
+       begin
+         (let jessie_11 = (i := ((add_int jessie_1) (1))) in void); jessie_1
+       end)) in
+       (let jessie_8 = ((shift jessie_6) jessie_7) in
+       (JC_39:
+       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_6) jessie_7) jessie_5)))))) in
        void);
       (K_7:
       begin
@@ -1847,15 +1758,13 @@ let SideEffects_m1_safety =
             and (JC_41: eq_int(i, (1))))) } ];
        (K_9:
        begin
-         (let jessie_19 = (let jessie_14 = (2) in
-                          (let jessie_15 = t in
-                          (let jessie_16 = (K_8:
-                                           begin
-                                             (i := ((add_int !i) (1))); !i
-                                           end) in
-                          (let jessie_17 = ((shift jessie_15) jessie_16) in
-                          (JC_43:
-                          (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) jessie_14)))))) in
+         (let jessie_19 =
+         (let jessie_14 = (2) in
+         (let jessie_15 = t in
+         (let jessie_16 = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+         (let jessie_17 = ((shift jessie_15) jessie_16) in
+         (JC_43:
+         (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) jessie_14)))))) in
          void);
         (K_15:
         begin
@@ -1866,15 +1775,14 @@ let SideEffects_m1_safety =
                   and (JC_46: eq_int(i, (2)))))) } ];
          (K_17:
          begin
-           (let jessie_26 = (let jessie_21 = (3) in
-                            (let jessie_22 = t in
-                            (let jessie_23 = (K_16:
-                                             begin
-                                               (i := ((sub_int !i) (1))); !i
-                                             end) in
-                            (let jessie_24 = ((shift jessie_22) jessie_23) in
-                            (JC_48:
-                            (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_22) jessie_23) jessie_21)))))) in
+           (let jessie_26 =
+           (let jessie_21 = (3) in
+           (let jessie_22 = t in
+           (let jessie_23 =
+           (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+           (let jessie_24 = ((shift jessie_22) jessie_23) in
+           (JC_48:
+           (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_22) jessie_23) jessie_21)))))) in
            void);
           (K_25:
           begin
@@ -1887,19 +1795,18 @@ let SideEffects_m1_safety =
                         and (JC_52: eq_int(i, (1))))))) } ];
            (K_27:
            begin
-             (let jessie_35 = (let jessie_28 = (4) in
-                              (let jessie_29 = t in
-                              (let jessie_30 = (K_26:
-                                               (let jessie_2 = !i in
-                                               begin
-                                                 (let jessie_34 = (i := 
-                                                                   ((sub_int jessie_2) (1))) in
-                                                 void);
-                                                jessie_2
-                                               end)) in
-                              (let jessie_31 = ((shift jessie_29) jessie_30) in
-                              (JC_54:
-                              (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_29) jessie_30) jessie_28)))))) in
+             (let jessie_35 =
+             (let jessie_28 = (4) in
+             (let jessie_29 = t in
+             (let jessie_30 =
+             (K_26:
+             (let jessie_2 = !i in
+             begin
+               (let jessie_34 = (i := ((sub_int jessie_2) (1))) in void);
+              jessie_2 end)) in
+             (let jessie_31 = ((shift jessie_29) jessie_30) in
+             (JC_54:
+             (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_29) jessie_30) jessie_28)))))) in
              void);
             (K_35:
             [ { } unit reads i,intM_intP
@@ -1908,19 +1815,8 @@ let SideEffects_m1_safety =
                 and ((JC_56: eq_int(select(intM_intP, shift(t, (2))), (2)))
                     and ((JC_57:
                          eq_int(select(intM_intP, shift(t, (1))), (4)))
-                        and (JC_58: eq_int(i, (0))))))) } ])
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+                        and (JC_58: eq_int(i, (0))))))) } ]) end) end) end)
+        end) end) end) end)); (raise Return) end with Return -> void end)
   { true }
 
 let cons_SideEffects_ensures_default =

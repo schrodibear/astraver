@@ -10,7 +10,7 @@ package java.lang;
 
 public class IndexOutOfBoundsException extends RuntimeException { 
 
-  /* @ public normal_behavior
+  /*  public normal_behavior
          requires true;
        assignable \nothing;
           ensures true;

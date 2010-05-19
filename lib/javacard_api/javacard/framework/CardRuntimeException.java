@@ -45,7 +45,7 @@ public class CardRuntimeException extends RuntimeException {
   private static CardRuntimeException systemInstance;
 
   // CardRuntimeException reason code
-  private /* @ spec_public */ short reason;
+  private /*  spec_public */ short reason;
 
   /**
    * Construct a CardRuntimeException instance with the specified reason.
@@ -64,7 +64,7 @@ public class CardRuntimeException extends RuntimeException {
    */
 
     
-    public /* @ pure @*/ short getReason() {
+    public /*  pure @*/ short getReason() {
 	return reason;
     }
 

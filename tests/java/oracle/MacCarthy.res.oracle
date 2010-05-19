@@ -418,6 +418,10 @@ gui stat: MacCarthy.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/MacCarthy_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include MacCarthy.depend
 
 depend: coq/MacCarthy_why.v
@@ -1410,33 +1414,27 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_MacCarthy(p:Object pointer,
- a:int,
+predicate left_valid_struct_MacCarthy(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -1447,174 +1445,124 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_MacCarthy(p:Object pointer,
- b:int,
+predicate right_valid_struct_MacCarthy(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_MacCarthy(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_MacCarthy(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_MacCarthy(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_MacCarthy(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_MacCarthy(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_MacCarthy(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1975,16 +1923,14 @@ parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 let MacCarthy_f91_ensures_default =
@@ -1998,19 +1944,13 @@ let MacCarthy_f91_ensures_default =
      then
       begin
         (return := (K_7:
-                   (let jessie_6 = (K_6:
-                                   (let jessie_7 = (K_5: ((add_int n) (11))) in
-                                   (JC_31: (MacCarthy_f91 jessie_7)))) in
-                   (JC_32: (MacCarthy_f91 jessie_6)))));
-       (raise Return)
-      end
+                   (let jessie_6 =
+                   (K_6:
+                   (let jessie_7 = (K_5: ((add_int n) (11))) in
+                   (JC_31: (MacCarthy_f91 jessie_7)))) in
+                   (JC_32: (MacCarthy_f91 jessie_6))))); (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_15: true) }
+    absurd  end with Return -> !return end)) { (JC_15: true) }
 
 let MacCarthy_f91_ensures_greater_than_100 =
  fun (n : int) ->
@@ -2023,19 +1963,13 @@ let MacCarthy_f91_ensures_greater_than_100 =
      then
       begin
         (return := (K_7:
-                   (let jessie_14 = (K_6:
-                                    (let jessie_15 = (K_5:
-                                                     ((add_int n) (11))) in
-                                    (JC_35: (MacCarthy_f91 jessie_15)))) in
-                   (JC_36: (MacCarthy_f91 jessie_14)))));
-       (raise Return)
-      end
+                   (let jessie_14 =
+                   (K_6:
+                   (let jessie_15 = (K_5: ((add_int n) (11))) in
+                   (JC_35: (MacCarthy_f91 jessie_15)))) in
+                   (JC_36: (MacCarthy_f91 jessie_14))))); (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+    absurd  end with Return -> !return end))
   { (JC_21: eq_int(result, sub_int(n, (10)))) }
 
 let MacCarthy_f91_ensures_less_than_101 =
@@ -2049,19 +1983,13 @@ let MacCarthy_f91_ensures_less_than_101 =
      then
       begin
         (return := (K_7:
-                   (let jessie_10 = (K_6:
-                                    (let jessie_11 = (K_5:
-                                                     ((add_int n) (11))) in
-                                    (JC_33: (MacCarthy_f91 jessie_11)))) in
-                   (JC_34: (MacCarthy_f91 jessie_10)))));
-       (raise Return)
-      end
+                   (let jessie_10 =
+                   (K_6:
+                   (let jessie_11 = (K_5: ((add_int n) (11))) in
+                   (JC_33: (MacCarthy_f91 jessie_11)))) in
+                   (JC_34: (MacCarthy_f91 jessie_10))))); (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+    absurd  end with Return -> !return end))
   { (JC_19: eq_int(result, (91))) }
 
 let MacCarthy_f91_safety =
@@ -2075,28 +2003,22 @@ let MacCarthy_f91_safety =
      then
       begin
         (return := (K_7:
-                   (let jessie_2 = (K_6:
-                                   (let jessie_3 = (K_5: ((add_int n) (11))) in
-                                   (JC_26:
-                                   (assert
-                                   { zwf_zero((JC_25 : sub_int((101),
-                                                       jessie_3)),
-                                     (JC_24 : sub_int((101), n))) };
-                                   (JC_23: (MacCarthy_f91_requires jessie_3)))))) in
+                   (let jessie_2 =
+                   (K_6:
+                   (let jessie_3 = (K_5: ((add_int n) (11))) in
+                   (JC_26:
+                   (assert
+                   { zwf_zero((JC_25 : sub_int((101), jessie_3)),
+                     (JC_24 : sub_int((101), n))) };
+                   (JC_23: (MacCarthy_f91_requires jessie_3)))))) in
                    (JC_30:
                    (assert
                    { zwf_zero((JC_29 : sub_int((101), jessie_2)),
                      (JC_28 : sub_int((101), n))) };
                    (JC_27: (MacCarthy_f91_requires jessie_2)))))));
-       (raise Return)
-      end
+       (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    absurd  end with Return -> !return end)) { true }
 
 let cons_MacCarthy_ensures_default =
  fun (this_1 : Object pointer) ->
@@ -2131,19 +2053,19 @@ why --project [...] why/MacCarthy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/MacCarthy_po5.why">
-      <location file = "why/MacCarthy.why" line = "738" begin = "37" end = "202"/>
+      <location file = "why/MacCarthy.why" line = "663" begin = "21" end = "115"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/MacCarthy_po6.why">
-      <location file = "why/MacCarthy.why" line = "738" begin = "37" end = "202"/>
+      <location file = "why/MacCarthy.why" line = "663" begin = "21" end = "115"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/MacCarthy_po7.why">
-      <location file = "why/MacCarthy.why" line = "744" begin = "21" end = "115"/>
+      <location file = "why/MacCarthy.why" line = "668" begin = "21" end = "115"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/MacCarthy_po8.why">
-      <location file = "why/MacCarthy.why" line = "744" begin = "21" end = "115"/>
+      <location file = "why/MacCarthy.why" line = "668" begin = "21" end = "115"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -4106,14 +4028,14 @@ why -simplify [...] why/MacCarthy.why
 (IMPLIES (> n 100)
 (FORALL (return) (IMPLIES (EQ return (- n 10)) (EQ return 91))))))
 
-;; MacCarthy_f91_safety_po_1, File "why/MacCarthy.why", line 738, characters 37-202
+;; MacCarthy_f91_safety_po_1, File "why/MacCarthy.why", line 663, characters 21-115
 (FORALL (n) (IMPLIES TRUE (IMPLIES (<= n 100) (<= 0 (- 101 n)))))
 
-;; MacCarthy_f91_safety_po_2, File "why/MacCarthy.why", line 738, characters 37-202
+;; MacCarthy_f91_safety_po_2, File "why/MacCarthy.why", line 663, characters 21-115
 (FORALL (n)
 (IMPLIES TRUE (IMPLIES (<= n 100) (< (- 101 (+ n 11)) (- 101 n)))))
 
-;; MacCarthy_f91_safety_po_3, File "why/MacCarthy.why", line 744, characters 21-115
+;; MacCarthy_f91_safety_po_3, File "why/MacCarthy.why", line 668, characters 21-115
 (FORALL (n)
 (IMPLIES TRUE
 (IMPLIES (<= n 100)
@@ -4123,7 +4045,7 @@ why -simplify [...] why/MacCarthy.why
          (IMPLIES (<= (+ n 11) 100) (EQ result 91)))
 (<= 0 (- 101 n))))))))
 
-;; MacCarthy_f91_safety_po_4, File "why/MacCarthy.why", line 744, characters 21-115
+;; MacCarthy_f91_safety_po_4, File "why/MacCarthy.why", line 668, characters 21-115
 (FORALL (n)
 (IMPLIES TRUE
 (IMPLIES (<= n 100)

@@ -39,7 +39,7 @@ package java.lang;
    */
 public class Object {
 
-  /* @ public normal_behavior 
+  /*  public normal_behavior 
          requires true;
        assignable \nothing;
           ensures true;
@@ -77,11 +77,11 @@ public class Object {
   * @return <code>true</code> if this object is the same as the obj argument; <code>false</code> otherwise.
   */
 
-  /* @ public normal_behavior 
+  /*  public normal_behavior 
     @  requires true;
     @  assignable \nothing;
     @  ensures \result <==> this==obj;
     @*/
-    public /* @ pure @*/ boolean equals(Object obj){ return (this==obj); }
+    public /* pure @*/ boolean equals(Object obj){ return (this==obj); }
 
 }

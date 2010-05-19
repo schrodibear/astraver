@@ -76,7 +76,7 @@ public class Purse {
     }
 
 
-    /*@ requires p != null && p != this && s >= 0;
+    /*@ requires p != null && s >= 0;
       @ behavior transfer_ok:
       @   ensures 
       @       balance == \old(balance) - s &&

@@ -80,6 +80,7 @@ let single_term rresult t =
 	     rem
        | JCTmatch(_, []) ->
 	   ()
+       | JCTlet _ -> ()
        | JCTapp app ->
 	   let li = app.jc_app_fun in
 	   let param_regions,result_region =
@@ -365,8 +366,8 @@ let regionalize_assertion a assoc =
       | JCTconst _ | JCTvar _ | JCTshift _ 
       | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
       | JCTaddress _ | JCTbase_block _
-      | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
-	  t
+      | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ | JCTlet _ -> t
+
     in
     try new term_with ~region:(RegionList.assoc t#region assoc) t
     with Not_found -> t

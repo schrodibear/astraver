@@ -162,6 +162,9 @@ let rec term fmt t =
 	fprintf fmt "@[(%s %a)@]" (unary_op op) term t1
     | JCTif (t1,t2,t3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
+    | JCTlet (vi,t1,t2) -> 
+	fprintf fmt "@[(let %s = %a in %a)@]" 
+          vi.jc_var_info_name term t1 term t2 
     | JCTcast (t, _, si)
     | JCTbitwise_cast (t, _, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name

@@ -90,7 +90,7 @@ public class Util
      * - if copying would cause the commit capacity to be exceeded.
      * @see javacard.framework.JCSystem#getUnusedCommitCapacity()
      */
-    /* @ normal_behavior
+    /*  normal_behavior
       @  requires src != null &&  srcOff >= 0 &&
       @              srcOff+length <= src.length &&
       @            dest != null && destOff >= 0 &&
@@ -143,7 +143,7 @@ public class Util
      * @see javacard.framework.JCSystem#getUnusedCommitCapacity()
      */
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   requires src != null;
       @   requires srcOff >= 0;
       @   requires srcOff + length <= src.length;
@@ -222,7 +222,7 @@ public class Util
      */
     // TEMP // This method might eventually be a native method
 
-    /* @ public normal_behavior
+    /*  public normal_behavior
       @   requires src != null;
       @   requires srcOff >= 0;
       @   requires srcOff + length <= src.length;
@@ -249,7 +249,7 @@ public class Util
       @                    (\forall short i; 0 <= i && i < j; src[srcOff + i] == dest[destOff + i]));
       @*/
 
-    public static final /* @ pure @*/ native byte arrayCompare(byte[] src, short srcOff, byte[] dest, short destOff, short length)
+    public static final /*  pure @*/ native byte arrayCompare(byte[] src, short srcOff, byte[] dest, short destOff, short length)
     throws ArrayIndexOutOfBoundsException, NullPointerException;
 
     /**
@@ -271,18 +271,18 @@ public class Util
      */
 
     // Added by Xavier to avoid & in specs
-    /* @ normal_behavior
+    /*  normal_behavior
       @// requires -128 <= b  && b <= 127 ;
       @ ensures (b >= 0 ==> \result==b) && (b < 0 ==> \result==b+256) ;
       @*/
-    public static /* @ pure @*/ short k_unsigned(byte b){}
+    public static /*  pure @*/ short k_unsigned(byte b){}
 
     // Is this ensures clause necessary ?
     //    ensures     (\result >> 8) == (int)bArray[bOff] &&
     //    (\result & 0x00ff) == (k_unsigned(bArray[bOff+1]));
       
 
-    /* @ normal_behavior
+    /*  normal_behavior
       @  requires bArray != null && 
       @           bOff >= 0 &&
       @           bArray.length - 1 > bOff;
@@ -290,7 +290,7 @@ public class Util
       @     ensures \result == 256 * bArray[bOff]
       @                          + (k_unsigned(bArray[bOff+1]));
       @*/
-    public static final /* @ pure @*/ short getShort( byte[] bArray, short bOff )
+    public static final /*  pure @*/ short getShort( byte[] bArray, short bOff )
     {
         return (short)(( (short)(bArray[bOff]) << 8 ) +
                        ( (short)(bArray[(short)(bOff+1)]) & 0xFF));

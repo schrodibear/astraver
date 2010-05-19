@@ -325,20 +325,17 @@ axiom div4_not_mod4_as_axiom :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic integer_of_uint32: uint32 -> int
 
-predicate eq_uint32(x:uint32,
- y:uint32) =
+predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 logic integer_of_uint8: uint8 -> int
 
-predicate eq_uint8(x:uint8,
- y:uint8) =
+predicate eq_uint8(x:uint8, y:uint8) =
  eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int8_of_integer: int -> int8
@@ -355,23 +352,19 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_unsigned_char_P(p:unsigned_char_P pointer,
- a:int,
+predicate left_valid_struct_unsigned_char_P(p:unsigned_char_P pointer, a:int,
  unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
  (offset_min(unsigned_char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_unsigned_long_P(p:unsigned_long_P pointer,
- a:int,
+predicate left_valid_struct_unsigned_long_P(p:unsigned_long_P pointer, a:int,
  unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
  (offset_min(unsigned_long_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -395,78 +388,58 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
 predicate right_valid_struct_unsigned_char_P(p:unsigned_char_P pointer,
- b:int,
- unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
+ b:int, unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
  (offset_max(unsigned_char_P_alloc_table, p) >= b)
 
 predicate right_valid_struct_unsigned_long_P(p:unsigned_long_P pointer,
- b:int,
- unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
+ b:int, unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
  (offset_max(unsigned_long_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_unsigned_char_P(p:unsigned_char_P pointer,
- a:int,
- b:int,
- unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
+predicate strict_valid_root_unsigned_char_P(p:unsigned_char_P pointer, a:int,
+ b:int, unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
  ((offset_min(unsigned_char_P_alloc_table, p) = a)
  and (offset_max(unsigned_char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_unsigned_long_P(p:unsigned_long_P pointer,
- a:int,
- b:int,
- unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
+predicate strict_valid_root_unsigned_long_P(p:unsigned_long_P pointer, a:int,
+ b:int, unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
  ((offset_min(unsigned_long_P_alloc_table, p) = a)
  and (offset_max(unsigned_long_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_char_P(p:unsigned_char_P pointer,
- a:int,
- b:int,
- unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
+ a:int, b:int, unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
  ((offset_min(unsigned_char_P_alloc_table, p) = a)
  and (offset_max(unsigned_char_P_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_long_P(p:unsigned_long_P pointer,
- a:int,
- b:int,
- unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
+ a:int, b:int, unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
  ((offset_min(unsigned_long_P_alloc_table, p) = a)
  and (offset_max(unsigned_long_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
@@ -540,86 +513,62 @@ axiom unsigned_long_P_tags :
   (forall unsigned_long_P_tag_table:unsigned_long_P tag_table.
    instanceof(unsigned_long_P_tag_table, x, unsigned_long_P_tag)))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_unsigned_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_unsigned_char_P(p:unit pointer, a:int,
+ b:int, bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_unsigned_long_P(p:unit pointer, a:int,
+ b:int, bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_unsigned_long_P(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_unsigned_char_P(p:unsigned_char_P pointer,
- a:int,
- b:int,
+predicate valid_root_unsigned_char_P(p:unsigned_char_P pointer, a:int, b:int,
  unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
  ((offset_min(unsigned_char_P_alloc_table, p) <= a)
  and (offset_max(unsigned_char_P_alloc_table, p) >= b))
 
-predicate valid_root_unsigned_long_P(p:unsigned_long_P pointer,
- a:int,
- b:int,
+predicate valid_root_unsigned_long_P(p:unsigned_long_P pointer, a:int, b:int,
  unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
  ((offset_min(unsigned_long_P_alloc_table, p) <= a)
  and (offset_max(unsigned_long_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_unsigned_char_P(p:unsigned_char_P pointer,
- a:int,
- b:int,
- unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
+predicate valid_struct_unsigned_char_P(p:unsigned_char_P pointer, a:int,
+ b:int, unsigned_char_P_alloc_table:unsigned_char_P alloc_table) =
  ((offset_min(unsigned_char_P_alloc_table, p) <= a)
  and (offset_max(unsigned_char_P_alloc_table, p) >= b))
 
-predicate valid_struct_unsigned_long_P(p:unsigned_long_P pointer,
- a:int,
- b:int,
- unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
+predicate valid_struct_unsigned_long_P(p:unsigned_long_P pointer, a:int,
+ b:int, unsigned_long_P_alloc_table:unsigned_long_P alloc_table) =
  ((offset_min(unsigned_long_P_alloc_table, p) <= a)
  and (offset_max(unsigned_long_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -1252,118 +1201,97 @@ let memset_burst4_ensures_aligned_data =
         void);
        (if ((ge_int_ (integer_of_uint32 NbOct)) (4))
        then
-        (let jessie_163 = (C_47:
-                          begin
-                            (let jessie_152 = (align := (C_46:
-                                                        (safe_uint32_of_integer_ 
-                                                         (C_45:
-                                                         ((sub_int (4)) 
-                                                          (integer_of_uint32 addr_mod4)))))) in
-                            void);
-                           (if ((lt_int_ (integer_of_uint32 !align)) (4))
-                           then
-                            (let jessie_159 = (C_50:
-                                              begin
-                                                (let unsigned_char_P_Adresse_1_3_alloc_table = ref 
-                                                (any_alloc_table void) in
-                                                (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref 
-                                                (any_memory void) in
-                                                (let jessie_157 = begin
-                                                                    ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                                                                   ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                                                                   (let jessie_156 = !s in
-                                                                   (let jessie_155 = ValOct_0 in
-                                                                   (let jessie_154 = !index_oct in
-                                                                   (let jessie_153 = 
-                                                                   (C_49:
+        (let jessie_163 =
+        (C_47:
+        begin
+          (let jessie_152 =
+          (align := (C_46:
+                    (safe_uint32_of_integer_ (C_45:
+                                             ((sub_int (4)) (integer_of_uint32 addr_mod4)))))) in
+          void);
+         (if ((lt_int_ (integer_of_uint32 !align)) (4))
+         then
+          (let jessie_159 =
+          (C_50:
+          begin
+            (let unsigned_char_P_Adresse_1_3_alloc_table =
+            ref (any_alloc_table void) in
+            (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+            ref (any_memory void) in
+            (let jessie_157 =
+            begin
+              ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+             ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+             (let jessie_156 = !s in
+             (let jessie_155 = ValOct_0 in
+             (let jessie_154 = !index_oct in
+             (let jessie_153 =
+             (C_49:
+             (safe_uint32_of_integer_ (C_48:
+                                      ((sub_int (integer_of_uint32 !align)) (1))))) in
+             (JC_125:
+             ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_156)) jessie_155) jessie_154) jessie_153) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+            end in
+            begin
+              ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
+             jessie_157 end))); void;
+           (C_54:
+           begin
+             (index_oct := (C_53:
+                           (safe_uint32_of_integer_ (C_52:
+                                                    ((add_int (integer_of_uint32 !index_oct)) 
+                                                     (integer_of_uint32 !align))))));
+            !index_oct end) end) in void) else void);
+         (C_59:
+         begin
+           (let jessie_161 =
+           (nb_mots_alignes := (C_58:
+                               (safe_uint32_of_integer_ (C_57:
+                                                        (JC_127:
+                                                        ((div_int (integer_of_uint32 
+                                                                   (C_56:
                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_48:
-                                                                    ((sub_int 
-                                                                    (integer_of_uint32 !align)) (1))))) in
-                                                                   (JC_125:
-                                                                   ((((((memset_uchar 
-                                                                    (unsigned_char_P_of_pointer_address jessie_156)) jessie_155) jessie_154) jessie_153) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                                                                  end in
-                                                begin
-                                                  ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-                                                 jessie_157
-                                                end)));
-                                               void;
-                                               (C_54:
-                                               begin
-                                                 (index_oct := (C_53:
-                                                               (safe_uint32_of_integer_ 
-                                                                (C_52:
-                                                                ((add_int 
-                                                                  (integer_of_uint32 !index_oct)) 
-                                                                 (integer_of_uint32 !align))))));
-                                                !index_oct
-                                               end)
-                                              end) in
-                            void)
-                           else void);
-                           (C_59:
-                           begin
-                             (let jessie_161 = (nb_mots_alignes := (C_58:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_57:
-                                                                    (JC_127:
-                                                                    ((div_int 
-                                                                    (integer_of_uint32 
-                                                                    (C_56:
-                                                                    (safe_uint32_of_integer_ 
                                                                     (C_55:
                                                                     ((sub_int 
                                                                     (integer_of_uint32 NbOct)) 
                                                                     (integer_of_uint32 !index_oct))))))) (4))))))) in
-                             void);
-                            (C_64:
-                            begin
-                              (index_oct := (C_63:
-                                            (safe_uint32_of_integer_ 
-                                             (C_62:
-                                             ((add_int (integer_of_uint32 !index_oct)) 
-                                              (integer_of_uint32 (C_61:
-                                                                 (safe_uint32_of_integer_ 
-                                                                  (C_60:
-                                                                  ((mul_int (4)) 
-                                                                   (integer_of_uint32 !nb_mots_alignes)))))))))));
-                             !index_oct
-                            end)
-                           end)
-                          end) in
-        void)
-       else void);
+           void);
+          (C_64:
+          begin
+            (index_oct := (C_63:
+                          (safe_uint32_of_integer_ (C_62:
+                                                   ((add_int (integer_of_uint32 !index_oct)) 
+                                                    (integer_of_uint32 
+                                                     (C_61:
+                                                     (safe_uint32_of_integer_ 
+                                                      (C_60:
+                                                      ((mul_int (4)) 
+                                                       (integer_of_uint32 !nb_mots_alignes)))))))))));
+           !index_oct end) end) end) in void) else void);
        (C_67:
        begin
-         (let unsigned_char_P_Adresse_1_3_alloc_table = ref (any_alloc_table void) in
-         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref (any_memory void) in
-         (let jessie_168 = begin
-                             ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                            ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                            (let jessie_167 = !s in
-                            (let jessie_166 = ValOct_0 in
-                            (let jessie_165 = !index_oct in
-                            (let jessie_164 = (C_66:
-                                              (safe_uint32_of_integer_ 
-                                               (C_65:
-                                               ((sub_int (integer_of_uint32 NbOct)) (1))))) in
-                            (JC_128:
-                            ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_167)) jessie_166) jessie_165) jessie_164) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                           end in
+         (let unsigned_char_P_Adresse_1_3_alloc_table =
+         ref (any_alloc_table void) in
+         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+         ref (any_memory void) in
+         (let jessie_168 =
+         begin
+           ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+          ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+          (let jessie_167 = !s in
+          (let jessie_166 = ValOct_0 in
+          (let jessie_165 = !index_oct in
+          (let jessie_164 =
+          (C_66:
+          (safe_uint32_of_integer_ (C_65:
+                                   ((sub_int (integer_of_uint32 NbOct)) (1))))) in
+          (JC_128:
+          ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_167)) jessie_166) jessie_165) jessie_164) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+         end in
          begin
            ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-          jessie_168
-         end)));
-        (raise Return)
-       end)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+          jessie_168 end))); (raise Return) end) end) end)))));
+    (raise Return) end with Return -> void end)
   { (JC_99:
     (forall k_7:int.
      ((le_int(mul_int((4), div_int(integer_of_uint32(NbOct), (4))), k_7)
@@ -1403,120 +1331,97 @@ let memset_burst4_ensures_default =
         void);
        (if ((ge_int_ (integer_of_uint32 NbOct)) (4))
        then
-        (let jessie_97 = (C_47:
-                         begin
-                           (let jessie_86 = (align := (C_46:
-                                                      (safe_uint32_of_integer_ 
-                                                       (C_45:
-                                                       ((sub_int (4)) 
-                                                        (integer_of_uint32 addr_mod4)))))) in
-                           void);
-                          (if ((lt_int_ (integer_of_uint32 !align)) (4))
-                          then
-                           (let jessie_93 = (C_50:
-                                            begin
-                                              (let unsigned_char_P_Adresse_1_3_alloc_table = ref 
-                                              (any_alloc_table void) in
-                                              (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref 
-                                              (any_memory void) in
-                                              (let jessie_91 = begin
-                                                                 ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                                                                ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                                                                (let jessie_90 = !s in
-                                                                (let jessie_89 = ValOct_0 in
-                                                                (let jessie_88 = !index_oct in
-                                                                (let jessie_87 = 
-                                                                (C_49:
-                                                                (safe_uint32_of_integer_ 
-                                                                 (C_48:
-                                                                 ((sub_int 
-                                                                   (integer_of_uint32 !align)) (1))))) in
-                                                                (JC_113:
-                                                                ((((((memset_uchar 
-                                                                    (unsigned_char_P_of_pointer_address jessie_90)) jessie_89) jessie_88) jessie_87) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                                                               end in
-                                              begin
-                                                ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-                                               jessie_91
-                                              end)));
-                                             void;
-                                             (C_54:
-                                             begin
-                                               (index_oct := (C_53:
-                                                             (safe_uint32_of_integer_ 
-                                                              (C_52:
-                                                              ((add_int 
-                                                                (integer_of_uint32 !index_oct)) 
-                                                               (integer_of_uint32 !align))))));
-                                              !index_oct
-                                             end)
-                                            end) in
-                           void)
-                          else void);
-                          (C_59:
-                          begin
-                            (let jessie_95 = (nb_mots_alignes := (C_58:
-                                                                 (safe_uint32_of_integer_ 
-                                                                  (C_57:
-                                                                  (JC_115:
-                                                                  ((div_int 
-                                                                    (integer_of_uint32 
-                                                                    (C_56:
-                                                                    (safe_uint32_of_integer_ 
+        (let jessie_97 =
+        (C_47:
+        begin
+          (let jessie_86 =
+          (align := (C_46:
+                    (safe_uint32_of_integer_ (C_45:
+                                             ((sub_int (4)) (integer_of_uint32 addr_mod4)))))) in
+          void);
+         (if ((lt_int_ (integer_of_uint32 !align)) (4))
+         then
+          (let jessie_93 =
+          (C_50:
+          begin
+            (let unsigned_char_P_Adresse_1_3_alloc_table =
+            ref (any_alloc_table void) in
+            (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+            ref (any_memory void) in
+            (let jessie_91 =
+            begin
+              ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+             ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+             (let jessie_90 = !s in
+             (let jessie_89 = ValOct_0 in
+             (let jessie_88 = !index_oct in
+             (let jessie_87 =
+             (C_49:
+             (safe_uint32_of_integer_ (C_48:
+                                      ((sub_int (integer_of_uint32 !align)) (1))))) in
+             (JC_113:
+             ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_90)) jessie_89) jessie_88) jessie_87) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+            end in
+            begin
+              ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
+             jessie_91 end))); void;
+           (C_54:
+           begin
+             (index_oct := (C_53:
+                           (safe_uint32_of_integer_ (C_52:
+                                                    ((add_int (integer_of_uint32 !index_oct)) 
+                                                     (integer_of_uint32 !align))))));
+            !index_oct end) end) in void) else void);
+         (C_59:
+         begin
+           (let jessie_95 =
+           (nb_mots_alignes := (C_58:
+                               (safe_uint32_of_integer_ (C_57:
+                                                        (JC_115:
+                                                        ((div_int (integer_of_uint32 
+                                                                   (C_56:
+                                                                   (safe_uint32_of_integer_ 
                                                                     (C_55:
                                                                     ((sub_int 
                                                                     (integer_of_uint32 NbOct)) 
                                                                     (integer_of_uint32 !index_oct))))))) (4))))))) in
-                            void);
-                           (C_64:
-                           begin
-                             (index_oct := (C_63:
-                                           (safe_uint32_of_integer_ (C_62:
-                                                                    ((add_int 
-                                                                    (integer_of_uint32 !index_oct)) 
-                                                                    (integer_of_uint32 
-                                                                    (C_61:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_60:
-                                                                    ((mul_int (4)) 
-                                                                    (integer_of_uint32 !nb_mots_alignes)))))))))));
-                            !index_oct
-                           end)
-                          end)
-                         end) in
-        void)
-       else void);
+           void);
+          (C_64:
+          begin
+            (index_oct := (C_63:
+                          (safe_uint32_of_integer_ (C_62:
+                                                   ((add_int (integer_of_uint32 !index_oct)) 
+                                                    (integer_of_uint32 
+                                                     (C_61:
+                                                     (safe_uint32_of_integer_ 
+                                                      (C_60:
+                                                      ((mul_int (4)) 
+                                                       (integer_of_uint32 !nb_mots_alignes)))))))))));
+           !index_oct end) end) end) in void) else void);
        (C_67:
        begin
-         (let unsigned_char_P_Adresse_1_3_alloc_table = ref (any_alloc_table void) in
-         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref (any_memory void) in
-         (let jessie_102 = begin
-                             ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                            ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                            (let jessie_101 = !s in
-                            (let jessie_100 = ValOct_0 in
-                            (let jessie_99 = !index_oct in
-                            (let jessie_98 = (C_66:
-                                             (safe_uint32_of_integer_ 
-                                              (C_65:
-                                              ((sub_int (integer_of_uint32 NbOct)) (1))))) in
-                            (JC_116:
-                            ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_101)) jessie_100) jessie_99) jessie_98) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                           end in
+         (let unsigned_char_P_Adresse_1_3_alloc_table =
+         ref (any_alloc_table void) in
+         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+         ref (any_memory void) in
+         (let jessie_102 =
+         begin
+           ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+          ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+          (let jessie_101 = !s in
+          (let jessie_100 = ValOct_0 in
+          (let jessie_99 = !index_oct in
+          (let jessie_98 =
+          (C_66:
+          (safe_uint32_of_integer_ (C_65:
+                                   ((sub_int (integer_of_uint32 NbOct)) (1))))) in
+          (JC_116:
+          ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_101)) jessie_100) jessie_99) jessie_98) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+         end in
          begin
            ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-          jessie_102
-         end)));
-        (raise Return)
-       end)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_87: true) }
+          jessie_102 end))); (raise Return) end) end) end)))));
+    (raise Return) end with Return -> void end) { (JC_87: true) }
 
 let memset_burst4_ensures_misaligned_data =
  fun (Adresse_1 : unit pointer) (ValOct_0 : uint8) (NbOct : uint32) (bitvector_Adresse_1_3 : (unit, bitvector) memory ref) (bitvector_Adresse_1_3_alloc_table : unit alloc_table) ->
@@ -1550,132 +1455,106 @@ let memset_burst4_ensures_misaligned_data =
         void);
        (if ((ge_int_ (integer_of_uint32 NbOct)) (4))
        then
-        (let jessie_141 = (C_47:
-                          begin
-                            (let jessie_130 = (align := (C_46:
-                                                        (safe_uint32_of_integer_ 
-                                                         (C_45:
-                                                         ((sub_int (4)) 
-                                                          (integer_of_uint32 addr_mod4)))))) in
-                            void);
-                           (if ((lt_int_ (integer_of_uint32 !align)) (4))
-                           then
-                            (let jessie_137 = (C_50:
-                                              begin
-                                                (let unsigned_char_P_Adresse_1_3_alloc_table = ref 
-                                                (any_alloc_table void) in
-                                                (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref 
-                                                (any_memory void) in
-                                                (let jessie_135 = begin
-                                                                    ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                                                                   ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                                                                   (let jessie_134 = !s in
-                                                                   (let jessie_133 = ValOct_0 in
-                                                                   (let jessie_132 = !index_oct in
-                                                                   (let jessie_131 = 
-                                                                   (C_49:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_48:
-                                                                    ((sub_int 
-                                                                    (integer_of_uint32 !align)) (1))))) in
-                                                                   (JC_121:
-                                                                   ((((((memset_uchar 
-                                                                    (unsigned_char_P_of_pointer_address jessie_134)) jessie_133) jessie_132) jessie_131) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                                                                  end in
-                                                begin
-                                                  ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-                                                 jessie_135
-                                                end)));
-                                               (assert
-                                               { (JC_122:
-                                                 (forall k_3:int.
-                                                  ((le_int((0), k_3)
-                                                   and le_int(k_3,
-                                                       sub_int((3),
-                                                       integer_of_uint32(addr_mod4)))) ->
-                                                   eq_int(integer_of_uint8(
-                                                          uint8_of_bitvector(
-                                                          select_bytes(bitvector_Adresse_1_3,
+        (let jessie_141 =
+        (C_47:
+        begin
+          (let jessie_130 =
+          (align := (C_46:
+                    (safe_uint32_of_integer_ (C_45:
+                                             ((sub_int (4)) (integer_of_uint32 addr_mod4)))))) in
+          void);
+         (if ((lt_int_ (integer_of_uint32 !align)) (4))
+         then
+          (let jessie_137 =
+          (C_50:
+          begin
+            (let unsigned_char_P_Adresse_1_3_alloc_table =
+            ref (any_alloc_table void) in
+            (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+            ref (any_memory void) in
+            (let jessie_135 =
+            begin
+              ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+             ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+             (let jessie_134 = !s in
+             (let jessie_133 = ValOct_0 in
+             (let jessie_132 = !index_oct in
+             (let jessie_131 =
+             (C_49:
+             (safe_uint32_of_integer_ (C_48:
+                                      ((sub_int (integer_of_uint32 !align)) (1))))) in
+             (JC_121:
+             ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_134)) jessie_133) jessie_132) jessie_131) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+            end in
+            begin
+              ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
+             jessie_135 end)));
+           (assert
+           { (JC_122:
+             (forall k_3:int.
+              ((le_int((0), k_3)
+               and le_int(k_3, sub_int((3), integer_of_uint32(addr_mod4)))) ->
+               eq_int(integer_of_uint8(uint8_of_bitvector(select_bytes(bitvector_Adresse_1_3,
                                                           shift(s, k_3), (0),
                                                           (1)))),
-                                                   integer_of_uint8(ValOct_0))))) };
-                                               void);
-                                               void;
-                                               (C_54:
-                                               begin
-                                                 (index_oct := (C_53:
-                                                               (safe_uint32_of_integer_ 
-                                                                (C_52:
-                                                                ((add_int 
-                                                                  (integer_of_uint32 !index_oct)) 
-                                                                 (integer_of_uint32 !align))))));
-                                                !index_oct
-                                               end)
-                                              end) in
-                            void)
-                           else void);
-                           (C_59:
-                           begin
-                             (let jessie_139 = (nb_mots_alignes := (C_58:
+               integer_of_uint8(ValOct_0))))) }; void); void;
+           (C_54:
+           begin
+             (index_oct := (C_53:
+                           (safe_uint32_of_integer_ (C_52:
+                                                    ((add_int (integer_of_uint32 !index_oct)) 
+                                                     (integer_of_uint32 !align))))));
+            !index_oct end) end) in void) else void);
+         (C_59:
+         begin
+           (let jessie_139 =
+           (nb_mots_alignes := (C_58:
+                               (safe_uint32_of_integer_ (C_57:
+                                                        (JC_123:
+                                                        ((div_int (integer_of_uint32 
+                                                                   (C_56:
                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_57:
-                                                                    (JC_123:
-                                                                    ((div_int 
-                                                                    (integer_of_uint32 
-                                                                    (C_56:
-                                                                    (safe_uint32_of_integer_ 
                                                                     (C_55:
                                                                     ((sub_int 
                                                                     (integer_of_uint32 NbOct)) 
                                                                     (integer_of_uint32 !index_oct))))))) (4))))))) in
-                             void);
-                            (C_64:
-                            begin
-                              (index_oct := (C_63:
-                                            (safe_uint32_of_integer_ 
-                                             (C_62:
-                                             ((add_int (integer_of_uint32 !index_oct)) 
-                                              (integer_of_uint32 (C_61:
-                                                                 (safe_uint32_of_integer_ 
-                                                                  (C_60:
-                                                                  ((mul_int (4)) 
-                                                                   (integer_of_uint32 !nb_mots_alignes)))))))))));
-                             !index_oct
-                            end)
-                           end)
-                          end) in
-        void)
-       else void);
+           void);
+          (C_64:
+          begin
+            (index_oct := (C_63:
+                          (safe_uint32_of_integer_ (C_62:
+                                                   ((add_int (integer_of_uint32 !index_oct)) 
+                                                    (integer_of_uint32 
+                                                     (C_61:
+                                                     (safe_uint32_of_integer_ 
+                                                      (C_60:
+                                                      ((mul_int (4)) 
+                                                       (integer_of_uint32 !nb_mots_alignes)))))))))));
+           !index_oct end) end) end) in void) else void);
        (C_67:
        begin
-         (let unsigned_char_P_Adresse_1_3_alloc_table = ref (any_alloc_table void) in
-         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref (any_memory void) in
-         (let jessie_146 = begin
-                             ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                            ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                            (let jessie_145 = !s in
-                            (let jessie_144 = ValOct_0 in
-                            (let jessie_143 = !index_oct in
-                            (let jessie_142 = (C_66:
-                                              (safe_uint32_of_integer_ 
-                                               (C_65:
-                                               ((sub_int (integer_of_uint32 NbOct)) (1))))) in
-                            (JC_124:
-                            ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_145)) jessie_144) jessie_143) jessie_142) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                           end in
+         (let unsigned_char_P_Adresse_1_3_alloc_table =
+         ref (any_alloc_table void) in
+         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+         ref (any_memory void) in
+         (let jessie_146 =
+         begin
+           ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+          ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+          (let jessie_145 = !s in
+          (let jessie_144 = ValOct_0 in
+          (let jessie_143 = !index_oct in
+          (let jessie_142 =
+          (C_66:
+          (safe_uint32_of_integer_ (C_65:
+                                   ((sub_int (integer_of_uint32 NbOct)) (1))))) in
+          (JC_124:
+          ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_145)) jessie_144) jessie_143) jessie_142) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+         end in
          begin
            ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-          jessie_146
-         end)));
-        (raise Return)
-       end)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+          jessie_146 end))); (raise Return) end) end) end)))));
+    (raise Return) end with Return -> void end)
   { (JC_95:
     ((JC_93:
      (forall k_5:int.
@@ -1730,118 +1609,97 @@ let memset_burst4_ensures_small_data =
         void);
        (if ((ge_int_ (integer_of_uint32 NbOct)) (4))
        then
-        (let jessie_119 = (C_47:
-                          begin
-                            (let jessie_108 = (align := (C_46:
-                                                        (safe_uint32_of_integer_ 
-                                                         (C_45:
-                                                         ((sub_int (4)) 
-                                                          (integer_of_uint32 addr_mod4)))))) in
-                            void);
-                           (if ((lt_int_ (integer_of_uint32 !align)) (4))
-                           then
-                            (let jessie_115 = (C_50:
-                                              begin
-                                                (let unsigned_char_P_Adresse_1_3_alloc_table = ref 
-                                                (any_alloc_table void) in
-                                                (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref 
-                                                (any_memory void) in
-                                                (let jessie_113 = begin
-                                                                    ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                                                                   ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                                                                   (let jessie_112 = !s in
-                                                                   (let jessie_111 = ValOct_0 in
-                                                                   (let jessie_110 = !index_oct in
-                                                                   (let jessie_109 = 
-                                                                   (C_49:
+        (let jessie_119 =
+        (C_47:
+        begin
+          (let jessie_108 =
+          (align := (C_46:
+                    (safe_uint32_of_integer_ (C_45:
+                                             ((sub_int (4)) (integer_of_uint32 addr_mod4)))))) in
+          void);
+         (if ((lt_int_ (integer_of_uint32 !align)) (4))
+         then
+          (let jessie_115 =
+          (C_50:
+          begin
+            (let unsigned_char_P_Adresse_1_3_alloc_table =
+            ref (any_alloc_table void) in
+            (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+            ref (any_memory void) in
+            (let jessie_113 =
+            begin
+              ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+             ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+             (let jessie_112 = !s in
+             (let jessie_111 = ValOct_0 in
+             (let jessie_110 = !index_oct in
+             (let jessie_109 =
+             (C_49:
+             (safe_uint32_of_integer_ (C_48:
+                                      ((sub_int (integer_of_uint32 !align)) (1))))) in
+             (JC_117:
+             ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_112)) jessie_111) jessie_110) jessie_109) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+            end in
+            begin
+              ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
+             jessie_113 end))); void;
+           (C_54:
+           begin
+             (index_oct := (C_53:
+                           (safe_uint32_of_integer_ (C_52:
+                                                    ((add_int (integer_of_uint32 !index_oct)) 
+                                                     (integer_of_uint32 !align))))));
+            !index_oct end) end) in void) else void);
+         (C_59:
+         begin
+           (let jessie_117 =
+           (nb_mots_alignes := (C_58:
+                               (safe_uint32_of_integer_ (C_57:
+                                                        (JC_119:
+                                                        ((div_int (integer_of_uint32 
+                                                                   (C_56:
                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_48:
-                                                                    ((sub_int 
-                                                                    (integer_of_uint32 !align)) (1))))) in
-                                                                   (JC_117:
-                                                                   ((((((memset_uchar 
-                                                                    (unsigned_char_P_of_pointer_address jessie_112)) jessie_111) jessie_110) jessie_109) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                                                                  end in
-                                                begin
-                                                  ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-                                                 jessie_113
-                                                end)));
-                                               void;
-                                               (C_54:
-                                               begin
-                                                 (index_oct := (C_53:
-                                                               (safe_uint32_of_integer_ 
-                                                                (C_52:
-                                                                ((add_int 
-                                                                  (integer_of_uint32 !index_oct)) 
-                                                                 (integer_of_uint32 !align))))));
-                                                !index_oct
-                                               end)
-                                              end) in
-                            void)
-                           else void);
-                           (C_59:
-                           begin
-                             (let jessie_117 = (nb_mots_alignes := (C_58:
-                                                                   (safe_uint32_of_integer_ 
-                                                                    (C_57:
-                                                                    (JC_119:
-                                                                    ((div_int 
-                                                                    (integer_of_uint32 
-                                                                    (C_56:
-                                                                    (safe_uint32_of_integer_ 
                                                                     (C_55:
                                                                     ((sub_int 
                                                                     (integer_of_uint32 NbOct)) 
                                                                     (integer_of_uint32 !index_oct))))))) (4))))))) in
-                             void);
-                            (C_64:
-                            begin
-                              (index_oct := (C_63:
-                                            (safe_uint32_of_integer_ 
-                                             (C_62:
-                                             ((add_int (integer_of_uint32 !index_oct)) 
-                                              (integer_of_uint32 (C_61:
-                                                                 (safe_uint32_of_integer_ 
-                                                                  (C_60:
-                                                                  ((mul_int (4)) 
-                                                                   (integer_of_uint32 !nb_mots_alignes)))))))))));
-                             !index_oct
-                            end)
-                           end)
-                          end) in
-        void)
-       else void);
+           void);
+          (C_64:
+          begin
+            (index_oct := (C_63:
+                          (safe_uint32_of_integer_ (C_62:
+                                                   ((add_int (integer_of_uint32 !index_oct)) 
+                                                    (integer_of_uint32 
+                                                     (C_61:
+                                                     (safe_uint32_of_integer_ 
+                                                      (C_60:
+                                                      ((mul_int (4)) 
+                                                       (integer_of_uint32 !nb_mots_alignes)))))))))));
+           !index_oct end) end) end) in void) else void);
        (C_67:
        begin
-         (let unsigned_char_P_Adresse_1_3_alloc_table = ref (any_alloc_table void) in
-         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref (any_memory void) in
-         (let jessie_124 = begin
-                             ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                            ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                            (let jessie_123 = !s in
-                            (let jessie_122 = ValOct_0 in
-                            (let jessie_121 = !index_oct in
-                            (let jessie_120 = (C_66:
-                                              (safe_uint32_of_integer_ 
-                                               (C_65:
-                                               ((sub_int (integer_of_uint32 NbOct)) (1))))) in
-                            (JC_120:
-                            ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_123)) jessie_122) jessie_121) jessie_120) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                           end in
+         (let unsigned_char_P_Adresse_1_3_alloc_table =
+         ref (any_alloc_table void) in
+         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+         ref (any_memory void) in
+         (let jessie_124 =
+         begin
+           ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+          ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+          (let jessie_123 = !s in
+          (let jessie_122 = ValOct_0 in
+          (let jessie_121 = !index_oct in
+          (let jessie_120 =
+          (C_66:
+          (safe_uint32_of_integer_ (C_65:
+                                   ((sub_int (integer_of_uint32 NbOct)) (1))))) in
+          (JC_120:
+          ((((((memset_uchar (unsigned_char_P_of_pointer_address jessie_123)) jessie_122) jessie_121) jessie_120) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+         end in
          begin
            ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-          jessie_124
-         end)));
-        (raise Return)
-       end)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+          jessie_124 end))); (raise Return) end) end) end)))));
+    (raise Return) end with Return -> void end)
   { (JC_91:
     (forall k_4:int.
      ((le_int((0), k_4)
@@ -1881,128 +1739,104 @@ let memset_burst4_safety =
         void);
        (if ((ge_int_ (integer_of_uint32 NbOct)) (4))
        then
-        (let jessie_75 = (C_47:
-                         begin
-                           (let jessie_64 = (align := (C_46:
-                                                      (JC_101:
-                                                      (uint32_of_integer_ 
-                                                       (C_45:
-                                                       ((sub_int (4)) 
-                                                        (integer_of_uint32 addr_mod4))))))) in
-                           void);
-                          (if ((lt_int_ (integer_of_uint32 !align)) (4))
-                          then
-                           (let jessie_71 = (C_50:
-                                            begin
-                                              (let unsigned_char_P_Adresse_1_3_alloc_table = ref 
-                                              (any_alloc_table void) in
-                                              (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref 
-                                              (any_memory void) in
-                                              (let jessie_69 = begin
-                                                                 ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                                                                ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                                                                (let jessie_68 = !s in
-                                                                (let jessie_67 = ValOct_0 in
-                                                                (let jessie_66 = !index_oct in
-                                                                (let jessie_65 = 
-                                                                (C_49:
-                                                                (JC_102:
-                                                                (uint32_of_integer_ 
-                                                                 (C_48:
-                                                                 ((sub_int 
-                                                                   (integer_of_uint32 !align)) (1)))))) in
-                                                                (JC_103:
-                                                                ((((((memset_uchar_requires 
-                                                                    (unsigned_char_P_of_pointer_address jessie_68)) jessie_67) jessie_66) jessie_65) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                                                               end in
-                                              begin
-                                                ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-                                               jessie_69
-                                              end)));
-                                             void;
-                                             (C_54:
-                                             begin
-                                               (index_oct := (C_53:
-                                                             (JC_105:
-                                                             (uint32_of_integer_ 
-                                                              (C_52:
-                                                              ((add_int 
-                                                                (integer_of_uint32 !index_oct)) 
-                                                               (integer_of_uint32 !align)))))));
-                                              !index_oct
-                                             end)
-                                            end) in
-                           void)
-                          else void);
-                          (C_59:
-                          begin
-                            (let jessie_73 = (nb_mots_alignes := (C_58:
-                                                                 (JC_108:
-                                                                 (uint32_of_integer_ 
-                                                                  (C_57:
-                                                                  (JC_107:
-                                                                  ((div_int_ 
-                                                                    (integer_of_uint32 
-                                                                    (C_56:
-                                                                    (JC_106:
-                                                                    (uint32_of_integer_ 
-                                                                    (C_55:
-                                                                    ((sub_int 
-                                                                    (integer_of_uint32 NbOct)) 
-                                                                    (integer_of_uint32 !index_oct)))))))) (4)))))))) in
-                            void);
-                           (C_64:
-                           begin
-                             (index_oct := (C_63:
-                                           (JC_110:
-                                           (uint32_of_integer_ (C_62:
-                                                               ((add_int 
-                                                                 (integer_of_uint32 !index_oct)) 
-                                                                (integer_of_uint32 
-                                                                 (C_61:
-                                                                 (JC_109:
-                                                                 (uint32_of_integer_ 
-                                                                  (C_60:
-                                                                  ((mul_int (4)) 
-                                                                   (integer_of_uint32 !nb_mots_alignes)))))))))))));
-                            !index_oct
-                           end)
-                          end)
-                         end) in
-        void)
-       else void);
+        (let jessie_75 =
+        (C_47:
+        begin
+          (let jessie_64 =
+          (align := (C_46:
+                    (JC_101:
+                    (uint32_of_integer_ (C_45:
+                                        ((sub_int (4)) (integer_of_uint32 addr_mod4))))))) in
+          void);
+         (if ((lt_int_ (integer_of_uint32 !align)) (4))
+         then
+          (let jessie_71 =
+          (C_50:
+          begin
+            (let unsigned_char_P_Adresse_1_3_alloc_table =
+            ref (any_alloc_table void) in
+            (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+            ref (any_memory void) in
+            (let jessie_69 =
+            begin
+              ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+             ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+             (let jessie_68 = !s in
+             (let jessie_67 = ValOct_0 in
+             (let jessie_66 = !index_oct in
+             (let jessie_65 =
+             (C_49:
+             (JC_102:
+             (uint32_of_integer_ (C_48:
+                                 ((sub_int (integer_of_uint32 !align)) (1)))))) in
+             (JC_103:
+             ((((((memset_uchar_requires (unsigned_char_P_of_pointer_address jessie_68)) jessie_67) jessie_66) jessie_65) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+            end in
+            begin
+              ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
+             jessie_69 end))); void;
+           (C_54:
+           begin
+             (index_oct := (C_53:
+                           (JC_105:
+                           (uint32_of_integer_ (C_52:
+                                               ((add_int (integer_of_uint32 !index_oct)) 
+                                                (integer_of_uint32 !align)))))));
+            !index_oct end) end) in void) else void);
+         (C_59:
+         begin
+           (let jessie_73 =
+           (nb_mots_alignes := (C_58:
+                               (JC_108:
+                               (uint32_of_integer_ (C_57:
+                                                   (JC_107:
+                                                   ((div_int_ (integer_of_uint32 
+                                                               (C_56:
+                                                               (JC_106:
+                                                               (uint32_of_integer_ 
+                                                                (C_55:
+                                                                ((sub_int 
+                                                                  (integer_of_uint32 NbOct)) 
+                                                                 (integer_of_uint32 !index_oct)))))))) (4)))))))) in
+           void);
+          (C_64:
+          begin
+            (index_oct := (C_63:
+                          (JC_110:
+                          (uint32_of_integer_ (C_62:
+                                              ((add_int (integer_of_uint32 !index_oct)) 
+                                               (integer_of_uint32 (C_61:
+                                                                  (JC_109:
+                                                                  (uint32_of_integer_ 
+                                                                   (C_60:
+                                                                   ((mul_int (4)) 
+                                                                    (integer_of_uint32 !nb_mots_alignes)))))))))))));
+           !index_oct end) end) end) in void) else void);
        (C_67:
        begin
-         (let unsigned_char_P_Adresse_1_3_alloc_table = ref (any_alloc_table void) in
-         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 = ref (any_memory void) in
-         (let jessie_80 = begin
-                            ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
-                           ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-                           (let jessie_79 = !s in
-                           (let jessie_78 = ValOct_0 in
-                           (let jessie_77 = !index_oct in
-                           (let jessie_76 = (C_66:
-                                            (JC_111:
-                                            (uint32_of_integer_ (C_65:
-                                                                ((sub_int 
-                                                                  (integer_of_uint32 NbOct)) (1)))))) in
-                           (JC_112:
-                           ((((((memset_uchar_requires (unsigned_char_P_of_pointer_address jessie_79)) jessie_78) jessie_77) jessie_76) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
-                          end in
+         (let unsigned_char_P_Adresse_1_3_alloc_table =
+         ref (any_alloc_table void) in
+         (let unsigned_char_P_unsigned_char_M_Adresse_1_3 =
+         ref (any_memory void) in
+         (let jessie_80 =
+         begin
+           ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
+          ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
+          (let jessie_79 = !s in
+          (let jessie_78 = ValOct_0 in
+          (let jessie_77 = !index_oct in
+          (let jessie_76 =
+          (C_66:
+          (JC_111:
+          (uint32_of_integer_ (C_65:
+                              ((sub_int (integer_of_uint32 NbOct)) (1)))))) in
+          (JC_112:
+          ((((((memset_uchar_requires (unsigned_char_P_of_pointer_address jessie_79)) jessie_78) jessie_77) jessie_76) unsigned_char_P_unsigned_char_M_Adresse_1_3) !unsigned_char_P_Adresse_1_3_alloc_table))))))
+         end in
          begin
            ((struct_unsigned_char_P_mem_to_bitvector bitvector_Adresse_1_3) !unsigned_char_P_unsigned_char_M_Adresse_1_3);
-          jessie_80
-         end)));
-        (raise Return)
-       end)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+          jessie_80 end))); (raise Return) end) end) end))))); (raise Return)
+   end with Return -> void end) { true }
 
 let memset_uchar_ensures_default =
  fun (Adresse_0 : unsigned_char_P pointer) (ValOct : uint8) (i_min_0 : uint32) (i_max_0 : uint32) (unsigned_char_P_unsigned_char_M_Adresse_0_1 : (unsigned_char_P, uint8) memory ref) (unsigned_char_P_Adresse_0_1_alloc_table : unsigned_char_P alloc_table) ->
@@ -2025,100 +1859,64 @@ let memset_uchar_ensures_default =
      begin
        (let jessie_21 = (i := i_min_0) in void);
       try
-       (let jessie_32 = begin
-                          (loop_2:
-                          while true do
-                          { invariant
-                              (((JC_34:
-                                ((JC_31:
-                                 le_int(integer_of_uint32(i_min_0),
-                                 integer_of_uint32(i)))
-                                and ((JC_32:
-                                     le_int(integer_of_uint32(i),
-                                     add_int(integer_of_uint32(i_max_0), (1))))
-                                    and (JC_33:
-                                        le_int(add_int(integer_of_uint32(i_max_0),
-                                               (1)),
-                                        (4294967295))))))
-                               and (JC_35:
-                                   (forall k:int.
-                                    ((le_int(integer_of_uint32(i_min_0), k)
-                                     and lt_int(k, integer_of_uint32(i))) ->
-                                     eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
-                                                             shift(Adresse_0,
-                                                             k))),
-                                     integer_of_uint8(ValOct))))))
-                              and (JC_37:
-                                  not_assigns(unsigned_char_P_Adresse_0_1_alloc_table@init,
-                                  unsigned_char_P_unsigned_char_M_Adresse_0_1@init,
-                                  unsigned_char_P_unsigned_char_M_Adresse_0_1,
-                                  pset_range(pset_singleton(Adresse_0@init),
-                                  integer_of_uint32(i_min_0@init),
-                                  integer_of_uint32(i_max_0@init)))))
-                             }
-                           begin
-                             [ { } unit { true } ];
-                            try
-                             (let jessie_31 = begin
-                                                (let jessie_30 = begin
-                                                                   (if 
-                                                                   ((le_int_ 
-                                                                    (integer_of_uint32 !i)) 
-                                                                    (integer_of_uint32 i_max_0))
-                                                                   then void
-                                                                   else
-                                                                    (let jessie_22 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                  (C_10:
-                                                                  begin
-                                                                    (let jessie_28 = 
-                                                                    (let jessie_24 = ValOct in
-                                                                    (let jessie_27 = 
-                                                                    (C_8:
-                                                                    ((shift Adresse_0) 
-                                                                    (integer_of_uint32 !i))) in
-                                                                    (((safe_upd_ unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_27) jessie_24))) in
-                                                                    void);
-                                                                   (C_13:
-                                                                   begin
-                                                                     
-                                                                    (i := 
-                                                                    (C_12:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_11:
-                                                                    ((add_int 
-                                                                    (integer_of_uint32 !i)) (1))))));
-                                                                    !i
-                                                                   end)
-                                                                  end)
-                                                                 end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
-                             void)
-                             with
-                             Loop_continue_exc jessie_3 ->
-                             void end
-                           end
-                          done);
-                         (raise (Goto_while_0_break_exc void))
-                        end in
-       void)
-       with
-       Goto_while_0_break_exc jessie_1 ->
-       (while_0_break: void) end;
-      (raise Return)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_32 =
+       begin
+         (loop_2:
+         while true do
+         { invariant
+             (((JC_34:
+               ((JC_31:
+                le_int(integer_of_uint32(i_min_0), integer_of_uint32(i)))
+               and ((JC_32:
+                    le_int(integer_of_uint32(i),
+                    add_int(integer_of_uint32(i_max_0), (1))))
+                   and (JC_33:
+                       le_int(add_int(integer_of_uint32(i_max_0), (1)),
+                       (4294967295))))))
+              and (JC_35:
+                  (forall k:int.
+                   ((le_int(integer_of_uint32(i_min_0), k)
+                    and lt_int(k, integer_of_uint32(i))) ->
+                    eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
+                                            shift(Adresse_0, k))),
+                    integer_of_uint8(ValOct))))))
+             and (JC_37:
+                 not_assigns(unsigned_char_P_Adresse_0_1_alloc_table@init,
+                 unsigned_char_P_unsigned_char_M_Adresse_0_1@init,
+                 unsigned_char_P_unsigned_char_M_Adresse_0_1,
+                 pset_range(pset_singleton(Adresse_0@init),
+                 integer_of_uint32(i_min_0@init),
+                 integer_of_uint32(i_max_0@init)))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            (let jessie_31 =
+            begin
+              (let jessie_30 =
+              begin
+                (if ((le_int_ (integer_of_uint32 !i)) (integer_of_uint32 i_max_0))
+                then void
+                else
+                 (let jessie_22 = (raise (Goto_while_0_break_exc void)) in
+                 void));
+               (C_10:
+               begin
+                 (let jessie_28 =
+                 (let jessie_24 = ValOct in
+                 (let jessie_27 =
+                 (C_8: ((shift Adresse_0) (integer_of_uint32 !i))) in
+                 (((safe_upd_ unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_27) jessie_24))) in
+                 void);
+                (C_13:
+                begin
+                  (i := (C_12:
+                        (safe_uint32_of_integer_ (C_11:
+                                                 ((add_int (integer_of_uint32 !i)) (1))))));
+                 !i end) end) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_3 -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end in void) with
+       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_15:
     ((JC_13:
      (forall k_0:int.
@@ -2155,97 +1953,60 @@ let memset_uchar_safety =
      begin
        (let jessie_8 = (i := i_min_0) in void);
       try
-       (let jessie_19 = begin
-                          (loop_1:
-                          while true do
-                          { invariant (JC_27: true) variant (0) }
-                           begin
-                             [ { } unit
-                               reads i,unsigned_char_P_unsigned_char_M_Adresse_0_1
-                               { ((JC_24:
-                                  ((JC_21:
-                                   le_int(integer_of_uint32(i_min_0),
-                                   integer_of_uint32(i)))
-                                  and ((JC_22:
-                                       le_int(integer_of_uint32(i),
-                                       add_int(integer_of_uint32(i_max_0),
-                                       (1))))
-                                      and (JC_23:
-                                          le_int(add_int(integer_of_uint32(i_max_0),
-                                                 (1)),
-                                          (4294967295))))))
-                                 and (JC_25:
-                                     (forall k:int.
-                                      ((le_int(integer_of_uint32(i_min_0), k)
-                                       and lt_int(k, integer_of_uint32(i))) ->
-                                       eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
-                                                               shift(Adresse_0,
-                                                               k))),
-                                       integer_of_uint8(ValOct)))))) } ];
-                            try
-                             (let jessie_18 = begin
-                                                (let jessie_17 = begin
-                                                                   (if 
-                                                                   ((le_int_ 
-                                                                    (integer_of_uint32 !i)) 
-                                                                    (integer_of_uint32 i_max_0))
-                                                                   then void
-                                                                   else
-                                                                    (let jessie_9 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                  (C_10:
-                                                                  begin
-                                                                    (let jessie_15 = 
-                                                                    (let jessie_11 = ValOct in
-                                                                    (let jessie_12 = Adresse_0 in
-                                                                    (let jessie_13 = 
-                                                                    (integer_of_uint32 !i) in
-                                                                    (let jessie_14 = 
-                                                                    ((shift jessie_12) jessie_13) in
-                                                                    (JC_29:
-                                                                    (((((offset_upd_ unsigned_char_P_Adresse_0_1_alloc_table) unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_12) jessie_13) jessie_11)))))) in
-                                                                    void);
-                                                                   (C_13:
-                                                                   begin
-                                                                     
-                                                                    (i := 
-                                                                    (C_12:
-                                                                    (JC_30:
-                                                                    (uint32_of_integer_ 
-                                                                    (C_11:
-                                                                    ((add_int 
-                                                                    (integer_of_uint32 !i)) (1)))))));
-                                                                    !i
-                                                                   end)
-                                                                  end)
-                                                                 end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
-                             void)
-                             with
-                             Loop_continue_exc jessie_3 ->
-                             void end
-                           end
-                          done);
-                         (raise (Goto_while_0_break_exc void))
-                        end in
-       void)
-       with
-       Goto_while_0_break_exc jessie_1 ->
-       (while_0_break: void) end;
-      (raise Return)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_19 =
+       begin
+         (loop_1:
+         while true do
+         { invariant (JC_27: true) variant (0) }
+          begin
+            [ { } unit reads i,unsigned_char_P_unsigned_char_M_Adresse_0_1
+              { ((JC_24:
+                 ((JC_21:
+                  le_int(integer_of_uint32(i_min_0), integer_of_uint32(i)))
+                 and ((JC_22:
+                      le_int(integer_of_uint32(i),
+                      add_int(integer_of_uint32(i_max_0), (1))))
+                     and (JC_23:
+                         le_int(add_int(integer_of_uint32(i_max_0), (1)),
+                         (4294967295))))))
+                and (JC_25:
+                    (forall k:int.
+                     ((le_int(integer_of_uint32(i_min_0), k)
+                      and lt_int(k, integer_of_uint32(i))) ->
+                      eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
+                                              shift(Adresse_0, k))),
+                      integer_of_uint8(ValOct)))))) } ];
+           try
+            (let jessie_18 =
+            begin
+              (let jessie_17 =
+              begin
+                (if ((le_int_ (integer_of_uint32 !i)) (integer_of_uint32 i_max_0))
+                then void
+                else
+                 (let jessie_9 = (raise (Goto_while_0_break_exc void)) in
+                 void));
+               (C_10:
+               begin
+                 (let jessie_15 =
+                 (let jessie_11 = ValOct in
+                 (let jessie_12 = Adresse_0 in
+                 (let jessie_13 = (integer_of_uint32 !i) in
+                 (let jessie_14 = ((shift jessie_12) jessie_13) in
+                 (JC_29:
+                 (((((offset_upd_ unsigned_char_P_Adresse_0_1_alloc_table) unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_12) jessie_13) jessie_11)))))) in
+                 void);
+                (C_13:
+                begin
+                  (i := (C_12:
+                        (JC_30:
+                        (uint32_of_integer_ (C_11:
+                                            ((add_int (integer_of_uint32 !i)) (1)))))));
+                 !i end) end) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_3 -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end in void) with
+       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 
 let memset_uint_ensures_default =
@@ -2269,95 +2030,58 @@ let memset_uint_ensures_default =
      begin
        (let jessie_47 = (i_0 := i_min) in void);
       try
-       (let jessie_58 = begin
-                          (loop_4:
-                          while true do
-                          { invariant
-                              ((JC_68:
-                               ((JC_65:
-                                le_int(integer_of_uint32(i_min),
-                                integer_of_uint32(i_0)))
-                               and ((JC_66:
-                                    le_int(integer_of_uint32(i_0),
-                                    add_int(integer_of_uint32(i_max), (1))))
-                                   and (JC_67:
-                                       le_int(add_int(integer_of_uint32(i_max),
-                                              (1)),
-                                       (4294967295))))))
-                              and (JC_69:
-                                  (forall k_1:int.
-                                   ((le_int(integer_of_uint32(i_min), k_1)
-                                    and lt_int(k_1, integer_of_uint32(i_0))) ->
-                                    eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
-                                                             shift(Adresse,
-                                                             k_1))),
-                                    integer_of_uint32(ValMot))))))
-                             }
-                           begin
-                             [ { } unit { true } ];
-                            try
-                             (let jessie_57 = begin
-                                                (let jessie_56 = begin
-                                                                   (if 
-                                                                   ((le_int_ 
-                                                                    (integer_of_uint32 !i_0)) 
-                                                                    (integer_of_uint32 i_max))
-                                                                   then void
-                                                                   else
-                                                                    (let jessie_48 = 
-                                                                    (raise
-                                                                    (Goto_while_1_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                  (C_31:
-                                                                  begin
-                                                                    (let jessie_54 = 
-                                                                    (let jessie_50 = 
-                                                                    (C_28:
-                                                                    ValMot) in
-                                                                    (let jessie_53 = 
-                                                                    (C_29:
-                                                                    ((shift Adresse) 
-                                                                    (integer_of_uint32 !i_0))) in
-                                                                    (((safe_upd_ unsigned_long_P_unsigned_long_M_Adresse_2) jessie_53) jessie_50))) in
-                                                                    void);
-                                                                   (C_34:
-                                                                   begin
-                                                                     
-                                                                    (i_0 := 
-                                                                    (C_33:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_32:
-                                                                    ((add_int 
-                                                                    (integer_of_uint32 !i_0)) (1))))));
-                                                                    !i_0
-                                                                   end)
-                                                                  end)
-                                                                 end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
-                             void)
-                             with
-                             Loop_continue_exc jessie_6 ->
-                             void end
-                           end
-                          done);
-                         (raise (Goto_while_1_break_exc void))
-                        end in
-       void)
-       with
-       Goto_while_1_break_exc jessie_4 ->
-       (while_1_break: void) end;
-      (raise Return)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_58 =
+       begin
+         (loop_4:
+         while true do
+         { invariant
+             ((JC_68:
+              ((JC_65:
+               le_int(integer_of_uint32(i_min), integer_of_uint32(i_0)))
+              and ((JC_66:
+                   le_int(integer_of_uint32(i_0),
+                   add_int(integer_of_uint32(i_max), (1))))
+                  and (JC_67:
+                      le_int(add_int(integer_of_uint32(i_max), (1)),
+                      (4294967295))))))
+             and (JC_69:
+                 (forall k_1:int.
+                  ((le_int(integer_of_uint32(i_min), k_1)
+                   and lt_int(k_1, integer_of_uint32(i_0))) ->
+                   eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
+                                            shift(Adresse, k_1))),
+                   integer_of_uint32(ValMot))))))  }
+          begin
+            [ { } unit { true } ];
+           try
+            (let jessie_57 =
+            begin
+              (let jessie_56 =
+              begin
+                (if ((le_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 i_max))
+                then void
+                else
+                 (let jessie_48 = (raise (Goto_while_1_break_exc void)) in
+                 void));
+               (C_31:
+               begin
+                 (let jessie_54 =
+                 (let jessie_50 = (C_28: ValMot) in
+                 (let jessie_53 =
+                 (C_29: ((shift Adresse) (integer_of_uint32 !i_0))) in
+                 (((safe_upd_ unsigned_long_P_unsigned_long_M_Adresse_2) jessie_53) jessie_50))) in
+                 void);
+                (C_34:
+                begin
+                  (i_0 := (C_33:
+                          (safe_uint32_of_integer_ (C_32:
+                                                   ((add_int (integer_of_uint32 !i_0)) (1))))));
+                 !i_0 end) end) end in void);
+             (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_6 -> void end end done);
+        (raise (Goto_while_1_break_exc void)) end in void) with
+       Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_51:
     (forall k_2:int.
      ((le_int(integer_of_uint32(i_min), k_2)
@@ -2387,99 +2111,61 @@ let memset_uint_safety =
      begin
        (let jessie_34 = (i_0 := i_min) in void);
       try
-       (let jessie_45 = begin
-                          (loop_3:
-                          while true do
-                          { invariant (JC_61: true) variant (0) }
-                           begin
-                             [ { } unit
-                               reads i_0,unsigned_long_P_unsigned_long_M_Adresse_2
-                               { ((JC_58:
-                                  ((JC_55:
-                                   le_int(integer_of_uint32(i_min),
-                                   integer_of_uint32(i_0)))
-                                  and ((JC_56:
-                                       le_int(integer_of_uint32(i_0),
-                                       add_int(integer_of_uint32(i_max), (1))))
-                                      and (JC_57:
-                                          le_int(add_int(integer_of_uint32(i_max),
-                                                 (1)),
-                                          (4294967295))))))
-                                 and (JC_59:
-                                     (forall k_1:int.
-                                      ((le_int(integer_of_uint32(i_min), k_1)
-                                       and lt_int(k_1,
-                                           integer_of_uint32(i_0))) ->
-                                       eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
-                                                                shift(Adresse,
-                                                                k_1))),
-                                       integer_of_uint32(ValMot)))))) } ];
-                            try
-                             (let jessie_44 = begin
-                                                (let jessie_43 = begin
-                                                                   (if 
-                                                                   ((le_int_ 
-                                                                    (integer_of_uint32 !i_0)) 
-                                                                    (integer_of_uint32 i_max))
-                                                                   then void
-                                                                   else
-                                                                    (let jessie_35 = 
-                                                                    (raise
-                                                                    (Goto_while_1_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                  (C_31:
-                                                                  begin
-                                                                    (let jessie_41 = 
-                                                                    (let jessie_37 = 
-                                                                    (C_28:
-                                                                    ValMot) in
-                                                                    (let jessie_38 = Adresse in
-                                                                    (let jessie_39 = 
-                                                                    (integer_of_uint32 !i_0) in
-                                                                    (let jessie_40 = 
-                                                                    ((shift jessie_38) jessie_39) in
-                                                                    (JC_63:
-                                                                    (((((offset_upd_ unsigned_long_P_Adresse_2_alloc_table) unsigned_long_P_unsigned_long_M_Adresse_2) jessie_38) jessie_39) jessie_37)))))) in
-                                                                    void);
-                                                                   (C_34:
-                                                                   begin
-                                                                     
-                                                                    (i_0 := 
-                                                                    (C_33:
-                                                                    (JC_64:
-                                                                    (uint32_of_integer_ 
-                                                                    (C_32:
-                                                                    ((add_int 
-                                                                    (integer_of_uint32 !i_0)) (1)))))));
-                                                                    !i_0
-                                                                   end)
-                                                                  end)
-                                                                 end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
-                             void)
-                             with
-                             Loop_continue_exc jessie_6 ->
-                             void end
-                           end
-                          done);
-                         (raise (Goto_while_1_break_exc void))
-                        end in
-       void)
-       with
-       Goto_while_1_break_exc jessie_4 ->
-       (while_1_break: void) end;
-      (raise Return)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_45 =
+       begin
+         (loop_3:
+         while true do
+         { invariant (JC_61: true) variant (0) }
+          begin
+            [ { } unit reads i_0,unsigned_long_P_unsigned_long_M_Adresse_2
+              { ((JC_58:
+                 ((JC_55:
+                  le_int(integer_of_uint32(i_min), integer_of_uint32(i_0)))
+                 and ((JC_56:
+                      le_int(integer_of_uint32(i_0),
+                      add_int(integer_of_uint32(i_max), (1))))
+                     and (JC_57:
+                         le_int(add_int(integer_of_uint32(i_max), (1)),
+                         (4294967295))))))
+                and (JC_59:
+                    (forall k_1:int.
+                     ((le_int(integer_of_uint32(i_min), k_1)
+                      and lt_int(k_1, integer_of_uint32(i_0))) ->
+                      eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
+                                               shift(Adresse, k_1))),
+                      integer_of_uint32(ValMot)))))) } ];
+           try
+            (let jessie_44 =
+            begin
+              (let jessie_43 =
+              begin
+                (if ((le_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 i_max))
+                then void
+                else
+                 (let jessie_35 = (raise (Goto_while_1_break_exc void)) in
+                 void));
+               (C_31:
+               begin
+                 (let jessie_41 =
+                 (let jessie_37 = (C_28: ValMot) in
+                 (let jessie_38 = Adresse in
+                 (let jessie_39 = (integer_of_uint32 !i_0) in
+                 (let jessie_40 = ((shift jessie_38) jessie_39) in
+                 (JC_63:
+                 (((((offset_upd_ unsigned_long_P_Adresse_2_alloc_table) unsigned_long_P_unsigned_long_M_Adresse_2) jessie_38) jessie_39) jessie_37)))))) in
+                 void);
+                (C_34:
+                begin
+                  (i_0 := (C_33:
+                          (JC_64:
+                          (uint32_of_integer_ (C_32:
+                                              ((add_int (integer_of_uint32 !i_0)) (1)))))));
+                 !i_0 end) end) end in void);
+             (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_6 -> void end end done);
+        (raise (Goto_while_1_break_exc void)) end in void) with
+       Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 
 

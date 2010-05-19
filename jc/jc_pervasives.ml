@@ -414,7 +414,7 @@ let rec is_constant_term t =
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _ 
     | JCTbase_block _
     | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _
-    | JCTreal_cast _ | JCTif _ | JCTmatch _ -> false
+    | JCTreal_cast _ | JCTif _ | JCTlet _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
 	is_constant_term t1 && is_constant_term t2
     | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
@@ -445,6 +445,7 @@ module TermOrd = struct
     | JCTrange_cast _ -> 61
     | JCTreal_cast _ -> 67
     | JCTbase_block _ -> 71
+    | JCTlet _ -> 73
 
   let rec compare t1 t2 =
     match t1#node, t2#node with
@@ -584,6 +585,7 @@ module TermOrd = struct
       | JCTif(t11,t12,t13) ->
 	  hash t11 * hash t12 * hash t13
       | JCTmatch (_, _) -> assert false (* TODO *)
+      | JCTlet(_,t1,t2) -> hash t1 * hash t2
     in
     Hashtbl.hash (term_num t) * h
 	
@@ -728,7 +730,7 @@ let rec is_numeric_term t =
     | JCTbitwise_cast (t, _, _) | JCTbase_block t
     | JCTrange_cast (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
-    | JCTif _ | JCTmatch _ -> false (* TODO ? *)
+    | JCTif _ | JCTlet _ | JCTmatch _ -> false (* TODO ? *)
 
 
 (* assertions *)

@@ -553,20 +553,17 @@ axiom char_P_tags :
 
 logic integer_of_int16: int16 -> int
 
-predicate eq_int16(x:int16,
- y:int16) =
+predicate eq_int16(x:int16, y:int16) =
  eq_int(integer_of_int16(x), integer_of_int16(y))
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int16_of_integer: int -> int16
@@ -613,48 +610,36 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_root__Integer(p:_Integer pointer,
- a:int,
+predicate left_valid_root__Integer(p:_Integer pointer, a:int,
  _Integer_alloc_table:_Integer alloc_table) =
  (offset_min(_Integer_alloc_table, p) <= a)
 
-predicate left_valid_root__Integer2(p:_Integer2 pointer,
- a:int,
+predicate left_valid_root__Integer2(p:_Integer2 pointer, a:int,
  _Integer2_alloc_table:_Integer2 alloc_table) =
  (offset_min(_Integer2_alloc_table, p) <= a)
 
-predicate left_valid_root__U(p:_U pointer,
- a:int,
- _U_alloc_table:_U alloc_table) =
- (offset_min(_U_alloc_table, p) <= a)
+predicate left_valid_root__U(p:_U pointer, a:int,
+ _U_alloc_table:_U alloc_table) = (offset_min(_U_alloc_table, p) <= a)
 
-predicate left_valid_struct__Decomp(p:_Decomp pointer,
- a:int,
+predicate left_valid_struct__Decomp(p:_Decomp pointer, a:int,
  _Decomp_alloc_table:_Decomp alloc_table) =
  (offset_min(_Decomp_alloc_table, p) <= a)
 
-predicate left_valid_struct__Decomp2(p:_Decomp2 pointer,
- a:int,
+predicate left_valid_struct__Decomp2(p:_Decomp2 pointer, a:int,
  _Decomp2_alloc_table:_Decomp2 alloc_table) =
  (offset_min(_Decomp2_alloc_table, p) <= a)
 
-predicate left_valid_struct__S1(p:_S1 pointer,
- a:int,
- _S1_alloc_table:_S1 alloc_table) =
- (offset_min(_S1_alloc_table, p) <= a)
+predicate left_valid_struct__S1(p:_S1 pointer, a:int,
+ _S1_alloc_table:_S1 alloc_table) = (offset_min(_S1_alloc_table, p) <= a)
 
-predicate left_valid_struct__S2(p:_S2 pointer,
- a:int,
- _S2_alloc_table:_S2 alloc_table) =
- (offset_min(_S2_alloc_table, p) <= a)
+predicate left_valid_struct__S2(p:_S2 pointer, a:int,
+ _S2_alloc_table:_S2 alloc_table) = (offset_min(_S2_alloc_table, p) <= a)
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -691,48 +676,36 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_root__Integer(p:_Integer pointer,
- b:int,
+predicate right_valid_root__Integer(p:_Integer pointer, b:int,
  _Integer_alloc_table:_Integer alloc_table) =
  (offset_max(_Integer_alloc_table, p) >= b)
 
-predicate right_valid_root__Integer2(p:_Integer2 pointer,
- b:int,
+predicate right_valid_root__Integer2(p:_Integer2 pointer, b:int,
  _Integer2_alloc_table:_Integer2 alloc_table) =
  (offset_max(_Integer2_alloc_table, p) >= b)
 
-predicate right_valid_root__U(p:_U pointer,
- b:int,
- _U_alloc_table:_U alloc_table) =
- (offset_max(_U_alloc_table, p) >= b)
+predicate right_valid_root__U(p:_U pointer, b:int,
+ _U_alloc_table:_U alloc_table) = (offset_max(_U_alloc_table, p) >= b)
 
-predicate right_valid_struct__Decomp(p:_Decomp pointer,
- b:int,
+predicate right_valid_struct__Decomp(p:_Decomp pointer, b:int,
  _Decomp_alloc_table:_Decomp alloc_table) =
  (offset_max(_Decomp_alloc_table, p) >= b)
 
-predicate right_valid_struct__Decomp2(p:_Decomp2 pointer,
- b:int,
+predicate right_valid_struct__Decomp2(p:_Decomp2 pointer, b:int,
  _Decomp2_alloc_table:_Decomp2 alloc_table) =
  (offset_max(_Decomp2_alloc_table, p) >= b)
 
-predicate right_valid_struct__S1(p:_S1 pointer,
- b:int,
- _S1_alloc_table:_S1 alloc_table) =
- (offset_max(_S1_alloc_table, p) >= b)
+predicate right_valid_struct__S1(p:_S1 pointer, b:int,
+ _S1_alloc_table:_S1 alloc_table) = (offset_max(_S1_alloc_table, p) >= b)
 
-predicate right_valid_struct__S2(p:_S2 pointer,
- b:int,
- _S2_alloc_table:_S2 alloc_table) =
- (offset_max(_S2_alloc_table, p) >= b)
+predicate right_valid_struct__S2(p:_S2 pointer, b:int,
+ _S2_alloc_table:_S2 alloc_table) = (offset_max(_S2_alloc_table, p) >= b)
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
@@ -754,275 +727,197 @@ axiom s2P_int : (int_of_tag(s2P_tag) = (3))
 
 axiom s2P_parenttag_bottom : parenttag(s2P_tag, bottom_tag)
 
-predicate strict_valid_root__Decomp(p:_Decomp pointer,
- a:int,
- b:int,
+predicate strict_valid_root__Decomp(p:_Decomp pointer, a:int, b:int,
  _Decomp_alloc_table:_Decomp alloc_table) =
  ((offset_min(_Decomp_alloc_table, p) = a)
  and (offset_max(_Decomp_alloc_table, p) = b))
 
-predicate strict_valid_root__Decomp2(p:_Decomp2 pointer,
- a:int,
- b:int,
+predicate strict_valid_root__Decomp2(p:_Decomp2 pointer, a:int, b:int,
  _Decomp2_alloc_table:_Decomp2 alloc_table) =
  ((offset_min(_Decomp2_alloc_table, p) = a)
  and (offset_max(_Decomp2_alloc_table, p) = b))
 
-predicate strict_valid_root__Integer(p:_Integer pointer,
- a:int,
- b:int,
+predicate strict_valid_root__Integer(p:_Integer pointer, a:int, b:int,
  _Integer_alloc_table:_Integer alloc_table) =
  ((offset_min(_Integer_alloc_table, p) = a)
  and (offset_max(_Integer_alloc_table, p) = b))
 
-predicate strict_valid_root__Integer2(p:_Integer2 pointer,
- a:int,
- b:int,
+predicate strict_valid_root__Integer2(p:_Integer2 pointer, a:int, b:int,
  _Integer2_alloc_table:_Integer2 alloc_table) =
  ((offset_min(_Integer2_alloc_table, p) = a)
  and (offset_max(_Integer2_alloc_table, p) = b))
 
-predicate strict_valid_root__S1(p:_S1 pointer,
- a:int,
- b:int,
+predicate strict_valid_root__S1(p:_S1 pointer, a:int, b:int,
  _S1_alloc_table:_S1 alloc_table) =
  ((offset_min(_S1_alloc_table, p) = a)
  and (offset_max(_S1_alloc_table, p) = b))
 
-predicate strict_valid_root__S2(p:_S2 pointer,
- a:int,
- b:int,
+predicate strict_valid_root__S2(p:_S2 pointer, a:int, b:int,
  _S2_alloc_table:_S2 alloc_table) =
  ((offset_min(_S2_alloc_table, p) = a)
  and (offset_max(_S2_alloc_table, p) = b))
 
-predicate strict_valid_root__U(p:_U pointer,
- a:int,
- b:int,
+predicate strict_valid_root__U(p:_U pointer, a:int, b:int,
  _U_alloc_table:_U alloc_table) =
  ((offset_min(_U_alloc_table, p) = a)
  and (offset_max(_U_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct__Decomp(p:_Decomp pointer,
- a:int,
- b:int,
+predicate strict_valid_struct__Decomp(p:_Decomp pointer, a:int, b:int,
  _Decomp_alloc_table:_Decomp alloc_table) =
  ((offset_min(_Decomp_alloc_table, p) = a)
  and (offset_max(_Decomp_alloc_table, p) = b))
 
-predicate strict_valid_struct__Decomp2(p:_Decomp2 pointer,
- a:int,
- b:int,
+predicate strict_valid_struct__Decomp2(p:_Decomp2 pointer, a:int, b:int,
  _Decomp2_alloc_table:_Decomp2 alloc_table) =
  ((offset_min(_Decomp2_alloc_table, p) = a)
  and (offset_max(_Decomp2_alloc_table, p) = b))
 
-predicate strict_valid_struct__S1(p:_S1 pointer,
- a:int,
- b:int,
+predicate strict_valid_struct__S1(p:_S1 pointer, a:int, b:int,
  _S1_alloc_table:_S1 alloc_table) =
  ((offset_min(_S1_alloc_table, p) = a)
  and (offset_max(_S1_alloc_table, p) = b))
 
-predicate strict_valid_struct__S2(p:_S2 pointer,
- a:int,
- b:int,
+predicate strict_valid_struct__S2(p:_S2 pointer, a:int, b:int,
  _S2_alloc_table:_S2 alloc_table) =
  ((offset_min(_S2_alloc_table, p) = a)
  and (offset_max(_S2_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_root__Integer(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_root__Integer(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) <= a)
  and (offset_max(bitvector_alloc_table, p) >= b))
 
-predicate valid_bitvector_root__Integer2(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_root__Integer2(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) <= a)
  and (offset_max(bitvector_alloc_table, p) >= b))
 
-predicate valid_bitvector_root__U(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_root__U(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) <= a)
  and (offset_max(bitvector_alloc_table, p) >= b))
 
-predicate valid_bitvector_struct__Decomp(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct__Decomp(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct__Decomp2(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct__Decomp2(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct__S1(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct__S1(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct__S2(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct__S2(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root__Decomp(p:_Decomp pointer,
- a:int,
- b:int,
+predicate valid_root__Decomp(p:_Decomp pointer, a:int, b:int,
  _Decomp_alloc_table:_Decomp alloc_table) =
  ((offset_min(_Decomp_alloc_table, p) <= a)
  and (offset_max(_Decomp_alloc_table, p) >= b))
 
-predicate valid_root__Decomp2(p:_Decomp2 pointer,
- a:int,
- b:int,
+predicate valid_root__Decomp2(p:_Decomp2 pointer, a:int, b:int,
  _Decomp2_alloc_table:_Decomp2 alloc_table) =
  ((offset_min(_Decomp2_alloc_table, p) <= a)
  and (offset_max(_Decomp2_alloc_table, p) >= b))
 
-predicate valid_root__Integer(p:_Integer pointer,
- a:int,
- b:int,
+predicate valid_root__Integer(p:_Integer pointer, a:int, b:int,
  _Integer_alloc_table:_Integer alloc_table) =
  ((offset_min(_Integer_alloc_table, p) <= a)
  and (offset_max(_Integer_alloc_table, p) >= b))
 
-predicate valid_root__Integer2(p:_Integer2 pointer,
- a:int,
- b:int,
+predicate valid_root__Integer2(p:_Integer2 pointer, a:int, b:int,
  _Integer2_alloc_table:_Integer2 alloc_table) =
  ((offset_min(_Integer2_alloc_table, p) <= a)
  and (offset_max(_Integer2_alloc_table, p) >= b))
 
-predicate valid_root__S1(p:_S1 pointer,
- a:int,
- b:int,
+predicate valid_root__S1(p:_S1 pointer, a:int, b:int,
  _S1_alloc_table:_S1 alloc_table) =
  ((offset_min(_S1_alloc_table, p) <= a)
  and (offset_max(_S1_alloc_table, p) >= b))
 
-predicate valid_root__S2(p:_S2 pointer,
- a:int,
- b:int,
+predicate valid_root__S2(p:_S2 pointer, a:int, b:int,
  _S2_alloc_table:_S2 alloc_table) =
  ((offset_min(_S2_alloc_table, p) <= a)
  and (offset_max(_S2_alloc_table, p) >= b))
 
-predicate valid_root__U(p:_U pointer,
- a:int,
- b:int,
+predicate valid_root__U(p:_U pointer, a:int, b:int,
  _U_alloc_table:_U alloc_table) =
  ((offset_min(_U_alloc_table, p) <= a)
  and (offset_max(_U_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct__Decomp(p:_Decomp pointer,
- a:int,
- b:int,
+predicate valid_struct__Decomp(p:_Decomp pointer, a:int, b:int,
  _Decomp_alloc_table:_Decomp alloc_table) =
  ((offset_min(_Decomp_alloc_table, p) <= a)
  and (offset_max(_Decomp_alloc_table, p) >= b))
 
-predicate valid_struct__Decomp2(p:_Decomp2 pointer,
- a:int,
- b:int,
+predicate valid_struct__Decomp2(p:_Decomp2 pointer, a:int, b:int,
  _Decomp2_alloc_table:_Decomp2 alloc_table) =
  ((offset_min(_Decomp2_alloc_table, p) <= a)
  and (offset_max(_Decomp2_alloc_table, p) >= b))
 
-predicate valid_struct__S1(p:_S1 pointer,
- a:int,
- b:int,
+predicate valid_struct__S1(p:_S1 pointer, a:int, b:int,
  _S1_alloc_table:_S1 alloc_table) =
  ((offset_min(_S1_alloc_table, p) <= a)
  and (offset_max(_S1_alloc_table, p) >= b))
 
-predicate valid_struct__S2(p:_S2 pointer,
- a:int,
- b:int,
+predicate valid_struct__S2(p:_S2 pointer, a:int, b:int,
  _S2_alloc_table:_S2 alloc_table) =
  ((offset_min(_S2_alloc_table, p) <= a)
  and (offset_max(_S2_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -1886,259 +1781,230 @@ let endianness2_ensures_default =
      (let __cil_tmp = ref (any_pointer void) in
      (C_22:
      begin
-       (let jessie_159 = (i_1 := (C_21:
-                                 (JC_35:
-                                 ((alloc_root__Integer (1)) _Integer_i_1_12_alloc_table)))) in
+       (let jessie_159 =
+       (i_1 := (C_21:
+               (JC_35:
+               ((alloc_root__Integer (1)) _Integer_i_1_12_alloc_table)))) in
        void);
       (C_24:
       begin
-        (let jessie_161 = (j_0 := (C_23:
-                                  (JC_36:
-                                  ((alloc_root__Integer (1)) _Integer_j_0_13_alloc_table)))) in
+        (let jessie_161 =
+        (j_0 := (C_23:
+                (JC_36:
+                ((alloc_root__Integer (1)) _Integer_j_0_13_alloc_table)))) in
         void);
        (C_26:
        begin
-         (let jessie_163 = (__cil_tmp := (C_25:
-                                         (JC_37:
-                                         ((alloc_root__Integer (1)) _Integer_result_5_alloc_table)))) in
+         (let jessie_163 =
+         (__cil_tmp := (C_25:
+                       (JC_37:
+                       ((alloc_root__Integer (1)) _Integer_result_5_alloc_table)))) in
          void);
-        (let jessie_203 = (C_31:
-                          begin
-                            (let jessie_171 = (let jessie_165 = (C_28:
-                                                                (int32_of_bitvector 
-                                                                 (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_27:
-                                                                    v_i_1))) (0)) (4)))) in
-                                              (let jessie_166 = (C_29: !i_1) in
-                                              (let jessie_167 = ((((replace_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_29:
-                                                                    jessie_166))) (0)) (4)) 
-                                                                 (bitvector_of_int32 jessie_165)) in
-                                              (let jessie_170 = (C_29:
-                                                                jessie_166) in
-                                              (((safe_upd_ _Integer_fields_i_1_12) jessie_170) jessie_167))))) in
-                            void);
-                           (C_38:
-                           begin
-                             (let jessie_179 = (let jessie_173 = (C_34:
-                                                                 (int8_of_bitvector 
-                                                                  (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_32:
-                                                                    v_i_1))) (0)) (1)))) in
-                                               (let jessie_174 = (C_35: !i_1) in
-                                               (let jessie_175 = ((((replace_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_35:
-                                                                    jessie_174))) (0)) (1)) 
-                                                                  (bitvector_of_int8 jessie_173)) in
-                                               (let jessie_178 = (C_35:
-                                                                 jessie_174) in
-                                               (((safe_upd_ _Integer_fields_i_1_12) jessie_178) jessie_175))))) in
-                             void);
-                            (C_45:
-                            begin
-                              (let jessie_187 = (let jessie_181 = (C_41:
-                                                                  (int8_of_bitvector 
-                                                                   (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_39:
-                                                                    v_i_1))) (1)) (1)))) in
-                                                (let jessie_182 = (C_42:
-                                                                  !i_1) in
-                                                (let jessie_183 = ((((replace_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_42:
-                                                                    jessie_182))) (1)) (1)) 
-                                                                   (bitvector_of_int8 jessie_181)) in
-                                                (let jessie_186 = (C_42:
-                                                                  jessie_182) in
-                                                (((safe_upd_ _Integer_fields_i_1_12) jessie_186) jessie_183))))) in
-                              void);
-                             (C_52:
-                             begin
-                               (let jessie_195 = (let jessie_189 = (C_48:
-                                                                   (int8_of_bitvector 
-                                                                    (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_46:
-                                                                    v_i_1))) (2)) (1)))) in
-                                                 (let jessie_190 = (C_49:
-                                                                   !i_1) in
-                                                 (let jessie_191 = ((((replace_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_49:
+        (let jessie_203 =
+        (C_31:
+        begin
+          (let jessie_171 =
+          (let jessie_165 =
+          (C_28:
+          (int32_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                (C_27: v_i_1))) (0)) (4)))) in
+          (let jessie_166 = (C_29: !i_1) in
+          (let jessie_167 =
+          ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_29:
+                                                                 jessie_166))) (0)) (4)) 
+           (bitvector_of_int32 jessie_165)) in
+          (let jessie_170 = (C_29: jessie_166) in
+          (((safe_upd_ _Integer_fields_i_1_12) jessie_170) jessie_167))))) in
+          void);
+         (C_38:
+         begin
+           (let jessie_179 =
+           (let jessie_173 =
+           (C_34:
+           (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                (C_32: v_i_1))) (0)) (1)))) in
+           (let jessie_174 = (C_35: !i_1) in
+           (let jessie_175 =
+           ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_35:
+                                                                  jessie_174))) (0)) (1)) 
+            (bitvector_of_int8 jessie_173)) in
+           (let jessie_178 = (C_35: jessie_174) in
+           (((safe_upd_ _Integer_fields_i_1_12) jessie_178) jessie_175))))) in
+           void);
+          (C_45:
+          begin
+            (let jessie_187 =
+            (let jessie_181 =
+            (C_41:
+            (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                 (C_39: v_i_1))) (1)) (1)))) in
+            (let jessie_182 = (C_42: !i_1) in
+            (let jessie_183 =
+            ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_42:
+                                                                   jessie_182))) (1)) (1)) 
+             (bitvector_of_int8 jessie_181)) in
+            (let jessie_186 = (C_42: jessie_182) in
+            (((safe_upd_ _Integer_fields_i_1_12) jessie_186) jessie_183))))) in
+            void);
+           (C_52:
+           begin
+             (let jessie_195 =
+             (let jessie_189 =
+             (C_48:
+             (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                  (C_46: v_i_1))) (2)) (1)))) in
+             (let jessie_190 = (C_49: !i_1) in
+             (let jessie_191 =
+             ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_49:
                                                                     jessie_190))) (2)) (1)) 
-                                                                    (bitvector_of_int8 jessie_189)) in
-                                                 (let jessie_194 = (C_49:
-                                                                   jessie_190) in
-                                                 (((safe_upd_ _Integer_fields_i_1_12) jessie_194) jessie_191))))) in
-                               void);
-                              (C_59:
-                              (let jessie_197 = (C_55:
-                                                (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_53:
-                                                                    v_i_1))) (3)) (1)))) in
-                              (let jessie_198 = (C_56: !i_1) in
-                              (let jessie_199 = ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                   (C_56:
+              (bitvector_of_int8 jessie_189)) in
+             (let jessie_194 = (C_49: jessie_190) in
+             (((safe_upd_ _Integer_fields_i_1_12) jessie_194) jessie_191))))) in
+             void);
+            (C_59:
+            (let jessie_197 =
+            (C_55:
+            (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                 (C_53: v_i_1))) (3)) (1)))) in
+            (let jessie_198 = (C_56: !i_1) in
+            (let jessie_199 =
+            ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_56:
                                                                    jessie_198))) (3)) (1)) 
-                                                 (bitvector_of_int8 jessie_197)) in
-                              (let jessie_202 = (C_56: jessie_198) in
-                              begin
-                                (((safe_upd_ _Integer_fields_i_1_12) jessie_202) jessie_199);
-                               jessie_197
-                              end)))))
-                             end)
-                            end)
-                           end)
-                          end) in
-        void);
+             (bitvector_of_int8 jessie_197)) in
+            (let jessie_202 = (C_56: jessie_198) in
+            begin
+              (((safe_upd_ _Integer_fields_i_1_12) jessie_202) jessie_199);
+             jessie_197 end))))) end) end) end) end) in void);
         (C_66:
         begin
-          (let jessie_211 = (let jessie_205 = (C_62:
-                                              (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_60:
-                                                                    !i_1))) (0)) (1)))) in
-                            (let jessie_206 = (C_63: !j_0) in
-                            (let jessie_207 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                 (C_63:
+          (let jessie_211 =
+          (let jessie_205 =
+          (C_62:
+          (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                               (C_60: !i_1))) (0)) (1)))) in
+          (let jessie_206 = (C_63: !j_0) in
+          (let jessie_207 =
+          ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_63:
                                                                  jessie_206))) (0)) (1)) 
-                                               (bitvector_of_int8 jessie_205)) in
-                            (let jessie_210 = (C_63: jessie_206) in
-                            (((safe_upd_ _Integer_fields_j_0_13) jessie_210) jessie_207))))) in
+           (bitvector_of_int8 jessie_205)) in
+          (let jessie_210 = (C_63: jessie_206) in
+          (((safe_upd_ _Integer_fields_j_0_13) jessie_210) jessie_207))))) in
           void);
          (C_73:
          begin
-           (let jessie_219 = (let jessie_213 = (C_69:
-                                               (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_67:
-                                                                    !i_1))) (1)) (1)))) in
-                             (let jessie_214 = (C_70: !j_0) in
-                             (let jessie_215 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                  (C_70:
+           (let jessie_219 =
+           (let jessie_213 =
+           (C_69:
+           (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                                (C_67: !i_1))) (1)) (1)))) in
+           (let jessie_214 = (C_70: !j_0) in
+           (let jessie_215 =
+           ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_70:
                                                                   jessie_214))) (1)) (1)) 
-                                                (bitvector_of_int8 jessie_213)) in
-                             (let jessie_218 = (C_70: jessie_214) in
-                             (((safe_upd_ _Integer_fields_j_0_13) jessie_218) jessie_215))))) in
+            (bitvector_of_int8 jessie_213)) in
+           (let jessie_218 = (C_70: jessie_214) in
+           (((safe_upd_ _Integer_fields_j_0_13) jessie_218) jessie_215))))) in
            void);
           (C_80:
           begin
-            (let jessie_227 = (let jessie_221 = (C_76:
-                                                (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_74:
-                                                                    !i_1))) (2)) (1)))) in
-                              (let jessie_222 = (C_77: !j_0) in
-                              (let jessie_223 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                   (C_77:
+            (let jessie_227 =
+            (let jessie_221 =
+            (C_76:
+            (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                                 (C_74: !i_1))) (2)) (1)))) in
+            (let jessie_222 = (C_77: !j_0) in
+            (let jessie_223 =
+            ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_77:
                                                                    jessie_222))) (2)) (1)) 
-                                                 (bitvector_of_int8 jessie_221)) in
-                              (let jessie_226 = (C_77: jessie_222) in
-                              (((safe_upd_ _Integer_fields_j_0_13) jessie_226) jessie_223))))) in
+             (bitvector_of_int8 jessie_221)) in
+            (let jessie_226 = (C_77: jessie_222) in
+            (((safe_upd_ _Integer_fields_j_0_13) jessie_226) jessie_223))))) in
             void);
            (C_87:
            begin
-             (let jessie_235 = (let jessie_229 = (C_83:
-                                                 (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_81:
-                                                                    !i_1))) (3)) (1)))) in
-                               (let jessie_230 = (C_84: !j_0) in
-                               (let jessie_231 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                    (C_84:
+             (let jessie_235 =
+             (let jessie_229 =
+             (C_83:
+             (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                                  (C_81: !i_1))) (3)) (1)))) in
+             (let jessie_230 = (C_84: !j_0) in
+             (let jessie_231 =
+             ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_84:
                                                                     jessie_230))) (3)) (1)) 
-                                                  (bitvector_of_int8 jessie_229)) in
-                               (let jessie_234 = (C_84: jessie_230) in
-                               (((safe_upd_ _Integer_fields_j_0_13) jessie_234) jessie_231))))) in
+              (bitvector_of_int8 jessie_229)) in
+             (let jessie_234 = (C_84: jessie_230) in
+             (((safe_upd_ _Integer_fields_j_0_13) jessie_234) jessie_231))))) in
              void);
             (C_92:
             begin
-              (let jessie_243 = (let jessie_237 = (C_89:
-                                                  (int32_of_bitvector 
-                                                   (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                    (C_88:
-                                                                    !j_0))) (0)) (4)))) in
-                                (let jessie_238 = (C_90: !__cil_tmp) in
-                                (let jessie_239 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
-                                                                    (C_90:
-                                                                    jessie_238))) (0)) (4)) 
-                                                   (bitvector_of_int32 jessie_237)) in
-                                (let jessie_242 = (C_90: jessie_238) in
-                                (((safe_upd_ _Integer_fields_result_5) jessie_242) jessie_239))))) in
+              (let jessie_243 =
+              (let jessie_237 =
+              (C_89:
+              (int32_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                    (C_88: !j_0))) (0)) (4)))) in
+              (let jessie_238 = (C_90: !__cil_tmp) in
+              (let jessie_239 =
+              ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                 (C_90: jessie_238))) (0)) (4)) (bitvector_of_int32 jessie_237)) in
+              (let jessie_242 = (C_90: jessie_238) in
+              (((safe_upd_ _Integer_fields_result_5) jessie_242) jessie_239))))) in
               void);
              (C_99:
              begin
-               (let jessie_251 = (let jessie_245 = (C_95:
-                                                   (int8_of_bitvector 
-                                                    (((extract_bytes 
-                                                       ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                        (C_93:
-                                                        !j_0))) (0)) (1)))) in
-                                 (let jessie_246 = (C_96: !__cil_tmp) in
-                                 (let jessie_247 = ((((replace_bytes 
-                                                       ((safe_acc_ !_Integer_fields_result_5) 
-                                                        (C_96:
-                                                        jessie_246))) (0)) (1)) 
-                                                    (bitvector_of_int8 jessie_245)) in
-                                 (let jessie_250 = (C_96: jessie_246) in
-                                 (((safe_upd_ _Integer_fields_result_5) jessie_250) jessie_247))))) in
+               (let jessie_251 =
+               (let jessie_245 =
+               (C_95:
+               (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                    (C_93: !j_0))) (0)) (1)))) in
+               (let jessie_246 = (C_96: !__cil_tmp) in
+               (let jessie_247 =
+               ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                  (C_96: jessie_246))) (0)) (1)) (bitvector_of_int8 jessie_245)) in
+               (let jessie_250 = (C_96: jessie_246) in
+               (((safe_upd_ _Integer_fields_result_5) jessie_250) jessie_247))))) in
                void);
               (C_106:
               begin
-                (let jessie_259 = (let jessie_253 = (C_102:
-                                                    (int8_of_bitvector 
-                                                     (((extract_bytes 
-                                                        ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                         (C_100:
-                                                         !j_0))) (1)) (1)))) in
-                                  (let jessie_254 = (C_103: !__cil_tmp) in
-                                  (let jessie_255 = ((((replace_bytes 
-                                                        ((safe_acc_ !_Integer_fields_result_5) 
-                                                         (C_103:
-                                                         jessie_254))) (1)) (1)) 
-                                                     (bitvector_of_int8 jessie_253)) in
-                                  (let jessie_258 = (C_103: jessie_254) in
-                                  (((safe_upd_ _Integer_fields_result_5) jessie_258) jessie_255))))) in
+                (let jessie_259 =
+                (let jessie_253 =
+                (C_102:
+                (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                     (C_100: !j_0))) (1)) (1)))) in
+                (let jessie_254 = (C_103: !__cil_tmp) in
+                (let jessie_255 =
+                ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                   (C_103: jessie_254))) (1)) (1)) (bitvector_of_int8 jessie_253)) in
+                (let jessie_258 = (C_103: jessie_254) in
+                (((safe_upd_ _Integer_fields_result_5) jessie_258) jessie_255))))) in
                 void);
                (C_113:
                begin
-                 (let jessie_267 = (let jessie_261 = (C_109:
-                                                     (int8_of_bitvector 
-                                                      (((extract_bytes 
-                                                         ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                          (C_107:
-                                                          !j_0))) (2)) (1)))) in
-                                   (let jessie_262 = (C_110: !__cil_tmp) in
-                                   (let jessie_263 = ((((replace_bytes 
-                                                         ((safe_acc_ !_Integer_fields_result_5) 
-                                                          (C_110:
-                                                          jessie_262))) (2)) (1)) 
-                                                      (bitvector_of_int8 jessie_261)) in
-                                   (let jessie_266 = (C_110: jessie_262) in
-                                   (((safe_upd_ _Integer_fields_result_5) jessie_266) jessie_263))))) in
+                 (let jessie_267 =
+                 (let jessie_261 =
+                 (C_109:
+                 (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                      (C_107: !j_0))) (2)) (1)))) in
+                 (let jessie_262 = (C_110: !__cil_tmp) in
+                 (let jessie_263 =
+                 ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                    (C_110: jessie_262))) (2)) (1)) (bitvector_of_int8 jessie_261)) in
+                 (let jessie_266 = (C_110: jessie_262) in
+                 (((safe_upd_ _Integer_fields_result_5) jessie_266) jessie_263))))) in
                  void);
                 (C_120:
                 begin
-                  (let jessie_275 = (let jessie_269 = (C_116:
-                                                      (int8_of_bitvector 
-                                                       (((extract_bytes 
-                                                          ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                           (C_114:
-                                                           !j_0))) (3)) (1)))) in
-                                    (let jessie_270 = (C_117: !__cil_tmp) in
-                                    (let jessie_271 = ((((replace_bytes 
-                                                          ((safe_acc_ !_Integer_fields_result_5) 
-                                                           (C_117:
-                                                           jessie_270))) (3)) (1)) 
-                                                       (bitvector_of_int8 jessie_269)) in
-                                    (let jessie_274 = (C_117: jessie_270) in
-                                    (((safe_upd_ _Integer_fields_result_5) jessie_274) jessie_271))))) in
+                  (let jessie_275 =
+                  (let jessie_269 =
+                  (C_116:
+                  (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                       (C_114: !j_0))) (3)) (1)))) in
+                  (let jessie_270 = (C_117: !__cil_tmp) in
+                  (let jessie_271 =
+                  ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                     (C_117: jessie_270))) (3)) (1)) 
+                   (bitvector_of_int8 jessie_269)) in
+                  (let jessie_274 = (C_117: jessie_270) in
+                  (((safe_upd_ _Integer_fields_result_5) jessie_274) jessie_271))))) in
                   void);
                  (C_121:
                  begin
@@ -2146,27 +2012,9 @@ let endianness2_ensures_default =
                   (C_122:
                   begin
                     ((safe_free_parameter _Integer_j_0_13_alloc_table) !j_0);
-                   (return := !__cil_tmp);
-                   (raise Return)
-                  end)
-                 end)
-                end)
-               end)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end))))))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+                   (return := !__cil_tmp); (raise Return) end) end) end) end)
+              end) end) end) end) end) end) end) end) end) end))))))))));
+    absurd  end with Return -> !return end))
   { (JC_25:
     eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_v_i_1_4,
                                                              v_i_1),
@@ -2193,275 +2041,243 @@ let endianness2_safety =
      (let __cil_tmp = ref (any_pointer void) in
      (C_22:
      begin
-       (let jessie_40 = (i_1 := (let jessie_39 = (C_21:
-                                                 (JC_29:
-                                                 ((alloc_root__Integer_requires (1)) _Integer_i_1_12_alloc_table))) in
-                                (JC_30:
-                                (assert
-                                { ge_int(offset_max(_Integer_i_1_12_alloc_table,
-                                         jessie_39),
-                                  (0)) };
-                                jessie_39)))) in
-       void);
+       (let jessie_40 =
+       (i_1 := (let jessie_39 =
+               (C_21:
+               (JC_29:
+               ((alloc_root__Integer_requires (1)) _Integer_i_1_12_alloc_table))) in
+               (JC_30:
+               (assert
+               { ge_int(offset_max(_Integer_i_1_12_alloc_table, jessie_39),
+                 (0)) }; jessie_39)))) in void);
       (C_24:
       begin
-        (let jessie_42 = (j_0 := (let jessie_41 = (C_23:
-                                                  (JC_31:
-                                                  ((alloc_root__Integer_requires (1)) _Integer_j_0_13_alloc_table))) in
-                                 (JC_32:
-                                 (assert
-                                 { ge_int(offset_max(_Integer_j_0_13_alloc_table,
-                                          jessie_41),
-                                   (0)) };
-                                 jessie_41)))) in
-        void);
+        (let jessie_42 =
+        (j_0 := (let jessie_41 =
+                (C_23:
+                (JC_31:
+                ((alloc_root__Integer_requires (1)) _Integer_j_0_13_alloc_table))) in
+                (JC_32:
+                (assert
+                { ge_int(offset_max(_Integer_j_0_13_alloc_table, jessie_41),
+                  (0)) }; jessie_41)))) in void);
        (C_26:
        begin
-         (let jessie_44 = (__cil_tmp := (let jessie_43 = (C_25:
-                                                         (JC_33:
-                                                         ((alloc_root__Integer_requires (1)) _Integer_result_5_alloc_table))) in
-                                        (JC_34:
-                                        (assert
-                                        { ge_int(offset_max(_Integer_result_5_alloc_table,
-                                                 jessie_43),
-                                          (0)) };
-                                        jessie_43)))) in
-         void);
-        (let jessie_84 = (C_31:
-                         begin
-                           (let jessie_52 = (let jessie_46 = (C_28:
-                                                             (int32_of_bitvector 
-                                                              (((extract_bytes 
-                                                                 ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                  (C_27:
-                                                                  v_i_1))) (0)) (4)))) in
-                                            (let jessie_47 = (C_29: !i_1) in
-                                            (let jessie_48 = ((((replace_bytes 
-                                                                 ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                  (C_29:
-                                                                  jessie_47))) (0)) (4)) 
-                                                              (bitvector_of_int32 jessie_46)) in
-                                            (let jessie_51 = (C_29:
-                                                             jessie_47) in
-                                            (((safe_upd_ _Integer_fields_i_1_12) jessie_51) jessie_48))))) in
-                           void);
-                          (C_38:
-                          begin
-                            (let jessie_60 = (let jessie_54 = (C_34:
-                                                              (int8_of_bitvector 
-                                                               (((extract_bytes 
-                                                                  ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                   (C_32:
-                                                                   v_i_1))) (0)) (1)))) in
-                                             (let jessie_55 = (C_35: !i_1) in
-                                             (let jessie_56 = ((((replace_bytes 
-                                                                  ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                   (C_35:
-                                                                   jessie_55))) (0)) (1)) 
-                                                               (bitvector_of_int8 jessie_54)) in
-                                             (let jessie_59 = (C_35:
-                                                              jessie_55) in
-                                             (((safe_upd_ _Integer_fields_i_1_12) jessie_59) jessie_56))))) in
-                            void);
-                           (C_45:
-                           begin
-                             (let jessie_68 = (let jessie_62 = (C_41:
-                                                               (int8_of_bitvector 
-                                                                (((extract_bytes 
-                                                                   ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_39:
-                                                                    v_i_1))) (1)) (1)))) in
-                                              (let jessie_63 = (C_42: !i_1) in
-                                              (let jessie_64 = ((((replace_bytes 
-                                                                   ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_42:
-                                                                    jessie_63))) (1)) (1)) 
-                                                                (bitvector_of_int8 jessie_62)) in
-                                              (let jessie_67 = (C_42:
-                                                               jessie_63) in
-                                              (((safe_upd_ _Integer_fields_i_1_12) jessie_67) jessie_64))))) in
-                             void);
-                            (C_52:
-                            begin
-                              (let jessie_76 = (let jessie_70 = (C_48:
-                                                                (int8_of_bitvector 
-                                                                 (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_46:
-                                                                    v_i_1))) (2)) (1)))) in
-                                               (let jessie_71 = (C_49: !i_1) in
-                                               (let jessie_72 = ((((replace_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_49:
+         (let jessie_44 =
+         (__cil_tmp := (let jessie_43 =
+                       (C_25:
+                       (JC_33:
+                       ((alloc_root__Integer_requires (1)) _Integer_result_5_alloc_table))) in
+                       (JC_34:
+                       (assert
+                       { ge_int(offset_max(_Integer_result_5_alloc_table,
+                                jessie_43),
+                         (0)) }; jessie_43)))) in void);
+        (let jessie_84 =
+        (C_31:
+        begin
+          (let jessie_52 =
+          (let jessie_46 =
+          (C_28:
+          (int32_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                (C_27: v_i_1))) (0)) (4)))) in
+          (let jessie_47 = (C_29: !i_1) in
+          (let jessie_48 =
+          ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_29:
+                                                                 jessie_47))) (0)) (4)) 
+           (bitvector_of_int32 jessie_46)) in
+          (let jessie_51 = (C_29: jessie_47) in
+          (((safe_upd_ _Integer_fields_i_1_12) jessie_51) jessie_48))))) in
+          void);
+         (C_38:
+         begin
+           (let jessie_60 =
+           (let jessie_54 =
+           (C_34:
+           (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                (C_32: v_i_1))) (0)) (1)))) in
+           (let jessie_55 = (C_35: !i_1) in
+           (let jessie_56 =
+           ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_35:
+                                                                  jessie_55))) (0)) (1)) 
+            (bitvector_of_int8 jessie_54)) in
+           (let jessie_59 = (C_35: jessie_55) in
+           (((safe_upd_ _Integer_fields_i_1_12) jessie_59) jessie_56))))) in
+           void);
+          (C_45:
+          begin
+            (let jessie_68 =
+            (let jessie_62 =
+            (C_41:
+            (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                 (C_39: v_i_1))) (1)) (1)))) in
+            (let jessie_63 = (C_42: !i_1) in
+            (let jessie_64 =
+            ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_42:
+                                                                   jessie_63))) (1)) (1)) 
+             (bitvector_of_int8 jessie_62)) in
+            (let jessie_67 = (C_42: jessie_63) in
+            (((safe_upd_ _Integer_fields_i_1_12) jessie_67) jessie_64))))) in
+            void);
+           (C_52:
+           begin
+             (let jessie_76 =
+             (let jessie_70 =
+             (C_48:
+             (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                  (C_46: v_i_1))) (2)) (1)))) in
+             (let jessie_71 = (C_49: !i_1) in
+             (let jessie_72 =
+             ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_49:
                                                                     jessie_71))) (2)) (1)) 
-                                                                 (bitvector_of_int8 jessie_70)) in
-                                               (let jessie_75 = (C_49:
-                                                                jessie_71) in
-                                               (((safe_upd_ _Integer_fields_i_1_12) jessie_75) jessie_72))))) in
-                              void);
-                             (C_59:
-                             (let jessie_78 = (C_55:
-                                              (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_v_i_1_4) 
-                                                                    (C_53:
-                                                                    v_i_1))) (3)) (1)))) in
-                             (let jessie_79 = (C_56: !i_1) in
-                             (let jessie_80 = ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                 (C_56:
-                                                                 jessie_79))) (3)) (1)) 
-                                               (bitvector_of_int8 jessie_78)) in
-                             (let jessie_83 = (C_56: jessie_79) in
-                             begin
-                               (((safe_upd_ _Integer_fields_i_1_12) jessie_83) jessie_80);
-                              jessie_78
-                             end)))))
-                            end)
-                           end)
-                          end)
-                         end) in
-        void);
+              (bitvector_of_int8 jessie_70)) in
+             (let jessie_75 = (C_49: jessie_71) in
+             (((safe_upd_ _Integer_fields_i_1_12) jessie_75) jessie_72))))) in
+             void);
+            (C_59:
+            (let jessie_78 =
+            (C_55:
+            (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_v_i_1_4) 
+                                                 (C_53: v_i_1))) (3)) (1)))) in
+            (let jessie_79 = (C_56: !i_1) in
+            (let jessie_80 =
+            ((((replace_bytes ((safe_acc_ !_Integer_fields_i_1_12) (C_56:
+                                                                   jessie_79))) (3)) (1)) 
+             (bitvector_of_int8 jessie_78)) in
+            (let jessie_83 = (C_56: jessie_79) in
+            begin
+              (((safe_upd_ _Integer_fields_i_1_12) jessie_83) jessie_80);
+             jessie_78 end))))) end) end) end) end) in void);
         (C_66:
         begin
-          (let jessie_92 = (let jessie_86 = (C_62:
-                                            (int8_of_bitvector (((extract_bytes 
-                                                                  ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                   (C_60:
-                                                                   !i_1))) (0)) (1)))) in
-                           (let jessie_87 = (C_63: !j_0) in
-                           (let jessie_88 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                               (C_63:
-                                                               jessie_87))) (0)) (1)) 
-                                             (bitvector_of_int8 jessie_86)) in
-                           (let jessie_91 = (C_63: jessie_87) in
-                           (((safe_upd_ _Integer_fields_j_0_13) jessie_91) jessie_88))))) in
+          (let jessie_92 =
+          (let jessie_86 =
+          (C_62:
+          (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                               (C_60: !i_1))) (0)) (1)))) in
+          (let jessie_87 = (C_63: !j_0) in
+          (let jessie_88 =
+          ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_63:
+                                                                 jessie_87))) (0)) (1)) 
+           (bitvector_of_int8 jessie_86)) in
+          (let jessie_91 = (C_63: jessie_87) in
+          (((safe_upd_ _Integer_fields_j_0_13) jessie_91) jessie_88))))) in
           void);
          (C_73:
          begin
-           (let jessie_100 = (let jessie_94 = (C_69:
-                                              (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_67:
-                                                                    !i_1))) (1)) (1)))) in
-                             (let jessie_95 = (C_70: !j_0) in
-                             (let jessie_96 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                 (C_70:
-                                                                 jessie_95))) (1)) (1)) 
-                                               (bitvector_of_int8 jessie_94)) in
-                             (let jessie_99 = (C_70: jessie_95) in
-                             (((safe_upd_ _Integer_fields_j_0_13) jessie_99) jessie_96))))) in
+           (let jessie_100 =
+           (let jessie_94 =
+           (C_69:
+           (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                                (C_67: !i_1))) (1)) (1)))) in
+           (let jessie_95 = (C_70: !j_0) in
+           (let jessie_96 =
+           ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_70:
+                                                                  jessie_95))) (1)) (1)) 
+            (bitvector_of_int8 jessie_94)) in
+           (let jessie_99 = (C_70: jessie_95) in
+           (((safe_upd_ _Integer_fields_j_0_13) jessie_99) jessie_96))))) in
            void);
           (C_80:
           begin
-            (let jessie_108 = (let jessie_102 = (C_76:
-                                                (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_74:
-                                                                    !i_1))) (2)) (1)))) in
-                              (let jessie_103 = (C_77: !j_0) in
-                              (let jessie_104 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                   (C_77:
+            (let jessie_108 =
+            (let jessie_102 =
+            (C_76:
+            (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                                 (C_74: !i_1))) (2)) (1)))) in
+            (let jessie_103 = (C_77: !j_0) in
+            (let jessie_104 =
+            ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_77:
                                                                    jessie_103))) (2)) (1)) 
-                                                 (bitvector_of_int8 jessie_102)) in
-                              (let jessie_107 = (C_77: jessie_103) in
-                              (((safe_upd_ _Integer_fields_j_0_13) jessie_107) jessie_104))))) in
+             (bitvector_of_int8 jessie_102)) in
+            (let jessie_107 = (C_77: jessie_103) in
+            (((safe_upd_ _Integer_fields_j_0_13) jessie_107) jessie_104))))) in
             void);
            (C_87:
            begin
-             (let jessie_116 = (let jessie_110 = (C_83:
-                                                 (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ !_Integer_fields_i_1_12) 
-                                                                    (C_81:
-                                                                    !i_1))) (3)) (1)))) in
-                               (let jessie_111 = (C_84: !j_0) in
-                               (let jessie_112 = ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                    (C_84:
+             (let jessie_116 =
+             (let jessie_110 =
+             (C_83:
+             (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_i_1_12) 
+                                                  (C_81: !i_1))) (3)) (1)))) in
+             (let jessie_111 = (C_84: !j_0) in
+             (let jessie_112 =
+             ((((replace_bytes ((safe_acc_ !_Integer_fields_j_0_13) (C_84:
                                                                     jessie_111))) (3)) (1)) 
-                                                  (bitvector_of_int8 jessie_110)) in
-                               (let jessie_115 = (C_84: jessie_111) in
-                               (((safe_upd_ _Integer_fields_j_0_13) jessie_115) jessie_112))))) in
+              (bitvector_of_int8 jessie_110)) in
+             (let jessie_115 = (C_84: jessie_111) in
+             (((safe_upd_ _Integer_fields_j_0_13) jessie_115) jessie_112))))) in
              void);
             (C_92:
             begin
-              (let jessie_124 = (let jessie_118 = (C_89:
-                                                  (int32_of_bitvector 
-                                                   (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                                    (C_88:
-                                                                    !j_0))) (0)) (4)))) in
-                                (let jessie_119 = (C_90: !__cil_tmp) in
-                                (let jessie_120 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
-                                                                    (C_90:
-                                                                    jessie_119))) (0)) (4)) 
-                                                   (bitvector_of_int32 jessie_118)) in
-                                (let jessie_123 = (C_90: jessie_119) in
-                                (((safe_upd_ _Integer_fields_result_5) jessie_123) jessie_120))))) in
+              (let jessie_124 =
+              (let jessie_118 =
+              (C_89:
+              (int32_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                    (C_88: !j_0))) (0)) (4)))) in
+              (let jessie_119 = (C_90: !__cil_tmp) in
+              (let jessie_120 =
+              ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                 (C_90: jessie_119))) (0)) (4)) (bitvector_of_int32 jessie_118)) in
+              (let jessie_123 = (C_90: jessie_119) in
+              (((safe_upd_ _Integer_fields_result_5) jessie_123) jessie_120))))) in
               void);
              (C_99:
              begin
-               (let jessie_132 = (let jessie_126 = (C_95:
-                                                   (int8_of_bitvector 
-                                                    (((extract_bytes 
-                                                       ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                        (C_93:
-                                                        !j_0))) (0)) (1)))) in
-                                 (let jessie_127 = (C_96: !__cil_tmp) in
-                                 (let jessie_128 = ((((replace_bytes 
-                                                       ((safe_acc_ !_Integer_fields_result_5) 
-                                                        (C_96:
-                                                        jessie_127))) (0)) (1)) 
-                                                    (bitvector_of_int8 jessie_126)) in
-                                 (let jessie_131 = (C_96: jessie_127) in
-                                 (((safe_upd_ _Integer_fields_result_5) jessie_131) jessie_128))))) in
+               (let jessie_132 =
+               (let jessie_126 =
+               (C_95:
+               (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                    (C_93: !j_0))) (0)) (1)))) in
+               (let jessie_127 = (C_96: !__cil_tmp) in
+               (let jessie_128 =
+               ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                  (C_96: jessie_127))) (0)) (1)) (bitvector_of_int8 jessie_126)) in
+               (let jessie_131 = (C_96: jessie_127) in
+               (((safe_upd_ _Integer_fields_result_5) jessie_131) jessie_128))))) in
                void);
               (C_106:
               begin
-                (let jessie_140 = (let jessie_134 = (C_102:
-                                                    (int8_of_bitvector 
-                                                     (((extract_bytes 
-                                                        ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                         (C_100:
-                                                         !j_0))) (1)) (1)))) in
-                                  (let jessie_135 = (C_103: !__cil_tmp) in
-                                  (let jessie_136 = ((((replace_bytes 
-                                                        ((safe_acc_ !_Integer_fields_result_5) 
-                                                         (C_103:
-                                                         jessie_135))) (1)) (1)) 
-                                                     (bitvector_of_int8 jessie_134)) in
-                                  (let jessie_139 = (C_103: jessie_135) in
-                                  (((safe_upd_ _Integer_fields_result_5) jessie_139) jessie_136))))) in
+                (let jessie_140 =
+                (let jessie_134 =
+                (C_102:
+                (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                     (C_100: !j_0))) (1)) (1)))) in
+                (let jessie_135 = (C_103: !__cil_tmp) in
+                (let jessie_136 =
+                ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                   (C_103: jessie_135))) (1)) (1)) (bitvector_of_int8 jessie_134)) in
+                (let jessie_139 = (C_103: jessie_135) in
+                (((safe_upd_ _Integer_fields_result_5) jessie_139) jessie_136))))) in
                 void);
                (C_113:
                begin
-                 (let jessie_148 = (let jessie_142 = (C_109:
-                                                     (int8_of_bitvector 
-                                                      (((extract_bytes 
-                                                         ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                          (C_107:
-                                                          !j_0))) (2)) (1)))) in
-                                   (let jessie_143 = (C_110: !__cil_tmp) in
-                                   (let jessie_144 = ((((replace_bytes 
-                                                         ((safe_acc_ !_Integer_fields_result_5) 
-                                                          (C_110:
-                                                          jessie_143))) (2)) (1)) 
-                                                      (bitvector_of_int8 jessie_142)) in
-                                   (let jessie_147 = (C_110: jessie_143) in
-                                   (((safe_upd_ _Integer_fields_result_5) jessie_147) jessie_144))))) in
+                 (let jessie_148 =
+                 (let jessie_142 =
+                 (C_109:
+                 (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                      (C_107: !j_0))) (2)) (1)))) in
+                 (let jessie_143 = (C_110: !__cil_tmp) in
+                 (let jessie_144 =
+                 ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                    (C_110: jessie_143))) (2)) (1)) (bitvector_of_int8 jessie_142)) in
+                 (let jessie_147 = (C_110: jessie_143) in
+                 (((safe_upd_ _Integer_fields_result_5) jessie_147) jessie_144))))) in
                  void);
                 (C_120:
                 begin
-                  (let jessie_156 = (let jessie_150 = (C_116:
-                                                      (int8_of_bitvector 
-                                                       (((extract_bytes 
-                                                          ((safe_acc_ !_Integer_fields_j_0_13) 
-                                                           (C_114:
-                                                           !j_0))) (3)) (1)))) in
-                                    (let jessie_151 = (C_117: !__cil_tmp) in
-                                    (let jessie_152 = ((((replace_bytes 
-                                                          ((safe_acc_ !_Integer_fields_result_5) 
-                                                           (C_117:
-                                                           jessie_151))) (3)) (1)) 
-                                                       (bitvector_of_int8 jessie_150)) in
-                                    (let jessie_155 = (C_117: jessie_151) in
-                                    (((safe_upd_ _Integer_fields_result_5) jessie_155) jessie_152))))) in
+                  (let jessie_156 =
+                  (let jessie_150 =
+                  (C_116:
+                  (int8_of_bitvector (((extract_bytes ((safe_acc_ !_Integer_fields_j_0_13) 
+                                                       (C_114: !j_0))) (3)) (1)))) in
+                  (let jessie_151 = (C_117: !__cil_tmp) in
+                  (let jessie_152 =
+                  ((((replace_bytes ((safe_acc_ !_Integer_fields_result_5) 
+                                     (C_117: jessie_151))) (3)) (1)) 
+                   (bitvector_of_int8 jessie_150)) in
+                  (let jessie_155 = (C_117: jessie_151) in
+                  (((safe_upd_ _Integer_fields_result_5) jessie_155) jessie_152))))) in
                   void);
                  (C_121:
                  begin
@@ -2469,28 +2285,9 @@ let endianness2_safety =
                   (C_122:
                   begin
                     ((free_parameter _Integer_j_0_13_alloc_table) !j_0);
-                   (return := !__cil_tmp);
-                   (raise Return)
-                  end)
-                 end)
-                end)
-               end)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end))))))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+                   (return := !__cil_tmp); (raise Return) end) end) end) end)
+              end) end) end) end) end) end) end) end) end) end))))))))));
+    absurd  end with Return -> !return end)) { true }
 
 let endianness3_ensures_default =
  fun (i : _Integer pointer) (_Integer_result_8_alloc_table : _Integer alloc_table ref) (_Integer_result_8_tag_table : _Integer tag_table ref) (_Integer_fields_result_8 : (_Integer, bitvector) memory ref) (_Integer_i_7_alloc_table : _Integer alloc_table) (_Integer_fields_i_7 : (_Integer, bitvector) memory) ->
@@ -2504,82 +2301,72 @@ let endianness3_ensures_default =
      (let j_1 = ref (any_pointer void) in
      (C_125:
      begin
-       (let jessie_313 = (j_1 := (C_124:
-                                 (JC_63:
-                                 ((alloc_root__Integer (1)) _Integer_result_8_alloc_table)))) in
+       (let jessie_313 =
+       (j_1 := (C_124:
+               (JC_63:
+               ((alloc_root__Integer (1)) _Integer_result_8_alloc_table)))) in
        void);
       (C_132:
       begin
-        (let jessie_321 = (let jessie_315 = (C_128:
-                                            (int8_of_bitvector (((extract_bytes 
-                                                                  ((safe_acc_ _Integer_fields_i_7) 
-                                                                   (C_126:
-                                                                   i))) (0)) (1)))) in
-                          (let jessie_316 = (C_129: !j_1) in
-                          (let jessie_317 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
-                                                               (C_129:
-                                                               jessie_316))) (0)) (1)) 
-                                             (bitvector_of_int8 jessie_315)) in
-                          (let jessie_320 = (C_129: jessie_316) in
-                          (((safe_upd_ _Integer_fields_result_8) jessie_320) jessie_317))))) in
+        (let jessie_321 =
+        (let jessie_315 =
+        (C_128:
+        (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_i_7) 
+                                             (C_126: i))) (0)) (1)))) in
+        (let jessie_316 = (C_129: !j_1) in
+        (let jessie_317 =
+        ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) (C_129:
+                                                                 jessie_316))) (0)) (1)) 
+         (bitvector_of_int8 jessie_315)) in
+        (let jessie_320 = (C_129: jessie_316) in
+        (((safe_upd_ _Integer_fields_result_8) jessie_320) jessie_317))))) in
         void);
        (C_139:
        begin
-         (let jessie_329 = (let jessie_323 = (C_135:
-                                             (int8_of_bitvector (((extract_bytes 
-                                                                   ((safe_acc_ _Integer_fields_i_7) 
-                                                                    (C_133:
-                                                                    i))) (1)) (1)))) in
-                           (let jessie_324 = (C_136: !j_1) in
-                           (let jessie_325 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
-                                                                (C_136:
-                                                                jessie_324))) (1)) (1)) 
-                                              (bitvector_of_int8 jessie_323)) in
-                           (let jessie_328 = (C_136: jessie_324) in
-                           (((safe_upd_ _Integer_fields_result_8) jessie_328) jessie_325))))) in
+         (let jessie_329 =
+         (let jessie_323 =
+         (C_135:
+         (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_i_7) 
+                                              (C_133: i))) (1)) (1)))) in
+         (let jessie_324 = (C_136: !j_1) in
+         (let jessie_325 =
+         ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) (C_136:
+                                                                  jessie_324))) (1)) (1)) 
+          (bitvector_of_int8 jessie_323)) in
+         (let jessie_328 = (C_136: jessie_324) in
+         (((safe_upd_ _Integer_fields_result_8) jessie_328) jessie_325))))) in
          void);
         (C_146:
         begin
-          (let jessie_337 = (let jessie_331 = (C_142:
-                                              (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_i_7) 
-                                                                    (C_140:
-                                                                    i))) (2)) (1)))) in
-                            (let jessie_332 = (C_143: !j_1) in
-                            (let jessie_333 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
-                                                                 (C_143:
-                                                                 jessie_332))) (2)) (1)) 
-                                               (bitvector_of_int8 jessie_331)) in
-                            (let jessie_336 = (C_143: jessie_332) in
-                            (((safe_upd_ _Integer_fields_result_8) jessie_336) jessie_333))))) in
+          (let jessie_337 =
+          (let jessie_331 =
+          (C_142:
+          (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_i_7) 
+                                               (C_140: i))) (2)) (1)))) in
+          (let jessie_332 = (C_143: !j_1) in
+          (let jessie_333 =
+          ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) (C_143:
+                                                                   jessie_332))) (2)) (1)) 
+           (bitvector_of_int8 jessie_331)) in
+          (let jessie_336 = (C_143: jessie_332) in
+          (((safe_upd_ _Integer_fields_result_8) jessie_336) jessie_333))))) in
           void);
          (C_153:
          begin
-           (let jessie_345 = (let jessie_339 = (C_149:
-                                               (int8_of_bitvector (((extract_bytes 
-                                                                    ((safe_acc_ _Integer_fields_i_7) 
-                                                                    (C_147:
-                                                                    i))) (3)) (1)))) in
-                             (let jessie_340 = (C_150: !j_1) in
-                             (let jessie_341 = ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) 
-                                                                  (C_150:
-                                                                  jessie_340))) (3)) (1)) 
-                                                (bitvector_of_int8 jessie_339)) in
-                             (let jessie_344 = (C_150: jessie_340) in
-                             (((safe_upd_ _Integer_fields_result_8) jessie_344) jessie_341))))) in
-           void);
-          (return := !j_1);
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+           (let jessie_345 =
+           (let jessie_339 =
+           (C_149:
+           (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer_fields_i_7) 
+                                                (C_147: i))) (3)) (1)))) in
+           (let jessie_340 = (C_150: !j_1) in
+           (let jessie_341 =
+           ((((replace_bytes ((safe_acc_ !_Integer_fields_result_8) (C_150:
+                                                                    jessie_340))) (3)) (1)) 
+            (bitvector_of_int8 jessie_339)) in
+           (let jessie_344 = (C_150: jessie_340) in
+           (((safe_upd_ _Integer_fields_result_8) jessie_344) jessie_341))))) in
+           void); (return := !j_1); (raise Return) end) end) end) end) end));
+    absurd  end with Return -> !return end))
   { (JC_46:
     eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(_Integer_fields_i_7,
                                                              i),
@@ -2600,95 +2387,80 @@ let endianness3_safety =
      (let j_1 = ref (any_pointer void) in
      (C_125:
      begin
-       (let jessie_278 = (j_1 := (C_124:
-                                 (JC_50:
-                                 ((alloc_root__Integer_requires (1)) _Integer_result_8_alloc_table)))) in
+       (let jessie_278 =
+       (j_1 := (C_124:
+               (JC_50:
+               ((alloc_root__Integer_requires (1)) _Integer_result_8_alloc_table)))) in
        void);
       (C_132:
       begin
-        (let jessie_286 = (let jessie_280 = (C_128:
-                                            (int8_of_bitvector (((extract_bytes 
-                                                                  (JC_51:
-                                                                  (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
-                                                                   (C_126:
-                                                                   i)))) (0)) (1)))) in
-                          (let jessie_281 = (C_129: !j_1) in
-                          (let jessie_282 = ((((replace_bytes (JC_52:
-                                                              (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
-                                                               (C_129:
-                                                               jessie_281)))) (0)) (1)) 
-                                             (bitvector_of_int8 jessie_280)) in
-                          (let jessie_285 = (C_129: jessie_281) in
-                          (JC_53:
-                          ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_285) jessie_282)))))) in
+        (let jessie_286 =
+        (let jessie_280 =
+        (C_128:
+        (int8_of_bitvector (((extract_bytes (JC_51:
+                                            (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
+                                             (C_126: i)))) (0)) (1)))) in
+        (let jessie_281 = (C_129: !j_1) in
+        (let jessie_282 =
+        ((((replace_bytes (JC_52:
+                          (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
+                           (C_129: jessie_281)))) (0)) (1)) (bitvector_of_int8 jessie_280)) in
+        (let jessie_285 = (C_129: jessie_281) in
+        (JC_53:
+        ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_285) jessie_282)))))) in
         void);
        (C_139:
        begin
-         (let jessie_294 = (let jessie_288 = (C_135:
-                                             (int8_of_bitvector (((extract_bytes 
-                                                                   (JC_54:
-                                                                   (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
-                                                                    (C_133:
-                                                                    i)))) (1)) (1)))) in
-                           (let jessie_289 = (C_136: !j_1) in
-                           (let jessie_290 = ((((replace_bytes (JC_55:
-                                                               (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
-                                                                (C_136:
-                                                                jessie_289)))) (1)) (1)) 
-                                              (bitvector_of_int8 jessie_288)) in
-                           (let jessie_293 = (C_136: jessie_289) in
-                           (JC_56:
-                           ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_293) jessie_290)))))) in
+         (let jessie_294 =
+         (let jessie_288 =
+         (C_135:
+         (int8_of_bitvector (((extract_bytes (JC_54:
+                                             (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
+                                              (C_133: i)))) (1)) (1)))) in
+         (let jessie_289 = (C_136: !j_1) in
+         (let jessie_290 =
+         ((((replace_bytes (JC_55:
+                           (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
+                            (C_136: jessie_289)))) (1)) (1)) (bitvector_of_int8 jessie_288)) in
+         (let jessie_293 = (C_136: jessie_289) in
+         (JC_56:
+         ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_293) jessie_290)))))) in
          void);
         (C_146:
         begin
-          (let jessie_302 = (let jessie_296 = (C_142:
-                                              (int8_of_bitvector (((extract_bytes 
-                                                                    (JC_57:
-                                                                    (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
-                                                                    (C_140:
-                                                                    i)))) (2)) (1)))) in
-                            (let jessie_297 = (C_143: !j_1) in
-                            (let jessie_298 = ((((replace_bytes (JC_58:
-                                                                (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
-                                                                 (C_143:
-                                                                 jessie_297)))) (2)) (1)) 
-                                               (bitvector_of_int8 jessie_296)) in
-                            (let jessie_301 = (C_143: jessie_297) in
-                            (JC_59:
-                            ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_301) jessie_298)))))) in
+          (let jessie_302 =
+          (let jessie_296 =
+          (C_142:
+          (int8_of_bitvector (((extract_bytes (JC_57:
+                                              (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
+                                               (C_140: i)))) (2)) (1)))) in
+          (let jessie_297 = (C_143: !j_1) in
+          (let jessie_298 =
+          ((((replace_bytes (JC_58:
+                            (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
+                             (C_143: jessie_297)))) (2)) (1)) (bitvector_of_int8 jessie_296)) in
+          (let jessie_301 = (C_143: jessie_297) in
+          (JC_59:
+          ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_301) jessie_298)))))) in
           void);
          (C_153:
          begin
-           (let jessie_310 = (let jessie_304 = (C_149:
-                                               (int8_of_bitvector (((extract_bytes 
-                                                                    (JC_60:
-                                                                    (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
-                                                                    (C_147:
-                                                                    i)))) (3)) (1)))) in
-                             (let jessie_305 = (C_150: !j_1) in
-                             (let jessie_306 = ((((replace_bytes (JC_61:
-                                                                 (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
-                                                                  (C_150:
-                                                                  jessie_305)))) (3)) (1)) 
-                                                (bitvector_of_int8 jessie_304)) in
-                             (let jessie_309 = (C_150: jessie_305) in
-                             (JC_62:
-                             ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_309) jessie_306)))))) in
-           void);
-          (return := !j_1);
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+           (let jessie_310 =
+           (let jessie_304 =
+           (C_149:
+           (int8_of_bitvector (((extract_bytes (JC_60:
+                                               (((acc_ _Integer_i_7_alloc_table) _Integer_fields_i_7) 
+                                                (C_147: i)))) (3)) (1)))) in
+           (let jessie_305 = (C_150: !j_1) in
+           (let jessie_306 =
+           ((((replace_bytes (JC_61:
+                             (((acc_ !_Integer_result_8_alloc_table) !_Integer_fields_result_8) 
+                              (C_150: jessie_305)))) (3)) (1)) (bitvector_of_int8 jessie_304)) in
+           (let jessie_309 = (C_150: jessie_305) in
+           (JC_62:
+           ((((upd_ !_Integer_result_8_alloc_table) _Integer_fields_result_8) jessie_309) jessie_306)))))) in
+           void); (return := !j_1); (raise Return) end) end) end) end) end));
+    absurd  end with Return -> !return end)) { true }
 
 let endianness_ensures_default =
  fun (i_0 : _Integer2 pointer) (_Integer2_result_2_alloc_table : _Integer2 alloc_table ref) (_Integer2_result_2_tag_table : _Integer2 tag_table ref) (_Integer2_fields_result_2 : (_Integer2, bitvector) memory ref) (_Integer2_i_0_1_alloc_table : _Integer2 alloc_table) (_Integer2_fields_i_0_1 : (_Integer2, bitvector) memory) ->
@@ -2702,50 +2474,42 @@ let endianness_ensures_default =
      (let j = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_21 = (j := (C_1:
-                              (JC_20:
-                              ((alloc_root__Integer2 (1)) _Integer2_result_2_alloc_table)))) in
+       (let jessie_21 =
+       (j := (C_1:
+             (JC_20:
+             ((alloc_root__Integer2 (1)) _Integer2_result_2_alloc_table)))) in
        void);
       (C_9:
       begin
-        (let jessie_29 = (let jessie_23 = (C_5:
-                                          (int8_of_bitvector (((extract_bytes 
-                                                                ((safe_acc_ _Integer2_fields_i_0_1) 
-                                                                 (C_3:
-                                                                 i_0))) (0)) (1)))) in
-                         (let jessie_24 = (C_6: !j) in
-                         (let jessie_25 = ((((replace_bytes ((safe_acc_ !_Integer2_fields_result_2) 
-                                                             (C_6:
-                                                             jessie_24))) (0)) (1)) 
-                                           (bitvector_of_int8 jessie_23)) in
-                         (let jessie_28 = (C_6: jessie_24) in
-                         (((safe_upd_ _Integer2_fields_result_2) jessie_28) jessie_25))))) in
+        (let jessie_29 =
+        (let jessie_23 =
+        (C_5:
+        (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer2_fields_i_0_1) 
+                                             (C_3: i_0))) (0)) (1)))) in
+        (let jessie_24 = (C_6: !j) in
+        (let jessie_25 =
+        ((((replace_bytes ((safe_acc_ !_Integer2_fields_result_2) (C_6:
+                                                                  jessie_24))) (0)) (1)) 
+         (bitvector_of_int8 jessie_23)) in
+        (let jessie_28 = (C_6: jessie_24) in
+        (((safe_upd_ _Integer2_fields_result_2) jessie_28) jessie_25))))) in
         void);
        (C_16:
        begin
-         (let jessie_37 = (let jessie_31 = (C_12:
-                                           (int8_of_bitvector (((extract_bytes 
-                                                                 ((safe_acc_ _Integer2_fields_i_0_1) 
-                                                                  (C_10:
-                                                                  i_0))) (1)) (1)))) in
-                          (let jessie_32 = (C_13: !j) in
-                          (let jessie_33 = ((((replace_bytes ((safe_acc_ !_Integer2_fields_result_2) 
-                                                              (C_13:
-                                                              jessie_32))) (1)) (1)) 
-                                            (bitvector_of_int8 jessie_31)) in
-                          (let jessie_36 = (C_13: jessie_32) in
-                          (((safe_upd_ _Integer2_fields_result_2) jessie_36) jessie_33))))) in
-         void);
-        (return := !j);
-        (raise Return)
-       end)
-      end)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+         (let jessie_37 =
+         (let jessie_31 =
+         (C_12:
+         (int8_of_bitvector (((extract_bytes ((safe_acc_ _Integer2_fields_i_0_1) 
+                                              (C_10: i_0))) (1)) (1)))) in
+         (let jessie_32 = (C_13: !j) in
+         (let jessie_33 =
+         ((((replace_bytes ((safe_acc_ !_Integer2_fields_result_2) (C_13:
+                                                                   jessie_32))) (1)) (1)) 
+          (bitvector_of_int8 jessie_31)) in
+         (let jessie_36 = (C_13: jessie_32) in
+         (((safe_upd_ _Integer2_fields_result_2) jessie_36) jessie_33))))) in
+         void); (return := !j); (raise Return) end) end) end)); absurd  end
+   with Return -> !return end))
   { (JC_9:
     eq_int(integer_of_int16(int16_of_bitvector(extract_bytes(select(_Integer2_fields_i_0_1,
                                                              i_0),
@@ -2766,57 +2530,46 @@ let endianness_safety =
      (let j = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_2 = (j := (C_1:
-                             (JC_13:
-                             ((alloc_root__Integer2_requires (1)) _Integer2_result_2_alloc_table)))) in
+       (let jessie_2 =
+       (j := (C_1:
+             (JC_13:
+             ((alloc_root__Integer2_requires (1)) _Integer2_result_2_alloc_table)))) in
        void);
       (C_9:
       begin
-        (let jessie_10 = (let jessie_4 = (C_5:
-                                         (int8_of_bitvector (((extract_bytes 
-                                                               (JC_14:
-                                                               (((acc_ _Integer2_i_0_1_alloc_table) _Integer2_fields_i_0_1) 
-                                                                (C_3:
-                                                                i_0)))) (0)) (1)))) in
-                         (let jessie_5 = (C_6: !j) in
-                         (let jessie_6 = ((((replace_bytes (JC_15:
-                                                           (((acc_ !_Integer2_result_2_alloc_table) !_Integer2_fields_result_2) 
-                                                            (C_6:
-                                                            jessie_5)))) (0)) (1)) 
-                                          (bitvector_of_int8 jessie_4)) in
-                         (let jessie_9 = (C_6: jessie_5) in
-                         (JC_16:
-                         ((((upd_ !_Integer2_result_2_alloc_table) _Integer2_fields_result_2) jessie_9) jessie_6)))))) in
+        (let jessie_10 =
+        (let jessie_4 =
+        (C_5:
+        (int8_of_bitvector (((extract_bytes (JC_14:
+                                            (((acc_ _Integer2_i_0_1_alloc_table) _Integer2_fields_i_0_1) 
+                                             (C_3: i_0)))) (0)) (1)))) in
+        (let jessie_5 = (C_6: !j) in
+        (let jessie_6 =
+        ((((replace_bytes (JC_15:
+                          (((acc_ !_Integer2_result_2_alloc_table) !_Integer2_fields_result_2) 
+                           (C_6: jessie_5)))) (0)) (1)) (bitvector_of_int8 jessie_4)) in
+        (let jessie_9 = (C_6: jessie_5) in
+        (JC_16:
+        ((((upd_ !_Integer2_result_2_alloc_table) _Integer2_fields_result_2) jessie_9) jessie_6)))))) in
         void);
        (C_16:
        begin
-         (let jessie_18 = (let jessie_12 = (C_12:
-                                           (int8_of_bitvector (((extract_bytes 
-                                                                 (JC_17:
-                                                                 (((acc_ _Integer2_i_0_1_alloc_table) _Integer2_fields_i_0_1) 
-                                                                  (C_10:
-                                                                  i_0)))) (1)) (1)))) in
-                          (let jessie_13 = (C_13: !j) in
-                          (let jessie_14 = ((((replace_bytes (JC_18:
-                                                             (((acc_ !_Integer2_result_2_alloc_table) !_Integer2_fields_result_2) 
-                                                              (C_13:
-                                                              jessie_13)))) (1)) (1)) 
-                                            (bitvector_of_int8 jessie_12)) in
-                          (let jessie_17 = (C_13: jessie_13) in
-                          (JC_19:
-                          ((((upd_ !_Integer2_result_2_alloc_table) _Integer2_fields_result_2) jessie_17) jessie_14)))))) in
-         void);
-        (return := !j);
-        (raise Return)
-       end)
-      end)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+         (let jessie_18 =
+         (let jessie_12 =
+         (C_12:
+         (int8_of_bitvector (((extract_bytes (JC_17:
+                                             (((acc_ _Integer2_i_0_1_alloc_table) _Integer2_fields_i_0_1) 
+                                              (C_10: i_0)))) (1)) (1)))) in
+         (let jessie_13 = (C_13: !j) in
+         (let jessie_14 =
+         ((((replace_bytes (JC_18:
+                           (((acc_ !_Integer2_result_2_alloc_table) !_Integer2_fields_result_2) 
+                            (C_13: jessie_13)))) (1)) (1)) (bitvector_of_int8 jessie_12)) in
+         (let jessie_17 = (C_13: jessie_13) in
+         (JC_19:
+         ((((upd_ !_Integer2_result_2_alloc_table) _Integer2_fields_result_2) jessie_17) jessie_14)))))) in
+         void); (return := !j); (raise Return) end) end) end)); absurd  end
+   with Return -> !return end)) { true }
 
 let test_ensures_default =
  fun (tt : unit) ->
@@ -2832,63 +2585,47 @@ let test_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_159:
      begin
-       (let jessie_369 = (u := (C_158:
-                               (JC_75:
-                               ((alloc_root__U (1)) _U_u_20_alloc_table)))) in
+       (let jessie_369 =
+       (u := (C_158: (JC_75: ((alloc_root__U (1)) _U_u_20_alloc_table)))) in
        void);
       (C_163:
       begin
-        (let jessie_377 = (let jessie_371 = (safe_int32_of_integer_ (1)) in
-                          (let jessie_372 = (C_160: !u) in
-                          (let jessie_373 = ((((replace_bytes ((safe_acc_ !_U_fields_u_20) 
-                                                               (C_160:
-                                                               jessie_372))) (4)) (4)) 
-                                             (bitvector_of_int32 jessie_371)) in
-                          (let jessie_376 = (C_160: jessie_372) in
-                          (((safe_upd_ _U_fields_u_20) jessie_376) jessie_373))))) in
-        void);
+        (let jessie_377 =
+        (let jessie_371 = (safe_int32_of_integer_ (1)) in
+        (let jessie_372 = (C_160: !u) in
+        (let jessie_373 =
+        ((((replace_bytes ((safe_acc_ !_U_fields_u_20) (C_160: jessie_372))) (4)) (4)) 
+         (bitvector_of_int32 jessie_371)) in
+        (let jessie_376 = (C_160: jessie_372) in
+        (((safe_upd_ _U_fields_u_20) jessie_376) jessie_373))))) in void);
        (C_167:
        begin
-         (let jessie_385 = (let jessie_379 = (safe_int8_of_integer_ (2)) in
-                           (let jessie_380 = (C_164: !u) in
-                           (let jessie_381 = ((((replace_bytes ((safe_acc_ !_U_fields_u_20) 
-                                                                (C_164:
-                                                                jessie_380))) (0)) (1)) 
-                                              (bitvector_of_int8 jessie_379)) in
-                           (let jessie_384 = (C_164: jessie_380) in
-                           (((safe_upd_ _U_fields_u_20) jessie_384) jessie_381))))) in
-         void);
+         (let jessie_385 =
+         (let jessie_379 = (safe_int8_of_integer_ (2)) in
+         (let jessie_380 = (C_164: !u) in
+         (let jessie_381 =
+         ((((replace_bytes ((safe_acc_ !_U_fields_u_20) (C_164: jessie_380))) (0)) (1)) 
+          (bitvector_of_int8 jessie_379)) in
+         (let jessie_384 = (C_164: jessie_380) in
+         (((safe_upd_ _U_fields_u_20) jessie_384) jessie_381))))) in void);
         (assert
         { (JC_76:
           eq_int(integer_of_int8(int8_of_bitvector(extract_bytes(select(_U_fields_u_20,
                                                                  u),
                                                    (0), (1)))),
-          (2))) };
-        void);
-        void;
+          (2))) }; void); void;
         (C_172:
         begin
-          (let jessie_387 = (__retres := (C_171:
-                                         (int32_of_bitvector (((extract_bytes 
-                                                                ((safe_acc_ !_U_fields_u_20) 
-                                                                 (C_169:
-                                                                 !u))) (4)) (4))))) in
+          (let jessie_387 =
+          (__retres := (C_171:
+                       (int32_of_bitvector (((extract_bytes ((safe_acc_ !_U_fields_u_20) 
+                                                             (C_169: !u))) (4)) (4))))) in
           void);
          (C_173:
          begin
            ((safe_free_parameter _U_u_20_alloc_table) !u);
-          (return := !__retres);
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+          (return := !__retres); (raise Return) end) end) end) end) end))))));
+    absurd  end with Return -> !return end))
   { (JC_68: eq_int(integer_of_int32(result), (1))) }
 
 let test_safety =
@@ -2905,69 +2642,52 @@ let test_safety =
      (let __retres = ref (any_int32 void) in
      (C_159:
      begin
-       (let jessie_348 = (u := (let jessie_347 = (C_158:
-                                                 (JC_72:
-                                                 ((alloc_root__U_requires (1)) _U_u_20_alloc_table))) in
-                               (JC_73:
-                               (assert
-                               { ge_int(offset_max(_U_u_20_alloc_table,
-                                        jessie_347),
-                                 (0)) };
-                               jessie_347)))) in
-       void);
+       (let jessie_348 =
+       (u := (let jessie_347 =
+             (C_158:
+             (JC_72: ((alloc_root__U_requires (1)) _U_u_20_alloc_table))) in
+             (JC_73:
+             (assert
+             { ge_int(offset_max(_U_u_20_alloc_table, jessie_347), (0)) };
+             jessie_347)))) in void);
       (C_163:
       begin
-        (let jessie_356 = (let jessie_350 = (safe_int32_of_integer_ (1)) in
-                          (let jessie_351 = (C_160: !u) in
-                          (let jessie_352 = ((((replace_bytes ((safe_acc_ !_U_fields_u_20) 
-                                                               (C_160:
-                                                               jessie_351))) (4)) (4)) 
-                                             (bitvector_of_int32 jessie_350)) in
-                          (let jessie_355 = (C_160: jessie_351) in
-                          (((safe_upd_ _U_fields_u_20) jessie_355) jessie_352))))) in
-        void);
+        (let jessie_356 =
+        (let jessie_350 = (safe_int32_of_integer_ (1)) in
+        (let jessie_351 = (C_160: !u) in
+        (let jessie_352 =
+        ((((replace_bytes ((safe_acc_ !_U_fields_u_20) (C_160: jessie_351))) (4)) (4)) 
+         (bitvector_of_int32 jessie_350)) in
+        (let jessie_355 = (C_160: jessie_351) in
+        (((safe_upd_ _U_fields_u_20) jessie_355) jessie_352))))) in void);
        (C_167:
        begin
-         (let jessie_364 = (let jessie_358 = (safe_int8_of_integer_ (2)) in
-                           (let jessie_359 = (C_164: !u) in
-                           (let jessie_360 = ((((replace_bytes ((safe_acc_ !_U_fields_u_20) 
-                                                                (C_164:
-                                                                jessie_359))) (0)) (1)) 
-                                              (bitvector_of_int8 jessie_358)) in
-                           (let jessie_363 = (C_164: jessie_359) in
-                           (((safe_upd_ _U_fields_u_20) jessie_363) jessie_360))))) in
-         void);
+         (let jessie_364 =
+         (let jessie_358 = (safe_int8_of_integer_ (2)) in
+         (let jessie_359 = (C_164: !u) in
+         (let jessie_360 =
+         ((((replace_bytes ((safe_acc_ !_U_fields_u_20) (C_164: jessie_359))) (0)) (1)) 
+          (bitvector_of_int8 jessie_358)) in
+         (let jessie_363 = (C_164: jessie_359) in
+         (((safe_upd_ _U_fields_u_20) jessie_363) jessie_360))))) in void);
         [ { } unit reads _U_fields_u_20
           { (JC_74:
             eq_int(integer_of_int8(int8_of_bitvector(extract_bytes(select(_U_fields_u_20,
                                                                    u),
                                                      (0), (1)))),
-            (2))) } ];
-        void;
+            (2))) } ]; void;
         (C_172:
         begin
-          (let jessie_366 = (__retres := (C_171:
-                                         (int32_of_bitvector (((extract_bytes 
-                                                                ((safe_acc_ !_U_fields_u_20) 
-                                                                 (C_169:
-                                                                 !u))) (4)) (4))))) in
+          (let jessie_366 =
+          (__retres := (C_171:
+                       (int32_of_bitvector (((extract_bytes ((safe_acc_ !_U_fields_u_20) 
+                                                             (C_169: !u))) (4)) (4))))) in
           void);
          (C_173:
          begin
-           ((free_parameter _U_u_20_alloc_table) !u);
-          (return := !__retres);
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+           ((free_parameter _U_u_20_alloc_table) !u); (return := !__retres);
+          (raise Return) end) end) end) end) end)))))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C union.jessie --quiet -f union.makefile project
@@ -2982,11 +2702,11 @@ why --project [...] why/union.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po53.why">
-      <location file = "why/union.why" line = "2684" begin = "33" end = "162"/>
+      <location file = "why/union.why" line = "2422" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po54.why">
-      <location file = "why/union.why" line = "2728" begin = "12" end = "51"/>
+      <location file = "why/union.why" line = "2459" begin = "12" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3147,7 +2867,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po3.why">
-      <location file = "why/union.why" line = "1972" begin = "34" end = "172"/>
+      <location file = "why/union.why" line = "1822" begin = "17" end = "97"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po4.why">
@@ -3156,7 +2876,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po5.why">
-      <location file = "why/union.why" line = "1984" begin = "35" end = "175"/>
+      <location file = "why/union.why" line = "1833" begin = "18" end = "99"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po6.why">
@@ -3165,16 +2885,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/union_po7.why">
-      <location file = "why/union.why" line = "1996" begin = "42" end = "198"/>
+      <location file = "why/union.why" line = "1844" begin = "25" end = "147"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/union_po8.why">
-      <location file = "why/union.why" line = "2239" begin = "20" end = "69"/>
+      <location file = "why/union.why" line = "2055" begin = "20" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/union_po9.why">
-      <location file = "why/union.why" line = "2242" begin = "21" end = "70"/>
+      <location file = "why/union.why" line = "2058" begin = "21" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

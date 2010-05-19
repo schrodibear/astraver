@@ -44,9 +44,9 @@ public class ISOException extends CardRuntimeException {
   // initialized when created by Dispatcher
     // if non static : 
     //   Modified by Xavier to bypass pb with static non final variables
-    private /* @ spec_public @*/ static ISOException systemInstance;
+    private /*  spec_public @*/ static ISOException systemInstance;
   
-    private /* @ spec_public @*/short[] theSw;
+    private /*  spec_public @*/short[] theSw;
 
   // @ public model short _reason; 
 
@@ -74,7 +74,7 @@ public class ISOException extends CardRuntimeException {
    * @exception ISOException always.
    */
     
-    /* @ public exceptional_behavior
+    /*  public exceptional_behavior
       @   requires true;
       @   modifiable systemInstance.theSw[0];
       @   signals (ISOException e) e.getReason() == sw 
@@ -97,13 +97,13 @@ public class ISOException extends CardRuntimeException {
    *  @return the reason for the exception
    */
 
-  /* @ public normal_behavior
+  /*  public normal_behavior
     @    requires true;
     @  assignable \nothing;
     @     ensures \result == _reason ;
     @*/
 
-  public /* @ pure @*/ short getReason() {
+  public /*  pure @*/ short getReason() {
     return theSw[0];
   }
 
@@ -111,7 +111,7 @@ public class ISOException extends CardRuntimeException {
    * @param reason the reason for the exception
    */
 
-  /* @ public normal_behavior
+  /*  public normal_behavior
     @    requires true;
     @  assignable _reason;
     @     ensures getReason() == sw;

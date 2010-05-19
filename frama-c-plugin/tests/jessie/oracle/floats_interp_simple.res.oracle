@@ -224,8 +224,7 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-predicate bounded(z:double,
- bound:real) =
+predicate bounded(z:double, bound:real) =
  (le_real(neg_real(bound), double_value(z))
  and le_real(double_value(z), bound))
 
@@ -260,8 +259,7 @@ axiom div_bounds_as_axiom :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -275,13 +273,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -293,13 +289,11 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
@@ -325,72 +319,52 @@ axiom round_div_as_axiom :
     (le_real(0.0, round_double(nearest_even, div_real(a_0, b_0)))
     and le_real(round_double(nearest_even, div_real(a_0, b_0)), 1.0)))))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -613,110 +587,74 @@ let interp_lin_ensures_default =
      (let r = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_13 = (b_1 := (C_1:
-                                (JC_54:
-                                (((sub_double_safe nearest_even) x2) x1)))) in
+       (let jessie_13 =
+       (b_1 := (C_1: (JC_54: (((sub_double_safe nearest_even) x2) x1)))) in
        void);
-      (assert { (JC_55: le_real(0x1p-53, double_value(b_1))) }; void);
-      void;
-      (assert { (JC_56: lt_real(0.0, double_value(b_1))) }; void);
-      void;
+      (assert { (JC_55: le_real(0x1p-53, double_value(b_1))) }; void); void;
+      (assert { (JC_56: lt_real(0.0, double_value(b_1))) }; void); void;
       (assert
       { (JC_57:
         le_real(abs_real(div_real(sub_real(double_value(b_1),
                                   sub_real(double_value(x2),
                                   double_value(x1))),
                          sub_real(double_value(x2), double_value(x1)))),
-        0x1p-53)) };
-      void);
-      void;
-      (let jessie_15 = (C_7:
-                       begin
-                         (a_1 := (C_6:
-                                 (JC_58:
-                                 (((sub_double_safe nearest_even) z_0) x1))));
-                        !a_1
-                       end) in
-      void);
+        0x1p-53)) }; void); void;
+      (let jessie_15 =
+      (C_7:
+      begin
+        (a_1 := (C_6: (JC_58: (((sub_double_safe nearest_even) z_0) x1))));
+       !a_1 end) in void);
       (assert
       { (JC_61:
         ((JC_59: le_real(0.0, sub_real(double_value(z_0), double_value(x1))))
         and (JC_60:
             le_real(sub_real(double_value(z_0), double_value(x1)),
-            sub_real(double_value(x2), double_value(x1)))))) };
-      void);
-      void;
+            sub_real(double_value(x2), double_value(x1)))))) }; void); void;
       (assert
       { (JC_64:
         ((JC_62: le_real(0.0, double_value(a_1)))
-        and (JC_63: le_real(double_value(a_1), double_value(b_1))))) };
-      void);
-      void;
-      void;
-      void;
-      (let jessie_17 = (C_17:
-                       begin
-                         (k_1 := (C_16:
-                                 (JC_67:
-                                 (((div_double_safe nearest_even) !a_1) !b_1))));
-                        !k_1
-                       end) in
-      void);
+        and (JC_63: le_real(double_value(a_1), double_value(b_1))))) }; void);
+      void; void; void;
+      (let jessie_17 =
+      (C_17:
+      begin
+        (k_1 := (C_16: (JC_67: (((div_double_safe nearest_even) !a_1) !b_1))));
+       !k_1 end) in void);
       (assert
       { (JC_70:
         ((JC_68: le_real(0.0, double_value(k_1)))
-        and (JC_69: le_real(double_value(k_1), 1.0)))) };
-      void);
-      void;
+        and (JC_69: le_real(double_value(k_1), 1.0)))) }; void); void;
       (assert
       { (JC_71:
         (let k2 =
               div_real(sub_real(double_value(z_0), double_value(x1)),
               sub_real(double_value(x2), double_value(x1))) in
-         (le_real(0.0, k2) and le_real(k2, 1.0)))) };
-      void);
-      void;
-      void;
-      (let jessie_19 = (C_24:
-                       begin
-                         (c := (C_23:
-                               (JC_73:
-                               (((sub_double_safe nearest_even) y2) y1))));
-                        !c
-                       end) in
-      void);
+         (le_real(0.0, k2) and le_real(k2, 1.0)))) }; void); void; void;
+      (let jessie_19 =
+      (C_24:
+      begin
+        (c := (C_23: (JC_73: (((sub_double_safe nearest_even) y2) y1)))); !c
+      end) in void);
       (assert
       { (JC_74:
         le_real(abs_real(div_real(sub_real(double_value(c),
                                   sub_real(double_value(y2),
                                   double_value(y1))),
                          sub_real(double_value(y2), double_value(y1)))),
-        0x1p-53)) };
-      void);
-      void;
-      (let jessie_21 = (C_29:
-                       begin
-                         (r := (C_28:
-                               (JC_77:
-                               (((add_double_safe nearest_even) y1) (C_27:
-                                                                    (JC_76:
-                                                                    (((mul_double_safe nearest_even) !k_1) 
-                                                                    (C_26:
-                                                                    (JC_75:
-                                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
-                        !r
-                       end) in
-      void);
-      void;
-      (return := !r);
-      (raise Return)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_21: true) }
+        0x1p-53)) }; void); void;
+      (let jessie_21 =
+      (C_29:
+      begin
+        (r := (C_28:
+              (JC_77:
+              (((add_double_safe nearest_even) y1) (C_27:
+                                                   (JC_76:
+                                                   (((mul_double_safe nearest_even) !k_1) 
+                                                    (C_26:
+                                                    (JC_75:
+                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
+       !r end) in void); void; (return := !r); (raise Return) end))))));
+    absurd  end with Return -> !return end)) { (JC_21: true) }
 
 let interp_lin_ensures_denormalized =
  fun (x1 : double) (x2 : double) (y1 : double) (y2 : double) (z_0 : double) ->
@@ -747,9 +685,8 @@ let interp_lin_ensures_denormalized =
      (let r = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_35 = (b_1 := (C_1:
-                                (JC_104:
-                                (((sub_double_safe nearest_even) x2) x1)))) in
+       (let jessie_35 =
+       (b_1 := (C_1: (JC_104: (((sub_double_safe nearest_even) x2) x1)))) in
        void);
       [ { } unit reads b_1 { (JC_105: le_real(0x1p-53, double_value(b_1))) } ];
       void;
@@ -761,94 +698,76 @@ let interp_lin_ensures_denormalized =
                                     sub_real(double_value(x2),
                                     double_value(x1))),
                            sub_real(double_value(x2), double_value(x1)))),
-          0x1p-53)) } ];
-      void;
-      (let jessie_37 = (C_7:
-                       begin
-                         (a_1 := (C_6:
-                                 (JC_108:
-                                 (((sub_double_safe nearest_even) z_0) x1))));
-                        !a_1
-                       end) in
-      void);
+          0x1p-53)) } ]; void;
+      (let jessie_37 =
+      (C_7:
+      begin
+        (a_1 := (C_6: (JC_108: (((sub_double_safe nearest_even) z_0) x1))));
+       !a_1 end) in void);
       [ { } unit
         { (JC_111:
           ((JC_109:
            le_real(0.0, sub_real(double_value(z_0), double_value(x1))))
           and (JC_110:
               le_real(sub_real(double_value(z_0), double_value(x1)),
-              sub_real(double_value(x2), double_value(x1)))))) } ];
-      void;
+              sub_real(double_value(x2), double_value(x1)))))) } ]; void;
       [ { } unit reads a_1,b_1
         { (JC_114:
           ((JC_112: le_real(0.0, double_value(a_1)))
           and (JC_113: le_real(double_value(a_1), double_value(b_1))))) } ];
-      void;
-      void;
+      void; void;
       (assert
       { (JC_116:
         le_real(abs_real(sub_real(double_value(a_1),
                          sub_real(double_value(z_0), double_value(x1)))),
-        0x1p-53)) };
-      void);
-      void;
-      (let jessie_39 = (C_17:
-                       begin
-                         (k_1 := (C_16:
-                                 (JC_117:
-                                 (((div_double_safe nearest_even) !a_1) !b_1))));
-                        !k_1
-                       end) in
-      void);
+        0x1p-53)) }; void); void;
+      (let jessie_39 =
+      (C_17:
+      begin
+        (k_1 := (C_16:
+                (JC_117: (((div_double_safe nearest_even) !a_1) !b_1))));
+       !k_1 end) in void);
       [ { } unit reads k_1
         { (JC_120:
           ((JC_118: le_real(0.0, double_value(k_1)))
-          and (JC_119: le_real(double_value(k_1), 1.0)))) } ];
-      void;
+          and (JC_119: le_real(double_value(k_1), 1.0)))) } ]; void;
       [ { } unit
         { (JC_121:
           (let k2 =
                 div_real(sub_real(double_value(z_0), double_value(x1)),
                 sub_real(double_value(x2), double_value(x1))) in
-           (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
-      void;
+           (le_real(0.0, k2) and le_real(k2, 1.0)))) } ]; void;
       (assert
       { (JC_122:
         (let k2_0 =
               div_real(sub_real(double_value(z_0), double_value(x1)),
               sub_real(double_value(x2), double_value(x1))) in
          le_real(abs_real(sub_real(double_value(k_1), k2_0)), 0x1p-51))) };
-      void);
-      void;
-      (let jessie_41 = (C_24:
-                       begin
-                         (c := (C_23:
-                               (JC_123:
-                               (((sub_double_safe nearest_even) y2) y1))));
-                        !c
-                       end) in
-      void);
+      void); void;
+      (let jessie_41 =
+      (C_24:
+      begin
+        (c := (C_23: (JC_123: (((sub_double_safe nearest_even) y2) y1)))); !c
+      end) in void);
       [ { } unit reads c
         { (JC_124:
           le_real(abs_real(div_real(sub_real(double_value(c),
                                     sub_real(double_value(y2),
                                     double_value(y1))),
                            sub_real(double_value(y2), double_value(y1)))),
-          0x1p-53)) } ];
-      void;
-      (let jessie_43 = (C_29:
-                       begin
-                         (r := (C_28:
-                               (JC_127:
-                               (((add_double_safe nearest_even) y1) (C_27:
-                                                                    (JC_126:
-                                                                    (((mul_double_safe nearest_even) !k_1) 
-                                                                    (C_26:
-                                                                    (JC_125:
-                                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
-                        !r
-                       end) in
-      void);
+          0x1p-53)) } ]; void;
+      (let jessie_43 =
+      (C_29:
+      begin
+        (r := (C_28:
+              (JC_127:
+              (((add_double_safe nearest_even) y1) (C_27:
+                                                   (JC_126:
+                                                   (((mul_double_safe nearest_even) !k_1) 
+                                                    (C_26:
+                                                    (JC_125:
+                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
+       !r end) in void);
       (assert
       { (JC_128:
         (let k2_1 =
@@ -858,16 +777,8 @@ let interp_lin_ensures_denormalized =
                add_real(double_value(y1),
                mul_real(k2_1, sub_real(double_value(y2), double_value(y1)))) in
           le_real(abs_real(sub_real(double_value(r), exact_result)), 0x1p-1)))) };
-      void);
-      void;
-      (return := !r);
-      (raise Return)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      void); void; (return := !r); (raise Return) end)))))); absurd  end with
+   Return -> !return end))
   { (JC_27:
     (let k_0 =
           div_real(sub_real(double_value(z_0), double_value(x1)),
@@ -907,9 +818,8 @@ let interp_lin_ensures_normalized =
      (let r = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_24 = (b_1 := (C_1:
-                                (JC_79:
-                                (((sub_double_safe nearest_even) x2) x1)))) in
+       (let jessie_24 =
+       (b_1 := (C_1: (JC_79: (((sub_double_safe nearest_even) x2) x1)))) in
        void);
       [ { } unit reads b_1 { (JC_80: le_real(0x1p-53, double_value(b_1))) } ];
       void;
@@ -921,24 +831,19 @@ let interp_lin_ensures_normalized =
                                     sub_real(double_value(x2),
                                     double_value(x1))),
                            sub_real(double_value(x2), double_value(x1)))),
-          0x1p-53)) } ];
-      void;
-      (let jessie_26 = (C_7:
-                       begin
-                         (a_1 := (C_6:
-                                 (JC_83:
-                                 (((sub_double_safe nearest_even) z_0) x1))));
-                        !a_1
-                       end) in
-      void);
+          0x1p-53)) } ]; void;
+      (let jessie_26 =
+      (C_7:
+      begin
+        (a_1 := (C_6: (JC_83: (((sub_double_safe nearest_even) z_0) x1))));
+       !a_1 end) in void);
       [ { } unit
         { (JC_86:
           ((JC_84:
            le_real(0.0, sub_real(double_value(z_0), double_value(x1))))
           and (JC_85:
               le_real(sub_real(double_value(z_0), double_value(x1)),
-              sub_real(double_value(x2), double_value(x1)))))) } ];
-      void;
+              sub_real(double_value(x2), double_value(x1)))))) } ]; void;
       [ { } unit reads a_1,b_1
         { (JC_89:
           ((JC_87: le_real(0.0, double_value(a_1)))
@@ -950,69 +855,47 @@ let interp_lin_ensures_normalized =
                                   sub_real(double_value(z_0),
                                   double_value(x1))),
                          sub_real(double_value(z_0), double_value(x1)))),
-        0x1p-53)) };
-      void);
-      void;
-      void;
-      (let jessie_28 = (C_17:
-                       begin
-                         (k_1 := (C_16:
-                                 (JC_92:
-                                 (((div_double_safe nearest_even) !a_1) !b_1))));
-                        !k_1
-                       end) in
-      void);
+        0x1p-53)) }; void); void; void;
+      (let jessie_28 =
+      (C_17:
+      begin
+        (k_1 := (C_16: (JC_92: (((div_double_safe nearest_even) !a_1) !b_1))));
+       !k_1 end) in void);
       [ { } unit reads k_1
         { (JC_95:
           ((JC_93: le_real(0.0, double_value(k_1)))
-          and (JC_94: le_real(double_value(k_1), 1.0)))) } ];
-      void;
+          and (JC_94: le_real(double_value(k_1), 1.0)))) } ]; void;
       [ { } unit
         { (JC_96:
           (let k2 =
                 div_real(sub_real(double_value(z_0), double_value(x1)),
                 sub_real(double_value(x2), double_value(x1))) in
-           (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
-      void;
-      void;
-      (let jessie_30 = (C_24:
-                       begin
-                         (c := (C_23:
-                               (JC_98:
-                               (((sub_double_safe nearest_even) y2) y1))));
-                        !c
-                       end) in
-      void);
+           (le_real(0.0, k2) and le_real(k2, 1.0)))) } ]; void; void;
+      (let jessie_30 =
+      (C_24:
+      begin
+        (c := (C_23: (JC_98: (((sub_double_safe nearest_even) y2) y1)))); !c
+      end) in void);
       [ { } unit reads c
         { (JC_99:
           le_real(abs_real(div_real(sub_real(double_value(c),
                                     sub_real(double_value(y2),
                                     double_value(y1))),
                            sub_real(double_value(y2), double_value(y1)))),
-          0x1p-53)) } ];
-      void;
-      (let jessie_32 = (C_29:
-                       begin
-                         (r := (C_28:
-                               (JC_102:
-                               (((add_double_safe nearest_even) y1) (C_27:
-                                                                    (JC_101:
-                                                                    (((mul_double_safe nearest_even) !k_1) 
-                                                                    (C_26:
-                                                                    (JC_100:
-                                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
-                        !r
-                       end) in
-      void);
-      void;
-      (return := !r);
-      (raise Return)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+          0x1p-53)) } ]; void;
+      (let jessie_32 =
+      (C_29:
+      begin
+        (r := (C_28:
+              (JC_102:
+              (((add_double_safe nearest_even) y1) (C_27:
+                                                   (JC_101:
+                                                   (((mul_double_safe nearest_even) !k_1) 
+                                                    (C_26:
+                                                    (JC_100:
+                                                    (((sub_double_safe nearest_even) y2) y1))))))))));
+       !r end) in void); void; (return := !r); (raise Return) end))))));
+    absurd  end with Return -> !return end))
   { (JC_25:
     (let k =
           div_real(sub_real(double_value(z_0), double_value(x1)),
@@ -1051,9 +934,8 @@ let interp_lin_safety =
      (let r = ref (any_double void) in
      (C_2:
      begin
-       (let jessie_2 = (b_1 := (C_1:
-                               (JC_29: (((sub_double nearest_even) x2) x1)))) in
-       void);
+       (let jessie_2 =
+       (b_1 := (C_1: (JC_29: (((sub_double nearest_even) x2) x1)))) in void);
       [ { } unit reads b_1 { (JC_30: le_real(0x1p-53, double_value(b_1))) } ];
       void;
       [ { } unit reads b_1 { (JC_31: lt_real(0.0, double_value(b_1))) } ];
@@ -1064,89 +946,63 @@ let interp_lin_safety =
                                     sub_real(double_value(x2),
                                     double_value(x1))),
                            sub_real(double_value(x2), double_value(x1)))),
-          0x1p-53)) } ];
-      void;
-      (let jessie_4 = (C_7:
-                      begin
-                        (a_1 := (C_6:
-                                (JC_33: (((sub_double nearest_even) z_0) x1))));
-                       !a_1
-                      end) in
-      void);
+          0x1p-53)) } ]; void;
+      (let jessie_4 =
+      (C_7:
+      begin
+        (a_1 := (C_6: (JC_33: (((sub_double nearest_even) z_0) x1)))); !a_1
+      end) in void);
       [ { } unit
         { (JC_36:
           ((JC_34:
            le_real(0.0, sub_real(double_value(z_0), double_value(x1))))
           and (JC_35:
               le_real(sub_real(double_value(z_0), double_value(x1)),
-              sub_real(double_value(x2), double_value(x1)))))) } ];
-      void;
+              sub_real(double_value(x2), double_value(x1)))))) } ]; void;
       [ { } unit reads a_1,b_1
         { (JC_39:
           ((JC_37: le_real(0.0, double_value(a_1)))
           and (JC_38: le_real(double_value(a_1), double_value(b_1))))) } ];
-      void;
-      void;
-      void;
-      (let jessie_6 = (C_17:
-                      begin
-                        (k_1 := (C_16:
-                                (JC_42:
-                                (((div_double nearest_even) !a_1) !b_1))));
-                       !k_1
-                      end) in
-      void);
+      void; void; void;
+      (let jessie_6 =
+      (C_17:
+      begin
+        (k_1 := (C_16: (JC_42: (((div_double nearest_even) !a_1) !b_1))));
+       !k_1 end) in void);
       [ { } unit reads k_1
         { (JC_45:
           ((JC_43: le_real(0.0, double_value(k_1)))
-          and (JC_44: le_real(double_value(k_1), 1.0)))) } ];
-      void;
+          and (JC_44: le_real(double_value(k_1), 1.0)))) } ]; void;
       [ { } unit
         { (JC_46:
           (let k2 =
                 div_real(sub_real(double_value(z_0), double_value(x1)),
                 sub_real(double_value(x2), double_value(x1))) in
-           (le_real(0.0, k2) and le_real(k2, 1.0)))) } ];
-      void;
-      void;
-      (let jessie_8 = (C_24:
-                      begin
-                        (c := (C_23:
-                              (JC_48: (((sub_double nearest_even) y2) y1))));
-                       !c
-                      end) in
-      void);
+           (le_real(0.0, k2) and le_real(k2, 1.0)))) } ]; void; void;
+      (let jessie_8 =
+      (C_24:
+      begin   (c := (C_23: (JC_48: (((sub_double nearest_even) y2) y1)))); !c
+      end) in void);
       [ { } unit reads c
         { (JC_49:
           le_real(abs_real(div_real(sub_real(double_value(c),
                                     sub_real(double_value(y2),
                                     double_value(y1))),
                            sub_real(double_value(y2), double_value(y1)))),
-          0x1p-53)) } ];
-      void;
-      (let jessie_10 = (C_29:
-                       begin
-                         (r := (C_28:
-                               (JC_52:
-                               (((add_double nearest_even) y1) (C_27:
-                                                               (JC_51:
-                                                               (((mul_double nearest_even) !k_1) 
-                                                                (C_26:
-                                                                (JC_50:
-                                                                (((sub_double nearest_even) y2) y1))))))))));
-                        !r
-                       end) in
-      void);
-      void;
-      (return := !r);
-      (raise Return)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+          0x1p-53)) } ]; void;
+      (let jessie_10 =
+      (C_29:
+      begin
+        (r := (C_28:
+              (JC_52:
+              (((add_double nearest_even) y1) (C_27:
+                                              (JC_51:
+                                              (((mul_double nearest_even) !k_1) 
+                                               (C_26:
+                                               (JC_50:
+                                               (((sub_double nearest_even) y2) y1))))))))));
+       !r end) in void); void; (return := !r); (raise Return) end))))));
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C floats_interp_simple.jessie --quiet -f floats_interp_simple.makefile project

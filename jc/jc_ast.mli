@@ -389,6 +389,7 @@ and 'li term_node =
   | JCTreal_cast of 'li term * real_conversion
   | JCTif of 'li term * 'li term * 'li term
   | JCTrange of 'li term option * 'li term option
+  | JCTlet of var_info * 'li term * 'li term
   | JCTmatch of 'li term * (pattern * 'li term) list
 
 and 'li term = 'li term_node c_term

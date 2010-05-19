@@ -198,14 +198,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int32_of_integer: int -> int32
@@ -247,18 +245,15 @@ axiom int_P_tags :
   (forall int_P_tag_table:int_P tag_table.
    instanceof(int_P_tag_table, x, int_P_tag)))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_int_P(p:int_P pointer,
- a:int,
+predicate left_valid_struct_int_P(p:int_P pointer, a:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_min(int_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -273,122 +268,89 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_P(p:int_P pointer,
- b:int,
+predicate right_valid_struct_int_P(p:int_P pointer, b:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_max(int_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_int_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -748,17 +710,11 @@ let f_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (0)) in
-                        (let jessie_11 = x_0 in
-                        (((safe_upd_ int_P_int_M_x_0_1) jessie_11) jessie_8))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_12 =
+       (let jessie_8 = (safe_int32_of_integer_ (0)) in
+       (let jessie_11 = x_0 in
+       (((safe_upd_ int_P_int_M_x_0_1) jessie_11) jessie_8))) in void);
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_15:
     ((JC_13: eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
     and (JC_14:
@@ -778,18 +734,12 @@ let f_safety =
    begin
      (C_2:
      begin
-       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (0)) in
-                       (let jessie_5 = x_0 in
-                       (JC_21:
-                       ((((upd_ int_P_x_0_1_alloc_table) int_P_int_M_x_0_1) jessie_5) jessie_2)))) in
-       void);
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+       (let jessie_6 =
+       (let jessie_2 = (safe_int32_of_integer_ (0)) in
+       (let jessie_5 = x_0 in
+       (JC_21:
+       ((((upd_ int_P_x_0_1_alloc_table) int_P_int_M_x_0_1) jessie_5) jessie_2)))) in
+       void); (raise Return) end); (raise Return) end with Return -> void end)
   { true }
 
 let g_ensures_default =
@@ -812,34 +762,37 @@ let g_ensures_default =
      (let a = ref (any_pointer void) in
      (C_14:
      begin
-       (let jessie_48 = (x_1 := (C_13:
-                                (JC_47:
-                                (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
+       (let jessie_48 =
+       (x_1 := (C_13:
+               (JC_47:
+               (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
        void);
       (C_16:
       begin
-        (let jessie_50 = (y_1 := (C_15:
-                                 (JC_48:
-                                 (((alloc_struct_int_P (1)) int_P_y_1_6_alloc_table) int_P_y_1_6_tag_table)))) in
+        (let jessie_50 =
+        (y_1 := (C_15:
+                (JC_48:
+                (((alloc_struct_int_P (1)) int_P_y_1_6_alloc_table) int_P_y_1_6_tag_table)))) in
         void);
        (C_18:
        begin
-         (let jessie_52 = (a := (C_17:
-                                (JC_49:
-                                (((alloc_struct_int_P (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table)))) in
+         (let jessie_52 =
+         (a := (C_17:
+               (JC_49:
+               (((alloc_struct_int_P (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table)))) in
          void);
         (C_20:
         begin
-          (let jessie_58 = (let jessie_54 = (safe_int32_of_integer_ (1)) in
-                           (let jessie_57 = !x_1 in
-                           (((safe_upd_ int_P_int_M_x_1_5) jessie_57) jessie_54))) in
-          void);
+          (let jessie_58 =
+          (let jessie_54 = (safe_int32_of_integer_ (1)) in
+          (let jessie_57 = !x_1 in
+          (((safe_upd_ int_P_int_M_x_1_5) jessie_57) jessie_54))) in void);
          (C_22:
          begin
-           (let jessie_64 = (let jessie_60 = (safe_int32_of_integer_ (1)) in
-                            (let jessie_63 = !y_1 in
-                            (((safe_upd_ int_P_int_M_y_1_6) jessie_63) jessie_60))) in
-           void);
+           (let jessie_64 =
+           (let jessie_60 = (safe_int32_of_integer_ (1)) in
+           (let jessie_63 = !y_1 in
+           (((safe_upd_ int_P_int_M_y_1_6) jessie_63) jessie_60))) in void);
           (C_23:
           begin
             (let jessie_66 = !x_1 in
@@ -847,21 +800,19 @@ let g_ensures_default =
             (JC_50:
             ((((((f jessie_66) jessie_65) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
            void;
-           (let jessie_78 = (C_28:
-                            begin
-                              (let jessie_72 = (let jessie_68 = (safe_int32_of_integer_ (1)) in
-                                               (let jessie_71 = ((shift !a) (0)) in
-                                               (((safe_upd_ int_P_int_M_a_7) jessie_71) jessie_68))) in
-                              void);
-                             (C_30:
-                             (let jessie_74 = (safe_int32_of_integer_ (1)) in
-                             (let jessie_77 = ((shift !a) (1)) in
-                             begin
-                               (((safe_upd_ int_P_int_M_a_7) jessie_77) jessie_74);
-                              jessie_74
-                             end)))
-                            end) in
-           void);
+           (let jessie_78 =
+           (C_28:
+           begin
+             (let jessie_72 =
+             (let jessie_68 = (safe_int32_of_integer_ (1)) in
+             (let jessie_71 = ((shift !a) (0)) in
+             (((safe_upd_ int_P_int_M_a_7) jessie_71) jessie_68))) in void);
+            (C_30:
+            (let jessie_74 = (safe_int32_of_integer_ (1)) in
+            (let jessie_77 = ((shift !a) (1)) in
+            begin
+              (((safe_upd_ int_P_int_M_a_7) jessie_77) jessie_74); jessie_74
+            end))) end) in void);
            (C_32:
            begin
              (let jessie_80 = !a in
@@ -878,22 +829,8 @@ let g_ensures_default =
               (C_38:
               begin
                 ((safe_free_parameter int_P_a_7_alloc_table) !a);
-               (raise Return)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end)))))))))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+               (raise Return) end) end) end) end) end) end) end) end) end)
+     end))))))))))))); (raise Return) end with Return -> void end)
   { (JC_26: true) }
 
 let g_ensures_values =
@@ -916,34 +853,37 @@ let g_ensures_values =
      (let a = ref (any_pointer void) in
      (C_14:
      begin
-       (let jessie_82 = (x_1 := (C_13:
-                                (JC_58:
-                                (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
+       (let jessie_82 =
+       (x_1 := (C_13:
+               (JC_58:
+               (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
        void);
       (C_16:
       begin
-        (let jessie_84 = (y_1 := (C_15:
-                                 (JC_59:
-                                 (((alloc_struct_int_P (1)) int_P_y_1_6_alloc_table) int_P_y_1_6_tag_table)))) in
+        (let jessie_84 =
+        (y_1 := (C_15:
+                (JC_59:
+                (((alloc_struct_int_P (1)) int_P_y_1_6_alloc_table) int_P_y_1_6_tag_table)))) in
         void);
        (C_18:
        begin
-         (let jessie_86 = (a := (C_17:
-                                (JC_60:
-                                (((alloc_struct_int_P (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table)))) in
+         (let jessie_86 =
+         (a := (C_17:
+               (JC_60:
+               (((alloc_struct_int_P (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table)))) in
          void);
         (C_20:
         begin
-          (let jessie_92 = (let jessie_88 = (safe_int32_of_integer_ (1)) in
-                           (let jessie_91 = !x_1 in
-                           (((safe_upd_ int_P_int_M_x_1_5) jessie_91) jessie_88))) in
-          void);
+          (let jessie_92 =
+          (let jessie_88 = (safe_int32_of_integer_ (1)) in
+          (let jessie_91 = !x_1 in
+          (((safe_upd_ int_P_int_M_x_1_5) jessie_91) jessie_88))) in void);
          (C_22:
          begin
-           (let jessie_98 = (let jessie_94 = (safe_int32_of_integer_ (1)) in
-                            (let jessie_97 = !y_1 in
-                            (((safe_upd_ int_P_int_M_y_1_6) jessie_97) jessie_94))) in
-           void);
+           (let jessie_98 =
+           (let jessie_94 = (safe_int32_of_integer_ (1)) in
+           (let jessie_97 = !y_1 in
+           (((safe_upd_ int_P_int_M_y_1_6) jessie_97) jessie_94))) in void);
           (C_23:
           begin
             (let jessie_100 = !x_1 in
@@ -956,24 +896,20 @@ let g_ensures_values =
               eq_int(integer_of_int32(select(int_P_int_M_x_1_5, x_1)), (0)))
              and (JC_63:
                  eq_int(integer_of_int32(select(int_P_int_M_y_1_6, y_1)),
-                 (1))))) };
-           void);
-           void;
-           (let jessie_112 = (C_28:
-                             begin
-                               (let jessie_106 = (let jessie_102 = (safe_int32_of_integer_ (1)) in
-                                                 (let jessie_105 = ((shift !a) (0)) in
-                                                 (((safe_upd_ int_P_int_M_a_7) jessie_105) jessie_102))) in
-                               void);
-                              (C_30:
-                              (let jessie_108 = (safe_int32_of_integer_ (1)) in
-                              (let jessie_111 = ((shift !a) (1)) in
-                              begin
-                                (((safe_upd_ int_P_int_M_a_7) jessie_111) jessie_108);
-                               jessie_108
-                              end)))
-                             end) in
-           void);
+                 (1))))) }; void); void;
+           (let jessie_112 =
+           (C_28:
+           begin
+             (let jessie_106 =
+             (let jessie_102 = (safe_int32_of_integer_ (1)) in
+             (let jessie_105 = ((shift !a) (0)) in
+             (((safe_upd_ int_P_int_M_a_7) jessie_105) jessie_102))) in void);
+            (C_30:
+            (let jessie_108 = (safe_int32_of_integer_ (1)) in
+            (let jessie_111 = ((shift !a) (1)) in
+            begin
+              (((safe_upd_ int_P_int_M_a_7) jessie_111) jessie_108);
+             jessie_108 end))) end) in void);
            (C_32:
            begin
              (let jessie_114 = !a in
@@ -988,9 +924,7 @@ let g_ensures_values =
               and (JC_67:
                   eq_int(integer_of_int32(select(int_P_int_M_a_7,
                                           shift(a, (1)))),
-                  (1))))) };
-            void);
-            void;
+                  (1))))) }; void); void;
             (C_36:
             begin
               ((safe_free_parameter int_P_x_1_5_alloc_table) !x_1);
@@ -1000,22 +934,8 @@ let g_ensures_values =
               (C_38:
               begin
                 ((safe_free_parameter int_P_a_7_alloc_table) !a);
-               (raise Return)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end)))))))))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+               (raise Return) end) end) end) end) end) end) end) end) end)
+     end))))))))))))); (raise Return) end with Return -> void end)
   { (JC_30: true) }
 
 let g_safety =
@@ -1038,52 +958,49 @@ let g_safety =
      (let a = ref (any_pointer void) in
      (C_14:
      begin
-       (let jessie_14 = (x_1 := (let jessie_13 = (C_13:
-                                                 (JC_32:
-                                                 (((alloc_struct_int_P_requires (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table))) in
-                                (JC_33:
-                                (assert
-                                { ge_int(offset_max(int_P_x_1_5_alloc_table,
-                                         jessie_13),
-                                  (0)) };
-                                jessie_13)))) in
-       void);
+       (let jessie_14 =
+       (x_1 := (let jessie_13 =
+               (C_13:
+               (JC_32:
+               (((alloc_struct_int_P_requires (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table))) in
+               (JC_33:
+               (assert
+               { ge_int(offset_max(int_P_x_1_5_alloc_table, jessie_13), (0)) };
+               jessie_13)))) in void);
       (C_16:
       begin
-        (let jessie_16 = (y_1 := (let jessie_15 = (C_15:
-                                                  (JC_34:
-                                                  (((alloc_struct_int_P_requires (1)) int_P_y_1_6_alloc_table) int_P_y_1_6_tag_table))) in
-                                 (JC_35:
-                                 (assert
-                                 { ge_int(offset_max(int_P_y_1_6_alloc_table,
-                                          jessie_15),
-                                   (0)) };
-                                 jessie_15)))) in
-        void);
+        (let jessie_16 =
+        (y_1 := (let jessie_15 =
+                (C_15:
+                (JC_34:
+                (((alloc_struct_int_P_requires (1)) int_P_y_1_6_alloc_table) int_P_y_1_6_tag_table))) in
+                (JC_35:
+                (assert
+                { ge_int(offset_max(int_P_y_1_6_alloc_table, jessie_15), (0)) };
+                jessie_15)))) in void);
        (C_18:
        begin
-         (let jessie_18 = (a := (let jessie_17 = (C_17:
-                                                 (JC_36:
-                                                 (((alloc_struct_int_P_requires (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table))) in
-                                (JC_37:
-                                (assert
-                                { ge_int(offset_max(int_P_a_7_alloc_table,
-                                         jessie_17),
-                                  (1)) };
-                                jessie_17)))) in
-         void);
+         (let jessie_18 =
+         (a := (let jessie_17 =
+               (C_17:
+               (JC_36:
+               (((alloc_struct_int_P_requires (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table))) in
+               (JC_37:
+               (assert
+               { ge_int(offset_max(int_P_a_7_alloc_table, jessie_17), (1)) };
+               jessie_17)))) in void);
         (C_20:
         begin
-          (let jessie_24 = (let jessie_20 = (safe_int32_of_integer_ (1)) in
-                           (let jessie_23 = !x_1 in
-                           (((safe_upd_ int_P_int_M_x_1_5) jessie_23) jessie_20))) in
-          void);
+          (let jessie_24 =
+          (let jessie_20 = (safe_int32_of_integer_ (1)) in
+          (let jessie_23 = !x_1 in
+          (((safe_upd_ int_P_int_M_x_1_5) jessie_23) jessie_20))) in void);
          (C_22:
          begin
-           (let jessie_30 = (let jessie_26 = (safe_int32_of_integer_ (1)) in
-                            (let jessie_29 = !y_1 in
-                            (((safe_upd_ int_P_int_M_y_1_6) jessie_29) jessie_26))) in
-           void);
+           (let jessie_30 =
+           (let jessie_26 = (safe_int32_of_integer_ (1)) in
+           (let jessie_29 = !y_1 in
+           (((safe_upd_ int_P_int_M_y_1_6) jessie_29) jessie_26))) in void);
           (C_23:
           begin
             (let jessie_32 = !x_1 in
@@ -1091,21 +1008,19 @@ let g_safety =
             (JC_38:
             ((((((f_requires jessie_32) jessie_31) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
            void;
-           (let jessie_44 = (C_28:
-                            begin
-                              (let jessie_38 = (let jessie_34 = (safe_int32_of_integer_ (1)) in
-                                               (let jessie_37 = ((shift !a) (0)) in
-                                               (((safe_upd_ int_P_int_M_a_7) jessie_37) jessie_34))) in
-                              void);
-                             (C_30:
-                             (let jessie_40 = (safe_int32_of_integer_ (1)) in
-                             (let jessie_43 = ((shift !a) (1)) in
-                             begin
-                               (((safe_upd_ int_P_int_M_a_7) jessie_43) jessie_40);
-                              jessie_40
-                             end)))
-                            end) in
-           void);
+           (let jessie_44 =
+           (C_28:
+           begin
+             (let jessie_38 =
+             (let jessie_34 = (safe_int32_of_integer_ (1)) in
+             (let jessie_37 = ((shift !a) (0)) in
+             (((safe_upd_ int_P_int_M_a_7) jessie_37) jessie_34))) in void);
+            (C_30:
+            (let jessie_40 = (safe_int32_of_integer_ (1)) in
+            (let jessie_43 = ((shift !a) (1)) in
+            begin
+              (((safe_upd_ int_P_int_M_a_7) jessie_43) jessie_40); jessie_40
+            end))) end) in void);
            (C_32:
            begin
              (let jessie_46 = !a in
@@ -1126,22 +1041,8 @@ let g_safety =
               (C_38:
               begin
                 ((free_parameter int_P_a_7_alloc_table) !a); (raise Return)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end)))))))))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+              end) end) end) end) end) end) end) end) end) end)))))))))))));
+    (raise Return) end with Return -> void end) { true }
 
 let h_ensures_default =
  fun (x : int_P pointer) (y : int_P pointer) (int_P_int_M_x_3 : (int_P, int32) memory ref) (int_P_int_M_y_4 : (int_P, int32) memory ref) (int_P_x_3_alloc_table : int_P alloc_table) (int_P_y_4_alloc_table : int_P alloc_table) ->
@@ -1155,24 +1056,17 @@ let h_ensures_default =
    begin
      (C_42:
      begin
-       (let jessie_132 = (let jessie_128 = (safe_int32_of_integer_ (0)) in
-                         (let jessie_131 = x in
-                         (((safe_upd_ int_P_int_M_x_3) jessie_131) jessie_128))) in
-       void);
+       (let jessie_132 =
+       (let jessie_128 = (safe_int32_of_integer_ (0)) in
+       (let jessie_131 = x in
+       (((safe_upd_ int_P_int_M_x_3) jessie_131) jessie_128))) in void);
       (C_44:
       begin
-        (let jessie_138 = (let jessie_134 = (safe_int32_of_integer_ (1)) in
-                          (let jessie_137 = y in
-                          (((safe_upd_ int_P_int_M_y_4) jessie_137) jessie_134))) in
-        void);
-       (raise Return)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+        (let jessie_138 =
+        (let jessie_134 = (safe_int32_of_integer_ (1)) in
+        (let jessie_137 = y in
+        (((safe_upd_ int_P_int_M_y_4) jessie_137) jessie_134))) in void);
+       (raise Return) end) end); (raise Return) end with Return -> void end)
   { (JC_83:
     ((JC_81: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
     and (JC_82: eq_int(integer_of_int32(select(int_P_int_M_y_4, y)), (1))))) }
@@ -1189,27 +1083,21 @@ let h_safety =
    begin
      (C_42:
      begin
-       (let jessie_120 = (let jessie_116 = (safe_int32_of_integer_ (0)) in
-                         (let jessie_119 = x in
-                         (JC_89:
-                         ((((upd_ int_P_x_3_alloc_table) int_P_int_M_x_3) jessie_119) jessie_116)))) in
+       (let jessie_120 =
+       (let jessie_116 = (safe_int32_of_integer_ (0)) in
+       (let jessie_119 = x in
+       (JC_89:
+       ((((upd_ int_P_x_3_alloc_table) int_P_int_M_x_3) jessie_119) jessie_116)))) in
        void);
       (C_44:
       begin
-        (let jessie_126 = (let jessie_122 = (safe_int32_of_integer_ (1)) in
-                          (let jessie_125 = y in
-                          (JC_90:
-                          ((((upd_ int_P_y_4_alloc_table) int_P_int_M_y_4) jessie_125) jessie_122)))) in
-        void);
-       (raise Return)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+        (let jessie_126 =
+        (let jessie_122 = (safe_int32_of_integer_ (1)) in
+        (let jessie_125 = y in
+        (JC_90:
+        ((((upd_ int_P_y_4_alloc_table) int_P_int_M_y_4) jessie_125) jessie_122)))) in
+        void); (raise Return) end) end); (raise Return) end with Return ->
+   void end) { true }
 
 let k_ensures_default =
  fun (tt : unit) ->
@@ -1231,33 +1119,37 @@ let k_ensures_default =
      (let a_0 = ref (any_pointer void) in
      (C_56:
      begin
-       (let jessie_174 = (x_2 := (C_55:
-                                 (JC_116:
-                                 (((alloc_struct_int_P (1)) int_P_x_2_11_alloc_table) int_P_x_2_11_tag_table)))) in
+       (let jessie_174 =
+       (x_2 := (C_55:
+               (JC_116:
+               (((alloc_struct_int_P (1)) int_P_x_2_11_alloc_table) int_P_x_2_11_tag_table)))) in
        void);
       (C_58:
       begin
-        (let jessie_176 = (y_2 := (C_57:
-                                  (JC_117:
-                                  (((alloc_struct_int_P (1)) int_P_y_2_12_alloc_table) int_P_y_2_12_tag_table)))) in
+        (let jessie_176 =
+        (y_2 := (C_57:
+                (JC_117:
+                (((alloc_struct_int_P (1)) int_P_y_2_12_alloc_table) int_P_y_2_12_tag_table)))) in
         void);
        (C_60:
        begin
-         (let jessie_178 = (a_0 := (C_59:
-                                   (JC_118:
-                                   (((alloc_struct_int_P (2)) int_P_a_0_13_alloc_table) int_P_a_0_13_tag_table)))) in
+         (let jessie_178 =
+         (a_0 := (C_59:
+                 (JC_118:
+                 (((alloc_struct_int_P (2)) int_P_a_0_13_alloc_table) int_P_a_0_13_tag_table)))) in
          void);
         (C_62:
         begin
-          (let jessie_184 = (let jessie_180 = (safe_int32_of_integer_ (1)) in
-                            (let jessie_183 = !x_2 in
-                            (((safe_upd_ int_P_int_M_x_2_11) jessie_183) jessie_180))) in
-          void);
+          (let jessie_184 =
+          (let jessie_180 = (safe_int32_of_integer_ (1)) in
+          (let jessie_183 = !x_2 in
+          (((safe_upd_ int_P_int_M_x_2_11) jessie_183) jessie_180))) in void);
          (C_64:
          begin
-           (let jessie_190 = (let jessie_186 = (safe_int32_of_integer_ (2)) in
-                             (let jessie_189 = !y_2 in
-                             (((safe_upd_ int_P_int_M_y_2_12) jessie_189) jessie_186))) in
+           (let jessie_190 =
+           (let jessie_186 = (safe_int32_of_integer_ (2)) in
+           (let jessie_189 = !y_2 in
+           (((safe_upd_ int_P_int_M_y_2_12) jessie_189) jessie_186))) in
            void);
           (C_65:
           begin
@@ -1266,21 +1158,20 @@ let k_ensures_default =
             (JC_119:
             ((((((h jessie_192) jessie_191) int_P_int_M_y_2_12) int_P_int_M_x_2_11) !int_P_y_2_12_alloc_table) !int_P_x_2_11_alloc_table))));
            void;
-           (let jessie_204 = (C_70:
-                             begin
-                               (let jessie_198 = (let jessie_194 = (safe_int32_of_integer_ (1)) in
-                                                 (let jessie_197 = ((shift !a_0) (0)) in
-                                                 (((safe_upd_ int_P_int_M_a_0_13) jessie_197) jessie_194))) in
-                               void);
-                              (C_72:
-                              (let jessie_200 = (safe_int32_of_integer_ (2)) in
-                              (let jessie_203 = ((shift !a_0) (1)) in
-                              begin
-                                (((safe_upd_ int_P_int_M_a_0_13) jessie_203) jessie_200);
-                               jessie_200
-                              end)))
-                             end) in
-           void);
+           (let jessie_204 =
+           (C_70:
+           begin
+             (let jessie_198 =
+             (let jessie_194 = (safe_int32_of_integer_ (1)) in
+             (let jessie_197 = ((shift !a_0) (0)) in
+             (((safe_upd_ int_P_int_M_a_0_13) jessie_197) jessie_194))) in
+             void);
+            (C_72:
+            (let jessie_200 = (safe_int32_of_integer_ (2)) in
+            (let jessie_203 = ((shift !a_0) (1)) in
+            begin
+              (((safe_upd_ int_P_int_M_a_0_13) jessie_203) jessie_200);
+             jessie_200 end))) end) in void);
            (C_74:
            begin
              (let jessie_206 = !a_0 in
@@ -1297,22 +1188,8 @@ let k_ensures_default =
               (C_80:
               begin
                 ((safe_free_parameter int_P_a_0_13_alloc_table) !a_0);
-               (raise Return)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end)))))))))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+               (raise Return) end) end) end) end) end) end) end) end) end)
+     end))))))))))))); (raise Return) end with Return -> void end)
   { (JC_95: true) }
 
 let k_ensures_values =
@@ -1335,33 +1212,37 @@ let k_ensures_values =
      (let a_0 = ref (any_pointer void) in
      (C_56:
      begin
-       (let jessie_208 = (x_2 := (C_55:
-                                 (JC_127:
-                                 (((alloc_struct_int_P (1)) int_P_x_2_11_alloc_table) int_P_x_2_11_tag_table)))) in
+       (let jessie_208 =
+       (x_2 := (C_55:
+               (JC_127:
+               (((alloc_struct_int_P (1)) int_P_x_2_11_alloc_table) int_P_x_2_11_tag_table)))) in
        void);
       (C_58:
       begin
-        (let jessie_210 = (y_2 := (C_57:
-                                  (JC_128:
-                                  (((alloc_struct_int_P (1)) int_P_y_2_12_alloc_table) int_P_y_2_12_tag_table)))) in
+        (let jessie_210 =
+        (y_2 := (C_57:
+                (JC_128:
+                (((alloc_struct_int_P (1)) int_P_y_2_12_alloc_table) int_P_y_2_12_tag_table)))) in
         void);
        (C_60:
        begin
-         (let jessie_212 = (a_0 := (C_59:
-                                   (JC_129:
-                                   (((alloc_struct_int_P (2)) int_P_a_0_13_alloc_table) int_P_a_0_13_tag_table)))) in
+         (let jessie_212 =
+         (a_0 := (C_59:
+                 (JC_129:
+                 (((alloc_struct_int_P (2)) int_P_a_0_13_alloc_table) int_P_a_0_13_tag_table)))) in
          void);
         (C_62:
         begin
-          (let jessie_218 = (let jessie_214 = (safe_int32_of_integer_ (1)) in
-                            (let jessie_217 = !x_2 in
-                            (((safe_upd_ int_P_int_M_x_2_11) jessie_217) jessie_214))) in
-          void);
+          (let jessie_218 =
+          (let jessie_214 = (safe_int32_of_integer_ (1)) in
+          (let jessie_217 = !x_2 in
+          (((safe_upd_ int_P_int_M_x_2_11) jessie_217) jessie_214))) in void);
          (C_64:
          begin
-           (let jessie_224 = (let jessie_220 = (safe_int32_of_integer_ (2)) in
-                             (let jessie_223 = !y_2 in
-                             (((safe_upd_ int_P_int_M_y_2_12) jessie_223) jessie_220))) in
+           (let jessie_224 =
+           (let jessie_220 = (safe_int32_of_integer_ (2)) in
+           (let jessie_223 = !y_2 in
+           (((safe_upd_ int_P_int_M_y_2_12) jessie_223) jessie_220))) in
            void);
           (C_65:
           begin
@@ -1375,24 +1256,21 @@ let k_ensures_values =
               eq_int(integer_of_int32(select(int_P_int_M_x_2_11, x_2)), (0)))
              and (JC_132:
                  eq_int(integer_of_int32(select(int_P_int_M_y_2_12, y_2)),
-                 (1))))) };
-           void);
-           void;
-           (let jessie_238 = (C_70:
-                             begin
-                               (let jessie_232 = (let jessie_228 = (safe_int32_of_integer_ (1)) in
-                                                 (let jessie_231 = ((shift !a_0) (0)) in
-                                                 (((safe_upd_ int_P_int_M_a_0_13) jessie_231) jessie_228))) in
-                               void);
-                              (C_72:
-                              (let jessie_234 = (safe_int32_of_integer_ (2)) in
-                              (let jessie_237 = ((shift !a_0) (1)) in
-                              begin
-                                (((safe_upd_ int_P_int_M_a_0_13) jessie_237) jessie_234);
-                               jessie_234
-                              end)))
-                             end) in
-           void);
+                 (1))))) }; void); void;
+           (let jessie_238 =
+           (C_70:
+           begin
+             (let jessie_232 =
+             (let jessie_228 = (safe_int32_of_integer_ (1)) in
+             (let jessie_231 = ((shift !a_0) (0)) in
+             (((safe_upd_ int_P_int_M_a_0_13) jessie_231) jessie_228))) in
+             void);
+            (C_72:
+            (let jessie_234 = (safe_int32_of_integer_ (2)) in
+            (let jessie_237 = ((shift !a_0) (1)) in
+            begin
+              (((safe_upd_ int_P_int_M_a_0_13) jessie_237) jessie_234);
+             jessie_234 end))) end) in void);
            (C_74:
            begin
              (let jessie_240 = !a_0 in
@@ -1408,9 +1286,7 @@ let k_ensures_values =
               and (JC_136:
                   eq_int(integer_of_int32(select(int_P_int_M_a_0_13,
                                           shift(a_0, (1)))),
-                  (1))))) };
-            void);
-            void;
+                  (1))))) }; void); void;
             (C_78:
             begin
               ((safe_free_parameter int_P_x_2_11_alloc_table) !x_2);
@@ -1420,22 +1296,8 @@ let k_ensures_values =
               (C_80:
               begin
                 ((safe_free_parameter int_P_a_0_13_alloc_table) !a_0);
-               (raise Return)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end)))))))))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+               (raise Return) end) end) end) end) end) end) end) end) end)
+     end))))))))))))); (raise Return) end with Return -> void end)
   { (JC_99: true) }
 
 let k_safety =
@@ -1458,51 +1320,49 @@ let k_safety =
      (let a_0 = ref (any_pointer void) in
      (C_56:
      begin
-       (let jessie_140 = (x_2 := (let jessie_139 = (C_55:
-                                                   (JC_101:
-                                                   (((alloc_struct_int_P_requires (1)) int_P_x_2_11_alloc_table) int_P_x_2_11_tag_table))) in
-                                 (JC_102:
-                                 (assert
-                                 { ge_int(offset_max(int_P_x_2_11_alloc_table,
-                                          jessie_139),
-                                   (0)) };
-                                 jessie_139)))) in
-       void);
+       (let jessie_140 =
+       (x_2 := (let jessie_139 =
+               (C_55:
+               (JC_101:
+               (((alloc_struct_int_P_requires (1)) int_P_x_2_11_alloc_table) int_P_x_2_11_tag_table))) in
+               (JC_102:
+               (assert
+               { ge_int(offset_max(int_P_x_2_11_alloc_table, jessie_139),
+                 (0)) }; jessie_139)))) in void);
       (C_58:
       begin
-        (let jessie_142 = (y_2 := (let jessie_141 = (C_57:
-                                                    (JC_103:
-                                                    (((alloc_struct_int_P_requires (1)) int_P_y_2_12_alloc_table) int_P_y_2_12_tag_table))) in
-                                  (JC_104:
-                                  (assert
-                                  { ge_int(offset_max(int_P_y_2_12_alloc_table,
-                                           jessie_141),
-                                    (0)) };
-                                  jessie_141)))) in
-        void);
+        (let jessie_142 =
+        (y_2 := (let jessie_141 =
+                (C_57:
+                (JC_103:
+                (((alloc_struct_int_P_requires (1)) int_P_y_2_12_alloc_table) int_P_y_2_12_tag_table))) in
+                (JC_104:
+                (assert
+                { ge_int(offset_max(int_P_y_2_12_alloc_table, jessie_141),
+                  (0)) }; jessie_141)))) in void);
        (C_60:
        begin
-         (let jessie_144 = (a_0 := (let jessie_143 = (C_59:
-                                                     (JC_105:
-                                                     (((alloc_struct_int_P_requires (2)) int_P_a_0_13_alloc_table) int_P_a_0_13_tag_table))) in
-                                   (JC_106:
-                                   (assert
-                                   { ge_int(offset_max(int_P_a_0_13_alloc_table,
-                                            jessie_143),
-                                     (1)) };
-                                   jessie_143)))) in
-         void);
+         (let jessie_144 =
+         (a_0 := (let jessie_143 =
+                 (C_59:
+                 (JC_105:
+                 (((alloc_struct_int_P_requires (2)) int_P_a_0_13_alloc_table) int_P_a_0_13_tag_table))) in
+                 (JC_106:
+                 (assert
+                 { ge_int(offset_max(int_P_a_0_13_alloc_table, jessie_143),
+                   (1)) }; jessie_143)))) in void);
         (C_62:
         begin
-          (let jessie_150 = (let jessie_146 = (safe_int32_of_integer_ (1)) in
-                            (let jessie_149 = !x_2 in
-                            (((safe_upd_ int_P_int_M_x_2_11) jessie_149) jessie_146))) in
-          void);
+          (let jessie_150 =
+          (let jessie_146 = (safe_int32_of_integer_ (1)) in
+          (let jessie_149 = !x_2 in
+          (((safe_upd_ int_P_int_M_x_2_11) jessie_149) jessie_146))) in void);
          (C_64:
          begin
-           (let jessie_156 = (let jessie_152 = (safe_int32_of_integer_ (2)) in
-                             (let jessie_155 = !y_2 in
-                             (((safe_upd_ int_P_int_M_y_2_12) jessie_155) jessie_152))) in
+           (let jessie_156 =
+           (let jessie_152 = (safe_int32_of_integer_ (2)) in
+           (let jessie_155 = !y_2 in
+           (((safe_upd_ int_P_int_M_y_2_12) jessie_155) jessie_152))) in
            void);
           (C_65:
           begin
@@ -1511,21 +1371,20 @@ let k_safety =
             (JC_107:
             ((((((h_requires jessie_158) jessie_157) int_P_int_M_y_2_12) int_P_int_M_x_2_11) !int_P_y_2_12_alloc_table) !int_P_x_2_11_alloc_table))));
            void;
-           (let jessie_170 = (C_70:
-                             begin
-                               (let jessie_164 = (let jessie_160 = (safe_int32_of_integer_ (1)) in
-                                                 (let jessie_163 = ((shift !a_0) (0)) in
-                                                 (((safe_upd_ int_P_int_M_a_0_13) jessie_163) jessie_160))) in
-                               void);
-                              (C_72:
-                              (let jessie_166 = (safe_int32_of_integer_ (2)) in
-                              (let jessie_169 = ((shift !a_0) (1)) in
-                              begin
-                                (((safe_upd_ int_P_int_M_a_0_13) jessie_169) jessie_166);
-                               jessie_166
-                              end)))
-                             end) in
-           void);
+           (let jessie_170 =
+           (C_70:
+           begin
+             (let jessie_164 =
+             (let jessie_160 = (safe_int32_of_integer_ (1)) in
+             (let jessie_163 = ((shift !a_0) (0)) in
+             (((safe_upd_ int_P_int_M_a_0_13) jessie_163) jessie_160))) in
+             void);
+            (C_72:
+            (let jessie_166 = (safe_int32_of_integer_ (2)) in
+            (let jessie_169 = ((shift !a_0) (1)) in
+            begin
+              (((safe_upd_ int_P_int_M_a_0_13) jessie_169) jessie_166);
+             jessie_166 end))) end) in void);
            (C_74:
            begin
              (let jessie_172 = !a_0 in
@@ -1546,23 +1405,8 @@ let k_safety =
               (C_80:
               begin
                 ((free_parameter int_P_a_0_13_alloc_table) !a_0);
-               (raise Return)
-              end)
-             end)
-            end)
-           end)
-          end)
-         end)
-        end)
-       end)
-      end)
-     end)))))))))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+               (raise Return) end) end) end) end) end) end) end) end) end)
+     end))))))))))))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C separation.jessie --quiet -f separation.makefile project
@@ -1577,7 +1421,7 @@ why --project [...] why/separation.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po37.why">
-      <location file = "why/separation.why" line = "1303" begin = "35" end = "173"/>
+      <location file = "why/separation.why" line = "1167" begin = "17" end = "95"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po38.why">
@@ -1586,7 +1430,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po39.why">
-      <location file = "why/separation.why" line = "1315" begin = "36" end = "176"/>
+      <location file = "why/separation.why" line = "1178" begin = "18" end = "97"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po40.why">
@@ -1595,7 +1439,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po41.why">
-      <location file = "why/separation.why" line = "1327" begin = "37" end = "179"/>
+      <location file = "why/separation.why" line = "1189" begin = "19" end = "99"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po42.why">
@@ -1619,7 +1463,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po46.why">
-      <location file = "why/separation.why" line = "1372" begin = "15" end = "107"/>
+      <location file = "why/separation.why" line = "1231" begin = "15" end = "107"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po47.why">
@@ -1643,17 +1487,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po51.why">
-      <location file = "why/separation.why" line = "1379" begin = "15" end = "61"/>
+      <location file = "why/separation.why" line = "1238" begin = "15" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po52.why">
-      <location file = "why/separation.why" line = "1382" begin = "16" end = "62"/>
+      <location file = "why/separation.why" line = "1241" begin = "16" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po53.why">
-      <location file = "why/separation.why" line = "1385" begin = "17" end = "63"/>
+      <location file = "why/separation.why" line = "1244" begin = "17" end = "63"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1721,7 +1565,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po9.why">
-      <location file = "why/separation.why" line = "883" begin = "34" end = "168"/>
+      <location file = "why/separation.why" line = "805" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po10.why">
@@ -1730,7 +1574,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po11.why">
-      <location file = "why/separation.why" line = "895" begin = "35" end = "171"/>
+      <location file = "why/separation.why" line = "816" begin = "18" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po12.why">
@@ -1739,7 +1583,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po13.why">
-      <location file = "why/separation.why" line = "907" begin = "34" end = "166"/>
+      <location file = "why/separation.why" line = "827" begin = "17" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po14.why">
@@ -1763,7 +1607,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po18.why">
-      <location file = "why/separation.why" line = "952" begin = "15" end = "103"/>
+      <location file = "why/separation.why" line = "867" begin = "15" end = "103"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po19.why">
@@ -1787,17 +1631,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po23.why">
-      <location file = "why/separation.why" line = "959" begin = "15" end = "60"/>
+      <location file = "why/separation.why" line = "874" begin = "15" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po24.why">
-      <location file = "why/separation.why" line = "962" begin = "16" end = "61"/>
+      <location file = "why/separation.why" line = "877" begin = "16" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po25.why">
-      <location file = "why/separation.why" line = "965" begin = "17" end = "58"/>
+      <location file = "why/separation.why" line = "880" begin = "17" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

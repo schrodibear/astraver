@@ -815,6 +815,10 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         let t2' = ft t2 in
         let t3' = ft t3 in
         TIf(t1', t2', t3')
+    | JCTlet(vi,t1,t2) ->
+        let t1' = ft t1 in
+        let t2' = ft t2 in
+        TLet(vi.jc_var_info_final_name, t1', t2')
     | JCToffset(k,t1,st) -> 
 	let ac = tderef_alloc_class ~type_safe t1 in
         let alloc = 
@@ -1459,7 +1463,7 @@ let rec const_int_term t =
     | JCTold _ | JCTat _ 
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
     | JCTreal_cast _ | JCTif _ | JCTrange _ 
-    | JCTcast _ | JCTmatch _ | JCTbitwise_cast _ ->
+    | JCTcast _ | JCTmatch _ | JCTlet _ | JCTbitwise_cast _ ->
 	assert false
 	  
 let rec const_int_expr e =
@@ -3543,6 +3547,9 @@ let tr_specialized_fun n fname param_name_assoc acc =
       | Tnamed(n,t) -> Tnamed(n,modif_term t)
       | TIf(t1,t2,t3) -> 
 	  TIf(modif_term t1,modif_term t2,modif_term t3)
+      | TLet(id,t1,t2) -> 
+	  let id = StringMap.find_or_default id id param_name_assoc in
+	  TLet(id,modif_term t1,modif_term t2)
 
   and modif_namelist names =
     fst (List.fold_right 

@@ -412,6 +412,10 @@ gui stat: Termination.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/Termination_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include Termination.depend
 
 depend: coq/Termination_why.v
@@ -992,33 +996,27 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Termination(p:Object pointer,
- a:int,
+predicate left_valid_struct_Termination(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -1029,174 +1027,124 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Termination(p:Object pointer,
- b:int,
+predicate right_valid_struct_Termination(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Termination(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Termination(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Termination(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Termination(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Termination(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Termination(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1487,16 +1435,14 @@ parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 let Termination_loop1_ensures_default =
@@ -1513,38 +1459,21 @@ let Termination_loop1_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_21 = begin
-                            (if (K_4: ((gt_int_ !mutable_n) (0)))
-                            then
-                             (let jessie_19 = (K_3:
-                                              (let jessie_1 = !mutable_n in
-                                              begin
-                                                (let jessie_18 = (mutable_n := 
-                                                                  ((sub_int jessie_1) (1))) in
-                                                void);
-                                               jessie_1
-                                              end)) in
-                             void)
-                            else
-                             (let jessie_20 = (raise (Loop_exit_exc void)) in
-                             void));
-                           (raise (Loop_continue_exc void))
-                          end in
-         void)
-         with
-         Loop_continue_exc jessie_3 ->
-         void end
-       end
-      done)
-      with
-      Loop_exit_exc jessie_2 ->
-      void end;
-    (raise Return)
-   end
-   with
-   Return ->
-   void end))
-  { (JC_15: true) }
+         (let jessie_21 =
+         begin
+           (if (K_4: ((gt_int_ !mutable_n) (0)))
+           then
+            (let jessie_19 =
+            (K_3:
+            (let jessie_1 = !mutable_n in
+            begin
+              (let jessie_18 = (mutable_n := ((sub_int jessie_1) (1))) in
+              void); jessie_1 end)) in void)
+           else (let jessie_20 = (raise (Loop_exit_exc void)) in void));
+          (raise (Loop_continue_exc void)) end in void) with
+         Loop_continue_exc jessie_3 -> void end end done) with
+      Loop_exit_exc jessie_2 -> void end; (raise Return) end with Return ->
+   void end)) { (JC_15: true) }
 
 let Termination_loop1_safety =
  fun (this_2 : Object pointer) (n : int) ->
@@ -1560,38 +1489,21 @@ let Termination_loop1_safety =
        begin
          [ { } unit { (JC_19: (true = true)) } ];
         try
-         (let jessie_15 = begin
-                            (if (K_4: ((gt_int_ !mutable_n) (0)))
-                            then
-                             (let jessie_13 = (K_3:
-                                              (let jessie_1 = !mutable_n in
-                                              begin
-                                                (let jessie_12 = (mutable_n := 
-                                                                  ((sub_int jessie_1) (1))) in
-                                                void);
-                                               jessie_1
-                                              end)) in
-                             void)
-                            else
-                             (let jessie_14 = (raise (Loop_exit_exc void)) in
-                             void));
-                           (raise (Loop_continue_exc void))
-                          end in
-         void)
-         with
-         Loop_continue_exc jessie_3 ->
-         void end
-       end
-      done)
-      with
-      Loop_exit_exc jessie_2 ->
-      void end;
-    (raise Return)
-   end
-   with
-   Return ->
-   void end))
-  { true }
+         (let jessie_15 =
+         begin
+           (if (K_4: ((gt_int_ !mutable_n) (0)))
+           then
+            (let jessie_13 =
+            (K_3:
+            (let jessie_1 = !mutable_n in
+            begin
+              (let jessie_12 = (mutable_n := ((sub_int jessie_1) (1))) in
+              void); jessie_1 end)) in void)
+           else (let jessie_14 = (raise (Loop_exit_exc void)) in void));
+          (raise (Loop_continue_exc void)) end in void) with
+         Loop_continue_exc jessie_3 -> void end end done) with
+      Loop_exit_exc jessie_2 -> void end; (raise Return) end with Return ->
+   void end)) { true }
 
 let Termination_loop2_ensures_default =
  fun (this_1 : Object pointer) (n_0 : int) ->
@@ -1607,38 +1519,21 @@ let Termination_loop2_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_33 = begin
-                            (if (K_8: ((lt_int_ !mutable_n_0) (100)))
-                            then
-                             (let jessie_31 = (K_7:
-                                              (let jessie_4 = !mutable_n_0 in
-                                              begin
-                                                (let jessie_30 = (mutable_n_0 := 
-                                                                  ((add_int jessie_4) (1))) in
-                                                void);
-                                               jessie_4
-                                              end)) in
-                             void)
-                            else
-                             (let jessie_32 = (raise (Loop_exit_exc void)) in
-                             void));
-                           (raise (Loop_continue_exc void))
-                          end in
-         void)
-         with
-         Loop_continue_exc jessie_6 ->
-         void end
-       end
-      done)
-      with
-      Loop_exit_exc jessie_5 ->
-      void end;
-    (raise Return)
-   end
-   with
-   Return ->
-   void end))
-  { (JC_32: true) }
+         (let jessie_33 =
+         begin
+           (if (K_8: ((lt_int_ !mutable_n_0) (100)))
+           then
+            (let jessie_31 =
+            (K_7:
+            (let jessie_4 = !mutable_n_0 in
+            begin
+              (let jessie_30 = (mutable_n_0 := ((add_int jessie_4) (1))) in
+              void); jessie_4 end)) in void)
+           else (let jessie_32 = (raise (Loop_exit_exc void)) in void));
+          (raise (Loop_continue_exc void)) end in void) with
+         Loop_continue_exc jessie_6 -> void end end done) with
+      Loop_exit_exc jessie_5 -> void end; (raise Return) end with Return ->
+   void end)) { (JC_32: true) }
 
 let Termination_loop2_safety =
  fun (this_1 : Object pointer) (n_0 : int) ->
@@ -1655,38 +1550,21 @@ let Termination_loop2_safety =
        begin
          [ { } unit { (JC_36: (true = true)) } ];
         try
-         (let jessie_27 = begin
-                            (if (K_8: ((lt_int_ !mutable_n_0) (100)))
-                            then
-                             (let jessie_25 = (K_7:
-                                              (let jessie_4 = !mutable_n_0 in
-                                              begin
-                                                (let jessie_24 = (mutable_n_0 := 
-                                                                  ((add_int jessie_4) (1))) in
-                                                void);
-                                               jessie_4
-                                              end)) in
-                             void)
-                            else
-                             (let jessie_26 = (raise (Loop_exit_exc void)) in
-                             void));
-                           (raise (Loop_continue_exc void))
-                          end in
-         void)
-         with
-         Loop_continue_exc jessie_6 ->
-         void end
-       end
-      done)
-      with
-      Loop_exit_exc jessie_5 ->
-      void end;
-    (raise Return)
-   end
-   with
-   Return ->
-   void end))
-  { true }
+         (let jessie_27 =
+         begin
+           (if (K_8: ((lt_int_ !mutable_n_0) (100)))
+           then
+            (let jessie_25 =
+            (K_7:
+            (let jessie_4 = !mutable_n_0 in
+            begin
+              (let jessie_24 = (mutable_n_0 := ((add_int jessie_4) (1))) in
+              void); jessie_4 end)) in void)
+           else (let jessie_26 = (raise (Loop_exit_exc void)) in void));
+          (raise (Loop_continue_exc void)) end in void) with
+         Loop_continue_exc jessie_6 -> void end end done) with
+      Loop_exit_exc jessie_5 -> void end; (raise Return) end with Return ->
+   void end)) { true }
 
 let Termination_loop3_ensures_default =
  fun (this_0 : Object pointer) ->
@@ -1706,40 +1584,21 @@ let Termination_loop3_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_48 = begin
-                              (if (K_15: ((gt_int_ !i) (0)))
-                              then
-                               (let jessie_46 = (K_14:
-                                                (let jessie_7 = !i in
-                                                begin
-                                                  (let jessie_45 = (i := 
-                                                                    ((sub_int jessie_7) (1))) in
-                                                  void);
-                                                 jessie_7
-                                                end)) in
-                               void)
-                              else
-                               (let jessie_47 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_9 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_8 ->
-        void end;
-      (return := !i);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+           (let jessie_48 =
+           begin
+             (if (K_15: ((gt_int_ !i) (0)))
+             then
+              (let jessie_46 =
+              (K_14:
+              (let jessie_7 = !i in
+              begin
+                (let jessie_45 = (i := ((sub_int jessie_7) (1))) in void);
+               jessie_7 end)) in void)
+             else (let jessie_47 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_9 -> void end end done) with
+        Loop_exit_exc jessie_8 -> void end; (return := !i); (raise Return)
+     end); absurd  end with Return -> !return end))
   { (JC_49: eq_int(result, (0))) }
 
 let Termination_loop3_safety =
@@ -1760,41 +1619,21 @@ let Termination_loop3_safety =
              { (JC_55:
                ((JC_53: le_int((0), i)) and (JC_54: le_int(i, (100))))) } ];
           try
-           (let jessie_40 = begin
-                              (if (K_15: ((gt_int_ !i) (0)))
-                              then
-                               (let jessie_38 = (K_14:
-                                                (let jessie_7 = !i in
-                                                begin
-                                                  (let jessie_37 = (i := 
-                                                                    ((sub_int jessie_7) (1))) in
-                                                  void);
-                                                 jessie_7
-                                                end)) in
-                               void)
-                              else
-                               (let jessie_39 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
-           Loop_continue_exc jessie_9 ->
-           void end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_8 ->
-        void end;
-      (return := !i);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+           (let jessie_40 =
+           begin
+             (if (K_15: ((gt_int_ !i) (0)))
+             then
+              (let jessie_38 =
+              (K_14:
+              (let jessie_7 = !i in
+              begin
+                (let jessie_37 = (i := ((sub_int jessie_7) (1))) in void);
+               jessie_7 end)) in void)
+             else (let jessie_39 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
+           Loop_continue_exc jessie_9 -> void end end done) with
+        Loop_exit_exc jessie_8 -> void end; (return := !i); (raise Return)
+     end); absurd  end with Return -> !return end)) { true }
 
 let cons_Termination_ensures_default =
  fun (this_3 : Object pointer) ->

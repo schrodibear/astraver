@@ -113,14 +113,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int32_of_integer: int -> int32
@@ -162,18 +160,15 @@ axiom int_P_tags :
   (forall int_P_tag_table:int_P tag_table.
    instanceof(int_P_tag_table, x, int_P_tag)))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_int_P(p:int_P pointer,
- a:int,
+predicate left_valid_struct_int_P(p:int_P pointer, a:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_min(int_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -188,124 +183,91 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_P(p:int_P pointer,
- b:int,
+predicate right_valid_struct_int_P(p:int_P pointer, b:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_max(int_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
 logic t:  -> int_P pointer
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_int_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -520,52 +482,37 @@ let main_ensures_default =
        (let jessie_18 = (y := (C_2: (safe_int32_of_integer_ (0)))) in void);
       (C_6:
       begin
-        (let jessie_24 = (let jessie_20 = (C_4: !y) in
-                         (let jessie_23 = ((shift t) (1)) in
-                         (((safe_upd_ int_P_int_M_t_2) jessie_23) jessie_20))) in
-        void);
+        (let jessie_24 =
+        (let jessie_20 = (C_4: !y) in
+        (let jessie_23 = ((shift t) (1)) in
+        (((safe_upd_ int_P_int_M_t_2) jessie_23) jessie_20))) in void);
        (C_11:
        begin
-         (let jessie_25 = (C_10:
-                          (safe_int32_of_integer_ (C_9:
-                                                  ((sub_int (integer_of_int32 
-                                                             (C_8:
+         (let jessie_25 =
+         (C_10:
+         (safe_int32_of_integer_ (C_9:
+                                 ((sub_int (integer_of_int32 (C_8:
                                                              ((safe_acc_ !int_P_int_M_t_2) 
                                                               ((shift t) (1)))))) 
-                                                   (integer_of_int32 
-                                                    (C_7:
-                                                    !y)))))) in
+                                  (integer_of_int32 (C_7: !y)))))) in
          (JC_25: (CEA_F jessie_25)));
         (C_13:
         begin
-          (let jessie_31 = (let jessie_27 = (safe_int32_of_integer_ (0)) in
-                           (let jessie_30 = ((shift t) (0)) in
-                           (((safe_upd_ int_P_int_M_t_2) jessie_30) jessie_27))) in
-          void);
+          (let jessie_31 =
+          (let jessie_27 = (safe_int32_of_integer_ (0)) in
+          (let jessie_30 = ((shift t) (0)) in
+          (((safe_upd_ int_P_int_M_t_2) jessie_30) jessie_27))) in void);
          (C_18:
          begin
-           (let jessie_32 = (C_17:
-                            (safe_int32_of_integer_ (C_16:
-                                                    ((sub_int (integer_of_int32 
-                                                               (C_15:
+           (let jessie_32 =
+           (C_17:
+           (safe_int32_of_integer_ (C_16:
+                                   ((sub_int (integer_of_int32 (C_15:
                                                                ((safe_acc_ !int_P_int_M_t_2) 
                                                                 ((shift t) (1)))))) 
-                                                     (integer_of_int32 
-                                                      (C_14:
-                                                      !y)))))) in
-           (JC_26: (CEA_F jessie_32)));
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_17: true) }
+                                    (integer_of_int32 (C_14: !y)))))) in
+           (JC_26: (CEA_F jessie_32))); (raise Return) end) end) end) end)
+     end)); (raise Return) end with Return -> void end) { (JC_17: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -579,49 +526,39 @@ let main_safety =
        (let jessie_2 = (y := (C_2: (safe_int32_of_integer_ (0)))) in void);
       (C_6:
       begin
-        (let jessie_8 = (let jessie_4 = (C_4: !y) in
-                        (let jessie_7 = ((shift t) (1)) in
-                        (((safe_upd_ int_P_int_M_t_2) jessie_7) jessie_4))) in
-        void);
+        (let jessie_8 =
+        (let jessie_4 = (C_4: !y) in
+        (let jessie_7 = ((shift t) (1)) in
+        (((safe_upd_ int_P_int_M_t_2) jessie_7) jessie_4))) in void);
        (C_11:
        begin
-         (let jessie_9 = (C_10:
-                         (JC_21:
-                         (int32_of_integer_ (C_9:
-                                            ((sub_int (integer_of_int32 
-                                                       (C_8:
-                                                       ((safe_acc_ !int_P_int_M_t_2) 
-                                                        ((shift t) (1)))))) 
-                                             (integer_of_int32 (C_7: !y))))))) in
+         (let jessie_9 =
+         (C_10:
+         (JC_21:
+         (int32_of_integer_ (C_9:
+                            ((sub_int (integer_of_int32 (C_8:
+                                                        ((safe_acc_ !int_P_int_M_t_2) 
+                                                         ((shift t) (1)))))) 
+                             (integer_of_int32 (C_7: !y))))))) in
          (JC_22: (CEA_F_requires jessie_9)));
         (C_13:
         begin
-          (let jessie_15 = (let jessie_11 = (safe_int32_of_integer_ (0)) in
-                           (let jessie_14 = ((shift t) (0)) in
-                           (((safe_upd_ int_P_int_M_t_2) jessie_14) jessie_11))) in
-          void);
+          (let jessie_15 =
+          (let jessie_11 = (safe_int32_of_integer_ (0)) in
+          (let jessie_14 = ((shift t) (0)) in
+          (((safe_upd_ int_P_int_M_t_2) jessie_14) jessie_11))) in void);
          (C_18:
          begin
-           (let jessie_16 = (C_17:
-                            (JC_23:
-                            (int32_of_integer_ (C_16:
-                                               ((sub_int (integer_of_int32 
-                                                          (C_15:
+           (let jessie_16 =
+           (C_17:
+           (JC_23:
+           (int32_of_integer_ (C_16:
+                              ((sub_int (integer_of_int32 (C_15:
                                                           ((safe_acc_ !int_P_int_M_t_2) 
                                                            ((shift t) (1)))))) 
-                                                (integer_of_int32 (C_14: !y))))))) in
-           (JC_24: (CEA_F_requires jessie_16)));
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+                               (integer_of_int32 (C_14: !y))))))) in
+           (JC_24: (CEA_F_requires jessie_16))); (raise Return) end) end) end)
+      end) end)); (raise Return) end with Return -> void end)
   { (JC_19: valid_t(int_P_t_2_alloc_table)) }
 
 

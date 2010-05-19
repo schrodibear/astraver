@@ -157,8 +157,7 @@ logic cM_of_bitvector: bitvector -> int8
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 axiom cM_of_bitvector_of_bitvector_of_cM :
@@ -190,8 +189,7 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic iM_of_bitvector: bitvector -> int32
@@ -232,18 +230,15 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_root___anonunion_U_1(p:__anonunion_U_1 pointer,
- a:int,
+predicate left_valid_root___anonunion_U_1(p:__anonunion_U_1 pointer, a:int,
  __anonunion_U_1_alloc_table:__anonunion_U_1 alloc_table) =
  (offset_min(__anonunion_U_1_alloc_table, p) <= a)
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -259,108 +254,79 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_root___anonunion_U_1(p:__anonunion_U_1 pointer,
- b:int,
+predicate right_valid_root___anonunion_U_1(p:__anonunion_U_1 pointer, b:int,
  __anonunion_U_1_alloc_table:__anonunion_U_1 alloc_table) =
  (offset_max(__anonunion_U_1_alloc_table, p) >= b)
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root___anonunion_U_1(p:__anonunion_U_1 pointer,
- a:int,
- b:int,
- __anonunion_U_1_alloc_table:__anonunion_U_1 alloc_table) =
+predicate strict_valid_root___anonunion_U_1(p:__anonunion_U_1 pointer, a:int,
+ b:int, __anonunion_U_1_alloc_table:__anonunion_U_1 alloc_table) =
  ((offset_min(__anonunion_U_1_alloc_table, p) = a)
  and (offset_max(__anonunion_U_1_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_root___anonunion_U_1(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_root___anonunion_U_1(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) <= a)
  and (offset_max(bitvector_alloc_table, p) >= b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root___anonunion_U_1(p:__anonunion_U_1 pointer,
- a:int,
- b:int,
+predicate valid_root___anonunion_U_1(p:__anonunion_U_1 pointer, a:int, b:int,
  __anonunion_U_1_alloc_table:__anonunion_U_1 alloc_table) =
  ((offset_min(__anonunion_U_1_alloc_table, p) <= a)
  and (offset_max(__anonunion_U_1_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -622,51 +588,41 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_24 = (let jessie_18 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_19 = (C_1: x) in
-                        (let jessie_20 = ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) 
-                                                            (C_1:
-                                                            jessie_19))) (0)) (4)) 
-                                          (bitvector_of_int32 jessie_18)) in
-                        (let jessie_23 = (C_1: jessie_19) in
-                        (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_23) jessie_20))))) in
+       (let jessie_24 =
+       (let jessie_18 = (safe_int32_of_integer_ (1)) in
+       (let jessie_19 = (C_1: x) in
+       (let jessie_20 =
+       ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) (C_1:
+                                                                  jessie_19))) (0)) (4)) 
+        (bitvector_of_int32 jessie_18)) in
+       (let jessie_23 = (C_1: jessie_19) in
+       (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_23) jessie_20))))) in
        void);
       (assert
       { (JC_15:
         eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
                                                                  x),
                                                    (0), (4)))),
-        (1))) };
-      void);
-      void;
+        (1))) }; void); void;
       (C_7:
       begin
-        (let jessie_32 = (let jessie_26 = (safe_int8_of_integer_ (1)) in
-                         (let jessie_27 = (C_5: x) in
-                         (let jessie_28 = ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) 
-                                                             (C_5:
-                                                             jessie_27))) (0)) (1)) 
-                                           (bitvector_of_int8 jessie_26)) in
-                         (let jessie_31 = (C_5: jessie_27) in
-                         (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_31) jessie_28))))) in
+        (let jessie_32 =
+        (let jessie_26 = (safe_int8_of_integer_ (1)) in
+        (let jessie_27 = (C_5: x) in
+        (let jessie_28 =
+        ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) (C_5:
+                                                                   jessie_27))) (0)) (1)) 
+         (bitvector_of_int8 jessie_26)) in
+        (let jessie_31 = (C_5: jessie_27) in
+        (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_31) jessie_28))))) in
         void);
        (assert
        { (JC_16:
          eq_int(integer_of_int8(int8_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
                                                                 x),
                                                   (0), (1)))),
-         (1))) };
-       void);
-       void;
-       (raise Return)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_5: true) }
+         (1))) }; void); void; (raise Return) end) end); (raise Return) end
+   with Return -> void end) { (JC_5: true) }
 
 let f_safety =
  fun (x : __anonunion_U_1 pointer) (__anonunion_U_1_fields_x_1 : (__anonunion_U_1, bitvector) memory ref) (__anonunion_U_1_x_1_alloc_table : __anonunion_U_1 alloc_table) ->
@@ -676,53 +632,43 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_8 = (let jessie_2 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_3 = (C_1: x) in
-                       (let jessie_4 = ((((replace_bytes (JC_9:
-                                                         (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
-                                                          (C_1:
-                                                          jessie_3)))) (0)) (4)) 
-                                        (bitvector_of_int32 jessie_2)) in
-                       (let jessie_7 = (C_1: jessie_3) in
-                       (JC_10:
-                       ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_7) jessie_4)))))) in
+       (let jessie_8 =
+       (let jessie_2 = (safe_int32_of_integer_ (1)) in
+       (let jessie_3 = (C_1: x) in
+       (let jessie_4 =
+       ((((replace_bytes (JC_9:
+                         (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
+                          (C_1: jessie_3)))) (0)) (4)) (bitvector_of_int32 jessie_2)) in
+       (let jessie_7 = (C_1: jessie_3) in
+       (JC_10:
+       ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_7) jessie_4)))))) in
        void);
       [ { } unit reads __anonunion_U_1_fields_x_1
         { (JC_11:
           eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
                                                                    x),
                                                      (0), (4)))),
-          (1))) } ];
-      void;
+          (1))) } ]; void;
       (C_7:
       begin
-        (let jessie_16 = (let jessie_10 = (safe_int8_of_integer_ (1)) in
-                         (let jessie_11 = (C_5: x) in
-                         (let jessie_12 = ((((replace_bytes (JC_12:
-                                                            (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
-                                                             (C_5:
-                                                             jessie_11)))) (0)) (1)) 
-                                           (bitvector_of_int8 jessie_10)) in
-                         (let jessie_15 = (C_5: jessie_11) in
-                         (JC_13:
-                         ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_15) jessie_12)))))) in
+        (let jessie_16 =
+        (let jessie_10 = (safe_int8_of_integer_ (1)) in
+        (let jessie_11 = (C_5: x) in
+        (let jessie_12 =
+        ((((replace_bytes (JC_12:
+                          (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
+                           (C_5: jessie_11)))) (0)) (1)) (bitvector_of_int8 jessie_10)) in
+        (let jessie_15 = (C_5: jessie_11) in
+        (JC_13:
+        ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_15) jessie_12)))))) in
         void);
        [ { } unit reads __anonunion_U_1_fields_x_1
          { (JC_14:
            eq_int(integer_of_int8(int8_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
                                                                   x),
                                                     (0), (1)))),
-           (1))) } ];
-       void;
-       (raise Return)
-      end)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+           (1))) } ]; void; (raise Return) end) end); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C union_simple.jessie --quiet -f union_simple.makefile project

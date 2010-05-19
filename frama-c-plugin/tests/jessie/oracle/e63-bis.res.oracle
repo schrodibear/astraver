@@ -227,8 +227,7 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic float_P_tag:  -> float_P tag_id
@@ -266,9 +265,7 @@ inductive incr: float_P pointer, int, int, (float_P, single) memory -> prop =
                  (forall i_1:int.
                   incr(t_1, i_1, i_1, float_P_float_M_t_1_at_L))))
  
-predicate incr2(t_2:float_P pointer,
- i_2:int,
- j_1:int,
+predicate incr2(t_2:float_P pointer, i_2:int, j_1:int,
  float_P_float_M_t_2_2_at_L:(float_P, single) memory) =
  (forall k1:int.
   (forall k2:int.
@@ -276,9 +273,7 @@ predicate incr2(t_2:float_P pointer,
     le_real(single_value(select(float_P_float_M_t_2_2_at_L, shift(t_2, k1))),
     single_value(select(float_P_float_M_t_2_2_at_L, shift(t_2, k2)))))))
 
-predicate incr3(t_3:float_P pointer,
- i_3:int,
- j_2:int,
+predicate incr3(t_3:float_P pointer, i_3:int, j_2:int,
  float_P_float_M_t_3_3_at_L:(float_P, single) memory) =
  (forall k:int.
   ((le_int(i_3, k) and lt_int(k, j_2)) ->
@@ -297,18 +292,15 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_float_P(p:float_P pointer,
- a:int,
+predicate left_valid_struct_float_P(p:float_P pointer, a:int,
  float_P_alloc_table:float_P alloc_table) =
  (offset_min(float_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -324,122 +316,89 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_float_P(p:float_P pointer,
- b:int,
+predicate right_valid_struct_float_P(p:float_P pointer, b:int,
  float_P_alloc_table:float_P alloc_table) =
  (offset_max(float_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_float_P(p:float_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_float_P(p:float_P pointer, a:int, b:int,
  float_P_alloc_table:float_P alloc_table) =
  ((offset_min(float_P_alloc_table, p) = a)
  and (offset_max(float_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_float_P(p:float_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_float_P(p:float_P pointer, a:int, b:int,
  float_P_alloc_table:float_P alloc_table) =
  ((offset_min(float_P_alloc_table, p) = a)
  and (offset_max(float_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_float_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_float_P(p:float_P pointer,
- a:int,
- b:int,
+predicate valid_root_float_P(p:float_P pointer, a:int, b:int,
  float_P_alloc_table:float_P alloc_table) =
  ((offset_min(float_P_alloc_table, p) <= a)
  and (offset_max(float_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_float_P(p:float_P pointer,
- a:int,
- b:int,
+predicate valid_struct_float_P(p:float_P pointer, a:int, b:int,
  float_P_alloc_table:float_P alloc_table) =
  ((offset_min(float_P_alloc_table, p) <= a)
  and (offset_max(float_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -620,130 +579,91 @@ let f_ensures_default =
      (let t_4 = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_4 = (t_4 := (C_1:
-                               (JC_34:
-                               (((alloc_struct_float_P (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table)))) in
+       (let jessie_4 =
+       (t_4 := (C_1:
+               (JC_34:
+               (((alloc_struct_float_P (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table)))) in
        void);
       (assert
       { (JC_35:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (0)))),
-        0.)) };
-      void);
-      void;
+        0.)) }; void); void;
       (assert
       { (JC_36:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (1)))),
-        1.)) };
-      void);
-      void;
+        1.)) }; void); void;
       (assert
       { (JC_37:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (2)))),
-        2.)) };
-      void);
-      void;
+        2.)) }; void); void;
       (assert
       { (JC_38:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (3)))),
-        3.)) };
-      void);
-      void;
+        3.)) }; void); void;
       (assert
       { (JC_39:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (4)))),
-        4.)) };
-      void);
-      void;
+        4.)) }; void); void;
       (assert
       { (JC_40:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (5)))),
-        5.)) };
-      void);
-      void;
+        5.)) }; void); void;
       (assert
       { (JC_41:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (6)))),
-        6.)) };
-      void);
-      void;
+        6.)) }; void); void;
       (assert
       { (JC_42:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (7)))),
-        7.)) };
-      void);
-      void;
+        7.)) }; void); void;
       (assert
       { (JC_43:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (8)))),
-        8.)) };
-      void);
-      void;
+        8.)) }; void); void;
       (assert
       { (JC_44:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (9)))),
-        9.)) };
-      void);
-      void;
+        9.)) }; void); void;
       (assert
       { (JC_45:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (10)))),
-        10.)) };
-      void);
-      void;
+        10.)) }; void); void;
       (assert
       { (JC_46:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (11)))),
-        11.)) };
-      void);
-      void;
+        11.)) }; void); void;
       (assert
       { (JC_47:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (12)))),
-        12.)) };
-      void);
-      void;
+        12.)) }; void); void;
       (assert
       { (JC_48:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (13)))),
-        13.)) };
-      void);
-      void;
+        13.)) }; void); void;
       (assert
       { (JC_49:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (14)))),
-        14.)) };
-      void);
-      void;
+        14.)) }; void); void;
       (assert
       { (JC_50:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (15)))),
-        15.)) };
-      void);
-      void;
+        15.)) }; void); void;
       (assert
       { (JC_51:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (16)))),
-        16.)) };
-      void);
-      void;
+        16.)) }; void); void;
       (assert
       { (JC_52:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (17)))),
-        17.)) };
-      void);
-      void;
+        17.)) }; void); void;
       (assert
       { (JC_53:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (18)))),
-        18.)) };
-      void);
-      void;
+        18.)) }; void); void;
       (assert
       { (JC_54:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
-        19.)) };
-      void);
-      void;
+        19.)) }; void); void;
       (assert { (JC_55: incr3(t_4, (0), (4), float_P_float_M_t_6)) }; void);
       void;
       (assert { (JC_56: incr3(t_4, (0), (9), float_P_float_M_t_6)) }; void);
@@ -753,13 +673,7 @@ let f_ensures_default =
       (C_26:
       begin
         ((safe_free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+      end) end))))); (raise Return) end with Return -> void end)
   { (JC_5: true) }
 
 let f_safety =
@@ -774,136 +688,104 @@ let f_safety =
      (let t_4 = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_2 = (t_4 := (let jessie_1 = (C_1:
-                                               (JC_9:
-                                               (((alloc_struct_float_P_requires (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table))) in
-                               (JC_10:
-                               (assert
-                               { ge_int(offset_max(float_P_t_6_alloc_table,
-                                        jessie_1),
-                                 (19)) };
-                               jessie_1)))) in
-       void);
+       (let jessie_2 =
+       (t_4 := (let jessie_1 =
+               (C_1:
+               (JC_9:
+               (((alloc_struct_float_P_requires (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table))) in
+               (JC_10:
+               (assert
+               { ge_int(offset_max(float_P_t_6_alloc_table, jessie_1), (19)) };
+               jessie_1)))) in void);
       [ { } unit reads t_4
         { (JC_11:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (0)))),
-          0.)) } ];
-      void;
+          0.)) } ]; void;
       [ { } unit reads t_4
         { (JC_12:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (1)))),
-          1.)) } ];
-      void;
+          1.)) } ]; void;
       [ { } unit reads t_4
         { (JC_13:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (2)))),
-          2.)) } ];
-      void;
+          2.)) } ]; void;
       [ { } unit reads t_4
         { (JC_14:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (3)))),
-          3.)) } ];
-      void;
+          3.)) } ]; void;
       [ { } unit reads t_4
         { (JC_15:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (4)))),
-          4.)) } ];
-      void;
+          4.)) } ]; void;
       [ { } unit reads t_4
         { (JC_16:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (5)))),
-          5.)) } ];
-      void;
+          5.)) } ]; void;
       [ { } unit reads t_4
         { (JC_17:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (6)))),
-          6.)) } ];
-      void;
+          6.)) } ]; void;
       [ { } unit reads t_4
         { (JC_18:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (7)))),
-          7.)) } ];
-      void;
+          7.)) } ]; void;
       [ { } unit reads t_4
         { (JC_19:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (8)))),
-          8.)) } ];
-      void;
+          8.)) } ]; void;
       [ { } unit reads t_4
         { (JC_20:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (9)))),
-          9.)) } ];
-      void;
+          9.)) } ]; void;
       [ { } unit reads t_4
         { (JC_21:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (10)))),
-          10.)) } ];
-      void;
+          10.)) } ]; void;
       [ { } unit reads t_4
         { (JC_22:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (11)))),
-          11.)) } ];
-      void;
+          11.)) } ]; void;
       [ { } unit reads t_4
         { (JC_23:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (12)))),
-          12.)) } ];
-      void;
+          12.)) } ]; void;
       [ { } unit reads t_4
         { (JC_24:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (13)))),
-          13.)) } ];
-      void;
+          13.)) } ]; void;
       [ { } unit reads t_4
         { (JC_25:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (14)))),
-          14.)) } ];
-      void;
+          14.)) } ]; void;
       [ { } unit reads t_4
         { (JC_26:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (15)))),
-          15.)) } ];
-      void;
+          15.)) } ]; void;
       [ { } unit reads t_4
         { (JC_27:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (16)))),
-          16.)) } ];
-      void;
+          16.)) } ]; void;
       [ { } unit reads t_4
         { (JC_28:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (17)))),
-          17.)) } ];
-      void;
+          17.)) } ]; void;
       [ { } unit reads t_4
         { (JC_29:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (18)))),
-          18.)) } ];
-      void;
+          18.)) } ]; void;
       [ { } unit reads t_4
         { (JC_30:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
-          19.)) } ];
-      void;
+          19.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_31: incr3(t_4, (0), (4), float_P_float_M_t_6)) } ];
-      void;
+        { (JC_31: incr3(t_4, (0), (4), float_P_float_M_t_6)) } ]; void;
       [ { } unit reads t_4
-        { (JC_32: incr3(t_4, (0), (9), float_P_float_M_t_6)) } ];
-      void;
+        { (JC_32: incr3(t_4, (0), (9), float_P_float_M_t_6)) } ]; void;
       [ { } unit reads t_4
-        { (JC_33: incr3(t_4, (0), (19), float_P_float_M_t_6)) } ];
-      void;
+        { (JC_33: incr3(t_4, (0), (19), float_P_float_M_t_6)) } ]; void;
       (C_26:
-      begin
-        ((free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
-      end)
-     end)))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+      begin   ((free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
+      end) end))))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C e63-bis.jessie --quiet -f e63-bis.makefile project
@@ -918,11 +800,11 @@ why --project [...] why/e63-bis.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "588" begin = "33" end = "165"/>
+      <location file = "why/e63-bis.why" line = "504" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "704" begin = "9" end = "54"/>
+      <location file = "why/e63-bis.why" line = "593" begin = "15" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

@@ -97,7 +97,8 @@ axiom __anonstruct_EXEMPLE_STRUCTURE_1_parenttag_bottom :
 
 axiom __anonstruct_EXEMPLE_STRUCTURE_1_tags :
  (forall x:__anonstruct_EXEMPLE_STRUCTURE_1 pointer.
-  (forall __anonstruct_EXEMPLE_STRUCTURE_1_tag_table:__anonstruct_EXEMPLE_STRUCTURE_1 tag_table.
+  (forall __anonstruct_EXEMPLE_STRUCTURE_1_tag_table:
+   __anonstruct_EXEMPLE_STRUCTURE_1 tag_table.
    instanceof(__anonstruct_EXEMPLE_STRUCTURE_1_tag_table, x,
    __anonstruct_EXEMPLE_STRUCTURE_1_tag)))
 
@@ -120,14 +121,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int32_of_integer: int -> int32
@@ -158,13 +157,11 @@ predicate left_valid_struct___anonstruct_EXEMPLE_STRUCTURE_1(p:__anonstruct_EXEM
  __anonstruct_EXEMPLE_STRUCTURE_1_alloc_table:__anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) =
  (offset_min(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) <= a)
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -185,117 +182,89 @@ predicate right_valid_struct___anonstruct_EXEMPLE_STRUCTURE_1(p:__anonstruct_EXE
  __anonstruct_EXEMPLE_STRUCTURE_1_alloc_table:__anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) =
  (offset_max(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) >= b)
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
 predicate strict_valid_root___anonstruct_EXEMPLE_STRUCTURE_1(p:__anonstruct_EXEMPLE_STRUCTURE_1 pointer,
- a:int,
- b:int,
+ a:int, b:int,
  __anonstruct_EXEMPLE_STRUCTURE_1_alloc_table:__anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) =
  ((offset_min(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) = a)
  and (offset_max(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
 predicate strict_valid_struct___anonstruct_EXEMPLE_STRUCTURE_1(p:__anonstruct_EXEMPLE_STRUCTURE_1 pointer,
- a:int,
- b:int,
+ a:int, b:int,
  __anonstruct_EXEMPLE_STRUCTURE_1_alloc_table:__anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) =
  ((offset_min(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) = a)
  and (offset_max(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
 predicate valid_bitvector_struct___anonstruct_EXEMPLE_STRUCTURE_1(p:unit pointer,
- a:int,
- b:int,
+ a:int, b:int, bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root___anonstruct_EXEMPLE_STRUCTURE_1(p:__anonstruct_EXEMPLE_STRUCTURE_1 pointer,
- a:int,
- b:int,
+ a:int, b:int,
  __anonstruct_EXEMPLE_STRUCTURE_1_alloc_table:__anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) =
  ((offset_min(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) <= a)
  and (offset_max(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
 predicate valid_struct___anonstruct_EXEMPLE_STRUCTURE_1(p:__anonstruct_EXEMPLE_STRUCTURE_1 pointer,
- a:int,
- b:int,
+ a:int, b:int,
  __anonstruct_EXEMPLE_STRUCTURE_1_alloc_table:__anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) =
  ((offset_min(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) <= a)
  and (offset_max(__anonstruct_EXEMPLE_STRUCTURE_1_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -651,31 +620,23 @@ let f_ensures_default =
   (init:
   try
    begin
-     (let jessie_22 = (if ((gt_int_ (integer_of_int32 n)) (0))
-                      then
-                       (C_4:
-                       (let jessie_13 = n in
-                       (let jessie_16 = p in
-                       begin
-                         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_16) jessie_13);
-                        jessie_13
-                       end)))
-                      else
-                       (C_2:
-                       (let jessie_18 = n in
-                       (let jessie_21 = q in
-                       begin
-                         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_21) jessie_18);
-                        jessie_18
-                       end)))) in
-     void);
-    (raise Return);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_13: true) }
+     (let jessie_22 =
+     (if ((gt_int_ (integer_of_int32 n)) (0))
+     then
+      (C_4:
+      (let jessie_13 = n in
+      (let jessie_16 = p in
+      begin
+        (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_16) jessie_13);
+       jessie_13 end)))
+     else
+      (C_2:
+      (let jessie_18 = n in
+      (let jessie_21 = q in
+      begin
+        (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_21) jessie_18);
+       jessie_18 end)))) in void); (raise Return); (raise Return) end with
+   Return -> void end) { (JC_13: true) }
 
 let f_ensures_p_changed =
  fun (n : int32) (p : __anonstruct_EXEMPLE_STRUCTURE_1 pointer) (q : __anonstruct_EXEMPLE_STRUCTURE_1 pointer) (__anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1 : (__anonstruct_EXEMPLE_STRUCTURE_1, int32) memory ref) (__anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2 : (__anonstruct_EXEMPLE_STRUCTURE_1, int32) memory ref) (__anonstruct_EXEMPLE_STRUCTURE_1_elem2_p_1 : (__anonstruct_EXEMPLE_STRUCTURE_1, int32) memory ref) (__anonstruct_EXEMPLE_STRUCTURE_1_elem2_q_2 : (__anonstruct_EXEMPLE_STRUCTURE_1, int32) memory ref) (__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table : __anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) (__anonstruct_EXEMPLE_STRUCTURE_1_q_2_alloc_table : __anonstruct_EXEMPLE_STRUCTURE_1 alloc_table) ->
@@ -700,30 +661,23 @@ let f_ensures_p_changed =
   (init:
   try
    begin
-     (let jessie_33 = (if ((gt_int_ (integer_of_int32 n)) (0))
-                      then
-                       (C_4:
-                       (let jessie_24 = n in
-                       (let jessie_27 = p in
-                       begin
-                         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_27) jessie_24);
-                        jessie_24
-                       end)))
-                      else
-                       (C_2:
-                       (let jessie_29 = n in
-                       (let jessie_32 = q in
-                       begin
-                         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_32) jessie_29);
-                        jessie_29
-                       end)))) in
-     void);
-    (raise Return);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_33 =
+     (if ((gt_int_ (integer_of_int32 n)) (0))
+     then
+      (C_4:
+      (let jessie_24 = n in
+      (let jessie_27 = p in
+      begin
+        (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_27) jessie_24);
+       jessie_24 end)))
+     else
+      (C_2:
+      (let jessie_29 = n in
+      (let jessie_32 = q in
+      begin
+        (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_32) jessie_29);
+       jessie_29 end)))) in void); (raise Return); (raise Return) end with
+   Return -> void end)
   { (JC_23:
     ((JC_17:
      eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1,
@@ -770,30 +724,23 @@ let f_ensures_q_changed =
   (init:
   try
    begin
-     (let jessie_44 = (if ((gt_int_ (integer_of_int32 n)) (0))
-                      then
-                       (C_4:
-                       (let jessie_35 = n in
-                       (let jessie_38 = p in
-                       begin
-                         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_38) jessie_35);
-                        jessie_35
-                       end)))
-                      else
-                       (C_2:
-                       (let jessie_40 = n in
-                       (let jessie_43 = q in
-                       begin
-                         (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_43) jessie_40);
-                        jessie_40
-                       end)))) in
-     void);
-    (raise Return);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_44 =
+     (if ((gt_int_ (integer_of_int32 n)) (0))
+     then
+      (C_4:
+      (let jessie_35 = n in
+      (let jessie_38 = p in
+      begin
+        (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_38) jessie_35);
+       jessie_35 end)))
+     else
+      (C_2:
+      (let jessie_40 = n in
+      (let jessie_43 = q in
+      begin
+        (((safe_upd_ __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_43) jessie_40);
+       jessie_40 end)))) in void); (raise Return); (raise Return) end with
+   Return -> void end)
   { (JC_37:
     ((JC_31:
      eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2,
@@ -838,33 +785,25 @@ let f_safety =
   (init:
   try
    begin
-     (let jessie_11 = (if ((gt_int_ (integer_of_int32 n)) (0))
-                      then
-                       (C_4:
-                       (let jessie_2 = n in
-                       (let jessie_5 = p in
-                       begin
-                         (JC_45:
-                         ((((upd_ __anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table) __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_5) jessie_2));
-                        jessie_2
-                       end)))
-                      else
-                       (C_2:
-                       (let jessie_7 = n in
-                       (let jessie_10 = q in
-                       begin
-                         (JC_46:
-                         ((((upd_ __anonstruct_EXEMPLE_STRUCTURE_1_q_2_alloc_table) __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_10) jessie_7));
-                        jessie_7
-                       end)))) in
-     void);
-    (raise Return);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+     (let jessie_11 =
+     (if ((gt_int_ (integer_of_int32 n)) (0))
+     then
+      (C_4:
+      (let jessie_2 = n in
+      (let jessie_5 = p in
+      begin
+        (JC_45:
+        ((((upd_ __anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table) __anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1) jessie_5) jessie_2));
+       jessie_2 end)))
+     else
+      (C_2:
+      (let jessie_7 = n in
+      (let jessie_10 = q in
+      begin
+        (JC_46:
+        ((((upd_ __anonstruct_EXEMPLE_STRUCTURE_1_q_2_alloc_table) __anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2) jessie_10) jessie_7));
+       jessie_7 end)))) in void); (raise Return); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C geanta1.jessie --quiet -f geanta1.makefile project

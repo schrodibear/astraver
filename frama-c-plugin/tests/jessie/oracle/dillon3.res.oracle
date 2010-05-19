@@ -127,8 +127,7 @@ axiom double_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -142,18 +141,15 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_double_P(p:double_P pointer,
- a:int,
+predicate left_valid_struct_double_P(p:double_P pointer, a:int,
  double_P_alloc_table:double_P alloc_table) =
  (offset_min(double_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -169,122 +165,89 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_double_P(p:double_P pointer,
- b:int,
+predicate right_valid_struct_double_P(p:double_P pointer, b:int,
  double_P_alloc_table:double_P alloc_table) =
  (offset_max(double_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_double_P(p:double_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_double_P(p:double_P pointer, a:int, b:int,
  double_P_alloc_table:double_P alloc_table) =
  ((offset_min(double_P_alloc_table, p) = a)
  and (offset_max(double_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_double_P(p:double_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_double_P(p:double_P pointer, a:int, b:int,
  double_P_alloc_table:double_P alloc_table) =
  ((offset_min(double_P_alloc_table, p) = a)
  and (offset_max(double_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_double_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_double_P(p:double_P pointer,
- a:int,
- b:int,
+predicate valid_root_double_P(p:double_P pointer, a:int, b:int,
  double_P_alloc_table:double_P alloc_table) =
  ((offset_min(double_P_alloc_table, p) <= a)
  and (offset_max(double_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_double_P(p:double_P pointer,
- a:int,
- b:int,
+predicate valid_struct_double_P(p:double_P pointer, a:int, b:int,
  double_P_alloc_table:double_P alloc_table) =
  ((offset_min(double_P_alloc_table, p) <= a)
  and (offset_max(double_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -503,44 +466,38 @@ let f4_ensures_default =
      (let r = ref (any_double void) in
      (C_16:
      begin
-       (let jessie_26 = (tab := (C_15:
-                                (JC_36:
-                                (((alloc_struct_double_P (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table)))) in
+       (let jessie_26 =
+       (tab := (C_15:
+               (JC_36:
+               (((alloc_struct_double_P (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table)))) in
        void);
       (C_18:
       begin
-        (let jessie_32 = (let jessie_28 = (double_of_real_exact 1.0) in
-                         (let jessie_31 = ((shift !tab) (0)) in
-                         (((safe_upd_ double_P_double_M_tab_2) jessie_31) jessie_28))) in
+        (let jessie_32 =
+        (let jessie_28 = (double_of_real_exact 1.0) in
+        (let jessie_31 = ((shift !tab) (0)) in
+        (((safe_upd_ double_P_double_M_tab_2) jessie_31) jessie_28))) in
         void);
        (C_20:
        begin
-         (let jessie_38 = (let jessie_34 = (double_of_real_exact 2.0) in
-                          (let jessie_37 = ((shift !tab) (1)) in
-                          (((safe_upd_ double_P_double_M_tab_2) jessie_37) jessie_34))) in
+         (let jessie_38 =
+         (let jessie_34 = (double_of_real_exact 2.0) in
+         (let jessie_37 = ((shift !tab) (1)) in
+         (((safe_upd_ double_P_double_M_tab_2) jessie_37) jessie_34))) in
          void);
         (C_22:
         begin
-          (let jessie_41 = (r := (C_21:
-                                 (let jessie_40 = !tab in
-                                 (JC_37:
-                                 (((g4 jessie_40) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
+          (let jessie_41 =
+          (r := (C_21:
+                (let jessie_40 = !tab in
+                (JC_37:
+                (((g4 jessie_40) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
           void);
          (C_23:
          begin
            ((safe_free_parameter double_P_tab_2_alloc_table) !tab);
-          (return := !r);
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+          (return := !r); (raise Return) end) end) end) end) end))))));
+    absurd  end with Return -> !return end))
   { (JC_28:
     not_assigns(double_P_tab_2_alloc_table@, double_P_double_M_tab_2@,
     double_P_double_M_tab_2, pset_empty)) }
@@ -559,51 +516,42 @@ let f4_safety =
      (let r = ref (any_double void) in
      (C_16:
      begin
-       (let jessie_8 = (tab := (let jessie_7 = (C_15:
-                                               (JC_33:
-                                               (((alloc_struct_double_P_requires (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table))) in
-                               (JC_34:
-                               (assert
-                               { ge_int(offset_max(double_P_tab_2_alloc_table,
-                                        jessie_7),
-                                 (1)) };
-                               jessie_7)))) in
-       void);
+       (let jessie_8 =
+       (tab := (let jessie_7 =
+               (C_15:
+               (JC_33:
+               (((alloc_struct_double_P_requires (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table))) in
+               (JC_34:
+               (assert
+               { ge_int(offset_max(double_P_tab_2_alloc_table, jessie_7),
+                 (1)) }; jessie_7)))) in void);
       (C_18:
       begin
-        (let jessie_14 = (let jessie_10 = (double_of_real_exact 1.0) in
-                         (let jessie_13 = ((shift !tab) (0)) in
-                         (((safe_upd_ double_P_double_M_tab_2) jessie_13) jessie_10))) in
+        (let jessie_14 =
+        (let jessie_10 = (double_of_real_exact 1.0) in
+        (let jessie_13 = ((shift !tab) (0)) in
+        (((safe_upd_ double_P_double_M_tab_2) jessie_13) jessie_10))) in
         void);
        (C_20:
        begin
-         (let jessie_20 = (let jessie_16 = (double_of_real_exact 2.0) in
-                          (let jessie_19 = ((shift !tab) (1)) in
-                          (((safe_upd_ double_P_double_M_tab_2) jessie_19) jessie_16))) in
+         (let jessie_20 =
+         (let jessie_16 = (double_of_real_exact 2.0) in
+         (let jessie_19 = ((shift !tab) (1)) in
+         (((safe_upd_ double_P_double_M_tab_2) jessie_19) jessie_16))) in
          void);
         (C_22:
         begin
-          (let jessie_23 = (r := (C_21:
-                                 (let jessie_22 = !tab in
-                                 (JC_35:
-                                 (((g4_requires jessie_22) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
+          (let jessie_23 =
+          (r := (C_21:
+                (let jessie_22 = !tab in
+                (JC_35:
+                (((g4_requires jessie_22) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
           void);
          (C_23:
          begin
            ((free_parameter double_P_tab_2_alloc_table) !tab);
-          (return := !r);
-          (raise Return)
-         end)
-        end)
-       end)
-      end)
-     end))))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+          (return := !r); (raise Return) end) end) end) end) end))))));
+    absurd  end with Return -> !return end)) { true }
 
 let g4_ensures_default =
  fun (t : double_P pointer) (double_P_t_1_alloc_table : double_P alloc_table) (double_P_double_M_t_1 : (double_P, double) memory) ->
@@ -619,24 +567,16 @@ let g4_ensures_default =
      (let y = ref (any_double void) in
      (C_6:
      begin
-       (let jessie_5 = (y := (C_5:
-                             (JC_22:
-                             (((add_double_safe nearest_even) (C_4:
-                                                              ((safe_acc_ double_P_double_M_t_1) 
-                                                               (C_3:
-                                                               ((shift t) (0)))))) 
-                              (C_2:
-                              ((safe_acc_ double_P_double_M_t_1) (C_1:
-                                                                 ((shift t) (1))))))))) in
-       void);
-      (return := !y);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+       (let jessie_5 =
+       (y := (C_5:
+             (JC_22:
+             (((add_double_safe nearest_even) (C_4:
+                                              ((safe_acc_ double_P_double_M_t_1) 
+                                               (C_3: ((shift t) (0)))))) 
+              (C_2:
+              ((safe_acc_ double_P_double_M_t_1) (C_1: ((shift t) (1))))))))) in
+       void); (return := !y); (raise Return) end)); absurd  end with
+   Return -> !return end))
   { (JC_13:
     eq_real(double_value(result),
     add_real(double_value(select(double_P_double_M_t_1, shift(t, (0)))),
@@ -656,24 +596,17 @@ let g4_safety =
      (let y = ref (any_double void) in
      (C_6:
      begin
-       (let jessie_2 = (y := (C_5:
-                             (JC_21:
-                             (((add_double nearest_even) (C_4:
-                                                         (JC_19:
-                                                         (((acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t)))) 
-                              (C_2:
-                              (JC_20:
-                              ((((offset_acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t) (1)))))))) in
-       void);
-      (return := !y);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_2 =
+       (y := (C_5:
+             (JC_21:
+             (((add_double nearest_even) (C_4:
+                                         (JC_19:
+                                         (((acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t)))) 
+              (C_2:
+              (JC_20:
+              ((((offset_acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t) (1)))))))) in
+       void); (return := !y); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon3.jessie --quiet -f dillon3.makefile project

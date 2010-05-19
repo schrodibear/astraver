@@ -121,8 +121,7 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -154,13 +153,11 @@ axiom le_mul_as_axiom :
       and (le_real(x, y) and (le_real(0.0, z) and le_real(z, t)))) ->
       le_real(mul_real(x, z), mul_real(y, t)))))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -172,82 +169,60 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -407,43 +382,27 @@ let Perimeter_ensures_default =
      (let r = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_7 = (a := (JC_29: ((single_of_real nearest_even) 6.28))) in
-       void);
-      (assert { (JC_30: single_is_finite(a)) }; void);
-      void;
+       (let jessie_7 =
+       (a := (JC_29: ((single_of_real nearest_even) 6.28))) in void);
+      (assert { (JC_30: single_is_finite(a)) }; void); void;
       (assert
       { (JC_33:
         ((JC_31: le_real(6.27, single_value(a)))
-        and (JC_32: le_real(single_value(a), 6.29)))) };
-      void);
-      void;
-      (let jessie_9 = (C_7:
-                      begin
-                        (r := (C_6:
-                              (JC_34:
-                              (((mul_single nearest_even) !a) radius))));
-                       !r
-                      end) in
-      void);
+        and (JC_32: le_real(single_value(a), 6.29)))) }; void); void;
+      (let jessie_9 =
+      (C_7:
+      begin
+        (r := (C_6: (JC_34: (((mul_single nearest_even) !a) radius)))); !r
+      end) in void);
       (assert
       { (JC_37:
         ((JC_35:
          le_real(0.0, mul_real(single_value(a), single_value(radius))))
         and (JC_36:
             le_real(mul_real(single_value(a), single_value(radius)),
-            mul_real(6.29, 3.0))))) };
-      void);
-      void;
-      (assert { (JC_38: single_is_finite(r)) }; void);
-      void;
-      (return := !r);
-      (raise Return)
-     end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+            mul_real(6.29, 3.0))))) }; void); void;
+      (assert { (JC_38: single_is_finite(r)) }; void); void; (return := !r);
+      (raise Return) end))); absurd  end with Return -> !return end))
   { (JC_13:
     ((JC_11: single_is_finite(result))
     and (JC_12:
@@ -466,42 +425,28 @@ let Perimeter_safety =
      (let r = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_2 = (a := (JC_19: ((single_of_real nearest_even) 6.28))) in
-       void);
-      [ { } unit reads a { (JC_20: single_is_finite(a)) } ];
-      void;
+       (let jessie_2 =
+       (a := (JC_19: ((single_of_real nearest_even) 6.28))) in void);
+      [ { } unit reads a { (JC_20: single_is_finite(a)) } ]; void;
       [ { } unit reads a
         { (JC_23:
           ((JC_21: le_real(6.27, single_value(a)))
-          and (JC_22: le_real(single_value(a), 6.29)))) } ];
-      void;
-      (let jessie_4 = (C_7:
-                      begin
-                        (r := (C_6:
-                              (JC_24:
-                              (((mul_single nearest_even) !a) radius))));
-                       !r
-                      end) in
-      void);
+          and (JC_22: le_real(single_value(a), 6.29)))) } ]; void;
+      (let jessie_4 =
+      (C_7:
+      begin
+        (r := (C_6: (JC_24: (((mul_single nearest_even) !a) radius)))); !r
+      end) in void);
       [ { } unit reads a
         { (JC_27:
           ((JC_25:
            le_real(0.0, mul_real(single_value(a), single_value(radius))))
           and (JC_26:
               le_real(mul_real(single_value(a), single_value(radius)),
-              mul_real(6.29, 3.0))))) } ];
-      void;
-      [ { } unit reads r { (JC_28: single_is_finite(r)) } ];
-      void;
-      (return := !r);
-      (raise Return)
-     end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+              mul_real(6.29, 3.0))))) } ]; void;
+      [ { } unit reads r { (JC_28: single_is_finite(r)) } ]; void;
+      (return := !r); (raise Return) end))); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C pi_example_full.jessie --quiet -f pi_example_full.makefile project

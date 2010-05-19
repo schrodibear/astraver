@@ -123,14 +123,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int32_of_integer: int -> int32
@@ -156,13 +154,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -174,82 +170,60 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -436,27 +410,18 @@ let f1_ensures_default =
    begin
      (let x_2 = ref (any_int32 void) in
      try
-      (let jessie_17 = (C_1:
-                       begin
-                         (let jessie_13 = (x_2 := (safe_int32_of_integer_ (0))) in
-                         void);
-                        (let jessie_14 = (raise (Goto_l1_exc void)) in void);
-                        (C_2:
-                        begin
-                          (let jessie_16 = (x_2 := (safe_int32_of_integer_ (1))) in
-                          void);
-                         (raise (Goto_l1_exc void))
-                        end)
-                       end) in
-      void)
-      with
+      (let jessie_17 =
+      (C_1:
+      begin
+        (let jessie_13 = (x_2 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_14 = (raise (Goto_l1_exc void)) in void);
+       (C_2:
+       begin
+         (let jessie_16 = (x_2 := (safe_int32_of_integer_ (1))) in void);
+        (raise (Goto_l1_exc void)) end) end) in void) with
       Goto_l1_exc jessie_1 ->
-      (l1: begin   (return := !x_2); (raise Return) end) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+      (l1: begin   (return := !x_2); (raise Return) end) end); absurd  end
+   with Return -> !return end))
   { (JC_5: eq_int(integer_of_int32(result), (0))) }
 
 let f1_safety =
@@ -468,28 +433,18 @@ let f1_safety =
    begin
      (let x_2 = ref (any_int32 void) in
      try
-      (let jessie_10 = (C_1:
-                       begin
-                         (let jessie_6 = (x_2 := (safe_int32_of_integer_ (0))) in
-                         void);
-                        (let jessie_7 = (raise (Goto_l1_exc void)) in void);
-                        (C_2:
-                        begin
-                          (let jessie_9 = (x_2 := (safe_int32_of_integer_ (1))) in
-                          void);
-                         (raise (Goto_l1_exc void))
-                        end)
-                       end) in
-      void)
-      with
+      (let jessie_10 =
+      (C_1:
+      begin
+        (let jessie_6 = (x_2 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_7 = (raise (Goto_l1_exc void)) in void);
+       (C_2:
+       begin
+         (let jessie_9 = (x_2 := (safe_int32_of_integer_ (1))) in void);
+        (raise (Goto_l1_exc void)) end) end) in void) with
       Goto_l1_exc jessie_1 ->
-      (l1: begin   (return := !x_2); (raise Return) end) end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+      (l1: begin   (return := !x_2); (raise Return) end) end); absurd  end
+   with Return -> !return end)) { true }
 
 let f2_ensures_default =
  fun (x_0 : int32) ->
@@ -500,28 +455,17 @@ let f2_ensures_default =
   try
    begin
      try
-      (let jessie_27 = begin
-                         (if ((eq_int_ (integer_of_int32 !mutable_x_0)) (0))
-                         then
-                          (let jessie_24 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                        (C_4:
-                        begin
-                          (let jessie_26 = (mutable_x_0 := (safe_int32_of_integer_ (1))) in
-                          void);
-                         (raise (Goto_l1_exc void))
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_27 =
+      begin
+        (if ((eq_int_ (integer_of_int32 !mutable_x_0)) (0))
+        then (let jessie_24 = (raise (Goto_l1_exc void)) in void) else void);
+       (C_4:
+       begin
+         (let jessie_26 = (mutable_x_0 := (safe_int32_of_integer_ (1))) in
+         void); (raise (Goto_l1_exc void)) end) end in void) with
       Goto_l1_exc jessie_2 ->
-      (l1: begin   (return := !mutable_x_0); (raise Return) end) end;
-    absurd 
-   end
-   with
-   Return ->
-   !return end)))
+      (l1: begin   (return := !mutable_x_0); (raise Return) end) end; 
+    absurd  end with Return -> !return end)))
   { (JC_13:
     (eq_int(integer_of_int32(x_0), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
@@ -535,29 +479,17 @@ let f2_safety =
   try
    begin
      try
-      (let jessie_22 = begin
-                         (if ((eq_int_ (integer_of_int32 !mutable_x_0)) (0))
-                         then
-                          (let jessie_19 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                        (C_4:
-                        begin
-                          (let jessie_21 = (mutable_x_0 := (safe_int32_of_integer_ (1))) in
-                          void);
-                         (raise (Goto_l1_exc void))
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_22 =
+      begin
+        (if ((eq_int_ (integer_of_int32 !mutable_x_0)) (0))
+        then (let jessie_19 = (raise (Goto_l1_exc void)) in void) else void);
+       (C_4:
+       begin
+         (let jessie_21 = (mutable_x_0 := (safe_int32_of_integer_ (1))) in
+         void); (raise (Goto_l1_exc void)) end) end in void) with
       Goto_l1_exc jessie_2 ->
-      (l1: begin   (return := !mutable_x_0); (raise Return) end) end;
-    absurd 
-   end
-   with
-   Return ->
-   !return end)))
-  { true }
+      (l1: begin   (return := !mutable_x_0); (raise Return) end) end; 
+    absurd  end with Return -> !return end))) { true }
 
 let f3_ensures_default =
  fun (x_1 : int32) ->
@@ -568,42 +500,26 @@ let f3_ensures_default =
   try
    begin
      try
-      (let jessie_43 = begin
-                         (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (0))
-                         then
-                          (let jessie_37 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                        (C_8:
-                        begin
-                          (let jessie_39 = (mutable_x_1 := (C_7:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_6:
-                                                            ((add_int 
-                                                              (integer_of_int32 !mutable_x_1)) (1)))))) in
-                          void);
-                         (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (10))
-                         then
-                          (let jessie_40 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                         (C_9:
-                         begin
-                           (let jessie_42 = (mutable_x_1 := (safe_int32_of_integer_ (1))) in
-                           void);
-                          (raise (Goto_l1_exc void))
-                         end)
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_43 =
+      begin
+        (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (0))
+        then (let jessie_37 = (raise (Goto_l1_exc void)) in void) else void);
+       (C_8:
+       begin
+         (let jessie_39 =
+         (mutable_x_1 := (C_7:
+                         (safe_int32_of_integer_ (C_6:
+                                                 ((add_int (integer_of_int32 !mutable_x_1)) (1)))))) in
+         void);
+        (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (10))
+        then (let jessie_40 = (raise (Goto_l1_exc void)) in void) else void);
+        (C_9:
+        begin
+          (let jessie_42 = (mutable_x_1 := (safe_int32_of_integer_ (1))) in
+          void); (raise (Goto_l1_exc void)) end) end) end in void) with
       Goto_l1_exc jessie_3 ->
-      (l1: begin   (return := !mutable_x_1); (raise Return) end) end;
-    absurd 
-   end
-   with
-   Return ->
-   !return end)))
+      (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
+    absurd  end with Return -> !return end)))
   { (JC_21:
     (eq_int(integer_of_int32(x_1), (9))
     <-> eq_int(integer_of_int32(result), (10)))) }
@@ -617,44 +533,27 @@ let f3_safety =
   try
    begin
      try
-      (let jessie_35 = begin
-                         (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (0))
-                         then
-                          (let jessie_29 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                        (C_8:
-                        begin
-                          (let jessie_31 = (mutable_x_1 := (C_7:
-                                                           (JC_25:
-                                                           (int32_of_integer_ 
-                                                            (C_6:
-                                                            ((add_int 
-                                                              (integer_of_int32 !mutable_x_1)) (1))))))) in
-                          void);
-                         (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (10))
-                         then
-                          (let jessie_32 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                         (C_9:
-                         begin
-                           (let jessie_34 = (mutable_x_1 := (safe_int32_of_integer_ (1))) in
-                           void);
-                          (raise (Goto_l1_exc void))
-                         end)
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_35 =
+      begin
+        (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (0))
+        then (let jessie_29 = (raise (Goto_l1_exc void)) in void) else void);
+       (C_8:
+       begin
+         (let jessie_31 =
+         (mutable_x_1 := (C_7:
+                         (JC_25:
+                         (int32_of_integer_ (C_6:
+                                            ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
+         void);
+        (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (10))
+        then (let jessie_32 = (raise (Goto_l1_exc void)) in void) else void);
+        (C_9:
+        begin
+          (let jessie_34 = (mutable_x_1 := (safe_int32_of_integer_ (1))) in
+          void); (raise (Goto_l1_exc void)) end) end) end in void) with
       Goto_l1_exc jessie_3 ->
-      (l1: begin   (return := !mutable_x_1); (raise Return) end) end;
-    absurd 
-   end
-   with
-   Return ->
-   !return end)))
-  { true }
+      (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
+    absurd  end with Return -> !return end))) { true }
 
 let f4_ensures_default =
  fun (x : int32) ->
@@ -665,36 +564,23 @@ let f4_ensures_default =
   try
    begin
      try
-      (let jessie_53 = begin
-                         (if ((eq_int_ (integer_of_int32 !mutable_x)) (0))
-                         then
-                          (let jessie_50 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                        (l2:
-                        begin
-                          void;
-                         (C_13:
-                         begin
-                           (let jessie_52 = (mutable_x := (C_12:
-                                                          (safe_int32_of_integer_ 
-                                                           (C_11:
-                                                           ((add_int 
-                                                             (integer_of_int32 !mutable_x)) (1)))))) in
-                           void);
-                          (raise (Goto_l1_exc void))
-                         end)
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_53 =
+      begin
+        (if ((eq_int_ (integer_of_int32 !mutable_x)) (0))
+        then (let jessie_50 = (raise (Goto_l1_exc void)) in void) else void);
+       (l2:
+       begin
+         void;
+        (C_13:
+        begin
+          (let jessie_52 =
+          (mutable_x := (C_12:
+                        (safe_int32_of_integer_ (C_11:
+                                                ((add_int (integer_of_int32 !mutable_x)) (1)))))) in
+          void); (raise (Goto_l1_exc void)) end) end) end in void) with
       Goto_l1_exc jessie_4 ->
-      (l1: begin   (return := !mutable_x); (raise Return) end) end;
-    absurd 
-   end
-   with
-   Return ->
-   !return end)))
+      (l1: begin   (return := !mutable_x); (raise Return) end) end; absurd 
+   end with Return -> !return end)))
   { (JC_30:
     (eq_int(integer_of_int32(x), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
@@ -708,38 +594,24 @@ let f4_safety =
   try
    begin
      try
-      (let jessie_48 = begin
-                         (if ((eq_int_ (integer_of_int32 !mutable_x)) (0))
-                         then
-                          (let jessie_45 = (raise (Goto_l1_exc void)) in
-                          void)
-                         else void);
-                        (l2:
-                        begin
-                          void;
-                         (C_13:
-                         begin
-                           (let jessie_47 = (mutable_x := (C_12:
-                                                          (JC_34:
-                                                          (int32_of_integer_ 
-                                                           (C_11:
-                                                           ((add_int 
-                                                             (integer_of_int32 !mutable_x)) (1))))))) in
-                           void);
-                          (raise (Goto_l1_exc void))
-                         end)
-                        end)
-                       end in
-      void)
-      with
+      (let jessie_48 =
+      begin
+        (if ((eq_int_ (integer_of_int32 !mutable_x)) (0))
+        then (let jessie_45 = (raise (Goto_l1_exc void)) in void) else void);
+       (l2:
+       begin
+         void;
+        (C_13:
+        begin
+          (let jessie_47 =
+          (mutable_x := (C_12:
+                        (JC_34:
+                        (int32_of_integer_ (C_11:
+                                           ((add_int (integer_of_int32 !mutable_x)) (1))))))) in
+          void); (raise (Goto_l1_exc void)) end) end) end in void) with
       Goto_l1_exc jessie_4 ->
-      (l1: begin   (return := !mutable_x); (raise Return) end) end;
-    absurd 
-   end
-   with
-   Return ->
-   !return end)))
-  { true }
+      (l1: begin   (return := !mutable_x); (raise Return) end) end; absurd 
+   end with Return -> !return end))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C goto.jessie --quiet -f goto.makefile project

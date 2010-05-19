@@ -41,7 +41,7 @@ public class Exception extends Throwable{
   /**
    * Constructs an <code>Exception</code> instance. 
    */
-  /* @ public normal_behavior 
+  /*  public normal_behavior 
          requires true;
        assignable \nothing;
           ensures true;

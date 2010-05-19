@@ -156,20 +156,17 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic integer_of_uint32: uint32 -> int
 
-predicate eq_uint32(x:uint32,
- y:uint32) =
+predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 logic int32_of_integer: int -> int32
@@ -195,13 +192,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -225,40 +220,30 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
@@ -275,44 +260,32 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -534,26 +507,25 @@ let mean2_ensures_default =
      (let __retres_1 = ref (any_int32 void) in
      (C_27:
      begin
-       (let jessie_27 = (min := (C_26:
-                                (let jessie_26 = x_0 in
-                                (let jessie_25 = y_0 in
-                                (JC_75: ((min_int jessie_26) jessie_25)))))) in
-       void);
+       (let jessie_27 =
+       (min := (C_26:
+               (let jessie_26 = x_0 in
+               (let jessie_25 = y_0 in
+               (JC_75: ((min_int jessie_26) jessie_25)))))) in void);
       (C_29:
       begin
-        (let jessie_31 = (max := (C_28:
-                                 (let jessie_30 = x_0 in
-                                 (let jessie_29 = y_0 in
-                                 (JC_76: ((max_int jessie_30) jessie_29)))))) in
-        void);
+        (let jessie_31 =
+        (max := (C_28:
+                (let jessie_30 = x_0 in
+                (let jessie_29 = y_0 in
+                (JC_76: ((max_int jessie_30) jessie_29)))))) in void);
        (C_36:
        begin
-         (let jessie_33 = (__retres_1 := (C_35:
-                                         (safe_int32_of_integer_ (C_34:
-                                                                 ((add_int 
-                                                                   (integer_of_int32 !min)) 
-                                                                  (integer_of_int32 
-                                                                   (C_33:
+         (let jessie_33 =
+         (__retres_1 := (C_35:
+                        (safe_int32_of_integer_ (C_34:
+                                                ((add_int (integer_of_int32 !min)) 
+                                                 (integer_of_int32 (C_33:
                                                                    (safe_int32_of_integer_ 
                                                                     (C_32:
                                                                     (JC_77:
@@ -565,18 +537,8 @@ let mean2_ensures_default =
                                                                     ((sub_int 
                                                                     (integer_of_int32 !max)) 
                                                                     (integer_of_int32 !min))))))) (2)))))))))))) in
-         void);
-        (return := !__retres_1);
-        (raise Return)
-       end)
-      end)
-     end))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_65: true) }
+         void); (return := !__retres_1); (raise Return) end) end) end))));
+    absurd  end with Return -> !return end)) { (JC_65: true) }
 
 let mean2_safety =
  fun (x_0 : int32) (y_0 : int32) ->
@@ -592,29 +554,27 @@ let mean2_safety =
      (let __retres_1 = ref (any_int32 void) in
      (C_27:
      begin
-       (let jessie_16 = (min := (C_26:
-                                (let jessie_15 = x_0 in
-                                (let jessie_14 = y_0 in
-                                (JC_69:
-                                ((min_int_requires jessie_15) jessie_14)))))) in
-       void);
+       (let jessie_16 =
+       (min := (C_26:
+               (let jessie_15 = x_0 in
+               (let jessie_14 = y_0 in
+               (JC_69: ((min_int_requires jessie_15) jessie_14)))))) in void);
       (C_29:
       begin
-        (let jessie_20 = (max := (C_28:
-                                 (let jessie_19 = x_0 in
-                                 (let jessie_18 = y_0 in
-                                 (JC_70:
-                                 ((max_int_requires jessie_19) jessie_18)))))) in
+        (let jessie_20 =
+        (max := (C_28:
+                (let jessie_19 = x_0 in
+                (let jessie_18 = y_0 in
+                (JC_70: ((max_int_requires jessie_19) jessie_18)))))) in
         void);
        (C_36:
        begin
-         (let jessie_22 = (__retres_1 := (C_35:
-                                         (JC_74:
-                                         (int32_of_integer_ (C_34:
-                                                            ((add_int 
-                                                              (integer_of_int32 !min)) 
-                                                             (integer_of_int32 
-                                                              (C_33:
+         (let jessie_22 =
+         (__retres_1 := (C_35:
+                        (JC_74:
+                        (int32_of_integer_ (C_34:
+                                           ((add_int (integer_of_int32 !min)) 
+                                            (integer_of_int32 (C_33:
                                                               (JC_73:
                                                               (int32_of_integer_ 
                                                                (C_32:
@@ -628,18 +588,8 @@ let mean2_safety =
                                                                    ((sub_int 
                                                                     (integer_of_int32 !max)) 
                                                                     (integer_of_int32 !min)))))))) (2)))))))))))))) in
-         void);
-        (return := !__retres_1);
-        (raise Return)
-       end)
-      end)
-     end))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+         void); (return := !__retres_1); (raise Return) end) end) end))));
+    absurd  end with Return -> !return end)) { true }
 
 let mean_ensures_default =
  fun (l : int32) (r : int32) ->
@@ -653,33 +603,24 @@ let mean_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_5 = (__retres := (C_6:
-                                    (safe_int32_of_integer_ (C_5:
-                                                            ((add_int 
-                                                              (integer_of_int32 l)) 
-                                                             (integer_of_int32 
-                                                              (C_4:
-                                                              (safe_int32_of_integer_ 
-                                                               (C_3:
-                                                               (JC_17:
-                                                               ((div_int 
-                                                                 (integer_of_int32 
-                                                                  (C_2:
-                                                                  (safe_int32_of_integer_ 
-                                                                   (C_1:
-                                                                   ((sub_int 
+       (let jessie_5 =
+       (__retres := (C_6:
+                    (safe_int32_of_integer_ (C_5:
+                                            ((add_int (integer_of_int32 l)) 
+                                             (integer_of_int32 (C_4:
+                                                               (safe_int32_of_integer_ 
+                                                                (C_3:
+                                                                (JC_17:
+                                                                ((div_int 
+                                                                  (integer_of_int32 
+                                                                   (C_2:
+                                                                   (safe_int32_of_integer_ 
+                                                                    (C_1:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 r)) 
                                                                     (integer_of_int32 l))))))) (2)))))))))))) in
-       void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_9: true) }
+       void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_9: true) }
 
 let mean_safety =
  fun (l : int32) (r : int32) ->
@@ -693,35 +634,27 @@ let mean_safety =
      (let __retres = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_2 = (__retres := (C_6:
-                                    (JC_16:
-                                    (int32_of_integer_ (C_5:
-                                                       ((add_int (integer_of_int32 l)) 
-                                                        (integer_of_int32 
-                                                         (C_4:
-                                                         (JC_15:
-                                                         (int32_of_integer_ 
-                                                          (C_3:
-                                                          (JC_14:
-                                                          ((div_int_ 
-                                                            (integer_of_int32 
-                                                             (C_2:
-                                                             (JC_13:
-                                                             (int32_of_integer_ 
-                                                              (C_1:
-                                                              ((sub_int 
-                                                                (integer_of_int32 r)) 
-                                                               (integer_of_int32 l)))))))) (2)))))))))))))) in
-       void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_2 =
+       (__retres := (C_6:
+                    (JC_16:
+                    (int32_of_integer_ (C_5:
+                                       ((add_int (integer_of_int32 l)) 
+                                        (integer_of_int32 (C_4:
+                                                          (JC_15:
+                                                          (int32_of_integer_ 
+                                                           (C_3:
+                                                           (JC_14:
+                                                           ((div_int_ 
+                                                             (integer_of_int32 
+                                                              (C_2:
+                                                              (JC_13:
+                                                              (int32_of_integer_ 
+                                                               (C_1:
+                                                               ((sub_int 
+                                                                 (integer_of_int32 r)) 
+                                                                (integer_of_int32 l)))))))) (2)))))))))))))) in
+       void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 let umean_ensures_default =
  fun (l_0 : uint32) (r_0 : uint32) ->
@@ -743,17 +676,15 @@ let umean_ensures_default =
                             integer_of_uint32(l_0)),
                     (2)),
              sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) };
-       void);
-      void;
+       void); void;
       (C_21:
       begin
-        (let jessie_11 = (__retres_0 := (C_20:
-                                        (safe_uint32_of_integer_ (C_19:
-                                                                 ((add_int 
-                                                                   (integer_of_uint32 l_0)) 
-                                                                  (integer_of_uint32 
-                                                                   (C_18:
-                                                                   (safe_uint32_of_integer_ 
+        (let jessie_11 =
+        (__retres_0 := (C_20:
+                       (safe_uint32_of_integer_ (C_19:
+                                                ((add_int (integer_of_uint32 l_0)) 
+                                                 (integer_of_uint32 (C_18:
+                                                                    (safe_uint32_of_integer_ 
                                                                     (C_17:
                                                                     (JC_36:
                                                                     ((div_int 
@@ -764,17 +695,8 @@ let umean_ensures_default =
                                                                     ((sub_int 
                                                                     (integer_of_uint32 r_0)) 
                                                                     (integer_of_uint32 l_0))))))) (2)))))))))))) in
-        void);
-       (return := !__retres_0);
-       (raise Return)
-      end)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_22: true) }
+        void); (return := !__retres_0); (raise Return) end) end); absurd  end
+   with Return -> !return end)) { (JC_22: true) }
 
 let umean_safety =
  fun (l_0 : uint32) (r_0 : uint32) ->
@@ -799,37 +721,27 @@ let umean_safety =
       void;
       (C_21:
       begin
-        (let jessie_8 = (__retres_0 := (C_20:
-                                       (JC_32:
-                                       (uint32_of_integer_ (C_19:
-                                                           ((add_int 
-                                                             (integer_of_uint32 l_0)) 
-                                                            (integer_of_uint32 
-                                                             (C_18:
-                                                             (JC_31:
-                                                             (uint32_of_integer_ 
-                                                              (C_17:
-                                                              (JC_30:
-                                                              ((div_int_ 
-                                                                (integer_of_uint32 
-                                                                 (C_16:
-                                                                 (JC_29:
-                                                                 (uint32_of_integer_ 
-                                                                  (C_15:
-                                                                  ((sub_int 
+        (let jessie_8 =
+        (__retres_0 := (C_20:
+                       (JC_32:
+                       (uint32_of_integer_ (C_19:
+                                           ((add_int (integer_of_uint32 l_0)) 
+                                            (integer_of_uint32 (C_18:
+                                                               (JC_31:
+                                                               (uint32_of_integer_ 
+                                                                (C_17:
+                                                                (JC_30:
+                                                                ((div_int_ 
+                                                                  (integer_of_uint32 
+                                                                   (C_16:
+                                                                   (JC_29:
+                                                                   (uint32_of_integer_ 
+                                                                    (C_15:
+                                                                    ((sub_int 
                                                                     (integer_of_uint32 r_0)) 
-                                                                   (integer_of_uint32 l_0)))))))) (2)))))))))))))) in
-        void);
-       (return := !__retres_0);
-       (raise Return)
-      end)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+                                                                    (integer_of_uint32 l_0)))))))) (2)))))))))))))) in
+        void); (return := !__retres_0); (raise Return) end) end); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C mean.jessie --quiet -f mean.makefile project

@@ -138,14 +138,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int32_of_integer: int -> int32
@@ -187,27 +185,23 @@ axiom int_P_tags :
   (forall int_P_tag_table:int_P tag_table.
    instanceof(int_P_tag_table, x, int_P_tag)))
 
-predicate left_valid_struct_int_P(p:int_P pointer,
- a:int,
+predicate left_valid_struct_int_P(p:int_P pointer, a:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_min(int_P_alloc_table, p) <= a)
 
 predicate left_valid_struct___anonstruct_las_1(p:__anonstruct_las_1 pointer,
- a:int,
- __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
+ a:int, __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
  int_P_alloc_table:int_P alloc_table,
  __anonstruct_las_1_c:(__anonstruct_las_1, int_P pointer) memory) =
  ((offset_min(__anonstruct_las_1_alloc_table, p) <= a)
  and left_valid_struct_int_P(select(__anonstruct_las_1_c, p), (0),
      int_P_alloc_table))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -226,69 +220,54 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_int_P(p:int_P pointer,
- b:int,
+predicate right_valid_struct_int_P(p:int_P pointer, b:int,
  int_P_alloc_table:int_P alloc_table) =
  (offset_max(int_P_alloc_table, p) >= b)
 
 predicate right_valid_struct___anonstruct_las_1(p:__anonstruct_las_1 pointer,
- b:int,
- __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
+ b:int, __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
  int_P_alloc_table:int_P alloc_table,
  __anonstruct_las_1_c:(__anonstruct_las_1, int_P pointer) memory) =
  ((offset_max(__anonstruct_las_1_alloc_table, p) >= b)
  and right_valid_struct_int_P(select(__anonstruct_las_1_c, p), (0),
      int_P_alloc_table))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
 predicate strict_valid_root___anonstruct_las_1(p:__anonstruct_las_1 pointer,
- a:int,
- b:int,
+ a:int, b:int,
  __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table) =
  ((offset_min(__anonstruct_las_1_alloc_table, p) = a)
  and (offset_max(__anonstruct_las_1_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) = a)
  and (offset_max(int_P_alloc_table, p) = b))
 
 predicate strict_valid_struct___anonstruct_las_1(p:__anonstruct_las_1 pointer,
- a:int,
- b:int,
- __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
+ a:int, b:int, __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
  int_P_alloc_table:int_P alloc_table,
  __anonstruct_las_1_c:(__anonstruct_las_1, int_P pointer) memory) =
  ((offset_min(__anonstruct_las_1_alloc_table, p) = a)
@@ -296,89 +275,65 @@ predicate strict_valid_struct___anonstruct_las_1(p:__anonstruct_las_1 pointer,
      and strict_valid_struct_int_P(select(__anonstruct_las_1_c, p), (0), (0),
          int_P_alloc_table)))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
 logic v:  -> __anonstruct_las_1 pointer
 
-predicate valid_bitvector_struct___anonstruct_las_1(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct___anonstruct_las_1(p:unit pointer, a:int,
+ b:int, bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_int_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_root___anonstruct_las_1(p:__anonstruct_las_1 pointer,
- a:int,
- b:int,
- __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table) =
+predicate valid_root___anonstruct_las_1(p:__anonstruct_las_1 pointer, a:int,
+ b:int, __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table) =
  ((offset_min(__anonstruct_las_1_alloc_table, p) <= a)
  and (offset_max(__anonstruct_las_1_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_root_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_int_P(p:int_P pointer,
- a:int,
- b:int,
+predicate valid_struct_int_P(p:int_P pointer, a:int, b:int,
  int_P_alloc_table:int_P alloc_table) =
  ((offset_min(int_P_alloc_table, p) <= a)
  and (offset_max(int_P_alloc_table, p) >= b))
 
 predicate valid_struct___anonstruct_las_1(p:__anonstruct_las_1 pointer,
- a:int,
- b:int,
- __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
+ a:int, b:int, __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table,
  int_P_alloc_table:int_P alloc_table,
  __anonstruct_las_1_c:(__anonstruct_las_1, int_P pointer) memory) =
  ((offset_min(__anonstruct_las_1_alloc_table, p) <= a)
@@ -386,16 +341,12 @@ predicate valid_struct___anonstruct_las_1(p:__anonstruct_las_1 pointer,
      and valid_struct_int_P(select(__anonstruct_las_1_c, p), (0), (0),
          int_P_alloc_table)))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -719,13 +670,7 @@ let f2_ensures_default =
      begin
        (let jessie_4 = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x)) in
        (JC_50: (((g jessie_4) int_P_int_M_x_3) int_P_x_3_alloc_table)));
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_44: true) }
 
 let f2_safety =
@@ -741,18 +686,13 @@ let f2_safety =
    begin
      (C_9:
      begin
-       (let jessie_3 = (C_8:
-                       (JC_48:
-                       (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x))) in
+       (let jessie_3 =
+       (C_8:
+       (JC_48:
+       (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x))) in
        (JC_49:
        (((g_requires jessie_3) int_P_int_M_x_3) int_P_x_3_alloc_table)));
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_46: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 let f_ensures_default =
@@ -765,13 +705,7 @@ let f_ensures_default =
      begin
        (let jessie_2 = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
        (JC_31: (((g jessie_2) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_26: true) }
 
 let f_safety =
@@ -785,13 +719,7 @@ let f_safety =
        (let jessie_1 = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
        (JC_30:
        (((g_requires jessie_1) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
-      (raise Return)
-     end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+      (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_28: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 

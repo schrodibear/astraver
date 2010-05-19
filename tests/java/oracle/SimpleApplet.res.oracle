@@ -943,8 +943,8 @@ end = 67
 name = "Method equals"
 file = "HOME/lib/javacard_api/java/lang/Object.java"
 line = 85
-begin = 33
-end = 39
+begin = 31
+end = 37
 
 [K_4]
 file = "HOME/tests/java/SimpleApplet.java"
@@ -976,8 +976,8 @@ end = 30
 name = "Method getReason"
 file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
 line = 67
-begin = 31
-end = 40
+begin = 30
+end = 39
 
 [K_6]
 file = "HOME/tests/java/SimpleApplet.java"
@@ -1021,8 +1021,8 @@ end = 40
 name = "Method getReason"
 file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
 line = 106
-begin = 29
-end = 38
+begin = 28
+end = 37
 
 [cons_Object]
 name = "Constructor of class Object"
@@ -1500,6 +1500,10 @@ gui stat: SimpleApplet.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/SimpleApplet_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include SimpleApplet.depend
 
 depend: coq/SimpleApplet_why.v
@@ -2281,8 +2285,8 @@ end = -1
 [JC_196]
 file = "HOME/lib/javacard_api/java/lang/Object.java"
 line = 85
-begin = 33
-end = 39
+begin = 31
+end = 37
 
 [JC_197]
 file = "HOME/"
@@ -2293,8 +2297,8 @@ end = -1
 [JC_198]
 file = "HOME/lib/javacard_api/java/lang/Object.java"
 line = 85
-begin = 33
-end = 39
+begin = 31
+end = 37
 
 [JC_199]
 file = "HOME/"
@@ -2625,8 +2629,8 @@ end = 26
 [JC_620]
 file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
 line = 67
-begin = 31
-end = 40
+begin = 30
+end = 39
 
 [JC_508]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -2649,8 +2653,8 @@ end = -1
 [JC_622]
 file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
 line = 67
-begin = 31
-end = 40
+begin = 30
+end = 39
 
 [JC_623]
 file = "HOME/"
@@ -3203,8 +3207,8 @@ end = 36
 [JC_652]
 file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
 line = 106
-begin = 29
-end = 38
+begin = 28
+end = 37
 
 [JC_307]
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
@@ -3233,8 +3237,8 @@ end = 38
 [JC_654]
 file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
 line = 106
-begin = 29
-end = 38
+begin = 28
+end = 37
 
 [JC_421]
 file = "HOME/"
@@ -5995,30 +5999,25 @@ axiom char_range :
  (forall x:char.
   (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
 
-predicate eq_byte(x:byte,
- y:byte) =
+predicate eq_byte(x:byte, y:byte) =
  eq_int(integer_of_byte(x), integer_of_byte(y))
 
-predicate eq_char(x:char,
- y:char) =
+predicate eq_char(x:char, y:char) =
  eq_int(integer_of_char(x), integer_of_char(y))
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_long: long -> int
 
-predicate eq_long(x:long,
- y:long) =
+predicate eq_long(x:long, y:long) =
  eq_int(integer_of_long(x), integer_of_long(y))
 
 logic integer_of_short: short -> int
 
-predicate eq_short(x:short,
- y:short) =
+predicate eq_short(x:short, y:short) =
  eq_int(integer_of_short(x), integer_of_short(y))
 
 logic int32_of_integer: int -> int32
@@ -6050,93 +6049,75 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_AID(p:Object pointer,
- a:int,
+predicate left_valid_struct_AID(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_APDU(p:Object pointer,
- a:int,
+predicate left_valid_struct_APDU(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Applet(p:Object pointer,
- a:int,
+predicate left_valid_struct_Applet(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Card(p:Object pointer,
- a:int,
+predicate left_valid_struct_Card(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Applet(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Throwable(p, a, Object_alloc_table)
 
-predicate left_valid_struct_RuntimeException(p:Object pointer,
- a:int,
+predicate left_valid_struct_RuntimeException(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Exception(p, a, Object_alloc_table)
 
-predicate left_valid_struct_CardRuntimeException(p:Object pointer,
- a:int,
+predicate left_valid_struct_CardRuntimeException(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_RuntimeException(p, a, Object_alloc_table)
 
-predicate left_valid_struct_ISOException(p:Object pointer,
- a:int,
+predicate left_valid_struct_ISOException(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_CardRuntimeException(p, a, Object_alloc_table)
 
-predicate left_valid_struct_JCSystem(p:Object pointer,
- a:int,
+predicate left_valid_struct_JCSystem(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_NativeMethods(p:Object pointer,
- a:int,
+predicate left_valid_struct_NativeMethods(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_OwnerPIN(p:Object pointer,
- a:int,
+predicate left_valid_struct_OwnerPIN(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_PackedBoolean(p:Object pointer,
- a:int,
+predicate left_valid_struct_PackedBoolean(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_PrivAccess(p:Object pointer,
- a:int,
+predicate left_valid_struct_PrivAccess(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_byteM(p:Object pointer,
- a:int,
+predicate left_valid_struct_byteM(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
-predicate left_valid_struct_shortM(p:Object pointer,
- a:int,
+predicate left_valid_struct_shortM(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
@@ -6159,93 +6140,75 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_AID(p:Object pointer,
- b:int,
+predicate right_valid_struct_AID(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_APDU(p:Object pointer,
- b:int,
+predicate right_valid_struct_APDU(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Applet(p:Object pointer,
- b:int,
+predicate right_valid_struct_Applet(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Card(p:Object pointer,
- b:int,
+predicate right_valid_struct_Card(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Applet(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Throwable(p, b, Object_alloc_table)
 
-predicate right_valid_struct_RuntimeException(p:Object pointer,
- b:int,
+predicate right_valid_struct_RuntimeException(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Exception(p, b, Object_alloc_table)
 
-predicate right_valid_struct_CardRuntimeException(p:Object pointer,
- b:int,
+predicate right_valid_struct_CardRuntimeException(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_RuntimeException(p, b, Object_alloc_table)
 
-predicate right_valid_struct_ISOException(p:Object pointer,
- b:int,
+predicate right_valid_struct_ISOException(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_CardRuntimeException(p, b, Object_alloc_table)
 
-predicate right_valid_struct_JCSystem(p:Object pointer,
- b:int,
+predicate right_valid_struct_JCSystem(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_NativeMethods(p:Object pointer,
- b:int,
+predicate right_valid_struct_NativeMethods(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_OwnerPIN(p:Object pointer,
- b:int,
+predicate right_valid_struct_OwnerPIN(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_PackedBoolean(p:Object pointer,
- b:int,
+predicate right_valid_struct_PackedBoolean(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_PrivAccess(p:Object pointer,
- b:int,
+predicate right_valid_struct_PrivAccess(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_byteM(p:Object pointer,
- b:int,
+predicate right_valid_struct_byteM(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate right_valid_struct_shortM(p:Object pointer,
- b:int,
+predicate right_valid_struct_shortM(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
@@ -6263,361 +6226,245 @@ axiom short_range :
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_AID(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_AID(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_APDU(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_APDU(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Applet(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Applet(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Card(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Card(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Applet(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Throwable(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_RuntimeException(p:Object pointer,
- a:int,
- b:int,
- Object_alloc_table:Object alloc_table) =
+predicate strict_valid_struct_RuntimeException(p:Object pointer, a:int,
+ b:int, Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Exception(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_CardRuntimeException(p:Object pointer,
- a:int,
- b:int,
- Object_alloc_table:Object alloc_table) =
+predicate strict_valid_struct_CardRuntimeException(p:Object pointer, a:int,
+ b:int, Object_alloc_table:Object alloc_table) =
  strict_valid_struct_RuntimeException(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_ISOException(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_ISOException(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_CardRuntimeException(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_JCSystem(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_JCSystem(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_NativeMethods(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_NativeMethods(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_OwnerPIN(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_OwnerPIN(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_PackedBoolean(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_PackedBoolean(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_PrivAccess(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_PrivAccess(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_byteM(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_byteM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_shortM(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_shortM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_AID(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_AID(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_APDU(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_APDU(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Applet(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Applet(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Card(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Card(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Applet(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_RuntimeException(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
+predicate valid_bitvector_struct_RuntimeException(p:unit pointer, a:int,
+ b:int, bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_CardRuntimeException(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
+predicate valid_bitvector_struct_CardRuntimeException(p:unit pointer, a:int,
+ b:int, bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_RuntimeException(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_ISOException(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_ISOException(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_CardRuntimeException(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_JCSystem(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_JCSystem(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_NativeMethods(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_NativeMethods(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_OwnerPIN(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_OwnerPIN(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_PackedBoolean(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_PackedBoolean(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_PrivAccess(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_PrivAccess(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_byteM(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_byteM(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_shortM(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_shortM(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_AID(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_AID(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_APDU(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_APDU(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Applet(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Applet(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Card(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Card(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Applet(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Throwable(p, a, b, Object_alloc_table)
 
-predicate valid_struct_RuntimeException(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_RuntimeException(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Exception(p, a, b, Object_alloc_table)
 
-predicate valid_struct_CardRuntimeException(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_CardRuntimeException(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_RuntimeException(p, a, b, Object_alloc_table)
 
-predicate valid_struct_ISOException(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_ISOException(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_CardRuntimeException(p, a, b, Object_alloc_table)
 
-predicate valid_struct_JCSystem(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_JCSystem(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_NativeMethods(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_NativeMethods(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_OwnerPIN(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_OwnerPIN(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_PackedBoolean(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_PackedBoolean(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_PrivAccess(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_PrivAccess(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_byteM(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_byteM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_shortM(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_shortM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
@@ -8206,48 +8053,42 @@ parameter non_null_Object :
  x_6:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_50:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_6), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_6), (0))
      else (x_6 = null))) }
 
 parameter non_null_Object_requires :
  x_6:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_50:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_6), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_6), (0))
      else (x_6 = null))) }
 
 parameter non_null_byteM :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
 
 parameter non_null_byteM_requires :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_7:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
 
 parameter non_null_shortM :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_27:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
      else (x_4 = null))) }
 
 parameter non_null_shortM_requires :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_27:
-    (if result
-     then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
+    (if result then ge_int(offset_max(Object_alloc_table, x_4), neg_int((1)))
      else (x_4 = null))) }
 
 parameter safe_byte_of_integer_ :
@@ -8279,27 +8120,24 @@ let Card_install_ensures_default =
   try
    begin
      (K_4:
-     (let jessie_25 = (let this = (JC_146:
-                                  (((alloc_struct_Card (1)) Object_alloc_table) Object_tag_table)) in
-                      (let tt = (let jessie_28 = this in
-                                (JC_147: (cons_Card jessie_28))) in
-                      this)) in
+     (let jessie_25 =
+     (let this =
+     (JC_146:
+     (((alloc_struct_Card (1)) Object_alloc_table) Object_tag_table)) in
+     (let tt = (let jessie_28 = this in (JC_147: (cons_Card jessie_28))) in
+     this)) in
      (let jessie_24 = bArray_1 in
-     (let jessie_23 = (K_2:
-                      (safe_short_of_integer_ (integer_of_int32 (K_1:
-                                                                (safe_int32_of_integer_ 
-                                                                 ((add_int 
-                                                                   (integer_of_short bOffset_1)) (1))))))) in
-     (let jessie_22 = (K_3:
-                      ((safe_acc_ !byteM_byteP) ((shift bArray_1) (integer_of_short bOffset_1)))) in
+     (let jessie_23 =
+     (K_2:
+     (safe_short_of_integer_ (integer_of_int32 (K_1:
+                                               (safe_int32_of_integer_ 
+                                                ((add_int (integer_of_short bOffset_1)) (1))))))) in
+     (let jessie_22 =
+     (K_3:
+     ((safe_acc_ !byteM_byteP) ((shift bArray_1) (integer_of_short bOffset_1)))) in
      (JC_148:
      ((((Applet_register_byteA_short_byte jessie_25) jessie_24) jessie_23) jessie_22)))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_135: true) }
+    (raise Return) end with Return -> void end) { (JC_135: true) }
 
 let Card_install_safety =
  fun (bArray_1 : Object pointer) (bOffset_1 : short) (bLength_1 : byte) ->
@@ -8308,37 +8146,32 @@ let Card_install_safety =
   try
    begin
      (K_4:
-     (let jessie_18 = (let this = (let jessie_19 = (JC_142:
-                                                   (((alloc_struct_Card_requires (1)) Object_alloc_table) Object_tag_table)) in
-                                  (JC_143:
-                                  (assert
-                                  { ge_int(offset_max(Object_alloc_table,
-                                           jessie_19),
-                                    (0)) };
-                                  jessie_19))) in
-                      (let tt = (let jessie_21 = this in
-                                (JC_144: (cons_Card_requires jessie_21))) in
-                      this)) in
+     (let jessie_18 =
+     (let this =
+     (let jessie_19 =
+     (JC_142:
+     (((alloc_struct_Card_requires (1)) Object_alloc_table) Object_tag_table)) in
+     (JC_143:
+     (assert { ge_int(offset_max(Object_alloc_table, jessie_19), (0)) };
+     jessie_19))) in
+     (let tt =
+     (let jessie_21 = this in (JC_144: (cons_Card_requires jessie_21))) in
+     this)) in
      (let jessie_17 = bArray_1 in
-     (let jessie_16 = (K_2:
-                      (JC_141:
-                      (short_of_integer_ (integer_of_int32 (K_1:
-                                                           (JC_140:
-                                                           (int32_of_integer_ 
-                                                            ((add_int 
-                                                              (integer_of_short bOffset_1)) (1))))))))) in
-     (let jessie_15 = (K_3:
-                      (JC_139:
-                      ((((offset_acc_ !Object_alloc_table) !byteM_byteP) bArray_1) 
-                       (integer_of_short bOffset_1)))) in
+     (let jessie_16 =
+     (K_2:
+     (JC_141:
+     (short_of_integer_ (integer_of_int32 (K_1:
+                                          (JC_140:
+                                          (int32_of_integer_ ((add_int 
+                                                               (integer_of_short bOffset_1)) (1))))))))) in
+     (let jessie_15 =
+     (K_3:
+     (JC_139:
+     ((((offset_acc_ !Object_alloc_table) !byteM_byteP) bArray_1) (integer_of_short bOffset_1)))) in
      (JC_145:
      ((((Applet_register_byteA_short_byte_requires jessie_18) jessie_17) jessie_16) jessie_15)))))));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+    (raise Return) end with Return -> void end) { true }
 
 let Card_process_ensures_default =
  fun (this_1 : Object pointer) (apdu_0 : Object pointer) ->
@@ -8350,12 +8183,10 @@ let Card_process_ensures_default =
    begin
      (if (K_6:
          (let jessie_36 = this_1 in
-         (JC_184: (Applet_selectingApplet jessie_36))))
-     then (raise Return)
+         (JC_184: (Applet_selectingApplet jessie_36)))) then (raise Return)
      else void);
-    (let buf = (K_12:
-               (let jessie_38 = apdu_0 in
-               (JC_185: (APDU_getBuffer jessie_38)))) in
+    (let buf =
+    (K_12: (let jessie_38 = apdu_0 in (JC_185: (APDU_getBuffer jessie_38)))) in
     begin
       (if (K_9:
           ((neq_int_ (integer_of_byte (K_8:
@@ -8365,10 +8196,10 @@ let Card_process_ensures_default =
       then
        (K_7:
        (let jessie_39 = ISO7816_SW_CLA_NOT_SUPPORTED in
-       (JC_186: (ISOException_throwIt jessie_39))))
-      else void);
-     (let jessie_1 = (K_11:
-                     ((safe_acc_ !byteM_byteP) ((shift buf) (integer_of_byte ISO7816_OFFSET_INS)))) in
+       (JC_186: (ISOException_throwIt jessie_39)))) else void);
+     (let jessie_1 =
+     (K_11:
+     ((safe_acc_ !byteM_byteP) ((shift buf) (integer_of_byte ISO7816_OFFSET_INS)))) in
      try
       (if ((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read))
       then (let jessie_41 = (raise (Loop_exit_exc void)) in void)
@@ -8377,19 +8208,9 @@ let Card_process_ensures_default =
        then
         (K_10:
         (let jessie_42 = ISO7816_SW_INS_NOT_SUPPORTED in
-        (JC_187: (ISOException_throwIt jessie_42))))
-       else void))
-      with
-      Loop_exit_exc jessie_2 ->
-      void end);
-     (raise Return)
-    end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_173: true) }
+        (JC_187: (ISOException_throwIt jessie_42)))) else void)) with
+      Loop_exit_exc jessie_2 -> void end); (raise Return) end);
+    (raise Return) end with Return -> void end) { (JC_173: true) }
 
 let Card_process_safety =
  fun (this_1 : Object pointer) (apdu_0 : Object pointer) ->
@@ -8402,14 +8223,13 @@ let Card_process_safety =
      (if (K_6:
          (let jessie_29 = this_1 in
          (JC_177: (Applet_selectingApplet_requires jessie_29))))
-     then (raise Return)
-     else void);
-    (let buf = (K_12:
-               (let jessie_31 = apdu_0 in
-               (JC_179:
-               (assert
-               { ge_int(offset_max(Object_alloc_table, jessie_31), (0)) };
-               (JC_178: (APDU_getBuffer_requires jessie_31)))))) in
+     then (raise Return) else void);
+    (let buf =
+    (K_12:
+    (let jessie_31 = apdu_0 in
+    (JC_179:
+    (assert { ge_int(offset_max(Object_alloc_table, jessie_31), (0)) };
+    (JC_178: (APDU_getBuffer_requires jessie_31)))))) in
     begin
       (if (K_9:
           ((neq_int_ (integer_of_byte (K_8:
@@ -8419,11 +8239,11 @@ let Card_process_safety =
       then
        (K_7:
        (let jessie_32 = ISO7816_SW_CLA_NOT_SUPPORTED in
-       (JC_181: (ISOException_throwIt_requires jessie_32))))
-      else void);
-     (let jessie_1 = (K_11:
-                     (JC_182:
-                     ((((lsafe_lbound_acc_ !Object_alloc_table) !byteM_byteP) buf) (1)))) in
+       (JC_181: (ISOException_throwIt_requires jessie_32)))) else void);
+     (let jessie_1 =
+     (K_11:
+     (JC_182:
+     ((((lsafe_lbound_acc_ !Object_alloc_table) !byteM_byteP) buf) (1)))) in
      try
       (if ((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read))
       then (let jessie_34 = (raise (Loop_exit_exc void)) in void)
@@ -8432,18 +8252,9 @@ let Card_process_safety =
        then
         (K_10:
         (let jessie_35 = ISO7816_SW_INS_NOT_SUPPORTED in
-        (JC_183: (ISOException_throwIt_requires jessie_35))))
-       else void))
-      with
-      Loop_exit_exc jessie_2 ->
-      void end);
-     (raise Return)
-    end);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+        (JC_183: (ISOException_throwIt_requires jessie_35)))) else void))
+      with Loop_exit_exc jessie_2 -> void end); (raise Return) end);
+    (raise Return) end with Return -> void end)
   { (JC_175: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
 
 let cons_APDU_ensures_default =
@@ -8452,53 +8263,48 @@ let cons_APDU_ensures_default =
   (init:
   try
    begin
-     (let jessie_150 = begin
-                         (let jessie_102 = (let jessie_98 = null in
-                                           (let jessie_101 = this_68 in
-                                           (((safe_upd_ APDU_buffer) jessie_101) jessie_98))) in
-                         void);
-                        (let jessie_108 = (let jessie_104 = null in
-                                          (let jessie_107 = this_68 in
-                                          (((safe_upd_ APDU_thePackedBoolean) jessie_107) jessie_104))) in
-                        void);
-                        (let jessie_114 = (let jessie_110 = (safe_byte_of_integer_ (0)) in
-                                          (let jessie_113 = this_68 in
-                                          (((safe_upd_ APDU_incomingFlag) jessie_113) jessie_110))) in
-                        void);
-                        (let jessie_120 = (let jessie_116 = (safe_byte_of_integer_ (0)) in
-                                          (let jessie_119 = this_68 in
-                                          (((safe_upd_ APDU_outgoingFlag) jessie_119) jessie_116))) in
-                        void);
-                        (let jessie_126 = (let jessie_122 = (safe_byte_of_integer_ (0)) in
-                                          (let jessie_125 = this_68 in
-                                          (((safe_upd_ APDU_outgoingLenSetFlag) jessie_125) jessie_122))) in
-                        void);
-                        (let jessie_132 = (let jessie_128 = (safe_byte_of_integer_ (0)) in
-                                          (let jessie_131 = this_68 in
-                                          (((safe_upd_ APDU_lrIs256Flag) jessie_131) jessie_128))) in
-                        void);
-                        (let jessie_138 = (let jessie_134 = (safe_byte_of_integer_ (0)) in
-                                          (let jessie_137 = this_68 in
-                                          (((safe_upd_ APDU_sendInProgressFlag) jessie_137) jessie_134))) in
-                        void);
-                        (let jessie_144 = (let jessie_140 = (safe_byte_of_integer_ (0)) in
-                                          (let jessie_143 = this_68 in
-                                          (((safe_upd_ APDU_noChainingFlag) jessie_143) jessie_140))) in
-                        void);
-                        (let jessie_146 = (safe_byte_of_integer_ (0)) in
-                        (let jessie_149 = this_68 in
-                        begin
-                          (((safe_upd_ APDU_noGetResponseFlag) jessie_149) jessie_146);
-                         jessie_146
-                        end))
-                       end in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_440: true) }
+     (let jessie_150 =
+     begin
+       (let jessie_102 =
+       (let jessie_98 = null in
+       (let jessie_101 = this_68 in
+       (((safe_upd_ APDU_buffer) jessie_101) jessie_98))) in void);
+      (let jessie_108 =
+      (let jessie_104 = null in
+      (let jessie_107 = this_68 in
+      (((safe_upd_ APDU_thePackedBoolean) jessie_107) jessie_104))) in void);
+      (let jessie_114 =
+      (let jessie_110 = (safe_byte_of_integer_ (0)) in
+      (let jessie_113 = this_68 in
+      (((safe_upd_ APDU_incomingFlag) jessie_113) jessie_110))) in void);
+      (let jessie_120 =
+      (let jessie_116 = (safe_byte_of_integer_ (0)) in
+      (let jessie_119 = this_68 in
+      (((safe_upd_ APDU_outgoingFlag) jessie_119) jessie_116))) in void);
+      (let jessie_126 =
+      (let jessie_122 = (safe_byte_of_integer_ (0)) in
+      (let jessie_125 = this_68 in
+      (((safe_upd_ APDU_outgoingLenSetFlag) jessie_125) jessie_122))) in
+      void);
+      (let jessie_132 =
+      (let jessie_128 = (safe_byte_of_integer_ (0)) in
+      (let jessie_131 = this_68 in
+      (((safe_upd_ APDU_lrIs256Flag) jessie_131) jessie_128))) in void);
+      (let jessie_138 =
+      (let jessie_134 = (safe_byte_of_integer_ (0)) in
+      (let jessie_137 = this_68 in
+      (((safe_upd_ APDU_sendInProgressFlag) jessie_137) jessie_134))) in
+      void);
+      (let jessie_144 =
+      (let jessie_140 = (safe_byte_of_integer_ (0)) in
+      (let jessie_143 = this_68 in
+      (((safe_upd_ APDU_noChainingFlag) jessie_143) jessie_140))) in void);
+      (let jessie_146 = (safe_byte_of_integer_ (0)) in
+      (let jessie_149 = this_68 in
+      begin
+        (((safe_upd_ APDU_noGetResponseFlag) jessie_149) jessie_146);
+       jessie_146 end)) end in void); (raise Return) end with Return ->
+   void end) { (JC_440: true) }
 
 let cons_APDU_safety =
  fun (this_68 : Object pointer) ->
@@ -8506,52 +8312,45 @@ let cons_APDU_safety =
   (init:
   try
    begin
-     (let jessie_96 = begin
-                        (let jessie_48 = (let jessie_44 = null in
-                                         (let jessie_47 = this_68 in
-                                         (((safe_upd_ APDU_buffer) jessie_47) jessie_44))) in
-                        void);
-                       (let jessie_54 = (let jessie_50 = null in
-                                        (let jessie_53 = this_68 in
-                                        (((safe_upd_ APDU_thePackedBoolean) jessie_53) jessie_50))) in
-                       void);
-                       (let jessie_60 = (let jessie_56 = (safe_byte_of_integer_ (0)) in
-                                        (let jessie_59 = this_68 in
-                                        (((safe_upd_ APDU_incomingFlag) jessie_59) jessie_56))) in
-                       void);
-                       (let jessie_66 = (let jessie_62 = (safe_byte_of_integer_ (0)) in
-                                        (let jessie_65 = this_68 in
-                                        (((safe_upd_ APDU_outgoingFlag) jessie_65) jessie_62))) in
-                       void);
-                       (let jessie_72 = (let jessie_68 = (safe_byte_of_integer_ (0)) in
-                                        (let jessie_71 = this_68 in
-                                        (((safe_upd_ APDU_outgoingLenSetFlag) jessie_71) jessie_68))) in
-                       void);
-                       (let jessie_78 = (let jessie_74 = (safe_byte_of_integer_ (0)) in
-                                        (let jessie_77 = this_68 in
-                                        (((safe_upd_ APDU_lrIs256Flag) jessie_77) jessie_74))) in
-                       void);
-                       (let jessie_84 = (let jessie_80 = (safe_byte_of_integer_ (0)) in
-                                        (let jessie_83 = this_68 in
-                                        (((safe_upd_ APDU_sendInProgressFlag) jessie_83) jessie_80))) in
-                       void);
-                       (let jessie_90 = (let jessie_86 = (safe_byte_of_integer_ (0)) in
-                                        (let jessie_89 = this_68 in
-                                        (((safe_upd_ APDU_noChainingFlag) jessie_89) jessie_86))) in
-                       void);
-                       (let jessie_92 = (safe_byte_of_integer_ (0)) in
-                       (let jessie_95 = this_68 in
-                       begin
-                         (((safe_upd_ APDU_noGetResponseFlag) jessie_95) jessie_92);
-                        jessie_92
-                       end))
-                      end in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_96 =
+     begin
+       (let jessie_48 =
+       (let jessie_44 = null in
+       (let jessie_47 = this_68 in
+       (((safe_upd_ APDU_buffer) jessie_47) jessie_44))) in void);
+      (let jessie_54 =
+      (let jessie_50 = null in
+      (let jessie_53 = this_68 in
+      (((safe_upd_ APDU_thePackedBoolean) jessie_53) jessie_50))) in void);
+      (let jessie_60 =
+      (let jessie_56 = (safe_byte_of_integer_ (0)) in
+      (let jessie_59 = this_68 in
+      (((safe_upd_ APDU_incomingFlag) jessie_59) jessie_56))) in void);
+      (let jessie_66 =
+      (let jessie_62 = (safe_byte_of_integer_ (0)) in
+      (let jessie_65 = this_68 in
+      (((safe_upd_ APDU_outgoingFlag) jessie_65) jessie_62))) in void);
+      (let jessie_72 =
+      (let jessie_68 = (safe_byte_of_integer_ (0)) in
+      (let jessie_71 = this_68 in
+      (((safe_upd_ APDU_outgoingLenSetFlag) jessie_71) jessie_68))) in void);
+      (let jessie_78 =
+      (let jessie_74 = (safe_byte_of_integer_ (0)) in
+      (let jessie_77 = this_68 in
+      (((safe_upd_ APDU_lrIs256Flag) jessie_77) jessie_74))) in void);
+      (let jessie_84 =
+      (let jessie_80 = (safe_byte_of_integer_ (0)) in
+      (let jessie_83 = this_68 in
+      (((safe_upd_ APDU_sendInProgressFlag) jessie_83) jessie_80))) in void);
+      (let jessie_90 =
+      (let jessie_86 = (safe_byte_of_integer_ (0)) in
+      (let jessie_89 = this_68 in
+      (((safe_upd_ APDU_noChainingFlag) jessie_89) jessie_86))) in void);
+      (let jessie_92 = (safe_byte_of_integer_ (0)) in
+      (let jessie_95 = this_68 in
+      begin
+        (((safe_upd_ APDU_noGetResponseFlag) jessie_95) jessie_92); jessie_92
+      end)) end in void); (raise Return) end with Return -> void end)
   { (JC_442: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
 
 let cons_Applet_ensures_default =
@@ -8560,18 +8359,12 @@ let cons_Applet_ensures_default =
   (init:
   try
    begin
-     (let jessie_14 = (let jessie_10 = null in
-                      (let jessie_13 = this_66 in
-                      begin
-                        (((safe_upd_ Applet_thePrivAccess) jessie_13) jessie_10);
-                       jessie_10
-                      end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_14 =
+     (let jessie_10 = null in
+     (let jessie_13 = this_66 in
+     begin
+       (((safe_upd_ Applet_thePrivAccess) jessie_13) jessie_10); jessie_10
+     end)) in void); (raise Return) end with Return -> void end)
   { (JC_55: true) }
 
 let cons_Applet_safety =
@@ -8580,19 +8373,11 @@ let cons_Applet_safety =
   (init:
   try
    begin
-     (let jessie_8 = (let jessie_4 = null in
-                     (let jessie_7 = this_66 in
-                     begin
-                       (((safe_upd_ Applet_thePrivAccess) jessie_7) jessie_4);
-                      jessie_4
-                     end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+     (let jessie_8 =
+     (let jessie_4 = null in
+     (let jessie_7 = this_66 in
+     begin   (((safe_upd_ Applet_thePrivAccess) jessie_7) jessie_4); jessie_4
+     end)) in void); (raise Return) end with Return -> void end) { true }
 
 let cons_CardRuntimeException_short_ensures_default =
  fun (this_72 : Object pointer) (reason : short) ->
@@ -8600,18 +8385,12 @@ let cons_CardRuntimeException_short_ensures_default =
   (init:
   try
    begin
-     (let jessie_162 = (let jessie_158 = (safe_short_of_integer_ (0)) in
-                       (let jessie_161 = this_72 in
-                       begin
-                         (((safe_upd_ CardRuntimeException_reason) jessie_161) jessie_158);
-                        jessie_158
-                       end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_162 =
+     (let jessie_158 = (safe_short_of_integer_ (0)) in
+     (let jessie_161 = this_72 in
+     begin
+       (((safe_upd_ CardRuntimeException_reason) jessie_161) jessie_158);
+      jessie_158 end)) in void); (raise Return) end with Return -> void end)
   { (JC_616: true) }
 
 let cons_CardRuntimeException_short_safety =
@@ -8620,18 +8399,12 @@ let cons_CardRuntimeException_short_safety =
   (init:
   try
    begin
-     (let jessie_156 = (let jessie_152 = (safe_short_of_integer_ (0)) in
-                       (let jessie_155 = this_72 in
-                       begin
-                         (((safe_upd_ CardRuntimeException_reason) jessie_155) jessie_152);
-                        jessie_152
-                       end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_156 =
+     (let jessie_152 = (safe_short_of_integer_ (0)) in
+     (let jessie_155 = this_72 in
+     begin
+       (((safe_upd_ CardRuntimeException_reason) jessie_155) jessie_152);
+      jessie_152 end)) in void); (raise Return) end with Return -> void end)
   { true }
 
 let cons_Card_ensures_default =
@@ -8664,18 +8437,12 @@ let cons_ISOException_short_ensures_default =
   (init:
   try
    begin
-     (let jessie_174 = (let jessie_170 = null in
-                       (let jessie_173 = this_73 in
-                       begin
-                         (((safe_upd_ ISOException_theSw) jessie_173) jessie_170);
-                        jessie_170
-                       end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+     (let jessie_174 =
+     (let jessie_170 = null in
+     (let jessie_173 = this_73 in
+     begin
+       (((safe_upd_ ISOException_theSw) jessie_173) jessie_170); jessie_170
+     end)) in void); (raise Return) end with Return -> void end)
   { (JC_648: true) }
 
 let cons_ISOException_short_safety =
@@ -8684,19 +8451,12 @@ let cons_ISOException_short_safety =
   (init:
   try
    begin
-     (let jessie_168 = (let jessie_164 = null in
-                       (let jessie_167 = this_73 in
-                       begin
-                         (((safe_upd_ ISOException_theSw) jessie_167) jessie_164);
-                        jessie_164
-                       end)) in
-     void);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+     (let jessie_168 =
+     (let jessie_164 = null in
+     (let jessie_167 = this_73 in
+     begin
+       (((safe_upd_ ISOException_theSw) jessie_167) jessie_164); jessie_164
+     end)) in void); (raise Return) end with Return -> void end) { true }
 
 let cons_Object_ensures_default =
  fun (this_67 : Object pointer) ->
@@ -8765,7 +8525,7 @@ text = "unexplained assertion"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/SimpleApplet_po2.why">
-      <location file = "why/SimpleApplet.why" line = "2604" begin = "36" end = "169"/>
+      <location file = "why/SimpleApplet.why" line = "2440" begin = "15" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SimpleApplet_po3.why">
@@ -12006,7 +11766,7 @@ why -simplify [...] why/SimpleApplet.why
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_byteM bArray_1 0 Object_alloc_table) (>= 1 0))))
 
-;; Card_install_safety_po_2, File "why/SimpleApplet.why", line 2604, characters 36-169
+;; Card_install_safety_po_2, File "why/SimpleApplet.why", line 2440, characters 15-69
 (FORALL (bArray_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_byteM bArray_1 0 Object_alloc_table)

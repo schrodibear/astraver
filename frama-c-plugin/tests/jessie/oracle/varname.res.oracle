@@ -130,8 +130,7 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -145,13 +144,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -163,82 +160,60 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -384,46 +359,26 @@ let g_ensures_default =
      (let tmp_0 = ref (any_pointer void) in
      (let tmp_1 = ref (any_pointer void) in
      try
-      (let jessie_20 = (C_4:
-                       begin
-                         (let jessie_13 = (tmp_1 := (C_3: (JC_32: (ff void)))) in
-                         void);
-                        (if ((safe_neq_pointer !tmp_1) null)
-                        then
-                         (C_6:
-                         begin
-                           (let jessie_15 = (tmp := (C_5: (JC_33: (ff void)))) in
-                           void);
-                          (if ((safe_neq_pointer !tmp) null)
-                          then
-                           (let jessie_16 = (raise (Return_label_exc void)) in
-                           void)
-                          else void);
-                          (C_8:
-                          begin
-                            (let jessie_18 = (tmp_0 := (C_7:
-                                                       (JC_34: (ff void)))) in
-                            void);
-                           (if ((safe_neq_pointer !tmp_0) null)
-                           then void
-                           else
-                            (let jessie_19 = (raise (Return_label_exc void)) in
-                            void))
-                          end)
-                         end)
-                        else void);
-                        (raise (Return_label_exc void))
-                       end) in
-      void)
-      with
-      Return_label_exc jessie_1 ->
-      (return_label: (raise Return)) end)));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_25: true) }
+      (let jessie_20 =
+      (C_4:
+      begin
+        (let jessie_13 = (tmp_1 := (C_3: (JC_32: (ff void)))) in void);
+       (if ((safe_neq_pointer !tmp_1) null)
+       then
+        (C_6:
+        begin
+          (let jessie_15 = (tmp := (C_5: (JC_33: (ff void)))) in void);
+         (if ((safe_neq_pointer !tmp) null)
+         then (let jessie_16 = (raise (Return_label_exc void)) in void)
+         else void);
+         (C_8:
+         begin
+           (let jessie_18 = (tmp_0 := (C_7: (JC_34: (ff void)))) in void);
+          (if ((safe_neq_pointer !tmp_0) null) then void
+          else (let jessie_19 = (raise (Return_label_exc void)) in void)) end)
+        end) else void); (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_1 -> (return_label: (raise Return)) end)));
+    (raise Return) end with Return -> void end) { (JC_25: true) }
 
 let g_safety =
  fun (tt : unit) ->
@@ -435,51 +390,29 @@ let g_safety =
      (let tmp_0 = ref (any_pointer void) in
      (let tmp_1 = ref (any_pointer void) in
      try
-      (let jessie_11 = (C_4:
-                       begin
-                         (let jessie_4 = (tmp_1 := (C_3:
-                                                   (JC_29:
-                                                   (ff_requires void)))) in
-                         void);
-                        (if ((neq_pointer !tmp_1) null)
-                        then
-                         (C_6:
-                         begin
-                           (let jessie_6 = (tmp := (C_5:
-                                                   (JC_30:
-                                                   (ff_requires void)))) in
-                           void);
-                          (if ((neq_pointer !tmp) null)
-                          then
-                           (let jessie_7 = (raise (Return_label_exc void)) in
-                           void)
-                          else void);
-                          (C_8:
-                          begin
-                            (let jessie_9 = (tmp_0 := (C_7:
-                                                      (JC_31:
-                                                      (ff_requires void)))) in
-                            void);
-                           (if ((neq_pointer !tmp_0) null)
-                           then void
-                           else
-                            (let jessie_10 = (raise (Return_label_exc void)) in
-                            void))
-                          end)
-                         end)
-                        else void);
-                        (raise (Return_label_exc void))
-                       end) in
-      void)
-      with
-      Return_label_exc jessie_1 ->
-      (return_label: (raise Return)) end)));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+      (let jessie_11 =
+      (C_4:
+      begin
+        (let jessie_4 = (tmp_1 := (C_3: (JC_29: (ff_requires void)))) in
+        void);
+       (if ((neq_pointer !tmp_1) null)
+       then
+        (C_6:
+        begin
+          (let jessie_6 = (tmp := (C_5: (JC_30: (ff_requires void)))) in
+          void);
+         (if ((neq_pointer !tmp) null)
+         then (let jessie_7 = (raise (Return_label_exc void)) in void)
+         else void);
+         (C_8:
+         begin
+           (let jessie_9 = (tmp_0 := (C_7: (JC_31: (ff_requires void)))) in
+           void);
+          (if ((neq_pointer !tmp_0) null) then void
+          else (let jessie_10 = (raise (Return_label_exc void)) in void)) end)
+        end) else void); (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_1 -> (return_label: (raise Return)) end)));
+    (raise Return) end with Return -> void end) { true }
 
 let h_ensures_default =
  fun (tt : unit) ->
@@ -491,48 +424,26 @@ let h_ensures_default =
      (let tmp_0_1 = ref (any_pointer void) in
      (let tmp_1_0 = ref (any_pointer void) in
      try
-      (let jessie_38 = (C_11:
-                       begin
-                         (let jessie_31 = (tmp_1_0 := (C_10:
-                                                      (JC_46: (f void)))) in
-                         void);
-                        (if ((safe_neq_pointer !tmp_1_0) null)
-                        then
-                         (C_13:
-                         begin
-                           (let jessie_33 = (tmp_0_0 := (C_12:
-                                                        (JC_47: (f void)))) in
-                           void);
-                          (if ((safe_neq_pointer !tmp_0_0) null)
-                          then
-                           (let jessie_34 = (raise (Return_label_exc void)) in
-                           void)
-                          else void);
-                          (C_15:
-                          begin
-                            (let jessie_36 = (tmp_0_1 := (C_14:
-                                                         (JC_48: (f void)))) in
-                            void);
-                           (if ((safe_neq_pointer !tmp_0_1) null)
-                           then void
-                           else
-                            (let jessie_37 = (raise (Return_label_exc void)) in
-                            void))
-                          end)
-                         end)
-                        else void);
-                        (raise (Return_label_exc void))
-                       end) in
-      void)
-      with
-      Return_label_exc jessie_2 ->
-      (return_label: (raise Return)) end)));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_39: true) }
+      (let jessie_38 =
+      (C_11:
+      begin
+        (let jessie_31 = (tmp_1_0 := (C_10: (JC_46: (f void)))) in void);
+       (if ((safe_neq_pointer !tmp_1_0) null)
+       then
+        (C_13:
+        begin
+          (let jessie_33 = (tmp_0_0 := (C_12: (JC_47: (f void)))) in void);
+         (if ((safe_neq_pointer !tmp_0_0) null)
+         then (let jessie_34 = (raise (Return_label_exc void)) in void)
+         else void);
+         (C_15:
+         begin
+           (let jessie_36 = (tmp_0_1 := (C_14: (JC_48: (f void)))) in void);
+          (if ((safe_neq_pointer !tmp_0_1) null) then void
+          else (let jessie_37 = (raise (Return_label_exc void)) in void)) end)
+        end) else void); (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_2 -> (return_label: (raise Return)) end)));
+    (raise Return) end with Return -> void end) { (JC_39: true) }
 
 let h_safety =
  fun (tt : unit) ->
@@ -544,51 +455,29 @@ let h_safety =
      (let tmp_0_1 = ref (any_pointer void) in
      (let tmp_1_0 = ref (any_pointer void) in
      try
-      (let jessie_29 = (C_11:
-                       begin
-                         (let jessie_22 = (tmp_1_0 := (C_10:
-                                                      (JC_43:
-                                                      (f_requires void)))) in
-                         void);
-                        (if ((neq_pointer !tmp_1_0) null)
-                        then
-                         (C_13:
-                         begin
-                           (let jessie_24 = (tmp_0_0 := (C_12:
-                                                        (JC_44:
-                                                        (f_requires void)))) in
-                           void);
-                          (if ((neq_pointer !tmp_0_0) null)
-                          then
-                           (let jessie_25 = (raise (Return_label_exc void)) in
-                           void)
-                          else void);
-                          (C_15:
-                          begin
-                            (let jessie_27 = (tmp_0_1 := (C_14:
-                                                         (JC_45:
-                                                         (f_requires void)))) in
-                            void);
-                           (if ((neq_pointer !tmp_0_1) null)
-                           then void
-                           else
-                            (let jessie_28 = (raise (Return_label_exc void)) in
-                            void))
-                          end)
-                         end)
-                        else void);
-                        (raise (Return_label_exc void))
-                       end) in
-      void)
-      with
-      Return_label_exc jessie_2 ->
-      (return_label: (raise Return)) end)));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+      (let jessie_29 =
+      (C_11:
+      begin
+        (let jessie_22 = (tmp_1_0 := (C_10: (JC_43: (f_requires void)))) in
+        void);
+       (if ((neq_pointer !tmp_1_0) null)
+       then
+        (C_13:
+        begin
+          (let jessie_24 = (tmp_0_0 := (C_12: (JC_44: (f_requires void)))) in
+          void);
+         (if ((neq_pointer !tmp_0_0) null)
+         then (let jessie_25 = (raise (Return_label_exc void)) in void)
+         else void);
+         (C_15:
+         begin
+           (let jessie_27 =
+           (tmp_0_1 := (C_14: (JC_45: (f_requires void)))) in void);
+          (if ((neq_pointer !tmp_0_1) null) then void
+          else (let jessie_28 = (raise (Return_label_exc void)) in void)) end)
+        end) else void); (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_2 -> (return_label: (raise Return)) end)));
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C varname.jessie --quiet -f varname.makefile project
@@ -598,17 +487,17 @@ why --project [...] why/varname.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/varname_po4.why">
-      <location file = "why/varname.why" line = "454" begin = "29" end = "56"/>
+      <location file = "why/varname.why" line = "364" begin = "12" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/varname_po5.why">
-      <location file = "why/varname.why" line = "462" begin = "31" end = "58"/>
+      <location file = "why/varname.why" line = "370" begin = "14" end = "41"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/varname_po6.why">
-      <location file = "why/varname.why" line = "473" begin = "32" end = "59"/>
+      <location file = "why/varname.why" line = "377" begin = "15" end = "42"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -618,17 +507,17 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/varname_po1.why">
-      <location file = "why/varname.why" line = "345" begin = "29" end = "54"/>
+      <location file = "why/varname.why" line = "299" begin = "12" end = "37"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/varname_po2.why">
-      <location file = "why/varname.why" line = "353" begin = "31" end = "54"/>
+      <location file = "why/varname.why" line = "305" begin = "14" end = "37"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/varname_po3.why">
-      <location file = "why/varname.why" line = "364" begin = "32" end = "57"/>
+      <location file = "why/varname.why" line = "312" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

@@ -94,8 +94,7 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -109,13 +108,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -127,82 +124,60 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -355,89 +330,51 @@ let StrCpy_ensures_default =
       begin
         (let jessie_30 = (source := Chaine2) in void);
        try
-        (let jessie_43 = begin
-                           (loop_2:
-                           while true do
-                           { invariant (JC_17: true)  }
-                            begin
-                              [ { } unit { true } ];
-                             try
-                              (let jessie_42 = begin
-                                                 (let jessie_41 = begin
-                                                                    (if 
-                                                                    ((neq_int_ 
-                                                                    (integer_of_int8 
-                                                                    (C_3:
-                                                                    ((safe_acc_ char_P_char_M_Chaine2_2) !source)))) (0))
-                                                                    then void
-                                                                    else
-                                                                    (let jessie_31 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                   (C_6:
-                                                                   begin
-                                                                     
-                                                                    (let jessie_37 = 
-                                                                    (let jessie_33 = 
-                                                                    (C_4:
-                                                                    ((safe_acc_ char_P_char_M_Chaine2_2) !source)) in
-                                                                    (let jessie_36 = !pointeur in
-                                                                    (((safe_upd_ char_P_char_M_Chaine1_1) jessie_36) jessie_33))) in
-                                                                    void);
-                                                                    (C_8:
-                                                                    begin
-                                                                      
-                                                                    (let jessie_39 = 
-                                                                    (pointeur := 
-                                                                    (C_7:
-                                                                    ((shift !pointeur) (1)))) in
-                                                                    void);
-                                                                    (C_10:
-                                                                    begin
-                                                                      
-                                                                    (source := 
-                                                                    (C_9:
-                                                                    ((shift !source) (1))));
-                                                                    !source
-                                                                    end)
-                                                                    end)
-                                                                   end)
-                                                                  end in
-                                                 void);
-                                                (raise
-                                                 (Loop_continue_exc
-                                                 void))
-                                               end in
-                              void)
-                              with
-                              Loop_continue_exc jessie_3 ->
-                              void end
-                            end
-                           done);
-                          (raise (Goto_while_0_break_exc void))
-                         end in
-        void)
-        with
-        Goto_while_0_break_exc jessie_1 ->
-        (while_0_break: void) end;
+        (let jessie_43 =
+        begin
+          (loop_2:
+          while true do
+          { invariant (JC_17: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             (let jessie_42 =
+             begin
+               (let jessie_41 =
+               begin
+                 (if ((neq_int_ (integer_of_int8 (C_3:
+                                                 ((safe_acc_ char_P_char_M_Chaine2_2) !source)))) (0))
+                 then void
+                 else
+                  (let jessie_31 = (raise (Goto_while_0_break_exc void)) in
+                  void));
+                (C_6:
+                begin
+                  (let jessie_37 =
+                  (let jessie_33 =
+                  (C_4: ((safe_acc_ char_P_char_M_Chaine2_2) !source)) in
+                  (let jessie_36 = !pointeur in
+                  (((safe_upd_ char_P_char_M_Chaine1_1) jessie_36) jessie_33))) in
+                  void);
+                 (C_8:
+                 begin
+                   (let jessie_39 =
+                   (pointeur := (C_7: ((shift !pointeur) (1)))) in void);
+                  (C_10:
+                  begin   (source := (C_9: ((shift !source) (1)))); !source
+                  end) end) end) end in void);
+              (raise (Loop_continue_exc void)) end in void) with
+             Loop_continue_exc jessie_3 -> void end end done);
+         (raise (Goto_while_0_break_exc void)) end in void) with
+        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (C_12:
        begin
-         (let jessie_49 = (let jessie_45 = (safe_int8_of_integer_ (0)) in
-                          (let jessie_48 = !pointeur in
-                          (((safe_upd_ char_P_char_M_Chaine1_1) jessie_48) jessie_45))) in
-         void);
-        (raise Return)
-       end)
-      end)
-     end)));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { (JC_5: true) }
+         (let jessie_49 =
+         (let jessie_45 = (safe_int8_of_integer_ (0)) in
+         (let jessie_48 = !pointeur in
+         (((safe_upd_ char_P_char_M_Chaine1_1) jessie_48) jessie_45))) in
+         void); (raise Return) end) end) end))); (raise Return) end with
+   Return -> void end) { (JC_5: true) }
 
 let StrCpy_safety =
  fun (Chaine1 : char_P pointer) (Chaine2 : char_P pointer) (char_P_char_M_Chaine1_1 : (char_P, int8) memory ref) (char_P_Chaine1_1_alloc_table : char_P alloc_table) (char_P_Chaine2_2_alloc_table : char_P alloc_table) (char_P_char_M_Chaine2_2 : (char_P, int8) memory) ->
@@ -454,93 +391,56 @@ let StrCpy_safety =
       begin
         (let jessie_7 = (source := Chaine2) in void);
        try
-        (let jessie_20 = begin
-                           (loop_1:
-                           while true do
-                           { invariant (JC_10: true) variant (0) }
-                            begin
-                              [ { } unit { true } ];
-                             try
-                              (let jessie_19 = begin
-                                                 (let jessie_18 = begin
-                                                                    (if 
-                                                                    ((neq_int_ 
-                                                                    (integer_of_int8 
-                                                                    (C_3:
-                                                                    (JC_12:
-                                                                    (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))))) (0))
-                                                                    then void
-                                                                    else
-                                                                    (let jessie_8 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                   (C_6:
-                                                                   begin
-                                                                     
-                                                                    (let jessie_14 = 
-                                                                    (let jessie_10 = 
-                                                                    (C_4:
-                                                                    (JC_13:
-                                                                    (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))) in
-                                                                    (let jessie_13 = !pointeur in
-                                                                    (JC_14:
-                                                                    ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_13) jessie_10)))) in
-                                                                    void);
-                                                                    (C_8:
-                                                                    begin
-                                                                      
-                                                                    (let jessie_16 = 
-                                                                    (pointeur := 
-                                                                    (C_7:
-                                                                    ((shift !pointeur) (1)))) in
-                                                                    void);
-                                                                    (C_10:
-                                                                    begin
-                                                                      
-                                                                    (source := 
-                                                                    (C_9:
-                                                                    ((shift !source) (1))));
-                                                                    !source
-                                                                    end)
-                                                                    end)
-                                                                   end)
-                                                                  end in
-                                                 void);
-                                                (raise
-                                                 (Loop_continue_exc
-                                                 void))
-                                               end in
-                              void)
-                              with
-                              Loop_continue_exc jessie_3 ->
-                              void end
-                            end
-                           done);
-                          (raise (Goto_while_0_break_exc void))
-                         end in
-        void)
-        with
-        Goto_while_0_break_exc jessie_1 ->
-        (while_0_break: void) end;
+        (let jessie_20 =
+        begin
+          (loop_1:
+          while true do
+          { invariant (JC_10: true) variant (0) }
+           begin
+             [ { } unit { true } ];
+            try
+             (let jessie_19 =
+             begin
+               (let jessie_18 =
+               begin
+                 (if ((neq_int_ (integer_of_int8 (C_3:
+                                                 (JC_12:
+                                                 (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))))) (0))
+                 then void
+                 else
+                  (let jessie_8 = (raise (Goto_while_0_break_exc void)) in
+                  void));
+                (C_6:
+                begin
+                  (let jessie_14 =
+                  (let jessie_10 =
+                  (C_4:
+                  (JC_13:
+                  (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))) in
+                  (let jessie_13 = !pointeur in
+                  (JC_14:
+                  ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_13) jessie_10)))) in
+                  void);
+                 (C_8:
+                 begin
+                   (let jessie_16 =
+                   (pointeur := (C_7: ((shift !pointeur) (1)))) in void);
+                  (C_10:
+                  begin   (source := (C_9: ((shift !source) (1)))); !source
+                  end) end) end) end in void);
+              (raise (Loop_continue_exc void)) end in void) with
+             Loop_continue_exc jessie_3 -> void end end done);
+         (raise (Goto_while_0_break_exc void)) end in void) with
+        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (C_12:
        begin
-         (let jessie_26 = (let jessie_22 = (safe_int8_of_integer_ (0)) in
-                          (let jessie_25 = !pointeur in
-                          (JC_15:
-                          ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_25) jessie_22)))) in
-         void);
-        (raise Return)
-       end)
-      end)
-     end)));
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+         (let jessie_26 =
+         (let jessie_22 = (safe_int8_of_integer_ (0)) in
+         (let jessie_25 = !pointeur in
+         (JC_15:
+         ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_25) jessie_22)))) in
+         void); (raise Return) end) end) end))); (raise Return) end with
+   Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C StrCpy.jessie --quiet -f StrCpy.makefile project
@@ -580,11 +480,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po7.why">
-      <location file = "why/StrCpy.why" line = "399" begin = "62" end = "63"/>
+      <location file = "why/StrCpy.why" line = "337" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/StrCpy_po8.why">
-      <location file = "why/StrCpy.why" line = "399" begin = "62" end = "63"/>
+      <location file = "why/StrCpy.why" line = "337" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/StrCpy_po9.why">

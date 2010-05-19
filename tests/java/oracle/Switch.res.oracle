@@ -384,6 +384,10 @@ gui stat: Switch.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/Switch_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include Switch.depend
 
 depend: coq/Switch_why.v
@@ -821,30 +825,25 @@ axiom char_range :
  (forall x:char.
   (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
 
-predicate eq_byte(x:byte,
- y:byte) =
+predicate eq_byte(x:byte, y:byte) =
  eq_int(integer_of_byte(x), integer_of_byte(y))
 
-predicate eq_char(x:char,
- y:char) =
+predicate eq_char(x:char, y:char) =
  eq_int(integer_of_char(x), integer_of_char(y))
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_long: long -> int
 
-predicate eq_long(x:long,
- y:long) =
+predicate eq_long(x:long, y:long) =
  eq_int(integer_of_long(x), integer_of_long(y))
 
 logic integer_of_short: short -> int
 
-predicate eq_short(x:short,
- y:short) =
+predicate eq_short(x:short, y:short) =
  eq_int(integer_of_short(x), integer_of_short(y))
 
 logic int32_of_integer: int -> int32
@@ -876,33 +875,27 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Switch(p:Object pointer,
- a:int,
+predicate left_valid_struct_Switch(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -925,33 +918,27 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Switch(p:Object pointer,
- b:int,
+predicate right_valid_struct_Switch(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
@@ -967,144 +954,100 @@ axiom short_range :
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Switch(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Switch(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Switch(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Switch(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Switch(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Switch(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1443,16 +1386,14 @@ parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter safe_byte_of_integer_ :
@@ -1489,32 +1430,18 @@ let Switch_test1_ensures_default =
         (if (((eq_int_ (integer_of_int32 jessie_1)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_1)) (0)))
         then
-         (let jessie_15 = begin
-                            (let jessie_14 = (r_0 := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (raise (Loop_exit_exc void))
-                          end in
-         void)
+         (let jessie_15 =
+         begin
+           (let jessie_14 = (r_0 := (safe_int32_of_integer_ (0))) in void);
+          (raise (Loop_exit_exc void)) end in void)
         else
          (if true
          then
-          (let jessie_17 = begin
-                             (r_0 := (safe_int32_of_integer_ (2))); !r_0
-                           end in
-          void)
-         else void))
-        with
-        Loop_exit_exc jessie_2 ->
-        void end);
-      (return := !r_0);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_15: true) }
+          (let jessie_17 =
+          begin   (r_0 := (safe_int32_of_integer_ (2))); !r_0 end in void)
+         else void)) with Loop_exit_exc jessie_2 -> void end);
+      (return := !r_0); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_15: true) }
 
 let Switch_test1_ensures_normal =
  fun (n : int32) ->
@@ -1530,30 +1457,17 @@ let Switch_test1_ensures_normal =
         (if (((eq_int_ (integer_of_int32 jessie_1)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_1)) (0)))
         then
-         (let jessie_22 = begin
-                            (let jessie_21 = (r_0 := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (raise (Loop_exit_exc void))
-                          end in
-         void)
+         (let jessie_22 =
+         begin
+           (let jessie_21 = (r_0 := (safe_int32_of_integer_ (0))) in void);
+          (raise (Loop_exit_exc void)) end in void)
         else
          (if true
          then
-          (let jessie_24 = begin
-                             (r_0 := (safe_int32_of_integer_ (2))); !r_0
-                           end in
-          void)
-         else void))
-        with
-        Loop_exit_exc jessie_2 ->
-        void end);
-      (return := !r_0);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
+          (let jessie_24 =
+          begin   (r_0 := (safe_int32_of_integer_ (2))); !r_0 end in void)
+         else void)) with Loop_exit_exc jessie_2 -> void end);
+      (return := !r_0); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_19:
     ((eq_int(integer_of_int32(n), (0)) or eq_int(integer_of_int32(n), (1)))
@@ -1573,32 +1487,18 @@ let Switch_test1_safety =
         (if (((eq_int_ (integer_of_int32 jessie_1)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_1)) (0)))
         then
-         (let jessie_8 = begin
-                           (let jessie_7 = (r_0 := (safe_int32_of_integer_ (0))) in
-                           void);
-                          (raise (Loop_exit_exc void))
-                         end in
-         void)
+         (let jessie_8 =
+         begin
+           (let jessie_7 = (r_0 := (safe_int32_of_integer_ (0))) in void);
+          (raise (Loop_exit_exc void)) end in void)
         else
          (if true
          then
-          (let jessie_10 = begin
-                             (r_0 := (safe_int32_of_integer_ (2))); !r_0
-                           end in
-          void)
-         else void))
-        with
-        Loop_exit_exc jessie_2 ->
-        void end);
-      (return := !r_0);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+          (let jessie_10 =
+          begin   (r_0 := (safe_int32_of_integer_ (2))); !r_0 end in void)
+         else void)) with Loop_exit_exc jessie_2 -> void end);
+      (return := !r_0); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 let Switch_test2_ensures_default =
  fun (n_0 : int32) ->
@@ -1614,44 +1514,28 @@ let Switch_test2_ensures_default =
         (if (((eq_int_ (integer_of_int32 jessie_3)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_3)) (0)))
         then
-         (let jessie_39 = begin
-                            (let jessie_38 = (r := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (raise (Loop_exit_exc void))
-                          end in
-         void)
+         (let jessie_39 =
+         begin
+           (let jessie_38 = (r := (safe_int32_of_integer_ (0))) in void);
+          (raise (Loop_exit_exc void)) end in void)
         else
          (if (((eq_int_ (integer_of_int32 jessie_3)) (7)) || ((eq_int_ 
                                                                (integer_of_int32 jessie_3)) (4)))
          then
-          (let jessie_42 = begin
-                             (let jessie_41 = (r := (safe_int32_of_integer_ (1))) in
-                             void);
-                            (raise (Loop_exit_exc void))
-                           end in
-          void)
+          (let jessie_42 =
+          begin
+            (let jessie_41 = (r := (safe_int32_of_integer_ (1))) in void);
+           (raise (Loop_exit_exc void)) end in void)
          else
           (if (((eq_int_ (integer_of_int32 jessie_3)) (26)) || (true || 
                                                                ((eq_int_ 
                                                                  (integer_of_int32 jessie_3)) (12))))
           then
-           (let jessie_44 = begin
-                              (r := (safe_int32_of_integer_ (2))); !r
-                            end in
-           void)
-          else void)))
-        with
-        Loop_exit_exc jessie_4 ->
-        void end);
-      (return := !r);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_27: true) }
+           (let jessie_44 =
+           begin   (r := (safe_int32_of_integer_ (2))); !r end in void)
+          else void))) with Loop_exit_exc jessie_4 -> void end);
+      (return := !r); (raise Return) end); absurd  end with Return ->
+   !return end)) { (JC_27: true) }
 
 let Switch_test2_ensures_normal =
  fun (n_0 : int32) ->
@@ -1667,42 +1551,27 @@ let Switch_test2_ensures_normal =
         (if (((eq_int_ (integer_of_int32 jessie_3)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_3)) (0)))
         then
-         (let jessie_49 = begin
-                            (let jessie_48 = (r := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (raise (Loop_exit_exc void))
-                          end in
-         void)
+         (let jessie_49 =
+         begin
+           (let jessie_48 = (r := (safe_int32_of_integer_ (0))) in void);
+          (raise (Loop_exit_exc void)) end in void)
         else
          (if (((eq_int_ (integer_of_int32 jessie_3)) (7)) || ((eq_int_ 
                                                                (integer_of_int32 jessie_3)) (4)))
          then
-          (let jessie_52 = begin
-                             (let jessie_51 = (r := (safe_int32_of_integer_ (1))) in
-                             void);
-                            (raise (Loop_exit_exc void))
-                           end in
-          void)
+          (let jessie_52 =
+          begin
+            (let jessie_51 = (r := (safe_int32_of_integer_ (1))) in void);
+           (raise (Loop_exit_exc void)) end in void)
          else
           (if (((eq_int_ (integer_of_int32 jessie_3)) (26)) || (true || 
                                                                ((eq_int_ 
                                                                  (integer_of_int32 jessie_3)) (12))))
           then
-           (let jessie_54 = begin
-                              (r := (safe_int32_of_integer_ (2))); !r
-                            end in
-           void)
-          else void)))
-        with
-        Loop_exit_exc jessie_4 ->
-        void end);
-      (return := !r);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
+           (let jessie_54 =
+           begin   (r := (safe_int32_of_integer_ (2))); !r end in void)
+          else void))) with Loop_exit_exc jessie_4 -> void end);
+      (return := !r); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_33:
     ((JC_31:
@@ -1728,44 +1597,28 @@ let Switch_test2_safety =
         (if (((eq_int_ (integer_of_int32 jessie_3)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_3)) (0)))
         then
-         (let jessie_29 = begin
-                            (let jessie_28 = (r := (safe_int32_of_integer_ (0))) in
-                            void);
-                           (raise (Loop_exit_exc void))
-                          end in
-         void)
+         (let jessie_29 =
+         begin
+           (let jessie_28 = (r := (safe_int32_of_integer_ (0))) in void);
+          (raise (Loop_exit_exc void)) end in void)
         else
          (if (((eq_int_ (integer_of_int32 jessie_3)) (7)) || ((eq_int_ 
                                                                (integer_of_int32 jessie_3)) (4)))
          then
-          (let jessie_32 = begin
-                             (let jessie_31 = (r := (safe_int32_of_integer_ (1))) in
-                             void);
-                            (raise (Loop_exit_exc void))
-                           end in
-          void)
+          (let jessie_32 =
+          begin
+            (let jessie_31 = (r := (safe_int32_of_integer_ (1))) in void);
+           (raise (Loop_exit_exc void)) end in void)
          else
           (if (((eq_int_ (integer_of_int32 jessie_3)) (26)) || (true || 
                                                                ((eq_int_ 
                                                                  (integer_of_int32 jessie_3)) (12))))
           then
-           (let jessie_34 = begin
-                              (r := (safe_int32_of_integer_ (2))); !r
-                            end in
-           void)
-          else void)))
-        with
-        Loop_exit_exc jessie_4 ->
-        void end);
-      (return := !r);
-      (raise Return)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+           (let jessie_34 =
+           begin   (r := (safe_int32_of_integer_ (2))); !r end in void)
+          else void))) with Loop_exit_exc jessie_4 -> void end);
+      (return := !r); (raise Return) end); absurd  end with Return ->
+   !return end)) { true }
 
 let cons_Switch_ensures_default =
  fun (this_0 : Object pointer) ->

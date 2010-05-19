@@ -66,7 +66,7 @@ public class OwnerPIN implements PIN{
    * presented before the PIN is blocked. When the PIN is blocked, it
    * cannot be validated even on valid PIN presentation.
    */
-    private /* @ spec_public */ byte tryLimit;
+    private /*  spec_public */ byte tryLimit;
 
   /**
    * max PIN size, the maximum length of PIN allowed
@@ -108,10 +108,10 @@ public class OwnerPIN implements PIN{
    * override the internal PIN state of the <code>OwnerPIN</code>.
    * @return the boolean state of the PIN validated flag.
    */
-    /* @public normal_behavior
+    /* public normal_behavior
       @ensures \result == flags[VALIDATED];
       @*/
-    protected /* @ pure */ boolean getValidatedFlag() {
+    protected /*  pure */ boolean getValidatedFlag() {
     createFlags();
     return flags[VALIDATED];
     }
@@ -172,7 +172,7 @@ public class OwnerPIN implements PIN{
    * <li><code>PINException.ILLEGAL_VALUE</code> if <code>maxPINSize</code> parameter is less than 1.</ul>
    */
    
-    /* @invariant
+    /* invariant
       @triesLeft instanceof byte[] &&
       @pinValue instanceof byte[] ;
       @*/
@@ -192,11 +192,11 @@ public class OwnerPIN implements PIN{
    *
    * @return the number of times remaining
    */
-    /* @public normal_behavior
+    /* public normal_behavior
       @modifiable \nothing;
       @ensures \result==triesLeft[0];
       @*/
-    public /* @ pure */ byte getTriesRemaining(){
+    public /*  pure */ byte getTriesRemaining(){
     return triesLeft[0];
     }
 
@@ -247,10 +247,10 @@ public class OwnerPIN implements PIN{
    *
    * @return <code>true</code> if validated; <code>false</code> otherwise
    */
-    /* @public normal_behavior
+    /* public normal_behavior
       @ensures \result<==>getValidatedFlag();
       @*/
-    public /* @ pure */ boolean isValidated(){
+    public /*  pure */ boolean isValidated(){
     return getValidatedFlag();
     }
 

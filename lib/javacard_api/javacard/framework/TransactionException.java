@@ -90,7 +90,7 @@ public class TransactionException extends CardRuntimeException {
    * @exception TransactionException always.
    */
 
-    /* @ public exceptional_behavior
+    /*  public exceptional_behavior
       @   requires true;
       @ 
       @   assignable systemInstance.reason;

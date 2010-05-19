@@ -100,13 +100,11 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -118,82 +116,60 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -323,15 +299,8 @@ let f1_ensures_b1 =
      (C_2:
      begin
        (let jessie_8 = (__retres := (C_1: ((add_int n) (1)))) in void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_9: true) }
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_9: true) }
 
 let f1_ensures_b2 =
  fun (n : int) ->
@@ -344,15 +313,8 @@ let f1_ensures_b2 =
      (C_2:
      begin
        (let jessie_11 = (__retres := (C_1: ((add_int n) (1)))) in void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_11: true) }
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_11: true) }
 
 let f1_ensures_default =
  fun (n : int) ->
@@ -367,15 +329,8 @@ let f1_ensures_default =
     (C_2:
     begin
       (let jessie_5 = (__retres := (C_1: ((add_int n) (1)))) in void);
-     (return := !__retres);
-     (raise Return)
-    end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_5: true) }
+     (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_5: true) }
 
 let f1_safety =
  fun (n : int) ->
@@ -388,15 +343,8 @@ let f1_safety =
      (C_2:
      begin
        (let jessie_2 = (__retres := (C_1: ((add_int n) (1)))) in void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 let f2_ensures_b1 =
  fun (x : int) (y : int) ->
@@ -409,15 +357,8 @@ let f2_ensures_b1 =
      (C_7:
      begin
        (let jessie_20 = (__retres_0 := (C_6: ((add_int x) y))) in void);
-      (return := !__retres_0);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_29: true) }
+      (return := !__retres_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_29: true) }
 
 let f2_ensures_b2 =
  fun (x : int) (y : int) ->
@@ -430,15 +371,8 @@ let f2_ensures_b2 =
      (C_7:
      begin
        (let jessie_23 = (__retres_0 := (C_6: ((add_int x) y))) in void);
-      (return := !__retres_0);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_31: true) }
+      (return := !__retres_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_31: true) }
 
 let f2_ensures_default =
  fun (x : int) (y : int) ->
@@ -453,15 +387,8 @@ let f2_ensures_default =
     (C_7:
     begin
       (let jessie_17 = (__retres_0 := (C_6: ((add_int x) y))) in void);
-     (return := !__retres_0);
-     (raise Return)
-    end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_25: true) }
+     (return := !__retres_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_25: true) }
 
 let f2_safety =
  fun (x : int) (y : int) ->
@@ -474,15 +401,8 @@ let f2_safety =
      (C_7:
      begin
        (let jessie_14 = (__retres_0 := (C_6: ((add_int x) y))) in void);
-      (return := !__retres_0);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+      (return := !__retres_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0026.jessie --quiet -f bts0026.makefile project

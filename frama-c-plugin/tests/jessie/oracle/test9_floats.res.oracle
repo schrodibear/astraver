@@ -81,8 +81,7 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int8_of_integer: int -> int8
@@ -96,13 +95,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -114,82 +111,60 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -333,33 +308,25 @@ let monexp_ensures_default =
      (let __retres = ref (any_double void) in
      (C_6:
      begin
-       (let jessie_5 = (__retres := (C_5:
-                                    (JC_21:
-                                    (((div_double_safe nearest_even) 
-                                      (C_4:
-                                      (JC_18:
-                                      (((add_double_safe nearest_even) 
-                                        ((double_of_real_safe nearest_even) 1.017021247)) 
-                                       (C_3:
-                                       (JC_17:
-                                       (((mul_double_safe nearest_even) 
-                                         ((double_of_real_safe nearest_even) 0.5175411565)) x))))))) 
-                                     (C_2:
-                                     (JC_20:
-                                     (((sub_double_safe nearest_even) 
-                                       (double_of_real_exact 1.0)) (C_1:
-                                                                   (JC_19:
-                                                                   (((mul_double_safe nearest_even) 
-                                                                    ((double_of_real_safe nearest_even) 0.4397882839)) x)))))))))) in
-       void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+       (let jessie_5 =
+       (__retres := (C_5:
+                    (JC_21:
+                    (((div_double_safe nearest_even) (C_4:
+                                                     (JC_18:
+                                                     (((add_double_safe nearest_even) 
+                                                       ((double_of_real_safe nearest_even) 1.017021247)) 
+                                                      (C_3:
+                                                      (JC_17:
+                                                      (((mul_double_safe nearest_even) 
+                                                        ((double_of_real_safe nearest_even) 0.5175411565)) x))))))) 
+                     (C_2:
+                     (JC_20:
+                     (((sub_double_safe nearest_even) (double_of_real_exact 1.0)) 
+                      (C_1:
+                      (JC_19:
+                      (((mul_double_safe nearest_even) ((double_of_real_safe nearest_even) 0.4397882839)) x)))))))))) in
+       void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end))
   { (JC_5:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x)))),
     0.02097256305)) }
@@ -374,35 +341,28 @@ let monexp_safety =
      (let __retres = ref (any_double void) in
      (C_6:
      begin
-       (let jessie_2 = (__retres := (C_5:
-                                    (JC_16:
-                                    (((div_double nearest_even) (C_4:
-                                                                (JC_12:
-                                                                (((add_double nearest_even) 
-                                                                  (JC_9:
-                                                                  ((double_of_real nearest_even) 1.017021247))) 
-                                                                 (C_3:
-                                                                 (JC_11:
-                                                                 (((mul_double nearest_even) 
-                                                                   (JC_10:
-                                                                   ((double_of_real nearest_even) 0.5175411565))) x))))))) 
-                                     (C_2:
-                                     (JC_15:
-                                     (((sub_double nearest_even) (double_of_real_exact 1.0)) 
-                                      (C_1:
-                                      (JC_14:
-                                      (((mul_double nearest_even) (JC_13:
-                                                                  ((double_of_real nearest_even) 0.4397882839))) x)))))))))) in
-       void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_2 =
+       (__retres := (C_5:
+                    (JC_16:
+                    (((div_double nearest_even) (C_4:
+                                                (JC_12:
+                                                (((add_double nearest_even) 
+                                                  (JC_9:
+                                                  ((double_of_real nearest_even) 1.017021247))) 
+                                                 (C_3:
+                                                 (JC_11:
+                                                 (((mul_double nearest_even) 
+                                                   (JC_10:
+                                                   ((double_of_real nearest_even) 0.5175411565))) x))))))) 
+                     (C_2:
+                     (JC_15:
+                     (((sub_double nearest_even) (double_of_real_exact 1.0)) 
+                      (C_1:
+                      (JC_14:
+                      (((mul_double nearest_even) (JC_13:
+                                                  ((double_of_real nearest_even) 0.4397882839))) x)))))))))) in
+       void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test9_floats.jessie --quiet -f test9_floats.makefile project

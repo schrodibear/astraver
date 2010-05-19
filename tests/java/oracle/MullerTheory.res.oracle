@@ -618,6 +618,10 @@ gui stat: MullerTheory.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/MullerTheory_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include MullerTheory.depend
 
 depend: coq/MullerTheory_why.v
@@ -1356,38 +1360,31 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_MullerTheory(p:Object pointer,
- a:int,
+predicate left_valid_struct_MullerTheory(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_intM(p:Object pointer,
- a:int,
+predicate left_valid_struct_intM(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -1457,197 +1454,140 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_MullerTheory(p:Object pointer,
- b:int,
+predicate right_valid_struct_MullerTheory(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_intM(p:Object pointer,
- b:int,
+predicate right_valid_struct_intM(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_MullerTheory(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_MullerTheory(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_MullerTheory(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_MullerTheory(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_intM(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_intM(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_MullerTheory(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_MullerTheory(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_intM(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_intM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -2003,8 +1943,7 @@ parameter non_null_Object :
   Object_x_5_alloc_table:Object alloc_table ->
    { } bool
    { (JC_30:
-     (if result
-      then eq_int(offset_max(Object_x_5_alloc_table, x_3), (0))
+     (if result then eq_int(offset_max(Object_x_5_alloc_table, x_3), (0))
       else (x_3 = null))) }
 
 parameter non_null_Object_requires :
@@ -2012,8 +1951,7 @@ parameter non_null_Object_requires :
   Object_x_5_alloc_table:Object alloc_table ->
    { } bool
    { (JC_30:
-     (if result
-      then eq_int(offset_max(Object_x_5_alloc_table, x_3), (0))
+     (if result then eq_int(offset_max(Object_x_5_alloc_table, x_3), (0))
       else (x_3 = null))) }
 
 parameter non_null_intM :
@@ -2059,57 +1997,42 @@ let MullerTheory_m_ensures_default =
                         and (JC_72:
                             eq_int(count,
                             num_of_pos((0), sub_int(i_4, (1)), t_4,
-                            intM_intP_t_4_7))))))))
-           }
+                            intM_intP_t_4_7))))))))  }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_51 = begin
-                              (if (K_18:
-                                  ((lt_int_ !i_4) (K_17:
-                                                  (let jessie_45 = t_4 in
-                                                  (JC_77:
-                                                  ((java_array_length_intM jessie_45) Object_t_4_7_alloc_table))))))
-                              then
-                               (if (K_15:
-                                   ((gt_int_ (K_14:
-                                             ((safe_acc_ intM_intP_t_4_7) 
-                                              ((shift t_4) !i_4)))) (0)))
-                               then
-                                (K_13:
-                                (let jessie_49 = (let jessie_2 = !count in
-                                                 begin
-                                                   (let jessie_48 = (count := 
-                                                                    ((add_int jessie_2) (1))) in
-                                                   void);
-                                                  jessie_2
-                                                 end) in
-                                void))
-                               else void)
-                              else
-                               (let jessie_50 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
+           (let jessie_51 =
+           begin
+             (if (K_18:
+                 ((lt_int_ !i_4) (K_17:
+                                 (let jessie_45 = t_4 in
+                                 (JC_77:
+                                 ((java_array_length_intM jessie_45) Object_t_4_7_alloc_table))))))
+             then
+              (if (K_15:
+                  ((gt_int_ (K_14:
+                            ((safe_acc_ intM_intP_t_4_7) ((shift t_4) !i_4)))) (0)))
+              then
+               (K_13:
+               (let jessie_49 =
+               (let jessie_2 = !count in
+               begin
+                 (let jessie_48 = (count := ((add_int jessie_2) (1))) in
+                 void); jessie_2 end) in void)) else void)
+             else (let jessie_50 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_4 ->
-           (let jessie_55 = (K_16:
-                            (let jessie_1 = !i_4 in
-                            begin
-                              (let jessie_54 = (i_4 := ((add_int jessie_1) (1))) in
-                              void);
-                             jessie_1
-                            end)) in
-           void) end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_3 ->
-        void end);
-      (let u = (K_38:
-               (JC_78:
-               (((alloc_struct_intM !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
+           (let jessie_55 =
+           (K_16:
+           (let jessie_1 = !i_4 in
+           begin
+             (let jessie_54 = (i_4 := ((add_int jessie_1) (1))) in void);
+            jessie_1 end)) in void) end end done) with
+        Loop_exit_exc jessie_3 -> void end);
+      (let u =
+      (K_38:
+      (JC_78:
+      (((alloc_struct_intM !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
       begin
         (let jessie_58 = (count := (0)) in void);
        (let i_5 = ref (K_19: (0)) in
@@ -2127,72 +2050,46 @@ let MullerTheory_m_ensures_default =
                         and (JC_83:
                             eq_int(count,
                             num_of_pos((0), sub_int(i_5, (1)), t_4,
-                            intM_intP_t_4_7))))))))
-           }
+                            intM_intP_t_4_7))))))))  }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_71 = begin
-                              (if (K_37:
-                                  ((lt_int_ !i_5) (K_36:
-                                                  (let jessie_60 = t_4 in
-                                                  (JC_88:
-                                                  ((java_array_length_intM jessie_60) Object_t_4_7_alloc_table))))))
-                              then
-                               (if (K_34:
-                                   ((gt_int_ (K_33:
-                                             ((safe_acc_ intM_intP_t_4_7) 
-                                              ((shift t_4) !i_5)))) (0)))
-                               then
-                                (K_32:
-                                (let jessie_69 = (let jessie_62 = (K_31:
-                                                                  ((safe_acc_ intM_intP_t_4_7) 
-                                                                   ((shift t_4) !i_5))) in
-                                                 (let jessie_65 = ((shift u) 
-                                                                   (K_30:
-                                                                   (let jessie_6 = !count in
-                                                                   begin
-                                                                     
-                                                                    (let jessie_68 = 
-                                                                    (count := 
-                                                                    ((add_int jessie_6) (1))) in
-                                                                    void);
-                                                                    jessie_6
-                                                                   end))) in
-                                                 (((safe_upd_ intM_intP_MullerTheory_m_9) jessie_65) jessie_62))) in
-                                void))
-                               else void)
-                              else
-                               (let jessie_70 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
+           (let jessie_71 =
+           begin
+             (if (K_37:
+                 ((lt_int_ !i_5) (K_36:
+                                 (let jessie_60 = t_4 in
+                                 (JC_88:
+                                 ((java_array_length_intM jessie_60) Object_t_4_7_alloc_table))))))
+             then
+              (if (K_34:
+                  ((gt_int_ (K_33:
+                            ((safe_acc_ intM_intP_t_4_7) ((shift t_4) !i_5)))) (0)))
+              then
+               (K_32:
+               (let jessie_69 =
+               (let jessie_62 =
+               (K_31: ((safe_acc_ intM_intP_t_4_7) ((shift t_4) !i_5))) in
+               (let jessie_65 =
+               ((shift u) (K_30:
+                          (let jessie_6 = !count in
+                          begin
+                            (let jessie_68 =
+                            (count := ((add_int jessie_6) (1))) in void);
+                           jessie_6 end))) in
+               (((safe_upd_ intM_intP_MullerTheory_m_9) jessie_65) jessie_62))) in
+               void)) else void)
+             else (let jessie_70 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_8 ->
-           (let jessie_75 = (K_35:
-                            (let jessie_5 = !i_5 in
-                            begin
-                              (let jessie_74 = (i_5 := ((add_int jessie_5) (1))) in
-                              void);
-                             jessie_5
-                            end)) in
-           void) end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_7 ->
-        void end);
-       (return := u);
-       (raise Return)
-      end)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_35: true) }
+           (let jessie_75 =
+           (K_35:
+           (let jessie_5 = !i_5 in
+           begin
+             (let jessie_74 = (i_5 := ((add_int jessie_5) (1))) in void);
+            jessie_5 end)) in void) end end done) with
+        Loop_exit_exc jessie_7 -> void end); (return := u); (raise Return)
+      end) end); absurd  end with Return -> !return end)) { (JC_35: true) }
 
 let MullerTheory_m_safety =
  fun (t_4 : Object pointer) (Object_MullerTheory_m_9_alloc_table : Object alloc_table ref) (Object_MullerTheory_m_9_tag_table : Object tag_table ref) (intM_intP_MullerTheory_m_9 : (Object, int) memory ref) (Object_t_4_7_alloc_table : Object alloc_table) (intM_intP_t_4_7 : (Object, int) memory) ->
@@ -2227,57 +2124,44 @@ let MullerTheory_m_safety =
                                num_of_pos((0), sub_int(i_4, (1)), t_4,
                                intM_intP_t_4_7)))))))) } ];
           try
-           (let jessie_17 = begin
-                              (if (K_18:
-                                  ((lt_int_ !i_4) (K_17:
-                                                  (let jessie_11 = t_4 in
-                                                  (JC_49:
-                                                  (assert
-                                                  { ge_int(offset_max(Object_t_4_7_alloc_table,
-                                                           jessie_11),
-                                                    (-1)) };
-                                                  (JC_48:
-                                                  ((java_array_length_intM_requires jessie_11) Object_t_4_7_alloc_table))))))))
-                              then
-                               (if (K_15:
-                                   ((gt_int_ (K_14:
-                                             (JC_50:
-                                             ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_4)))) (0)))
-                               then
-                                (K_13:
-                                (let jessie_15 = (let jessie_2 = !count in
-                                                 begin
-                                                   (let jessie_14 = (count := 
-                                                                    ((add_int jessie_2) (1))) in
-                                                   void);
-                                                  jessie_2
-                                                 end) in
-                                void))
-                               else void)
-                              else
-                               (let jessie_16 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
+           (let jessie_17 =
+           begin
+             (if (K_18:
+                 ((lt_int_ !i_4) (K_17:
+                                 (let jessie_11 = t_4 in
+                                 (JC_49:
+                                 (assert
+                                 { ge_int(offset_max(Object_t_4_7_alloc_table,
+                                          jessie_11),
+                                   (-1)) };
+                                 (JC_48:
+                                 ((java_array_length_intM_requires jessie_11) Object_t_4_7_alloc_table))))))))
+             then
+              (if (K_15:
+                  ((gt_int_ (K_14:
+                            (JC_50:
+                            ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_4)))) (0)))
+              then
+               (K_13:
+               (let jessie_15 =
+               (let jessie_2 = !count in
+               begin
+                 (let jessie_14 = (count := ((add_int jessie_2) (1))) in
+                 void); jessie_2 end) in void)) else void)
+             else (let jessie_16 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_4 ->
-           (let jessie_21 = (K_16:
-                            (let jessie_1 = !i_4 in
-                            begin
-                              (let jessie_20 = (i_4 := ((add_int jessie_1) (1))) in
-                              void);
-                             jessie_1
-                            end)) in
-           void) end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_3 ->
-        void end);
-      (let u = (K_38:
-               (JC_52:
-               (((alloc_struct_intM_requires !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
+           (let jessie_21 =
+           (K_16:
+           (let jessie_1 = !i_4 in
+           begin
+             (let jessie_20 = (i_4 := ((add_int jessie_1) (1))) in void);
+            jessie_1 end)) in void) end end done) with
+        Loop_exit_exc jessie_3 -> void end);
+      (let u =
+      (K_38:
+      (JC_52:
+      (((alloc_struct_intM_requires !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
       begin
         (let jessie_24 = (count := (0)) in void);
        (let i_5 = ref (K_19: (0)) in
@@ -2303,73 +2187,52 @@ let MullerTheory_m_safety =
                                num_of_pos((0), sub_int(i_5, (1)), t_4,
                                intM_intP_t_4_7)))))))) } ];
           try
-           (let jessie_37 = begin
-                              (if (K_37:
-                                  ((lt_int_ !i_5) (K_36:
-                                                  (let jessie_26 = t_4 in
-                                                  (JC_63:
-                                                  (assert
-                                                  { ge_int(offset_max(Object_t_4_7_alloc_table,
-                                                           jessie_26),
-                                                    (-1)) };
-                                                  (JC_62:
-                                                  ((java_array_length_intM_requires jessie_26) Object_t_4_7_alloc_table))))))))
-                              then
-                               (if (K_34:
-                                   ((gt_int_ (K_33:
-                                             (JC_64:
-                                             ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5)))) (0)))
-                               then
-                                (K_32:
-                                (let jessie_35 = (let jessie_28 = (K_31:
-                                                                  (JC_65:
-                                                                  ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5))) in
-                                                 (let jessie_29 = u in
-                                                 (let jessie_30 = (K_30:
-                                                                  (let jessie_6 = !count in
-                                                                  begin
-                                                                    (let jessie_34 = 
-                                                                    (count := 
-                                                                    ((add_int jessie_6) (1))) in
-                                                                    void);
-                                                                   jessie_6
-                                                                  end)) in
-                                                 (let jessie_31 = ((shift jessie_29) jessie_30) in
-                                                 (JC_66:
-                                                 (((((offset_upd_ !Object_MullerTheory_m_9_alloc_table) intM_intP_MullerTheory_m_9) jessie_29) jessie_30) jessie_28)))))) in
-                                void))
-                               else void)
-                              else
-                               (let jessie_36 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
+           (let jessie_37 =
+           begin
+             (if (K_37:
+                 ((lt_int_ !i_5) (K_36:
+                                 (let jessie_26 = t_4 in
+                                 (JC_63:
+                                 (assert
+                                 { ge_int(offset_max(Object_t_4_7_alloc_table,
+                                          jessie_26),
+                                   (-1)) };
+                                 (JC_62:
+                                 ((java_array_length_intM_requires jessie_26) Object_t_4_7_alloc_table))))))))
+             then
+              (if (K_34:
+                  ((gt_int_ (K_33:
+                            (JC_64:
+                            ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5)))) (0)))
+              then
+               (K_32:
+               (let jessie_35 =
+               (let jessie_28 =
+               (K_31:
+               (JC_65:
+               ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5))) in
+               (let jessie_29 = u in
+               (let jessie_30 =
+               (K_30:
+               (let jessie_6 = !count in
+               begin
+                 (let jessie_34 = (count := ((add_int jessie_6) (1))) in
+                 void); jessie_6 end)) in
+               (let jessie_31 = ((shift jessie_29) jessie_30) in
+               (JC_66:
+               (((((offset_upd_ !Object_MullerTheory_m_9_alloc_table) intM_intP_MullerTheory_m_9) jessie_29) jessie_30) jessie_28)))))) in
+               void)) else void)
+             else (let jessie_36 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_8 ->
-           (let jessie_41 = (K_35:
-                            (let jessie_5 = !i_5 in
-                            begin
-                              (let jessie_40 = (i_5 := ((add_int jessie_5) (1))) in
-                              void);
-                             jessie_5
-                            end)) in
-           void) end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_7 ->
-        void end);
-       (return := u);
-       (raise Return)
-      end)
-     end);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+           (let jessie_41 =
+           (K_35:
+           (let jessie_5 = !i_5 in
+           begin
+             (let jessie_40 = (i_5 := ((add_int jessie_5) (1))) in void);
+            jessie_5 end)) in void) end end done) with
+        Loop_exit_exc jessie_7 -> void end); (return := u); (raise Return)
+      end) end); absurd  end with Return -> !return end)) { true }
 
 let cons_MullerTheory_ensures_default =
  fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
@@ -2402,7 +2265,7 @@ why --project [...] why/MullerTheory.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/MullerTheory_po32.why">
-      <location file = "why/MullerTheory.why" line = "954" begin = "52" end = "224"/>
+      <location file = "why/MullerTheory.why" line = "848" begin = "35" end = "173"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/MullerTheory_po33.why">
@@ -7476,7 +7339,7 @@ why -simplify [...] why/MullerTheory.why
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (EQ count1 (num_of_pos 0 (- i_5_0 1) t_4 intM_intP_t_4_7))))))))))))))))))))))))))))))
 
-;; MullerTheory_m_safety_po_1, File "why/MullerTheory.why", line 954, characters 52-224
+;; MullerTheory_m_safety_po_1, File "why/MullerTheory.why", line 848, characters 35-173
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)

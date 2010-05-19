@@ -387,6 +387,8 @@ let rec subst_term (subst : term_subst) t =
     | JCTapp app -> 
         JCTapp({app with jc_app_args = List.map f app.jc_app_args})
     | JCTif(t1,t2,t3) -> JCTif(f t1, f t2, f t3)
+    | JCTlet(_vi,_t1,_t2) -> 
+        assert false (* TODO, beware of variable capture *)
     | JCTmatch(_t, _ptl) -> 
         assert false (* TODO, beware of variable capture *)
           (* JCTmatch(f t,List.map f ptl) *)
@@ -415,6 +417,8 @@ module TermAst = struct
 	  [t1;t2;t3]
       | JCTmatch(t, ptl) ->
 	  t :: List.map snd ptl
+      | JCTlet(_, t1,t2) ->
+	  [t1;t2]
 end
 
 module ITerm = Iterators(TermAst)
@@ -453,6 +457,9 @@ let fold_sub_term it f acc t =
 	let acc = it acc t1 in
 	let acc = it acc t2 in
 	it acc t3
+    | JCTlet(_,t1,t2) ->
+	let acc = it acc t1 in
+	it acc t2
     | JCTmatch(t, ptl) ->
 	let acc = it acc t in
 	List.fold_left (fun acc (_, t) -> it acc t) acc ptl
@@ -505,6 +512,8 @@ let rec map_term f t =
 	JCTreal_cast(map_term f t,rc)
     | JCTif(t1,t2,t3) ->
 	JCTif(map_term f t1,map_term f t2,map_term f t3)
+    | JCTlet(vi,t1,t2) ->
+	JCTlet(vi,map_term f t1,map_term f t2)
     | JCTrange(Some t1,Some t2) ->
 	JCTrange(Some (map_term f t1),Some (map_term f t2))
     | JCTrange(Some t1,None) ->

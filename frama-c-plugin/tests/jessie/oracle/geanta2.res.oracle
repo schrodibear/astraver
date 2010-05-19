@@ -144,7 +144,8 @@ axiom enum___anonenum_RESULTAT_1_P_parenttag_bottom :
 
 axiom enum___anonenum_RESULTAT_1_P_tags :
  (forall x:enum___anonenum_RESULTAT_1_P pointer.
-  (forall enum___anonenum_RESULTAT_1_P_tag_table:enum___anonenum_RESULTAT_1_P tag_table.
+  (forall enum___anonenum_RESULTAT_1_P_tag_table:
+   enum___anonenum_RESULTAT_1_P tag_table.
    instanceof(enum___anonenum_RESULTAT_1_P_tag_table, x,
    enum___anonenum_RESULTAT_1_P_tag)))
 
@@ -155,18 +156,15 @@ predicate eq___anonenum_RESULTAT_1(x:__anonenum_RESULTAT_1,
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-predicate result_0(status:__anonenum_RESULTAT_1,
- n:int32) =
+predicate result_0(status:__anonenum_RESULTAT_1, n:int32) =
  (eq_int(integer_of___anonenum_RESULTAT_1(status), (0))
  and gt_int(integer_of_int32(n), (0)))
 
@@ -196,8 +194,7 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
@@ -206,8 +203,7 @@ predicate left_valid_struct_enum___anonenum_RESULTAT_1_P(p:enum___anonenum_RESUL
  enum___anonenum_RESULTAT_1_P_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table) =
  (offset_min(enum___anonenum_RESULTAT_1_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -223,8 +219,7 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
@@ -233,112 +228,85 @@ predicate right_valid_struct_enum___anonenum_RESULTAT_1_P(p:enum___anonenum_RESU
  enum___anonenum_RESULTAT_1_P_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table) =
  (offset_max(enum___anonenum_RESULTAT_1_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
 predicate strict_valid_root_enum___anonenum_RESULTAT_1_P(p:enum___anonenum_RESULTAT_1_P pointer,
- a:int,
- b:int,
+ a:int, b:int,
  enum___anonenum_RESULTAT_1_P_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table) =
  ((offset_min(enum___anonenum_RESULTAT_1_P_alloc_table, p) = a)
  and (offset_max(enum___anonenum_RESULTAT_1_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
 predicate strict_valid_struct_enum___anonenum_RESULTAT_1_P(p:enum___anonenum_RESULTAT_1_P pointer,
- a:int,
- b:int,
+ a:int, b:int,
  enum___anonenum_RESULTAT_1_P_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table) =
  ((offset_min(enum___anonenum_RESULTAT_1_P_alloc_table, p) = a)
  and (offset_max(enum___anonenum_RESULTAT_1_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_enum___anonenum_RESULTAT_1_P(p:unit pointer,
- a:int,
- b:int,
+ a:int, b:int, bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
 predicate valid_root_enum___anonenum_RESULTAT_1_P(p:enum___anonenum_RESULTAT_1_P pointer,
- a:int,
- b:int,
+ a:int, b:int,
  enum___anonenum_RESULTAT_1_P_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table) =
  ((offset_min(enum___anonenum_RESULTAT_1_P_alloc_table, p) <= a)
  and (offset_max(enum___anonenum_RESULTAT_1_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
 predicate valid_struct_enum___anonenum_RESULTAT_1_P(p:enum___anonenum_RESULTAT_1_P pointer,
- a:int,
- b:int,
+ a:int, b:int,
  enum___anonenum_RESULTAT_1_P_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table) =
  ((offset_min(enum___anonenum_RESULTAT_1_P_alloc_table, p) <= a)
  and (offset_max(enum___anonenum_RESULTAT_1_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -597,16 +565,18 @@ let f2_ensures_default =
   (let return = ref (any___anonenum_RESULTAT_1 void) in
   try
    begin
-     (let enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2 = ref 
-     (any_memory void) in
-     (let enum___anonenum_RESULTAT_1_P_initial_2_alloc_table = (any_alloc_table void) in
+     (let enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2 =
+     ref (any_memory void) in
+     (let enum___anonenum_RESULTAT_1_P_initial_2_alloc_table =
+     (any_alloc_table void) in
      (let initial = (any_pointer void) in
      (let __retres = ref (any___anonenum_RESULTAT_1 void) in
      (C_12:
      begin
-       (let jessie_39 = (let jessie_35 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-                        (let jessie_38 = initial in
-                        (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_38) jessie_35))) in
+       (let jessie_39 =
+       (let jessie_35 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
+       (let jessie_38 = initial in
+       (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_38) jessie_35))) in
        void);
       (C_13:
       begin
@@ -616,19 +586,11 @@ let f2_ensures_default =
         ((((p1 jessie_41) jessie_40) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) enum___anonenum_RESULTAT_1_P_initial_2_alloc_table))));
        (C_15:
        begin
-         (let jessie_43 = (__retres := (C_14:
-                                       ((safe_acc_ !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial))) in
-         void);
-        (return := !__retres);
-        (raise Return)
-       end)
-      end)
-     end)))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+         (let jessie_43 =
+         (__retres := (C_14:
+                      ((safe_acc_ !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial))) in
+         void); (return := !__retres); (raise Return) end) end) end)))));
+    absurd  end with Return -> !return end))
   { (JC_21:
     (function2_res(n_0_0) ->
      eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
@@ -640,17 +602,19 @@ let f2_safety =
   (let return = ref (any___anonenum_RESULTAT_1 void) in
   try
    begin
-     (let enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2 = ref 
-     (any_memory void) in
-     (let enum___anonenum_RESULTAT_1_P_initial_2_alloc_table = (any_alloc_table void) in
+     (let enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2 =
+     ref (any_memory void) in
+     (let enum___anonenum_RESULTAT_1_P_initial_2_alloc_table =
+     (any_alloc_table void) in
      (let initial = (any_pointer void) in
      (let __retres = ref (any___anonenum_RESULTAT_1 void) in
      (C_12:
      begin
-       (let jessie_28 = (let jessie_24 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-                        (let jessie_27 = initial in
-                        (JC_25:
-                        ((((upd_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_27) jessie_24)))) in
+       (let jessie_28 =
+       (let jessie_24 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
+       (let jessie_27 = initial in
+       (JC_25:
+       ((((upd_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_27) jessie_24)))) in
        void);
       (C_13:
       begin
@@ -660,21 +624,12 @@ let f2_safety =
         ((((p1_requires jessie_30) jessie_29) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) enum___anonenum_RESULTAT_1_P_initial_2_alloc_table))));
        (C_15:
        begin
-         (let jessie_32 = (__retres := (C_14:
-                                       (JC_27:
-                                       (((acc_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial)))) in
-         void);
-        (return := !__retres);
-        (raise Return)
-       end)
-      end)
-     end)))));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+         (let jessie_32 =
+         (__retres := (C_14:
+                      (JC_27:
+                      (((acc_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial)))) in
+         void); (return := !__retres); (raise Return) end) end) end)))));
+    absurd  end with Return -> !return end)) { true }
 
 let p1_ensures_default =
  fun (last : enum___anonenum_RESULTAT_1_P pointer) (n_1 : int32) (enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1 : (enum___anonenum_RESULTAT_1_P, __anonenum_RESULTAT_1) memory ref) (enum___anonenum_RESULTAT_1_P_last_1_alloc_table : enum___anonenum_RESULTAT_1_P alloc_table) ->
@@ -694,31 +649,23 @@ let p1_ensures_default =
                                                               (C_5:
                                                               ((safe_acc_ !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) last))))))) (0))
      then
-      (let jessie_22 = (if ((gt_int_ (integer_of_int32 n_1)) (0))
-                       then
-                        (C_4:
-                        (let jessie_13 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-                        (let jessie_16 = last in
-                        begin
-                          (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_16) jessie_13);
-                         jessie_13
-                        end)))
-                       else
-                        (C_2:
-                        (let jessie_18 = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
-                        (let jessie_21 = last in
-                        begin
-                          (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_21) jessie_18);
-                         jessie_18
-                        end)))) in
-      void)
-     else void);
-    (raise Return);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
+      (let jessie_22 =
+      (if ((gt_int_ (integer_of_int32 n_1)) (0))
+      then
+       (C_4:
+       (let jessie_13 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
+       (let jessie_16 = last in
+       begin
+         (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_16) jessie_13);
+        jessie_13 end)))
+      else
+       (C_2:
+       (let jessie_18 = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
+       (let jessie_21 = last in
+       begin
+         (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_21) jessie_18);
+        jessie_18 end)))) in void) else void); (raise Return); (raise Return)
+   end with Return -> void end)
   { (JC_9:
     (result_0(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
               last@),
@@ -747,34 +694,25 @@ let p1_safety =
                                                          (JC_13:
                                                          (((acc_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) last))))))))) (0))
      then
-      (let jessie_11 = (if ((gt_int_ (integer_of_int32 n_1)) (0))
-                       then
-                        (C_4:
-                        (let jessie_2 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-                        (let jessie_5 = last in
-                        begin
-                          (JC_15:
-                          ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_5) jessie_2));
-                         jessie_2
-                        end)))
-                       else
-                        (C_2:
-                        (let jessie_7 = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
-                        (let jessie_10 = last in
-                        begin
-                          (JC_16:
-                          ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_10) jessie_7));
-                         jessie_7
-                        end)))) in
-      void)
-     else void);
-    (raise Return);
-    (raise Return)
-   end
-   with
-   Return ->
-   void end)
-  { true }
+      (let jessie_11 =
+      (if ((gt_int_ (integer_of_int32 n_1)) (0))
+      then
+       (C_4:
+       (let jessie_2 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
+       (let jessie_5 = last in
+       begin
+         (JC_15:
+         ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_5) jessie_2));
+        jessie_2 end)))
+      else
+       (C_2:
+       (let jessie_7 = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
+       (let jessie_10 = last in
+       begin
+         (JC_16:
+         ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_10) jessie_7));
+        jessie_7 end)))) in void) else void); (raise Return); (raise Return)
+   end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C geanta2.jessie --quiet -f geanta2.makefile project

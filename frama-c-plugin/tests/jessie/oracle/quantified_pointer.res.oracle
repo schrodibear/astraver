@@ -115,14 +115,12 @@ axiom char_P_tags :
 
 logic integer_of_int32: int32 -> int
 
-predicate eq_int32(x:int32,
- y:int32) =
+predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic int32_of_integer: int -> int32
@@ -174,8 +172,7 @@ predicate is_cycle(x_4:_Node pointer,
   (reachable(x_4, y_2, _Node_x_4_5_alloc_table_at_L, _Node_next_x_4_5_at_L)
   and (select(_Node_next_x_4_5_at_L, y_2) = x_4)))
 
-predicate is_in_list(x_3:_Node pointer,
- elem:int,
+predicate is_in_list(x_3:_Node pointer, elem:int,
  _Node_x_3_4_alloc_table_at_L:_Node alloc_table,
  _Node_next_x_3_4_at_L:(_Node, _Node pointer) memory,
  _Node_elem_x_3_4_at_L:(_Node, int32) memory) =
@@ -188,18 +185,15 @@ predicate is_list(x_2:_Node pointer,
  _Node_next_x_2_3_at_L:(_Node, _Node pointer) memory) =
  reachable(x_2, null, _Node_x_2_3_alloc_table_at_L, _Node_next_x_2_3_at_L)
 
-predicate left_valid_struct__Node(p:_Node pointer,
- a:int,
+predicate left_valid_struct__Node(p:_Node pointer, a:int,
  _Node_alloc_table:_Node alloc_table) =
  (offset_min(_Node_alloc_table, p) <= a)
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -214,122 +208,89 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct__Node(p:_Node pointer,
- b:int,
+predicate right_valid_struct__Node(p:_Node pointer, b:int,
  _Node_alloc_table:_Node alloc_table) =
  (offset_max(_Node_alloc_table, p) >= b)
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root__Node(p:_Node pointer,
- a:int,
- b:int,
+predicate strict_valid_root__Node(p:_Node pointer, a:int, b:int,
  _Node_alloc_table:_Node alloc_table) =
  ((offset_min(_Node_alloc_table, p) = a)
  and (offset_max(_Node_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct__Node(p:_Node pointer,
- a:int,
- b:int,
+predicate strict_valid_struct__Node(p:_Node pointer, a:int, b:int,
  _Node_alloc_table:_Node alloc_table) =
  ((offset_min(_Node_alloc_table, p) = a)
  and (offset_max(_Node_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate valid_bitvector_struct__Node(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct__Node(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root__Node(p:_Node pointer,
- a:int,
- b:int,
+predicate valid_root__Node(p:_Node pointer, a:int, b:int,
  _Node_alloc_table:_Node alloc_table) =
  ((offset_min(_Node_alloc_table, p) <= a)
  and (offset_max(_Node_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct__Node(p:_Node pointer,
- a:int,
- b:int,
+predicate valid_struct__Node(p:_Node pointer, a:int, b:int,
  _Node_alloc_table:_Node alloc_table) =
  ((offset_min(_Node_alloc_table, p) <= a)
  and (offset_max(_Node_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))

@@ -169,26 +169,22 @@ axiom char_P_tags :
 
 logic integer_of_int16: int16 -> int
 
-predicate eq_int16(x:int16,
- y:int16) =
+predicate eq_int16(x:int16, y:int16) =
  eq_int(integer_of_int16(x), integer_of_int16(y))
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic integer_of_uint16: uint16 -> int
 
-predicate eq_uint16(x:uint16,
- y:uint16) =
+predicate eq_uint16(x:uint16, y:uint16) =
  eq_int(integer_of_uint16(x), integer_of_uint16(y))
 
 logic integer_of_uint8: uint8 -> int
 
-predicate eq_uint8(x:uint8,
- y:uint8) =
+predicate eq_uint8(x:uint8, y:uint8) =
  eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int16_of_integer: int -> int16
@@ -214,13 +210,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -232,40 +226,30 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
@@ -293,44 +277,32 @@ axiom uint8_range :
  (forall x:uint8.
   (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -509,17 +481,9 @@ let char_range_ensures_default =
    begin
      (assert
      { (JC_11: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) };
-     void);
-    void;
-    (assert { (JC_12: le_int(integer_of_int8(i_0), (127))) }; void);
-    void;
-    (return := i_0);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+     void); void;
+    (assert { (JC_12: le_int(integer_of_int8(i_0), (127))) }; void); void;
+    (return := i_0); (raise Return); absurd  end with Return -> !return end))
   { (JC_5: true) }
 
 let char_range_safety =
@@ -531,17 +495,9 @@ let char_range_safety =
    begin
      [ { } unit
        { (JC_9: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) } ];
-    void;
-    [ { } unit { (JC_10: le_int(integer_of_int8(i_0), (127))) } ];
-    void;
-    (return := i_0);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    void; [ { } unit { (JC_10: le_int(integer_of_int8(i_0), (127))) } ];
+    void; (return := i_0); (raise Return); absurd  end with Return ->
+   !return end)) { true }
 
 let schar_range_ensures_default =
  fun (i_2 : int8) ->
@@ -552,17 +508,9 @@ let schar_range_ensures_default =
    begin
      (assert
      { (JC_23: ge_int(integer_of_int8(i_2), sub_int(neg_int((127)), (1)))) };
-     void);
-    void;
-    (assert { (JC_24: le_int(integer_of_int8(i_2), (127))) }; void);
-    void;
-    (return := i_2);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+     void); void;
+    (assert { (JC_24: le_int(integer_of_int8(i_2), (127))) }; void); void;
+    (return := i_2); (raise Return); absurd  end with Return -> !return end))
   { (JC_17: true) }
 
 let schar_range_safety =
@@ -574,17 +522,9 @@ let schar_range_safety =
    begin
      [ { } unit
        { (JC_21: ge_int(integer_of_int8(i_2), sub_int(neg_int((127)), (1)))) } ];
-    void;
-    [ { } unit { (JC_22: le_int(integer_of_int8(i_2), (127))) } ];
-    void;
-    (return := i_2);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    void; [ { } unit { (JC_22: le_int(integer_of_int8(i_2), (127))) } ];
+    void; (return := i_2); (raise Return); absurd  end with Return ->
+   !return end)) { true }
 
 let short_range_ensures_default =
  fun (i : int16) ->
@@ -595,17 +535,9 @@ let short_range_ensures_default =
    begin
      (assert
      { (JC_47: ge_int(integer_of_int16(i), sub_int(neg_int((32767)), (1)))) };
-     void);
-    void;
-    (assert { (JC_48: le_int(integer_of_int16(i), (32767))) }; void);
-    void;
-    (return := i);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+     void); void;
+    (assert { (JC_48: le_int(integer_of_int16(i), (32767))) }; void); void;
+    (return := i); (raise Return); absurd  end with Return -> !return end))
   { (JC_41: true) }
 
 let short_range_safety =
@@ -617,17 +549,9 @@ let short_range_safety =
    begin
      [ { } unit
        { (JC_45: ge_int(integer_of_int16(i), sub_int(neg_int((32767)), (1)))) } ];
-    void;
-    [ { } unit { (JC_46: le_int(integer_of_int16(i), (32767))) } ];
-    void;
-    (return := i);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    void; [ { } unit { (JC_46: le_int(integer_of_int16(i), (32767))) } ];
+    void; (return := i); (raise Return); absurd  end with Return ->
+   !return end)) { true }
 
 let uchar_range_ensures_default =
  fun (i_3 : uint8) ->
@@ -636,21 +560,12 @@ let uchar_range_ensures_default =
   (let return = ref (any_uint8 void) in
   try
    begin
-     (assert { (JC_35: ge_int(integer_of_uint8(i_3), (0))) }; void);
-    void;
+     (assert { (JC_35: ge_int(integer_of_uint8(i_3), (0))) }; void); void;
     (assert
     { (JC_36:
       le_int(integer_of_uint8(i_3), add_int(mul_int((127), (2)), (1)))) };
-    void);
-    void;
-    (return := i_3);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_29: true) }
+    void); void; (return := i_3); (raise Return); absurd  end with Return ->
+   !return end)) { (JC_29: true) }
 
 let uchar_range_safety =
  fun (i_3 : uint8) ->
@@ -659,20 +574,12 @@ let uchar_range_safety =
   (let return = ref (any_uint8 void) in
   try
    begin
-     [ { } unit { (JC_33: ge_int(integer_of_uint8(i_3), (0))) } ];
-    void;
+     [ { } unit { (JC_33: ge_int(integer_of_uint8(i_3), (0))) } ]; void;
     [ { } unit
       { (JC_34:
         le_int(integer_of_uint8(i_3), add_int(mul_int((127), (2)), (1)))) } ];
-    void;
-    (return := i_3);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    void; (return := i_3); (raise Return); absurd  end with Return ->
+   !return end)) { true }
 
 let ushort_range_ensures_default =
  fun (i_1 : uint16) ->
@@ -681,21 +588,12 @@ let ushort_range_ensures_default =
   (let return = ref (any_uint16 void) in
   try
    begin
-     (assert { (JC_59: ge_int(integer_of_uint16(i_1), (0))) }; void);
-    void;
+     (assert { (JC_59: ge_int(integer_of_uint16(i_1), (0))) }; void); void;
     (assert
     { (JC_60:
       le_int(integer_of_uint16(i_1), add_int(mul_int((32767), (2)), (1)))) };
-    void);
-    void;
-    (return := i_1);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_53: true) }
+    void); void; (return := i_1); (raise Return); absurd  end with Return ->
+   !return end)) { (JC_53: true) }
 
 let ushort_range_safety =
  fun (i_1 : uint16) ->
@@ -704,20 +602,12 @@ let ushort_range_safety =
   (let return = ref (any_uint16 void) in
   try
    begin
-     [ { } unit { (JC_57: ge_int(integer_of_uint16(i_1), (0))) } ];
-    void;
+     [ { } unit { (JC_57: ge_int(integer_of_uint16(i_1), (0))) } ]; void;
     [ { } unit
       { (JC_58:
         le_int(integer_of_uint16(i_1), add_int(mul_int((32767), (2)), (1)))) } ];
-    void;
-    (return := i_1);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+    void; (return := i_1); (raise Return); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0094.jessie --quiet -f bts0094.makefile project

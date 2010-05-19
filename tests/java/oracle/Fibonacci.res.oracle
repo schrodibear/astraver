@@ -403,6 +403,10 @@ gui stat: Fibonacci.stat
 %.stat: why/%.why
 	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
+why3: why/Fibonacci_why3.why
+why/%_why3.why:  WHYOPT=-why3
+why/%_why3.why: why/%.why
+	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 -include Fibonacci.depend
 
 depend: coq/Fibonacci_why.v
@@ -814,33 +818,27 @@ goal isfib_6_8 : isfib((6), (8))
 
 axiom isfib_6_8_as_axiom : isfib((6), (8))
 
-predicate left_valid_struct_Object(p:Object pointer,
- a:int,
+predicate left_valid_struct_Object(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
-predicate left_valid_struct_Exception(p:Object pointer,
- a:int,
+predicate left_valid_struct_Exception(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Fibonacci(p:Object pointer,
- a:int,
+predicate left_valid_struct_Fibonacci(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_String(p:Object pointer,
- a:int,
+predicate left_valid_struct_String(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_Throwable(p:Object pointer,
- a:int,
+predicate left_valid_struct_Throwable(p:Object pointer, a:int,
  Object_alloc_table:Object alloc_table) =
  left_valid_struct_Object(p, a, Object_alloc_table)
 
-predicate left_valid_struct_interface(p:interface pointer,
- a:int,
+predicate left_valid_struct_interface(p:interface pointer, a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
 
@@ -855,174 +853,124 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
-predicate right_valid_struct_Object(p:Object pointer,
- b:int,
+predicate right_valid_struct_Object(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
-predicate right_valid_struct_Exception(p:Object pointer,
- b:int,
+predicate right_valid_struct_Exception(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Fibonacci(p:Object pointer,
- b:int,
+predicate right_valid_struct_Fibonacci(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_String(p:Object pointer,
- b:int,
+predicate right_valid_struct_String(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_Throwable(p:Object pointer,
- b:int,
+predicate right_valid_struct_Throwable(p:Object pointer, b:int,
  Object_alloc_table:Object alloc_table) =
  right_valid_struct_Object(p, b, Object_alloc_table)
 
-predicate right_valid_struct_interface(p:interface pointer,
- b:int,
+predicate right_valid_struct_interface(p:interface pointer, b:int,
  interface_alloc_table:interface alloc_table) =
  (offset_max(interface_alloc_table, p) >= b)
 
-predicate strict_valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate strict_valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
-predicate strict_valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Fibonacci(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Fibonacci(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate strict_valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Exception(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Fibonacci(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Fibonacci(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_String(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_Throwable(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
-predicate valid_bitvector_struct_interface(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_root_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_root_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
-predicate valid_struct_Object(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
-predicate valid_struct_Exception(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Exception(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Fibonacci(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Fibonacci(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_String(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_String(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_Throwable(p:Object pointer,
- a:int,
- b:int,
+predicate valid_struct_Throwable(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  valid_struct_Object(p, a, b, Object_alloc_table)
 
-predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
+predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
@@ -1296,16 +1244,14 @@ parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
 let Fibonacci_Fib_ensures_default =
@@ -1328,53 +1274,31 @@ let Fibonacci_Fib_ensures_default =
             ((JC_28: le_int((0), i))
             and ((JC_29: le_int(i, n_0))
                 and ((JC_30: isfib(add_int(i, (1)), x_0_0))
-                    and (JC_31: isfib(i, y))))))
-           }
+                    and (JC_31: isfib(i, y))))))  }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_30 = begin
-                              (if (K_14: ((lt_int_ !i) n_0))
-                              then
-                               (let jessie_28 = begin
-                                                  (let jessie_24 = (aux := !y) in
-                                                  void);
-                                                 (let jessie_26 = (y := !x_0_0) in
-                                                 void);
-                                                 (x_0_0 := (K_12:
-                                                           ((add_int !x_0_0) !aux)));
-                                                 !x_0_0
-                                                end in
-                               void)
-                              else
-                               (let jessie_29 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
+           (let jessie_30 =
+           begin
+             (if (K_14: ((lt_int_ !i) n_0))
+             then
+              (let jessie_28 =
+              begin
+                (let jessie_24 = (aux := !y) in void);
+               (let jessie_26 = (y := !x_0_0) in void);
+               (x_0_0 := (K_12: ((add_int !x_0_0) !aux))); !x_0_0 end in
+              void)
+             else (let jessie_29 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_3 ->
-           (let jessie_34 = (K_13:
-                            (let jessie_1 = !i in
-                            begin
-                              (let jessie_33 = (i := ((add_int jessie_1) (1))) in
-                              void);
-                             jessie_1
-                            end)) in
-           void) end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_2 ->
-        void end);
-      (return := !y);
-      (raise Return)
-     end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
+           (let jessie_34 =
+           (K_13:
+           (let jessie_1 = !i in
+           begin
+             (let jessie_33 = (i := ((add_int jessie_1) (1))) in void);
+            jessie_1 end)) in void) end end done) with
+        Loop_exit_exc jessie_2 -> void end); (return := !y); (raise Return)
+     end))); absurd  end with Return -> !return end))
   { (JC_15: isfib(n_0, result)) }
 
 let Fibonacci_Fib_safety =
@@ -1401,49 +1325,27 @@ let Fibonacci_Fib_safety =
                    and ((JC_21: isfib(add_int(i, (1)), x_0_0))
                        and (JC_22: isfib(i, y)))))) } ];
           try
-           (let jessie_14 = begin
-                              (if (K_14: ((lt_int_ !i) n_0))
-                              then
-                               (let jessie_12 = begin
-                                                  (let jessie_8 = (aux := !y) in
-                                                  void);
-                                                 (let jessie_10 = (y := !x_0_0) in
-                                                 void);
-                                                 (x_0_0 := (K_12:
-                                                           ((add_int !x_0_0) !aux)));
-                                                 !x_0_0
-                                                end in
-                               void)
-                              else
-                               (let jessie_13 = (raise (Loop_exit_exc void)) in
-                               void));
-                             (raise (Loop_continue_exc void))
-                            end in
-           void)
-           with
+           (let jessie_14 =
+           begin
+             (if (K_14: ((lt_int_ !i) n_0))
+             then
+              (let jessie_12 =
+              begin
+                (let jessie_8 = (aux := !y) in void);
+               (let jessie_10 = (y := !x_0_0) in void);
+               (x_0_0 := (K_12: ((add_int !x_0_0) !aux))); !x_0_0 end in
+              void)
+             else (let jessie_13 = (raise (Loop_exit_exc void)) in void));
+            (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_3 ->
-           (let jessie_18 = (K_13:
-                            (let jessie_1 = !i in
-                            begin
-                              (let jessie_17 = (i := ((add_int jessie_1) (1))) in
-                              void);
-                             jessie_1
-                            end)) in
-           void) end
-         end
-        done)
-        with
-        Loop_exit_exc jessie_2 ->
-        void end);
-      (return := !y);
-      (raise Return)
-     end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+           (let jessie_18 =
+           (K_13:
+           (let jessie_1 = !i in
+           begin
+             (let jessie_17 = (i := ((add_int jessie_1) (1))) in void);
+            jessie_1 end)) in void) end end done) with
+        Loop_exit_exc jessie_2 -> void end); (return := !y); (raise Return)
+     end))); absurd  end with Return -> !return end)) { true }
 
 let cons_Fibonacci_ensures_default =
  fun (this_0 : Object pointer) ->
@@ -4971,8 +4873,6 @@ failure :   0 (  0%)
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq [...] why/Fibonacci.why
-File "/home/cmarche/recherche/why2/trunk/tests/java/coq/Fibonacci_why.v", line 34, characters 0-9:
-Error: No focused proof (No proof-editing in progress).
 ========== file tests/java/coq/Fibonacci_why.v ==========
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)
@@ -5005,12 +4905,6 @@ Admitted.
   := (offset_max Object_alloc_table x) = 0.
 
 (*Why axiom*) Lemma Object_int : (int_of_tag Object_tag) = 1.
-Admitted.
-
-Admitted.
-
-Admitted.
-
 Admitted.
 
 (*Why logic*) Definition Object_of_pointer_address :
@@ -5046,20 +4940,11 @@ Admitted.
   (parenttag Throwable_tag Object_tag).
 Admitted.
 
-Admitted.
-
-Admitted.
-
-Admitted.
-
-Admitted.
 
 (*Why logic*) Definition interface_tag : (tag_id interface).
 Admitted.
 
 (*Why axiom*) Lemma interface_int : (int_of_tag interface_tag) = 1.
-Admitted.
-
 Admitted.
 
 (*Why logic*) Definition interface_of_pointer_address :
@@ -5464,5 +5349,3 @@ intuition.
 Save.
 
 ========== running Coq ==========
-File "/home/cmarche/recherche/why2/trunk/tests/java/coq/Fibonacci_why.v", line 34, characters 0-9:
-Error: No focused proof (No proof-editing in progress).

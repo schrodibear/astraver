@@ -114,14 +114,12 @@ axiom char_P_tags :
 
 logic integer_of_int8: int8 -> int
 
-predicate eq_int8(x:int8,
- y:int8) =
+predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 logic integer_of_uint32: uint32 -> int
 
-predicate eq_uint32(x:uint32,
- y:uint32) =
+predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 logic int8_of_integer: int -> int8
@@ -135,13 +133,11 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer,
- a:int,
+predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer,
- a:int,
+predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
@@ -153,40 +149,30 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer,
- b:int,
+predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer,
- b:int,
+predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
@@ -203,44 +189,32 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer,
- a:int,
- b:int,
+predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer,
- a:int,
- b:int,
+predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer,
- a:int,
- b:int,
+predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) <= a)
  and (offset_max(void_P_alloc_table, p) >= b))
@@ -396,21 +370,13 @@ let b1_ensures_default =
      (let __retres = ref (any_uint32 void) in
      (C_3:
      begin
-       (let jessie_5 = (__retres := (C_2:
-                                    (safe_uint32_of_integer_ (C_1:
-                                                             ((bw_xor 
-                                                               (integer_of_uint32 x_0)) 
-                                                              (integer_of_uint32 y_0)))))) in
-       void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_5: true) }
+       (let jessie_5 =
+       (__retres := (C_2:
+                    (safe_uint32_of_integer_ (C_1:
+                                             ((bw_xor (integer_of_uint32 x_0)) 
+                                              (integer_of_uint32 y_0)))))) in
+       void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_5: true) }
 
 let b1_safety =
  fun (x_0 : uint32) (y_0 : uint32) ->
@@ -422,21 +388,14 @@ let b1_safety =
      (let __retres = ref (any_uint32 void) in
      (C_3:
      begin
-       (let jessie_2 = (__retres := (C_2:
-                                    (JC_9:
-                                    (uint32_of_integer_ (C_1:
-                                                        ((bw_xor (integer_of_uint32 x_0)) 
-                                                         (integer_of_uint32 y_0))))))) in
-       void);
-      (return := !__retres);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_2 =
+       (__retres := (C_2:
+                    (JC_9:
+                    (uint32_of_integer_ (C_1:
+                                        ((bw_xor (integer_of_uint32 x_0)) 
+                                         (integer_of_uint32 y_0))))))) in
+       void); (return := !__retres); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 let b2_ensures_default =
  fun (x_2 : uint32) (y_1 : uint32) ->
@@ -448,21 +407,13 @@ let b2_ensures_default =
      (let __retres_0 = ref (any_uint32 void) in
      (C_7:
      begin
-       (let jessie_11 = (__retres_0 := (C_6:
-                                       (safe_uint32_of_integer_ (C_5:
-                                                                ((bw_and 
-                                                                  (integer_of_uint32 x_2)) 
-                                                                 (integer_of_uint32 y_1)))))) in
-       void);
-      (return := !__retres_0);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_14: true) }
+       (let jessie_11 =
+       (__retres_0 := (C_6:
+                      (safe_uint32_of_integer_ (C_5:
+                                               ((bw_and (integer_of_uint32 x_2)) 
+                                                (integer_of_uint32 y_1)))))) in
+       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_14: true) }
 
 let b2_safety =
  fun (x_2 : uint32) (y_1 : uint32) ->
@@ -474,21 +425,14 @@ let b2_safety =
      (let __retres_0 = ref (any_uint32 void) in
      (C_7:
      begin
-       (let jessie_8 = (__retres_0 := (C_6:
-                                      (JC_18:
-                                      (uint32_of_integer_ (C_5:
-                                                          ((bw_and (integer_of_uint32 x_2)) 
-                                                           (integer_of_uint32 y_1))))))) in
-       void);
-      (return := !__retres_0);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_8 =
+       (__retres_0 := (C_6:
+                      (JC_18:
+                      (uint32_of_integer_ (C_5:
+                                          ((bw_and (integer_of_uint32 x_2)) 
+                                           (integer_of_uint32 y_1))))))) in
+       void); (return := !__retres_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 let b3_ensures_default =
  fun (x : uint32) (y : uint32) ->
@@ -500,21 +444,13 @@ let b3_ensures_default =
      (let __retres_1 = ref (any_uint32 void) in
      (C_11:
      begin
-       (let jessie_17 = (__retres_1 := (C_10:
-                                       (safe_uint32_of_integer_ (C_9:
-                                                                ((bw_or 
-                                                                  (integer_of_uint32 x)) 
-                                                                 (integer_of_uint32 y)))))) in
-       void);
-      (return := !__retres_1);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_23: true) }
+       (let jessie_17 =
+       (__retres_1 := (C_10:
+                      (safe_uint32_of_integer_ (C_9:
+                                               ((bw_or (integer_of_uint32 x)) 
+                                                (integer_of_uint32 y)))))) in
+       void); (return := !__retres_1); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_23: true) }
 
 let b3_safety =
  fun (x : uint32) (y : uint32) ->
@@ -526,21 +462,14 @@ let b3_safety =
      (let __retres_1 = ref (any_uint32 void) in
      (C_11:
      begin
-       (let jessie_14 = (__retres_1 := (C_10:
-                                       (JC_27:
-                                       (uint32_of_integer_ (C_9:
-                                                           ((bw_or (integer_of_uint32 x)) 
-                                                            (integer_of_uint32 y))))))) in
-       void);
-      (return := !__retres_1);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_14 =
+       (__retres_1 := (C_10:
+                      (JC_27:
+                      (uint32_of_integer_ (C_9:
+                                          ((bw_or (integer_of_uint32 x)) 
+                                           (integer_of_uint32 y))))))) in
+       void); (return := !__retres_1); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 let b4_ensures_default =
  fun (x_1 : uint32) ->
@@ -552,20 +481,12 @@ let b4_ensures_default =
      (let __retres_2 = ref (any_uint32 void) in
      (C_15:
      begin
-       (let jessie_23 = (__retres_2 := (C_14:
-                                       (safe_uint32_of_integer_ (C_13:
-                                                                (bw_compl 
-                                                                 (integer_of_uint32 x_1)))))) in
-       void);
-      (return := !__retres_2);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_32: true) }
+       (let jessie_23 =
+       (__retres_2 := (C_14:
+                      (safe_uint32_of_integer_ (C_13:
+                                               (bw_compl (integer_of_uint32 x_1)))))) in
+       void); (return := !__retres_2); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_32: true) }
 
 let b4_safety =
  fun (x_1 : uint32) ->
@@ -577,21 +498,13 @@ let b4_safety =
      (let __retres_2 = ref (any_uint32 void) in
      (C_15:
      begin
-       (let jessie_20 = (__retres_2 := (C_14:
-                                       (JC_36:
-                                       (uint32_of_integer_ (C_13:
-                                                           (bw_compl 
-                                                            (integer_of_uint32 x_1))))))) in
-       void);
-      (return := !__retres_2);
-      (raise Return)
-     end));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { true }
+       (let jessie_20 =
+       (__retres_2 := (C_14:
+                      (JC_36:
+                      (uint32_of_integer_ (C_13:
+                                          (bw_compl (integer_of_uint32 x_1))))))) in
+       void); (return := !__retres_2); (raise Return) end)); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0348.jessie --quiet -f bts0348.makefile project
