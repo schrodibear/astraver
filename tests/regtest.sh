@@ -74,20 +74,32 @@ case $1 in
         fi
 	;;
   *.c)
+        d=`dirname $1`
 	b=`basename $1 .c`
-	exit 1
-	caduceus -why-opt -split-user-conj $1 || exit 1
-	make --quiet -f $b.makefile gui
-	;;
-  *.jc)
-	b=`basename $1 .jc`
-	exit 1
-	jessie $b.jc || exit 1
-	make --quiet -f $b.makefile gui
-	;;
-  *.why)
-	exit 1
-	gwhy-bin -split-user-conj $1
+        j=$d/$b.jessie
+        f=$j/$b
+	mycat $1
+	echo "========== frama-c -jessie execution =========="
+	rm -f $f.jc
+	rm -f $f.cloc
+	frama-c -jessie -jessie-gen-only $1 || exit 1
+	mycat $f.jc 
+	mycatfilterdir $f.cloc
+	echo "========== jessie execution =========="
+	rm -f $f.makefile 
+	rm -f $j/why/$b.why
+	rm -f $f.loc
+	WHYLIB=$DIR/lib bin/jessie.opt -locs $f.cloc -why-opt -split-user-conj $f.jc || exit 2
+	mycatfilterdir $f.makefile
+	mycatfilterdir $f.loc
+	mycat $j/why/$b.why
+	echo "========== generation of alt-ergo VC output =========="
+	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile why/$b'_why'.why	
+	mycat $j/why/$b'_why'.why
+	echo "========== running alt-ergo =========="
+	tmp=$(tempfile -s regtests_ergo)
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile ergo 2> $tmp
+	grep -v 'CPU time limit' $tmp >&2
 	;;
   *)
 	echo "don't know what to do with $1"

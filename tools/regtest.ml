@@ -35,7 +35,7 @@ let default_options = [ "" ]
 
 (** the list of tests suites to consider *)
 let default_suites =
-[ "java" ]
+[ "java" ; "c" ]
 
 let () =
   Unix.putenv "FRAMAC_SHARE" (Filename.concat Filename.current_dir_name "share");
@@ -46,7 +46,7 @@ let dir_config_file = "test_config"
 
 (** the files in [suites] whose name matches
     the pattern [test_file_regexp] will be considered as test files *)
-let test_file_regexp = ".*\\.\\(java\\)$"
+let test_file_regexp = ".*\\.\\(java\\|c\\)$"
 
 (** the pattern that ends the parsing of options in a test file *)
 let end_comment = Str.regexp ".*\\*/"

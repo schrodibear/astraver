@@ -32,6 +32,6 @@ int binary_search(int* t, int n, int v) {
 
 /* 
 Local Variables:
-compile-command: "PPCHOME=../.. LC_ALL=C make binary_search"
+compile-command: "frama-c -jessie binary_search.c"
 End:
 */
