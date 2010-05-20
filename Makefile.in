@@ -1057,9 +1057,11 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
 	bench/jc/bench bench/jc/good/*.jc \
 	bench/java/bench bench/java/*/*.java bench/provers/*.mlw \
-	tests/regtest.sh tests/java/*.java \
-	tests/java/coq/*.v \
+	tests/regtest.sh \
+	tests/java/*.java tests/java/coq/*.v \
 	tests/java/result/README tests/java/oracle/*.oracle \
+	tests/c/*.c tests/c/coq/*.v \
+	tests/c/result/README tests/c/oracle/*.oracle \
 	lib/coq*/*.v \
 	lib/pvs/pvscontext.el lib/pvs/*.pvs lib/pvs/*.prf \
 	lib/mizar/why.miz lib/mizar/dict/why.voc \
