@@ -84,6 +84,11 @@ let rec mkdisjunct elist pos =
     | [e] -> e
     | e::el -> mkexpr (JCPEbinary(e,`Blor,mkdisjunct el pos)) pos
 
+let rec mkimplies elist e pos =
+  match elist with
+    | [] -> e
+    | _ -> mkexpr (JCPEbinary(e,`Bimplies,mkconjunct elist pos)) pos
+
 let mkdecl dnode pos = new decl ~pos dnode
 
 
@@ -1251,10 +1256,6 @@ let assigns = function
       Some(Loc.dummy_position,assign_list)
 
 let spec funspec =
-  let require p =
-    JCCrequires(locate (pred (Logic_const.pred_of_id_pred p)))
-  in
-  let requires = List.map require funspec.spec_requires in
   let is_normal_postcond =
     function (Normal,_) -> true
       | (Exits | Returns | Breaks | Continues),_ -> false
@@ -1262,12 +1263,15 @@ let spec funspec =
   let behavior b =
     if List.exists (not $ is_normal_postcond) b.b_post_cond then
       warn_once "abrupt clause(s) ignored";
+    let name = if b.b_name = Cil.default_behavior_name then
+      name_of_default_behavior else b.b_name
+    in
 (*
-    Format.eprintf "producing behavior '%s'@." b.b_name;
+    Format.eprintf "producing behavior '%s' from behavior '%s'@." name b.b_name;
 *)
     JCCbehavior(
       Loc.dummy_position,
-      b.b_name,
+      name,
       None, (* throws *)
       Some(conjunct Loc.dummy_position b.b_assumes),
       None, (* requires *)
@@ -1280,6 +1284,22 @@ let spec funspec =
               snd b.b_post_cond)))
   in
   let behaviors = List.map behavior funspec.spec_behavior in
+  let requires = 
+    List.fold_right
+      (fun b acc -> 
+         let ass = List.map (pred $ Logic_const.pred_of_id_pred) b.b_assumes in
+         List.fold_right
+           (fun req acc ->
+              let impl = mkimplies ass
+                (pred (Logic_const.pred_of_id_pred req)) 
+                  Loc.dummy_position in
+              JCCrequires(locate impl) :: acc)
+           b.b_requires
+           acc
+      )
+      funspec.spec_behavior
+      []
+  in
 
   let complete_behaviors_assertions : Jc_ast.pexpr list =
     List.map
@@ -1298,7 +1318,7 @@ let spec funspec =
               (fun acc b ->
                  match b with
                    | JCCbehavior(_,name,_,Some a,_,_,_) ->
-                       if (bnames = [] && name <> "default")
+                       if (bnames = [] && name <> Cil.default_behavior_name)
                          || List.mem name bnames
                        then
                          a :: acc
@@ -1325,7 +1345,7 @@ let spec funspec =
                       Format.eprintf "name = %s, len bnames = %d@."
                         name (List.length bnames);
 *)
-                      if (bnames = [] && name <> "default") ||
+                      if (bnames = [] && name <> Cil.default_behavior_name) ||
                         List.mem name bnames
                       then
                         a :: acc

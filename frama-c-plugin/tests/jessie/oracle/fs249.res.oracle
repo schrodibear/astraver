@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fs249.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fs249.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function free, default assigns generated for behavior default
+[kernel] No code for function malloc, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir fs249.jessie
 [jessie] File fs249.jessie/fs249.jc written.
 [jessie] File fs249.jessie/fs249.cloc written.
@@ -48,7 +50,6 @@ invariant valid_t :
 
 unit CEA_F(int32 unnamed)
 behavior default:
-  assigns \nothing;
   ensures (C_1 : true);
 ;
 
@@ -296,12 +297,12 @@ parameter int_P_t_2_alloc_table : int_P alloc_table ref
 parameter CEA_F :
  unnamed:int32 ->
   { } unit reads int_P_t_2_alloc_table
-  { (JC_12: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_10: valid_t(int_P_t_2_alloc_table)) }
 
 parameter CEA_F_requires :
  unnamed:int32 ->
   { (JC_3: valid_t(int_P_t_2_alloc_table))} unit reads int_P_t_2_alloc_table
-  { (JC_12: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_10: valid_t(int_P_t_2_alloc_table)) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -456,13 +457,13 @@ parameter int_P_int_M_t_2 : (int_P, int32) memory ref
 parameter main :
  tt:unit ->
   { } unit reads int_P_int_M_t_2,int_P_t_2_alloc_table writes int_P_int_M_t_2
-  { (JC_20: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_18: valid_t(int_P_t_2_alloc_table)) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_13: valid_t(int_P_t_2_alloc_table))} unit
+  { (JC_11: valid_t(int_P_t_2_alloc_table))} unit
   reads int_P_int_M_t_2,int_P_t_2_alloc_table writes int_P_int_M_t_2
-  { (JC_20: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_18: valid_t(int_P_t_2_alloc_table)) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -472,7 +473,7 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_15: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_13: valid_t(int_P_t_2_alloc_table)) }
   (init:
   try
    begin
@@ -495,7 +496,7 @@ let main_ensures_default =
                                                              ((safe_acc_ !int_P_int_M_t_2) 
                                                               ((shift t) (1)))))) 
                                   (integer_of_int32 (C_7: !y)))))) in
-         (JC_25: (CEA_F jessie_25)));
+         (JC_23: (CEA_F jessie_25)));
         (C_13:
         begin
           (let jessie_31 =
@@ -511,12 +512,12 @@ let main_ensures_default =
                                                                ((safe_acc_ !int_P_int_M_t_2) 
                                                                 ((shift t) (1)))))) 
                                     (integer_of_int32 (C_14: !y)))))) in
-           (JC_26: (CEA_F jessie_32))); (raise Return) end) end) end) end)
-     end)); (raise Return) end with Return -> void end) { (JC_17: true) }
+           (JC_24: (CEA_F jessie_32))); (raise Return) end) end) end) end)
+     end)); (raise Return) end with Return -> void end) { (JC_15: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_15: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_13: valid_t(int_P_t_2_alloc_table)) }
   (init:
   try
    begin
@@ -534,13 +535,13 @@ let main_safety =
        begin
          (let jessie_9 =
          (C_10:
-         (JC_21:
+         (JC_19:
          (int32_of_integer_ (C_9:
                             ((sub_int (integer_of_int32 (C_8:
                                                         ((safe_acc_ !int_P_int_M_t_2) 
                                                          ((shift t) (1)))))) 
                              (integer_of_int32 (C_7: !y))))))) in
-         (JC_22: (CEA_F_requires jessie_9)));
+         (JC_20: (CEA_F_requires jessie_9)));
         (C_13:
         begin
           (let jessie_15 =
@@ -551,15 +552,15 @@ let main_safety =
          begin
            (let jessie_16 =
            (C_17:
-           (JC_23:
+           (JC_21:
            (int32_of_integer_ (C_16:
                               ((sub_int (integer_of_int32 (C_15:
                                                           ((safe_acc_ !int_P_int_M_t_2) 
                                                            ((shift t) (1)))))) 
                                (integer_of_int32 (C_14: !y))))))) in
-           (JC_24: (CEA_F_requires jessie_16))); (raise Return) end) end) end)
+           (JC_22: (CEA_F_requires jessie_16))); (raise Return) end) end) end)
       end) end)); (raise Return) end with Return -> void end)
-  { (JC_19: valid_t(int_P_t_2_alloc_table)) }
+  { (JC_17: valid_t(int_P_t_2_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fs249.jessie --quiet -f fs249.makefile project

@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only calloc.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD calloc.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir calloc.jessie
 [jessie] File calloc.jessie/calloc.jc written.
 [jessie] File calloc.jessie/calloc.cloc written.
@@ -392,35 +394,39 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 char_P[..] memcpy(char_P[..] dest, char_P[..] src, uint32 n)
-  requires (C_1 : (((C_3 : (\offset_min(dest) <= 0)) &&
-                     (C_4 : (\offset_max(dest) >= (n - 1)))) &&
-                    ((C_6 : (\offset_min(src) <= 0)) &&
-                      (C_7 : (\offset_max(src) >= (n - 1))))));
+  requires (C_6 : (((C_8 : (\offset_min(dest) <= 0)) &&
+                     (C_9 : (\offset_max(dest) >= (n - 1)))) &&
+                    ((C_11 : (\offset_min(src) <= 0)) &&
+                      (C_12 : (\offset_max(src) >= (n - 1))))));
 behavior default:
   assigns (dest + [0..(n - 1)]).char_M;
-  ensures (C_8 : (((C_10 : (memcmp{Here}(dest, src, n) == 0)) &&
-                    (C_11 : (\result == dest))) &&
-                   (C_12 : (\base_block(\result) == \base_block(dest)))));
+  ensures (C_1 : (((C_3 : (memcmp{Here}(\at(dest,Old), \at(src,Old),
+                                        \at(n,Old)) ==
+                            0)) &&
+                    (C_4 : (\result == \at(dest,Old)))) &&
+                   (C_5 : (\base_block(\result) ==
+                            \base_block(\at(dest,Old))))));
 ;
 
 uint32 strlen(char_P[..] s)
-  requires (C_13 : valid_string{Here}(s));
+  requires (C_14 : valid_string{Here}(s));
 behavior default:
   assigns \nothing;
-  ensures (C_14 : (\result == strlen{Here}(s)));
+  ensures (C_13 : (\result == strlen{Here}(\at(s,Old))));
 ;
 
 char_P[..] calloc(uint32 nmemb, uint32 size_0)
 behavior default:
   assigns \nothing;
   ensures (C_15 : ((C_16 : (\offset_min(\result) <= 0)) &&
-                    (C_17 : (\offset_max(\result) >= ((size_0 * nmemb) - 1)))));
+                    (C_17 : (\offset_max(\result) >=
+                              ((\at(size_0,Old) * \at(nmemb,Old)) - 1)))));
 ;
 
 unit f(char_P[..] x)
-  requires (C_26 : valid_string(x));
+  requires (C_27 : valid_string(x));
 behavior default:
-  ensures (C_27 : true);
+  ensures (C_26 : true);
 {  
    (var uint32 len);
    
@@ -1860,8 +1866,8 @@ parameter calloc :
       ((JC_45: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
       and (JC_46:
           ge_int(offset_max(char_P_result_25_alloc_table, result),
-          sub_int(mul_int(integer_of_uint32(size_0),
-                  integer_of_uint32(nmemb)),
+          sub_int(mul_int(integer_of_uint32(size_0@),
+                  integer_of_uint32(nmemb@)),
           (1)))))) }
 
 parameter calloc_requires :
@@ -1873,8 +1879,8 @@ parameter calloc_requires :
       ((JC_45: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
       and (JC_46:
           ge_int(offset_max(char_P_result_25_alloc_table, result),
-          sub_int(mul_int(integer_of_uint32(size_0),
-                  integer_of_uint32(nmemb)),
+          sub_int(mul_int(integer_of_uint32(size_0@),
+                  integer_of_uint32(nmemb@)),
           (1)))))) }
 
 parameter f :
@@ -1912,11 +1918,11 @@ parameter memcpy :
         { (JC_24:
           ((JC_22:
            ((JC_19:
-            eq_int(memcmp(dest, src, integer_of_uint32(n_0),
+            eq_int(memcmp(dest@, src@, integer_of_uint32(n_0@),
                    char_P_char_M_src_21, char_P_char_M_dest_20),
             (0)))
-           and ((JC_20: (result = dest))
-               and (JC_21: same_block(result, dest)))))
+           and ((JC_20: (result = dest@))
+               and (JC_21: same_block(result, dest@)))))
           and (JC_23:
               not_assigns(char_P_dest_20_alloc_table@,
               char_P_char_M_dest_20@, char_P_char_M_dest_20,
@@ -1946,11 +1952,11 @@ parameter memcpy_requires :
         { (JC_24:
           ((JC_22:
            ((JC_19:
-            eq_int(memcmp(dest, src, integer_of_uint32(n_0),
+            eq_int(memcmp(dest@, src@, integer_of_uint32(n_0@),
                    char_P_char_M_src_21, char_P_char_M_dest_20),
             (0)))
-           and ((JC_20: (result = dest))
-               and (JC_21: same_block(result, dest)))))
+           and ((JC_20: (result = dest@))
+               and (JC_21: same_block(result, dest@)))))
           and (JC_23:
               not_assigns(char_P_dest_20_alloc_table@,
               char_P_char_M_dest_20@, char_P_char_M_dest_20,
@@ -1975,7 +1981,7 @@ parameter strlen_0 :
    char_P_char_M_s_24:(char_P, int8) memory ->
     { } uint32
     { (JC_33:
-      eq_int(integer_of_uint32(result), strlen(s_0, char_P_char_M_s_24))) }
+      eq_int(integer_of_uint32(result), strlen(s_0@, char_P_char_M_s_24))) }
 
 parameter strlen_0_requires :
  s_0:char_P pointer ->
@@ -1984,7 +1990,7 @@ parameter strlen_0_requires :
     { (JC_27: valid_string(s_0, char_P_s_24_alloc_table, char_P_char_M_s_24))}
     uint32
     { (JC_33:
-      eq_int(integer_of_uint32(result), strlen(s_0, char_P_char_M_s_24))) }
+      eq_int(integer_of_uint32(result), strlen(s_0@, char_P_char_M_s_24))) }
 
 parameter uint16_of_integer_ :
  x:int ->
@@ -2114,22 +2120,22 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/calloc_po6.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "425" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "429" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po7.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "425" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "429" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po8.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "425" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "429" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po9.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "425" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "429" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

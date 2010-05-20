@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0420.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0420.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir bts0420.jessie
 [jessie] File bts0420.jessie/bts0420.jc written.
 [jessie] File bts0420.jessie/bts0420.cloc written.
@@ -49,12 +51,12 @@ axiomatic ax1 {
 }
 
 unit ftest(int_P[..] a, int_P[..] b)
-  requires (C_25 : (((C_27 : (\offset_min(a) <= 0)) &&
-                      (C_28 : (\offset_max(a) >= 9))) &&
-                     ((C_30 : (\offset_min(b) <= 0)) &&
-                       (C_31 : (\offset_max(b) >= 9)))));
+  requires (C_26 : (((C_28 : (\offset_min(a) <= 0)) &&
+                      (C_29 : (\offset_max(a) >= 9))) &&
+                     ((C_31 : (\offset_min(b) <= 0)) &&
+                       (C_32 : (\offset_max(b) >= 9)))));
 behavior default:
-  ensures (C_32 : true);
+  ensures (C_25 : true);
 {  
    (var integer i);
    
@@ -64,8 +66,8 @@ behavior default:
          {  
             loop 
             behavior default:
-              invariant (C_2 : ((C_3 : (0 <= i)) && (C_4 : (i <= 9))));
-            variant (C_5 : (9 - i));
+              invariant (C_3 : ((C_4 : (0 <= i)) && (C_5 : (i <= 9))));
+            variant (C_2 : (9 - i));
             while (true)
             {  
                {  (if (i < 9) then () else 

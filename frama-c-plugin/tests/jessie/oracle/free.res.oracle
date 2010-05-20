@@ -1,7 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only free.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD free.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function free, default assigns generated
+[kernel] No code for function free, default assigns generated for behavior default
+[kernel] No code for function malloc, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir free.jessie
 [jessie] File free.jessie/free.jc written.
 [jessie] File free.jessie/free.cloc written.
@@ -39,11 +40,12 @@ tag void_P = {
 type void_P = [void_P]
 
 unit f(int_P[..] p_0)
-  requires (C_3 : ((C_4 : (\offset_min(p_0) <= 0)) &&
-                    (C_5 : (\offset_max(p_0) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(p_0) <= 0)) &&
+                    (C_6 : (\offset_max(p_0) >= 0))));
 behavior default:
   assigns \nothing;
-  ensures (C_6 : (! ((\offset_min(p_0) <= 0) && (\offset_max(p_0) >= 0))));
+  ensures (C_3 : (! ((\offset_min(\at(p_0,Old)) <= 0) &&
+                      (\offset_max(\at(p_0,Old)) >= 0))));
 {  
    {  (C_1 : (free(p_0)));
       
@@ -60,10 +62,10 @@ behavior default:
 }
 
 int32 main(int_P[..] q)
-  requires (C_9 : ((C_10 : (\offset_min(q) <= 0)) &&
-                    (C_11 : (\offset_max(q) >= 0))));
+  requires (C_10 : ((C_11 : (\offset_min(q) <= 0)) &&
+                     (C_12 : (\offset_max(q) >= 0))));
 behavior default:
-  ensures (C_12 : true);
+  ensures (C_9 : true);
 {  
    (var int32 __retres);
    
@@ -439,8 +441,8 @@ parameter f :
   int_P_p_0_1_alloc_table:int_P alloc_table ref ->
    { } unit reads int_P_p_0_1_alloc_table writes int_P_p_0_1_alloc_table
    { (JC_11:
-     (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
-          and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0))))) }
+     (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0@), (0))
+          and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0@), (0))))) }
 
 parameter f_requires :
  p_0:int_P pointer ->
@@ -450,8 +452,8 @@ parameter f_requires :
      and (JC_2: ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0)))))}
    unit reads int_P_p_0_1_alloc_table writes int_P_p_0_1_alloc_table
    { (JC_11:
-     (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
-          and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0))))) }
+     (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0@), (0))
+          and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0@), (0))))) }
 
 parameter free_null : tt:unit -> { } unit { true }
 
@@ -504,8 +506,8 @@ let f_ensures_default =
         and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0)))) }; void);
       void; (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_9:
-    (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0), (0))
-         and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0), (0))))) }
+    (not (le_int(offset_min(int_P_p_0_1_alloc_table, p_0@), (0))
+         and ge_int(offset_max(int_P_p_0_1_alloc_table, p_0@), (0))))) }
 
 let f_safety =
  fun (p_0 : int_P pointer) (int_P_p_0_1_alloc_table : int_P alloc_table ref) ->
@@ -604,12 +606,12 @@ why --project [...] why/free.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/free_po6.why">
-      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "63" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "64" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/free_po7.why">
-      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "63" begin = "13" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/free.jessie/free.jc" line = "64" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

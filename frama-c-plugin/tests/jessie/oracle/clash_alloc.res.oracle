@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only clash_alloc.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD clash_alloc.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir clash_alloc.jessie
 [jessie] File clash_alloc.jessie/clash_alloc.jc written.
 [jessie] File clash_alloc.jessie/clash_alloc.cloc written.
@@ -38,10 +40,10 @@ tag T = {
 type T = [T]
 
 int32 f(T[..] p)
-  requires (C_3 : ((C_4 : (\offset_min(p) <= 0)) &&
-                    (C_5 : (\offset_max(p) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(p) <= 0)) &&
+                    (C_6 : (\offset_max(p) >= 0))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (C_3 : true);
 {  
    (var int32 __retres);
    

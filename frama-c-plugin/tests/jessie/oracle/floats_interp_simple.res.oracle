@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only floats_interp_simple.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD floats_interp_simple.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir floats_interp_simple.jessie
 [jessie] File floats_interp_simple.jessie/floats_interp_simple.jc written.
 [jessie] File floats_interp_simple.jessie/floats_interp_simple.cloc written.
@@ -52,32 +54,35 @@ lemma round_div :
         ((\round_double(\NearestEven(), (a_0 / b_0)) :> real) <= 1.0)))))
 
 double interp_lin(double x1, double x2, double y1, double y2, double z)
-  requires (C_31 : ((C_32 : ((x1 :> real) < (z :> real))) &&
-                     (C_33 : ((z :> real) <= (x2 :> real)))));
-  requires (C_34 : bounded(x1, 0x1p100));
-  requires (C_35 : bounded(x2, 0x1p100));
-  requires (C_36 : bounded(y1, 0x1p100));
-  requires (C_37 : bounded(y2, 0x1p100));
-  requires (C_38 : (((x2 :> real) - (x1 :> real)) >= 0x1p-53));
-  requires (C_39 : (((y2 :> real) - (y1 :> real)) >= 0x1p-53));
+  requires (C_40 : ((C_41 : ((x1 :> real) < (z :> real))) &&
+                     (C_42 : ((z :> real) <= (x2 :> real)))));
+  requires (C_39 : bounded(x1, 0x1p100));
+  requires (C_38 : bounded(x2, 0x1p100));
+  requires (C_37 : bounded(y1, 0x1p100));
+  requires (C_36 : bounded(y2, 0x1p100));
+  requires (C_35 : (((x2 :> real) - (x1 :> real)) >= 0x1p-53));
+  requires (C_34 : (((y2 :> real) - (y1 :> real)) >= 0x1p-53));
 behavior default:
-  ensures (C_40 : true);
+  ensures (C_31 : true);
 behavior normalized:
   assumes (((z :> real) - (x1 :> real)) >= 0x1p-53);
-  ensures (C_41 : (let real k =
-                  (((z :> real) - (x1 :> real)) /
-                    ((x2 :> real) - (x1 :> real)))
+  ensures (C_32 : (let real k =
+                  (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
+                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
                   in (let real exact_result_0 =
-                     ((y1 :> real) + (k * ((y2 :> real) - (y1 :> real))))
+                     ((\at(y1,Old) :> real) +
+                       (k * ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
                      in (\real_abs(((\result :> real) - exact_result_0)) <=
                           0x1p-1))));
 behavior denormalized:
   assumes (((z :> real) - (x1 :> real)) < 0x1p-53);
-  ensures (C_42 : (let real k_0 =
-                  (((z :> real) - (x1 :> real)) /
-                    ((x2 :> real) - (x1 :> real)))
+  ensures (C_33 : (let real k_0 =
+                  (((\at(z,Old) :> real) - (\at(x1,Old) :> real)) /
+                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
                   in (let real exact_result_1 =
-                     ((y1 :> real) + (k_0 * ((y2 :> real) - (y1 :> real))))
+                     ((\at(y1,Old) :> real) +
+                       (k_0 *
+                         ((\at(y2,Old) :> real) - (\at(y1,Old) :> real))))
                      in (\real_abs(((\result :> real) - exact_result_1)) <=
                           0x1p-1))));
 {  
@@ -491,22 +496,24 @@ parameter interp_lin :
       { ((lt_real(sub_real(double_value(z_0@), double_value(x1@)), 0x1p-53) ->
           (JC_28:
           (let k_0 =
-                div_real(sub_real(double_value(z_0), double_value(x1)),
-                sub_real(double_value(x2), double_value(x1))) in
+                div_real(sub_real(double_value(z_0@), double_value(x1@)),
+                sub_real(double_value(x2@), double_value(x1@))) in
            (let exact_result_1 =
-                 add_real(double_value(y1),
-                 mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
+                 add_real(double_value(y1@),
+                 mul_real(k_0,
+                 sub_real(double_value(y2@), double_value(y1@)))) in
             le_real(abs_real(sub_real(double_value(result), exact_result_1)),
             0x1p-1)))))
         and (ge_real(sub_real(double_value(z_0@), double_value(x1@)),
              0x1p-53) ->
              (JC_26:
              (let k =
-                   div_real(sub_real(double_value(z_0), double_value(x1)),
-                   sub_real(double_value(x2), double_value(x1))) in
+                   div_real(sub_real(double_value(z_0@), double_value(x1@)),
+                   sub_real(double_value(x2@), double_value(x1@))) in
               (let exact_result_0 =
-                    add_real(double_value(y1),
-                    mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+                    add_real(double_value(y1@),
+                    mul_real(k,
+                    sub_real(double_value(y2@), double_value(y1@)))) in
                le_real(abs_real(sub_real(double_value(result),
                                 exact_result_0)),
                0x1p-1)))))) }
@@ -536,22 +543,24 @@ parameter interp_lin_requires :
       { ((lt_real(sub_real(double_value(z_0@), double_value(x1@)), 0x1p-53) ->
           (JC_28:
           (let k_0 =
-                div_real(sub_real(double_value(z_0), double_value(x1)),
-                sub_real(double_value(x2), double_value(x1))) in
+                div_real(sub_real(double_value(z_0@), double_value(x1@)),
+                sub_real(double_value(x2@), double_value(x1@))) in
            (let exact_result_1 =
-                 add_real(double_value(y1),
-                 mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
+                 add_real(double_value(y1@),
+                 mul_real(k_0,
+                 sub_real(double_value(y2@), double_value(y1@)))) in
             le_real(abs_real(sub_real(double_value(result), exact_result_1)),
             0x1p-1)))))
         and (ge_real(sub_real(double_value(z_0@), double_value(x1@)),
              0x1p-53) ->
              (JC_26:
              (let k =
-                   div_real(sub_real(double_value(z_0), double_value(x1)),
-                   sub_real(double_value(x2), double_value(x1))) in
+                   div_real(sub_real(double_value(z_0@), double_value(x1@)),
+                   sub_real(double_value(x2@), double_value(x1@))) in
               (let exact_result_0 =
-                    add_real(double_value(y1),
-                    mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+                    add_real(double_value(y1@),
+                    mul_real(k,
+                    sub_real(double_value(y2@), double_value(y1@)))) in
                le_real(abs_real(sub_real(double_value(result),
                                 exact_result_0)),
                0x1p-1)))))) }
@@ -781,11 +790,11 @@ let interp_lin_ensures_denormalized =
    Return -> !return end))
   { (JC_27:
     (let k_0 =
-          div_real(sub_real(double_value(z_0), double_value(x1)),
-          sub_real(double_value(x2), double_value(x1))) in
+          div_real(sub_real(double_value(z_0@), double_value(x1@)),
+          sub_real(double_value(x2@), double_value(x1@))) in
      (let exact_result_1 =
-           add_real(double_value(y1),
-           mul_real(k_0, sub_real(double_value(y2), double_value(y1)))) in
+           add_real(double_value(y1@),
+           mul_real(k_0, sub_real(double_value(y2@), double_value(y1@)))) in
       le_real(abs_real(sub_real(double_value(result), exact_result_1)),
       0x1p-1)))) }
 
@@ -898,11 +907,11 @@ let interp_lin_ensures_normalized =
     absurd  end with Return -> !return end))
   { (JC_25:
     (let k =
-          div_real(sub_real(double_value(z_0), double_value(x1)),
-          sub_real(double_value(x2), double_value(x1))) in
+          div_real(sub_real(double_value(z_0@), double_value(x1@)),
+          sub_real(double_value(x2@), double_value(x1@))) in
      (let exact_result_0 =
-           add_real(double_value(y1),
-           mul_real(k, sub_real(double_value(y2), double_value(y1)))) in
+           add_real(double_value(y1@),
+           mul_real(k, sub_real(double_value(y2@), double_value(y1@)))) in
       le_real(abs_real(sub_real(double_value(result), exact_result_0)),
       0x1p-1)))) }
 

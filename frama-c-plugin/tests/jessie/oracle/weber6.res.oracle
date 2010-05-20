@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only weber6.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD weber6.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir weber6.jessie
 [jessie] File weber6.jessie/weber6.jc written.
 [jessie] File weber6.jessie/weber6.cloc written.
@@ -38,21 +40,25 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 equal_int_array(int_P[..] first1, int_P[..] last1, int_P[..] first2)
-  requires (C_15 : ((last1 - first1) > 0));
-  requires (C_16 : ((C_17 : (\offset_min(first1) <= 0)) &&
-                     (C_18 : (\offset_max(first1) >= ((last1 - first1) - 1)))));
-  requires (C_19 : ((C_20 : (\offset_min(first2) <= 0)) &&
-                     (C_21 : (\offset_max(first2) >= ((last1 - first1) - 1)))));
+  requires (C_24 : ((last1 - first1) > 0));
+  requires (C_21 : ((C_22 : (\offset_min(first1) <= 0)) &&
+                     (C_23 : (\offset_max(first1) >= ((last1 - first1) - 1)))));
+  requires (C_18 : ((C_19 : (\offset_min(first2) <= 0)) &&
+                     (C_20 : (\offset_max(first2) >= ((last1 - first1) - 1)))));
 behavior default:
-  ensures (C_22 : true);
+  ensures (C_15 : true);
 behavior equal:
-  ensures (C_23 : (\forall integer i_1;
-                    (((0 <= i_1) && (i_1 < (last1 - first1))) ==>
-                      ((first1 + i_1).int_M == (first2 + i_1).int_M))));
+  ensures (C_16 : (\forall integer i_1;
+                    (((0 <= i_1) &&
+                       (i_1 < (\at(last1,Old) - \at(first1,Old)))) ==>
+                      ((\at(first1,Old) + i_1).int_M ==
+                        (\at(first2,Old) + i_1).int_M))));
 behavior not_equal:
-  ensures (C_24 : (\exists integer i_2;
-                    (((0 <= i_2) && (i_2 < (last1 - first1))) ==>
-                      ((first1 + i_2).int_M != (first2 + i_2).int_M))));
+  ensures (C_17 : (\exists integer i_2;
+                    (((0 <= i_2) &&
+                       (i_2 < (\at(last1,Old) - \at(first1,Old)))) ==>
+                      ((\at(first1,Old) + i_2).int_M !=
+                        (\at(first2,Old) + i_2).int_M))));
 {  
    (var int_P[..] a);
    
@@ -65,14 +71,14 @@ behavior not_equal:
       {  
          loop 
          behavior equal:
-           invariant (C_6 : (\forall integer i;
+           invariant (C_6 : (\forall integer i_0;
                               (((0 <= k) && (k < (first1 - a))) ==>
                                 ((first1 + k).int_M == (first2 + k).int_M))));
          behavior default:
            invariant (C_3 : ((C_4 : ((a - first1) <= 0)) &&
                               (C_5 : ((first1 - last1) <= 0))));
          behavior not_equal:
-           invariant (C_2 : (\exists integer i_0;
+           invariant (C_2 : (\exists integer i;
                               (((0 <= k) && (k < (first1 - a))) ==>
                                 ((first1 + k).int_M != (first2 + k).int_M))));
          while (true)
@@ -456,19 +462,19 @@ parameter equal_int_array :
         { } int32
         { ((JC_22:
            (exists i_2:int.
-            ((le_int((0), i_2) and lt_int(i_2, sub_pointer(last1, first1))) ->
+            ((le_int((0), i_2) and lt_int(i_2, sub_pointer(last1@, first1@))) ->
              neq_int(integer_of_int32(select(int_P_int_M_first1_1,
-                                      shift(first1, i_2))),
+                                      shift(first1@, i_2))),
              integer_of_int32(select(int_P_int_M_first2_3,
-                              shift(first2, i_2)))))))
+                              shift(first2@, i_2)))))))
           and (JC_20:
               (forall i_1:int.
                ((le_int((0), i_1)
-                and lt_int(i_1, sub_pointer(last1, first1))) ->
+                and lt_int(i_1, sub_pointer(last1@, first1@))) ->
                 eq_int(integer_of_int32(select(int_P_int_M_first1_1,
-                                        shift(first1, i_1))),
+                                        shift(first1@, i_1))),
                 integer_of_int32(select(int_P_int_M_first2_3,
-                                 shift(first2, i_1)))))))) }
+                                 shift(first2@, i_1)))))))) }
 
 parameter equal_int_array_requires :
  first1:int_P pointer ->
@@ -495,19 +501,19 @@ parameter equal_int_array_requires :
         int32
         { ((JC_22:
            (exists i_2:int.
-            ((le_int((0), i_2) and lt_int(i_2, sub_pointer(last1, first1))) ->
+            ((le_int((0), i_2) and lt_int(i_2, sub_pointer(last1@, first1@))) ->
              neq_int(integer_of_int32(select(int_P_int_M_first1_1,
-                                      shift(first1, i_2))),
+                                      shift(first1@, i_2))),
              integer_of_int32(select(int_P_int_M_first2_3,
-                              shift(first2, i_2)))))))
+                              shift(first2@, i_2)))))))
           and (JC_20:
               (forall i_1:int.
                ((le_int((0), i_1)
-                and lt_int(i_1, sub_pointer(last1, first1))) ->
+                and lt_int(i_1, sub_pointer(last1@, first1@))) ->
                 eq_int(integer_of_int32(select(int_P_int_M_first1_1,
-                                        shift(first1, i_1))),
+                                        shift(first1@, i_1))),
                 integer_of_int32(select(int_P_int_M_first2_3,
-                                 shift(first2, i_1)))))))) }
+                                 shift(first2@, i_1)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -639,7 +645,7 @@ let equal_int_array_ensures_equal =
           while true do
           { invariant
               (JC_37:
-              (forall i:int.
+              (forall i_0:int.
                ((le_int((0), integer_of_int32(k))
                 and lt_int(integer_of_int32(k),
                     sub_pointer(mutable_first1, a))) ->
@@ -696,10 +702,10 @@ let equal_int_array_ensures_equal =
     absurd  end with Return -> !return end))))
   { (JC_19:
     (forall i_1:int.
-     ((le_int((0), i_1) and lt_int(i_1, sub_pointer(last1, first1))) ->
+     ((le_int((0), i_1) and lt_int(i_1, sub_pointer(last1@, first1@))) ->
       eq_int(integer_of_int32(select(int_P_int_M_first1_1,
-                              shift(first1, i_1))),
-      integer_of_int32(select(int_P_int_M_first2_3, shift(first2, i_1))))))) }
+                              shift(first1@, i_1))),
+      integer_of_int32(select(int_P_int_M_first2_3, shift(first2@, i_1))))))) }
 
 let equal_int_array_ensures_not_equal =
  fun (first1 : int_P pointer) (last1 : int_P pointer) (first2 : int_P pointer) (int_P_first1_1_alloc_table : int_P alloc_table) (int_P_first2_3_alloc_table : int_P alloc_table) (int_P_int_M_first1_1 : (int_P, int32) memory) (int_P_int_M_first2_3 : (int_P, int32) memory) ->
@@ -735,7 +741,7 @@ let equal_int_array_ensures_not_equal =
           while true do
           { invariant
               (JC_44:
-              (exists i_0:int.
+              (exists i:int.
                ((le_int((0), integer_of_int32(k))
                 and lt_int(integer_of_int32(k),
                     sub_pointer(mutable_first1, a))) ->
@@ -792,10 +798,10 @@ let equal_int_array_ensures_not_equal =
     absurd  end with Return -> !return end))))
   { (JC_21:
     (exists i_2:int.
-     ((le_int((0), i_2) and lt_int(i_2, sub_pointer(last1, first1))) ->
+     ((le_int((0), i_2) and lt_int(i_2, sub_pointer(last1@, first1@))) ->
       neq_int(integer_of_int32(select(int_P_int_M_first1_1,
-                               shift(first1, i_2))),
-      integer_of_int32(select(int_P_int_M_first2_3, shift(first2, i_2))))))) }
+                               shift(first1@, i_2))),
+      integer_of_int32(select(int_P_int_M_first2_3, shift(first2@, i_2))))))) }
 
 let equal_int_array_safety =
  fun (first1 : int_P pointer) (last1 : int_P pointer) (first2 : int_P pointer) (int_P_first1_1_alloc_table : int_P alloc_table) (int_P_first2_3_alloc_table : int_P alloc_table) (int_P_int_M_first1_1 : (int_P, int32) memory) (int_P_int_M_first2_3 : (int_P, int32) memory) ->

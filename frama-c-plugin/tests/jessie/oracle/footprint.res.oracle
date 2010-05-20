@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only footprint.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD footprint.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir footprint.jessie
 [jessie] File footprint.jessie/footprint.jc written.
 [jessie] File footprint.jessie/footprint.cloc written.
@@ -48,12 +50,12 @@ axiomatic P {
 }
 
 unit f(int_P[..] x)
-  requires (C_5 : (((C_7 : (\offset_min(x) <= 0)) &&
-                     (C_8 : (\offset_max(x) >= 1))) &&
-                    (C_9 : p{Here}(x))));
+  requires (C_6 : (((C_8 : (\offset_min(x) <= 0)) &&
+                     (C_9 : (\offset_max(x) >= 1))) &&
+                    (C_10 : p{Here}(x))));
 behavior default:
   assigns (x + 1).int_M;
-  ensures (C_10 : true);
+  ensures (C_5 : true);
 {  
    {  (C_3 : ((C_2 : (C_1 : (x + 1)).int_M) = 0));
       
@@ -67,12 +69,12 @@ behavior default:
 }
 
 unit g(int_P[..] x_0)
-  requires (C_13 : (((C_15 : (\offset_min(x_0) <= 0)) &&
-                      (C_16 : (\offset_max(x_0) >= 1))) &&
-                     (C_17 : p{Here}(x_0))));
+  requires (C_14 : (((C_16 : (\offset_min(x_0) <= 0)) &&
+                      (C_17 : (\offset_max(x_0) >= 1))) &&
+                     (C_18 : p{Here}(x_0))));
 behavior default:
   assigns (x_0 + 1).int_M;
-  ensures (C_18 : true);
+  ensures (C_13 : true);
 {  
    {  (C_11 : f(x_0));
       

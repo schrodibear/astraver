@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only minix3_strcpy.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD minix3_strcpy.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir minix3_strcpy.jessie
 [jessie] File minix3_strcpy.jessie/minix3_strcpy.jc written.
 [jessie] File minix3_strcpy.jessie/minix3_strcpy.cloc written.
@@ -390,9 +392,9 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 char_P[..] strcpy(char_P[..] ret, char_P[..] s2)
-  requires (C_12 : valid_string(s2));
+  requires (C_13 : valid_string(s2));
 behavior default:
-  ensures (C_13 : true);
+  ensures (C_12 : true);
 {  
    (var char_P[..] s1);
    

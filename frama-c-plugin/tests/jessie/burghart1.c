@@ -64,13 +64,13 @@ int remove_copy(const int* a, int n, int* b, int val)
     loop assigns b[0..j-1];
 
     loop invariant 0 <= j <= i <= n;
-    loop   variant n-i;
 
     loop invariant \forall int k; j <= k < n ==> b[k] == \at(b[k],Pre);
     loop invariant \forall int k; 0 <= k < j ==> b[k] != val;
     loop invariant \forall int x; x != val ==>
         cnt{Here}(a,i,x) == cnt{Here}(b,j,x);
     loop invariant j == i - cnt{Here}(a,i,val);
+    loop   variant n-i;
   */
 
   for (i=0; i<n; ++i)

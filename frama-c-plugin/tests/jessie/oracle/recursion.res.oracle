@@ -1,7 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only recursion.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD recursion.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated
+[kernel] No code for function free, default assigns generated for behavior default
+[kernel] No code for function malloc, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir recursion.jessie
 [jessie] File recursion.jessie/recursion.jc written.
 [jessie] File recursion.jessie/recursion.cloc written.
@@ -48,11 +49,11 @@ axiomatic IsList {
 }
 
 _List[..] cons(int32 elem, _List[..] x)
-  requires (C_7 : is_list{Here}(x));
+  requires (C_10 : is_list{Here}(x));
 behavior default:
-  ensures (C_8 : ((C_9 : is_list{Here}(\result)) &&
-                   (C_10 : (list_length{Here}(\result) ==
-                             (list_length{Here}(x) + 1)))));
+  ensures (C_7 : ((C_8 : is_list{Here}(\result)) &&
+                   (C_9 : (list_length{Here}(\result) ==
+                            (list_length{Here}(\at(x,Old)) + 1)))));
 {  
    (var _List[..] hd);
    
@@ -427,7 +428,7 @@ parameter cons :
        { (JC_10:
          ((JC_8: is_list(result))
          and (JC_9:
-             eq_int(list_length(result), add_int(list_length(x_1), (1)))))) }
+             eq_int(list_length(result), add_int(list_length(x_1@), (1)))))) }
 
 parameter cons_requires :
  elem:int32 ->
@@ -441,7 +442,7 @@ parameter cons_requires :
        { (JC_10:
          ((JC_8: is_list(result))
          and (JC_9:
-             eq_int(list_length(result), add_int(list_length(x_1), (1)))))) }
+             eq_int(list_length(result), add_int(list_length(x_1@), (1)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -490,7 +491,7 @@ let cons_ensures_default =
    Return -> !return end))
   { (JC_7:
     ((JC_5: is_list(result))
-    and (JC_6: eq_int(list_length(result), add_int(list_length(x_1), (1)))))) }
+    and (JC_6: eq_int(list_length(result), add_int(list_length(x_1@), (1)))))) }
 
 let cons_safety =
  fun (elem : int32) (x_1 : _List pointer) (_List_result_4_alloc_table : _List alloc_table ref) (_List_result_4_tag_table : _List tag_table ref) (_List_elem_0_result_4 : (_List, int32) memory ref) (_List_next_result_4 : (_List, _List pointer) memory ref) ->

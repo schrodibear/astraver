@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only addrof_field.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD addrof_field.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir addrof_field.jessie
 [jessie] File addrof_field.jessie/addrof_field.jc written.
 [jessie] File addrof_field.jessie/addrof_field.cloc written.
@@ -51,10 +53,10 @@ tag S = {
 type S = [S]
 
 unit gs(S[..] s_0, int32 i_0)
-  requires (C_4 : ((C_5 : (\offset_min(s_0) <= 0)) &&
-                    (C_6 : (\offset_max(s_0) >= 0))));
+  requires (C_5 : ((C_6 : (\offset_min(s_0) <= 0)) &&
+                    (C_7 : (\offset_max(s_0) >= 0))));
 behavior default:
-  ensures (C_7 : (s_0.p.int_M == \old(i_0)));
+  ensures (C_4 : (\at(s_0,Old).p.int_M == \old(i_0)));
 {  
    {  (C_3 : ((C_2 : (C_1 : s_0.p).int_M) = i_0));
       
@@ -84,12 +86,12 @@ behavior default:
 }
 
 unit gps(struct_S_xP[..] s, int32 i)
-  requires (C_28 : (((C_30 : (\offset_min(s) <= 0)) &&
-                      (C_31 : (\offset_max(s) >= 0))) &&
-                     ((C_33 : (\offset_min(s.struct_S_xM) <= 0)) &&
-                       (C_34 : (\offset_max(s.struct_S_xM) >= 0)))));
+  requires (C_29 : (((C_31 : (\offset_min(s) <= 0)) &&
+                      (C_32 : (\offset_max(s) >= 0))) &&
+                     ((C_34 : (\offset_min(s.struct_S_xM) <= 0)) &&
+                       (C_35 : (\offset_max(s.struct_S_xM) >= 0)))));
 behavior default:
-  ensures (C_35 : (s.struct_S_xM.p.int_M == \old(i)));
+  ensures (C_28 : (\at(s,Old).struct_S_xM.p.int_M == \old(i)));
 {  
    {  (C_27 : ((C_26 : (C_25 : (C_24 : s.struct_S_xM).p).int_M) = i));
       
@@ -709,7 +711,7 @@ parameter gps :
          { (JC_41:
            eq_int(integer_of_int32(select(int_P_int_M_p_8,
                                    select(S_p_struct_S_xM_7,
-                                   select(struct_S_xP_struct_S_xM_s_2, s)))),
+                                   select(struct_S_xP_struct_S_xM_s_2, s@)))),
            integer_of_int32(i@))) }
 
 parameter gps_requires :
@@ -737,7 +739,7 @@ parameter gps_requires :
          { (JC_41:
            eq_int(integer_of_int32(select(int_P_int_M_p_8,
                                    select(S_p_struct_S_xM_7,
-                                   select(struct_S_xP_struct_S_xM_s_2, s)))),
+                                   select(struct_S_xP_struct_S_xM_s_2, s@)))),
            integer_of_int32(i@))) }
 
 parameter gs :
@@ -750,7 +752,7 @@ parameter gs :
        { } unit reads int_P_int_M_p_3 writes int_P_int_M_p_3
        { (JC_10:
          eq_int(integer_of_int32(select(int_P_int_M_p_3,
-                                 select(S_p_s_0_1, s_0))),
+                                 select(S_p_s_0_1, s_0@))),
          integer_of_int32(i_0@))) }
 
 parameter gs_requires :
@@ -766,7 +768,7 @@ parameter gs_requires :
        unit reads int_P_int_M_p_3 writes int_P_int_M_p_3
        { (JC_10:
          eq_int(integer_of_int32(select(int_P_int_M_p_3,
-                                 select(S_p_s_0_1, s_0))),
+                                 select(S_p_s_0_1, s_0@))),
          integer_of_int32(i_0@))) }
 
 parameter int32_of_integer_ :
@@ -1099,7 +1101,7 @@ let gps_ensures_default =
   { (JC_40:
     eq_int(integer_of_int32(select(int_P_int_M_p_8,
                             select(S_p_struct_S_xM_7,
-                            select(struct_S_xP_struct_S_xM_s_2, s)))),
+                            select(struct_S_xP_struct_S_xM_s_2, s@)))),
     integer_of_int32(i@))) }
 
 let gps_safety =
@@ -1149,7 +1151,7 @@ let gs_ensures_default =
        (((safe_upd_ int_P_int_M_p_3) jessie_11) jessie_8))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_9:
-    eq_int(integer_of_int32(select(int_P_int_M_p_3, select(S_p_s_0_1, s_0))),
+    eq_int(integer_of_int32(select(int_P_int_M_p_3, select(S_p_s_0_1, s_0@))),
     integer_of_int32(i_0@))) }
 
 let gs_safety =

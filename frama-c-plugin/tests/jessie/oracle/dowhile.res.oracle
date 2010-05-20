@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only dowhile.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD dowhile.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir dowhile.jessie
 [jessie] File dowhile.jessie/dowhile.jc written.
 [jessie] File dowhile.jessie/dowhile.cloc written.
@@ -36,9 +38,9 @@ int32 x;
 int32 i;
 
 unit main()
-  requires (C_15 : (x >= 0));
+  requires (C_16 : (x >= 0));
 behavior default:
-  ensures (C_16 : (x == 10));
+  ensures (C_15 : (x == 10));
 {  
    {  (C_1 : (x = 0));
       (C_2 : (i = 10));

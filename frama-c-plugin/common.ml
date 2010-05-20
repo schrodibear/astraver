@@ -1089,8 +1089,9 @@ let malloc_function () =
     let behav = {
       b_name = name_of_default_behavior;
       b_assumes = [];
-      b_post_cond = [];
+      b_requires = [];
       b_assigns = [ Nothing,[] ];
+      b_post_cond = [];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
     Globals.Functions.replace_by_declaration spec f locUnknown;
@@ -1109,6 +1110,7 @@ let free_function () =
       b_name = name_of_default_behavior;
       b_assumes = [];
       b_post_cond = [];
+      b_requires = [];
       b_assigns = [ Nothing,[] ];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in

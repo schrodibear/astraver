@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only string_basic.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD string_basic.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir string_basic.jessie
 [jessie] File string_basic.jessie/string_basic.jc written.
 [jessie] File string_basic.jessie/string_basic.cloc written.
@@ -37,16 +39,16 @@ invariant valid___string_toto :
 ((\offset_min(__string_toto) <= 0) && (\offset_max(__string_toto) >= 4))
 
 int32 endsat(char_P[..] p, int32 i)
-  requires (C_6 : ((C_7 : (\offset_min(p) <= i)) &&
-                    (C_8 : (\offset_max(p) >= i))));
+  requires (C_9 : ((C_10 : (\offset_min(p) <= i)) &&
+                    (C_11 : (\offset_max(p) >= i))));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_6 : true);
 behavior ok:
   assumes ((p + i).char_M == 0);
-  ensures (C_10 : (\result == 1));
+  ensures (C_7 : (\result == 1));
 behavior ko:
   assumes ((p + i).char_M != 0);
-  ensures (C_11 : (\result == 0));
+  ensures (C_8 : (\result == 0));
 {  
    (var int32 __retres);
    

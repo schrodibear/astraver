@@ -53,13 +53,14 @@ class add_default_behavior =
     inherit Visitor.generic_frama_c_visitor (Project.current())
       (Cil.inplace_visit())
     method vspec s =
-      if not (List.exists (fun x -> x.b_name = Common.name_of_default_behavior)
+      if not (List.exists (fun x -> x.b_name = Cil.default_behavior_name)
                 s.spec_behavior)
       then begin
         s.spec_behavior <-
           { b_name = name_of_default_behavior;
-            b_assigns = [];
             b_assumes = [];
+            b_requires = [];
+            b_assigns = [];
             b_post_cond = [];
           } :: s.spec_behavior
       end;

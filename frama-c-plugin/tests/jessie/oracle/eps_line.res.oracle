@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only eps_line.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD eps_line.c"
 [jessie] Starting Jessie translation
+[kernel] No code for function malloc, default assigns generated for behavior default
+[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir eps_line.jessie
 [jessie] File eps_line.jessie/eps_line.jc written.
 [jessie] File eps_line.jessie/eps_line.cloc written.
@@ -31,12 +33,12 @@ logic integer l_sign(real x) =
 (if (x >= 0.0) then 1 else (- 1))
 
 integer sign(double x, double e1, double e2)
-  requires (C_4 : ((C_5 : ((e1 :> real) <= ((x :> real) - \double_exact(x)))) &&
-                    (C_6 : (((x :> real) - \double_exact(x)) <= (e2 :> real)))));
+  requires (C_7 : ((C_8 : ((e1 :> real) <= ((x :> real) - \double_exact(x)))) &&
+                    (C_9 : (((x :> real) - \double_exact(x)) <= (e2 :> real)))));
 behavior default:
-  ensures (C_7 : ((C_8 : ((\result != 0) ==>
-                           (\result == l_sign(\double_exact(x))))) &&
-                   (C_9 : (\real_abs(\result) <= 1))));
+  ensures (C_4 : ((C_5 : ((\result != 0) ==>
+                           (\result == l_sign(\double_exact(\at(x,Old)))))) &&
+                   (C_6 : (\real_abs(\result) <= 1))));
 {  
    (var integer __retres);
    
@@ -57,21 +59,25 @@ behavior default:
 }
 
 integer eps_line(double sx, double sy, double vx, double vy)
-  requires (C_24 : ((((((((C_31 : ((sx :> real) == \double_exact(sx))) &&
-                           (C_32 : ((sy :> real) == \double_exact(sy)))) &&
-                          (C_33 : ((vx :> real) == \double_exact(vx)))) &&
-                         (C_34 : ((vy :> real) == \double_exact(vy)))) &&
-                        (C_35 : (\real_abs((sx :> real)) <= 100.0))) &&
-                       (C_36 : (\real_abs((sy :> real)) <= 100.0))) &&
-                      (C_37 : (\real_abs((vx :> real)) <= 1.0))) &&
-                     (C_38 : (\real_abs((vy :> real)) <= 1.0))));
+  requires (C_25 : ((((((((C_32 : ((sx :> real) == \double_exact(sx))) &&
+                           (C_33 : ((sy :> real) == \double_exact(sy)))) &&
+                          (C_34 : ((vx :> real) == \double_exact(vx)))) &&
+                         (C_35 : ((vy :> real) == \double_exact(vy)))) &&
+                        (C_36 : (\real_abs((sx :> real)) <= 100.0))) &&
+                       (C_37 : (\real_abs((sy :> real)) <= 100.0))) &&
+                      (C_38 : (\real_abs((vx :> real)) <= 1.0))) &&
+                     (C_39 : (\real_abs((vy :> real)) <= 1.0))));
 behavior default:
-  ensures (C_39 : ((\result != 0) ==>
+  ensures (C_24 : ((\result != 0) ==>
                     (\result ==
-                      (l_sign(((\double_exact(sx) * \double_exact(vx)) +
-                                (\double_exact(sy) * \double_exact(vy)))) *
-                        l_sign(((\double_exact(sx) * \double_exact(vy)) -
-                                 (\double_exact(sy) * \double_exact(vx))))))));
+                      (l_sign(((\double_exact(\at(sx,Old)) *
+                                 \double_exact(\at(vx,Old))) +
+                                (\double_exact(\at(sy,Old)) *
+                                  \double_exact(\at(vy,Old))))) *
+                        l_sign(((\double_exact(\at(sx,Old)) *
+                                  \double_exact(\at(vy,Old))) -
+                                 (\double_exact(\at(sy,Old)) *
+                                   \double_exact(\at(vx,Old)))))))));
 {  
    (var integer s1);
    
@@ -313,10 +319,11 @@ parameter eps_line :
      { (JC_38:
        (neq_int(result, (0)) ->
         eq_int(result,
-        mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
-                       mul_real(double_exact(sy), double_exact(vy)))),
-        l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
-               mul_real(double_exact(sy), double_exact(vx)))))))) }
+        mul_int(l_sign(add_real(mul_real(double_exact(sx@),
+                                double_exact(vx@)),
+                       mul_real(double_exact(sy@), double_exact(vy@)))),
+        l_sign(sub_real(mul_real(double_exact(sx@), double_exact(vy@)),
+               mul_real(double_exact(sy@), double_exact(vx@)))))))) }
 
 parameter eps_line_requires :
  sx:double ->
@@ -339,10 +346,11 @@ parameter eps_line_requires :
      { (JC_38:
        (neq_int(result, (0)) ->
         eq_int(result,
-        mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
-                       mul_real(double_exact(sy), double_exact(vy)))),
-        l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
-               mul_real(double_exact(sy), double_exact(vx)))))))) }
+        mul_int(l_sign(add_real(mul_real(double_exact(sx@),
+                                double_exact(vx@)),
+                       mul_real(double_exact(sy@), double_exact(vy@)))),
+        l_sign(sub_real(mul_real(double_exact(sx@), double_exact(vy@)),
+               mul_real(double_exact(sy@), double_exact(vx@)))))))) }
 
 parameter sign :
  x_0:double ->
@@ -351,7 +359,7 @@ parameter sign :
     { } int
     { (JC_14:
       ((JC_12:
-       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
+       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0@)))))
       and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 parameter sign_requires :
@@ -368,7 +376,7 @@ parameter sign_requires :
     int
     { (JC_14:
       ((JC_12:
-       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
+       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0@)))))
       and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 let eps_line_ensures_default =
@@ -436,10 +444,10 @@ let eps_line_ensures_default =
   { (JC_37:
     (neq_int(result, (0)) ->
      eq_int(result,
-     mul_int(l_sign(add_real(mul_real(double_exact(sx), double_exact(vx)),
-                    mul_real(double_exact(sy), double_exact(vy)))),
-     l_sign(sub_real(mul_real(double_exact(sx), double_exact(vy)),
-            mul_real(double_exact(sy), double_exact(vx)))))))) }
+     mul_int(l_sign(add_real(mul_real(double_exact(sx@), double_exact(vx@)),
+                    mul_real(double_exact(sy@), double_exact(vy@)))),
+     l_sign(sub_real(mul_real(double_exact(sx@), double_exact(vy@)),
+            mul_real(double_exact(sy@), double_exact(vx@)))))))) }
 
 let eps_line_safety =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
@@ -547,7 +555,7 @@ let sign_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_11:
     ((JC_9:
-     (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0)))))
+     (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0@)))))
     and (JC_10: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 let sign_safety =
@@ -625,7 +633,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po5.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "78" begin = "44" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "82" begin = "44" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -635,7 +643,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po7.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "79" begin = "33" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "83" begin = "33" end = "64"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -665,7 +673,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po13.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "82" begin = "44" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "86" begin = "44" end = "75"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -675,7 +683,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/eps_line_po15.why">
-      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "83" begin = "33" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/eps_line.jessie/eps_line.jc" line = "87" begin = "33" end = "64"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
