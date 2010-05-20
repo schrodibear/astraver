@@ -1,3 +1,5 @@
+// RUNSIMPLIFY: will ask regtests to run Simplify on this program
+
 #pragma JessieIntegerModel(math)
 
 #include "sorting.h"

@@ -51,6 +51,7 @@ let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
 let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
 let ergo fmt f = fprintf fmt "why/%s_why.why" f
+let gappa fmt f = fprintf fmt "gappa/%s_why.gappa" f
 let why_goals fmt f = fprintf fmt "why/%s_ctx.why" f
 let wpr fmt f = fprintf fmt "why/%s.wpr" f
 let isabelle fmt f = fprintf fmt "isabelle/%s_why.thy" f
@@ -140,6 +141,12 @@ let generic full f targets =
        out "why/%%_why.why: WHYOPT=-alt-ergo -dir why@\n";
        out "why/%%_why.why: why/%%.why@\n";
        out "\t@@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
+
+       out "gappa: %a@\n" (print_files gappa) targets;
+       out "\t@@echo 'Running Gappa on proof obligations' && ($(DP) $^)@\n@\n";
+       out "gappa/%%_why.gappa: WHYOPT=-gappa -dir gappa@\n";
+       out "gappa/%%_why.gappa: why/%%.why@\n";
+       out "\t@@echo 'why -gappa [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "cvcl: %a@\n@\n" (print_files cvcl) targets;
        out "\t@@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)@\n@\n";

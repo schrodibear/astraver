@@ -1,4 +1,6 @@
 ========== file tests/c/minimum_sort.c ==========
+// RUNSIMPLIFY: will ask regtests to run Simplify on this program
+
 #pragma JessieIntegerModel(math)
 
 #include "sorting.h"
@@ -255,43 +257,43 @@ behavior permutation:
 ========== file tests/c/minimum_sort.jessie/minimum_sort.cloc ==========
 [C_50]
 file = "HOME/tests/c/minimum_sort.c"
-line = 49
+line = 51
 begin = 6
 end = 8
 
 [C_51]
 file = "HOME/tests/c/minimum_sort.c"
-line = 49
+line = 51
 begin = 6
 end = 8
 
 [C_52]
 file = "HOME/tests/c/minimum_sort.c"
-line = 48
+line = 50
 begin = 4
 end = 7
 
 [C_53]
 file = "HOME/tests/c/minimum_sort.c"
-line = 48
+line = 50
 begin = 4
 end = 7
 
 [C_54]
 file = "HOME/tests/c/minimum_sort.c"
-line = 53
+line = 55
 begin = 4
 end = 8
 
 [C_55]
 file = "HOME/tests/c/minimum_sort.c"
-line = 35
+line = 37
 begin = 2
 end = 5
 
 [C_56]
 file = "HOME/tests/c/minimum_sort.c"
-line = 35
+line = 37
 begin = 2
 end = 5
 
@@ -303,339 +305,339 @@ end = -1
 
 [C_58]
 file = "HOME/tests/c/minimum_sort.c"
-line = 17
+line = 19
 begin = 14
 end = 29
 
 [C_59]
 file = "HOME/tests/c/minimum_sort.c"
-line = 19
+line = 21
 begin = 14
 end = 39
 
 [C_60]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
 [C_61]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
 [C_62]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
 [C_10]
 file = "HOME/tests/c/minimum_sort.c"
-line = 12
+line = 14
 begin = 2
 end = 3
 
 [C_11]
 file = "HOME/tests/c/minimum_sort.c"
-line = 12
+line = 14
 begin = 2
 end = 3
 
 [C_12]
 file = "HOME/tests/c/minimum_sort.c"
-line = 7
+line = 9
 begin = 12
 end = 33
 
 [C_13]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 39
 
 [C_14]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
 [C_15]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
 [C_16]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
 [C_17]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
 [C_18]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
 [C_19]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
 [C_1]
 file = "HOME/tests/c/minimum_sort.c"
-line = 10
+line = 12
 begin = 2
 end = 5
 
 [C_2]
 file = "HOME/tests/c/minimum_sort.c"
-line = 10
+line = 12
 begin = 2
 end = 5
 
 [C_3]
 file = "HOME/tests/c/minimum_sort.c"
-line = 10
+line = 12
 begin = 2
 end = 5
 
 [C_4]
 file = "HOME/tests/c/minimum_sort.c"
-line = 11
+line = 13
 begin = 2
 end = 3
 
 [C_20]
 file = "HOME/tests/c/minimum_sort.c"
-line = 35
+line = 37
 begin = 2
 end = 5
 
 [C_5]
 file = "HOME/tests/c/minimum_sort.c"
-line = 11
+line = 13
 begin = 2
 end = 3
 
 [C_21]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 31
 
 [C_6]
 file = "HOME/tests/c/minimum_sort.c"
-line = 11
+line = 13
 begin = 2
 end = 3
 
 [C_22]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 27
 
 [C_7]
 file = "HOME/tests/c/minimum_sort.c"
-line = 11
+line = 13
 begin = 2
 end = 3
 
 [C_23]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 26
 end = 31
 
 [C_8]
 file = "HOME/tests/c/minimum_sort.c"
-line = 11
+line = 13
 begin = 2
 end = 3
 
 [C_24]
 file = "HOME/tests/c/minimum_sort.c"
-line = 28
+line = 30
 begin = 8
 end = 111
 
 [C_9]
 file = "HOME/tests/c/minimum_sort.c"
-line = 12
+line = 14
 begin = 2
 end = 3
 
 [C_25]
 file = "HOME/tests/c/minimum_sort.c"
-line = 28
+line = 30
 begin = 8
 end = 21
 
 [C_26]
 file = "HOME/tests/c/minimum_sort.c"
-line = 29
+line = 31
 begin = 8
 end = 86
 
 [C_27]
 file = "HOME/tests/c/minimum_sort.c"
-line = 32
+line = 34
 begin = 22
 end = 47
 
 [C_28]
 file = "HOME/tests/c/minimum_sort.c"
-line = 33
+line = 35
 begin = 19
 end = 22
 
 [C_29]
 file = "HOME/tests/c/minimum_sort.c"
-line = 35
+line = 37
 begin = 2
 end = 5
 
 [C_30]
 file = "HOME/tests/c/minimum_sort.c"
-line = 37
+line = 39
 begin = 4
 end = 6
 
 [C_31]
 file = "HOME/tests/c/minimum_sort.c"
-line = 37
+line = 39
 begin = 4
 end = 6
 
 [C_32]
 file = "HOME/tests/c/minimum_sort.c"
-line = 37
+line = 39
 begin = 4
 end = 6
 
 [C_33]
 file = "HOME/tests/c/minimum_sort.c"
-line = 37
+line = 39
 begin = 15
 end = 17
 
 [C_34]
 file = "HOME/tests/c/minimum_sort.c"
-line = 48
+line = 50
 begin = 4
 end = 7
 
 [C_35]
 file = "HOME/tests/c/minimum_sort.c"
-line = 48
+line = 50
 begin = 4
 end = 7
 
 [C_36]
 file = "HOME/tests/c/minimum_sort.c"
-line = 45
+line = 47
 begin = 10
 end = 35
 
 [C_37]
 file = "HOME/tests/c/minimum_sort.c"
-line = 46
+line = 48
 begin = 21
 end = 24
 
 [C_38]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 43
 
 [C_39]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 28
 
 [swap]
 name = "Function swap"
 file = "HOME/tests/c/minimum_sort.c"
-line = 9
+line = 11
 begin = 5
 end = 9
 
 [min_sort]
 name = "Function min_sort"
 file = "HOME/tests/c/minimum_sort.c"
-line = 21
+line = 23
 begin = 5
 end = 13
 
 [C_40]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 32
 end = 43
 
 [C_41]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 32
 end = 39
 
 [C_42]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 37
 end = 43
 
 [C_43]
 file = "HOME/tests/c/minimum_sort.c"
-line = 41
+line = 43
 begin = 11
 end = 83
 
 [C_44]
 file = "HOME/tests/c/minimum_sort.c"
-line = 41
+line = 43
 begin = 11
 end = 22
 
 [C_45]
 file = "HOME/tests/c/minimum_sort.c"
-line = 42
+line = 44
 begin = 11
 end = 57
 
 [C_46]
 file = "HOME/tests/c/minimum_sort.c"
-line = 50
+line = 52
 begin = 1
 end = 3
 
 [C_47]
 file = "HOME/tests/c/minimum_sort.c"
-line = 50
+line = 52
 begin = 10
 end = 12
 
 [C_48]
 file = "HOME/tests/c/minimum_sort.c"
-line = 50
+line = 52
 begin = 10
 end = 12
 
 [C_49]
 file = "HOME/tests/c/minimum_sort.c"
-line = 50
+line = 52
 begin = 10
 end = 12
 
@@ -727,6 +729,13 @@ why/%_why.why: WHYOPT=-alt-ergo -dir why
 why/%_why.why: why/%.why
 	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
+gappa: gappa/minimum_sort_why.gappa
+	@echo 'Running Gappa on proof obligations' && ($(DP) $^)
+
+gappa/%_why.gappa: WHYOPT=-gappa -dir gappa
+gappa/%_why.gappa: why/%.why
+	@echo 'why -gappa [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
 cvcl: cvcl/minimum_sort_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
@@ -803,7 +812,7 @@ end = 1310
 
 [JC_40]
 file = "HOME/tests/c/minimum_sort.c"
-line = 19
+line = 21
 begin = 14
 end = 39
 
@@ -816,37 +825,37 @@ end = 41
 
 [JC_41]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 27
 
 [JC_94]
 file = "HOME/tests/c/minimum_sort.c"
-line = 32
+line = 34
 begin = 22
 end = 47
 
 [JC_42]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 26
 end = 31
 
 [JC_95]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 27
 
 [JC_43]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 31
 
 [JC_96]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 26
 end = 31
 
@@ -858,7 +867,7 @@ end = -1
 
 [JC_97]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 31
 
@@ -882,7 +891,7 @@ end = 2614
 
 [JC_1]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
@@ -901,67 +910,67 @@ end = 2614
 [JC_47]
 kind = PointerDeref
 file = "HOME/tests/c/minimum_sort.c"
-line = 37
+line = 39
 begin = 4
 end = 6
 
 [JC_2]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
 [JC_101]
 file = "HOME/tests/c/minimum_sort.c"
-line = 45
+line = 47
 begin = 10
 end = 35
 
 [JC_48]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 28
 
 [JC_3]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
 [JC_102]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 28
 
 [JC_49]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 32
 end = 39
 
 [JC_4]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
 [JC_103]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 32
 end = 39
 
 [JC_5]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 39
 
 [JC_104]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 37
 end = 43
 
@@ -973,13 +982,13 @@ end = -1
 
 [JC_105]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 43
 
 [JC_7]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
@@ -991,7 +1000,7 @@ end = -1
 
 [JC_8]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 24
 
@@ -1003,7 +1012,7 @@ end = 1310
 
 [JC_9]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
@@ -1022,13 +1031,13 @@ end = 41
 
 [JC_50]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 37
 end = 43
 
 [JC_51]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 43
 
@@ -1053,20 +1062,20 @@ end = 1310
 [JC_55]
 kind = PointerDeref
 file = "HOME/tests/c/minimum_sort.c"
-line = 49
+line = 51
 begin = 6
 end = 8
 
 [JC_56]
 kind = PointerDeref
 file = "HOME/tests/c/minimum_sort.c"
-line = 50
+line = 52
 begin = 10
 end = 12
 
 [JC_57]
 file = "HOME/tests/c/minimum_sort.c"
-line = 46
+line = 48
 begin = 21
 end = 24
 
@@ -1079,7 +1088,7 @@ end = 41
 
 [JC_59]
 file = "HOME/tests/c/minimum_sort.c"
-line = 33
+line = 35
 begin = 19
 end = 22
 
@@ -1087,31 +1096,31 @@ end = 22
 name = "Function swap"
 behavior = "Safety"
 file = "HOME/tests/c/minimum_sort.c"
-line = 9
+line = 11
 begin = 5
 end = 9
 
 [JC_60]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 27
 
 [JC_61]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 26
 end = 31
 
 [JC_62]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 31
 
 [JC_10]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 28
 end = 39
 
@@ -1119,7 +1128,7 @@ end = 39
 name = "Function min_sort"
 behavior = "Normal behavior `sorted'"
 file = "HOME/tests/c/minimum_sort.c"
-line = 21
+line = 23
 begin = 5
 end = 13
 
@@ -1131,7 +1140,7 @@ end = -1
 
 [JC_11]
 file = "HOME/tests/c/minimum_sort.c"
-line = 5
+line = 7
 begin = 13
 end = 39
 
@@ -1155,25 +1164,25 @@ end = 2614
 
 [JC_13]
 file = "HOME/tests/c/minimum_sort.c"
-line = 7
+line = 9
 begin = 12
 end = 33
 
 [JC_66]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 28
 
 [JC_14]
 file = "HOME/tests/c/minimum_sort.c"
-line = 9
+line = 11
 begin = 5
 end = 9
 
 [JC_67]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 32
 end = 39
 
@@ -1185,25 +1194,25 @@ end = 16
 
 [JC_68]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 37
 end = 43
 
 [JC_16]
 file = "HOME/tests/c/minimum_sort.c"
-line = 7
+line = 9
 begin = 12
 end = 33
 
 [JC_69]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 43
 
 [JC_17]
 file = "HOME/tests/c/minimum_sort.c"
-line = 9
+line = 11
 begin = 5
 end = 9
 
@@ -1253,26 +1262,26 @@ end = 41
 [JC_21]
 kind = PointerDeref
 file = "HOME/tests/c/minimum_sort.c"
-line = 10
+line = 12
 begin = 2
 end = 5
 
 [JC_74]
 file = "HOME/tests/c/minimum_sort.c"
-line = 28
+line = 30
 begin = 8
 end = 21
 
 [JC_22]
 kind = PointerDeref
 file = "HOME/tests/c/minimum_sort.c"
-line = 11
+line = 13
 begin = 2
 end = 3
 
 [JC_75]
 file = "HOME/tests/c/minimum_sort.c"
-line = 29
+line = 31
 begin = 8
 end = 86
 
@@ -1285,7 +1294,7 @@ end = 75
 
 [JC_76]
 file = "HOME/tests/c/minimum_sort.c"
-line = 28
+line = 30
 begin = 8
 end = 111
 
@@ -1293,7 +1302,7 @@ end = 111
 name = "Function swap"
 behavior = "Default behavior"
 file = "HOME/tests/c/minimum_sort.c"
-line = 9
+line = 11
 begin = 5
 end = 9
 
@@ -1306,25 +1315,25 @@ end = 51
 
 [JC_77]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 27
 
 [JC_25]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
 [JC_78]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 26
 end = 31
 
 [JC_26]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
@@ -1332,19 +1341,19 @@ end = 34
 name = "Function min_sort"
 behavior = "Normal behavior `permutation'"
 file = "HOME/tests/c/minimum_sort.c"
-line = 21
+line = 23
 begin = 5
 end = 13
 
 [JC_79]
 file = "HOME/tests/c/minimum_sort.c"
-line = 25
+line = 27
 begin = 21
 end = 31
 
 [JC_27]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
@@ -1356,7 +1365,7 @@ end = -1
 
 [JC_29]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
@@ -1364,7 +1373,7 @@ end = 34
 name = "Function min_sort"
 behavior = "Safety"
 file = "HOME/tests/c/minimum_sort.c"
-line = 21
+line = 23
 begin = 5
 end = 13
 
@@ -1372,7 +1381,7 @@ end = 13
 name = "Function min_sort"
 behavior = "Default behavior"
 file = "HOME/tests/c/minimum_sort.c"
-line = 21
+line = 23
 begin = 5
 end = 13
 
@@ -1396,25 +1405,25 @@ end = 2614
 
 [JC_30]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
 [JC_83]
 file = "HOME/tests/c/minimum_sort.c"
-line = 41
+line = 43
 begin = 11
 end = 22
 
 [JC_31]
 file = "HOME/tests/c/minimum_sort.c"
-line = 15
+line = 17
 begin = 13
 end = 34
 
 [JC_84]
 file = "HOME/tests/c/minimum_sort.c"
-line = 42
+line = 44
 begin = 11
 end = 57
 
@@ -1426,7 +1435,7 @@ end = -1
 
 [JC_85]
 file = "HOME/tests/c/minimum_sort.c"
-line = 41
+line = 43
 begin = 11
 end = 83
 
@@ -1438,7 +1447,7 @@ end = -1
 
 [JC_86]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 28
 
@@ -1450,7 +1459,7 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 32
 end = 39
 
@@ -1462,7 +1471,7 @@ end = -1
 
 [JC_88]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 37
 end = 43
 
@@ -1474,25 +1483,25 @@ end = -1
 
 [JC_89]
 file = "HOME/tests/c/minimum_sort.c"
-line = 38
+line = 40
 begin = 23
 end = 43
 
 [JC_37]
 file = "HOME/tests/c/minimum_sort.c"
-line = 17
+line = 19
 begin = 14
 end = 29
 
 [JC_38]
 file = "HOME/tests/c/minimum_sort.c"
-line = 17
+line = 19
 begin = 14
 end = 29
 
 [JC_39]
 file = "HOME/tests/c/minimum_sort.c"
-line = 19
+line = 21
 begin = 14
 end = 39
 
@@ -5155,6 +5164,7 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   1 (  2%)
 failure :   0 (  0%)
+// RUNSIMPLIFY: will ask regtests to run Simplify on this program
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/minimum_sort.why
 ========== file tests/c/minimum_sort.jessie/simplify/minimum_sort_why.sx ==========
@@ -6050,7 +6060,7 @@ why -simplify [...] why/minimum_sort.why
  ;; Why axiom void_P_tags
  (FORALL (x void_P_tag_table) (instanceof void_P_tag_table x void_P_tag)))
 
-;; min_sort_ensures_default_po_1, File "HOME/tests/c/minimum_sort.c", line 25, characters 21-27
+;; min_sort_ensures_default_po_1, File "HOME/tests/c/minimum_sort.c", line 27, characters 21-27
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6058,7 +6068,7 @@ why -simplify [...] why/minimum_sort.why
          (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
 (IMPLIES (> n 0) (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (<= 0 i_0_1))))))))
 
-;; min_sort_ensures_default_po_2, File "HOME/tests/c/minimum_sort.c", line 25, characters 26-31
+;; min_sort_ensures_default_po_2, File "HOME/tests/c/minimum_sort.c", line 27, characters 26-31
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6066,7 +6076,7 @@ why -simplify [...] why/minimum_sort.why
          (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
 (IMPLIES (> n 0) (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (< i_0_1 n))))))))
 
-;; min_sort_ensures_default_po_3, File "HOME/tests/c/minimum_sort.c", line 38, characters 23-28
+;; min_sort_ensures_default_po_3, File "HOME/tests/c/minimum_sort.c", line 40, characters 23-28
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6087,7 +6097,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mi i_0_1_0)
 (FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (< i_0_1_0 j_0_1))))))))))))))))))))
 
-;; min_sort_ensures_default_po_4, File "HOME/tests/c/minimum_sort.c", line 38, characters 32-39
+;; min_sort_ensures_default_po_4, File "HOME/tests/c/minimum_sort.c", line 40, characters 32-39
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6108,7 +6118,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mi i_0_1_0)
 (FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (<= i_0_1_0 mi))))))))))))))))))))
 
-;; min_sort_ensures_default_po_5, File "HOME/tests/c/minimum_sort.c", line 38, characters 37-43
+;; min_sort_ensures_default_po_5, File "HOME/tests/c/minimum_sort.c", line 40, characters 37-43
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6129,7 +6139,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mi i_0_1_0)
 (FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (< mi n))))))))))))))))))))
 
-;; min_sort_ensures_default_po_6, File "HOME/tests/c/minimum_sort.c", line 38, characters 23-28
+;; min_sort_ensures_default_po_6, File "HOME/tests/c/minimum_sort.c", line 40, characters 23-28
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6166,7 +6176,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< i_0_1_0 j_0_1_1))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_7, File "HOME/tests/c/minimum_sort.c", line 38, characters 32-39
+;; min_sort_ensures_default_po_7, File "HOME/tests/c/minimum_sort.c", line 40, characters 32-39
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6203,7 +6213,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= i_0_1_0 mi1))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_8, File "HOME/tests/c/minimum_sort.c", line 38, characters 37-43
+;; min_sort_ensures_default_po_8, File "HOME/tests/c/minimum_sort.c", line 40, characters 37-43
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6240,7 +6250,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< mi1 n))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_9, File "HOME/tests/c/minimum_sort.c", line 38, characters 23-28
+;; min_sort_ensures_default_po_9, File "HOME/tests/c/minimum_sort.c", line 40, characters 23-28
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6271,7 +6281,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< i_0_1_0 j_0_1_1))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_10, File "HOME/tests/c/minimum_sort.c", line 38, characters 32-39
+;; min_sort_ensures_default_po_10, File "HOME/tests/c/minimum_sort.c", line 40, characters 32-39
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6302,7 +6312,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= i_0_1_0 mi0))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_11, File "HOME/tests/c/minimum_sort.c", line 38, characters 37-43
+;; min_sort_ensures_default_po_11, File "HOME/tests/c/minimum_sort.c", line 40, characters 37-43
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6333,7 +6343,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< mi0 n))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_12, File "HOME/tests/c/minimum_sort.c", line 25, characters 21-27
+;; min_sort_ensures_default_po_12, File "HOME/tests/c/minimum_sort.c", line 27, characters 21-27
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6367,7 +6377,7 @@ why -simplify [...] why/minimum_sort.why
                                                    (pset_singleton t_0) i_0_1_0 i_0_1_0))))
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 i_0_1_1))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_13, File "HOME/tests/c/minimum_sort.c", line 25, characters 26-31
+;; min_sort_ensures_default_po_13, File "HOME/tests/c/minimum_sort.c", line 27, characters 26-31
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6401,7 +6411,7 @@ why -simplify [...] why/minimum_sort.why
                                                    (pset_singleton t_0) i_0_1_0 i_0_1_0))))
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< i_0_1_1 n))))))))))))))))))))))))))))
 
-;; min_sort_ensures_permutation_po_1, File "HOME/tests/c/minimum_sort.c", line 19, characters 14-39
+;; min_sort_ensures_permutation_po_1, File "HOME/tests/c/minimum_sort.c", line 21, characters 14-39
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6411,7 +6421,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (<= n 0)
 (EQ (Permut t_0 0 (- n 1) int_P_int_M_t_0_5 int_P_int_M_t_0_5) |@true|)))))))
 
-;; min_sort_ensures_permutation_po_2, File "HOME/tests/c/minimum_sort.c", line 32, characters 22-47
+;; min_sort_ensures_permutation_po_2, File "HOME/tests/c/minimum_sort.c", line 34, characters 22-47
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6423,7 +6433,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ i_0_1 0)
 (EQ (Permut t_0 0 (- n 1) int_P_int_M_t_0_5 int_P_int_M_t_0_5) |@true|)))))))))
 
-;; min_sort_ensures_permutation_po_3, File "HOME/tests/c/minimum_sort.c", line 32, characters 22-47
+;; min_sort_ensures_permutation_po_3, File "HOME/tests/c/minimum_sort.c", line 34, characters 22-47
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6464,7 +6474,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (EQ (Permut t_0 0 (- n 1) int_P_int_M_t_0_5_1 int_P_int_M_t_0_5) |@true|)))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_1, File "HOME/tests/c/minimum_sort.c", line 17, characters 14-29
+;; min_sort_ensures_sorted_po_1, File "HOME/tests/c/minimum_sort.c", line 19, characters 14-29
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6473,7 +6483,7 @@ why -simplify [...] why/minimum_sort.why
          (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
 (IMPLIES (<= n 0) (Sorted t_0 0 (- n 1) int_P_int_M_t_0_5)))))))
 
-;; min_sort_ensures_sorted_po_2, File "HOME/tests/c/minimum_sort.c", line 28, characters 8-21
+;; min_sort_ensures_sorted_po_2, File "HOME/tests/c/minimum_sort.c", line 30, characters 8-21
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6484,7 +6494,7 @@ why -simplify [...] why/minimum_sort.why
 (FORALL (i_0_1)
 (IMPLIES (EQ i_0_1 0) (Sorted t_0 0 i_0_1 int_P_int_M_t_0_5)))))))))
 
-;; min_sort_ensures_sorted_po_3, File "HOME/tests/c/minimum_sort.c", line 29, characters 8-86
+;; min_sort_ensures_sorted_po_3, File "HOME/tests/c/minimum_sort.c", line 31, characters 8-86
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6500,7 +6510,7 @@ why -simplify [...] why/minimum_sort.why
                                               int_P_int_M_t_0_5 (shift
                                                                 t_0 k2)))))))))))))
 
-;; min_sort_ensures_sorted_po_4, File "HOME/tests/c/minimum_sort.c", line 41, characters 11-22
+;; min_sort_ensures_sorted_po_4, File "HOME/tests/c/minimum_sort.c", line 43, characters 11-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6530,7 +6540,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
 (EQ mv (select int_P_int_M_t_0_5_0 (shift t_0 mi)))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_5, File "HOME/tests/c/minimum_sort.c", line 42, characters 11-57
+;; min_sort_ensures_sorted_po_5, File "HOME/tests/c/minimum_sort.c", line 44, characters 11-57
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6562,7 +6572,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1))
 (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv)))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_6, File "HOME/tests/c/minimum_sort.c", line 41, characters 11-22
+;; min_sort_ensures_sorted_po_6, File "HOME/tests/c/minimum_sort.c", line 43, characters 11-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6612,7 +6622,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1))
 (EQ mv1 (select int_P_int_M_t_0_5_0 (shift t_0 mi1))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_7, File "HOME/tests/c/minimum_sort.c", line 42, characters 11-57
+;; min_sort_ensures_sorted_po_7, File "HOME/tests/c/minimum_sort.c", line 44, characters 11-57
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6664,7 +6674,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_1))
 (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv1))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_8, File "HOME/tests/c/minimum_sort.c", line 42, characters 11-57
+;; min_sort_ensures_sorted_po_8, File "HOME/tests/c/minimum_sort.c", line 44, characters 11-57
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6710,7 +6720,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_1))
 (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_9, File "HOME/tests/c/minimum_sort.c", line 28, characters 8-21
+;; min_sort_ensures_sorted_po_9, File "HOME/tests/c/minimum_sort.c", line 30, characters 8-21
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6758,7 +6768,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (Sorted t_0 0 i_0_1_1 int_P_int_M_t_0_5_1)))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_10, File "HOME/tests/c/minimum_sort.c", line 29, characters 8-86
+;; min_sort_ensures_sorted_po_10, File "HOME/tests/c/minimum_sort.c", line 31, characters 8-86
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6810,7 +6820,7 @@ why -simplify [...] why/minimum_sort.why
                                                 int_P_int_M_t_0_5_1 (shift
                                                                     t_0 k2)))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_11, File "HOME/tests/c/minimum_sort.c", line 17, characters 14-29
+;; min_sort_ensures_sorted_po_11, File "HOME/tests/c/minimum_sort.c", line 19, characters 14-29
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6831,7 +6841,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
 (IMPLIES (>= i_0_1_0 (- n 1)) (Sorted t_0 0 (- n 1) int_P_int_M_t_0_5_0)))))))))))))
 
-;; min_sort_safety_po_1, File "HOME/tests/c/minimum_sort.c", line 37, characters 4-6
+;; min_sort_safety_po_1, File "HOME/tests/c/minimum_sort.c", line 39, characters 4-6
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6846,7 +6856,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (< i_0_1_0 (- n 1))
 (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0))))))))))))
 
-;; min_sort_safety_po_2, File "HOME/tests/c/minimum_sort.c", line 37, characters 4-6
+;; min_sort_safety_po_2, File "HOME/tests/c/minimum_sort.c", line 39, characters 4-6
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6861,7 +6871,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (< i_0_1_0 (- n 1))
 (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))))))))))))
 
-;; min_sort_safety_po_3, File "HOME/tests/c/minimum_sort.c", line 49, characters 6-8
+;; min_sort_safety_po_3, File "HOME/tests/c/minimum_sort.c", line 51, characters 6-8
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6891,7 +6901,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (< j_0_1_0 n) (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_4, File "HOME/tests/c/minimum_sort.c", line 49, characters 6-8
+;; min_sort_safety_po_4, File "HOME/tests/c/minimum_sort.c", line 51, characters 6-8
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6921,7 +6931,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (< j_0_1_0 n) (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_5, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+;; min_sort_safety_po_5, File "HOME/tests/c/minimum_sort.c", line 48, characters 21-24
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -6966,7 +6976,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= 0 (- n j_0_1_0))))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_6, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+;; min_sort_safety_po_6, File "HOME/tests/c/minimum_sort.c", line 48, characters 21-24
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7012,7 +7022,7 @@ why -simplify [...] why/minimum_sort.why
 (FORALL (j_0_1_1)
 (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< (- n j_0_1_1) (- n j_0_1_0))))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_7, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+;; min_sort_safety_po_7, File "HOME/tests/c/minimum_sort.c", line 48, characters 21-24
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7049,7 +7059,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= 0 (- n j_0_1_0)))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_8, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+;; min_sort_safety_po_8, File "HOME/tests/c/minimum_sort.c", line 48, characters 21-24
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7178,7 +7188,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (>= j_0_1_0 n) (>= (offset_max int_P_t_0_5_alloc_table t_0) mi0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_12, File "HOME/tests/c/minimum_sort.c", line 33, characters 19-22
+;; min_sort_safety_po_12, File "HOME/tests/c/minimum_sort.c", line 35, characters 19-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7220,7 +7230,7 @@ why -simplify [...] why/minimum_sort.why
                                                    (pset_singleton t_0) i_0_1_0 i_0_1_0))))
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 (- n i_0_1_0)))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_13, File "HOME/tests/c/minimum_sort.c", line 33, characters 19-22
+;; min_sort_safety_po_13, File "HOME/tests/c/minimum_sort.c", line 35, characters 19-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7263,7 +7273,7 @@ why -simplify [...] why/minimum_sort.why
 (FORALL (i_0_1_1)
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< (- n i_0_1_1) (- n i_0_1_0)))))))))))))))))))))))))))))))))
 
-;; swap_ensures_default_po_1, File "HOME/tests/c/minimum_sort.c", line 7, characters 12-33
+;; swap_ensures_default_po_1, File "HOME/tests/c/minimum_sort.c", line 9, characters 12-33
 (FORALL (t)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -7287,7 +7297,7 @@ why -simplify [...] why/minimum_sort.why
          (|why__store| int_P_int_M_t_4_0 (shift t j_0) tmp))
 (Swap t i_0 j_0 int_P_int_M_t_4_1 int_P_int_M_t_4)))))))))))))))))
 
-;; swap_ensures_default_po_2, File "HOME/tests/c/minimum_sort.c", line 9, characters 5-9
+;; swap_ensures_default_po_2, File "HOME/tests/c/minimum_sort.c", line 11, characters 5-9
 (FORALL (t)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -7316,7 +7326,7 @@ int_P_t_4_alloc_table int_P_int_M_t_4 int_P_int_M_t_4_1 (pset_union
                                                         (pset_range
                                                         (pset_singleton t) i_0 i_0)))))))))))))))))))
 
-;; swap_safety_po_1, File "HOME/tests/c/minimum_sort.c", line 10, characters 2-5
+;; swap_safety_po_1, File "HOME/tests/c/minimum_sort.c", line 12, characters 2-5
 (FORALL (t)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -7327,7 +7337,7 @@ int_P_t_4_alloc_table int_P_int_M_t_4 int_P_int_M_t_4_1 (pset_union
          (>= (offset_max int_P_t_4_alloc_table t) j_0))))
 (<= i_0 (offset_max int_P_t_4_alloc_table t)))))))
 
-;; swap_safety_po_2, File "HOME/tests/c/minimum_sort.c", line 11, characters 2-3
+;; swap_safety_po_2, File "HOME/tests/c/minimum_sort.c", line 13, characters 2-3
 (FORALL (t)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -7344,7 +7354,7 @@ int_P_t_4_alloc_table int_P_int_M_t_4 int_P_int_M_t_4_1 (pset_union
 (FORALL (tmp)
 (IMPLIES (EQ tmp result) (<= (offset_min int_P_t_4_alloc_table t) j_0))))))))))))
 
-;; swap_safety_po_3, File "HOME/tests/c/minimum_sort.c", line 11, characters 2-3
+;; swap_safety_po_3, File "HOME/tests/c/minimum_sort.c", line 13, characters 2-3
 (FORALL (t)
 (FORALL (i_0)
 (FORALL (j_0)

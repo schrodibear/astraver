@@ -98,15 +98,26 @@ case $1 in
 	mycat $j/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
 	tmp=$(tempfile -s regtests_ergo)
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile ergo 2> $tmp
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 2" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile ergo 2> $tmp
 	grep -v 'CPU time limit' $tmp >&2
-	echo "========== generation of Simplify VC output =========="
-	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile simplify/$b'_why'.sx	
-	mycatfilterdir $j/simplify/$b'_why'.sx
-	echo "========== running Simplify =========="
-	tmp=$(tempfile -s regtests_simplify)
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 1" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile simplify 2> $tmp	
-	grep -v 'CPU time limit' $tmp >&2
+	if grep RUNGAPPA $1 ; then
+	    echo "========== generation of Gappa VC output =========="
+	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile gappa/$b'_why'.gappa	
+	    mycatfilterdir $j/gappa/$b'_why'.gappa
+	    echo "========== running Gappa =========="
+	    tmp=$(tempfile -s regtests_gappa)
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 1" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile gappa 2> $tmp	
+	    grep -v 'CPU time limit' $tmp >&2
+        fi
+	if grep RUNSIMPLIFY $1 ; then
+	    echo "========== generation of Simplify VC output =========="
+	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile simplify/$b'_why'.sx	
+	    mycatfilterdir $j/simplify/$b'_why'.sx
+	    echo "========== running Simplify =========="
+	    tmp=$(tempfile -s regtests_simplify)
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 1" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile simplify 2> $tmp	
+	    grep -v 'CPU time limit' $tmp >&2
+        fi
 	;;
   *)
 	echo "don't know what to do with $1"
