@@ -55,6 +55,12 @@ void min_sort(int t[], int n) {
   }
 }
 
+
+/* 
+Local Variables:
+compile-command: "frama-c -jessie minimum_sort.c"
+End:
+*/
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/minimum_sort.c"
 [jessie] Starting Jessie translation
@@ -5148,4 +5154,2220 @@ valid   :  44 ( 98%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   1 (  2%)
+failure :   0 (  0%)
+========== generation of Simplify VC output ==========
+why -simplify [...] why/minimum_sort.why
+========== file tests/c/minimum_sort.jessie/simplify/minimum_sort_why.sx ==========
+
+;; DO NOT EDIT BELOW THIS LINE
+
+(BG_PUSH (NEQ |@true| |@false|))
+
+(DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
+
+(BG_PUSH
+ ;; Why axiom bool_and_def
+ (FORALL (a b)
+ (IFF (EQ (bool_and a b) |@true|) (AND (EQ a |@true|) (EQ b |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom bool_or_def
+ (FORALL (a b)
+ (IFF (EQ (bool_or a b) |@true|) (OR (EQ a |@true|) (EQ b |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom bool_xor_def
+ (FORALL (a b) (IFF (EQ (bool_xor a b) |@true|) (NEQ a b))))
+
+(BG_PUSH
+ ;; Why axiom bool_not_def
+ (FORALL (a) (IFF (EQ (bool_not a) |@true|) (EQ a |@false|))))
+
+(BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x y) (EQ (ite |@true| x y) x)))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x y) (EQ (ite |@false| x y) y)))
+
+(BG_PUSH
+ ;; Why axiom lt_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y))))
+
+(BG_PUSH
+ ;; Why axiom le_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (le_int_bool x y) |@true|) (<= x y))))
+
+(BG_PUSH
+ ;; Why axiom gt_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (gt_int_bool x y) |@true|) (> x y))))
+
+(BG_PUSH
+ ;; Why axiom ge_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (ge_int_bool x y) |@true|) (>= x y))))
+
+(BG_PUSH
+ ;; Why axiom eq_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_int_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
+ ;; Why axiom abs_int_pos
+ (FORALL (x) (IMPLIES (>= x 0) (EQ (abs_int x) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_int_neg
+ (FORALL (x) (IMPLIES (<= x 0) (EQ (abs_int x) (- 0 x)))))
+
+(BG_PUSH
+ ;; Why axiom int_max_is_ge
+ (FORALL (x y) (AND (>= (int_max x y) x) (>= (int_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_max_is_some
+ (FORALL (x y) (OR (EQ (int_max x y) x) (EQ (int_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_min_is_le
+ (FORALL (x y) (AND (<= (int_min x y) x) (<= (int_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_min_is_some
+ (FORALL (x y) (OR (EQ (int_min x y) x) (EQ (int_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_zero
+ (EQ (real_of_int 0) real_constant_0_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_one
+ (EQ (real_of_int 1) real_constant_1_0e))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_add
+ (FORALL (x y)
+ (EQ (real_of_int (+ x y)) (real_add (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom real_of_int_sub
+ (FORALL (x y)
+ (EQ (real_of_int (- x y)) (real_sub (real_of_int x) (real_of_int y)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_down_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (AND (EQ (le_real (real_of_int (truncate_real_to_int x)) x) |@true|)
+ (EQ (lt_real x (real_of_int (+ (truncate_real_to_int x) 1))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom truncate_up_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (AND (EQ (lt_real (real_of_int (- (truncate_real_to_int x) 1)) x) |@true|)
+ (EQ (le_real x (real_of_int (truncate_real_to_int x))) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom lt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom le_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (le_real_bool x y) |@true|) (EQ (le_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom gt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (gt_real_bool x y) |@true|) (EQ (gt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom ge_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (ge_real_bool x y) |@true|) (EQ (ge_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom eq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_real_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_real_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
+ ;; Why axiom real_max_is_ge
+ (FORALL (x y)
+ (AND (EQ (ge_real (real_max x y) x) |@true|)
+ (EQ (ge_real (real_max x y) y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom real_max_is_some
+ (FORALL (x y) (OR (EQ (real_max x y) x) (EQ (real_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom real_min_is_le
+ (FORALL (x y)
+ (AND (EQ (le_real (real_min x y) x) |@true|)
+ (EQ (le_real (real_min x y) y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom real_min_is_some
+ (FORALL (x y) (OR (EQ (real_min x y) x) (EQ (real_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom sqr_real_def
+ (FORALL (x) (EQ (sqr_real x) (real_mul x x))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (ge_real (real_sqrt x) real_constant_0_0e) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom sqrt_sqr
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (sqr_real (real_sqrt x)) x))))
+
+(BG_PUSH
+ ;; Why axiom sqr_sqrt
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|)
+ (EQ (real_sqrt (real_mul x x)) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_real_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_real_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
+ (EQ (real_abs x) (real_neg x)))))
+
+(BG_PUSH
+ ;; Why axiom log_exp
+ (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom exp_log
+ (FORALL (x)
+ (IMPLIES (EQ (gt_real x real_constant_0_0e) |@true|) (EQ (exp (log x)) x))))
+
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
+
+(DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
+
+(DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
+
+(BG_PUSH
+ ;; Why axiom address_injective
+ (FORALL (p q) (IFF (EQ p q) (EQ (address p) (address q)))))
+
+(BG_PUSH
+ ;; Why axiom address_null
+ (EQ (address null) 0))
+
+(BG_PUSH
+ ;; Why axiom address_shift_lt
+ (FORALL (p i j)
+ (IFF (< (address (shift p i)) (address (shift p j))) (< i j))))
+
+(BG_PUSH
+ ;; Why axiom address_shift_le
+ (FORALL (p i j)
+ (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
+
+(BG_PUSH
+ ;; Why axiom shift_zero
+ (FORALL (p) (EQ (shift p 0) p)))
+
+(BG_PUSH
+ ;; Why axiom shift_shift
+ (FORALL (p i j) (EQ (shift (shift p i) j) (shift p (+ i j)))))
+
+(BG_PUSH
+ ;; Why axiom offset_max_shift
+ (FORALL (a p i) (EQ (offset_max a (shift p i)) (- (offset_max a p) i))))
+
+(BG_PUSH
+ ;; Why axiom offset_min_shift
+ (FORALL (a p i) (EQ (offset_min a (shift p i)) (- (offset_min a p) i))))
+
+(BG_PUSH
+ ;; Why axiom neq_shift
+ (FORALL (p i j) (IMPLIES (NEQ i j) (NEQ (shift p i) (shift p j))))
+
+ (FORALL (i j)
+ (IMPLIES (NEQ i j) (FORALL (p) (NEQ (shift p i) (shift p j))))))
+
+(BG_PUSH
+ ;; Why axiom null_not_valid
+ (FORALL (a) (NOT (valid a null))))
+
+(BG_PUSH
+ ;; Why axiom null_pointer
+ (FORALL (a)
+ (AND (>= (offset_min a null) 0) (<= (offset_max a null) (- 0 2)))))
+
+(BG_PUSH
+ ;; Why axiom eq_pointer_bool_def
+ (FORALL (p1 p2) (IFF (EQ (eq_pointer_bool p1 p2) |@true|) (EQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom neq_pointer_bool_def
+ (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift_right
+ (FORALL (p q i) (IMPLIES (same_block p q) (same_block p (shift q i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (FORALL (i) (same_block p (shift q i))))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift_left
+ (FORALL (p q i) (IMPLIES (same_block q p) (same_block (shift q i) p)))
+
+ (FORALL (p q)
+ (IMPLIES (same_block q p) (FORALL (i) (same_block (shift q i) p)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift
+ (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_self
+ (FORALL (p) (EQ (sub_pointer p p) 0)))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_zero
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_left
+ (FORALL (p q i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_right
+ (FORALL (p q i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
+
+(BG_PUSH
+ ;; Why axiom select_store_eq
+ (FORALL (m p1 p2 a)
+ (IMPLIES (EQ p1 p2) (EQ (select (|why__store| m p1 a) p2) a)))
+
+ (FORALL (p1 p2)
+ (IMPLIES (EQ p1 p2) (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) a)))))
+
+(BG_PUSH
+ ;; Why axiom select_store_neq
+ (FORALL (m p1 p2 a)
+ (IMPLIES (NEQ p1 p2) (EQ (select (|why__store| m p1 a) p2) (select m p2))))
+
+ (FORALL (p1 p2)
+ (IMPLIES (NEQ p1 p2)
+ (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) (select m p2))))))
+
+(DEFPRED (pset_disjoint ps1 ps2)
+  (FORALL (p)
+  (NOT (AND (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|)))))
+
+(DEFPRED (pset_included ps1 ps2)
+  (FORALL (p)
+  (IMPLIES (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_self
+ (FORALL (ps) (pset_included ps ps)))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range
+ (FORALL (ps a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (pset_included (pset_range ps a b) (pset_range ps c d))))
+
+ (FORALL (a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (FORALL (ps) (pset_included (pset_range ps a b) (pset_range ps c d))))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range_all
+ (FORALL (ps a b c d) (pset_included (pset_range ps a b) (pset_all ps))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_empty
+ (FORALL (p) (NOT (EQ (in_pset p pset_empty) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_singleton
+ (FORALL (p q) (IFF (EQ (in_pset p (pset_singleton q)) |@true|) (EQ p q))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_deref
+ (FORALL (p m q)
+ (IFF (EQ (in_pset p (pset_deref m q)) |@true|)
+ (EXISTS (r) (AND (EQ (in_pset r q) |@true|) (EQ p (select m r)))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_all
+ (FORALL (p q)
+ (IFF (EQ (in_pset p (pset_all q)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range
+ (FORALL (p q a b)
+ (IFF (EQ (in_pset p (pset_range q a b)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= a i)
+ (AND (<= i b) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i))))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range_left
+ (FORALL (p q b)
+ (IFF (EQ (in_pset p (pset_range_left q b)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= i b) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i)))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range_right
+ (FORALL (p q a)
+ (IFF (EQ (in_pset p (pset_range_right q a)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= a i) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i)))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_union
+ (FORALL (p s1 s2)
+ (IFF (EQ (in_pset p (pset_union s1 s2)) |@true|)
+ (OR (EQ (in_pset p s1) |@true|) (EQ (in_pset p s2) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_empty
+ (FORALL (a) (EQ (valid_pset a pset_empty) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_singleton
+ (FORALL (a p)
+ (IFF (EQ (valid_pset a (pset_singleton p)) |@true|) (valid a p))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_deref
+ (FORALL (a m q)
+ (IFF (EQ (valid_pset a (pset_deref m q)) |@true|)
+ (FORALL (r p)
+ (IMPLIES (AND (EQ (in_pset r q) |@true|) (EQ p (select m r))) (valid a p))))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_range
+ (FORALL (a q c d)
+ (IFF (EQ (valid_pset a (pset_range q c d)) |@true|)
+ (FORALL (i r)
+ (IMPLIES (AND (EQ (in_pset r q) |@true|) (AND (<= c i) (<= i d)))
+ (valid a (shift r i)))))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_union
+ (FORALL (a s1 s2)
+ (IFF (EQ (valid_pset a (pset_union s1 s2)) |@true|)
+ (AND (EQ (valid_pset a s1) |@true|) (EQ (valid_pset a s2) |@true|)))))
+
+(DEFPRED (not_assigns a m1 m2 l)
+  (FORALL (p)
+  (IMPLIES (AND (valid a p) (NOT (EQ (in_pset p l) |@true|)))
+  (EQ (select m2 p) (select m1 p)))))
+
+(BG_PUSH
+ ;; Why axiom not_assigns_refl
+ (FORALL (a m l) (not_assigns a m m l)))
+
+(BG_PUSH
+ ;; Why axiom not_assigns_trans
+ (FORALL (a m1 m2 m3 l)
+ (IMPLIES (not_assigns a m1 m2 l)
+ (IMPLIES (not_assigns a m2 m3 l) (not_assigns a m1 m3 l))))
+
+ (FORALL (a m1 m2 l)
+ (IMPLIES (not_assigns a m1 m2 l)
+ (FORALL (m3) (IMPLIES (not_assigns a m2 m3 l) (not_assigns a m1 m3 l))))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift1
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (EQ (full_separated p (shift q i)) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (FORALL (i) (EQ (full_separated p (shift q i)) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift2
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (EQ (full_separated (shift q i) p) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (FORALL (i) (EQ (full_separated (shift q i) p) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift3
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (EQ (full_separated (shift q i) p) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (FORALL (i) (EQ (full_separated (shift q i) p) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift4
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (EQ (full_separated p (shift q i)) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (FORALL (i) (EQ (full_separated p (shift q i)) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom subtag_bool_def
+ (FORALL (t1 t2)
+ (IFF (EQ (subtag_bool t1 t2) |@true|) (EQ (subtag t1 t2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom subtag_refl
+ (FORALL (t) (EQ (subtag t t) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom subtag_parent
+ (FORALL (t1 t2 t3)
+ (IMPLIES (EQ (subtag t1 t2) |@true|)
+ (IMPLIES (EQ (parenttag t2 t3) |@true|) (EQ (subtag t1 t3) |@true|))))
+
+ (FORALL (t1 t2)
+ (IMPLIES (EQ (subtag t1 t2) |@true|)
+ (FORALL (t3)
+ (IMPLIES (EQ (parenttag t2 t3) |@true|) (EQ (subtag t1 t3) |@true|))))))
+
+(DEFPRED (instanceof a p t) (EQ (subtag (typeof a p) t) |@true|))
+
+(BG_PUSH
+ ;; Why axiom downcast_instanceof
+ (FORALL (a p s) (IMPLIES (instanceof a p s) (EQ (downcast a p s) p))))
+
+(BG_PUSH
+ ;; Why axiom bottom_tag_axiom
+ (FORALL (t) (EQ (subtag t bottom_tag) |@true|)))
+
+(DEFPRED (root_tag t) (EQ (parenttag t bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom root_subtag
+ (FORALL (a b c)
+ (IMPLIES (root_tag a)
+ (IMPLIES (root_tag b)
+ (IMPLIES (NEQ a b)
+ (IMPLIES (EQ (subtag c a) |@true|) (NOT (EQ (subtag c b) |@true|)))))))
+
+ (FORALL (a)
+ (IMPLIES (root_tag a)
+ (FORALL (b)
+ (IMPLIES (root_tag b)
+ (IMPLIES (NEQ a b)
+ (FORALL (c)
+ (IMPLIES (EQ (subtag c a) |@true|) (NOT (EQ (subtag c b) |@true|))))))))))
+
+(DEFPRED (fully_packed tag_table mutable this)
+  (EQ (select mutable this) (typeof tag_table this)))
+
+(BG_PUSH
+ ;; Why axiom bw_and_not_null
+ (FORALL (a b) (IMPLIES (NEQ (bw_and a b) 0) (AND (NEQ a 0) (NEQ b 0)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_left_positive_returns_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (lsl a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_left_positive_monotone
+ (FORALL (a1 a2 b)
+ (IMPLIES (AND (<= 0 a1) (AND (<= a1 a2) (<= 0 b)))
+ (<= (lsl a1 b) (lsl a2 b)))))
+
+(BG_PUSH
+ ;; Why axiom lsr_left_positive_returns_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (lsr a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsr_left_positive_decreases
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (lsr a b) a))))
+
+(BG_PUSH
+ ;; Why axiom asr_positive_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (asr a b)))))
+
+(BG_PUSH
+ ;; Why axiom asr_decreases_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (asr a b) a))))
+
+(BG_PUSH
+ ;; Why axiom asr_lsr_same_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (asr a b) (lsr a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_of_lsr_decreases_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (lsl (lsr a b) b) a))))
+
+(BG_PUSH
+ ;; Why axiom lsr_of_lsl_identity_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (lsr (lsl a b) b) a))))
+
+(DEFPRED (alloc_fresh a p n)
+  (FORALL (i) (IMPLIES (AND (<= 0 i) (< i n)) (NOT (valid a (shift p i))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_offset_min
+ (FORALL (a1 a2)
+ (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
+ (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_min a1 p) (offset_min a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_offset_max
+ (FORALL (a1 a2)
+ (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
+ (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_not_assigns_empty
+ (FORALL (a1 a2 m1 m2 l p n)
+ (IMPLIES
+ (AND (EQ (alloc_extends a1 a2) |@true|)
+ (AND (alloc_fresh a1 p n)
+ (AND (not_assigns a2 m1 m2 l)
+ (pset_included l (pset_all (pset_singleton p))))))
+ (not_assigns a1 m1 m2 pset_empty))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_except_offset_min
+ (FORALL (a1 a2 l)
+ (IMPLIES (EQ (alloc_extends_except a1 a2 l) |@true|)
+ (FORALL (p)
+ (IMPLIES (AND (valid a1 p) (NOT (EQ (in_pset p l) |@true|)))
+ (EQ (offset_min a1 p) (offset_min a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_except_offset_max
+ (FORALL (a1 a2 l)
+ (IMPLIES (EQ (alloc_extends_except a1 a2 l) |@true|)
+ (FORALL (p)
+ (IMPLIES (AND (valid a1 p) (NOT (EQ (in_pset p l) |@true|)))
+ (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(DEFPRED (Swap a i j int_P_int_M_a_1_at_L2 int_P_int_M_a_1_at_L1)
+  (AND
+  (EQ (select int_P_int_M_a_1_at_L1 (shift a i))
+  (select int_P_int_M_a_1_at_L2 (shift a j)))
+  (AND
+  (EQ (select int_P_int_M_a_1_at_L1 (shift a j))
+  (select int_P_int_M_a_1_at_L2 (shift a i)))
+  (FORALL (k)
+  (IMPLIES (AND (NEQ k i) (NEQ k j))
+  (EQ (select int_P_int_M_a_1_at_L1 (shift a k))
+  (select int_P_int_M_a_1_at_L2 (shift a k))))))))
+
+(BG_PUSH
+ ;; Why axiom Permut_inversion
+ (FORALL (aux_1 aux_2 aux_3 aux_4 aux_5)
+ (IMPLIES (EQ (Permut aux_1 aux_2 aux_3 aux_4 aux_5) |@true|)
+ (OR
+ (EXISTS (int_P_int_M_a_0_2_at_L)
+ (EXISTS (a_1)
+ (EXISTS (l_0)
+ (EXISTS (h_0)
+ (AND (EQ aux_1 a_1)
+ (AND (EQ aux_2 l_0)
+ (AND (EQ aux_3 h_0)
+ (AND (EQ aux_4 int_P_int_M_a_0_2_at_L) (EQ aux_5 int_P_int_M_a_0_2_at_L)))))))))
+ (OR
+ (EXISTS (int_P_int_M_a_0_2_at_L2)
+ (EXISTS (int_P_int_M_a_0_2_at_L1)
+ (EXISTS (a_2)
+ (EXISTS (l_1)
+ (EXISTS (h_1)
+ (AND
+ (EQ (Permut
+ a_2 l_1 h_1 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1) |@true|)
+ (AND (EQ aux_1 a_2)
+ (AND (EQ aux_2 l_1)
+ (AND (EQ aux_3 h_1)
+ (AND (EQ aux_4 int_P_int_M_a_0_2_at_L1) (EQ aux_5 int_P_int_M_a_0_2_at_L2)))))))))))
+ (OR
+ (EXISTS (int_P_int_M_a_0_2_at_L3)
+ (EXISTS (int_P_int_M_a_0_2_at_L2)
+ (EXISTS (int_P_int_M_a_0_2_at_L1)
+ (EXISTS (a_3)
+ (EXISTS (l_2)
+ (EXISTS (h_2)
+ (AND
+ (AND
+ (EQ (Permut
+ a_3 l_2 h_2 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1) |@true|)
+ (EQ (Permut
+ a_3 l_2 h_2 int_P_int_M_a_0_2_at_L3 int_P_int_M_a_0_2_at_L2) |@true|))
+ (AND (EQ aux_1 a_3)
+ (AND (EQ aux_2 l_2)
+ (AND (EQ aux_3 h_2)
+ (AND (EQ aux_4 int_P_int_M_a_0_2_at_L3) (EQ aux_5 int_P_int_M_a_0_2_at_L1))))))))))))
+ (EXISTS (int_P_int_M_a_0_2_at_L2)
+ (EXISTS (int_P_int_M_a_0_2_at_L1)
+ (EXISTS (a_4)
+ (EXISTS (l_3)
+ (EXISTS (h_3)
+ (EXISTS (i_0_0)
+ (EXISTS (j_0_0)
+ (AND
+ (AND (<= l_3 i_0_0)
+ (AND (<= i_0_0 h_3)
+ (AND (<= l_3 j_0_0)
+ (AND (<= j_0_0 h_3)
+ (Swap a_4 i_0_0 j_0_0 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1)))))
+ (AND (EQ aux_1 a_4)
+ (AND (EQ aux_2 l_3)
+ (AND (EQ aux_3 h_3)
+ (AND (EQ aux_4 int_P_int_M_a_0_2_at_L2) (EQ aux_5 int_P_int_M_a_0_2_at_L1)))))))))))))))))))
+
+(BG_PUSH
+ ;; Why axiom Permut_refl
+ (FORALL (int_P_int_M_a_0_2_at_L a_1 l_0 h_0)
+ (EQ (Permut
+ a_1 l_0 h_0 int_P_int_M_a_0_2_at_L int_P_int_M_a_0_2_at_L) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom Permut_sym
+ (FORALL (int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1 a_2 l_1 h_1)
+ (IMPLIES
+ (EQ (Permut
+ a_2 l_1 h_1 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1) |@true|)
+ (EQ (Permut
+ a_2 l_1 h_1 int_P_int_M_a_0_2_at_L1 int_P_int_M_a_0_2_at_L2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom Permut_trans
+ (FORALL (int_P_int_M_a_0_2_at_L3 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1 a_3 l_2 h_2)
+ (IMPLIES
+ (AND
+ (EQ (Permut
+ a_3 l_2 h_2 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1) |@true|)
+ (EQ (Permut
+ a_3 l_2 h_2 int_P_int_M_a_0_2_at_L3 int_P_int_M_a_0_2_at_L2) |@true|))
+ (EQ (Permut
+ a_3 l_2 h_2 int_P_int_M_a_0_2_at_L3 int_P_int_M_a_0_2_at_L1) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom Permut_swap
+ (FORALL (int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1 a_4 l_3 h_3 i_0_0 j_0_0)
+ (IMPLIES
+ (AND (<= l_3 i_0_0)
+ (AND (<= i_0_0 h_3)
+ (AND (<= l_3 j_0_0)
+ (AND (<= j_0_0 h_3)
+ (Swap a_4 i_0_0 j_0_0 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1)))))
+ (EQ (Permut
+ a_4 l_3 h_3 int_P_int_M_a_0_2_at_L2 int_P_int_M_a_0_2_at_L1) |@true|))))
+
+(DEFPRED (Sorted a_5 l_4 h_4 int_P_int_M_a_5_3_at_L)
+  (FORALL (i_1)
+  (IMPLIES (AND (<= l_4 i_1) (< i_1 h_4))
+  (<= (select int_P_int_M_a_5_3_at_L (shift a_5 i_1)) (select
+                                                      int_P_int_M_a_5_3_at_L 
+                                                      (shift a_5 (+ i_1 1)))))))
+
+(BG_PUSH
+ ;; Why axiom char_P_int
+ (EQ (int_of_tag char_P_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom char_P_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (char_P_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom char_P_parenttag_bottom
+ (EQ (parenttag char_P_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom char_P_tags
+ (FORALL (x char_P_tag_table) (instanceof char_P_tag_table x char_P_tag)))
+
+(BG_PUSH
+ ;; Why axiom int_P_int
+ (EQ (int_of_tag int_P_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom int_P_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (int_P_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom int_P_parenttag_bottom
+ (EQ (parenttag int_P_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom int_P_tags
+ (FORALL (x int_P_tag_table) (instanceof int_P_tag_table x int_P_tag)))
+
+(DEFPRED (left_valid_struct_char_P p a char_P_alloc_table)
+  (<= (offset_min char_P_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_int_P p a int_P_alloc_table)
+  (<= (offset_min int_P_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_void_P p a void_P_alloc_table)
+  (<= (offset_min void_P_alloc_table p) a))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_char_P_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (char_P_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_int_P_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (int_P_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_void_P_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (void_P_of_pointer_address p)))))
+
+(DEFPRED (right_valid_struct_char_P p b char_P_alloc_table)
+  (>= (offset_max char_P_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_int_P p b int_P_alloc_table)
+  (>= (offset_max int_P_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_void_P p b void_P_alloc_table)
+  (>= (offset_max void_P_alloc_table p) b))
+
+(DEFPRED (strict_valid_root_char_P p a b char_P_alloc_table)
+  (AND (EQ (offset_min char_P_alloc_table p) a)
+  (EQ (offset_max char_P_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_int_P p a b int_P_alloc_table)
+  (AND (EQ (offset_min int_P_alloc_table p) a)
+  (EQ (offset_max int_P_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_void_P p a b void_P_alloc_table)
+  (AND (EQ (offset_min void_P_alloc_table p) a)
+  (EQ (offset_max void_P_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_char_P p a b char_P_alloc_table)
+  (AND (EQ (offset_min char_P_alloc_table p) a)
+  (EQ (offset_max char_P_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_int_P p a b int_P_alloc_table)
+  (AND (EQ (offset_min int_P_alloc_table p) a)
+  (EQ (offset_max int_P_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_void_P p a b void_P_alloc_table)
+  (AND (EQ (offset_min void_P_alloc_table p) a)
+  (EQ (offset_max void_P_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_char_P p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_int_P p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_void_P p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_root_char_P p a b char_P_alloc_table)
+  (AND (<= (offset_min char_P_alloc_table p) a)
+  (>= (offset_max char_P_alloc_table p) b)))
+
+(DEFPRED (valid_root_int_P p a b int_P_alloc_table)
+  (AND (<= (offset_min int_P_alloc_table p) a)
+  (>= (offset_max int_P_alloc_table p) b)))
+
+(DEFPRED (valid_root_void_P p a b void_P_alloc_table)
+  (AND (<= (offset_min void_P_alloc_table p) a)
+  (>= (offset_max void_P_alloc_table p) b)))
+
+(DEFPRED (valid_struct_char_P p a b char_P_alloc_table)
+  (AND (<= (offset_min char_P_alloc_table p) a)
+  (>= (offset_max char_P_alloc_table p) b)))
+
+(DEFPRED (valid_struct_int_P p a b int_P_alloc_table)
+  (AND (<= (offset_min int_P_alloc_table p) a)
+  (>= (offset_max int_P_alloc_table p) b)))
+
+(DEFPRED (valid_struct_void_P p a b void_P_alloc_table)
+  (AND (<= (offset_min void_P_alloc_table p) a)
+  (>= (offset_max void_P_alloc_table p) b)))
+
+(BG_PUSH
+ ;; Why axiom void_P_int
+ (EQ (int_of_tag void_P_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom void_P_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (void_P_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom void_P_parenttag_bottom
+ (EQ (parenttag void_P_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom void_P_tags
+ (FORALL (x void_P_tag_table) (instanceof void_P_tag_table x void_P_tag)))
+
+;; min_sort_ensures_default_po_1, File "HOME/tests/c/minimum_sort.c", line 25, characters 21-27
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0) (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (<= 0 i_0_1))))))))
+
+;; min_sort_ensures_default_po_2, File "HOME/tests/c/minimum_sort.c", line 25, characters 26-31
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0) (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (< i_0_1 n))))))))
+
+;; min_sort_ensures_default_po_3, File "HOME/tests/c/minimum_sort.c", line 38, characters 23-28
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (< i_0_1_0 j_0_1))))))))))))))))))))
+
+;; min_sort_ensures_default_po_4, File "HOME/tests/c/minimum_sort.c", line 38, characters 32-39
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (<= i_0_1_0 mi))))))))))))))))))))
+
+;; min_sort_ensures_default_po_5, File "HOME/tests/c/minimum_sort.c", line 38, characters 37-43
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (< mi n))))))))))))))))))))
+
+;; min_sort_ensures_default_po_6, File "HOME/tests/c/minimum_sort.c", line 38, characters 23-28
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< i_0_1_0 j_0_1_1))))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_7, File "HOME/tests/c/minimum_sort.c", line 38, characters 32-39
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= i_0_1_0 mi1))))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_8, File "HOME/tests/c/minimum_sort.c", line 38, characters 37-43
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< mi1 n))))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_9, File "HOME/tests/c/minimum_sort.c", line 38, characters 23-28
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (>= result0 mv0)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< i_0_1_0 j_0_1_1))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_10, File "HOME/tests/c/minimum_sort.c", line 38, characters 32-39
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (>= result0 mv0)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= i_0_1_0 mi0))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_11, File "HOME/tests/c/minimum_sort.c", line 38, characters 37-43
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (>= result0 mv0)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< mi0 n))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_12, File "HOME/tests/c/minimum_sort.c", line 25, characters 21-27
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_0 int_P_int_M_t_0_5)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5 int_P_int_M_t_0_5_0 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 i_0_1_1))))))))))))))))))))))))))))
+
+;; min_sort_ensures_default_po_13, File "HOME/tests/c/minimum_sort.c", line 25, characters 26-31
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_0 int_P_int_M_t_0_5)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5 int_P_int_M_t_0_5_0 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< i_0_1_1 n))))))))))))))))))))))))))))
+
+;; min_sort_ensures_permutation_po_1, File "HOME/tests/c/minimum_sort.c", line 19, characters 14-39
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (<= n 0)
+(EQ (Permut t_0 0 (- n 1) int_P_int_M_t_0_5 int_P_int_M_t_0_5) |@true|)))))))
+
+;; min_sort_ensures_permutation_po_2, File "HOME/tests/c/minimum_sort.c", line 32, characters 22-47
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(EQ (Permut t_0 0 (- n 1) int_P_int_M_t_0_5 int_P_int_M_t_0_5) |@true|)))))))))
+
+;; min_sort_ensures_permutation_po_3, File "HOME/tests/c/minimum_sort.c", line 32, characters 22-47
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (EQ (Permut
+         t_0 0 (- n 1) int_P_int_M_t_0_5_0 int_P_int_M_t_0_5) |@true|)
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES (EQ (Permut
+         t_0 0 (- n 1) int_P_int_M_t_0_5_0 int_P_int_M_t_0_5) |@true|)
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(FORALL (int_P_int_M_t_0_5_1)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_1 int_P_int_M_t_0_5_0)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5_0 int_P_int_M_t_0_5_1 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1)
+(IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
+(EQ (Permut t_0 0 (- n 1) int_P_int_M_t_0_5_1 int_P_int_M_t_0_5) |@true|)))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_1, File "HOME/tests/c/minimum_sort.c", line 17, characters 14-29
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (<= n 0) (Sorted t_0 0 (- n 1) int_P_int_M_t_0_5)))))))
+
+;; min_sort_ensures_sorted_po_2, File "HOME/tests/c/minimum_sort.c", line 28, characters 8-21
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0) (Sorted t_0 0 i_0_1 int_P_int_M_t_0_5)))))))))
+
+;; min_sort_ensures_sorted_po_3, File "HOME/tests/c/minimum_sort.c", line 29, characters 8-86
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (k1 k2)
+(IMPLIES (AND (<= 0 k1) (AND (< k1 i_0_1) (AND (<= i_0_1 k2) (< k2 n))))
+(<= (select int_P_int_M_t_0_5 (shift t_0 k1)) (select
+                                              int_P_int_M_t_0_5 (shift
+                                                                t_0 k2)))))))))))))
+
+;; min_sort_ensures_sorted_po_4, File "HOME/tests/c/minimum_sort.c", line 41, characters 11-22
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(EQ mv (select int_P_int_M_t_0_5_0 (shift t_0 mi)))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_5, File "HOME/tests/c/minimum_sort.c", line 42, characters 11-57
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (k_0)
+(IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1))
+(>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv)))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_6, File "HOME/tests/c/minimum_sort.c", line 41, characters 11-22
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (EQ mv0 (select int_P_int_M_t_0_5_0 (shift t_0 mi0)))
+         (FORALL (k_0)
+         (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_0))
+         (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5_0 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5_0 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1)
+(IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1))
+(EQ mv1 (select int_P_int_M_t_0_5_0 (shift t_0 mi1))))))))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_7, File "HOME/tests/c/minimum_sort.c", line 42, characters 11-57
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (EQ mv0 (select int_P_int_M_t_0_5_0 (shift t_0 mi0)))
+         (FORALL (k_0)
+         (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_0))
+         (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5_0 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5_0 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1)
+(IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1))
+(FORALL (k_0)
+(IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_1))
+(>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv1))))))))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_8, File "HOME/tests/c/minimum_sort.c", line 42, characters 11-57
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (EQ mv0 (select int_P_int_M_t_0_5_0 (shift t_0 mi0)))
+         (FORALL (k_0)
+         (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_0))
+         (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5_0 (shift t_0 j_0_1_0)))
+(IMPLIES (>= result0 mv0)
+(FORALL (j_0_1_1)
+(IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1))
+(FORALL (k_0)
+(IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_1))
+(>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_9, File "HOME/tests/c/minimum_sort.c", line 28, characters 8-21
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (EQ mv0 (select int_P_int_M_t_0_5_0 (shift t_0 mi0)))
+         (FORALL (k_0)
+         (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_0))
+         (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(FORALL (int_P_int_M_t_0_5_1)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_1 int_P_int_M_t_0_5_0)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5_0 int_P_int_M_t_0_5_1 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1)
+(IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
+(Sorted t_0 0 i_0_1_1 int_P_int_M_t_0_5_1)))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_10, File "HOME/tests/c/minimum_sort.c", line 29, characters 8-86
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5_0 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES (AND (EQ mv0 (select int_P_int_M_t_0_5_0 (shift t_0 mi0)))
+         (FORALL (k_0)
+         (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_0))
+         (>= (select int_P_int_M_t_0_5_0 (shift t_0 k_0)) mv0))))
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(FORALL (int_P_int_M_t_0_5_1)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_1 int_P_int_M_t_0_5_0)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5_0 int_P_int_M_t_0_5_1 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1)
+(IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
+(FORALL (k1 k2)
+(IMPLIES (AND (<= 0 k1) (AND (< k1 i_0_1_1) (AND (<= i_0_1_1 k2) (< k2 n))))
+(<= (select int_P_int_M_t_0_5_1 (shift t_0 k1)) (select
+                                                int_P_int_M_t_0_5_1 (shift
+                                                                    t_0 k2)))))))))))))))))))))))))))))))))))
+
+;; min_sort_ensures_sorted_po_11, File "HOME/tests/c/minimum_sort.c", line 17, characters 14-29
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Sorted t_0 0 i_0_1_0 int_P_int_M_t_0_5_0)
+         (FORALL (k1 k2)
+         (IMPLIES
+         (AND (<= 0 k1) (AND (< k1 i_0_1_0) (AND (<= i_0_1_0 k2) (< k2 n))))
+         (<= (select int_P_int_M_t_0_5_0 (shift t_0 k1)) (select
+                                                         int_P_int_M_t_0_5_0 
+                                                         (shift t_0 k2))))))
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (>= i_0_1_0 (- n 1)) (Sorted t_0 0 (- n 1) int_P_int_M_t_0_5_0)))))))))))))
+
+;; min_sort_safety_po_1, File "HOME/tests/c/minimum_sort.c", line 37, characters 4-6
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0))))))))))))
+
+;; min_sort_safety_po_2, File "HOME/tests/c/minimum_sort.c", line 37, characters 4-6
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))))))))))))
+
+;; min_sort_safety_po_3, File "HOME/tests/c/minimum_sort.c", line 49, characters 6-8
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n) (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)))))))))))))))))))))))))))
+
+;; min_sort_safety_po_4, File "HOME/tests/c/minimum_sort.c", line 49, characters 6-8
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n) (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0))))))))))))))))))))))))))))
+
+;; min_sort_safety_po_5, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)
+         (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)
+         (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= 0 (- n j_0_1_0))))))))))))))))))))))))))))))))))))))))))
+
+;; min_sort_safety_po_6, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)
+         (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (< result0 mv0)
+(FORALL (mi1)
+(IMPLIES (EQ mi1 j_0_1_0)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)
+         (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result1)
+(IMPLIES (EQ result1 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(FORALL (mv1)
+(IMPLIES (EQ mv1 result1)
+(FORALL (j_0_1_1)
+(IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< (- n j_0_1_1) (- n j_0_1_0))))))))))))))))))))))))))))))))))))))))))
+
+;; min_sort_safety_po_7, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)
+         (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (>= result0 mv0)
+(FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= 0 (- n j_0_1_0)))))))))))))))))))))))))))))))))))
+
+;; min_sort_safety_po_8, File "HOME/tests/c/minimum_sort.c", line 46, characters 21-24
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(FORALL (mv0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (< j_0_1_0 n)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) j_0_1_0)
+         (<= j_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_0_5 (shift t_0 j_0_1_0)))
+(IMPLIES (>= result0 mv0)
+(FORALL (j_0_1_1)
+(IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< (- n j_0_1_1) (- n j_0_1_0)))))))))))))))))))))))))))))))))))
+
+;; min_sort_safety_po_9, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 173, characters 23-41
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(>= (offset_max int_P_t_0_5_alloc_table t_0) i_0_1_0)))))))))))))))))))))))))))
+
+;; min_sort_safety_po_10, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 173, characters 23-41
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n) (<= (offset_min int_P_t_0_5_alloc_table t_0) mi0)))))))))))))))))))))))))))
+
+;; min_sort_safety_po_11, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 173, characters 23-41
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n) (>= (offset_max int_P_t_0_5_alloc_table t_0) mi0)))))))))))))))))))))))))))
+
+;; min_sort_safety_po_12, File "HOME/tests/c/minimum_sort.c", line 33, characters 19-22
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (AND (>= (offset_max int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) mi0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) mi0))))
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_0 int_P_int_M_t_0_5)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5 int_P_int_M_t_0_5_0 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 (- n i_0_1_0)))))))))))))))))))))))))))))))))
+
+;; min_sort_safety_po_13, File "HOME/tests/c/minimum_sort.c", line 33, characters 19-22
+(FORALL (t_0)
+(FORALL (n)
+(FORALL (int_P_t_0_5_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) 0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) (- n 1)))
+(IMPLIES (> n 0)
+(FORALL (i_0_1)
+(IMPLIES (EQ i_0_1 0)
+(FORALL (i_0_1_0)
+(FORALL (int_P_int_M_t_0_5)
+(IMPLIES TRUE
+(IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
+(IMPLIES (< i_0_1_0 (- n 1))
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (<= i_0_1_0 (offset_max int_P_t_0_5_alloc_table t_0)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_0_5 (shift t_0 i_0_1_0)))
+(FORALL (mv)
+(IMPLIES (EQ mv result)
+(FORALL (mi)
+(IMPLIES (EQ mi i_0_1_0)
+(FORALL (j_0_1)
+(IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
+(FORALL (j_0_1_0)
+(FORALL (mi0)
+(IMPLIES TRUE
+(IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
+(IMPLIES (>= j_0_1_0 n)
+(IMPLIES (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (AND (>= (offset_max int_P_t_0_5_alloc_table t_0) i_0_1_0)
+         (AND (<= (offset_min int_P_t_0_5_alloc_table t_0) mi0)
+         (>= (offset_max int_P_t_0_5_alloc_table t_0) mi0))))
+(FORALL (int_P_int_M_t_0_5_0)
+(IMPLIES (AND (Swap t_0 i_0_1_0 mi0 int_P_int_M_t_0_5_0 int_P_int_M_t_0_5)
+         (not_assigns
+         int_P_t_0_5_alloc_table int_P_int_M_t_0_5 int_P_int_M_t_0_5_0 
+         (pset_union
+         (pset_range (pset_singleton t_0) mi0 mi0) (pset_range
+                                                   (pset_singleton t_0) i_0_1_0 i_0_1_0))))
+(FORALL (i_0_1_1)
+(IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< (- n i_0_1_1) (- n i_0_1_0)))))))))))))))))))))))))))))))))
+
+;; swap_ensures_default_po_1, File "HOME/tests/c/minimum_sort.c", line 7, characters 12-33
+(FORALL (t)
+(FORALL (i_0)
+(FORALL (j_0)
+(FORALL (int_P_t_4_alloc_table)
+(FORALL (int_P_int_M_t_4)
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (AND (>= (offset_max int_P_t_4_alloc_table t) i_0)
+         (AND (<= (offset_min int_P_t_4_alloc_table t) j_0)
+         (>= (offset_max int_P_t_4_alloc_table t) j_0))))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_4 (shift t i_0)))
+(FORALL (tmp)
+(IMPLIES (EQ tmp result)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_4 (shift t j_0)))
+(FORALL (int_P_int_M_t_4_0)
+(IMPLIES (EQ int_P_int_M_t_4_0
+         (|why__store| int_P_int_M_t_4 (shift t i_0) result0))
+(FORALL (int_P_int_M_t_4_1)
+(IMPLIES (EQ int_P_int_M_t_4_1
+         (|why__store| int_P_int_M_t_4_0 (shift t j_0) tmp))
+(Swap t i_0 j_0 int_P_int_M_t_4_1 int_P_int_M_t_4)))))))))))))))))
+
+;; swap_ensures_default_po_2, File "HOME/tests/c/minimum_sort.c", line 9, characters 5-9
+(FORALL (t)
+(FORALL (i_0)
+(FORALL (j_0)
+(FORALL (int_P_t_4_alloc_table)
+(FORALL (int_P_int_M_t_4)
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (AND (>= (offset_max int_P_t_4_alloc_table t) i_0)
+         (AND (<= (offset_min int_P_t_4_alloc_table t) j_0)
+         (>= (offset_max int_P_t_4_alloc_table t) j_0))))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_4 (shift t i_0)))
+(FORALL (tmp)
+(IMPLIES (EQ tmp result)
+(FORALL (result0)
+(IMPLIES (EQ result0 (select int_P_int_M_t_4 (shift t j_0)))
+(FORALL (int_P_int_M_t_4_0)
+(IMPLIES (EQ int_P_int_M_t_4_0
+         (|why__store| int_P_int_M_t_4 (shift t i_0) result0))
+(FORALL (int_P_int_M_t_4_1)
+(IMPLIES (EQ int_P_int_M_t_4_1
+         (|why__store| int_P_int_M_t_4_0 (shift t j_0) tmp))
+(not_assigns
+int_P_t_4_alloc_table int_P_int_M_t_4 int_P_int_M_t_4_1 (pset_union
+                                                        (pset_range
+                                                        (pset_singleton t) j_0 j_0) 
+                                                        (pset_range
+                                                        (pset_singleton t) i_0 i_0)))))))))))))))))))
+
+;; swap_safety_po_1, File "HOME/tests/c/minimum_sort.c", line 10, characters 2-5
+(FORALL (t)
+(FORALL (i_0)
+(FORALL (j_0)
+(FORALL (int_P_t_4_alloc_table)
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (AND (>= (offset_max int_P_t_4_alloc_table t) i_0)
+         (AND (<= (offset_min int_P_t_4_alloc_table t) j_0)
+         (>= (offset_max int_P_t_4_alloc_table t) j_0))))
+(<= i_0 (offset_max int_P_t_4_alloc_table t)))))))
+
+;; swap_safety_po_2, File "HOME/tests/c/minimum_sort.c", line 11, characters 2-3
+(FORALL (t)
+(FORALL (i_0)
+(FORALL (j_0)
+(FORALL (int_P_t_4_alloc_table)
+(FORALL (int_P_int_M_t_4)
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (AND (>= (offset_max int_P_t_4_alloc_table t) i_0)
+         (AND (<= (offset_min int_P_t_4_alloc_table t) j_0)
+         (>= (offset_max int_P_t_4_alloc_table t) j_0))))
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (<= i_0 (offset_max int_P_t_4_alloc_table t)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_4 (shift t i_0)))
+(FORALL (tmp)
+(IMPLIES (EQ tmp result) (<= (offset_min int_P_t_4_alloc_table t) j_0))))))))))))
+
+;; swap_safety_po_3, File "HOME/tests/c/minimum_sort.c", line 11, characters 2-3
+(FORALL (t)
+(FORALL (i_0)
+(FORALL (j_0)
+(FORALL (int_P_t_4_alloc_table)
+(FORALL (int_P_int_M_t_4)
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (AND (>= (offset_max int_P_t_4_alloc_table t) i_0)
+         (AND (<= (offset_min int_P_t_4_alloc_table t) j_0)
+         (>= (offset_max int_P_t_4_alloc_table t) j_0))))
+(IMPLIES (AND (<= (offset_min int_P_t_4_alloc_table t) i_0)
+         (<= i_0 (offset_max int_P_t_4_alloc_table t)))
+(FORALL (result)
+(IMPLIES (EQ result (select int_P_int_M_t_4 (shift t i_0)))
+(FORALL (tmp)
+(IMPLIES (EQ tmp result) (<= j_0 (offset_max int_P_t_4_alloc_table t)))))))))))))
+
+========== running Simplify ==========
+Running Simplify on proof obligations
+(. = valid * = invalid ? = unknown # = timeout ! = failure)
+simplify/minimum_sort_why.sx  : ...............?............................. (44/0/1/0/0)
+total   :  45
+valid   :  44 ( 98%)
+invalid :   0 (  0%)
+unknown :   1 (  2%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

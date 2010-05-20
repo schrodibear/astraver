@@ -100,6 +100,13 @@ case $1 in
 	tmp=$(tempfile -s regtests_ergo)
 	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile ergo 2> $tmp
 	grep -v 'CPU time limit' $tmp >&2
+	echo "========== generation of Simplify VC output =========="
+	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile simplify/$b'_why'.sx	
+	mycatfilterdir $j/simplify/$b'_why'.sx
+	echo "========== running Simplify =========="
+	tmp=$(tempfile -s regtests_simplify)
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 1" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $j -f $b.makefile simplify 2> $tmp	
+	grep -v 'CPU time limit' $tmp >&2
 	;;
   *)
 	echo "don't know what to do with $1"
