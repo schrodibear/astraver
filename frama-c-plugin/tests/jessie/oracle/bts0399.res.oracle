@@ -67,11 +67,11 @@ behavior default:
    
    {  (C_7 : (y_0 = 0));
       
-      ( requires (C_9 : (x_0 > 0));
+      ( requires (C_10 : (x_0 > 0));
         
         behavior default:
           assigns y_0;
-          ensures (C_10 : (y_0 == x_0));
+          ensures (C_9 : (y_0 == x_0));
         { (C_8 : (y_0 = x_0))
         });
       

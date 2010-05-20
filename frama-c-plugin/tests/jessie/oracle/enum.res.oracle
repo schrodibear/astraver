@@ -71,12 +71,12 @@ behavior default:
 }
 
 unit h(enum___anonenum_color_1_P[..] t_0)
-  requires (C_12 : ((C_13 : (\offset_min(t_0) <= 0)) &&
-                     (C_14 : (\offset_max(t_0) >= 9))));
+  requires (C_13 : ((C_14 : (\offset_min(t_0) <= 0)) &&
+                     (C_15 : (\offset_max(t_0) >= 9))));
 behavior default:
-  ensures (C_15 : ((((t_0 + 2).enum___anonenum_color_1_M == 0) ||
-                     ((t_0 + 2).enum___anonenum_color_1_M == 1)) ||
-                    ((t_0 + 2).enum___anonenum_color_1_M == 2)));
+  ensures (C_12 : ((((\at(t_0,Old) + 2).enum___anonenum_color_1_M == 0) ||
+                     ((\at(t_0,Old) + 2).enum___anonenum_color_1_M == 1)) ||
+                    ((\at(t_0,Old) + 2).enum___anonenum_color_1_M == 2)));
 {  
    {  (C_11 : ((C_10 : (C_9 : (t_0 + 2)).enum___anonenum_color_1_M) = 
       (C_8 : (C_7 : (t_0 + 0)).enum___anonenum_color_1_M)));
@@ -86,10 +86,10 @@ behavior default:
 }
 
 unit enum_as_array_index(int_P[..] t)
-  requires (C_19 : ((C_20 : (\offset_min(t) <= 0)) &&
-                     (C_21 : (\offset_max(t) >= 2))));
+  requires (C_20 : ((C_21 : (\offset_min(t) <= 0)) &&
+                     (C_22 : (\offset_max(t) >= 2))));
 behavior default:
-  ensures (C_22 : ((t + 1).int_M == 0));
+  ensures (C_19 : ((\at(t,Old) + 1).int_M == 0));
 {  
    {  (C_18 : ((C_17 : (C_16 : (t + 1)).int_M) = 0));
       
@@ -642,7 +642,7 @@ parameter enum_as_array_index :
    int_P_t_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_t_2 writes int_P_int_M_t_2
     { (JC_45:
-      eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0))) }
+      eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t@, (1)))), (0))) }
 
 parameter enum_as_array_index_requires :
  t:int_P pointer ->
@@ -653,7 +653,7 @@ parameter enum_as_array_index_requires :
       and (JC_37: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))}
     unit reads int_P_int_M_t_2 writes int_P_int_M_t_2
     { (JC_45:
-      eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0))) }
+      eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t@, (1)))), (0))) }
 
 parameter f : tt:unit -> { } unit { (JC_6: eq_int((4), (4))) }
 
@@ -681,13 +681,13 @@ parameter h :
     writes enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
     { (JC_31:
       (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                            shift(t_0, (2)))),
+                                            shift(t_0@, (2)))),
        (0))
       or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                               shift(t_0, (2)))),
+                                               shift(t_0@, (2)))),
           (1))
          or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                                 shift(t_0, (2)))),
+                                                 shift(t_0@, (2)))),
             (2))))) }
 
 parameter h_requires :
@@ -705,13 +705,13 @@ parameter h_requires :
     writes enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
     { (JC_31:
       (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                            shift(t_0, (2)))),
+                                            shift(t_0@, (2)))),
        (0))
       or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                               shift(t_0, (2)))),
+                                               shift(t_0@, (2)))),
           (1))
          or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                                 shift(t_0, (2)))),
+                                                 shift(t_0@, (2)))),
             (2))))) }
 
 parameter int32_of_integer_ :
@@ -756,7 +756,7 @@ let enum_as_array_index_ensures_default =
        (((safe_upd_ int_P_int_M_t_2) jessie_29) jessie_26))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_44:
-    eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t, (1)))), (0))) }
+    eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t@, (1)))), (0))) }
 
 let enum_as_array_index_safety =
  fun (t : int_P pointer) (int_P_int_M_t_2 : (int_P, int32) memory ref) (int_P_t_2_alloc_table : int_P alloc_table) ->
@@ -849,13 +849,13 @@ let h_ensures_default =
        void); (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_30:
     (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                          shift(t_0, (2)))),
+                                          shift(t_0@, (2)))),
      (0))
     or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                             shift(t_0, (2)))),
+                                             shift(t_0@, (2)))),
         (1))
        or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
-                                               shift(t_0, (2)))),
+                                               shift(t_0@, (2)))),
           (2))))) }
 
 let h_safety =

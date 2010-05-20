@@ -38,14 +38,14 @@ tag void_P = {
 type void_P = [void_P]
 
 unit f(int_P[..] a, int32 len)
-  requires (C_10 : (((((C_14 : (\offset_min(a) <= 0)) &&
-                        (C_15 : (\offset_max(a) >= (len - 1)))) &&
-                       (C_16 : (len >= 0))) &&
-                      (C_17 : (len < 2147483647))) &&
-                     ((C_19 : (0 <= (len / 8))) &&
-                       (C_20 : ((len / 8) <= len)))));
+  requires (C_11 : (((((C_15 : (\offset_min(a) <= 0)) &&
+                        (C_16 : (\offset_max(a) >= (len - 1)))) &&
+                       (C_17 : (len >= 0))) &&
+                      (C_18 : (len < 2147483647))) &&
+                     ((C_20 : (0 <= (len / 8))) &&
+                       (C_21 : ((len / 8) <= len)))));
 behavior default:
-  ensures (C_21 : true);
+  ensures (C_10 : true);
 {  
    (var int32 i);
    

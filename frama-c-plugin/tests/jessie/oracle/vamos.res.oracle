@@ -88,9 +88,9 @@ axiomatic Reachable {
 }
 
 int32 process_kill(uint32 pid)
-  requires (C_45 : (list_length{Here}(ready_list) >= 0));
+  requires (C_46 : (list_length{Here}(ready_list) >= 0));
 behavior default:
-  ensures (C_46 : true);
+  ensures (C_45 : true);
 {  
    (var int32 found);
    

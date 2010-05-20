@@ -73,7 +73,7 @@ axiomatic CountBits {
 
 int32 count_bits(int32 x)
 behavior default:
-  ensures (C_15 : (\result == nbits(x)));
+  ensures (C_15 : (\result == nbits(\at(x,Old))));
 {  
    (var int32 d);
    
@@ -392,12 +392,12 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter count_bits :
  x_1:int32 ->
   { } int32
-  { (JC_6: eq_int(integer_of_int32(result), nbits(integer_of_int32(x_1)))) }
+  { (JC_6: eq_int(integer_of_int32(result), nbits(integer_of_int32(x_1@)))) }
 
 parameter count_bits_requires :
  x_1:int32 ->
   { } int32
-  { (JC_6: eq_int(integer_of_int32(result), nbits(integer_of_int32(x_1)))) }
+  { (JC_6: eq_int(integer_of_int32(result), nbits(integer_of_int32(x_1@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -480,7 +480,7 @@ let count_bits_ensures_default =
        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
       (return := !c); (raise Return) end))); absurd  end with Return ->
    !return end)))
-  { (JC_5: eq_int(integer_of_int32(result), nbits(integer_of_int32(x_1)))) }
+  { (JC_5: eq_int(integer_of_int32(result), nbits(integer_of_int32(x_1@)))) }
 
 let count_bits_safety =
  fun (x_1 : int32) ->

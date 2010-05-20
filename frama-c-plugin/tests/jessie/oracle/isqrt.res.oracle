@@ -431,11 +431,11 @@ behavior default:
       (if (x1 > 3) then (C_27 : (s = (C_26 : ((C_25 : (s + 1)) :> int32)))) else ());
       
       {  
-         (assert for default: (C_30 : (1 <= (2147483647 >>> s))));
+         (assert for default: (C_30 : (s < 32)));
          
          (assert for default: (C_29 : (s >= 0)));
          
-         (assert for default: (C_28 : (s < 32)));
+         (assert for default: (C_28 : (1 <= (2147483647 >>> s))));
          (C_33 : (g0 = (C_32 : ((C_31 : (1 << s)) :> int32))))
       };
       
@@ -2024,11 +2024,11 @@ let isqrt_ensures_default =
           void)) else void);
          (let jessie_63 =
          begin
-           (assert
-           { (JC_44: le_int((1), asr((2147483647), integer_of_int32(s_33)))) };
-           void);
+           (assert { (JC_44: lt_int(integer_of_int32(s_33), (32))) }; void);
           (assert { (JC_45: ge_int(integer_of_int32(s_33), (0))) }; void);
-          (assert { (JC_46: lt_int(integer_of_int32(s_33), (32))) }; void);
+          (assert
+          { (JC_46: le_int((1), asr((2147483647), integer_of_int32(s_33)))) };
+          void);
           (C_33:
           begin
             (g0 := (C_32:
@@ -2221,12 +2221,11 @@ let isqrt_safety =
          (let jessie_27 =
          begin
            [ { } unit reads s_33
-             { (JC_21:
-               le_int((1), asr((2147483647), integer_of_int32(s_33)))) } ];
+             { (JC_21: lt_int(integer_of_int32(s_33), (32))) } ];
           [ { } unit reads s_33
             { (JC_22: ge_int(integer_of_int32(s_33), (0))) } ];
           [ { } unit reads s_33
-            { (JC_23: lt_int(integer_of_int32(s_33), (32))) } ];
+            { (JC_23: le_int((1), asr((2147483647), integer_of_int32(s_33)))) } ];
           (C_33:
           begin
             (g0 := (C_32:
@@ -2344,13 +2343,18 @@ why --project [...] why/isqrt.why
   <function name="Function isqrt">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/isqrt_po5.why">
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "12" begin = "15" end = "21"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
     <goal why_file="why/isqrt_po6.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "12" begin = "15" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po7.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "12" begin = "15" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "14" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2360,7 +2364,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po9.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "14" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "15" begin = "20" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2370,14 +2374,14 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po11.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "15" begin = "20" end = "21"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "15" begin = "31" end = "33"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/isqrt_po12.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "15" begin = "31" end = "33"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po13.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "15" begin = "31" end = "33"/>
@@ -2385,7 +2389,7 @@ text = "DivByZero"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po14.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "15" begin = "31" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "16" begin = "18" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2395,14 +2399,14 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po16.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "16" begin = "18" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "16" begin = "29" end = "31"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/isqrt_po17.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "16" begin = "29" end = "31"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po18.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "16" begin = "29" end = "31"/>
@@ -2410,7 +2414,7 @@ text = "DivByZero"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po19.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "16" begin = "29" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "17" begin = "17" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2420,14 +2424,14 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po21.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "17" begin = "17" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "17" begin = "28" end = "30"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/isqrt_po22.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "17" begin = "28" end = "30"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po23.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "17" begin = "28" end = "30"/>
@@ -2435,7 +2439,7 @@ text = "DivByZero"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po24.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "17" begin = "28" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "18" begin = "16" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2445,7 +2449,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po26.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "18" begin = "16" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "20" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2455,7 +2459,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po28.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "20" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "21" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2487,12 +2491,12 @@ text = "ArithOverflow"/>
     <goal why_file="why/isqrt_po34.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "21" begin = "3" end = "5"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/isqrt_po35.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "21" begin = "3" end = "5"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po36.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "21" begin = "3" end = "5"/>
@@ -2500,7 +2504,7 @@ text = "DivByZero"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po37.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "21" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2522,12 +2526,12 @@ text = "ArithOverflow"/>
     <goal why_file="why/isqrt_po41.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/isqrt_po42.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po43.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
@@ -2547,12 +2551,12 @@ text = "ArithOverflow"/>
     <goal why_file="why/isqrt_po46.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/isqrt_po47.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po48.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
@@ -2560,16 +2564,11 @@ text = "DivByZero"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po49.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "25" begin = "6" end = "8"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/isqrt_po50.why">
-      <location file = "why/isqrt.why" line = "1799" begin = "47" end = "48"/>
+      <location file = "why/isqrt.why" line = "1798" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/isqrt_po51.why">
-      <location file = "why/isqrt.why" line = "1799" begin = "47" end = "48"/>
+    <goal why_file="why/isqrt_po50.why">
+      <location file = "why/isqrt.why" line = "1798" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2584,10 +2583,6 @@ text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po4.why">
       <location file = "PPCHOME/tests/jessie/isqrt.c" line = "20" begin = "3" end = "5"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/isqrt_po5.why">
-      <location file = "PPCHOME/tests/jessie/isqrt.c" line = "21" begin = "3" end = "5"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

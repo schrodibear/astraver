@@ -40,22 +40,22 @@ type __anonstruct_EXEMPLE_STRUCTURE_1 = [__anonstruct_EXEMPLE_STRUCTURE_1]
 
 unit f(int32 n, __anonstruct_EXEMPLE_STRUCTURE_1[..] p,
        __anonstruct_EXEMPLE_STRUCTURE_1[..] q)
-  requires (C_5 : (((C_7 : (\offset_min(p) <= 0)) &&
-                     (C_8 : (\offset_max(p) >= 0))) &&
-                    ((C_10 : (\offset_min(q) <= 0)) &&
-                      (C_11 : (\offset_max(q) >= 0)))));
+  requires (C_8 : (((C_10 : (\offset_min(p) <= 0)) &&
+                     (C_11 : (\offset_max(p) >= 0))) &&
+                    ((C_13 : (\offset_min(q) <= 0)) &&
+                      (C_14 : (\offset_max(q) >= 0)))));
 behavior default:
-  ensures (C_12 : true);
+  ensures (C_5 : true);
 behavior p_changed:
   assumes (n > 0);
   assigns p.elem1,
   p.elem2;
-  ensures (C_13 : (p.elem1 == n));
+  ensures (C_6 : (\at(p,Old).elem1 == \at(n,Old)));
 behavior q_changed:
   assumes (n <= 0);
   assigns q.elem1,
   q.elem2;
-  ensures (C_14 : (q.elem1 == n));
+  ensures (C_7 : (\at(q,Old).elem1 == \at(n,Old)));
 {  
    {  (if (n > 0) then (C_4 : ((C_3 : p.elem1) = n)) else (C_2 : ((C_1 : q.elem1) = n)));
       
@@ -449,8 +449,8 @@ parameter f :
               (JC_44:
               ((JC_38:
                eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2,
-                                       q)),
-               integer_of_int32(n)))
+                                       q@)),
+               integer_of_int32(n@)))
               and (JC_43:
                   ((((JC_39:
                      not_assigns(__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table@,
@@ -475,8 +475,8 @@ parameter f :
                  (JC_30:
                  ((JC_24:
                   eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1,
-                                          p)),
-                  integer_of_int32(n)))
+                                          p@)),
+                  integer_of_int32(n@)))
                  and (JC_29:
                      ((((JC_25:
                         not_assigns(__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table@,
@@ -533,8 +533,8 @@ parameter f_requires :
               (JC_44:
               ((JC_38:
                eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2,
-                                       q)),
-               integer_of_int32(n)))
+                                       q@)),
+               integer_of_int32(n@)))
               and (JC_43:
                   ((((JC_39:
                      not_assigns(__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table@,
@@ -559,8 +559,8 @@ parameter f_requires :
                  (JC_30:
                  ((JC_24:
                   eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1,
-                                          p)),
-                  integer_of_int32(n)))
+                                          p@)),
+                  integer_of_int32(n@)))
                  and (JC_29:
                      ((((JC_25:
                         not_assigns(__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table@,
@@ -681,8 +681,8 @@ let f_ensures_p_changed =
   { (JC_23:
     ((JC_17:
      eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_p_1,
-                             p)),
-     integer_of_int32(n)))
+                             p@)),
+     integer_of_int32(n@)))
     and (JC_22:
         ((((JC_18:
            not_assigns(__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table@,
@@ -744,8 +744,8 @@ let f_ensures_q_changed =
   { (JC_37:
     ((JC_31:
      eq_int(integer_of_int32(select(__anonstruct_EXEMPLE_STRUCTURE_1_elem1_q_2,
-                             q)),
-     integer_of_int32(n)))
+                             q@)),
+     integer_of_int32(n@)))
     and (JC_36:
         ((((JC_32:
            not_assigns(__anonstruct_EXEMPLE_STRUCTURE_1_p_1_alloc_table@,

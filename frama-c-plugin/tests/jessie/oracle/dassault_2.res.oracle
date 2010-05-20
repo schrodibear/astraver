@@ -32,9 +32,9 @@ tag void_P = {
 type void_P = [void_P]
 
 unit g(int32 Def_Rv)
-  requires (C_2 : (Def_Rv == 1));
+  requires (C_3 : (Def_Rv == 1));
 behavior default:
-  ensures (C_3 : true);
+  ensures (C_2 : true);
 {  
    {  (C_1 : (Def_Rv = 1));
       

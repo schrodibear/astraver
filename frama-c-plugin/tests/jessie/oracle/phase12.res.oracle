@@ -68,32 +68,32 @@ predicate f_cond_OK{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_1,
 
 __anonenum_T_RESULTAT_1 TesterOK(enum___anonenum_T_RESULTAT_1_P[..] status,
                                  __anonenum_T_ID_TEST_2 id_test)
-  requires (C_1 : ((C_2 : (\offset_min(status) <= 0)) &&
-                    (C_3 : (\offset_max(status) >= 0))));
+  requires (C_6 : ((C_7 : (\offset_min(status) <= 0)) &&
+                    (C_8 : (\offset_max(status) >= 0))));
 behavior default:
   assigns status.enum___anonenum_T_RESULTAT_1_M,
   __ConsignerPanne_cpt,
   __TT0_cpt,
   __TT1_cpt;
-  ensures (C_4 : ((C_5 : (\old(__ConsignerPanne_cpt) <= __ConsignerPanne_cpt)) &&
-                   (C_6 : (__ConsignerPanne_cpt <=
+  ensures (C_1 : ((C_2 : (\old(__ConsignerPanne_cpt) <= __ConsignerPanne_cpt)) &&
+                   (C_3 : (__ConsignerPanne_cpt <=
                             (\old(__ConsignerPanne_cpt) + 1)))));
 behavior T0:
   assumes ((id_test == 0) && (status.enum___anonenum_T_RESULTAT_1_M == 1));
   assigns status.enum___anonenum_T_RESULTAT_1_M,
   __ConsignerPanne_cpt,
   __TT0_cpt;
-  ensures (C_7 : (f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt),
+  ensures (C_4 : (f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt),
                                   \old(__ConsignerPanne_cpt)) ==>
-                   (status.enum___anonenum_T_RESULTAT_1_M == 1)));
+                   (\at(status,Old).enum___anonenum_T_RESULTAT_1_M == 1)));
 behavior T1:
   assumes ((id_test == 1) && (status.enum___anonenum_T_RESULTAT_1_M == 1));
   assigns status.enum___anonenum_T_RESULTAT_1_M,
   __ConsignerPanne_cpt,
   __TT1_cpt;
-  ensures (C_8 : (f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt),
+  ensures (C_5 : (f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt),
                                   \old(__ConsignerPanne_cpt)) ==>
-                   (status.enum___anonenum_T_RESULTAT_1_M == 1)));
+                   (\at(status,Old).enum___anonenum_T_RESULTAT_1_M == 1)));
 ;
 
 uint32 __ConsignerPanne_cpt_t0;
@@ -101,16 +101,16 @@ uint32 __ConsignerPanne_cpt_t0;
 uint32 __ConsignerPanne_cpt_t1;
 
 __anonenum_T_RESULTAT_1 phase1()
-  requires (C_20 : ((C_21 : (\offset_min(__TT0_v0) <= __TT0_cpt)) &&
-                     (C_22 : (\offset_max(__TT0_v0) >= (__TT0_cpt + 1)))));
-  requires (C_23 : ((C_24 : (\offset_min(__TT1_v0) <= __TT1_cpt)) &&
-                     (C_25 : (\offset_max(__TT1_v0) >= (__TT1_cpt + 1)))));
-  requires (C_26 : ((C_27 : (\offset_min(__ConsignerPanne_v0) <=
+  requires (C_27 : ((C_28 : (\offset_min(__TT0_v0) <= __TT0_cpt)) &&
+                     (C_29 : (\offset_max(__TT0_v0) >= (__TT0_cpt + 1)))));
+  requires (C_24 : ((C_25 : (\offset_min(__TT1_v0) <= __TT1_cpt)) &&
+                     (C_26 : (\offset_max(__TT1_v0) >= (__TT1_cpt + 1)))));
+  requires (C_21 : ((C_22 : (\offset_min(__ConsignerPanne_v0) <=
                               __ConsignerPanne_cpt)) &&
-                     (C_28 : (\offset_max(__ConsignerPanne_v0) >=
+                     (C_23 : (\offset_max(__ConsignerPanne_v0) >=
                                (__ConsignerPanne_cpt + 1)))));
 behavior default:
-  ensures (C_29 : ((f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt),
+  ensures (C_20 : ((f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt),
                                     __ConsignerPanne_cpt_t0) &&
                      f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt),
                                      __ConsignerPanne_cpt_t1)) ==>
@@ -477,7 +477,7 @@ parameter TesterOK :
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
            eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
-                                                     status)),
+                                                     status@)),
            (1))))
          and (JC_35:
              ((__TT0_cpt = __TT0_cpt@)
@@ -497,7 +497,7 @@ parameter TesterOK :
                enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,
                enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
                eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
-                                                         status)),
+                                                         status@)),
                (1))))
              and (JC_27:
                  ((__TT1_cpt = __TT1_cpt@)
@@ -548,7 +548,7 @@ parameter TesterOK_requires :
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
            eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
-                                                     status)),
+                                                     status@)),
            (1))))
          and (JC_35:
              ((__TT0_cpt = __TT0_cpt@)
@@ -568,7 +568,7 @@ parameter TesterOK_requires :
                enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,
                enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
                eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
-                                                         status)),
+                                                         status@)),
                (1))))
              and (JC_27:
                  ((__TT1_cpt = __TT1_cpt@)

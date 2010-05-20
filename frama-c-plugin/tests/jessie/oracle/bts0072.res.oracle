@@ -37,10 +37,10 @@ behavior default:
 {  
    {  (C_1 : (p = 1));
       
-      ( requires (C_3 : (p == 1));
+      ( requires (C_4 : (p == 1));
         
         behavior default:
-          ensures (C_4 : (\old(p) == (p - 1)));
+          ensures (C_3 : (\old(p) == (p - 1)));
         { (C_2 : (p = 2))
         });
       

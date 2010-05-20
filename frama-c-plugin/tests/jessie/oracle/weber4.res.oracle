@@ -38,20 +38,21 @@ tag void_P = {
 type void_P = [void_P]
 
 unit fill_int_array(int_P[..] first, int_P[..] last, int32 value)
-  requires (C_11 : ((last - first) >= 0));
-  requires (C_12 : ((C_13 : (\offset_min(first) <= 0)) &&
-                     (C_14 : (\offset_max(first) >=
+  requires (C_17 : ((last - first) >= 0));
+  requires (C_14 : ((C_15 : (\offset_min(first) <= 0)) &&
+                     (C_16 : (\offset_max(first) >=
                                (((last - first) / 4) - 1)))));
 behavior default:
-  ensures (C_15 : true);
+  ensures (C_11 : true);
 behavior is_not_empty:
   assumes ((last - first) > 0);
-  ensures (C_16 : (\forall integer i;
-                    (((0 <= i) && (i < ((last - first) / 4))) ==>
-                      ((first + i).int_M == value))));
+  ensures (C_12 : (\forall integer i;
+                    (((0 <= i) &&
+                       (i < ((\at(last,Old) - \at(first,Old)) / 4))) ==>
+                      ((\at(first,Old) + i).int_M == \at(value,Old)))));
 behavior is_empty:
   assumes (last == first);
-  ensures (C_17 : (last == first));
+  ensures (C_13 : (\at(last,Old) == \at(first,Old)));
 {  
    (var int_P[..] a);
    
@@ -444,15 +445,15 @@ parameter fill_int_array :
     int_P_int_M_first_1:(int_P, int32) memory ref ->
      int_P_first_1_alloc_table:int_P alloc_table ->
       { } unit reads int_P_int_M_first_1 writes int_P_int_M_first_1
-      { (((last@ = first@) -> (JC_18: (last = first)))
+      { (((last@ = first@) -> (JC_18: (last@ = first@)))
         and (gt_int(sub_pointer(last@, first@), (0)) ->
              (JC_16:
              (forall i:int.
               ((le_int((0), i)
-               and lt_int(i, div_int(sub_pointer(last, first), (4)))) ->
+               and lt_int(i, div_int(sub_pointer(last@, first@), (4)))) ->
                eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                       shift(first, i))),
-               integer_of_int32(value))))))) }
+                                       shift(first@, i))),
+               integer_of_int32(value@))))))) }
 
 parameter fill_int_array_requires :
  first:int_P pointer ->
@@ -468,15 +469,15 @@ parameter fill_int_array_requires :
                 ge_int(offset_max(int_P_first_1_alloc_table, first),
                 sub_int(div_int(sub_pointer(last, first), (4)), (1)))))))}
       unit reads int_P_int_M_first_1 writes int_P_int_M_first_1
-      { (((last@ = first@) -> (JC_18: (last = first)))
+      { (((last@ = first@) -> (JC_18: (last@ = first@)))
         and (gt_int(sub_pointer(last@, first@), (0)) ->
              (JC_16:
              (forall i:int.
               ((le_int((0), i)
-               and lt_int(i, div_int(sub_pointer(last, first), (4)))) ->
+               and lt_int(i, div_int(sub_pointer(last@, first@), (4)))) ->
                eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                       shift(first, i))),
-               integer_of_int32(value))))))) }
+                                       shift(first@, i))),
+               integer_of_int32(value@))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -624,7 +625,7 @@ let fill_int_array_ensures_is_empty =
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
       (raise Return) end))); (raise Return) end with Return -> void end))
-  { (JC_17: (last = first)) }
+  { (JC_17: (last@ = first@)) }
 
 let fill_int_array_ensures_is_not_empty =
  fun (first : int_P pointer) (last : int_P pointer) (value : int32) (int_P_int_M_first_1 : (int_P, int32) memory ref) (int_P_first_1_alloc_table : int_P alloc_table) ->
@@ -693,9 +694,10 @@ let fill_int_array_ensures_is_not_empty =
       (raise Return) end))); (raise Return) end with Return -> void end))
   { (JC_15:
     (forall i:int.
-     ((le_int((0), i) and lt_int(i, div_int(sub_pointer(last, first), (4)))) ->
-      eq_int(integer_of_int32(select(int_P_int_M_first_1, shift(first, i))),
-      integer_of_int32(value))))) }
+     ((le_int((0), i)
+      and lt_int(i, div_int(sub_pointer(last@, first@), (4)))) ->
+      eq_int(integer_of_int32(select(int_P_int_M_first_1, shift(first@, i))),
+      integer_of_int32(value@))))) }
 
 let fill_int_array_safety =
  fun (first : int_P pointer) (last : int_P pointer) (value : int32) (int_P_int_M_first_1 : (int_P, int32) memory ref) (int_P_first_1_alloc_table : int_P alloc_table) ->
@@ -771,26 +773,26 @@ why --project [...] why/weber4.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber4_po8.why">
-      <location file = "why/weber4.why" line = "650" begin = "21" end = "54"/>
+      <location file = "why/weber4.why" line = "651" begin = "21" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/weber4_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "74" begin = "27" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "75" begin = "27" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber4_po10.why">
-      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "74" begin = "27" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "75" begin = "27" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber4_po11.why">
-      <location file = "why/weber4.why" line = "632" begin = "44" end = "45"/>
+      <location file = "why/weber4.why" line = "633" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber4_po12.why">
-      <location file = "why/weber4.why" line = "632" begin = "44" end = "45"/>
+      <location file = "why/weber4.why" line = "633" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

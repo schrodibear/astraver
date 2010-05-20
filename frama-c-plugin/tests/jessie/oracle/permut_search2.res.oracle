@@ -57,9 +57,9 @@ axiomatic PermutSize {
 }
 
 int32 permut_search(int_P[..] arr, int32 v)
-  requires (C_11 : (0 <= permut_size{Here}(arr)));
+  requires (C_12 : (0 <= permut_size{Here}(arr)));
 behavior default:
-  ensures (C_12 : true);
+  ensures (C_11 : true);
 {  
    (var int32 idx);
    

@@ -35,7 +35,7 @@ behavior less_than_101:
   ensures (C_10 : (\result == 91));
 behavior greater_than_100:
   assumes (n_0 >= 101);
-  ensures (C_11 : (\result == (n_0 - 10)));
+  ensures (C_11 : (\result == (\at(n_0,Old) - 10)));
 {  
    (var integer tmp);
    
@@ -109,9 +109,9 @@ case lex1: (\forall integer x1;
 }
 
 integer f91_nonrec(integer n, integer x)
-  requires (C_23 : (n >= 1));
+  requires (C_24 : (n >= 1));
 behavior default:
-  ensures (C_24 : (\result == iter_f(n, x)));
+  ensures (C_23 : (\result == iter_f(\at(n,Old), \at(x,Old))));
 {  
    {  
       {  
@@ -388,22 +388,23 @@ parameter alloc_struct_void_P_requires :
 parameter f91 :
  n_0:int ->
   { } int
-  { ((ge_int(n_0@, (101)) -> (JC_12: eq_int(result, sub_int(n_0, (10)))))
+  { ((ge_int(n_0@, (101)) -> (JC_12: eq_int(result, sub_int(n_0@, (10)))))
     and (le_int(n_0@, (100)) -> (JC_10: eq_int(result, (91))))) }
 
 parameter f91_nonrec :
- n_1:int -> x_0:int -> { } int { (JC_32: eq_int(result, iter_f(n_1, x_0))) }
+ n_1:int ->
+  x_0:int -> { } int { (JC_32: eq_int(result, iter_f(n_1@, x_0@))) }
 
 parameter f91_nonrec_requires :
  n_1:int ->
   x_0:int ->
    { (JC_27: ge_int(n_1, (1)))} int
-   { (JC_32: eq_int(result, iter_f(n_1, x_0))) }
+   { (JC_32: eq_int(result, iter_f(n_1@, x_0@))) }
 
 parameter f91_requires :
  n_0:int ->
   { } int
-  { ((ge_int(n_0@, (101)) -> (JC_12: eq_int(result, sub_int(n_0, (10)))))
+  { ((ge_int(n_0@, (101)) -> (JC_12: eq_int(result, sub_int(n_0@, (10)))))
     and (le_int(n_0@, (100)) -> (JC_10: eq_int(result, (91))))) }
 
 let f91_ensures_default =
@@ -491,7 +492,7 @@ let f91_ensures_greater_than_100 =
       Return_label_exc jessie_1 ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end))
-  { (JC_11: eq_int(result, sub_int(n_0, (10)))) }
+  { (JC_11: eq_int(result, sub_int(n_0@, (10)))) }
 
 let f91_ensures_less_than_101 =
  fun (n_0 : int) ->
@@ -592,7 +593,7 @@ let f91_nonrec_ensures_default =
        (raise (Goto_while_0_break_exc void)) end in void) with
       Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
     (return := !mutable_x_0); (raise Return); absurd  end with Return ->
-   !return end)))) { (JC_31: eq_int(result, iter_f(n_1, x_0))) }
+   !return end)))) { (JC_31: eq_int(result, iter_f(n_1@, x_0@))) }
 
 let f91_nonrec_safety =
  fun (n_1 : int) (x_0 : int) ->
@@ -711,11 +712,11 @@ why --project [...] why/mac_carthy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po7.why">
-      <location file = "why/mac_carthy.why" line = "469" begin = "43" end = "44"/>
+      <location file = "why/mac_carthy.why" line = "470" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/mac_carthy_po8.why">
-      <location file = "why/mac_carthy.why" line = "469" begin = "43" end = "44"/>
+      <location file = "why/mac_carthy.why" line = "470" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -742,19 +743,19 @@ why --project [...] why/mac_carthy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po9.why">
-      <location file = "why/mac_carthy.why" line = "536" begin = "21" end = "117"/>
+      <location file = "why/mac_carthy.why" line = "537" begin = "21" end = "117"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/mac_carthy_po10.why">
-      <location file = "why/mac_carthy.why" line = "536" begin = "21" end = "117"/>
+      <location file = "why/mac_carthy.why" line = "537" begin = "21" end = "117"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/mac_carthy_po11.why">
-      <location file = "why/mac_carthy.why" line = "546" begin = "24" end = "123"/>
+      <location file = "why/mac_carthy.why" line = "547" begin = "24" end = "123"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/mac_carthy_po12.why">
-      <location file = "why/mac_carthy.why" line = "546" begin = "24" end = "123"/>
+      <location file = "why/mac_carthy.why" line = "547" begin = "24" end = "123"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

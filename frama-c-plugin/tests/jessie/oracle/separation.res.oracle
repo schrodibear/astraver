@@ -38,13 +38,13 @@ tag void_P = {
 type void_P = [void_P]
 
 unit f(int_P[..] x_0, int_P[..] y_0)
-  requires (C_3 : (((C_5 : (\offset_min(x_0) <= 0)) &&
-                     (C_6 : (\offset_max(x_0) >= 0))) &&
-                    ((C_8 : (\offset_min(y_0) <= 0)) &&
-                      (C_9 : (\offset_max(y_0) >= 0)))));
+  requires (C_6 : (((C_8 : (\offset_min(x_0) <= 0)) &&
+                     (C_9 : (\offset_max(x_0) >= 0))) &&
+                    ((C_11 : (\offset_min(y_0) <= 0)) &&
+                      (C_12 : (\offset_max(y_0) >= 0)))));
 behavior default:
-  ensures (C_10 : ((C_11 : (x_0.int_M == 0)) &&
-                    (C_12 : (y_0.int_M == \old(y_0.int_M)))));
+  ensures (C_3 : ((C_4 : (\at(x_0,Old).int_M == 0)) &&
+                   (C_5 : (\at(y_0,Old).int_M == \old(y_0.int_M)))));
 {  
    {  (C_2 : ((C_1 : x_0.int_M) = 0));
       
@@ -100,12 +100,13 @@ behavior values:
 }
 
 unit h(int_P[..] x, int_P[..] y)
-  requires (C_45 : (((C_47 : (\offset_min(x) <= 0)) &&
-                      (C_48 : (\offset_max(x) >= 0))) &&
-                     ((C_50 : (\offset_min(y) <= 0)) &&
-                       (C_51 : (\offset_max(y) >= 0)))));
+  requires (C_48 : (((C_50 : (\offset_min(x) <= 0)) &&
+                      (C_51 : (\offset_max(x) >= 0))) &&
+                     ((C_53 : (\offset_min(y) <= 0)) &&
+                       (C_54 : (\offset_max(y) >= 0)))));
 behavior default:
-  ensures (C_52 : ((C_53 : (x.int_M == 0)) && (C_54 : (y.int_M == 1))));
+  ensures (C_45 : ((C_46 : (\at(x,Old).int_M == 0)) &&
+                    (C_47 : (\at(y,Old).int_M == 1))));
 {  
    {  (C_42 : ((C_41 : x.int_M) = 0));
       (C_44 : ((C_43 : y.int_M) = 1));
@@ -518,9 +519,9 @@ parameter f :
        { } unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
        { (JC_18:
          ((JC_16:
-          eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
+          eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
          and (JC_17:
-             eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0)),
+             eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0@)),
              integer_of_int32(select(int_P_int_M_y_0_2@, y_0@)))))) }
 
 parameter f_requires :
@@ -540,9 +541,9 @@ parameter f_requires :
        unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
        { (JC_18:
          ((JC_16:
-          eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
+          eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
          and (JC_17:
-             eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0)),
+             eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0@)),
              integer_of_int32(select(int_P_int_M_y_0_2@, y_0@)))))) }
 
 parameter f_requires_specialized :
@@ -561,9 +562,9 @@ parameter f_requires_specialized :
       unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
       { (JC_18:
         ((JC_16:
-         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
         and (JC_17:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0)),
+            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0@)),
             integer_of_int32(select(int_P_int_M_x_0_1@, y_0@)))))) }
 
 parameter f_specialized :
@@ -575,9 +576,9 @@ parameter f_specialized :
       { } unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
       { (JC_18:
         ((JC_16:
-         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
         and (JC_17:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0)),
+            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0@)),
             integer_of_int32(select(int_P_int_M_x_0_1@, y_0@)))))) }
 
 parameter f_specialized_1 :
@@ -589,9 +590,9 @@ parameter f_specialized_1 :
       { } unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
       { (JC_18:
         ((JC_16:
-         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
         and (JC_17:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0)),
+            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0@)),
             integer_of_int32(select(int_P_int_M_x_0_1@, y_0@)))))) }
 
 parameter g : tt:unit -> { } unit { true }
@@ -608,9 +609,9 @@ parameter h :
        { } unit reads int_P_int_M_x_3,int_P_int_M_y_4
        writes int_P_int_M_x_3,int_P_int_M_y_4
        { (JC_86:
-         ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+         ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
          and (JC_85:
-             eq_int(integer_of_int32(select(int_P_int_M_y_4, y)), (1))))) }
+             eq_int(integer_of_int32(select(int_P_int_M_y_4, y@)), (1))))) }
 
 parameter h_requires :
  x:int_P pointer ->
@@ -628,9 +629,9 @@ parameter h_requires :
        unit reads int_P_int_M_x_3,int_P_int_M_y_4
        writes int_P_int_M_x_3,int_P_int_M_y_4
        { (JC_86:
-         ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+         ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
          and (JC_85:
-             eq_int(integer_of_int32(select(int_P_int_M_y_4, y)), (1))))) }
+             eq_int(integer_of_int32(select(int_P_int_M_y_4, y@)), (1))))) }
 
 parameter h_requires_specialized :
  x:int_P pointer ->
@@ -647,9 +648,9 @@ parameter h_requires_specialized :
       unit reads int_P_int_M_x_3,int_P_int_M_x_3
       writes int_P_int_M_x_3,int_P_int_M_x_3
       { (JC_86:
-        ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+        ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
         and (JC_85:
-            eq_int(integer_of_int32(select(int_P_int_M_x_3, y)), (1))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_3, y@)), (1))))) }
 
 parameter h_specialized :
  x:int_P pointer ->
@@ -660,9 +661,9 @@ parameter h_specialized :
       { } unit reads int_P_int_M_x_3,int_P_int_M_x_3
       writes int_P_int_M_x_3,int_P_int_M_x_3
       { (JC_86:
-        ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+        ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
         and (JC_85:
-            eq_int(integer_of_int32(select(int_P_int_M_x_3, y)), (1))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_3, y@)), (1))))) }
 
 parameter h_specialized_1 :
  x:int_P pointer ->
@@ -673,9 +674,9 @@ parameter h_specialized_1 :
       { } unit reads int_P_int_M_x_3,int_P_int_M_x_3
       writes int_P_int_M_x_3,int_P_int_M_x_3
       { (JC_86:
-        ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+        ((JC_84: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
         and (JC_85:
-            eq_int(integer_of_int32(select(int_P_int_M_x_3, y)), (1))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_3, y@)), (1))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -716,9 +717,9 @@ let f_ensures_default =
        (((safe_upd_ int_P_int_M_x_0_1) jessie_11) jessie_8))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_15:
-    ((JC_13: eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0)), (0)))
+    ((JC_13: eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
     and (JC_14:
-        eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0)),
+        eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0@)),
         integer_of_int32(select(int_P_int_M_y_0_2@, y_0@)))))) }
 
 let f_safety =
@@ -1068,8 +1069,8 @@ let h_ensures_default =
         (((safe_upd_ int_P_int_M_y_4) jessie_137) jessie_134))) in void);
        (raise Return) end) end); (raise Return) end with Return -> void end)
   { (JC_83:
-    ((JC_81: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
-    and (JC_82: eq_int(integer_of_int32(select(int_P_int_M_y_4, y)), (1))))) }
+    ((JC_81: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
+    and (JC_82: eq_int(integer_of_int32(select(int_P_int_M_y_4, y@)), (1))))) }
 
 let h_safety =
  fun (x : int_P pointer) (y : int_P pointer) (int_P_int_M_x_3 : (int_P, int32) memory ref) (int_P_int_M_y_4 : (int_P, int32) memory ref) (int_P_x_3_alloc_table : int_P alloc_table) (int_P_y_4_alloc_table : int_P alloc_table) ->
@@ -1443,22 +1444,22 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po42.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "128" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "129" begin = "14" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po43.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "128" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "129" begin = "14" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po44.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "128" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "129" begin = "14" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po45.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "128" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "129" begin = "14" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1467,22 +1468,22 @@ text = "UserCall"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po47.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "139" begin = "14" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "140" begin = "14" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po48.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "139" begin = "14" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "140" begin = "14" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po49.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "139" begin = "14" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "140" begin = "14" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po50.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "139" begin = "14" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "140" begin = "14" end = "40"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1525,22 +1526,22 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/separation_po28.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "104" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po29.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "104" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po30.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "106" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po31.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "106" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

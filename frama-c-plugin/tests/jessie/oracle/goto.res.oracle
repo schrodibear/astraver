@@ -48,7 +48,7 @@ behavior default:
 
 int32 f2(int32 x_0)
 behavior default:
-  ensures (C_5 : ((x_0 == 0) ==> (\result == 0)));
+  ensures (C_5 : ((\at(x_0,Old) == 0) ==> (\result == 0)));
 {  
    {  (if (x_0 == 0) then 
       (goto l1) else ());
@@ -60,7 +60,7 @@ behavior default:
 
 int32 f3(int32 x_1)
 behavior default:
-  ensures (C_10 : ((x_1 == 9) <==> (\result == 10)));
+  ensures (C_10 : ((\at(x_1,Old) == 9) <==> (\result == 10)));
 {  
    {  (if (x_1 == 0) then 
       (goto l1) else ());
@@ -75,7 +75,7 @@ behavior default:
 
 int32 f4(int32 x)
 behavior default:
-  ensures (C_14 : ((x == 0) ==> (\result == 0)));
+  ensures (C_14 : ((\at(x,Old) == 0) ==> (\result == 0)));
 {  
    {  (if (x == 0) then 
       (goto l1) else ());
@@ -347,42 +347,42 @@ parameter f2 :
  x_0:int32 ->
   { } int32
   { (JC_14:
-    (eq_int(integer_of_int32(x_0), (0)) ->
+    (eq_int(integer_of_int32(x_0@), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
 
 parameter f2_requires :
  x_0:int32 ->
   { } int32
   { (JC_14:
-    (eq_int(integer_of_int32(x_0), (0)) ->
+    (eq_int(integer_of_int32(x_0@), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
 
 parameter f3 :
  x_1:int32 ->
   { } int32
   { (JC_22:
-    (eq_int(integer_of_int32(x_1), (9))
+    (eq_int(integer_of_int32(x_1@), (9))
     <-> eq_int(integer_of_int32(result), (10)))) }
 
 parameter f3_requires :
  x_1:int32 ->
   { } int32
   { (JC_22:
-    (eq_int(integer_of_int32(x_1), (9))
+    (eq_int(integer_of_int32(x_1@), (9))
     <-> eq_int(integer_of_int32(result), (10)))) }
 
 parameter f4 :
  x:int32 ->
   { } int32
   { (JC_31:
-    (eq_int(integer_of_int32(x), (0)) ->
+    (eq_int(integer_of_int32(x@), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
 
 parameter f4_requires :
  x:int32 ->
   { } int32
   { (JC_31:
-    (eq_int(integer_of_int32(x), (0)) ->
+    (eq_int(integer_of_int32(x@), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
 
 parameter int32_of_integer_ :
@@ -467,7 +467,7 @@ let f2_ensures_default =
       (l1: begin   (return := !mutable_x_0); (raise Return) end) end; 
     absurd  end with Return -> !return end)))
   { (JC_13:
-    (eq_int(integer_of_int32(x_0), (0)) ->
+    (eq_int(integer_of_int32(x_0@), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
 
 let f2_safety =
@@ -521,7 +521,7 @@ let f3_ensures_default =
       (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
     absurd  end with Return -> !return end)))
   { (JC_21:
-    (eq_int(integer_of_int32(x_1), (9))
+    (eq_int(integer_of_int32(x_1@), (9))
     <-> eq_int(integer_of_int32(result), (10)))) }
 
 let f3_safety =
@@ -582,7 +582,7 @@ let f4_ensures_default =
       (l1: begin   (return := !mutable_x); (raise Return) end) end; absurd 
    end with Return -> !return end)))
   { (JC_30:
-    (eq_int(integer_of_int32(x), (0)) ->
+    (eq_int(integer_of_int32(x@), (0)) ->
      eq_int(integer_of_int32(result), (0)))) }
 
 let f4_safety =

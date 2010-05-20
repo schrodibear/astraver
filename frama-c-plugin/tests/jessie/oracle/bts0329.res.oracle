@@ -30,14 +30,14 @@ tag void_P = {
 type void_P = [void_P]
 
 float cosine1a(float x)
-  requires (C_5 : ((C_6 : (\real_abs(\single_exact(x)) <= 0x1p-5)) &&
-                    (C_7 : (\single_round_error(x) <= 0x1p-20))));
+  requires (C_8 : ((C_9 : (\real_abs(\single_exact(x)) <= 0x1p-5)) &&
+                    (C_10 : (\single_round_error(x) <= 0x1p-20))));
 behavior default:
-  ensures (C_8 : ((C_9 : (\real_abs((\single_exact(\result) -
-                                      \cos(\single_exact(x)))) <=
+  ensures (C_5 : ((C_6 : (\real_abs((\single_exact(\result) -
+                                      \cos(\single_exact(\at(x,Old))))) <=
                            0x1p-24)) &&
-                   (C_10 : (\single_round_error(\result) <=
-                             (\single_round_error(x) + 0x3p-24)))));
+                   (C_7 : (\single_round_error(\result) <=
+                            (\single_round_error(\at(x,Old)) + 0x3p-24)))));
 {  
    (var float r);
    
@@ -281,11 +281,11 @@ parameter cosine1a :
   { } single
   { (JC_14:
     ((JC_12:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x@)))),
      0x1p-24))
     and (JC_13:
         le_real(single_round_error(result),
-        add_real(single_round_error(x), 0x3p-24))))) }
+        add_real(single_round_error(x@), 0x3p-24))))) }
 
 parameter cosine1a_requires :
  x:single ->
@@ -295,11 +295,11 @@ parameter cosine1a_requires :
   single
   { (JC_14:
     ((JC_12:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x@)))),
      0x1p-24))
     and (JC_13:
         le_real(single_round_error(result),
-        add_real(single_round_error(x), 0x3p-24))))) }
+        add_real(single_round_error(x@), 0x3p-24))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -334,11 +334,11 @@ let cosine1a_ensures_default =
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_11:
     ((JC_9:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x@)))),
      0x1p-24))
     and (JC_10:
         le_real(single_round_error(result),
-        add_real(single_round_error(x), 0x3p-24))))) }
+        add_real(single_round_error(x@), 0x3p-24))))) }
 
 let cosine1a_safety =
  fun (x : single) ->

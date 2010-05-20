@@ -317,57 +317,57 @@ predicate sorted{L}(int_xP[..] s_17, integer a_6, integer b_5) =
       lt_sol{L}((s_17 + i_18).int_xM, (s_17 + j_2).int_xM))))
 
 integer min_elt(integer x)
-  requires (C_27 : (x != 0));
+  requires (C_28 : (x != 0));
 behavior default:
   assigns \nothing;
-  ensures (C_28 : (\result == min_elt(iset(x))));
+  ensures (C_27 : (\result == min_elt(iset(\at(x,Old)))));
 ;
 
 unit store_solution()
-  requires (C_29 : solution{Here}(col));
+  requires (C_32 : solution{Here}(col));
 behavior default:
   assigns s,
   ((sol + s).int_xM + [0..(N - 1)]).int_M;
-  ensures (C_30 : ((C_31 : (s == (\old(s) + 1))) &&
-                    (C_32 : eq_sol{Here}((sol + \old(s)).int_xM, col))));
+  ensures (C_29 : ((C_30 : (s == (\old(s) + 1))) &&
+                    (C_31 : eq_sol{Here}((sol + \old(s)).int_xM, col))));
 ;
 
 integer t3(integer a, integer b, integer c)
-  requires (C_78 : ((((C_81 : (0 <= k)) &&
-                       (C_82 : ((k + card(iset(a))) == N))) &&
-                      (C_83 : (0 <= s))) &&
-                     ((C_85 : (\forall integer i_20;
+  requires (C_87 : ((((C_90 : (0 <= k)) &&
+                       (C_91 : ((k + card(iset(a))) == N))) &&
+                      (C_92 : (0 <= s))) &&
+                     ((C_94 : (\forall integer i_20;
                                 (in_(i_20, iset(a)) <==>
                                   (((0 <= i_20) && (i_20 < N)) &&
                                     (\forall integer j_3;
                                       (((0 <= j_3) && (j_3 < k)) ==>
                                         (i_20 != (col + j_3).int_M))))))) &&
-                       ((C_87 : (\forall integer i_21;
+                       ((C_96 : (\forall integer i_21;
                                   ((i_21 >= 0) ==>
                                     (in_(i_21, iset(b)) <==>
                                       (\exists integer j_4;
                                         (((0 <= j_4) && (j_4 < k)) &&
                                           ((col + j_4).int_M ==
                                             ((i_21 + j_4) - k)))))))) &&
-                         ((C_89 : (\forall integer i_22;
+                         ((C_98 : (\forall integer i_22;
                                     ((i_22 >= 0) ==>
                                       (in_(i_22, iset(c)) <==>
                                         (\exists integer j_5;
                                           (((0 <= j_5) && (j_5 < k)) &&
                                             ((col + j_5).int_M ==
                                               ((i_22 + k) - j_5)))))))) &&
-                           (C_90 : partial_solution{Here}(k, col)))))));
+                           (C_99 : partial_solution{Here}(k, col)))))));
   decreases (C_100 : card(iset(a)));
 behavior default:
   assigns (col + [k..]).int_M,
   s,
   k,
   ((sol + [s..]).int_xM + [..]).int_M;
-  ensures (C_91 : (((((C_95 : (\result == (s - \old(s)))) &&
-                       (C_96 : (\result >= 0))) &&
-                      (C_97 : (k == \old(k)))) &&
-                     (C_98 : sorted{Here}(sol, \old(s), s))) &&
-                    (C_99 : (\forall int_P[..] t_3;
+  ensures (C_78 : (((((C_82 : (\result == (s - \old(s)))) &&
+                       (C_83 : (\result >= 0))) &&
+                      (C_84 : (k == \old(k)))) &&
+                     (C_85 : sorted{Here}(sol, \old(s), s))) &&
+                    (C_86 : (\forall int_P[..] t_3;
                               ((solution{Here}(t_3) &&
                                  eq_prefix{Here}(col, t_3, k)) <==>
                                 (\exists integer i_23;
@@ -462,12 +462,12 @@ behavior default:
 }
 
 integer queens(integer n)
-  requires (C_109 : (((C_111 : (n == N)) && (C_112 : (s == 0))) &&
-                      (C_113 : (k == 0))));
+  requires (C_114 : (((C_116 : (n == N)) && (C_117 : (s == 0))) &&
+                      (C_118 : (k == 0))));
 behavior default:
-  ensures (C_114 : (((C_116 : (\result == s)) &&
-                      (C_117 : sorted{Here}(sol, 0, s))) &&
-                     (C_118 : (\forall int_P[..] t_4;
+  ensures (C_109 : (((C_111 : (\result == s)) &&
+                      (C_112 : sorted{Here}(sol, 0, s))) &&
+                     (C_113 : (\forall int_P[..] t_4;
                                 (solution{Here}(t_4) <==>
                                   (\exists integer i_24;
                                     (((0 <= i_24) && (i_24 < \result)) &&
@@ -477,13 +477,13 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_104 : (n >= 0)));
+         (assert for default: (C_104 : (-1 >= 0)));
          
-         (assert for default: (C_103 : (n < 32)));
+         (assert for default: (C_103 : (-1 <= (2147483647 >>> n))));
          
-         (assert for default: (C_102 : (-1 >= 0)));
+         (assert for default: (C_102 : (n < 32)));
          
-         (assert for default: (C_101 : (-1 <= (2147483647 >>> n))));
+         (assert for default: (C_101 : (n >= 0)));
          (C_108 : (tmp_1 = (C_107 : t3((C_106 : (~ (C_105 : (-1 << n)))), 0,
                                        0))))
       };
@@ -1173,12 +1173,12 @@ parameter int_xP_int_xM : (int_xP, int_P pointer) memory ref
 parameter k : int ref
 
 parameter min_elt_0 :
- x_1:int -> { } int { (JC_33: eq_int(result, min_elt(iset(x_1)))) }
+ x_1:int -> { } int { (JC_33: eq_int(result, min_elt(iset(x_1@)))) }
 
 parameter min_elt_0_requires :
  x_1:int ->
   { (JC_27: neq_int(x_1, (0)))} int
-  { (JC_33: eq_int(result, min_elt(iset(x_1)))) }
+  { (JC_33: eq_int(result, min_elt(iset(x_1@)))) }
 
 parameter s : int ref
 
@@ -1356,11 +1356,10 @@ let queens_ensures_default =
      begin
        (let jessie_123 =
        begin
-         (assert { (JC_151: ge_int(n_0, (0))) }; void);
-        (assert { (JC_152: lt_int(n_0, (32))) }; void);
-        (assert { (JC_153: ge_int(neg_int((1)), (0))) }; void);
-        (assert { (JC_154: le_int(neg_int((1)), asr((2147483647), n_0))) };
-        void);
+         (assert { (JC_151: ge_int(neg_int((1)), (0))) }; void);
+        (assert { (JC_152: le_int(neg_int((1)), asr((2147483647), n_0))) };
+        void); (assert { (JC_153: lt_int(n_0, (32))) }; void);
+        (assert { (JC_154: ge_int(n_0, (0))) }; void);
         (C_108:
         begin
           (tmp_1 := (C_107:
@@ -1397,10 +1396,10 @@ let queens_safety =
      begin
        (let jessie_117 =
        begin
-         [ { } unit { (JC_146: ge_int(n_0, (0))) } ];
-        [ { } unit { (JC_147: lt_int(n_0, (32))) } ];
-        [ { } unit { (JC_148: ge_int(neg_int((1)), (0))) } ];
-        [ { } unit { (JC_149: le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+         [ { } unit { (JC_146: ge_int(neg_int((1)), (0))) } ];
+        [ { } unit { (JC_147: le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+        [ { } unit { (JC_148: lt_int(n_0, (32))) } ];
+        [ { } unit { (JC_149: ge_int(n_0, (0))) } ];
         (C_108:
         begin
           (tmp_1 := (C_107:
@@ -2030,11 +2029,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1438" begin = "35" end = "140"/>
+      <location file = "why/queens.why" line = "1437" begin = "35" end = "140"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1438" begin = "35" end = "140"/>
+      <location file = "why/queens.why" line = "1437" begin = "35" end = "140"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2243,11 +2242,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1071" begin = "31" end = "132"/>
+      <location file = "why/queens.why" line = "1070" begin = "31" end = "132"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1071" begin = "31" end = "132"/>
+      <location file = "why/queens.why" line = "1070" begin = "31" end = "132"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po32.why">

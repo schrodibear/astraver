@@ -38,10 +38,10 @@ tag void_P = {
 type void_P = [void_P]
 
 unit reverse_endian(short_P[..] s)
-  requires (C_12 : ((C_13 : (\offset_min(s) <= 0)) &&
-                     (C_14 : (\offset_max(s) >= 0))));
+  requires (C_13 : ((C_14 : (\offset_min(s) <= 0)) &&
+                     (C_15 : (\offset_max(s) >= 0))));
 behavior default:
-  ensures (C_15 : (s.short_M ==
+  ensures (C_12 : (\at(s,Old).short_M ==
                     ((256 * (\old(s.short_M) % 256)) +
                       (\old(s.short_M) / 256))));
 {  
@@ -475,7 +475,7 @@ parameter reverse_endian :
    short_P_s_1_alloc_table:short_P alloc_table ->
     { } unit reads short_P_short_M_s_1 writes short_P_short_M_s_1
     { (JC_10:
-      eq_int(integer_of_int16(select(short_P_short_M_s_1, s)),
+      eq_int(integer_of_int16(select(short_P_short_M_s_1, s@)),
       add_int(mul_int((256),
               mod_int(integer_of_int16(select(short_P_short_M_s_1@, s@)),
               (256))),
@@ -490,7 +490,7 @@ parameter reverse_endian_requires :
       and (JC_2: ge_int(offset_max(short_P_s_1_alloc_table, s), (0)))))}
     unit reads short_P_short_M_s_1 writes short_P_short_M_s_1
     { (JC_10:
-      eq_int(integer_of_int16(select(short_P_short_M_s_1, s)),
+      eq_int(integer_of_int16(select(short_P_short_M_s_1, s@)),
       add_int(mul_int((256),
               mod_int(integer_of_int16(select(short_P_short_M_s_1@, s@)),
               (256))),
@@ -645,8 +645,8 @@ let reverse_endian_ensures_default =
           void); (raise Return) end) end) end) end))); (raise Return) end
    with Return -> void end)
   { (JC_9:
-    eq_int(integer_of_int16(int16_of_bitvector(select_bytes(bitvector_s_1, s,
-                                               (0), (2)))),
+    eq_int(integer_of_int16(int16_of_bitvector(select_bytes(bitvector_s_1,
+                                               s@, (0), (2)))),
     add_int(mul_int((256),
             mod_int(integer_of_int16(int16_of_bitvector(select_bytes(bitvector_s_1@,
                                                         s@, (0), (2)))),

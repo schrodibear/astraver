@@ -30,9 +30,9 @@ tag void_P = {
 type void_P = [void_P]
 
 double monexp(double x)
-  requires (C_7 : (\real_abs((x :> real)) <= 1.0));
+  requires (C_8 : (\real_abs((x :> real)) <= 1.0));
 behavior default:
-  ensures (C_8 : (\real_abs(((\result :> real) - \exp((x :> real)))) <=
+  ensures (C_7 : (\real_abs(((\result :> real) - \exp((\at(x,Old) :> real)))) <=
                    0.02097256305));
 {  
    (var double __retres);
@@ -285,14 +285,14 @@ parameter monexp :
  x:double ->
   { } double
   { (JC_6:
-    le_real(abs_real(sub_real(double_value(result), exp(double_value(x)))),
+    le_real(abs_real(sub_real(double_value(result), exp(double_value(x@)))),
     0.02097256305)) }
 
 parameter monexp_requires :
  x:double ->
   { (JC_1: le_real(abs_real(double_value(x)), 1.0))} double
   { (JC_6:
-    le_real(abs_real(sub_real(double_value(result), exp(double_value(x)))),
+    le_real(abs_real(sub_real(double_value(result), exp(double_value(x@)))),
     0.02097256305)) }
 
 parameter safe_int8_of_integer_ :
@@ -328,7 +328,7 @@ let monexp_ensures_default =
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_5:
-    le_real(abs_real(sub_real(double_value(result), exp(double_value(x)))),
+    le_real(abs_real(sub_real(double_value(result), exp(double_value(x@)))),
     0.02097256305)) }
 
 let monexp_safety =

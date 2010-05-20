@@ -69,11 +69,12 @@ axiomatic NbOcc {
 }
 
 int32 count(long_P[..] a, int32 n, int32 d)
-  requires (C_19 : ((C_20 : (0 <= n)) &&
-                     ((C_22 : (\offset_min(a) <= 0)) &&
-                       (C_23 : (\offset_max(a) >= (n - 1))))));
+  requires (C_20 : ((C_21 : (0 <= n)) &&
+                     ((C_23 : (\offset_min(a) <= 0)) &&
+                       (C_24 : (\offset_max(a) >= (n - 1))))));
 behavior default:
-  ensures (C_24 : (\result == nb_occ{Here}(a, 0, (n - 1), d)));
+  ensures (C_19 : (\result ==
+                    nb_occ{Here}(\at(a,Old), 0, (\at(n,Old) - 1), \at(d,Old))));
 {  
    (var int32 c);
    
@@ -509,7 +510,7 @@ parameter count :
       { } int32
       { (JC_12:
         eq_int(integer_of_int32(result),
-        nb_occ(a, (0), sub_int(integer_of_int32(n), (1)), d,
+        nb_occ(a@, (0), sub_int(integer_of_int32(n@), (1)), d@,
         long_P_long_M_a_2))) }
 
 parameter count_requires :
@@ -527,7 +528,7 @@ parameter count_requires :
       int32
       { (JC_12:
         eq_int(integer_of_int32(result),
-        nb_occ(a, (0), sub_int(integer_of_int32(n), (1)), d,
+        nb_occ(a@, (0), sub_int(integer_of_int32(n@), (1)), d@,
         long_P_long_M_a_2))) }
 
 parameter int32_of_integer_ :
@@ -619,7 +620,8 @@ let count_ensures_default =
    !return end))
   { (JC_11:
     eq_int(integer_of_int32(result),
-    nb_occ(a, (0), sub_int(integer_of_int32(n), (1)), d, long_P_long_M_a_2))) }
+    nb_occ(a@, (0), sub_int(integer_of_int32(n@), (1)), d@,
+    long_P_long_M_a_2))) }
 
 let count_safety =
  fun (a : long_P pointer) (n : int32) (d : int32) (long_P_a_2_alloc_table : long_P alloc_table) (long_P_long_M_a_2 : (long_P, int32) memory) ->

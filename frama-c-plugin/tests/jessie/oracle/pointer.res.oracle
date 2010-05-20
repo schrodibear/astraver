@@ -46,11 +46,12 @@ tag S = {
 type S = [S]
 
 int32 f(int_P[..] x)
-  requires (C_10 : ((C_11 : (\offset_min(x) <= 0)) &&
-                     (C_12 : (\offset_max(x) >= 0))));
+  requires (C_13 : ((C_14 : (\offset_min(x) <= 0)) &&
+                     (C_15 : (\offset_max(x) >= 0))));
 behavior default:
   assigns x.int_M;
-  ensures (C_13 : ((C_14 : (x.int_M == 1)) && (C_15 : (\result == 0))));
+  ensures (C_10 : ((C_11 : (\at(x,Old).int_M == 1)) &&
+                    (C_12 : (\result == 0))));
 {  
    (var int32 tmp);
    
@@ -63,10 +64,11 @@ behavior default:
 }
 
 int32 f2(int_P[..] x_0)
-  requires (C_25 : ((C_26 : (\offset_min(x_0) <= 0)) &&
-                     (C_27 : (\offset_max(x_0) >= 0))));
+  requires (C_28 : ((C_29 : (\offset_min(x_0) <= 0)) &&
+                     (C_30 : (\offset_max(x_0) >= 0))));
 behavior default:
-  ensures (C_28 : ((C_29 : (x_0.int_M == 1)) && (C_30 : (\result == 1))));
+  ensures (C_25 : ((C_26 : (\at(x_0,Old).int_M == 1)) &&
+                    (C_27 : (\result == 1))));
 {  
    (var int32 __retres);
    
@@ -81,10 +83,10 @@ behavior default:
 int_P[..] r;
 
 int32 g()
-  requires (C_33 : ((C_34 : (\offset_min(r) <= 0)) &&
-                     (C_35 : (\offset_max(r) >= 0))));
+  requires (C_34 : ((C_35 : (\offset_min(r) <= 0)) &&
+                     (C_36 : (\offset_max(r) >= 0))));
 behavior default:
-  ensures (C_36 : (r.int_M == 1));
+  ensures (C_33 : (r.int_M == 1));
 {  
    (var int32 tmp_0);
    
@@ -135,10 +137,10 @@ invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 4))
 
 int32 array1()
-  requires (C_62 : ((C_63 : (\offset_min(t) <= 2)) &&
-                     (C_64 : (\offset_max(t) >= 2))));
+  requires (C_63 : ((C_64 : (\offset_min(t) <= 2)) &&
+                     (C_65 : (\offset_max(t) >= 2))));
 behavior default:
-  ensures (C_65 : (\result == 1));
+  ensures (C_62 : (\result == 1));
 {  
    (var int_P[..] p);
    
@@ -702,7 +704,7 @@ parameter f :
       and (JC_38:
           ((JC_36:
            ((JC_34:
-            eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
+            eq_int(integer_of_int32(select(int_P_int_M_x_4, x@)), (1)))
            and (JC_35: eq_int(integer_of_int32(result), (0)))))
           and (JC_37:
               not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
@@ -719,7 +721,7 @@ parameter f2 :
        and (JC_74: valid_s(S_s_3_alloc_table))))
       and (JC_69:
           ((JC_67:
-           eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
+           eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0@)), (1)))
           and (JC_68: eq_int(integer_of_int32(result), (1)))))) }
 
 parameter f2_requires :
@@ -739,7 +741,7 @@ parameter f2_requires :
        and (JC_74: valid_s(S_s_3_alloc_table))))
       and (JC_69:
           ((JC_67:
-           eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
+           eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0@)), (1)))
           and (JC_68: eq_int(integer_of_int32(result), (1)))))) }
 
 parameter f_requires :
@@ -760,7 +762,7 @@ parameter f_requires :
       and (JC_38:
           ((JC_36:
            ((JC_34:
-            eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
+            eq_int(integer_of_int32(select(int_P_int_M_x_4, x@)), (1)))
            and (JC_35: eq_int(integer_of_int32(result), (0)))))
           and (JC_37:
               not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
@@ -1000,7 +1002,7 @@ let f2_ensures_default =
         (return := !__retres); (raise Return) end) end) end)); absurd  end
    with Return -> !return end))
   { (JC_66:
-    ((JC_64: eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0)), (1)))
+    ((JC_64: eq_int(integer_of_int32(select(int_P_int_M_x_0_5, x_0@)), (1)))
     and (JC_65: eq_int(integer_of_int32(result), (1))))) }
 
 let f2_safety =
@@ -1087,7 +1089,7 @@ let f_ensures_default =
    Return -> !return end))
   { (JC_33:
     ((JC_31:
-     ((JC_29: eq_int(integer_of_int32(select(int_P_int_M_x_4, x)), (1)))
+     ((JC_29: eq_int(integer_of_int32(select(int_P_int_M_x_4, x@)), (1)))
      and (JC_30: eq_int(integer_of_int32(result), (0)))))
     and (JC_32:
         not_assigns(int_P_x_4_alloc_table@, int_P_int_M_x_4@,
@@ -1440,12 +1442,12 @@ why --project [...] why/pointer.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po55.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "170" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "172" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po56.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "170" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "172" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1581,12 +1583,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po8.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "66" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "68" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po9.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "66" begin = "15" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "68" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1611,12 +1613,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po14.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "67" begin = "15" end = "89"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "69" begin = "15" end = "89"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po15.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "67" begin = "15" end = "89"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "69" begin = "15" end = "89"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1654,12 +1656,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po23.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "50" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "51" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po24.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "50" begin = "14" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "51" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1694,12 +1696,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po31.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "52" begin = "14" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "53" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po32.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "52" begin = "14" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "53" begin = "14" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1731,12 +1733,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po2.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "149" begin = "18" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "151" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po3.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "149" begin = "18" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "151" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

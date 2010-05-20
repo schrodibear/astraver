@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only burghart1.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD burghart1.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated for behavior default
-[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir burghart1.jessie
 [jessie] File burghart1.jessie/burghart1.jc written.
 [jessie] File burghart1.jessie/burghart1.cloc written.

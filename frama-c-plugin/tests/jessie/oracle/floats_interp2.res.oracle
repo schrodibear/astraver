@@ -84,43 +84,44 @@ lemma round_div :
 int32 i_interp;
 
 double interp_lin(double_P[..] x, double_P[..] y, int32 n, double z)
-  requires (C_70 : (((C_72 : (n >= 1)) &&
-                      ((C_74 : (\offset_min(x) <= 0)) &&
-                        (C_75 : (\offset_max(x) >= (n - 1))))) &&
-                     ((C_77 : (\offset_min(y) <= 0)) &&
-                       (C_78 : (\offset_max(y) >= (n - 1))))));
-  requires (C_79 : min_step{Here}(x, 0, (n - 1), 0x1p-900));
-  requires (C_80 : bounded(z, 0x1p1022));
-  requires (C_81 : array_bounded{Here}(x, n, 0x1p1022));
+  requires (C_86 : (((C_88 : (n >= 1)) &&
+                      ((C_90 : (\offset_min(x) <= 0)) &&
+                        (C_91 : (\offset_max(x) >= (n - 1))))) &&
+                     ((C_93 : (\offset_min(y) <= 0)) &&
+                       (C_94 : (\offset_max(y) >= (n - 1))))));
+  requires (C_85 : min_step{Here}(x, 0, (n - 1), 0x1p-900));
+  requires (C_84 : bounded(z, 0x1p1022));
+  requires (C_83 : array_bounded{Here}(x, n, 0x1p1022));
   requires (C_82 : array_bounded{Here}(y, n, 0x1p1022));
 behavior default:
   assigns i_interp;
-  ensures (C_83 : true);
+  ensures (C_70 : true);
 behavior too_low:
   assumes ((z :> real) <= ((x + 0).double_M :> real));
-  ensures (C_84 : ((\result :> real) == ((y + 0).double_M :> real)));
+  ensures (C_71 : ((\result :> real) == ((\at(y,Old) + 0).double_M :> real)));
 behavior too_high:
   assumes ((z :> real) > ((x + (n - 1)).double_M :> real));
-  ensures (C_85 : ((\result :> real) == ((y + (n - 1)).double_M :> real)));
+  ensures (C_72 : ((\result :> real) ==
+                    ((\at(y,Old) + (\at(n,Old) - 1)).double_M :> real)));
 behavior in_interval:
   assumes ((((x + 0).double_M :> real) < (z :> real)) &&
             ((z :> real) <= ((x + (n - 1)).double_M :> real)));
-  ensures (C_86 : (((C_88 : (1 <= i_interp)) &&
-                     (C_89 : (i_interp <= (n - 1)))) &&
-                    (((C_92 : (((x + (i_interp - 1)).double_M :> real) <
-                                (z :> real))) &&
-                       (C_93 : ((z :> real) <=
-                                 ((x + i_interp).double_M :> real)))) &&
-                      (C_94 : (let real k =
-                              (((z :> real) -
-                                 ((x + (i_interp - 1)).double_M :> real)) /
-                                (((x + i_interp).double_M :> real) -
-                                  ((x + (i_interp - 1)).double_M :> real)))
+  ensures (C_73 : (((C_75 : (1 <= i_interp)) &&
+                     (C_76 : (i_interp <= (\at(n,Old) - 1)))) &&
+                    (((C_79 : (((\at(x,Old) + (i_interp - 1)).double_M :> real) <
+                                (\at(z,Old) :> real))) &&
+                       (C_80 : ((\at(z,Old) :> real) <=
+                                 ((\at(x,Old) + i_interp).double_M :> real)))) &&
+                      (C_81 : (let real k =
+                              (((\at(z,Old) :> real) -
+                                 ((\at(x,Old) + (i_interp - 1)).double_M :> real)) /
+                                (((\at(x,Old) + i_interp).double_M :> real) -
+                                  ((\at(x,Old) + (i_interp - 1)).double_M :> real)))
                               in (let real exact_result_0 =
-                                 (((y + (i_interp - 1)).double_M :> real) +
+                                 (((\at(y,Old) + (i_interp - 1)).double_M :> real) +
                                    (k *
-                                     (((y + i_interp).double_M :> real) -
-                                       ((y + (i_interp - 1)).double_M :> real))))
+                                     (((\at(y,Old) + i_interp).double_M :> real) -
+                                       ((\at(y,Old) + (i_interp - 1)).double_M :> real))))
                                  in (\real_abs(((\result :> real) -
                                                  exact_result_0)) <=
                                       0x1p-10)))))));
@@ -767,42 +768,42 @@ parameter interp_lin :
              ((JC_39: le_int((1), integer_of_int32(i_interp)))
              and ((JC_40:
                   le_int(integer_of_int32(i_interp),
-                  sub_int(integer_of_int32(n_0), (1))))
+                  sub_int(integer_of_int32(n_0@), (1))))
                  and ((JC_41:
                       lt_real(double_value(select(double_P_double_M_x_3,
-                                           shift(x,
+                                           shift(x@,
                                            sub_int(integer_of_int32(i_interp),
                                            (1))))),
-                      double_value(z_0)))
+                      double_value(z_0@)))
                      and ((JC_42:
-                          le_real(double_value(z_0),
+                          le_real(double_value(z_0@),
                           double_value(select(double_P_double_M_x_3,
-                                       shift(x, integer_of_int32(i_interp))))))
+                                       shift(x@, integer_of_int32(i_interp))))))
                          and (JC_43:
                              (let k =
-                                   div_real(sub_real(double_value(z_0),
+                                   div_real(sub_real(double_value(z_0@),
                                             double_value(select(double_P_double_M_x_3,
-                                                         shift(x,
+                                                         shift(x@,
                                                          sub_int(integer_of_int32(i_interp),
                                                          (1)))))),
                                    sub_real(double_value(select(double_P_double_M_x_3,
-                                                         shift(x,
+                                                         shift(x@,
                                                          integer_of_int32(i_interp)))),
                                    double_value(select(double_P_double_M_x_3,
-                                                shift(x,
+                                                shift(x@,
                                                 sub_int(integer_of_int32(i_interp),
                                                 (1))))))) in
                               (let exact_result_0 =
                                     add_real(double_value(select(double_P_double_M_y_4,
-                                                          shift(y,
+                                                          shift(y@,
                                                           sub_int(integer_of_int32(i_interp),
                                                           (1))))),
                                     mul_real(k,
                                     sub_real(double_value(select(double_P_double_M_y_4,
-                                                          shift(y,
+                                                          shift(y@,
                                                           integer_of_int32(i_interp)))),
                                     double_value(select(double_P_double_M_y_4,
-                                                 shift(y,
+                                                 shift(y@,
                                                  sub_int(integer_of_int32(i_interp),
                                                  (1)))))))) in
                                le_real(abs_real(sub_real(double_value(result),
@@ -814,13 +815,14 @@ parameter interp_lin :
                  (JC_32:
                  eq_real(double_value(result),
                  double_value(select(double_P_double_M_y_4,
-                              shift(y, sub_int(integer_of_int32(n_0), (1))))))))
+                              shift(y@, sub_int(integer_of_int32(n_0@), (1))))))))
                and (le_real(double_value(z_0@),
                     double_value(select(double_P_double_M_x_3@,
                                  shift(x@, (0))))) ->
                     (JC_30:
                     eq_real(double_value(result),
-                    double_value(select(double_P_double_M_y_4, shift(y, (0))))))))) }
+                    double_value(select(double_P_double_M_y_4,
+                                 shift(y@, (0))))))))) }
 
 parameter interp_lin_requires :
  x:double_P pointer ->
@@ -864,42 +866,42 @@ parameter interp_lin_requires :
              ((JC_39: le_int((1), integer_of_int32(i_interp)))
              and ((JC_40:
                   le_int(integer_of_int32(i_interp),
-                  sub_int(integer_of_int32(n_0), (1))))
+                  sub_int(integer_of_int32(n_0@), (1))))
                  and ((JC_41:
                       lt_real(double_value(select(double_P_double_M_x_3,
-                                           shift(x,
+                                           shift(x@,
                                            sub_int(integer_of_int32(i_interp),
                                            (1))))),
-                      double_value(z_0)))
+                      double_value(z_0@)))
                      and ((JC_42:
-                          le_real(double_value(z_0),
+                          le_real(double_value(z_0@),
                           double_value(select(double_P_double_M_x_3,
-                                       shift(x, integer_of_int32(i_interp))))))
+                                       shift(x@, integer_of_int32(i_interp))))))
                          and (JC_43:
                              (let k =
-                                   div_real(sub_real(double_value(z_0),
+                                   div_real(sub_real(double_value(z_0@),
                                             double_value(select(double_P_double_M_x_3,
-                                                         shift(x,
+                                                         shift(x@,
                                                          sub_int(integer_of_int32(i_interp),
                                                          (1)))))),
                                    sub_real(double_value(select(double_P_double_M_x_3,
-                                                         shift(x,
+                                                         shift(x@,
                                                          integer_of_int32(i_interp)))),
                                    double_value(select(double_P_double_M_x_3,
-                                                shift(x,
+                                                shift(x@,
                                                 sub_int(integer_of_int32(i_interp),
                                                 (1))))))) in
                               (let exact_result_0 =
                                     add_real(double_value(select(double_P_double_M_y_4,
-                                                          shift(y,
+                                                          shift(y@,
                                                           sub_int(integer_of_int32(i_interp),
                                                           (1))))),
                                     mul_real(k,
                                     sub_real(double_value(select(double_P_double_M_y_4,
-                                                          shift(y,
+                                                          shift(y@,
                                                           integer_of_int32(i_interp)))),
                                     double_value(select(double_P_double_M_y_4,
-                                                 shift(y,
+                                                 shift(y@,
                                                  sub_int(integer_of_int32(i_interp),
                                                  (1)))))))) in
                                le_real(abs_real(sub_real(double_value(result),
@@ -911,13 +913,14 @@ parameter interp_lin_requires :
                  (JC_32:
                  eq_real(double_value(result),
                  double_value(select(double_P_double_M_y_4,
-                              shift(y, sub_int(integer_of_int32(n_0), (1))))))))
+                              shift(y@, sub_int(integer_of_int32(n_0@), (1))))))))
                and (le_real(double_value(z_0@),
                     double_value(select(double_P_double_M_x_3@,
                                  shift(x@, (0))))) ->
                     (JC_30:
                     eq_real(double_value(result),
-                    double_value(select(double_P_double_M_y_4, shift(y, (0))))))))) }
+                    double_value(select(double_P_double_M_y_4,
+                                 shift(y@, (0))))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1477,41 +1480,41 @@ let interp_lin_ensures_in_interval =
     ((JC_33: le_int((1), integer_of_int32(i_interp)))
     and ((JC_34:
          le_int(integer_of_int32(i_interp),
-         sub_int(integer_of_int32(n_0), (1))))
+         sub_int(integer_of_int32(n_0@), (1))))
         and ((JC_35:
              lt_real(double_value(select(double_P_double_M_x_3,
-                                  shift(x,
+                                  shift(x@,
                                   sub_int(integer_of_int32(i_interp), (1))))),
-             double_value(z_0)))
+             double_value(z_0@)))
             and ((JC_36:
-                 le_real(double_value(z_0),
+                 le_real(double_value(z_0@),
                  double_value(select(double_P_double_M_x_3,
-                              shift(x, integer_of_int32(i_interp))))))
+                              shift(x@, integer_of_int32(i_interp))))))
                 and (JC_37:
                     (let k =
-                          div_real(sub_real(double_value(z_0),
+                          div_real(sub_real(double_value(z_0@),
                                    double_value(select(double_P_double_M_x_3,
-                                                shift(x,
+                                                shift(x@,
                                                 sub_int(integer_of_int32(i_interp),
                                                 (1)))))),
                           sub_real(double_value(select(double_P_double_M_x_3,
-                                                shift(x,
+                                                shift(x@,
                                                 integer_of_int32(i_interp)))),
                           double_value(select(double_P_double_M_x_3,
-                                       shift(x,
+                                       shift(x@,
                                        sub_int(integer_of_int32(i_interp),
                                        (1))))))) in
                      (let exact_result_0 =
                            add_real(double_value(select(double_P_double_M_y_4,
-                                                 shift(y,
+                                                 shift(y@,
                                                  sub_int(integer_of_int32(i_interp),
                                                  (1))))),
                            mul_real(k,
                            sub_real(double_value(select(double_P_double_M_y_4,
-                                                 shift(y,
+                                                 shift(y@,
                                                  integer_of_int32(i_interp)))),
                            double_value(select(double_P_double_M_y_4,
-                                        shift(y,
+                                        shift(y@,
                                         sub_int(integer_of_int32(i_interp),
                                         (1)))))))) in
                       le_real(abs_real(sub_real(double_value(result),
@@ -1799,7 +1802,7 @@ let interp_lin_ensures_too_high =
   { (JC_31:
     eq_real(double_value(result),
     double_value(select(double_P_double_M_y_4,
-                 shift(y, sub_int(integer_of_int32(n_0), (1))))))) }
+                 shift(y@, sub_int(integer_of_int32(n_0@), (1))))))) }
 
 let interp_lin_ensures_too_low =
  fun (x : double_P pointer) (y : double_P pointer) (n_0 : int32) (z_0 : double) (double_P_x_3_alloc_table : double_P alloc_table) (double_P_y_4_alloc_table : double_P alloc_table) (double_P_double_M_x_3 : (double_P, double) memory) (double_P_double_M_y_4 : (double_P, double) memory) ->
@@ -2080,7 +2083,7 @@ let interp_lin_ensures_too_low =
     absurd  end with Return -> !return end))
   { (JC_29:
     eq_real(double_value(result),
-    double_value(select(double_P_double_M_y_4, shift(y, (0)))))) }
+    double_value(select(double_P_double_M_y_4, shift(y@, (0)))))) }
 
 let interp_lin_safety =
  fun (x : double_P pointer) (y : double_P pointer) (n_0 : int32) (z_0 : double) (double_P_x_3_alloc_table : double_P alloc_table) (double_P_y_4_alloc_table : double_P alloc_table) (double_P_double_M_x_3 : (double_P, double) memory) (double_P_double_M_y_4 : (double_P, double) memory) ->

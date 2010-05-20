@@ -34,10 +34,10 @@ tag qr = {
 type qr = [qr]
 
 qr[0] md(integer n, integer d)
-  requires (C_41 : ((C_42 : (d > 0)) && (C_43 : (n >= 0))));
+  requires (C_42 : ((C_43 : (d > 0)) && (C_44 : (n >= 0))));
   decreases (C_45 : n);
 behavior default:
-  ensures (C_44 : true);
+  ensures (C_41 : true);
 {  
    (var qr[0] v);
    

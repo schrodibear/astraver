@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only weber3.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD weber3.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated for behavior default
-[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir weber3.jessie
 [jessie] File weber3.jessie/weber3.jc written.
 [jessie] File weber3.jessie/weber3.cloc written.

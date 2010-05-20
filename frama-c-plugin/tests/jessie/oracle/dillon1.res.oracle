@@ -38,11 +38,11 @@ tag void_P = {
 type void_P = [void_P]
 
 unit f2(int_P[..] p)
-  requires (C_3 : ((C_4 : (\offset_min(p) <= 0)) &&
-                    (C_5 : (\offset_max(p) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(p) <= 0)) &&
+                    (C_6 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.int_M;
-  ensures (C_6 : true);
+  ensures (C_3 : true);
 {  
    {  (C_2 : ((C_1 : p.int_M) = 3));
       

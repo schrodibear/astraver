@@ -48,7 +48,7 @@ predicate strcmp{L}(char_P[..] x_0, char_P[..] y) =
 
 int32 f(int32 x)
 behavior default:
-  ensures (C_5 : strcmp{Here}(foo{Here}(x), foo{Here}(\result)));
+  ensures (C_5 : strcmp{Here}(foo{Here}(\at(x,Old)), foo{Here}(\result)));
 {  
    (var int32 tmp);
    
@@ -327,14 +327,14 @@ parameter f :
  x_1:int32 ->
   { } int32
   { (JC_6:
-    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
+    strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
 
 parameter f_requires :
  x_1:int32 ->
   { } int32
   { (JC_6:
-    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
+    strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
 
 parameter int32_of_integer_ :
@@ -376,7 +376,7 @@ let f_ensures_default =
         void); (return := !tmp); (raise Return) end) end)))); absurd  end
    with Return -> !return end)))
   { (JC_5:
-    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
+    strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
 
 let f_safety =

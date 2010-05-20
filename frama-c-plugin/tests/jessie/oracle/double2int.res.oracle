@@ -54,12 +54,12 @@ behavior big:
   ensures (C_12 : (\result == 65535));
 behavior negative_fits:
   assumes (((- 65536.0) < (f :> real)) && ((f :> real) < 0.0));
-  ensures (C_13 : ((C_14 : ((f :> real) <= \result)) &&
-                    (C_15 : (\result < ((f :> real) + 1)))));
+  ensures (C_13 : ((C_14 : ((\at(f,Old) :> real) <= \result)) &&
+                    (C_15 : (\result < ((\at(f,Old) :> real) + 1)))));
 behavior positive_fits:
   assumes ((0.0 <= (f :> real)) && ((f :> real) < 65535.0));
-  ensures (C_16 : ((C_17 : (((f :> real) - 1) < \result)) &&
-                    (C_18 : (\result <= (f :> real)))));
+  ensures (C_16 : ((C_17 : (((\at(f,Old) :> real) - 1) < \result)) &&
+                    (C_18 : (\result <= (\at(f,Old) :> real)))));
 {  
    (var int32 i);
    
@@ -327,18 +327,18 @@ parameter double2int :
   { (((le_real(0.0, double_value(f@)) and lt_real(double_value(f@), 65535.0)) ->
       (JC_32:
       ((JC_30:
-       lt_real(sub_real(double_value(f), 1.0),
+       lt_real(sub_real(double_value(f@), 1.0),
        real_of_int(integer_of_int32(result))))
       and (JC_31:
-          le_real(real_of_int(integer_of_int32(result)), double_value(f))))))
+          le_real(real_of_int(integer_of_int32(result)), double_value(f@))))))
     and (((lt_real(neg_real(65536.0), double_value(f@))
           and lt_real(double_value(f@), 0.0)) ->
           (JC_26:
           ((JC_24:
-           le_real(double_value(f), real_of_int(integer_of_int32(result))))
+           le_real(double_value(f@), real_of_int(integer_of_int32(result))))
           and (JC_25:
               lt_real(real_of_int(integer_of_int32(result)),
-              add_real(double_value(f), 1.0))))))
+              add_real(double_value(f@), 1.0))))))
         and ((ge_real(double_value(f@), 65535.0) ->
               (JC_20: eq_int(integer_of_int32(result), (65535))))
             and (le_real(double_value(f@), neg_real(65536.0)) ->
@@ -350,18 +350,18 @@ parameter double2int_requires :
   { (((le_real(0.0, double_value(f@)) and lt_real(double_value(f@), 65535.0)) ->
       (JC_32:
       ((JC_30:
-       lt_real(sub_real(double_value(f), 1.0),
+       lt_real(sub_real(double_value(f@), 1.0),
        real_of_int(integer_of_int32(result))))
       and (JC_31:
-          le_real(real_of_int(integer_of_int32(result)), double_value(f))))))
+          le_real(real_of_int(integer_of_int32(result)), double_value(f@))))))
     and (((lt_real(neg_real(65536.0), double_value(f@))
           and lt_real(double_value(f@), 0.0)) ->
           (JC_26:
           ((JC_24:
-           le_real(double_value(f), real_of_int(integer_of_int32(result))))
+           le_real(double_value(f@), real_of_int(integer_of_int32(result))))
           and (JC_25:
               lt_real(real_of_int(integer_of_int32(result)),
-              add_real(double_value(f), 1.0))))))
+              add_real(double_value(f@), 1.0))))))
         and ((ge_real(double_value(f@), 65535.0) ->
               (JC_20: eq_int(integer_of_int32(result), (65535))))
             and (le_real(double_value(f@), neg_real(65536.0)) ->
@@ -481,10 +481,11 @@ let double2int_ensures_negative_fits =
           !i end)) in void)); (return := !i); (raise Return) end); absurd 
    end with Return -> !return end))
   { (JC_23:
-    ((JC_21: le_real(double_value(f), real_of_int(integer_of_int32(result))))
+    ((JC_21:
+     le_real(double_value(f@), real_of_int(integer_of_int32(result))))
     and (JC_22:
         lt_real(real_of_int(integer_of_int32(result)),
-        add_real(double_value(f), 1.0))))) }
+        add_real(double_value(f@), 1.0))))) }
 
 let double2int_ensures_positive_fits =
  fun (f : double) ->
@@ -517,10 +518,10 @@ let double2int_ensures_positive_fits =
    end with Return -> !return end))
   { (JC_29:
     ((JC_27:
-     lt_real(sub_real(double_value(f), 1.0),
+     lt_real(sub_real(double_value(f@), 1.0),
      real_of_int(integer_of_int32(result))))
     and (JC_28:
-        le_real(real_of_int(integer_of_int32(result)), double_value(f))))) }
+        le_real(real_of_int(integer_of_int32(result)), double_value(f@))))) }
 
 let double2int_ensures_small =
  fun (f : double) ->

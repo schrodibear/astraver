@@ -38,15 +38,15 @@ tag void_P = {
 type void_P = [void_P]
 
 unit Swap(int_P[..] p, int_P[..] q)
-  requires (C_8 : (((C_10 : (\offset_min(p) <= 0)) &&
-                     (C_11 : (\offset_max(p) >= 0))) &&
-                    ((C_13 : (\offset_min(q) <= 0)) &&
-                      (C_14 : (\offset_max(q) >= 0)))));
+  requires (C_11 : (((C_13 : (\offset_min(p) <= 0)) &&
+                      (C_14 : (\offset_max(p) >= 0))) &&
+                     ((C_16 : (\offset_min(q) <= 0)) &&
+                       (C_17 : (\offset_max(q) >= 0)))));
 behavior default:
   assigns p.int_M,
   q.int_M;
-  ensures (C_15 : ((C_16 : (p.int_M == \old(q.int_M))) &&
-                    (C_17 : (q.int_M == \old(p.int_M)))));
+  ensures (C_8 : ((C_9 : (\at(p,Old).int_M == \old(q.int_M))) &&
+                   (C_10 : (\at(q,Old).int_M == \old(p.int_M)))));
 {  
    (var int32 temp);
    
@@ -59,10 +59,10 @@ behavior default:
 }
 
 unit foo(int_P[..] a, int32 k)
-  requires (C_21 : ((C_22 : (\offset_min(a) <= 0)) &&
-                     (C_23 : (\offset_max(a) >= k))));
+  requires (C_22 : ((C_23 : (\offset_min(a) <= 0)) &&
+                     (C_24 : (\offset_max(a) >= k))));
 behavior default:
-  ensures (C_24 : true);
+  ensures (C_21 : true);
 {  
    {  (C_20 : Swap((C_18 : (a + 0)), (C_19 : (a + k))));
       
@@ -291,10 +291,10 @@ parameter Swap :
        { (JC_26:
          ((JC_22:
           ((JC_20:
-           eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
+           eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)),
            integer_of_int32(select(int_P_int_M_q_2@, q@))))
           and (JC_21:
-              eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
+              eq_int(integer_of_int32(select(int_P_int_M_q_2, q@)),
               integer_of_int32(select(int_P_int_M_p_1@, p@))))))
          and (JC_25:
              ((JC_23:
@@ -322,10 +322,10 @@ parameter Swap_requires :
        { (JC_26:
          ((JC_22:
           ((JC_20:
-           eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
+           eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)),
            integer_of_int32(select(int_P_int_M_q_2@, q@))))
           and (JC_21:
-              eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
+              eq_int(integer_of_int32(select(int_P_int_M_q_2, q@)),
               integer_of_int32(select(int_P_int_M_p_1@, p@))))))
          and (JC_25:
              ((JC_23:
@@ -539,10 +539,10 @@ let Swap_ensures_default =
   { (JC_19:
     ((JC_15:
      ((JC_13:
-      eq_int(integer_of_int32(select(int_P_int_M_p_1, p)),
+      eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)),
       integer_of_int32(select(int_P_int_M_q_2@, q@))))
      and (JC_14:
-         eq_int(integer_of_int32(select(int_P_int_M_q_2, q)),
+         eq_int(integer_of_int32(select(int_P_int_M_q_2, q@)),
          integer_of_int32(select(int_P_int_M_p_1@, p@))))))
     and (JC_18:
         ((JC_16:

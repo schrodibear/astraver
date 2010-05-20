@@ -1263,8 +1263,12 @@ let spec funspec =
   let behavior b =
     if List.exists (not $ is_normal_postcond) b.b_post_cond then
       warn_once "abrupt clause(s) ignored";
-    let name = if b.b_name = Cil.default_behavior_name then
-      name_of_default_behavior else b.b_name
+    let name =
+      if b.b_name = Cil.default_behavior_name then
+        name_of_default_behavior
+      else if b.b_name = name_of_default_behavior then
+        name_of_default_behavior ^ "_jessie"
+      else b.b_name
     in
 (*
     Format.eprintf "producing behavior '%s' from behavior '%s'@." name b.b_name;
@@ -1284,14 +1288,14 @@ let spec funspec =
               snd b.b_post_cond)))
   in
   let behaviors = List.map behavior funspec.spec_behavior in
-  let requires = 
+  let requires =
     List.fold_right
-      (fun b acc -> 
+      (fun b acc ->
          let ass = List.map (pred $ Logic_const.pred_of_id_pred) b.b_assumes in
          List.fold_right
            (fun req acc ->
               let impl = mkimplies ass
-                (pred (Logic_const.pred_of_id_pred req)) 
+                (pred (Logic_const.pred_of_id_pred req))
                   Loc.dummy_position in
               JCCrequires(locate impl) :: acc)
            b.b_requires
@@ -1318,7 +1322,7 @@ let spec funspec =
               (fun acc b ->
                  match b with
                    | JCCbehavior(_,name,_,Some a,_,_,_) ->
-                       if (bnames = [] && name <> Cil.default_behavior_name)
+                       if (bnames = [] && name <> Common.name_of_default_behavior)
                          || List.mem name bnames
                        then
                          a :: acc
@@ -1345,7 +1349,9 @@ let spec funspec =
                       Format.eprintf "name = %s, len bnames = %d@."
                         name (List.length bnames);
 *)
-                      if (bnames = [] && name <> Cil.default_behavior_name) ||
+                      if (bnames = [] &&
+                          name <> Common.name_of_default_behavior)
+                        ||
                         List.mem name bnames
                       then
                         a :: acc
@@ -1395,11 +1401,15 @@ let assertion = function
   | { status = Checked { valid = True } } -> Aassume
   | _ -> Aassert
 
-let built_behavior_ids l =
-  let l =
-    if l = [] then [ name_of_default_behavior ] else l
-  in
-  List.map (fun i -> new identifier i) l
+let built_behavior_ids = function
+    [] -> [ new identifier name_of_default_behavior ]
+  | l ->
+      List.map
+        (fun i ->
+           new identifier
+             (if i = name_of_default_behavior then name_of_default_behavior ^ "_jessie"
+              else i))
+        l
 
 let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
   let a, is_after =

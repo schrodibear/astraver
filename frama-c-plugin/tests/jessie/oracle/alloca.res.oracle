@@ -85,9 +85,9 @@ invariant valid_u :
 ((\offset_min(u) <= 0) && (\offset_max(u) >= 3))
 
 int32 h()
-  requires (C_38 : ((u + 2).int_M == 12));
+  requires (C_39 : ((u + 2).int_M == 12));
 behavior default:
-  ensures (C_39 : (\result == 12));
+  ensures (C_38 : (\result == 12));
 {  
    (var int_P[0..3] t_1);
    

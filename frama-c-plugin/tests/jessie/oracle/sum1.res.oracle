@@ -34,9 +34,9 @@ type void_P = [void_P]
 int32 x;
 
 unit main()
-  requires (C_13 : (x == 0));
+  requires (C_14 : (x == 0));
 behavior default:
-  ensures (C_14 : (x == 10));
+  ensures (C_13 : (x == 10));
 {  
    (var int32 i);
    

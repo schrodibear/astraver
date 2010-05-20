@@ -38,11 +38,11 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 main(int32 argc, char_xP[..] argv)
-  requires (C_14 : ((C_15 : (0 <= argc)) && (C_16 : (argc <= 10))));
-  requires (C_17 : ((C_18 : (\offset_min(argv) <= 0)) &&
-                     (C_19 : (\offset_max(argv) >= (argc - 1)))));
+  requires (C_18 : ((C_19 : (0 <= argc)) && (C_20 : (argc <= 10))));
+  requires (C_15 : ((C_16 : (\offset_min(argv) <= 0)) &&
+                     (C_17 : (\offset_max(argv) >= (argc - 1)))));
 behavior default:
-  ensures (C_20 : true);
+  ensures (C_14 : true);
 {  
    (var int32 i);
    

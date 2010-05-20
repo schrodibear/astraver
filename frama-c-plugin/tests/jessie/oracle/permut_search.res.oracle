@@ -38,15 +38,16 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 permut_search(int_P[..] arr, int32 v)
-  requires (C_9 : (\exists int32 n_0;
-                    (((0 <= n_0) &&
-                       ((\offset_min(arr) <= 0) && (\offset_max(arr) >= n_0))) &&
-                      (\forall int32 i_0;
-                        (((0 <= i_0) && (i_0 <= n_0)) ==>
-                          ((0 <= (arr + i_0).int_M) &&
-                            ((arr + i_0).int_M <= n_0)))))));
+  requires (C_10 : (\exists int32 n_0;
+                     (((0 <= n_0) &&
+                        ((\offset_min(arr) <= 0) &&
+                          (\offset_max(arr) >= n_0))) &&
+                       (\forall int32 i_0;
+                         (((0 <= i_0) && (i_0 <= n_0)) ==>
+                           ((0 <= (arr + i_0).int_M) &&
+                             ((arr + i_0).int_M <= n_0)))))));
 behavior default:
-  ensures (C_10 : true);
+  ensures (C_9 : true);
 {  
    (var int32 idx);
    

@@ -27,10 +27,10 @@ tag void_P = {
 type void_P = [void_P]
 
 integer even(integer n)
-  requires (C_8 : (n >= 0));
+  requires (C_9 : (n >= 0));
   decreases (C_10 : n);
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_8 : true);
 {  
    (var integer tmp);
    
@@ -52,10 +52,10 @@ behavior default:
 }
 
 integer odd(integer n_0)
-  requires (C_18 : (n_0 >= 0));
+  requires (C_19 : (n_0 >= 0));
   decreases (C_20 : n_0);
 behavior default:
-  ensures (C_19 : true);
+  ensures (C_18 : true);
 {  
    (var integer tmp_0_0);
    

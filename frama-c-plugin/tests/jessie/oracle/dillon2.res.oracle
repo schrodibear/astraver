@@ -55,11 +55,11 @@ logic las_xP[..] p_ref =
 p
 
 unit f3()
-  requires (C_4 : ((C_5 : (\offset_min(p.las_xM) <= 0)) &&
-                    (C_6 : (\offset_max(p.las_xM) >= 0))));
+  requires (C_5 : ((C_6 : (\offset_min(p.las_xM) <= 0)) &&
+                    (C_7 : (\offset_max(p.las_xM) >= 0))));
 behavior default:
   assigns p.las_xM.a;
-  ensures (C_7 : true);
+  ensures (C_4 : true);
 {  
    {  (C_3 : ((C_2 : (C_1 : p.las_xM).a) = 5));
       
@@ -68,11 +68,11 @@ behavior default:
 }
 
 unit g3(int_P[..] p_0)
-  requires (C_9 : ((C_10 : (\offset_min(p_0) <= 0)) &&
-                    (C_11 : (\offset_max(p_0) >= 0))));
+  requires (C_10 : ((C_11 : (\offset_min(p_0) <= 0)) &&
+                     (C_12 : (\offset_max(p_0) >= 0))));
 behavior default:
   assigns p_ref.las_xM.a;
-  ensures (C_12 : true);
+  ensures (C_9 : true);
 {  
    {  (C_8 : f3());
       

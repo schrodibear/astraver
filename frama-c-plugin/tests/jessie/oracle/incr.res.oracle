@@ -45,9 +45,9 @@ invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 9))
 
 unit f()
-  requires (C_7 : (b == 0));
+  requires (C_8 : (b == 0));
 behavior default:
-  ensures (C_8 : (b == 1));
+  ensures (C_7 : (b == 1));
 {  
    (var int32 tmp);
    

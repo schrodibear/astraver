@@ -32,11 +32,11 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 foo(int32 a)
-  requires (C_7 : ((C_8 : (0 <= a)) && (C_9 : (a <= 10))));
-  requires (C_10 : ((C_11 : (0 <= a)) && (C_12 : (a <= 11))));
+  requires (C_17 : ((C_18 : (0 <= a)) && (C_19 : (a <= 10))));
+  requires (C_14 : ((C_15 : (0 <= a)) && (C_16 : (a <= 11))));
 behavior default:
-  ensures (C_13 : (((C_15 : (0 <= \result)) && (C_16 : (\result <= 11))) &&
-                    ((C_18 : (0 <= \result)) && (C_19 : (\result <= 10)))));
+  ensures (C_7 : (((C_9 : (0 <= \result)) && (C_10 : (\result <= 11))) &&
+                   ((C_12 : (0 <= \result)) && (C_13 : (\result <= 10)))));
 {  
    (var int32 __retres);
    

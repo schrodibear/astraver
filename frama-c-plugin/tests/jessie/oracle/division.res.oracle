@@ -44,10 +44,11 @@ lemma distr_left :
       (((x_0 + y_0) * z_0) == ((x_0 * z_0) + (y_0 * z_0))))))
 
 int32 division(int32 x, int32 y)
-  requires (C_13 : ((C_14 : (x >= 0)) && (C_15 : (y > 0))));
+  requires (C_14 : ((C_15 : (x >= 0)) && (C_16 : (y > 0))));
 behavior default:
-  ensures (C_16 : (\exists integer r;
-                    ((x == ((\result * y) + r)) && ((0 <= r) && (r < y)))));
+  ensures (C_13 : (\exists integer r;
+                    ((\at(x,Old) == ((\result * \at(y,Old)) + r)) &&
+                      ((0 <= r) && (r < \at(y,Old))))));
 {  
    (var int32 i);
    
@@ -362,9 +363,9 @@ parameter division :
    { } int32
    { (JC_10:
      (exists r:int.
-      (eq_int(integer_of_int32(x),
-       add_int(mul_int(integer_of_int32(result), integer_of_int32(y)), r))
-      and (le_int((0), r) and lt_int(r, integer_of_int32(y)))))) }
+      (eq_int(integer_of_int32(x@),
+       add_int(mul_int(integer_of_int32(result), integer_of_int32(y@)), r))
+      and (le_int((0), r) and lt_int(r, integer_of_int32(y@)))))) }
 
 parameter division_requires :
  x:int32 ->
@@ -375,9 +376,9 @@ parameter division_requires :
    int32
    { (JC_10:
      (exists r:int.
-      (eq_int(integer_of_int32(x),
-       add_int(mul_int(integer_of_int32(result), integer_of_int32(y)), r))
-      and (le_int((0), r) and lt_int(r, integer_of_int32(y)))))) }
+      (eq_int(integer_of_int32(x@),
+       add_int(mul_int(integer_of_int32(result), integer_of_int32(y@)), r))
+      and (le_int((0), r) and lt_int(r, integer_of_int32(y@)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -457,9 +458,9 @@ let division_ensures_default =
    !return end))
   { (JC_9:
     (exists r:int.
-     (eq_int(integer_of_int32(x),
-      add_int(mul_int(integer_of_int32(result), integer_of_int32(y)), r))
-     and (le_int((0), r) and lt_int(r, integer_of_int32(y)))))) }
+     (eq_int(integer_of_int32(x@),
+      add_int(mul_int(integer_of_int32(result), integer_of_int32(y@)), r))
+     and (le_int((0), r) and lt_int(r, integer_of_int32(y@)))))) }
 
 let division_safety =
  fun (x : int32) (y : int32) ->

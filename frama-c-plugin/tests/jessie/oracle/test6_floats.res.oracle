@@ -38,21 +38,24 @@ axiomatic KillingProp {
 }
 
 double comput_seq(double u0, double u1, int32 N)
-  requires (C_25 : (((((C_29 : (2 <= N)) && (C_30 : (N <= 0x1p26))) &&
-                       (C_31 : (\double_exact(u0) == (u0 :> real)))) &&
-                      (C_32 : (\double_exact(u1) == (u1 :> real)))) &&
-                     (C_33 : (\forall integer k;
+  requires (C_28 : (((((C_32 : (2 <= N)) && (C_33 : (N <= 0x1p26))) &&
+                       (C_34 : (\double_exact(u0) == (u0 :> real)))) &&
+                      (C_35 : (\double_exact(u1) == (u1 :> real)))) &&
+                     (C_36 : (\forall integer k;
                                (((0 <= k) && (k <= N)) ==>
                                  (\real_abs(((u0 :> real) +
                                               (k *
                                                 ((u1 :> real) - (u0 :> real))))) <=
                                    1))))));
 behavior default:
-  ensures (C_34 : ((C_35 : (\double_exact(\result) ==
-                             ((u0 :> real) +
-                               (N * ((u1 :> real) - (u0 :> real)))))) &&
-                    (C_36 : (\double_round_error(\result) <=
-                              (((N * (N + 1)) / 2.0) * 0x1p-53)))));
+  ensures (C_25 : ((C_26 : (\double_exact(\result) ==
+                             ((\at(u0,Old) :> real) +
+                               (\at(N,Old) *
+                                 ((\at(u1,Old) :> real) -
+                                   (\at(u0,Old) :> real)))))) &&
+                    (C_27 : (\double_round_error(\result) <=
+                              (((\at(N,Old) * (\at(N,Old) + 1)) / 2.0) *
+                                0x1p-53)))));
 {  
    (var int32 i);
    
@@ -365,13 +368,13 @@ parameter comput_seq :
     { (JC_20:
       ((JC_18:
        eq_real(double_exact(result),
-       add_real(double_value(u0),
-       mul_real(real_of_int(integer_of_int32(N)),
-       sub_real(double_value(u1), double_value(u0))))))
+       add_real(double_value(u0@),
+       mul_real(real_of_int(integer_of_int32(N@)),
+       sub_real(double_value(u1@), double_value(u0@))))))
       and (JC_19:
           le_real(double_round_error(result),
-          mul_real(div_real(real_of_int(mul_int(integer_of_int32(N),
-                                        add_int(integer_of_int32(N), (1)))),
+          mul_real(div_real(real_of_int(mul_int(integer_of_int32(N@),
+                                        add_int(integer_of_int32(N@), (1)))),
                    2.0),
           0x1p-53))))) }
 
@@ -396,13 +399,13 @@ parameter comput_seq_requires :
     { (JC_20:
       ((JC_18:
        eq_real(double_exact(result),
-       add_real(double_value(u0),
-       mul_real(real_of_int(integer_of_int32(N)),
-       sub_real(double_value(u1), double_value(u0))))))
+       add_real(double_value(u0@),
+       mul_real(real_of_int(integer_of_int32(N@)),
+       sub_real(double_value(u1@), double_value(u0@))))))
       and (JC_19:
           le_real(double_round_error(result),
-          mul_real(div_real(real_of_int(mul_int(integer_of_int32(N),
-                                        add_int(integer_of_int32(N), (1)))),
+          mul_real(div_real(real_of_int(mul_int(integer_of_int32(N@),
+                                        add_int(integer_of_int32(N@), (1)))),
                    2.0),
           0x1p-53))))) }
 
@@ -533,13 +536,13 @@ let comput_seq_ensures_default =
   { (JC_17:
     ((JC_15:
      eq_real(double_exact(result),
-     add_real(double_value(u0),
-     mul_real(real_of_int(integer_of_int32(N)),
-     sub_real(double_value(u1), double_value(u0))))))
+     add_real(double_value(u0@),
+     mul_real(real_of_int(integer_of_int32(N@)),
+     sub_real(double_value(u1@), double_value(u0@))))))
     and (JC_16:
         le_real(double_round_error(result),
-        mul_real(div_real(real_of_int(mul_int(integer_of_int32(N),
-                                      add_int(integer_of_int32(N), (1)))),
+        mul_real(div_real(real_of_int(mul_int(integer_of_int32(N@),
+                                      add_int(integer_of_int32(N@), (1)))),
                  2.0),
         0x1p-53))))) }
 

@@ -44,15 +44,15 @@ tag __anonstruct_S_1 = {
 type __anonstruct_S_1 = [__anonstruct_S_1]
 
 int32 main1(__anonstruct_S_1[..] p, int_P[..] r)
-  requires (C_10 : ((((C_13 : (\offset_min(p) <= 0)) &&
-                       (C_14 : (\offset_max(p) >= 0))) &&
-                      ((C_16 : (\offset_min(p.rc) <= 0)) &&
-                        (C_17 : (\offset_max(p.rc) >= 0)))) &&
-                     ((C_19 : (\offset_min(r) <= 0)) &&
-                       (C_20 : (\offset_max(r) >= 0)))));
+  requires (C_11 : ((((C_14 : (\offset_min(p) <= 0)) &&
+                       (C_15 : (\offset_max(p) >= 0))) &&
+                      ((C_17 : (\offset_min(p.rc) <= 0)) &&
+                        (C_18 : (\offset_max(p.rc) >= 0)))) &&
+                     ((C_20 : (\offset_min(r) <= 0)) &&
+                       (C_21 : (\offset_max(r) >= 0)))));
 behavior default:
   assigns p.rc;
-  ensures (C_21 : true);
+  ensures (C_10 : true);
 {  
    (var int_P[0] x);
    

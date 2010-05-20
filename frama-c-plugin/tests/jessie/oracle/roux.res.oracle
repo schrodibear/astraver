@@ -41,11 +41,11 @@ type void_P = [void_P]
 int_P[..] p;
 
 unit f(int_P[..] q)
-  requires (C_3 : ((C_4 : (\offset_min(q) <= 0)) &&
-                    (C_5 : (\offset_max(q) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(q) <= 0)) &&
+                    (C_6 : (\offset_max(q) >= 0))));
 behavior default:
   assigns q.int_M;
-  ensures (C_6 : true);
+  ensures (C_3 : true);
 {  
    {  (C_2 : ((C_1 : q.int_M) = 42));
       
@@ -54,11 +54,11 @@ behavior default:
 }
 
 unit g()
-  requires (C_13 : (((C_15 : (\offset_min(p) <= 0)) &&
-                      (C_16 : (\offset_max(p) >= 0))) &&
-                     (C_17 : (p.int_M == 0))));
+  requires (C_14 : (((C_16 : (\offset_min(p) <= 0)) &&
+                      (C_17 : (\offset_max(p) >= 0))) &&
+                     (C_18 : (p.int_M == 0))));
 behavior default:
-  ensures (C_18 : (p.int_M == 0));
+  ensures (C_13 : (p.int_M == 0));
 {  
    (var int_P[0..1] i);
    

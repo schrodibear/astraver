@@ -53,10 +53,10 @@ tag pP = {
 }
 
 unit zero(U[..] x)
-  requires (C_14 : ((C_15 : (\offset_min(x) <= 0)) &&
-                     (C_16 : (\offset_max(x) >= 0))));
+  requires (C_15 : ((C_16 : (\offset_min(x) <= 0)) &&
+                     (C_17 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_17 : true);
+  ensures (C_14 : true);
 {  
    {  (C_3 : ((C_2 : (C_1 : (x :> iP[0])).iM) = 0));
       

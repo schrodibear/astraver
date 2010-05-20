@@ -50,11 +50,11 @@ invariant valid_v :
 ((\offset_min(v) <= 0) && (\offset_max(v) >= 0))
 
 unit g(int_P[..] p)
-  requires (C_1 : ((C_2 : (\offset_min(p) <= 0)) &&
-                    (C_3 : (\offset_max(p) >= 0))));
+  requires (C_2 : ((C_3 : (\offset_min(p) <= 0)) &&
+                    (C_4 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.int_M;
-  ensures (C_4 : true);
+  ensures (C_1 : true);
 ;
 
 unit f()
@@ -68,10 +68,10 @@ behavior default:
 }
 
 unit f2(__anonstruct_las_1[..] x)
-  requires (C_10 : ((C_11 : (\offset_min(x) <= 0)) &&
-                     (C_12 : (\offset_max(x) >= 0))));
+  requires (C_11 : ((C_12 : (\offset_min(x) <= 0)) &&
+                     (C_13 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_13 : true);
+  ensures (C_10 : true);
 {  
    {  (C_9 : g((C_8 : x.c)));
       

@@ -42,44 +42,61 @@ int32 i_f;
 
 real InterPolate(real x, double_P[..] X, double_P[..] Y, double_P[..] V,
                  int32 n)
-  requires (C_38 : ((C_39 : (3 <= n)) && (C_40 : (n <= 17))));
-  requires (C_41 : ((C_42 : (\offset_min(X) <= 0)) &&
-                     (C_43 : (\offset_max(X) >= n))));
-  requires (C_44 : ((C_45 : (\offset_min(Y) <= 0)) &&
-                     (C_46 : (\offset_max(Y) >= n))));
-  requires (C_47 : ((C_48 : (\offset_min(V) <= 0)) &&
-                     (C_49 : (\offset_max(V) >= n))));
-  requires (C_50 : ((X + 0).double_M == (X + 1).double_M));
-  requires (C_51 : (\forall integer k1;
+  requires (C_57 : ((C_58 : (3 <= n)) && (C_59 : (n <= 17))));
+  requires (C_54 : ((C_55 : (\offset_min(X) <= 0)) &&
+                     (C_56 : (\offset_max(X) >= n))));
+  requires (C_51 : ((C_52 : (\offset_min(Y) <= 0)) &&
+                     (C_53 : (\offset_max(Y) >= n))));
+  requires (C_48 : ((C_49 : (\offset_min(V) <= 0)) &&
+                     (C_50 : (\offset_max(V) >= n))));
+  requires (C_47 : ((X + 0).double_M == (X + 1).double_M));
+  requires (C_46 : (\forall integer k1;
                      (\forall int32 k2;
                        (((1 <= k1) && ((k1 < k2) && (k2 <= n))) ==>
                          ((X + k1).double_M < (X + k2).double_M)))));
 behavior default:
+  ensures (C_38 : true);
+behavior small:
   assumes (((Y + 0).double_M == (Y + 1).double_M) &&
             ((((V + 0).double_M == (V + n).double_M) &&
                ((V + n).double_M == 0.0)) &&
-              (\forall integer k_0;
-                (((1 <= k_0) && (k_0 <= (n - 1))) ==>
-                  ((V + k_0).double_M ==
-                    (((Y + (k_0 + 1)).double_M - (Y + k_0).double_M) /
-                      ((X + (k_0 + 1)).double_M - (X + k_0).double_M)))))));
-  ensures (C_52 : true);
-behavior small:
-  assumes (x < (X + 0).double_M);
-  ensures (C_53 : (\result == (Y + 0).double_M));
+              ((\forall integer k_0;
+                 (((1 <= k_0) && (k_0 <= (n - 1))) ==>
+                   ((V + k_0).double_M ==
+                     (((Y + (k_0 + 1)).double_M - (Y + k_0).double_M) /
+                       ((X + (k_0 + 1)).double_M - (X + k_0).double_M))))) &&
+                (x < (X + 0).double_M))));
+  ensures (C_39 : (\result == (\at(Y,Old) + 0).double_M));
 behavior big:
-  assumes (x >= (X + n).double_M);
-  ensures (C_54 : (\result == (Y + n).double_M));
+  assumes (((Y + 0).double_M == (Y + 1).double_M) &&
+            ((((V + 0).double_M == (V + n).double_M) &&
+               ((V + n).double_M == 0.0)) &&
+              ((\forall integer k_1;
+                 (((1 <= k_1) && (k_1 <= (n - 1))) ==>
+                   ((V + k_1).double_M ==
+                     (((Y + (k_1 + 1)).double_M - (Y + k_1).double_M) /
+                       ((X + (k_1 + 1)).double_M - (X + k_1).double_M))))) &&
+                (x >= (X + n).double_M))));
+  ensures (C_40 : (\result == (\at(Y,Old) + \at(n,Old)).double_M));
 behavior inter:
-  assumes (((X + 0).double_M <= x) && (x < (X + n).double_M));
-  ensures (C_55 : (((C_57 : (1 <= i_f)) && (C_58 : (i_f <= (n - 1)))) &&
-                    (C_59 : (\result ==
-                              ((Y + i_f).double_M +
-                                (((x - (X + i_f).double_M) *
-                                   ((Y + (i_f + 1)).double_M -
-                                     (Y + i_f).double_M)) /
-                                  ((X + (i_f + 1)).double_M -
-                                    (X + i_f).double_M)))))));
+  assumes (((Y + 0).double_M == (Y + 1).double_M) &&
+            ((((V + 0).double_M == (V + n).double_M) &&
+               ((V + n).double_M == 0.0)) &&
+              ((\forall integer k_2;
+                 (((1 <= k_2) && (k_2 <= (n - 1))) ==>
+                   ((V + k_2).double_M ==
+                     (((Y + (k_2 + 1)).double_M - (Y + k_2).double_M) /
+                       ((X + (k_2 + 1)).double_M - (X + k_2).double_M))))) &&
+                (((X + 0).double_M <= x) && (x < (X + n).double_M)))));
+  ensures (C_41 : (((C_43 : (1 <= i_f)) &&
+                     (C_44 : (i_f <= (\at(n,Old) - 1)))) &&
+                    (C_45 : (\result ==
+                              ((\at(Y,Old) + i_f).double_M +
+                                (((\at(x,Old) - (\at(X,Old) + i_f).double_M) *
+                                   ((\at(Y,Old) + (i_f + 1)).double_M -
+                                     (\at(Y,Old) + i_f).double_M)) /
+                                  ((\at(X,Old) + (i_f + 1)).double_M -
+                                    (\at(X,Old) + i_f).double_M)))))));
 {  
    (var int32 i);
    
@@ -101,15 +118,15 @@ behavior inter:
       
       {  
          loop 
-         behavior small:
-           invariant (C_17 : (i == 0));
          behavior default:
-           invariant (C_16 : (\forall integer k;
+           invariant (C_17 : (\forall integer k;
                                (((i0 <= k) && (k < i)) ==>
                                  (x >= (X + i).double_M))));
          behavior default:
-           invariant (C_13 : ((C_14 : (i0 <= i)) && (C_15 : (i <= n))));
-         variant (C_12 : (n - i));
+           invariant (C_14 : ((C_15 : (i0 <= i)) && (C_16 : (i <= n))));
+         behavior small:
+           invariant (C_12 : (i == 0));
+         variant (C_13 : (n - i));
          while (true)
          {  
             {  (if (i < n) then (if (x >=
@@ -374,44 +391,119 @@ parameter InterPolate :
           double_P_double_M_Y_2:(double_P, real) memory ->
            double_P_double_M_X_1:(double_P, real) memory ->
             { } real reads i_f writes i_f
-            { (((le_real(select(double_P_double_M_X_1@, shift(X@, (0))), x@)
-                and lt_real(x@,
-                    select(double_P_double_M_X_1@,
-                    shift(X@, integer_of_int32(n@))))) ->
+            { (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
+                 select(double_P_double_M_Y_2@, shift(Y@, (1))))
+                and (eq_real(select(double_P_double_M_V_3@, shift(V@, (0))),
+                     select(double_P_double_M_V_3@,
+                     shift(V@, integer_of_int32(n@))))
+                    and (eq_real(select(double_P_double_M_V_3@,
+                                 shift(V@, integer_of_int32(n@))),
+                         0.0)
+                        and ((forall k_2:int.
+                              ((le_int((1), k_2@)
+                               and le_int(k_2@,
+                                   sub_int(integer_of_int32(n@), (1)))) ->
+                               eq_real(select(double_P_double_M_V_3@,
+                                       shift(V@, k_2@)),
+                               div_real(sub_real(select(double_P_double_M_Y_2@,
+                                                 shift(Y@,
+                                                 add_int(k_2@, (1)))),
+                                        select(double_P_double_M_Y_2@,
+                                        shift(Y@, k_2@))),
+                               sub_real(select(double_P_double_M_X_1@,
+                                        shift(X@, add_int(k_2@, (1)))),
+                               select(double_P_double_M_X_1@,
+                               shift(X@, k_2@)))))))
+                            and (le_real(select(double_P_double_M_X_1@,
+                                         shift(X@, (0))),
+                                 x@)
+                                and lt_real(x@,
+                                    select(double_P_double_M_X_1@,
+                                    shift(X@, integer_of_int32(n@))))))))) ->
                 (JC_40:
                 ((JC_37: le_int((1), integer_of_int32(i_f)))
                 and ((JC_38:
                      le_int(integer_of_int32(i_f),
-                     sub_int(integer_of_int32(n), (1))))
+                     sub_int(integer_of_int32(n@), (1))))
                     and (JC_39:
                         eq_real(result,
                         add_real(select(double_P_double_M_Y_2,
-                                 shift(Y, integer_of_int32(i_f))),
-                        div_real(mul_real(sub_real(x,
+                                 shift(Y@, integer_of_int32(i_f))),
+                        div_real(mul_real(sub_real(x@,
                                           select(double_P_double_M_X_1,
-                                          shift(X, integer_of_int32(i_f)))),
+                                          shift(X@, integer_of_int32(i_f)))),
                                  sub_real(select(double_P_double_M_Y_2,
-                                          shift(Y,
+                                          shift(Y@,
                                           add_int(integer_of_int32(i_f), (1)))),
                                  select(double_P_double_M_Y_2,
-                                 shift(Y, integer_of_int32(i_f))))),
+                                 shift(Y@, integer_of_int32(i_f))))),
                         sub_real(select(double_P_double_M_X_1,
-                                 shift(X,
+                                 shift(X@,
                                  add_int(integer_of_int32(i_f), (1)))),
                         select(double_P_double_M_X_1,
-                        shift(X, integer_of_int32(i_f))))))))))))
-              and ((ge_real(x@,
-                    select(double_P_double_M_X_1@,
-                    shift(X@, integer_of_int32(n@)))) ->
+                        shift(X@, integer_of_int32(i_f))))))))))))
+              and (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
+                     select(double_P_double_M_Y_2@, shift(Y@, (1))))
+                    and (eq_real(select(double_P_double_M_V_3@,
+                                 shift(V@, (0))),
+                         select(double_P_double_M_V_3@,
+                         shift(V@, integer_of_int32(n@))))
+                        and (eq_real(select(double_P_double_M_V_3@,
+                                     shift(V@, integer_of_int32(n@))),
+                             0.0)
+                            and ((forall k_1:int.
+                                  ((le_int((1), k_1@)
+                                   and le_int(k_1@,
+                                       sub_int(integer_of_int32(n@), (1)))) ->
+                                   eq_real(select(double_P_double_M_V_3@,
+                                           shift(V@, k_1@)),
+                                   div_real(sub_real(select(double_P_double_M_Y_2@,
+                                                     shift(Y@,
+                                                     add_int(k_1@, (1)))),
+                                            select(double_P_double_M_Y_2@,
+                                            shift(Y@, k_1@))),
+                                   sub_real(select(double_P_double_M_X_1@,
+                                            shift(X@, add_int(k_1@, (1)))),
+                                   select(double_P_double_M_X_1@,
+                                   shift(X@, k_1@)))))))
+                                and ge_real(x@,
+                                    select(double_P_double_M_X_1@,
+                                    shift(X@, integer_of_int32(n@)))))))) ->
                     (JC_32:
                     eq_real(result,
                     select(double_P_double_M_Y_2,
-                    shift(Y, integer_of_int32(n))))))
-                  and (lt_real(x@,
-                       select(double_P_double_M_X_1@, shift(X@, (0)))) ->
+                    shift(Y@, integer_of_int32(n@))))))
+                  and ((eq_real(select(double_P_double_M_Y_2@,
+                                shift(Y@, (0))),
+                        select(double_P_double_M_Y_2@, shift(Y@, (1))))
+                       and (eq_real(select(double_P_double_M_V_3@,
+                                    shift(V@, (0))),
+                            select(double_P_double_M_V_3@,
+                            shift(V@, integer_of_int32(n@))))
+                           and (eq_real(select(double_P_double_M_V_3@,
+                                        shift(V@, integer_of_int32(n@))),
+                                0.0)
+                               and ((forall k_0:int.
+                                     ((le_int((1), k_0@)
+                                      and le_int(k_0@,
+                                          sub_int(integer_of_int32(n@), (1)))) ->
+                                      eq_real(select(double_P_double_M_V_3@,
+                                              shift(V@, k_0@)),
+                                      div_real(sub_real(select(double_P_double_M_Y_2@,
+                                                        shift(Y@,
+                                                        add_int(k_0@, (1)))),
+                                               select(double_P_double_M_Y_2@,
+                                               shift(Y@, k_0@))),
+                                      sub_real(select(double_P_double_M_X_1@,
+                                               shift(X@, add_int(k_0@, (1)))),
+                                      select(double_P_double_M_X_1@,
+                                      shift(X@, k_0@)))))))
+                                   and lt_real(x@,
+                                       select(double_P_double_M_X_1@,
+                                       shift(X@, (0)))))))) ->
                        (JC_30:
                        eq_real(result,
-                       select(double_P_double_M_Y_2, shift(Y, (0)))))))) }
+                       select(double_P_double_M_Y_2, shift(Y@, (0)))))))) }
 
 parameter InterPolate_requires :
  x:real ->
@@ -467,44 +559,119 @@ parameter InterPolate_requires :
                                                      shift(X,
                                                      integer_of_int32(k2))))))))))))))))))}
             real reads i_f writes i_f
-            { (((le_real(select(double_P_double_M_X_1@, shift(X@, (0))), x@)
-                and lt_real(x@,
-                    select(double_P_double_M_X_1@,
-                    shift(X@, integer_of_int32(n@))))) ->
+            { (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
+                 select(double_P_double_M_Y_2@, shift(Y@, (1))))
+                and (eq_real(select(double_P_double_M_V_3@, shift(V@, (0))),
+                     select(double_P_double_M_V_3@,
+                     shift(V@, integer_of_int32(n@))))
+                    and (eq_real(select(double_P_double_M_V_3@,
+                                 shift(V@, integer_of_int32(n@))),
+                         0.0)
+                        and ((forall k_2:int.
+                              ((le_int((1), k_2@)
+                               and le_int(k_2@,
+                                   sub_int(integer_of_int32(n@), (1)))) ->
+                               eq_real(select(double_P_double_M_V_3@,
+                                       shift(V@, k_2@)),
+                               div_real(sub_real(select(double_P_double_M_Y_2@,
+                                                 shift(Y@,
+                                                 add_int(k_2@, (1)))),
+                                        select(double_P_double_M_Y_2@,
+                                        shift(Y@, k_2@))),
+                               sub_real(select(double_P_double_M_X_1@,
+                                        shift(X@, add_int(k_2@, (1)))),
+                               select(double_P_double_M_X_1@,
+                               shift(X@, k_2@)))))))
+                            and (le_real(select(double_P_double_M_X_1@,
+                                         shift(X@, (0))),
+                                 x@)
+                                and lt_real(x@,
+                                    select(double_P_double_M_X_1@,
+                                    shift(X@, integer_of_int32(n@))))))))) ->
                 (JC_40:
                 ((JC_37: le_int((1), integer_of_int32(i_f)))
                 and ((JC_38:
                      le_int(integer_of_int32(i_f),
-                     sub_int(integer_of_int32(n), (1))))
+                     sub_int(integer_of_int32(n@), (1))))
                     and (JC_39:
                         eq_real(result,
                         add_real(select(double_P_double_M_Y_2,
-                                 shift(Y, integer_of_int32(i_f))),
-                        div_real(mul_real(sub_real(x,
+                                 shift(Y@, integer_of_int32(i_f))),
+                        div_real(mul_real(sub_real(x@,
                                           select(double_P_double_M_X_1,
-                                          shift(X, integer_of_int32(i_f)))),
+                                          shift(X@, integer_of_int32(i_f)))),
                                  sub_real(select(double_P_double_M_Y_2,
-                                          shift(Y,
+                                          shift(Y@,
                                           add_int(integer_of_int32(i_f), (1)))),
                                  select(double_P_double_M_Y_2,
-                                 shift(Y, integer_of_int32(i_f))))),
+                                 shift(Y@, integer_of_int32(i_f))))),
                         sub_real(select(double_P_double_M_X_1,
-                                 shift(X,
+                                 shift(X@,
                                  add_int(integer_of_int32(i_f), (1)))),
                         select(double_P_double_M_X_1,
-                        shift(X, integer_of_int32(i_f))))))))))))
-              and ((ge_real(x@,
-                    select(double_P_double_M_X_1@,
-                    shift(X@, integer_of_int32(n@)))) ->
+                        shift(X@, integer_of_int32(i_f))))))))))))
+              and (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
+                     select(double_P_double_M_Y_2@, shift(Y@, (1))))
+                    and (eq_real(select(double_P_double_M_V_3@,
+                                 shift(V@, (0))),
+                         select(double_P_double_M_V_3@,
+                         shift(V@, integer_of_int32(n@))))
+                        and (eq_real(select(double_P_double_M_V_3@,
+                                     shift(V@, integer_of_int32(n@))),
+                             0.0)
+                            and ((forall k_1:int.
+                                  ((le_int((1), k_1@)
+                                   and le_int(k_1@,
+                                       sub_int(integer_of_int32(n@), (1)))) ->
+                                   eq_real(select(double_P_double_M_V_3@,
+                                           shift(V@, k_1@)),
+                                   div_real(sub_real(select(double_P_double_M_Y_2@,
+                                                     shift(Y@,
+                                                     add_int(k_1@, (1)))),
+                                            select(double_P_double_M_Y_2@,
+                                            shift(Y@, k_1@))),
+                                   sub_real(select(double_P_double_M_X_1@,
+                                            shift(X@, add_int(k_1@, (1)))),
+                                   select(double_P_double_M_X_1@,
+                                   shift(X@, k_1@)))))))
+                                and ge_real(x@,
+                                    select(double_P_double_M_X_1@,
+                                    shift(X@, integer_of_int32(n@)))))))) ->
                     (JC_32:
                     eq_real(result,
                     select(double_P_double_M_Y_2,
-                    shift(Y, integer_of_int32(n))))))
-                  and (lt_real(x@,
-                       select(double_P_double_M_X_1@, shift(X@, (0)))) ->
+                    shift(Y@, integer_of_int32(n@))))))
+                  and ((eq_real(select(double_P_double_M_Y_2@,
+                                shift(Y@, (0))),
+                        select(double_P_double_M_Y_2@, shift(Y@, (1))))
+                       and (eq_real(select(double_P_double_M_V_3@,
+                                    shift(V@, (0))),
+                            select(double_P_double_M_V_3@,
+                            shift(V@, integer_of_int32(n@))))
+                           and (eq_real(select(double_P_double_M_V_3@,
+                                        shift(V@, integer_of_int32(n@))),
+                                0.0)
+                               and ((forall k_0:int.
+                                     ((le_int((1), k_0@)
+                                      and le_int(k_0@,
+                                          sub_int(integer_of_int32(n@), (1)))) ->
+                                      eq_real(select(double_P_double_M_V_3@,
+                                              shift(V@, k_0@)),
+                                      div_real(sub_real(select(double_P_double_M_Y_2@,
+                                                        shift(Y@,
+                                                        add_int(k_0@, (1)))),
+                                               select(double_P_double_M_Y_2@,
+                                               shift(Y@, k_0@))),
+                                      sub_real(select(double_P_double_M_X_1@,
+                                               shift(X@, add_int(k_0@, (1)))),
+                                      select(double_P_double_M_X_1@,
+                                      shift(X@, k_0@)))))))
+                                   and lt_real(x@,
+                                       select(double_P_double_M_X_1@,
+                                       shift(X@, (0)))))))) ->
                        (JC_30:
                        eq_real(result,
-                       select(double_P_double_M_Y_2, shift(Y, (0)))))))) }
+                       select(double_P_double_M_Y_2, shift(Y@, (0)))))))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -663,7 +830,26 @@ parameter safe_int8_of_integer_ :
 
 let InterPolate_ensures_big =
  fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { (ge_real(x, select(double_P_double_M_X_1, shift(X, integer_of_int32(n))))
+  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
+      select(double_P_double_M_Y_2, shift(Y, (1))))
+     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
+          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
+         and (eq_real(select(double_P_double_M_V_3,
+                      shift(V, integer_of_int32(n))),
+              0.0)
+             and ((forall k_1:int.
+                   ((le_int((1), k_1)
+                    and le_int(k_1, sub_int(integer_of_int32(n), (1)))) ->
+                    eq_real(select(double_P_double_M_V_3, shift(V, k_1)),
+                    div_real(sub_real(select(double_P_double_M_Y_2,
+                                      shift(Y, add_int(k_1, (1)))),
+                             select(double_P_double_M_Y_2, shift(Y, k_1))),
+                    sub_real(select(double_P_double_M_X_1,
+                             shift(X, add_int(k_1, (1)))),
+                    select(double_P_double_M_X_1, shift(X, k_1)))))))
+                 and ge_real(x,
+                     select(double_P_double_M_X_1,
+                     shift(X, integer_of_int32(n))))))))
     and (JC_23:
         ((JC_13: le_int((3), integer_of_int32(n)))
         and ((JC_14: le_int(integer_of_int32(n), (17)))
@@ -811,65 +997,46 @@ let InterPolate_ensures_big =
      end))))); absurd  end with Return -> !return end))
   { (JC_31:
     eq_real(result,
-    select(double_P_double_M_Y_2, shift(Y, integer_of_int32(n))))) }
+    select(double_P_double_M_Y_2, shift(Y@, integer_of_int32(n@))))) }
 
 let InterPolate_ensures_default =
  fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
-      select(double_P_double_M_Y_2, shift(Y, (1))))
-     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
-          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
-         and (eq_real(select(double_P_double_M_V_3,
-                      shift(V, integer_of_int32(n))),
-              0.0)
-             and (forall k_0:int.
-                  ((le_int((1), k_0)
-                   and le_int(k_0, sub_int(integer_of_int32(n), (1)))) ->
-                   eq_real(select(double_P_double_M_V_3, shift(V, k_0)),
-                   div_real(sub_real(select(double_P_double_M_Y_2,
-                                     shift(Y, add_int(k_0, (1)))),
-                            select(double_P_double_M_Y_2, shift(Y, k_0))),
-                   sub_real(select(double_P_double_M_X_1,
-                            shift(X, add_int(k_0, (1)))),
-                   select(double_P_double_M_X_1, shift(X, k_0))))))))))
-    and (JC_23:
-        ((JC_13: le_int((3), integer_of_int32(n)))
-        and ((JC_14: le_int(integer_of_int32(n), (17)))
-            and ((JC_15:
-                 le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
-                and ((JC_16:
-                     ge_int(offset_max(double_P_X_1_alloc_table, X),
-                     integer_of_int32(n)))
-                    and ((JC_17:
-                         le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
-                        and ((JC_18:
-                             ge_int(offset_max(double_P_Y_2_alloc_table, Y),
-                             integer_of_int32(n)))
-                            and ((JC_19:
-                                 le_int(offset_min(double_P_V_3_alloc_table,
+  { (JC_23:
+    ((JC_13: le_int((3), integer_of_int32(n)))
+    and ((JC_14: le_int(integer_of_int32(n), (17)))
+        and ((JC_15: le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+            and ((JC_16:
+                 ge_int(offset_max(double_P_X_1_alloc_table, X),
+                 integer_of_int32(n)))
+                and ((JC_17:
+                     le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
+                    and ((JC_18:
+                         ge_int(offset_max(double_P_Y_2_alloc_table, Y),
+                         integer_of_int32(n)))
+                        and ((JC_19:
+                             le_int(offset_min(double_P_V_3_alloc_table, V),
+                             (0)))
+                            and ((JC_20:
+                                 ge_int(offset_max(double_P_V_3_alloc_table,
                                         V),
-                                 (0)))
-                                and ((JC_20:
-                                     ge_int(offset_max(double_P_V_3_alloc_table,
-                                            V),
-                                     integer_of_int32(n)))
-                                    and ((JC_21:
-                                         eq_real(select(double_P_double_M_X_1,
-                                                 shift(X, (0))),
-                                         select(double_P_double_M_X_1,
-                                         shift(X, (1)))))
-                                        and (JC_22:
-                                            (forall k1:int.
-                                             (forall k2:int32.
-                                              ((le_int((1), k1)
-                                               and (lt_int(k1,
-                                                    integer_of_int32(k2))
-                                                   and le_int(integer_of_int32(k2),
-                                                       integer_of_int32(n)))) ->
-                                               lt_real(select(double_P_double_M_X_1,
-                                                       shift(X, k1)),
-                                               select(double_P_double_M_X_1,
-                                               shift(X, integer_of_int32(k2))))))))))))))))))) }
+                                 integer_of_int32(n)))
+                                and ((JC_21:
+                                     eq_real(select(double_P_double_M_X_1,
+                                             shift(X, (0))),
+                                     select(double_P_double_M_X_1,
+                                     shift(X, (1)))))
+                                    and (JC_22:
+                                        (forall k1:int.
+                                         (forall k2:int32.
+                                          ((le_int((1), k1)
+                                           and (lt_int(k1,
+                                                integer_of_int32(k2))
+                                               and le_int(integer_of_int32(k2),
+                                                   integer_of_int32(n)))) ->
+                                           lt_real(select(double_P_double_M_X_1,
+                                                   shift(X, k1)),
+                                           select(double_P_double_M_X_1,
+                                           shift(X, integer_of_int32(k2)))))))))))))))))) }
   (init:
   (let return = ref (any_real void) in
   try
@@ -975,9 +1142,28 @@ let InterPolate_ensures_default =
 
 let InterPolate_ensures_inter =
  fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { ((le_real(select(double_P_double_M_X_1, shift(X, (0))), x)
-     and lt_real(x,
-         select(double_P_double_M_X_1, shift(X, integer_of_int32(n)))))
+  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
+      select(double_P_double_M_Y_2, shift(Y, (1))))
+     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
+          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
+         and (eq_real(select(double_P_double_M_V_3,
+                      shift(V, integer_of_int32(n))),
+              0.0)
+             and ((forall k_2:int.
+                   ((le_int((1), k_2)
+                    and le_int(k_2, sub_int(integer_of_int32(n), (1)))) ->
+                    eq_real(select(double_P_double_M_V_3, shift(V, k_2)),
+                    div_real(sub_real(select(double_P_double_M_Y_2,
+                                      shift(Y, add_int(k_2, (1)))),
+                             select(double_P_double_M_Y_2, shift(Y, k_2))),
+                    sub_real(select(double_P_double_M_X_1,
+                             shift(X, add_int(k_2, (1)))),
+                    select(double_P_double_M_X_1, shift(X, k_2)))))))
+                 and (le_real(select(double_P_double_M_X_1, shift(X, (0))),
+                      x)
+                     and lt_real(x,
+                         select(double_P_double_M_X_1,
+                         shift(X, integer_of_int32(n)))))))))
     and (JC_23:
         ((JC_13: le_int((3), integer_of_int32(n)))
         and ((JC_14: le_int(integer_of_int32(n), (17)))
@@ -1123,25 +1309,42 @@ let InterPolate_ensures_inter =
   { (JC_36:
     ((JC_33: le_int((1), integer_of_int32(i_f)))
     and ((JC_34:
-         le_int(integer_of_int32(i_f), sub_int(integer_of_int32(n), (1))))
+         le_int(integer_of_int32(i_f), sub_int(integer_of_int32(n@), (1))))
         and (JC_35:
             eq_real(result,
             add_real(select(double_P_double_M_Y_2,
-                     shift(Y, integer_of_int32(i_f))),
-            div_real(mul_real(sub_real(x,
+                     shift(Y@, integer_of_int32(i_f))),
+            div_real(mul_real(sub_real(x@,
                               select(double_P_double_M_X_1,
-                              shift(X, integer_of_int32(i_f)))),
+                              shift(X@, integer_of_int32(i_f)))),
                      sub_real(select(double_P_double_M_Y_2,
-                              shift(Y, add_int(integer_of_int32(i_f), (1)))),
+                              shift(Y@, add_int(integer_of_int32(i_f), (1)))),
                      select(double_P_double_M_Y_2,
-                     shift(Y, integer_of_int32(i_f))))),
+                     shift(Y@, integer_of_int32(i_f))))),
             sub_real(select(double_P_double_M_X_1,
-                     shift(X, add_int(integer_of_int32(i_f), (1)))),
-            select(double_P_double_M_X_1, shift(X, integer_of_int32(i_f))))))))))) }
+                     shift(X@, add_int(integer_of_int32(i_f), (1)))),
+            select(double_P_double_M_X_1, shift(X@, integer_of_int32(i_f))))))))))) }
 
 let InterPolate_ensures_small =
  fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { (lt_real(x, select(double_P_double_M_X_1, shift(X, (0))))
+  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
+      select(double_P_double_M_Y_2, shift(Y, (1))))
+     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
+          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
+         and (eq_real(select(double_P_double_M_V_3,
+                      shift(V, integer_of_int32(n))),
+              0.0)
+             and ((forall k_0:int.
+                   ((le_int((1), k_0)
+                    and le_int(k_0, sub_int(integer_of_int32(n), (1)))) ->
+                    eq_real(select(double_P_double_M_V_3, shift(V, k_0)),
+                    div_real(sub_real(select(double_P_double_M_Y_2,
+                                      shift(Y, add_int(k_0, (1)))),
+                             select(double_P_double_M_Y_2, shift(Y, k_0))),
+                    sub_real(select(double_P_double_M_X_1,
+                             shift(X, add_int(k_0, (1)))),
+                    select(double_P_double_M_X_1, shift(X, k_0)))))))
+                 and lt_real(x, select(double_P_double_M_X_1, shift(X, (0))))))))
     and (JC_23:
         ((JC_13: le_int((3), integer_of_int32(n)))
         and ((JC_14: le_int(integer_of_int32(n), (17)))
@@ -1287,7 +1490,7 @@ let InterPolate_ensures_small =
                                                               (integer_of_int32 !i)))))))))) in
            void); (return := !__retres); (raise Return) end) end) end) end)
      end))))); absurd  end with Return -> !return end))
-  { (JC_29: eq_real(result, select(double_P_double_M_Y_2, shift(Y, (0))))) }
+  { (JC_29: eq_real(result, select(double_P_double_M_Y_2, shift(Y@, (0))))) }
 
 let InterPolate_safety =
  fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
@@ -1447,120 +1650,120 @@ why --project [...] why/floats_interp_math.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_interp_math_po16.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po17.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po18.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/floats_interp_math_po19.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po20.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po21.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "36" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "42" begin = "4" end = "6"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po22.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "36" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "42" begin = "4" end = "6"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po23.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "45" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "51" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po24.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "45" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "51" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po25.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "45" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "51" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po26.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "45" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "51" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po27.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "45" begin = "37" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "51" begin = "37" end = "38"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po28.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "45" begin = "37" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "51" begin = "37" end = "38"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_math_po29.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "43" begin = "21" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "21" end = "24"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp_math_po30.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "43" begin = "21" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "21" end = "24"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp_math_po31.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "55" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po32.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "55" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po33.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "55" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po34.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "55" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po35.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "55" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp_math_po36.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "49" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "55" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `small'">
     <goal why_file="why/floats_interp_math_po12.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "38" begin = "26" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "44" begin = "26" end = "30"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_math_po13.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "42" begin = "34" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "48" begin = "34" end = "38"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp_math_po14.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "47" begin = "26" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "53" begin = "26" end = "30"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_math_po15.why">
@@ -1570,51 +1773,51 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Normal behavior `inter'">
     <goal why_file="why/floats_interp_math_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "28" begin = "16" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "16" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/floats_interp_math_po10.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "28" begin = "21" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "34" begin = "21" end = "31"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/floats_interp_math_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "29" begin = "19" end = "93"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "35" begin = "19" end = "93"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `big'">
     <goal why_file="why/floats_interp_math_po1.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "48" begin = "24" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "54" begin = "24" end = "28"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/floats_interp_math_po2.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "24" begin = "16" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "27" begin = "16" end = "31"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/floats_interp_math_po3.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "23" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "46" begin = "23" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp_math_po4.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "29" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "46" begin = "29" end = "35"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp_math_po5.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "41" begin = "23" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "47" begin = "23" end = "67"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp_math_po6.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "23" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "46" begin = "23" end = "30"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp_math_po7.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "40" begin = "29" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "46" begin = "29" end = "35"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp_math_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "41" begin = "23" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_math.c" line = "47" begin = "23" end = "67"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>

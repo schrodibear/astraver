@@ -46,7 +46,8 @@ lemma div2neg :
 
 int32 foo(int32 l, int32 h)
 behavior default:
-  ensures (C_6 : ((C_7 : (l <= \result)) && (C_8 : (\result <= h))));
+  ensures (C_6 : ((C_7 : (\at(l,Old) <= \result)) &&
+                   (C_8 : (\result <= \at(h,Old)))));
 {  
    (var int32 __retres);
    
@@ -345,16 +346,16 @@ parameter foo :
   h:int32 ->
    { } int32
    { (JC_10:
-     ((JC_8: le_int(integer_of_int32(l), integer_of_int32(result)))
-     and (JC_9: le_int(integer_of_int32(result), integer_of_int32(h))))) }
+     ((JC_8: le_int(integer_of_int32(l@), integer_of_int32(result)))
+     and (JC_9: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
 
 parameter foo_requires :
  l:int32 ->
   h:int32 ->
    { } int32
    { (JC_10:
-     ((JC_8: le_int(integer_of_int32(l), integer_of_int32(result)))
-     and (JC_9: le_int(integer_of_int32(result), integer_of_int32(h))))) }
+     ((JC_8: le_int(integer_of_int32(l@), integer_of_int32(result)))
+     and (JC_9: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -395,8 +396,8 @@ let foo_ensures_default =
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_7:
-    ((JC_5: le_int(integer_of_int32(l), integer_of_int32(result)))
-    and (JC_6: le_int(integer_of_int32(result), integer_of_int32(h))))) }
+    ((JC_5: le_int(integer_of_int32(l@), integer_of_int32(result)))
+    and (JC_6: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
 
 let foo_safety =
  fun (l : int32) (h : int32) ->

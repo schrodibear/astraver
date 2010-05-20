@@ -116,11 +116,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_14 : (1 <= (2147483647 >>> V8))));
+         (assert for default: (C_14 : (V8 < 32)));
          
          (assert for default: (C_13 : (V8 >= 0)));
          
-         (assert for default: (C_12 : (V8 < 32)));
+         (assert for default: (C_12 : (1 <= (2147483647 >>> V8))));
          (C_17 : (V7 = (C_16 : ((C_15 : (1 << V8)) :> int32))))
       };
       
@@ -1522,11 +1522,11 @@ let F5_ensures_default =
      begin
        (let jessie_41 =
        begin
-         (assert
-         { (JC_261: le_int((1), asr((2147483647), integer_of_int32(V8)))) };
-         void);
+         (assert { (JC_261: lt_int(integer_of_int32(V8), (32))) }; void);
         (assert { (JC_262: ge_int(integer_of_int32(V8), (0))) }; void);
-        (assert { (JC_263: lt_int(integer_of_int32(V8), (32))) }; void);
+        (assert
+        { (JC_263: le_int((1), asr((2147483647), integer_of_int32(V8)))) };
+        void);
         (C_17:
         begin
           (V7 := (C_16:
@@ -1552,10 +1552,10 @@ let F5_safety =
      begin
        (let jessie_38 =
        begin
-         [ { } unit
-           { (JC_257: le_int((1), asr((2147483647), integer_of_int32(V8)))) } ];
+         [ { } unit { (JC_257: lt_int(integer_of_int32(V8), (32))) } ];
         [ { } unit { (JC_258: ge_int(integer_of_int32(V8), (0))) } ];
-        [ { } unit { (JC_259: lt_int(integer_of_int32(V8), (32))) } ];
+        [ { } unit
+          { (JC_259: le_int((1), asr((2147483647), integer_of_int32(V8)))) } ];
         (C_17:
         begin
           (V7 := (C_16:

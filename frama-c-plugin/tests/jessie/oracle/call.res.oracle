@@ -34,10 +34,10 @@ type void_P = [void_P]
 int32 x;
 
 int32 f(int32 y, int32 ddd, int32 z)
-  requires (C_6 : (y == ddd));
+  requires (C_7 : (y == ddd));
 behavior default:
   assigns \nothing;
-  ensures (C_7 : (\result == z));
+  ensures (C_6 : (\result == \at(z,Old)));
 {  
    (var int32 u);
    
@@ -317,14 +317,14 @@ parameter f :
   ddd:int32 ->
    z:int32 ->
     { } int32
-    { (JC_7: eq_int(integer_of_int32(result), integer_of_int32(z))) }
+    { (JC_7: eq_int(integer_of_int32(result), integer_of_int32(z@))) }
 
 parameter f_requires :
  y:int32 ->
   ddd:int32 ->
    z:int32 ->
     { (JC_1: eq_int(integer_of_int32(y), integer_of_int32(ddd)))} int32
-    { (JC_7: eq_int(integer_of_int32(result), integer_of_int32(z))) }
+    { (JC_7: eq_int(integer_of_int32(result), integer_of_int32(z@))) }
 
 parameter x : int32 ref
 
@@ -375,7 +375,7 @@ let f_ensures_default =
                                        ((add_int (integer_of_int32 !u)) (1)))))) in
          void); (return := !tmp); (raise Return) end) end) end))); absurd 
    end with Return -> !return end))
-  { (JC_5: eq_int(integer_of_int32(result), integer_of_int32(z))) }
+  { (JC_5: eq_int(integer_of_int32(result), integer_of_int32(z@))) }
 
 let f_safety =
  fun (y : int32) (ddd : int32) (z : int32) ->

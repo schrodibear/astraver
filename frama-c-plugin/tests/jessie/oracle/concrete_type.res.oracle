@@ -32,10 +32,10 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 f(int32 y)
-  requires (C_4 : (y <= 10));
+  requires (C_5 : (y <= 10));
 behavior default:
-  ensures (C_5 : (\forall int32 x;
-                   ((x == y) ==> (x <= \result))));
+  ensures (C_4 : (\forall int32 x;
+                   ((x == \at(y,Old)) ==> (x <= \result))));
 {  
    (var int32 __retres);
    
@@ -299,7 +299,7 @@ parameter f :
   { } int32
   { (JC_6:
     (forall x:int32.
-     (eq_int(integer_of_int32(x), integer_of_int32(y)) ->
+     (eq_int(integer_of_int32(x), integer_of_int32(y@)) ->
       le_int(integer_of_int32(x), integer_of_int32(result))))) }
 
 parameter f_requires :
@@ -307,7 +307,7 @@ parameter f_requires :
   { (JC_1: le_int(integer_of_int32(y), (10)))} int32
   { (JC_6:
     (forall x:int32.
-     (eq_int(integer_of_int32(x), integer_of_int32(y)) ->
+     (eq_int(integer_of_int32(x), integer_of_int32(y@)) ->
       le_int(integer_of_int32(x), integer_of_int32(result))))) }
 
 parameter int32_of_integer_ :
@@ -344,7 +344,7 @@ let f_ensures_default =
    Return -> !return end))
   { (JC_5:
     (forall x:int32.
-     (eq_int(integer_of_int32(x), integer_of_int32(y)) ->
+     (eq_int(integer_of_int32(x), integer_of_int32(y@)) ->
       le_int(integer_of_int32(x), integer_of_int32(result))))) }
 
 let f_safety =

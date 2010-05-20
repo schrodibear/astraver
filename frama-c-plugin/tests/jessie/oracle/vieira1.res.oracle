@@ -89,14 +89,15 @@ axiomatic Sumone {
 }
 
 unit func(int32 i, int_P[..] a, int_P[..] b, int32 n)
-  requires (C_32 : (((((C_36 : (\offset_min(a) <= 0)) &&
-                        (C_37 : (\offset_max(a) >= n))) &&
-                       ((C_39 : (\offset_min(b) <= 0)) &&
-                         (C_40 : (\offset_max(b) >= n)))) &&
-                      (C_41 : (n > 0))) &&
-                     ((C_43 : (0 <= i)) && (C_44 : (i < n)))));
+  requires (C_33 : (((((C_37 : (\offset_min(a) <= 0)) &&
+                        (C_38 : (\offset_max(a) >= n))) &&
+                       ((C_40 : (\offset_min(b) <= 0)) &&
+                         (C_41 : (\offset_max(b) >= n)))) &&
+                      (C_42 : (n > 0))) &&
+                     ((C_44 : (0 <= i)) && (C_45 : (i < n)))));
 behavior default:
-  ensures (C_45 : ((b + i).int_M == ((a + i).int_M + 1)));
+  ensures (C_32 : ((\at(b,Old) + \at(i,Old)).int_M ==
+                    ((\at(a,Old) + \at(i,Old)).int_M + 1)));
 {  
    (var int32 k);
    
@@ -105,10 +106,10 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_2 : ((C_3 : sumone{Pre,
+           invariant (C_3 : ((C_4 : sumone{Pre,
                              Here}((0 :> int32), a, b, k, a, b, n)) &&
-                              ((C_5 : (0 <= k)) && (C_6 : (k <= n)))));
-         variant (C_7 : (n - k));
+                              ((C_6 : (0 <= k)) && (C_7 : (k <= n)))));
+         variant (C_2 : (n - k));
          while (true)
          {  
             {  (if (k < n) then () else 
@@ -577,9 +578,9 @@ parameter func :
        { } unit reads int_P_int_M_a_5 writes int_P_int_M_a_5
        { (JC_20:
          eq_int(integer_of_int32(select(int_P_int_M_a_5,
-                                 shift(b, integer_of_int32(i)))),
+                                 shift(b@, integer_of_int32(i@)))),
          add_int(integer_of_int32(select(int_P_int_M_a_5,
-                                  shift(a, integer_of_int32(i)))),
+                                  shift(a@, integer_of_int32(i@)))),
          (1)))) }
 
 parameter func_requires :
@@ -606,9 +607,9 @@ parameter func_requires :
        unit reads int_P_int_M_a_5 writes int_P_int_M_a_5
        { (JC_20:
          eq_int(integer_of_int32(select(int_P_int_M_a_5,
-                                 shift(b, integer_of_int32(i)))),
+                                 shift(b@, integer_of_int32(i@)))),
          add_int(integer_of_int32(select(int_P_int_M_a_5,
-                                  shift(a, integer_of_int32(i)))),
+                                  shift(a@, integer_of_int32(i@)))),
          (1)))) }
 
 parameter int32_of_integer_ :
@@ -766,9 +767,9 @@ let func_ensures_default =
    void end)
   { (JC_19:
     eq_int(integer_of_int32(select(int_P_int_M_a_5,
-                            shift(b, integer_of_int32(i)))),
+                            shift(b@, integer_of_int32(i@)))),
     add_int(integer_of_int32(select(int_P_int_M_a_5,
-                             shift(a, integer_of_int32(i)))),
+                             shift(a@, integer_of_int32(i@)))),
     (1)))) }
 
 let func_safety =
@@ -945,12 +946,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vieira1_po17.why">
-      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "110" begin = "24" end = "464"/>
+      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "111" begin = "24" end = "464"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vieira1_po18.why">
-      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "110" begin = "24" end = "464"/>
+      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "111" begin = "24" end = "464"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -983,12 +984,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vieira1_po25.why">
-      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "138" begin = "24" end = "224"/>
+      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "139" begin = "24" end = "224"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vieira1_po26.why">
-      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "138" begin = "24" end = "224"/>
+      <location file = "PPCHOME/tests/jessie/vieira1.jessie/vieira1.jc" line = "139" begin = "24" end = "224"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

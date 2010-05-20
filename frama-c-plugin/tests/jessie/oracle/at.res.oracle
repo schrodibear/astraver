@@ -35,7 +35,7 @@ int32 x;
 
 int32 f(int32 y)
 behavior default:
-  ensures (C_12 : (x == ((2 + \old(x)) + y)));
+  ensures (C_12 : (x == ((2 + \old(x)) + \at(y,Old))));
 {  
    {  (C_3 : (x = (C_2 : ((C_1 : (x + y)) :> int32))));
       (L1 : ());
@@ -313,14 +313,14 @@ parameter f :
   { } int32 reads x writes x
   { (JC_6:
     eq_int(integer_of_int32(x),
-    add_int(add_int((2), integer_of_int32(x@)), integer_of_int32(y)))) }
+    add_int(add_int((2), integer_of_int32(x@)), integer_of_int32(y@)))) }
 
 parameter f_requires :
  y:int32 ->
   { } int32 reads x writes x
   { (JC_6:
     eq_int(integer_of_int32(x),
-    add_int(add_int((2), integer_of_int32(x@)), integer_of_int32(y)))) }
+    add_int(add_int((2), integer_of_int32(x@)), integer_of_int32(y@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -386,7 +386,7 @@ let f_ensures_default =
    !return end))
   { (JC_5:
     eq_int(integer_of_int32(x),
-    add_int(add_int((2), integer_of_int32(x@)), integer_of_int32(y)))) }
+    add_int(add_int((2), integer_of_int32(x@)), integer_of_int32(y@)))) }
 
 let f_safety =
  fun (y : int32) ->

@@ -52,12 +52,13 @@ tag T = {
 type T = [T]
 
 unit f(S[..] s)
-  requires (C_18 : (((C_20 : (\offset_min(s) <= 0)) &&
-                      (C_21 : (\offset_max(s) >= 0))) &&
-                     ((C_23 : (\offset_min(s.p) <= 0)) &&
-                       (C_24 : (\offset_max(s.p) >= 0)))));
+  requires (C_21 : (((C_23 : (\offset_min(s) <= 0)) &&
+                      (C_24 : (\offset_max(s) >= 0))) &&
+                     ((C_26 : (\offset_min(s.p) <= 0)) &&
+                       (C_27 : (\offset_max(s.p) >= 0)))));
 behavior default:
-  ensures (C_25 : ((C_26 : (s.i.int_M == 1)) && (C_27 : (s.p.int_M == 2))));
+  ensures (C_18 : ((C_19 : (\at(s,Old).i.int_M == 1)) &&
+                    (C_20 : (\at(s,Old).p.int_M == 2))));
 {  
    (var int_P[..] tmp);
    
@@ -73,10 +74,11 @@ behavior default:
 }
 
 unit fc(T[..] t)
-  requires (C_41 : ((C_42 : (\offset_min(t) <= 0)) &&
-                     (C_43 : (\offset_max(t) >= 0))));
+  requires (C_44 : ((C_45 : (\offset_min(t) <= 0)) &&
+                     (C_46 : (\offset_max(t) >= 0))));
 behavior default:
-  ensures (C_44 : ((C_45 : (t.ti == 1)) && (C_46 : (t.tj == 2))));
+  ensures (C_41 : ((C_42 : (\at(t,Old).ti == 1)) &&
+                    (C_43 : (\at(t,Old).tj == 2))));
 {  
    (var T[0] tmp_0);
    
@@ -653,11 +655,12 @@ parameter f :
        { } unit reads S_p_s_1,int_P_int_M_s_1 writes S_p_s_1,int_P_int_M_s_1
        { (JC_18:
          ((JC_16:
-          eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_i_s_1, s))),
+          eq_int(integer_of_int32(select(int_P_int_M_s_1,
+                                  select(S_i_s_1, s@))),
           (1)))
          and (JC_17:
              eq_int(integer_of_int32(select(int_P_int_M_s_1,
-                                     select(S_p_s_1, s))),
+                                     select(S_p_s_1, s@))),
              (2))))) }
 
 parameter f_requires :
@@ -681,11 +684,12 @@ parameter f_requires :
        unit reads S_p_s_1,int_P_int_M_s_1 writes S_p_s_1,int_P_int_M_s_1
        { (JC_18:
          ((JC_16:
-          eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_i_s_1, s))),
+          eq_int(integer_of_int32(select(int_P_int_M_s_1,
+                                  select(S_i_s_1, s@))),
           (1)))
          and (JC_17:
              eq_int(integer_of_int32(select(int_P_int_M_s_1,
-                                     select(S_p_s_1, s))),
+                                     select(S_p_s_1, s@))),
              (2))))) }
 
 parameter fc :
@@ -695,8 +699,8 @@ parameter fc :
     T_t_2_alloc_table:T alloc_table ->
      { } unit reads T_ti_t_2,T_tj_t_2 writes T_ti_t_2,T_tj_t_2
      { (JC_45:
-       ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
-       and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2))))) }
+       ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t@)), (1)))
+       and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t@)), (2))))) }
 
 parameter fc_requires :
  t:T pointer ->
@@ -708,8 +712,8 @@ parameter fc_requires :
        and (JC_33: ge_int(offset_max(T_t_2_alloc_table, t), (0)))))}
      unit reads T_ti_t_2,T_tj_t_2 writes T_ti_t_2,T_tj_t_2
      { (JC_45:
-       ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
-       and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2))))) }
+       ((JC_43: eq_int(integer_of_int32(select(T_ti_t_2, t@)), (1)))
+       and (JC_44: eq_int(integer_of_int32(select(T_tj_t_2, t@)), (2))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -781,10 +785,10 @@ let f_ensures_default =
    with Return -> void end)
   { (JC_15:
     ((JC_13:
-     eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_i_s_1, s))),
+     eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_i_s_1, s@))),
      (1)))
     and (JC_14:
-        eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_p_s_1, s))),
+        eq_int(integer_of_int32(select(int_P_int_M_s_1, select(S_p_s_1, s@))),
         (2))))) }
 
 let f_safety =
@@ -903,8 +907,8 @@ let fc_ensures_default =
          (raise Return) end) end) end) end)))))); (raise Return) end with
    Return -> void end)
   { (JC_42:
-    ((JC_40: eq_int(integer_of_int32(select(T_ti_t_2, t)), (1)))
-    and (JC_41: eq_int(integer_of_int32(select(T_tj_t_2, t)), (2))))) }
+    ((JC_40: eq_int(integer_of_int32(select(T_ti_t_2, t@)), (1)))
+    and (JC_41: eq_int(integer_of_int32(select(T_tj_t_2, t@)), (2))))) }
 
 let fc_safety =
  fun (t : T pointer) (T_ti_t_2 : (T, int32) memory ref) (T_tj_t_2 : (T, int32) memory ref) (T_t_2_alloc_table : T alloc_table) ->
@@ -977,31 +981,31 @@ why --project [...] why/compound_local.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/compound_local_po19.why">
-      <location file = "why/compound_local.why" line = "834" begin = "19" end = "76"/>
+      <location file = "why/compound_local.why" line = "836" begin = "19" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/compound_local_po20.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "81" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "83" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po21.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "81" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "83" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po22.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "82" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "84" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po23.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "82" begin = "18" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "84" begin = "18" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po24.why">
-      <location file = "why/compound_local.why" line = "866" begin = "11" end = "56"/>
+      <location file = "why/compound_local.why" line = "868" begin = "11" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1031,12 +1035,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po5.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "59" begin = "14" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "60" begin = "14" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po6.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "59" begin = "14" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "60" begin = "14" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1061,22 +1065,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po11.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "61" begin = "15" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "62"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po12.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "61" begin = "15" end = "62"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "62"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po13.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "63" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_local_po14.why">
-      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "62" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/compound_local.jessie/compound_local.jc" line = "63" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -40,14 +40,14 @@ tag __anonstruct_las_1 = {
 type __anonstruct_las_1 = [__anonstruct_las_1]
 
 unit g(int_P[..] a, int_P[..] b)
-  requires (C_5 : (((C_7 : (\offset_min(a) <= 0)) &&
-                     (C_8 : (\offset_max(a) >= 0))) &&
-                    ((C_10 : (\offset_min(b) <= 0)) &&
-                      (C_11 : (\offset_max(b) >= 0)))));
+  requires (C_6 : (((C_8 : (\offset_min(a) <= 0)) &&
+                     (C_9 : (\offset_max(a) >= 0))) &&
+                    ((C_11 : (\offset_min(b) <= 0)) &&
+                      (C_12 : (\offset_max(b) >= 0)))));
 behavior default:
   assigns a.int_M,
   b.int_M;
-  ensures (C_12 : true);
+  ensures (C_5 : true);
 {  
    {  (C_2 : ((C_1 : a.int_M) = 11));
       (C_4 : ((C_3 : b.int_M) = 15));
@@ -57,12 +57,12 @@ behavior default:
 }
 
 unit f(__anonstruct_las_1[..] p)
-  requires (C_16 : ((C_17 : (\offset_min(p) <= 0)) &&
-                     (C_18 : (\offset_max(p) >= 0))));
+  requires (C_17 : ((C_18 : (\offset_min(p) <= 0)) &&
+                     (C_19 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.i.int_M,
   p.j.int_M;
-  ensures (C_19 : true);
+  ensures (C_16 : true);
 {  
    {  (C_15 : g((C_13 : p.i), (C_14 : p.j)));
       

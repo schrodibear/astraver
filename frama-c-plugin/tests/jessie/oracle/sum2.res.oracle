@@ -61,11 +61,11 @@ axiomatic Sum {
 }
 
 integer test1(int_P[..] t, integer n)
-  requires (C_15 : ((C_16 : (n >= 1)) &&
-                     ((C_18 : (\offset_min(t) <= 0)) &&
-                       (C_19 : (\offset_max(t) >= (n - 1))))));
+  requires (C_16 : ((C_17 : (n >= 1)) &&
+                     ((C_19 : (\offset_min(t) <= 0)) &&
+                       (C_20 : (\offset_max(t) >= (n - 1))))));
 behavior default:
-  ensures (C_20 : (\result == sum{Here}(t, 0, n)));
+  ensures (C_15 : (\result == sum{Here}(\at(t,Old), 0, \at(n,Old))));
 {  
    (var integer i);
    
@@ -96,13 +96,13 @@ behavior default:
 }
 
 unit test2(int_P[..] t_0, integer n_0)
-  requires (C_36 : ((C_37 : (n_0 >= 1)) &&
-                     ((C_39 : (\offset_min(t_0) <= 0)) &&
-                       (C_40 : (\offset_max(t_0) >= (n_0 - 1))))));
+  requires (C_37 : ((C_38 : (n_0 >= 1)) &&
+                     ((C_40 : (\offset_min(t_0) <= 0)) &&
+                       (C_41 : (\offset_max(t_0) >= (n_0 - 1))))));
 behavior default:
   assigns (t_0 + [..]).int_M;
-  ensures (C_41 : (sum{Here}(t_0, 0, n_0) ==
-                    (\old(sum{Old}(t_0, 0, n_0)) + n_0)));
+  ensures (C_36 : (sum{Here}(\at(t_0,Old), 0, \at(n_0,Old)) ==
+                    (\old(sum{Old}(t_0, 0, n_0)) + \at(n_0,Old))));
 {  
    (var integer i_0);
    
@@ -502,7 +502,7 @@ parameter test1 :
   n:int ->
    int_P_t_2_alloc_table:int_P alloc_table ->
     int_P_int_M_t_2:(int_P, int) memory ->
-     { } int { (JC_12: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2))) }
+     { } int { (JC_12: eq_int(result, sum(t_0@, (0), n@, int_P_int_M_t_2))) }
 
 parameter test1_requires :
  t_0:int_P pointer ->
@@ -515,7 +515,7 @@ parameter test1_requires :
            and (JC_3:
                ge_int(offset_max(int_P_t_2_alloc_table, t_0),
                sub_int(n, (1)))))))}
-     int { (JC_12: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2))) }
+     int { (JC_12: eq_int(result, sum(t_0@, (0), n@, int_P_int_M_t_2))) }
 
 parameter test2 :
  t_0_0:int_P pointer ->
@@ -525,8 +525,8 @@ parameter test2 :
      { } unit reads int_P_int_M_t_0_3 writes int_P_int_M_t_0_3
      { (JC_46:
        ((JC_44:
-        eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
-        add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
+        eq_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3),
+        add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0@)))
        and (JC_45:
            not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
            int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@)))))) }
@@ -545,8 +545,8 @@ parameter test2_requires :
      unit reads int_P_int_M_t_0_3 writes int_P_int_M_t_0_3
      { (JC_46:
        ((JC_44:
-        eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
-        add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
+        eq_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3),
+        add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0@)))
        and (JC_45:
            not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
            int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@)))))) }
@@ -608,7 +608,7 @@ let test1_ensures_default =
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (return := !s); (raise Return) end) end))); absurd  end with Return ->
    !return end))
-  { (JC_11: eq_int(result, sum(t_0, (0), n, int_P_int_M_t_2))) }
+  { (JC_11: eq_int(result, sum(t_0@, (0), n@, int_P_int_M_t_2))) }
 
 let test1_safety =
  fun (t_0 : int_P pointer) (n : int) (int_P_t_2_alloc_table : int_P alloc_table) (int_P_int_M_t_2 : (int_P, int) memory) ->
@@ -732,8 +732,8 @@ let test2_ensures_default =
       (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_43:
     ((JC_41:
-     eq_int(sum(t_0_0, (0), n_0, int_P_int_M_t_0_3),
-     add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0)))
+     eq_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3),
+     add_int(sum(t_0_0@, (0), n_0@, int_P_int_M_t_0_3@), n_0@)))
     and (JC_42:
         not_assigns(int_P_t_0_3_alloc_table@, int_P_int_M_t_0_3@,
         int_P_int_M_t_0_3, pset_all(pset_singleton(t_0_0@)))))) }

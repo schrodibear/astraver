@@ -33,7 +33,8 @@ type void_P = [void_P]
 
 int32 and_0(int32 i, int32 j)
 behavior default:
-  ensures (C_4 : ((\result != 0) <==> ((i != 0) && (j != 0))));
+  ensures (C_4 : ((\result != 0) <==>
+                   ((\at(i,Old) != 0) && (\at(j,Old) != 0))));
 {  
    (var int32 ret);
    
@@ -46,7 +47,8 @@ behavior default:
 
 int32 or(int32 i_0, int32 j_0)
 behavior default:
-  ensures (C_8 : ((\result != 0) <==> ((i_0 != 0) || (j_0 != 0))));
+  ensures (C_8 : ((\result != 0) <==>
+                   ((\at(i_0,Old) != 0) || (\at(j_0,Old) != 0))));
 {  
    (var int32 __retres);
    
@@ -316,8 +318,8 @@ parameter and_0 :
    { } int32
    { (JC_6:
      (neq_int(integer_of_int32(result), (0))
-     <-> (neq_int(integer_of_int32(i), (0))
-         and neq_int(integer_of_int32(j), (0))))) }
+     <-> (neq_int(integer_of_int32(i@), (0))
+         and neq_int(integer_of_int32(j@), (0))))) }
 
 parameter and_0_requires :
  i:int32 ->
@@ -325,8 +327,8 @@ parameter and_0_requires :
    { } int32
    { (JC_6:
      (neq_int(integer_of_int32(result), (0))
-     <-> (neq_int(integer_of_int32(i), (0))
-         and neq_int(integer_of_int32(j), (0))))) }
+     <-> (neq_int(integer_of_int32(i@), (0))
+         and neq_int(integer_of_int32(j@), (0))))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
@@ -348,8 +350,8 @@ parameter or_0 :
    { } int32
    { (JC_14:
      (neq_int(integer_of_int32(result), (0))
-     <-> (neq_int(integer_of_int32(i_0), (0))
-         or neq_int(integer_of_int32(j_0), (0))))) }
+     <-> (neq_int(integer_of_int32(i_0@), (0))
+         or neq_int(integer_of_int32(j_0@), (0))))) }
 
 parameter or_0_requires :
  i_0:int32 ->
@@ -357,8 +359,8 @@ parameter or_0_requires :
    { } int32
    { (JC_14:
      (neq_int(integer_of_int32(result), (0))
-     <-> (neq_int(integer_of_int32(i_0), (0))
-         or neq_int(integer_of_int32(j_0), (0))))) }
+     <-> (neq_int(integer_of_int32(i_0@), (0))
+         or neq_int(integer_of_int32(j_0@), (0))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -389,8 +391,8 @@ let and_0_ensures_default =
    !return end))
   { (JC_5:
     (neq_int(integer_of_int32(result), (0))
-    <-> (neq_int(integer_of_int32(i), (0))
-        and neq_int(integer_of_int32(j), (0))))) }
+    <-> (neq_int(integer_of_int32(i@), (0))
+        and neq_int(integer_of_int32(j@), (0))))) }
 
 let and_0_safety =
  fun (i : int32) (j : int32) ->
@@ -448,8 +450,8 @@ let or_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_13:
     (neq_int(integer_of_int32(result), (0))
-    <-> (neq_int(integer_of_int32(i_0), (0))
-        or neq_int(integer_of_int32(j_0), (0))))) }
+    <-> (neq_int(integer_of_int32(i_0@), (0))
+        or neq_int(integer_of_int32(j_0@), (0))))) }
 
 let or_safety =
  fun (i_0 : int32) (j_0 : int32) ->

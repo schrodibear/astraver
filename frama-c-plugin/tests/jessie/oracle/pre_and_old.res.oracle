@@ -34,7 +34,7 @@ logic integer f{L}(integer n) =
 integer g(integer x)
 behavior default:
   ensures (C_5 : ((C_6 : (\result == \old(f{Old}(x)))) &&
-                   ((C_8 : (\result == f{Old}(x))) &&
+                   ((C_8 : (\result == f{Old}(\at(x,Old)))) &&
                      (C_9 : (\result == \at(f{Old}(x),Old))))));
 {  
    (var integer tmp);
@@ -266,7 +266,7 @@ parameter g :
   { } int reads y writes y
   { (JC_12:
     ((JC_9: eq_int(result, f(x@, y@)))
-    and ((JC_10: eq_int(result, f(x, y@)))
+    and ((JC_10: eq_int(result, f(x@, y@)))
         and (JC_11: eq_int(result, f(x@, y@)))))) }
 
 parameter g_requires :
@@ -274,7 +274,7 @@ parameter g_requires :
   { } int reads y writes y
   { (JC_12:
     ((JC_9: eq_int(result, f(x@, y@)))
-    and ((JC_10: eq_int(result, f(x, y@)))
+    and ((JC_10: eq_int(result, f(x@, y@)))
         and (JC_11: eq_int(result, f(x@, y@)))))) }
 
 let g_ensures_default =
@@ -299,7 +299,7 @@ let g_ensures_default =
    with Return -> !return end))
   { (JC_8:
     ((JC_5: eq_int(result, f(x@, y@)))
-    and ((JC_6: eq_int(result, f(x, y@)))
+    and ((JC_6: eq_int(result, f(x@, y@)))
         and (JC_7: eq_int(result, f(x@, y@)))))) }
 
 let g_safety =

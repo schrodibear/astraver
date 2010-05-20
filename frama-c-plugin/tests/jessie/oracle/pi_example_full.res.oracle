@@ -39,14 +39,14 @@ lemma le_mul :
           ((x * z) <= (y * t)))))))
 
 float Perimeter(float radius)
-  requires (C_12 : (((C_14 : \single_is_finite(radius)) &&
-                      (C_15 : ((radius :> real) > 0.0))) &&
-                     (C_16 : ((radius :> real) <= 3.0))));
+  requires (C_15 : (((C_17 : \single_is_finite(radius)) &&
+                      (C_18 : ((radius :> real) > 0.0))) &&
+                     (C_19 : ((radius :> real) <= 3.0))));
 behavior default:
-  ensures (C_17 : ((C_18 : \single_is_finite(\result)) &&
-                    (C_19 : (\real_abs(((\result :> real) -
+  ensures (C_12 : ((C_13 : \single_is_finite(\result)) &&
+                    (C_14 : (\real_abs(((\result :> real) -
                                          ((3.141592654 * 2.0) *
-                                           (radius :> real)))) <=
+                                           (\at(radius,Old) :> real)))) <=
                               0.01))));
 {  
    (var float a);
@@ -250,7 +250,7 @@ parameter Perimeter :
     and (JC_15:
         le_real(abs_real(sub_real(single_value(result),
                          mul_real(mul_real(3.141592654, 2.0),
-                         single_value(radius)))),
+                         single_value(radius@)))),
         0.01)))) }
 
 parameter Perimeter_requires :
@@ -265,7 +265,7 @@ parameter Perimeter_requires :
     and (JC_15:
         le_real(abs_real(sub_real(single_value(result),
                          mul_real(mul_real(3.141592654, 2.0),
-                         single_value(radius)))),
+                         single_value(radius@)))),
         0.01)))) }
 
 parameter alloc_bitvector_struct_char_P :
@@ -408,7 +408,7 @@ let Perimeter_ensures_default =
     and (JC_12:
         le_real(abs_real(sub_real(single_value(result),
                          mul_real(mul_real(3.141592654, 2.0),
-                         single_value(radius)))),
+                         single_value(radius@)))),
         0.01)))) }
 
 let Perimeter_safety =

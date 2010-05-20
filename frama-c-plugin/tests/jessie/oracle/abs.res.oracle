@@ -34,7 +34,7 @@ type void_P = [void_P]
 
 unit abs1(int_P[..] p)
 behavior default:
-  ensures (C_6 : (p.int_M >= 0));
+  ensures (C_6 : (\at(p,Old).int_M >= 0));
 {  
    {  (if ((C_5 : p.int_M) < 0) then (C_4 : ((C_3 : p.int_M) = (C_2 : 
                                                                (- (C_1 : p.int_M))))) else ());
@@ -44,10 +44,10 @@ behavior default:
 }
 
 unit abs2(int_P[..] p_0)
-  requires (C_12 : ((C_13 : (\offset_min(p_0) <= 0)) &&
-                     (C_14 : (\offset_max(p_0) >= 0))));
+  requires (C_13 : ((C_14 : (\offset_min(p_0) <= 0)) &&
+                     (C_15 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_15 : (p_0.int_M >= 0));
+  ensures (C_12 : (\at(p_0,Old).int_M >= 0));
 {  
    {  (if ((C_11 : p_0.int_M) < 0) then (C_10 : ((C_9 : p_0.int_M) = 
                                         (C_8 : (- (C_7 : p_0.int_M))))) else ());
@@ -233,21 +233,21 @@ parameter abs1 :
   int_P_int_M_p_1:(int_P, int) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_6: ge_int(select(int_P_int_M_p_1, p), (0))) }
+    { (JC_6: ge_int(select(int_P_int_M_p_1, p@), (0))) }
 
 parameter abs1_requires :
  p:int_P pointer ->
   int_P_int_M_p_1:(int_P, int) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_6: ge_int(select(int_P_int_M_p_1, p), (0))) }
+    { (JC_6: ge_int(select(int_P_int_M_p_1, p@), (0))) }
 
 parameter abs2 :
  p_0:int_P pointer ->
   int_P_int_M_p_0_2:(int_P, int) memory ref ->
    int_P_p_0_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
+    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0@), (0))) }
 
 parameter abs2_requires :
  p_0:int_P pointer ->
@@ -257,7 +257,7 @@ parameter abs2_requires :
       ((JC_12: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
       and (JC_13: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))}
     unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
+    { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0@), (0))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -408,7 +408,7 @@ let abs1_ensures_default =
       (let jessie_11 = p in
       (((safe_upd_ int_P_int_M_p_1) jessie_11) jessie_8))) in void))
      else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_5: ge_int(select(int_P_int_M_p_1, p), (0))) }
+  { (JC_5: ge_int(select(int_P_int_M_p_1, p@), (0))) }
 
 let abs1_safety =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
@@ -449,7 +449,7 @@ let abs2_ensures_default =
       (let jessie_23 = p_0 in
       (((safe_upd_ int_P_int_M_p_0_2) jessie_23) jessie_20))) in void))
      else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_20: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
+  { (JC_20: ge_int(select(int_P_int_M_p_0_2, p_0@), (0))) }
 
 let abs2_safety =
  fun (p_0 : int_P pointer) (int_P_int_M_p_0_2 : (int_P, int) memory ref) (int_P_p_0_2_alloc_table : int_P alloc_table) ->

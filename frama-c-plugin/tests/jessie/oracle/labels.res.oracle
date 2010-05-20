@@ -42,10 +42,10 @@ predicate val{P, Q}(int_P[..] x) =
 \at(((\offset_min(x) <= 0) && (\offset_max(x) >= 0)),P)
 
 unit f(int_P[..] x)
-  requires (C_3 : ((C_4 : (\offset_min(x) <= 0)) &&
-                    (C_5 : (\offset_max(x) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(x) <= 0)) &&
+                    (C_6 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_6 : true);
+  ensures (C_3 : true);
 {  
    {  (C_1 : (free(x)));
       
@@ -64,9 +64,9 @@ predicate valg{P, Q}() =
 \at((g == 0),P)
 
 unit h()
-  requires (C_9 : (g == 0));
+  requires (C_10 : (g == 0));
 behavior default:
-  ensures (C_10 : true);
+  ensures (C_9 : true);
 {  
    {  (C_7 : (g = 1));
       

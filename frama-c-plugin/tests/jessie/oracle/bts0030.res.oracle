@@ -39,34 +39,44 @@ type void_P = [void_P]
 
 int32 lexicographical_compare_array(int_P[..] a, int32 length_a, int_P[..] b,
                                     int32 length_b)
-  requires (C_27 : (0 <= length_a));
-  requires (C_28 : (0 <= length_b));
-  requires (C_29 : ((C_30 : (\offset_min(a) <= 0)) &&
-                     (C_31 : (\offset_max(a) >= (length_a - 1)))));
-  requires (C_32 : ((C_33 : (\offset_min(b) <= 0)) &&
-                     (C_34 : (\offset_max(b) >= (length_b - 1)))));
+  requires (C_37 : (0 <= length_a));
+  requires (C_36 : (0 <= length_b));
+  requires (C_33 : ((C_34 : (\offset_min(a) <= 0)) &&
+                     (C_35 : (\offset_max(a) >= (length_a - 1)))));
+  requires (C_30 : ((C_31 : (\offset_min(b) <= 0)) &&
+                     (C_32 : (\offset_max(b) >= (length_b - 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_35 : ((C_36 : ((\result == 1) || (\result == 0))) &&
-                    (C_37 : ((((\exists integer k1_1;
-                                 ((((0 <= k1_1) && (k1_1 < length_a)) &&
-                                    ((0 <= k1_1) && (k1_1 < length_b))) &&
-                                   ((a + k1_1).int_M < (b + k1_1).int_M))) ||
+  ensures (C_27 : ((C_28 : ((\result == 1) || (\result == 0))) &&
+                    (C_29 : ((((\exists integer k1_1;
+                                 ((((0 <= k1_1) &&
+                                     (k1_1 < \at(length_a,Old))) &&
+                                    ((0 <= k1_1) &&
+                                      (k1_1 < \at(length_b,Old)))) &&
+                                   ((\at(a,Old) + k1_1).int_M <
+                                     (\at(b,Old) + k1_1).int_M))) ||
                                 (\forall integer k2_0;
-                                  (((0 <= k2_0) && (k2_0 < length_a)) ==>
-                                    ((length_a < length_b) &&
-                                      ((a + k2_0).int_M == (b + k2_0).int_M))))) &&
+                                  (((0 <= k2_0) &&
+                                     (k2_0 < \at(length_a,Old))) ==>
+                                    ((\at(length_a,Old) < \at(length_b,Old)) &&
+                                      ((\at(a,Old) + k2_0).int_M ==
+                                        (\at(b,Old) + k2_0).int_M))))) &&
                                (! (\result == 0))) ||
                               ((\result == 0) &&
                                 (! ((\exists integer k1_1;
-                                      ((((0 <= k1_1) && (k1_1 < length_a)) &&
-                                         ((0 <= k1_1) && (k1_1 < length_b))) &&
-                                        ((a + k1_1).int_M < (b + k1_1).int_M))) ||
+                                      ((((0 <= k1_1) &&
+                                          (k1_1 < \at(length_a,Old))) &&
+                                         ((0 <= k1_1) &&
+                                           (k1_1 < \at(length_b,Old)))) &&
+                                        ((\at(a,Old) + k1_1).int_M <
+                                          (\at(b,Old) + k1_1).int_M))) ||
                                      (\forall integer k2_0;
-                                       (((0 <= k2_0) && (k2_0 < length_a)) ==>
-                                         ((length_a < length_b) &&
-                                           ((a + k2_0).int_M ==
-                                             (b + k2_0).int_M)))))))))));
+                                       (((0 <= k2_0) &&
+                                          (k2_0 < \at(length_a,Old))) ==>
+                                         ((\at(length_a,Old) <
+                                            \at(length_b,Old)) &&
+                                           ((\at(a,Old) + k2_0).int_M ==
+                                             (\at(b,Old) + k2_0).int_M)))))))))));
 {  
    (var int32 i);
    
@@ -534,46 +544,46 @@ parameter lexicographical_compare_array :
            and (JC_22:
                ((((exists k1_1:int.
                    (le_int((0), k1_1)
-                   and (lt_int(k1_1, integer_of_int32(length_a))
+                   and (lt_int(k1_1, integer_of_int32(length_a@))
                        and (le_int((0), k1_1)
-                           and (lt_int(k1_1, integer_of_int32(length_b))
+                           and (lt_int(k1_1, integer_of_int32(length_b@))
                                and lt_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                           shift(a, k1_1))),
+                                                           shift(a@, k1_1))),
                                    integer_of_int32(select(int_P_int_M_b_2,
-                                                    shift(b, k1_1)))))))))
+                                                    shift(b@, k1_1)))))))))
                  or (forall k2_0:int.
                      ((le_int((0), k2_0)
-                      and lt_int(k2_0, integer_of_int32(length_a))) ->
-                      (lt_int(integer_of_int32(length_a),
-                       integer_of_int32(length_b))
+                      and lt_int(k2_0, integer_of_int32(length_a@))) ->
+                      (lt_int(integer_of_int32(length_a@),
+                       integer_of_int32(length_b@))
                       and eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                  shift(a, k2_0))),
+                                                  shift(a@, k2_0))),
                           integer_of_int32(select(int_P_int_M_b_2,
-                                           shift(b, k2_0))))))))
+                                           shift(b@, k2_0))))))))
                 and (not eq_int(integer_of_int32(result), (0))))
                or (eq_int(integer_of_int32(result), (0))
                   and (not ((exists k1_1_0:int.
                              (le_int((0), k1_1_0)
-                             and (lt_int(k1_1_0, integer_of_int32(length_a))
+                             and (lt_int(k1_1_0, integer_of_int32(length_a@))
                                  and (le_int((0), k1_1_0)
                                      and (lt_int(k1_1_0,
-                                          integer_of_int32(length_b))
+                                          integer_of_int32(length_b@))
                                          and lt_int(integer_of_int32(
                                                     select(int_P_int_M_a_1,
-                                                    shift(a, k1_1_0))),
+                                                    shift(a@, k1_1_0))),
                                              integer_of_int32(select(int_P_int_M_b_2,
-                                                              shift(b,
+                                                              shift(b@,
                                                               k1_1_0)))))))))
                            or (forall k2_0_0:int.
                                ((le_int((0), k2_0_0)
                                 and lt_int(k2_0_0,
-                                    integer_of_int32(length_a))) ->
-                                (lt_int(integer_of_int32(length_a),
-                                 integer_of_int32(length_b))
+                                    integer_of_int32(length_a@))) ->
+                                (lt_int(integer_of_int32(length_a@),
+                                 integer_of_int32(length_b@))
                                 and eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                            shift(a, k2_0_0))),
+                                                            shift(a@, k2_0_0))),
                                     integer_of_int32(select(int_P_int_M_b_2,
-                                                     shift(b, k2_0_0)))))))))))))) }
+                                                     shift(b@, k2_0_0)))))))))))))) }
 
 parameter lexicographical_compare_array_requires :
  a:int_P pointer ->
@@ -604,46 +614,46 @@ parameter lexicographical_compare_array_requires :
            and (JC_22:
                ((((exists k1_1:int.
                    (le_int((0), k1_1)
-                   and (lt_int(k1_1, integer_of_int32(length_a))
+                   and (lt_int(k1_1, integer_of_int32(length_a@))
                        and (le_int((0), k1_1)
-                           and (lt_int(k1_1, integer_of_int32(length_b))
+                           and (lt_int(k1_1, integer_of_int32(length_b@))
                                and lt_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                           shift(a, k1_1))),
+                                                           shift(a@, k1_1))),
                                    integer_of_int32(select(int_P_int_M_b_2,
-                                                    shift(b, k1_1)))))))))
+                                                    shift(b@, k1_1)))))))))
                  or (forall k2_0:int.
                      ((le_int((0), k2_0)
-                      and lt_int(k2_0, integer_of_int32(length_a))) ->
-                      (lt_int(integer_of_int32(length_a),
-                       integer_of_int32(length_b))
+                      and lt_int(k2_0, integer_of_int32(length_a@))) ->
+                      (lt_int(integer_of_int32(length_a@),
+                       integer_of_int32(length_b@))
                       and eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                  shift(a, k2_0))),
+                                                  shift(a@, k2_0))),
                           integer_of_int32(select(int_P_int_M_b_2,
-                                           shift(b, k2_0))))))))
+                                           shift(b@, k2_0))))))))
                 and (not eq_int(integer_of_int32(result), (0))))
                or (eq_int(integer_of_int32(result), (0))
                   and (not ((exists k1_1_0:int.
                              (le_int((0), k1_1_0)
-                             and (lt_int(k1_1_0, integer_of_int32(length_a))
+                             and (lt_int(k1_1_0, integer_of_int32(length_a@))
                                  and (le_int((0), k1_1_0)
                                      and (lt_int(k1_1_0,
-                                          integer_of_int32(length_b))
+                                          integer_of_int32(length_b@))
                                          and lt_int(integer_of_int32(
                                                     select(int_P_int_M_a_1,
-                                                    shift(a, k1_1_0))),
+                                                    shift(a@, k1_1_0))),
                                              integer_of_int32(select(int_P_int_M_b_2,
-                                                              shift(b,
+                                                              shift(b@,
                                                               k1_1_0)))))))))
                            or (forall k2_0_0:int.
                                ((le_int((0), k2_0_0)
                                 and lt_int(k2_0_0,
-                                    integer_of_int32(length_a))) ->
-                                (lt_int(integer_of_int32(length_a),
-                                 integer_of_int32(length_b))
+                                    integer_of_int32(length_a@))) ->
+                                (lt_int(integer_of_int32(length_a@),
+                                 integer_of_int32(length_b@))
                                 and eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                            shift(a, k2_0_0))),
+                                                            shift(a@, k2_0_0))),
                                     integer_of_int32(select(int_P_int_M_b_2,
-                                                     shift(b, k2_0_0)))))))))))))) }
+                                                     shift(b@, k2_0_0)))))))))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -819,42 +829,43 @@ let lexicographical_compare_array_ensures_default =
     and (JC_18:
         ((((exists k1_1:int.
             (le_int((0), k1_1)
-            and (lt_int(k1_1, integer_of_int32(length_a))
+            and (lt_int(k1_1, integer_of_int32(length_a@))
                 and (le_int((0), k1_1)
-                    and (lt_int(k1_1, integer_of_int32(length_b))
+                    and (lt_int(k1_1, integer_of_int32(length_b@))
                         and lt_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                    shift(a, k1_1))),
+                                                    shift(a@, k1_1))),
                             integer_of_int32(select(int_P_int_M_b_2,
-                                             shift(b, k1_1)))))))))
+                                             shift(b@, k1_1)))))))))
           or (forall k2_0:int.
               ((le_int((0), k2_0)
-               and lt_int(k2_0, integer_of_int32(length_a))) ->
-               (lt_int(integer_of_int32(length_a),
-                integer_of_int32(length_b))
+               and lt_int(k2_0, integer_of_int32(length_a@))) ->
+               (lt_int(integer_of_int32(length_a@),
+                integer_of_int32(length_b@))
                and eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                           shift(a, k2_0))),
-                   integer_of_int32(select(int_P_int_M_b_2, shift(b, k2_0))))))))
+                                           shift(a@, k2_0))),
+                   integer_of_int32(select(int_P_int_M_b_2, shift(b@, k2_0))))))))
          and (not eq_int(integer_of_int32(result), (0))))
         or (eq_int(integer_of_int32(result), (0))
            and (not ((exists k1_1_0:int.
                       (le_int((0), k1_1_0)
-                      and (lt_int(k1_1_0, integer_of_int32(length_a))
+                      and (lt_int(k1_1_0, integer_of_int32(length_a@))
                           and (le_int((0), k1_1_0)
-                              and (lt_int(k1_1_0, integer_of_int32(length_b))
+                              and (lt_int(k1_1_0,
+                                   integer_of_int32(length_b@))
                                   and lt_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                              shift(a,
+                                                              shift(a@,
                                                               k1_1_0))),
                                       integer_of_int32(select(int_P_int_M_b_2,
-                                                       shift(b, k1_1_0)))))))))
+                                                       shift(b@, k1_1_0)))))))))
                     or (forall k2_0_0:int.
                         ((le_int((0), k2_0_0)
-                         and lt_int(k2_0_0, integer_of_int32(length_a))) ->
-                         (lt_int(integer_of_int32(length_a),
-                          integer_of_int32(length_b))
+                         and lt_int(k2_0_0, integer_of_int32(length_a@))) ->
+                         (lt_int(integer_of_int32(length_a@),
+                          integer_of_int32(length_b@))
                          and eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                     shift(a, k2_0_0))),
+                                                     shift(a@, k2_0_0))),
                              integer_of_int32(select(int_P_int_M_b_2,
-                                              shift(b, k2_0_0)))))))))))))) }
+                                              shift(b@, k2_0_0)))))))))))))) }
 
 let lexicographical_compare_array_safety =
  fun (a : int_P pointer) (length_a : int32) (b : int_P pointer) (length_b : int32) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_b_2_alloc_table : int_P alloc_table) (int_P_int_M_a_1 : (int_P, int32) memory) (int_P_int_M_b_2 : (int_P, int32) memory) ->
@@ -1078,11 +1089,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0030_po25.why">
-      <location file = "why/bts0030.why" line = "729" begin = "45" end = "46"/>
+      <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0030_po26.why">
-      <location file = "why/bts0030.why" line = "729" begin = "45" end = "46"/>
+      <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

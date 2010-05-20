@@ -38,14 +38,14 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 f(int_P[..] x, int_P[..] y, int_P[..] z)
-  requires (C_7 : ((((C_10 : (\offset_min(x) <= 0)) &&
-                      (C_11 : (\offset_max(x) >= 0))) &&
-                     ((C_13 : (\offset_min(y) <= 0)) &&
-                       (C_14 : (\offset_max(y) >= 0)))) &&
-                    ((C_16 : (\offset_min(z) <= 0)) &&
-                      (C_17 : (\offset_max(z) >= 0)))));
+  requires (C_8 : ((((C_11 : (\offset_min(x) <= 0)) &&
+                      (C_12 : (\offset_max(x) >= 0))) &&
+                     ((C_14 : (\offset_min(y) <= 0)) &&
+                       (C_15 : (\offset_max(y) >= 0)))) &&
+                    ((C_17 : (\offset_min(z) <= 0)) &&
+                      (C_18 : (\offset_max(z) >= 0)))));
 behavior default:
-  ensures (C_18 : (\result == 0));
+  ensures (C_7 : (\result == 0));
 {  
    (var int32 __retres);
    

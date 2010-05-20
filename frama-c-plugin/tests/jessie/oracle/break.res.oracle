@@ -66,8 +66,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_6 : (0 <= n));
-         variant (C_5 : n);
+           invariant (C_5 : (0 <= n));
+         variant (C_6 : n);
          while (true)
          {  
             {  (if (n >= 0) then () else 

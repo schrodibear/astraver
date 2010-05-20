@@ -57,7 +57,7 @@ class add_default_behavior =
                 s.spec_behavior)
       then begin
         s.spec_behavior <-
-          { b_name = name_of_default_behavior;
+          { b_name = Cil.default_behavior_name;
             b_assumes = [];
             b_requires = [];
             b_assigns = [];

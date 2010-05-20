@@ -55,9 +55,9 @@ invariant valid_ga3 :
 
 unit fg(int32 i)
 behavior default:
-  ensures (C_7 : ((C_8 : ((ga1 + 0).ii == i)) &&
-                   ((C_10 : ((ga2 + 1).ii == i)) &&
-                     (C_11 : ((ga3 + 2).ii == i)))));
+  ensures (C_7 : ((C_8 : ((ga1 + 0).ii == \at(i,Old))) &&
+                   ((C_10 : ((ga2 + 1).ii == \at(i,Old))) &&
+                     (C_11 : ((ga3 + 2).ii == \at(i,Old))))));
 {  
    {  (C_2 : ((C_1 : (ga1 + 0).ii) = i));
       (C_4 : ((C_3 : (ga2 + 1).ii) = i));
@@ -527,13 +527,13 @@ parameter fg :
     and (JC_27:
         ((JC_24:
          eq_int(integer_of_int32(select(S_ii_ga1_1, shift(ga1, (0)))),
-         integer_of_int32(i)))
+         integer_of_int32(i@)))
         and ((JC_25:
              eq_int(integer_of_int32(select(S_ii_ga2_2, shift(ga2, (1)))),
-             integer_of_int32(i)))
+             integer_of_int32(i@)))
             and (JC_26:
                 eq_int(integer_of_int32(select(S_ii_ga3_3, shift(ga3, (2)))),
-                integer_of_int32(i))))))) }
+                integer_of_int32(i@))))))) }
 
 parameter fg_requires :
  i:int32 ->
@@ -551,13 +551,13 @@ parameter fg_requires :
     and (JC_27:
         ((JC_24:
          eq_int(integer_of_int32(select(S_ii_ga1_1, shift(ga1, (0)))),
-         integer_of_int32(i)))
+         integer_of_int32(i@)))
         and ((JC_25:
              eq_int(integer_of_int32(select(S_ii_ga2_2, shift(ga2, (1)))),
-             integer_of_int32(i)))
+             integer_of_int32(i@)))
             and (JC_26:
                 eq_int(integer_of_int32(select(S_ii_ga3_3, shift(ga3, (2)))),
-                integer_of_int32(i))))))) }
+                integer_of_int32(i@))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -651,13 +651,13 @@ let fg_ensures_default =
   { (JC_23:
     ((JC_20:
      eq_int(integer_of_int32(select(S_ii_ga1_1, shift(ga1, (0)))),
-     integer_of_int32(i)))
+     integer_of_int32(i@)))
     and ((JC_21:
          eq_int(integer_of_int32(select(S_ii_ga2_2, shift(ga2, (1)))),
-         integer_of_int32(i)))
+         integer_of_int32(i@)))
         and (JC_22:
             eq_int(integer_of_int32(select(S_ii_ga3_3, shift(ga3, (2)))),
-            integer_of_int32(i)))))) }
+            integer_of_int32(i@)))))) }
 
 let fg_safety =
  fun (i : int32) ->

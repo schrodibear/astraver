@@ -27,23 +27,23 @@ tag void_P = {
 type void_P = [void_P]
 
 integer f(double x)
-  requires (C_4 : (\real_abs((x :> real)) <= 0x1p30));
+  requires (C_23 : (\real_abs((x :> real)) <= 0x1p30));
 behavior default:
-  ensures (C_5 : (\real_abs((\result - (x :> real))) <= 1.0));
+  ensures (C_4 : (\real_abs((\result - (\at(x,Old) :> real))) <= 1.0));
 behavior positive:
   assumes ((x :> real) >= 0.0);
-  ensures (C_6 : (((C_8 : (0 <= \result)) &&
-                    ((C_10 : (\result <= (x :> real))) &&
-                      (C_11 : ((x :> real) < (\result + 1))))) &&
-                   ((C_13 : ((- 1.0) <= (\result - (x :> real)))) &&
-                     (C_14 : ((\result - (x :> real)) <= 0.0)))));
+  ensures (C_5 : (((C_7 : (0 <= \result)) &&
+                    ((C_9 : (\result <= (\at(x,Old) :> real))) &&
+                      (C_10 : ((\at(x,Old) :> real) < (\result + 1))))) &&
+                   ((C_12 : ((- 1.0) <= (\result - (\at(x,Old) :> real)))) &&
+                     (C_13 : ((\result - (\at(x,Old) :> real)) <= 0.0)))));
 behavior negative:
   assumes ((x :> real) <= 0.0);
-  ensures (C_15 : (((C_17 : (0 >= \result)) &&
-                     ((C_19 : (\result >= (x :> real))) &&
-                       (C_20 : ((x :> real) > (\result - 1))))) &&
-                    ((C_22 : (1.0 >= (\result - (x :> real)))) &&
-                      (C_23 : ((\result - (x :> real)) >= 0.0)))));
+  ensures (C_14 : (((C_16 : (0 >= \result)) &&
+                     ((C_18 : (\result >= (\at(x,Old) :> real))) &&
+                       (C_19 : ((\at(x,Old) :> real) > (\result - 1))))) &&
+                    ((C_21 : (1.0 >= (\result - (\at(x,Old) :> real)))) &&
+                      (C_22 : ((\result - (\at(x,Old) :> real)) >= 0.0)))));
 {  
    (var integer i);
    
@@ -267,31 +267,31 @@ parameter f :
   { ((le_real(double_value(x@), 0.0) ->
       (JC_32:
       ((JC_27: ge_int((0), result))
-      and ((JC_28: ge_real(real_of_int(result), double_value(x)))
+      and ((JC_28: ge_real(real_of_int(result), double_value(x@)))
           and ((JC_29:
-               gt_real(double_value(x), real_of_int(sub_int(result, (1)))))
+               gt_real(double_value(x@), real_of_int(sub_int(result, (1)))))
               and ((JC_30:
                    ge_real(1.0,
-                   sub_real(real_of_int(result), double_value(x))))
+                   sub_real(real_of_int(result), double_value(x@))))
                   and (JC_31:
-                      ge_real(sub_real(real_of_int(result), double_value(x)),
+                      ge_real(sub_real(real_of_int(result), double_value(x@)),
                       0.0))))))))
     and ((ge_real(double_value(x@), 0.0) ->
           (JC_20:
           ((JC_15: le_int((0), result))
-          and ((JC_16: le_real(real_of_int(result), double_value(x)))
+          and ((JC_16: le_real(real_of_int(result), double_value(x@)))
               and ((JC_17:
-                   lt_real(double_value(x),
+                   lt_real(double_value(x@),
                    real_of_int(add_int(result, (1)))))
                   and ((JC_18:
                        le_real(neg_real(1.0),
-                       sub_real(real_of_int(result), double_value(x))))
+                       sub_real(real_of_int(result), double_value(x@))))
                       and (JC_19:
                           le_real(sub_real(real_of_int(result),
-                                  double_value(x)),
+                                  double_value(x@)),
                           0.0))))))))
         and (JC_6:
-            le_real(abs_real(sub_real(real_of_int(result), double_value(x))),
+            le_real(abs_real(sub_real(real_of_int(result), double_value(x@))),
             1.0)))) }
 
 parameter f_requires :
@@ -300,31 +300,31 @@ parameter f_requires :
   { ((le_real(double_value(x@), 0.0) ->
       (JC_32:
       ((JC_27: ge_int((0), result))
-      and ((JC_28: ge_real(real_of_int(result), double_value(x)))
+      and ((JC_28: ge_real(real_of_int(result), double_value(x@)))
           and ((JC_29:
-               gt_real(double_value(x), real_of_int(sub_int(result, (1)))))
+               gt_real(double_value(x@), real_of_int(sub_int(result, (1)))))
               and ((JC_30:
                    ge_real(1.0,
-                   sub_real(real_of_int(result), double_value(x))))
+                   sub_real(real_of_int(result), double_value(x@))))
                   and (JC_31:
-                      ge_real(sub_real(real_of_int(result), double_value(x)),
+                      ge_real(sub_real(real_of_int(result), double_value(x@)),
                       0.0))))))))
     and ((ge_real(double_value(x@), 0.0) ->
           (JC_20:
           ((JC_15: le_int((0), result))
-          and ((JC_16: le_real(real_of_int(result), double_value(x)))
+          and ((JC_16: le_real(real_of_int(result), double_value(x@)))
               and ((JC_17:
-                   lt_real(double_value(x),
+                   lt_real(double_value(x@),
                    real_of_int(add_int(result, (1)))))
                   and ((JC_18:
                        le_real(neg_real(1.0),
-                       sub_real(real_of_int(result), double_value(x))))
+                       sub_real(real_of_int(result), double_value(x@))))
                       and (JC_19:
                           le_real(sub_real(real_of_int(result),
-                                  double_value(x)),
+                                  double_value(x@)),
                           0.0))))))))
         and (JC_6:
-            le_real(abs_real(sub_real(real_of_int(result), double_value(x))),
+            le_real(abs_real(sub_real(real_of_int(result), double_value(x@))),
             1.0)))) }
 
 let f_ensures_default =
@@ -343,7 +343,7 @@ let f_ensures_default =
              (truncate_real_to_int jessie_6)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_5:
-    le_real(abs_real(sub_real(real_of_int(result), double_value(x))), 1.0)) }
+    le_real(abs_real(sub_real(real_of_int(result), double_value(x@))), 1.0)) }
 
 let f_ensures_negative =
  fun (x : double) ->
@@ -363,13 +363,14 @@ let f_ensures_negative =
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_26:
     ((JC_21: ge_int((0), result))
-    and ((JC_22: ge_real(real_of_int(result), double_value(x)))
+    and ((JC_22: ge_real(real_of_int(result), double_value(x@)))
         and ((JC_23:
-             gt_real(double_value(x), real_of_int(sub_int(result, (1)))))
+             gt_real(double_value(x@), real_of_int(sub_int(result, (1)))))
             and ((JC_24:
-                 ge_real(1.0, sub_real(real_of_int(result), double_value(x))))
+                 ge_real(1.0,
+                 sub_real(real_of_int(result), double_value(x@))))
                 and (JC_25:
-                    ge_real(sub_real(real_of_int(result), double_value(x)),
+                    ge_real(sub_real(real_of_int(result), double_value(x@)),
                     0.0))))))) }
 
 let f_ensures_positive =
@@ -390,14 +391,14 @@ let f_ensures_positive =
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_14:
     ((JC_9: le_int((0), result))
-    and ((JC_10: le_real(real_of_int(result), double_value(x)))
+    and ((JC_10: le_real(real_of_int(result), double_value(x@)))
         and ((JC_11:
-             lt_real(double_value(x), real_of_int(add_int(result, (1)))))
+             lt_real(double_value(x@), real_of_int(add_int(result, (1)))))
             and ((JC_12:
                  le_real(neg_real(1.0),
-                 sub_real(real_of_int(result), double_value(x))))
+                 sub_real(real_of_int(result), double_value(x@))))
                 and (JC_13:
-                    le_real(sub_real(real_of_int(result), double_value(x)),
+                    le_real(sub_real(real_of_int(result), double_value(x@)),
                     0.0))))))) }
 
 let f_safety =

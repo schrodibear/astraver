@@ -388,57 +388,57 @@ axiomatic WcsNCmp {
   
 }
 
-int32 div0_wrong(int32 x_37, int32 y_26)
+int32 div0_wrong(int32 x_39, int32 y_27)
 behavior default:
   ensures (C_4 : true);
 {  
    (var int32 __retres);
    
-   {  (C_3 : (__retres = (C_2 : ((C_1 : (x_37 / 0)) :> int32))));
+   {  (C_3 : (__retres = (C_2 : ((C_1 : (x_39 / 0)) :> int32))));
       
       (return __retres)
    }
 }
 
-int32 div0_unsafe(int32 x_4, int32 y_3)
-  requires (C_8 : (y_3 != 0));
+int32 div0_unsafe(int32 x_6, int32 y_4)
+  requires (C_9 : (y_4 != 0));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_8 : true);
 {  
    (var int32 __retres_0);
    
-   {  (C_7 : (__retres_0 = (C_6 : ((C_5 : (x_4 / y_3)) :> int32))));
+   {  (C_7 : (__retres_0 = (C_6 : ((C_5 : (x_6 / y_4)) :> int32))));
       
       (return __retres_0)
    }
 }
 
-int32 div0_unsafe_pos(int32 x_17, int32 y_12)
-  requires (C_13 : (y_12 > 0));
+int32 div0_unsafe_pos(int32 x_19, int32 y_13)
+  requires (C_14 : (y_13 > 0));
 behavior default:
-  ensures (C_14 : true);
+  ensures (C_13 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_12 : (__retres_1 = (C_11 : ((C_10 : (x_17 / y_12)) :> int32))));
+   {  (C_12 : (__retres_1 = (C_11 : ((C_10 : (x_19 / y_13)) :> int32))));
       
       (return __retres_1)
    }
 }
 
-int32 div0_safe(int32 x_26, int32 y_18)
-  requires (C_19 : true);
+int32 div0_safe(int32 x_28, int32 y_19)
+  requires (C_20 : true);
 behavior default:
-  ensures (C_20 : true);
+  ensures (C_19 : true);
 {  
    (var int32 __retres_2);
    
-   {  (if (y_18 == 0) then 
+   {  (if (y_19 == 0) then 
       {  (C_18 : (__retres_2 = 0));
          
          (goto return_label)
       } else 
-      {  (C_17 : (__retres_2 = (C_16 : ((C_15 : (x_26 / y_18)) :> int32))));
+      {  (C_17 : (__retres_2 = (C_16 : ((C_15 : (x_28 / y_19)) :> int32))));
          
          (goto return_label)
       });
@@ -447,19 +447,19 @@ behavior default:
    }
 }
 
-int32 div0_safe_pos(int32 x_36, int32 y_25)
-  requires (C_25 : true);
+int32 div0_safe_pos(int32 x_38, int32 y_26)
+  requires (C_26 : true);
 behavior default:
-  ensures (C_26 : true);
+  ensures (C_25 : true);
 {  
    (var int32 __retres_3);
    
-   {  (if (y_25 <= 0) then 
+   {  (if (y_26 <= 0) then 
       {  (C_24 : (__retres_3 = 0));
          
          (goto return_label)
       } else 
-      {  (C_23 : (__retres_3 = (C_22 : ((C_21 : (x_36 / y_25)) :> int32))));
+      {  (C_23 : (__retres_3 = (C_22 : ((C_21 : (x_38 / y_26)) :> int32))));
          
          (goto return_label)
       });
@@ -468,44 +468,44 @@ behavior default:
    }
 }
 
-uint32 udiv0_wrong(uint32 x_7, uint32 y_6)
+uint32 udiv0_wrong(uint32 x_9, uint32 y_7)
 behavior default:
   ensures (C_30 : true);
 {  
    (var uint32 __retres_4);
    
-   {  (C_29 : (__retres_4 = (C_28 : ((C_27 : (x_7 / 0)) :> uint32))));
+   {  (C_29 : (__retres_4 = (C_28 : ((C_27 : (x_9 / 0)) :> uint32))));
       
       (return __retres_4)
    }
 }
 
-uint32 udiv0_unsafe(uint32 x_16, uint32 y_11)
-  requires (C_34 : (y_11 != 0));
+uint32 udiv0_unsafe(uint32 x_18, uint32 y_12)
+  requires (C_35 : (y_12 != 0));
 behavior default:
-  ensures (C_35 : true);
+  ensures (C_34 : true);
 {  
    (var uint32 __retres_5);
    
-   {  (C_33 : (__retres_5 = (C_32 : ((C_31 : (x_16 / y_11)) :> uint32))));
+   {  (C_33 : (__retres_5 = (C_32 : ((C_31 : (x_18 / y_12)) :> uint32))));
       
       (return __retres_5)
    }
 }
 
-uint32 udiv0_safe(uint32 x_25, uint32 y_17)
-  requires (C_40 : true);
+uint32 udiv0_safe(uint32 x_27, uint32 y_18)
+  requires (C_41 : true);
 behavior default:
-  ensures (C_41 : true);
+  ensures (C_40 : true);
 {  
    (var uint32 __retres_6);
    
-   {  (if (y_17 == 0) then 
+   {  (if (y_18 == 0) then 
       {  (C_39 : (__retres_6 = 0));
          
          (goto return_label)
       } else 
-      {  (C_38 : (__retres_6 = (C_37 : ((C_36 : (x_25 / y_17)) :> uint32))));
+      {  (C_38 : (__retres_6 = (C_37 : ((C_36 : (x_27 / y_18)) :> uint32))));
          
          (goto return_label)
       });
@@ -514,44 +514,44 @@ behavior default:
    }
 }
 
-int32 mod0_wrong(int32 x_35, int32 y_24)
+int32 mod0_wrong(int32 x_37, int32 y_25)
 behavior default:
   ensures (C_45 : true);
 {  
    (var int32 __retres_7);
    
-   {  (C_44 : (__retres_7 = (C_43 : ((C_42 : (x_35 % 0)) :> int32))));
+   {  (C_44 : (__retres_7 = (C_43 : ((C_42 : (x_37 % 0)) :> int32))));
       
       (return __retres_7)
    }
 }
 
-int32 mod0_unsafe(int32 x_3, int32 y_2)
-  requires (C_49 : (y_2 != 0));
+int32 mod0_unsafe(int32 x_5, int32 y_3)
+  requires (C_50 : (y_3 != 0));
 behavior default:
-  ensures (C_50 : true);
+  ensures (C_49 : true);
 {  
    (var int32 __retres_8);
    
-   {  (C_48 : (__retres_8 = (C_47 : ((C_46 : (x_3 % y_2)) :> int32))));
+   {  (C_48 : (__retres_8 = (C_47 : ((C_46 : (x_5 % y_3)) :> int32))));
       
       (return __retres_8)
    }
 }
 
-int32 mod0_safe(int32 x_15, int32 y_10)
-  requires (C_55 : true);
+int32 mod0_safe(int32 x_17, int32 y_11)
+  requires (C_56 : true);
 behavior default:
-  ensures (C_56 : true);
+  ensures (C_55 : true);
 {  
    (var int32 __retres_9);
    
-   {  (if (y_10 == 0) then 
+   {  (if (y_11 == 0) then 
       {  (C_54 : (__retres_9 = 0));
          
          (goto return_label)
       } else 
-      {  (C_53 : (__retres_9 = (C_52 : ((C_51 : (x_15 % y_10)) :> int32))));
+      {  (C_53 : (__retres_9 = (C_52 : ((C_51 : (x_17 % y_11)) :> int32))));
          
          (goto return_label)
       });
@@ -560,7 +560,7 @@ behavior default:
    }
 }
 
-int32 shift_left_signed_wrong_1(int32 x_24, int32 y_16)
+int32 shift_left_signed_wrong_1(int32 x_26, int32 y_17)
 behavior default:
   ensures (C_63 : true);
 {  
@@ -570,17 +570,17 @@ behavior default:
       {  
          (assert for default: (C_59 : (32 < 32)));
          
-         (assert for default: (C_58 : (x_24 >= 0)));
+         (assert for default: (C_58 : (x_26 <= 0)));
          
-         (assert for default: (C_57 : (x_24 <= 0)));
-         (C_62 : (__retres_10 = (C_61 : ((C_60 : (x_24 * 4294967296)) :> int32))))
+         (assert for default: (C_57 : (x_26 >= 0)));
+         (C_62 : (__retres_10 = (C_61 : ((C_60 : (x_26 * 4294967296)) :> int32))))
       };
       
       (return __retres_10)
    }
 }
 
-int32 shift_left_signed_wrong_2(int32 x_34, int32 y_23)
+int32 shift_left_signed_wrong_2(int32 x_36, int32 y_24)
 behavior default:
   ensures (C_70 : true);
 {  
@@ -590,17 +590,17 @@ behavior default:
       {  
          (assert for default: (C_66 : (-1 >= 0)));
          
-         (assert for default: (C_65 : (x_34 >= 0)));
+         (assert for default: (C_65 : (x_36 <= (2147483647 >>> -1))));
          
-         (assert for default: (C_64 : (x_34 <= (2147483647 >>> -1))));
-         (C_69 : (__retres_11 = (C_68 : ((C_67 : (x_34 << -1)) :> int32))))
+         (assert for default: (C_64 : (x_36 >= 0)));
+         (C_69 : (__retres_11 = (C_68 : ((C_67 : (x_36 << -1)) :> int32))))
       };
       
       (return __retres_11)
    }
 }
 
-int32 shift_left_signed_wrong_3(int32 x_1, int32 y_0)
+int32 shift_left_signed_wrong_3(int32 x_3, int32 y_1)
 behavior default:
   ensures (C_72 : true);
 {  
@@ -612,7 +612,7 @@ behavior default:
    }
 }
 
-int32 shift_left_signed_unsafe(int32 x_14, int32 y_9)
+int32 shift_left_signed_unsafe(int32 x_16, int32 y_10)
 behavior default:
   ensures (C_80 : true);
 {  
@@ -620,64 +620,64 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_76 : (y_9 >= 0)));
+         (assert for default: (C_76 : (x_16 <= (2147483647 >>> y_10))));
          
-         (assert for default: (C_75 : (y_9 < 32)));
+         (assert for default: (C_75 : (x_16 >= 0)));
          
-         (assert for default: (C_74 : (x_14 >= 0)));
+         (assert for default: (C_74 : (y_10 < 32)));
          
-         (assert for default: (C_73 : (x_14 <= (2147483647 >>> y_9))));
-         (C_79 : (__retres_13 = (C_78 : ((C_77 : (x_14 << y_9)) :> int32))))
+         (assert for default: (C_73 : (y_10 >= 0)));
+         (C_79 : (__retres_13 = (C_78 : ((C_77 : (x_16 << y_10)) :> int32))))
       };
       
       (return __retres_13)
    }
 }
 
-int32 shift_left_signed_safe(int32 x_22, int32 y_15)
-  requires (C_98 : true);
+int32 shift_left_signed_safe(int32 x_24, int32 y_16)
+  requires (C_99 : true);
 behavior default:
-  ensures (C_99 : true);
+  ensures (C_98 : true);
 {  
    (var int32 __retres_14);
    
-   {  (if (x_22 < 0) then 
+   {  (if (x_24 < 0) then 
       {  (C_96 : (__retres_14 = 0));
          
          (goto return_label)
-      } else (if (y_15 < 0) then 
+      } else (if (y_16 < 0) then 
              {  (C_95 : (__retres_14 = 0));
                 
                 (goto return_label)
-             } else (if ((C_94 : (y_15 :> uint32)) >= 32) then 
+             } else (if ((C_94 : (y_16 :> uint32)) >= 32) then 
                     {  (C_93 : (__retres_14 = 0));
                        
                        (goto return_label)
                     } else 
                     {  
-                       (assert for default: (C_82 : (y_15 >= 0)));
+                       (assert for default: (C_82 : (y_16 < 32)));
                        
-                       (assert for default: (C_81 : (y_15 < 32)));
-                       (if (x_22 >
-                             (C_92 : ((C_91 : (2147483647 >>> y_15)) :> int32))) then 
+                       (assert for default: (C_81 : (y_16 >= 0)));
+                       (if (x_24 >
+                             (C_92 : ((C_91 : (2147483647 >>> y_16)) :> int32))) then 
                        {  (C_90 : (__retres_14 = 0));
                           
                           (goto return_label)
                        } else 
                        {  
                           {  
-                             (assert for default: (C_86 : (y_15 >= 0)));
-                             
-                             (assert for default: (C_85 : (y_15 < 32)));
-                             
-                             (assert for default: (C_84 : (x_22 >= 0)));
-                             
-                             (assert for default: (C_83 : (x_22 <=
+                             (assert for default: (C_86 : (x_24 <=
                                                             (2147483647 >>>
-                                                              y_15))));
+                                                              y_16))));
+                             
+                             (assert for default: (C_85 : (x_24 >= 0)));
+                             
+                             (assert for default: (C_84 : (y_16 < 32)));
+                             
+                             (assert for default: (C_83 : (y_16 >= 0)));
                              (C_89 : (__retres_14 = (C_88 : ((C_87 : 
-                                                             (x_22 <<
-                                                               y_15)) :> int32))))
+                                                             (x_24 <<
+                                                               y_16)) :> int32))))
                           };
                           
                           (goto return_label)
@@ -689,7 +689,7 @@ behavior default:
    }
 }
 
-uint32 shift_left_unsigned_wrong(uint32 x_33, uint32 y_22)
+uint32 shift_left_unsigned_wrong(uint32 x_35, uint32 y_23)
 behavior default:
   ensures (C_104 : true);
 {  
@@ -698,14 +698,14 @@ behavior default:
    {  
       {  
          (assert for default: (C_100 : (32 < 32)));
-         (C_103 : (__retres_15 = (C_102 : ((C_101 : (x_33 * 4294967296)) :> uint32))))
+         (C_103 : (__retres_15 = (C_102 : ((C_101 : (x_35 * 4294967296)) :> uint32))))
       };
       
       (return __retres_15)
    }
 }
 
-uint32 shift_left_unsigned_unsafe(uint32 x_0, uint32 y)
+uint32 shift_left_unsigned_unsafe(uint32 x_2, uint32 y_0)
 behavior default:
   ensures (C_109 : true);
 {  
@@ -713,30 +713,30 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_105 : (y < 32)));
-         (C_108 : (__retres_16 = (C_107 : ((C_106 : (x_0 << y)) :> uint32))))
+         (assert for default: (C_105 : (y_0 < 32)));
+         (C_108 : (__retres_16 = (C_107 : ((C_106 : (x_2 << y_0)) :> uint32))))
       };
       
       (return __retres_16)
    }
 }
 
-uint32 shift_left_unsigned_safe(uint32 x_11, uint32 y_8)
-  requires (C_115 : true);
+uint32 shift_left_unsigned_safe(uint32 x_13, uint32 y_9)
+  requires (C_116 : true);
 behavior default:
-  ensures (C_116 : true);
+  ensures (C_115 : true);
 {  
    (var uint32 __retres_17);
    
-   {  (if (y_8 >= 32) then 
+   {  (if (y_9 >= 32) then 
       {  (C_114 : (__retres_17 = 0));
          
          (goto return_label)
       } else 
       {  
          {  
-            (assert for default: (C_110 : (y_8 < 32)));
-            (C_113 : (__retres_17 = (C_112 : ((C_111 : (x_11 << y_8)) :> uint32))))
+            (assert for default: (C_110 : (y_9 < 32)));
+            (C_113 : (__retres_17 = (C_112 : ((C_111 : (x_13 << y_9)) :> uint32))))
          };
          
          (goto return_label)
@@ -746,7 +746,7 @@ behavior default:
    }
 }
 
-int32 shift_right_signed_wrong_1(int32 x_21, int32 y_14)
+int32 shift_right_signed_wrong_1(int32 x_23, int32 y_15)
 behavior default:
   ensures (C_121 : true);
 {  
@@ -755,14 +755,14 @@ behavior default:
    {  
       {  
          (assert for default: (C_117 : (-1 >= 0)));
-         (C_120 : (__retres_18 = (C_119 : ((C_118 : (x_21 >>> -1)) :> int32))))
+         (C_120 : (__retres_18 = (C_119 : ((C_118 : (x_23 >>> -1)) :> int32))))
       };
       
       (return __retres_18)
    }
 }
 
-int32 shift_right_signed_wrong_2(int32 x_29, int32 y_20)
+int32 shift_right_signed_wrong_2(int32 x_31, int32 y_21)
 behavior default:
   ensures (C_126 : true);
 {  
@@ -771,14 +771,14 @@ behavior default:
    {  
       {  
          (assert for default: (C_122 : (32 < 32)));
-         (C_125 : (__retres_19 = (C_124 : ((C_123 : (x_29 / 4294967296)) :> int32))))
+         (C_125 : (__retres_19 = (C_124 : ((C_123 : (x_31 / 4294967296)) :> int32))))
       };
       
       (return __retres_19)
    }
 }
 
-int32 shift_right_signed_unsafe(int32 x_40, int32 y_28)
+int32 shift_right_signed_unsafe(int32 x_0, int32 y)
 behavior default:
   ensures (C_132 : true);
 {  
@@ -786,38 +786,38 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_128 : (y_28 >= 0)));
+         (assert for default: (C_128 : (y < 32)));
          
-         (assert for default: (C_127 : (y_28 < 32)));
-         (C_131 : (__retres_20 = (C_130 : ((C_129 : (x_40 >>> y_28)) :> int32))))
+         (assert for default: (C_127 : (y >= 0)));
+         (C_131 : (__retres_20 = (C_130 : ((C_129 : (x_0 >>> y)) :> int32))))
       };
       
       (return __retres_20)
    }
 }
 
-int32 shift_right_signed_safe(int32 x_10, int32 y_7)
-  requires (C_142 : true);
+int32 shift_right_signed_safe(int32 x_12, int32 y_8)
+  requires (C_143 : true);
 behavior default:
-  ensures (C_143 : true);
+  ensures (C_142 : true);
 {  
    (var int32 __retres_21);
    
-   {  (if (y_7 < 0) then 
+   {  (if (y_8 < 0) then 
       {  (C_140 : (__retres_21 = 0));
          
          (goto return_label)
-      } else (if ((C_139 : (y_7 :> uint32)) >= 32) then 
+      } else (if ((C_139 : (y_8 :> uint32)) >= 32) then 
              {  (C_138 : (__retres_21 = 0));
                 
                 (goto return_label)
              } else 
              {  
                 {  
-                   (assert for default: (C_134 : (y_7 >= 0)));
+                   (assert for default: (C_134 : (y_8 < 32)));
                    
-                   (assert for default: (C_133 : (y_7 < 32)));
-                   (C_137 : (__retres_21 = (C_136 : ((C_135 : (x_10 >>> y_7)) :> int32))))
+                   (assert for default: (C_133 : (y_8 >= 0)));
+                   (C_137 : (__retres_21 = (C_136 : ((C_135 : (x_12 >>> y_8)) :> int32))))
                 };
                 
                 (goto return_label)
@@ -828,7 +828,7 @@ behavior default:
    }
 }
 
-uint32 shift_right_unsigned_wrong(uint32 x_18, uint32 y_13)
+uint32 shift_right_unsigned_wrong(uint32 x_20, uint32 y_14)
 behavior default:
   ensures (C_148 : true);
 {  
@@ -837,14 +837,14 @@ behavior default:
    {  
       {  
          (assert for default: (C_144 : (32 < 32)));
-         (C_147 : (__retres_22 = (C_146 : ((C_145 : (x_18 / 4294967296)) :> uint32))))
+         (C_147 : (__retres_22 = (C_146 : ((C_145 : (x_20 / 4294967296)) :> uint32))))
       };
       
       (return __retres_22)
    }
 }
 
-uint32 shift_right_unsigned_unsafe(uint32 x_28, uint32 y_19)
+uint32 shift_right_unsigned_unsafe(uint32 x_30, uint32 y_20)
 behavior default:
   ensures (C_153 : true);
 {  
@@ -852,30 +852,30 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_149 : (y_19 < 32)));
-         (C_152 : (__retres_23 = (C_151 : ((C_150 : (x_28 >> y_19)) :> uint32))))
+         (assert for default: (C_149 : (y_20 < 32)));
+         (C_152 : (__retres_23 = (C_151 : ((C_150 : (x_30 >> y_20)) :> uint32))))
       };
       
       (return __retres_23)
    }
 }
 
-uint32 shift_right_unsigned_safe(uint32 x_38, uint32 y_27)
-  requires (C_159 : true);
+uint32 shift_right_unsigned_safe(uint32 x_40, uint32 y_28)
+  requires (C_160 : true);
 behavior default:
-  ensures (C_160 : true);
+  ensures (C_159 : true);
 {  
    (var uint32 __retres_24);
    
-   {  (if (y_27 >= 32) then 
+   {  (if (y_28 >= 32) then 
       {  (C_158 : (__retres_24 = 0));
          
          (goto return_label)
       } else 
       {  
          {  
-            (assert for default: (C_154 : (y_27 < 32)));
-            (C_157 : (__retres_24 = (C_156 : ((C_155 : (x_38 >> y_27)) :> uint32))))
+            (assert for default: (C_154 : (y_28 < 32)));
+            (C_157 : (__retres_24 = (C_156 : ((C_155 : (x_40 >> y_28)) :> uint32))))
          };
          
          (goto return_label)
@@ -885,47 +885,47 @@ behavior default:
    }
 }
 
-int32 null_ptr_wrong(int_P[..] x_9)
+int32 null_ptr_wrong(int_P[..] x_11)
 behavior default:
   ensures (C_164 : true);
 {  
    (var int32 __retres_25);
    
-   {  (C_161 : (x_9 = null));
-      (C_163 : (__retres_25 = (C_162 : x_9.int_M)));
+   {  (C_161 : (x_11 = null));
+      (C_163 : (__retres_25 = (C_162 : x_11.int_M)));
       
       (return __retres_25)
    }
 }
 
-int32 null_ptr_unsafe(int_P[..] x_13)
-  requires (C_167 : ((C_168 : (\offset_min(x_13) <= 0)) &&
-                      (C_169 : (\offset_max(x_13) >= 0))));
+int32 null_ptr_unsafe(int_P[..] x_15)
+  requires (C_168 : ((C_169 : (\offset_min(x_15) <= 0)) &&
+                      (C_170 : (\offset_max(x_15) >= 0))));
 behavior default:
-  ensures (C_170 : true);
+  ensures (C_167 : true);
 {  
    (var int32 __retres_26);
    
-   {  (C_166 : (__retres_26 = (C_165 : x_13.int_M)));
+   {  (C_166 : (__retres_26 = (C_165 : x_15.int_M)));
       
       (return __retres_26)
    }
 }
 
-int32 null_ptr_safe(int_P[..] x_20)
-  requires (C_174 : (((\offset_min(x_20) <= 0) && (\offset_max(x_20) >= 0)) ||
-                      (x_20 == null)));
+int32 null_ptr_safe(int_P[..] x_22)
+  requires (C_175 : (((\offset_min(x_22) <= 0) && (\offset_max(x_22) >= 0)) ||
+                      (x_22 == null)));
 behavior default:
-  ensures (C_175 : true);
+  ensures (C_174 : true);
 {  
    (var int32 __retres_27);
    
-   {  (if (x_20 == null) then 
+   {  (if (x_22 == null) then 
       {  (C_173 : (__retres_27 = 0));
          
          (goto return_label)
       } else 
-      {  (C_172 : (__retres_27 = (C_171 : x_20.int_M)));
+      {  (C_172 : (__retres_27 = (C_171 : x_22.int_M)));
          
          (goto return_label)
       });
@@ -996,26 +996,26 @@ behavior default:
    }
 }
 
-int32 ptr_sub_unsafe(int_P[..] x_6, int_P[..] y_5)
-  requires (C_204 : (((C_206 : (\offset_min(x_6) <= 0)) &&
-                       (C_207 : (\offset_max(x_6) >= 0))) &&
-                      ((C_209 : (\offset_min(y_5) <= 0)) &&
-                        (C_210 : (\offset_max(y_5) >= 0)))));
+int32 ptr_sub_unsafe(int_P[..] x_8, int_P[..] y_6)
+  requires (C_205 : (((C_207 : (\offset_min(x_8) <= 0)) &&
+                       (C_208 : (\offset_max(x_8) >= 0))) &&
+                      ((C_210 : (\offset_min(y_6) <= 0)) &&
+                        (C_211 : (\offset_max(y_6) >= 0)))));
 behavior default:
-  ensures (C_211 : true);
+  ensures (C_204 : true);
 {  
    (var int32 __retres_31);
    
-   {  (C_203 : (__retres_31 = (C_202 : ((C_201 : (x_6 - y_5)) :> int32))));
+   {  (C_203 : (__retres_31 = (C_202 : ((C_201 : (x_8 - y_6)) :> int32))));
       
       (return __retres_31)
    }
 }
 
 int32 ptr_sub_safe()
-  requires (C_221 : true);
+  requires (C_222 : true);
 behavior default:
-  ensures (C_222 : true);
+  ensures (C_221 : true);
 {  
    (var int_P[0..2] a_0_0);
    
@@ -1042,7 +1042,7 @@ int_P[0..1] a;
 invariant valid_a :
 ((\offset_min(a) <= 0) && (\offset_max(a) >= 1))
 
-int32 oob_pointer_wrong(uint32 x_23)
+int32 oob_pointer_wrong(uint32 x_25)
 behavior default:
   ensures (C_228 : true);
 {  
@@ -1050,30 +1050,30 @@ behavior default:
    
    (var int32 __retres_33);
    
-   {  (C_225 : (i_6 = (C_224 : ((C_223 : (a + x_23)) + 2))));
+   {  (C_225 : (i_6 = (C_224 : ((C_223 : (a + x_25)) + 2))));
       (C_227 : (__retres_33 = (C_226 : i_6.int_M)));
       
       (return __retres_33)
    }
 }
 
-int32 oob_pointer_unsafe(uint32 x_32)
-  requires (C_233 : ((C_234 : (0 <= x_32)) && (C_235 : (x_32 < 2))));
+int32 oob_pointer_unsafe(uint32 x_34)
+  requires (C_234 : ((C_235 : (0 <= x_34)) && (C_236 : (x_34 < 2))));
 behavior default:
-  ensures (C_236 : true);
+  ensures (C_233 : true);
 {  
    (var int_P[..] i_7);
    
    (var int32 __retres_34);
    
-   {  (C_230 : (i_7 = (C_229 : (a + x_32))));
+   {  (C_230 : (i_7 = (C_229 : (a + x_34))));
       (C_232 : (__retres_34 = (C_231 : i_7.int_M)));
       
       (return __retres_34)
    }
 }
 
-int32 oob_pointer_safe(uint32 x)
+int32 oob_pointer_safe(uint32 x_1)
 behavior default:
   ensures (C_242 : true);
 {  
@@ -1081,8 +1081,8 @@ behavior default:
    
    (var int32 __retres_35);
    
-   {  (if (x < 2) then 
-      {  (C_239 : (i_8 = (C_238 : (a + x))));
+   {  (if (x_1 < 2) then 
+      {  (C_239 : (i_8 = (C_238 : (a + x_1))));
          (C_241 : (__retres_35 = (C_240 : i_8.int_M)));
          
          (goto return_label)
@@ -1096,41 +1096,41 @@ behavior default:
    }
 }
 
-int32 array_bounds_wrong(uint32 i)
+int32 array_bounds_wrong(uint32 i_0)
 behavior default:
   ensures (C_247 : true);
 {  
    (var int32 __retres_36);
    
    {  (C_246 : (__retres_36 = (C_245 : (a +
-                                         (C_244 : ((C_243 : (2 + i)) :> uint32))).int_M)));
+                                         (C_244 : ((C_243 : (2 + i_0)) :> uint32))).int_M)));
       
       (return __retres_36)
    }
 }
 
-int32 array_bounds_unsafe(uint32 i_0)
-  requires (C_250 : (i_0 < 2));
+int32 array_bounds_unsafe(uint32 i_1)
+  requires (C_251 : (i_1 < 2));
 behavior default:
-  ensures (C_251 : true);
+  ensures (C_250 : true);
 {  
    (var int32 __retres_37);
    
-   {  (C_249 : (__retres_37 = (C_248 : (a + i_0).int_M)));
+   {  (C_249 : (__retres_37 = (C_248 : (a + i_1).int_M)));
       
       (return __retres_37)
    }
 }
 
-int32 array_bounds_safe(uint32 i_2)
-  requires (C_256 : true);
+int32 array_bounds_safe(uint32 i_3)
+  requires (C_257 : true);
 behavior default:
-  ensures (C_257 : true);
+  ensures (C_256 : true);
 {  
    (var int32 __retres_38);
    
-   {  (if (i_2 < 2) then 
-      {  (C_255 : (__retres_38 = (C_254 : (a + i_2).int_M)));
+   {  (if (i_3 < 2) then 
+      {  (C_255 : (__retres_38 = (C_254 : (a + i_3).int_M)));
          
          (goto return_label)
       } else 
@@ -1154,45 +1154,45 @@ behavior default:
    }
 }
 
-int32 initialization_unsafe(int32 i_4)
-  requires (C_260 : (i_4 != 0));
+int32 initialization_unsafe(int32 i_5)
+  requires (C_261 : (i_5 != 0));
 behavior default:
-  ensures (C_261 : true);
+  ensures (C_260 : true);
 {  
    (var int32 x_46);
    
-   {  (if (i_4 != 0) then (C_259 : (x_46 = 1)) else ());
+   {  (if (i_5 != 0) then (C_259 : (x_46 = 1)) else ());
       
       (return x_46)
    }
 }
 
-int32 initialization_safe(int32 i_5)
-  requires (C_264 : true);
+int32 initialization_safe(int32 i)
+  requires (C_265 : true);
 behavior default:
-  ensures (C_265 : true);
+  ensures (C_264 : true);
 {  
    (var int32 x_47);
    
-   {  (if (i_5 != 0) then (C_263 : (x_47 = 1)) else (C_262 : (x_47 = 2)));
+   {  (if (i != 0) then (C_263 : (x_47 = 1)) else (C_262 : (x_47 = 2)));
       
       (return x_47)
    }
 }
 
-int32 signed_overflow_wrong(int32 x_8)
+int32 signed_overflow_wrong(int32 x_10)
 behavior default:
   ensures (C_274 : true);
 {  
    (var int32 __retres_39);
    
-   {  (if (x_8 > 0) then 
-      {  (C_273 : (__retres_39 = (C_272 : ((C_271 : (x_8 + 2147483647)) :> int32))));
+   {  (if (x_10 > 0) then 
+      {  (C_273 : (__retres_39 = (C_272 : ((C_271 : (x_10 + 2147483647)) :> int32))));
          
          (goto return_label)
       } else 
       {  (C_270 : (__retres_39 = (C_269 : ((C_268 : ((C_267 : ((C_266 : 
-                                                               (x_8 -
+                                                               (x_10 -
                                                                  1)) :> int32)) -
                                                       2147483647)) :> int32))));
          
@@ -1203,32 +1203,32 @@ behavior default:
    }
 }
 
-int32 signed_overflow_unsafe(int32 x_12)
-  requires (C_278 : (x_12 <= (2147483647 - 10)));
+int32 signed_overflow_unsafe(int32 x_14)
+  requires (C_279 : (x_14 <= (2147483647 - 10)));
 behavior default:
-  ensures (C_279 : true);
+  ensures (C_278 : true);
 {  
    (var int32 __retres_40);
    
-   {  (C_277 : (__retres_40 = (C_276 : ((C_275 : (x_12 + 10)) :> int32))));
+   {  (C_277 : (__retres_40 = (C_276 : ((C_275 : (x_14 + 10)) :> int32))));
       
       (return __retres_40)
    }
 }
 
-int32 signed_overflow_safe(int32 x_19)
-  requires (C_286 : true);
+int32 signed_overflow_safe(int32 x_21)
+  requires (C_287 : true);
 behavior default:
-  ensures (C_287 : true);
+  ensures (C_286 : true);
 {  
    (var int32 __retres_41);
    
-   {  (if (x_19 < 0) then 
-      {  (C_285 : (__retres_41 = (C_284 : ((C_283 : (x_19 + 2147483647)) :> int32))));
+   {  (if (x_21 < 0) then 
+      {  (C_285 : (__retres_41 = (C_284 : ((C_283 : (x_21 + 2147483647)) :> int32))));
          
          (goto return_label)
       } else 
-      {  (C_282 : (__retres_41 = (C_281 : ((C_280 : (x_19 - 2147483647)) :> int32))));
+      {  (C_282 : (__retres_41 = (C_281 : ((C_280 : (x_21 - 2147483647)) :> int32))));
          
          (goto return_label)
       });
@@ -1237,7 +1237,7 @@ behavior default:
    }
 }
 
-int32 missing_return_wrong(int32 x_27)
+int32 missing_return_wrong(int32 x_29)
 behavior default:
   ensures (C_289 : true);
 {  
@@ -1249,14 +1249,14 @@ behavior default:
    }
 }
 
-int32 missing_return_unsafe(int32 x_31)
-  requires (C_292 : (x_31 < 0));
+int32 missing_return_unsafe(int32 x_33)
+  requires (C_293 : (x_33 < 0));
 behavior default:
-  ensures (C_293 : true);
+  ensures (C_292 : true);
 {  
    (var int32 __retres_43);
    
-   {  (if (x_31 < 0) then 
+   {  (if (x_33 < 0) then 
       {  (C_290 : (__retres_43 = 0));
          
          (goto return_label)
@@ -1267,14 +1267,14 @@ behavior default:
    }
 }
 
-int32 missing_return_safe(int32 x_39)
-  requires (C_296 : true);
+int32 missing_return_safe(int32 x)
+  requires (C_297 : true);
 behavior default:
-  ensures (C_297 : true);
+  ensures (C_296 : true);
 {  
    (var int32 __retres_44);
    
-   {  (if (x_39 < 0) then 
+   {  (if (x < 0) then 
       {  (C_295 : (__retres_44 = 0));
          
          (goto return_label)
@@ -1288,7 +1288,7 @@ behavior default:
    }
 }
 
-int32 multiple_update_wrong_1(int_P[..] x_5, int_P[..] y_4)
+int32 multiple_update_wrong_1(int_P[..] x_7, int_P[..] y_5)
 behavior default:
   ensures (C_307 : true);
 {  
@@ -1300,9 +1300,9 @@ behavior default:
    
    {  
       {  (C_298 : (tmp = 0));
-         (C_300 : ((C_299 : x_5.int_M) = tmp));
+         (C_300 : ((C_299 : x_7.int_M) = tmp));
          (C_301 : (tmp_0 = 0));
-         (C_303 : ((C_302 : x_5.int_M) = tmp_0))
+         (C_303 : ((C_302 : x_7.int_M) = tmp_0))
       };
       (C_306 : (__retres_45 = (C_305 : ((C_304 : (tmp + tmp_0)) :> int32))));
       
@@ -1310,20 +1310,20 @@ behavior default:
    }
 }
 
-int32 multiple_update_wrong_2(int32 i_1)
+int32 multiple_update_wrong_2(int32 i_2)
 behavior default:
   ensures (C_314 : true);
 {  
    {  
-      {  (C_310 : (i_1 = (C_309 : ((C_308 : (i_1 + 1)) :> int32))));
-         (C_313 : (i_1 = (C_312 : ((C_311 : (i_1 + 1)) :> int32))))
+      {  (C_310 : (i_2 = (C_309 : ((C_308 : (i_2 + 1)) :> int32))));
+         (C_313 : (i_2 = (C_312 : ((C_311 : (i_2 + 1)) :> int32))))
       };
       
-      (return i_1)
+      (return i_2)
    }
 }
 
-int32 multiple_update_wrong_3(int32 i_3)
+int32 multiple_update_wrong_3(int32 i_4)
 behavior default:
   ensures (C_321 : true);
 {  
@@ -1331,20 +1331,20 @@ behavior default:
    
    {  
       {  
-         {  (C_315 : (tmp_0_0 = i_3));
-            (C_318 : (i_3 = (C_317 : ((C_316 : (i_3 + 1)) :> int32))))
+         {  (C_315 : (tmp_0_0 = i_4));
+            (C_318 : (i_4 = (C_317 : ((C_316 : (i_4 + 1)) :> int32))))
          };
-         (C_320 : ((C_319 : (a + tmp_0_0).int_M) = i_3))
+         (C_320 : ((C_319 : (a + tmp_0_0).int_M) = i_4))
       };
       
-      (return i_3)
+      (return i_4)
    }
 }
 
-int32 multiple_update_unsafe(int_P[..] x_30, int_P[..] y_21)
-  requires (C_331 : (x_30 != y_21));
+int32 multiple_update_unsafe(int_P[..] x_32, int_P[..] y_22)
+  requires (C_332 : (x_32 != y_22));
 behavior default:
-  ensures (C_332 : true);
+  ensures (C_331 : true);
 {  
    (var int32 tmp_0_1);
    
@@ -1354,9 +1354,9 @@ behavior default:
    
    {  
       {  (C_322 : (tmp_0_1 = 0));
-         (C_324 : ((C_323 : x_30.int_M) = tmp_0_1));
+         (C_324 : ((C_323 : x_32.int_M) = tmp_0_1));
          (C_325 : (tmp_0_2 = 0));
-         (C_327 : ((C_326 : y_21.int_M) = tmp_0_2))
+         (C_327 : ((C_326 : y_22.int_M) = tmp_0_2))
       };
       (C_330 : (__retres_46 = (C_329 : ((C_328 : (tmp_0_1 + tmp_0_2)) :> int32))));
       
@@ -1364,10 +1364,10 @@ behavior default:
    }
 }
 
-int32 multiple_update_safe(int_P[..] x_2, int_P[..] y_1)
-  requires (C_343 : true);
+int32 multiple_update_safe(int_P[..] x_4, int_P[..] y_2)
+  requires (C_344 : true);
 behavior default:
-  ensures (C_344 : true);
+  ensures (C_343 : true);
 {  
    (var int32 tmp_0_3);
    
@@ -1375,16 +1375,16 @@ behavior default:
    
    (var int32 __retres_47);
    
-   {  (if (x_2 == y_1) then 
+   {  (if (x_4 == y_2) then 
       {  (C_342 : (__retres_47 = 0));
          
          (goto return_label)
       } else 
       {  
          {  (C_333 : (tmp_0_3 = 0));
-            (C_335 : ((C_334 : x_2.int_M) = tmp_0_3));
+            (C_335 : ((C_334 : x_4.int_M) = tmp_0_3));
             (C_336 : (tmp_0_4 = 0));
-            (C_338 : ((C_337 : y_1.int_M) = tmp_0_4))
+            (C_338 : ((C_337 : y_2.int_M) = tmp_0_4))
          };
          (C_341 : (__retres_47 = (C_340 : ((C_339 : (tmp_0_3 + tmp_0_4)) :> int32))));
          
@@ -2974,7 +2974,7 @@ parameter char_P___string_abc_1_alloc_table : char_P alloc_table ref
 parameter int_P_int_M_a_2 : (int_P, int32) memory ref
 
 parameter array_bounds_safe :
- i_2:uint32 ->
+ i_3:uint32 ->
   { } int32
   reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table,int_P_int_M_a_2
   { (JC_937:
@@ -2982,7 +2982,7 @@ parameter array_bounds_safe :
     and (JC_936: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter array_bounds_safe_requires :
- i_2:uint32 ->
+ i_3:uint32 ->
   { (JC_924:
     ((JC_922: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_923: valid_a(int_P_a_2_alloc_table))))}
@@ -2993,7 +2993,7 @@ parameter array_bounds_safe_requires :
     and (JC_936: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter array_bounds_unsafe :
- i_0:uint32 ->
+ i_1:uint32 ->
   { } int32
   reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table,int_P_int_M_a_2
   { (JC_920:
@@ -3001,9 +3001,9 @@ parameter array_bounds_unsafe :
     and (JC_919: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter array_bounds_unsafe_requires :
- i_0:uint32 ->
+ i_1:uint32 ->
   { (JC_906:
-    ((JC_903: lt_int(integer_of_uint32(i_0), (2)))
+    ((JC_903: lt_int(integer_of_uint32(i_1), (2)))
     and ((JC_904: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_905: valid_a(int_P_a_2_alloc_table)))))}
   int32
@@ -3013,7 +3013,7 @@ parameter array_bounds_unsafe_requires :
     and (JC_919: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter array_bounds_wrong :
- i:uint32 ->
+ i_0:uint32 ->
   { } int32
   reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table,int_P_int_M_a_2
   { (JC_900:
@@ -3021,7 +3021,7 @@ parameter array_bounds_wrong :
     and (JC_899: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter array_bounds_wrong_requires :
- i:uint32 ->
+ i_0:uint32 ->
   { (JC_887:
     ((JC_885: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_886: valid_a(int_P_a_2_alloc_table))))}
@@ -3124,24 +3124,24 @@ parameter const_cast_wrong_requires :
       and (JC_1297: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_safe :
- x_26:int32 ->
-  y_18:int32 ->
+ x_28:int32 ->
+  y_19:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_199:
      ((JC_197: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_198: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_safe_pos :
- x_36:int32 ->
-  y_25:int32 ->
+ x_38:int32 ->
+  y_26:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_218:
      ((JC_216: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_217: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_safe_pos_requires :
- x_36:int32 ->
-  y_25:int32 ->
+ x_38:int32 ->
+  y_26:int32 ->
    { (JC_205:
      ((JC_203: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_204: valid_a(int_P_a_2_alloc_table))))}
@@ -3151,8 +3151,8 @@ parameter div0_safe_pos_requires :
      and (JC_217: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_safe_requires :
- x_26:int32 ->
-  y_18:int32 ->
+ x_28:int32 ->
+  y_19:int32 ->
    { (JC_186:
      ((JC_184: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_185: valid_a(int_P_a_2_alloc_table))))}
@@ -3162,26 +3162,26 @@ parameter div0_safe_requires :
      and (JC_198: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_unsafe :
- x_4:int32 ->
-  y_3:int32 ->
+ x_6:int32 ->
+  y_4:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_159:
      ((JC_157: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_158: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_unsafe_pos :
- x_17:int32 ->
-  y_12:int32 ->
+ x_19:int32 ->
+  y_13:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_180:
      ((JC_178: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_179: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_unsafe_pos_requires :
- x_17:int32 ->
-  y_12:int32 ->
+ x_19:int32 ->
+  y_13:int32 ->
    { (JC_166:
-     ((JC_163: gt_int(integer_of_int32(y_12), (0)))
+     ((JC_163: gt_int(integer_of_int32(y_13), (0)))
      and ((JC_164: valid___string_abc(char_P___string_abc_1_alloc_table))
          and (JC_165: valid_a(int_P_a_2_alloc_table)))))}
    int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3190,10 +3190,10 @@ parameter div0_unsafe_pos_requires :
      and (JC_179: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_unsafe_requires :
- x_4:int32 ->
-  y_3:int32 ->
+ x_6:int32 ->
+  y_4:int32 ->
    { (JC_145:
-     ((JC_142: neq_int(integer_of_int32(y_3), (0)))
+     ((JC_142: neq_int(integer_of_int32(y_4), (0)))
      and ((JC_143: valid___string_abc(char_P___string_abc_1_alloc_table))
          and (JC_144: valid_a(int_P_a_2_alloc_table)))))}
    int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3202,16 +3202,16 @@ parameter div0_unsafe_requires :
      and (JC_158: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_wrong :
- x_37:int32 ->
-  y_26:int32 ->
+ x_39:int32 ->
+  y_27:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_138:
      ((JC_136: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_137: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter div0_wrong_requires :
- x_37:int32 ->
-  y_26:int32 ->
+ x_39:int32 ->
+  y_27:int32 ->
    { (JC_125:
      ((JC_123: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_124: valid_a(int_P_a_2_alloc_table))))}
@@ -3240,14 +3240,14 @@ parameter foo_requires :
      and (JC_1206: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter initialization_safe :
- i_5:int32 ->
+ i:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_988:
     ((JC_986: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_987: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter initialization_safe_requires :
- i_5:int32 ->
+ i:int32 ->
   { (JC_975:
     ((JC_973: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_974: valid_a(int_P_a_2_alloc_table))))}
@@ -3257,16 +3257,16 @@ parameter initialization_safe_requires :
     and (JC_987: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter initialization_unsafe :
- i_4:int32 ->
+ i_5:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_972:
     ((JC_970: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_971: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter initialization_unsafe_requires :
- i_4:int32 ->
+ i_5:int32 ->
   { (JC_958:
-    ((JC_955: neq_int(integer_of_int32(i_4), (0)))
+    ((JC_955: neq_int(integer_of_int32(i_5), (0)))
     and ((JC_956: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_957: valid_a(int_P_a_2_alloc_table)))))}
   int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3302,14 +3302,14 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter missing_return_safe :
- x_39:int32 ->
+ x:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1094:
     ((JC_1092: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1093: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter missing_return_safe_requires :
- x_39:int32 ->
+ x:int32 ->
   { (JC_1081:
     ((JC_1079: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1080: valid_a(int_P_a_2_alloc_table))))}
@@ -3319,16 +3319,16 @@ parameter missing_return_safe_requires :
     and (JC_1093: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter missing_return_unsafe :
- x_31:int32 ->
+ x_33:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1078:
     ((JC_1076: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1077: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter missing_return_unsafe_requires :
- x_31:int32 ->
+ x_33:int32 ->
   { (JC_1064:
-    ((JC_1061: lt_int(integer_of_int32(x_31), (0)))
+    ((JC_1061: lt_int(integer_of_int32(x_33), (0)))
     and ((JC_1062: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1063: valid_a(int_P_a_2_alloc_table)))))}
   int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3337,14 +3337,14 @@ parameter missing_return_unsafe_requires :
     and (JC_1077: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter missing_return_wrong :
- x_27:int32 ->
+ x_29:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1060:
     ((JC_1058: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1059: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter missing_return_wrong_requires :
- x_27:int32 ->
+ x_29:int32 ->
   { (JC_1047:
     ((JC_1045: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1046: valid_a(int_P_a_2_alloc_table))))}
@@ -3354,16 +3354,16 @@ parameter missing_return_wrong_requires :
     and (JC_1059: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter mod0_safe :
- x_15:int32 ->
-  y_10:int32 ->
+ x_17:int32 ->
+  y_11:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_336:
      ((JC_334: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_335: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter mod0_safe_requires :
- x_15:int32 ->
-  y_10:int32 ->
+ x_17:int32 ->
+  y_11:int32 ->
    { (JC_323:
      ((JC_321: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_322: valid_a(int_P_a_2_alloc_table))))}
@@ -3373,18 +3373,18 @@ parameter mod0_safe_requires :
      and (JC_335: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter mod0_unsafe :
- x_3:int32 ->
-  y_2:int32 ->
+ x_5:int32 ->
+  y_3:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_317:
      ((JC_315: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_316: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter mod0_unsafe_requires :
- x_3:int32 ->
-  y_2:int32 ->
+ x_5:int32 ->
+  y_3:int32 ->
    { (JC_303:
-     ((JC_300: neq_int(integer_of_int32(y_2), (0)))
+     ((JC_300: neq_int(integer_of_int32(y_3), (0)))
      and ((JC_301: valid___string_abc(char_P___string_abc_1_alloc_table))
          and (JC_302: valid_a(int_P_a_2_alloc_table)))))}
    int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3393,16 +3393,16 @@ parameter mod0_unsafe_requires :
      and (JC_316: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter mod0_wrong :
- x_35:int32 ->
-  y_24:int32 ->
+ x_37:int32 ->
+  y_25:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_296:
      ((JC_294: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_295: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter mod0_wrong_requires :
- x_35:int32 ->
-  y_24:int32 ->
+ x_37:int32 ->
+  y_25:int32 ->
    { (JC_283:
      ((JC_281: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_282: valid_a(int_P_a_2_alloc_table))))}
@@ -3431,96 +3431,96 @@ parameter mod_string_requires :
     and (JC_1314: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_safe :
- x_2:int_P pointer ->
-  y_1:int_P pointer ->
-   int_P_int_M_x_2_29:(int_P, int32) memory ref ->
-    int_P_x_2_29_alloc_table:int_P alloc_table ->
+ x_4:int_P pointer ->
+  y_2:int_P pointer ->
+   int_P_int_M_x_4_29:(int_P, int32) memory ref ->
+    int_P_x_4_29_alloc_table:int_P alloc_table ->
      { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
-     writes int_P_int_M_x_2_29
+     writes int_P_int_M_x_4_29
      { (JC_1186:
        ((JC_1184: valid___string_abc(char_P___string_abc_1_alloc_table))
        and (JC_1185: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_safe_requires :
- x_2:int_P pointer ->
-  y_1:int_P pointer ->
-   int_P_int_M_x_2_29:(int_P, int32) memory ref ->
-    int_P_x_2_29_alloc_table:int_P alloc_table ->
+ x_4:int_P pointer ->
+  y_2:int_P pointer ->
+   int_P_int_M_x_4_29:(int_P, int32) memory ref ->
+    int_P_x_4_29_alloc_table:int_P alloc_table ->
      { (JC_1173:
        ((JC_1171: valid___string_abc(char_P___string_abc_1_alloc_table))
        and (JC_1172: valid_a(int_P_a_2_alloc_table))))}
      int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
-     writes int_P_int_M_x_2_29
+     writes int_P_int_M_x_4_29
      { (JC_1186:
        ((JC_1184: valid___string_abc(char_P___string_abc_1_alloc_table))
        and (JC_1185: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_unsafe :
- x_30:int_P pointer ->
-  y_21:int_P pointer ->
-   int_P_int_M_y_21_28:(int_P, int32) memory ref ->
-    int_P_int_M_x_30_27:(int_P, int32) memory ref ->
-     int_P_y_21_28_alloc_table:int_P alloc_table ->
-      int_P_x_30_27_alloc_table:int_P alloc_table ->
+ x_32:int_P pointer ->
+  y_22:int_P pointer ->
+   int_P_int_M_y_22_28:(int_P, int32) memory ref ->
+    int_P_int_M_x_32_27:(int_P, int32) memory ref ->
+     int_P_y_22_28_alloc_table:int_P alloc_table ->
+      int_P_x_32_27_alloc_table:int_P alloc_table ->
        { } int32
        reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
-       writes int_P_int_M_x_30_27,int_P_int_M_y_21_28
+       writes int_P_int_M_x_32_27,int_P_int_M_y_22_28
        { (JC_1167:
          ((JC_1165: valid___string_abc(char_P___string_abc_1_alloc_table))
          and (JC_1166: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_unsafe_requires :
- x_30:int_P pointer ->
-  y_21:int_P pointer ->
-   int_P_int_M_y_21_28:(int_P, int32) memory ref ->
-    int_P_int_M_x_30_27:(int_P, int32) memory ref ->
-     int_P_y_21_28_alloc_table:int_P alloc_table ->
-      int_P_x_30_27_alloc_table:int_P alloc_table ->
+ x_32:int_P pointer ->
+  y_22:int_P pointer ->
+   int_P_int_M_y_22_28:(int_P, int32) memory ref ->
+    int_P_int_M_x_32_27:(int_P, int32) memory ref ->
+     int_P_y_22_28_alloc_table:int_P alloc_table ->
+      int_P_x_32_27_alloc_table:int_P alloc_table ->
        { (JC_1153:
-         ((JC_1150: (x_30 <> y_21))
+         ((JC_1150: (x_32 <> y_22))
          and ((JC_1151:
               valid___string_abc(char_P___string_abc_1_alloc_table))
              and (JC_1152: valid_a(int_P_a_2_alloc_table)))))}
        int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
-       writes int_P_int_M_x_30_27,int_P_int_M_y_21_28
+       writes int_P_int_M_x_32_27,int_P_int_M_y_22_28
        { (JC_1167:
          ((JC_1165: valid___string_abc(char_P___string_abc_1_alloc_table))
          and (JC_1166: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_1 :
- x_5:int_P pointer ->
-  y_4:int_P pointer ->
-   int_P_int_M_x_5_25:(int_P, int32) memory ref ->
-    int_P_x_5_25_alloc_table:int_P alloc_table ->
+ x_7:int_P pointer ->
+  y_5:int_P pointer ->
+   int_P_int_M_x_7_25:(int_P, int32) memory ref ->
+    int_P_x_7_25_alloc_table:int_P alloc_table ->
      { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
-     writes int_P_int_M_x_5_25
+     writes int_P_int_M_x_7_25
      { (JC_1110:
        ((JC_1108: valid___string_abc(char_P___string_abc_1_alloc_table))
        and (JC_1109: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_1_requires :
- x_5:int_P pointer ->
-  y_4:int_P pointer ->
-   int_P_int_M_x_5_25:(int_P, int32) memory ref ->
-    int_P_x_5_25_alloc_table:int_P alloc_table ->
+ x_7:int_P pointer ->
+  y_5:int_P pointer ->
+   int_P_int_M_x_7_25:(int_P, int32) memory ref ->
+    int_P_x_7_25_alloc_table:int_P alloc_table ->
      { (JC_1097:
        ((JC_1095: valid___string_abc(char_P___string_abc_1_alloc_table))
        and (JC_1096: valid_a(int_P_a_2_alloc_table))))}
      int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
-     writes int_P_int_M_x_5_25
+     writes int_P_int_M_x_7_25
      { (JC_1110:
        ((JC_1108: valid___string_abc(char_P___string_abc_1_alloc_table))
        and (JC_1109: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_2 :
- i_1:int32 ->
+ i_2:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1129:
     ((JC_1127: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1128: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_2_requires :
- i_1:int32 ->
+ i_2:int32 ->
   { (JC_1116:
     ((JC_1114: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1115: valid_a(int_P_a_2_alloc_table))))}
@@ -3530,7 +3530,7 @@ parameter multiple_update_wrong_2_requires :
     and (JC_1128: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_3 :
- i_3:int32 ->
+ i_4:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   writes int_P_int_M_a_2
   { (JC_1147:
@@ -3538,7 +3538,7 @@ parameter multiple_update_wrong_3 :
     and (JC_1146: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_3_requires :
- i_3:int32 ->
+ i_4:int32 ->
   { (JC_1134:
     ((JC_1132: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1133: valid_a(int_P_a_2_alloc_table))))}
@@ -3549,23 +3549,23 @@ parameter multiple_update_wrong_3_requires :
     and (JC_1146: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter null_ptr_safe :
- x_20:int_P pointer ->
-  int_P_x_20_20_alloc_table:int_P alloc_table ->
-   int_P_int_M_x_20_20:(int_P, int32) memory ->
+ x_22:int_P pointer ->
+  int_P_x_22_20_alloc_table:int_P alloc_table ->
+   int_P_int_M_x_22_20:(int_P, int32) memory ->
     { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
     { (JC_714:
       ((JC_712: valid___string_abc(char_P___string_abc_1_alloc_table))
       and (JC_713: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter null_ptr_safe_requires :
- x_20:int_P pointer ->
-  int_P_x_20_20_alloc_table:int_P alloc_table ->
-   int_P_int_M_x_20_20:(int_P, int32) memory ->
+ x_22:int_P pointer ->
+  int_P_x_22_20_alloc_table:int_P alloc_table ->
+   int_P_int_M_x_22_20:(int_P, int32) memory ->
     { (JC_700:
       ((JC_697:
-       ((le_int(offset_min(int_P_x_20_20_alloc_table, x_20), (0))
-        and ge_int(offset_max(int_P_x_20_20_alloc_table, x_20), (0)))
-       or (x_20 = null)))
+       ((le_int(offset_min(int_P_x_22_20_alloc_table, x_22), (0))
+        and ge_int(offset_max(int_P_x_22_20_alloc_table, x_22), (0)))
+       or (x_22 = null)))
       and ((JC_698: valid___string_abc(char_P___string_abc_1_alloc_table))
           and (JC_699: valid_a(int_P_a_2_alloc_table)))))}
     int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3574,22 +3574,22 @@ parameter null_ptr_safe_requires :
       and (JC_713: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter null_ptr_unsafe :
- x_13:int_P pointer ->
-  int_P_x_13_19_alloc_table:int_P alloc_table ->
-   int_P_int_M_x_13_19:(int_P, int32) memory ->
+ x_15:int_P pointer ->
+  int_P_x_15_19_alloc_table:int_P alloc_table ->
+   int_P_int_M_x_15_19:(int_P, int32) memory ->
     { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
     { (JC_695:
       ((JC_693: valid___string_abc(char_P___string_abc_1_alloc_table))
       and (JC_694: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter null_ptr_unsafe_requires :
- x_13:int_P pointer ->
-  int_P_x_13_19_alloc_table:int_P alloc_table ->
-   int_P_int_M_x_13_19:(int_P, int32) memory ->
+ x_15:int_P pointer ->
+  int_P_x_15_19_alloc_table:int_P alloc_table ->
+   int_P_int_M_x_15_19:(int_P, int32) memory ->
     { (JC_679:
       ((JC_676:
-       ((JC_674: le_int(offset_min(int_P_x_13_19_alloc_table, x_13), (0)))
-       and (JC_675: ge_int(offset_max(int_P_x_13_19_alloc_table, x_13), (0)))))
+       ((JC_674: le_int(offset_min(int_P_x_15_19_alloc_table, x_15), (0)))
+       and (JC_675: ge_int(offset_max(int_P_x_15_19_alloc_table, x_15), (0)))))
       and ((JC_677: valid___string_abc(char_P___string_abc_1_alloc_table))
           and (JC_678: valid_a(int_P_a_2_alloc_table)))))}
     int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3598,18 +3598,18 @@ parameter null_ptr_unsafe_requires :
       and (JC_694: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter null_ptr_wrong :
- x_9:int_P pointer ->
-  int_P_x_9_18_alloc_table:int_P alloc_table ->
-   int_P_int_M_x_9_18:(int_P, int32) memory ->
+ x_11:int_P pointer ->
+  int_P_x_11_18_alloc_table:int_P alloc_table ->
+   int_P_int_M_x_11_18:(int_P, int32) memory ->
     { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
     { (JC_672:
       ((JC_670: valid___string_abc(char_P___string_abc_1_alloc_table))
       and (JC_671: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter null_ptr_wrong_requires :
- x_9:int_P pointer ->
-  int_P_x_9_18_alloc_table:int_P alloc_table ->
-   int_P_int_M_x_9_18:(int_P, int32) memory ->
+ x_11:int_P pointer ->
+  int_P_x_11_18_alloc_table:int_P alloc_table ->
+   int_P_int_M_x_11_18:(int_P, int32) memory ->
     { (JC_659:
       ((JC_657: valid___string_abc(char_P___string_abc_1_alloc_table))
       and (JC_658: valid_a(int_P_a_2_alloc_table))))}
@@ -3619,7 +3619,7 @@ parameter null_ptr_wrong_requires :
       and (JC_671: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter oob_pointer_safe :
- x:uint32 ->
+ x_1:uint32 ->
   { } int32
   reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table,int_P_int_M_a_2
   { (JC_883:
@@ -3627,7 +3627,7 @@ parameter oob_pointer_safe :
     and (JC_882: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter oob_pointer_safe_requires :
- x:uint32 ->
+ x_1:uint32 ->
   { (JC_870:
     ((JC_868: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_869: valid_a(int_P_a_2_alloc_table))))}
@@ -3638,7 +3638,7 @@ parameter oob_pointer_safe_requires :
     and (JC_882: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter oob_pointer_unsafe :
- x_32:uint32 ->
+ x_34:uint32 ->
   { } int32
   reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table,int_P_int_M_a_2
   { (JC_866:
@@ -3646,11 +3646,11 @@ parameter oob_pointer_unsafe :
     and (JC_865: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter oob_pointer_unsafe_requires :
- x_32:uint32 ->
+ x_34:uint32 ->
   { (JC_850:
     ((JC_847:
-     ((JC_845: le_int((0), integer_of_uint32(x_32)))
-     and (JC_846: lt_int(integer_of_uint32(x_32), (2)))))
+     ((JC_845: le_int((0), integer_of_uint32(x_34)))
+     and (JC_846: lt_int(integer_of_uint32(x_34), (2)))))
     and ((JC_848: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_849: valid_a(int_P_a_2_alloc_table)))))}
   int32
@@ -3660,7 +3660,7 @@ parameter oob_pointer_unsafe_requires :
     and (JC_865: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter oob_pointer_wrong :
- x_23:uint32 ->
+ x_25:uint32 ->
   { } int32
   reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table,int_P_int_M_a_2
   { (JC_843:
@@ -3668,7 +3668,7 @@ parameter oob_pointer_wrong :
     and (JC_842: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter oob_pointer_wrong_requires :
- x_23:uint32 ->
+ x_25:uint32 ->
   { (JC_830:
     ((JC_828: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_829: valid_a(int_P_a_2_alloc_table))))}
@@ -3713,26 +3713,26 @@ parameter ptr_sub_safe_requires :
     and (JC_822: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter ptr_sub_unsafe :
- x_6:int_P pointer ->
-  y_5:int_P pointer ->
-   int_P_x_6_23_alloc_table:int_P alloc_table ->
+ x_8:int_P pointer ->
+  y_6:int_P pointer ->
+   int_P_x_8_23_alloc_table:int_P alloc_table ->
     { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
     { (JC_806:
       ((JC_804: valid___string_abc(char_P___string_abc_1_alloc_table))
       and (JC_805: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter ptr_sub_unsafe_requires :
- x_6:int_P pointer ->
-  y_5:int_P pointer ->
-   int_P_x_6_23_alloc_table:int_P alloc_table ->
+ x_8:int_P pointer ->
+  y_6:int_P pointer ->
+   int_P_x_8_23_alloc_table:int_P alloc_table ->
     { (JC_788:
       ((JC_785:
-       ((JC_781: le_int(offset_min(int_P_x_6_23_alloc_table, x_6), (0)))
-       and ((JC_782: ge_int(offset_max(int_P_x_6_23_alloc_table, x_6), (0)))
+       ((JC_781: le_int(offset_min(int_P_x_8_23_alloc_table, x_8), (0)))
+       and ((JC_782: ge_int(offset_max(int_P_x_8_23_alloc_table, x_8), (0)))
            and ((JC_783:
-                le_int(offset_min(int_P_x_6_23_alloc_table, y_5), (0)))
+                le_int(offset_min(int_P_x_8_23_alloc_table, y_6), (0)))
                and (JC_784:
-                   ge_int(offset_max(int_P_x_6_23_alloc_table, y_5), (0)))))))
+                   ge_int(offset_max(int_P_x_8_23_alloc_table, y_6), (0)))))))
       and ((JC_786: valid___string_abc(char_P___string_abc_1_alloc_table))
           and (JC_787: valid_a(int_P_a_2_alloc_table)))))}
     int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -3770,16 +3770,16 @@ parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
 parameter shift_left_signed_safe :
- x_22:int32 ->
-  y_15:int32 ->
+ x_24:int32 ->
+  y_16:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_442:
      ((JC_440: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_441: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_safe_requires :
- x_22:int32 ->
-  y_15:int32 ->
+ x_24:int32 ->
+  y_16:int32 ->
    { (JC_429:
      ((JC_427: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_428: valid_a(int_P_a_2_alloc_table))))}
@@ -3789,16 +3789,16 @@ parameter shift_left_signed_safe_requires :
      and (JC_441: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_unsafe :
- x_14:int32 ->
-  y_9:int32 ->
+ x_16:int32 ->
+  y_10:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_417:
      ((JC_415: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_416: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_unsafe_requires :
- x_14:int32 ->
-  y_9:int32 ->
+ x_16:int32 ->
+  y_10:int32 ->
    { (JC_404:
      ((JC_402: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_403: valid_a(int_P_a_2_alloc_table))))}
@@ -3808,16 +3808,16 @@ parameter shift_left_signed_unsafe_requires :
      and (JC_416: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_wrong_1 :
- x_24:int32 ->
-  y_16:int32 ->
+ x_26:int32 ->
+  y_17:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_355:
      ((JC_353: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_354: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_wrong_1_requires :
- x_24:int32 ->
-  y_16:int32 ->
+ x_26:int32 ->
+  y_17:int32 ->
    { (JC_342:
      ((JC_340: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_341: valid_a(int_P_a_2_alloc_table))))}
@@ -3827,16 +3827,16 @@ parameter shift_left_signed_wrong_1_requires :
      and (JC_354: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_wrong_2 :
- x_34:int32 ->
-  y_23:int32 ->
+ x_36:int32 ->
+  y_24:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_378:
      ((JC_376: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_377: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_wrong_2_requires :
- x_34:int32 ->
-  y_23:int32 ->
+ x_36:int32 ->
+  y_24:int32 ->
    { (JC_365:
      ((JC_363: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_364: valid_a(int_P_a_2_alloc_table))))}
@@ -3846,16 +3846,16 @@ parameter shift_left_signed_wrong_2_requires :
      and (JC_377: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_wrong_3 :
- x_1:int32 ->
-  y_0:int32 ->
+ x_3:int32 ->
+  y_1:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_401:
      ((JC_399: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_400: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_signed_wrong_3_requires :
- x_1:int32 ->
-  y_0:int32 ->
+ x_3:int32 ->
+  y_1:int32 ->
    { (JC_388:
      ((JC_386: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_387: valid_a(int_P_a_2_alloc_table))))}
@@ -3865,16 +3865,16 @@ parameter shift_left_signed_wrong_3_requires :
      and (JC_400: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_unsigned_safe :
- x_11:uint32 ->
-  y_8:uint32 ->
+ x_13:uint32 ->
+  y_9:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_511:
      ((JC_509: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_510: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_unsigned_safe_requires :
- x_11:uint32 ->
-  y_8:uint32 ->
+ x_13:uint32 ->
+  y_9:uint32 ->
    { (JC_498:
      ((JC_496: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_497: valid_a(int_P_a_2_alloc_table))))}
@@ -3884,16 +3884,16 @@ parameter shift_left_unsigned_safe_requires :
      and (JC_510: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_unsigned_unsafe :
- x_0:uint32 ->
-  y:uint32 ->
+ x_2:uint32 ->
+  y_0:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_492:
      ((JC_490: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_491: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_unsigned_unsafe_requires :
- x_0:uint32 ->
-  y:uint32 ->
+ x_2:uint32 ->
+  y_0:uint32 ->
    { (JC_479:
      ((JC_477: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_478: valid_a(int_P_a_2_alloc_table))))}
@@ -3903,16 +3903,16 @@ parameter shift_left_unsigned_unsafe_requires :
      and (JC_491: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_unsigned_wrong :
- x_33:uint32 ->
-  y_22:uint32 ->
+ x_35:uint32 ->
+  y_23:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_473:
      ((JC_471: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_472: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_left_unsigned_wrong_requires :
- x_33:uint32 ->
-  y_22:uint32 ->
+ x_35:uint32 ->
+  y_23:uint32 ->
    { (JC_460:
      ((JC_458: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_459: valid_a(int_P_a_2_alloc_table))))}
@@ -3922,16 +3922,16 @@ parameter shift_left_unsigned_wrong_requires :
      and (JC_472: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_safe :
- x_10:int32 ->
-  y_7:int32 ->
+ x_12:int32 ->
+  y_8:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_591:
      ((JC_589: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_590: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_safe_requires :
- x_10:int32 ->
-  y_7:int32 ->
+ x_12:int32 ->
+  y_8:int32 ->
    { (JC_578:
      ((JC_576: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_577: valid_a(int_P_a_2_alloc_table))))}
@@ -3941,16 +3941,16 @@ parameter shift_right_signed_safe_requires :
      and (JC_590: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_unsafe :
- x_40:int32 ->
-  y_28:int32 ->
+ x_0:int32 ->
+  y:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_570:
      ((JC_568: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_569: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_unsafe_requires :
- x_40:int32 ->
-  y_28:int32 ->
+ x_0:int32 ->
+  y:int32 ->
    { (JC_557:
      ((JC_555: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_556: valid_a(int_P_a_2_alloc_table))))}
@@ -3960,16 +3960,16 @@ parameter shift_right_signed_unsafe_requires :
      and (JC_569: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_wrong_1 :
- x_21:int32 ->
-  y_14:int32 ->
+ x_23:int32 ->
+  y_15:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_530:
      ((JC_528: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_529: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_wrong_1_requires :
- x_21:int32 ->
-  y_14:int32 ->
+ x_23:int32 ->
+  y_15:int32 ->
    { (JC_517:
      ((JC_515: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_516: valid_a(int_P_a_2_alloc_table))))}
@@ -3979,16 +3979,16 @@ parameter shift_right_signed_wrong_1_requires :
      and (JC_529: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_wrong_2 :
- x_29:int32 ->
-  y_20:int32 ->
+ x_31:int32 ->
+  y_21:int32 ->
    { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_549:
      ((JC_547: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_548: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_signed_wrong_2_requires :
- x_29:int32 ->
-  y_20:int32 ->
+ x_31:int32 ->
+  y_21:int32 ->
    { (JC_536:
      ((JC_534: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_535: valid_a(int_P_a_2_alloc_table))))}
@@ -3998,16 +3998,16 @@ parameter shift_right_signed_wrong_2_requires :
      and (JC_548: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_unsigned_safe :
- x_38:uint32 ->
-  y_27:uint32 ->
+ x_40:uint32 ->
+  y_28:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_653:
      ((JC_651: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_652: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_unsigned_safe_requires :
- x_38:uint32 ->
-  y_27:uint32 ->
+ x_40:uint32 ->
+  y_28:uint32 ->
    { (JC_640:
      ((JC_638: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_639: valid_a(int_P_a_2_alloc_table))))}
@@ -4017,16 +4017,16 @@ parameter shift_right_unsigned_safe_requires :
      and (JC_652: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_unsigned_unsafe :
- x_28:uint32 ->
-  y_19:uint32 ->
+ x_30:uint32 ->
+  y_20:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_634:
      ((JC_632: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_633: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_unsigned_unsafe_requires :
- x_28:uint32 ->
-  y_19:uint32 ->
+ x_30:uint32 ->
+  y_20:uint32 ->
    { (JC_621:
      ((JC_619: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_620: valid_a(int_P_a_2_alloc_table))))}
@@ -4036,16 +4036,16 @@ parameter shift_right_unsigned_unsafe_requires :
      and (JC_633: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_unsigned_wrong :
- x_18:uint32 ->
-  y_13:uint32 ->
+ x_20:uint32 ->
+  y_14:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_613:
      ((JC_611: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_612: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter shift_right_unsigned_wrong_requires :
- x_18:uint32 ->
-  y_13:uint32 ->
+ x_20:uint32 ->
+  y_14:uint32 ->
    { (JC_600:
      ((JC_598: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_599: valid_a(int_P_a_2_alloc_table))))}
@@ -4055,14 +4055,14 @@ parameter shift_right_unsigned_wrong_requires :
      and (JC_612: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter signed_overflow_safe :
- x_19:int32 ->
+ x_21:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1042:
     ((JC_1040: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1041: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter signed_overflow_safe_requires :
- x_19:int32 ->
+ x_21:int32 ->
   { (JC_1029:
     ((JC_1027: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1028: valid_a(int_P_a_2_alloc_table))))}
@@ -4072,16 +4072,16 @@ parameter signed_overflow_safe_requires :
     and (JC_1041: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter signed_overflow_unsafe :
- x_12:int32 ->
+ x_14:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1025:
     ((JC_1023: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1024: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter signed_overflow_unsafe_requires :
- x_12:int32 ->
+ x_14:int32 ->
   { (JC_1011:
-    ((JC_1008: le_int(integer_of_int32(x_12), sub_int((2147483647), (10))))
+    ((JC_1008: le_int(integer_of_int32(x_14), sub_int((2147483647), (10))))
     and ((JC_1009: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1010: valid_a(int_P_a_2_alloc_table)))))}
   int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -4090,14 +4090,14 @@ parameter signed_overflow_unsafe_requires :
     and (JC_1024: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter signed_overflow_wrong :
- x_8:int32 ->
+ x_10:int32 ->
   { } int32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
   { (JC_1004:
     ((JC_1002: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1003: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter signed_overflow_wrong_requires :
- x_8:int32 ->
+ x_10:int32 ->
   { (JC_991:
     ((JC_989: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_990: valid_a(int_P_a_2_alloc_table))))}
@@ -4124,16 +4124,16 @@ parameter stack_access_wrong_requires :
     and (JC_753: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter udiv0_safe :
- x_25:uint32 ->
-  y_17:uint32 ->
+ x_27:uint32 ->
+  y_18:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_277:
      ((JC_275: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_276: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter udiv0_safe_requires :
- x_25:uint32 ->
-  y_17:uint32 ->
+ x_27:uint32 ->
+  y_18:uint32 ->
    { (JC_264:
      ((JC_262: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_263: valid_a(int_P_a_2_alloc_table))))}
@@ -4143,18 +4143,18 @@ parameter udiv0_safe_requires :
      and (JC_276: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter udiv0_unsafe :
- x_16:uint32 ->
-  y_11:uint32 ->
+ x_18:uint32 ->
+  y_12:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_258:
      ((JC_256: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_257: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter udiv0_unsafe_requires :
- x_16:uint32 ->
-  y_11:uint32 ->
+ x_18:uint32 ->
+  y_12:uint32 ->
    { (JC_244:
-     ((JC_241: neq_int(integer_of_uint32(y_11), (0)))
+     ((JC_241: neq_int(integer_of_uint32(y_12), (0)))
      and ((JC_242: valid___string_abc(char_P___string_abc_1_alloc_table))
          and (JC_243: valid_a(int_P_a_2_alloc_table)))))}
    uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
@@ -4163,16 +4163,16 @@ parameter udiv0_unsafe_requires :
      and (JC_257: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter udiv0_wrong :
- x_7:uint32 ->
-  y_6:uint32 ->
+ x_9:uint32 ->
+  y_7:uint32 ->
    { } uint32 reads char_P___string_abc_1_alloc_table,int_P_a_2_alloc_table
    { (JC_237:
      ((JC_235: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_236: valid_a(int_P_a_2_alloc_table)))) }
 
 parameter udiv0_wrong_requires :
- x_7:uint32 ->
-  y_6:uint32 ->
+ x_9:uint32 ->
+  y_7:uint32 ->
    { (JC_224:
      ((JC_222: valid___string_abc(char_P___string_abc_1_alloc_table))
      and (JC_223: valid_a(int_P_a_2_alloc_table))))}
@@ -4213,7 +4213,7 @@ parameter volatile_cast_wrong_requires :
       and (JC_1280: valid_a(int_P_a_2_alloc_table)))) }
 
 let array_bounds_safe_ensures_default =
- fun (i_2 : uint32) ->
+ fun (i_3 : uint32) ->
   { (JC_928:
     ((JC_926: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_927: valid_a(int_P_a_2_alloc_table)))) }
@@ -4225,14 +4225,14 @@ let array_bounds_safe_ensures_default =
      try
       (let jessie_449 =
       begin
-        (if ((lt_int_ (integer_of_uint32 i_2)) (2))
+        (if ((lt_int_ (integer_of_uint32 i_3)) (2))
         then
          (let jessie_445 =
          (C_255:
          begin
            (let jessie_444 =
            (__retres_38 := (C_254:
-                           ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 i_2))))) in
+                           ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 i_3))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
          (let jessie_448 =
@@ -4248,7 +4248,7 @@ let array_bounds_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_930: true) }
 
 let array_bounds_safe_safety =
- fun (i_2 : uint32) ->
+ fun (i_3 : uint32) ->
   { (JC_928:
     ((JC_926: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_927: valid_a(int_P_a_2_alloc_table)))) }
@@ -4260,7 +4260,7 @@ let array_bounds_safe_safety =
      try
       (let jessie_441 =
       begin
-        (if ((lt_int_ (integer_of_uint32 i_2)) (2))
+        (if ((lt_int_ (integer_of_uint32 i_3)) (2))
         then
          (let jessie_437 =
          (C_255:
@@ -4269,7 +4269,7 @@ let array_bounds_safe_safety =
            (__retres_38 := (C_254:
                            (JC_938:
                            ((((offset_acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) a) 
-                            (integer_of_uint32 i_2))))) in void);
+                            (integer_of_uint32 i_3))))) in void);
           (raise (Return_label_exc void)) end) in void)
         else
          (let jessie_440 =
@@ -4288,9 +4288,9 @@ let array_bounds_safe_safety =
     and (JC_933: valid_a(int_P_a_2_alloc_table)))) }
 
 let array_bounds_unsafe_ensures_default =
- fun (i_0 : uint32) ->
+ fun (i_1 : uint32) ->
   { (JC_911:
-    ((JC_908: lt_int(integer_of_uint32(i_0), (2)))
+    ((JC_908: lt_int(integer_of_uint32(i_1), (2)))
     and ((JC_909: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_910: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4302,14 +4302,14 @@ let array_bounds_unsafe_ensures_default =
      begin
        (let jessie_433 =
        (__retres_37 := (C_248:
-                       ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 i_0))))) in
+                       ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 i_1))))) in
        void); (return := !__retres_37); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_913: true) }
 
 let array_bounds_unsafe_safety =
- fun (i_0 : uint32) ->
+ fun (i_1 : uint32) ->
   { (JC_911:
-    ((JC_908: lt_int(integer_of_uint32(i_0), (2)))
+    ((JC_908: lt_int(integer_of_uint32(i_1), (2)))
     and ((JC_909: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_910: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4323,7 +4323,7 @@ let array_bounds_unsafe_safety =
        (__retres_37 := (C_248:
                        (JC_921:
                        ((((offset_acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) a) 
-                        (integer_of_uint32 i_0))))) in void);
+                        (integer_of_uint32 i_1))))) in void);
       (return := !__retres_37); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_917:
@@ -4331,7 +4331,7 @@ let array_bounds_unsafe_safety =
     and (JC_916: valid_a(int_P_a_2_alloc_table)))) }
 
 let array_bounds_wrong_ensures_default =
- fun (i : uint32) ->
+ fun (i_0 : uint32) ->
   { (JC_891:
     ((JC_889: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_890: valid_a(int_P_a_2_alloc_table)))) }
@@ -4349,12 +4349,12 @@ let array_bounds_wrong_ensures_default =
                                                                  (safe_uint32_of_integer_ 
                                                                   (C_243:
                                                                   ((add_int (2)) 
-                                                                   (integer_of_uint32 i)))))))))) in
+                                                                   (integer_of_uint32 i_0)))))))))) in
        void); (return := !__retres_36); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_893: true) }
 
 let array_bounds_wrong_safety =
- fun (i : uint32) ->
+ fun (i_0 : uint32) ->
   { (JC_891:
     ((JC_889: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_890: valid_a(int_P_a_2_alloc_table)))) }
@@ -4373,7 +4373,7 @@ let array_bounds_wrong_safety =
                                            (JC_901:
                                            (uint32_of_integer_ (C_243:
                                                                ((add_int (2)) 
-                                                                (integer_of_uint32 i))))))))))) in
+                                                                (integer_of_uint32 i_0))))))))))) in
        void); (return := !__retres_36); (raise Return) end)); absurd  end
    with Return -> !return end))
   { (JC_897:
@@ -4503,7 +4503,7 @@ let const_cast_wrong_safety =
     and (JC_1294: valid_a(int_P_a_2_alloc_table)))) }
 
 let div0_safe_ensures_default =
- fun (x_26 : int32) (y_18 : int32) ->
+ fun (x_28 : int32) (y_19 : int32) ->
   { (JC_190:
     ((JC_188: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_189: valid_a(int_P_a_2_alloc_table)))) }
@@ -4515,7 +4515,7 @@ let div0_safe_ensures_default =
      try
       (let jessie_49 =
       begin
-        (if ((eq_int_ (integer_of_int32 y_18)) (0))
+        (if ((eq_int_ (integer_of_int32 y_19)) (0))
         then
          (let jessie_45 =
          (C_18:
@@ -4530,8 +4530,8 @@ let div0_safe_ensures_default =
            (__retres_2 := (C_16:
                           (safe_int32_of_integer_ (C_15:
                                                   (JC_202:
-                                                  ((div_int (integer_of_int32 x_26)) 
-                                                   (integer_of_int32 y_18))))))) in
+                                                  ((div_int (integer_of_int32 x_28)) 
+                                                   (integer_of_int32 y_19))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_1 ->
@@ -4539,7 +4539,7 @@ let div0_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_192: true) }
 
 let div0_safe_pos_ensures_default =
- fun (x_36 : int32) (y_25 : int32) ->
+ fun (x_38 : int32) (y_26 : int32) ->
   { (JC_209:
     ((JC_207: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_208: valid_a(int_P_a_2_alloc_table)))) }
@@ -4551,7 +4551,7 @@ let div0_safe_pos_ensures_default =
      try
       (let jessie_65 =
       begin
-        (if ((le_int_ (integer_of_int32 y_25)) (0))
+        (if ((le_int_ (integer_of_int32 y_26)) (0))
         then
          (let jessie_61 =
          (C_24:
@@ -4566,8 +4566,8 @@ let div0_safe_pos_ensures_default =
            (__retres_3 := (C_22:
                           (safe_int32_of_integer_ (C_21:
                                                   (JC_221:
-                                                  ((div_int (integer_of_int32 x_36)) 
-                                                   (integer_of_int32 y_25))))))) in
+                                                  ((div_int (integer_of_int32 x_38)) 
+                                                   (integer_of_int32 y_26))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_2 ->
@@ -4575,7 +4575,7 @@ let div0_safe_pos_ensures_default =
     absurd  end with Return -> !return end)) { (JC_211: true) }
 
 let div0_safe_pos_safety =
- fun (x_36 : int32) (y_25 : int32) ->
+ fun (x_38 : int32) (y_26 : int32) ->
   { (JC_209:
     ((JC_207: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_208: valid_a(int_P_a_2_alloc_table)))) }
@@ -4587,7 +4587,7 @@ let div0_safe_pos_safety =
      try
       (let jessie_57 =
       begin
-        (if ((le_int_ (integer_of_int32 y_25)) (0))
+        (if ((le_int_ (integer_of_int32 y_26)) (0))
         then
          (let jessie_53 =
          (C_24:
@@ -4603,8 +4603,8 @@ let div0_safe_pos_safety =
                           (JC_220:
                           (int32_of_integer_ (C_21:
                                              (JC_219:
-                                             ((div_int_ (integer_of_int32 x_36)) 
-                                              (integer_of_int32 y_25)))))))) in
+                                             ((div_int_ (integer_of_int32 x_38)) 
+                                              (integer_of_int32 y_26)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_2 ->
@@ -4615,7 +4615,7 @@ let div0_safe_pos_safety =
     and (JC_214: valid_a(int_P_a_2_alloc_table)))) }
 
 let div0_safe_safety =
- fun (x_26 : int32) (y_18 : int32) ->
+ fun (x_28 : int32) (y_19 : int32) ->
   { (JC_190:
     ((JC_188: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_189: valid_a(int_P_a_2_alloc_table)))) }
@@ -4627,7 +4627,7 @@ let div0_safe_safety =
      try
       (let jessie_41 =
       begin
-        (if ((eq_int_ (integer_of_int32 y_18)) (0))
+        (if ((eq_int_ (integer_of_int32 y_19)) (0))
         then
          (let jessie_37 =
          (C_18:
@@ -4643,8 +4643,8 @@ let div0_safe_safety =
                           (JC_201:
                           (int32_of_integer_ (C_15:
                                              (JC_200:
-                                             ((div_int_ (integer_of_int32 x_26)) 
-                                              (integer_of_int32 y_18)))))))) in
+                                             ((div_int_ (integer_of_int32 x_28)) 
+                                              (integer_of_int32 y_19)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_1 ->
@@ -4655,9 +4655,9 @@ let div0_safe_safety =
     and (JC_195: valid_a(int_P_a_2_alloc_table)))) }
 
 let div0_unsafe_ensures_default =
- fun (x_4 : int32) (y_3 : int32) ->
+ fun (x_6 : int32) (y_4 : int32) ->
   { (JC_150:
-    ((JC_147: neq_int(integer_of_int32(y_3), (0)))
+    ((JC_147: neq_int(integer_of_int32(y_4), (0)))
     and ((JC_148: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_149: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4671,15 +4671,15 @@ let div0_unsafe_ensures_default =
        (__retres_0 := (C_6:
                       (safe_int32_of_integer_ (C_5:
                                               (JC_162:
-                                              ((div_int (integer_of_int32 x_4)) 
-                                               (integer_of_int32 y_3))))))) in
+                                              ((div_int (integer_of_int32 x_6)) 
+                                               (integer_of_int32 y_4))))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_152: true) }
 
 let div0_unsafe_pos_ensures_default =
- fun (x_17 : int32) (y_12 : int32) ->
+ fun (x_19 : int32) (y_13 : int32) ->
   { (JC_171:
-    ((JC_168: gt_int(integer_of_int32(y_12), (0)))
+    ((JC_168: gt_int(integer_of_int32(y_13), (0)))
     and ((JC_169: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_170: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4693,15 +4693,15 @@ let div0_unsafe_pos_ensures_default =
        (__retres_1 := (C_11:
                       (safe_int32_of_integer_ (C_10:
                                               (JC_183:
-                                              ((div_int (integer_of_int32 x_17)) 
-                                               (integer_of_int32 y_12))))))) in
+                                              ((div_int (integer_of_int32 x_19)) 
+                                               (integer_of_int32 y_13))))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_173: true) }
 
 let div0_unsafe_pos_safety =
- fun (x_17 : int32) (y_12 : int32) ->
+ fun (x_19 : int32) (y_13 : int32) ->
   { (JC_171:
-    ((JC_168: gt_int(integer_of_int32(y_12), (0)))
+    ((JC_168: gt_int(integer_of_int32(y_13), (0)))
     and ((JC_169: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_170: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4716,8 +4716,8 @@ let div0_unsafe_pos_safety =
                       (JC_182:
                       (int32_of_integer_ (C_10:
                                          (JC_181:
-                                         ((div_int_ (integer_of_int32 x_17)) 
-                                          (integer_of_int32 y_12)))))))) in
+                                         ((div_int_ (integer_of_int32 x_19)) 
+                                          (integer_of_int32 y_13)))))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_177:
@@ -4725,9 +4725,9 @@ let div0_unsafe_pos_safety =
     and (JC_176: valid_a(int_P_a_2_alloc_table)))) }
 
 let div0_unsafe_safety =
- fun (x_4 : int32) (y_3 : int32) ->
+ fun (x_6 : int32) (y_4 : int32) ->
   { (JC_150:
-    ((JC_147: neq_int(integer_of_int32(y_3), (0)))
+    ((JC_147: neq_int(integer_of_int32(y_4), (0)))
     and ((JC_148: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_149: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4742,8 +4742,8 @@ let div0_unsafe_safety =
                       (JC_161:
                       (int32_of_integer_ (C_5:
                                          (JC_160:
-                                         ((div_int_ (integer_of_int32 x_4)) 
-                                          (integer_of_int32 y_3)))))))) in
+                                         ((div_int_ (integer_of_int32 x_6)) 
+                                          (integer_of_int32 y_4)))))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_156:
@@ -4751,7 +4751,7 @@ let div0_unsafe_safety =
     and (JC_155: valid_a(int_P_a_2_alloc_table)))) }
 
 let div0_wrong_ensures_default =
- fun (x_37 : int32) (y_26 : int32) ->
+ fun (x_39 : int32) (y_27 : int32) ->
   { (JC_129:
     ((JC_127: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_128: valid_a(int_P_a_2_alloc_table)))) }
@@ -4766,12 +4766,12 @@ let div0_wrong_ensures_default =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
                                             (JC_141:
-                                            ((div_int (integer_of_int32 x_37)) (0))))))) in
+                                            ((div_int (integer_of_int32 x_39)) (0))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_131: true) }
 
 let div0_wrong_safety =
- fun (x_37 : int32) (y_26 : int32) ->
+ fun (x_39 : int32) (y_27 : int32) ->
   { (JC_129:
     ((JC_127: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_128: valid_a(int_P_a_2_alloc_table)))) }
@@ -4787,7 +4787,7 @@ let div0_wrong_safety =
                     (JC_140:
                     (int32_of_integer_ (C_1:
                                        (JC_139:
-                                       ((div_int_ (integer_of_int32 x_37)) (0)))))))) in
+                                       ((div_int_ (integer_of_int32 x_39)) (0)))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_135:
@@ -4795,7 +4795,7 @@ let div0_wrong_safety =
     and (JC_134: valid_a(int_P_a_2_alloc_table)))) }
 
 let initialization_safe_ensures_default =
- fun (i_5 : int32) ->
+ fun (i : int32) ->
   { (JC_979:
     ((JC_977: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_978: valid_a(int_P_a_2_alloc_table)))) }
@@ -4806,7 +4806,7 @@ let initialization_safe_ensures_default =
      (let x_47 = ref (any_int32 void) in
      begin
        (let jessie_465 =
-       (if ((neq_int_ (integer_of_int32 i_5)) (0))
+       (if ((neq_int_ (integer_of_int32 i)) (0))
        then
         (C_263: begin   (x_47 := (safe_int32_of_integer_ (1))); !x_47 end)
        else
@@ -4815,7 +4815,7 @@ let initialization_safe_ensures_default =
    Return -> !return end)) { (JC_981: true) }
 
 let initialization_safe_safety =
- fun (i_5 : int32) ->
+ fun (i : int32) ->
   { (JC_979:
     ((JC_977: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_978: valid_a(int_P_a_2_alloc_table)))) }
@@ -4826,7 +4826,7 @@ let initialization_safe_safety =
      (let x_47 = ref (any_int32 void) in
      begin
        (let jessie_461 =
-       (if ((neq_int_ (integer_of_int32 i_5)) (0))
+       (if ((neq_int_ (integer_of_int32 i)) (0))
        then
         (C_263: begin   (x_47 := (safe_int32_of_integer_ (1))); !x_47 end)
        else
@@ -4838,9 +4838,9 @@ let initialization_safe_safety =
     and (JC_984: valid_a(int_P_a_2_alloc_table)))) }
 
 let initialization_unsafe_ensures_default =
- fun (i_4 : int32) ->
+ fun (i_5 : int32) ->
   { (JC_963:
-    ((JC_960: neq_int(integer_of_int32(i_4), (0)))
+    ((JC_960: neq_int(integer_of_int32(i_5), (0)))
     and ((JC_961: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_962: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4849,7 +4849,7 @@ let initialization_unsafe_ensures_default =
    begin
      (let x_46 = ref (any_int32 void) in
      begin
-       (if ((neq_int_ (integer_of_int32 i_4)) (0))
+       (if ((neq_int_ (integer_of_int32 i_5)) (0))
        then
         (C_259:
         (let jessie_457 = (x_46 := (safe_int32_of_integer_ (1))) in void))
@@ -4857,9 +4857,9 @@ let initialization_unsafe_ensures_default =
    Return -> !return end)) { (JC_965: true) }
 
 let initialization_unsafe_safety =
- fun (i_4 : int32) ->
+ fun (i_5 : int32) ->
   { (JC_963:
-    ((JC_960: neq_int(integer_of_int32(i_4), (0)))
+    ((JC_960: neq_int(integer_of_int32(i_5), (0)))
     and ((JC_961: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_962: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4868,7 +4868,7 @@ let initialization_unsafe_safety =
    begin
      (let x_46 = ref (any_int32 void) in
      begin
-       (if ((neq_int_ (integer_of_int32 i_4)) (0))
+       (if ((neq_int_ (integer_of_int32 i_5)) (0))
        then
         (C_259:
         (let jessie_454 = (x_46 := (safe_int32_of_integer_ (1))) in void))
@@ -4908,7 +4908,7 @@ let initialization_wrong_safety =
     and (JC_950: valid_a(int_P_a_2_alloc_table)))) }
 
 let missing_return_safe_ensures_default =
- fun (x_39 : int32) ->
+ fun (x : int32) ->
   { (JC_1085:
     ((JC_1083: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1084: valid_a(int_P_a_2_alloc_table)))) }
@@ -4920,7 +4920,7 @@ let missing_return_safe_ensures_default =
      try
       (let jessie_539 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_39)) (0))
+        (if ((lt_int_ (integer_of_int32 x)) (0))
         then
          (let jessie_535 =
          (C_295:
@@ -4939,7 +4939,7 @@ let missing_return_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_1087: true) }
 
 let missing_return_safe_safety =
- fun (x_39 : int32) ->
+ fun (x : int32) ->
   { (JC_1085:
     ((JC_1083: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1084: valid_a(int_P_a_2_alloc_table)))) }
@@ -4951,7 +4951,7 @@ let missing_return_safe_safety =
      try
       (let jessie_531 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_39)) (0))
+        (if ((lt_int_ (integer_of_int32 x)) (0))
         then
          (let jessie_527 =
          (C_295:
@@ -4973,9 +4973,9 @@ let missing_return_safe_safety =
     and (JC_1090: valid_a(int_P_a_2_alloc_table)))) }
 
 let missing_return_unsafe_ensures_default =
- fun (x_31 : int32) ->
+ fun (x_33 : int32) ->
   { (JC_1069:
-    ((JC_1066: lt_int(integer_of_int32(x_31), (0)))
+    ((JC_1066: lt_int(integer_of_int32(x_33), (0)))
     and ((JC_1067: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1068: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -4986,7 +4986,7 @@ let missing_return_unsafe_ensures_default =
      try
       (let jessie_523 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_31)) (0))
+        (if ((lt_int_ (integer_of_int32 x_33)) (0))
         then
          (let jessie_520 =
          (C_290:
@@ -5002,9 +5002,9 @@ let missing_return_unsafe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_1071: true) }
 
 let missing_return_unsafe_safety =
- fun (x_31 : int32) ->
+ fun (x_33 : int32) ->
   { (JC_1069:
-    ((JC_1066: lt_int(integer_of_int32(x_31), (0)))
+    ((JC_1066: lt_int(integer_of_int32(x_33), (0)))
     and ((JC_1067: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1068: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5015,7 +5015,7 @@ let missing_return_unsafe_safety =
      try
       (let jessie_516 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_31)) (0))
+        (if ((lt_int_ (integer_of_int32 x_33)) (0))
         then
          (let jessie_513 =
          (C_290:
@@ -5034,7 +5034,7 @@ let missing_return_unsafe_safety =
     and (JC_1074: valid_a(int_P_a_2_alloc_table)))) }
 
 let missing_return_wrong_ensures_default =
- fun (x_27 : int32) ->
+ fun (x_29 : int32) ->
   { (JC_1051:
     ((JC_1049: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1050: valid_a(int_P_a_2_alloc_table)))) }
@@ -5050,7 +5050,7 @@ let missing_return_wrong_ensures_default =
    with Return -> !return end)) { (JC_1053: true) }
 
 let missing_return_wrong_safety =
- fun (x_27 : int32) ->
+ fun (x_29 : int32) ->
   { (JC_1051:
     ((JC_1049: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1050: valid_a(int_P_a_2_alloc_table)))) }
@@ -5069,7 +5069,7 @@ let missing_return_wrong_safety =
     and (JC_1056: valid_a(int_P_a_2_alloc_table)))) }
 
 let mod0_safe_ensures_default =
- fun (x_15 : int32) (y_10 : int32) ->
+ fun (x_17 : int32) (y_11 : int32) ->
   { (JC_327:
     ((JC_325: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_326: valid_a(int_P_a_2_alloc_table)))) }
@@ -5081,7 +5081,7 @@ let mod0_safe_ensures_default =
      try
       (let jessie_121 =
       begin
-        (if ((eq_int_ (integer_of_int32 y_10)) (0))
+        (if ((eq_int_ (integer_of_int32 y_11)) (0))
         then
          (let jessie_117 =
          (C_54:
@@ -5096,8 +5096,8 @@ let mod0_safe_ensures_default =
            (__retres_9 := (C_52:
                           (safe_int32_of_integer_ (C_51:
                                                   (JC_339:
-                                                  ((mod_int (integer_of_int32 x_15)) 
-                                                   (integer_of_int32 y_10))))))) in
+                                                  ((mod_int (integer_of_int32 x_17)) 
+                                                   (integer_of_int32 y_11))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_4 ->
@@ -5105,7 +5105,7 @@ let mod0_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_329: true) }
 
 let mod0_safe_safety =
- fun (x_15 : int32) (y_10 : int32) ->
+ fun (x_17 : int32) (y_11 : int32) ->
   { (JC_327:
     ((JC_325: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_326: valid_a(int_P_a_2_alloc_table)))) }
@@ -5117,7 +5117,7 @@ let mod0_safe_safety =
      try
       (let jessie_113 =
       begin
-        (if ((eq_int_ (integer_of_int32 y_10)) (0))
+        (if ((eq_int_ (integer_of_int32 y_11)) (0))
         then
          (let jessie_109 =
          (C_54:
@@ -5133,8 +5133,8 @@ let mod0_safe_safety =
                           (JC_338:
                           (int32_of_integer_ (C_51:
                                              (JC_337:
-                                             ((mod_int_ (integer_of_int32 x_15)) 
-                                              (integer_of_int32 y_10)))))))) in
+                                             ((mod_int_ (integer_of_int32 x_17)) 
+                                              (integer_of_int32 y_11)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_4 ->
@@ -5145,9 +5145,9 @@ let mod0_safe_safety =
     and (JC_332: valid_a(int_P_a_2_alloc_table)))) }
 
 let mod0_unsafe_ensures_default =
- fun (x_3 : int32) (y_2 : int32) ->
+ fun (x_5 : int32) (y_3 : int32) ->
   { (JC_308:
-    ((JC_305: neq_int(integer_of_int32(y_2), (0)))
+    ((JC_305: neq_int(integer_of_int32(y_3), (0)))
     and ((JC_306: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_307: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5161,15 +5161,15 @@ let mod0_unsafe_ensures_default =
        (__retres_8 := (C_47:
                       (safe_int32_of_integer_ (C_46:
                                               (JC_320:
-                                              ((mod_int (integer_of_int32 x_3)) 
-                                               (integer_of_int32 y_2))))))) in
+                                              ((mod_int (integer_of_int32 x_5)) 
+                                               (integer_of_int32 y_3))))))) in
        void); (return := !__retres_8); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_310: true) }
 
 let mod0_unsafe_safety =
- fun (x_3 : int32) (y_2 : int32) ->
+ fun (x_5 : int32) (y_3 : int32) ->
   { (JC_308:
-    ((JC_305: neq_int(integer_of_int32(y_2), (0)))
+    ((JC_305: neq_int(integer_of_int32(y_3), (0)))
     and ((JC_306: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_307: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5184,8 +5184,8 @@ let mod0_unsafe_safety =
                       (JC_319:
                       (int32_of_integer_ (C_46:
                                          (JC_318:
-                                         ((mod_int_ (integer_of_int32 x_3)) 
-                                          (integer_of_int32 y_2)))))))) in
+                                         ((mod_int_ (integer_of_int32 x_5)) 
+                                          (integer_of_int32 y_3)))))))) in
        void); (return := !__retres_8); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_314:
@@ -5193,7 +5193,7 @@ let mod0_unsafe_safety =
     and (JC_313: valid_a(int_P_a_2_alloc_table)))) }
 
 let mod0_wrong_ensures_default =
- fun (x_35 : int32) (y_24 : int32) ->
+ fun (x_37 : int32) (y_25 : int32) ->
   { (JC_287:
     ((JC_285: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_286: valid_a(int_P_a_2_alloc_table)))) }
@@ -5208,12 +5208,12 @@ let mod0_wrong_ensures_default =
        (__retres_7 := (C_43:
                       (safe_int32_of_integer_ (C_42:
                                               (JC_299:
-                                              ((mod_int (integer_of_int32 x_35)) (0))))))) in
+                                              ((mod_int (integer_of_int32 x_37)) (0))))))) in
        void); (return := !__retres_7); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_289: true) }
 
 let mod0_wrong_safety =
- fun (x_35 : int32) (y_24 : int32) ->
+ fun (x_37 : int32) (y_25 : int32) ->
   { (JC_287:
     ((JC_285: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_286: valid_a(int_P_a_2_alloc_table)))) }
@@ -5229,7 +5229,7 @@ let mod0_wrong_safety =
                       (JC_298:
                       (int32_of_integer_ (C_42:
                                          (JC_297:
-                                         ((mod_int_ (integer_of_int32 x_35)) (0)))))))) in
+                                         ((mod_int_ (integer_of_int32 x_37)) (0)))))))) in
        void); (return := !__retres_7); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_293:
@@ -5285,7 +5285,7 @@ let mod_string_safety =
     and (JC_1311: valid_a(int_P_a_2_alloc_table)))) }
 
 let multiple_update_safe_ensures_default =
- fun (x_2 : int_P pointer) (y_1 : int_P pointer) (int_P_int_M_x_2_29 : (int_P, int32) memory ref) (int_P_x_2_29_alloc_table : int_P alloc_table) ->
+ fun (x_4 : int_P pointer) (y_2 : int_P pointer) (int_P_int_M_x_4_29 : (int_P, int32) memory ref) (int_P_x_4_29_alloc_table : int_P alloc_table) ->
   { (JC_1177:
     ((JC_1175: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1176: valid_a(int_P_a_2_alloc_table)))) }
@@ -5299,7 +5299,7 @@ let multiple_update_safe_ensures_default =
      try
       (let jessie_695 =
       begin
-        (if ((safe_eq_pointer x_2) y_1)
+        (if ((safe_eq_pointer x_4) y_2)
         then
          (let jessie_675 =
          (C_342:
@@ -5318,8 +5318,8 @@ let multiple_update_safe_ensures_default =
             begin
               (let jessie_683 =
               (let jessie_679 = !tmp_0_3 in
-              (let jessie_682 = x_2 in
-              (((safe_upd_ int_P_int_M_x_2_29) jessie_682) jessie_679))) in
+              (let jessie_682 = x_4 in
+              (((safe_upd_ int_P_int_M_x_4_29) jessie_682) jessie_679))) in
               void);
              (C_336:
              begin
@@ -5327,9 +5327,9 @@ let multiple_update_safe_ensures_default =
                void);
               (C_338:
               (let jessie_687 = !tmp_0_4 in
-              (let jessie_690 = y_1 in
+              (let jessie_690 = y_2 in
               begin
-                (((safe_upd_ int_P_int_M_x_2_29) jessie_690) jessie_687);
+                (((safe_upd_ int_P_int_M_x_4_29) jessie_690) jessie_687);
                jessie_687 end))) end) end) end) in void);
           (C_341:
           begin
@@ -5345,7 +5345,7 @@ let multiple_update_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_1179: true) }
 
 let multiple_update_safe_safety =
- fun (x_2 : int_P pointer) (y_1 : int_P pointer) (int_P_int_M_x_2_29 : (int_P, int32) memory ref) (int_P_x_2_29_alloc_table : int_P alloc_table) ->
+ fun (x_4 : int_P pointer) (y_2 : int_P pointer) (int_P_int_M_x_4_29 : (int_P, int32) memory ref) (int_P_x_4_29_alloc_table : int_P alloc_table) ->
   { (JC_1177:
     ((JC_1175: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1176: valid_a(int_P_a_2_alloc_table)))) }
@@ -5359,7 +5359,7 @@ let multiple_update_safe_safety =
      try
       (let jessie_671 =
       begin
-        (if ((eq_pointer x_2) y_1)
+        (if ((eq_pointer x_4) y_2)
         then
          (let jessie_651 =
          (C_342:
@@ -5378,9 +5378,9 @@ let multiple_update_safe_safety =
             begin
               (let jessie_659 =
               (let jessie_655 = !tmp_0_3 in
-              (let jessie_658 = x_2 in
+              (let jessie_658 = x_4 in
               (JC_1187:
-              ((((upd_ int_P_x_2_29_alloc_table) int_P_int_M_x_2_29) jessie_658) jessie_655)))) in
+              ((((upd_ int_P_x_4_29_alloc_table) int_P_int_M_x_4_29) jessie_658) jessie_655)))) in
               void);
              (C_336:
              begin
@@ -5388,10 +5388,10 @@ let multiple_update_safe_safety =
                void);
               (C_338:
               (let jessie_663 = !tmp_0_4 in
-              (let jessie_666 = y_1 in
+              (let jessie_666 = y_2 in
               begin
                 (JC_1188:
-                ((((upd_ int_P_x_2_29_alloc_table) int_P_int_M_x_2_29) jessie_666) jessie_663));
+                ((((upd_ int_P_x_4_29_alloc_table) int_P_int_M_x_4_29) jessie_666) jessie_663));
                jessie_663 end))) end) end) end) in void);
           (C_341:
           begin
@@ -5411,9 +5411,9 @@ let multiple_update_safe_safety =
     and (JC_1182: valid_a(int_P_a_2_alloc_table)))) }
 
 let multiple_update_unsafe_ensures_default =
- fun (x_30 : int_P pointer) (y_21 : int_P pointer) (int_P_int_M_x_30_27 : (int_P, int32) memory ref) (int_P_int_M_y_21_28 : (int_P, int32) memory ref) (int_P_x_30_27_alloc_table : int_P alloc_table) (int_P_y_21_28_alloc_table : int_P alloc_table) ->
+ fun (x_32 : int_P pointer) (y_22 : int_P pointer) (int_P_int_M_x_32_27 : (int_P, int32) memory ref) (int_P_int_M_y_22_28 : (int_P, int32) memory ref) (int_P_x_32_27_alloc_table : int_P alloc_table) (int_P_y_22_28_alloc_table : int_P alloc_table) ->
   { (JC_1158:
-    ((JC_1155: (x_30 <> y_21))
+    ((JC_1155: (x_32 <> y_22))
     and ((JC_1156: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1157: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5432,8 +5432,8 @@ let multiple_update_unsafe_ensures_default =
         begin
           (let jessie_637 =
           (let jessie_633 = !tmp_0_1 in
-          (let jessie_636 = x_30 in
-          (((safe_upd_ int_P_int_M_x_30_27) jessie_636) jessie_633))) in
+          (let jessie_636 = x_32 in
+          (((safe_upd_ int_P_int_M_x_32_27) jessie_636) jessie_633))) in
           void);
          (C_325:
          begin
@@ -5441,9 +5441,9 @@ let multiple_update_unsafe_ensures_default =
            void);
           (C_327:
           (let jessie_641 = !tmp_0_2 in
-          (let jessie_644 = y_21 in
+          (let jessie_644 = y_22 in
           begin
-            (((safe_upd_ int_P_int_M_y_21_28) jessie_644) jessie_641);
+            (((safe_upd_ int_P_int_M_y_22_28) jessie_644) jessie_641);
            jessie_641 end))) end) end) end) in void);
       (C_330:
       begin
@@ -5456,9 +5456,9 @@ let multiple_update_unsafe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_1160: true) }
 
 let multiple_update_unsafe_safety =
- fun (x_30 : int_P pointer) (y_21 : int_P pointer) (int_P_int_M_x_30_27 : (int_P, int32) memory ref) (int_P_int_M_y_21_28 : (int_P, int32) memory ref) (int_P_x_30_27_alloc_table : int_P alloc_table) (int_P_y_21_28_alloc_table : int_P alloc_table) ->
+ fun (x_32 : int_P pointer) (y_22 : int_P pointer) (int_P_int_M_x_32_27 : (int_P, int32) memory ref) (int_P_int_M_y_22_28 : (int_P, int32) memory ref) (int_P_x_32_27_alloc_table : int_P alloc_table) (int_P_y_22_28_alloc_table : int_P alloc_table) ->
   { (JC_1158:
-    ((JC_1155: (x_30 <> y_21))
+    ((JC_1155: (x_32 <> y_22))
     and ((JC_1156: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1157: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5477,9 +5477,9 @@ let multiple_update_unsafe_safety =
         begin
           (let jessie_618 =
           (let jessie_614 = !tmp_0_1 in
-          (let jessie_617 = x_30 in
+          (let jessie_617 = x_32 in
           (JC_1168:
-          ((((upd_ int_P_x_30_27_alloc_table) int_P_int_M_x_30_27) jessie_617) jessie_614)))) in
+          ((((upd_ int_P_x_32_27_alloc_table) int_P_int_M_x_32_27) jessie_617) jessie_614)))) in
           void);
          (C_325:
          begin
@@ -5487,10 +5487,10 @@ let multiple_update_unsafe_safety =
            void);
           (C_327:
           (let jessie_622 = !tmp_0_2 in
-          (let jessie_625 = y_21 in
+          (let jessie_625 = y_22 in
           begin
             (JC_1169:
-            ((((upd_ int_P_y_21_28_alloc_table) int_P_int_M_y_21_28) jessie_625) jessie_622));
+            ((((upd_ int_P_y_22_28_alloc_table) int_P_int_M_y_22_28) jessie_625) jessie_622));
            jessie_622 end))) end) end) end) in void);
       (C_330:
       begin
@@ -5507,7 +5507,7 @@ let multiple_update_unsafe_safety =
     and (JC_1163: valid_a(int_P_a_2_alloc_table)))) }
 
 let multiple_update_wrong_1_ensures_default =
- fun (x_5 : int_P pointer) (y_4 : int_P pointer) (int_P_int_M_x_5_25 : (int_P, int32) memory ref) (int_P_x_5_25_alloc_table : int_P alloc_table) ->
+ fun (x_7 : int_P pointer) (y_5 : int_P pointer) (int_P_int_M_x_7_25 : (int_P, int32) memory ref) (int_P_x_7_25_alloc_table : int_P alloc_table) ->
   { (JC_1101:
     ((JC_1099: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1100: valid_a(int_P_a_2_alloc_table)))) }
@@ -5527,16 +5527,16 @@ let multiple_update_wrong_1_ensures_default =
         begin
           (let jessie_567 =
           (let jessie_563 = !tmp in
-          (let jessie_566 = x_5 in
-          (((safe_upd_ int_P_int_M_x_5_25) jessie_566) jessie_563))) in void);
+          (let jessie_566 = x_7 in
+          (((safe_upd_ int_P_int_M_x_7_25) jessie_566) jessie_563))) in void);
          (C_301:
          begin
            (let jessie_569 = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
           (C_303:
           (let jessie_571 = !tmp_0 in
-          (let jessie_574 = x_5 in
+          (let jessie_574 = x_7 in
           begin
-            (((safe_upd_ int_P_int_M_x_5_25) jessie_574) jessie_571);
+            (((safe_upd_ int_P_int_M_x_7_25) jessie_574) jessie_571);
            jessie_571 end))) end) end) end) in void);
       (C_306:
       begin
@@ -5549,7 +5549,7 @@ let multiple_update_wrong_1_ensures_default =
     absurd  end with Return -> !return end)) { (JC_1103: true) }
 
 let multiple_update_wrong_1_safety =
- fun (x_5 : int_P pointer) (y_4 : int_P pointer) (int_P_int_M_x_5_25 : (int_P, int32) memory ref) (int_P_x_5_25_alloc_table : int_P alloc_table) ->
+ fun (x_7 : int_P pointer) (y_5 : int_P pointer) (int_P_int_M_x_7_25 : (int_P, int32) memory ref) (int_P_x_7_25_alloc_table : int_P alloc_table) ->
   { (JC_1101:
     ((JC_1099: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1100: valid_a(int_P_a_2_alloc_table)))) }
@@ -5569,19 +5569,19 @@ let multiple_update_wrong_1_safety =
         begin
           (let jessie_548 =
           (let jessie_544 = !tmp in
-          (let jessie_547 = x_5 in
+          (let jessie_547 = x_7 in
           (JC_1111:
-          ((((upd_ int_P_x_5_25_alloc_table) int_P_int_M_x_5_25) jessie_547) jessie_544)))) in
+          ((((upd_ int_P_x_7_25_alloc_table) int_P_int_M_x_7_25) jessie_547) jessie_544)))) in
           void);
          (C_301:
          begin
            (let jessie_550 = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
           (C_303:
           (let jessie_552 = !tmp_0 in
-          (let jessie_555 = x_5 in
+          (let jessie_555 = x_7 in
           begin
             (JC_1112:
-            ((((upd_ int_P_x_5_25_alloc_table) int_P_int_M_x_5_25) jessie_555) jessie_552));
+            ((((upd_ int_P_x_7_25_alloc_table) int_P_int_M_x_7_25) jessie_555) jessie_552));
            jessie_552 end))) end) end) end) in void);
       (C_306:
       begin
@@ -5598,11 +5598,11 @@ let multiple_update_wrong_1_safety =
     and (JC_1106: valid_a(int_P_a_2_alloc_table)))) }
 
 let multiple_update_wrong_2_ensures_default =
- fun (i_1 : int32) ->
+ fun (i_2 : int32) ->
   { (JC_1120:
     ((JC_1118: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1119: valid_a(int_P_a_2_alloc_table)))) }
-  (let mutable_i_1 = ref i_1 in
+  (let mutable_i_2 = ref i_2 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5611,25 +5611,25 @@ let multiple_update_wrong_2_ensures_default =
      (C_310:
      begin
        (let jessie_585 =
-       (mutable_i_1 := (C_309:
+       (mutable_i_2 := (C_309:
                        (safe_int32_of_integer_ (C_308:
-                                               ((add_int (integer_of_int32 !mutable_i_1)) (1)))))) in
+                                               ((add_int (integer_of_int32 !mutable_i_2)) (1)))))) in
        void);
       (C_313:
       begin
-        (mutable_i_1 := (C_312:
+        (mutable_i_2 := (C_312:
                         (safe_int32_of_integer_ (C_311:
-                                                ((add_int (integer_of_int32 !mutable_i_1)) (1))))));
-       !mutable_i_1 end) end) in void); (return := !mutable_i_1);
+                                                ((add_int (integer_of_int32 !mutable_i_2)) (1))))));
+       !mutable_i_2 end) end) in void); (return := !mutable_i_2);
     (raise Return); absurd  end with Return -> !return end)))
   { (JC_1122: true) }
 
 let multiple_update_wrong_2_safety =
- fun (i_1 : int32) ->
+ fun (i_2 : int32) ->
   { (JC_1120:
     ((JC_1118: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1119: valid_a(int_P_a_2_alloc_table)))) }
-  (let mutable_i_1 = ref i_1 in
+  (let mutable_i_2 = ref i_2 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5638,29 +5638,29 @@ let multiple_update_wrong_2_safety =
      (C_310:
      begin
        (let jessie_580 =
-       (mutable_i_1 := (C_309:
+       (mutable_i_2 := (C_309:
                        (JC_1130:
                        (int32_of_integer_ (C_308:
-                                          ((add_int (integer_of_int32 !mutable_i_1)) (1))))))) in
+                                          ((add_int (integer_of_int32 !mutable_i_2)) (1))))))) in
        void);
       (C_313:
       begin
-        (mutable_i_1 := (C_312:
+        (mutable_i_2 := (C_312:
                         (JC_1131:
                         (int32_of_integer_ (C_311:
-                                           ((add_int (integer_of_int32 !mutable_i_1)) (1)))))));
-       !mutable_i_1 end) end) in void); (return := !mutable_i_1);
+                                           ((add_int (integer_of_int32 !mutable_i_2)) (1)))))));
+       !mutable_i_2 end) end) in void); (return := !mutable_i_2);
     (raise Return); absurd  end with Return -> !return end)))
   { (JC_1126:
     ((JC_1124: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1125: valid_a(int_P_a_2_alloc_table)))) }
 
 let multiple_update_wrong_3_ensures_default =
- fun (i_3 : int32) ->
+ fun (i_4 : int32) ->
   { (JC_1138:
     ((JC_1136: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1137: valid_a(int_P_a_2_alloc_table)))) }
-  (let mutable_i_3 = ref i_3 in
+  (let mutable_i_4 = ref i_4 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5672,27 +5672,27 @@ let multiple_update_wrong_3_ensures_default =
          (let jessie_603 =
          (C_315:
          begin
-           (let jessie_601 = (tmp_0_0 := !mutable_i_3) in void);
+           (let jessie_601 = (tmp_0_0 := !mutable_i_4) in void);
           (C_318:
           begin
-            (mutable_i_3 := (C_317:
+            (mutable_i_4 := (C_317:
                             (safe_int32_of_integer_ (C_316:
-                                                    ((add_int (integer_of_int32 !mutable_i_3)) (1))))));
-           !mutable_i_3 end) end) in void);
+                                                    ((add_int (integer_of_int32 !mutable_i_4)) (1))))));
+           !mutable_i_4 end) end) in void);
         (C_320:
-        (let jessie_605 = !mutable_i_3 in
+        (let jessie_605 = !mutable_i_4 in
         (let jessie_608 = ((shift a) (integer_of_int32 !tmp_0_0)) in
         begin
           (((safe_upd_ int_P_int_M_a_2) jessie_608) jessie_605); jessie_605
-        end))) end in void); (return := !mutable_i_3); (raise Return) end);
+        end))) end in void); (return := !mutable_i_4); (raise Return) end);
     absurd  end with Return -> !return end))) { (JC_1140: true) }
 
 let multiple_update_wrong_3_safety =
- fun (i_3 : int32) ->
+ fun (i_4 : int32) ->
   { (JC_1138:
     ((JC_1136: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1137: valid_a(int_P_a_2_alloc_table)))) }
-  (let mutable_i_3 = ref i_3 in
+  (let mutable_i_4 = ref i_4 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5704,35 +5704,35 @@ let multiple_update_wrong_3_safety =
          (let jessie_592 =
          (C_315:
          begin
-           (let jessie_590 = (tmp_0_0 := !mutable_i_3) in void);
+           (let jessie_590 = (tmp_0_0 := !mutable_i_4) in void);
           (C_318:
           begin
-            (mutable_i_3 := (C_317:
+            (mutable_i_4 := (C_317:
                             (JC_1148:
                             (int32_of_integer_ (C_316:
-                                               ((add_int (integer_of_int32 !mutable_i_3)) (1)))))));
-           !mutable_i_3 end) end) in void);
+                                               ((add_int (integer_of_int32 !mutable_i_4)) (1)))))));
+           !mutable_i_4 end) end) in void);
         (C_320:
-        (let jessie_594 = !mutable_i_3 in
+        (let jessie_594 = !mutable_i_4 in
         (let jessie_595 = a in
         (let jessie_596 = (integer_of_int32 !tmp_0_0) in
         (let jessie_597 = ((shift jessie_595) jessie_596) in
         begin
           (JC_1149:
           (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_595) jessie_596) jessie_594));
-         jessie_594 end))))) end in void); (return := !mutable_i_3);
+         jessie_594 end))))) end in void); (return := !mutable_i_4);
       (raise Return) end); absurd  end with Return -> !return end)))
   { (JC_1144:
     ((JC_1142: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1143: valid_a(int_P_a_2_alloc_table)))) }
 
 let null_ptr_safe_ensures_default =
- fun (x_20 : int_P pointer) (int_P_x_20_20_alloc_table : int_P alloc_table) (int_P_int_M_x_20_20 : (int_P, int32) memory) ->
+ fun (x_22 : int_P pointer) (int_P_x_22_20_alloc_table : int_P alloc_table) (int_P_int_M_x_22_20 : (int_P, int32) memory) ->
   { (JC_705:
     ((JC_702:
-     ((le_int(offset_min(int_P_x_20_20_alloc_table, x_20), (0))
-      and ge_int(offset_max(int_P_x_20_20_alloc_table, x_20), (0)))
-     or (x_20 = null)))
+     ((le_int(offset_min(int_P_x_22_20_alloc_table, x_22), (0))
+      and ge_int(offset_max(int_P_x_22_20_alloc_table, x_22), (0)))
+     or (x_22 = null)))
     and ((JC_703: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_704: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5743,7 +5743,7 @@ let null_ptr_safe_ensures_default =
      try
       (let jessie_315 =
       begin
-        (if ((safe_eq_pointer x_20) null)
+        (if ((safe_eq_pointer x_22) null)
         then
          (let jessie_311 =
          (C_173:
@@ -5755,7 +5755,7 @@ let null_ptr_safe_ensures_default =
          (C_172:
          begin
            (let jessie_313 =
-           (__retres_27 := (C_171: ((safe_acc_ int_P_int_M_x_20_20) x_20))) in
+           (__retres_27 := (C_171: ((safe_acc_ int_P_int_M_x_22_20) x_22))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_9 ->
@@ -5763,12 +5763,12 @@ let null_ptr_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_707: true) }
 
 let null_ptr_safe_safety =
- fun (x_20 : int_P pointer) (int_P_x_20_20_alloc_table : int_P alloc_table) (int_P_int_M_x_20_20 : (int_P, int32) memory) ->
+ fun (x_22 : int_P pointer) (int_P_x_22_20_alloc_table : int_P alloc_table) (int_P_int_M_x_22_20 : (int_P, int32) memory) ->
   { (JC_705:
     ((JC_702:
-     ((le_int(offset_min(int_P_x_20_20_alloc_table, x_20), (0))
-      and ge_int(offset_max(int_P_x_20_20_alloc_table, x_20), (0)))
-     or (x_20 = null)))
+     ((le_int(offset_min(int_P_x_22_20_alloc_table, x_22), (0))
+      and ge_int(offset_max(int_P_x_22_20_alloc_table, x_22), (0)))
+     or (x_22 = null)))
     and ((JC_703: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_704: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5779,7 +5779,7 @@ let null_ptr_safe_safety =
      try
       (let jessie_307 =
       begin
-        (if ((eq_pointer x_20) null)
+        (if ((eq_pointer x_22) null)
         then
          (let jessie_303 =
          (C_173:
@@ -5793,7 +5793,7 @@ let null_ptr_safe_safety =
            (let jessie_305 =
            (__retres_27 := (C_171:
                            (JC_715:
-                           (((acc_ int_P_x_20_20_alloc_table) int_P_int_M_x_20_20) x_20)))) in
+                           (((acc_ int_P_x_22_20_alloc_table) int_P_int_M_x_22_20) x_22)))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_9 ->
@@ -5804,11 +5804,11 @@ let null_ptr_safe_safety =
     and (JC_710: valid_a(int_P_a_2_alloc_table)))) }
 
 let null_ptr_unsafe_ensures_default =
- fun (x_13 : int_P pointer) (int_P_x_13_19_alloc_table : int_P alloc_table) (int_P_int_M_x_13_19 : (int_P, int32) memory) ->
+ fun (x_15 : int_P pointer) (int_P_x_15_19_alloc_table : int_P alloc_table) (int_P_int_M_x_15_19 : (int_P, int32) memory) ->
   { (JC_686:
     ((JC_683:
-     ((JC_681: le_int(offset_min(int_P_x_13_19_alloc_table, x_13), (0)))
-     and (JC_682: ge_int(offset_max(int_P_x_13_19_alloc_table, x_13), (0)))))
+     ((JC_681: le_int(offset_min(int_P_x_15_19_alloc_table, x_15), (0)))
+     and (JC_682: ge_int(offset_max(int_P_x_15_19_alloc_table, x_15), (0)))))
     and ((JC_684: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_685: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5819,16 +5819,16 @@ let null_ptr_unsafe_ensures_default =
      (C_166:
      begin
        (let jessie_299 =
-       (__retres_26 := (C_165: ((safe_acc_ int_P_int_M_x_13_19) x_13))) in
+       (__retres_26 := (C_165: ((safe_acc_ int_P_int_M_x_15_19) x_15))) in
        void); (return := !__retres_26); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_688: true) }
 
 let null_ptr_unsafe_safety =
- fun (x_13 : int_P pointer) (int_P_x_13_19_alloc_table : int_P alloc_table) (int_P_int_M_x_13_19 : (int_P, int32) memory) ->
+ fun (x_15 : int_P pointer) (int_P_x_15_19_alloc_table : int_P alloc_table) (int_P_int_M_x_15_19 : (int_P, int32) memory) ->
   { (JC_686:
     ((JC_683:
-     ((JC_681: le_int(offset_min(int_P_x_13_19_alloc_table, x_13), (0)))
-     and (JC_682: ge_int(offset_max(int_P_x_13_19_alloc_table, x_13), (0)))))
+     ((JC_681: le_int(offset_min(int_P_x_15_19_alloc_table, x_15), (0)))
+     and (JC_682: ge_int(offset_max(int_P_x_15_19_alloc_table, x_15), (0)))))
     and ((JC_684: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_685: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5841,7 +5841,7 @@ let null_ptr_unsafe_safety =
        (let jessie_296 =
        (__retres_26 := (C_165:
                        (JC_696:
-                       (((acc_ int_P_x_13_19_alloc_table) int_P_int_M_x_13_19) x_13)))) in
+                       (((acc_ int_P_x_15_19_alloc_table) int_P_int_M_x_15_19) x_15)))) in
        void); (return := !__retres_26); (raise Return) end)); absurd  end
    with Return -> !return end))
   { (JC_692:
@@ -5849,11 +5849,11 @@ let null_ptr_unsafe_safety =
     and (JC_691: valid_a(int_P_a_2_alloc_table)))) }
 
 let null_ptr_wrong_ensures_default =
- fun (x_9 : int_P pointer) (int_P_x_9_18_alloc_table : int_P alloc_table) (int_P_int_M_x_9_18 : (int_P, int32) memory) ->
+ fun (x_11 : int_P pointer) (int_P_x_11_18_alloc_table : int_P alloc_table) (int_P_int_M_x_11_18 : (int_P, int32) memory) ->
   { (JC_663:
     ((JC_661: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_662: valid_a(int_P_a_2_alloc_table)))) }
-  (let mutable_x_9 = ref x_9 in
+  (let mutable_x_11 = ref x_11 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5861,21 +5861,21 @@ let null_ptr_wrong_ensures_default =
      (let __retres_25 = ref (any_int32 void) in
      (C_161:
      begin
-       (let jessie_291 = (mutable_x_9 := null) in void);
+       (let jessie_291 = (mutable_x_11 := null) in void);
       (C_163:
       begin
         (let jessie_293 =
         (__retres_25 := (C_162:
-                        ((safe_acc_ int_P_int_M_x_9_18) !mutable_x_9))) in
+                        ((safe_acc_ int_P_int_M_x_11_18) !mutable_x_11))) in
         void); (return := !__retres_25); (raise Return) end) end)); absurd 
    end with Return -> !return end))) { (JC_665: true) }
 
 let null_ptr_wrong_safety =
- fun (x_9 : int_P pointer) (int_P_x_9_18_alloc_table : int_P alloc_table) (int_P_int_M_x_9_18 : (int_P, int32) memory) ->
+ fun (x_11 : int_P pointer) (int_P_x_11_18_alloc_table : int_P alloc_table) (int_P_int_M_x_11_18 : (int_P, int32) memory) ->
   { (JC_663:
     ((JC_661: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_662: valid_a(int_P_a_2_alloc_table)))) }
-  (let mutable_x_9 = ref x_9 in
+  (let mutable_x_11 = ref x_11 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5883,13 +5883,13 @@ let null_ptr_wrong_safety =
      (let __retres_25 = ref (any_int32 void) in
      (C_161:
      begin
-       (let jessie_286 = (mutable_x_9 := null) in void);
+       (let jessie_286 = (mutable_x_11 := null) in void);
       (C_163:
       begin
         (let jessie_288 =
         (__retres_25 := (C_162:
                         (JC_673:
-                        (((acc_ int_P_x_9_18_alloc_table) int_P_int_M_x_9_18) !mutable_x_9)))) in
+                        (((acc_ int_P_x_11_18_alloc_table) int_P_int_M_x_11_18) !mutable_x_11)))) in
         void); (return := !__retres_25); (raise Return) end) end)); absurd 
    end with Return -> !return end)))
   { (JC_669:
@@ -5897,7 +5897,7 @@ let null_ptr_wrong_safety =
     and (JC_668: valid_a(int_P_a_2_alloc_table)))) }
 
 let oob_pointer_safe_ensures_default =
- fun (x : uint32) ->
+ fun (x_1 : uint32) ->
   { (JC_874:
     ((JC_872: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_873: valid_a(int_P_a_2_alloc_table)))) }
@@ -5910,13 +5910,13 @@ let oob_pointer_safe_ensures_default =
      try
       (let jessie_421 =
       begin
-        (if ((lt_int_ (integer_of_uint32 x)) (2))
+        (if ((lt_int_ (integer_of_uint32 x_1)) (2))
         then
          (let jessie_417 =
          (C_239:
          begin
            (let jessie_414 =
-           (i_8_0 := (C_238: ((shift a) (integer_of_uint32 x)))) in void);
+           (i_8_0 := (C_238: ((shift a) (integer_of_uint32 x_1)))) in void);
           (C_241:
           begin
             (let jessie_416 =
@@ -5934,7 +5934,7 @@ let oob_pointer_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_876: true) }
 
 let oob_pointer_safe_safety =
- fun (x : uint32) ->
+ fun (x_1 : uint32) ->
   { (JC_874:
     ((JC_872: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_873: valid_a(int_P_a_2_alloc_table)))) }
@@ -5947,13 +5947,13 @@ let oob_pointer_safe_safety =
      try
       (let jessie_411 =
       begin
-        (if ((lt_int_ (integer_of_uint32 x)) (2))
+        (if ((lt_int_ (integer_of_uint32 x_1)) (2))
         then
          (let jessie_407 =
          (C_239:
          begin
            (let jessie_404 =
-           (i_8_0 := (C_238: ((shift a) (integer_of_uint32 x)))) in void);
+           (i_8_0 := (C_238: ((shift a) (integer_of_uint32 x_1)))) in void);
           (C_241:
           begin
             (let jessie_406 =
@@ -5976,11 +5976,11 @@ let oob_pointer_safe_safety =
     and (JC_879: valid_a(int_P_a_2_alloc_table)))) }
 
 let oob_pointer_unsafe_ensures_default =
- fun (x_32 : uint32) ->
+ fun (x_34 : uint32) ->
   { (JC_857:
     ((JC_854:
-     ((JC_852: le_int((0), integer_of_uint32(x_32)))
-     and (JC_853: lt_int(integer_of_uint32(x_32), (2)))))
+     ((JC_852: le_int((0), integer_of_uint32(x_34)))
+     and (JC_853: lt_int(integer_of_uint32(x_34), (2)))))
     and ((JC_855: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_856: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -5992,7 +5992,7 @@ let oob_pointer_unsafe_ensures_default =
      (C_230:
      begin
        (let jessie_399 =
-       (i_7_0 := (C_229: ((shift a) (integer_of_uint32 x_32)))) in void);
+       (i_7_0 := (C_229: ((shift a) (integer_of_uint32 x_34)))) in void);
       (C_232:
       begin
         (let jessie_401 =
@@ -6001,11 +6001,11 @@ let oob_pointer_unsafe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_859: true) }
 
 let oob_pointer_unsafe_safety =
- fun (x_32 : uint32) ->
+ fun (x_34 : uint32) ->
   { (JC_857:
     ((JC_854:
-     ((JC_852: le_int((0), integer_of_uint32(x_32)))
-     and (JC_853: lt_int(integer_of_uint32(x_32), (2)))))
+     ((JC_852: le_int((0), integer_of_uint32(x_34)))
+     and (JC_853: lt_int(integer_of_uint32(x_34), (2)))))
     and ((JC_855: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_856: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -6017,7 +6017,7 @@ let oob_pointer_unsafe_safety =
      (C_230:
      begin
        (let jessie_394 =
-       (i_7_0 := (C_229: ((shift a) (integer_of_uint32 x_32)))) in void);
+       (i_7_0 := (C_229: ((shift a) (integer_of_uint32 x_34)))) in void);
       (C_232:
       begin
         (let jessie_396 =
@@ -6031,7 +6031,7 @@ let oob_pointer_unsafe_safety =
     and (JC_862: valid_a(int_P_a_2_alloc_table)))) }
 
 let oob_pointer_wrong_ensures_default =
- fun (x_23 : uint32) ->
+ fun (x_25 : uint32) ->
   { (JC_834:
     ((JC_832: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_833: valid_a(int_P_a_2_alloc_table)))) }
@@ -6045,7 +6045,7 @@ let oob_pointer_wrong_ensures_default =
      begin
        (let jessie_389 =
        (i_6_1 := (C_224:
-                 ((shift (C_223: ((shift a) (integer_of_uint32 x_23)))) (2)))) in
+                 ((shift (C_223: ((shift a) (integer_of_uint32 x_25)))) (2)))) in
        void);
       (C_227:
       begin
@@ -6055,7 +6055,7 @@ let oob_pointer_wrong_ensures_default =
     absurd  end with Return -> !return end)) { (JC_836: true) }
 
 let oob_pointer_wrong_safety =
- fun (x_23 : uint32) ->
+ fun (x_25 : uint32) ->
   { (JC_834:
     ((JC_832: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_833: valid_a(int_P_a_2_alloc_table)))) }
@@ -6069,7 +6069,7 @@ let oob_pointer_wrong_safety =
      begin
        (let jessie_384 =
        (i_6_1 := (C_224:
-                 ((shift (C_223: ((shift a) (integer_of_uint32 x_23)))) (2)))) in
+                 ((shift (C_223: ((shift a) (integer_of_uint32 x_25)))) (2)))) in
        void);
       (C_227:
       begin
@@ -6240,15 +6240,15 @@ let ptr_sub_safe_safety =
     and (JC_819: valid_a(int_P_a_2_alloc_table)))) }
 
 let ptr_sub_unsafe_ensures_default =
- fun (x_6 : int_P pointer) (y_5 : int_P pointer) (int_P_x_6_23_alloc_table : int_P alloc_table) ->
+ fun (x_8 : int_P pointer) (y_6 : int_P pointer) (int_P_x_8_23_alloc_table : int_P alloc_table) ->
   { (JC_797:
     ((JC_794:
-     ((JC_790: le_int(offset_min(int_P_x_6_23_alloc_table, x_6), (0)))
-     and ((JC_791: ge_int(offset_max(int_P_x_6_23_alloc_table, x_6), (0)))
+     ((JC_790: le_int(offset_min(int_P_x_8_23_alloc_table, x_8), (0)))
+     and ((JC_791: ge_int(offset_max(int_P_x_8_23_alloc_table, x_8), (0)))
          and ((JC_792:
-              le_int(offset_min(int_P_x_6_23_alloc_table, y_5), (0)))
+              le_int(offset_min(int_P_x_8_23_alloc_table, y_6), (0)))
              and (JC_793:
-                 ge_int(offset_max(int_P_x_6_23_alloc_table, y_5), (0)))))))
+                 ge_int(offset_max(int_P_x_8_23_alloc_table, y_6), (0)))))))
     and ((JC_795: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_796: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -6261,20 +6261,20 @@ let ptr_sub_unsafe_ensures_default =
        (let jessie_363 =
        (__retres_31 := (C_202:
                        (safe_int32_of_integer_ (C_201:
-                                               ((safe_sub_pointer_ x_6) y_5))))) in
+                                               ((safe_sub_pointer_ x_8) y_6))))) in
        void); (return := !__retres_31); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_799: true) }
 
 let ptr_sub_unsafe_safety =
- fun (x_6 : int_P pointer) (y_5 : int_P pointer) (int_P_x_6_23_alloc_table : int_P alloc_table) ->
+ fun (x_8 : int_P pointer) (y_6 : int_P pointer) (int_P_x_8_23_alloc_table : int_P alloc_table) ->
   { (JC_797:
     ((JC_794:
-     ((JC_790: le_int(offset_min(int_P_x_6_23_alloc_table, x_6), (0)))
-     and ((JC_791: ge_int(offset_max(int_P_x_6_23_alloc_table, x_6), (0)))
+     ((JC_790: le_int(offset_min(int_P_x_8_23_alloc_table, x_8), (0)))
+     and ((JC_791: ge_int(offset_max(int_P_x_8_23_alloc_table, x_8), (0)))
          and ((JC_792:
-              le_int(offset_min(int_P_x_6_23_alloc_table, y_5), (0)))
+              le_int(offset_min(int_P_x_8_23_alloc_table, y_6), (0)))
              and (JC_793:
-                 ge_int(offset_max(int_P_x_6_23_alloc_table, y_5), (0)))))))
+                 ge_int(offset_max(int_P_x_8_23_alloc_table, y_6), (0)))))))
     and ((JC_795: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_796: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -6287,7 +6287,7 @@ let ptr_sub_unsafe_safety =
        (let jessie_360 =
        (__retres_31 := (C_202:
                        (JC_807:
-                       (int32_of_integer_ (C_201: ((sub_pointer_ x_6) y_5)))))) in
+                       (int32_of_integer_ (C_201: ((sub_pointer_ x_8) y_6)))))) in
        void); (return := !__retres_31); (raise Return) end)); absurd  end
    with Return -> !return end))
   { (JC_803:
@@ -6412,7 +6412,7 @@ let ptr_sub_wrong_safety =
     and (JC_769: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_signed_safe_ensures_default =
- fun (x_22 : int32) (y_15 : int32) ->
+ fun (x_24 : int32) (y_16 : int32) ->
   { (JC_433:
     ((JC_431: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_432: valid_a(int_P_a_2_alloc_table)))) }
@@ -6424,7 +6424,7 @@ let shift_left_signed_safe_ensures_default =
      try
       (let jessie_183 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_22)) (0))
+        (if ((lt_int_ (integer_of_int32 x_24)) (0))
         then
          (let jessie_168 =
          (C_96:
@@ -6432,7 +6432,7 @@ let shift_left_signed_safe_ensures_default =
            (let jessie_167 = (__retres_14 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (if ((lt_int_ (integer_of_int32 y_15)) (0))
+         (if ((lt_int_ (integer_of_int32 y_16)) (0))
          then
           (let jessie_171 =
           (C_95:
@@ -6442,7 +6442,7 @@ let shift_left_signed_safe_ensures_default =
            (raise (Return_label_exc void)) end) in void)
          else
           (if ((ge_int_ (integer_of_uint32 (C_94:
-                                           (safe_uint32_of_integer_ (integer_of_int32 y_15))))) (32))
+                                           (safe_uint32_of_integer_ (integer_of_int32 y_16))))) (32))
           then
            (let jessie_174 =
            (C_93:
@@ -6452,14 +6452,15 @@ let shift_left_signed_safe_ensures_default =
             (raise (Return_label_exc void)) end) in void)
           else
            begin
-             (assert { (JC_452: ge_int(integer_of_int32(y_15), (0))) }; void);
-            (assert { (JC_453: lt_int(integer_of_int32(y_15), (32))) }; void);
-            (if ((gt_int_ (integer_of_int32 x_22)) (integer_of_int32 
+             (assert { (JC_452: lt_int(integer_of_int32(y_16), (32))) };
+             void);
+            (assert { (JC_453: ge_int(integer_of_int32(y_16), (0))) }; void);
+            (if ((gt_int_ (integer_of_int32 x_24)) (integer_of_int32 
                                                     (C_92:
                                                     (safe_int32_of_integer_ 
                                                      (C_91:
                                                      ((asr (2147483647)) 
-                                                      (integer_of_int32 y_15)))))))
+                                                      (integer_of_int32 y_16)))))))
             then
              (let jessie_177 =
              (C_90:
@@ -6472,22 +6473,22 @@ let shift_left_signed_safe_ensures_default =
              begin
                (let jessie_179 =
                begin
-                 (assert { (JC_454: ge_int(integer_of_int32(y_15), (0))) };
-                 void);
-                (assert { (JC_455: lt_int(integer_of_int32(y_15), (32))) };
+                 (assert
+                 { (JC_454:
+                   le_int(integer_of_int32(x_24),
+                   asr((2147483647), integer_of_int32(y_16)))) }; void);
+                (assert { (JC_455: ge_int(integer_of_int32(x_24), (0))) };
                 void);
-                (assert { (JC_456: ge_int(integer_of_int32(x_22), (0))) };
+                (assert { (JC_456: lt_int(integer_of_int32(y_16), (32))) };
                 void);
-                (assert
-                { (JC_457:
-                  le_int(integer_of_int32(x_22),
-                  asr((2147483647), integer_of_int32(y_15)))) }; void);
+                (assert { (JC_457: ge_int(integer_of_int32(y_16), (0))) };
+                void);
                 (C_89:
                 begin
                   (__retres_14 := (C_88:
                                   (safe_int32_of_integer_ (C_87:
-                                                          ((lsl (integer_of_int32 x_22)) 
-                                                           (integer_of_int32 y_15))))));
+                                                          ((lsl (integer_of_int32 x_24)) 
+                                                           (integer_of_int32 y_16))))));
                  !__retres_14 end) end in void);
               (raise (Return_label_exc void)) end in void)) end)));
        (C_97:
@@ -6499,7 +6500,7 @@ let shift_left_signed_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_435: true) }
 
 let shift_left_signed_safe_safety =
- fun (x_22 : int32) (y_15 : int32) ->
+ fun (x_24 : int32) (y_16 : int32) ->
   { (JC_433:
     ((JC_431: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_432: valid_a(int_P_a_2_alloc_table)))) }
@@ -6511,7 +6512,7 @@ let shift_left_signed_safe_safety =
      try
       (let jessie_164 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_22)) (0))
+        (if ((lt_int_ (integer_of_int32 x_24)) (0))
         then
          (let jessie_149 =
          (C_96:
@@ -6519,7 +6520,7 @@ let shift_left_signed_safe_safety =
            (let jessie_148 = (__retres_14 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (if ((lt_int_ (integer_of_int32 y_15)) (0))
+         (if ((lt_int_ (integer_of_int32 y_16)) (0))
          then
           (let jessie_152 =
           (C_95:
@@ -6530,7 +6531,7 @@ let shift_left_signed_safe_safety =
          else
           (if ((ge_int_ (integer_of_uint32 (C_94:
                                            (JC_443:
-                                           (uint32_of_integer_ (integer_of_int32 y_15)))))) (32))
+                                           (uint32_of_integer_ (integer_of_int32 y_16)))))) (32))
           then
            (let jessie_155 =
            (C_93:
@@ -6540,15 +6541,15 @@ let shift_left_signed_safe_safety =
             (raise (Return_label_exc void)) end) in void)
           else
            begin
-             [ { } unit { (JC_444: ge_int(integer_of_int32(y_15), (0))) } ];
-            [ { } unit { (JC_445: lt_int(integer_of_int32(y_15), (32))) } ];
-            (if ((gt_int_ (integer_of_int32 x_22)) (integer_of_int32 
+             [ { } unit { (JC_444: lt_int(integer_of_int32(y_16), (32))) } ];
+            [ { } unit { (JC_445: ge_int(integer_of_int32(y_16), (0))) } ];
+            (if ((gt_int_ (integer_of_int32 x_24)) (integer_of_int32 
                                                     (C_92:
                                                     (JC_446:
                                                     (int32_of_integer_ 
                                                      (C_91:
                                                      ((asr (2147483647)) 
-                                                      (integer_of_int32 y_15))))))))
+                                                      (integer_of_int32 y_16))))))))
             then
              (let jessie_158 =
              (C_90:
@@ -6561,20 +6562,20 @@ let shift_left_signed_safe_safety =
              begin
                (let jessie_160 =
                begin
-                 [ { } unit { (JC_447: ge_int(integer_of_int32(y_15), (0))) } ];
-                [ { } unit { (JC_448: lt_int(integer_of_int32(y_15), (32))) } ];
-                [ { } unit { (JC_449: ge_int(integer_of_int32(x_22), (0))) } ];
-                [ { } unit
-                  { (JC_450:
-                    le_int(integer_of_int32(x_22),
-                    asr((2147483647), integer_of_int32(y_15)))) } ];
+                 [ { } unit
+                   { (JC_447:
+                     le_int(integer_of_int32(x_24),
+                     asr((2147483647), integer_of_int32(y_16)))) } ];
+                [ { } unit { (JC_448: ge_int(integer_of_int32(x_24), (0))) } ];
+                [ { } unit { (JC_449: lt_int(integer_of_int32(y_16), (32))) } ];
+                [ { } unit { (JC_450: ge_int(integer_of_int32(y_16), (0))) } ];
                 (C_89:
                 begin
                   (__retres_14 := (C_88:
                                   (JC_451:
                                   (int32_of_integer_ (C_87:
-                                                     ((lsl (integer_of_int32 x_22)) 
-                                                      (integer_of_int32 y_15)))))));
+                                                     ((lsl (integer_of_int32 x_24)) 
+                                                      (integer_of_int32 y_16)))))));
                  !__retres_14 end) end in void);
               (raise (Return_label_exc void)) end in void)) end)));
        (C_97:
@@ -6589,7 +6590,7 @@ let shift_left_signed_safe_safety =
     and (JC_438: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_signed_unsafe_ensures_default =
- fun (x_14 : int32) (y_9 : int32) ->
+ fun (x_16 : int32) (y_10 : int32) ->
   { (JC_408:
     ((JC_406: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_407: valid_a(int_P_a_2_alloc_table)))) }
@@ -6601,25 +6602,25 @@ let shift_left_signed_unsafe_ensures_default =
      begin
        (let jessie_145 =
        begin
-         (assert { (JC_423: ge_int(integer_of_int32(y_9), (0))) }; void);
-        (assert { (JC_424: lt_int(integer_of_int32(y_9), (32))) }; void);
-        (assert { (JC_425: ge_int(integer_of_int32(x_14), (0))) }; void);
-        (assert
-        { (JC_426:
-          le_int(integer_of_int32(x_14),
-          asr((2147483647), integer_of_int32(y_9)))) }; void);
+         (assert
+         { (JC_423:
+           le_int(integer_of_int32(x_16),
+           asr((2147483647), integer_of_int32(y_10)))) }; void);
+        (assert { (JC_424: ge_int(integer_of_int32(x_16), (0))) }; void);
+        (assert { (JC_425: lt_int(integer_of_int32(y_10), (32))) }; void);
+        (assert { (JC_426: ge_int(integer_of_int32(y_10), (0))) }; void);
         (C_79:
         begin
           (__retres_13 := (C_78:
                           (safe_int32_of_integer_ (C_77:
-                                                  ((lsl (integer_of_int32 x_14)) 
-                                                   (integer_of_int32 y_9))))));
+                                                  ((lsl (integer_of_int32 x_16)) 
+                                                   (integer_of_int32 y_10))))));
          !__retres_13 end) end in void); (return := !__retres_13);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_410: true) }
 
 let shift_left_signed_unsafe_safety =
- fun (x_14 : int32) (y_9 : int32) ->
+ fun (x_16 : int32) (y_10 : int32) ->
   { (JC_408:
     ((JC_406: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_407: valid_a(int_P_a_2_alloc_table)))) }
@@ -6631,20 +6632,20 @@ let shift_left_signed_unsafe_safety =
      begin
        (let jessie_142 =
        begin
-         [ { } unit { (JC_418: ge_int(integer_of_int32(y_9), (0))) } ];
-        [ { } unit { (JC_419: lt_int(integer_of_int32(y_9), (32))) } ];
-        [ { } unit { (JC_420: ge_int(integer_of_int32(x_14), (0))) } ];
-        [ { } unit
-          { (JC_421:
-            le_int(integer_of_int32(x_14),
-            asr((2147483647), integer_of_int32(y_9)))) } ];
+         [ { } unit
+           { (JC_418:
+             le_int(integer_of_int32(x_16),
+             asr((2147483647), integer_of_int32(y_10)))) } ];
+        [ { } unit { (JC_419: ge_int(integer_of_int32(x_16), (0))) } ];
+        [ { } unit { (JC_420: lt_int(integer_of_int32(y_10), (32))) } ];
+        [ { } unit { (JC_421: ge_int(integer_of_int32(y_10), (0))) } ];
         (C_79:
         begin
           (__retres_13 := (C_78:
                           (JC_422:
                           (int32_of_integer_ (C_77:
-                                             ((lsl (integer_of_int32 x_14)) 
-                                              (integer_of_int32 y_9)))))));
+                                             ((lsl (integer_of_int32 x_16)) 
+                                              (integer_of_int32 y_10)))))));
          !__retres_13 end) end in void); (return := !__retres_13);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_414:
@@ -6652,7 +6653,7 @@ let shift_left_signed_unsafe_safety =
     and (JC_413: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_signed_wrong_1_ensures_default =
- fun (x_24 : int32) (y_16 : int32) ->
+ fun (x_26 : int32) (y_17 : int32) ->
   { (JC_346:
     ((JC_344: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_345: valid_a(int_P_a_2_alloc_table)))) }
@@ -6665,19 +6666,19 @@ let shift_left_signed_wrong_1_ensures_default =
        (let jessie_127 =
        begin
          (assert { (JC_360: lt_int((32), (32))) }; void);
-        (assert { (JC_361: ge_int(integer_of_int32(x_24), (0))) }; void);
-        (assert { (JC_362: le_int(integer_of_int32(x_24), (0))) }; void);
+        (assert { (JC_361: le_int(integer_of_int32(x_26), (0))) }; void);
+        (assert { (JC_362: ge_int(integer_of_int32(x_26), (0))) }; void);
         (C_62:
         begin
           (__retres_10 := (C_61:
                           (safe_int32_of_integer_ (C_60:
-                                                  ((mul_int (integer_of_int32 x_24)) (4294967296))))));
+                                                  ((mul_int (integer_of_int32 x_26)) (4294967296))))));
          !__retres_10 end) end in void); (return := !__retres_10);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_348: true) }
 
 let shift_left_signed_wrong_1_safety =
- fun (x_24 : int32) (y_16 : int32) ->
+ fun (x_26 : int32) (y_17 : int32) ->
   { (JC_346:
     ((JC_344: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_345: valid_a(int_P_a_2_alloc_table)))) }
@@ -6690,14 +6691,14 @@ let shift_left_signed_wrong_1_safety =
        (let jessie_124 =
        begin
          [ { } unit { (JC_356: lt_int((32), (32))) } ];
-        [ { } unit { (JC_357: ge_int(integer_of_int32(x_24), (0))) } ];
-        [ { } unit { (JC_358: le_int(integer_of_int32(x_24), (0))) } ];
+        [ { } unit { (JC_357: le_int(integer_of_int32(x_26), (0))) } ];
+        [ { } unit { (JC_358: ge_int(integer_of_int32(x_26), (0))) } ];
         (C_62:
         begin
           (__retres_10 := (C_61:
                           (JC_359:
                           (int32_of_integer_ (C_60:
-                                             ((mul_int (integer_of_int32 x_24)) (4294967296)))))));
+                                             ((mul_int (integer_of_int32 x_26)) (4294967296)))))));
          !__retres_10 end) end in void); (return := !__retres_10);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_352:
@@ -6705,7 +6706,7 @@ let shift_left_signed_wrong_1_safety =
     and (JC_351: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_signed_wrong_2_ensures_default =
- fun (x_34 : int32) (y_23 : int32) ->
+ fun (x_36 : int32) (y_24 : int32) ->
   { (JC_369:
     ((JC_367: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_368: valid_a(int_P_a_2_alloc_table)))) }
@@ -6718,23 +6719,23 @@ let shift_left_signed_wrong_2_ensures_default =
        (let jessie_133 =
        begin
          (assert { (JC_383: ge_int(neg_int((1)), (0))) }; void);
-        (assert { (JC_384: ge_int(integer_of_int32(x_34), (0))) }; void);
         (assert
-        { (JC_385:
-          le_int(integer_of_int32(x_34), asr((2147483647), neg_int((1))))) };
+        { (JC_384:
+          le_int(integer_of_int32(x_36), asr((2147483647), neg_int((1))))) };
         void);
+        (assert { (JC_385: ge_int(integer_of_int32(x_36), (0))) }; void);
         (C_69:
         begin
           (__retres_11 := (C_68:
                           (safe_int32_of_integer_ (C_67:
-                                                  ((lsl (integer_of_int32 x_34)) 
+                                                  ((lsl (integer_of_int32 x_36)) 
                                                    (neg_int (1)))))));
          !__retres_11 end) end in void); (return := !__retres_11);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_371: true) }
 
 let shift_left_signed_wrong_2_safety =
- fun (x_34 : int32) (y_23 : int32) ->
+ fun (x_36 : int32) (y_24 : int32) ->
   { (JC_369:
     ((JC_367: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_368: valid_a(int_P_a_2_alloc_table)))) }
@@ -6747,16 +6748,16 @@ let shift_left_signed_wrong_2_safety =
        (let jessie_130 =
        begin
          [ { } unit { (JC_379: ge_int(neg_int((1)), (0))) } ];
-        [ { } unit { (JC_380: ge_int(integer_of_int32(x_34), (0))) } ];
         [ { } unit
-          { (JC_381:
-            le_int(integer_of_int32(x_34), asr((2147483647), neg_int((1))))) } ];
+          { (JC_380:
+            le_int(integer_of_int32(x_36), asr((2147483647), neg_int((1))))) } ];
+        [ { } unit { (JC_381: ge_int(integer_of_int32(x_36), (0))) } ];
         (C_69:
         begin
           (__retres_11 := (C_68:
                           (JC_382:
                           (int32_of_integer_ (C_67:
-                                             ((lsl (integer_of_int32 x_34)) 
+                                             ((lsl (integer_of_int32 x_36)) 
                                               (neg_int (1))))))));
          !__retres_11 end) end in void); (return := !__retres_11);
       (raise Return) end); absurd  end with Return -> !return end))
@@ -6765,7 +6766,7 @@ let shift_left_signed_wrong_2_safety =
     and (JC_374: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_signed_wrong_3_ensures_default =
- fun (x_1 : int32) (y_0 : int32) ->
+ fun (x_3 : int32) (y_1 : int32) ->
   { (JC_392:
     ((JC_390: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_391: valid_a(int_P_a_2_alloc_table)))) }
@@ -6782,7 +6783,7 @@ let shift_left_signed_wrong_3_ensures_default =
    Return -> !return end)) { (JC_394: true) }
 
 let shift_left_signed_wrong_3_safety =
- fun (x_1 : int32) (y_0 : int32) ->
+ fun (x_3 : int32) (y_1 : int32) ->
   { (JC_392:
     ((JC_390: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_391: valid_a(int_P_a_2_alloc_table)))) }
@@ -6802,7 +6803,7 @@ let shift_left_signed_wrong_3_safety =
     and (JC_397: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_unsigned_safe_ensures_default =
- fun (x_11 : uint32) (y_8 : uint32) ->
+ fun (x_13 : uint32) (y_9 : uint32) ->
   { (JC_502:
     ((JC_500: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_501: valid_a(int_P_a_2_alloc_table)))) }
@@ -6814,7 +6815,7 @@ let shift_left_unsigned_safe_ensures_default =
      try
       (let jessie_211 =
       begin
-        (if ((ge_int_ (integer_of_uint32 y_8)) (32))
+        (if ((ge_int_ (integer_of_uint32 y_9)) (32))
         then
          (let jessie_207 =
          (C_114:
@@ -6827,14 +6828,14 @@ let shift_left_unsigned_safe_ensures_default =
          begin
            (let jessie_209 =
            begin
-             (assert { (JC_514: lt_int(integer_of_uint32(y_8), (32))) };
+             (assert { (JC_514: lt_int(integer_of_uint32(y_9), (32))) };
              void);
             (C_113:
             begin
               (__retres_17 := (C_112:
                               (safe_uint32_of_integer_ (C_111:
-                                                       ((lsl (integer_of_uint32 x_11)) 
-                                                        (integer_of_uint32 y_8))))));
+                                                       ((lsl (integer_of_uint32 x_13)) 
+                                                        (integer_of_uint32 y_9))))));
              !__retres_17 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_6 ->
@@ -6842,7 +6843,7 @@ let shift_left_unsigned_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_504: true) }
 
 let shift_left_unsigned_safe_safety =
- fun (x_11 : uint32) (y_8 : uint32) ->
+ fun (x_13 : uint32) (y_9 : uint32) ->
   { (JC_502:
     ((JC_500: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_501: valid_a(int_P_a_2_alloc_table)))) }
@@ -6854,7 +6855,7 @@ let shift_left_unsigned_safe_safety =
      try
       (let jessie_203 =
       begin
-        (if ((ge_int_ (integer_of_uint32 y_8)) (32))
+        (if ((ge_int_ (integer_of_uint32 y_9)) (32))
         then
          (let jessie_199 =
          (C_114:
@@ -6867,14 +6868,14 @@ let shift_left_unsigned_safe_safety =
          begin
            (let jessie_201 =
            begin
-             [ { } unit { (JC_512: lt_int(integer_of_uint32(y_8), (32))) } ];
+             [ { } unit { (JC_512: lt_int(integer_of_uint32(y_9), (32))) } ];
             (C_113:
             begin
               (__retres_17 := (C_112:
                               (JC_513:
                               (uint32_of_integer_ (C_111:
-                                                  ((lsl (integer_of_uint32 x_11)) 
-                                                   (integer_of_uint32 y_8)))))));
+                                                  ((lsl (integer_of_uint32 x_13)) 
+                                                   (integer_of_uint32 y_9)))))));
              !__retres_17 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_6 ->
@@ -6885,7 +6886,7 @@ let shift_left_unsigned_safe_safety =
     and (JC_507: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_unsigned_unsafe_ensures_default =
- fun (x_0 : uint32) (y : uint32) ->
+ fun (x_2 : uint32) (y_0 : uint32) ->
   { (JC_483:
     ((JC_481: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_482: valid_a(int_P_a_2_alloc_table)))) }
@@ -6897,19 +6898,19 @@ let shift_left_unsigned_unsafe_ensures_default =
      begin
        (let jessie_195 =
        begin
-         (assert { (JC_495: lt_int(integer_of_uint32(y), (32))) }; void);
+         (assert { (JC_495: lt_int(integer_of_uint32(y_0), (32))) }; void);
         (C_108:
         begin
           (__retres_16 := (C_107:
                           (safe_uint32_of_integer_ (C_106:
-                                                   ((lsl (integer_of_uint32 x_0)) 
-                                                    (integer_of_uint32 y))))));
+                                                   ((lsl (integer_of_uint32 x_2)) 
+                                                    (integer_of_uint32 y_0))))));
          !__retres_16 end) end in void); (return := !__retres_16);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_485: true) }
 
 let shift_left_unsigned_unsafe_safety =
- fun (x_0 : uint32) (y : uint32) ->
+ fun (x_2 : uint32) (y_0 : uint32) ->
   { (JC_483:
     ((JC_481: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_482: valid_a(int_P_a_2_alloc_table)))) }
@@ -6921,14 +6922,14 @@ let shift_left_unsigned_unsafe_safety =
      begin
        (let jessie_192 =
        begin
-         [ { } unit { (JC_493: lt_int(integer_of_uint32(y), (32))) } ];
+         [ { } unit { (JC_493: lt_int(integer_of_uint32(y_0), (32))) } ];
         (C_108:
         begin
           (__retres_16 := (C_107:
                           (JC_494:
                           (uint32_of_integer_ (C_106:
-                                              ((lsl (integer_of_uint32 x_0)) 
-                                               (integer_of_uint32 y)))))));
+                                              ((lsl (integer_of_uint32 x_2)) 
+                                               (integer_of_uint32 y_0)))))));
          !__retres_16 end) end in void); (return := !__retres_16);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_489:
@@ -6936,7 +6937,7 @@ let shift_left_unsigned_unsafe_safety =
     and (JC_488: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_left_unsigned_wrong_ensures_default =
- fun (x_33 : uint32) (y_22 : uint32) ->
+ fun (x_35 : uint32) (y_23 : uint32) ->
   { (JC_464:
     ((JC_462: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_463: valid_a(int_P_a_2_alloc_table)))) }
@@ -6953,13 +6954,13 @@ let shift_left_unsigned_wrong_ensures_default =
         begin
           (__retres_15 := (C_102:
                           (safe_uint32_of_integer_ (C_101:
-                                                   ((mul_int (integer_of_uint32 x_33)) (4294967296))))));
+                                                   ((mul_int (integer_of_uint32 x_35)) (4294967296))))));
          !__retres_15 end) end in void); (return := !__retres_15);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_466: true) }
 
 let shift_left_unsigned_wrong_safety =
- fun (x_33 : uint32) (y_22 : uint32) ->
+ fun (x_35 : uint32) (y_23 : uint32) ->
   { (JC_464:
     ((JC_462: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_463: valid_a(int_P_a_2_alloc_table)))) }
@@ -6977,7 +6978,7 @@ let shift_left_unsigned_wrong_safety =
           (__retres_15 := (C_102:
                           (JC_475:
                           (uint32_of_integer_ (C_101:
-                                              ((mul_int (integer_of_uint32 x_33)) (4294967296)))))));
+                                              ((mul_int (integer_of_uint32 x_35)) (4294967296)))))));
          !__retres_15 end) end in void); (return := !__retres_15);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_470:
@@ -6985,7 +6986,7 @@ let shift_left_unsigned_wrong_safety =
     and (JC_469: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_signed_safe_ensures_default =
- fun (x_10 : int32) (y_7 : int32) ->
+ fun (x_12 : int32) (y_8 : int32) ->
   { (JC_582:
     ((JC_580: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_581: valid_a(int_P_a_2_alloc_table)))) }
@@ -6997,7 +6998,7 @@ let shift_right_signed_safe_ensures_default =
      try
       (let jessie_255 =
       begin
-        (if ((lt_int_ (integer_of_int32 y_7)) (0))
+        (if ((lt_int_ (integer_of_int32 y_8)) (0))
         then
          (let jessie_246 =
          (C_140:
@@ -7006,7 +7007,7 @@ let shift_right_signed_safe_ensures_default =
            void); (raise (Return_label_exc void)) end) in void)
         else
          (if ((ge_int_ (integer_of_uint32 (C_139:
-                                          (safe_uint32_of_integer_ (integer_of_int32 y_7))))) (32))
+                                          (safe_uint32_of_integer_ (integer_of_int32 y_8))))) (32))
          then
           (let jessie_249 =
           (C_138:
@@ -7019,14 +7020,15 @@ let shift_right_signed_safe_ensures_default =
           begin
             (let jessie_251 =
             begin
-              (assert { (JC_596: ge_int(integer_of_int32(y_7), (0))) }; void);
-             (assert { (JC_597: lt_int(integer_of_int32(y_7), (32))) }; void);
+              (assert { (JC_596: lt_int(integer_of_int32(y_8), (32))) };
+              void);
+             (assert { (JC_597: ge_int(integer_of_int32(y_8), (0))) }; void);
              (C_137:
              begin
                (__retres_21 := (C_136:
                                (safe_int32_of_integer_ (C_135:
-                                                       ((asr (integer_of_int32 x_10)) 
-                                                        (integer_of_int32 y_7))))));
+                                                       ((asr (integer_of_int32 x_12)) 
+                                                        (integer_of_int32 y_8))))));
               !__retres_21 end) end in void); (raise (Return_label_exc void))
           end in void)));
        (C_141:
@@ -7038,7 +7040,7 @@ let shift_right_signed_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_584: true) }
 
 let shift_right_signed_safe_safety =
- fun (x_10 : int32) (y_7 : int32) ->
+ fun (x_12 : int32) (y_8 : int32) ->
   { (JC_582:
     ((JC_580: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_581: valid_a(int_P_a_2_alloc_table)))) }
@@ -7050,7 +7052,7 @@ let shift_right_signed_safe_safety =
      try
       (let jessie_242 =
       begin
-        (if ((lt_int_ (integer_of_int32 y_7)) (0))
+        (if ((lt_int_ (integer_of_int32 y_8)) (0))
         then
          (let jessie_233 =
          (C_140:
@@ -7060,7 +7062,7 @@ let shift_right_signed_safe_safety =
         else
          (if ((ge_int_ (integer_of_uint32 (C_139:
                                           (JC_592:
-                                          (uint32_of_integer_ (integer_of_int32 y_7)))))) (32))
+                                          (uint32_of_integer_ (integer_of_int32 y_8)))))) (32))
          then
           (let jessie_236 =
           (C_138:
@@ -7073,15 +7075,15 @@ let shift_right_signed_safe_safety =
           begin
             (let jessie_238 =
             begin
-              [ { } unit { (JC_593: ge_int(integer_of_int32(y_7), (0))) } ];
-             [ { } unit { (JC_594: lt_int(integer_of_int32(y_7), (32))) } ];
+              [ { } unit { (JC_593: lt_int(integer_of_int32(y_8), (32))) } ];
+             [ { } unit { (JC_594: ge_int(integer_of_int32(y_8), (0))) } ];
              (C_137:
              begin
                (__retres_21 := (C_136:
                                (JC_595:
                                (int32_of_integer_ (C_135:
-                                                  ((asr (integer_of_int32 x_10)) 
-                                                   (integer_of_int32 y_7)))))));
+                                                  ((asr (integer_of_int32 x_12)) 
+                                                   (integer_of_int32 y_8)))))));
               !__retres_21 end) end in void); (raise (Return_label_exc void))
           end in void)));
        (C_141:
@@ -7096,7 +7098,7 @@ let shift_right_signed_safe_safety =
     and (JC_587: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_signed_unsafe_ensures_default =
- fun (x_40 : int32) (y_28 : int32) ->
+ fun (x_0 : int32) (y : int32) ->
   { (JC_561:
     ((JC_559: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_560: valid_a(int_P_a_2_alloc_table)))) }
@@ -7108,20 +7110,20 @@ let shift_right_signed_unsafe_ensures_default =
      begin
        (let jessie_229 =
        begin
-         (assert { (JC_574: ge_int(integer_of_int32(y_28), (0))) }; void);
-        (assert { (JC_575: lt_int(integer_of_int32(y_28), (32))) }; void);
+         (assert { (JC_574: lt_int(integer_of_int32(y), (32))) }; void);
+        (assert { (JC_575: ge_int(integer_of_int32(y), (0))) }; void);
         (C_131:
         begin
           (__retres_20 := (C_130:
                           (safe_int32_of_integer_ (C_129:
-                                                  ((asr (integer_of_int32 x_40)) 
-                                                   (integer_of_int32 y_28))))));
+                                                  ((asr (integer_of_int32 x_0)) 
+                                                   (integer_of_int32 y))))));
          !__retres_20 end) end in void); (return := !__retres_20);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_563: true) }
 
 let shift_right_signed_unsafe_safety =
- fun (x_40 : int32) (y_28 : int32) ->
+ fun (x_0 : int32) (y : int32) ->
   { (JC_561:
     ((JC_559: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_560: valid_a(int_P_a_2_alloc_table)))) }
@@ -7133,15 +7135,15 @@ let shift_right_signed_unsafe_safety =
      begin
        (let jessie_226 =
        begin
-         [ { } unit { (JC_571: ge_int(integer_of_int32(y_28), (0))) } ];
-        [ { } unit { (JC_572: lt_int(integer_of_int32(y_28), (32))) } ];
+         [ { } unit { (JC_571: lt_int(integer_of_int32(y), (32))) } ];
+        [ { } unit { (JC_572: ge_int(integer_of_int32(y), (0))) } ];
         (C_131:
         begin
           (__retres_20 := (C_130:
                           (JC_573:
                           (int32_of_integer_ (C_129:
-                                             ((asr (integer_of_int32 x_40)) 
-                                              (integer_of_int32 y_28)))))));
+                                             ((asr (integer_of_int32 x_0)) 
+                                              (integer_of_int32 y)))))));
          !__retres_20 end) end in void); (return := !__retres_20);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_567:
@@ -7149,7 +7151,7 @@ let shift_right_signed_unsafe_safety =
     and (JC_566: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_signed_wrong_1_ensures_default =
- fun (x_21 : int32) (y_14 : int32) ->
+ fun (x_23 : int32) (y_15 : int32) ->
   { (JC_521:
     ((JC_519: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_520: valid_a(int_P_a_2_alloc_table)))) }
@@ -7166,14 +7168,14 @@ let shift_right_signed_wrong_1_ensures_default =
         begin
           (__retres_18 := (C_119:
                           (safe_int32_of_integer_ (C_118:
-                                                  ((asr (integer_of_int32 x_21)) 
+                                                  ((asr (integer_of_int32 x_23)) 
                                                    (neg_int (1)))))));
          !__retres_18 end) end in void); (return := !__retres_18);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_523: true) }
 
 let shift_right_signed_wrong_1_safety =
- fun (x_21 : int32) (y_14 : int32) ->
+ fun (x_23 : int32) (y_15 : int32) ->
   { (JC_521:
     ((JC_519: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_520: valid_a(int_P_a_2_alloc_table)))) }
@@ -7191,7 +7193,7 @@ let shift_right_signed_wrong_1_safety =
           (__retres_18 := (C_119:
                           (JC_532:
                           (int32_of_integer_ (C_118:
-                                             ((asr (integer_of_int32 x_21)) 
+                                             ((asr (integer_of_int32 x_23)) 
                                               (neg_int (1))))))));
          !__retres_18 end) end in void); (return := !__retres_18);
       (raise Return) end); absurd  end with Return -> !return end))
@@ -7200,7 +7202,7 @@ let shift_right_signed_wrong_1_safety =
     and (JC_526: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_signed_wrong_2_ensures_default =
- fun (x_29 : int32) (y_20 : int32) ->
+ fun (x_31 : int32) (y_21 : int32) ->
   { (JC_540:
     ((JC_538: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_539: valid_a(int_P_a_2_alloc_table)))) }
@@ -7218,13 +7220,13 @@ let shift_right_signed_wrong_2_ensures_default =
           (__retres_19 := (C_124:
                           (safe_int32_of_integer_ (C_123:
                                                   (JC_554:
-                                                  ((div_int (integer_of_int32 x_29)) (4294967296)))))));
+                                                  ((div_int (integer_of_int32 x_31)) (4294967296)))))));
          !__retres_19 end) end in void); (return := !__retres_19);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_542: true) }
 
 let shift_right_signed_wrong_2_safety =
- fun (x_29 : int32) (y_20 : int32) ->
+ fun (x_31 : int32) (y_21 : int32) ->
   { (JC_540:
     ((JC_538: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_539: valid_a(int_P_a_2_alloc_table)))) }
@@ -7243,7 +7245,7 @@ let shift_right_signed_wrong_2_safety =
                           (JC_552:
                           (int32_of_integer_ (C_123:
                                              (JC_551:
-                                             ((div_int_ (integer_of_int32 x_29)) (4294967296))))))));
+                                             ((div_int_ (integer_of_int32 x_31)) (4294967296))))))));
          !__retres_19 end) end in void); (return := !__retres_19);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_546:
@@ -7251,7 +7253,7 @@ let shift_right_signed_wrong_2_safety =
     and (JC_545: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_unsigned_safe_ensures_default =
- fun (x_38 : uint32) (y_27 : uint32) ->
+ fun (x_40 : uint32) (y_28 : uint32) ->
   { (JC_644:
     ((JC_642: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_643: valid_a(int_P_a_2_alloc_table)))) }
@@ -7263,7 +7265,7 @@ let shift_right_unsigned_safe_ensures_default =
      try
       (let jessie_283 =
       begin
-        (if ((ge_int_ (integer_of_uint32 y_27)) (32))
+        (if ((ge_int_ (integer_of_uint32 y_28)) (32))
         then
          (let jessie_279 =
          (C_158:
@@ -7276,14 +7278,14 @@ let shift_right_unsigned_safe_ensures_default =
          begin
            (let jessie_281 =
            begin
-             (assert { (JC_656: lt_int(integer_of_uint32(y_27), (32))) };
+             (assert { (JC_656: lt_int(integer_of_uint32(y_28), (32))) };
              void);
             (C_157:
             begin
               (__retres_24 := (C_156:
                               (safe_uint32_of_integer_ (C_155:
-                                                       ((lsr (integer_of_uint32 x_38)) 
-                                                        (integer_of_uint32 y_27))))));
+                                                       ((lsr (integer_of_uint32 x_40)) 
+                                                        (integer_of_uint32 y_28))))));
              !__retres_24 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_8 ->
@@ -7291,7 +7293,7 @@ let shift_right_unsigned_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_646: true) }
 
 let shift_right_unsigned_safe_safety =
- fun (x_38 : uint32) (y_27 : uint32) ->
+ fun (x_40 : uint32) (y_28 : uint32) ->
   { (JC_644:
     ((JC_642: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_643: valid_a(int_P_a_2_alloc_table)))) }
@@ -7303,7 +7305,7 @@ let shift_right_unsigned_safe_safety =
      try
       (let jessie_275 =
       begin
-        (if ((ge_int_ (integer_of_uint32 y_27)) (32))
+        (if ((ge_int_ (integer_of_uint32 y_28)) (32))
         then
          (let jessie_271 =
          (C_158:
@@ -7316,14 +7318,14 @@ let shift_right_unsigned_safe_safety =
          begin
            (let jessie_273 =
            begin
-             [ { } unit { (JC_654: lt_int(integer_of_uint32(y_27), (32))) } ];
+             [ { } unit { (JC_654: lt_int(integer_of_uint32(y_28), (32))) } ];
             (C_157:
             begin
               (__retres_24 := (C_156:
                               (JC_655:
                               (uint32_of_integer_ (C_155:
-                                                  ((lsr (integer_of_uint32 x_38)) 
-                                                   (integer_of_uint32 y_27)))))));
+                                                  ((lsr (integer_of_uint32 x_40)) 
+                                                   (integer_of_uint32 y_28)))))));
              !__retres_24 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_8 ->
@@ -7334,7 +7336,7 @@ let shift_right_unsigned_safe_safety =
     and (JC_649: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_unsigned_unsafe_ensures_default =
- fun (x_28 : uint32) (y_19 : uint32) ->
+ fun (x_30 : uint32) (y_20 : uint32) ->
   { (JC_625:
     ((JC_623: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_624: valid_a(int_P_a_2_alloc_table)))) }
@@ -7346,19 +7348,19 @@ let shift_right_unsigned_unsafe_ensures_default =
      begin
        (let jessie_267 =
        begin
-         (assert { (JC_637: lt_int(integer_of_uint32(y_19), (32))) }; void);
+         (assert { (JC_637: lt_int(integer_of_uint32(y_20), (32))) }; void);
         (C_152:
         begin
           (__retres_23 := (C_151:
                           (safe_uint32_of_integer_ (C_150:
-                                                   ((lsr (integer_of_uint32 x_28)) 
-                                                    (integer_of_uint32 y_19))))));
+                                                   ((lsr (integer_of_uint32 x_30)) 
+                                                    (integer_of_uint32 y_20))))));
          !__retres_23 end) end in void); (return := !__retres_23);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_627: true) }
 
 let shift_right_unsigned_unsafe_safety =
- fun (x_28 : uint32) (y_19 : uint32) ->
+ fun (x_30 : uint32) (y_20 : uint32) ->
   { (JC_625:
     ((JC_623: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_624: valid_a(int_P_a_2_alloc_table)))) }
@@ -7370,14 +7372,14 @@ let shift_right_unsigned_unsafe_safety =
      begin
        (let jessie_264 =
        begin
-         [ { } unit { (JC_635: lt_int(integer_of_uint32(y_19), (32))) } ];
+         [ { } unit { (JC_635: lt_int(integer_of_uint32(y_20), (32))) } ];
         (C_152:
         begin
           (__retres_23 := (C_151:
                           (JC_636:
                           (uint32_of_integer_ (C_150:
-                                              ((lsr (integer_of_uint32 x_28)) 
-                                               (integer_of_uint32 y_19)))))));
+                                              ((lsr (integer_of_uint32 x_30)) 
+                                               (integer_of_uint32 y_20)))))));
          !__retres_23 end) end in void); (return := !__retres_23);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_631:
@@ -7385,7 +7387,7 @@ let shift_right_unsigned_unsafe_safety =
     and (JC_630: valid_a(int_P_a_2_alloc_table)))) }
 
 let shift_right_unsigned_wrong_ensures_default =
- fun (x_18 : uint32) (y_13 : uint32) ->
+ fun (x_20 : uint32) (y_14 : uint32) ->
   { (JC_604:
     ((JC_602: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_603: valid_a(int_P_a_2_alloc_table)))) }
@@ -7403,13 +7405,13 @@ let shift_right_unsigned_wrong_ensures_default =
           (__retres_22 := (C_146:
                           (safe_uint32_of_integer_ (C_145:
                                                    (JC_618:
-                                                   ((div_int (integer_of_uint32 x_18)) (4294967296)))))));
+                                                   ((div_int (integer_of_uint32 x_20)) (4294967296)))))));
          !__retres_22 end) end in void); (return := !__retres_22);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_606: true) }
 
 let shift_right_unsigned_wrong_safety =
- fun (x_18 : uint32) (y_13 : uint32) ->
+ fun (x_20 : uint32) (y_14 : uint32) ->
   { (JC_604:
     ((JC_602: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_603: valid_a(int_P_a_2_alloc_table)))) }
@@ -7428,7 +7430,7 @@ let shift_right_unsigned_wrong_safety =
                           (JC_616:
                           (uint32_of_integer_ (C_145:
                                               (JC_615:
-                                              ((div_int_ (integer_of_uint32 x_18)) (4294967296))))))));
+                                              ((div_int_ (integer_of_uint32 x_20)) (4294967296))))))));
          !__retres_22 end) end in void); (return := !__retres_22);
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_610:
@@ -7436,7 +7438,7 @@ let shift_right_unsigned_wrong_safety =
     and (JC_609: valid_a(int_P_a_2_alloc_table)))) }
 
 let signed_overflow_safe_ensures_default =
- fun (x_19 : int32) ->
+ fun (x_21 : int32) ->
   { (JC_1033:
     ((JC_1031: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1032: valid_a(int_P_a_2_alloc_table)))) }
@@ -7448,7 +7450,7 @@ let signed_overflow_safe_ensures_default =
      try
       (let jessie_503 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_19)) (0))
+        (if ((lt_int_ (integer_of_int32 x_21)) (0))
         then
          (let jessie_499 =
          (C_285:
@@ -7456,7 +7458,7 @@ let signed_overflow_safe_ensures_default =
            (let jessie_498 =
            (__retres_41 := (C_284:
                            (safe_int32_of_integer_ (C_283:
-                                                   ((add_int (integer_of_int32 x_19)) (2147483647)))))) in
+                                                   ((add_int (integer_of_int32 x_21)) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
          (let jessie_502 =
@@ -7465,7 +7467,7 @@ let signed_overflow_safe_ensures_default =
            (let jessie_501 =
            (__retres_41 := (C_281:
                            (safe_int32_of_integer_ (C_280:
-                                                   ((sub_int (integer_of_int32 x_19)) (2147483647)))))) in
+                                                   ((sub_int (integer_of_int32 x_21)) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_13 ->
@@ -7473,7 +7475,7 @@ let signed_overflow_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_1035: true) }
 
 let signed_overflow_safe_safety =
- fun (x_19 : int32) ->
+ fun (x_21 : int32) ->
   { (JC_1033:
     ((JC_1031: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1032: valid_a(int_P_a_2_alloc_table)))) }
@@ -7485,7 +7487,7 @@ let signed_overflow_safe_safety =
      try
       (let jessie_495 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_19)) (0))
+        (if ((lt_int_ (integer_of_int32 x_21)) (0))
         then
          (let jessie_491 =
          (C_285:
@@ -7494,7 +7496,7 @@ let signed_overflow_safe_safety =
            (__retres_41 := (C_284:
                            (JC_1043:
                            (int32_of_integer_ (C_283:
-                                              ((add_int (integer_of_int32 x_19)) (2147483647))))))) in
+                                              ((add_int (integer_of_int32 x_21)) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
          (let jessie_494 =
@@ -7504,7 +7506,7 @@ let signed_overflow_safe_safety =
            (__retres_41 := (C_281:
                            (JC_1044:
                            (int32_of_integer_ (C_280:
-                                              ((sub_int (integer_of_int32 x_19)) (2147483647))))))) in
+                                              ((sub_int (integer_of_int32 x_21)) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_13 ->
@@ -7515,9 +7517,9 @@ let signed_overflow_safe_safety =
     and (JC_1038: valid_a(int_P_a_2_alloc_table)))) }
 
 let signed_overflow_unsafe_ensures_default =
- fun (x_12 : int32) ->
+ fun (x_14 : int32) ->
   { (JC_1016:
-    ((JC_1013: le_int(integer_of_int32(x_12), sub_int((2147483647), (10))))
+    ((JC_1013: le_int(integer_of_int32(x_14), sub_int((2147483647), (10))))
     and ((JC_1014: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1015: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -7530,14 +7532,14 @@ let signed_overflow_unsafe_ensures_default =
        (let jessie_487 =
        (__retres_40 := (C_276:
                        (safe_int32_of_integer_ (C_275:
-                                               ((add_int (integer_of_int32 x_12)) (10)))))) in
+                                               ((add_int (integer_of_int32 x_14)) (10)))))) in
        void); (return := !__retres_40); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_1018: true) }
 
 let signed_overflow_unsafe_safety =
- fun (x_12 : int32) ->
+ fun (x_14 : int32) ->
   { (JC_1016:
-    ((JC_1013: le_int(integer_of_int32(x_12), sub_int((2147483647), (10))))
+    ((JC_1013: le_int(integer_of_int32(x_14), sub_int((2147483647), (10))))
     and ((JC_1014: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_1015: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -7551,7 +7553,7 @@ let signed_overflow_unsafe_safety =
        (__retres_40 := (C_276:
                        (JC_1026:
                        (int32_of_integer_ (C_275:
-                                          ((add_int (integer_of_int32 x_12)) (10))))))) in
+                                          ((add_int (integer_of_int32 x_14)) (10))))))) in
        void); (return := !__retres_40); (raise Return) end)); absurd  end
    with Return -> !return end))
   { (JC_1022:
@@ -7559,7 +7561,7 @@ let signed_overflow_unsafe_safety =
     and (JC_1021: valid_a(int_P_a_2_alloc_table)))) }
 
 let signed_overflow_wrong_ensures_default =
- fun (x_8 : int32) ->
+ fun (x_10 : int32) ->
   { (JC_995:
     ((JC_993: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_994: valid_a(int_P_a_2_alloc_table)))) }
@@ -7571,7 +7573,7 @@ let signed_overflow_wrong_ensures_default =
      try
       (let jessie_481 =
       begin
-        (if ((gt_int_ (integer_of_int32 x_8)) (0))
+        (if ((gt_int_ (integer_of_int32 x_10)) (0))
         then
          (let jessie_477 =
          (C_273:
@@ -7579,7 +7581,7 @@ let signed_overflow_wrong_ensures_default =
            (let jessie_476 =
            (__retres_39 := (C_272:
                            (safe_int32_of_integer_ (C_271:
-                                                   ((add_int (integer_of_int32 x_8)) (2147483647)))))) in
+                                                   ((add_int (integer_of_int32 x_10)) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
          (let jessie_480 =
@@ -7593,7 +7595,7 @@ let signed_overflow_wrong_ensures_default =
                                                               (safe_int32_of_integer_ 
                                                                (C_266:
                                                                ((sub_int 
-                                                                 (integer_of_int32 x_8)) (1))))))) (2147483647)))))) in
+                                                                 (integer_of_int32 x_10)) (1))))))) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_12 ->
@@ -7601,7 +7603,7 @@ let signed_overflow_wrong_ensures_default =
     absurd  end with Return -> !return end)) { (JC_997: true) }
 
 let signed_overflow_wrong_safety =
- fun (x_8 : int32) ->
+ fun (x_10 : int32) ->
   { (JC_995:
     ((JC_993: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_994: valid_a(int_P_a_2_alloc_table)))) }
@@ -7613,7 +7615,7 @@ let signed_overflow_wrong_safety =
      try
       (let jessie_473 =
       begin
-        (if ((gt_int_ (integer_of_int32 x_8)) (0))
+        (if ((gt_int_ (integer_of_int32 x_10)) (0))
         then
          (let jessie_469 =
          (C_273:
@@ -7622,7 +7624,7 @@ let signed_overflow_wrong_safety =
            (__retres_39 := (C_272:
                            (JC_1005:
                            (int32_of_integer_ (C_271:
-                                              ((add_int (integer_of_int32 x_8)) (2147483647))))))) in
+                                              ((add_int (integer_of_int32 x_10)) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
          (let jessie_472 =
@@ -7637,7 +7639,7 @@ let signed_overflow_wrong_safety =
                                                          (JC_1006:
                                                          (int32_of_integer_ 
                                                           (C_266:
-                                                          ((sub_int (integer_of_int32 x_8)) (1)))))))) (2147483647))))))) in
+                                                          ((sub_int (integer_of_int32 x_10)) (1)))))))) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_12 ->
@@ -7709,7 +7711,7 @@ let stack_access_wrong_safety =
     and (JC_750: valid_a(int_P_a_2_alloc_table)))) }
 
 let udiv0_safe_ensures_default =
- fun (x_25 : uint32) (y_17 : uint32) ->
+ fun (x_27 : uint32) (y_18 : uint32) ->
   { (JC_268:
     ((JC_266: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_267: valid_a(int_P_a_2_alloc_table)))) }
@@ -7721,7 +7723,7 @@ let udiv0_safe_ensures_default =
      try
       (let jessie_93 =
       begin
-        (if ((eq_int_ (integer_of_uint32 y_17)) (0))
+        (if ((eq_int_ (integer_of_uint32 y_18)) (0))
         then
          (let jessie_89 =
          (C_39:
@@ -7736,8 +7738,8 @@ let udiv0_safe_ensures_default =
            (__retres_6 := (C_37:
                           (safe_uint32_of_integer_ (C_36:
                                                    (JC_280:
-                                                   ((div_int (integer_of_uint32 x_25)) 
-                                                    (integer_of_uint32 y_17))))))) in
+                                                   ((div_int (integer_of_uint32 x_27)) 
+                                                    (integer_of_uint32 y_18))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_3 ->
@@ -7745,7 +7747,7 @@ let udiv0_safe_ensures_default =
     absurd  end with Return -> !return end)) { (JC_270: true) }
 
 let udiv0_safe_safety =
- fun (x_25 : uint32) (y_17 : uint32) ->
+ fun (x_27 : uint32) (y_18 : uint32) ->
   { (JC_268:
     ((JC_266: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_267: valid_a(int_P_a_2_alloc_table)))) }
@@ -7757,7 +7759,7 @@ let udiv0_safe_safety =
      try
       (let jessie_85 =
       begin
-        (if ((eq_int_ (integer_of_uint32 y_17)) (0))
+        (if ((eq_int_ (integer_of_uint32 y_18)) (0))
         then
          (let jessie_81 =
          (C_39:
@@ -7773,8 +7775,8 @@ let udiv0_safe_safety =
                           (JC_279:
                           (uint32_of_integer_ (C_36:
                                               (JC_278:
-                                              ((div_int_ (integer_of_uint32 x_25)) 
-                                               (integer_of_uint32 y_17)))))))) in
+                                              ((div_int_ (integer_of_uint32 x_27)) 
+                                               (integer_of_uint32 y_18)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_3 ->
@@ -7785,9 +7787,9 @@ let udiv0_safe_safety =
     and (JC_273: valid_a(int_P_a_2_alloc_table)))) }
 
 let udiv0_unsafe_ensures_default =
- fun (x_16 : uint32) (y_11 : uint32) ->
+ fun (x_18 : uint32) (y_12 : uint32) ->
   { (JC_249:
-    ((JC_246: neq_int(integer_of_uint32(y_11), (0)))
+    ((JC_246: neq_int(integer_of_uint32(y_12), (0)))
     and ((JC_247: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_248: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -7801,15 +7803,15 @@ let udiv0_unsafe_ensures_default =
        (__retres_5 := (C_32:
                       (safe_uint32_of_integer_ (C_31:
                                                (JC_261:
-                                               ((div_int (integer_of_uint32 x_16)) 
-                                                (integer_of_uint32 y_11))))))) in
+                                               ((div_int (integer_of_uint32 x_18)) 
+                                                (integer_of_uint32 y_12))))))) in
        void); (return := !__retres_5); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_251: true) }
 
 let udiv0_unsafe_safety =
- fun (x_16 : uint32) (y_11 : uint32) ->
+ fun (x_18 : uint32) (y_12 : uint32) ->
   { (JC_249:
-    ((JC_246: neq_int(integer_of_uint32(y_11), (0)))
+    ((JC_246: neq_int(integer_of_uint32(y_12), (0)))
     and ((JC_247: valid___string_abc(char_P___string_abc_1_alloc_table))
         and (JC_248: valid_a(int_P_a_2_alloc_table))))) }
   (init:
@@ -7824,8 +7826,8 @@ let udiv0_unsafe_safety =
                       (JC_260:
                       (uint32_of_integer_ (C_31:
                                           (JC_259:
-                                          ((div_int_ (integer_of_uint32 x_16)) 
-                                           (integer_of_uint32 y_11)))))))) in
+                                          ((div_int_ (integer_of_uint32 x_18)) 
+                                           (integer_of_uint32 y_12)))))))) in
        void); (return := !__retres_5); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_255:
@@ -7833,7 +7835,7 @@ let udiv0_unsafe_safety =
     and (JC_254: valid_a(int_P_a_2_alloc_table)))) }
 
 let udiv0_wrong_ensures_default =
- fun (x_7 : uint32) (y_6 : uint32) ->
+ fun (x_9 : uint32) (y_7 : uint32) ->
   { (JC_228:
     ((JC_226: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_227: valid_a(int_P_a_2_alloc_table)))) }
@@ -7848,12 +7850,12 @@ let udiv0_wrong_ensures_default =
        (__retres_4 := (C_28:
                       (safe_uint32_of_integer_ (C_27:
                                                (JC_240:
-                                               ((div_int (integer_of_uint32 x_7)) (0))))))) in
+                                               ((div_int (integer_of_uint32 x_9)) (0))))))) in
        void); (return := !__retres_4); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_230: true) }
 
 let udiv0_wrong_safety =
- fun (x_7 : uint32) (y_6 : uint32) ->
+ fun (x_9 : uint32) (y_7 : uint32) ->
   { (JC_228:
     ((JC_226: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_227: valid_a(int_P_a_2_alloc_table)))) }
@@ -7869,7 +7871,7 @@ let udiv0_wrong_safety =
                       (JC_239:
                       (uint32_of_integer_ (C_27:
                                           (JC_238:
-                                          ((div_int_ (integer_of_uint32 x_7)) (0)))))))) in
+                                          ((div_int_ (integer_of_uint32 x_9)) (0)))))))) in
        void); (return := !__retres_4); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_234:

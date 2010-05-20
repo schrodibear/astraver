@@ -49,15 +49,15 @@ behavior b2:
 }
 
 integer f2(integer x, integer y)
-  requires (C_8 : ((x * y) < 0));
+  requires (C_11 : ((x * y) < 0));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_8 : true);
 behavior b1:
   assumes (x >= 0);
-  ensures (C_10 : true);
+  ensures (C_9 : true);
 behavior b2:
   assumes (y >= 0);
-  ensures (C_11 : true);
+  ensures (C_10 : true);
 {  
    (check (disjoint_behaviors : (! ((x >= 0) && (y >= 0)))));
    

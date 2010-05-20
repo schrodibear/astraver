@@ -58,10 +58,10 @@ invariant valid_aaa :
 ((\offset_min(aaa) <= 0) && (\offset_max(aaa) >= 0))
 
 int32 f(S[0] v_x)
-  requires (C_43 : ((C_44 : (\offset_min(v_x.s) <= 0)) &&
-                     (C_45 : (\offset_max(v_x.s) >= 0))));
+  requires (C_44 : ((C_45 : (\offset_min(v_x.s) <= 0)) &&
+                     (C_46 : (\offset_max(v_x.s) >= 0))));
 behavior default:
-  ensures (C_46 : true);
+  ensures (C_43 : true);
 {  
    (var S[0] x);
    

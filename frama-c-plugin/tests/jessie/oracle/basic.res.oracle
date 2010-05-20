@@ -53,12 +53,13 @@ int32 max(int32 x, int32 y)
 behavior default:
   ensures (C_5 : true);
 behavior result_ge_x:
-  ensures (C_6 : (\result >= x));
+  ensures (C_6 : (\result >= \at(x,Old)));
 behavior result_ge_y:
-  ensures (C_7 : (\result >= y));
+  ensures (C_7 : (\result >= \at(y,Old)));
 behavior result_is_lub:
   ensures (C_8 : (\forall int32 z;
-                   (((z >= x) && (z >= y)) ==> (z >= \result))));
+                   (((z >= \at(x,Old)) && (z >= \at(y,Old))) ==>
+                     (z >= \result))));
 {  
    (var int32 tmp);
    
@@ -70,7 +71,7 @@ behavior result_is_lub:
 
 unit abs1(int_P[..] p)
 behavior default:
-  ensures (C_15 : (p.int_M >= 0));
+  ensures (C_15 : (\at(p,Old).int_M >= 0));
 {  
    {  (if ((C_14 : p.int_M) < 0) then (C_13 : ((C_12 : p.int_M) = (C_11 : (
                                                                   (C_10 : 
@@ -295,14 +296,14 @@ parameter abs1 :
   int_P_int_M_p_1:(int_P, int32) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_28: ge_int(integer_of_int32(select(int_P_int_M_p_1, p)), (0))) }
+    { (JC_28: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
 
 parameter abs1_requires :
  p:int_P pointer ->
   int_P_int_M_p_1:(int_P, int32) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_28: ge_int(integer_of_int32(select(int_P_int_M_p_1, p)), (0))) }
+    { (JC_28: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -464,11 +465,11 @@ parameter max :
    { } int32
    { ((JC_22:
       (forall z:int32.
-       ((ge_int(integer_of_int32(z), integer_of_int32(x))
-        and ge_int(integer_of_int32(z), integer_of_int32(y))) ->
+       ((ge_int(integer_of_int32(z), integer_of_int32(x@))
+        and ge_int(integer_of_int32(z), integer_of_int32(y@))) ->
         ge_int(integer_of_int32(z), integer_of_int32(result)))))
-     and ((JC_20: ge_int(integer_of_int32(result), integer_of_int32(y)))
-         and (JC_18: ge_int(integer_of_int32(result), integer_of_int32(x))))) }
+     and ((JC_20: ge_int(integer_of_int32(result), integer_of_int32(y@)))
+         and (JC_18: ge_int(integer_of_int32(result), integer_of_int32(x@))))) }
 
 parameter max_requires :
  x:int32 ->
@@ -476,11 +477,11 @@ parameter max_requires :
    { } int32
    { ((JC_22:
       (forall z:int32.
-       ((ge_int(integer_of_int32(z), integer_of_int32(x))
-        and ge_int(integer_of_int32(z), integer_of_int32(y))) ->
+       ((ge_int(integer_of_int32(z), integer_of_int32(x@))
+        and ge_int(integer_of_int32(z), integer_of_int32(y@))) ->
         ge_int(integer_of_int32(z), integer_of_int32(result)))))
-     and ((JC_20: ge_int(integer_of_int32(result), integer_of_int32(y)))
-         and (JC_18: ge_int(integer_of_int32(result), integer_of_int32(x))))) }
+     and ((JC_20: ge_int(integer_of_int32(result), integer_of_int32(y@)))
+         and (JC_18: ge_int(integer_of_int32(result), integer_of_int32(x@))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -506,7 +507,7 @@ let abs1_ensures_default =
       (let jessie_37 = p in
       (((safe_upd_ int_P_int_M_p_1) jessie_37) jessie_34))) in void))
      else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_27: ge_int(integer_of_int32(select(int_P_int_M_p_1, p)), (0))) }
+  { (JC_27: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
 
 let abs1_safety =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
@@ -591,7 +592,7 @@ let max_ensures_result_ge_x =
        then (C_4: begin   (tmp := x); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_17: ge_int(integer_of_int32(result), integer_of_int32(x))) }
+  { (JC_17: ge_int(integer_of_int32(result), integer_of_int32(x@))) }
 
 let max_ensures_result_ge_y =
  fun (x : int32) (y : int32) ->
@@ -607,7 +608,7 @@ let max_ensures_result_ge_y =
        then (C_4: begin   (tmp := x); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_19: ge_int(integer_of_int32(result), integer_of_int32(y))) }
+  { (JC_19: ge_int(integer_of_int32(result), integer_of_int32(y@))) }
 
 let max_ensures_result_is_lub =
  fun (x : int32) (y : int32) ->
@@ -625,8 +626,8 @@ let max_ensures_result_is_lub =
       (raise Return) end); absurd  end with Return -> !return end))
   { (JC_21:
     (forall z:int32.
-     ((ge_int(integer_of_int32(z), integer_of_int32(x))
-      and ge_int(integer_of_int32(z), integer_of_int32(y))) ->
+     ((ge_int(integer_of_int32(z), integer_of_int32(x@))
+      and ge_int(integer_of_int32(z), integer_of_int32(y@))) ->
       ge_int(integer_of_int32(z), integer_of_int32(result))))) }
 
 let max_safety =

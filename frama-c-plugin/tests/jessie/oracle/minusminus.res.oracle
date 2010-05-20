@@ -30,9 +30,9 @@ tag void_P = {
 type void_P = [void_P]
 
 unit f(char_P[..] p)
-  requires (C_3 : (p.char_M == 1));
+  requires (C_4 : (p.char_M == 1));
 behavior default:
-  ensures (C_4 : (p.char_M != 0));
+  ensures (C_3 : (\at(p,Old).char_M != 0));
 {  
    {  (C_2 : (p = (C_1 : (p - 1))));
       
@@ -272,13 +272,13 @@ parameter f :
  p:char_P pointer ->
   char_P_char_M_p_1:(char_P, int8) memory ->
    { } unit
-   { (JC_6: neq_int(integer_of_int8(select(char_P_char_M_p_1, p)), (0))) }
+   { (JC_6: neq_int(integer_of_int8(select(char_P_char_M_p_1, p@)), (0))) }
 
 parameter f_requires :
  p:char_P pointer ->
   char_P_char_M_p_1:(char_P, int8) memory ->
    { (JC_1: eq_int(integer_of_int8(select(char_P_char_M_p_1, p)), (1)))} unit
-   { (JC_6: neq_int(integer_of_int8(select(char_P_char_M_p_1, p)), (0))) }
+   { (JC_6: neq_int(integer_of_int8(select(char_P_char_M_p_1, p@)), (0))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -300,7 +300,7 @@ let f_ensures_default =
        (let jessie_4 =
        (mutable_p := (C_1: ((shift !mutable_p) (neg_int (1))))) in void);
       (raise Return) end); (raise Return) end with Return -> void end))
-  { (JC_5: neq_int(integer_of_int8(select(char_P_char_M_p_1, p)), (0))) }
+  { (JC_5: neq_int(integer_of_int8(select(char_P_char_M_p_1, p@)), (0))) }
 
 let f_safety =
  fun (p : char_P pointer) (char_P_char_M_p_1 : (char_P, int8) memory) ->

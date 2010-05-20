@@ -33,14 +33,14 @@ tag void_P = {
 type void_P = [void_P]
 
 unit negate(int_P[..] t, integer n)
-  requires (C_16 : ((C_17 : (n >= 0)) &&
-                     ((C_19 : (\offset_min(t) <= 0)) &&
-                       (C_20 : (\offset_max(t) >= (n - 1))))));
+  requires (C_17 : ((C_18 : (n >= 0)) &&
+                     ((C_20 : (\offset_min(t) <= 0)) &&
+                       (C_21 : (\offset_max(t) >= (n - 1))))));
 behavior default:
   assigns (t + [0..(n - 1)]).int_M;
-  ensures (C_21 : (\forall integer k_0;
-                    (((0 <= k_0) && (k_0 < n)) ==>
-                      ((t + k_0).int_M == (- \old((t + k_0).int_M))))));
+  ensures (C_16 : (\forall integer k_0;
+                    (((0 <= k_0) && (k_0 < \at(n,Old))) ==>
+                      ((\at(t,Old) + k_0).int_M == (- \old((t + k_0).int_M))))));
 {  
    (var integer i);
    
@@ -394,8 +394,8 @@ parameter negate :
      { (JC_16:
        ((JC_14:
         (forall k_0:int.
-         ((le_int((0), k_0) and lt_int(k_0, n)) ->
-          eq_int(select(int_P_int_M_t_1, shift(t, k_0)),
+         ((le_int((0), k_0) and lt_int(k_0, n@)) ->
+          eq_int(select(int_P_int_M_t_1, shift(t@, k_0)),
           neg_int(select(int_P_int_M_t_1@, shift(t@, k_0@)))))))
        and (JC_15:
            not_assigns(int_P_t_1_alloc_table@, int_P_int_M_t_1@,
@@ -416,8 +416,8 @@ parameter negate_requires :
      { (JC_16:
        ((JC_14:
         (forall k_0:int.
-         ((le_int((0), k_0) and lt_int(k_0, n)) ->
-          eq_int(select(int_P_int_M_t_1, shift(t, k_0)),
+         ((le_int((0), k_0) and lt_int(k_0, n@)) ->
+          eq_int(select(int_P_int_M_t_1, shift(t@, k_0)),
           neg_int(select(int_P_int_M_t_1@, shift(t@, k_0@)))))))
        and (JC_15:
            not_assigns(int_P_t_1_alloc_table@, int_P_int_M_t_1@,
@@ -492,8 +492,8 @@ let negate_ensures_default =
   { (JC_13:
     ((JC_11:
      (forall k_0:int.
-      ((le_int((0), k_0) and lt_int(k_0, n)) ->
-       eq_int(select(int_P_int_M_t_1, shift(t, k_0)),
+      ((le_int((0), k_0) and lt_int(k_0, n@)) ->
+       eq_int(select(int_P_int_M_t_1, shift(t@, k_0)),
        neg_int(select(int_P_int_M_t_1@, shift(t@, k_0@)))))))
     and (JC_12:
         not_assigns(int_P_t_1_alloc_table@, int_P_int_M_t_1@,

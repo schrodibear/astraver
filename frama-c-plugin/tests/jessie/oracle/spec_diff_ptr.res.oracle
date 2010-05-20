@@ -38,9 +38,9 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 m2(int_P[..] x, int_P[..] y)
-  requires (C_4 : ((x - y) > 0));
+  requires (C_5 : ((x - y) > 0));
 behavior default:
-  ensures (C_5 : (\result > 0));
+  ensures (C_4 : (\result > 0));
 {  
    (var int32 __retres);
    

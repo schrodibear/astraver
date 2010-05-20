@@ -52,9 +52,9 @@ behavior default:
 }
 
 unit f2()
-  requires (C_6 : (x == 0));
+  requires (C_7 : (x == 0));
 behavior default:
-  ensures (C_7 : (x == 1));
+  ensures (C_6 : (x == 1));
 {  
    {  (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))));
       
@@ -63,9 +63,9 @@ behavior default:
 }
 
 unit f3()
-  requires (C_11 : (x == 0));
+  requires (C_12 : (x == 0));
 behavior default:
-  ensures (C_12 : (x == 1));
+  ensures (C_11 : (x == 1));
 {  
    {  (C_10 : (x = (C_9 : ((C_8 : (x + 1)) :> int32))));
       
@@ -74,9 +74,9 @@ behavior default:
 }
 
 unit f4()
-  requires (C_18 : (x == 0));
+  requires (C_21 : (x == 0));
 behavior default:
-  ensures (C_19 : ((C_20 : (x == 1)) && (C_21 : (y == 0))));
+  ensures (C_18 : ((C_19 : (x == 1)) && (C_20 : (y == 0))));
 {  
    (var int32 tmp);
    
@@ -89,9 +89,9 @@ behavior default:
 }
 
 unit f5()
-  requires (C_26 : (x == 0));
+  requires (C_29 : (x == 0));
 behavior default:
-  ensures (C_27 : ((C_28 : (x == 1)) && (C_29 : (y == 1))));
+  ensures (C_26 : ((C_27 : (x == 1)) && (C_28 : (y == 1))));
 {  
    {  
       {  (C_24 : (x = (C_23 : ((C_22 : (x + 1)) :> int32))));
@@ -103,9 +103,9 @@ behavior default:
 }
 
 unit f6()
-  requires (C_33 : (x == 1));
+  requires (C_34 : (x == 1));
 behavior default:
-  ensures (C_34 : (x == 3));
+  ensures (C_33 : (x == 3));
 {  
    {  (C_32 : (x = (C_31 : ((C_30 : (x + 2)) :> int32))));
       
@@ -114,9 +114,9 @@ behavior default:
 }
 
 unit f7a()
-  requires (C_37 : (x == 0));
+  requires (C_38 : (x == 0));
 behavior default:
-  ensures (C_38 : (y == 1));
+  ensures (C_37 : (y == 1));
 {  
    {  (if (x == 0) then (C_36 : (y = 1)) else (C_35 : (y = 2)));
       
@@ -125,9 +125,9 @@ behavior default:
 }
 
 unit f7b()
-  requires (C_41 : (x != 0));
+  requires (C_42 : (x != 0));
 behavior default:
-  ensures (C_42 : (y == 2));
+  ensures (C_41 : (y == 2));
 {  
    {  (if (x == 0) then (C_40 : (y = 1)) else (C_39 : (y = 2)));
       
@@ -141,9 +141,9 @@ invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 2))
 
 unit t1()
-  requires (C_45 : ((t + 0).int_M == 1));
+  requires (C_46 : ((t + 0).int_M == 1));
 behavior default:
-  ensures (C_46 : (y == 1));
+  ensures (C_45 : (y == 1));
 {  
    {  (C_44 : (y = (C_43 : (t + 0).int_M)));
       
@@ -152,9 +152,9 @@ behavior default:
 }
 
 unit t2()
-  requires (C_53 : ((C_54 : (x == 0)) && (C_55 : ((t + 0).int_M == 1))));
+  requires (C_54 : ((C_55 : (x == 0)) && (C_56 : ((t + 0).int_M == 1))));
 behavior default:
-  ensures (C_56 : (y == 1));
+  ensures (C_53 : (y == 1));
 {  
    (var int32 tmp_0);
    
@@ -171,9 +171,9 @@ behavior default:
 }
 
 unit t3()
-  requires (C_62 : ((C_63 : (x == 0)) && (C_64 : ((t + 1).int_M == 1))));
+  requires (C_63 : ((C_64 : (x == 0)) && (C_65 : ((t + 1).int_M == 1))));
 behavior default:
-  ensures (C_65 : (y == 1));
+  ensures (C_62 : (y == 1));
 {  
    {  
       {  (C_59 : (x = (C_58 : ((C_57 : (x + 1)) :> int32))));

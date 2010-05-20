@@ -55,10 +55,10 @@ axiomatic s_axioms {
 }
 
 unit ftest(int_P[0] b)
-  requires (C_6 : ((C_7 : (\offset_min(b) <= 0)) &&
-                    (C_8 : (\offset_max(b) >= 8))));
+  requires (C_7 : ((C_8 : (\offset_min(b) <= 0)) &&
+                    (C_9 : (\offset_max(b) >= 8))));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_6 : true);
 {  
    {  (M : (C_3 : ((C_2 : (C_1 : (b + 4)).int_M) = 5)));
       

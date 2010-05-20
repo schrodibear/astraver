@@ -42,10 +42,11 @@ logic boolean cond3(boolean c1, boolean c2) =
 
 int32 ftest(int32 x, int32 y)
 behavior default:
-  ensures (C_4 : ((C_5 : (((cond1(x) == true) && (cond2(y) == true)) ==>
+  ensures (C_4 : ((C_5 : (((cond1(\at(x,Old)) == true) &&
+                            (cond2(\at(y,Old)) == true)) ==>
                            (\result == 1))) &&
                    (C_6 : (\result ==
-                            (if cond3(cond1(x), cond2(y)) then 1 else 0)))));
+                            (if cond3(cond1(\at(x,Old)), cond2(\at(y,Old))) then 1 else 0)))));
 {  
    (var int32 tmp);
    
@@ -318,12 +319,12 @@ parameter ftest :
    { } int32
    { (JC_10:
      ((JC_8:
-      ((eq_bool(cond1(integer_of_int32(x)), true)
-       and eq_bool(cond2(integer_of_int32(y)), true)) ->
+      ((eq_bool(cond1(integer_of_int32(x@)), true)
+       and eq_bool(cond2(integer_of_int32(y@)), true)) ->
        eq_int(integer_of_int32(result), (1))))
      and (JC_9:
          eq_int(integer_of_int32(result),
-         (if cond3(cond1(integer_of_int32(x)), cond2(integer_of_int32(y)))
+         (if cond3(cond1(integer_of_int32(x@)), cond2(integer_of_int32(y@)))
           then (1) else (0)))))) }
 
 parameter ftest_requires :
@@ -332,12 +333,12 @@ parameter ftest_requires :
    { } int32
    { (JC_10:
      ((JC_8:
-      ((eq_bool(cond1(integer_of_int32(x)), true)
-       and eq_bool(cond2(integer_of_int32(y)), true)) ->
+      ((eq_bool(cond1(integer_of_int32(x@)), true)
+       and eq_bool(cond2(integer_of_int32(y@)), true)) ->
        eq_int(integer_of_int32(result), (1))))
      and (JC_9:
          eq_int(integer_of_int32(result),
-         (if cond3(cond1(integer_of_int32(x)), cond2(integer_of_int32(y)))
+         (if cond3(cond1(integer_of_int32(x@)), cond2(integer_of_int32(y@)))
           then (1) else (0)))))) }
 
 parameter int32_of_integer_ :
@@ -379,12 +380,12 @@ let ftest_ensures_default =
    !return end))
   { (JC_7:
     ((JC_5:
-     ((eq_bool(cond1(integer_of_int32(x)), true)
-      and eq_bool(cond2(integer_of_int32(y)), true)) ->
+     ((eq_bool(cond1(integer_of_int32(x@)), true)
+      and eq_bool(cond2(integer_of_int32(y@)), true)) ->
       eq_int(integer_of_int32(result), (1))))
     and (JC_6:
         eq_int(integer_of_int32(result),
-        (if cond3(cond1(integer_of_int32(x)), cond2(integer_of_int32(y)))
+        (if cond3(cond1(integer_of_int32(x@)), cond2(integer_of_int32(y@)))
          then (1) else (0)))))) }
 
 let ftest_safety =

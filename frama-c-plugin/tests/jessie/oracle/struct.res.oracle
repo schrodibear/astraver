@@ -52,13 +52,13 @@ tag S = {
 type S = [S]
 
 int32 f(T[..] t2)
-  requires (C_13 : (((C_15 : (\offset_min(t2) <= 0)) &&
-                      (C_16 : (\offset_max(t2) >= 0))) &&
-                     (C_17 : (t2.x == 0))));
+  requires (C_18 : (((C_20 : (\offset_min(t2) <= 0)) &&
+                      (C_21 : (\offset_max(t2) >= 0))) &&
+                     (C_22 : (t2.x == 0))));
 behavior default:
   assigns t2.x;
-  ensures (C_18 : (((C_20 : (\result == 1)) && (C_21 : (t2.x == 2))) &&
-                    (C_22 : (t2.y == \old(t2.y)))));
+  ensures (C_13 : (((C_15 : (\result == 1)) && (C_16 : (\at(t2,Old).x == 2))) &&
+                    (C_17 : (\at(t2,Old).y == \old(t2.y)))));
 {  
    (var int32 tmp);
    
@@ -83,10 +83,10 @@ invariant valid_pps :
 ((\offset_min(pps) <= 0) && (\offset_max(pps) >= 0))
 
 int32 g()
-  requires (C_34 : ((C_35 : (\offset_min(ps) <= 0)) &&
-                     (C_36 : (\offset_max(ps) >= 0))));
+  requires (C_35 : ((C_36 : (\offset_min(ps) <= 0)) &&
+                     (C_37 : (\offset_max(ps) >= 0))));
 behavior default:
-  ensures (C_37 : (\result == 1));
+  ensures (C_34 : (\result == 1));
 {  
    (var T[..] p);
    
@@ -692,9 +692,10 @@ parameter f :
        and (JC_32:
            ((JC_30:
             ((JC_27: eq_int(integer_of_int32(result), (1)))
-            and ((JC_28: eq_int(integer_of_int32(select(T_x_t2_4, t2)), (2)))
+            and ((JC_28:
+                 eq_int(integer_of_int32(select(T_x_t2_4, t2@)), (2)))
                 and (JC_29:
-                    eq_int(integer_of_int32(select(T_y_t2_4, t2)),
+                    eq_int(integer_of_int32(select(T_y_t2_4, t2@)),
                     integer_of_int32(select(T_y_t2_4@, t2@)))))))
            and (JC_31:
                not_assigns(T_t2_4_alloc_table@, T_x_t2_4@, T_x_t2_4,
@@ -720,9 +721,10 @@ parameter f_requires :
        and (JC_32:
            ((JC_30:
             ((JC_27: eq_int(integer_of_int32(result), (1)))
-            and ((JC_28: eq_int(integer_of_int32(select(T_x_t2_4, t2)), (2)))
+            and ((JC_28:
+                 eq_int(integer_of_int32(select(T_x_t2_4, t2@)), (2)))
                 and (JC_29:
-                    eq_int(integer_of_int32(select(T_y_t2_4, t2)),
+                    eq_int(integer_of_int32(select(T_y_t2_4, t2@)),
                     integer_of_int32(select(T_y_t2_4@, t2@)))))))
            and (JC_31:
                not_assigns(T_t2_4_alloc_table@, T_x_t2_4@, T_x_t2_4,
@@ -815,9 +817,9 @@ let f_ensures_default =
   { (JC_26:
     ((JC_24:
      ((JC_21: eq_int(integer_of_int32(result), (1)))
-     and ((JC_22: eq_int(integer_of_int32(select(T_x_t2_4, t2)), (2)))
+     and ((JC_22: eq_int(integer_of_int32(select(T_x_t2_4, t2@)), (2)))
          and (JC_23:
-             eq_int(integer_of_int32(select(T_y_t2_4, t2)),
+             eq_int(integer_of_int32(select(T_y_t2_4, t2@)),
              integer_of_int32(select(T_y_t2_4@, t2@)))))))
     and (JC_25:
         not_assigns(T_t2_4_alloc_table@, T_x_t2_4@, T_x_t2_4,

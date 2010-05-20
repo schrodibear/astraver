@@ -54,9 +54,9 @@ E1 e1;
 E2 e2;
 
 unit f()
-  requires (C_3 : (e2 != 2));
+  requires (C_4 : (e2 != 2));
 behavior default:
-  ensures (C_4 : true);
+  ensures (C_3 : true);
 {  
    {  (C_2 : (e1 = (C_1 : (e2 :> E1))));
       
@@ -65,9 +65,9 @@ behavior default:
 }
 
 unit g()
-  requires (C_7 : ((C_8 : (0 <= s)) && (C_9 : (s <= 255))));
+  requires (C_8 : ((C_9 : (0 <= s)) && (C_10 : (s <= 255))));
 behavior default:
-  ensures (C_10 : true);
+  ensures (C_7 : true);
 {  
    {  (C_6 : (c = (C_5 : (s :> uint8))));
       

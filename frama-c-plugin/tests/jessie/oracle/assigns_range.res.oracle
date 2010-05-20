@@ -82,13 +82,13 @@ behavior default:
 }
 
 int32 f1(int_P[..] p_0, int_P[..] q)
-  requires (C_22 : (((C_24 : (\offset_min(p_0) <= 0)) &&
-                      (C_25 : (\offset_max(p_0) >= 0))) &&
-                     ((C_27 : (\offset_min(q) <= 0)) &&
-                       (C_28 : (\offset_max(q) >= 0)))));
+  requires (C_23 : (((C_25 : (\offset_min(p_0) <= 0)) &&
+                      (C_26 : (\offset_max(p_0) >= 0))) &&
+                     ((C_28 : (\offset_min(q) <= 0)) &&
+                       (C_29 : (\offset_max(q) >= 0)))));
 behavior default:
   assigns q.int_M;
-  ensures (C_29 : true);
+  ensures (C_22 : true);
 {  
    (var int32 __retres_1);
    
@@ -101,16 +101,16 @@ behavior default:
 }
 
 int32 f2(__anonstruct_S_1[..] p, int_P[..] r)
-  requires (C_36 : ((((C_39 : (\offset_min(p) <= 0)) &&
-                       (C_40 : (\offset_max(p) >= 0))) &&
-                      ((C_42 : (\offset_min(p.rc) <= 0)) &&
-                        (C_43 : (\offset_max(p.rc) >= 0)))) &&
-                     ((C_45 : (\offset_min(r) <= 0)) &&
-                       (C_46 : (\offset_max(r) >= 0)))));
+  requires (C_37 : ((((C_40 : (\offset_min(p) <= 0)) &&
+                       (C_41 : (\offset_max(p) >= 0))) &&
+                      ((C_43 : (\offset_min(p.rc) <= 0)) &&
+                        (C_44 : (\offset_max(p.rc) >= 0)))) &&
+                     ((C_46 : (\offset_min(r) <= 0)) &&
+                       (C_47 : (\offset_max(r) >= 0)))));
 behavior default:
-  assigns \at(p.rc,Post).int_M,
+  assigns \at(\at(p,Old).rc,Post).int_M,
   p.rc;
-  ensures (C_47 : true);
+  ensures (C_36 : true);
 {  
    (var int32 __retres_2);
    

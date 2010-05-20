@@ -7,9 +7,9 @@ bts0032.c:18:[jessie] failure: Unexpected exception.
          Raised at file "src/kernel/log.ml", line 506, characters 30-31
          Called from file "src/kernel/log.ml", line 500, characters 2-9
          Re-raised at file "src/kernel/log.ml", line 503, characters 8-9
-         Called from file "src/lib/type.ml", line 746, characters 40-45
+         Called from file "src/lib/type.ml", line 763, characters 40-45
          Called from file "queue.ml", line 134, characters 6-20
-         Called from file "src/kernel/boot.ml", line 50, characters 4-20
+         Called from file "src/kernel/boot.ml", line 36, characters 4-20
          Called from file "src/kernel/cmdline.ml", line 170, characters 4-8
          
          Plug-in jessie aborted because of an internal error.

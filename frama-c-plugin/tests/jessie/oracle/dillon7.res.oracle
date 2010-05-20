@@ -69,15 +69,15 @@ axiomatic MyCast {
 float_P[..] simulated_cast_to_float_ptr(__anonstruct_ts_1[..] x)
 behavior default:
   assigns \nothing;
-  ensures (C_1 : simulated_cast{Here}(x, \result));
+  ensures (C_1 : simulated_cast{Here}(\at(x,Old), \result));
 ;
 
 unit f(float_P[..] d)
-  requires (C_5 : ((C_6 : (\offset_min(d) <= 0)) &&
-                    (C_7 : (\offset_max(d) >= 2))));
+  requires (C_6 : ((C_7 : (\offset_min(d) <= 0)) &&
+                    (C_8 : (\offset_max(d) >= 2))));
 behavior default:
   assigns v;
-  ensures (C_8 : ((v :> real) == ((d + 1).float_M :> real)));
+  ensures (C_5 : ((v :> real) == ((\at(d,Old) + 1).float_M :> real)));
 {  
    {  (C_4 : (v = (C_3 : (C_2 : (d + 1)).float_M)));
       
@@ -603,7 +603,7 @@ parameter f :
     { } unit reads v writes v
     { (JC_21:
       eq_real(single_value(v),
-      single_value(select(float_P_float_M_d_6, shift(d, (1)))))) }
+      single_value(select(float_P_float_M_d_6, shift(d@, (1)))))) }
 
 parameter f_requires :
  d:float_P pointer ->
@@ -615,7 +615,7 @@ parameter f_requires :
     unit reads v writes v
     { (JC_21:
       eq_real(single_value(v),
-      single_value(select(float_P_float_M_d_6, shift(d, (1)))))) }
+      single_value(select(float_P_float_M_d_6, shift(d@, (1)))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -643,7 +643,7 @@ parameter simulated_cast_to_float_ptr :
        float_P_float_M_result_4:(float_P, single) memory ->
         { } float_P pointer
         { (JC_7:
-          simulated_cast(x, result, float_P_result_4_alloc_table,
+          simulated_cast(x@, result, float_P_result_4_alloc_table,
           __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
           __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
           float_P_float_M_result_4)) }
@@ -658,7 +658,7 @@ parameter simulated_cast_to_float_ptr_requires :
        float_P_float_M_result_4:(float_P, single) memory ->
         { } float_P pointer
         { (JC_7:
-          simulated_cast(x, result, float_P_result_4_alloc_table,
+          simulated_cast(x@, result, float_P_result_4_alloc_table,
           __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
           __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
           float_P_float_M_result_4)) }
@@ -678,7 +678,7 @@ let f_ensures_default =
        void); (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_19:
     eq_real(single_value(v),
-    single_value(select(float_P_float_M_d_6, shift(d, (1)))))) }
+    single_value(select(float_P_float_M_d_6, shift(d@, (1)))))) }
 
 let f_safety =
  fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, single) memory) ->

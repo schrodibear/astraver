@@ -95,15 +95,15 @@ lemma gcd_property :
           isGcd(a_1, b_0, d_0))))))
 
 integer gcd(integer x, integer y)
-  requires (C_29 : ((C_30 : (x >= 0)) && (C_31 : (y >= 0))));
+  requires (C_32 : ((C_33 : (x >= 0)) && (C_34 : (y >= 0))));
 behavior default:
-  ensures (C_32 : true);
+  ensures (C_29 : true);
 behavior resultIsGcd:
-  ensures (C_33 : isGcd(x, y, \result));
+  ensures (C_30 : isGcd(\at(x,Old), \at(y,Old), \result));
 behavior bezoutProperty:
-  ensures (C_34 : (\exists integer a_2;
+  ensures (C_31 : (\exists integer a_2;
                     (\exists integer b_1;
-                      (((a_2 * x) + (b_1 * y)) == \result))));
+                      (((a_2 * \at(x,Old)) + (b_1 * \at(y,Old))) == \result))));
 {  
    (var integer a);
    
@@ -511,8 +511,8 @@ parameter gcd :
    { ((JC_16:
       (exists a_2:int.
        (exists b_1:int.
-        eq_int(add_int(mul_int(a_2, x), mul_int(b_1, y)), result))))
-     and (JC_14: isGcd(x, y, result))) }
+        eq_int(add_int(mul_int(a_2, x@), mul_int(b_1, y@)), result))))
+     and (JC_14: isGcd(x@, y@, result))) }
 
 parameter gcd_requires :
  x:int ->
@@ -521,8 +521,8 @@ parameter gcd_requires :
    { ((JC_16:
       (exists a_2:int.
        (exists b_1:int.
-        eq_int(add_int(mul_int(a_2, x), mul_int(b_1, y)), result))))
-     and (JC_14: isGcd(x, y, result))) }
+        eq_int(add_int(mul_int(a_2, x@), mul_int(b_1, y@)), result))))
+     and (JC_14: isGcd(x@, y@, result))) }
 
 let gcd_ensures_bezoutProperty =
  fun (x : int) (y : int) ->
@@ -632,7 +632,7 @@ let gcd_ensures_bezoutProperty =
   { (JC_15:
     (exists a_2:int.
      (exists b_1:int.
-      eq_int(add_int(mul_int(a_2, x), mul_int(b_1, y)), result)))) }
+      eq_int(add_int(mul_int(a_2, x@), mul_int(b_1, y@)), result)))) }
 
 let gcd_ensures_default =
  fun (x : int) (y : int) ->
@@ -832,7 +832,7 @@ let gcd_ensures_resultIsGcd =
           Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
          (return := !mutable_x); (raise Return) end) end) end) end)))))))));
     absurd  end with Return -> !return end))))
-  { (JC_13: isGcd(x, y, result)) }
+  { (JC_13: isGcd(x@, y@, result)) }
 
 let gcd_safety =
  fun (x : int) (y : int) ->

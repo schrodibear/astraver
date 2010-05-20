@@ -38,11 +38,11 @@ tag void_P = {
 type void_P = [void_P]
 
 unit g(int_P[..] x)
-  requires (C_3 : ((C_4 : (\offset_min(x) <= 0)) &&
-                    (C_5 : (\offset_max(x) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(x) <= 0)) &&
+                    (C_6 : (\offset_max(x) >= 0))));
 behavior default:
   assigns x.int_M;
-  ensures (C_6 : (x.int_M == 0));
+  ensures (C_3 : (\at(x,Old).int_M == 0));
 {  
    {  (C_2 : ((C_1 : x.int_M) = 0));
       
@@ -53,10 +53,10 @@ behavior default:
 int_P[..] r;
 
 int32 g2()
-  requires (C_10 : ((C_11 : (\offset_min(r) <= 0)) &&
-                     (C_12 : (\offset_max(r) >= 0))));
+  requires (C_11 : ((C_12 : (\offset_min(r) <= 0)) &&
+                     (C_13 : (\offset_max(r) >= 0))));
 behavior default:
-  ensures (C_13 : (\result == 0));
+  ensures (C_10 : (\result == 0));
 {  
    (var int32 __retres);
    
@@ -68,11 +68,11 @@ behavior default:
 }
 
 unit f(int_P[..] x_0)
-  requires (C_17 : ((C_18 : (\offset_min(x_0) <= 0)) &&
-                     (C_19 : (\offset_max(x_0) >= 0))));
+  requires (C_18 : ((C_19 : (\offset_min(x_0) <= 0)) &&
+                     (C_20 : (\offset_max(x_0) >= 0))));
 behavior default:
   assigns (x_0 + 0).int_M;
-  ensures (C_20 : ((x_0 + 0).int_M == 1));
+  ensures (C_17 : ((\at(x_0,Old) + 0).int_M == 1));
 {  
    {  (C_16 : ((C_15 : (C_14 : (x_0 + 0)).int_M) = 1));
       
@@ -465,7 +465,8 @@ parameter f :
     { ((JC_64: valid_t(int_P_t_2_alloc_table))
       and (JC_62:
           ((JC_60:
-           eq_int(integer_of_int32(select(int_P_int_M_x_0_4, shift(x_0, (0)))),
+           eq_int(integer_of_int32(select(int_P_int_M_x_0_4,
+                                   shift(x_0@, (0)))),
            (1)))
           and (JC_61:
               not_assigns(int_P_x_0_4_alloc_table@, int_P_int_M_x_0_4@,
@@ -485,7 +486,8 @@ parameter f_requires :
     { ((JC_64: valid_t(int_P_t_2_alloc_table))
       and (JC_62:
           ((JC_60:
-           eq_int(integer_of_int32(select(int_P_int_M_x_0_4, shift(x_0, (0)))),
+           eq_int(integer_of_int32(select(int_P_int_M_x_0_4,
+                                   shift(x_0@, (0)))),
            (1)))
           and (JC_61:
               not_assigns(int_P_x_0_4_alloc_table@, int_P_int_M_x_0_4@,
@@ -499,7 +501,8 @@ parameter g :
     writes int_P_int_M_x_3
     { ((JC_24: valid_t(int_P_t_2_alloc_table))
       and (JC_22:
-          ((JC_20: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+          ((JC_20:
+           eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
           and (JC_21:
               not_assigns(int_P_x_3_alloc_table@, int_P_int_M_x_3@,
               int_P_int_M_x_3, pset_singleton(x@)))))) }
@@ -539,7 +542,8 @@ parameter g_requires :
     unit reads int_P_int_M_x_3,int_P_t_2_alloc_table writes int_P_int_M_x_3
     { ((JC_24: valid_t(int_P_t_2_alloc_table))
       and (JC_22:
-          ((JC_20: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+          ((JC_20:
+           eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
           and (JC_21:
               not_assigns(int_P_x_3_alloc_table@, int_P_int_M_x_3@,
               int_P_int_M_x_3, pset_singleton(x@)))))) }
@@ -596,7 +600,7 @@ let f_ensures_default =
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_59:
     ((JC_57:
-     eq_int(integer_of_int32(select(int_P_int_M_x_0_4, shift(x_0, (0)))),
+     eq_int(integer_of_int32(select(int_P_int_M_x_0_4, shift(x_0@, (0)))),
      (1)))
     and (JC_58:
         not_assigns(int_P_x_0_4_alloc_table@, int_P_int_M_x_0_4@,
@@ -689,7 +693,7 @@ let g_ensures_default =
        (((safe_upd_ int_P_int_M_x_3) jessie_11) jessie_8))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_19:
-    ((JC_17: eq_int(integer_of_int32(select(int_P_int_M_x_3, x)), (0)))
+    ((JC_17: eq_int(integer_of_int32(select(int_P_int_M_x_3, x@)), (0)))
     and (JC_18:
         not_assigns(int_P_x_3_alloc_table@, int_P_int_M_x_3@,
         int_P_int_M_x_3, pset_singleton(x@))))) }

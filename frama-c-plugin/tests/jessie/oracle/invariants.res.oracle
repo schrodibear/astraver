@@ -61,9 +61,9 @@ invariant const_c :
 ((c + 0).int_M == 12)
 
 unit f(int32 n)
-  requires (C_13 : (n >= 0));
+  requires (C_14 : (n >= 0));
 behavior default:
-  ensures (C_14 : true);
+  ensures (C_13 : true);
 {  
    (var int32 t);
    

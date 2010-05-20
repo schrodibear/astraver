@@ -47,9 +47,9 @@ predicate strcmp{L}(char_P[..] x_0, char_P[..] y) =
     ((x_0 + i).char_M == (y + i).char_M)))
 
 int32 f(int32 x, int32 y)
-  requires (C_4 : strcmp{Here}(foo{Here}(x), foo{Here}(y)));
+  requires (C_5 : strcmp{Here}(foo{Here}(x), foo{Here}(y)));
 behavior default:
-  ensures (C_5 : true);
+  ensures (C_4 : true);
 {  
    (var int32 __retres);
    

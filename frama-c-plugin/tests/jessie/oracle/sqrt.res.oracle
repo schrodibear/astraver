@@ -35,20 +35,22 @@ logic real invsqrt(real x) =
 (1 / \real_sqrt(x))
 
 double sqrt_init(double x_0)
-  requires (C_1 : ((C_2 : (0.5 <= (x_0 :> real))) &&
-                    (C_3 : ((x_0 :> real) <= 2))));
+  requires (C_2 : ((C_3 : (0.5 <= (x_0 :> real))) &&
+                    (C_4 : ((x_0 :> real) <= 2))));
 behavior default:
   assigns \nothing;
-  ensures (C_4 : (\real_abs(((\result :> real) - invsqrt((x_0 :> real)))) <=
-                   (0x1p-6 * \real_abs(invsqrt((x_0 :> real))))));
+  ensures (C_1 : (\real_abs(((\result :> real) -
+                              invsqrt((\at(x_0,Old) :> real)))) <=
+                   (0x1p-6 * \real_abs(invsqrt((\at(x_0,Old) :> real))))));
 ;
 
 double sqrt(double x)
-  requires (C_43 : ((C_44 : (0.5 <= (x :> real))) &&
-                     (C_45 : ((x :> real) <= 2))));
+  requires (C_44 : ((C_45 : (0.5 <= (x :> real))) &&
+                     (C_46 : ((x :> real) <= 2))));
 behavior default:
-  ensures (C_46 : (\real_abs(((\result :> real) - \real_sqrt((x :> real)))) <=
-                    (0x1p-43 * \real_abs(\real_sqrt((x :> real))))));
+  ensures (C_43 : (\real_abs(((\result :> real) -
+                               \real_sqrt((\at(x,Old) :> real)))) <=
+                    (0x1p-43 * \real_abs(\real_sqrt((\at(x,Old) :> real))))));
 {  
    (var double t);
    
@@ -444,16 +446,16 @@ parameter sqrt :
   { } double
   { (JC_24:
     le_real(abs_real(sub_real(double_value(result),
-                     sqrt_real(double_value(x_1)))),
-    mul_real(0x1p-43, abs_real(sqrt_real(double_value(x_1)))))) }
+                     sqrt_real(double_value(x_1@)))),
+    mul_real(0x1p-43, abs_real(sqrt_real(double_value(x_1@)))))) }
 
 parameter sqrt_init :
  x_0:double ->
   { } double
   { (JC_11:
     le_real(abs_real(sub_real(double_value(result),
-                     invsqrt(double_value(x_0)))),
-    mul_real(0x1p-6, abs_real(invsqrt(double_value(x_0)))))) }
+                     invsqrt(double_value(x_0@)))),
+    mul_real(0x1p-6, abs_real(invsqrt(double_value(x_0@)))))) }
 
 parameter sqrt_init_requires :
  x_0:double ->
@@ -463,8 +465,8 @@ parameter sqrt_init_requires :
   double
   { (JC_11:
     le_real(abs_real(sub_real(double_value(result),
-                     invsqrt(double_value(x_0)))),
-    mul_real(0x1p-6, abs_real(invsqrt(double_value(x_0)))))) }
+                     invsqrt(double_value(x_0@)))),
+    mul_real(0x1p-6, abs_real(invsqrt(double_value(x_0@)))))) }
 
 parameter sqrt_requires :
  x_1:double ->
@@ -474,8 +476,8 @@ parameter sqrt_requires :
   double
   { (JC_24:
     le_real(abs_real(sub_real(double_value(result),
-                     sqrt_real(double_value(x_1)))),
-    mul_real(0x1p-43, abs_real(sqrt_real(double_value(x_1)))))) }
+                     sqrt_real(double_value(x_1@)))),
+    mul_real(0x1p-43, abs_real(sqrt_real(double_value(x_1@)))))) }
 
 let sqrt_ensures_default =
  fun (x_1 : double) ->
@@ -675,8 +677,8 @@ let sqrt_ensures_default =
         end) end) end) end)))); absurd  end with Return -> !return end))
   { (JC_23:
     le_real(abs_real(sub_real(double_value(result),
-                     sqrt_real(double_value(x_1)))),
-    mul_real(0x1p-43, abs_real(sqrt_real(double_value(x_1)))))) }
+                     sqrt_real(double_value(x_1@)))),
+    mul_real(0x1p-43, abs_real(sqrt_real(double_value(x_1@)))))) }
 
 let sqrt_safety =
  fun (x_1 : double) ->

@@ -30,12 +30,13 @@ tag void_P = {
 type void_P = [void_P]
 
 float diff(float x, float y)
-  requires (C_3 : (((C_5 : (3.2 <= (x :> real))) &&
-                     (C_6 : ((x :> real) <= 3.3))) &&
-                    ((C_8 : (1.4 <= (y :> real))) &&
-                      (C_9 : ((y :> real) <= 1.8)))));
+  requires (C_4 : (((C_6 : (3.2 <= (x :> real))) &&
+                     (C_7 : ((x :> real) <= 3.3))) &&
+                    ((C_9 : (1.4 <= (y :> real))) &&
+                      (C_10 : ((y :> real) <= 1.8)))));
 behavior default:
-  ensures (C_10 : ((\result :> real) == ((x :> real) - (y :> real))));
+  ensures (C_3 : ((\result :> real) ==
+                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
 {  
    (var float __retres);
    
@@ -279,7 +280,7 @@ parameter diff :
    { } single
    { (JC_14:
      eq_real(single_value(result),
-     sub_real(single_value(x), single_value(y)))) }
+     sub_real(single_value(x@), single_value(y@)))) }
 
 parameter diff_requires :
  x:single ->
@@ -292,7 +293,7 @@ parameter diff_requires :
    single
    { (JC_14:
      eq_real(single_value(result),
-     sub_real(single_value(x), single_value(y)))) }
+     sub_real(single_value(x@), single_value(y@)))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -321,7 +322,8 @@ let diff_ensures_default =
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_13:
-    eq_real(single_value(result), sub_real(single_value(x), single_value(y)))) }
+    eq_real(single_value(result),
+    sub_real(single_value(x@), single_value(y@)))) }
 
 let diff_safety =
  fun (x : single) (y : single) ->

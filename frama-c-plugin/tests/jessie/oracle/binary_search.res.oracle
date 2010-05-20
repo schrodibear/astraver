@@ -43,20 +43,21 @@ lemma mean_1 :
     ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
 
 int32 binary_search(int_P[..] t, int32 n, int32 v)
-  requires (C_37 : (((C_39 : (n >= 0)) &&
-                      ((C_41 : (\offset_min(t) <= 0)) &&
-                        (C_42 : (\offset_max(t) >= (n - 1))))) &&
-                     (C_43 : (\forall int32 k1;
+  requires (C_38 : (((C_40 : (n >= 0)) &&
+                      ((C_42 : (\offset_min(t) <= 0)) &&
+                        (C_43 : (\offset_max(t) >= (n - 1))))) &&
+                     (C_44 : (\forall int32 k1;
                                (\forall int32 k2;
                                  (((0 <= k1) &&
                                     ((k1 <= k2) && (k2 <= (n - 1)))) ==>
                                    ((t + k1).int_M <= (t + k2).int_M)))))));
 behavior default:
-  ensures (C_44 : (((\result >= 0) && ((t + \result).int_M == v)) ||
+  ensures (C_37 : (((\result >= 0) &&
+                     ((\at(t,Old) + \result).int_M == \at(v,Old))) ||
                     ((\result == (- 1)) &&
                       (\forall int32 k_0;
-                        (((0 <= k_0) && (k_0 < n)) ==>
-                          ((t + k_0).int_M != v))))));
+                        (((0 <= k_0) && (k_0 < \at(n,Old))) ==>
+                          ((\at(t,Old) + k_0).int_M != \at(v,Old)))))));
 {  
    (var int32 l);
    
@@ -495,15 +496,15 @@ parameter binary_search :
       { (JC_14:
         ((ge_int(integer_of_int32(result), (0))
          and eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                     shift(t, integer_of_int32(result)))),
-             integer_of_int32(v)))
+                                     shift(t@, integer_of_int32(result)))),
+             integer_of_int32(v@)))
         or (eq_int(integer_of_int32(result), neg_int((1)))
            and (forall k_0:int32.
                 ((le_int((0), integer_of_int32(k_0))
-                 and lt_int(integer_of_int32(k_0), integer_of_int32(n))) ->
+                 and lt_int(integer_of_int32(k_0), integer_of_int32(n@))) ->
                  neq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                          shift(t, integer_of_int32(k_0)))),
-                 integer_of_int32(v))))))) }
+                                          shift(t@, integer_of_int32(k_0)))),
+                 integer_of_int32(v@))))))) }
 
 parameter binary_search_requires :
  t:int_P pointer ->
@@ -533,15 +534,15 @@ parameter binary_search_requires :
       { (JC_14:
         ((ge_int(integer_of_int32(result), (0))
          and eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                     shift(t, integer_of_int32(result)))),
-             integer_of_int32(v)))
+                                     shift(t@, integer_of_int32(result)))),
+             integer_of_int32(v@)))
         or (eq_int(integer_of_int32(result), neg_int((1)))
            and (forall k_0:int32.
                 ((le_int((0), integer_of_int32(k_0))
-                 and lt_int(integer_of_int32(k_0), integer_of_int32(n))) ->
+                 and lt_int(integer_of_int32(k_0), integer_of_int32(n@))) ->
                  neq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                          shift(t, integer_of_int32(k_0)))),
-                 integer_of_int32(v))))))) }
+                                          shift(t@, integer_of_int32(k_0)))),
+                 integer_of_int32(v@))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -705,15 +706,15 @@ let binary_search_ensures_default =
   { (JC_13:
     ((ge_int(integer_of_int32(result), (0))
      and eq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                 shift(t, integer_of_int32(result)))),
-         integer_of_int32(v)))
+                                 shift(t@, integer_of_int32(result)))),
+         integer_of_int32(v@)))
     or (eq_int(integer_of_int32(result), neg_int((1)))
        and (forall k_0:int32.
             ((le_int((0), integer_of_int32(k_0))
-             and lt_int(integer_of_int32(k_0), integer_of_int32(n))) ->
+             and lt_int(integer_of_int32(k_0), integer_of_int32(n@))) ->
              neq_int(integer_of_int32(select(int_P_int_M_t_1,
-                                      shift(t, integer_of_int32(k_0)))),
-             integer_of_int32(v))))))) }
+                                      shift(t@, integer_of_int32(k_0)))),
+             integer_of_int32(v@))))))) }
 
 let binary_search_safety =
  fun (t : int_P pointer) (n : int32) (v : int32) (int_P_t_1_alloc_table : int_P alloc_table) (int_P_int_M_t_1 : (int_P, int32) memory) ->

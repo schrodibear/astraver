@@ -33,10 +33,10 @@ logic integer signr(real x) =
 (if (x >= 0.0) then 1 else (- 1))
 
 double sign(double x, double M)
-  requires (C_8 : (\double_round_error(x) <= (M :> real)));
+  requires (C_9 : (\double_round_error(x) <= (M :> real)));
 behavior default:
-  ensures (C_9 : (((\result :> real) != 0) ==>
-                   ((\result :> real) == signr(\double_exact(x)))));
+  ensures (C_8 : (((\result :> real) != 0) ==>
+                   ((\result :> real) == signr(\double_exact(\at(x,Old))))));
 {  
    (var double __retres);
    
@@ -62,21 +62,25 @@ invariant M22_value :
 ((M22 :> real) == 0x1p-45)
 
 double eps_line(double sx, double sy, double vx, double vy)
-  requires (C_22 : ((((((((C_29 : (\double_round_error(sx) == 0)) &&
-                           (C_30 : (\double_round_error(sy) == 0))) &&
-                          (C_31 : (\double_round_error(vx) == 0))) &&
-                         (C_32 : (\double_round_error(vy) == 0))) &&
-                        (C_33 : (\real_abs((sx :> real)) <= 100.0))) &&
-                       (C_34 : (\real_abs((sy :> real)) <= 100.0))) &&
-                      (C_35 : (\real_abs((vx :> real)) <= 1.0))) &&
-                     (C_36 : (\real_abs((vy :> real)) <= 1.0))));
+  requires (C_23 : ((((((((C_30 : (\double_round_error(sx) == 0)) &&
+                           (C_31 : (\double_round_error(sy) == 0))) &&
+                          (C_32 : (\double_round_error(vx) == 0))) &&
+                         (C_33 : (\double_round_error(vy) == 0))) &&
+                        (C_34 : (\real_abs((sx :> real)) <= 100.0))) &&
+                       (C_35 : (\real_abs((sy :> real)) <= 100.0))) &&
+                      (C_36 : (\real_abs((vx :> real)) <= 1.0))) &&
+                     (C_37 : (\real_abs((vy :> real)) <= 1.0))));
 behavior default:
-  ensures (C_37 : (((\result :> real) != 0) ==>
+  ensures (C_22 : (((\result :> real) != 0) ==>
                     ((\result :> real) ==
-                      (signr(((\double_exact(sx) * \double_exact(vx)) +
-                               (\double_exact(sy) * \double_exact(vy)))) *
-                        signr(((\double_exact(sx) * \double_exact(vy)) -
-                                (\double_exact(sy) * \double_exact(vx))))))));
+                      (signr(((\double_exact(\at(sx,Old)) *
+                                \double_exact(\at(vx,Old))) +
+                               (\double_exact(\at(sy,Old)) *
+                                 \double_exact(\at(vy,Old))))) *
+                        signr(((\double_exact(\at(sx,Old)) *
+                                 \double_exact(\at(vy,Old))) -
+                                (\double_exact(\at(sy,Old)) *
+                                  \double_exact(\at(vx,Old)))))))));
 {  
    (var double tmp);
    
@@ -343,13 +347,13 @@ parameter eps_line :
        and (JC_43:
            (neq_real(double_value(result), 0.0) ->
             eq_real(double_value(result),
-            real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
-                                               double_exact(vx)),
-                                      mul_real(double_exact(sy),
-                                      double_exact(vy)))),
-                        signr(sub_real(mul_real(double_exact(sx),
-                                       double_exact(vy)),
-                              mul_real(double_exact(sy), double_exact(vx)))))))))) }
+            real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx@),
+                                               double_exact(vx@)),
+                                      mul_real(double_exact(sy@),
+                                      double_exact(vy@)))),
+                        signr(sub_real(mul_real(double_exact(sx@),
+                                       double_exact(vy@)),
+                              mul_real(double_exact(sy@), double_exact(vx@)))))))))) }
 
 parameter eps_line_requires :
  sx:double ->
@@ -375,13 +379,13 @@ parameter eps_line_requires :
        and (JC_43:
            (neq_real(double_value(result), 0.0) ->
             eq_real(double_value(result),
-            real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
-                                               double_exact(vx)),
-                                      mul_real(double_exact(sy),
-                                      double_exact(vy)))),
-                        signr(sub_real(mul_real(double_exact(sx),
-                                       double_exact(vy)),
-                              mul_real(double_exact(sy), double_exact(vx)))))))))) }
+            real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx@),
+                                               double_exact(vx@)),
+                                      mul_real(double_exact(sy@),
+                                      double_exact(vy@)))),
+                        signr(sub_real(mul_real(double_exact(sx@),
+                                       double_exact(vy@)),
+                              mul_real(double_exact(sy@), double_exact(vx@)))))))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -399,7 +403,7 @@ parameter sign :
      and (JC_12:
          (neq_real(double_value(result), 0.0) ->
           eq_real(double_value(result),
-          real_of_int(signr(double_exact(x_0))))))) }
+          real_of_int(signr(double_exact(x_0@))))))) }
 
 parameter sign_requires :
  x_0:double ->
@@ -412,7 +416,7 @@ parameter sign_requires :
      and (JC_12:
          (neq_real(double_value(result), 0.0) ->
           eq_real(double_value(result),
-          real_of_int(signr(double_exact(x_0))))))) }
+          real_of_int(signr(double_exact(x_0@))))))) }
 
 let eps_line_ensures_default =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
@@ -476,11 +480,12 @@ let eps_line_ensures_default =
   { (JC_42:
     (neq_real(double_value(result), 0.0) ->
      eq_real(double_value(result),
-     real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx),
-                                        double_exact(vx)),
-                               mul_real(double_exact(sy), double_exact(vy)))),
-                 signr(sub_real(mul_real(double_exact(sx), double_exact(vy)),
-                       mul_real(double_exact(sy), double_exact(vx))))))))) }
+     real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx@),
+                                        double_exact(vx@)),
+                               mul_real(double_exact(sy@), double_exact(vy@)))),
+                 signr(sub_real(mul_real(double_exact(sx@),
+                                double_exact(vy@)),
+                       mul_real(double_exact(sy@), double_exact(vx@))))))))) }
 
 let eps_line_safety =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
@@ -580,7 +585,7 @@ let sign_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_11:
     (neq_real(double_value(result), 0.0) ->
-     eq_real(double_value(result), real_of_int(signr(double_exact(x_0)))))) }
+     eq_real(double_value(result), real_of_int(signr(double_exact(x_0@)))))) }
 
 let sign_safety =
  fun (x_0 : double) (M : double) ->

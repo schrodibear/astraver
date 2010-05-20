@@ -57,10 +57,10 @@ lemma round01 :
 (\real_abs((((0.1 :> float) :> real) - 0.1)) <= 1.49012e-09)
 
 float f_single(int32 n)
-  requires (C_17 : ((C_18 : (0 <= n)) && (C_19 : (n <= 1000000))));
+  requires (C_18 : ((C_19 : (0 <= n)) && (C_20 : (n <= 1000000))));
 behavior default:
-  ensures (C_20 : (\real_abs(((\result :> real) - (n * 0.1))) <=
-                    (n * (0x1p-8 + 1.49012e-09))));
+  ensures (C_17 : (\real_abs(((\result :> real) - (\at(n,Old) * 0.1))) <=
+                    (\at(n,Old) * (0x1p-8 + 1.49012e-09))));
 {  
    (var float t);
    
@@ -438,8 +438,8 @@ parameter f_single :
      valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))
     and (JC_17:
         le_real(abs_real(sub_real(single_value(result),
-                         mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-        mul_real(real_of_int(integer_of_int32(n)),
+                         mul_real(real_of_int(integer_of_int32(n@)), 0.1))),
+        mul_real(real_of_int(integer_of_int32(n@)),
         add_real(0x1p-8, 1.49012e-09))))) }
 
 parameter f_single_requires :
@@ -455,8 +455,8 @@ parameter f_single_requires :
      valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table))
     and (JC_17:
         le_real(abs_real(sub_real(single_value(result),
-                         mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-        mul_real(real_of_int(integer_of_int32(n)),
+                         mul_real(real_of_int(integer_of_int32(n@)), 0.1))),
+        mul_real(real_of_int(integer_of_int32(n@)),
         add_real(0x1p-8, 1.49012e-09))))) }
 
 parameter int32_of_integer_ :
@@ -588,8 +588,9 @@ let f_single_ensures_default =
    !return end))
   { (JC_16:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n@)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n@)),
+    add_real(0x1p-8, 1.49012e-09)))) }
 
 let f_single_safety =
  fun (n : int32) ->

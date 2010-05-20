@@ -45,11 +45,11 @@ tag __anonstruct_las_1 = {
 type __anonstruct_las_1 = [__anonstruct_las_1]
 
 unit g(int_P[..] p)
-  requires (C_1 : ((C_2 : (\offset_min(p) <= 0)) &&
-                    (C_3 : (\offset_max(p) >= 0))));
+  requires (C_2 : ((C_3 : (\offset_min(p) <= 0)) &&
+                    (C_4 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.int_M;
-  ensures (C_4 : true);
+  ensures (C_1 : true);
 ;
 
 __anonstruct_las_1[0] v;

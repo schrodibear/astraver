@@ -34,24 +34,25 @@ predicate bounded(real z, real bound) =
 
 double interp_lin(double x1, double x2, double y1, double y2, double v,
                   double z)
-  requires (C_11 : ((C_12 : ((x1 :> real) <= (z :> real))) &&
-                     (C_13 : ((z :> real) <= (x2 :> real)))));
-  requires (C_14 : bounded((x1 :> real), 0x1p500));
-  requires (C_15 : bounded((x2 :> real), 0x1p500));
-  requires (C_16 : bounded((v :> real), 0x1p500));
-  requires (C_17 : (let real slope_0 =
+  requires (C_16 : ((C_17 : ((x1 :> real) <= (z :> real))) &&
+                     (C_18 : ((z :> real) <= (x2 :> real)))));
+  requires (C_15 : bounded((x1 :> real), 0x1p500));
+  requires (C_14 : bounded((x2 :> real), 0x1p500));
+  requires (C_13 : bounded((v :> real), 0x1p500));
+  requires (C_12 : (let real slope_0 =
                    (((y2 :> real) - (y1 :> real)) /
                      ((x2 :> real) - (x1 :> real)))
                    in (bounded(slope_0, 0x1p500) &&
                         (\real_abs(((v :> real) - slope_0)) <=
                           (0x1p-53 * \real_abs(slope_0))))));
 behavior default:
-  ensures (C_18 : (let real slope_1 =
-                  (((y2 :> real) - (y1 :> real)) /
-                    ((x2 :> real) - (x1 :> real)))
+  ensures (C_11 : (let real slope_1 =
+                  (((\at(y2,Old) :> real) - (\at(y1,Old) :> real)) /
+                    ((\at(x2,Old) :> real) - (\at(x1,Old) :> real)))
                   in (let real exact_result =
-                     ((y1 :> real) +
-                       (slope_1 * ((z :> real) - (x1 :> real))))
+                     ((\at(y1,Old) :> real) +
+                       (slope_1 *
+                         ((\at(z,Old) :> real) - (\at(x1,Old) :> real))))
                      in (\real_abs(((\result :> real) - exact_result)) <=
                           0x1p-1))));
 {  
@@ -356,12 +357,12 @@ parameter interp_lin :
        { } double
        { (JC_18:
          (let slope_1 =
-               div_real(sub_real(double_value(y2), double_value(y1)),
-               sub_real(double_value(x2), double_value(x1))) in
+               div_real(sub_real(double_value(y2@), double_value(y1@)),
+               sub_real(double_value(x2@), double_value(x1@))) in
           (let exact_result =
-                add_real(double_value(y1),
+                add_real(double_value(y1@),
                 mul_real(slope_1,
-                sub_real(double_value(z_0), double_value(x1)))) in
+                sub_real(double_value(z_0@), double_value(x1@)))) in
            le_real(abs_real(sub_real(double_value(result), exact_result)),
            0x1p-1)))) }
 
@@ -391,12 +392,12 @@ parameter interp_lin_requires :
        double
        { (JC_18:
          (let slope_1 =
-               div_real(sub_real(double_value(y2), double_value(y1)),
-               sub_real(double_value(x2), double_value(x1))) in
+               div_real(sub_real(double_value(y2@), double_value(y1@)),
+               sub_real(double_value(x2@), double_value(x1@))) in
           (let exact_result =
-                add_real(double_value(y1),
+                add_real(double_value(y1@),
                 mul_real(slope_1,
-                sub_real(double_value(z_0), double_value(x1)))) in
+                sub_real(double_value(z_0@), double_value(x1@)))) in
            le_real(abs_real(sub_real(double_value(result), exact_result)),
            0x1p-1)))) }
 
@@ -472,11 +473,11 @@ let interp_lin_ensures_default =
    end with Return -> !return end))
   { (JC_17:
     (let slope_1 =
-          div_real(sub_real(double_value(y2), double_value(y1)),
-          sub_real(double_value(x2), double_value(x1))) in
+          div_real(sub_real(double_value(y2@), double_value(y1@)),
+          sub_real(double_value(x2@), double_value(x1@))) in
      (let exact_result =
-           add_real(double_value(y1),
-           mul_real(slope_1, sub_real(double_value(z_0), double_value(x1)))) in
+           add_real(double_value(y1@),
+           mul_real(slope_1, sub_real(double_value(z_0@), double_value(x1@)))) in
       le_real(abs_real(sub_real(double_value(result), exact_result)), 0x1p-1)))) }
 
 let interp_lin_safety =

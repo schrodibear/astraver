@@ -38,10 +38,10 @@ tag void_P = {
 type void_P = [void_P]
 
 int_P[..] foo(int_P[..] a)
-  requires (C_1 : ((C_2 : (\offset_min(a) <= 0)) &&
-                    (C_3 : (\offset_max(a) >= 0))));
+  requires (C_2 : ((C_3 : (\offset_min(a) <= 0)) &&
+                    (C_4 : (\offset_max(a) >= 0))));
 behavior default:
-  ensures (C_4 : (\result.int_M == a.int_M));
+  ensures (C_1 : (\result.int_M == \at(a,Old).int_M));
 {  
    {  
       (return a)
@@ -402,7 +402,7 @@ parameter foo :
     { } int_P pointer
     { (JC_10:
       eq_int(integer_of_int32(select(int_P_int_M_a_1, result)),
-      integer_of_int32(select(int_P_int_M_a_1, a)))) }
+      integer_of_int32(select(int_P_int_M_a_1, a@)))) }
 
 parameter foo_requires :
  a:int_P pointer ->
@@ -414,7 +414,7 @@ parameter foo_requires :
     int_P pointer
     { (JC_10:
       eq_int(integer_of_int32(select(int_P_int_M_a_1, result)),
-      integer_of_int32(select(int_P_int_M_a_1, a)))) }
+      integer_of_int32(select(int_P_int_M_a_1, a@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -443,7 +443,7 @@ let foo_ensures_default =
    !return end))
   { (JC_9:
     eq_int(integer_of_int32(select(int_P_int_M_a_1, result)),
-    integer_of_int32(select(int_P_int_M_a_1, a)))) }
+    integer_of_int32(select(int_P_int_M_a_1, a@)))) }
 
 let foo_safety =
  fun (a : int_P pointer) (int_P_a_1_alloc_table : int_P alloc_table) (int_P_int_M_a_1 : (int_P, int32) memory) ->

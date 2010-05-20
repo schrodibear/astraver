@@ -50,10 +50,10 @@ tag t = {
 type t = [t]
 
 unit g(int_P[..] i)
-  requires (C_3 : ((C_4 : (\offset_min(i) <= 0)) &&
-                    (C_5 : (\offset_max(i) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(i) <= 0)) &&
+                    (C_6 : (\offset_max(i) >= 0))));
 behavior default:
-  ensures (C_6 : (i.int_M == 1));
+  ensures (C_3 : (\at(i,Old).int_M == 1));
 {  
    {  (C_2 : ((C_1 : i.int_M) = 1));
       
@@ -62,12 +62,12 @@ behavior default:
 }
 
 unit f(t[..] a)
-  requires (C_11 : (((C_13 : (\offset_min(a) <= 0)) &&
-                      (C_14 : (\offset_max(a) >= 0))) &&
-                     ((C_16 : (\offset_min(a.tab) <= 0)) &&
-                       (C_17 : (\offset_max(a.tab) >= 4)))));
+  requires (C_12 : (((C_14 : (\offset_min(a) <= 0)) &&
+                      (C_15 : (\offset_max(a) >= 0))) &&
+                     ((C_17 : (\offset_min(a.tab) <= 0)) &&
+                       (C_18 : (\offset_max(a.tab) >= 4)))));
 behavior default:
-  ensures (C_18 : true);
+  ensures (C_11 : true);
 {  
    {  (C_9 : g((C_8 : ((C_7 : a.tab) + 0))));
       
@@ -693,7 +693,7 @@ parameter g :
   int_P_int_M_i_1:(int_P, int32) memory ref ->
    int_P_i_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_i_1 writes int_P_int_M_i_1
-    { (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1))) }
+    { (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i@)), (1))) }
 
 parameter g_requires :
  i:int_P pointer ->
@@ -703,7 +703,7 @@ parameter g_requires :
       ((JC_1: le_int(offset_min(int_P_i_1_alloc_table, i), (0)))
       and (JC_2: ge_int(offset_max(int_P_i_1_alloc_table, i), (0)))))}
     unit reads int_P_int_M_i_1 writes int_P_int_M_i_1
-    { (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1))) }
+    { (JC_10: eq_int(integer_of_int32(select(int_P_int_M_i_1, i@)), (1))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -792,7 +792,7 @@ let g_ensures_default =
        (let jessie_11 = i in
        (((safe_upd_ int_P_int_M_i_1) jessie_11) jessie_8))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_9: eq_int(integer_of_int32(select(int_P_int_M_i_1, i)), (1))) }
+  { (JC_9: eq_int(integer_of_int32(select(int_P_int_M_i_1, i@)), (1))) }
 
 let g_safety =
  fun (i : int_P pointer) (int_P_int_M_i_1 : (int_P, int32) memory ref) (int_P_i_1_alloc_table : int_P alloc_table) ->

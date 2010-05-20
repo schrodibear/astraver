@@ -38,9 +38,9 @@ tag void_P = {
 type void_P = [void_P]
 
 int8 f(int_P[..] p1, int_P[..] p2)
-  requires (C_3 : (\base_block(p1) != \base_block(p2)));
+  requires (C_4 : (\base_block(p1) != \base_block(p2)));
 behavior default:
-  ensures (C_4 : true);
+  ensures (C_3 : true);
 {  
    (var int8 __retres);
    

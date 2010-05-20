@@ -192,24 +192,24 @@ invariant _Buch_tr_cross_3 :
     ((buch_CurTrans + _buch_tr_4).int_M != 0)))
 
 unit fake()
-  requires (C_48 : (0 == (buch_CurTrans + 1).int_M));
-  requires (C_49 : ((0 != (buch_CurTrans + 0).int_M) ||
+  requires (C_61 : (0 == (buch_CurTrans + 1).int_M));
+  requires (C_60 : ((0 != (buch_CurTrans + 0).int_M) ||
                      (0 != (buch_CurTrans + 2).int_M)));
-  requires (C_50 : true);
-  requires (C_51 : ((0 != (buch_CurStates + 0).int_M) ||
+  requires (C_59 : true);
+  requires (C_58 : ((0 != (buch_CurStates + 0).int_M) ||
                      (0 != (buch_CurStates + 1).int_M)));
-  requires (C_52 : (rr < 5000));
+  requires (C_57 : (rr < 5000));
 behavior default:
-  ensures (C_53 : true);
+  ensures (C_48 : true);
 behavior Buchi_property_behavior:
-  ensures (C_54 : ((C_55 : (0 == (buch_CurTrans + 1).int_M)) &&
-                    ((C_57 : ((0 != (buch_CurTrans + 0).int_M) ||
+  ensures (C_49 : ((C_50 : (0 == (buch_CurTrans + 1).int_M)) &&
+                    ((C_52 : ((0 != (buch_CurTrans + 0).int_M) ||
                                (0 != (buch_CurTrans + 2).int_M))) &&
-                      ((C_59 : true) &&
-                        (C_60 : ((0 != (buch_CurStates + 0).int_M) ||
+                      ((C_54 : true) &&
+                        (C_55 : ((0 != (buch_CurStates + 0).int_M) ||
                                   (0 != (buch_CurStates + 1).int_M)))))));
 behavior j:
-  ensures (C_61 : (rr < 5001));
+  ensures (C_56 : (rr < 5001));
 {  
    (var int32 tmp);
    
@@ -259,20 +259,20 @@ behavior j:
 }
 
 unit op()
-  requires (C_115 : (0 == (buch_CurTrans + 1).int_M));
-  requires (C_116 : ((0 != (buch_CurTrans + 0).int_M) ||
+  requires (C_126 : (0 == (buch_CurTrans + 1).int_M));
+  requires (C_125 : ((0 != (buch_CurTrans + 0).int_M) ||
                       (0 != (buch_CurTrans + 2).int_M)));
-  requires (C_117 : true);
-  requires (C_118 : ((0 != (buch_CurStates + 0).int_M) ||
+  requires (C_124 : true);
+  requires (C_123 : ((0 != (buch_CurStates + 0).int_M) ||
                       (0 != (buch_CurStates + 1).int_M)));
 behavior default:
-  ensures (C_119 : true);
+  ensures (C_115 : true);
 behavior Buchi_property_behavior:
-  ensures (C_120 : ((C_121 : (0 == (buch_CurTrans + 1).int_M)) &&
-                     ((C_123 : ((0 != (buch_CurTrans + 0).int_M) ||
+  ensures (C_116 : ((C_117 : (0 == (buch_CurTrans + 1).int_M)) &&
+                     ((C_119 : ((0 != (buch_CurTrans + 0).int_M) ||
                                  (0 != (buch_CurTrans + 2).int_M))) &&
-                       ((C_125 : true) &&
-                         (C_126 : ((0 != (buch_CurStates + 0).int_M) ||
+                       ((C_121 : true) &&
+                         (C_122 : ((0 != (buch_CurStates + 0).int_M) ||
                                     (0 != (buch_CurStates + 1).int_M)))))));
 {  
    (var int32 tmp_0_0);
@@ -334,20 +334,20 @@ behavior Buchi_property_behavior:
 }
 
 int32 main()
-  requires (C_178 : (0 == (buch_CurTrans + 1).int_M));
-  requires (C_179 : ((0 != (buch_CurTrans + 0).int_M) ||
+  requires (C_189 : (0 == (buch_CurTrans + 1).int_M));
+  requires (C_188 : ((0 != (buch_CurTrans + 0).int_M) ||
                       (0 != (buch_CurTrans + 2).int_M)));
-  requires (C_180 : true);
-  requires (C_181 : ((0 != (buch_CurStates + 0).int_M) ||
+  requires (C_187 : true);
+  requires (C_186 : ((0 != (buch_CurStates + 0).int_M) ||
                       (0 != (buch_CurStates + 1).int_M)));
 behavior default:
-  ensures (C_182 : true);
+  ensures (C_178 : true);
 behavior Buchi_property_behavior:
-  ensures (C_183 : ((C_184 : (0 == (buch_CurTrans + 1).int_M)) &&
-                     ((C_186 : ((0 != (buch_CurTrans + 0).int_M) ||
+  ensures (C_179 : ((C_180 : (0 == (buch_CurTrans + 1).int_M)) &&
+                     ((C_182 : ((0 != (buch_CurTrans + 0).int_M) ||
                                  (0 != (buch_CurTrans + 2).int_M))) &&
-                       ((C_188 : true) &&
-                         (C_189 : ((0 != (buch_CurStates + 0).int_M) ||
+                       ((C_184 : true) &&
+                         (C_185 : ((0 != (buch_CurStates + 0).int_M) ||
                                     (0 != (buch_CurStates + 1).int_M)))))));
 {  
    (var int32 __retres);

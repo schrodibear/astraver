@@ -38,10 +38,10 @@ tag void_P = {
 type void_P = [void_P]
 
 unit zero(int_P[..] x)
-  requires (C_17 : ((C_18 : (\offset_min(x) <= 0)) &&
-                     (C_19 : (\offset_max(x) >= 0))));
+  requires (C_18 : ((C_19 : (\offset_min(x) <= 0)) &&
+                     (C_20 : (\offset_max(x) >= 0))));
 behavior default:
-  ensures (C_20 : true);
+  ensures (C_17 : true);
 {  
    (var char_P[..] c);
    

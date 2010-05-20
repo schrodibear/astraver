@@ -33,7 +33,7 @@ type void_P = [void_P]
 
 int32 f(int32 x, int32 y)
 behavior default:
-  ensures (C_4 : (\result == (x + y)));
+  ensures (C_4 : (\result == (\at(x,Old) + \at(y,Old))));
 {  
    {  (C_3 : (x = (C_2 : ((C_1 : (x + y)) :> int32))));
       
@@ -296,7 +296,7 @@ parameter f :
    { } int32
    { (JC_6:
      eq_int(integer_of_int32(result),
-     add_int(integer_of_int32(x), integer_of_int32(y)))) }
+     add_int(integer_of_int32(x@), integer_of_int32(y@)))) }
 
 parameter f_requires :
  x:int32 ->
@@ -304,7 +304,7 @@ parameter f_requires :
    { } int32
    { (JC_6:
      eq_int(integer_of_int32(result),
-     add_int(integer_of_int32(x), integer_of_int32(y)))) }
+     add_int(integer_of_int32(x@), integer_of_int32(y@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -341,7 +341,7 @@ let f_ensures_default =
    Return -> !return end)))
   { (JC_5:
     eq_int(integer_of_int32(result),
-    add_int(integer_of_int32(x), integer_of_int32(y)))) }
+    add_int(integer_of_int32(x@), integer_of_int32(y@)))) }
 
 let f_safety =
  fun (x : int32) (y : int32) ->

@@ -83,11 +83,11 @@ behavior default:
 ;
 
 unit m(int_P[..] t, int32 length)
-  requires (C_50 : ((C_51 : (length >= 0)) &&
-                     ((C_53 : (\offset_min(t) <= 0)) &&
-                       (C_54 : (\offset_max(t) >= (length - 1))))));
+  requires (C_51 : ((C_52 : (length >= 0)) &&
+                     ((C_54 : (\offset_min(t) <= 0)) &&
+                       (C_55 : (\offset_max(t) >= (length - 1))))));
 behavior default:
-  ensures (C_55 : true);
+  ensures (C_50 : true);
 {  
    (var int32 count);
    

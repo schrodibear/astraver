@@ -48,15 +48,15 @@ behavior default:
 ;
 
 unit Swap(int_P[..] p, int_P[..] q)
-  requires (C_9 : (((C_11 : (\offset_min(p) <= 0)) &&
-                     (C_12 : (\offset_max(p) >= 0))) &&
-                    ((C_14 : (\offset_min(q) <= 0)) &&
-                      (C_15 : (\offset_max(q) >= 0)))));
+  requires (C_12 : (((C_14 : (\offset_min(p) <= 0)) &&
+                      (C_15 : (\offset_max(p) >= 0))) &&
+                     ((C_17 : (\offset_min(q) <= 0)) &&
+                       (C_18 : (\offset_max(q) >= 0)))));
 behavior default:
   assigns p.int_M,
   q.int_M;
-  ensures (C_16 : ((C_17 : (p.int_M == \old(q.int_M))) &&
-                    (C_18 : (q.int_M == \old(p.int_M)))));
+  ensures (C_9 : ((C_10 : (\at(p,Old).int_M == \old(q.int_M))) &&
+                   (C_11 : (\at(q,Old).int_M == \old(p.int_M)))));
 {  
    (var int32 temp);
    
@@ -431,10 +431,10 @@ parameter Swap :
        { (JC_36:
          ((JC_32:
           ((JC_30:
-           eq_int(integer_of_int32(select(int_P_int_M_p_3, p)),
+           eq_int(integer_of_int32(select(int_P_int_M_p_3, p@)),
            integer_of_int32(select(int_P_int_M_q_4@, q@))))
           and (JC_31:
-              eq_int(integer_of_int32(select(int_P_int_M_q_4, q)),
+              eq_int(integer_of_int32(select(int_P_int_M_q_4, q@)),
               integer_of_int32(select(int_P_int_M_p_3@, p@))))))
          and (JC_35:
              ((JC_33:
@@ -462,10 +462,10 @@ parameter Swap_requires :
        { (JC_36:
          ((JC_32:
           ((JC_30:
-           eq_int(integer_of_int32(select(int_P_int_M_p_3, p)),
+           eq_int(integer_of_int32(select(int_P_int_M_p_3, p@)),
            integer_of_int32(select(int_P_int_M_q_4@, q@))))
           and (JC_31:
-              eq_int(integer_of_int32(select(int_P_int_M_q_4, q)),
+              eq_int(integer_of_int32(select(int_P_int_M_q_4, q@)),
               integer_of_int32(select(int_P_int_M_p_3@, p@))))))
          and (JC_35:
              ((JC_33:
@@ -1031,10 +1031,10 @@ let Swap_ensures_default =
   { (JC_29:
     ((JC_25:
      ((JC_23:
-      eq_int(integer_of_int32(select(int_P_int_M_p_3, p)),
+      eq_int(integer_of_int32(select(int_P_int_M_p_3, p@)),
       integer_of_int32(select(int_P_int_M_q_4@, q@))))
      and (JC_24:
-         eq_int(integer_of_int32(select(int_P_int_M_q_4, q)),
+         eq_int(integer_of_int32(select(int_P_int_M_q_4, q@)),
          integer_of_int32(select(int_P_int_M_p_3@, p@))))))
     and (JC_28:
         ((JC_26:

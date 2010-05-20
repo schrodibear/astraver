@@ -39,11 +39,11 @@ tag void_P = {
 type void_P = [void_P]
 
 int_P[..] find_int_array(int_P[..] first, int_P[..] last, int32 value)
-  requires (C_2 : ((last - first) > 0));
+  requires (C_6 : ((last - first) > 0));
   requires (C_3 : ((C_4 : (\offset_min(first) <= 0)) &&
                     (C_5 : (\offset_max(first) >= ((last - first) - 1)))));
 behavior default:
-  ensures (C_6 : (\result.int_M == value));
+  ensures (C_2 : (\result.int_M == \at(value,Old)));
 {  
    (var int_P[..] __retres);
    
@@ -431,7 +431,7 @@ parameter find_int_array :
       { } int_P pointer
       { (JC_12:
         eq_int(integer_of_int32(select(int_P_int_M_result_3, result)),
-        integer_of_int32(value))) }
+        integer_of_int32(value@))) }
 
 parameter find_int_array_requires :
  first:int_P pointer ->
@@ -449,7 +449,7 @@ parameter find_int_array_requires :
       int_P pointer
       { (JC_12:
         eq_int(integer_of_int32(select(int_P_int_M_result_3, result)),
-        integer_of_int32(value))) }
+        integer_of_int32(value@))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -534,7 +534,7 @@ let find_int_array_ensures_default =
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_11:
     eq_int(integer_of_int32(select(int_P_int_M_result_3, result)),
-    integer_of_int32(value))) }
+    integer_of_int32(value@))) }
 
 let find_int_array_safety =
  fun (first : int_P pointer) (last : int_P pointer) (value : int32) (int_P_first_1_alloc_table : int_P alloc_table) (int_P_int_M_result_3 : (int_P, int32) memory) ->

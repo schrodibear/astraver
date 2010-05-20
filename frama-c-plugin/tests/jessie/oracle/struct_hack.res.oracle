@@ -59,11 +59,11 @@ tag S1 = {
 type S1 = [S1]
 
 unit f(S[0] v_s_0)
-  requires (C_22 : ((C_23 : (v_s_0.i >= 0)) &&
-                     ((C_25 : (\offset_min(v_s_0.a) <= 0)) &&
-                       (C_26 : (\offset_max(v_s_0.a) >= (v_s_0.i - 1))))));
+  requires (C_23 : ((C_24 : (v_s_0.i >= 0)) &&
+                     ((C_26 : (\offset_min(v_s_0.a) <= 0)) &&
+                       (C_27 : (\offset_max(v_s_0.a) >= (v_s_0.i - 1))))));
 behavior default:
-  ensures (C_27 : true);
+  ensures (C_22 : true);
 {  
    (var S[0] s_0);
    
@@ -76,11 +76,11 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_7 : (((C_9 : (0 <= j)) && (C_10 : (j <= v_s_0.i))) &&
-                              (C_11 : (\forall int32 k;
+           invariant (C_8 : (((C_10 : (0 <= j)) && (C_11 : (j <= v_s_0.i))) &&
+                              (C_12 : (\forall int32 k;
                                         (((0 <= k) && (k < j)) ==>
                                           ((v_s_0.a + k).int_M == 0))))));
-         variant (C_12 : (v_s_0.i - j));
+         variant (C_7 : (v_s_0.i - j));
          while (true)
          {  
             {  (if (j < (C_13 : s_0.i)) then () else 
@@ -107,11 +107,11 @@ behavior default:
 }
 
 unit f0(S0[0] v_s_1)
-  requires (C_49 : ((C_50 : (v_s_1.i0 >= 0)) &&
-                     ((C_52 : (\offset_min(v_s_1.a0) <= 0)) &&
-                       (C_53 : (\offset_max(v_s_1.a0) >= (v_s_1.i0 - 1))))));
+  requires (C_50 : ((C_51 : (v_s_1.i0 >= 0)) &&
+                     ((C_53 : (\offset_min(v_s_1.a0) <= 0)) &&
+                       (C_54 : (\offset_max(v_s_1.a0) >= (v_s_1.i0 - 1))))));
 behavior default:
-  ensures (C_54 : true);
+  ensures (C_49 : true);
 {  
    (var S0[0] s_1);
    
@@ -124,12 +124,12 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_34 : (((C_36 : (0 <= j_0)) &&
-                                (C_37 : (j_0 <= v_s_1.i0))) &&
-                               (C_38 : (\forall int32 k_1;
+           invariant (C_35 : (((C_37 : (0 <= j_0)) &&
+                                (C_38 : (j_0 <= v_s_1.i0))) &&
+                               (C_39 : (\forall int32 k_1;
                                          (((0 <= k_1) && (k_1 < j_0)) ==>
                                            ((v_s_1.a0 + k_1).int_M == 0))))));
-         variant (C_39 : (v_s_1.i0 - j_0));
+         variant (C_34 : (v_s_1.i0 - j_0));
          while (true)
          {  
             {  (if (j_0 < (C_40 : s_1.i0)) then () else 
@@ -156,11 +156,11 @@ behavior default:
 }
 
 unit f1(S1[0] v_s)
-  requires (C_81 : ((C_82 : (v_s.i1 >= 0)) &&
-                     ((C_84 : (\offset_min(v_s.a1) <= 0)) &&
-                       (C_85 : (\offset_max(v_s.a1) >= (v_s.i1 - 1))))));
+  requires (C_82 : ((C_83 : (v_s.i1 >= 0)) &&
+                     ((C_85 : (\offset_min(v_s.a1) <= 0)) &&
+                       (C_86 : (\offset_max(v_s.a1) >= (v_s.i1 - 1))))));
 behavior default:
-  ensures (C_86 : true);
+  ensures (C_81 : true);
 {  
    (var S1[0] s);
    
@@ -177,12 +177,12 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_66 : (((C_68 : (0 <= j_1)) &&
-                                (C_69 : (j_1 <= v_s.i1))) &&
-                               (C_70 : (\forall int32 k_3;
+           invariant (C_67 : (((C_69 : (0 <= j_1)) &&
+                                (C_70 : (j_1 <= v_s.i1))) &&
+                               (C_71 : (\forall int32 k_3;
                                          (((0 <= k_3) && (k_3 < j_1)) ==>
                                            ((v_s.a1 + k_3).int_M == 0))))));
-         variant (C_71 : (v_s.i1 - j_1));
+         variant (C_66 : (v_s.i1 - j_1));
          while (true)
          {  
             {  (if (j_1 < (C_72 : s.i1)) then () else 

@@ -57,15 +57,15 @@ tag pP = {
 }
 
 int32 f(__anonunion_U_1[..] x)
-  requires (C_12 : ((((C_15 : (\offset_min(x) <= 0)) &&
-                       (C_16 : (\offset_max(x) >= 0))) &&
-                      ((C_18 : (\offset_min((x :> pP[0]).pM) <= 0)) &&
-                        (C_19 : (\offset_max((x :> pP[0]).pM) >= 0)))) &&
-                     (C_20 : ((x :> cP[0]).cM == 0))));
+  requires (C_17 : ((((C_20 : (\offset_min(x) <= 0)) &&
+                       (C_21 : (\offset_max(x) >= 0))) &&
+                      ((C_23 : (\offset_min((x :> pP[0]).pM) <= 0)) &&
+                        (C_24 : (\offset_max((x :> pP[0]).pM) >= 0)))) &&
+                     (C_25 : ((x :> cP[0]).cM == 0))));
 behavior default:
-  ensures (C_21 : (((C_23 : ((x :> iP[0]).iM == 0)) &&
-                     (C_24 : ((x :> cP[0]).cM == 0))) &&
-                    (C_25 : (\result == 0))));
+  ensures (C_12 : (((C_14 : ((\at(x,Old) :> iP[0]).iM == 0)) &&
+                     (C_15 : ((\at(x,Old) :> cP[0]).cM == 0))) &&
+                    (C_16 : (\result == 0))));
 {  
    (var int32 __retres);
    
@@ -640,8 +640,8 @@ parameter f :
          { } int32 reads iP_iM_x_1,int_P_int_M_pM_2
          writes iP_iM_x_1,int_P_int_M_pM_2
          { (JC_22:
-           ((JC_19: eq_int(integer_of_int32(select(iP_iM_x_1, x)), (0)))
-           and ((JC_20: eq_int(integer_of_int8(select(cP_cM_x_1, x)), (0)))
+           ((JC_19: eq_int(integer_of_int32(select(iP_iM_x_1, x@)), (0)))
+           and ((JC_20: eq_int(integer_of_int8(select(cP_cM_x_1, x@)), (0)))
                and (JC_21: eq_int(integer_of_int32(result), (0)))))) }
 
 parameter f_requires :
@@ -671,8 +671,8 @@ parameter f_requires :
          int32 reads iP_iM_x_1,int_P_int_M_pM_2
          writes iP_iM_x_1,int_P_int_M_pM_2
          { (JC_22:
-           ((JC_19: eq_int(integer_of_int32(select(iP_iM_x_1, x)), (0)))
-           and ((JC_20: eq_int(integer_of_int8(select(cP_cM_x_1, x)), (0)))
+           ((JC_19: eq_int(integer_of_int32(select(iP_iM_x_1, x@)), (0)))
+           and ((JC_20: eq_int(integer_of_int8(select(cP_cM_x_1, x@)), (0)))
                and (JC_21: eq_int(integer_of_int32(result), (0)))))) }
 
 parameter int32_of_integer_ :
@@ -838,8 +838,8 @@ let f_ensures_default =
         (return := !__retres); (raise Return) end) end) end)); absurd  end
    with Return -> !return end))
   { (JC_18:
-    ((JC_15: eq_int(integer_of_int32(select(iP_iM_x_1, x)), (0)))
-    and ((JC_16: eq_int(integer_of_int8(select(cP_cM_x_1, x)), (0)))
+    ((JC_15: eq_int(integer_of_int32(select(iP_iM_x_1, x@)), (0)))
+    and ((JC_16: eq_int(integer_of_int8(select(cP_cM_x_1, x@)), (0)))
         and (JC_17: eq_int(integer_of_int32(result), (0)))))) }
 
 let f_safety =

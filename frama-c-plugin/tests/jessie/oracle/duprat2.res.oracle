@@ -42,8 +42,10 @@ predicate pcond3(boolean c1, boolean c2) =
 
 int32 ftest2(int32 x, int32 y)
 behavior default:
-  ensures (C_4 : ((C_5 : ((pcond1(x) && pcond2(y)) ==> (\result == 1))) &&
-                   (C_6 : ((\result == 1) <==> (pcond1(x) && pcond2(y))))));
+  ensures (C_4 : ((C_5 : ((pcond1(\at(x,Old)) && pcond2(\at(y,Old))) ==>
+                           (\result == 1))) &&
+                   (C_6 : ((\result == 1) <==>
+                            (pcond1(\at(x,Old)) && pcond2(\at(y,Old)))))));
 {  
    (var int32 tmp);
    
@@ -318,11 +320,11 @@ parameter ftest2 :
    { } int32
    { (JC_10:
      ((JC_8:
-      ((pcond1(integer_of_int32(x)) and pcond2(integer_of_int32(y))) ->
+      ((pcond1(integer_of_int32(x@)) and pcond2(integer_of_int32(y@))) ->
        eq_int(integer_of_int32(result), (1))))
      and (JC_9:
          (eq_int(integer_of_int32(result), (1))
-         <-> (pcond1(integer_of_int32(x)) and pcond2(integer_of_int32(y))))))) }
+         <-> (pcond1(integer_of_int32(x@)) and pcond2(integer_of_int32(y@))))))) }
 
 parameter ftest2_requires :
  x:int32 ->
@@ -330,11 +332,11 @@ parameter ftest2_requires :
    { } int32
    { (JC_10:
      ((JC_8:
-      ((pcond1(integer_of_int32(x)) and pcond2(integer_of_int32(y))) ->
+      ((pcond1(integer_of_int32(x@)) and pcond2(integer_of_int32(y@))) ->
        eq_int(integer_of_int32(result), (1))))
      and (JC_9:
          (eq_int(integer_of_int32(result), (1))
-         <-> (pcond1(integer_of_int32(x)) and pcond2(integer_of_int32(y))))))) }
+         <-> (pcond1(integer_of_int32(x@)) and pcond2(integer_of_int32(y@))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -375,11 +377,11 @@ let ftest2_ensures_default =
    !return end))
   { (JC_7:
     ((JC_5:
-     ((pcond1(integer_of_int32(x)) and pcond2(integer_of_int32(y))) ->
+     ((pcond1(integer_of_int32(x@)) and pcond2(integer_of_int32(y@))) ->
       eq_int(integer_of_int32(result), (1))))
     and (JC_6:
         (eq_int(integer_of_int32(result), (1))
-        <-> (pcond1(integer_of_int32(x)) and pcond2(integer_of_int32(y))))))) }
+        <-> (pcond1(integer_of_int32(x@)) and pcond2(integer_of_int32(y@))))))) }
 
 let ftest2_safety =
  fun (x : int32) (y : int32) ->

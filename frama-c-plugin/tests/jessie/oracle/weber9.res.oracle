@@ -82,18 +82,21 @@ axiomatic Nb_occ {
 
 int32 remove_copy_array(int_P[..] a, int32 length, int_P[..] dest,
                         int32 value)
-  requires (C_25 : (0 <= length));
-  requires (C_26 : ((C_27 : (\offset_min(a) <= 0)) &&
-                     (C_28 : (\offset_max(a) >= (length - 1)))));
+  requires (C_35 : (0 <= length));
+  requires (C_32 : ((C_33 : (\offset_min(a) <= 0)) &&
+                     (C_34 : (\offset_max(a) >= (length - 1)))));
   requires (C_29 : ((C_30 : (\offset_min(dest) <= 0)) &&
                      (C_31 : (\offset_max(dest) >= (length - 1)))));
-  requires (C_32 : disjoint_arrays(a, dest, length));
+  requires (C_28 : disjoint_arrays(a, dest, length));
 behavior default:
-  ensures (C_33 : ((C_34 : (\result ==
-                             (length - nb_occ{Old}(a, 0, length, value)))) &&
-                    (C_35 : (\forall integer k_0;
+  ensures (C_25 : ((C_26 : (\result ==
+                             (\at(length,Old) -
+                               nb_occ{Old}(\at(a,Old), 0, \at(length,Old),
+                                           \at(value,Old))))) &&
+                    (C_27 : (\forall integer k_0;
                               (((0 <= k_0) && (k_0 < \result)) ==>
-                                ((dest + k_0).int_M != value))))));
+                                ((\at(dest,Old) + k_0).int_M !=
+                                  \at(value,Old)))))));
 {  
    (var int32 index_a);
    
@@ -564,15 +567,15 @@ parameter remove_copy_array :
          { (JC_22:
            ((JC_20:
             eq_int(integer_of_int32(result),
-            sub_int(integer_of_int32(length_0),
-            nb_occ(a_1, (0), integer_of_int32(length_0), value_0,
+            sub_int(integer_of_int32(length_0@),
+            nb_occ(a_1@, (0), integer_of_int32(length_0@), value_0@,
             int_P_a_4_alloc_table@, int_P_int_M_a_4@))))
            and (JC_21:
                (forall k_0:int.
                 ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(result))) ->
                  neq_int(integer_of_int32(select(int_P_int_M_dest_5,
-                                          shift(dest, k_0))),
-                 integer_of_int32(value_0))))))) }
+                                          shift(dest@, k_0))),
+                 integer_of_int32(value_0@))))))) }
 
 parameter remove_copy_array_requires :
  a_1:int_P pointer ->
@@ -602,15 +605,15 @@ parameter remove_copy_array_requires :
          { (JC_22:
            ((JC_20:
             eq_int(integer_of_int32(result),
-            sub_int(integer_of_int32(length_0),
-            nb_occ(a_1, (0), integer_of_int32(length_0), value_0,
+            sub_int(integer_of_int32(length_0@),
+            nb_occ(a_1@, (0), integer_of_int32(length_0@), value_0@,
             int_P_a_4_alloc_table@, int_P_int_M_a_4@))))
            and (JC_21:
                (forall k_0:int.
                 ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(result))) ->
                  neq_int(integer_of_int32(select(int_P_int_M_dest_5,
-                                          shift(dest, k_0))),
-                 integer_of_int32(value_0))))))) }
+                                          shift(dest@, k_0))),
+                 integer_of_int32(value_0@))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -730,15 +733,15 @@ let remove_copy_array_ensures_default =
   { (JC_19:
     ((JC_17:
      eq_int(integer_of_int32(result),
-     sub_int(integer_of_int32(length_0),
-     nb_occ(a_1, (0), integer_of_int32(length_0), value_0,
+     sub_int(integer_of_int32(length_0@),
+     nb_occ(a_1@, (0), integer_of_int32(length_0@), value_0@,
      int_P_a_4_alloc_table@, int_P_int_M_a_4@))))
     and (JC_18:
         (forall k_0:int.
          ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(result))) ->
           neq_int(integer_of_int32(select(int_P_int_M_dest_5,
-                                   shift(dest, k_0))),
-          integer_of_int32(value_0))))))) }
+                                   shift(dest@, k_0))),
+          integer_of_int32(value_0@))))))) }
 
 let remove_copy_array_safety =
  fun (a_1 : int_P pointer) (length_0 : int32) (dest : int_P pointer) (value_0 : int32) (int_P_int_M_dest_5 : (int_P, int32) memory ref) (int_P_a_4_alloc_table : int_P alloc_table) (int_P_dest_5_alloc_table : int_P alloc_table) (int_P_int_M_a_4 : (int_P, int32) memory) ->
@@ -881,12 +884,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber9_po21.why">
-      <location file = "PPCHOME/tests/jessie/weber9.jessie/weber9.jc" line = "121" begin = "27" end = "129"/>
+      <location file = "PPCHOME/tests/jessie/weber9.jessie/weber9.jc" line = "124" begin = "27" end = "129"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber9_po22.why">
-      <location file = "PPCHOME/tests/jessie/weber9.jessie/weber9.jc" line = "121" begin = "27" end = "129"/>
+      <location file = "PPCHOME/tests/jessie/weber9.jessie/weber9.jc" line = "124" begin = "27" end = "129"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

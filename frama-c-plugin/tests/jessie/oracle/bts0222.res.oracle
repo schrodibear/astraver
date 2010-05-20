@@ -66,7 +66,8 @@ logic integer_of_int32: int32 -> int
 axiom _jc_axiom_max_index :
  (forall t:int_P pointer.
   (forall n:int.
-   (forall int_P_int_M_t_1_at_L:(int_P, int32) memory.
+   (forall int_P_int_M_t_1_at_L:(int_P, int32) memory
+    [max_index(t, n, int_P_int_M_t_1_at_L)].
     (max_index(t, n, int_P_int_M_t_1_at_L) = (if eq_int_bool(n, (0)) then (0)
                                               else (if eq_int_bool(integer_of_int32(
                                                                    select(int_P_int_M_t_1_at_L,
@@ -1231,7 +1232,8 @@ logic integer_of_int32 : int32 -> int
 axiom _jc_axiom_max_index:
   (forall t:int_P pointer.
     (forall n:int.
-      (forall int_P_int_M_t_1_at_L:(int_P, int32) memory. (max_index(t, n,
+      (forall int_P_int_M_t_1_at_L:(int_P, int32) memory [max_index(t, n,
+        int_P_int_M_t_1_at_L)]. (max_index(t, n,
         int_P_int_M_t_1_at_L) = ite(eq_int_bool(n, 0), 0,
         ite(eq_int_bool(integer_of_int32(select(int_P_int_M_t_1_at_L,
         shift(t, (n - 1)))), 0), n, max_index(t, (n - 1),

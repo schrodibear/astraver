@@ -678,9 +678,9 @@ behavior default:
          {  
             (assert for default: (C_192 : (1 <= (2147483647 >>> (tmp_1 - 2)))));
             
-            (assert for default: (C_191 : ((tmp_1 - 2) >= 0)));
+            (assert for default: (C_191 : ((tmp_1 - 2) < 32)));
             
-            (assert for default: (C_190 : ((tmp_1 - 2) < 32)));
+            (assert for default: (C_190 : ((tmp_1 - 2) >= 0)));
             (C_199 : (ones_2 = (C_198 : ((C_197 : ((C_196 : ((C_195 : 
                                                              (1 <<
                                                                (C_194 : (
@@ -814,11 +814,11 @@ behavior default:
       (C_265 : printf());
       
       {  
-         (assert for default: (C_268 : (n_1 >= 0)));
+         (assert for default: (C_268 : (1 <= (2147483647 >>> n_1))));
          
          (assert for default: (C_267 : (n_1 < 32)));
          
-         (assert for default: (C_266 : (1 <= (2147483647 >>> n_1))));
+         (assert for default: (C_266 : (n_1 >= 0)));
          (C_273 : (x_8 = (C_272 : ((C_271 : ((C_270 : ((C_269 : (1 << n_1)) :> int32)) -
                                               1)) :> uint32))))
       };
@@ -3528,11 +3528,11 @@ let main_ensures_default =
          (let jessie_359 = (JC_799: (printf void)) in void);
         (let jessie_361 =
         begin
-          (assert { (JC_800: ge_int(integer_of_int32(n_1_0), (0))) }; void);
+          (assert
+          { (JC_800: le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) };
+          void);
          (assert { (JC_801: lt_int(integer_of_int32(n_1_0), (32))) }; void);
-         (assert
-         { (JC_802: le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) };
-         void);
+         (assert { (JC_802: ge_int(integer_of_int32(n_1_0), (0))) }; void);
          (C_273:
          begin
            (x_8 := (C_272:
@@ -3707,12 +3707,12 @@ let main_safety =
         (let jessie_314 =
         begin
           [ { } unit reads n_1_0
-            { (JC_775: ge_int(integer_of_int32(n_1_0), (0))) } ];
+            { (JC_775:
+              le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) } ];
          [ { } unit reads n_1_0
            { (JC_776: lt_int(integer_of_int32(n_1_0), (32))) } ];
          [ { } unit reads n_1_0
-           { (JC_777:
-             le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) } ];
+           { (JC_777: ge_int(integer_of_int32(n_1_0), (0))) } ];
          (C_273:
          begin
            (x_8 := (C_272:
@@ -5454,10 +5454,10 @@ let snoob3_ensures_default =
            asr((2147483647), sub_int(integer_of_int32(tmp_1), (2))))) };
          void);
          (assert
-         { (JC_529: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) };
+         { (JC_529: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) };
          void);
          (assert
-         { (JC_530: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) };
+         { (JC_530: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) };
          void);
          (C_199:
          begin
@@ -5561,9 +5561,9 @@ let snoob3_safety =
              le_int((1),
              asr((2147483647), sub_int(integer_of_int32(tmp_1), (2))))) } ];
          [ { } unit reads tmp_1
-           { (JC_521: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) } ];
+           { (JC_521: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) } ];
          [ { } unit reads tmp_1
-           { (JC_522: lt_int(sub_int(integer_of_int32(tmp_1), (2)), (32))) } ];
+           { (JC_522: ge_int(sub_int(integer_of_int32(tmp_1), (2)), (0))) } ];
          (C_199:
          begin
            (ones_2 := (C_198:

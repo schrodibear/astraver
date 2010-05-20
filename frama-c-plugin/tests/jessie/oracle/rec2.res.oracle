@@ -32,10 +32,10 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 f(int32 x)
-  requires (C_7 : (x >= 0));
+  requires (C_8 : (x >= 0));
 behavior default:
   assigns \nothing;
-  ensures (C_8 : (\result == 0));
+  ensures (C_7 : (\result == 0));
 {  
    (var int32 tmp);
    

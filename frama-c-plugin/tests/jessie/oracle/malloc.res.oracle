@@ -47,12 +47,12 @@ tag void_P = {
 type void_P = [void_P]
 
 int_xP[..] test(int32 n)
-  requires (C_17 : (n >= 1));
+  requires (C_22 : (n >= 1));
 behavior default:
-  ensures (C_18 : (((C_20 : (\offset_min(\result) <= 0)) &&
-                     (C_21 : (\offset_max(\result) >= (n - 1)))) &&
-                    (C_22 : (\forall int32 i;
-                              (((0 <= i) && (i < n)) ==>
+  ensures (C_17 : (((C_19 : (\offset_min(\result) <= 0)) &&
+                     (C_20 : (\offset_max(\result) >= (\at(n,Old) - 1)))) &&
+                    (C_21 : (\forall int32 i;
+                              (((0 <= i) && (i < \at(n,Old))) ==>
                                 ((\offset_min((\result + i).int_xM) <= 0) &&
                                   (\offset_max((\result + i).int_xM) >= 0)))))));
 {  
@@ -613,11 +613,11 @@ parameter test :
           le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
          and ((JC_10:
               ge_int(offset_max(int_xP_result_1_alloc_table, result),
-              sub_int(integer_of_int32(n), (1))))
+              sub_int(integer_of_int32(n@), (1))))
              and (JC_11:
                  (forall i:int32.
                   ((le_int((0), integer_of_int32(i))
-                   and lt_int(integer_of_int32(i), integer_of_int32(n))) ->
+                   and lt_int(integer_of_int32(i), integer_of_int32(n@))) ->
                    (le_int(offset_min(int_P_int_xM_3_alloc_table,
                            select(int_xP_int_xM_result_1,
                            shift(result, integer_of_int32(i)))),
@@ -642,11 +642,11 @@ parameter test_requires :
           le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
          and ((JC_10:
               ge_int(offset_max(int_xP_result_1_alloc_table, result),
-              sub_int(integer_of_int32(n), (1))))
+              sub_int(integer_of_int32(n@), (1))))
              and (JC_11:
                  (forall i:int32.
                   ((le_int((0), integer_of_int32(i))
-                   and lt_int(integer_of_int32(i), integer_of_int32(n))) ->
+                   and lt_int(integer_of_int32(i), integer_of_int32(n@))) ->
                    (le_int(offset_min(int_P_int_xM_3_alloc_table,
                            select(int_xP_int_xM_result_1,
                            shift(result, integer_of_int32(i)))),
@@ -835,11 +835,11 @@ let test_ensures_default =
     ((JC_5: le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
     and ((JC_6:
          ge_int(offset_max(int_xP_result_1_alloc_table, result),
-         sub_int(integer_of_int32(n), (1))))
+         sub_int(integer_of_int32(n@), (1))))
         and (JC_7:
             (forall i:int32.
              ((le_int((0), integer_of_int32(i))
-              and lt_int(integer_of_int32(i), integer_of_int32(n))) ->
+              and lt_int(integer_of_int32(i), integer_of_int32(n@))) ->
               (le_int(offset_min(int_P_int_xM_3_alloc_table,
                       select(int_xP_int_xM_result_1,
                       shift(result, integer_of_int32(i)))),

@@ -30,13 +30,14 @@ tag void_P = {
 type void_P = [void_P]
 
 double monexp(double x)
-  requires (C_6 : (\real_abs((x :> real)) <= 0x2.p-3));
+  requires (C_9 : (\real_abs((x :> real)) <= 0x2.p-3));
 behavior default:
-  ensures (C_7 : ((C_8 : (\double_model(\result) == \exp(\double_model(x)))) &&
-                   (C_9 : ((\double_round_error(x) == 0.0) ==>
+  ensures (C_6 : ((C_7 : (\double_model(\result) ==
+                           \exp(\double_model(\at(x,Old))))) &&
+                   (C_8 : ((\double_round_error(\at(x,Old)) == 0.0) ==>
                             ((\double_round_error(\result) <= 0x2.p-52) &&
                               (\double_total_error(\result) <=
-                                (\double_total_error(x) + 0x2.p-51)))))));
+                                (\double_total_error(\at(x,Old)) + 0x2.p-51)))))));
 {  
    (var double y);
    
@@ -286,23 +287,23 @@ parameter monexp :
  x:double ->
   { } double
   { (JC_10:
-    ((JC_8: eq_real(double_model(result), exp(double_model(x))))
+    ((JC_8: eq_real(double_model(result), exp(double_model(x@))))
     and (JC_9:
-        (eq_real(double_round_error(x), 0.0) ->
+        (eq_real(double_round_error(x@), 0.0) ->
          (le_real(double_round_error(result), 0x2.p-52)
          and le_real(double_total_error(result),
-             add_real(double_total_error(x), 0x2.p-51))))))) }
+             add_real(double_total_error(x@), 0x2.p-51))))))) }
 
 parameter monexp_requires :
  x:double ->
   { (JC_1: le_real(abs_real(double_value(x)), 0x2.p-3))} double
   { (JC_10:
-    ((JC_8: eq_real(double_model(result), exp(double_model(x))))
+    ((JC_8: eq_real(double_model(result), exp(double_model(x@))))
     and (JC_9:
-        (eq_real(double_round_error(x), 0.0) ->
+        (eq_real(double_round_error(x@), 0.0) ->
          (le_real(double_round_error(result), 0x2.p-52)
          and le_real(double_total_error(result),
-             add_real(double_total_error(x), 0x2.p-51))))))) }
+             add_real(double_total_error(x@), 0x2.p-51))))))) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -334,12 +335,12 @@ let monexp_ensures_default =
        void); (return := !y); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_7:
-    ((JC_5: eq_real(double_model(result), exp(double_model(x))))
+    ((JC_5: eq_real(double_model(result), exp(double_model(x@))))
     and (JC_6:
-        (eq_real(double_round_error(x), 0.0) ->
+        (eq_real(double_round_error(x@), 0.0) ->
          (le_real(double_round_error(result), 0x2.p-52)
          and le_real(double_total_error(result),
-             add_real(double_total_error(x), 0x2.p-51))))))) }
+             add_real(double_total_error(x@), 0x2.p-51))))))) }
 
 let monexp_safety =
  fun (x : double) ->

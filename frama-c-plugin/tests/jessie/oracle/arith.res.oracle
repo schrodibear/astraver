@@ -58,8 +58,8 @@ int32 j;
 
 unit test(int32 k)
 behavior default:
-  ensures (C_20 : ((C_21 : (i == (\old(j) + k))) &&
-                    (C_22 : (j == (((3 * \old(j)) + (11 * k)) + 12)))));
+  ensures (C_20 : ((C_21 : (i == (\old(j) + \at(k,Old)))) &&
+                    (C_22 : (j == (((3 * \old(j)) + (11 * \at(k,Old))) + 12)))));
 {  
    (var int32 l);
    
@@ -394,11 +394,11 @@ parameter test :
   { (JC_10:
     ((JC_8:
      eq_int(integer_of_int32(i),
-     add_int(integer_of_int32(j@), integer_of_int32(k))))
+     add_int(integer_of_int32(j@), integer_of_int32(k@))))
     and (JC_9:
         eq_int(integer_of_int32(j),
         add_int(add_int(mul_int((3), integer_of_int32(j@)),
-                mul_int((11), integer_of_int32(k))),
+                mul_int((11), integer_of_int32(k@))),
         (12)))))) }
 
 parameter test_requires :
@@ -407,11 +407,11 @@ parameter test_requires :
   { (JC_10:
     ((JC_8:
      eq_int(integer_of_int32(i),
-     add_int(integer_of_int32(j@), integer_of_int32(k))))
+     add_int(integer_of_int32(j@), integer_of_int32(k@))))
     and (JC_9:
         eq_int(integer_of_int32(j),
         add_int(add_int(mul_int((3), integer_of_int32(j@)),
-                mul_int((11), integer_of_int32(k))),
+                mul_int((11), integer_of_int32(k@))),
         (12)))))) }
 
 let test_ensures_default =
@@ -476,11 +476,11 @@ let test_ensures_default =
   { (JC_7:
     ((JC_5:
      eq_int(integer_of_int32(i),
-     add_int(integer_of_int32(j@), integer_of_int32(k))))
+     add_int(integer_of_int32(j@), integer_of_int32(k@))))
     and (JC_6:
         eq_int(integer_of_int32(j),
         add_int(add_int(mul_int((3), integer_of_int32(j@)),
-                mul_int((11), integer_of_int32(k))),
+                mul_int((11), integer_of_int32(k@))),
         (12)))))) }
 
 let test_safety =

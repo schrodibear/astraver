@@ -38,10 +38,10 @@ tag void_P = {
 type void_P = [void_P]
 
 char_P[..] f(char_P[..] c)
-  requires (C_1 : ((C_2 : (\offset_min(c) <= 0)) &&
-                    (C_3 : (\offset_max(c) >= 0))));
+  requires (C_2 : ((C_3 : (\offset_min(c) <= 0)) &&
+                    (C_4 : (\offset_max(c) >= 0))));
 behavior default:
-  ensures (C_4 : (\result == c));
+  ensures (C_1 : (\result == \at(c,Old)));
 {  
    {  
       (return c)
@@ -472,7 +472,7 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f :
  c:char_P pointer ->
   char_P_c_1_alloc_table:char_P alloc_table ->
-   { } char_P pointer { (JC_10: (result = c)) }
+   { } char_P pointer { (JC_10: (result = c@)) }
 
 parameter f_requires :
  c:char_P pointer ->
@@ -480,7 +480,7 @@ parameter f_requires :
    { (JC_3:
      ((JC_1: le_int(offset_min(char_P_c_1_alloc_table, c), (0)))
      and (JC_2: ge_int(offset_max(char_P_c_1_alloc_table, c), (0)))))}
-   char_P pointer { (JC_10: (result = c)) }
+   char_P pointer { (JC_10: (result = c@)) }
 
 parameter g : tt:unit -> { } unit { true }
 
@@ -612,7 +612,7 @@ let f_ensures_default =
   (init:
   (let return = ref (any_pointer void) in
   try begin   (return := c); (raise Return); absurd  end with Return ->
-   !return end)) { (JC_9: (result = c)) }
+   !return end)) { (JC_9: (result = c@)) }
 
 let f_safety =
  fun (c : char_P pointer) (char_P_c_1_alloc_table : char_P alloc_table) ->

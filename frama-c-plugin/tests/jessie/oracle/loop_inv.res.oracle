@@ -36,9 +36,9 @@ int32 i;
 int32 c;
 
 unit f()
-  requires (C_9 : ((C_10 : (i >= 0)) && (C_11 : (c > 0))));
+  requires (C_10 : ((C_11 : (i >= 0)) && (C_12 : (c > 0))));
 behavior default:
-  ensures (C_12 : (i == 0));
+  ensures (C_9 : (i == 0));
 {  
    {  
       {  

@@ -48,10 +48,10 @@ int_P[0] i;
 int_xP[0] p;
 
 unit gi(int_P[..] p_0_0, int32 i_0_0)
-  requires (C_3 : ((C_4 : (\offset_min(p_0_0) <= 0)) &&
-                    (C_5 : (\offset_max(p_0_0) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(p_0_0) <= 0)) &&
+                    (C_6 : (\offset_max(p_0_0) >= 0))));
 behavior default:
-  ensures (C_6 : (p_0_0.int_M == \old(i_0_0)));
+  ensures (C_3 : (\at(p_0_0,Old).int_M == \old(i_0_0)));
 {  
    {  (C_2 : ((C_1 : p_0_0.int_M) = i_0_0));
       
@@ -70,15 +70,15 @@ behavior default:
 }
 
 unit gp(int_xP[..] p_0, int_P[..] i_0)
-  requires (C_17 : ((((C_20 : (\offset_min(p_0) <= 0)) &&
-                       (C_21 : (\offset_max(p_0) >= 0))) &&
-                      ((C_23 : (\offset_min(p_0.int_xM) <= 0)) &&
-                        (C_24 : (\offset_max(p_0.int_xM) >= 0)))) &&
-                     ((C_26 : (\offset_min(i_0) <= 0)) &&
-                       (C_27 : (\offset_max(i_0) >= 0)))));
+  requires (C_20 : ((((C_23 : (\offset_min(p_0) <= 0)) &&
+                       (C_24 : (\offset_max(p_0) >= 0))) &&
+                      ((C_26 : (\offset_min(p_0.int_xM) <= 0)) &&
+                        (C_27 : (\offset_max(p_0.int_xM) >= 0)))) &&
+                     ((C_29 : (\offset_min(i_0) <= 0)) &&
+                       (C_30 : (\offset_max(i_0) >= 0)))));
 behavior default:
-  ensures (C_28 : ((C_29 : (p_0.int_xM.int_M == \old(i_0.int_M))) &&
-                    (C_30 : (p_0.int_xM == \old(i_0)))));
+  ensures (C_17 : ((C_18 : (\at(p_0,Old).int_xM.int_M == \old(i_0.int_M))) &&
+                    (C_19 : (\at(p_0,Old).int_xM == \old(i_0)))));
 {  
    {  (C_14 : ((C_13 : (C_12 : p_0.int_xM).int_M) = (C_11 : i_0.int_M)));
       (C_16 : ((C_15 : p_0.int_xM) = i_0));
@@ -603,7 +603,7 @@ parameter gi :
     int_P_p_0_0_3_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_p_0_0_3 writes int_P_int_M_p_0_0_3
      { (JC_10:
-       eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
+       eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0@)),
        integer_of_int32(i_0_0@))) }
 
 parameter gi_requires :
@@ -616,7 +616,7 @@ parameter gi_requires :
        and (JC_2: ge_int(offset_max(int_P_p_0_0_3_alloc_table, p_0_0), (0)))))}
      unit reads int_P_int_M_p_0_0_3 writes int_P_int_M_p_0_0_3
      { (JC_10:
-       eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
+       eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0@)),
        integer_of_int32(i_0_0@))) }
 
 parameter gp :
@@ -631,9 +631,9 @@ parameter gp :
        { (JC_45:
          ((JC_43:
           eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
-                                  select(int_xP_int_xM_p_0_4, p_0))),
+                                  select(int_xP_int_xM_p_0_4, p_0@))),
           integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
-         and (JC_44: (select(int_xP_int_xM_p_0_4, p_0) = i_0@)))) }
+         and (JC_44: (select(int_xP_int_xM_p_0_4, p_0@) = i_0@)))) }
 
 parameter gp_requires :
  p_0:int_xP pointer ->
@@ -664,9 +664,9 @@ parameter gp_requires :
        { (JC_45:
          ((JC_43:
           eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
-                                  select(int_xP_int_xM_p_0_4, p_0))),
+                                  select(int_xP_int_xM_p_0_4, p_0@))),
           integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
-         and (JC_44: (select(int_xP_int_xM_p_0_4, p_0) = i_0@)))) }
+         and (JC_44: (select(int_xP_int_xM_p_0_4, p_0@) = i_0@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -786,7 +786,7 @@ let gi_ensures_default =
        (((safe_upd_ int_P_int_M_p_0_0_3) jessie_11) jessie_8))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_9:
-    eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0)),
+    eq_int(integer_of_int32(select(int_P_int_M_p_0_0_3, p_0_0@)),
     integer_of_int32(i_0_0@))) }
 
 let gi_safety =
@@ -843,9 +843,9 @@ let gp_ensures_default =
   { (JC_42:
     ((JC_40:
      eq_int(integer_of_int32(select(int_P_int_M_i_0_5,
-                             select(int_xP_int_xM_p_0_4, p_0))),
+                             select(int_xP_int_xM_p_0_4, p_0@))),
      integer_of_int32(select(int_P_int_M_i_0_5@, i_0@))))
-    and (JC_41: (select(int_xP_int_xM_p_0_4, p_0) = i_0@)))) }
+    and (JC_41: (select(int_xP_int_xM_p_0_4, p_0@) = i_0@)))) }
 
 let gp_safety =
  fun (p_0 : int_xP pointer) (i_0 : int_P pointer) (int_xP_int_xM_p_0_4 : (int_xP, int_P pointer) memory ref) (int_P_int_M_i_0_5 : (int_P, int32) memory ref) (int_P_i_0_5_alloc_table : int_P alloc_table) (int_xP_p_0_4_alloc_table : int_xP alloc_table) ->

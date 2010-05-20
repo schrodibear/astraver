@@ -183,11 +183,11 @@ behavior default:
 }
 
 unit push(int32 x)
-  requires (C_27 : (size < (100 - 1)));
+  requires (C_28 : (size < (100 - 1)));
 behavior default:
   assigns (heap + [..]).int_M,
   size;
-  ensures (C_28 : (model() == add_bag(x, \old(model()))));
+  ensures (C_27 : (model() == add_bag(\at(x,Old), \old(model()))));
 {  
    (var int32 i);
    
@@ -243,10 +243,10 @@ behavior default:
 }
 
 int32 max()
-  requires (C_31 : (size > 0));
+  requires (C_32 : (size > 0));
 behavior default:
   assigns \nothing;
-  ensures (C_32 : is_max_bag(model(), \result));
+  ensures (C_31 : is_max_bag(model(), \result));
 {  
    (var int32 __retres);
    
@@ -257,13 +257,13 @@ behavior default:
 }
 
 int32 pop()
-  requires (C_66 : (size > 0));
+  requires (C_71 : (size > 0));
 behavior default:
   assigns (heap + [..]).int_M,
   size;
-  ensures (C_67 : (((C_69 : (size == (\old(size) - 1))) &&
-                     (C_70 : is_max_bag(\old(model()), \result))) &&
-                    (C_71 : (\old(model()) == add_bag(\result, model())))));
+  ensures (C_66 : (((C_68 : (size == (\old(size) - 1))) &&
+                     (C_69 : is_max_bag(\old(model()), \result))) &&
+                    (C_70 : (\old(model()) == add_bag(\result, model())))));
 {  
    (var int32 res);
    
@@ -954,7 +954,7 @@ parameter push :
          and (JC_59: is_heap_inv(int_P_int_M_heap_1, size)))))
     and (JC_52:
         ((JC_50:
-         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
+         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x@),
                                             model(int_P_int_M_heap_1@, size@))))
         and (JC_51:
             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
@@ -975,7 +975,7 @@ parameter push_requires :
          and (JC_59: is_heap_inv(int_P_int_M_heap_1, size)))))
     and (JC_52:
         ((JC_50:
-         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
+         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x@),
                                             model(int_P_int_M_heap_1@, size@))))
         and (JC_51:
             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
@@ -1488,7 +1488,7 @@ let push_ensures_default =
    Return -> void end)
   { (JC_49:
     ((JC_47:
-     (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x),
+     (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x@),
                                         model(int_P_int_M_heap_1@, size@))))
     and (JC_48:
         not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,

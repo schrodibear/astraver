@@ -38,13 +38,13 @@ tag void_P = {
 type void_P = [void_P]
 
 unit f(int_P[..] a)
-  requires (C_4 : ((C_5 : (\offset_min(a) <= 0)) &&
-                    (C_6 : (\offset_max(a) >= 0))));
+  requires (C_6 : ((C_7 : (\offset_min(a) <= 0)) &&
+                    (C_8 : (\offset_max(a) >= 0))));
 behavior default:
-  ensures (C_7 : true);
+  ensures (C_4 : true);
 behavior az:
   assumes (a.int_M == 0);
-  ensures (C_8 : (a.int_M == 0));
+  ensures (C_5 : (\at(a,Old).int_M == 0));
 {  
    {  (if ((C_3 : a.int_M) != 0) then (C_2 : ((C_1 : a.int_M) = 1)) else ());
       
@@ -53,10 +53,10 @@ behavior az:
 }
 
 unit g(int_P[..] a_0)
-  requires (C_10 : ((C_11 : (\offset_min(a_0) <= 0)) &&
-                     (C_12 : (\offset_max(a_0) >= 0))));
+  requires (C_11 : ((C_12 : (\offset_min(a_0) <= 0)) &&
+                     (C_13 : (\offset_max(a_0) >= 0))));
 behavior default:
-  ensures (C_13 : ((\old(a_0.int_M) == 0) ==> (a_0.int_M == 0)));
+  ensures (C_10 : ((\old(a_0.int_M) == 0) ==> (\at(a_0,Old).int_M == 0)));
 {  
    {  (C_9 : f(a_0));
       
@@ -417,7 +417,7 @@ parameter f :
    int_P_a_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_a_1 writes int_P_int_M_a_1
     { (eq_int(integer_of_int32(select(int_P_int_M_a_1@, a@)), (0)) ->
-       (JC_14: eq_int(integer_of_int32(select(int_P_int_M_a_1, a)), (0)))) }
+       (JC_14: eq_int(integer_of_int32(select(int_P_int_M_a_1, a@)), (0)))) }
 
 parameter f_requires :
  a:int_P pointer ->
@@ -428,7 +428,7 @@ parameter f_requires :
       and (JC_2: ge_int(offset_max(int_P_a_1_alloc_table, a), (0)))))}
     unit reads int_P_int_M_a_1 writes int_P_int_M_a_1
     { (eq_int(integer_of_int32(select(int_P_int_M_a_1@, a@)), (0)) ->
-       (JC_14: eq_int(integer_of_int32(select(int_P_int_M_a_1, a)), (0)))) }
+       (JC_14: eq_int(integer_of_int32(select(int_P_int_M_a_1, a@)), (0)))) }
 
 parameter g :
  a_0:int_P pointer ->
@@ -437,7 +437,7 @@ parameter g :
     { } unit reads int_P_int_M_a_0_2 writes int_P_int_M_a_0_2
     { (JC_26:
       (eq_int(integer_of_int32(select(int_P_int_M_a_0_2@, a_0@)), (0)) ->
-       eq_int(integer_of_int32(select(int_P_int_M_a_0_2, a_0)), (0)))) }
+       eq_int(integer_of_int32(select(int_P_int_M_a_0_2, a_0@)), (0)))) }
 
 parameter g_requires :
  a_0:int_P pointer ->
@@ -449,7 +449,7 @@ parameter g_requires :
     unit reads int_P_int_M_a_0_2 writes int_P_int_M_a_0_2
     { (JC_26:
       (eq_int(integer_of_int32(select(int_P_int_M_a_0_2@, a_0@)), (0)) ->
-       eq_int(integer_of_int32(select(int_P_int_M_a_0_2, a_0)), (0)))) }
+       eq_int(integer_of_int32(select(int_P_int_M_a_0_2, a_0@)), (0)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -484,7 +484,7 @@ let f_ensures_az =
       (let jessie_17 = a in
       (((safe_upd_ int_P_int_M_a_1) jessie_17) jessie_14))) in void))
      else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_13: eq_int(integer_of_int32(select(int_P_int_M_a_1, a)), (0))) }
+  { (JC_13: eq_int(integer_of_int32(select(int_P_int_M_a_1, a@)), (0))) }
 
 let f_ensures_default =
  fun (a : int_P pointer) (int_P_int_M_a_1 : (int_P, int32) memory ref) (int_P_a_1_alloc_table : int_P alloc_table) ->
@@ -540,7 +540,7 @@ let g_ensures_default =
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_25:
     (eq_int(integer_of_int32(select(int_P_int_M_a_0_2@, a_0@)), (0)) ->
-     eq_int(integer_of_int32(select(int_P_int_M_a_0_2, a_0)), (0)))) }
+     eq_int(integer_of_int32(select(int_P_int_M_a_0_2, a_0@)), (0)))) }
 
 let g_safety =
  fun (a_0 : int_P pointer) (int_P_int_M_a_0_2 : (int_P, int32) memory ref) (int_P_a_0_2_alloc_table : int_P alloc_table) ->

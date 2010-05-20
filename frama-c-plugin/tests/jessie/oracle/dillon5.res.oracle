@@ -53,11 +53,11 @@ invariant valid_v1 :
 ((\offset_min(v1) <= 0) && (\offset_max(v1) >= 0))
 
 unit g(__anonstruct_las2_1[..] v2)
-  requires (C_3 : ((C_4 : (\offset_min(v2) <= 0)) &&
-                    (C_5 : (\offset_max(v2) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(v2) <= 0)) &&
+                    (C_6 : (\offset_max(v2) >= 0))));
 behavior default:
   assigns v2.a;
-  ensures (C_6 : (v2.a == 3));
+  ensures (C_3 : (\at(v2,Old).a == 3));
 {  
    {  (C_2 : ((C_1 : v2.a) = 3));
       
@@ -66,11 +66,11 @@ behavior default:
 }
 
 int32 main()
-  requires (C_12 : ((C_13 : (\offset_min(v1.s) <= 0)) &&
-                     (C_14 : (\offset_max(v1.s) >= 0))));
+  requires (C_13 : ((C_14 : (\offset_min(v1.s) <= 0)) &&
+                     (C_15 : (\offset_max(v1.s) >= 0))));
 behavior default:
   assigns v1.s.a;
-  ensures (C_15 : (v1.s.a == 3));
+  ensures (C_12 : (v1.s.a == 3));
 {  
    (var int32 __retres);
    
@@ -620,7 +620,7 @@ parameter g :
     { ((JC_22: valid_v1(__anonstruct_las1_2_v1_1_alloc_table))
       and (JC_20:
           ((JC_18:
-           eq_int(integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2)),
+           eq_int(integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2@)),
            (3)))
           and (JC_19:
               not_assigns(__anonstruct_las2_1_v2_3_alloc_table@,
@@ -644,7 +644,7 @@ parameter g_requires :
     { ((JC_22: valid_v1(__anonstruct_las1_2_v1_1_alloc_table))
       and (JC_20:
           ((JC_18:
-           eq_int(integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2)),
+           eq_int(integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2@)),
            (3)))
           and (JC_19:
               not_assigns(__anonstruct_las2_1_v2_3_alloc_table@,
@@ -731,7 +731,7 @@ let g_ensures_default =
        void); (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_17:
     ((JC_15:
-     eq_int(integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2)), (3)))
+     eq_int(integer_of_int32(select(__anonstruct_las2_1_a_v2_3, v2@)), (3)))
     and (JC_16:
         not_assigns(__anonstruct_las2_1_v2_3_alloc_table@,
         __anonstruct_las2_1_a_v2_3@, __anonstruct_las2_1_a_v2_3,

@@ -192,16 +192,16 @@ lemma div2_5 :
         ((k_1 != ((i_14 - 1) / 2)) ==> (((2 * k_1) + 2) != i_14))))))
 
 unit sift_down(int_P[..] a_0, uint32 low, uint32 high, int32 v)
-  requires (C_42 : ((((C_45 : (0 <= low)) && (C_46 : (low <= high))) &&
-                      ((C_48 : (\offset_min(a_0) <= low)) &&
-                        (C_49 : (\offset_max(a_0) >= high)))) &&
-                     (C_50 : H{Here}(a_0, (low + 1), high))));
+  requires (C_45 : ((((C_48 : (0 <= low)) && (C_49 : (low <= high))) &&
+                      ((C_51 : (\offset_min(a_0) <= low)) &&
+                        (C_52 : (\offset_max(a_0) >= high)))) &&
+                     (C_53 : H{Here}(a_0, (low + 1), high))));
 behavior default:
   assigns (a_0 + [low..high]).int_M;
-  ensures (C_51 : ((C_52 : Permut(contents{Here}(a_0),
+  ensures (C_42 : ((C_43 : Permut(contents{Here}(\at(a_0,Old)),
                                   \old(update(contents{Old}(a_0), low, v)),
-                                  low, high)) &&
-                    (C_53 : H{Here}(a_0, low, high))));
+                                  \at(low,Old), \at(high,Old))) &&
+                    (C_44 : H{Here}(\at(a_0,Old), \at(low,Old), \at(high,Old)))));
 {  
    (var uint32 i);
    
@@ -211,6 +211,9 @@ behavior default:
       
       {  
          loop 
+         behavior default:
+           
+           assigns (a_0 + [low..high]).int_M;
          behavior default:
            invariant (C_3 : ((((((C_8 : (low <= i)) && (C_9 : (i <= high))) &&
                                  (C_10 : Permut(contents{Here}(a_0),
@@ -223,9 +226,6 @@ behavior default:
                                          Hnode{Here}(a_0, low, high)))) &&
                               (C_13 : ((low <= ((i - 1) / 2)) ==>
                                         ((a_0 + ((i - 1) / 2)).int_M >= v)))));
-         behavior default:
-           
-           assigns (a_0 + [low..high]).int_M;
          variant (C_2 : (high - i));
          while (true)
          {  
@@ -267,13 +267,14 @@ behavior default:
 }
 
 unit heapsort(int_P[..] a, uint32 n)
-  requires (C_106 : ((C_107 : (0 <= n)) &&
-                      ((C_109 : (\offset_min(a) <= 0)) &&
-                        (C_110 : (\offset_max(a) >= (n - 1))))));
+  requires (C_109 : ((C_110 : (0 <= n)) &&
+                      ((C_112 : (\offset_min(a) <= 0)) &&
+                        (C_113 : (\offset_max(a) >= (n - 1))))));
 behavior default:
-  ensures (C_111 : ((C_112 : Permut(contents{Here}(a),
-                                    \old(contents{Old}(a)), 0, (n - 1))) &&
-                     (C_113 : Sorted{Here}(a, 0, (n - 1)))));
+  ensures (C_106 : ((C_107 : Permut(contents{Here}(\at(a,Old)),
+                                    \old(contents{Old}(a)), 0,
+                                    (\at(n,Old) - 1))) &&
+                     (C_108 : Sorted{Here}(\at(a,Old), 0, (\at(n,Old) - 1)))));
 {  
    (var uint32 i_0);
    
@@ -990,11 +991,11 @@ parameter heapsort :
      { } unit reads int_P_int_M_a_6 writes int_P_int_M_a_6
      { (JC_76:
        ((JC_74:
-        Permut(contents(a_1, int_P_int_M_a_6),
+        Permut(contents(a_1@, int_P_int_M_a_6),
         contents(a_1@, int_P_int_M_a_6@), (0),
-        sub_int(integer_of_uint32(n), (1))))
+        sub_int(integer_of_uint32(n@), (1))))
        and (JC_75:
-           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+           Sorted(a_1@, (0), sub_int(integer_of_uint32(n@), (1)),
            int_P_int_M_a_6)))) }
 
 parameter heapsort_requires :
@@ -1011,11 +1012,11 @@ parameter heapsort_requires :
      unit reads int_P_int_M_a_6 writes int_P_int_M_a_6
      { (JC_76:
        ((JC_74:
-        Permut(contents(a_1, int_P_int_M_a_6),
+        Permut(contents(a_1@, int_P_int_M_a_6),
         contents(a_1@, int_P_int_M_a_6@), (0),
-        sub_int(integer_of_uint32(n), (1))))
+        sub_int(integer_of_uint32(n@), (1))))
        and (JC_75:
-           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+           Sorted(a_1@, (0), sub_int(integer_of_uint32(n@), (1)),
            int_P_int_M_a_6)))) }
 
 parameter int32_of_integer_ :
@@ -1048,12 +1049,12 @@ parameter sift_down :
        { (JC_24:
          ((JC_22:
           ((JC_20:
-           Permut(contents(a_0_0, int_P_int_M_a_0_5),
+           Permut(contents(a_0_0@, int_P_int_M_a_0_5),
            update(contents(a_0_0@, int_P_int_M_a_0_5@),
-           integer_of_uint32(low@), v_0@), integer_of_uint32(low),
-           integer_of_uint32(high)))
+           integer_of_uint32(low@), v_0@), integer_of_uint32(low@),
+           integer_of_uint32(high@)))
           and (JC_21:
-              H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+              H(a_0_0@, integer_of_uint32(low@), integer_of_uint32(high@),
               int_P_int_M_a_0_5))))
          and (JC_23:
              not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
@@ -1084,12 +1085,12 @@ parameter sift_down_requires :
        { (JC_24:
          ((JC_22:
           ((JC_20:
-           Permut(contents(a_0_0, int_P_int_M_a_0_5),
+           Permut(contents(a_0_0@, int_P_int_M_a_0_5),
            update(contents(a_0_0@, int_P_int_M_a_0_5@),
-           integer_of_uint32(low@), v_0@), integer_of_uint32(low),
-           integer_of_uint32(high)))
+           integer_of_uint32(low@), v_0@), integer_of_uint32(low@),
+           integer_of_uint32(high@)))
           and (JC_21:
-              H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+              H(a_0_0@, integer_of_uint32(low@), integer_of_uint32(high@),
               int_P_int_M_a_0_5))))
          and (JC_23:
              not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
@@ -1290,10 +1291,12 @@ let heapsort_ensures_default =
     (raise Return) end with Return -> void end)
   { (JC_73:
     ((JC_71:
-     Permut(contents(a_1, int_P_int_M_a_6), contents(a_1@, int_P_int_M_a_6@),
-     (0), sub_int(integer_of_uint32(n), (1))))
+     Permut(contents(a_1@, int_P_int_M_a_6),
+     contents(a_1@, int_P_int_M_a_6@), (0),
+     sub_int(integer_of_uint32(n@), (1))))
     and (JC_72:
-        Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)), int_P_int_M_a_6)))) }
+        Sorted(a_1@, (0), sub_int(integer_of_uint32(n@), (1)),
+        int_P_int_M_a_6)))) }
 
 let heapsort_safety =
  fun (a_1 : int_P pointer) (n : uint32) (int_P_int_M_a_6 : (int_P, int32) memory ref) (int_P_a_6_alloc_table : int_P alloc_table) ->
@@ -1655,11 +1658,11 @@ let sift_down_ensures_default =
   { (JC_19:
     ((JC_17:
      ((JC_15:
-      Permut(contents(a_0_0, int_P_int_M_a_0_5),
+      Permut(contents(a_0_0@, int_P_int_M_a_0_5),
       update(contents(a_0_0@, int_P_int_M_a_0_5@), integer_of_uint32(low@),
-      v_0@), integer_of_uint32(low), integer_of_uint32(high)))
+      v_0@), integer_of_uint32(low@), integer_of_uint32(high@)))
      and (JC_16:
-         H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
+         H(a_0_0@, integer_of_uint32(low@), integer_of_uint32(high@),
          int_P_int_M_a_0_5))))
     and (JC_18:
         not_assigns(int_P_a_0_5_alloc_table@, int_P_int_M_a_0_5@,
@@ -2176,27 +2179,27 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po42.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po43.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po44.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po45.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po46.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "293" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2211,11 +2214,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "983" begin = "21" end = "55"/>
+      <location file = "why/heapsort.why" line = "985" begin = "21" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "983" begin = "21" end = "55"/>
+      <location file = "why/heapsort.why" line = "985" begin = "21" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2249,12 +2252,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po57.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "326" begin = "27" end = "287"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "327" begin = "27" end = "287"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po58.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "326" begin = "27" end = "287"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "327" begin = "27" end = "287"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2269,27 +2272,27 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po61.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po62.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po63.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po64.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po65.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2304,11 +2307,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "1056" begin = "22" end = "57"/>
+      <location file = "why/heapsort.why" line = "1058" begin = "22" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "1056" begin = "22" end = "57"/>
+      <location file = "why/heapsort.why" line = "1058" begin = "22" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

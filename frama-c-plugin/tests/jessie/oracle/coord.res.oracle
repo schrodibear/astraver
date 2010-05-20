@@ -50,9 +50,9 @@ behavior default:
 ;
 
 unit g(int32 index)
-  requires (C_7 : ((C_8 : (0 <= index)) && (C_9 : (index < 3))));
+  requires (C_8 : ((C_9 : (0 <= index)) && (C_10 : (index < 3))));
 behavior default:
-  ensures (C_10 : true);
+  ensures (C_7 : true);
 {  
    {  (C_4 : f((C_3 : (C_2 : (tab + index)).x_0)));
       (C_6 : f((C_5 : (tab + index).x_0)));

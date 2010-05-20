@@ -46,15 +46,15 @@ tag T = {
 type T = [T]
 
 unit f(T[..] p_0, T[..] q)
-  requires (C_21 : (((C_23 : (\offset_min(p_0) <= 0)) &&
-                      (C_24 : (\offset_max(p_0) >= 0))) &&
-                     ((C_26 : (\offset_min(q) <= 0)) &&
-                       (C_27 : (\offset_max(q) >= 0)))));
+  requires (C_28 : (((C_30 : (\offset_min(p_0) <= 0)) &&
+                      (C_31 : (\offset_max(p_0) >= 0))) &&
+                     ((C_33 : (\offset_min(q) <= 0)) &&
+                       (C_34 : (\offset_max(q) >= 0)))));
 behavior default:
-  ensures (C_28 : (((C_30 : (p_0.a.i == q.a.i)) &&
-                     (C_31 : (p_0.a.j == q.a.j))) &&
-                    ((C_33 : (p_0.b.i == q.b.i)) &&
-                      (C_34 : (p_0.b.j == q.b.j)))));
+  ensures (C_21 : (((C_23 : (\at(p_0,Old).a.i == \at(q,Old).a.i)) &&
+                     (C_24 : (\at(p_0,Old).a.j == \at(q,Old).a.j))) &&
+                    ((C_26 : (\at(p_0,Old).b.i == \at(q,Old).b.i)) &&
+                      (C_27 : (\at(p_0,Old).b.j == \at(q,Old).b.j)))));
 {  
    {  
       {  (C_5 : ((C_4 : (C_3 : q.a).i) = (C_2 : (C_1 : p_0.a).i)));
@@ -69,10 +69,10 @@ behavior default:
 
 T[0] id(T[0] v_p_2)
 behavior default:
-  ensures (C_80 : (((C_82 : (\result.a.i == v_p_2.a.i)) &&
-                     (C_83 : (\result.a.j == v_p_2.a.j))) &&
-                    ((C_85 : (\result.b.i == v_p_2.b.i)) &&
-                      (C_86 : (\result.b.j == v_p_2.b.j)))));
+  ensures (C_80 : (((C_82 : (\result.a.i == \at(v_p_2.a.i,Old))) &&
+                     (C_83 : (\result.a.j == \at(v_p_2.a.j,Old)))) &&
+                    ((C_85 : (\result.b.i == \at(v_p_2.b.i,Old))) &&
+                      (C_86 : (\result.b.j == \at(v_p_2.b.j,Old))))));
 {  
    (var T[0] p_2);
    
@@ -101,13 +101,13 @@ behavior default:
 }
 
 T[0] idp(T[..] p)
-  requires (C_132 : ((C_133 : (\offset_min(p) <= 0)) &&
-                      (C_134 : (\offset_max(p) >= 0))));
+  requires (C_139 : ((C_140 : (\offset_min(p) <= 0)) &&
+                      (C_141 : (\offset_max(p) >= 0))));
 behavior default:
-  ensures (C_135 : (((C_137 : (\result.a.i == p.a.i)) &&
-                      (C_138 : (\result.a.j == p.a.j))) &&
-                     ((C_140 : (\result.b.i == p.b.i)) &&
-                       (C_141 : (\result.b.j == p.b.j)))));
+  ensures (C_132 : (((C_134 : (\result.a.i == \at(p,Old).a.i)) &&
+                      (C_135 : (\result.a.j == \at(p,Old).a.j))) &&
+                     ((C_137 : (\result.b.i == \at(p,Old).b.i)) &&
+                       (C_138 : (\result.b.j == \at(p,Old).b.j)))));
 {  
    (var T[0] __retres);
    
@@ -136,10 +136,10 @@ behavior default:
 }
 
 unit g(T[..] p_1)
-  requires (C_209 : ((C_210 : (\offset_min(p_1) <= 0)) &&
-                      (C_211 : (\offset_max(p_1) >= 0))));
+  requires (C_210 : ((C_211 : (\offset_min(p_1) <= 0)) &&
+                      (C_212 : (\offset_max(p_1) >= 0))));
 behavior default:
-  ensures (C_212 : true);
+  ensures (C_209 : true);
 {  
    (var T[0] copy);
    
@@ -678,22 +678,22 @@ parameter f :
                { (JC_22:
                  ((JC_18:
                   eq_int(integer_of_int32(select(S_i_p_0_1,
-                                          select(T_a_p_0_1, p_0))),
-                  integer_of_int32(select(S_i_q_2, select(T_a_q_2, q)))))
+                                          select(T_a_p_0_1, p_0@))),
+                  integer_of_int32(select(S_i_q_2, select(T_a_q_2, q@)))))
                  and ((JC_19:
                       eq_int(integer_of_int32(select(S_j_p_0_1,
-                                              select(T_a_p_0_1, p_0))),
-                      integer_of_int32(select(S_j_q_2, select(T_a_q_2, q)))))
+                                              select(T_a_p_0_1, p_0@))),
+                      integer_of_int32(select(S_j_q_2, select(T_a_q_2, q@)))))
                      and ((JC_20:
                           eq_int(integer_of_int32(select(S_i_p_0_1,
-                                                  select(T_b_p_0_1, p_0))),
+                                                  select(T_b_p_0_1, p_0@))),
                           integer_of_int32(select(S_i_q_2,
-                                           select(T_b_q_2, q)))))
+                                           select(T_b_q_2, q@)))))
                          and (JC_21:
                              eq_int(integer_of_int32(select(S_j_p_0_1,
-                                                     select(T_b_p_0_1, p_0))),
+                                                     select(T_b_p_0_1, p_0@))),
                              integer_of_int32(select(S_j_q_2,
-                                              select(T_b_q_2, q))))))))) }
+                                              select(T_b_q_2, q@))))))))) }
 
 parameter f_requires :
  p_0:T pointer ->
@@ -722,22 +722,22 @@ parameter f_requires :
                { (JC_22:
                  ((JC_18:
                   eq_int(integer_of_int32(select(S_i_p_0_1,
-                                          select(T_a_p_0_1, p_0))),
-                  integer_of_int32(select(S_i_q_2, select(T_a_q_2, q)))))
+                                          select(T_a_p_0_1, p_0@))),
+                  integer_of_int32(select(S_i_q_2, select(T_a_q_2, q@)))))
                  and ((JC_19:
                       eq_int(integer_of_int32(select(S_j_p_0_1,
-                                              select(T_a_p_0_1, p_0))),
-                      integer_of_int32(select(S_j_q_2, select(T_a_q_2, q)))))
+                                              select(T_a_p_0_1, p_0@))),
+                      integer_of_int32(select(S_j_q_2, select(T_a_q_2, q@)))))
                      and ((JC_20:
                           eq_int(integer_of_int32(select(S_i_p_0_1,
-                                                  select(T_b_p_0_1, p_0))),
+                                                  select(T_b_p_0_1, p_0@))),
                           integer_of_int32(select(S_i_q_2,
-                                           select(T_b_q_2, q)))))
+                                           select(T_b_q_2, q@)))))
                          and (JC_21:
                              eq_int(integer_of_int32(select(S_j_p_0_1,
-                                                     select(T_b_p_0_1, p_0))),
+                                                     select(T_b_p_0_1, p_0@))),
                              integer_of_int32(select(S_j_q_2,
-                                              select(T_b_q_2, q))))))))) }
+                                              select(T_b_q_2, q@))))))))) }
 
 parameter g :
  p_1:T pointer ->
@@ -785,25 +785,25 @@ parameter id :
                   ((JC_46:
                    eq_int(integer_of_int32(select(S_i_result_4,
                                            select(T_a_result_4, result))),
-                   integer_of_int32(select(S_i_v_p_2_3,
-                                    select(T_a_v_p_2_3, v_p_2)))))
+                   integer_of_int32(select(S_i_v_p_2_3@,
+                                    select(T_a_v_p_2_3@, v_p_2@)))))
                   and ((JC_47:
                        eq_int(integer_of_int32(select(S_j_result_4,
                                                select(T_a_result_4, result))),
-                       integer_of_int32(select(S_j_v_p_2_3,
-                                        select(T_a_v_p_2_3, v_p_2)))))
+                       integer_of_int32(select(S_j_v_p_2_3@,
+                                        select(T_a_v_p_2_3@, v_p_2@)))))
                       and ((JC_48:
                            eq_int(integer_of_int32(select(S_i_result_4,
                                                    select(T_b_result_4,
                                                    result))),
-                           integer_of_int32(select(S_i_v_p_2_3,
-                                            select(T_b_v_p_2_3, v_p_2)))))
+                           integer_of_int32(select(S_i_v_p_2_3@,
+                                            select(T_b_v_p_2_3@, v_p_2@)))))
                           and (JC_49:
                               eq_int(integer_of_int32(select(S_j_result_4,
                                                       select(T_b_result_4,
                                                       result))),
-                              integer_of_int32(select(S_j_v_p_2_3,
-                                               select(T_b_v_p_2_3, v_p_2))))))))) }
+                              integer_of_int32(select(S_j_v_p_2_3@,
+                                               select(T_b_v_p_2_3@, v_p_2@))))))))) }
 
 parameter id_requires :
  v_p_2:T pointer ->
@@ -828,25 +828,25 @@ parameter id_requires :
                   ((JC_46:
                    eq_int(integer_of_int32(select(S_i_result_4,
                                            select(T_a_result_4, result))),
-                   integer_of_int32(select(S_i_v_p_2_3,
-                                    select(T_a_v_p_2_3, v_p_2)))))
+                   integer_of_int32(select(S_i_v_p_2_3@,
+                                    select(T_a_v_p_2_3@, v_p_2@)))))
                   and ((JC_47:
                        eq_int(integer_of_int32(select(S_j_result_4,
                                                select(T_a_result_4, result))),
-                       integer_of_int32(select(S_j_v_p_2_3,
-                                        select(T_a_v_p_2_3, v_p_2)))))
+                       integer_of_int32(select(S_j_v_p_2_3@,
+                                        select(T_a_v_p_2_3@, v_p_2@)))))
                       and ((JC_48:
                            eq_int(integer_of_int32(select(S_i_result_4,
                                                    select(T_b_result_4,
                                                    result))),
-                           integer_of_int32(select(S_i_v_p_2_3,
-                                            select(T_b_v_p_2_3, v_p_2)))))
+                           integer_of_int32(select(S_i_v_p_2_3@,
+                                            select(T_b_v_p_2_3@, v_p_2@)))))
                           and (JC_49:
                               eq_int(integer_of_int32(select(S_j_result_4,
                                                       select(T_b_result_4,
                                                       result))),
-                              integer_of_int32(select(S_j_v_p_2_3,
-                                               select(T_b_v_p_2_3, v_p_2))))))))) }
+                              integer_of_int32(select(S_j_v_p_2_3@,
+                                               select(T_b_v_p_2_3@, v_p_2@))))))))) }
 
 parameter idp :
  p:T pointer ->
@@ -871,23 +871,23 @@ parameter idp :
                   ((JC_72:
                    eq_int(integer_of_int32(select(S_i_result_7,
                                            select(T_a_result_7, result))),
-                   integer_of_int32(select(S_i_p_6, select(T_a_p_6, p)))))
+                   integer_of_int32(select(S_i_p_6, select(T_a_p_6, p@)))))
                   and ((JC_73:
                        eq_int(integer_of_int32(select(S_j_result_7,
                                                select(T_a_result_7, result))),
-                       integer_of_int32(select(S_j_p_6, select(T_a_p_6, p)))))
+                       integer_of_int32(select(S_j_p_6, select(T_a_p_6, p@)))))
                       and ((JC_74:
                            eq_int(integer_of_int32(select(S_i_result_7,
                                                    select(T_b_result_7,
                                                    result))),
                            integer_of_int32(select(S_i_p_6,
-                                            select(T_b_p_6, p)))))
+                                            select(T_b_p_6, p@)))))
                           and (JC_75:
                               eq_int(integer_of_int32(select(S_j_result_7,
                                                       select(T_b_result_7,
                                                       result))),
                               integer_of_int32(select(S_j_p_6,
-                                               select(T_b_p_6, p))))))))) }
+                                               select(T_b_p_6, p@))))))))) }
 
 parameter idp_requires :
  p:T pointer ->
@@ -915,23 +915,23 @@ parameter idp_requires :
                   ((JC_72:
                    eq_int(integer_of_int32(select(S_i_result_7,
                                            select(T_a_result_7, result))),
-                   integer_of_int32(select(S_i_p_6, select(T_a_p_6, p)))))
+                   integer_of_int32(select(S_i_p_6, select(T_a_p_6, p@)))))
                   and ((JC_73:
                        eq_int(integer_of_int32(select(S_j_result_7,
                                                select(T_a_result_7, result))),
-                       integer_of_int32(select(S_j_p_6, select(T_a_p_6, p)))))
+                       integer_of_int32(select(S_j_p_6, select(T_a_p_6, p@)))))
                       and ((JC_74:
                            eq_int(integer_of_int32(select(S_i_result_7,
                                                    select(T_b_result_7,
                                                    result))),
                            integer_of_int32(select(S_i_p_6,
-                                            select(T_b_p_6, p)))))
+                                            select(T_b_p_6, p@)))))
                           and (JC_75:
                               eq_int(integer_of_int32(select(S_j_result_7,
                                                       select(T_b_result_7,
                                                       result))),
                               integer_of_int32(select(S_j_p_6,
-                                               select(T_b_p_6, p))))))))) }
+                                               select(T_b_p_6, p@))))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -990,19 +990,19 @@ let f_ensures_default =
    Return -> void end)
   { (JC_17:
     ((JC_13:
-     eq_int(integer_of_int32(select(S_i_p_0_1, select(T_a_p_0_1, p_0))),
-     integer_of_int32(select(S_i_q_2, select(T_a_q_2, q)))))
+     eq_int(integer_of_int32(select(S_i_p_0_1, select(T_a_p_0_1, p_0@))),
+     integer_of_int32(select(S_i_q_2, select(T_a_q_2, q@)))))
     and ((JC_14:
-         eq_int(integer_of_int32(select(S_j_p_0_1, select(T_a_p_0_1, p_0))),
-         integer_of_int32(select(S_j_q_2, select(T_a_q_2, q)))))
+         eq_int(integer_of_int32(select(S_j_p_0_1, select(T_a_p_0_1, p_0@))),
+         integer_of_int32(select(S_j_q_2, select(T_a_q_2, q@)))))
         and ((JC_15:
              eq_int(integer_of_int32(select(S_i_p_0_1,
-                                     select(T_b_p_0_1, p_0))),
-             integer_of_int32(select(S_i_q_2, select(T_b_q_2, q)))))
+                                     select(T_b_p_0_1, p_0@))),
+             integer_of_int32(select(S_i_q_2, select(T_b_q_2, q@)))))
             and (JC_16:
                 eq_int(integer_of_int32(select(S_j_p_0_1,
-                                        select(T_b_p_0_1, p_0))),
-                integer_of_int32(select(S_j_q_2, select(T_b_q_2, q))))))))) }
+                                        select(T_b_p_0_1, p_0@))),
+                integer_of_int32(select(S_j_q_2, select(T_b_q_2, q@))))))))) }
 
 let f_safety =
  fun (p_0 : T pointer) (q : T pointer) (S_i_q_2 : (S, int32) memory ref) (S_j_q_2 : (S, int32) memory ref) (S_p_0_1_alloc_table : S alloc_table) (S_q_2_alloc_table : S alloc_table) (T_p_0_1_alloc_table : T alloc_table) (T_q_2_alloc_table : T alloc_table) (S_i_p_0_1 : (S, int32) memory) (S_j_p_0_1 : (S, int32) memory) (T_a_p_0_1 : (T, S pointer) memory) (T_a_q_2 : (T, S pointer) memory) (T_b_p_0_1 : (T, S pointer) memory) (T_b_q_2 : (T, S pointer) memory) ->
@@ -1604,20 +1604,21 @@ let id_ensures_default =
     ((JC_41:
      eq_int(integer_of_int32(select(S_i_result_4,
                              select(T_a_result_4, result))),
-     integer_of_int32(select(S_i_v_p_2_3, select(T_a_v_p_2_3, v_p_2)))))
+     integer_of_int32(select(S_i_v_p_2_3@, select(T_a_v_p_2_3@, v_p_2@)))))
     and ((JC_42:
          eq_int(integer_of_int32(select(S_j_result_4,
                                  select(T_a_result_4, result))),
-         integer_of_int32(select(S_j_v_p_2_3, select(T_a_v_p_2_3, v_p_2)))))
+         integer_of_int32(select(S_j_v_p_2_3@, select(T_a_v_p_2_3@, v_p_2@)))))
         and ((JC_43:
              eq_int(integer_of_int32(select(S_i_result_4,
                                      select(T_b_result_4, result))),
-             integer_of_int32(select(S_i_v_p_2_3, select(T_b_v_p_2_3, v_p_2)))))
+             integer_of_int32(select(S_i_v_p_2_3@,
+                              select(T_b_v_p_2_3@, v_p_2@)))))
             and (JC_44:
                 eq_int(integer_of_int32(select(S_j_result_4,
                                         select(T_b_result_4, result))),
-                integer_of_int32(select(S_j_v_p_2_3,
-                                 select(T_b_v_p_2_3, v_p_2))))))))) }
+                integer_of_int32(select(S_j_v_p_2_3@,
+                                 select(T_b_v_p_2_3@, v_p_2@))))))))) }
 
 let id_safety =
  fun (v_p_2 : T pointer) (S_result_4_alloc_table : S alloc_table ref) (T_result_4_alloc_table : T alloc_table ref) (T_result_4_tag_table : T tag_table ref) (S_result_4_tag_table : S tag_table ref) (S_i_result_4 : (S, int32) memory ref) (S_j_result_4 : (S, int32) memory ref) (T_a_result_4 : (T, S pointer) memory ref) (T_b_result_4 : (T, S pointer) memory ref) (S_v_p_2_3_alloc_table : S alloc_table) (T_v_p_2_3_alloc_table : T alloc_table) (S_i_v_p_2_3 : (S, int32) memory) (S_j_v_p_2_3 : (S, int32) memory) (T_a_v_p_2_3 : (T, S pointer) memory) (T_b_v_p_2_3 : (T, S pointer) memory) ->
@@ -1845,19 +1846,19 @@ let idp_ensures_default =
     ((JC_67:
      eq_int(integer_of_int32(select(S_i_result_7,
                              select(T_a_result_7, result))),
-     integer_of_int32(select(S_i_p_6, select(T_a_p_6, p)))))
+     integer_of_int32(select(S_i_p_6, select(T_a_p_6, p@)))))
     and ((JC_68:
          eq_int(integer_of_int32(select(S_j_result_7,
                                  select(T_a_result_7, result))),
-         integer_of_int32(select(S_j_p_6, select(T_a_p_6, p)))))
+         integer_of_int32(select(S_j_p_6, select(T_a_p_6, p@)))))
         and ((JC_69:
              eq_int(integer_of_int32(select(S_i_result_7,
                                      select(T_b_result_7, result))),
-             integer_of_int32(select(S_i_p_6, select(T_b_p_6, p)))))
+             integer_of_int32(select(S_i_p_6, select(T_b_p_6, p@)))))
             and (JC_70:
                 eq_int(integer_of_int32(select(S_j_result_7,
                                         select(T_b_result_7, result))),
-                integer_of_int32(select(S_j_p_6, select(T_b_p_6, p))))))))) }
+                integer_of_int32(select(S_j_p_6, select(T_b_p_6, p@))))))))) }
 
 let idp_safety =
  fun (p : T pointer) (S_result_7_alloc_table : S alloc_table ref) (T_result_7_alloc_table : T alloc_table ref) (T_result_7_tag_table : T tag_table ref) (S_result_7_tag_table : S tag_table ref) (S_i_result_7 : (S, int32) memory ref) (S_j_result_7 : (S, int32) memory ref) (T_a_result_7 : (T, S pointer) memory ref) (T_b_result_7 : (T, S pointer) memory ref) (S_p_6_alloc_table : S alloc_table) (T_p_6_alloc_table : T alloc_table) (S_i_p_6 : (S, int32) memory) (S_j_p_6 : (S, int32) memory) (T_a_p_6 : (T, S pointer) memory) (T_b_p_6 : (T, S pointer) memory) ->
@@ -2005,7 +2006,7 @@ why --project [...] why/copy_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po49.why">
-      <location file = "why/copy_struct.why" line = "1684" begin = "22" end = "135"/>
+      <location file = "why/copy_struct.why" line = "1685" begin = "22" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po50.why">
@@ -2014,7 +2015,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po51.why">
-      <location file = "why/copy_struct.why" line = "1696" begin = "26" end = "144"/>
+      <location file = "why/copy_struct.why" line = "1697" begin = "26" end = "144"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po52.why">
@@ -2038,7 +2039,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_struct_po56.why">
-      <location file = "why/copy_struct.why" line = "1785" begin = "14" end = "66"/>
+      <location file = "why/copy_struct.why" line = "1786" begin = "14" end = "66"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2071,7 +2072,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po40.why">
-      <location file = "why/copy_struct.why" line = "1443" begin = "17" end = "73"/>
+      <location file = "why/copy_struct.why" line = "1444" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po41.why">
@@ -2080,11 +2081,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po42.why">
-      <location file = "why/copy_struct.why" line = "1454" begin = "24" end = "106"/>
+      <location file = "why/copy_struct.why" line = "1455" begin = "24" end = "106"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po43.why">
-      <location file = "why/copy_struct.why" line = "1523" begin = "14" end = "56"/>
+      <location file = "why/copy_struct.why" line = "1524" begin = "14" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

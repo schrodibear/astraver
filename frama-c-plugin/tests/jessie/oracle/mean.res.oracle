@@ -40,9 +40,9 @@ lemma mean_1 :
   ((0 <= x) ==> ((0 <= (x / 2)) && ((x / 2) <= x))))
 
 int32 mean(int32 l, int32 r)
-  requires (C_8 : ((C_9 : (0 <= l)) && (C_10 : (l <= r))));
+  requires (C_9 : ((C_10 : (0 <= l)) && (C_11 : (l <= r))));
 behavior default:
-  ensures (C_11 : true);
+  ensures (C_8 : true);
 {  
    (var int32 __retres);
    
@@ -57,9 +57,9 @@ behavior default:
 }
 
 uint32 umean(uint32 l_0, uint32 r_0)
-  requires (C_22 : (l_0 <= r_0));
+  requires (C_23 : (l_0 <= r_0));
 behavior default:
-  ensures (C_23 : true);
+  ensures (C_22 : true);
 {  
    (var uint32 __retres_0);
    
@@ -84,21 +84,23 @@ behavior default:
 int32 min_int(int32 x_1, int32 y_1)
 behavior default:
   assigns \nothing;
-  ensures (C_24 : (((\result == x_1) && (x_1 <= y_1)) ||
-                    ((\result == y_1) && (y_1 <= x_1))));
+  ensures (C_24 : (((\result == \at(x_1,Old)) &&
+                     (\at(x_1,Old) <= \at(y_1,Old))) ||
+                    ((\result == \at(y_1,Old)) &&
+                      (\at(y_1,Old) <= \at(x_1,Old)))));
 ;
 
 int32 max_int(int32 x, int32 y)
 behavior default:
   assigns \nothing;
-  ensures (C_25 : (((\result == x) && (x >= y)) ||
-                    ((\result == y) && (y >= x))));
+  ensures (C_25 : (((\result == \at(x,Old)) && (\at(x,Old) >= \at(y,Old))) ||
+                    ((\result == \at(y,Old)) && (\at(y,Old) >= \at(x,Old)))));
 ;
 
 int32 mean2(int32 x_0, int32 y_0)
-  requires (C_37 : ((C_38 : (0 <= x_0)) && (C_39 : (0 <= y_0))));
+  requires (C_38 : ((C_39 : (0 <= x_0)) && (C_40 : (0 <= y_0))));
 behavior default:
-  ensures (C_40 : true);
+  ensures (C_37 : true);
 {  
    (var int32 min);
    
@@ -416,20 +418,20 @@ parameter max_int :
   y:int32 ->
    { } int32
    { (JC_53:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x))
-      and ge_int(integer_of_int32(x), integer_of_int32(y)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y))
-        and ge_int(integer_of_int32(y), integer_of_int32(x))))) }
+     ((eq_int(integer_of_int32(result), integer_of_int32(x@))
+      and ge_int(integer_of_int32(x@), integer_of_int32(y@)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y@))
+        and ge_int(integer_of_int32(y@), integer_of_int32(x@))))) }
 
 parameter max_int_requires :
  x:int32 ->
   y:int32 ->
    { } int32
    { (JC_53:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x))
-      and ge_int(integer_of_int32(x), integer_of_int32(y)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y))
-        and ge_int(integer_of_int32(y), integer_of_int32(x))))) }
+     ((eq_int(integer_of_int32(result), integer_of_int32(x@))
+      and ge_int(integer_of_int32(x@), integer_of_int32(y@)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y@))
+        and ge_int(integer_of_int32(y@), integer_of_int32(x@))))) }
 
 parameter mean : l:int32 -> r:int32 -> { } int32 { true }
 
@@ -456,20 +458,20 @@ parameter min_int :
   y_1:int32 ->
    { } int32
    { (JC_43:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
-      and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
-        and le_int(integer_of_int32(y_1), integer_of_int32(x_1))))) }
+     ((eq_int(integer_of_int32(result), integer_of_int32(x_1@))
+      and le_int(integer_of_int32(x_1@), integer_of_int32(y_1@)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y_1@))
+        and le_int(integer_of_int32(y_1@), integer_of_int32(x_1@))))) }
 
 parameter min_int_requires :
  x_1:int32 ->
   y_1:int32 ->
    { } int32
    { (JC_43:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
-      and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
-        and le_int(integer_of_int32(y_1), integer_of_int32(x_1))))) }
+     ((eq_int(integer_of_int32(result), integer_of_int32(x_1@))
+      and le_int(integer_of_int32(x_1@), integer_of_int32(y_1@)))
+     or (eq_int(integer_of_int32(result), integer_of_int32(y_1@))
+        and le_int(integer_of_int32(y_1@), integer_of_int32(x_1@))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }

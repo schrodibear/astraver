@@ -33,10 +33,10 @@ tag void_P = {
 type void_P = [void_P]
 
 char_P[..] f(int32 n)
-  requires (C_3 : (n > 0));
+  requires (C_6 : (n > 0));
 behavior default:
-  ensures (C_4 : ((C_5 : (\offset_min(\result) <= 0)) &&
-                   (C_6 : (\offset_max(\result) >= (n - 1)))));
+  ensures (C_3 : ((C_4 : (\offset_min(\result) <= 0)) &&
+                   (C_5 : (\offset_max(\result) >= (\at(n,Old) - 1)))));
 {  
    (var char_P[..] i);
    
@@ -305,7 +305,7 @@ parameter f :
       ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
       and (JC_9:
           ge_int(offset_max(char_P_result_1_alloc_table, result),
-          sub_int(integer_of_int32(n), (1)))))) }
+          sub_int(integer_of_int32(n@), (1)))))) }
 
 parameter f_requires :
  n:int32 ->
@@ -318,7 +318,7 @@ parameter f_requires :
       ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
       and (JC_9:
           ge_int(offset_max(char_P_result_1_alloc_table, result),
-          sub_int(integer_of_int32(n), (1)))))) }
+          sub_int(integer_of_int32(n@), (1)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -356,7 +356,7 @@ let f_ensures_default =
     ((JC_5: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
     and (JC_6:
         ge_int(offset_max(char_P_result_1_alloc_table, result),
-        sub_int(integer_of_int32(n), (1)))))) }
+        sub_int(integer_of_int32(n@), (1)))))) }
 
 let f_safety =
  fun (n : int32) (char_P_result_1_alloc_table : char_P alloc_table ref) (char_P_result_1_tag_table : char_P tag_table ref) ->

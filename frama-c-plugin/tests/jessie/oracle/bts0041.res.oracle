@@ -404,15 +404,16 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 char_P[..] strndup(char_P[..] s, integer n)
-  requires (C_1 : valid_string{Here}(s));
+  requires (C_10 : valid_string{Here}(s));
 behavior default:
   assigns \nothing;
-  ensures (C_2 : (((((C_6 : (\offset_min(\result) <= 0)) &&
-                      (C_7 : (\offset_max(\result) >=
-                               minimum(strlen{Here}(s), n)))) &&
-                     (C_8 : valid_string{Here}(\result))) &&
-                    (C_9 : (strlen{Here}(\result) <= n))) &&
-                   (C_10 : (strncmp{Here}(\result, s, n) == 0))));
+  ensures (C_1 : (((((C_5 : (\offset_min(\result) <= 0)) &&
+                      (C_6 : (\offset_max(\result) >=
+                               minimum(strlen{Here}(\at(s,Old)), \at(n,Old))))) &&
+                     (C_7 : valid_string{Here}(\result))) &&
+                    (C_8 : (strlen{Here}(\result) <= \at(n,Old)))) &&
+                   (C_9 : (strncmp{Here}(\result, \at(s,Old), \at(n,Old)) ==
+                            0))));
 ;
 
 int_P[0..11] a;
@@ -496,11 +497,11 @@ behavior default:
 }
 
 unit foo(int_P[..] a_0, integer aLength)
-  requires (C_40 : ((C_41 : (\offset_min(a_0) <= 0)) &&
-                     (C_42 : (\offset_max(a_0) >= (aLength - 1)))));
+  requires (C_41 : ((C_42 : (\offset_min(a_0) <= 0)) &&
+                     (C_43 : (\offset_max(a_0) >= (aLength - 1)))));
 behavior default:
   assigns (a_0 + [..]).int_M;
-  ensures (C_43 : true);
+  ensures (C_40 : true);
 {  
    (var integer j);
    
@@ -2298,15 +2299,15 @@ parameter strndup :
               le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
              and ((JC_43:
                   ge_int(offset_max(char_P_result_24_alloc_table, result),
-                  minimum(strlen(s_0, char_P_char_M_s_23), n_0)))
+                  minimum(strlen(s_0@, char_P_char_M_s_23), n_0@)))
                  and ((JC_44:
                       valid_string(result, char_P_result_24_alloc_table,
                       char_P_char_M_result_24))
                      and ((JC_45:
                           le_int(strlen(result, char_P_char_M_result_24),
-                          n_0))
+                          n_0@))
                          and (JC_46:
-                             eq_int(strncmp(result, s_0, n_0,
+                             eq_int(strncmp(result, s_0@, n_0@,
                                     char_P_char_M_s_23,
                                     char_P_char_M_result_24),
                              (0))))))))) }
@@ -2343,15 +2344,15 @@ parameter strndup_requires :
               le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
              and ((JC_43:
                   ge_int(offset_max(char_P_result_24_alloc_table, result),
-                  minimum(strlen(s_0, char_P_char_M_s_23), n_0)))
+                  minimum(strlen(s_0@, char_P_char_M_s_23), n_0@)))
                  and ((JC_44:
                       valid_string(result, char_P_result_24_alloc_table,
                       char_P_char_M_result_24))
                      and ((JC_45:
                           le_int(strlen(result, char_P_char_M_result_24),
-                          n_0))
+                          n_0@))
                          and (JC_46:
-                             eq_int(strncmp(result, s_0, n_0,
+                             eq_int(strncmp(result, s_0@, n_0@,
                                     char_P_char_M_s_23,
                                     char_P_char_M_result_24),
                              (0))))))))) }
@@ -2797,32 +2798,32 @@ why --project [...] why/bts0041.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041_po48.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "485" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "486" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po49.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "485" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "486" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po50.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "485" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "486" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po51.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "486" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "487" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po52.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "486" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "487" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po53.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "486" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "487" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2854,12 +2855,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "511" begin = "24" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "512" begin = "24" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "511" begin = "24" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "512" begin = "24" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2894,7 +2895,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "504" begin = "9" end = "338"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "505" begin = "9" end = "338"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po35.why">
@@ -2902,7 +2903,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "504" begin = "9" end = "338"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "505" begin = "9" end = "338"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po37.why">
@@ -2915,12 +2916,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "439" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "440" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "439" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "440" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2955,7 +2956,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po21.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "432" begin = "9" end = "358"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "433" begin = "9" end = "358"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po22.why">
@@ -2967,7 +2968,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "432" begin = "9" end = "358"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "433" begin = "9" end = "358"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po25.why">
@@ -3000,12 +3001,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "467" begin = "24" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "468" begin = "24" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po13.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "467" begin = "24" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "468" begin = "24" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -3040,7 +3041,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "460" begin = "9" end = "462"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "461" begin = "9" end = "462"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041_po4.why">
@@ -3052,7 +3053,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "460" begin = "9" end = "462"/>
+      <location file = "PPCHOME/tests/jessie/bts0041.jessie/bts0041.jc" line = "461" begin = "9" end = "462"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041_po7.why">

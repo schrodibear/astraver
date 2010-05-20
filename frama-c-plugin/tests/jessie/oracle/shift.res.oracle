@@ -33,7 +33,7 @@ type void_P = [void_P]
 
 int32 f(int32 x)
 behavior default:
-  ensures (C_4 : (\result == (x / 2)));
+  ensures (C_4 : (\result == (\at(x,Old) / 2)));
 {  
    (var int32 __retres);
    
@@ -296,13 +296,13 @@ parameter f :
  x:int32 ->
   { } int32
   { (JC_6:
-    eq_int(integer_of_int32(result), div_int(integer_of_int32(x), (2)))) }
+    eq_int(integer_of_int32(result), div_int(integer_of_int32(x@), (2)))) }
 
 parameter f_requires :
  x:int32 ->
   { } int32
   { (JC_6:
-    eq_int(integer_of_int32(result), div_int(integer_of_int32(x), (2)))) }
+    eq_int(integer_of_int32(result), div_int(integer_of_int32(x@), (2)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -338,7 +338,7 @@ let f_ensures_default =
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_5:
-    eq_int(integer_of_int32(result), div_int(integer_of_int32(x), (2)))) }
+    eq_int(integer_of_int32(result), div_int(integer_of_int32(x@), (2)))) }
 
 let f_safety =
  fun (x : int32) ->

@@ -392,9 +392,9 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 char_P[..] ap_cpystrn(char_P[..] dst, char_P[..] src, uint32 dst_size)
-  requires (C_24 : valid_string(src));
+  requires (C_25 : valid_string(src));
 behavior default:
-  ensures (C_25 : true);
+  ensures (C_24 : true);
 {  
    (var int32 i);
    

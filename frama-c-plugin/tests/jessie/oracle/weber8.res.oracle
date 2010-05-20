@@ -38,16 +38,16 @@ tag void_P = {
 type void_P = [void_P]
 
 unit fill(int_P[..] first, int_P[..] last, int32 value)
-  requires (C_15 : ((((C_18 : (\offset_min(first) <= 0)) &&
-                       (C_19 : (\offset_max(first) >= ((last - first) - 1)))) &&
-                      (C_20 : ((first - last) <= 0))) &&
-                     (C_21 : (\base_block(first) == \base_block(last)))));
+  requires (C_17 : ((((C_20 : (\offset_min(first) <= 0)) &&
+                       (C_21 : (\offset_max(first) >= ((last - first) - 1)))) &&
+                      (C_22 : ((first - last) <= 0))) &&
+                     (C_23 : (\base_block(first) == \base_block(last)))));
 behavior default:
-  ensures (C_22 : true);
+  ensures (C_15 : true);
 behavior is_not_empty:
-  ensures (C_23 : (\forall integer i;
-                    (((0 <= i) && (i < (last - first))) ==>
-                      ((first + i).int_M == value))));
+  ensures (C_16 : (\forall integer i;
+                    (((0 <= i) && (i < (\at(last,Old) - \at(first,Old)))) ==>
+                      ((\at(first,Old) + i).int_M == \at(value,Old)))));
 {  
    (var int_P[..] it);
    
@@ -444,10 +444,10 @@ parameter fill :
       { } unit reads int_P_int_M_first_1 writes int_P_int_M_first_1
       { (JC_18:
         (forall i:int.
-         ((le_int((0), i) and lt_int(i, sub_pointer(last, first))) ->
+         ((le_int((0), i) and lt_int(i, sub_pointer(last@, first@))) ->
           eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                  shift(first, i))),
-          integer_of_int32(value))))) }
+                                  shift(first@, i))),
+          integer_of_int32(value@))))) }
 
 parameter fill_requires :
  first:int_P pointer ->
@@ -465,10 +465,10 @@ parameter fill_requires :
       unit reads int_P_int_M_first_1 writes int_P_int_M_first_1
       { (JC_18:
         (forall i:int.
-         ((le_int((0), i) and lt_int(i, sub_pointer(last, first))) ->
+         ((le_int((0), i) and lt_int(i, sub_pointer(last@, first@))) ->
           eq_int(integer_of_int32(select(int_P_int_M_first_1,
-                                  shift(first, i))),
-          integer_of_int32(value))))) }
+                                  shift(first@, i))),
+          integer_of_int32(value@))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -614,9 +614,9 @@ let fill_ensures_is_not_empty =
       (raise Return) end))); (raise Return) end with Return -> void end)
   { (JC_17:
     (forall i:int.
-     ((le_int((0), i) and lt_int(i, sub_pointer(last, first))) ->
-      eq_int(integer_of_int32(select(int_P_int_M_first_1, shift(first, i))),
-      integer_of_int32(value))))) }
+     ((le_int((0), i) and lt_int(i, sub_pointer(last@, first@))) ->
+      eq_int(integer_of_int32(select(int_P_int_M_first_1, shift(first@, i))),
+      integer_of_int32(value@))))) }
 
 let fill_safety =
  fun (first : int_P pointer) (last : int_P pointer) (value : int32) (int_P_int_M_first_1 : (int_P, int32) memory ref) (int_P_first_1_alloc_table : int_P alloc_table) ->

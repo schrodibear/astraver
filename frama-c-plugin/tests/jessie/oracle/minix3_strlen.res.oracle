@@ -392,9 +392,9 @@ predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 uint32 strlen(char_P[..] org)
-  requires (C_11 : valid_string(org));
+  requires (C_12 : valid_string(org));
 behavior default:
-  ensures (C_12 : true);
+  ensures (C_11 : true);
 {  
    (var char_P[..] s);
    

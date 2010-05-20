@@ -94,16 +94,19 @@ case Permut_refl{L}: (\forall int_P[..] a_2;
 }
 
 unit swap(int_P[..] t, int32 i, int32 j, int32 n)
-  requires (C_12 : (((C_14 : (\offset_min(t) <= i)) &&
-                      (C_15 : (\offset_max(t) >= i))) &&
-                     ((C_17 : (\offset_min(t) <= j)) &&
-                       (C_18 : (\offset_max(t) >= j)))));
+  requires (C_15 : (((C_17 : (\offset_min(t) <= i)) &&
+                      (C_18 : (\offset_max(t) >= i))) &&
+                     ((C_20 : (\offset_min(t) <= j)) &&
+                       (C_21 : (\offset_max(t) >= j)))));
 behavior default:
-  ensures (C_19 : ((C_20 : (\forall integer k_0;
-                             (((((0 <= k_0) && (k_0 < n)) && (k_0 != i)) &&
-                                (k_0 != j)) ==>
-                               ((t + k_0).int_M == \old((t + k_0).int_M))))) &&
-                    (C_21 : swapped{Old, Here}(t, i, j))));
+  ensures (C_12 : ((C_13 : (\forall integer k_0;
+                             (((((0 <= k_0) && (k_0 < \at(n,Old))) &&
+                                 (k_0 != \at(i,Old))) &&
+                                (k_0 != \at(j,Old))) ==>
+                               ((\at(t,Old) + k_0).int_M ==
+                                 \old((t + k_0).int_M))))) &&
+                    (C_14 : swapped{Old,
+                    Here}(\at(t,Old), \at(i,Old), \at(j,Old)))));
 {  
    (var int32 tmp);
    
@@ -116,15 +119,15 @@ behavior default:
 }
 
 unit bubble_sort(int_P[..] a, int32 length)
-  requires (C_82 : (0 < length));
-  requires (C_83 : ((C_84 : (\offset_min(a) <= 0)) &&
-                     (C_85 : (\offset_max(a) >= (length - 1)))));
+  requires (C_88 : (0 < length));
+  requires (C_85 : ((C_86 : (\offset_min(a) <= 0)) &&
+                     (C_87 : (\offset_max(a) >= (length - 1)))));
 behavior default:
-  ensures (C_86 : true);
+  ensures (C_82 : true);
 behavior sorted:
-  ensures (C_87 : sorted{Here}(a, 0, (length - 1)));
+  ensures (C_83 : sorted{Here}(\at(a,Old), 0, (\at(length,Old) - 1)));
 behavior permutation:
-  ensures (C_88 : Permut{Old, Here}(a, 0, (length - 1)));
+  ensures (C_84 : Permut{Old, Here}(\at(a,Old), 0, (\at(length,Old) - 1)));
 {  
    (var int32 up);
    
@@ -753,10 +756,10 @@ parameter bubble_sort :
     int_P_a_5_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_a_5 writes int_P_int_M_a_5
      { ((JC_42:
-        Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
+        Permut(a_2@, (0), sub_int(integer_of_int32(length@), (1)),
         int_P_int_M_a_5, int_P_int_M_a_5@))
        and (JC_40:
-           sorted(a_2, (0), sub_int(integer_of_int32(length), (1)),
+           sorted(a_2@, (0), sub_int(integer_of_int32(length@), (1)),
            int_P_int_M_a_5))) }
 
 parameter bubble_sort_requires :
@@ -772,10 +775,10 @@ parameter bubble_sort_requires :
                sub_int(integer_of_int32(length), (1)))))))}
      unit reads int_P_int_M_a_5 writes int_P_int_M_a_5
      { ((JC_42:
-        Permut(a_2, (0), sub_int(integer_of_int32(length), (1)),
+        Permut(a_2@, (0), sub_int(integer_of_int32(length@), (1)),
         int_P_int_M_a_5, int_P_int_M_a_5@))
        and (JC_40:
-           sorted(a_2, (0), sub_int(integer_of_int32(length), (1)),
+           sorted(a_2@, (0), sub_int(integer_of_int32(length@), (1)),
            int_P_int_M_a_5))) }
 
 parameter int32_of_integer_ :
@@ -806,13 +809,13 @@ parameter swap :
          ((JC_16:
           (forall k_0:int.
            ((le_int((0), k_0)
-            and (lt_int(k_0, integer_of_int32(n))
-                and (neq_int(k_0, integer_of_int32(i_0))
-                    and neq_int(k_0, integer_of_int32(j_0))))) ->
-            eq_int(integer_of_int32(select(int_P_int_M_t_4, shift(t, k_0))),
+            and (lt_int(k_0, integer_of_int32(n@))
+                and (neq_int(k_0, integer_of_int32(i_0@))
+                    and neq_int(k_0, integer_of_int32(j_0@))))) ->
+            eq_int(integer_of_int32(select(int_P_int_M_t_4, shift(t@, k_0))),
             integer_of_int32(select(int_P_int_M_t_4@, shift(t@, k_0@)))))))
          and (JC_17:
-             swapped(t, integer_of_int32(i_0), integer_of_int32(j_0),
+             swapped(t@, integer_of_int32(i_0@), integer_of_int32(j_0@),
              int_P_int_M_t_4, int_P_int_M_t_4@)))) }
 
 parameter swap_requires :
@@ -839,13 +842,13 @@ parameter swap_requires :
          ((JC_16:
           (forall k_0:int.
            ((le_int((0), k_0)
-            and (lt_int(k_0, integer_of_int32(n))
-                and (neq_int(k_0, integer_of_int32(i_0))
-                    and neq_int(k_0, integer_of_int32(j_0))))) ->
-            eq_int(integer_of_int32(select(int_P_int_M_t_4, shift(t, k_0))),
+            and (lt_int(k_0, integer_of_int32(n@))
+                and (neq_int(k_0, integer_of_int32(i_0@))
+                    and neq_int(k_0, integer_of_int32(j_0@))))) ->
+            eq_int(integer_of_int32(select(int_P_int_M_t_4, shift(t@, k_0))),
             integer_of_int32(select(int_P_int_M_t_4@, shift(t@, k_0@)))))))
          and (JC_17:
-             swapped(t, integer_of_int32(i_0), integer_of_int32(j_0),
+             swapped(t@, integer_of_int32(i_0@), integer_of_int32(j_0@),
              int_P_int_M_t_4, int_P_int_M_t_4@)))) }
 
 let bubble_sort_ensures_default =
@@ -1126,8 +1129,8 @@ let bubble_sort_ensures_permutation =
        (raise Return) end) end)))); (raise Return) end with Return ->
    void end)
   { (JC_41:
-    Permut(a_2, (0), sub_int(integer_of_int32(length), (1)), int_P_int_M_a_5,
-    int_P_int_M_a_5@)) }
+    Permut(a_2@, (0), sub_int(integer_of_int32(length@), (1)),
+    int_P_int_M_a_5, int_P_int_M_a_5@)) }
 
 let bubble_sort_ensures_sorted =
  fun (a_2 : int_P pointer) (length : int32) (int_P_int_M_a_5 : (int_P, int32) memory ref) (int_P_a_5_alloc_table : int_P alloc_table) ->
@@ -1386,7 +1389,8 @@ let bubble_sort_ensures_sorted =
        (raise Return) end) end)))); (raise Return) end with Return ->
    void end)
   { (JC_39:
-    sorted(a_2, (0), sub_int(integer_of_int32(length), (1)), int_P_int_M_a_5)) }
+    sorted(a_2@, (0), sub_int(integer_of_int32(length@), (1)),
+    int_P_int_M_a_5)) }
 
 let bubble_sort_safety =
  fun (a_2 : int_P pointer) (length : int32) (int_P_int_M_a_5 : (int_P, int32) memory ref) (int_P_a_5_alloc_table : int_P alloc_table) ->
@@ -1556,13 +1560,13 @@ let swap_ensures_default =
     ((JC_13:
      (forall k_0:int.
       ((le_int((0), k_0)
-       and (lt_int(k_0, integer_of_int32(n))
-           and (neq_int(k_0, integer_of_int32(i_0))
-               and neq_int(k_0, integer_of_int32(j_0))))) ->
-       eq_int(integer_of_int32(select(int_P_int_M_t_4, shift(t, k_0))),
+       and (lt_int(k_0, integer_of_int32(n@))
+           and (neq_int(k_0, integer_of_int32(i_0@))
+               and neq_int(k_0, integer_of_int32(j_0@))))) ->
+       eq_int(integer_of_int32(select(int_P_int_M_t_4, shift(t@, k_0))),
        integer_of_int32(select(int_P_int_M_t_4@, shift(t@, k_0@)))))))
     and (JC_14:
-        swapped(t, integer_of_int32(i_0), integer_of_int32(j_0),
+        swapped(t@, integer_of_int32(i_0@), integer_of_int32(j_0@),
         int_P_int_M_t_4, int_P_int_M_t_4@)))) }
 
 let swap_safety =
@@ -1637,22 +1641,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po68.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "105" begin = "14" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "108" begin = "14" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po69.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "105" begin = "14" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "108" begin = "14" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po70.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "109" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po71.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "106" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "109" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1712,22 +1716,22 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po55.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po56.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po57.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po58.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "35" end = "177"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "240" begin = "35" end = "177"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

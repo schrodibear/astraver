@@ -30,10 +30,11 @@ tag void_P = {
 type void_P = [void_P]
 
 float Sterbenz(float x, float y)
-  requires (C_3 : ((C_4 : (((y :> real) / 2.0) <= (x :> real))) &&
-                    (C_5 : ((x :> real) <= (2.0 * (y :> real))))));
+  requires (C_4 : ((C_5 : (((y :> real) / 2.0) <= (x :> real))) &&
+                    (C_6 : ((x :> real) <= (2.0 * (y :> real))))));
 behavior default:
-  ensures (C_6 : ((\result :> real) == ((x :> real) - (y :> real))));
+  ensures (C_3 : ((\result :> real) ==
+                   ((\at(x,Old) :> real) - (\at(y,Old) :> real))));
 {  
    (var float __retres);
    
@@ -44,9 +45,9 @@ behavior default:
 }
 
 float f(float x_0)
-  requires (C_11 : (2.0 == (x_0 :> real)));
+  requires (C_12 : (2.0 == (x_0 :> real)));
 behavior default:
-  ensures (C_12 : ((\result :> real) == 1.0));
+  ensures (C_11 : ((\result :> real) == 1.0));
 {  
    (var float tmp);
    
@@ -201,7 +202,7 @@ parameter Sterbenz :
    { } single
    { (JC_10:
      eq_real(single_value(result),
-     sub_real(single_value(x), single_value(y)))) }
+     sub_real(single_value(x@), single_value(y@)))) }
 
 parameter Sterbenz_requires :
  x:single ->
@@ -212,7 +213,7 @@ parameter Sterbenz_requires :
    single
    { (JC_10:
      eq_real(single_value(result),
-     sub_real(single_value(x), single_value(y)))) }
+     sub_real(single_value(x@), single_value(y@)))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -339,7 +340,8 @@ let Sterbenz_ensures_default =
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_9:
-    eq_real(single_value(result), sub_real(single_value(x), single_value(y)))) }
+    eq_real(single_value(result),
+    sub_real(single_value(x@), single_value(y@)))) }
 
 let Sterbenz_safety =
  fun (x : single) (y : single) ->

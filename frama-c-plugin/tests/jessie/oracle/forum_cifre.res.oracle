@@ -405,9 +405,9 @@ predicate paquet_bien_forme{Here}(__anonstruct_paquet_t_1[..] paquet) =
   valid_string{Here}(paquet.message))
 
 char_P[..] strncpy(char_P[..] destination, char_P[..] source, uint32 taille)
-  requires (C_30 : (taille < 1000000));
+  requires (C_31 : (taille < 1000000));
 behavior default:
-  ensures (C_31 : true);
+  ensures (C_30 : true);
 {  
    (var char_P[..] curseur);
    
@@ -482,20 +482,20 @@ behavior default:
 
 int32 recevoir_un_paquet(char_P[..] destination_0, uint32 taille_0,
                          __anonstruct_paquet_t_1[..] paquet)
-  requires (C_37 : (((C_39 : (\offset_min(paquet) <= 0)) &&
-                      (C_40 : (\offset_max(paquet) >= 0))) &&
-                     ((C_42 : (\offset_min(destination_0) <= 0)) &&
-                       (C_43 : (\offset_max(destination_0) >= (taille_0 - 1))))));
+  requires (C_40 : (((C_42 : (\offset_min(paquet) <= 0)) &&
+                      (C_43 : (\offset_max(paquet) >= 0))) &&
+                     ((C_45 : (\offset_min(destination_0) <= 0)) &&
+                       (C_46 : (\offset_max(destination_0) >= (taille_0 - 1))))));
 behavior default:
-  ensures (C_44 : true);
+  ensures (C_37 : true);
 behavior echec:
   assumes (taille_0 < paquet.longueur);
   assigns \nothing;
-  ensures (C_45 : (\result == 0));
+  ensures (C_38 : (\result == 0));
 behavior succes:
   assumes (taille_0 >= paquet.longueur);
   assigns (destination_0 + [0..(taille_0 - 1)]).char_M;
-  ensures (C_46 : (\result == 1));
+  ensures (C_39 : (\result == 1));
 {  
    (var int32 __retres);
    

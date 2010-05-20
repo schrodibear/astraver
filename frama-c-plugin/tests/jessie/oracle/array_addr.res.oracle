@@ -46,14 +46,14 @@ invariant valid_t :
 unit h(int_P[..] p)
 behavior default:
   assigns p.int_M;
-  ensures (C_1 : (p.int_M == 0));
+  ensures (C_1 : (\at(p,Old).int_M == 0));
 ;
 
 unit f()
-  requires (C_6 : ((C_7 : (\offset_min((t + (1 * 3))) <= 2)) &&
-                    (C_8 : (\offset_max((t + (1 * 3))) >= 2))));
+  requires (C_7 : ((C_8 : (\offset_min((t + (1 * 3))) <= 2)) &&
+                    (C_9 : (\offset_max((t + (1 * 3))) >= 2))));
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_6 : true);
 {  
    {  (C_5 : h((C_4 : (t + (C_3 : ((C_2 : (1 * 3)) :> int32))))));
       
@@ -62,10 +62,10 @@ behavior default:
 }
 
 unit g()
-  requires (C_14 : ((C_15 : (\offset_min((t + (1 * 3))) <= 2)) &&
-                     (C_16 : (\offset_max((t + (1 * 3))) >= 2))));
+  requires (C_15 : ((C_16 : (\offset_min((t + (1 * 3))) <= 2)) &&
+                     (C_17 : (\offset_max((t + (1 * 3))) >= 2))));
 behavior default:
-  ensures (C_17 : true);
+  ensures (C_14 : true);
 {  
    {  (C_13 : h((C_12 : (t + (C_11 : ((C_10 : (1 * 3)) :> int32))))));
       
@@ -531,7 +531,8 @@ parameter h :
        ((JC_26: valid_t(int_P_t_1_alloc_table))
        and (JC_27: valid_t2(int_P_t2_2_alloc_table))))
       and (JC_22:
-          ((JC_20: eq_int(integer_of_int32(select(int_P_int_M_p_3, p)), (0)))
+          ((JC_20:
+           eq_int(integer_of_int32(select(int_P_int_M_p_3, p@)), (0)))
           and (JC_21:
               not_assigns(int_P_p_3_alloc_table@, int_P_int_M_p_3@,
               int_P_int_M_p_3, pset_singleton(p@)))))) }
@@ -549,7 +550,8 @@ parameter h_requires :
        ((JC_26: valid_t(int_P_t_1_alloc_table))
        and (JC_27: valid_t2(int_P_t2_2_alloc_table))))
       and (JC_22:
-          ((JC_20: eq_int(integer_of_int32(select(int_P_int_M_p_3, p)), (0)))
+          ((JC_20:
+           eq_int(integer_of_int32(select(int_P_int_M_p_3, p@)), (0)))
           and (JC_21:
               not_assigns(int_P_p_3_alloc_table@, int_P_int_M_p_3@,
               int_P_int_M_p_3, pset_singleton(p@)))))) }

@@ -44,16 +44,17 @@ predicate disjoint_arrays(int_P[..] a, int_P[..] b, integer i) =
       ((a + k1) != (b + k2)))))
 
 int_P[..] copy_int_array(int_P[..] first, int_P[..] last, int_P[..] result)
-  requires (C_23 : ((last - first) > 0));
-  requires (C_24 : disjoint_arrays(first, result, (last - first)));
-  requires (C_25 : ((C_26 : (\offset_min(first) <= 0)) &&
-                     (C_27 : (\offset_max(first) >= ((last - first) - 1)))));
-  requires (C_28 : ((C_29 : (\offset_min(result) <= 0)) &&
-                     (C_30 : (\offset_max(result) >= ((last - first) - 1)))));
+  requires (C_31 : ((last - first) > 0));
+  requires (C_30 : disjoint_arrays(first, result, (last - first)));
+  requires (C_27 : ((C_28 : (\offset_min(first) <= 0)) &&
+                     (C_29 : (\offset_max(first) >= ((last - first) - 1)))));
+  requires (C_24 : ((C_25 : (\offset_min(result) <= 0)) &&
+                     (C_26 : (\offset_max(result) >= ((last - first) - 1)))));
 behavior default:
-  ensures (C_31 : (\forall integer i_0;
-                    (((0 <= i_0) && (i_0 < (last - first))) ==>
-                      ((result + i_0).int_M == (first + i_0).int_M))));
+  ensures (C_23 : (\forall integer i_0;
+                    (((0 <= i_0) && (i_0 < (\at(last,Old) - \at(first,Old)))) ==>
+                      ((\at(result,Old) + i_0).int_M ==
+                        (\at(first,Old) + i_0).int_M))));
 {  
    (var int_P[..] a);
    
@@ -475,10 +476,10 @@ parameter copy_int_array :
         writes int_P_int_M_result_5
         { (JC_18:
           (forall i_0:int.
-           ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
+           ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last@, first@))) ->
             eq_int(integer_of_int32(select(int_P_int_M_result_5,
-                                    shift(result_0, i_0))),
-            integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0))))))) }
+                                    shift(result_0@, i_0))),
+            integer_of_int32(select(int_P_int_M_first_3, shift(first@, i_0))))))) }
 
 parameter copy_int_array_requires :
  first:int_P pointer ->
@@ -508,10 +509,10 @@ parameter copy_int_array_requires :
         int_P pointer reads int_P_int_M_result_5 writes int_P_int_M_result_5
         { (JC_18:
           (forall i_0:int.
-           ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
+           ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last@, first@))) ->
             eq_int(integer_of_int32(select(int_P_int_M_result_5,
-                                    shift(result_0, i_0))),
-            integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0))))))) }
+                                    shift(result_0@, i_0))),
+            integer_of_int32(select(int_P_int_M_first_3, shift(first@, i_0))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -641,10 +642,10 @@ let copy_int_array_ensures_default =
     absurd  end with Return -> !return end))))
   { (JC_17:
     (forall i_0:int.
-     ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last, first))) ->
+     ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last@, first@))) ->
       eq_int(integer_of_int32(select(int_P_int_M_result_5,
-                              shift(result_0, i_0))),
-      integer_of_int32(select(int_P_int_M_first_3, shift(first, i_0))))))) }
+                              shift(result_0@, i_0))),
+      integer_of_int32(select(int_P_int_M_first_3, shift(first@, i_0))))))) }
 
 let copy_int_array_safety =
  fun (first : int_P pointer) (last : int_P pointer) (result_0 : int_P pointer) (int_P_int_M_result_5 : (int_P, int32) memory ref) (int_P_first_3_alloc_table : int_P alloc_table) (int_P_result_5_alloc_table : int_P alloc_table) (int_P_int_M_first_3 : (int_P, int32) memory) ->
@@ -800,12 +801,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po20.why">
-      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "92" begin = "30" end = "71"/>
+      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "93" begin = "30" end = "71"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po21.why">
-      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "92" begin = "30" end = "71"/>
+      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "93" begin = "30" end = "71"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

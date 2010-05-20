@@ -38,15 +38,15 @@ tag void_P = {
 type void_P = [void_P]
 
 unit safety(int_P[..] t, int32 n)
-  requires (C_47 : (((C_49 : (n >= 1)) &&
-                      ((C_51 : (\offset_min(t) <= 1)) &&
-                        (C_52 : (\offset_max(t) >= n)))) &&
-                     (C_53 : (\forall int32 k_1;
+  requires (C_48 : (((C_50 : (n >= 1)) &&
+                      ((C_52 : (\offset_min(t) <= 1)) &&
+                        (C_53 : (\offset_max(t) >= n)))) &&
+                     (C_54 : (\forall int32 k_1;
                                (((1 <= k_1) && (k_1 <= n)) ==>
                                  ((1 <= (t + k_1).int_M) &&
                                    ((t + k_1).int_M <= n)))))));
 behavior default:
-  ensures (C_54 : true);
+  ensures (C_47 : true);
 {  
    (var int32 m);
    

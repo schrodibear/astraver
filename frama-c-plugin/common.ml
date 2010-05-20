@@ -350,9 +350,9 @@ let name_of_realloc = "realloc"
 
 let predefined_name =
   [ (* coding functions *)
-    name_of_assert; 
-    name_of_malloc; 
-    name_of_calloc; 
+    name_of_assert;
+    name_of_malloc;
+    name_of_calloc;
     name_of_realloc;
     name_of_free;
   ]
@@ -378,20 +378,20 @@ let unique_name_generator is_exception =
 	if Hashtbl.mem unique_names s then
 	  aux s
 	else
-	  (Hashtbl.add unique_names s (ref 0); 
+	  (Hashtbl.add unique_names s (ref 0);
 	   incr count; s)
       with Not_found ->
 	Hashtbl.add unique_names s (ref 0); s
-  in 
+  in
   let add s = Hashtbl.add unique_names s (ref 0) in
   aux, add
 
 let unique_name, add_unique_name =
-(*  let u = *)unique_name_generator is_predefined_name 
+(*  let u = *)unique_name_generator is_predefined_name
 (* in (fun s -> let s' = u s in s') *)
 
 let unique_logic_name, add_unique_logic_name =
-(*  let u = *) unique_name_generator (fun _ -> false) 
+(*  let u = *) unique_name_generator (fun _ -> false)
 (* in (fun s -> let s' = u s in s')*)
 
 let unique_name_if_empty s =
@@ -483,7 +483,6 @@ let name_of_hint_assertion = "hint"
 let name_of_safety_behavior = "safety"
 
 let name_of_default_behavior = "default"
-
 
 (*****************************************************************************)
 (* Visitors                                                                  *)
@@ -1087,7 +1086,7 @@ let malloc_function () =
 	(Ast.get ()) "malloc" (TFun(voidPtrType,params,false,[]))
     in
     let behav = {
-      b_name = name_of_default_behavior;
+      b_name = Cil.default_behavior_name;
       b_assumes = [];
       b_requires = [];
       b_assigns = [ Nothing,[] ];
@@ -1107,7 +1106,7 @@ let free_function () =
 	(Ast.get ()) "free" (TFun(voidType,params,false,[]))
     in
     let behav = {
-      b_name = name_of_default_behavior;
+      b_name = Cil.default_behavior_name;
       b_assumes = [];
       b_post_cond = [];
       b_requires = [];

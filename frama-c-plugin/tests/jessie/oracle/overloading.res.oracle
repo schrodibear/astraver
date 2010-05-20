@@ -52,10 +52,10 @@ lemma l3 :
 (is_pos_0(1.5) && (! is_pos_integer((- 5))))
 
 unit f(float x, double y)
-  requires (C_1 : ((C_2 : \single_is_finite(x)) &&
-                    (C_3 : \double_is_finite(y))));
+  requires (C_2 : ((C_3 : \single_is_finite(x)) &&
+                    (C_4 : \double_is_finite(y))));
 behavior default:
-  ensures (C_4 : true);
+  ensures (C_1 : true);
 {  
    {  
       (return ())

@@ -64,14 +64,15 @@ invariant q_invariant :
   ((0 <= q.last) && (q.last < q.length)))
 
 unit push(int8 c)
-  requires (C_23 : (q.full == 0));
+  requires (C_26 : (q.full == 0));
 behavior default:
   assigns q.empty,
   q.full,
   q.last,
   (q.contents + q.last).char_M;
-  ensures (C_24 : ((C_25 : (q.empty == 0)) &&
-                    (C_26 : ((q.contents + \old(q.last)).char_M == c))));
+  ensures (C_23 : ((C_24 : (q.empty == 0)) &&
+                    (C_25 : ((q.contents + \old(q.last)).char_M ==
+                              \at(c,Old)))));
 {  
    (var int32 tmp);
    
@@ -92,13 +93,13 @@ behavior default:
 }
 
 int8 pop()
-  requires (C_49 : (q.empty == 0));
+  requires (C_52 : (q.empty == 0));
 behavior default:
   assigns q.empty,
   q.full,
   q.first;
-  ensures (C_50 : ((C_51 : (q.full == 0)) &&
-                    (C_52 : (\result == (q.contents + \old(q.first)).char_M))));
+  ensures (C_49 : ((C_50 : (q.full == 0)) &&
+                    (C_51 : (\result == (q.contents + \old(q.first)).char_M))));
 {  
    (var int8 r);
    
@@ -123,11 +124,11 @@ behavior default:
 }
 
 int32 test(queue[..] q1)
-  requires (C_58 : (((C_60 : (\offset_min(q1) <= 0)) &&
-                      (C_61 : (\offset_max(q1) >= 0))) &&
-                     (C_62 : (q.empty == 0))));
+  requires (C_59 : (((C_61 : (\offset_min(q1) <= 0)) &&
+                      (C_62 : (\offset_max(q1) >= 0))) &&
+                     (C_63 : (q.empty == 0))));
 behavior default:
-  ensures (C_63 : (\result == \old(q1.empty)));
+  ensures (C_58 : (\result == \old(q1.empty)));
 {  
    (var int8 c_0);
    
@@ -678,7 +679,7 @@ parameter push :
                                     shift(select(queue_contents_q_2, q),
                                     integer_of_int32(select(queue_last_q_2@,
                                                      q@))))),
-             integer_of_int8(c)))))
+             integer_of_int8(c@)))))
         and (JC_38:
             ((((JC_34:
                not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
@@ -722,7 +723,7 @@ parameter push_requires :
                                     shift(select(queue_contents_q_2, q),
                                     integer_of_int32(select(queue_last_q_2@,
                                                      q@))))),
-             integer_of_int8(c)))))
+             integer_of_int8(c@)))))
         and (JC_38:
             ((((JC_34:
                not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
@@ -1052,7 +1053,7 @@ let push_ensures_default =
          eq_int(integer_of_int8(select(char_P_char_M_q_4,
                                 shift(select(queue_contents_q_2, q),
                                 integer_of_int32(select(queue_last_q_2@, q@))))),
-         integer_of_int8(c)))))
+         integer_of_int8(c@)))))
     and (JC_29:
         ((((JC_25:
            not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
@@ -1308,12 +1309,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/queue_po23.why">
-      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "77" begin = "18" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "78" begin = "18" end = "72"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queue_po24.why">
-      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "77" begin = "18" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "78" begin = "18" end = "72"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

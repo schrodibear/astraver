@@ -36,14 +36,15 @@ tag void_P = {
 type void_P = [void_P]
 
 double g4(double_P[..] t)
-  requires (C_7 : (((C_9 : (\offset_min(t) <= 0)) &&
-                     (C_10 : (\offset_max(t) >= 0))) &&
-                    ((C_12 : (\offset_min(t) <= 0)) &&
-                      (C_13 : (\offset_max(t) >= 1)))));
+  requires (C_8 : (((C_10 : (\offset_min(t) <= 0)) &&
+                     (C_11 : (\offset_max(t) >= 0))) &&
+                    ((C_13 : (\offset_min(t) <= 0)) &&
+                      (C_14 : (\offset_max(t) >= 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_14 : ((\result :> real) ==
-                    (((t + 0).double_M :> real) + ((t + 1).double_M :> real))));
+  ensures (C_7 : ((\result :> real) ==
+                   (((\at(t,Old) + 0).double_M :> real) +
+                     ((\at(t,Old) + 1).double_M :> real))));
 {  
    (var double y);
    
@@ -425,8 +426,8 @@ parameter g4 :
     { } double
     { (JC_15:
       eq_real(double_value(result),
-      add_real(double_value(select(double_P_double_M_t_1, shift(t, (0)))),
-      double_value(select(double_P_double_M_t_1, shift(t, (1))))))) }
+      add_real(double_value(select(double_P_double_M_t_1, shift(t@, (0)))),
+      double_value(select(double_P_double_M_t_1, shift(t@, (1))))))) }
 
 parameter g4_requires :
  t:double_P pointer ->
@@ -441,8 +442,8 @@ parameter g4_requires :
     double
     { (JC_15:
       eq_real(double_value(result),
-      add_real(double_value(select(double_P_double_M_t_1, shift(t, (0)))),
-      double_value(select(double_P_double_M_t_1, shift(t, (1))))))) }
+      add_real(double_value(select(double_P_double_M_t_1, shift(t@, (0)))),
+      double_value(select(double_P_double_M_t_1, shift(t@, (1))))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -579,8 +580,8 @@ let g4_ensures_default =
    Return -> !return end))
   { (JC_13:
     eq_real(double_value(result),
-    add_real(double_value(select(double_P_double_M_t_1, shift(t, (0)))),
-    double_value(select(double_P_double_M_t_1, shift(t, (1))))))) }
+    add_real(double_value(select(double_P_double_M_t_1, shift(t@, (0)))),
+    double_value(select(double_P_double_M_t_1, shift(t@, (1))))))) }
 
 let g4_safety =
  fun (t : double_P pointer) (double_P_t_1_alloc_table : double_P alloc_table) (double_P_double_M_t_1 : (double_P, double) memory) ->

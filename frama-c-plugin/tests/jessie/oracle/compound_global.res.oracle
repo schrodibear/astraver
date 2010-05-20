@@ -60,10 +60,11 @@ invariant gt :
 ((gt.ti == 1) && (gt.tj == 2))
 
 unit fc(T[..] t)
-  requires (C_7 : ((C_8 : (\offset_min(t) <= 0)) &&
-                    (C_9 : (\offset_max(t) >= 0))));
+  requires (C_10 : ((C_11 : (\offset_min(t) <= 0)) &&
+                     (C_12 : (\offset_max(t) >= 0))));
 behavior default:
-  ensures (C_10 : ((C_11 : (t.ti == 1)) && (C_12 : (t.tj == 2))));
+  ensures (C_7 : ((C_8 : (\at(t,Old).ti == 1)) &&
+                   (C_9 : (\at(t,Old).tj == 2))));
 {  
    {  
       {  (C_3 : ((C_2 : t.ti) = (C_1 : gt.ti)));
@@ -83,10 +84,11 @@ invariant gt2 :
 ((gs.i == 1) && (gs.p == null))
 
 unit fcp(S[..] s)
-  requires (C_19 : ((C_20 : (\offset_min(s) <= 0)) &&
-                     (C_21 : (\offset_max(s) >= 0))));
+  requires (C_22 : ((C_23 : (\offset_min(s) <= 0)) &&
+                     (C_24 : (\offset_max(s) >= 0))));
 behavior default:
-  ensures (C_22 : ((C_23 : (s.i == 1)) && (C_24 : (s.p == null))));
+  ensures (C_19 : ((C_20 : (\at(s,Old).i == 1)) &&
+                    (C_21 : (\at(s,Old).p == null))));
 {  
    {  
       {  (C_15 : ((C_14 : s.i) = (C_13 : gs.i)));
@@ -677,8 +679,8 @@ parameter fc :
             and ((JC_40: valid_gs(S_gs_2_alloc_table))
                 and (JC_41: gt2(S_p_gs_2, S_i_gs_2))))))
        and (JC_32:
-           ((JC_30: eq_int(integer_of_int32(select(T_ti_t_3, t)), (1)))
-           and (JC_31: eq_int(integer_of_int32(select(T_tj_t_3, t)), (2)))))) }
+           ((JC_30: eq_int(integer_of_int32(select(T_ti_t_3, t@)), (1)))
+           and (JC_31: eq_int(integer_of_int32(select(T_tj_t_3, t@)), (2)))))) }
 
 parameter fc_requires :
  t:T pointer ->
@@ -702,8 +704,8 @@ parameter fc_requires :
             and ((JC_40: valid_gs(S_gs_2_alloc_table))
                 and (JC_41: gt2(S_p_gs_2, S_i_gs_2))))))
        and (JC_32:
-           ((JC_30: eq_int(integer_of_int32(select(T_ti_t_3, t)), (1)))
-           and (JC_31: eq_int(integer_of_int32(select(T_tj_t_3, t)), (2)))))) }
+           ((JC_30: eq_int(integer_of_int32(select(T_ti_t_3, t@)), (1)))
+           and (JC_31: eq_int(integer_of_int32(select(T_tj_t_3, t@)), (2)))))) }
 
 parameter fcp :
  s:S pointer ->
@@ -719,8 +721,8 @@ parameter fcp :
             and ((JC_76: valid_gs(S_gs_2_alloc_table))
                 and (JC_77: gt2(S_p_gs_2, S_i_gs_2))))))
        and (JC_68:
-           ((JC_66: eq_int(integer_of_int32(select(S_i_s_4, s)), (1)))
-           and (JC_67: (select(S_p_s_4, s) = null))))) }
+           ((JC_66: eq_int(integer_of_int32(select(S_i_s_4, s@)), (1)))
+           and (JC_67: (select(S_p_s_4, s@) = null))))) }
 
 parameter fcp_requires :
  s:S pointer ->
@@ -744,8 +746,8 @@ parameter fcp_requires :
             and ((JC_76: valid_gs(S_gs_2_alloc_table))
                 and (JC_77: gt2(S_p_gs_2, S_i_gs_2))))))
        and (JC_68:
-           ((JC_66: eq_int(integer_of_int32(select(S_i_s_4, s)), (1)))
-           and (JC_67: (select(S_p_s_4, s) = null))))) }
+           ((JC_66: eq_int(integer_of_int32(select(S_i_s_4, s@)), (1)))
+           and (JC_67: (select(S_p_s_4, s@) = null))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -790,8 +792,8 @@ let fc_ensures_default =
      end) in void); (raise Return); (raise Return) end with Return ->
    void end)
   { (JC_29:
-    ((JC_27: eq_int(integer_of_int32(select(T_ti_t_3, t)), (1)))
-    and (JC_28: eq_int(integer_of_int32(select(T_tj_t_3, t)), (2))))) }
+    ((JC_27: eq_int(integer_of_int32(select(T_ti_t_3, t@)), (1)))
+    and (JC_28: eq_int(integer_of_int32(select(T_tj_t_3, t@)), (2))))) }
 
 let fc_safety =
  fun (t : T pointer) (T_ti_t_3 : (T, int32) memory ref) (T_tj_t_3 : (T, int32) memory ref) (T_t_3_alloc_table : T alloc_table) ->
@@ -854,8 +856,8 @@ let fcp_ensures_default =
      end) in void); (raise Return); (raise Return) end with Return ->
    void end)
   { (JC_65:
-    ((JC_63: eq_int(integer_of_int32(select(S_i_s_4, s)), (1)))
-    and (JC_64: (select(S_p_s_4, s) = null)))) }
+    ((JC_63: eq_int(integer_of_int32(select(S_i_s_4, s@)), (1)))
+    and (JC_64: (select(S_p_s_4, s@) = null)))) }
 
 let fcp_safety =
  fun (s : S pointer) (S_i_s_4 : (S, int32) memory ref) (S_p_s_4 : (S, int_P pointer) memory ref) (S_s_4_alloc_table : S alloc_table) ->
@@ -899,22 +901,22 @@ why --project [...] why/compound_global.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/compound_global_po13.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "86" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "88" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po14.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "86" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "88" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po15.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "87" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "89" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po16.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "87" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "89" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -950,22 +952,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/compound_global_po3.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "63" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "64" begin = "17" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po4.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "63" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "64" begin = "17" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po5.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "64" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "65" begin = "17" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/compound_global_po6.why">
-      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "64" begin = "17" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/compound_global.jessie/compound_global.jc" line = "65" begin = "17" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

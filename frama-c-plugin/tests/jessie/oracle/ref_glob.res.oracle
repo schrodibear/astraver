@@ -51,11 +51,11 @@ tag __anonstruct_las_1 = {
 type __anonstruct_las_1 = [__anonstruct_las_1]
 
 unit g(int_P[..] p_0)
-  requires (C_3 : ((C_4 : (\offset_min(p_0) <= 0)) &&
-                    (C_5 : (\offset_max(p_0) >= 0))));
+  requires (C_4 : ((C_5 : (\offset_min(p_0) <= 0)) &&
+                    (C_6 : (\offset_max(p_0) >= 0))));
 behavior default:
   assigns p_0.int_M;
-  ensures (C_6 : (p_0.int_M == 1));
+  ensures (C_3 : (\at(p_0,Old).int_M == 1));
 {  
    {  (C_2 : ((C_1 : p_0.int_M) = 1));
       
@@ -90,13 +90,13 @@ behavior default:
 __anonstruct_las_1[..] plas;
 
 unit f4()
-  requires (C_19 : ((C_20 : (\offset_min(plas) <= 0)) &&
-                     (C_21 : (\offset_max(plas) >= 0))));
+  requires (C_22 : ((C_23 : (\offset_min(plas) <= 0)) &&
+                     (C_24 : (\offset_max(plas) >= 0))));
 behavior default:
   assigns plas.c1.int_M,
   plas.c2.int_M;
-  ensures (C_22 : ((C_23 : (plas.c1.int_M == 1)) &&
-                    (C_24 : (plas.c2.int_M == 1))));
+  ensures (C_19 : ((C_20 : (plas.c1.int_M == 1)) &&
+                    (C_21 : (plas.c2.int_M == 1))));
 {  
    {  (C_14 : ((C_13 : (C_12 : plas.c2).int_M) = 2));
       (C_16 : g((C_15 : plas.c1)));
@@ -112,13 +112,13 @@ invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 2))
 
 unit h(int_xP[..] p)
-  requires (C_28 : (((C_30 : (\offset_min(p) <= 0)) &&
-                      (C_31 : (\offset_max(p) >= 0))) &&
-                     ((C_33 : (\offset_min(p.int_xM) <= 0)) &&
-                       (C_34 : (\offset_max(p.int_xM) >= 0)))));
+  requires (C_29 : (((C_31 : (\offset_min(p) <= 0)) &&
+                      (C_32 : (\offset_max(p) >= 0))) &&
+                     ((C_34 : (\offset_min(p.int_xM) <= 0)) &&
+                       (C_35 : (\offset_max(p.int_xM) >= 0)))));
 behavior default:
   assigns p.int_xM.int_M;
-  ensures (C_35 : (p.int_xM.int_M == 2));
+  ensures (C_28 : (\at(p,Old).int_xM.int_M == 2));
 {  
    {  (C_27 : ((C_26 : (C_25 : p.int_xM).int_M) = 2));
       
@@ -862,7 +862,7 @@ parameter g :
     { ((JC_25: valid_t(int_P_t_3_alloc_table))
       and (JC_23:
           ((JC_21:
-           eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+           eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0@)), (1)))
           and (JC_22:
               not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
               int_P_int_M_p_0_4, pset_singleton(p_0@)))))) }
@@ -881,7 +881,7 @@ parameter g_requires :
     { ((JC_25: valid_t(int_P_t_3_alloc_table))
       and (JC_23:
           ((JC_21:
-           eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+           eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0@)), (1)))
           and (JC_22:
               not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
               int_P_int_M_p_0_4, pset_singleton(p_0@)))))) }
@@ -898,7 +898,7 @@ parameter h :
         and (JC_106:
             ((JC_104:
              eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                                     select(int_xP_int_xM_p_5, p))),
+                                     select(int_xP_int_xM_p_5, p@))),
              (2)))
             and (JC_105:
                 not_assigns(int_P_int_xM_6_alloc_table@,
@@ -930,7 +930,7 @@ parameter h_requires :
         and (JC_106:
             ((JC_104:
              eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                                     select(int_xP_int_xM_p_5, p))),
+                                     select(int_xP_int_xM_p_5, p@))),
              (2)))
             and (JC_105:
                 not_assigns(int_P_int_xM_6_alloc_table@,
@@ -1126,7 +1126,7 @@ let g_ensures_default =
        (((safe_upd_ int_P_int_M_p_0_4) jessie_11) jessie_8))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_20:
-    ((JC_18: eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+    ((JC_18: eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0@)), (1)))
     and (JC_19:
         not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
         int_P_int_M_p_0_4, pset_singleton(p_0@))))) }
@@ -1179,7 +1179,7 @@ let h_ensures_default =
   { (JC_103:
     ((JC_101:
      eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                             select(int_xP_int_xM_p_5, p))),
+                             select(int_xP_int_xM_p_5, p@))),
      (2)))
     and (JC_102:
         not_assigns(int_P_int_xM_6_alloc_table@, int_P_int_M_int_xM_6@,

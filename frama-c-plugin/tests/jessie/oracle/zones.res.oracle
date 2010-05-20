@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only zones.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD zones.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated for behavior default
-[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir zones.jessie
 [jessie] File zones.jessie/zones.jc written.
 [jessie] File zones.jessie/zones.cloc written.

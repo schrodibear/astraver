@@ -38,17 +38,17 @@ tag void_P = {
 type void_P = [void_P]
 
 int32 max_seq(int_P[..] p, int32 n)
-  requires (C_29 : (n > 0));
-  requires (C_30 : ((C_31 : (\offset_min(p) <= 0)) &&
-                     (C_32 : (\offset_max(p) >= (n - 1)))));
+  requires (C_35 : (n > 0));
+  requires (C_32 : ((C_33 : (\offset_min(p) <= 0)) &&
+                     (C_34 : (\offset_max(p) >= (n - 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_33 : ((C_34 : (\forall integer i;
-                             (((0 <= i) && (i <= (n - 1))) ==>
-                               (\result >= (p + i).int_M)))) &&
-                    (C_35 : (\exists integer e;
-                              (((0 <= e) && (e <= (n - 1))) &&
-                                (\result == (p + e).int_M))))));
+  ensures (C_29 : ((C_30 : (\forall integer i;
+                             (((0 <= i) && (i <= (\at(n,Old) - 1))) ==>
+                               (\result >= (\at(p,Old) + i).int_M)))) &&
+                    (C_31 : (\exists integer e;
+                              (((0 <= e) && (e <= (\at(n,Old) - 1))) &&
+                                (\result == (\at(p,Old) + e).int_M))))));
 {  
    (var int32 res);
    
@@ -465,15 +465,15 @@ parameter max_seq :
      { (JC_17:
        ((JC_15:
         (forall i:int.
-         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n), (1)))) ->
+         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n@), (1)))) ->
           ge_int(integer_of_int32(result),
-          integer_of_int32(select(int_P_int_M_p_1, shift(p, i)))))))
+          integer_of_int32(select(int_P_int_M_p_1, shift(p@, i)))))))
        and (JC_16:
            (exists e:int.
             (le_int((0), e)
-            and (le_int(e, sub_int(integer_of_int32(n), (1)))
+            and (le_int(e, sub_int(integer_of_int32(n@), (1)))
                 and eq_int(integer_of_int32(result),
-                    integer_of_int32(select(int_P_int_M_p_1, shift(p, e)))))))))) }
+                    integer_of_int32(select(int_P_int_M_p_1, shift(p@, e)))))))))) }
 
 parameter max_seq_requires :
  p:int_P pointer ->
@@ -490,15 +490,15 @@ parameter max_seq_requires :
      { (JC_17:
        ((JC_15:
         (forall i:int.
-         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n), (1)))) ->
+         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n@), (1)))) ->
           ge_int(integer_of_int32(result),
-          integer_of_int32(select(int_P_int_M_p_1, shift(p, i)))))))
+          integer_of_int32(select(int_P_int_M_p_1, shift(p@, i)))))))
        and (JC_16:
            (exists e:int.
             (le_int((0), e)
-            and (le_int(e, sub_int(integer_of_int32(n), (1)))
+            and (le_int(e, sub_int(integer_of_int32(n@), (1)))
                 and eq_int(integer_of_int32(result),
-                    integer_of_int32(select(int_P_int_M_p_1, shift(p, e)))))))))) }
+                    integer_of_int32(select(int_P_int_M_p_1, shift(p@, e)))))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -616,15 +616,15 @@ let max_seq_ensures_default =
   { (JC_13:
     ((JC_11:
      (forall i:int.
-      ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n), (1)))) ->
+      ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n@), (1)))) ->
        ge_int(integer_of_int32(result),
-       integer_of_int32(select(int_P_int_M_p_1, shift(p, i)))))))
+       integer_of_int32(select(int_P_int_M_p_1, shift(p@, i)))))))
     and (JC_12:
         (exists e:int.
          (le_int((0), e)
-         and (le_int(e, sub_int(integer_of_int32(n), (1)))
+         and (le_int(e, sub_int(integer_of_int32(n@), (1)))
              and eq_int(integer_of_int32(result),
-                 integer_of_int32(select(int_P_int_M_p_1, shift(p, e)))))))))) }
+                 integer_of_int32(select(int_P_int_M_p_1, shift(p@, e)))))))))) }
 
 let max_seq_safety =
  fun (p : int_P pointer) (n : int32) (int_P_p_1_alloc_table : int_P alloc_table) (int_P_int_M_p_1 : (int_P, int32) memory) ->
