@@ -60,6 +60,7 @@ class add_default_behavior =
           { b_name = Cil.default_behavior_name;
             b_assumes = [];
             b_requires = [];
+            b_extended = [];
             b_assigns = [];
             b_post_cond = [];
           } :: s.spec_behavior

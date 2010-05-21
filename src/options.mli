@@ -49,8 +49,8 @@ val ocaml_annot : bool
 val ocaml_externals : bool
 
 val explain_vc : bool
-val locs_table : 
-  (string, (string * int * int * int * (string * Rc.rc_value) list)) 
+val locs_table :
+  (string, (string * int * int * int * (string * Rc.rc_value) list))
      Hashtbl.t
 
 val wol : bool
@@ -95,14 +95,17 @@ val pruning_hyp_considere_arith_comparison_as_special_predicate : bool
 (* FIN de Heuristiques en test *)
 val modulo : bool
 
+val get_smtlib_v1: unit -> bool
+val set_smtlib_v1: bool -> unit
+
 val phantom_types : (string,unit) Hashtbl.t
 
 type expanding = All | Goal | NoExpanding
 val defExpanding : expanding
-val get_type_expanding : unit -> expanding 
+val get_type_expanding : unit -> expanding
 
-type encoding = 
-  | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
+type encoding =
+  | NoEncoding | Predicates | Stratified | Recursive | Monomorph
   | SortedStratified |MonoInst
 val get_types_encoding : unit -> encoding
 val set_types_encoding : encoding -> unit
@@ -125,7 +128,7 @@ val termination : termination
 
 type coq_version = V7 | V8 | V81
 
-type prover = 
+type prover =
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3
   | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
@@ -172,7 +175,7 @@ val out_file_exists :  string -> bool
 
 val lib_file : string -> string
 
-val lib_dir : string 
+val lib_dir : string
 
 (*s Files given on the command line *)
 
@@ -185,7 +188,7 @@ val gui_project : Project.t option ref
 val lib_files_to_load : string list
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "unset LANG; make -j -C .. bin/why.byte"
-End: 
+End:
 *)

@@ -50,7 +50,7 @@ let add_oblig ((_,_,id,_) as o) =
   Queue.add so oblig ;
   Hashtbl.add oblig_h id so
 
-let push_decl d = 
+let push_decl d =
   match d with
   | Dgoal (loc, expl, id, s) -> add_oblig (loc, expl, id, s)
   | d -> add_elem d
@@ -61,30 +61,30 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 open DpConfig
 
-let push_elem p e = 
-  if not pruning then 
-    assert (match e with Dgoal _ -> false | _ -> true);  
+let push_elem p e =
+  if not pruning then
+    assert (match e with Dgoal _ -> false | _ -> true);
   match p with
   | Simplify -> Simplify.push_decl e
   | Harvey -> Harvey.push_decl e
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
-  | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
-  | Ergo | ErgoSelect | SimplifySelect 
+  | Rvsat | Yices | Cvc3 | Z3 | VeriT -> Smtlib.push_decl e
+  | Ergo | ErgoSelect | SimplifySelect
   | GappaSelect -> Pretty.push_decl ~ergo:true e
   | Coq -> Coq.push_decl e
   | PVS -> Pvs.push_decl e
   | Gappa -> Gappa.push_decl e
 
-let push_obligation p (loc, expl, id, s) = 
+let push_obligation p (loc, expl, id, s) =
   let g = Dgoal (loc, expl, id, s) in
   match p with
   | Simplify -> Simplify.push_decl g
   | Harvey -> Harvey.push_decl g
   | Cvcl -> Cvcl.push_decl g
   | Zenon -> Zenon.push_decl g
-  | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl g
-  | Ergo | ErgoSelect | SimplifySelect 
+  | Rvsat | Yices | Cvc3 | Z3 | VeriT -> Smtlib.push_decl g
+  | Ergo | ErgoSelect | SimplifySelect
   | GappaSelect -> Pretty.push_decl g
   | Coq -> Coq.push_decl g
   | PVS -> Pvs.push_decl g
@@ -100,44 +100,44 @@ let get_project () =
     | Some p -> p
     | None ->
 	failwith "For interactive provers, option --project must be set"
-	
+
 
 let output_file ?encoding p (elems,o) =
-  begin match encoding with 
-      Some e -> set_types_encoding e 
+  begin match encoding with
+      Some e -> set_types_encoding e
     | None -> () end;
   begin match p with
-    | Simplify -> Simplify.reset () 
-    | Harvey -> Harvey.reset () 
+    | Simplify -> Simplify.reset ()
+    | Harvey -> Harvey.reset ()
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
-    | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.reset ()
+    | Rvsat | Yices | Cvc3 | Z3 | VeriT -> Smtlib.reset ()
     | Ergo | ErgoSelect | SimplifySelect
     | GappaSelect -> Pretty.reset ()
     | Coq -> () (* Coq.reset () *)
     | PVS -> Pvs.reset()
     | Gappa -> Gappa.reset ()
   end;
-  
-  if pruning then 
-    begin  
-      (**stores into the declarationQueue 
-	 all the elements of the elems list and th obligation**)  
+
+  if pruning then
+    begin
+      (**stores into the declarationQueue
+	 all the elements of the elems list and th obligation**)
       let declQ = Queue.create () in
       List.iter (fun p -> Queue.add p declQ) elems ;
       let (loc, expl, id, s) = o in
       let g = Dgoal (loc, expl, id, s) in
       Queue.add g declQ;
       if debug then
-	Format.printf "Before the pruning dedicated to the PO: %d @." 
+	Format.printf "Before the pruning dedicated to the PO: %d @."
 	  (Queue.length declQ);
       (** reduce the theory **)
-      let q = Theory_filtering.reduce declQ in 
+      let q = Theory_filtering.reduce declQ in
       if debug then
-	Format.printf "After the pruning dedicated to the PO: %d @." 
+	Format.printf "After the pruning dedicated to the PO: %d @."
 	  (Queue.length q);
       Queue.iter (push_elem p) q ;
-      push_obligation p o 
+      push_obligation p o
     end
   else
     begin
@@ -145,67 +145,74 @@ let output_file ?encoding p (elems,o) =
       push_obligation p o
     end;
   match p with
-    | Simplify -> 
+    | Simplify ->
 	let f = Filename.temp_file "gwhy" "_why.sx" in
 	Simplify.output_file ~allowedit:false f; f
-    | Harvey -> 
+    | Harvey ->
 	let f = Filename.temp_file "gwhy" "_why.rv" in
-	Harvey.output_file f; f 
-    | Cvcl -> 
+	Harvey.output_file f; f
+    | Cvcl ->
 	let f = Filename.temp_file "gwhy" "_why.cvc" in
-	Cvcl.output_file ~allowedit:false f; f 
-    | Zenon -> 
+	Cvcl.output_file ~allowedit:false f; f
+    | Zenon ->
 	let f = Filename.temp_file "gwhy" "_why.znn" in
-	Zenon.output_file ~allowedit:false f; f 
-    | Rvsat | Yices | Cvc3 -> 
+	Zenon.output_file ~allowedit:false f; f
+    | Rvsat | Yices | Cvc3 ->
 	let f = Filename.temp_file "gwhy" "_why.smt" in
-	Smtlib.output_file ~logic:"AUFLIRA" f; f 
-    | Z3 -> 
+	Smtlib.output_file ~logic:"AUFLIRA" f; f
+    | VeriT ->
+        let f = Filename.temp_file "gwhy" "_why.smt" in
+        let old_smtlib_version = Options.get_smtlib_v1 () in
+        Options.set_smtlib_v1 true;
+        Smtlib.output_file ~logic:"AUFLIRA" f;
+        Options.set_smtlib_v1 old_smtlib_version;
+        f
+    | Z3 ->
 	let f = Filename.temp_file "gwhy" "_why.smt" in
-	Smtlib.output_file f; f 
-    | Ergo 
-    | ErgoSelect 
-    | SimplifySelect 
-    | GappaSelect -> 
+	Smtlib.output_file f; f
+    | Ergo
+    | ErgoSelect
+    | SimplifySelect
+    | GappaSelect ->
 	let f = Filename.temp_file "gwhy" "_why.why" in
-	Pretty.output_file f; f 
-    | Gappa -> 
+	Pretty.output_file f; f
+    | Gappa ->
 	let f = Filename.temp_file "gwhy" "_why.gappa" in
-	Gappa.output_one_file ~allowedit:false f; f 
+	Gappa.output_one_file ~allowedit:false f; f
     | Coq ->
-	let (_, _, f, _) = o in 
-	let _p = get_project () in 
+	let (_, _, f, _) = o in
+	let _p = get_project () in
 	(* if necessary, Pretty.output_project "name ?"; *)
 	(* file should already be generated ?? *)
 	(* Coq.output_file f; *)
 	if debug then Format.printf "Reusing coq file %s_why.v@." f;
-	f ^ "_why.v" 
+	f ^ "_why.v"
     | PVS ->
 	assert false (* no PVS in Gwhy *)
 (*
 	let f = Filename.temp_file "gwhy" "_why.pvs" in
-        Pvs.output_file ~allowedit:false f; f 
+        Pvs.output_file ~allowedit:false f; f
 *)
 
-	
+
 
 open Format
 
-let prover_name p = 
+let prover_name p =
   try
     let (info,_) = List.assoc p DpConfig.prover_list in
     info.name
   with
       Not_found -> "(unnamed)"
 (*
-  | Simplify -> "Simplify" 
+  | Simplify -> "Simplify"
   | Harvey -> "haRVey"
   | Cvcl -> "CVC Lite"
   | Zenon -> "Zenon"
   | Rvsat -> "rv-sat"
   | Yices -> "Yices"
-  | Ergo -> 
-      DpConfig.alt_ergo.DpConfig.name ^ " " ^ 
+  | Ergo ->
+      DpConfig.alt_ergo.DpConfig.name ^ " " ^
       DpConfig.alt_ergo.DpConfig.version
   | Cvc3 -> "CVC3"
   | Graph -> "Graph"
@@ -218,28 +225,30 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let filename = output_file ?encoding p so in
   if debug then eprintf "calling %s on %s@." (prover_name p) filename;
   let r = match p with
-    | Simplify -> 
-	Calldp.simplify ~debug ?timeout ~filename () 
-    | Harvey -> 
+    | Simplify ->
+	Calldp.simplify ~debug ?timeout ~filename ()
+    | Harvey ->
 	Calldp.harvey ~debug ?timeout ~filename ()
     | Cvcl ->
 	Calldp.cvcl ~debug ?timeout ~filename ()
-    | Zenon -> 
+    | Zenon ->
 	Calldp.zenon ~debug ?timeout ~filename ()
-    | Rvsat -> 
+    | Rvsat ->
 	Calldp.rvsat ~debug ?timeout ~filename ()
-    | Yices -> 
+    | Yices ->
 	Calldp.yices ~debug ?timeout ~filename ()
     | Ergo ->
 	Calldp.ergo ~select_hypotheses:false ~debug ?timeout ~filename ()
     | ErgoSelect ->
 	Calldp.ergo ~select_hypotheses:true ~debug ?timeout ~filename ()
-    | Cvc3 -> 
+    | Cvc3 ->
 	Calldp.cvc3 ~debug ?timeout ~filename ()
-    | Z3 -> 
+    | Z3 ->
 	Calldp.z3 ~debug ?timeout ~filename ()
-    | SimplifySelect -> 
-	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename 
+    | VeriT ->
+        Calldp.verit ~debug ?timeout ~filename ()
+    | SimplifySelect ->
+	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename
 	  DpConfig.Simplify ()
     | Coq ->
 	Calldp.coq ~debug ?timeout ~filename ()
@@ -248,12 +257,11 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
     | Gappa ->
 	Calldp.gappa ~debug ?timeout ~filename ()
     | GappaSelect ->
-	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename 
+	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename
 	  DpConfig.Gappa ()
   in
   begin match p with
     | Coq -> ()
-    | _ -> Lib.remove_file ~debug filename 
-  end; 
+    | _ -> Lib.remove_file ~debug filename
+  end;
   r
-

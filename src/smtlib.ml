@@ -65,12 +65,14 @@ let prefix id =
   else if id == t_div_int then "div_int"
   else if id == t_mod_int then
     if Options.modulo then "%" else "modulo"
-  else if id == t_neg_int then "-"
+  else if id == t_neg_int then
+    if Options.get_smtlib_v1() then "~" else "-"
   (* real ops *)
   else if id == t_add_real then "+"
   else if id == t_sub_real then "-"
   else if id == t_mul_real then "*"
-  else if id == t_neg_real then "-"
+  else if id == t_neg_real then
+    if Options.get_smtlib_v1 () then "~" else "-"
   else if id == t_lt_real then "<"
   else if id == t_le_real then "<="
   else if id == t_gt_real then ">"
@@ -123,6 +125,12 @@ let rec print_term fmt = function
   | Tvar id ->
       print_bvar fmt id
   | Tconst (ConstInt n) ->
+      let n =
+        if Options.get_smtlib_v1 () then begin
+          let n = String.copy n in
+          if String.length n >= 1 && n.[0] = '-' then n.[0] <- '~'; n
+        end else n
+      in
       fprintf fmt "%s" n
   | Tconst (ConstBool b) ->
       fprintf fmt "c_Boolean_%b" b

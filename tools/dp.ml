@@ -49,44 +49,46 @@ let select_hypotheses = ref false
 let files = Queue.create ()
 let prover = ref None
 
-type smt_solver = Yices | CVC3 | Z3
+type smt_solver = Yices | CVC3 | Z3 | VeriT
 let smt_solver = ref Z3
 let set_smt_solver = function
   | "yices" -> smt_solver := Yices
   | "cvc3" -> smt_solver := CVC3
   | "z3" -> smt_solver := Z3
+  | "verit" -> smt_solver:= VeriT
   | s -> eprintf "unknown SMT solver %s@." s; exit 1
 
-let spec = 
+let spec =
   [ "-timeout", Arg.Int ((:=) timeout), "<int>  set the timeout (in seconds) (0 no timeout)";
-    "-eclauses", Arg.Int ((:=) eclauses), 
+    "-eclauses", Arg.Int ((:=) eclauses),
     "<int>  set the max nb of clauses for the E prover";
     "-debug", Arg.Set debug, "set the debug flag";
     "-batch", Arg.Set batch, "run in batch mode";
     "-no-timings", Arg.Clear timings, "do not display timings";
-    "-smt-solver", Arg.String set_smt_solver, "<solver id> (yices, cvc3 or z3)";
+    "-smt-solver", Arg.String set_smt_solver,
+      "<solver id> (yices, cvc3, z3 or verit)";
     "-basename", Arg.Set basename, "prints only file basenames";
     "-listing", Arg.Set listing, "argument file only lists real argument files";
-    "-select", Arg.Set select_hypotheses, 
+    "-select", Arg.Set select_hypotheses,
     "applies some selection of hypotheses (only Alt-Ergo)";
     "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout";
     "-split", Arg.Set split, "Create a directory wich contains all the goal splitted in different file";
     "-prover", Arg.Symbol (
-      ["Alt-Ergo";"CVC3";"CVCL";"Z3";"Yices";"Simplify"],(fun s -> prover := Some s)), "Select the prover to use"
+      ["Alt-Ergo";"CVC3";"CVCL";"Z3";"Yices";"Simplify";"VeriT"],(fun s -> prover := Some s)), "Select the prover to use"
   ]
 
-let () = 
+let () =
   let d = Filename.dirname Sys.argv.(0) in
   if not (Filename.is_relative d) then
     Calldp.cpulimit := Filename.concat d "why-cpulimit"
 
 let usage = "usage: why-dp [options] [files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}]"
-let () = 
-  Arg.parse spec 
-    (fun s -> 
+let () =
+  Arg.parse spec
+    (fun s ->
        if !listing then
 	 let c = open_in s in
-	 let rec push_file () = 
+	 let rec push_file () =
 	   let line = input_line c in
 	   let flist = Str.split (Str.regexp "[ \t]+") line in
 	   List.iter (fun f -> Queue.push f files) flist;
@@ -95,8 +97,8 @@ let () =
 	 (try push_file () with End_of_file -> ());
 	 close_in c
        else
-	 Queue.push s files) usage 
-    
+	 Queue.push s files) usage
+
 let () = if !split then simple := true
 
 (* stats *)
@@ -119,31 +121,31 @@ let ttimeout = ref 0.0
 let nfailure = ref 0
 let tfailure = ref 0.0
 
-let is_valid t = 
-  printf ".@?"; incr nvalid; 
+let is_valid t =
+  printf ".@?"; incr nvalid;
   tvalid := !tvalid +. t;
   tmaxvalid := max !tmaxvalid t
 
-let is_invalid t = 
-  printf "*@?"; incr ninvalid; 
+let is_invalid t =
+  printf "*@?"; incr ninvalid;
   tinvalid := !tinvalid +. t;
   tmaxinvalid := max !tmaxinvalid t
 
-let is_unknown t = 
-  printf "?@?"; incr nunknown; 
+let is_unknown t =
+  printf "?@?"; incr nunknown;
   tunknown := !tunknown +. t;
   tmaxunknown := max !tmaxunknown t
 
-let is_timeout t = 
+let is_timeout t =
   printf "#@?"; incr ntimeout;
   ttimeout := !ttimeout +. t
 
-let is_failure t = 
+let is_failure t =
   printf "!@?"; incr nfailure;
-  tfailure := !tfailure +. t 
+  tfailure := !tfailure +. t
 
 
-let wrapper_complete r = 
+let wrapper_complete r =
   begin match r with
     | Valid t -> is_valid t
     | Invalid(t,_) -> is_invalid t
@@ -153,7 +155,7 @@ let wrapper_complete r =
   end;
   flush stdout
 
-let wrapper_batch r = 
+let wrapper_batch r =
   begin match r with
     | Valid _t -> exit 0
     | Invalid(_t,_) -> exit 2
@@ -162,7 +164,7 @@ let wrapper_batch r =
     | ProverFailure(_t,_) -> exit 5
   end
 
-let wrapper_simple r = 
+let wrapper_simple r =
   begin match r with
     | Valid t -> printf "Valid %f@." t
     | Invalid(t,_) -> printf "Invalid %f@." t
@@ -172,58 +174,60 @@ let wrapper_simple r =
   end;
   flush stdout
 
-let wrapper = 
+let wrapper =
   if !batch then wrapper_batch
   else if !simple then wrapper_simple
   else wrapper_complete
 
 let debug = !debug
 
-let call_ergo f b = 
-  wrapper (Calldp.ergo ~debug ~timeout:!timeout 
+let call_ergo f b =
+  wrapper (Calldp.ergo ~debug ~timeout:!timeout
 	     ~select_hypotheses:!select_hypotheses ~filename:f ~buffers:b ())
-let call_cvcl f b = 
+let call_cvcl f b =
   wrapper (Calldp.cvcl ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
-let call_simplify f _ = 
+let call_simplify f _ =
   wrapper (Calldp.simplify ~debug ~timeout:!timeout ~filename:f ())
-let call_yices f b = 
+let call_yices f b =
   wrapper (Calldp.yices ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
-let call_cvc3 f b = 
+let call_cvc3 f b =
   wrapper (Calldp.cvc3 ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
-let call_z3 f b = 
+let call_z3 f b =
   wrapper (Calldp.z3 ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
-let call_rvsat f _ = 
+let call_rvsat f _ =
   wrapper (Calldp.rvsat ~debug ~timeout:!timeout ~filename:f ())
-let call_zenon f _ = 
+let call_zenon f _ =
   wrapper (Calldp.zenon ~debug ~timeout:!timeout ~filename:f ())
-let call_harvey f _ = 
+let call_harvey f _ =
   wrapper (Calldp.harvey ~debug ~timeout:!timeout ~filename:f ())
+let call_verit f b =
+  wrapper (Calldp.verit ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 
 
-
-let new_num = 
+let new_num =
   let c = ref (-1) in
   (fun () -> incr c;!c)
 
 let dir_name f = (Filename.chop_extension f)^".split"
 
 let call_split callback dir_name suffixe =
-  if !split then (fun f b -> 
+  if !split then (fun f b ->
                     let dest = (sprintf "%s/goal%i%s" dir_name (new_num ()) suffixe) in
                     match b with
                       | [] -> Lib.file_copy f dest
-                      | buffers -> 
+                      | buffers ->
                           let cout = open_out dest in
                           List.iter (Buffer.output_buffer cout) buffers;
                           close_out cout;
                  )
-  else callback 
-  
+  else callback
+
 
 let call_smt_solver = match !smt_solver with
   | Yices -> call_yices
   | CVC3 -> call_cvc3
   | Z3 -> call_z3
+  | VeriT -> call_verit
 
 let dispatch_prover_by_name cin = function
   | "Alt-Ergo" -> Ergo_split.iter call_ergo cin
@@ -232,6 +236,7 @@ let dispatch_prover_by_name cin = function
   | "Z3" -> Smtlib_split.iter call_z3 cin
   | "Yices" -> Smtlib_split.iter call_yices cin
   | "Simplify" -> Simplify_split.iter ~debug call_simplify cin
+  | "VeriT" -> Smtlib_split.iter call_verit cin
   | _ -> assert false
 
 
@@ -239,31 +244,31 @@ let dispatch_prover_by_extension dir_name f =
   let cin = open_in f in
   if Filename.check_suffix f ".smt"  || Filename.check_suffix f ".smt.all" then
     begin
-      Smtlib_split.iter (call_split call_smt_solver dir_name ".smt") cin 
-    end 
+      Smtlib_split.iter (call_split call_smt_solver dir_name ".smt") cin
+    end
   else
   if Filename.check_suffix f ".why" then
     begin
       Ergo_split.iter (call_split call_ergo dir_name ".why") cin
     end
-  else 
+  else
   if Filename.check_suffix f ".cvc"  || Filename.check_suffix f ".cvc.all" then
-    Cvcl_split.iter (call_split call_cvcl dir_name ".cvc") cin 
-  else 
-  if Filename.check_suffix f ".sx" || 
+    Cvcl_split.iter (call_split call_cvcl dir_name ".cvc") cin
+  else
+  if Filename.check_suffix f ".sx" ||
      Filename.check_suffix f ".sx.all" ||
      Filename.check_suffix f ".simplify"
   then
     Simplify_split.iter ~debug (call_split call_simplify dir_name ".sx") cin
-  else 
+  else
   if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then
     Zenon_split.iter ~debug (call_split call_zenon dir_name ".znn") f (* TODO: Zenon_split *)
-  else 
+  else
   if Filename.check_suffix f ".rv" then
     begin
-      Rv_split.iter ~debug (call_split call_harvey dir_name ".rv") f 
+      Rv_split.iter ~debug (call_split call_harvey dir_name ".rv") f
     end
-  else 
+  else
     begin Arg.usage spec usage; exit 1 end;
   close_in cin
 
@@ -271,7 +276,7 @@ let dispatch_prover_by_extension dir_name f =
 let split f =
   let dir_name = dir_name f in
   if !split && not (Sys.file_exists dir_name) then Unix.mkdir dir_name 0o740;
-  if not !batch && not !simple then printf "%-30s: " 
+  if not !batch && not !simple then printf "%-30s: "
     (if !basename then Filename.basename f else f);
   let oldv = !nvalid in
   let oldi = !ninvalid in
@@ -280,25 +285,25 @@ let split f =
   let oldf = !nfailure in
   (match !prover with
     | None -> dispatch_prover_by_extension dir_name f;
-    | Some p -> let cin = open_in f in 
+    | Some p -> let cin = open_in f in
       dispatch_prover_by_name cin p;
       close_in cin);
   if not !simple then
-    printf 
+    printf
       " (%d/%d/%d/%d/%d)@." (!nvalid - oldv) (!ninvalid - oldi) (!nunknown - oldu) (!ntimeout - oldt) (!nfailure - oldf)
-    
+
 let print_time fmt f =
-  if f < 60.0 then fprintf fmt "%.2f sec" f else 
+  if f < 60.0 then fprintf fmt "%.2f sec" f else
     let t = int_of_float f in
     let m = t / 60 in
     let s = t mod 60 in
-    if f < 3600.0 then fprintf fmt "%d m %02d sec" m s else 
+    if f < 3600.0 then fprintf fmt "%d m %02d sec" m s else
       let h = m / 60 in
       let m = m mod 60 in
-      fprintf fmt "%d h %02d m %02d sec" h m s  
+      fprintf fmt "%d h %02d m %02d sec" h m s
 
 
-let main () = 
+let main () =
   begin
     try
       DpConfig.load_rc_file ()
@@ -307,7 +312,7 @@ let main () =
       exit 1
   end;
   let wctime0 = Unix.gettimeofday() in
-  if not !batch && not !simple then printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
+  if not !batch && not !simple then printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@.";
   if Queue.is_empty files then
     match !prover with
       | None -> eprintf "Can't use stdin without the option -prover@.";
@@ -322,14 +327,14 @@ let main () =
   let ptimeout = 100. *. float !ntimeout /. float n in
   let punknown = 100. *. float !nunknown /. float n in
   let pfailure = 100. *. float !nfailure /. float n in
-  printf 
+  printf
 "total   : %3d
 valid   : %3d (%3.0f%%)
 invalid : %3d (%3.0f%%)
 unknown : %3d (%3.0f%%)
 timeout : %3d (%3.0f%%)
 failure : %3d (%3.0f%%)\n" n
-    !nvalid pvalid !ninvalid pinvalid !nunknown punknown 
+    !nvalid pvalid !ninvalid pinvalid !nunknown punknown
     !ntimeout ptimeout !nfailure pfailure;
   if !timings then printf
 "total wallclock time : %a
@@ -351,5 +356,5 @@ unknown VCs:
     !tmaxinvalid
       (!tunknown /. float !nunknown)
     !tmaxunknown
-    
+
 let () = Printexc.catch main ()

@@ -50,6 +50,7 @@ let cvcl fmt f = fprintf fmt "cvcl/%s_why.cvc" f
 let harvey fmt f = fprintf fmt "harvey/%s_why.rv" f
 let zenon fmt f = fprintf fmt "zenon/%s_why.znn" f
 let smtlib fmt f = fprintf fmt "smtlib/%s_why.smt" f
+let smtlib_v1 fmt f = fprintf fmt "smtlib-v1/%s_why.smt" f
 let ergo fmt f = fprintf fmt "why/%s_why.why" f
 let gappa fmt f = fprintf fmt "gappa/%s_why.gappa" f
 let why_goals fmt f = fprintf fmt "why/%s_ctx.why" f
@@ -181,16 +182,25 @@ let generic full f targets =
        out "cvc3: %a@\n" (print_files smtlib) targets;
        out "\t@@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)@\n@\n";
 
+       out "smtlib-v1: %a@\n" (print_files smtlib_v1) targets;
+       out "smtlib-v1/%%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1@\n";
+       out "smtlib-v1/%%_why.smt: why/%%.why@\n";
+       out "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
+
+       out "verit: %a@\n" (print_files smtlib_v1) targets;
+       out "\t@@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)@\n@\n";
+
+
        out "gui stat: %s@\n"
 	 (match targets with f::_ -> f^".stat" | [] -> "");
        out "@\n";
        out "%%.stat: why/%%.why@\n";
        out "\t@@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
-       
+
 
        out "why3: why/%s@\n"
 	 (match targets with f::_ -> f^"_why3.why" | [] -> "");
-       
+
        out "why/%%_why3.why:  WHYOPT=-why3@\n";
        out "why/%%_why3.why: why/%%.why@\n";
        out "\t@@echo 'why -why3 [...] why/$*.why' \

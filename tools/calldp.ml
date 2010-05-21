@@ -77,14 +77,14 @@ let timed_sys_command ?(stdin=[]) ~debug timeout cmd =
       assert (stdin=[]);
       let t0 = Unix.gettimeofday () in
       let out = Filename.temp_file "out" "" in
-      let cmd = if timeout = 0 
+      let cmd = if timeout = 0
       then sprintf "%s > %s 2>&1" cmd out
       else sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
       let ret = Sys.command cmd in
       let t1 = Unix.gettimeofday () in
       let cpu_time = t1 -. t0 in
       let out_content = Lib.file_contents out in
-      if debug then 
+      if debug then
 	Format.eprintf "Output file %s:@.%s@." out out_content
       else Lib.remove_file ~debug out;
       (cpu_time,Unix.WEXITED ret,out_content)
@@ -120,15 +120,15 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
           cmd,timed_sys_command ~stdin:buffers ~debug timeout cmd
       | Some buffers, _, Some f ->
           let f = Filename.temp_file "" f in
-          let f_in = 
-	    if is_true_cygwin then 
-	      let cin = 
-		Unix.open_process_in (sprintf "cygpath -am \"%s\"" f) 
+          let f_in =
+	    if is_true_cygwin then
+	      let cin =
+		Unix.open_process_in (sprintf "cygpath -am \"%s\"" f)
 	      in
               let f = input_line cin in
-              close_in cin; 
+              close_in cin;
 	      f
-            else f 
+            else f
 	  in
           let cout = open_out f_in in
           List.iter (Buffer.output_buffer cout) buffers;
@@ -201,8 +201,8 @@ let cvc3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
 let cvcl ?(debug=false) ?(timeout=10) ?filename ?buffers () =
   gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvcl
 
-
-
+let verit ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.verit
 
 let error c t cmd =
   match c with

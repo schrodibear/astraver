@@ -54,6 +54,7 @@ type prover = {
 
 val ergo : prover
 val simplify : prover
+val verit: prover
 val z3SS : prover
 val yicesSS : prover
 val cvc3SS : prover
@@ -70,7 +71,7 @@ val prover_name_with_version_and_enc : prover -> string
 (** {2 provers with their current selected/deselected status} *)
 
 val get_prover_states : unit -> (prover*bool) list
-  (** returns the list of known provers 
+  (** returns the list of known provers
       with there current state: selected or not *)
 
 val select_prover : prover -> unit
@@ -105,18 +106,13 @@ val find_fct : string -> Gtk.tree_iter
 val iter_fobligs : string -> (Gtk.tree_iter -> unit) -> unit
 
 val orows : (string, Gtk.tree_iter) Hashtbl.t
-  
+
 val add_failure : string -> prover -> string -> unit
 
 
-val find_oblig : 
+val find_oblig :
   string -> Loc.floc * Logic_decl.vc_expl * string * Cc.sequent Env.scheme
 val find_fobligs : string -> Gtk.tree_iter Queue.t
 val obligs :
   (string, Loc.floc * Logic_decl.vc_expl * string * Cc.sequent Env.scheme)
   Hashtbl.t
-
-
-
-
-

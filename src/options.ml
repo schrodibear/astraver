@@ -62,8 +62,8 @@ let split_user_conj_ = ref false
 let split_bool_op_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
-let eval_goals_ = ref false 
-let pruning_ = ref false 
+let eval_goals_ = ref false
+let pruning_ = ref false
 let pruning_hyp_v_ = {contents = -1}
 let pruning_hyp_p_ = {contents = -1}
 (* Heuristiques en test *)
@@ -82,7 +82,8 @@ let prune_coarse_pred_comp_ = ref false
 let prune_get_depths_ = ref false
 let pruning_hyp_considere_arith_comparison_as_special_predicate_ = ref true
 (* FIN de Heuristiques en test *)
-let modulo_ = ref false 
+let modulo_ = ref false
+let smtlib_v1_ = ref false
 
 let phantom_types = Hashtbl.create 17
 
@@ -94,8 +95,8 @@ let locs_files = ref []
 let explain_vc = ref false
 let locs_table = Hashtbl.create 97
 
-type encoding = 
-  | NoEncoding | Predicates | Stratified | Recursive | Monomorph 
+type encoding =
+  | NoEncoding | Predicates | Stratified | Recursive | Monomorph
   | SortedStratified | MonoInst
 
 type expanding = All | Goal | NoExpanding
@@ -116,7 +117,7 @@ let monoinstonlymem = ref false
 let monoinstnounit = ref false
 let monoinstonlyconst = ref false
 
-let defExpanding_ = ref NoExpanding 
+let defExpanding_ = ref NoExpanding
 
 type termination = UseVariant | Partial | Total
 let termination_ = ref UseVariant
@@ -133,7 +134,7 @@ type coq_version = V7 | V8 | V81
 let coq_version =
   match Version.coqversion with "v8" -> V8 | "v8.1" -> V81 | _ -> V7
 
-type prover = 
+type prover =
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3
   | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
@@ -149,9 +150,9 @@ let mizar_environ_from f =
   let c = open_in f in
   let rec look_for_environ () =
     let s = input_line c in
-    if Str.string_match environ_re s 0 then 
-      read_environ () 
-    else 
+    if Str.string_match environ_re s 0 then
+      read_environ ()
+    else
       look_for_environ ()
   and read_environ () =
     let s = input_line c in
@@ -199,7 +200,7 @@ Copyright (c) 2002 Jean-Christophe Filliâtre
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   flush stderr
-  
+
 let usage () =
   eprintf "\
 Usage: why [options] [files...]
@@ -222,11 +223,11 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
-  --fast-wp          use WP quadratic algorithm 
+  --fast-wp          use WP quadratic algorithm
   --white            white boxes: WP calculus enters pure expressions
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
-  --split-user-conj  splits also user conjunctions in goals 
+  --split-user-conj  splits also user conjunctions in goals
   --split-bool-op    splits VCs for boolean operations &&, || and not
   --split n          splits conditions into several pieces up to n levels
   --partial          partial correctness
@@ -238,10 +239,10 @@ Typing/Annotations/VCG options:
 VC transformation options:
   --all-vc           outputs all verification conditions (no auto discharge)
   --eval-goals       evaluate constant expressions in goals
-  --prune-theory     prunes the theory 
-  --prune-hyp P V    prunes the hypotheses according to the depths P and V  
-  --exp all          expands the predicate definitions in both theory and goal 
-  --exp goal         expands the predicate definitions only in goal 
+  --prune-theory     prunes the theory
+  --prune-hyp P V    prunes the hypotheses according to the depths P and V
+  --exp all          expands the predicate definitions in both theory and goal
+  --exp goal         expands the predicate definitions only in goal
 
 Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-with-comp            uses comparisons as predicates
@@ -253,8 +254,8 @@ Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-suffixed-comp        suffixes comparison predicates
   --prune-link-eqs             link each suffixed equalitie to the unsuffixed
   --prune-arith-tactic         statically link arithmetic operators (=, < & <=)
-  --prune-vars-filter T        T in {All, One-var, One-branch, Split-hyps, CNF}   
-  --prune-polarized-preds      Consider polarity on predicates 
+  --prune-vars-filter T        T in {All, One-var, One-branch, Split-hyps, CNF}
+  --prune-polarized-preds      Consider polarity on predicates
   --prune-context              Filter axioms with Pred depth
   --prune-coarse-pred-comp     abstract weights in predicate predecessors
   --prune-get-depths           get minimum depths to reach reachable vars/preds
@@ -265,7 +266,7 @@ Prelude files:
 Encoding for types in untyped logic:
   --encoding none    does not encode types into terms for untyped provers
   --encoding pred    encodes types with predicates
-  --encoding strat   encodes types into terms           
+  --encoding strat   encodes types into terms
   --encoding rec     encodes types with typing axioms
   --encoding mono    encodes types using monomorphisation
   --encoding sstrat  encodes types using some types  + strat
@@ -293,9 +294,9 @@ Prover selection:
   --project   selects the Why project format, with one file per goal
 
 Coq-specific options:
-  --valid, 
+  --valid,
   --no-valid  set/unset the functional validation (default is no)
-  --coq-tactic <tactic> 
+  --coq-tactic <tactic>
               gives a default tactic for new proof obligations
   --coq-preamble <text>
               gives some Coq preamble to be substituted to \"Require Why\"
@@ -304,6 +305,7 @@ Coq-specific options:
 
 SMT-lib-specific options:
   --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
+  --smtlib-v1          uses SMT-lib 1.2 syntax (defaults is 2.0)
 
 Monoinst-specific options
   --monoinstworldgen <builtin|complete|goal|premises>
@@ -343,7 +345,7 @@ Misc options:
   --output f     Redirect output to file f ( - for stdout)
   --dir d        Output files in directory d
   --int-is-ident
-                 Consider `int' as a normal identifier, and use 
+                 Consider `int' as a normal identifier, and use
                  built-in name `integer' instead for integers
 ";
   flush stderr
@@ -380,10 +382,10 @@ let files =
 	Printf.eprintf "%s: deprecated\n" o; exit 1
     | "--no-pervasives" :: args ->
 	no_pervasives := true; parse args
-    | ("-lib-file" | "--lib-file") :: f :: args -> 
+    | ("-lib-file" | "--lib-file") :: f :: args ->
 	lib_files_to_load_ := f :: !lib_files_to_load_; parse args
     | ("-lib-file" | "--lib-file") :: [] -> usage (); exit 1
-    | ("-load-file" | "--load-file") :: f :: args -> 
+    | ("-load-file" | "--load-file") :: f :: args ->
 	files_to_load_ := f :: !files_to_load_; parse args
     | ("-load-file" | "--load-file") :: [] -> usage (); exit 1
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
@@ -397,31 +399,31 @@ let files =
     | ("-V" | "--verbose") :: args -> verbose_ := true; parse args
     | ("-valid" | "--valid") :: args -> valid_ := true; parse args
     | ("-novalid" | "--no-valid") :: args -> valid_ := false; parse args
-    | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") 
+    | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic")
       :: s :: args -> coq_tactic_ := Some s; parse args
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
 	usage (); exit 1
-    | ("-coqpreamble" | "--coqpreamble" | "-coq-preamble" | "--coq-preamble") 
+    | ("-coqpreamble" | "--coqpreamble" | "-coq-preamble" | "--coq-preamble")
       :: s :: args -> coq_preamble_ := Some s; parse args
     | ("-coqpreamble"|"--coqpreamble"|"-coq-preamble"|"--coq-preamble")::[] ->
 	usage (); exit 1
-    | ("-pvspreamble" | "--pvspreamble" | "-pvs-preamble" | "--pvs-preamble") 
+    | ("-pvspreamble" | "--pvspreamble" | "-pvs-preamble" | "--pvs-preamble")
       :: s :: args -> pvs_preamble_ := Some s; parse args
     | ("-pvspreamble"|"--pvspreamble"|"-pvs-preamble"|"--pvs-preamble")::[] ->
 	usage (); exit 1
-    | ("-mizarenviron" | "--mizarenviron" | 
-       "-mizar-environ" | "--mizar-environ") 
+    | ("-mizarenviron" | "--mizarenviron" |
+       "-mizar-environ" | "--mizar-environ")
       :: s :: args -> mizar_environ_ := Some s; parse args
-    | ("-mizarenviron" | "--mizarenviron" | 
+    | ("-mizarenviron" | "--mizarenviron" |
        "-mizar-environ"|"--mizar-environ") :: [] ->
 	usage (); exit 1
-    | ("-mizarenvironfrom" | "--mizarenvironfrom" | 
-       "-mizar-environ-from" | "--mizar-environ-from") 
+    | ("-mizarenvironfrom" | "--mizarenvironfrom" |
+       "-mizar-environ-from" | "--mizar-environ-from")
       :: f :: args -> mizar_environ_ := Some (mizar_environ_from f); parse args
-    | ("-mizarenvironfrom" | "--mizarenvironfrom" | 
+    | ("-mizarenvironfrom" | "--mizarenvironfrom" |
        "-mizar-environ-from"|"--mizar-environ-from") :: [] ->
 	usage (); exit 1
-    | ("-isabelle-base-theory" | "--isabelle-base-theory") 
+    | ("-isabelle-base-theory" | "--isabelle-base-theory")
       :: s :: args -> isabelle_base_theory_ := s; parse args
     | ("-isabelle-base-theory" | "--isabelle-base-theory")::[] ->
 	usage (); exit 1
@@ -436,13 +438,13 @@ let files =
     | ("--no-zenon-prelude" | "-no-zenon-prelude") :: args ->
 	no_zenon_prelude_ := true; parse args
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
-    | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
+    | ("--ocaml-annot" | "-ocaml-annot") :: args ->
 	ocaml_annot_ := true; parse args
-    | ("--ocaml-ext" | "-ocaml-ext") :: args -> 
+    | ("--ocaml-ext" | "-ocaml-ext") :: args ->
 	ocaml_externals_ := true; parse args
-    | ("-o" | "-output" | "--output") :: f :: args -> 
+    | ("-o" | "-output" | "--output") :: f :: args ->
 	output_ := Some f; parse args
-    | ("-o" | "-output" | "--output") :: [] -> 
+    | ("-o" | "-output" | "--output") :: [] ->
 	usage (); exit 1
     | ("--wol") :: args ->
 	wol_ := true; parse args
@@ -465,7 +467,7 @@ let files =
     | ("-split-bool-op" | "--split-bool-op") :: args ->
 	split_bool_op_ := true; parse args
     | ("-split" | "--split") :: n :: args ->
-	begin try lvlmax_ := int_of_string n with _ -> usage (); exit 1 end; 
+	begin try lvlmax_ := int_of_string n with _ -> usage (); exit 1 end;
 	parse args
     | ("-split" | "--split") :: [] ->
 	usage (); exit 1
@@ -480,45 +482,45 @@ let files =
     | ("--prune-theory" | "-prune-theory") :: args ->
 	 pruning_ := true ; parse args
     | ("--prune-hyp" | "-prune-hyp"):: tp :: tv :: args ->
-	pruning_hyp_p_ := int_of_string tp ; 
-	pruning_hyp_v_ := int_of_string tv ; 
+	pruning_hyp_p_ := int_of_string tp ;
+	pruning_hyp_v_ := int_of_string tv ;
 	parse args
 (* Heuristiques en test *)
     | ("--prune-with-comp" | "-prune-with-comp"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
+	pruning_hyp_CompInGraph_ := true ;
 	parse args
     | ("--prune-with-comp-filter" | "-prune-with-comp-filter"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
+	pruning_hyp_CompInGraph_ := true ;
 	pruning_hyp_CompInFiltering_ := true ;
 	parse args
     | ("--prune-keep-local-links" | "-prune-keep-local-links"):: args ->
-	pruning_hyp_LinkVarsQuantif_ := true ; 
+	pruning_hyp_LinkVarsQuantif_ := true ;
 	parse args
     | ("--prune-comp-single-encoding" | "-prune-comp-single-encoding"):: args ->
-	pruning_hyp_keep_single_comparison_representation_ := true ; 
+	pruning_hyp_keep_single_comparison_representation_ := true ;
 	parse args
     | ("--prune-eq-only" | "-prune-eq-only"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
-	pruning_hyp_comparison_eqOnly_ := true ; 
+	pruning_hyp_CompInGraph_ := true ;
+	pruning_hyp_comparison_eqOnly_ := true ;
 	parse args
     | ("--prune-suffixed-comp" | "-prune-suffixed-comp"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
-	pruning_hyp_suffixed_comparison_ := true ; 
+	pruning_hyp_CompInGraph_ := true ;
+	pruning_hyp_suffixed_comparison_ := true ;
 	parse args
     | ("--prune-link-eqs" | "-prune-link-eqs"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
-	pruning_hyp_suffixed_comparison_ := true ; 
-	pruning_hyp_equalities_linked_ := true ; 
+	pruning_hyp_CompInGraph_ := true ;
+	pruning_hyp_suffixed_comparison_ := true ;
+	pruning_hyp_equalities_linked_ := true ;
 	parse args
     | ("--prune-arith-tactic" | "-prune-arith-tactic"):: args ->
-	pruning_hyp_CompInGraph_ := true ; 
-	pruning_hyp_arithmetic_tactic_ := true ; 
+	pruning_hyp_CompInGraph_ := true ;
+	pruning_hyp_arithmetic_tactic_ := true ;
 	parse args
 
     | ("--prune-vars-filter" | "-prune-vars-filter"):: t :: args ->
-	(match t with 
+	(match t with
 	  "All" -> pruning_hyp_var_tactic_:=0; parse args
-	| "One-var" -> pruning_hyp_var_tactic_:=1; parse args 
+	| "One-var" -> pruning_hyp_var_tactic_:=1; parse args
 	| "One-branch" -> pruning_hyp_var_tactic_:=2; parse args
 	| "Split-hyps" -> pruning_hyp_var_tactic_:=3; parse args
 	| "CNF" ->  pruning_hyp_var_tactic_:=4; parse args
@@ -541,15 +543,17 @@ let files =
 
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
+    | ("-smtlib-v1" | "--smtlib-v1") :: args ->
+        smtlib_v1_:=true; parse args
     | ("-exp" | "--exp") :: s :: args ->
-	(match s with 
-	     "goal" -> defExpanding_ := Goal 
-	   | "all"  -> defExpanding_:= All 
+	(match s with
+	     "goal" -> defExpanding_ := Goal
+	   | "all"  -> defExpanding_:= All
 	   | _ -> usage (); exit 1);
 	parse args
     | ("-encoding" | "--encoding") :: s :: args ->
-	(match s with 
-	  "none" -> types_encoding_ := NoEncoding 
+	(match s with
+	  "none" -> types_encoding_ := NoEncoding
 	| "pred" -> types_encoding_ := Predicates
 	| "strat" -> types_encoding_ := Stratified
 	| "rec" -> types_encoding_ := Recursive
@@ -559,7 +563,7 @@ let files =
 	| _ -> usage (); exit 1);
 	parse args
     | ("-monoinstworldgen" | "--monoinstworldgen") :: s :: args ->
-	(match s with 
+	(match s with
 	  "sorted" -> monoinstworldgen := MonoinstSorted
 	| "builtin" -> monoinstworldgen := MonoinstBuiltin
 	| "goal" -> monoinstworldgen := MonoinstGoal
@@ -590,7 +594,7 @@ let files =
     | ("-phantom" | "--phantom") :: s :: args ->
 	Hashtbl.add phantom_types s ();
 	parse args
-    | f :: args -> 
+    | f :: args ->
 	filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -602,7 +606,7 @@ let debug = !debug_
 let parse_only = !parse_only_
 let type_only = !type_only_
 let wp_only = !wp_only_
-let prover (* ?(ignore_gui=false) *) () = 
+let prover (* ?(ignore_gui=false) *) () =
   if (* not ignore_gui &&*) !gui then Dispatcher else !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
@@ -654,13 +658,17 @@ let prune_get_depths = !prune_get_depths_
 let pruning_hyp_considere_arith_comparison_as_special_predicate= !pruning_hyp_considere_arith_comparison_as_special_predicate_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
+
+let get_smtlib_v1 () = !smtlib_v1_
+let set_smtlib_v1 f = smtlib_v1_:=f
+
 let defExpanding = !defExpanding_
 let explain_vc = !explain_vc
 
 (* encoding checks *)
-let () = 
+let () =
   if (prover () = SmtLib || prover () = CVCLite || prover () = Z3) &&
-     !types_encoding_ = NoEncoding 
+     !types_encoding_ = NoEncoding
   then
     types_encoding_ := SortedStratified
 
@@ -677,7 +685,7 @@ let get_type_expanding () = !defExpanding_
 
 let show_time = !show_time_
 
-let file f = 
+let file f =
   (*Format.printf "Options.file: dir = %s, f = %s@." dir f;*)
   if dir = "" then f else Lib.file ~dir ~file:f
 
@@ -685,19 +693,19 @@ let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_
 let ocaml_externals = !ocaml_externals_
 
-let out_file f = match !output_ with 
-  | None -> file f 
+let out_file f = match !output_ with
+  | None -> file f
   | Some "-" -> invalid_arg "I can't use stdout for that output";
   | Some f -> f
 
-let open_out_file f = match !output_ with 
+let open_out_file f = match !output_ with
   | Some "-" -> stdout
   | _ -> open_out (out_file f)
-let close_out_file cout = match !output_ with 
+let close_out_file cout = match !output_ with
   | Some "-" -> ()
   | _ -> close_out cout
-let out_file_exists f =  
-  match !output_ with 
+let out_file_exists f =
+  match !output_ with
     | Some "-" -> false
     | _ -> Sys.file_exists (out_file f)
 
@@ -711,7 +719,7 @@ let if_debug_3 f x y z = if debug then f x y z
 
 let () =
   List.iter
-    (fun f -> 
+    (fun f ->
        let l = Rc.from_file f in
        List.iter
 	 (fun (id,fs) ->
@@ -750,28 +758,28 @@ let lib_file f = Filename.concat lib_dir (Filename.concat "why" f)
 
 let prelude_file = lib_file "prelude.why"
 
-let lib_files_to_load = 
-  (if !no_pervasives then [] else [prelude_file]) @ 
+let lib_files_to_load =
+  (if !no_pervasives then [] else [prelude_file]) @
   List.rev_map lib_file !lib_files_to_load_ @
   List.rev !files_to_load_
 
 let floats = List.mem "floats.why" !lib_files_to_load_
 
-let () = 
+let () =
   if not (Sys.file_exists prelude_file) then begin
     Printf.eprintf "cannot find prelude file %s\n" prelude_file;
     begin
-      try 
+      try
 	let s = Sys.getenv "WHYLIB" in
-	Printf.eprintf "(WHYLIB is set to %s)\n" s      
-      with Not_found -> 
+	Printf.eprintf "(WHYLIB is set to %s)\n" s
+      with Not_found ->
 	Printf.eprintf "(WHYLIB is not set, libdir is %s)\n" Version.libdir
     end;
     exit 1
   end
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "unset LANG; make -j -C .. bin/why.byte"
-End: 
+End:
 *)

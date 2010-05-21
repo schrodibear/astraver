@@ -1397,9 +1397,11 @@ let spec funspec =
 
 (* Depending on the argument status, an assertion with this status may
    not generate any PO but still be used as an hypothesis. *)
-let assertion = function
+(*[VP] this is not in the AST anymore. Information needs to be retrieved from table*)
+(*let assertion = function
   | { status = Checked { valid = True } } -> Aassume
   | _ -> Aassert
+*)
 
 let built_behavior_ids = function
     [] -> [ new identifier name_of_default_behavior ]
@@ -1426,9 +1428,9 @@ let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
      | User annot ->
          begin
            match annot.annot_content with
-             | AAssert (behav,p,status) ->
+             | AAssert (behav,p) ->
                  let behav = built_behavior_ids behav in
-                 let asrt = assertion status in
+                 let asrt = Aassert in (* [VP] Needs to retrieve exact status *)
                  push
                    (mkexpr
                       (JCPEassert (behav,asrt,locate ~pos (named_pred p))) pos)
@@ -1454,10 +1456,10 @@ let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
         end
     | AI(alarm,annot) ->
         begin match annot.annot_content with
-          | AAssert (behav,p,status) ->
+          | AAssert (behav,p) ->
               let asrt =
                 if pred_has_name p name_of_hint_assertion then Ahint
-                else assertion status
+                else Aassert (* [VP] needs to retrieve exact status *)
               in
               let p = remove_pred_name p name_of_hint_assertion in
               let behav = built_behavior_ids behav in

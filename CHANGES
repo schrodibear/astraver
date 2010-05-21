@@ -1,6 +1,7 @@
-
-
-  o [Jessie] fixed bug with division by zero in expressions evaluated at 
+  o [Jessie] preliminary support for \at in region computation
+  o [Why] added --smtlib-v1 option (default smtlib format is v2.0)
+  o [Why] added support for verit prover
+  o [Jessie] fixed bug with division by zero in expressions evaluated at
     compile-time
   o [Krakatoa] error message when a comment starts with /*(extra space)@
   o [WhyConfig] bug fix when detecting a prover which was removed
@@ -21,11 +22,11 @@ version 2.24, April 19, 2010
   o [Jessie] fixed bug 0443 (assigns \nothing and separation analysis)
   o [Jessie] fixed bug with assertions attached to behaviors
   o [Why] support for truncate_real_to_int in Gappa output
-  o [Frama-C plugin] logic functions do not accept struct or union as 
+  o [Frama-C plugin] logic functions do not accept struct or union as
     parameters
-  o [Jessie, Frama-C plugin] make the right difference between 
+  o [Jessie, Frama-C plugin] make the right difference between
     "reads \nothing" and no reads clause at all
-  o [Jessie, Frama-C plugin] the "defensive" model for floating-point 
+  o [Jessie, Frama-C plugin] the "defensive" model for floating-point
     computations is now the default
   o [Jessie] fixed bug 0370: missing coercion on decreasing measures
   o [Jessie] support for "let x = t in a" when a is an assertion
@@ -34,7 +35,7 @@ version 2.24, April 19, 2010
     names and inductive case names)
   o [Jessie/Krakatoa/Frama-C plugin] fixed bug with labels inside \old
     and \at.  Moreover, label Pre is now allowed in function
-    contracts, as specified in ACSL.    
+    contracts, as specified in ACSL.
   o [Why] improved detection of external provers
   o [Frama-C plugin] option "-jessie-adhoc-normalization" triggers a code
     normalization suited for jessie without launching the analysis

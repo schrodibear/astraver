@@ -32,10 +32,10 @@
 
 
 
-type prover_id = 
+type prover_id =
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | SimplifySelect | Z3 | Gappa | GappaSelect
-  | Coq | PVS
+  | Coq | PVS | VeriT
 
 type lazy_regexp =
   {
@@ -58,7 +58,7 @@ type prover_data =
     undecided_regexp : lazy_regexp;
     stdin_switch : string option;
   }
-    
+
 
 val alt_ergo : prover_data
 
@@ -67,6 +67,8 @@ val simplify : prover_data
 val z3 : prover_data
 
 val yices : prover_data
+
+val verit: prover_data
 
 val cvc3 : prover_data
 

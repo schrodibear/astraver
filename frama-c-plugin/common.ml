@@ -1089,6 +1089,7 @@ let malloc_function () =
       b_name = Cil.default_behavior_name;
       b_assumes = [];
       b_requires = [];
+      b_extended = [];
       b_assigns = [ Nothing,[] ];
       b_post_cond = [];
     } in
@@ -1110,6 +1111,7 @@ let free_function () =
       b_assumes = [];
       b_post_cond = [];
       b_requires = [];
+      b_extended = [];
       b_assigns = [ Nothing,[] ];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in

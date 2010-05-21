@@ -1,4 +1,4 @@
- 
+
 WHY=WHYLIB=../lib ../bin/why.opt
 BWHY=WHYLIB=../lib ../bin/why.byte
 GWHY=WHYLIB=../lib ../bin/gwhy.opt
@@ -13,7 +13,7 @@ ml:
 	../bin/why.opt --ocaml test.mlw > test.ml
 	ocamlc -c -i test.ml
 
-.PHONY: c
+.PHONY: c ml
 
 c:
 	gcc -c ctest.c
@@ -91,13 +91,13 @@ fastwp.simplify:
 
 fastwp.ergo:
 	$(BWHY) --why -d --fast-wp test.mlw
-	$(BWHY) -no-prelude -tc test_why.why 
+	$(BWHY) -no-prelude -tc test_why.why
 	$(BWHY) --alt-ergo --fast-wp --all-vc test.mlw
 	../bin/why-dp.opt -no-timings test_why.why
 
 FASTWPBENCH=po oldify opaque inductive \
 	wpcalls exns loops poly see all set return \
-        complex_arg_1 complex_arg_2 recfun 
+        complex_arg_1 complex_arg_2 recfun
 fastwp.bench.simplify:
 	rm -f good/*_why.sx
 	for f in $(FASTWPBENCH) ; do \

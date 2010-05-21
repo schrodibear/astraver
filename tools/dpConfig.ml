@@ -31,10 +31,10 @@
 
 
 
-type prover_id = 
+type prover_id =
   | Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | SimplifySelect | Z3 | Gappa | GappaSelect
-  | Coq | PVS
+  | Coq | PVS | VeriT
 
 type lazy_regexp =
   {
@@ -60,7 +60,7 @@ type prover_data =
     undecided_regexp : lazy_regexp;
     stdin_switch : string option;
   }
-    
+
 let gappa =
   {
     name = "Gappa";
@@ -93,7 +93,7 @@ let alt_ergo =
     stdin_switch = None;
   }
 
-let simplify = 
+let simplify =
   {
     name = "Simplify";
     is_interactive = false;
@@ -126,7 +126,7 @@ let z3 =
   }
 
 
-let yices =    
+let yices =
   {
     name = "Yices";
     is_interactive = false;
@@ -142,7 +142,7 @@ let yices =
     stdin_switch = Some "";
   }
 
-let cvc3 =    
+let cvc3 =
   {
     name = "CVC3";
     is_interactive = false;
@@ -158,7 +158,25 @@ let cvc3 =
     stdin_switch = Some "";
   }
 
-let cvcl =    
+let verit =
+{
+  name = "VeriT";
+  is_interactive = false;
+  version = "";
+  version_switch = "--proof-format-and-exit";
+  (* ugly, but with --help everything is
+     output on stderr *)
+  version_regexp = "verit *\\([0-9.]+\\(rc[0-9]*\\)?\\)";
+  versions_ok = [""];
+  versions_old = [""];
+  command="verit";
+  command_switches="--enable-simp --enable-unit-simp --enable-unit-subst-simp --enable-qnt-simp --split-on-demand";
+  valid_regexp = Some (make_regexp "\\bunsat\\b");
+  undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
+  stdin_switch = Some ""
+}
+
+let cvcl =
   {
     name = "CVCL";
     is_interactive = false;
@@ -174,7 +192,7 @@ let cvcl =
     stdin_switch = Some "";
   }
 
-let coq =    
+let coq =
   {
     name = "Coq";
     is_interactive = true;
@@ -190,7 +208,7 @@ let coq =
     stdin_switch = None;
   }
 
-let pvs =    
+let pvs =
   {
     name = "PVS";
     is_interactive = true;
@@ -207,7 +225,7 @@ let pvs =
   }
 
 
-let prover_list = 
+let prover_list =
   [
     Ergo, (alt_ergo, ["alt-ergo" ; "ergo"]) ;
     Simplify, (simplify, ["Simplify" ; "simplify"]) ;
@@ -218,26 +236,27 @@ let prover_list =
     Gappa, (gappa, ["gappa"]) ;
     Coq, (coq, ["coqc"]);
     PVS, (pvs, ["pvs"]);
-  ] 
+    VeriT, (verit, ["verit"]);
+  ]
 
-let rc_file () = 
+let rc_file () =
   let home = Rc.get_home_dir () in
   Filename.concat home ".whyrc"
 
 open Format
-  
+
 let load_prover_info p key l =
   List.iter
-    (function 
+    (function
        | ("version",Rc.RCstring s) -> p.version <- s
        | ("command",Rc.RCstring s) -> p.command <- s
        | (field,_) ->
 	   printf "Unknown field `%s' in section [%s] of rc file@." field key)
     l
-	 
+
 let already_loaded = ref false
 
-let load_rc_file () = 
+let load_rc_file () =
   if !already_loaded then () else
   let rc_file = rc_file () in
   let rc = Rc.from_file rc_file in
@@ -253,11 +272,12 @@ let load_rc_file () =
 	 | "Gappa" -> load_prover_info gappa key args
 	 | "Coq" -> load_prover_info coq key args
 	 | "PVS" -> load_prover_info pvs key args
-	 | _ -> 
+         | "VeriT" -> load_prover_info verit key args
+	 | _ ->
 	     printf "Unknown section [%s] in config file '%s'@." key rc_file)
     rc;
   already_loaded := true
-	     
+
 
 let save_prover_info fmt p =
   fprintf fmt "[%s]@." p.name;
@@ -270,4 +290,3 @@ let save_rc_file () =
   let fmt = Format.formatter_of_out_channel ch in
   List.iter (fun (_,(p,_)) -> save_prover_info fmt p) prover_list;
   close_out ch
-

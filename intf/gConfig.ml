@@ -41,8 +41,8 @@ let rc_file () =
 let save_main fmt =
   fprintf fmt "[main]@.";
   fprintf fmt "timeout = %d@." (Tools.get_timeout ());
-  fprintf fmt "default_prover = %s@." 
-    (Model.prover_id (Model.get_default_prover ()));  
+  fprintf fmt "default_prover = %s@."
+    (Model.prover_id (Model.get_default_prover ()));
   fprintf fmt "window_width = %d@." !Colors.window_width;
   fprintf fmt "window_height = %d@." !Colors.window_height;
   fprintf fmt "font_size = %d@." !Colors.font_size;
@@ -72,7 +72,7 @@ let save () =
 let set_main_setting (key,arg) =
   match key with
     | "timeout" -> Tools.set_timeout (Rc.int arg)
-    | "default_prover" ->         
+    | "default_prover" ->
         begin
           let n = Rc.string arg in
           try
@@ -115,6 +115,7 @@ let load_default_config () =
 	       | Cvc3 -> Model.cvc3SS
 	       | Yices -> Model.yicesSS
 	       | Gappa -> Model.gappa
+               | VeriT -> Model.verit
 	       | Coq -> raise Exit (* not yet supported in GWhy *)
 	       | PVS -> raise Exit (* not yet supported in GWhy *)
                | Cvcl -> raise Exit (* not yet supported in GWhy *)

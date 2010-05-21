@@ -41,7 +41,7 @@ let parent = cols#add string
 let total = cols#add int
 let result = cols#add int
 let stat = cols#add string
-  
+
 let first_row = ref None
 
 
@@ -56,14 +56,14 @@ type prover = {
 }
 
 let enc_name ~nl n p =
-  let nl x = if nl then "\n" ^ x else x in 
+  let nl x = if nl then "\n" ^ x else x in
   match p.pr_enc with
-    | NoEncoding -> 
+    | NoEncoding ->
 	begin match p.pr_id with
-	  | DpConfig.SimplifySelect 
-	  | DpConfig.GappaSelect 
+	  | DpConfig.SimplifySelect
+	  | DpConfig.GappaSelect
 	  | DpConfig.ErgoSelect -> n ^ nl "(Select)"
-	  | _ -> n ^ nl "" 
+	  | _ -> n ^ nl ""
 	end
     | SortedStratified -> n ^ nl "(SS)"
     | Monomorph -> n ^ nl "(mono)"
@@ -72,15 +72,15 @@ let enc_name ~nl n p =
     | Predicates -> n ^ nl "(pred)"
     | MonoInst -> n ^ nl "(monoinst)"
 
-let prover_id p = 
+let prover_id p =
   enc_name ~nl:false p.pr_info.DpConfig.name p
-  
-let prover_name_with_version_and_enc p = 
+
+let prover_name_with_version_and_enc p =
   let v = p.pr_info.DpConfig.version in
   let n = p.pr_info.DpConfig.name in
   let n = if v <> "" then n ^ "\n" ^ v else n ^ "\n(uninstalled)" in
   enc_name ~nl:true n p
-	 
+
 
 let simplify = {
   pr_id = DpConfig.Simplify;
@@ -262,6 +262,16 @@ let ergoSS = {
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
+let verit =
+  { pr_id = DpConfig.VeriT;
+    pr_info = DpConfig.verit;
+    pr_result = cols#add int;
+    pr_icon = cols#add GtkStock.conv;
+    pr_image = cols#add Gobject.Data.gobject;
+    pr_viewcol = None;
+    pr_enc = SortedStratified;
+  }
+
 let cvc3SS = {
   pr_id = DpConfig.Cvc3;
   pr_info = DpConfig.cvc3;
@@ -314,29 +324,30 @@ let coq = {
 
 (***********
 
-all provers 
+all provers
 
 
 ******)
-  
+
 let all_known_provers = [
-  ergo; 
-  ergo_select; 
-  (*ergoSS;*) 
-  simplify; 
-  simplify_select; 
-  z3SS ; 
-  yicesSS; 
-  cvc3SS; 
+  ergo;
+  ergo_select;
+  (*ergoSS;*)
+  simplify;
+  simplify_select;
+  z3SS ;
+  yicesSS;
+  cvc3SS;
   z3MI;
   cvc3MI;
-  (*simplify_sstrat;*) 
+  (*simplify_sstrat;*)
 (*
-  simplify_strat; 
+  simplify_strat;
 *)
-  yices; 
+  yices;
   gappa ;
   gappa_select ;
+  verit
 (*
   coq ;
 *)
@@ -346,27 +357,27 @@ let all_known_provers = [
 
 let prover_states = List.map (fun x -> (x,ref false)) all_known_provers
 
-let get_prover_states () = 
+let get_prover_states () =
   List.map (fun (x,y) -> (x,!y)) prover_states
 
 let default_prover = ref (List.hd all_known_provers)
 
 let get_default_prover () = !default_prover
 
-let set_default_prover p = 
+let set_default_prover p =
   default_prover := p
 
-let select_prover p = 
+let select_prover p =
   let s = List.assq p prover_states in s:= true
 
-let deselect_prover p = 
+let deselect_prover p =
   let s = List.assq p prover_states in s:= false
-  
-  let get_prover s = 
+
+  let get_prover s =
   let rec next = function
-    | [] -> 
+    | [] ->
 	raise Not_found
-    | (p',_) :: r -> 
+    | (p',_) :: r ->
 	if prover_id p' = s then p' else next r
   in next prover_states
 
@@ -374,26 +385,26 @@ let deselect_prover p =
 (* all obligations *)
 let obligs = Hashtbl.create 97
 let find_oblig = Hashtbl.find obligs
-  
+
 (* obligation name -> its model row *)
 let orows = Hashtbl.create 97
 (* obligation name -> its failure messages *)
 let fwrows = Hashtbl.create 97
-  
+
 (* function -> its model row *)
-let frows = Hashtbl.create 17 
+let frows = Hashtbl.create 17
 let find_fct = Hashtbl.find frows
-  
+
 (* function -> list of its obligations *)
 let fobligs = Hashtbl.create 97
 let find_fobligs = Hashtbl.find fobligs
 let iter_fobligs fct f = Queue.iter f (Hashtbl.find fobligs fct)
-  
+
 (* functions *)
 let fq = Queue.create ()
-  
-let add_failure row (p:prover) (message:string) = 
-  try 
+
+let add_failure row (p:prover) (message:string) =
+  try
     let messages = Hashtbl.find fwrows row in
     if Hashtbl.mem messages p then
       Hashtbl.replace messages p message
@@ -404,7 +415,7 @@ let add_failure row (p:prover) (message:string) =
     Hashtbl.add fwrows row h
   end
 
-let _ = 
+let _ =
   let h = Hashtbl.create 1 in
   Hashtbl.add h simplify "";
   Hashtbl.add fwrows " " h;
@@ -418,7 +429,7 @@ let create_model () =
        Hashtbl.add obligs s o;
        let f,n = Tools.decomp_name s in
        let row =
-	 try 
+	 try
 	   Hashtbl.find frows f
 	 with Not_found ->
 	   let row = model#append () in
@@ -436,8 +447,8 @@ let create_model () =
 	   model#set ~row ~column:fullname f;
 	   model#set ~row ~column:parent f;
 	   model#set ~row ~column:total 0;
-	   List.iter 
-	     (fun p -> model#set ~row ~column:p.pr_result 0) 
+	   List.iter
+	     (fun p -> model#set ~row ~column:p.pr_result 0)
 	     all_known_provers;
 	   row
        in
@@ -455,7 +466,7 @@ let create_model () =
        model#set ~row:row_n ~column:parent f;
        model#set ~row:row_n ~column:result 0;
        List.iter
-	 (fun p -> 
+	 (fun p ->
             model#set ~row:row_n ~column:p.pr_icon `REMOVE;
             model#set ~row:row_n ~column:p.pr_image !Tools.image_default;
             ()
@@ -463,4 +474,3 @@ let create_model () =
 	 all_known_provers
     );
   model
-    
