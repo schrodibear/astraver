@@ -87,14 +87,17 @@ let () =
 	 Cabs2cil.setDoTransformWhile ();
 	 Cabs2cil.setDoAlternateConditional ();
        end);
-  Parameters.SimplifyCfg.depend ForceAdHocNormalization.self;
-  Parameters.KeepSwitch.depend ForceAdHocNormalization.self;
-  Parameters.Constfold.depend ForceAdHocNormalization.self;
-  Parameters.PreprocessAnnot.depend ForceAdHocNormalization.self
+  State_dependency_graph.Static.add_dependencies
+    ~from:ForceAdHocNormalization.self
+    [ Parameters.SimplifyCfg.self;
+      Parameters.KeepSwitch.self;
+      Parameters.Constfold.self;
+      Parameters.PreprocessAnnot.self ]
 
 let () =
   Analysis.add_set_hook (fun _ b -> ForceAdHocNormalization.set b);
-  ForceAdHocNormalization.depend Analysis.self
+  State_dependency_graph.Static.add_dependencies
+    ~from:Analysis.self [ ForceAdHocNormalization.self ]
 
 module JcOpt =
   StringSet(struct
