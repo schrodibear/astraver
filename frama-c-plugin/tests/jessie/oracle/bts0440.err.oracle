@@ -1,4 +1,0 @@
-File "why/bts0440.why", line 325, characters 40-48:
-Unbound label 'before'
-make: *** [why/bts0440.wpr] Error 1
-make: *** [bts0440.regtest] Error 2

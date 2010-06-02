@@ -6,7 +6,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 hd_snoob.c:144:[jessie] warning: skipping all arguments of implicit prototype printf
 hd_snoob.c:148:[jessie] warning: skipping all arguments of implicit prototype strtol
 hd_snoob.c:150:[jessie] warning: skipping all arguments of implicit prototype printf
-hd_snoob.c:150:[jessie] warning: skipping all arguments of implicit prototype printf
 hd_snoob.c:154:[jessie] warning: skipping all arguments of implicit prototype printf
 hd_snoob.c:163:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir hd_snoob.jessie
@@ -781,7 +780,7 @@ behavior default:
 
 int32 main(int32 argc, char_xP[..] argv)
 behavior default:
-  ensures (C_296 : true);
+  ensures (C_294 : true);
 {  
    (var int32 n_1);
    
@@ -805,49 +804,54 @@ behavior default:
       } else ());
       (C_260 : (n_1 = (C_259 : strtol())));
       (if (n_1 < 1) then 
-      {  (C_263 : printf());
-         (C_264 : exit(1))
-      } else (if (n_1 > 7) then 
-             {  (C_261 : printf());
-                (C_262 : exit(1))
-             } else ()));
-      (C_265 : printf());
+      (goto _LOR) else (if (n_1 > 7) then 
+                       (goto _LOR) else ()));
+      
+      (goto _LOR_0);
+      (_LOR : 
+      {  (C_261 : printf());
+         (C_262 : exit(1))
+      });
+      (_LOR_0 : ());
+      (C_263 : printf());
       
       {  
-         (assert for default: (C_268 : (1 <= (2147483647 >>> n_1))));
+         (assert for default: (C_266 : (1 <= (2147483647 >>> n_1))));
          
-         (assert for default: (C_267 : (n_1 < 32)));
+         (assert for default: (C_265 : (n_1 < 32)));
          
-         (assert for default: (C_266 : (n_1 >= 0)));
-         (C_273 : (x_8 = (C_272 : ((C_271 : ((C_270 : ((C_269 : (1 << n_1)) :> int32)) -
+         (assert for default: (C_264 : (n_1 >= 0)));
+         (C_271 : (x_8 = (C_270 : ((C_269 : ((C_268 : ((C_267 : (1 << n_1)) :> int32)) -
                                               1)) :> uint32))))
       };
-      (C_274 : (y_0 = x_8));
-      (C_275 : (z = x_8));
-      (C_276 : (u = x_8));
-      (C_277 : (v = x_8));
-      (C_278 : (w = x_8));
+      (C_272 : (y_0 = x_8));
+      (C_273 : (z = x_8));
+      (C_274 : (u = x_8));
+      (C_275 : (v = x_8));
+      (C_276 : (w = x_8));
       
       {  
          loop 
          while (true)
          {  
-            {  (C_279 : printf());
-               (C_281 : (y_0 = (C_280 : snoob1(x_8))));
-               (C_283 : (z = (C_282 : snoob2(x_8))));
-               (C_285 : (u = (C_284 : snoob3(x_8))));
-               (C_287 : (v = (C_286 : next_set_of_n_elements(x_8))));
-               (C_292 : (let __cil_tmp =
-                        (C_289 : snoob4((C_288 : (x_8 :> int32))))
-                        in (C_291 : (w = (C_290 : (__cil_tmp :> uint32))))));
-               (C_294 : (x_8 = (C_293 : snoob(x_8))));
+            {  
+               {  (C_277 : printf());
+                  (C_279 : (y_0 = (C_278 : snoob1(x_8))));
+                  (C_281 : (z = (C_280 : snoob2(x_8))));
+                  (C_283 : (u = (C_282 : snoob3(x_8))));
+                  (C_285 : (v = (C_284 : next_set_of_n_elements(x_8))));
+                  (C_290 : (let __cil_tmp =
+                           (C_287 : snoob4((C_286 : (x_8 :> int32))))
+                           in (C_289 : (w = (C_288 : (__cil_tmp :> uint32))))));
+                  (C_292 : (x_8 = (C_291 : snoob(x_8))))
+               };
                (if (x_8 <= 255) then () else 
                (goto while_1_break))
             }
          };
          (while_1_break : ())
       };
-      (C_295 : (__retres_8 = 0));
+      (C_293 : (__retres_8 = 0));
       
       (return __retres_8)
    }
@@ -878,6 +882,10 @@ type uint32
 type unsigned_short_P
 
 type void_P
+
+exception Goto__LOR_0_exc of unit
+
+exception Goto__LOR_exc of unit
 
 exception Goto_while_0_break_exc of unit
 
@@ -3493,144 +3501,152 @@ let main_ensures_default =
      (let v = ref (any_uint32 void) in
      (let w = ref (any_uint32 void) in
      (let __retres_8 = ref (any_int32 void) in
-     begin
-       (if ((neq_int_ (integer_of_int32 argc)) (2))
-       then
-        (C_255:
-        begin
-          (let jessie_351 = (JC_792: (printf void)) in void);
-         (C_256:
-         (let jessie_352 = (safe_int32_of_integer_ (1)) in
-         (JC_793: (exit jessie_352)))) end) else void);
-      (C_260:
+     try
+      (let jessie_366 =
       begin
-        (let jessie_354 = (n_1_0 := (C_259: (JC_794: (strtol void)))) in
-        void);
-       (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
-       then
-        (C_263:
-        begin
-          (let jessie_355 = (JC_795: (printf void)) in void);
-         (C_264:
-         (let jessie_356 = (safe_int32_of_integer_ (1)) in
-         (JC_796: (exit jessie_356)))) end)
-       else
-        (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
-        then
+        try
+         (let jessie_363 =
+         begin
+           (if ((neq_int_ (integer_of_int32 argc)) (2))
+           then
+            (C_255:
+            begin
+              (let jessie_356 = (JC_790: (printf void)) in void);
+             (C_256:
+             (let jessie_357 = (safe_int32_of_integer_ (1)) in
+             (JC_791: (exit jessie_357)))) end) else void);
+          (C_260:
+          begin
+            (let jessie_359 = (n_1_0 := (C_259: (JC_792: (strtol void)))) in
+            void);
+           (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
+           then (let jessie_360 = (raise (Goto__LOR_exc void)) in void)
+           else
+            (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
+            then (let jessie_361 = (raise (Goto__LOR_exc void)) in void)
+            else void));
+           (let jessie_362 = (raise (Goto__LOR_0_exc void)) in void);
+           (raise (Goto__LOR_exc void)) end) end in void) with
+         Goto__LOR_exc jessie_8 ->
+         (_LOR:
          (C_261:
          begin
-           (let jessie_357 = (JC_797: (printf void)) in void);
+           (let jessie_364 = (JC_793: (printf void)) in void);
           (C_262:
-          (let jessie_358 = (safe_int32_of_integer_ (1)) in
-          (JC_798: (exit jessie_358)))) end) else void));
-       (C_265:
+          (let jessie_365 = (safe_int32_of_integer_ (1)) in
+          (JC_794: (exit jessie_365)))) end)) end;
+       (raise (Goto__LOR_0_exc void)) end in void) with
+      Goto__LOR_0_exc jessie_9 ->
+      (_LOR_0:
+      begin
+        void;
+       (C_263:
        begin
-         (let jessie_359 = (JC_799: (printf void)) in void);
-        (let jessie_361 =
+         (let jessie_367 = (JC_795: (printf void)) in void);
+        (let jessie_369 =
         begin
           (assert
-          { (JC_800: le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) };
+          { (JC_796: le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) };
           void);
-         (assert { (JC_801: lt_int(integer_of_int32(n_1_0), (32))) }; void);
-         (assert { (JC_802: ge_int(integer_of_int32(n_1_0), (0))) }; void);
-         (C_273:
+         (assert { (JC_797: lt_int(integer_of_int32(n_1_0), (32))) }; void);
+         (assert { (JC_798: ge_int(integer_of_int32(n_1_0), (0))) }; void);
+         (C_271:
          begin
-           (x_8 := (C_272:
-                   (safe_uint32_of_integer_ (C_271:
+           (x_8 := (C_270:
+                   (safe_uint32_of_integer_ (C_269:
                                             ((sub_int (integer_of_int32 
-                                                       (C_270:
+                                                       (C_268:
                                                        (safe_int32_of_integer_ 
-                                                        (C_269:
+                                                        (C_267:
                                                         ((lsl (1)) (integer_of_int32 !n_1_0))))))) (1))))));
           !x_8 end) end in void);
-        (C_274:
+        (C_272:
         begin
-          (let jessie_363 = (y_0 := !x_8) in void);
-         (C_275:
+          (let jessie_371 = (y_0 := !x_8) in void);
+         (C_273:
          begin
-           (let jessie_365 = (z := !x_8) in void);
-          (C_276:
+           (let jessie_373 = (z := !x_8) in void);
+          (C_274:
           begin
-            (let jessie_367 = (u := !x_8) in void);
-           (C_277:
+            (let jessie_375 = (u := !x_8) in void);
+           (C_275:
            begin
-             (let jessie_369 = (v := !x_8) in void);
-            (C_278:
+             (let jessie_377 = (v := !x_8) in void);
+            (C_276:
             begin
-              (let jessie_371 = (w := !x_8) in void);
+              (let jessie_379 = (w := !x_8) in void);
              try
-              (let jessie_394 =
+              (let jessie_402 =
               begin
                 (loop_4:
                 while true do
-                { invariant (JC_804: true)  }
+                { invariant (JC_800: true)  }
                  begin
                    [ { } unit { true } ];
                   try
-                   (let jessie_393 =
+                   (let jessie_401 =
                    begin
-                     (C_279:
+                     (let jessie_399 =
+                     (C_277:
                      begin
-                       (let jessie_372 = (JC_806: (printf void)) in void);
-                      (C_281:
+                       (let jessie_380 = (JC_802: (printf void)) in void);
+                      (C_279:
                       begin
-                        (let jessie_375 =
-                        (y_0 := (C_280:
-                                (let jessie_374 = !x_8 in
-                                (JC_807: (snoob1 jessie_374))))) in void);
-                       (C_283:
+                        (let jessie_383 =
+                        (y_0 := (C_278:
+                                (let jessie_382 = !x_8 in
+                                (JC_803: (snoob1 jessie_382))))) in void);
+                       (C_281:
                        begin
-                         (let jessie_378 =
-                         (z := (C_282:
-                               (let jessie_377 = !x_8 in
-                               (JC_808: (snoob2 jessie_377))))) in void);
-                        (C_285:
+                         (let jessie_386 =
+                         (z := (C_280:
+                               (let jessie_385 = !x_8 in
+                               (JC_804: (snoob2 jessie_385))))) in void);
+                        (C_283:
                         begin
-                          (let jessie_381 =
-                          (u := (C_284:
-                                (let jessie_380 = !x_8 in
-                                (JC_809: (snoob3 jessie_380))))) in void);
-                         (C_287:
+                          (let jessie_389 =
+                          (u := (C_282:
+                                (let jessie_388 = !x_8 in
+                                (JC_805: (snoob3 jessie_388))))) in void);
+                         (C_285:
                          begin
-                           (let jessie_384 =
-                           (v := (C_286:
-                                 (let jessie_383 = !x_8 in
-                                 (JC_810:
-                                 (next_set_of_n_elements jessie_383))))) in
+                           (let jessie_392 =
+                           (v := (C_284:
+                                 (let jessie_391 = !x_8 in
+                                 (JC_806:
+                                 (next_set_of_n_elements jessie_391))))) in
                            void);
-                          (C_292:
+                          (C_290:
                           begin
-                            (let jessie_388 =
+                            (let jessie_396 =
                             (let __cil_tmp =
-                            (C_289:
-                            (let jessie_386 =
-                            (C_288:
+                            (C_287:
+                            (let jessie_394 =
+                            (C_286:
                             (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
-                            (JC_811: (snoob4 jessie_386)))) in
-                            (C_291:
+                            (JC_807: (snoob4 jessie_394)))) in
+                            (C_289:
                             begin
-                              (w := (C_290:
+                              (w := (C_288:
                                     (safe_uint32_of_integer_ (integer_of_int32 __cil_tmp))));
                              !w end)) in void);
-                           (C_294:
+                           (C_292:
                            begin
-                             (let jessie_391 =
-                             (x_8 := (C_293:
-                                     (let jessie_390 = !x_8 in
-                                     (JC_812: (snoob jessie_390))))) in void);
-                            (if ((le_int_ (integer_of_uint32 !x_8)) (255))
-                            then void
-                            else
-                             (let jessie_392 =
-                             (raise (Goto_while_1_break_exc void)) in void))
-                           end) end) end) end) end) end) end);
+                             (x_8 := (C_291:
+                                     (let jessie_398 = !x_8 in
+                                     (JC_808: (snoob jessie_398))))); !x_8
+                           end) end) end) end) end) end) end) in void);
+                    (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
+                    else
+                     (let jessie_400 =
+                     (raise (Goto_while_1_break_exc void)) in void));
                     (raise (Loop_continue_exc void)) end in void) with
-                   Loop_continue_exc jessie_9 -> void end end done);
+                   Loop_continue_exc jessie_11 -> void end end done);
                (raise (Goto_while_1_break_exc void)) end in void) with
               Goto_while_1_break_exc jessie_7 -> (while_1_break: void) end;
-             (C_295:
+             (C_293:
              begin
-               (let jessie_396 =
+               (let jessie_404 =
                (__retres_8 := (safe_int32_of_integer_ (0))) in void);
               (return := !__retres_8); (raise Return) end) end) end) end) end)
         end) end) end) end)))))))); absurd  end with Return -> !return end))
@@ -3671,155 +3687,162 @@ let main_safety =
      (let v = ref (any_uint32 void) in
      (let w = ref (any_uint32 void) in
      (let __retres_8 = ref (any_int32 void) in
-     begin
-       (if ((neq_int_ (integer_of_int32 argc)) (2))
-       then
-        (C_255:
-        begin
-          (let jessie_304 = (JC_767: (printf_requires void)) in void);
-         (C_256:
-         (let jessie_305 = (safe_int32_of_integer_ (1)) in
-         (JC_768: (exit_requires jessie_305)))) end) else void);
-      (C_260:
+     try
+      (let jessie_316 =
       begin
-        (let jessie_307 =
-        (n_1_0 := (C_259: (JC_769: (strtol_requires void)))) in void);
-       (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
-       then
-        (C_263:
-        begin
-          (let jessie_308 = (JC_770: (printf_requires void)) in void);
-         (C_264:
-         (let jessie_309 = (safe_int32_of_integer_ (1)) in
-         (JC_771: (exit_requires jessie_309)))) end)
-       else
-        (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
-        then
+        try
+         (let jessie_313 =
+         begin
+           (if ((neq_int_ (integer_of_int32 argc)) (2))
+           then
+            (C_255:
+            begin
+              (let jessie_306 = (JC_767: (printf_requires void)) in void);
+             (C_256:
+             (let jessie_307 = (safe_int32_of_integer_ (1)) in
+             (JC_768: (exit_requires jessie_307)))) end) else void);
+          (C_260:
+          begin
+            (let jessie_309 =
+            (n_1_0 := (C_259: (JC_769: (strtol_requires void)))) in void);
+           (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
+           then (let jessie_310 = (raise (Goto__LOR_exc void)) in void)
+           else
+            (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
+            then (let jessie_311 = (raise (Goto__LOR_exc void)) in void)
+            else void));
+           (let jessie_312 = (raise (Goto__LOR_0_exc void)) in void);
+           (raise (Goto__LOR_exc void)) end) end in void) with
+         Goto__LOR_exc jessie_8 ->
+         (_LOR:
          (C_261:
          begin
-           (let jessie_310 = (JC_772: (printf_requires void)) in void);
+           (let jessie_314 = (JC_770: (printf_requires void)) in void);
           (C_262:
-          (let jessie_311 = (safe_int32_of_integer_ (1)) in
-          (JC_773: (exit_requires jessie_311)))) end) else void));
-       (C_265:
+          (let jessie_315 = (safe_int32_of_integer_ (1)) in
+          (JC_771: (exit_requires jessie_315)))) end)) end;
+       (raise (Goto__LOR_0_exc void)) end in void) with
+      Goto__LOR_0_exc jessie_9 ->
+      (_LOR_0:
+      begin
+        void;
+       (C_263:
        begin
-         (let jessie_312 = (JC_774: (printf_requires void)) in void);
-        (let jessie_314 =
+         (let jessie_317 = (JC_772: (printf_requires void)) in void);
+        (let jessie_319 =
         begin
           [ { } unit reads n_1_0
-            { (JC_775:
+            { (JC_773:
               le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) } ];
          [ { } unit reads n_1_0
-           { (JC_776: lt_int(integer_of_int32(n_1_0), (32))) } ];
+           { (JC_774: lt_int(integer_of_int32(n_1_0), (32))) } ];
          [ { } unit reads n_1_0
-           { (JC_777: ge_int(integer_of_int32(n_1_0), (0))) } ];
-         (C_273:
+           { (JC_775: ge_int(integer_of_int32(n_1_0), (0))) } ];
+         (C_271:
          begin
-           (x_8 := (C_272:
-                   (JC_779:
-                   (uint32_of_integer_ (C_271:
-                                       ((sub_int (integer_of_int32 (C_270:
-                                                                   (JC_778:
+           (x_8 := (C_270:
+                   (JC_777:
+                   (uint32_of_integer_ (C_269:
+                                       ((sub_int (integer_of_int32 (C_268:
+                                                                   (JC_776:
                                                                    (int32_of_integer_ 
-                                                                    (C_269:
+                                                                    (C_267:
                                                                     ((lsl (1)) 
                                                                     (integer_of_int32 !n_1_0)))))))) (1)))))));
           !x_8 end) end in void);
-        (C_274:
+        (C_272:
         begin
-          (let jessie_316 = (y_0 := !x_8) in void);
-         (C_275:
+          (let jessie_321 = (y_0 := !x_8) in void);
+         (C_273:
          begin
-           (let jessie_318 = (z := !x_8) in void);
-          (C_276:
+           (let jessie_323 = (z := !x_8) in void);
+          (C_274:
           begin
-            (let jessie_320 = (u := !x_8) in void);
-           (C_277:
+            (let jessie_325 = (u := !x_8) in void);
+           (C_275:
            begin
-             (let jessie_322 = (v := !x_8) in void);
-            (C_278:
+             (let jessie_327 = (v := !x_8) in void);
+            (C_276:
             begin
-              (let jessie_324 = (w := !x_8) in void);
+              (let jessie_329 = (w := !x_8) in void);
              try
-              (let jessie_347 =
+              (let jessie_352 =
               begin
                 (loop_3:
                 while true do
-                { invariant (JC_781: true) variant (0) }
+                { invariant (JC_779: true) variant (0) }
                  begin
                    [ { } unit { true } ];
                   try
-                   (let jessie_346 =
+                   (let jessie_351 =
                    begin
-                     (C_279:
+                     (let jessie_349 =
+                     (C_277:
                      begin
-                       (let jessie_325 = (JC_783: (printf_requires void)) in
+                       (let jessie_330 = (JC_781: (printf_requires void)) in
                        void);
-                      (C_281:
+                      (C_279:
                       begin
-                        (let jessie_328 =
-                        (y_0 := (C_280:
-                                (let jessie_327 = !x_8 in
-                                (JC_784: (snoob1_requires jessie_327))))) in
+                        (let jessie_333 =
+                        (y_0 := (C_278:
+                                (let jessie_332 = !x_8 in
+                                (JC_782: (snoob1_requires jessie_332))))) in
                         void);
-                       (C_283:
+                       (C_281:
                        begin
-                         (let jessie_331 =
-                         (z := (C_282:
-                               (let jessie_330 = !x_8 in
-                               (JC_785: (snoob2_requires jessie_330))))) in
+                         (let jessie_336 =
+                         (z := (C_280:
+                               (let jessie_335 = !x_8 in
+                               (JC_783: (snoob2_requires jessie_335))))) in
                          void);
-                        (C_285:
+                        (C_283:
                         begin
-                          (let jessie_334 =
-                          (u := (C_284:
-                                (let jessie_333 = !x_8 in
-                                (JC_786: (snoob3_requires jessie_333))))) in
+                          (let jessie_339 =
+                          (u := (C_282:
+                                (let jessie_338 = !x_8 in
+                                (JC_784: (snoob3_requires jessie_338))))) in
                           void);
-                         (C_287:
+                         (C_285:
                          begin
-                           (let jessie_337 =
-                           (v := (C_286:
-                                 (let jessie_336 = !x_8 in
-                                 (JC_787:
-                                 (next_set_of_n_elements_requires jessie_336))))) in
+                           (let jessie_342 =
+                           (v := (C_284:
+                                 (let jessie_341 = !x_8 in
+                                 (JC_785:
+                                 (next_set_of_n_elements_requires jessie_341))))) in
                            void);
-                          (C_292:
+                          (C_290:
                           begin
-                            (let jessie_341 =
+                            (let jessie_346 =
                             (let __cil_tmp =
-                            (C_289:
-                            (let jessie_339 =
-                            (C_288:
-                            (JC_788:
+                            (C_287:
+                            (let jessie_344 =
+                            (C_286:
+                            (JC_786:
                             (int32_of_integer_ (integer_of_uint32 !x_8)))) in
-                            (JC_789: (snoob4_requires jessie_339)))) in
-                            (C_291:
+                            (JC_787: (snoob4_requires jessie_344)))) in
+                            (C_289:
                             begin
-                              (w := (C_290:
-                                    (JC_790:
+                              (w := (C_288:
+                                    (JC_788:
                                     (uint32_of_integer_ (integer_of_int32 __cil_tmp)))));
                              !w end)) in void);
-                           (C_294:
+                           (C_292:
                            begin
-                             (let jessie_344 =
-                             (x_8 := (C_293:
-                                     (let jessie_343 = !x_8 in
-                                     (JC_791: (snoob_requires jessie_343))))) in
-                             void);
-                            (if ((le_int_ (integer_of_uint32 !x_8)) (255))
-                            then void
-                            else
-                             (let jessie_345 =
-                             (raise (Goto_while_1_break_exc void)) in void))
-                           end) end) end) end) end) end) end);
+                             (x_8 := (C_291:
+                                     (let jessie_348 = !x_8 in
+                                     (JC_789: (snoob_requires jessie_348)))));
+                            !x_8 end) end) end) end) end) end) end) in void);
+                    (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
+                    else
+                     (let jessie_350 =
+                     (raise (Goto_while_1_break_exc void)) in void));
                     (raise (Loop_continue_exc void)) end in void) with
-                   Loop_continue_exc jessie_9 -> void end end done);
+                   Loop_continue_exc jessie_11 -> void end end done);
                (raise (Goto_while_1_break_exc void)) end in void) with
               Goto_while_1_break_exc jessie_7 -> (while_1_break: void) end;
-             (C_295:
+             (C_293:
              begin
-               (let jessie_349 =
+               (let jessie_354 =
                (__retres_8 := (safe_int32_of_integer_ (0))) in void);
               (return := !__retres_8); (raise Return) end) end) end) end) end)
         end) end) end) end)))))))); absurd  end with Return -> !return end))
@@ -3878,18 +3901,18 @@ let next_set_of_n_elements_ensures_default =
      (let ones_3 = ref (any_uint32 void) in
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (let jessie_274 =
+      (let jessie_276 =
       begin
         (if ((eq_int_ (integer_of_uint32 x_7)) (0))
         then
-         (let jessie_263 =
+         (let jessie_265 =
          (C_204:
          begin
-           (let jessie_262 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
+           (let jessie_264 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
        (C_209:
        begin
-         (let jessie_265 =
+         (let jessie_267 =
          (smallest_3 := (C_208:
                         (safe_uint32_of_integer_ (C_207:
                                                  ((bw_and (integer_of_uint32 x_7)) 
@@ -3901,7 +3924,7 @@ let next_set_of_n_elements_ensures_default =
          void);
         (C_212:
         begin
-          (let jessie_267 =
+          (let jessie_269 =
           (ripple_3 := (C_211:
                        (safe_uint32_of_integer_ (C_210:
                                                 ((add_int (integer_of_uint32 x_7)) 
@@ -3909,7 +3932,7 @@ let next_set_of_n_elements_ensures_default =
           void);
          (C_217:
          begin
-           (let jessie_269 =
+           (let jessie_271 =
            (new_smallest := (C_216:
                             (safe_uint32_of_integer_ (C_215:
                                                      ((bw_and (integer_of_uint32 !ripple_3)) 
@@ -3921,7 +3944,7 @@ let next_set_of_n_elements_ensures_default =
            void);
           (C_224:
           begin
-            (let jessie_271 =
+            (let jessie_273 =
             (ones_3 := (C_223:
                        (safe_uint32_of_integer_ (C_222:
                                                 ((sub_int (integer_of_uint32 
@@ -3941,7 +3964,7 @@ let next_set_of_n_elements_ensures_default =
             void);
            (C_227:
            begin
-             (let jessie_273 =
+             (let jessie_275 =
              (__retres_6 := (C_226:
                             (safe_uint32_of_integer_ (C_225:
                                                      ((bw_or (integer_of_uint32 !ripple_3)) 
@@ -3984,18 +4007,18 @@ let next_set_of_n_elements_safety =
      (let ones_3 = ref (any_uint32 void) in
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (let jessie_259 =
+      (let jessie_261 =
       begin
         (if ((eq_int_ (integer_of_uint32 x_7)) (0))
         then
-         (let jessie_248 =
+         (let jessie_250 =
          (C_204:
          begin
-           (let jessie_247 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
+           (let jessie_249 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
        (C_209:
        begin
-         (let jessie_250 =
+         (let jessie_252 =
          (smallest_3 := (C_208:
                         (JC_572:
                         (uint32_of_integer_ (C_207:
@@ -4009,7 +4032,7 @@ let next_set_of_n_elements_safety =
          void);
         (C_212:
         begin
-          (let jessie_252 =
+          (let jessie_254 =
           (ripple_3 := (C_211:
                        (JC_573:
                        (uint32_of_integer_ (C_210:
@@ -4018,7 +4041,7 @@ let next_set_of_n_elements_safety =
           void);
          (C_217:
          begin
-           (let jessie_254 =
+           (let jessie_256 =
            (new_smallest := (C_216:
                             (JC_575:
                             (uint32_of_integer_ (C_215:
@@ -4032,7 +4055,7 @@ let next_set_of_n_elements_safety =
            void);
           (C_224:
           begin
-            (let jessie_256 =
+            (let jessie_258 =
             (ones_3 := (C_223:
                        (JC_580:
                        (uint32_of_integer_ (C_222:
@@ -4054,7 +4077,7 @@ let next_set_of_n_elements_safety =
             void);
            (C_227:
            begin
-             (let jessie_258 =
+             (let jessie_260 =
              (__retres_6 := (C_226:
                             (JC_581:
                             (uint32_of_integer_ (C_225:
@@ -4117,24 +4140,24 @@ let nlz_ensures_default =
      (let n_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_112 =
+      (let jessie_114 =
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x)) (0))
         then
-         (let jessie_89 =
+         (let jessie_91 =
          (C_43:
          begin
-           (let jessie_88 = (__retres_0 := (safe_int32_of_integer_ (32))) in
+           (let jessie_90 = (__retres_0 := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
        (C_44:
        begin
-         (let jessie_91 = (n_0_0 := (safe_int32_of_integer_ (0))) in void);
+         (let jessie_93 = (n_0_0 := (safe_int32_of_integer_ (0))) in void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (65535))
         then
-         (let jessie_95 =
+         (let jessie_97 =
          (C_47:
          begin
-           (let jessie_93 =
+           (let jessie_95 =
            (n_0_0 := (C_46:
                      (safe_int32_of_integer_ (C_45:
                                              ((add_int (integer_of_int32 !n_0_0)) (16)))))) in
@@ -4147,10 +4170,10 @@ let nlz_ensures_default =
            !mutable_x end) end) in void) else void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (16777215))
         then
-         (let jessie_99 =
+         (let jessie_101 =
          (C_53:
          begin
-           (let jessie_97 =
+           (let jessie_99 =
            (n_0_0 := (C_52:
                      (safe_int32_of_integer_ (C_51:
                                              ((add_int (integer_of_int32 !n_0_0)) (8)))))) in
@@ -4163,10 +4186,10 @@ let nlz_ensures_default =
            !mutable_x end) end) in void) else void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (268435455))
         then
-         (let jessie_103 =
+         (let jessie_105 =
          (C_59:
          begin
-           (let jessie_101 =
+           (let jessie_103 =
            (n_0_0 := (C_58:
                      (safe_int32_of_integer_ (C_57:
                                              ((add_int (integer_of_int32 !n_0_0)) (4)))))) in
@@ -4179,10 +4202,10 @@ let nlz_ensures_default =
            !mutable_x end) end) in void) else void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (1073741823))
         then
-         (let jessie_107 =
+         (let jessie_109 =
          (C_65:
          begin
-           (let jessie_105 =
+           (let jessie_107 =
            (n_0_0 := (C_64:
                      (safe_int32_of_integer_ (C_63:
                                              ((add_int (integer_of_int32 !n_0_0)) (2)))))) in
@@ -4196,14 +4219,14 @@ let nlz_ensures_default =
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (2147483647))
         then
          (C_71:
-         (let jessie_109 =
+         (let jessie_111 =
          (n_0_0 := (C_70:
                    (safe_int32_of_integer_ (C_69:
                                            ((add_int (integer_of_int32 !n_0_0)) (1)))))) in
          void)) else void);
         (C_72:
         begin
-          (let jessie_111 = (__retres_0 := !n_0_0) in void);
+          (let jessie_113 = (__retres_0 := !n_0_0) in void);
          (raise (Return_label_exc void)) end) end) end in void) with
       Return_label_exc jessie_2 ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end));
@@ -4240,24 +4263,24 @@ let nlz_safety =
      (let n_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_85 =
+      (let jessie_87 =
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x)) (0))
         then
-         (let jessie_62 =
+         (let jessie_64 =
          (C_43:
          begin
-           (let jessie_61 = (__retres_0 := (safe_int32_of_integer_ (32))) in
+           (let jessie_63 = (__retres_0 := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
        (C_44:
        begin
-         (let jessie_64 = (n_0_0 := (safe_int32_of_integer_ (0))) in void);
+         (let jessie_66 = (n_0_0 := (safe_int32_of_integer_ (0))) in void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (65535))
         then
-         (let jessie_68 =
+         (let jessie_70 =
          (C_47:
          begin
-           (let jessie_66 =
+           (let jessie_68 =
            (n_0_0 := (C_46:
                      (JC_250:
                      (int32_of_integer_ (C_45:
@@ -4272,10 +4295,10 @@ let nlz_safety =
            !mutable_x end) end) in void) else void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (16777215))
         then
-         (let jessie_72 =
+         (let jessie_74 =
          (C_53:
          begin
-           (let jessie_70 =
+           (let jessie_72 =
            (n_0_0 := (C_52:
                      (JC_252:
                      (int32_of_integer_ (C_51:
@@ -4290,10 +4313,10 @@ let nlz_safety =
            !mutable_x end) end) in void) else void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (268435455))
         then
-         (let jessie_76 =
+         (let jessie_78 =
          (C_59:
          begin
-           (let jessie_74 =
+           (let jessie_76 =
            (n_0_0 := (C_58:
                      (JC_254:
                      (int32_of_integer_ (C_57:
@@ -4308,10 +4331,10 @@ let nlz_safety =
            !mutable_x end) end) in void) else void);
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (1073741823))
         then
-         (let jessie_80 =
+         (let jessie_82 =
          (C_65:
          begin
-           (let jessie_78 =
+           (let jessie_80 =
            (n_0_0 := (C_64:
                      (JC_256:
                      (int32_of_integer_ (C_63:
@@ -4327,7 +4350,7 @@ let nlz_safety =
         (if ((le_int_ (integer_of_uint32 !mutable_x)) (2147483647))
         then
          (C_71:
-         (let jessie_82 =
+         (let jessie_84 =
          (n_0_0 := (C_70:
                    (JC_258:
                    (int32_of_integer_ (C_69:
@@ -4335,7 +4358,7 @@ let nlz_safety =
          void)) else void);
         (C_72:
         begin
-          (let jessie_84 = (__retres_0 := !n_0_0) in void);
+          (let jessie_86 = (__retres_0 := !n_0_0) in void);
          (raise (Return_label_exc void)) end) end) end in void) with
       Return_label_exc jessie_2 ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end));
@@ -4393,27 +4416,27 @@ let ntz_ensures_default =
      (let n_14 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_58 =
+      (let jessie_60 =
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x_6)) (0))
         then
-         (let jessie_37 =
+         (let jessie_39 =
          (C_2:
          begin
-           (let jessie_36 = (__retres := (safe_int32_of_integer_ (32))) in
+           (let jessie_38 = (__retres := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
        (C_3:
        begin
-         (let jessie_39 = (n_14 := (safe_int32_of_integer_ (1))) in void);
+         (let jessie_41 = (n_14 := (safe_int32_of_integer_ (1))) in void);
         (if ((eq_int_ (integer_of_uint32 (C_11:
                                          (safe_uint32_of_integer_ (C_10:
                                                                   ((bw_and 
                                                                     (integer_of_uint32 !mutable_x_6)) (65535))))))) (0))
         then
-         (let jessie_43 =
+         (let jessie_45 =
          (C_6:
          begin
-           (let jessie_41 =
+           (let jessie_43 =
            (n_14 := (C_5:
                     (safe_int32_of_integer_ (C_4:
                                             ((add_int (integer_of_int32 !n_14)) (16)))))) in
@@ -4430,10 +4453,10 @@ let ntz_ensures_default =
                                                                   ((bw_and 
                                                                     (integer_of_uint32 !mutable_x_6)) (255))))))) (0))
         then
-         (let jessie_47 =
+         (let jessie_49 =
          (C_14:
          begin
-           (let jessie_45 =
+           (let jessie_47 =
            (n_14 := (C_13:
                     (safe_int32_of_integer_ (C_12:
                                             ((add_int (integer_of_int32 !n_14)) (8)))))) in
@@ -4450,10 +4473,10 @@ let ntz_ensures_default =
                                                                   ((bw_and 
                                                                     (integer_of_uint32 !mutable_x_6)) (15))))))) (0))
         then
-         (let jessie_51 =
+         (let jessie_53 =
          (C_22:
          begin
-           (let jessie_49 =
+           (let jessie_51 =
            (n_14 := (C_21:
                     (safe_int32_of_integer_ (C_20:
                                             ((add_int (integer_of_int32 !n_14)) (4)))))) in
@@ -4470,10 +4493,10 @@ let ntz_ensures_default =
                                                                   ((bw_and 
                                                                     (integer_of_uint32 !mutable_x_6)) (3))))))) (0))
         then
-         (let jessie_55 =
+         (let jessie_57 =
          (C_30:
          begin
-           (let jessie_53 =
+           (let jessie_55 =
            (n_14 := (C_29:
                     (safe_int32_of_integer_ (C_28:
                                             ((add_int (integer_of_int32 !n_14)) (2)))))) in
@@ -4487,7 +4510,7 @@ let ntz_ensures_default =
            !mutable_x_6 end) end) in void) else void);
         (C_41:
         begin
-          (let jessie_57 =
+          (let jessie_59 =
           (__retres := (C_40:
                        (safe_int32_of_integer_ (C_39:
                                                ((sub_int (integer_of_uint32 
@@ -4535,28 +4558,28 @@ let ntz_safety =
      (let n_14 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_33 =
+      (let jessie_35 =
       begin
         (if ((eq_int_ (integer_of_uint32 !mutable_x_6)) (0))
         then
-         (let jessie_12 =
+         (let jessie_14 =
          (C_2:
          begin
-           (let jessie_11 = (__retres := (safe_int32_of_integer_ (32))) in
+           (let jessie_13 = (__retres := (safe_int32_of_integer_ (32))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
        (C_3:
        begin
-         (let jessie_14 = (n_14 := (safe_int32_of_integer_ (1))) in void);
+         (let jessie_16 = (n_14 := (safe_int32_of_integer_ (1))) in void);
         (if ((eq_int_ (integer_of_uint32 (C_11:
                                          (JC_187:
                                          (uint32_of_integer_ (C_10:
                                                              ((bw_and 
                                                                (integer_of_uint32 !mutable_x_6)) (65535)))))))) (0))
         then
-         (let jessie_18 =
+         (let jessie_20 =
          (C_6:
          begin
-           (let jessie_16 =
+           (let jessie_18 =
            (n_14 := (C_5:
                     (JC_188:
                     (int32_of_integer_ (C_4:
@@ -4576,10 +4599,10 @@ let ntz_safety =
                                                              ((bw_and 
                                                                (integer_of_uint32 !mutable_x_6)) (255)))))))) (0))
         then
-         (let jessie_22 =
+         (let jessie_24 =
          (C_14:
          begin
-           (let jessie_20 =
+           (let jessie_22 =
            (n_14 := (C_13:
                     (JC_192:
                     (int32_of_integer_ (C_12:
@@ -4599,10 +4622,10 @@ let ntz_safety =
                                                              ((bw_and 
                                                                (integer_of_uint32 !mutable_x_6)) (15)))))))) (0))
         then
-         (let jessie_26 =
+         (let jessie_28 =
          (C_22:
          begin
-           (let jessie_24 =
+           (let jessie_26 =
            (n_14 := (C_21:
                     (JC_196:
                     (int32_of_integer_ (C_20:
@@ -4622,10 +4645,10 @@ let ntz_safety =
                                                              ((bw_and 
                                                                (integer_of_uint32 !mutable_x_6)) (3)))))))) (0))
         then
-         (let jessie_30 =
+         (let jessie_32 =
          (C_30:
          begin
-           (let jessie_28 =
+           (let jessie_30 =
            (n_14 := (C_29:
                     (JC_200:
                     (int32_of_integer_ (C_28:
@@ -4641,7 +4664,7 @@ let ntz_safety =
            !mutable_x_6 end) end) in void) else void);
         (C_41:
         begin
-          (let jessie_32 =
+          (let jessie_34 =
           (__retres := (C_40:
                        (JC_205:
                        (int32_of_integer_ (C_39:
@@ -4713,7 +4736,7 @@ let pop_ensures_default =
      (let __retres_1 = ref (any_int32 void) in
      (C_80:
      begin
-       (let jessie_128 =
+       (let jessie_130 =
        (mutable_x_3 := (C_79:
                        (safe_uint32_of_integer_ (C_78:
                                                 ((sub_int (integer_of_uint32 !mutable_x_3)) 
@@ -4731,7 +4754,7 @@ let pop_ensures_default =
        void);
       (C_89:
       begin
-        (let jessie_130 =
+        (let jessie_132 =
         (mutable_x_3 := (C_88:
                         (safe_uint32_of_integer_ (C_87:
                                                  ((add_int (integer_of_uint32 
@@ -4754,7 +4777,7 @@ let pop_ensures_default =
         void);
        (C_96:
        begin
-         (let jessie_132 =
+         (let jessie_134 =
          (mutable_x_3 := (C_95:
                          (safe_uint32_of_integer_ (C_94:
                                                   ((bw_and (integer_of_uint32 
@@ -4773,7 +4796,7 @@ let pop_ensures_default =
          void);
         (C_101:
         begin
-          (let jessie_134 =
+          (let jessie_136 =
           (mutable_x_3 := (C_100:
                           (safe_uint32_of_integer_ (C_99:
                                                    ((add_int (integer_of_uint32 !mutable_x_3)) 
@@ -4785,7 +4808,7 @@ let pop_ensures_default =
           void);
          (C_106:
          begin
-           (let jessie_136 =
+           (let jessie_138 =
            (mutable_x_3 := (C_105:
                            (safe_uint32_of_integer_ (C_104:
                                                     ((add_int (integer_of_uint32 !mutable_x_3)) 
@@ -4797,7 +4820,7 @@ let pop_ensures_default =
            void);
           (C_109:
           begin
-            (let jessie_138 =
+            (let jessie_140 =
             (__retres_1 := (C_108:
                            (safe_int32_of_integer_ (C_107:
                                                    (JC_321:
@@ -4837,7 +4860,7 @@ let pop_safety =
      (let __retres_1 = ref (any_int32 void) in
      (C_80:
      begin
-       (let jessie_115 =
+       (let jessie_117 =
        (mutable_x_3 := (C_79:
                        (JC_302:
                        (uint32_of_integer_ (C_78:
@@ -4858,7 +4881,7 @@ let pop_safety =
        void);
       (C_89:
       begin
-        (let jessie_117 =
+        (let jessie_119 =
         (mutable_x_3 := (C_88:
                         (JC_307:
                         (uint32_of_integer_ (C_87:
@@ -4884,7 +4907,7 @@ let pop_safety =
         void);
        (C_96:
        begin
-         (let jessie_119 =
+         (let jessie_121 =
          (mutable_x_3 := (C_95:
                          (JC_311:
                          (uint32_of_integer_ (C_94:
@@ -4905,7 +4928,7 @@ let pop_safety =
          void);
         (C_101:
         begin
-          (let jessie_121 =
+          (let jessie_123 =
           (mutable_x_3 := (C_100:
                           (JC_313:
                           (uint32_of_integer_ (C_99:
@@ -4919,7 +4942,7 @@ let pop_safety =
           void);
          (C_106:
          begin
-           (let jessie_123 =
+           (let jessie_125 =
            (mutable_x_3 := (C_105:
                            (JC_315:
                            (uint32_of_integer_ (C_104:
@@ -4933,7 +4956,7 @@ let pop_safety =
            void);
           (C_109:
           begin
-            (let jessie_125 =
+            (let jessie_127 =
             (__retres_1 := (C_108:
                            (JC_317:
                            (int32_of_integer_ (C_107:
@@ -4997,7 +5020,7 @@ let snoob1_ensures_default =
      (let __retres_3 = ref (any_uint32 void) in
      (C_135:
      begin
-       (let jessie_177 =
+       (let jessie_179 =
        (smallest_0 := (C_134:
                       (safe_uint32_of_integer_ (C_133:
                                                ((bw_and (integer_of_uint32 x_0)) 
@@ -5009,7 +5032,7 @@ let snoob1_ensures_default =
        void);
       (C_138:
       begin
-        (let jessie_179 =
+        (let jessie_181 =
         (ripple_0 := (C_137:
                      (safe_uint32_of_integer_ (C_136:
                                               ((add_int (integer_of_uint32 x_0)) 
@@ -5017,18 +5040,18 @@ let snoob1_ensures_default =
         void);
        (C_141:
        begin
-         (let jessie_181 =
+         (let jessie_183 =
          (ones_0 := (C_140:
                     (safe_uint32_of_integer_ (C_139:
                                              ((bw_xor (integer_of_uint32 x_0)) 
                                               (integer_of_uint32 !ripple_0)))))) in
          void);
-        (let jessie_186 =
+        (let jessie_188 =
         (C_143:
         begin
-          (let jessie_184 =
+          (let jessie_186 =
           (tmp := (C_142:
-                  (let jessie_183 = x_0 in (JC_422: (ntz jessie_183))))) in
+                  (let jessie_185 = x_0 in (JC_422: (ntz jessie_185))))) in
           void);
          (assert
          { (JC_423: lt_int(add_int((2), integer_of_int32(tmp)), (32))) };
@@ -5046,7 +5069,7 @@ let snoob1_ensures_default =
           !ones_0 end) end) in void);
         (C_152:
         begin
-          (let jessie_188 =
+          (let jessie_190 =
           (__retres_3 := (C_151:
                          (safe_uint32_of_integer_ (C_150:
                                                   ((bw_or (integer_of_uint32 !ripple_0)) 
@@ -5088,7 +5111,7 @@ let snoob1_safety =
      (let __retres_3 = ref (any_uint32 void) in
      (C_135:
      begin
-       (let jessie_163 =
+       (let jessie_165 =
        (smallest_0 := (C_134:
                       (JC_414:
                       (uint32_of_integer_ (C_133:
@@ -5102,7 +5125,7 @@ let snoob1_safety =
        void);
       (C_138:
       begin
-        (let jessie_165 =
+        (let jessie_167 =
         (ripple_0 := (C_137:
                      (JC_415:
                      (uint32_of_integer_ (C_136:
@@ -5111,20 +5134,20 @@ let snoob1_safety =
         void);
        (C_141:
        begin
-         (let jessie_167 =
+         (let jessie_169 =
          (ones_0 := (C_140:
                     (JC_416:
                     (uint32_of_integer_ (C_139:
                                         ((bw_xor (integer_of_uint32 x_0)) 
                                          (integer_of_uint32 !ripple_0))))))) in
          void);
-        (let jessie_172 =
+        (let jessie_174 =
         (C_143:
         begin
-          (let jessie_170 =
+          (let jessie_172 =
           (tmp := (C_142:
-                  (let jessie_169 = x_0 in
-                  (JC_417: (ntz_requires jessie_169))))) in void);
+                  (let jessie_171 = x_0 in
+                  (JC_417: (ntz_requires jessie_171))))) in void);
          [ { } unit reads tmp
            { (JC_418: lt_int(add_int((2), integer_of_int32(tmp)), (32))) } ];
          (C_149:
@@ -5142,7 +5165,7 @@ let snoob1_safety =
           !ones_0 end) end) in void);
         (C_152:
         begin
-          (let jessie_174 =
+          (let jessie_176 =
           (__retres_3 := (C_151:
                          (JC_421:
                          (uint32_of_integer_ (C_150:
@@ -5206,7 +5229,7 @@ let snoob2_ensures_default =
      (let __retres_4 = ref (any_uint32 void) in
      (C_158:
      begin
-       (let jessie_205 =
+       (let jessie_207 =
        (smallest_1 := (C_157:
                       (safe_uint32_of_integer_ (C_156:
                                                ((bw_and (integer_of_uint32 x_4)) 
@@ -5218,7 +5241,7 @@ let snoob2_ensures_default =
        void);
       (C_161:
       begin
-        (let jessie_207 =
+        (let jessie_209 =
         (ripple_1 := (C_160:
                      (safe_uint32_of_integer_ (C_159:
                                               ((add_int (integer_of_uint32 x_4)) 
@@ -5226,19 +5249,19 @@ let snoob2_ensures_default =
         void);
        (C_164:
        begin
-         (let jessie_209 =
+         (let jessie_211 =
          (ones_1 := (C_163:
                     (safe_uint32_of_integer_ (C_162:
                                              ((bw_xor (integer_of_uint32 x_4)) 
                                               (integer_of_uint32 !ripple_1)))))) in
          void);
-        (let jessie_214 =
+        (let jessie_216 =
         (C_166:
         begin
-          (let jessie_212 =
+          (let jessie_214 =
           (tmp_0 := (C_165:
-                    (let jessie_211 = !smallest_1 in
-                    (JC_473: (nlz jessie_211))))) in void);
+                    (let jessie_213 = !smallest_1 in
+                    (JC_473: (nlz jessie_213))))) in void);
          (assert
          { (JC_474: lt_int(sub_int((33), integer_of_int32(tmp_0)), (32))) };
          void);
@@ -5255,7 +5278,7 @@ let snoob2_ensures_default =
           !ones_1 end) end) in void);
         (C_175:
         begin
-          (let jessie_216 =
+          (let jessie_218 =
           (__retres_4 := (C_174:
                          (safe_uint32_of_integer_ (C_173:
                                                   ((bw_or (integer_of_uint32 !ripple_1)) 
@@ -5297,7 +5320,7 @@ let snoob2_safety =
      (let __retres_4 = ref (any_uint32 void) in
      (C_158:
      begin
-       (let jessie_191 =
+       (let jessie_193 =
        (smallest_1 := (C_157:
                       (JC_465:
                       (uint32_of_integer_ (C_156:
@@ -5311,7 +5334,7 @@ let snoob2_safety =
        void);
       (C_161:
       begin
-        (let jessie_193 =
+        (let jessie_195 =
         (ripple_1 := (C_160:
                      (JC_466:
                      (uint32_of_integer_ (C_159:
@@ -5320,20 +5343,20 @@ let snoob2_safety =
         void);
        (C_164:
        begin
-         (let jessie_195 =
+         (let jessie_197 =
          (ones_1 := (C_163:
                     (JC_467:
                     (uint32_of_integer_ (C_162:
                                         ((bw_xor (integer_of_uint32 x_4)) 
                                          (integer_of_uint32 !ripple_1))))))) in
          void);
-        (let jessie_200 =
+        (let jessie_202 =
         (C_166:
         begin
-          (let jessie_198 =
+          (let jessie_200 =
           (tmp_0 := (C_165:
-                    (let jessie_197 = !smallest_1 in
-                    (JC_468: (nlz_requires jessie_197))))) in void);
+                    (let jessie_199 = !smallest_1 in
+                    (JC_468: (nlz_requires jessie_199))))) in void);
          [ { } unit reads tmp_0
            { (JC_469: lt_int(sub_int((33), integer_of_int32(tmp_0)), (32))) } ];
          (C_172:
@@ -5351,7 +5374,7 @@ let snoob2_safety =
           !ones_1 end) end) in void);
         (C_175:
         begin
-          (let jessie_202 =
+          (let jessie_204 =
           (__retres_4 := (C_174:
                          (JC_472:
                          (uint32_of_integer_ (C_173:
@@ -5415,7 +5438,7 @@ let snoob3_ensures_default =
      (let __retres_5 = ref (any_uint32 void) in
      (C_181:
      begin
-       (let jessie_233 =
+       (let jessie_235 =
        (smallest_2 := (C_180:
                       (safe_uint32_of_integer_ (C_179:
                                                ((bw_and (integer_of_uint32 x_1)) 
@@ -5427,7 +5450,7 @@ let snoob3_ensures_default =
        void);
       (C_184:
       begin
-        (let jessie_235 =
+        (let jessie_237 =
         (ripple_2 := (C_183:
                      (safe_uint32_of_integer_ (C_182:
                                               ((add_int (integer_of_uint32 x_1)) 
@@ -5435,18 +5458,18 @@ let snoob3_ensures_default =
         void);
        (C_187:
        begin
-         (let jessie_237 =
+         (let jessie_239 =
          (ones_2 := (C_186:
                     (safe_uint32_of_integer_ (C_185:
                                              ((bw_xor (integer_of_uint32 x_1)) 
                                               (integer_of_uint32 !ripple_2)))))) in
          void);
-        (let jessie_242 =
+        (let jessie_244 =
         (C_189:
         begin
-          (let jessie_240 =
+          (let jessie_242 =
           (tmp_1 := (C_188:
-                    (let jessie_239 = !ones_2 in (JC_527: (pop jessie_239))))) in
+                    (let jessie_241 = !ones_2 in (JC_527: (pop jessie_241))))) in
           void);
          (assert
          { (JC_528:
@@ -5477,7 +5500,7 @@ let snoob3_ensures_default =
           !ones_2 end) end) in void);
         (C_202:
         begin
-          (let jessie_244 =
+          (let jessie_246 =
           (__retres_5 := (C_201:
                          (safe_uint32_of_integer_ (C_200:
                                                   ((bw_or (integer_of_uint32 !ripple_2)) 
@@ -5519,7 +5542,7 @@ let snoob3_safety =
      (let __retres_5 = ref (any_uint32 void) in
      (C_181:
      begin
-       (let jessie_219 =
+       (let jessie_221 =
        (smallest_2 := (C_180:
                       (JC_516:
                       (uint32_of_integer_ (C_179:
@@ -5533,7 +5556,7 @@ let snoob3_safety =
        void);
       (C_184:
       begin
-        (let jessie_221 =
+        (let jessie_223 =
         (ripple_2 := (C_183:
                      (JC_517:
                      (uint32_of_integer_ (C_182:
@@ -5542,20 +5565,20 @@ let snoob3_safety =
         void);
        (C_187:
        begin
-         (let jessie_223 =
+         (let jessie_225 =
          (ones_2 := (C_186:
                     (JC_518:
                     (uint32_of_integer_ (C_185:
                                         ((bw_xor (integer_of_uint32 x_1)) 
                                          (integer_of_uint32 !ripple_2))))))) in
          void);
-        (let jessie_228 =
+        (let jessie_230 =
         (C_189:
         begin
-          (let jessie_226 =
+          (let jessie_228 =
           (tmp_1 := (C_188:
-                    (let jessie_225 = !ones_2 in
-                    (JC_519: (pop_requires jessie_225))))) in void);
+                    (let jessie_227 = !ones_2 in
+                    (JC_519: (pop_requires jessie_227))))) in void);
          [ { } unit reads tmp_1
            { (JC_520:
              le_int((1),
@@ -5584,7 +5607,7 @@ let snoob3_safety =
           !ones_2 end) end) in void);
         (C_202:
         begin
-          (let jessie_230 =
+          (let jessie_232 =
           (__retres_5 := (C_201:
                          (JC_526:
                          (uint32_of_integer_ (C_200:
@@ -5646,7 +5669,7 @@ let snoob4_ensures_default =
      (let __retres_7 = ref (any_int32 void) in
      (C_235:
      begin
-       (let jessie_291 =
+       (let jessie_293 =
        (y := (C_234:
              (safe_int32_of_integer_ (C_233:
                                      ((add_int (integer_of_int32 !mutable_x_2)) 
@@ -5663,7 +5686,7 @@ let snoob4_ensures_default =
        void);
       (C_240:
       begin
-        (let jessie_293 =
+        (let jessie_295 =
         (mutable_x_2 := (C_239:
                         (safe_int32_of_integer_ (C_238:
                                                 ((bw_and (integer_of_int32 !mutable_x_2)) 
@@ -5674,7 +5697,7 @@ let snoob4_ensures_default =
                                                                     (integer_of_int32 !y))))))))))) in
         void);
        try
-        (let jessie_298 =
+        (let jessie_300 =
         begin
           (loop_2:
           while true do
@@ -5682,9 +5705,9 @@ let snoob4_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_297 =
+             (let jessie_299 =
              begin
-               (let jessie_296 =
+               (let jessie_298 =
                begin
                  (if ((eq_int_ (integer_of_int32 (C_242:
                                                  (safe_int32_of_integer_ 
@@ -5692,7 +5715,7 @@ let snoob4_ensures_default =
                                                   ((bw_and (integer_of_int32 !mutable_x_2)) (1))))))) (0))
                  then void
                  else
-                  (let jessie_294 = (raise (Goto_while_0_break_exc void)) in
+                  (let jessie_296 = (raise (Goto_while_0_break_exc void)) in
                   void));
                 (C_245:
                 begin
@@ -5707,7 +5730,7 @@ let snoob4_ensures_default =
         Goto_while_0_break_exc jessie_4 -> (while_0_break: void) end;
        (C_248:
        begin
-         (let jessie_300 =
+         (let jessie_302 =
          (mutable_x_2 := (C_247:
                          (safe_int32_of_integer_ (C_246:
                                                  (JC_642:
@@ -5715,7 +5738,7 @@ let snoob4_ensures_default =
          void);
         (C_251:
         begin
-          (let jessie_302 =
+          (let jessie_304 =
           (__retres_7 := (C_250:
                          (safe_int32_of_integer_ (C_249:
                                                  ((bw_or (integer_of_int32 !y)) 
@@ -5755,7 +5778,7 @@ let snoob4_safety =
      (let __retres_7 = ref (any_int32 void) in
      (C_235:
      begin
-       (let jessie_277 =
+       (let jessie_279 =
        (y := (C_234:
              (JC_626:
              (int32_of_integer_ (C_233:
@@ -5774,7 +5797,7 @@ let snoob4_safety =
        void);
       (C_240:
       begin
-        (let jessie_279 =
+        (let jessie_281 =
         (mutable_x_2 := (C_239:
                         (JC_628:
                         (int32_of_integer_ (C_238:
@@ -5787,7 +5810,7 @@ let snoob4_safety =
                                                                 (integer_of_int32 !y))))))))))))) in
         void);
        try
-        (let jessie_284 =
+        (let jessie_286 =
         begin
           (loop_1:
           while true do
@@ -5795,9 +5818,9 @@ let snoob4_safety =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_283 =
+             (let jessie_285 =
              begin
-               (let jessie_282 =
+               (let jessie_284 =
                begin
                  (if ((eq_int_ (integer_of_int32 (C_242:
                                                  (JC_632:
@@ -5806,7 +5829,7 @@ let snoob4_safety =
                                                                     (integer_of_int32 !mutable_x_2)) (1)))))))) (0))
                  then void
                  else
-                  (let jessie_280 = (raise (Goto_while_0_break_exc void)) in
+                  (let jessie_282 = (raise (Goto_while_0_break_exc void)) in
                   void));
                 (C_245:
                 begin
@@ -5822,7 +5845,7 @@ let snoob4_safety =
         Goto_while_0_break_exc jessie_4 -> (while_0_break: void) end;
        (C_248:
        begin
-         (let jessie_286 =
+         (let jessie_288 =
          (mutable_x_2 := (C_247:
                          (JC_636:
                          (int32_of_integer_ (C_246:
@@ -5831,7 +5854,7 @@ let snoob4_safety =
          void);
         (C_251:
         begin
-          (let jessie_288 =
+          (let jessie_290 =
           (__retres_7 := (C_250:
                          (JC_637:
                          (int32_of_integer_ (C_249:
@@ -5894,7 +5917,7 @@ let snoob_ensures_default =
      (let __retres_2 = ref (any_uint32 void) in
      (C_115:
      begin
-       (let jessie_152 =
+       (let jessie_154 =
        (smallest := (C_114:
                     (safe_uint32_of_integer_ (C_113:
                                              ((bw_and (integer_of_uint32 x_5)) 
@@ -5906,7 +5929,7 @@ let snoob_ensures_default =
        void);
       (C_118:
       begin
-        (let jessie_154 =
+        (let jessie_156 =
         (ripple := (C_117:
                    (safe_uint32_of_integer_ (C_116:
                                             ((add_int (integer_of_uint32 x_5)) 
@@ -5914,7 +5937,7 @@ let snoob_ensures_default =
         void);
        (C_121:
        begin
-         (let jessie_156 =
+         (let jessie_158 =
          (ones := (C_120:
                   (safe_uint32_of_integer_ (C_119:
                                            ((bw_xor (integer_of_uint32 x_5)) 
@@ -5922,7 +5945,7 @@ let snoob_ensures_default =
          void);
         (C_126:
         begin
-          (let jessie_158 =
+          (let jessie_160 =
           (ones := (C_125:
                    (safe_uint32_of_integer_ (C_124:
                                             (JC_372:
@@ -5936,7 +5959,7 @@ let snoob_ensures_default =
           void);
          (C_129:
          begin
-           (let jessie_160 =
+           (let jessie_162 =
            (__retres_2 := (C_128:
                           (safe_uint32_of_integer_ (C_127:
                                                    ((bw_or (integer_of_uint32 !ripple)) 
@@ -5977,7 +6000,7 @@ let snoob_safety =
      (let __retres_2 = ref (any_uint32 void) in
      (C_115:
      begin
-       (let jessie_141 =
+       (let jessie_143 =
        (smallest := (C_114:
                     (JC_363:
                     (uint32_of_integer_ (C_113:
@@ -5991,7 +6014,7 @@ let snoob_safety =
        void);
       (C_118:
       begin
-        (let jessie_143 =
+        (let jessie_145 =
         (ripple := (C_117:
                    (JC_364:
                    (uint32_of_integer_ (C_116:
@@ -6000,7 +6023,7 @@ let snoob_safety =
         void);
        (C_121:
        begin
-         (let jessie_145 =
+         (let jessie_147 =
          (ones := (C_120:
                   (JC_365:
                   (uint32_of_integer_ (C_119:
@@ -6009,7 +6032,7 @@ let snoob_safety =
          void);
         (C_126:
         begin
-          (let jessie_147 =
+          (let jessie_149 =
           (ones := (C_125:
                    (JC_369:
                    (uint32_of_integer_ (C_124:
@@ -6025,7 +6048,7 @@ let snoob_safety =
           void);
          (C_129:
          begin
-           (let jessie_149 =
+           (let jessie_151 =
            (__retres_2 := (C_128:
                           (JC_370:
                           (uint32_of_integer_ (C_127:
@@ -6062,139 +6085,139 @@ why --project [...] why/hd_snoob.why
   <function name="Function snoob4">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po351.why">
+    <goal why_file="why/hd_snoob_po337.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po338.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po339.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po340.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po341.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po342.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po343.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po344.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po345.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po346.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po347.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "3" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po348.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "3" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po349.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "24" end = "25"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po350.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "24" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po351.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "24" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po352.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "why/hd_snoob.why" line = "4958" begin = "46" end = "47"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po353.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "why/hd_snoob.why" line = "4958" begin = "46" end = "47"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po354.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "135" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/hd_snoob_po355.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "135" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po356.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "132" begin = "3" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "135" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po357.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "136" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po358.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "136" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po359.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po360.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "133" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po361.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "3" end = "8"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po362.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "3" end = "8"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po363.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "24" end = "25"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po364.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "24" end = "25"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po365.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "134" begin = "24" end = "25"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po366.why">
-      <location file = "why/hd_snoob.why" line = "4939" begin = "46" end = "47"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po367.why">
-      <location file = "why/hd_snoob.why" line = "4939" begin = "46" end = "47"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po368.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "135" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po369.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "135" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po370.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "135" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po371.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "136" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po372.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "136" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po373.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po374.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po375.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po376.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po377.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po378.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po379.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
       <explain kind = "Post"/>
     </goal>
@@ -6203,160 +6226,160 @@ text = "ArithOverflow"/>
   <function name="Function snoob3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po321.why">
+    <goal why_file="why/hd_snoob_po307.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "93" begin = "3" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/hd_snoob_po322.why">
+    <goal why_file="why/hd_snoob_po308.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "93" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po309.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "93" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po310.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "93" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po311.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "94" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po312.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "94" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po313.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "95" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po314.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "95" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po315.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po316.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po317.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po318.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po319.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po320.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po321.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po322.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po323.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "93" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po324.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "93" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po325.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "94" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po326.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "94" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po327.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "95" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po328.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "95" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "98" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po329.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "98" begin = "3" end = "9"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po330.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po331.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po332.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po333.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po334.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po335.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po336.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po337.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po338.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po339.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po340.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po341.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po342.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "98" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po343.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "98" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po344.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po345.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po346.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po347.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po348.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po349.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po350.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "90" begin = "9" end = "15"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/hd_snoob_po318.why">
+    <goal why_file="why/hd_snoob_po304.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/hd_snoob_po319.why">
+    <goal why_file="why/hd_snoob_po305.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/hd_snoob_po320.why">
+    <goal why_file="why/hd_snoob_po306.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "96" begin = "3" end = "7"/>
       <explain kind = "Assert"/>
     </goal>
@@ -6365,142 +6388,142 @@ text = "ArithOverflow"/>
   <function name="Function snoob2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po290.why">
+    <goal why_file="why/hd_snoob_po276.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "81" begin = "3" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/hd_snoob_po291.why">
+    <goal why_file="why/hd_snoob_po277.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "81" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po278.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "81" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po279.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "81" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po280.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "82" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po281.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "82" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po282.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "83" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po283.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "83" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po284.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po285.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po286.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po287.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po288.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po289.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po290.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po291.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po292.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "81" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po293.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "81" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po294.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "82" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po295.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "82" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "85" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po296.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "83" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "85" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po297.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "83" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po298.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po299.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po300.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po301.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po302.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po303.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po304.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po305.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po306.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po307.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po308.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po309.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "85" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po310.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "85" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po311.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po312.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po313.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po314.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po315.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po316.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po317.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "78" begin = "9" end = "15"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/hd_snoob_po289.why">
+    <goal why_file="why/hd_snoob_po275.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "84" begin = "3" end = "7"/>
       <explain kind = "Assert"/>
     </goal>
@@ -6509,142 +6532,142 @@ text = "ArithOverflow"/>
   <function name="Function snoob1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po261.why">
+    <goal why_file="why/hd_snoob_po247.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "69" begin = "3" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/hd_snoob_po262.why">
+    <goal why_file="why/hd_snoob_po248.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "69" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po249.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "69" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po250.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "69" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po251.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "70" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po252.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "70" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po253.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "71" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po254.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "71" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po255.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po256.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po257.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po258.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po259.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po260.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po261.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po262.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po263.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "69" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po264.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "69" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po265.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "70" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po266.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "70" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "73" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po267.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "71" begin = "3" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "73" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po268.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "71" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po269.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po270.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po271.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po272.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po273.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po274.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po275.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po276.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po277.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po278.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po279.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po280.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "73" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po281.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "73" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po282.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po283.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po284.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po285.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po286.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po287.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po288.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "66" begin = "9" end = "15"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/hd_snoob_po260.why">
+    <goal why_file="why/hd_snoob_po246.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "72" begin = "3" end = "7"/>
       <explain kind = "Assert"/>
     </goal>
@@ -6653,111 +6676,111 @@ text = "ArithOverflow"/>
   <function name="Function snoob">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po380.why">
+    <goal why_file="why/hd_snoob_po366.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po367.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po368.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po369.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po370.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "57" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po371.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "57" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po372.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "58" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po373.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "58" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po374.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po375.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po376.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po377.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po378.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po379.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po380.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "60" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po381.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "60" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po382.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po383.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "56" begin = "3" end = "11"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po384.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "57" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po385.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "57" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po386.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "58" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po387.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "58" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po388.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po389.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po390.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po391.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po392.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po393.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "59" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po394.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "60" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po395.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "60" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po396.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po397.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po398.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po399.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po400.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po401.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po402.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
       <explain kind = "Post"/>
     </goal>
@@ -6766,201 +6789,201 @@ text = "ArithOverflow"/>
   <function name="Function pop">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po219.why">
+    <goal why_file="why/hd_snoob_po205.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/hd_snoob_po220.why">
+    <goal why_file="why/hd_snoob_po206.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po207.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po208.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po209.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po210.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po211.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po212.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po213.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po214.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po215.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po216.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po217.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po218.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po219.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po220.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po221.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/hd_snoob_po222.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po223.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po224.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po225.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "38" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po226.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po227.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po228.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po229.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po230.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po231.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po232.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po233.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po234.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "39" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po235.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po236.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
+    <goal why_file="why/hd_snoob_po236.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "43" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
     <goal why_file="why/hd_snoob_po237.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "43" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po238.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "43" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po239.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po240.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po241.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "40" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po242.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po243.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po244.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po245.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "41" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po246.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po247.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po248.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po249.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "42" begin = "3" end = "4"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po250.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "43" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po251.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "43" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po252.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "43" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po253.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po254.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po255.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po256.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po257.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po258.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po259.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "37" begin = "4" end = "7"/>
       <explain kind = "Post"/>
     </goal>
@@ -6969,201 +6992,201 @@ text = "ArithOverflow"/>
   <function name="Function ntz">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po178.why">
+    <goal why_file="why/hd_snoob_po164.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "3" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po165.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "3" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po166.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "31" end = "32"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po167.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "31" end = "32"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po168.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "42" end = "43"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po169.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "42" end = "43"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po170.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "42" end = "43"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po171.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "3" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po172.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "3" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po173.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "31" end = "32"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po174.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "31" end = "32"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po175.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "42" end = "43"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po176.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "42" end = "43"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po177.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "42" end = "43"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po178.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po179.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po180.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "31" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "31" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po181.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "31" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "31" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po182.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "42" end = "43"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/hd_snoob_po183.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "42" end = "43"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po184.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "17" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "42" end = "43"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po185.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po186.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po187.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "31" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "31" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po188.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "31" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "31" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po189.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "42" end = "43"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/hd_snoob_po190.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "42" end = "43"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po191.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "18" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "42" end = "43"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po192.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po193.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po194.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "31" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po195.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "31" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po196.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po197.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "42" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po198.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "19" begin = "42" end = "43"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po199.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "3" end = "5"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po200.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "3" end = "5"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po201.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "31" end = "32"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po202.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "31" end = "32"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po203.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "42" end = "43"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po204.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "42" end = "43"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po205.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "20" begin = "42" end = "43"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po206.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po207.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po208.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po209.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po210.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po211.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "21" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po212.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po213.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po214.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po215.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po216.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po217.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po218.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "12" begin = "4" end = "7"/>
       <explain kind = "Post"/>
     </goal>
@@ -7172,121 +7195,121 @@ text = "ArithOverflow"/>
   <function name="Function nlz">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po153.why">
+    <goal why_file="why/hd_snoob_po139.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po140.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po141.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "36" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po142.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "36" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po143.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po144.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po145.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "36" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po146.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "36" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po147.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po148.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po149.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "36" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po150.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "36" end = "37"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po151.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po152.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "25" end = "26"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po153.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "36" end = "37"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po154.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "25" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "36" end = "37"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po155.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "36" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "33" begin = "25" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po156.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "29" begin = "36" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "33" begin = "25" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po157.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po158.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po159.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "36" end = "37"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po160.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "30" begin = "36" end = "37"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po161.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po162.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po163.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "36" end = "37"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po164.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "31" begin = "36" end = "37"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po165.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po166.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po167.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "36" end = "37"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po168.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "32" begin = "36" end = "37"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po169.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "33" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po170.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "33" begin = "25" end = "26"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po171.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po172.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po173.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po174.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po175.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po176.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po177.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "24" begin = "4" end = "7"/>
       <explain kind = "Post"/>
     </goal>
@@ -7295,131 +7318,131 @@ text = "ArithOverflow"/>
   <function name="Function next_set_of_n_elements">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po126.why">
+    <goal why_file="why/hd_snoob_po112.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po113.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po114.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po115.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po116.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "109" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po117.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "109" begin = "3" end = "9"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po118.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po119.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po120.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po121.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po122.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po123.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po124.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po125.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po126.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po127.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po128.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po129.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "108" begin = "3" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po130.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "109" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "112" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po131.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "109" begin = "3" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "112" begin = "3" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po132.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po133.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po134.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po135.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "110" begin = "3" end = "15"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po136.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po137.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po138.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po139.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po140.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po141.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po142.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po143.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "111" begin = "3" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po144.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "112" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po145.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "112" begin = "3" end = "9"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po146.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po147.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po148.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po149.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po150.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po151.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po152.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "104" begin = "9" end = "31"/>
       <explain kind = "Post"/>
     </goal>
@@ -7534,498 +7557,428 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po25.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po26.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po27.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po28.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po29.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po30.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po31.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "794" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po32.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po33.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po34.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po35.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po36.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po37.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po38.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "795" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po39.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po40.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po41.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po42.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po43.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po44.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po45.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "25" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po46.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po47.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po48.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po49.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po50.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po51.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po52.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "25" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po53.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po54.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po55.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po56.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po57.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po58.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po59.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po60.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po61.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po62.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po63.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "156" begin = "3" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po64.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po65.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po66.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po67.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po68.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po69.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po70.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po71.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po72.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po73.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po74.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po75.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po76.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po77.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "164" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po78.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po79.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po80.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po81.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po82.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po83.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po84.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "165" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po85.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po86.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po87.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po88.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po89.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po90.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po91.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "166" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po92.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po93.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po94.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po95.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po96.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po97.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po98.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "167" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po99.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po100.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po101.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po102.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po103.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "why/hd_snoob.why" line = "2914" begin = "52" end = "53"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po104.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "why/hd_snoob.why" line = "2914" begin = "52" end = "53"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po105.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po106.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po107.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po108.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po109.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "168" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po110.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
+      <explain kind = "Post"/>
     </goal>
     <goal why_file="why/hd_snoob_po111.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po112.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po113.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po114.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po115.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po116.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "169" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po117.why">
-      <location file = "why/hd_snoob.why" line = "2893" begin = "52" end = "53"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po118.why">
-      <location file = "why/hd_snoob.why" line = "2893" begin = "52" end = "53"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po119.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po120.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po121.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po122.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po123.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po124.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po125.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "139" begin = "4" end = "8"/>
       <explain kind = "Post"/>
     </goal>

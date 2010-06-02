@@ -50,8 +50,10 @@ behavior default:
          {  
             {  (if (i > 0) then () else 
                (goto while_0_break));
-               (if (i >= c) then (C_8 : (i = (C_7 : ((C_6 : (i - c)) :> int32)))) else 
-               (C_5 : (i = (C_4 : ((C_3 : (i - 1)) :> int32)))))
+               
+               {  (if (i >= c) then (C_8 : (i = (C_7 : ((C_6 : (i - c)) :> int32)))) else 
+                  (C_5 : (i = (C_4 : ((C_3 : (i - 1)) :> int32)))))
+               }
             }
          };
          (while_0_break : ())

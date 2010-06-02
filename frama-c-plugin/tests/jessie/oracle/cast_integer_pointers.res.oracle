@@ -459,7 +459,9 @@ behavior default:
          {  
             {  (if (i < 10) then () else 
                (goto while_0_break));
-               (C_16 : ((C_15 : (C_14 : (cur + i)).int_M) = 0));
+               
+               {  (C_16 : ((C_15 : (C_14 : (cur + i)).int_M) = 0))
+               };
                (C_19 : (i = (C_18 : ((C_17 : (i + 1)) :> int32))))
             }
          };
@@ -3061,24 +3063,23 @@ let init_uint_through_int_ensures_default =
                  else
                   (let jessie_37 = (raise (Goto_while_0_break_exc void)) in
                   void));
+                (let jessie_41 =
                 (C_16:
+                (let jessie_39 = (safe_int32_of_integer_ (0)) in
+                (let jessie_40 =
+                (C_14: ((shift !cur) (integer_of_int32 !i_27))) in
+                (let jessie_39 = (bitvector_of_int32 jessie_39) in
                 begin
-                  (let jessie_41 =
-                  (let jessie_39 = (safe_int32_of_integer_ (0)) in
-                  (let jessie_40 =
-                  (C_14: ((shift !cur) (integer_of_int32 !i_27))) in
-                  (let jessie_39 = (bitvector_of_int32 jessie_39) in
-                  (((((safe_upd_bytes_ bitvector_uarr_21) jessie_40) (0)) (4)) jessie_39)))) in
-                  void);
-                 (C_19:
-                 begin
-                   (i_27 := (C_18:
-                            (safe_int32_of_integer_ (C_17:
-                                                    ((add_int (integer_of_int32 !i_27)) (1))))));
-                  !i_27 end) end) end in void);
-              (raise (Loop_continue_exc void)) end in void) with
-             Loop_continue_exc jessie_3 -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
+                  (((((safe_upd_bytes_ bitvector_uarr_21) jessie_40) (0)) (4)) jessie_39);
+                 jessie_39 end)))) in void);
+                (C_19:
+                begin
+                  (i_27 := (C_18:
+                           (safe_int32_of_integer_ (C_17:
+                                                   ((add_int (integer_of_int32 !i_27)) (1))))));
+                 !i_27 end) end in void); (raise (Loop_continue_exc void))
+             end in void) with Loop_continue_exc jessie_3 -> void end end
+          done); (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (raise Return) end) end))); (raise Return) end with Return -> void end)
   { (JC_24: true) }
@@ -3120,26 +3121,25 @@ let init_uint_through_int_safety =
                  else
                   (let jessie_24 = (raise (Goto_while_0_break_exc void)) in
                   void));
+                (let jessie_28 =
                 (C_16:
+                (let jessie_26 = (safe_int32_of_integer_ (0)) in
+                (let jessie_27 =
+                (C_14: ((shift !cur) (integer_of_int32 !i_27))) in
+                (let jessie_26 = (bitvector_of_int32 jessie_26) in
                 begin
-                  (let jessie_28 =
-                  (let jessie_26 = (safe_int32_of_integer_ (0)) in
-                  (let jessie_27 =
-                  (C_14: ((shift !cur) (integer_of_int32 !i_27))) in
-                  (let jessie_26 = (bitvector_of_int32 jessie_26) in
                   (JC_32:
-                  ((((((upd_bytes_ bitvector_uarr_21_alloc_table) bitvector_uarr_21) jessie_27) (0)) (4)) jessie_26))))) in
-                  void);
-                 (C_19:
-                 begin
-                   (i_27 := (C_18:
-                            (JC_33:
-                            (int32_of_integer_ (C_17:
-                                               ((add_int (integer_of_int32 !i_27)) (1)))))));
-                  !i_27 end) end) end in void);
-              (raise (Loop_continue_exc void)) end in void) with
-             Loop_continue_exc jessie_3 -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
+                  ((((((upd_bytes_ bitvector_uarr_21_alloc_table) bitvector_uarr_21) jessie_27) (0)) (4)) jessie_26));
+                 jessie_26 end)))) in void);
+                (C_19:
+                begin
+                  (i_27 := (C_18:
+                           (JC_33:
+                           (int32_of_integer_ (C_17:
+                                              ((add_int (integer_of_int32 !i_27)) (1)))))));
+                 !i_27 end) end in void); (raise (Loop_continue_exc void))
+             end in void) with Loop_continue_exc jessie_3 -> void end end
+          done); (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (raise Return) end) end))); (raise Return) end with Return -> void end)
   { true }
@@ -3380,12 +3380,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/cast_integer_pointers_po11.why">
-      <location file = "PPCHOME/tests/jessie/cast_integer_pointers.jessie/cast_integer_pointers.jc" line = "455" begin = "24" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/cast_integer_pointers.jessie/cast_integer_pointers.jc" line = "456" begin = "27" end = "64"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_integer_pointers_po12.why">
-      <location file = "PPCHOME/tests/jessie/cast_integer_pointers.jessie/cast_integer_pointers.jc" line = "455" begin = "24" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/cast_integer_pointers.jessie/cast_integer_pointers.jc" line = "456" begin = "27" end = "64"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -3400,11 +3400,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/cast_integer_pointers_po15.why">
-      <location file = "why/cast_integer_pointers.why" line = "2585" begin = "45" end = "46"/>
+      <location file = "why/cast_integer_pointers.why" line = "2584" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/cast_integer_pointers_po16.why">
-      <location file = "why/cast_integer_pointers.why" line = "2585" begin = "45" end = "46"/>
+      <location file = "why/cast_integer_pointers.why" line = "2584" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

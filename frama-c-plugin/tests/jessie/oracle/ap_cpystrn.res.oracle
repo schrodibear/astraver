@@ -414,15 +414,18 @@ behavior default:
             {  (if ((C_5 : (i :> uint32)) <
                      (C_4 : ((C_3 : (dst_size - 1)) :> uint32))) then () else 
                (goto while_0_break));
-               (C_10 : ((C_9 : (C_8 : (dst + i)).char_M) = (C_7 : (C_6 : 
-                                                                  (src +
-                                                                    i)).char_M)));
-               (if ((C_15 : ((C_14 : (C_13 : (src + i)).char_M) :> int32)) ==
-                     0) then 
-               {  (C_12 : (__retres = (C_11 : (dst + i))));
-                  
-                  (goto return_label)
-               } else ());
+               
+               {  (C_10 : ((C_9 : (C_8 : (dst + i)).char_M) = (C_7 : 
+                                                              (C_6 : 
+                                                              (src +
+                                                                i)).char_M)));
+                  (if ((C_15 : ((C_14 : (C_13 : (src + i)).char_M) :> int32)) ==
+                        0) then 
+                  {  (C_12 : (__retres = (C_11 : (dst + i))));
+                     
+                     (goto return_label)
+                  } else ())
+               };
                (C_18 : (i = (C_17 : ((C_16 : (i + 1)) :> int32))))
             }
          };
@@ -1976,16 +1979,15 @@ let ap_cpystrn_ensures_default =
                      (__retres := (C_11:
                                   ((shift dst) (integer_of_int32 !i_27)))) in
                      void); (raise (Return_label_exc void)) end) in void)
-                  else void);
-                  (C_18:
-                  begin
-                    (i_27 := (C_17:
-                             (safe_int32_of_integer_ (C_16:
-                                                     ((add_int (integer_of_int32 !i_27)) (1))))));
-                   !i_27 end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_4 -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end in void) with
+                  else void) end);
+                 (C_18:
+                 begin
+                   (i_27 := (C_17:
+                            (safe_int32_of_integer_ (C_16:
+                                                    ((add_int (integer_of_int32 !i_27)) (1))))));
+                  !i_27 end) end in void); (raise (Loop_continue_exc void))
+              end in void) with Loop_continue_exc jessie_4 -> void end end
+           done); (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
         (C_21:
         begin
@@ -2080,17 +2082,16 @@ let ap_cpystrn_safety =
                      (__retres := (C_11:
                                   ((shift dst) (integer_of_int32 !i_27)))) in
                      void); (raise (Return_label_exc void)) end) in void)
-                  else void);
-                  (C_18:
-                  begin
-                    (i_27 := (C_17:
-                             (JC_18:
-                             (int32_of_integer_ (C_16:
-                                                ((add_int (integer_of_int32 !i_27)) (1)))))));
-                   !i_27 end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_4 -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end in void) with
+                  else void) end);
+                 (C_18:
+                 begin
+                   (i_27 := (C_17:
+                            (JC_18:
+                            (int32_of_integer_ (C_16:
+                                               ((add_int (integer_of_int32 !i_27)) (1)))))));
+                  !i_27 end) end in void); (raise (Loop_continue_exc void))
+              end in void) with Loop_continue_exc jessie_4 -> void end end
+           done); (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
         (C_21:
         begin
@@ -2149,12 +2150,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po7.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "411" begin = "24" end = "226"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "412" begin = "27" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po8.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "411" begin = "24" end = "226"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "412" begin = "27" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2189,20 +2190,20 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po15.why">
-      <location file = "why/ap_cpystrn.why" line = "1596" begin = "46" end = "47"/>
+      <location file = "why/ap_cpystrn.why" line = "1595" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po16.why">
-      <location file = "why/ap_cpystrn.why" line = "1596" begin = "46" end = "47"/>
+      <location file = "why/ap_cpystrn.why" line = "1595" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po17.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "425" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "428" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po18.why">
-      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "425" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/ap_cpystrn.jessie/ap_cpystrn.jc" line = "428" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

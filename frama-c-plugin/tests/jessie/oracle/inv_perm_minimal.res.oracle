@@ -97,10 +97,12 @@ behavior default:
                                                                 n))))))));
                         while (true)
                         {  
-                           {  (C_30 : ((C_29 : (C_28 : (t + m)).int_M) = j));
-                              (C_33 : (j = (C_32 : ((C_31 : (- m)) :> int32))));
-                              (C_34 : (m = i));
-                              (C_37 : (i = (C_36 : (C_35 : (t + m)).int_M)));
+                           {  
+                              {  (C_30 : ((C_29 : (C_28 : (t + m)).int_M) = j));
+                                 (C_33 : (j = (C_32 : ((C_31 : (- m)) :> int32))));
+                                 (C_34 : (m = i));
+                                 (C_37 : (i = (C_36 : (C_35 : (t + m)).int_M)))
+                              };
                               (if (i > 0) then () else 
                               (goto while_1_break))
                            }
@@ -660,6 +662,7 @@ let safety_ensures_default =
                         try
                          (let jessie_60 =
                          begin
+                           (let jessie_58 =
                            (C_30:
                            begin
                              (let jessie_52 =
@@ -681,18 +684,15 @@ let safety_ensures_default =
                                (let jessie_56 = (m := !i) in void);
                               (C_37:
                               begin
-                                (let jessie_58 =
                                 (i := (C_36:
                                       ((safe_acc_ !int_P_int_M_t_1) (C_35:
                                                                     ((shift t) 
-                                                                    (integer_of_int32 !m)))))) in
-                                void);
-                               (if ((gt_int_ (integer_of_int32 !i)) (0))
-                               then void
-                               else
-                                (let jessie_59 =
-                                (raise (Goto_while_1_break_exc void)) in
-                                void)) end) end) end) end);
+                                                                    (integer_of_int32 !m))))));
+                               !i end) end) end) end) in void);
+                          (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
+                          else
+                           (let jessie_59 =
+                           (raise (Goto_while_1_break_exc void)) in void));
                           (raise (Loop_continue_exc void)) end in void) with
                          Loop_continue_exc jessie_4 -> void end end done);
                      (raise (Goto_while_1_break_exc void)) end in void) with
@@ -865,6 +865,7 @@ let safety_safety =
                         try
                          (let jessie_26 =
                          begin
+                           (let jessie_24 =
                            (C_30:
                            begin
                              (let jessie_18 =
@@ -889,17 +890,15 @@ let safety_safety =
                                (let jessie_22 = (m := !i) in void);
                               (C_37:
                               begin
-                                (let jessie_24 =
                                 (i := (C_36:
                                       (JC_40:
                                       ((((offset_acc_ int_P_t_1_alloc_table) !int_P_int_M_t_1) t) 
-                                       (integer_of_int32 !m))))) in void);
-                               (if ((gt_int_ (integer_of_int32 !i)) (0))
-                               then void
-                               else
-                                (let jessie_25 =
-                                (raise (Goto_while_1_break_exc void)) in
-                                void)) end) end) end) end);
+                                       (integer_of_int32 !m))))); !i end) end)
+                            end) end) in void);
+                          (if ((gt_int_ (integer_of_int32 !i)) (0)) then void
+                          else
+                           (let jessie_25 =
+                           (raise (Goto_while_1_break_exc void)) in void));
                           (raise (Loop_continue_exc void)) end in void) with
                          Loop_continue_exc jessie_4 -> void end end done);
                      (raise (Goto_while_1_break_exc void)) end in void) with
@@ -954,12 +953,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po26.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "94" begin = "39" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "95" begin = "42" end = "77"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po27.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "94" begin = "39" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "95" begin = "42" end = "77"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -984,11 +983,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po32.why">
-      <location file = "why/inv_perm_minimal.why" line = "691" begin = "57" end = "58"/>
+      <location file = "why/inv_perm_minimal.why" line = "689" begin = "57" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po33.why">
-      <location file = "why/inv_perm_minimal.why" line = "691" begin = "57" end = "58"/>
+      <location file = "why/inv_perm_minimal.why" line = "689" begin = "57" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po34.why">
@@ -1002,12 +1001,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po36.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "106" begin = "27" end = "219"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "108" begin = "27" end = "219"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po37.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "106" begin = "27" end = "219"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "108" begin = "27" end = "219"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1022,11 +1021,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po40.why">
-      <location file = "why/inv_perm_minimal.why" line = "638" begin = "45" end = "46"/>
+      <location file = "why/inv_perm_minimal.why" line = "636" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po41.why">
-      <location file = "why/inv_perm_minimal.why" line = "638" begin = "45" end = "46"/>
+      <location file = "why/inv_perm_minimal.why" line = "636" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

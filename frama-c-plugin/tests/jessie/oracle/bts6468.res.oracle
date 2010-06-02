@@ -57,7 +57,9 @@ behavior default:
          {  
             {  (if ((C_2 : dest.char_M) != 0) then () else 
                (goto while_0_break));
-               (C_4 : (dest = (C_3 : (dest + 1))))
+               
+               {  (C_4 : (dest = (C_3 : (dest + 1))))
+               }
             }
          };
          (while_0_break : ())
@@ -735,12 +737,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts6468_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "74" begin = "27" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "76" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts6468_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "74" begin = "27" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "76" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -46,9 +46,11 @@ behavior default:
          {  
             {  (if ((C_3 : source.char_M) != 0) then () else 
                (goto while_0_break));
-               (C_6 : ((C_5 : pointeur.char_M) = (C_4 : source.char_M)));
-               (C_8 : (pointeur = (C_7 : (pointeur + 1))));
-               (C_10 : (source = (C_9 : (source + 1))))
+               
+               {  (C_6 : ((C_5 : pointeur.char_M) = (C_4 : source.char_M)));
+                  (C_8 : (pointeur = (C_7 : (pointeur + 1))));
+                  (C_10 : (source = (C_9 : (source + 1))))
+               }
             }
          };
          (while_0_break : ())
@@ -470,12 +472,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po5.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "43" begin = "23" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "44" begin = "26" end = "73"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po6.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "43" begin = "23" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "44" begin = "26" end = "73"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -488,12 +490,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/StrCpy_po9.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "50" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "52" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po10.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "50" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "52" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

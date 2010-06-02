@@ -56,9 +56,7 @@ behavior two:
                (assert for one: (C_2 : (x == 1)));
                ()
             };
-            
-            {  (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))))
-            }
+            (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))))
          } else ())
       };
       

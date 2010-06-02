@@ -54,7 +54,9 @@ behavior default:
          {  
             {  (if true then () else 
                (goto while_0_break));
-               (C_3 : ((C_2 : p.int_M) = 3))
+               
+               {  (C_3 : ((C_2 : p.int_M) = 3))
+               }
             }
          };
          (while_0_break : ())
@@ -554,12 +556,12 @@ why --project [...] why/bts0103.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0103_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "51" begin = "23" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "52" begin = "26" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0103_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "51" begin = "23" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "52" begin = "26" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -574,11 +576,11 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0103_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "46" begin = "9" end = "195"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "46" begin = "9" end = "231"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0103_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "46" begin = "9" end = "195"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "46" begin = "9" end = "231"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0103_po3.why">

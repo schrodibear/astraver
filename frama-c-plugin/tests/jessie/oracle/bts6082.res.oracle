@@ -259,58 +259,60 @@ behavior j:
   ensures (C_110 : (rr < 5001));
 {  
    {  (C_3 : (rr = (C_2 : ((C_1 : (rr + 1)) :> int32))));
-      (C_4 : (buch_CurOperation = 3));
-      (C_5 : (buch_CurOpStatus = 1));
-      (C_8 : ((C_7 : (buch_CurStates_old + 6).int_M) = (C_6 : (buch_CurStates +
-                                                                6).int_M)));
-      (C_11 : ((C_10 : (buch_CurStates_old + 5).int_M) = (C_9 : (buch_CurStates +
-                                                                  5).int_M)));
-      (C_14 : ((C_13 : (buch_CurStates_old + 0).int_M) = (C_12 : (buch_CurStates +
-                                                                   0).int_M)));
-      (C_17 : ((C_16 : (buch_CurStates_old + 4).int_M) = (C_15 : (buch_CurStates +
-                                                                   4).int_M)));
-      (C_20 : ((C_19 : (buch_CurStates_old + 3).int_M) = (C_18 : (buch_CurStates +
-                                                                   3).int_M)));
-      (C_23 : ((C_22 : (buch_CurStates_old + 2).int_M) = (C_21 : (buch_CurStates +
-                                                                   2).int_M)));
-      (C_26 : ((C_25 : (buch_CurStates_old + 1).int_M) = (C_24 : (buch_CurStates +
-                                                                   1).int_M)));
-      (C_29 : ((C_28 : (buch_CurStates + 6).int_M) = (C_27 : (buch_CurStates_old +
-                                                               6).int_M)));
-      (C_31 : ((C_30 : (buch_CurStates + 5).int_M) = 0));
-      (C_33 : ((C_32 : (buch_CurStates + 0).int_M) = 0));
-      (C_36 : ((C_35 : (buch_CurStates + 4).int_M) = (C_34 : (buch_CurStates_old +
-                                                               3).int_M)));
-      (C_39 : ((C_38 : (buch_CurStates + 3).int_M) = (C_37 : (buch_CurStates_old +
-                                                               2).int_M)));
-      (C_41 : ((C_40 : (buch_CurStates + 2).int_M) = 0));
-      (C_43 : ((C_42 : (buch_CurStates + 1).int_M) = 0));
-      (C_45 : ((C_44 : (buch_CurTrans + 0).int_M) = 0));
-      (C_47 : ((C_46 : (buch_CurTrans + 1).int_M) = 0));
-      (C_50 : ((C_49 : (buch_CurTrans + 2).int_M) = (C_48 : (buch_CurStates_old +
-                                                              2).int_M)));
-      (C_53 : ((C_52 : (buch_CurTrans + 3).int_M) = (C_51 : (buch_CurStates_old +
-                                                              3).int_M)));
-      (C_55 : ((C_54 : (buch_CurTrans + 4).int_M) = 0));
-      (C_57 : ((C_56 : (buch_CurTrans + 5).int_M) = 0));
-      (C_60 : ((C_59 : (buch_CurTrans + 6).int_M) = (C_58 : (buch_CurStates_old +
-                                                              6).int_M)));
-      (C_63 : ((C_62 : (buch_CurTrans_tmp + 0).int_M) = (C_61 : (buch_CurTrans +
-                                                                  0).int_M)));
-      (C_66 : ((C_65 : (buch_CurTrans_tmp + 1).int_M) = (C_64 : (buch_CurTrans +
-                                                                  1).int_M)));
-      (C_69 : ((C_68 : (buch_CurTrans_tmp + 2).int_M) = (C_67 : (buch_CurTrans +
-                                                                  2).int_M)));
-      (C_72 : ((C_71 : (buch_CurTrans_tmp + 3).int_M) = (C_70 : (buch_CurTrans +
-                                                                  3).int_M)));
-      (C_75 : ((C_74 : (buch_CurTrans_tmp + 4).int_M) = (C_73 : (buch_CurTrans +
-                                                                  4).int_M)));
-      (C_78 : ((C_77 : (buch_CurTrans_tmp + 5).int_M) = (C_76 : (buch_CurTrans +
-                                                                  5).int_M)));
-      (C_81 : ((C_80 : (buch_CurTrans_tmp + 6).int_M) = (C_79 : (buch_CurTrans +
-                                                                  6).int_M)));
       
-      (return ())
+      {  (C_4 : (buch_CurOperation = 3));
+         (C_5 : (buch_CurOpStatus = 1));
+         (C_8 : ((C_7 : (buch_CurStates_old + 6).int_M) = (C_6 : (buch_CurStates +
+                                                                   6).int_M)));
+         (C_11 : ((C_10 : (buch_CurStates_old + 5).int_M) = (C_9 : (buch_CurStates +
+                                                                    5).int_M)));
+         (C_14 : ((C_13 : (buch_CurStates_old + 0).int_M) = (C_12 : (buch_CurStates +
+                                                                    0).int_M)));
+         (C_17 : ((C_16 : (buch_CurStates_old + 4).int_M) = (C_15 : (buch_CurStates +
+                                                                    4).int_M)));
+         (C_20 : ((C_19 : (buch_CurStates_old + 3).int_M) = (C_18 : (buch_CurStates +
+                                                                    3).int_M)));
+         (C_23 : ((C_22 : (buch_CurStates_old + 2).int_M) = (C_21 : (buch_CurStates +
+                                                                    2).int_M)));
+         (C_26 : ((C_25 : (buch_CurStates_old + 1).int_M) = (C_24 : (buch_CurStates +
+                                                                    1).int_M)));
+         (C_29 : ((C_28 : (buch_CurStates + 6).int_M) = (C_27 : (buch_CurStates_old +
+                                                                  6).int_M)));
+         (C_31 : ((C_30 : (buch_CurStates + 5).int_M) = 0));
+         (C_33 : ((C_32 : (buch_CurStates + 0).int_M) = 0));
+         (C_36 : ((C_35 : (buch_CurStates + 4).int_M) = (C_34 : (buch_CurStates_old +
+                                                                  3).int_M)));
+         (C_39 : ((C_38 : (buch_CurStates + 3).int_M) = (C_37 : (buch_CurStates_old +
+                                                                  2).int_M)));
+         (C_41 : ((C_40 : (buch_CurStates + 2).int_M) = 0));
+         (C_43 : ((C_42 : (buch_CurStates + 1).int_M) = 0));
+         (C_45 : ((C_44 : (buch_CurTrans + 0).int_M) = 0));
+         (C_47 : ((C_46 : (buch_CurTrans + 1).int_M) = 0));
+         (C_50 : ((C_49 : (buch_CurTrans + 2).int_M) = (C_48 : (buch_CurStates_old +
+                                                                 2).int_M)));
+         (C_53 : ((C_52 : (buch_CurTrans + 3).int_M) = (C_51 : (buch_CurStates_old +
+                                                                 3).int_M)));
+         (C_55 : ((C_54 : (buch_CurTrans + 4).int_M) = 0));
+         (C_57 : ((C_56 : (buch_CurTrans + 5).int_M) = 0));
+         (C_60 : ((C_59 : (buch_CurTrans + 6).int_M) = (C_58 : (buch_CurStates_old +
+                                                                 6).int_M)));
+         (C_63 : ((C_62 : (buch_CurTrans_tmp + 0).int_M) = (C_61 : (buch_CurTrans +
+                                                                    0).int_M)));
+         (C_66 : ((C_65 : (buch_CurTrans_tmp + 1).int_M) = (C_64 : (buch_CurTrans +
+                                                                    1).int_M)));
+         (C_69 : ((C_68 : (buch_CurTrans_tmp + 2).int_M) = (C_67 : (buch_CurTrans +
+                                                                    2).int_M)));
+         (C_72 : ((C_71 : (buch_CurTrans_tmp + 3).int_M) = (C_70 : (buch_CurTrans +
+                                                                    3).int_M)));
+         (C_75 : ((C_74 : (buch_CurTrans_tmp + 4).int_M) = (C_73 : (buch_CurTrans +
+                                                                    4).int_M)));
+         (C_78 : ((C_77 : (buch_CurTrans_tmp + 5).int_M) = (C_76 : (buch_CurTrans +
+                                                                    5).int_M)));
+         (C_81 : ((C_80 : (buch_CurTrans_tmp + 6).int_M) = (C_79 : (buch_CurTrans +
+                                                                    6).int_M)));
+         
+         (return ())
+      }
    }
 }
 
@@ -349,58 +351,74 @@ behavior Buchi_property_behavior_4:
                          (C_242 : (0 != (buch_CurStates + 5).int_M))))));
 {  
    {  (C_136 : (status = 1));
-      (C_137 : (buch_CurOperation = 2));
-      (C_138 : (buch_CurOpStatus = 1));
-      (C_141 : ((C_140 : (buch_CurStates_old + 6).int_M) = (C_139 : (buch_CurStates +
-                                                                    6).int_M)));
-      (C_144 : ((C_143 : (buch_CurStates_old + 5).int_M) = (C_142 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_147 : ((C_146 : (buch_CurStates_old + 0).int_M) = (C_145 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_150 : ((C_149 : (buch_CurStates_old + 4).int_M) = (C_148 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_153 : ((C_152 : (buch_CurStates_old + 3).int_M) = (C_151 : (buch_CurStates +
-                                                                    3).int_M)));
-      (C_156 : ((C_155 : (buch_CurStates_old + 2).int_M) = (C_154 : (buch_CurStates +
-                                                                    2).int_M)));
-      (C_159 : ((C_158 : (buch_CurStates_old + 1).int_M) = (C_157 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_162 : ((C_161 : (buch_CurStates + 6).int_M) = (C_160 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_165 : ((C_164 : (buch_CurStates + 5).int_M) = (C_163 : (buch_CurStates_old +
-                                                                  4).int_M)));
-      (C_167 : ((C_166 : (buch_CurStates + 0).int_M) = 0));
-      (C_170 : ((C_169 : (buch_CurStates + 4).int_M) = (C_168 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_172 : ((C_171 : (buch_CurStates + 3).int_M) = 0));
-      (C_174 : ((C_173 : (buch_CurStates + 2).int_M) = 0));
-      (C_176 : ((C_175 : (buch_CurStates + 1).int_M) = 0));
-      (C_178 : ((C_177 : (buch_CurTrans + 0).int_M) = 0));
-      (C_180 : ((C_179 : (buch_CurTrans + 1).int_M) = 0));
-      (C_182 : ((C_181 : (buch_CurTrans + 2).int_M) = 0));
-      (C_185 : ((C_184 : (buch_CurTrans + 3).int_M) = (C_183 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_188 : ((C_187 : (buch_CurTrans + 4).int_M) = (C_186 : (buch_CurStates_old +
-                                                                 4).int_M)));
-      (C_190 : ((C_189 : (buch_CurTrans + 5).int_M) = 0));
-      (C_193 : ((C_192 : (buch_CurTrans + 6).int_M) = (C_191 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_196 : ((C_195 : (buch_CurTrans_tmp + 0).int_M) = (C_194 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_199 : ((C_198 : (buch_CurTrans_tmp + 1).int_M) = (C_197 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_202 : ((C_201 : (buch_CurTrans_tmp + 2).int_M) = (C_200 : (buch_CurTrans +
-                                                                    2).int_M)));
-      (C_205 : ((C_204 : (buch_CurTrans_tmp + 3).int_M) = (C_203 : (buch_CurTrans +
-                                                                    3).int_M)));
-      (C_208 : ((C_207 : (buch_CurTrans_tmp + 4).int_M) = (C_206 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_211 : ((C_210 : (buch_CurTrans_tmp + 5).int_M) = (C_209 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_214 : ((C_213 : (buch_CurTrans_tmp + 6).int_M) = (C_212 : (buch_CurTrans +
-                                                                    6).int_M)));
       
-      (return ())
+      {  (C_137 : (buch_CurOperation = 2));
+         (C_138 : (buch_CurOpStatus = 1));
+         (C_141 : ((C_140 : (buch_CurStates_old + 6).int_M) = (C_139 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_144 : ((C_143 : (buch_CurStates_old + 5).int_M) = (C_142 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_147 : ((C_146 : (buch_CurStates_old + 0).int_M) = (C_145 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_150 : ((C_149 : (buch_CurStates_old + 4).int_M) = (C_148 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_153 : ((C_152 : (buch_CurStates_old + 3).int_M) = (C_151 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_156 : ((C_155 : (buch_CurStates_old + 2).int_M) = (C_154 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_159 : ((C_158 : (buch_CurStates_old + 1).int_M) = (C_157 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_162 : ((C_161 : (buch_CurStates + 6).int_M) = (C_160 : (buch_CurStates_old +
+                                                                    6).int_M)));
+         (C_165 : ((C_164 : (buch_CurStates + 5).int_M) = (C_163 : (buch_CurStates_old +
+                                                                    4).int_M)));
+         (C_167 : ((C_166 : (buch_CurStates + 0).int_M) = 0));
+         (C_170 : ((C_169 : (buch_CurStates + 4).int_M) = (C_168 : (buch_CurStates_old +
+                                                                    3).int_M)));
+         (C_172 : ((C_171 : (buch_CurStates + 3).int_M) = 0));
+         (C_174 : ((C_173 : (buch_CurStates + 2).int_M) = 0));
+         (C_176 : ((C_175 : (buch_CurStates + 1).int_M) = 0));
+         (C_178 : ((C_177 : (buch_CurTrans + 0).int_M) = 0));
+         (C_180 : ((C_179 : (buch_CurTrans + 1).int_M) = 0));
+         (C_182 : ((C_181 : (buch_CurTrans + 2).int_M) = 0));
+         (C_185 : ((C_184 : (buch_CurTrans + 3).int_M) = (C_183 : (buch_CurStates_old +
+                                                                    3).int_M)));
+         (C_188 : ((C_187 : (buch_CurTrans + 4).int_M) = (C_186 : (buch_CurStates_old +
+                                                                    4).int_M)));
+         (C_190 : ((C_189 : (buch_CurTrans + 5).int_M) = 0));
+         (C_193 : ((C_192 : (buch_CurTrans + 6).int_M) = (C_191 : (buch_CurStates_old +
+                                                                    6).int_M)));
+         (C_196 : ((C_195 : (buch_CurTrans_tmp + 0).int_M) = (C_194 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_199 : ((C_198 : (buch_CurTrans_tmp + 1).int_M) = (C_197 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_202 : ((C_201 : (buch_CurTrans_tmp + 2).int_M) = (C_200 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_205 : ((C_204 : (buch_CurTrans_tmp + 3).int_M) = (C_203 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_208 : ((C_207 : (buch_CurTrans_tmp + 4).int_M) = (C_206 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_211 : ((C_210 : (buch_CurTrans_tmp + 5).int_M) = (C_209 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_214 : ((C_213 : (buch_CurTrans_tmp + 6).int_M) = (C_212 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         
+         (return ())
+      }
    }
 }
 
@@ -425,58 +443,74 @@ behavior default:
   ensures (C_346 : true);
 {  
    {  (C_267 : (rr = 60000));
-      (C_268 : (buch_CurOperation = 1));
-      (C_269 : (buch_CurOpStatus = 1));
-      (C_272 : ((C_271 : (buch_CurStates_old + 6).int_M) = (C_270 : (buch_CurStates +
-                                                                    6).int_M)));
-      (C_275 : ((C_274 : (buch_CurStates_old + 5).int_M) = (C_273 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_278 : ((C_277 : (buch_CurStates_old + 0).int_M) = (C_276 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_281 : ((C_280 : (buch_CurStates_old + 4).int_M) = (C_279 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_284 : ((C_283 : (buch_CurStates_old + 3).int_M) = (C_282 : (buch_CurStates +
-                                                                    3).int_M)));
-      (C_287 : ((C_286 : (buch_CurStates_old + 2).int_M) = (C_285 : (buch_CurStates +
-                                                                    2).int_M)));
-      (C_290 : ((C_289 : (buch_CurStates_old + 1).int_M) = (C_288 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_293 : ((C_292 : (buch_CurStates + 6).int_M) = (C_291 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_295 : ((C_294 : (buch_CurStates + 5).int_M) = 0));
-      (C_297 : ((C_296 : (buch_CurStates + 0).int_M) = 0));
-      (C_300 : ((C_299 : (buch_CurStates + 4).int_M) = (C_298 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_303 : ((C_302 : (buch_CurStates + 3).int_M) = (C_301 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_305 : ((C_304 : (buch_CurStates + 2).int_M) = 0));
-      (C_307 : ((C_306 : (buch_CurStates + 1).int_M) = 0));
-      (C_309 : ((C_308 : (buch_CurTrans + 0).int_M) = 0));
-      (C_311 : ((C_310 : (buch_CurTrans + 1).int_M) = 0));
-      (C_314 : ((C_313 : (buch_CurTrans + 2).int_M) = (C_312 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_317 : ((C_316 : (buch_CurTrans + 3).int_M) = (C_315 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_319 : ((C_318 : (buch_CurTrans + 4).int_M) = 0));
-      (C_321 : ((C_320 : (buch_CurTrans + 5).int_M) = 0));
-      (C_324 : ((C_323 : (buch_CurTrans + 6).int_M) = (C_322 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_327 : ((C_326 : (buch_CurTrans_tmp + 0).int_M) = (C_325 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_330 : ((C_329 : (buch_CurTrans_tmp + 1).int_M) = (C_328 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_333 : ((C_332 : (buch_CurTrans_tmp + 2).int_M) = (C_331 : (buch_CurTrans +
-                                                                    2).int_M)));
-      (C_336 : ((C_335 : (buch_CurTrans_tmp + 3).int_M) = (C_334 : (buch_CurTrans +
-                                                                    3).int_M)));
-      (C_339 : ((C_338 : (buch_CurTrans_tmp + 4).int_M) = (C_337 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_342 : ((C_341 : (buch_CurTrans_tmp + 5).int_M) = (C_340 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_345 : ((C_344 : (buch_CurTrans_tmp + 6).int_M) = (C_343 : (buch_CurTrans +
-                                                                    6).int_M)));
       
-      (return ())
+      {  (C_268 : (buch_CurOperation = 1));
+         (C_269 : (buch_CurOpStatus = 1));
+         (C_272 : ((C_271 : (buch_CurStates_old + 6).int_M) = (C_270 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_275 : ((C_274 : (buch_CurStates_old + 5).int_M) = (C_273 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_278 : ((C_277 : (buch_CurStates_old + 0).int_M) = (C_276 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_281 : ((C_280 : (buch_CurStates_old + 4).int_M) = (C_279 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_284 : ((C_283 : (buch_CurStates_old + 3).int_M) = (C_282 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_287 : ((C_286 : (buch_CurStates_old + 2).int_M) = (C_285 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_290 : ((C_289 : (buch_CurStates_old + 1).int_M) = (C_288 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_293 : ((C_292 : (buch_CurStates + 6).int_M) = (C_291 : (buch_CurStates_old +
+                                                                    6).int_M)));
+         (C_295 : ((C_294 : (buch_CurStates + 5).int_M) = 0));
+         (C_297 : ((C_296 : (buch_CurStates + 0).int_M) = 0));
+         (C_300 : ((C_299 : (buch_CurStates + 4).int_M) = (C_298 : (buch_CurStates_old +
+                                                                    3).int_M)));
+         (C_303 : ((C_302 : (buch_CurStates + 3).int_M) = (C_301 : (buch_CurStates_old +
+                                                                    2).int_M)));
+         (C_305 : ((C_304 : (buch_CurStates + 2).int_M) = 0));
+         (C_307 : ((C_306 : (buch_CurStates + 1).int_M) = 0));
+         (C_309 : ((C_308 : (buch_CurTrans + 0).int_M) = 0));
+         (C_311 : ((C_310 : (buch_CurTrans + 1).int_M) = 0));
+         (C_314 : ((C_313 : (buch_CurTrans + 2).int_M) = (C_312 : (buch_CurStates_old +
+                                                                    2).int_M)));
+         (C_317 : ((C_316 : (buch_CurTrans + 3).int_M) = (C_315 : (buch_CurStates_old +
+                                                                    3).int_M)));
+         (C_319 : ((C_318 : (buch_CurTrans + 4).int_M) = 0));
+         (C_321 : ((C_320 : (buch_CurTrans + 5).int_M) = 0));
+         (C_324 : ((C_323 : (buch_CurTrans + 6).int_M) = (C_322 : (buch_CurStates_old +
+                                                                    6).int_M)));
+         (C_327 : ((C_326 : (buch_CurTrans_tmp + 0).int_M) = (C_325 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_330 : ((C_329 : (buch_CurTrans_tmp + 1).int_M) = (C_328 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_333 : ((C_332 : (buch_CurTrans_tmp + 2).int_M) = (C_331 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_336 : ((C_335 : (buch_CurTrans_tmp + 3).int_M) = (C_334 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_339 : ((C_338 : (buch_CurTrans_tmp + 4).int_M) = (C_337 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_342 : ((C_341 : (buch_CurTrans_tmp + 5).int_M) = (C_340 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_345 : ((C_344 : (buch_CurTrans_tmp + 6).int_M) = (C_343 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         
+         (return ())
+      }
    }
 }
 
@@ -520,333 +554,429 @@ behavior Buchi_property_behavior_1:
    
    {  (if (rr < 5000) then 
       (goto L) else ());
-      (C_375 : (buch_CurOperation = 1));
-      (C_376 : (buch_CurOpStatus = 0));
-      (C_379 : ((C_378 : (buch_CurStates_old + 6).int_M) = (C_377 : (buch_CurStates +
+      
+      {  (C_375 : (buch_CurOperation = 1));
+         (C_376 : (buch_CurOpStatus = 0));
+         (C_379 : ((C_378 : (buch_CurStates_old + 6).int_M) = (C_377 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_382 : ((C_381 : (buch_CurStates_old + 5).int_M) = (C_380 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_385 : ((C_384 : (buch_CurStates_old + 0).int_M) = (C_383 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_388 : ((C_387 : (buch_CurStates_old + 4).int_M) = (C_386 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_391 : ((C_390 : (buch_CurStates_old + 3).int_M) = (C_389 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_394 : ((C_393 : (buch_CurStates_old + 2).int_M) = (C_392 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_397 : ((C_396 : (buch_CurStates_old + 1).int_M) = (C_395 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_400 : ((C_399 : (buch_CurStates + 6).int_M) = (C_398 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_382 : ((C_381 : (buch_CurStates_old + 5).int_M) = (C_380 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_385 : ((C_384 : (buch_CurStates_old + 0).int_M) = (C_383 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_388 : ((C_387 : (buch_CurStates_old + 4).int_M) = (C_386 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_391 : ((C_390 : (buch_CurStates_old + 3).int_M) = (C_389 : (buch_CurStates +
+         (C_402 : ((C_401 : (buch_CurStates + 5).int_M) = 0));
+         (C_404 : ((C_403 : (buch_CurStates + 0).int_M) = 0));
+         (C_407 : ((C_406 : (buch_CurStates + 4).int_M) = (C_405 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_394 : ((C_393 : (buch_CurStates_old + 2).int_M) = (C_392 : (buch_CurStates +
+         (C_410 : ((C_409 : (buch_CurStates + 3).int_M) = (C_408 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_397 : ((C_396 : (buch_CurStates_old + 1).int_M) = (C_395 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_400 : ((C_399 : (buch_CurStates + 6).int_M) = (C_398 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_402 : ((C_401 : (buch_CurStates + 5).int_M) = 0));
-      (C_404 : ((C_403 : (buch_CurStates + 0).int_M) = 0));
-      (C_407 : ((C_406 : (buch_CurStates + 4).int_M) = (C_405 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_410 : ((C_409 : (buch_CurStates + 3).int_M) = (C_408 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_412 : ((C_411 : (buch_CurStates + 2).int_M) = 0));
-      (C_414 : ((C_413 : (buch_CurStates + 1).int_M) = 0));
-      (C_416 : ((C_415 : (buch_CurTrans + 0).int_M) = 0));
-      (C_418 : ((C_417 : (buch_CurTrans + 1).int_M) = 0));
-      (C_421 : ((C_420 : (buch_CurTrans + 2).int_M) = (C_419 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_424 : ((C_423 : (buch_CurTrans + 3).int_M) = (C_422 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_426 : ((C_425 : (buch_CurTrans + 4).int_M) = 0));
-      (C_428 : ((C_427 : (buch_CurTrans + 5).int_M) = 0));
-      (C_431 : ((C_430 : (buch_CurTrans + 6).int_M) = (C_429 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_434 : ((C_433 : (buch_CurTrans_tmp + 0).int_M) = (C_432 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_437 : ((C_436 : (buch_CurTrans_tmp + 1).int_M) = (C_435 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_440 : ((C_439 : (buch_CurTrans_tmp + 2).int_M) = (C_438 : (buch_CurTrans +
+         (C_412 : ((C_411 : (buch_CurStates + 2).int_M) = 0));
+         (C_414 : ((C_413 : (buch_CurStates + 1).int_M) = 0));
+         (C_416 : ((C_415 : (buch_CurTrans + 0).int_M) = 0));
+         (C_418 : ((C_417 : (buch_CurTrans + 1).int_M) = 0));
+         (C_421 : ((C_420 : (buch_CurTrans + 2).int_M) = (C_419 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_443 : ((C_442 : (buch_CurTrans_tmp + 3).int_M) = (C_441 : (buch_CurTrans +
+         (C_424 : ((C_423 : (buch_CurTrans + 3).int_M) = (C_422 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_446 : ((C_445 : (buch_CurTrans_tmp + 4).int_M) = (C_444 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_449 : ((C_448 : (buch_CurTrans_tmp + 5).int_M) = (C_447 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_452 : ((C_451 : (buch_CurTrans_tmp + 6).int_M) = (C_450 : (buch_CurTrans +
+         (C_426 : ((C_425 : (buch_CurTrans + 4).int_M) = 0));
+         (C_428 : ((C_427 : (buch_CurTrans + 5).int_M) = 0));
+         (C_431 : ((C_430 : (buch_CurTrans + 6).int_M) = (C_429 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_453 : opc());
+         (C_434 : ((C_433 : (buch_CurTrans_tmp + 0).int_M) = (C_432 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_437 : ((C_436 : (buch_CurTrans_tmp + 1).int_M) = (C_435 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_440 : ((C_439 : (buch_CurTrans_tmp + 2).int_M) = (C_438 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_443 : ((C_442 : (buch_CurTrans_tmp + 3).int_M) = (C_441 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_446 : ((C_445 : (buch_CurTrans_tmp + 4).int_M) = (C_444 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_449 : ((C_448 : (buch_CurTrans_tmp + 5).int_M) = (C_447 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_452 : ((C_451 : (buch_CurTrans_tmp + 6).int_M) = (C_450 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         (C_453 : opc())
+      };
       (L4 : 
       (goto L5));
       (L : ());
-      (C_454 : (buch_CurOperation = 3));
-      (C_455 : (buch_CurOpStatus = 0));
-      (C_458 : ((C_457 : (buch_CurStates_old + 6).int_M) = (C_456 : (buch_CurStates +
+      
+      {  (C_454 : (buch_CurOperation = 3));
+         (C_455 : (buch_CurOpStatus = 0));
+         (C_458 : ((C_457 : (buch_CurStates_old + 6).int_M) = (C_456 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_461 : ((C_460 : (buch_CurStates_old + 5).int_M) = (C_459 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_464 : ((C_463 : (buch_CurStates_old + 0).int_M) = (C_462 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_467 : ((C_466 : (buch_CurStates_old + 4).int_M) = (C_465 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_470 : ((C_469 : (buch_CurStates_old + 3).int_M) = (C_468 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_473 : ((C_472 : (buch_CurStates_old + 2).int_M) = (C_471 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_476 : ((C_475 : (buch_CurStates_old + 1).int_M) = (C_474 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_479 : ((C_478 : (buch_CurStates + 6).int_M) = (C_477 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_461 : ((C_460 : (buch_CurStates_old + 5).int_M) = (C_459 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_464 : ((C_463 : (buch_CurStates_old + 0).int_M) = (C_462 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_467 : ((C_466 : (buch_CurStates_old + 4).int_M) = (C_465 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_470 : ((C_469 : (buch_CurStates_old + 3).int_M) = (C_468 : (buch_CurStates +
-                                                                    3).int_M)));
-      (C_473 : ((C_472 : (buch_CurStates_old + 2).int_M) = (C_471 : (buch_CurStates +
+         (C_481 : ((C_480 : (buch_CurStates + 5).int_M) = 0));
+         (C_483 : ((C_482 : (buch_CurStates + 0).int_M) = 0));
+         (C_485 : ((C_484 : (buch_CurStates + 4).int_M) = 0));
+         (C_488 : ((C_487 : (buch_CurStates + 3).int_M) = (C_486 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_476 : ((C_475 : (buch_CurStates_old + 1).int_M) = (C_474 : (buch_CurStates +
+         (C_491 : ((C_490 : (buch_CurStates + 2).int_M) = (C_489 : (buch_CurStates_old +
                                                                     1).int_M)));
-      (C_479 : ((C_478 : (buch_CurStates + 6).int_M) = (C_477 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_481 : ((C_480 : (buch_CurStates + 5).int_M) = 0));
-      (C_483 : ((C_482 : (buch_CurStates + 0).int_M) = 0));
-      (C_485 : ((C_484 : (buch_CurStates + 4).int_M) = 0));
-      (C_488 : ((C_487 : (buch_CurStates + 3).int_M) = (C_486 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_491 : ((C_490 : (buch_CurStates + 2).int_M) = (C_489 : (buch_CurStates_old +
-                                                                  1).int_M)));
-      (C_493 : ((C_492 : (buch_CurStates + 1).int_M) = 0));
-      (C_495 : ((C_494 : (buch_CurTrans + 0).int_M) = 0));
-      (C_498 : ((C_497 : (buch_CurTrans + 1).int_M) = (C_496 : (buch_CurStates_old +
-                                                                 1).int_M)));
-      (C_501 : ((C_500 : (buch_CurTrans + 2).int_M) = (C_499 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_503 : ((C_502 : (buch_CurTrans + 3).int_M) = 0));
-      (C_505 : ((C_504 : (buch_CurTrans + 4).int_M) = 0));
-      (C_507 : ((C_506 : (buch_CurTrans + 5).int_M) = 0));
-      (C_510 : ((C_509 : (buch_CurTrans + 6).int_M) = (C_508 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_513 : ((C_512 : (buch_CurTrans_tmp + 0).int_M) = (C_511 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_516 : ((C_515 : (buch_CurTrans_tmp + 1).int_M) = (C_514 : (buch_CurTrans +
+         (C_493 : ((C_492 : (buch_CurStates + 1).int_M) = 0));
+         (C_495 : ((C_494 : (buch_CurTrans + 0).int_M) = 0));
+         (C_498 : ((C_497 : (buch_CurTrans + 1).int_M) = (C_496 : (buch_CurStates_old +
                                                                     1).int_M)));
-      (C_519 : ((C_518 : (buch_CurTrans_tmp + 2).int_M) = (C_517 : (buch_CurTrans +
+         (C_501 : ((C_500 : (buch_CurTrans + 2).int_M) = (C_499 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_522 : ((C_521 : (buch_CurTrans_tmp + 3).int_M) = (C_520 : (buch_CurTrans +
-                                                                    3).int_M)));
-      (C_525 : ((C_524 : (buch_CurTrans_tmp + 4).int_M) = (C_523 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_528 : ((C_527 : (buch_CurTrans_tmp + 5).int_M) = (C_526 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_531 : ((C_530 : (buch_CurTrans_tmp + 6).int_M) = (C_529 : (buch_CurTrans +
+         (C_503 : ((C_502 : (buch_CurTrans + 3).int_M) = 0));
+         (C_505 : ((C_504 : (buch_CurTrans + 4).int_M) = 0));
+         (C_507 : ((C_506 : (buch_CurTrans + 5).int_M) = 0));
+         (C_510 : ((C_509 : (buch_CurTrans + 6).int_M) = (C_508 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_532 : opa());
+         (C_513 : ((C_512 : (buch_CurTrans_tmp + 0).int_M) = (C_511 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_516 : ((C_515 : (buch_CurTrans_tmp + 1).int_M) = (C_514 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_519 : ((C_518 : (buch_CurTrans_tmp + 2).int_M) = (C_517 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_522 : ((C_521 : (buch_CurTrans_tmp + 3).int_M) = (C_520 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_525 : ((C_524 : (buch_CurTrans_tmp + 4).int_M) = (C_523 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_528 : ((C_527 : (buch_CurTrans_tmp + 5).int_M) = (C_526 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_531 : ((C_530 : (buch_CurTrans_tmp + 6).int_M) = (C_529 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         (C_532 : opa())
+      };
       
       (goto L2);
-      (C_533 : (buch_CurOperation = 1));
-      (C_534 : (buch_CurOpStatus = 0));
-      (C_537 : ((C_536 : (buch_CurStates_old + 6).int_M) = (C_535 : (buch_CurStates +
+      
+      {  (C_533 : (buch_CurOperation = 1));
+         (C_534 : (buch_CurOpStatus = 0));
+         (C_537 : ((C_536 : (buch_CurStates_old + 6).int_M) = (C_535 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_540 : ((C_539 : (buch_CurStates_old + 5).int_M) = (C_538 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_543 : ((C_542 : (buch_CurStates_old + 0).int_M) = (C_541 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_546 : ((C_545 : (buch_CurStates_old + 4).int_M) = (C_544 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_549 : ((C_548 : (buch_CurStates_old + 3).int_M) = (C_547 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_552 : ((C_551 : (buch_CurStates_old + 2).int_M) = (C_550 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_555 : ((C_554 : (buch_CurStates_old + 1).int_M) = (C_553 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_558 : ((C_557 : (buch_CurStates + 6).int_M) = (C_556 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_540 : ((C_539 : (buch_CurStates_old + 5).int_M) = (C_538 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_543 : ((C_542 : (buch_CurStates_old + 0).int_M) = (C_541 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_546 : ((C_545 : (buch_CurStates_old + 4).int_M) = (C_544 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_549 : ((C_548 : (buch_CurStates_old + 3).int_M) = (C_547 : (buch_CurStates +
+         (C_560 : ((C_559 : (buch_CurStates + 5).int_M) = 0));
+         (C_562 : ((C_561 : (buch_CurStates + 0).int_M) = 0));
+         (C_565 : ((C_564 : (buch_CurStates + 4).int_M) = (C_563 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_552 : ((C_551 : (buch_CurStates_old + 2).int_M) = (C_550 : (buch_CurStates +
+         (C_568 : ((C_567 : (buch_CurStates + 3).int_M) = (C_566 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_555 : ((C_554 : (buch_CurStates_old + 1).int_M) = (C_553 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_558 : ((C_557 : (buch_CurStates + 6).int_M) = (C_556 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_560 : ((C_559 : (buch_CurStates + 5).int_M) = 0));
-      (C_562 : ((C_561 : (buch_CurStates + 0).int_M) = 0));
-      (C_565 : ((C_564 : (buch_CurStates + 4).int_M) = (C_563 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_568 : ((C_567 : (buch_CurStates + 3).int_M) = (C_566 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_570 : ((C_569 : (buch_CurStates + 2).int_M) = 0));
-      (C_572 : ((C_571 : (buch_CurStates + 1).int_M) = 0));
-      (C_574 : ((C_573 : (buch_CurTrans + 0).int_M) = 0));
-      (C_576 : ((C_575 : (buch_CurTrans + 1).int_M) = 0));
-      (C_579 : ((C_578 : (buch_CurTrans + 2).int_M) = (C_577 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_582 : ((C_581 : (buch_CurTrans + 3).int_M) = (C_580 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_584 : ((C_583 : (buch_CurTrans + 4).int_M) = 0));
-      (C_586 : ((C_585 : (buch_CurTrans + 5).int_M) = 0));
-      (C_589 : ((C_588 : (buch_CurTrans + 6).int_M) = (C_587 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_592 : ((C_591 : (buch_CurTrans_tmp + 0).int_M) = (C_590 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_595 : ((C_594 : (buch_CurTrans_tmp + 1).int_M) = (C_593 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_598 : ((C_597 : (buch_CurTrans_tmp + 2).int_M) = (C_596 : (buch_CurTrans +
+         (C_570 : ((C_569 : (buch_CurStates + 2).int_M) = 0));
+         (C_572 : ((C_571 : (buch_CurStates + 1).int_M) = 0));
+         (C_574 : ((C_573 : (buch_CurTrans + 0).int_M) = 0));
+         (C_576 : ((C_575 : (buch_CurTrans + 1).int_M) = 0));
+         (C_579 : ((C_578 : (buch_CurTrans + 2).int_M) = (C_577 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_601 : ((C_600 : (buch_CurTrans_tmp + 3).int_M) = (C_599 : (buch_CurTrans +
+         (C_582 : ((C_581 : (buch_CurTrans + 3).int_M) = (C_580 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_604 : ((C_603 : (buch_CurTrans_tmp + 4).int_M) = (C_602 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_607 : ((C_606 : (buch_CurTrans_tmp + 5).int_M) = (C_605 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_610 : ((C_609 : (buch_CurTrans_tmp + 6).int_M) = (C_608 : (buch_CurTrans +
+         (C_584 : ((C_583 : (buch_CurTrans + 4).int_M) = 0));
+         (C_586 : ((C_585 : (buch_CurTrans + 5).int_M) = 0));
+         (C_589 : ((C_588 : (buch_CurTrans + 6).int_M) = (C_587 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_611 : opc());
+         (C_592 : ((C_591 : (buch_CurTrans_tmp + 0).int_M) = (C_590 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_595 : ((C_594 : (buch_CurTrans_tmp + 1).int_M) = (C_593 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_598 : ((C_597 : (buch_CurTrans_tmp + 2).int_M) = (C_596 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_601 : ((C_600 : (buch_CurTrans_tmp + 3).int_M) = (C_599 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_604 : ((C_603 : (buch_CurTrans_tmp + 4).int_M) = (C_602 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_607 : ((C_606 : (buch_CurTrans_tmp + 5).int_M) = (C_605 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_610 : ((C_609 : (buch_CurTrans_tmp + 6).int_M) = (C_608 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         (C_611 : opc())
+      };
       (L6 : (C_612 : (__retres = 1)));
       
       (goto return_label);
       (L3 : 
       (goto L4));
-      (C_613 : (buch_CurOperation = 1));
-      (C_614 : (buch_CurOpStatus = 0));
-      (C_617 : ((C_616 : (buch_CurStates_old + 6).int_M) = (C_615 : (buch_CurStates +
+      
+      {  (C_613 : (buch_CurOperation = 1));
+         (C_614 : (buch_CurOpStatus = 0));
+         (C_617 : ((C_616 : (buch_CurStates_old + 6).int_M) = (C_615 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_620 : ((C_619 : (buch_CurStates_old + 5).int_M) = (C_618 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_623 : ((C_622 : (buch_CurStates_old + 0).int_M) = (C_621 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_626 : ((C_625 : (buch_CurStates_old + 4).int_M) = (C_624 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_629 : ((C_628 : (buch_CurStates_old + 3).int_M) = (C_627 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_632 : ((C_631 : (buch_CurStates_old + 2).int_M) = (C_630 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_635 : ((C_634 : (buch_CurStates_old + 1).int_M) = (C_633 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_638 : ((C_637 : (buch_CurStates + 6).int_M) = (C_636 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_620 : ((C_619 : (buch_CurStates_old + 5).int_M) = (C_618 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_623 : ((C_622 : (buch_CurStates_old + 0).int_M) = (C_621 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_626 : ((C_625 : (buch_CurStates_old + 4).int_M) = (C_624 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_629 : ((C_628 : (buch_CurStates_old + 3).int_M) = (C_627 : (buch_CurStates +
+         (C_640 : ((C_639 : (buch_CurStates + 5).int_M) = 0));
+         (C_642 : ((C_641 : (buch_CurStates + 0).int_M) = 0));
+         (C_645 : ((C_644 : (buch_CurStates + 4).int_M) = (C_643 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_632 : ((C_631 : (buch_CurStates_old + 2).int_M) = (C_630 : (buch_CurStates +
+         (C_648 : ((C_647 : (buch_CurStates + 3).int_M) = (C_646 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_635 : ((C_634 : (buch_CurStates_old + 1).int_M) = (C_633 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_638 : ((C_637 : (buch_CurStates + 6).int_M) = (C_636 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_640 : ((C_639 : (buch_CurStates + 5).int_M) = 0));
-      (C_642 : ((C_641 : (buch_CurStates + 0).int_M) = 0));
-      (C_645 : ((C_644 : (buch_CurStates + 4).int_M) = (C_643 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_648 : ((C_647 : (buch_CurStates + 3).int_M) = (C_646 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_650 : ((C_649 : (buch_CurStates + 2).int_M) = 0));
-      (C_652 : ((C_651 : (buch_CurStates + 1).int_M) = 0));
-      (C_654 : ((C_653 : (buch_CurTrans + 0).int_M) = 0));
-      (C_656 : ((C_655 : (buch_CurTrans + 1).int_M) = 0));
-      (C_659 : ((C_658 : (buch_CurTrans + 2).int_M) = (C_657 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_662 : ((C_661 : (buch_CurTrans + 3).int_M) = (C_660 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_664 : ((C_663 : (buch_CurTrans + 4).int_M) = 0));
-      (C_666 : ((C_665 : (buch_CurTrans + 5).int_M) = 0));
-      (C_669 : ((C_668 : (buch_CurTrans + 6).int_M) = (C_667 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_672 : ((C_671 : (buch_CurTrans_tmp + 0).int_M) = (C_670 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_675 : ((C_674 : (buch_CurTrans_tmp + 1).int_M) = (C_673 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_678 : ((C_677 : (buch_CurTrans_tmp + 2).int_M) = (C_676 : (buch_CurTrans +
+         (C_650 : ((C_649 : (buch_CurStates + 2).int_M) = 0));
+         (C_652 : ((C_651 : (buch_CurStates + 1).int_M) = 0));
+         (C_654 : ((C_653 : (buch_CurTrans + 0).int_M) = 0));
+         (C_656 : ((C_655 : (buch_CurTrans + 1).int_M) = 0));
+         (C_659 : ((C_658 : (buch_CurTrans + 2).int_M) = (C_657 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_681 : ((C_680 : (buch_CurTrans_tmp + 3).int_M) = (C_679 : (buch_CurTrans +
+         (C_662 : ((C_661 : (buch_CurTrans + 3).int_M) = (C_660 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_684 : ((C_683 : (buch_CurTrans_tmp + 4).int_M) = (C_682 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_687 : ((C_686 : (buch_CurTrans_tmp + 5).int_M) = (C_685 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_690 : ((C_689 : (buch_CurTrans_tmp + 6).int_M) = (C_688 : (buch_CurTrans +
+         (C_664 : ((C_663 : (buch_CurTrans + 4).int_M) = 0));
+         (C_666 : ((C_665 : (buch_CurTrans + 5).int_M) = 0));
+         (C_669 : ((C_668 : (buch_CurTrans + 6).int_M) = (C_667 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_691 : opc());
+         (C_672 : ((C_671 : (buch_CurTrans_tmp + 0).int_M) = (C_670 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_675 : ((C_674 : (buch_CurTrans_tmp + 1).int_M) = (C_673 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_678 : ((C_677 : (buch_CurTrans_tmp + 2).int_M) = (C_676 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_681 : ((C_680 : (buch_CurTrans_tmp + 3).int_M) = (C_679 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_684 : ((C_683 : (buch_CurTrans_tmp + 4).int_M) = (C_682 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_687 : ((C_686 : (buch_CurTrans_tmp + 5).int_M) = (C_685 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_690 : ((C_689 : (buch_CurTrans_tmp + 6).int_M) = (C_688 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         (C_691 : opc())
+      };
       
       (goto L2);
       (L2 : 
       (goto L3));
       (L5 : ());
-      (C_692 : (buch_CurOperation = 2));
-      (C_693 : (buch_CurOpStatus = 0));
-      (C_696 : ((C_695 : (buch_CurStates_old + 6).int_M) = (C_694 : (buch_CurStates +
+      
+      {  (C_692 : (buch_CurOperation = 2));
+         (C_693 : (buch_CurOpStatus = 0));
+         (C_696 : ((C_695 : (buch_CurStates_old + 6).int_M) = (C_694 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_699 : ((C_698 : (buch_CurStates_old + 5).int_M) = (C_697 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_702 : ((C_701 : (buch_CurStates_old + 0).int_M) = (C_700 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_705 : ((C_704 : (buch_CurStates_old + 4).int_M) = (C_703 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_708 : ((C_707 : (buch_CurStates_old + 3).int_M) = (C_706 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_711 : ((C_710 : (buch_CurStates_old + 2).int_M) = (C_709 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_714 : ((C_713 : (buch_CurStates_old + 1).int_M) = (C_712 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_717 : ((C_716 : (buch_CurStates + 6).int_M) = (C_715 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_699 : ((C_698 : (buch_CurStates_old + 5).int_M) = (C_697 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_702 : ((C_701 : (buch_CurStates_old + 0).int_M) = (C_700 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_705 : ((C_704 : (buch_CurStates_old + 4).int_M) = (C_703 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_708 : ((C_707 : (buch_CurStates_old + 3).int_M) = (C_706 : (buch_CurStates +
+         (C_719 : ((C_718 : (buch_CurStates + 5).int_M) = 0));
+         (C_721 : ((C_720 : (buch_CurStates + 0).int_M) = 0));
+         (C_724 : ((C_723 : (buch_CurStates + 4).int_M) = (C_722 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_711 : ((C_710 : (buch_CurStates_old + 2).int_M) = (C_709 : (buch_CurStates +
+         (C_727 : ((C_726 : (buch_CurStates + 3).int_M) = (C_725 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_714 : ((C_713 : (buch_CurStates_old + 1).int_M) = (C_712 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_717 : ((C_716 : (buch_CurStates + 6).int_M) = (C_715 : (buch_CurStates_old +
-                                                                  6).int_M)));
-      (C_719 : ((C_718 : (buch_CurStates + 5).int_M) = 0));
-      (C_721 : ((C_720 : (buch_CurStates + 0).int_M) = 0));
-      (C_724 : ((C_723 : (buch_CurStates + 4).int_M) = (C_722 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_727 : ((C_726 : (buch_CurStates + 3).int_M) = (C_725 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_729 : ((C_728 : (buch_CurStates + 2).int_M) = 0));
-      (C_731 : ((C_730 : (buch_CurStates + 1).int_M) = 0));
-      (C_733 : ((C_732 : (buch_CurTrans + 0).int_M) = 0));
-      (C_735 : ((C_734 : (buch_CurTrans + 1).int_M) = 0));
-      (C_738 : ((C_737 : (buch_CurTrans + 2).int_M) = (C_736 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_741 : ((C_740 : (buch_CurTrans + 3).int_M) = (C_739 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_743 : ((C_742 : (buch_CurTrans + 4).int_M) = 0));
-      (C_745 : ((C_744 : (buch_CurTrans + 5).int_M) = 0));
-      (C_748 : ((C_747 : (buch_CurTrans + 6).int_M) = (C_746 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_751 : ((C_750 : (buch_CurTrans_tmp + 0).int_M) = (C_749 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_754 : ((C_753 : (buch_CurTrans_tmp + 1).int_M) = (C_752 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_757 : ((C_756 : (buch_CurTrans_tmp + 2).int_M) = (C_755 : (buch_CurTrans +
+         (C_729 : ((C_728 : (buch_CurStates + 2).int_M) = 0));
+         (C_731 : ((C_730 : (buch_CurStates + 1).int_M) = 0));
+         (C_733 : ((C_732 : (buch_CurTrans + 0).int_M) = 0));
+         (C_735 : ((C_734 : (buch_CurTrans + 1).int_M) = 0));
+         (C_738 : ((C_737 : (buch_CurTrans + 2).int_M) = (C_736 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_760 : ((C_759 : (buch_CurTrans_tmp + 3).int_M) = (C_758 : (buch_CurTrans +
+         (C_741 : ((C_740 : (buch_CurTrans + 3).int_M) = (C_739 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_763 : ((C_762 : (buch_CurTrans_tmp + 4).int_M) = (C_761 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_766 : ((C_765 : (buch_CurTrans_tmp + 5).int_M) = (C_764 : (buch_CurTrans +
-                                                                    5).int_M)));
-      (C_769 : ((C_768 : (buch_CurTrans_tmp + 6).int_M) = (C_767 : (buch_CurTrans +
+         (C_743 : ((C_742 : (buch_CurTrans + 4).int_M) = 0));
+         (C_745 : ((C_744 : (buch_CurTrans + 5).int_M) = 0));
+         (C_748 : ((C_747 : (buch_CurTrans + 6).int_M) = (C_746 : (buch_CurStates_old +
                                                                     6).int_M)));
-      (C_770 : opb());
+         (C_751 : ((C_750 : (buch_CurTrans_tmp + 0).int_M) = (C_749 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_754 : ((C_753 : (buch_CurTrans_tmp + 1).int_M) = (C_752 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_757 : ((C_756 : (buch_CurTrans_tmp + 2).int_M) = (C_755 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_760 : ((C_759 : (buch_CurTrans_tmp + 3).int_M) = (C_758 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_763 : ((C_762 : (buch_CurTrans_tmp + 4).int_M) = (C_761 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_766 : ((C_765 : (buch_CurTrans_tmp + 5).int_M) = (C_764 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_769 : ((C_768 : (buch_CurTrans_tmp + 6).int_M) = (C_767 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         (C_770 : opb())
+      };
       
       (goto L6);
-      (return_label : (C_771 : (buch_CurOperation = 0)));
-      (C_772 : (buch_CurOpStatus = 1));
-      (C_775 : ((C_774 : (buch_CurStates_old + 6).int_M) = (C_773 : (buch_CurStates +
-                                                                    6).int_M)));
-      (C_778 : ((C_777 : (buch_CurStates_old + 5).int_M) = (C_776 : (buch_CurStates +
-                                                                    5).int_M)));
-      (C_781 : ((C_780 : (buch_CurStates_old + 0).int_M) = (C_779 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_784 : ((C_783 : (buch_CurStates_old + 4).int_M) = (C_782 : (buch_CurStates +
-                                                                    4).int_M)));
-      (C_787 : ((C_786 : (buch_CurStates_old + 3).int_M) = (C_785 : (buch_CurStates +
+      (return_label : 
+      {  (C_771 : (buch_CurOperation = 0));
+         (C_772 : (buch_CurOpStatus = 1));
+         (C_775 : ((C_774 : (buch_CurStates_old + 6).int_M) = (C_773 : 
+                                                              (buch_CurStates +
+                                                                6).int_M)));
+         (C_778 : ((C_777 : (buch_CurStates_old + 5).int_M) = (C_776 : 
+                                                              (buch_CurStates +
+                                                                5).int_M)));
+         (C_781 : ((C_780 : (buch_CurStates_old + 0).int_M) = (C_779 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_784 : ((C_783 : (buch_CurStates_old + 4).int_M) = (C_782 : 
+                                                              (buch_CurStates +
+                                                                4).int_M)));
+         (C_787 : ((C_786 : (buch_CurStates_old + 3).int_M) = (C_785 : 
+                                                              (buch_CurStates +
+                                                                3).int_M)));
+         (C_790 : ((C_789 : (buch_CurStates_old + 2).int_M) = (C_788 : 
+                                                              (buch_CurStates +
+                                                                2).int_M)));
+         (C_793 : ((C_792 : (buch_CurStates_old + 1).int_M) = (C_791 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (if ((C_798 : (buch_CurStates_old + 6).int_M) != 0) then (C_797 : (tmp = 1)) else 
+         (if ((C_796 : (buch_CurStates_old + 5).int_M) != 0) then (C_795 : (tmp = 1)) else 
+         (C_794 : (tmp = 0))));
+         (C_800 : ((C_799 : (buch_CurStates + 6).int_M) = tmp));
+         (C_802 : ((C_801 : (buch_CurStates + 5).int_M) = 0));
+         (C_804 : ((C_803 : (buch_CurStates + 0).int_M) = 0));
+         (C_807 : ((C_806 : (buch_CurStates + 4).int_M) = (C_805 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_790 : ((C_789 : (buch_CurStates_old + 2).int_M) = (C_788 : (buch_CurStates +
+         (C_810 : ((C_809 : (buch_CurStates + 3).int_M) = (C_808 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_793 : ((C_792 : (buch_CurStates_old + 1).int_M) = (C_791 : (buch_CurStates +
-                                                                    1).int_M)));
-      (if ((C_798 : (buch_CurStates_old + 6).int_M) != 0) then (C_797 : (tmp = 1)) else 
-      (if ((C_796 : (buch_CurStates_old + 5).int_M) != 0) then (C_795 : (tmp = 1)) else 
-      (C_794 : (tmp = 0))));
-      (C_800 : ((C_799 : (buch_CurStates + 6).int_M) = tmp));
-      (C_802 : ((C_801 : (buch_CurStates + 5).int_M) = 0));
-      (C_804 : ((C_803 : (buch_CurStates + 0).int_M) = 0));
-      (C_807 : ((C_806 : (buch_CurStates + 4).int_M) = (C_805 : (buch_CurStates_old +
-                                                                  3).int_M)));
-      (C_810 : ((C_809 : (buch_CurStates + 3).int_M) = (C_808 : (buch_CurStates_old +
-                                                                  2).int_M)));
-      (C_812 : ((C_811 : (buch_CurStates + 2).int_M) = 0));
-      (C_814 : ((C_813 : (buch_CurStates + 1).int_M) = 0));
-      (C_816 : ((C_815 : (buch_CurTrans + 0).int_M) = 0));
-      (C_818 : ((C_817 : (buch_CurTrans + 1).int_M) = 0));
-      (C_821 : ((C_820 : (buch_CurTrans + 2).int_M) = (C_819 : (buch_CurStates_old +
-                                                                 2).int_M)));
-      (C_824 : ((C_823 : (buch_CurTrans + 3).int_M) = (C_822 : (buch_CurStates_old +
-                                                                 3).int_M)));
-      (C_826 : ((C_825 : (buch_CurTrans + 4).int_M) = 0));
-      (C_829 : ((C_828 : (buch_CurTrans + 5).int_M) = (C_827 : (buch_CurStates_old +
-                                                                 5).int_M)));
-      (C_832 : ((C_831 : (buch_CurTrans + 6).int_M) = (C_830 : (buch_CurStates_old +
-                                                                 6).int_M)));
-      (C_835 : ((C_834 : (buch_CurTrans_tmp + 0).int_M) = (C_833 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_838 : ((C_837 : (buch_CurTrans_tmp + 1).int_M) = (C_836 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_841 : ((C_840 : (buch_CurTrans_tmp + 2).int_M) = (C_839 : (buch_CurTrans +
+         (C_812 : ((C_811 : (buch_CurStates + 2).int_M) = 0));
+         (C_814 : ((C_813 : (buch_CurStates + 1).int_M) = 0));
+         (C_816 : ((C_815 : (buch_CurTrans + 0).int_M) = 0));
+         (C_818 : ((C_817 : (buch_CurTrans + 1).int_M) = 0));
+         (C_821 : ((C_820 : (buch_CurTrans + 2).int_M) = (C_819 : (buch_CurStates_old +
                                                                     2).int_M)));
-      (C_844 : ((C_843 : (buch_CurTrans_tmp + 3).int_M) = (C_842 : (buch_CurTrans +
+         (C_824 : ((C_823 : (buch_CurTrans + 3).int_M) = (C_822 : (buch_CurStates_old +
                                                                     3).int_M)));
-      (C_847 : ((C_846 : (buch_CurTrans_tmp + 4).int_M) = (C_845 : (buch_CurTrans +
-                                                                    4).int_M)));
-      (C_850 : ((C_849 : (buch_CurTrans_tmp + 5).int_M) = (C_848 : (buch_CurTrans +
+         (C_826 : ((C_825 : (buch_CurTrans + 4).int_M) = 0));
+         (C_829 : ((C_828 : (buch_CurTrans + 5).int_M) = (C_827 : (buch_CurStates_old +
                                                                     5).int_M)));
-      (C_853 : ((C_852 : (buch_CurTrans_tmp + 6).int_M) = (C_851 : (buch_CurTrans +
+         (C_832 : ((C_831 : (buch_CurTrans + 6).int_M) = (C_830 : (buch_CurStates_old +
                                                                     6).int_M)));
-      
-      (return __retres)
+         (C_835 : ((C_834 : (buch_CurTrans_tmp + 0).int_M) = (C_833 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_838 : ((C_837 : (buch_CurTrans_tmp + 1).int_M) = (C_836 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_841 : ((C_840 : (buch_CurTrans_tmp + 2).int_M) = (C_839 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (C_844 : ((C_843 : (buch_CurTrans_tmp + 3).int_M) = (C_842 : 
+                                                             (buch_CurTrans +
+                                                               3).int_M)));
+         (C_847 : ((C_846 : (buch_CurTrans_tmp + 4).int_M) = (C_845 : 
+                                                             (buch_CurTrans +
+                                                               4).int_M)));
+         (C_850 : ((C_849 : (buch_CurTrans_tmp + 5).int_M) = (C_848 : 
+                                                             (buch_CurTrans +
+                                                               5).int_M)));
+         (C_853 : ((C_852 : (buch_CurTrans_tmp + 6).int_M) = (C_851 : 
+                                                             (buch_CurTrans +
+                                                               6).int_M)));
+         
+         (return __retres)
+      })
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts6082.jessie/bts6082.cloc bts6082.jessie/bts6082.jc

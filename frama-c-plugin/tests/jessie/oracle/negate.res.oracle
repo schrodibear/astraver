@@ -62,12 +62,14 @@ behavior default:
          {  
             {  (if (i < n) then () else 
                (goto while_0_break));
-               (C_13 : ((C_12 : (C_11 : (t + i)).int_M) = (C_10 : (- 
-                                                                  (C_9 : 
-                                                                  (C_8 : 
-                                                                  (t +
-                                                                    i)).int_M)))));
-               (C_15 : (i = (C_14 : (i + 1))))
+               
+               {  (C_13 : ((C_12 : (C_11 : (t + i)).int_M) = (C_10 : 
+                                                             (- (C_9 : 
+                                                                (C_8 : 
+                                                                (t +
+                                                                  i)).int_M)))));
+                  (C_15 : (i = (C_14 : (i + 1))))
+               }
             }
          };
          (while_0_break : ())
@@ -580,12 +582,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/negate_po15.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "59" begin = "24" end = "369"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "60" begin = "27" end = "361"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/negate_po16.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "59" begin = "24" end = "369"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "60" begin = "27" end = "361"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -612,11 +614,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/negate_po4.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1048"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1076"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/negate_po5.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1048"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1076"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/negate_po6.why">
@@ -632,11 +634,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/negate_po9.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1048"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1076"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/negate_po10.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1048"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "9" end = "1076"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/negate_po11.why">

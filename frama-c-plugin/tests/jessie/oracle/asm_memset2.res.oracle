@@ -84,7 +84,9 @@ behavior default:
          {  
             {  (if (i <= i_max_0) then () else 
                (goto while_0_break));
-               (C_10 : ((C_9 : (C_8 : (Adresse_0 + i)).unsigned_char_M) = ValOct));
+               
+               {  (C_10 : ((C_9 : (C_8 : (Adresse_0 + i)).unsigned_char_M) = ValOct))
+               };
                (C_13 : (i = (C_12 : ((C_11 : (i + 1)) :> uint32))))
             }
          };
@@ -125,8 +127,10 @@ behavior default:
          {  
             {  (if (i_0 <= i_max) then () else 
                (goto while_1_break));
-               (C_31 : ((C_30 : (C_29 : (Adresse + i_0)).unsigned_long_M) = 
-               (C_28 : (ValMot :> uint32))));
+               
+               {  (C_31 : ((C_30 : (C_29 : (Adresse + i_0)).unsigned_long_M) = 
+                  (C_28 : (ValMot :> uint32))))
+               };
                (C_34 : (i_0 = (C_33 : ((C_32 : (i_0 + 1)) :> uint32))))
             }
          };
@@ -1907,21 +1911,21 @@ let memset_uchar_ensures_default =
                 else
                  (let jessie_22 = (raise (Goto_while_0_break_exc void)) in
                  void));
+               (let jessie_28 =
                (C_10:
+               (let jessie_24 = ValOct in
+               (let jessie_27 =
+               (C_8: ((shift Adresse_0) (integer_of_uint32 !i))) in
                begin
-                 (let jessie_28 =
-                 (let jessie_24 = ValOct in
-                 (let jessie_27 =
-                 (C_8: ((shift Adresse_0) (integer_of_uint32 !i))) in
-                 (((safe_upd_ unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_27) jessie_24))) in
-                 void);
-                (C_13:
-                begin
-                  (i := (C_12:
-                        (safe_uint32_of_integer_ (C_11:
-                                                 ((add_int (integer_of_uint32 !i)) (1))))));
-                 !i end) end) end in void); (raise (Loop_continue_exc void))
-            end in void) with Loop_continue_exc jessie_3 -> void end end done);
+                 (((safe_upd_ unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_27) jessie_24);
+                jessie_24 end))) in void);
+               (C_13:
+               begin
+                 (i := (C_12:
+                       (safe_uint32_of_integer_ (C_11:
+                                                ((add_int (integer_of_uint32 !i)) (1))))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_3 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
@@ -1994,24 +1998,24 @@ let memset_uchar_safety =
                 else
                  (let jessie_9 = (raise (Goto_while_0_break_exc void)) in
                  void));
+               (let jessie_15 =
                (C_10:
+               (let jessie_11 = ValOct in
+               (let jessie_12 = Adresse_0 in
+               (let jessie_13 = (integer_of_uint32 !i) in
+               (let jessie_14 = ((shift jessie_12) jessie_13) in
                begin
-                 (let jessie_15 =
-                 (let jessie_11 = ValOct in
-                 (let jessie_12 = Adresse_0 in
-                 (let jessie_13 = (integer_of_uint32 !i) in
-                 (let jessie_14 = ((shift jessie_12) jessie_13) in
                  (JC_29:
-                 (((((offset_upd_ unsigned_char_P_Adresse_0_1_alloc_table) unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_12) jessie_13) jessie_11)))))) in
-                 void);
-                (C_13:
-                begin
-                  (i := (C_12:
-                        (JC_30:
-                        (uint32_of_integer_ (C_11:
-                                            ((add_int (integer_of_uint32 !i)) (1)))))));
-                 !i end) end) end in void); (raise (Loop_continue_exc void))
-            end in void) with Loop_continue_exc jessie_3 -> void end end done);
+                 (((((offset_upd_ unsigned_char_P_Adresse_0_1_alloc_table) unsigned_char_P_unsigned_char_M_Adresse_0_1) jessie_12) jessie_13) jessie_11));
+                jessie_11 end))))) in void);
+               (C_13:
+               begin
+                 (i := (C_12:
+                       (JC_30:
+                       (uint32_of_integer_ (C_11:
+                                           ((add_int (integer_of_uint32 !i)) (1)))))));
+                !i end) end in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_3 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
@@ -2071,22 +2075,21 @@ let memset_uint_ensures_default =
                 else
                  (let jessie_48 = (raise (Goto_while_1_break_exc void)) in
                  void));
+               (let jessie_54 =
                (C_31:
+               (let jessie_50 = (C_28: ValMot) in
+               (let jessie_53 =
+               (C_29: ((shift Adresse) (integer_of_uint32 !i_0))) in
                begin
-                 (let jessie_54 =
-                 (let jessie_50 = (C_28: ValMot) in
-                 (let jessie_53 =
-                 (C_29: ((shift Adresse) (integer_of_uint32 !i_0))) in
-                 (((safe_upd_ unsigned_long_P_unsigned_long_M_Adresse_2) jessie_53) jessie_50))) in
-                 void);
-                (C_34:
-                begin
-                  (i_0 := (C_33:
-                          (safe_uint32_of_integer_ (C_32:
-                                                   ((add_int (integer_of_uint32 !i_0)) (1))))));
-                 !i_0 end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_6 -> void end end done);
+                 (((safe_upd_ unsigned_long_P_unsigned_long_M_Adresse_2) jessie_53) jessie_50);
+                jessie_50 end))) in void);
+               (C_34:
+               begin
+                 (i_0 := (C_33:
+                         (safe_uint32_of_integer_ (C_32:
+                                                  ((add_int (integer_of_uint32 !i_0)) (1))))));
+                !i_0 end) end in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
        Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
@@ -2152,25 +2155,24 @@ let memset_uint_safety =
                 else
                  (let jessie_35 = (raise (Goto_while_1_break_exc void)) in
                  void));
+               (let jessie_41 =
                (C_31:
+               (let jessie_37 = (C_28: ValMot) in
+               (let jessie_38 = Adresse in
+               (let jessie_39 = (integer_of_uint32 !i_0) in
+               (let jessie_40 = ((shift jessie_38) jessie_39) in
                begin
-                 (let jessie_41 =
-                 (let jessie_37 = (C_28: ValMot) in
-                 (let jessie_38 = Adresse in
-                 (let jessie_39 = (integer_of_uint32 !i_0) in
-                 (let jessie_40 = ((shift jessie_38) jessie_39) in
                  (JC_63:
-                 (((((offset_upd_ unsigned_long_P_Adresse_2_alloc_table) unsigned_long_P_unsigned_long_M_Adresse_2) jessie_38) jessie_39) jessie_37)))))) in
-                 void);
-                (C_34:
-                begin
-                  (i_0 := (C_33:
-                          (JC_64:
-                          (uint32_of_integer_ (C_32:
-                                              ((add_int (integer_of_uint32 !i_0)) (1)))))));
-                 !i_0 end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_6 -> void end end done);
+                 (((((offset_upd_ unsigned_long_P_Adresse_2_alloc_table) unsigned_long_P_unsigned_long_M_Adresse_2) jessie_38) jessie_39) jessie_37));
+                jessie_37 end))))) in void);
+               (C_34:
+               begin
+                 (i_0 := (C_33:
+                         (JC_64:
+                         (uint32_of_integer_ (C_32:
+                                             ((add_int (integer_of_uint32 !i_0)) (1)))))));
+                !i_0 end) end in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
        Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)

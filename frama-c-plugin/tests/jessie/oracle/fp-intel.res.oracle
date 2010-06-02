@@ -87,9 +87,7 @@ behavior default:
          (assert for default: (C_10 : \double_is_plus_infinity(x)));
          ()
       };
-      
-      {  (C_12 : printf())
-      };
+      (C_12 : printf());
       (C_13 : (__retres = 0));
       
       (return __retres)
@@ -426,12 +424,14 @@ let main_ensures_default =
                                           (((mul_double nearest_even) !v) !v)))) !v))));
        !x end) in void);
       (assert { (JC_37: double_is_plus_infinity(x)) }; void); void;
-      (let jessie_13 = (C_12: (JC_38: (printf void))) in void);
-      (C_13:
+      (C_12:
       begin
-        (let jessie_15 = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
-   Return -> !return end)) { (JC_17: true) }
+        (let jessie_13 = (JC_38: (printf void)) in void);
+       (C_13:
+       begin
+         (let jessie_15 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end) end)))); absurd  end
+   with Return -> !return end)) { (JC_17: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -466,12 +466,14 @@ let main_safety =
                                           (((mul_double nearest_even) !v) !v)))) !v))));
        !x end) in void);
       [ { } unit reads x { (JC_28: double_is_plus_infinity(x)) } ]; void;
-      (let jessie_5 = (C_12: (JC_29: (printf_requires void))) in void);
-      (C_13:
+      (C_12:
       begin
-        (let jessie_7 = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end)))); absurd  end with
-   Return -> !return end))
+        (let jessie_5 = (JC_29: (printf_requires void)) in void);
+       (C_13:
+       begin
+         (let jessie_7 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres); (raise Return) end) end) end)))); absurd  end
+   with Return -> !return end))
   { (JC_19: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
 
 

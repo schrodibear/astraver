@@ -131,39 +131,43 @@ behavior default:
             {  (if (ready_list_elem != null) then (if (found == 0) then () else 
                                                   (goto while_0_break)) else 
                (goto while_0_break));
-               (C_22 : (proc_id2 = (C_21 : ((C_20 : ready_list_elem.pid_0) :> uint32))));
-               (if (proc_id == proc_id2) then 
-               {  (if (prev_elem != null) then (C_27 : ((C_26 : prev_elem.next) = 
-                                               (C_25 : ready_list_elem.next))) else 
-                  (C_24 : (ready_list = (C_23 : ready_list_elem.next))));
-                  (C_29 : ((C_28 : ready_list_elem.next) = null));
-                  (if ((C_39 : process.priority) == max_prio) then 
-                  {  (C_30 : (highest_prio = 0));
-                     (C_31 : (highest_search = ready_list));
-                     
-                     {  
-                        loop 
-                        behavior default:
-                          invariant (C_32 : (list_length{Here}(highest_search) >=
-                                              0));
-                        while (true)
+               
+               {  (C_22 : (proc_id2 = (C_21 : ((C_20 : ready_list_elem.pid_0) :> uint32))));
+                  (if (proc_id == proc_id2) then 
+                  {  (if (prev_elem != null) then (C_27 : ((C_26 : prev_elem.next) = 
+                                                  (C_25 : ready_list_elem.next))) else 
+                     (C_24 : (ready_list = (C_23 : ready_list_elem.next))));
+                     (C_29 : ((C_28 : ready_list_elem.next) = null));
+                     (if ((C_39 : process.priority) == max_prio) then 
+                     {  (C_30 : (highest_prio = 0));
+                        (C_31 : (highest_search = ready_list));
+                        
                         {  
-                           {  (if (highest_search != null) then () else 
-                              (goto while_1_break));
-                              (if ((C_35 : highest_search.priority) >
-                                    highest_prio) then (C_34 : (highest_prio = 
-                                                       (C_33 : highest_search.priority))) else ());
-                              (C_37 : (highest_search = (C_36 : highest_search.next)))
-                           }
+                           loop 
+                           behavior default:
+                             invariant (C_32 : (list_length{Here}(highest_search) >=
+                                                 0));
+                           while (true)
+                           {  
+                              {  (if (highest_search != null) then () else 
+                                 (goto while_1_break));
+                                 
+                                 {  (if ((C_35 : highest_search.priority) >
+                                          highest_prio) then (C_34 : (highest_prio = 
+                                                             (C_33 : highest_search.priority))) else ());
+                                    (C_37 : (highest_search = (C_36 : highest_search.next)))
+                                 }
+                              }
+                           };
+                           (while_1_break : ())
                         };
-                        (while_1_break : ())
-                     };
-                     (C_38 : (max_prio = highest_prio))
+                        (C_38 : (max_prio = highest_prio))
+                     } else ());
+                     (C_40 : (found = 1))
                   } else ());
-                  (C_40 : (found = 1))
-               } else ());
-               (C_41 : (prev_elem = ready_list_elem));
-               (C_43 : (ready_list_elem = (C_42 : ready_list_elem.next)))
+                  (C_41 : (prev_elem = ready_list_elem));
+                  (C_43 : (ready_list_elem = (C_42 : ready_list_elem.next)))
+               }
             }
          };
          (while_0_break : ())
@@ -1211,12 +1215,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po24.why">
-      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "132" begin = "27" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "133" begin = "30" end = "66"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po25.why">
-      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "132" begin = "27" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "133" begin = "30" end = "66"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

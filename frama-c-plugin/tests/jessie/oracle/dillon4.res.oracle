@@ -92,7 +92,9 @@ behavior default:
          {  
             {  (if (i < 5) then () else 
                (goto while_0_break));
-               (C_8 : (tmp_1 = 0));
+               
+               {  (C_8 : (tmp_1 = 0))
+               };
                (C_11 : (i = (C_10 : ((C_9 : (i + 1)) :> int32))))
             }
          };
@@ -582,18 +584,17 @@ let NNN_ensures_default =
                 else
                  (let jessie_15 = (raise (Goto_while_0_break_exc void)) in
                  void));
+               (let jessie_17 =
                (C_8:
+               begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end) in
+               void);
+               (C_11:
                begin
-                 (let jessie_17 = (tmp_1 := (safe_int32_of_integer_ (0))) in
-                 void);
-                (C_11:
-                begin
-                  (i_2 := (C_10:
-                          (safe_int32_of_integer_ (C_9:
-                                                  ((add_int (integer_of_int32 !i_2)) (1))))));
-                 !i_2 end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+                 (i_2 := (C_10:
+                         (safe_int32_of_integer_ (C_9:
+                                                 ((add_int (integer_of_int32 !i_2)) (1))))));
+                !i_2 end) end in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_3 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
       (raise Return) end))); (raise Return) end with Return -> void end)
@@ -638,19 +639,18 @@ let NNN_safety =
                 else
                  (let jessie_6 = (raise (Goto_while_0_break_exc void)) in
                  void));
+               (let jessie_8 =
                (C_8:
+               begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end) in
+               void);
+               (C_11:
                begin
-                 (let jessie_8 = (tmp_1 := (safe_int32_of_integer_ (0))) in
-                 void);
-                (C_11:
-                begin
-                  (i_2 := (C_10:
-                          (JC_16:
-                          (int32_of_integer_ (C_9:
-                                             ((add_int (integer_of_int32 !i_2)) (1)))))));
-                 !i_2 end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+                 (i_2 := (C_10:
+                         (JC_16:
+                         (int32_of_integer_ (C_9:
+                                            ((add_int (integer_of_int32 !i_2)) (1)))))));
+                !i_2 end) end in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_3 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
       (raise Return) end))); (raise Return) end with Return -> void end)

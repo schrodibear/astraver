@@ -75,9 +75,7 @@ behavior default:
          (assert for default: (C_5 : (i == 0)));
          ()
       };
-      
-      {  (C_6 : print_equality(i, 0))
-      };
+      (C_6 : print_equality(i, 0));
       (C_7 : (tmp = i));
       (C_10 : (i = (C_9 : ((C_8 : (i + 1)) :> int32))));
       (C_11 : (j = tmp));
@@ -87,9 +85,7 @@ behavior default:
          (assert for default: (C_13 : (i == 0)));
          ()
       };
-      
-      {  (C_14 : print_equality(i, 0))
-      };
+      (C_14 : print_equality(i, 0));
       
       {  
          {  (C_15 : (tmp_0 = i));
@@ -103,9 +99,7 @@ behavior default:
          (assert for default: (C_21 : (i == 0)));
          ()
       };
-      
-      {  (C_22 : print_equality(i, 0))
-      };
+      (C_22 : print_equality(i, 0));
       (C_23 : (__retres = 0));
       
       (return __retres)
@@ -452,55 +446,60 @@ let main_ensures_default =
        (let jessie_31 = (i := (safe_int32_of_integer_ (0))) in void);
       (assert { (JC_40: eq_int(integer_of_int32(i), (0))) }; void); void;
       (C_6:
-      (let jessie_33 = !i in
-      (let jessie_32 = (safe_int32_of_integer_ (0)) in
-      (JC_41: ((print_equality jessie_33) jessie_32)))));
-      (C_7:
       begin
-        (let jessie_35 = (tmp := !i) in void);
-       (C_10:
+        (let jessie_33 = !i in
+        (let jessie_32 = (safe_int32_of_integer_ (0)) in
+        (JC_41: ((print_equality jessie_33) jessie_32))));
+       (C_7:
        begin
-         (let jessie_37 =
-         (i := (C_9:
-               (safe_int32_of_integer_ (C_8:
-                                       ((add_int (integer_of_int32 !i)) (1)))))) in
-         void);
-        (C_11:
+         (let jessie_35 = (tmp := !i) in void);
+        (C_10:
         begin
-          (let jessie_39 = (j := !tmp) in void);
-         (C_12:
+          (let jessie_37 =
+          (i := (C_9:
+                (safe_int32_of_integer_ (C_8:
+                                        ((add_int (integer_of_int32 !i)) (1)))))) in
+          void);
+         (C_11:
          begin
-           (let jessie_41 = (i := !j) in void);
-          (assert { (JC_42: eq_int(integer_of_int32(i), (0))) }; void); void;
-          (C_14:
-          (let jessie_43 = !i in
-          (let jessie_42 = (safe_int32_of_integer_ (0)) in
-          (JC_43: ((print_equality jessie_43) jessie_42)))));
-          (let jessie_51 =
+           (let jessie_39 = (j := !tmp) in void);
+          (C_12:
           begin
-            (let jessie_49 =
-            (C_15:
+            (let jessie_41 = (i := !j) in void);
+           (assert { (JC_42: eq_int(integer_of_int32(i), (0))) }; void);
+           void;
+           (C_14:
+           begin
+             (let jessie_43 = !i in
+             (let jessie_42 = (safe_int32_of_integer_ (0)) in
+             (JC_43: ((print_equality jessie_43) jessie_42))));
+            (let jessie_51 =
             begin
-              (let jessie_45 = (tmp_0 := !i) in void);
-             (C_18:
+              (let jessie_49 =
+              (C_15:
+              begin
+                (let jessie_45 = (tmp_0 := !i) in void);
+               (C_18:
+               begin
+                 (let jessie_47 =
+                 (i := (C_17:
+                       (safe_int32_of_integer_ (C_16:
+                                               ((add_int (integer_of_int32 !i)) (1)))))) in
+                 void); (C_19: begin   (j := !tmp_0); !j end) end) end) in
+              void); (C_20: begin   (i := !j); !i end) end in void);
+            (assert { (JC_44: eq_int(integer_of_int32(i), (0))) }; void);
+            void;
+            (C_22:
+            begin
+              (let jessie_53 = !i in
+              (let jessie_52 = (safe_int32_of_integer_ (0)) in
+              (JC_45: ((print_equality jessie_53) jessie_52))));
+             (C_23:
              begin
-               (let jessie_47 =
-               (i := (C_17:
-                     (safe_int32_of_integer_ (C_16:
-                                             ((add_int (integer_of_int32 !i)) (1)))))) in
-               void); (C_19: begin   (j := !tmp_0); !j end) end) end) in
-            void); (C_20: begin   (i := !j); !i end) end in void);
-          (assert { (JC_44: eq_int(integer_of_int32(i), (0))) }; void); void;
-          (C_22:
-          (let jessie_53 = !i in
-          (let jessie_52 = (safe_int32_of_integer_ (0)) in
-          (JC_45: ((print_equality jessie_53) jessie_52)))));
-          (C_23:
-          begin
-            (let jessie_55 = (__retres := (safe_int32_of_integer_ (0))) in
-            void); (return := !__retres); (raise Return) end) end) end) end)
-      end) end)))))); absurd  end with Return -> !return end))
-  { (JC_28: true) }
+               (let jessie_55 = (__retres := (safe_int32_of_integer_ (0))) in
+               void); (return := !__retres); (raise Return) end) end) end)
+          end) end) end) end) end) end)))))); absurd  end with Return ->
+   !return end)) { (JC_28: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -521,58 +520,62 @@ let main_safety =
       [ { } unit reads i { (JC_32: eq_int(integer_of_int32(i), (0))) } ];
       void;
       (C_6:
-      (let jessie_6 = !i in
-      (let jessie_5 = (safe_int32_of_integer_ (0)) in
-      (JC_33: ((print_equality_requires jessie_6) jessie_5)))));
-      (C_7:
       begin
-        (let jessie_8 = (tmp := !i) in void);
-       (C_10:
+        (let jessie_6 = !i in
+        (let jessie_5 = (safe_int32_of_integer_ (0)) in
+        (JC_33: ((print_equality_requires jessie_6) jessie_5))));
+       (C_7:
        begin
-         (let jessie_10 =
-         (i := (C_9:
-               (JC_34:
-               (int32_of_integer_ (C_8:
-                                  ((add_int (integer_of_int32 !i)) (1))))))) in
-         void);
-        (C_11:
+         (let jessie_8 = (tmp := !i) in void);
+        (C_10:
         begin
-          (let jessie_12 = (j := !tmp) in void);
-         (C_12:
+          (let jessie_10 =
+          (i := (C_9:
+                (JC_34:
+                (int32_of_integer_ (C_8:
+                                   ((add_int (integer_of_int32 !i)) (1))))))) in
+          void);
+         (C_11:
          begin
-           (let jessie_14 = (i := !j) in void);
-          [ { } unit reads i { (JC_35: eq_int(integer_of_int32(i), (0))) } ];
-          void;
-          (C_14:
-          (let jessie_16 = !i in
-          (let jessie_15 = (safe_int32_of_integer_ (0)) in
-          (JC_36: ((print_equality_requires jessie_16) jessie_15)))));
-          (let jessie_24 =
+           (let jessie_12 = (j := !tmp) in void);
+          (C_12:
           begin
-            (let jessie_22 =
-            (C_15:
+            (let jessie_14 = (i := !j) in void);
+           [ { } unit reads i { (JC_35: eq_int(integer_of_int32(i), (0))) } ];
+           void;
+           (C_14:
+           begin
+             (let jessie_16 = !i in
+             (let jessie_15 = (safe_int32_of_integer_ (0)) in
+             (JC_36: ((print_equality_requires jessie_16) jessie_15))));
+            (let jessie_24 =
             begin
-              (let jessie_18 = (tmp_0 := !i) in void);
-             (C_18:
+              (let jessie_22 =
+              (C_15:
+              begin
+                (let jessie_18 = (tmp_0 := !i) in void);
+               (C_18:
+               begin
+                 (let jessie_20 =
+                 (i := (C_17:
+                       (JC_37:
+                       (int32_of_integer_ (C_16:
+                                          ((add_int (integer_of_int32 !i)) (1))))))) in
+                 void); (C_19: begin   (j := !tmp_0); !j end) end) end) in
+              void); (C_20: begin   (i := !j); !i end) end in void);
+            [ { } unit reads i { (JC_38: eq_int(integer_of_int32(i), (0))) } ];
+            void;
+            (C_22:
+            begin
+              (let jessie_26 = !i in
+              (let jessie_25 = (safe_int32_of_integer_ (0)) in
+              (JC_39: ((print_equality_requires jessie_26) jessie_25))));
+             (C_23:
              begin
-               (let jessie_20 =
-               (i := (C_17:
-                     (JC_37:
-                     (int32_of_integer_ (C_16:
-                                        ((add_int (integer_of_int32 !i)) (1))))))) in
-               void); (C_19: begin   (j := !tmp_0); !j end) end) end) in
-            void); (C_20: begin   (i := !j); !i end) end in void);
-          [ { } unit reads i { (JC_38: eq_int(integer_of_int32(i), (0))) } ];
-          void;
-          (C_22:
-          (let jessie_26 = !i in
-          (let jessie_25 = (safe_int32_of_integer_ (0)) in
-          (JC_39: ((print_equality_requires jessie_26) jessie_25)))));
-          (C_23:
-          begin
-            (let jessie_28 = (__retres := (safe_int32_of_integer_ (0))) in
-            void); (return := !__retres); (raise Return) end) end) end) end)
-      end) end)))))); absurd  end with Return -> !return end))
+               (let jessie_28 = (__retres := (safe_int32_of_integer_ (0))) in
+               void); (return := !__retres); (raise Return) end) end) end)
+          end) end) end) end) end) end)))))); absurd  end with Return ->
+   !return end))
   { (JC_30:
     valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
 

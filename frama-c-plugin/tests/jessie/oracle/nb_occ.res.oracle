@@ -95,11 +95,10 @@ behavior default:
             {  
                {  (if (i < n) then () else 
                   (goto while_0_break));
-                  (if ((C_15 : (C_14 : (a + i)).long_M) == d) then (C_13 : (c = 
-                                                                   (C_12 : (
-                                                                   (C_11 : 
-                                                                   (c +
-                                                                    1)) :> int32)))) else ());
+                  
+                  {  (if ((C_15 : (C_14 : (a + i)).long_M) == d) then 
+                     (C_13 : (c = (C_12 : ((C_11 : (c + 1)) :> int32)))) else ())
+                  };
                   (C_18 : (i = (C_17 : ((C_16 : (i + 1)) :> int32))))
                }
             };

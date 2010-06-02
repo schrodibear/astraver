@@ -125,26 +125,30 @@ behavior permutation:
          {  
             {  (if (i_0 < (C_11 : ((C_10 : (n - 1)) :> int32))) then () else 
                (goto while_0_break));
-               (C_14 : (mv = (C_13 : (C_12 : (t_0 + i_0)).int_M)));
-               (C_15 : (mi = i_0));
-               (C_18 : (j_0 = (C_17 : ((C_16 : (i_0 + 1)) :> int32))));
                
-               {  
-                  loop 
-                  while (true)
+               {  (C_14 : (mv = (C_13 : (C_12 : (t_0 + i_0)).int_M)));
+                  (C_15 : (mi = i_0));
+                  (C_18 : (j_0 = (C_17 : ((C_16 : (i_0 + 1)) :> int32))));
+                  
                   {  
-                     {  (if (j_0 < n) then () else 
-                        (goto while_1_break));
-                        (if ((C_24 : (C_23 : (t_0 + j_0)).int_M) < mv) then 
-                        {  (C_19 : (mi = j_0));
-                           (C_22 : (mv = (C_21 : (C_20 : (t_0 + j_0)).int_M)))
-                        } else ());
-                        (C_27 : (j_0 = (C_26 : ((C_25 : (j_0 + 1)) :> int32))))
-                     }
+                     loop 
+                     while (true)
+                     {  
+                        {  (if (j_0 < n) then () else 
+                           (goto while_1_break));
+                           
+                           {  (if ((C_24 : (C_23 : (t_0 + j_0)).int_M) < mv) then 
+                              {  (C_19 : (mi = j_0));
+                                 (C_22 : (mv = (C_21 : (C_20 : (t_0 + j_0)).int_M)))
+                              } else ())
+                           };
+                           (C_27 : (j_0 = (C_26 : ((C_25 : (j_0 + 1)) :> int32))))
+                        }
+                     };
+                     (while_1_break : ())
                   };
-                  (while_1_break : ())
+                  (C_28 : swap(t_0, i_0, mi))
                };
-               (C_28 : swap(t_0, i_0, mi));
                (C_31 : (i_0 = (C_30 : ((C_29 : (i_0 + 1)) :> int32))))
             }
          };
@@ -770,20 +774,19 @@ let min_sort_ensures_default =
                    Goto_while_1_break_exc jessie_1 ->
                    (while_1_break: void) end;
                   (C_28:
-                  begin
-                    (let jessie_52 = t_0 in
-                    (let jessie_51 = !i_0_1 in
-                    (let jessie_50 = !mi in
-                    (JC_59:
-                    (((((swap jessie_52) jessie_51) jessie_50) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                   (C_31:
-                   begin
-                     (i_0_1 := (C_30:
-                               (safe_int32_of_integer_ (C_29:
-                                                       ((add_int (integer_of_int32 !i_0_1)) (1))))));
-                    !i_0_1 end) end) end) end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_6 -> void end end done);
+                  (let jessie_52 = t_0 in
+                  (let jessie_51 = !i_0_1 in
+                  (let jessie_50 = !mi in
+                  (JC_59:
+                  (((((swap jessie_52) jessie_51) jessie_50) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                 end) end) end);
+               (C_31:
+               begin
+                 (i_0_1 := (C_30:
+                           (safe_int32_of_integer_ (C_29:
+                                                   ((add_int (integer_of_int32 !i_0_1)) (1))))));
+                !i_0_1 end) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
@@ -897,20 +900,19 @@ let min_sort_ensures_permutation =
                    Goto_while_1_break_exc jessie_1 ->
                    (while_1_break: void) end;
                   (C_28:
-                  begin
-                    (let jessie_102 = t_0 in
-                    (let jessie_101 = !i_0_1 in
-                    (let jessie_100 = !mi in
-                    (JC_73:
-                    (((((swap jessie_102) jessie_101) jessie_100) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                   (C_31:
-                   begin
-                     (i_0_1 := (C_30:
-                               (safe_int32_of_integer_ (C_29:
-                                                       ((add_int (integer_of_int32 !i_0_1)) (1))))));
-                    !i_0_1 end) end) end) end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_6 -> void end end done);
+                  (let jessie_102 = t_0 in
+                  (let jessie_101 = !i_0_1 in
+                  (let jessie_100 = !mi in
+                  (JC_73:
+                  (((((swap jessie_102) jessie_101) jessie_100) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                 end) end) end);
+               (C_31:
+               begin
+                 (i_0_1 := (C_30:
+                           (safe_int32_of_integer_ (C_29:
+                                                   ((add_int (integer_of_int32 !i_0_1)) (1))))));
+                !i_0_1 end) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
@@ -1026,20 +1028,19 @@ let min_sort_ensures_sorted =
                    Goto_while_1_break_exc jessie_1 ->
                    (while_1_break: void) end;
                   (C_28:
-                  begin
-                    (let jessie_77 = t_0 in
-                    (let jessie_76 = !i_0_1 in
-                    (let jessie_75 = !mi in
-                    (JC_66:
-                    (((((swap jessie_77) jessie_76) jessie_75) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                   (C_31:
-                   begin
-                     (i_0_1 := (C_30:
-                               (safe_int32_of_integer_ (C_29:
-                                                       ((add_int (integer_of_int32 !i_0_1)) (1))))));
-                    !i_0_1 end) end) end) end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_6 -> void end end done);
+                  (let jessie_77 = t_0 in
+                  (let jessie_76 = !i_0_1 in
+                  (let jessie_75 = !mi in
+                  (JC_66:
+                  (((((swap jessie_77) jessie_76) jessie_75) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                 end) end) end);
+               (C_31:
+               begin
+                 (i_0_1 := (C_30:
+                           (safe_int32_of_integer_ (C_29:
+                                                   ((add_int (integer_of_int32 !i_0_1)) (1))))));
+                !i_0_1 end) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
@@ -1154,21 +1155,20 @@ let min_sort_safety =
                    Goto_while_1_break_exc jessie_1 ->
                    (while_1_break: void) end;
                   (C_28:
-                  begin
-                    (let jessie_27 = t_0 in
-                    (let jessie_26 = !i_0_1 in
-                    (let jessie_25 = !mi in
-                    (JC_51:
-                    (((((swap_requires jessie_27) jessie_26) jessie_25) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                   (C_31:
-                   begin
-                     (i_0_1 := (C_30:
-                               (JC_52:
-                               (int32_of_integer_ (C_29:
-                                                  ((add_int (integer_of_int32 !i_0_1)) (1)))))));
-                    !i_0_1 end) end) end) end) end) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_6 -> void end end done);
+                  (let jessie_27 = t_0 in
+                  (let jessie_26 = !i_0_1 in
+                  (let jessie_25 = !mi in
+                  (JC_51:
+                  (((((swap_requires jessie_27) jessie_26) jessie_25) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                 end) end) end);
+               (C_31:
+               begin
+                 (i_0_1 := (C_30:
+                           (JC_52:
+                           (int32_of_integer_ (C_29:
+                                              ((add_int (integer_of_int32 !i_0_1)) (1)))))));
+                !i_0_1 end) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
@@ -1242,30 +1242,30 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po15.why">
-      <location file = "why/min_sort.why" line = "957" begin = "56" end = "57"/>
+      <location file = "why/min_sort.why" line = "954" begin = "56" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po16.why">
-      <location file = "why/min_sort.why" line = "957" begin = "56" end = "57"/>
+      <location file = "why/min_sort.why" line = "954" begin = "56" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "143" begin = "26" end = "44"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "143" begin = "26" end = "44"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po19.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "143" begin = "26" end = "44"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po20.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "140" begin = "23" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "143" begin = "26" end = "44"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1280,11 +1280,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po23.why">
-      <location file = "why/min_sort.why" line = "915" begin = "44" end = "45"/>
+      <location file = "why/min_sort.why" line = "912" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po24.why">
-      <location file = "why/min_sort.why" line = "915" begin = "44" end = "45"/>
+      <location file = "why/min_sort.why" line = "912" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

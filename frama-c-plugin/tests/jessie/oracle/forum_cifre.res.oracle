@@ -461,10 +461,13 @@ behavior default:
                {  
                   {  
                      {  
-                        {  (C_20 : (tmp_2 = destination));
-                           (C_22 : (destination = (C_21 : (destination + 1))))
-                        };
-                        (C_24 : ((C_23 : tmp_2.char_M) = 0))
+                        {  
+                           {  (C_20 : (tmp_2 = destination));
+                              (C_22 : (destination = (C_21 : (destination +
+                                                               1))))
+                           };
+                           (C_24 : ((C_23 : tmp_2.char_M) = 0))
+                        }
                      };
                      (C_27 : (taille = (C_26 : ((C_25 : (taille - 1)) :> uint32))));
                      (if (taille > 0) then () else 
@@ -2816,12 +2819,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po20.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "461" begin = "33" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "463" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po21.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "461" begin = "33" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "463" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2851,7 +2854,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po7.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "501" begin = "14" end = "71"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "504" begin = "14" end = "71"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

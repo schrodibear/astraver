@@ -218,43 +218,48 @@ behavior j:
    (var int32 tmp_1);
    
    {  (C_3 : (rr = (C_2 : ((C_1 : (rr + 1)) :> int32))));
-      (C_4 : (buch_CurOperation = 0));
-      (C_5 : (buch_CurOpStatus = 1));
-      (C_8 : ((C_7 : (buch_CurStates_old + 0).int_M) = (C_6 : (buch_CurStates +
-                                                                0).int_M)));
-      (C_11 : ((C_10 : (buch_CurStates_old + 1).int_M) = (C_9 : (buch_CurStates +
-                                                                  1).int_M)));
-      (C_14 : ((C_13 : (buch_CurTrans_tmp + 0).int_M) = (C_12 : (buch_CurTrans +
-                                                                  0).int_M)));
-      (C_17 : ((C_16 : (buch_CurTrans_tmp + 1).int_M) = (C_15 : (buch_CurTrans +
-                                                                  1).int_M)));
-      (C_20 : ((C_19 : (buch_CurTrans_tmp + 2).int_M) = (C_18 : (buch_CurTrans +
-                                                                  2).int_M)));
-      (if (status == 0) then (if ((C_24 : (buch_CurStates_old + 0).int_M) !=
-                                   0) then (C_23 : (tmp = 1)) else (C_22 : (tmp = 0))) else 
-      (C_21 : (tmp = 0)));
-      (C_26 : ((C_25 : (buch_CurStates + 0).int_M) = tmp));
-      (C_30 : ((C_29 : (buch_CurStates + 1).int_M) = (C_28 : ((if ((C_27 : 
-                                                                   (buch_CurStates_old +
-                                                                    1).int_M) !=
-                                                                    0) then 1 else 0) :> int32))));
-      (if (status == 0) then (if ((C_36 : (buch_CurStates_old + 0).int_M) !=
-                                   0) then (if ((C_35 : (buch_CurStates + 0).int_M) !=
-                                                 0) then (C_34 : (tmp_0 = 1)) else 
-                                           (C_33 : (tmp_0 = 0))) else 
-                             (C_32 : (tmp_0 = 0))) else (C_31 : (tmp_0 = 0)));
-      (C_38 : ((C_37 : (buch_CurTrans + 0).int_M) = tmp_0));
-      (C_40 : ((C_39 : (buch_CurTrans + 1).int_M) = 0));
-      (if ((C_45 : (buch_CurStates_old + 1).int_M) != 0) then (if ((C_44 : 
-                                                                   (buch_CurStates +
-                                                                    1).int_M) !=
-                                                                    0) then 
-                                                              (C_43 : (tmp_1 = 1)) else 
-                                                              (C_42 : (tmp_1 = 0))) else 
-      (C_41 : (tmp_1 = 0)));
-      (C_47 : ((C_46 : (buch_CurTrans + 2).int_M) = tmp_1));
       
-      (return ())
+      {  (C_4 : (buch_CurOperation = 0));
+         (C_5 : (buch_CurOpStatus = 1));
+         (C_8 : ((C_7 : (buch_CurStates_old + 0).int_M) = (C_6 : (buch_CurStates +
+                                                                   0).int_M)));
+         (C_11 : ((C_10 : (buch_CurStates_old + 1).int_M) = (C_9 : (buch_CurStates +
+                                                                    1).int_M)));
+         (C_14 : ((C_13 : (buch_CurTrans_tmp + 0).int_M) = (C_12 : (buch_CurTrans +
+                                                                    0).int_M)));
+         (C_17 : ((C_16 : (buch_CurTrans_tmp + 1).int_M) = (C_15 : (buch_CurTrans +
+                                                                    1).int_M)));
+         (C_20 : ((C_19 : (buch_CurTrans_tmp + 2).int_M) = (C_18 : (buch_CurTrans +
+                                                                    2).int_M)));
+         (if (status == 0) then (if ((C_24 : (buch_CurStates_old + 0).int_M) !=
+                                      0) then (C_23 : (tmp = 1)) else 
+                                (C_22 : (tmp = 0))) else (C_21 : (tmp = 0)));
+         (C_26 : ((C_25 : (buch_CurStates + 0).int_M) = tmp));
+         (C_30 : ((C_29 : (buch_CurStates + 1).int_M) = (C_28 : ((if 
+                                                                 ((C_27 : 
+                                                                  (buch_CurStates_old +
+                                                                    1).int_M) !=
+                                                                   0) then 1 else 0) :> int32))));
+         (if (status == 0) then (if ((C_36 : (buch_CurStates_old + 0).int_M) !=
+                                      0) then (if ((C_35 : (buch_CurStates +
+                                                             0).int_M) !=
+                                                    0) then (C_34 : (tmp_0 = 1)) else 
+                                              (C_33 : (tmp_0 = 0))) else 
+                                (C_32 : (tmp_0 = 0))) else (C_31 : (tmp_0 = 0)));
+         (C_38 : ((C_37 : (buch_CurTrans + 0).int_M) = tmp_0));
+         (C_40 : ((C_39 : (buch_CurTrans + 1).int_M) = 0));
+         (if ((C_45 : (buch_CurStates_old + 1).int_M) != 0) then (if 
+                                                                 ((C_44 : 
+                                                                  (buch_CurStates +
+                                                                    1).int_M) !=
+                                                                   0) then 
+                                                                 (C_43 : (tmp_1 = 1)) else 
+                                                                 (C_42 : (tmp_1 = 0))) else 
+         (C_41 : (tmp_1 = 0)));
+         (C_47 : ((C_46 : (buch_CurTrans + 2).int_M) = tmp_1));
+         
+         (return ())
+      }
    }
 }
 
@@ -286,50 +291,55 @@ behavior Buchi_property_behavior:
    (var int32 tmp_3);
    
    {  (C_62 : (status = 1));
-      (C_63 : (buch_CurOperation = 2));
-      (C_64 : (buch_CurOpStatus = 1));
-      (C_67 : ((C_66 : (buch_CurStates_old + 0).int_M) = (C_65 : (buch_CurStates +
-                                                                   0).int_M)));
-      (C_70 : ((C_69 : (buch_CurStates_old + 1).int_M) = (C_68 : (buch_CurStates +
-                                                                   1).int_M)));
-      (C_73 : ((C_72 : (buch_CurTrans_tmp + 0).int_M) = (C_71 : (buch_CurTrans +
-                                                                  0).int_M)));
-      (C_76 : ((C_75 : (buch_CurTrans_tmp + 1).int_M) = (C_74 : (buch_CurTrans +
-                                                                  1).int_M)));
-      (C_79 : ((C_78 : (buch_CurTrans_tmp + 2).int_M) = (C_77 : (buch_CurTrans +
-                                                                  2).int_M)));
-      (if (status == 0) then (if ((C_83 : (buch_CurStates_old + 0).int_M) !=
-                                   0) then (C_82 : (tmp_0_0 = 1)) else 
-                             (C_81 : (tmp_0_0 = 0))) else (C_80 : (tmp_0_0 = 0)));
-      (C_85 : ((C_84 : (buch_CurStates + 0).int_M) = tmp_0_0));
-      (if ((C_90 : (buch_CurStates_old + 0).int_M) != 0) then (C_89 : (tmp_0_1 = 1)) else 
-      (if ((C_88 : (buch_CurStates_old + 1).int_M) != 0) then (C_87 : (tmp_0_1 = 1)) else 
-      (C_86 : (tmp_0_1 = 0))));
-      (C_92 : ((C_91 : (buch_CurStates + 1).int_M) = tmp_0_1));
-      (if (status == 0) then (if ((C_98 : (buch_CurStates_old + 0).int_M) !=
-                                   0) then (if ((C_97 : (buch_CurStates + 0).int_M) !=
-                                                 0) then (C_96 : (tmp_1_0 = 1)) else 
-                                           (C_95 : (tmp_1_0 = 0))) else 
-                             (C_94 : (tmp_1_0 = 0))) else (C_93 : (tmp_1_0 = 0)));
-      (C_100 : ((C_99 : (buch_CurTrans + 0).int_M) = tmp_1_0));
-      (if ((C_105 : (buch_CurStates_old + 0).int_M) != 0) then (if ((C_104 : 
-                                                                    (buch_CurStates +
-                                                                    1).int_M) !=
-                                                                    0) then 
-                                                               (C_103 : (tmp_2 = 1)) else 
-                                                               (C_102 : (tmp_2 = 0))) else 
-      (C_101 : (tmp_2 = 0)));
-      (C_107 : ((C_106 : (buch_CurTrans + 1).int_M) = tmp_2));
-      (if ((C_112 : (buch_CurStates_old + 1).int_M) != 0) then (if ((C_111 : 
-                                                                    (buch_CurStates +
-                                                                    1).int_M) !=
-                                                                    0) then 
-                                                               (C_110 : (tmp_3 = 1)) else 
-                                                               (C_109 : (tmp_3 = 0))) else 
-      (C_108 : (tmp_3 = 0)));
-      (C_114 : ((C_113 : (buch_CurTrans + 2).int_M) = tmp_3));
       
-      (return ())
+      {  (C_63 : (buch_CurOperation = 2));
+         (C_64 : (buch_CurOpStatus = 1));
+         (C_67 : ((C_66 : (buch_CurStates_old + 0).int_M) = (C_65 : (buch_CurStates +
+                                                                    0).int_M)));
+         (C_70 : ((C_69 : (buch_CurStates_old + 1).int_M) = (C_68 : (buch_CurStates +
+                                                                    1).int_M)));
+         (C_73 : ((C_72 : (buch_CurTrans_tmp + 0).int_M) = (C_71 : (buch_CurTrans +
+                                                                    0).int_M)));
+         (C_76 : ((C_75 : (buch_CurTrans_tmp + 1).int_M) = (C_74 : (buch_CurTrans +
+                                                                    1).int_M)));
+         (C_79 : ((C_78 : (buch_CurTrans_tmp + 2).int_M) = (C_77 : (buch_CurTrans +
+                                                                    2).int_M)));
+         (if (status == 0) then (if ((C_83 : (buch_CurStates_old + 0).int_M) !=
+                                      0) then (C_82 : (tmp_0_0 = 1)) else 
+                                (C_81 : (tmp_0_0 = 0))) else (C_80 : (tmp_0_0 = 0)));
+         (C_85 : ((C_84 : (buch_CurStates + 0).int_M) = tmp_0_0));
+         (if ((C_90 : (buch_CurStates_old + 0).int_M) != 0) then (C_89 : (tmp_0_1 = 1)) else 
+         (if ((C_88 : (buch_CurStates_old + 1).int_M) != 0) then (C_87 : (tmp_0_1 = 1)) else 
+         (C_86 : (tmp_0_1 = 0))));
+         (C_92 : ((C_91 : (buch_CurStates + 1).int_M) = tmp_0_1));
+         (if (status == 0) then (if ((C_98 : (buch_CurStates_old + 0).int_M) !=
+                                      0) then (if ((C_97 : (buch_CurStates +
+                                                             0).int_M) !=
+                                                    0) then (C_96 : (tmp_1_0 = 1)) else 
+                                              (C_95 : (tmp_1_0 = 0))) else 
+                                (C_94 : (tmp_1_0 = 0))) else (C_93 : (tmp_1_0 = 0)));
+         (C_100 : ((C_99 : (buch_CurTrans + 0).int_M) = tmp_1_0));
+         (if ((C_105 : (buch_CurStates_old + 0).int_M) != 0) then (if 
+                                                                  ((C_104 : 
+                                                                   (buch_CurStates +
+                                                                    1).int_M) !=
+                                                                    0) then 
+                                                                  (C_103 : (tmp_2 = 1)) else 
+                                                                  (C_102 : (tmp_2 = 0))) else 
+         (C_101 : (tmp_2 = 0)));
+         (C_107 : ((C_106 : (buch_CurTrans + 1).int_M) = tmp_2));
+         (if ((C_112 : (buch_CurStates_old + 1).int_M) != 0) then (if 
+                                                                  ((C_111 : 
+                                                                   (buch_CurStates +
+                                                                    1).int_M) !=
+                                                                    0) then 
+                                                                  (C_110 : (tmp_3 = 1)) else 
+                                                                  (C_109 : (tmp_3 = 0))) else 
+         (C_108 : (tmp_3 = 0)));
+         (C_114 : ((C_113 : (buch_CurTrans + 2).int_M) = tmp_3));
+         
+         (return ())
+      }
    }
 }
 
@@ -363,48 +373,59 @@ behavior Buchi_property_behavior:
          (C_128 : (buch_CurOpStatus = 0));
          (C_129 : fake())
       } else ());
-      (C_130 : (buch_CurOperation = 2));
-      (C_131 : (buch_CurOpStatus = 0));
-      (C_132 : op());
+      
+      {  (C_130 : (buch_CurOperation = 2));
+         (C_131 : (buch_CurOpStatus = 0));
+         (C_132 : op())
+      };
       (C_133 : (__retres = 1));
-      (C_134 : (buch_CurOperation = 1));
-      (C_135 : (buch_CurOpStatus = 1));
-      (C_138 : ((C_137 : (buch_CurStates_old + 0).int_M) = (C_136 : (buch_CurStates +
-                                                                    0).int_M)));
-      (C_141 : ((C_140 : (buch_CurStates_old + 1).int_M) = (C_139 : (buch_CurStates +
-                                                                    1).int_M)));
-      (C_144 : ((C_143 : (buch_CurTrans_tmp + 0).int_M) = (C_142 : (buch_CurTrans +
-                                                                    0).int_M)));
-      (C_147 : ((C_146 : (buch_CurTrans_tmp + 1).int_M) = (C_145 : (buch_CurTrans +
-                                                                    1).int_M)));
-      (C_150 : ((C_149 : (buch_CurTrans_tmp + 2).int_M) = (C_148 : (buch_CurTrans +
-                                                                    2).int_M)));
-      (if (status == 0) then (if ((C_154 : (buch_CurStates_old + 0).int_M) !=
-                                   0) then (C_153 : (tmp_0_2 = 1)) else 
-                             (C_152 : (tmp_0_2 = 0))) else (C_151 : (tmp_0_2 = 0)));
-      (C_156 : ((C_155 : (buch_CurStates + 0).int_M) = tmp_0_2));
-      (C_160 : ((C_159 : (buch_CurStates + 1).int_M) = (C_158 : ((if 
-                                                                 ((C_157 : 
-                                                                  (buch_CurStates_old +
+      
+      {  (C_134 : (buch_CurOperation = 1));
+         (C_135 : (buch_CurOpStatus = 1));
+         (C_138 : ((C_137 : (buch_CurStates_old + 0).int_M) = (C_136 : 
+                                                              (buch_CurStates +
+                                                                0).int_M)));
+         (C_141 : ((C_140 : (buch_CurStates_old + 1).int_M) = (C_139 : 
+                                                              (buch_CurStates +
+                                                                1).int_M)));
+         (C_144 : ((C_143 : (buch_CurTrans_tmp + 0).int_M) = (C_142 : 
+                                                             (buch_CurTrans +
+                                                               0).int_M)));
+         (C_147 : ((C_146 : (buch_CurTrans_tmp + 1).int_M) = (C_145 : 
+                                                             (buch_CurTrans +
+                                                               1).int_M)));
+         (C_150 : ((C_149 : (buch_CurTrans_tmp + 2).int_M) = (C_148 : 
+                                                             (buch_CurTrans +
+                                                               2).int_M)));
+         (if (status == 0) then (if ((C_154 : (buch_CurStates_old + 0).int_M) !=
+                                      0) then (C_153 : (tmp_0_2 = 1)) else 
+                                (C_152 : (tmp_0_2 = 0))) else (C_151 : (tmp_0_2 = 0)));
+         (C_156 : ((C_155 : (buch_CurStates + 0).int_M) = tmp_0_2));
+         (C_160 : ((C_159 : (buch_CurStates + 1).int_M) = (C_158 : ((if 
+                                                                    ((C_157 : 
+                                                                    (buch_CurStates_old +
                                                                     1).int_M) !=
-                                                                   0) then 1 else 0) :> int32))));
-      (if (status == 0) then (if ((C_166 : (buch_CurStates_old + 0).int_M) !=
-                                   0) then (if ((C_165 : (buch_CurStates + 0).int_M) !=
-                                                 0) then (C_164 : (tmp_0_3 = 1)) else 
-                                           (C_163 : (tmp_0_3 = 0))) else 
-                             (C_162 : (tmp_0_3 = 0))) else (C_161 : (tmp_0_3 = 0)));
-      (C_168 : ((C_167 : (buch_CurTrans + 0).int_M) = tmp_0_3));
-      (C_170 : ((C_169 : (buch_CurTrans + 1).int_M) = 0));
-      (if ((C_175 : (buch_CurStates_old + 1).int_M) != 0) then (if ((C_174 : 
-                                                                    (buch_CurStates +
+                                                                    0) then 1 else 0) :> int32))));
+         (if (status == 0) then (if ((C_166 : (buch_CurStates_old + 0).int_M) !=
+                                      0) then (if ((C_165 : (buch_CurStates +
+                                                              0).int_M) !=
+                                                    0) then (C_164 : (tmp_0_3 = 1)) else 
+                                              (C_163 : (tmp_0_3 = 0))) else 
+                                (C_162 : (tmp_0_3 = 0))) else (C_161 : (tmp_0_3 = 0)));
+         (C_168 : ((C_167 : (buch_CurTrans + 0).int_M) = tmp_0_3));
+         (C_170 : ((C_169 : (buch_CurTrans + 1).int_M) = 0));
+         (if ((C_175 : (buch_CurStates_old + 1).int_M) != 0) then (if 
+                                                                  ((C_174 : 
+                                                                   (buch_CurStates +
                                                                     1).int_M) !=
                                                                     0) then 
-                                                               (C_173 : (tmp_1_1 = 1)) else 
-                                                               (C_172 : (tmp_1_1 = 0))) else 
-      (C_171 : (tmp_1_1 = 0)));
-      (C_177 : ((C_176 : (buch_CurTrans + 2).int_M) = tmp_1_1));
-      
-      (return __retres)
+                                                                  (C_173 : (tmp_1_1 = 1)) else 
+                                                                  (C_172 : (tmp_1_1 = 0))) else 
+         (C_171 : (tmp_1_1 = 0)));
+         (C_177 : ((C_176 : (buch_CurTrans + 2).int_M) = tmp_1_1));
+         
+         (return __retres)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs t1_annot24.jessie/t1_annot24.cloc t1_annot24.jessie/t1_annot24.jc
@@ -3708,181 +3729,173 @@ let main_ensures_Buchi_property_behavior =
        begin
          (let jessie_803 =
          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
-         void);
-        (C_132:
+         void); (C_132: (JC_444: (op void))) end) end);
+      (C_133:
+      begin
+        (let jessie_805 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (C_134:
+       begin
+         (let jessie_807 =
+         (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in void);
+        (C_135:
         begin
-          (JC_444: (op void));
-         (C_133:
+          (let jessie_809 =
+          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+          void);
+         (C_138:
          begin
-           (let jessie_805 = (__retres := (safe_int32_of_integer_ (1))) in
+           (let jessie_815 =
+           (let jessie_811 =
+           (C_136:
+           ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+           (let jessie_814 = ((shift buch_CurStates_old) (0)) in
+           (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_814) jessie_811))) in
            void);
-          (C_134:
+          (C_141:
           begin
-            (let jessie_807 =
-            (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in
+            (let jessie_821 =
+            (let jessie_817 =
+            (C_139:
+            ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+            (let jessie_820 = ((shift buch_CurStates_old) (1)) in
+            (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_820) jessie_817))) in
             void);
-           (C_135:
+           (C_144:
            begin
-             (let jessie_809 =
-             (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+             (let jessie_827 =
+             (let jessie_823 =
+             (C_142:
+             ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+             (let jessie_826 = ((shift buch_CurTrans_tmp) (0)) in
+             (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_826) jessie_823))) in
              void);
-            (C_138:
+            (C_147:
             begin
-              (let jessie_815 =
-              (let jessie_811 =
-              (C_136:
-              ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-              (let jessie_814 = ((shift buch_CurStates_old) (0)) in
-              (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_814) jessie_811))) in
+              (let jessie_833 =
+              (let jessie_829 =
+              (C_145:
+              ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+              (let jessie_832 = ((shift buch_CurTrans_tmp) (1)) in
+              (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_832) jessie_829))) in
               void);
-             (C_141:
+             (C_150:
              begin
-               (let jessie_821 =
-               (let jessie_817 =
-               (C_139:
-               ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-               (let jessie_820 = ((shift buch_CurStates_old) (1)) in
-               (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_820) jessie_817))) in
+               (let jessie_839 =
+               (let jessie_835 =
+               (C_148:
+               ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+               (let jessie_838 = ((shift buch_CurTrans_tmp) (2)) in
+               (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_838) jessie_835))) in
                void);
-              (C_144:
+              (if ((eq_int_ (integer_of_int32 !status)) (0))
+              then
+               (let jessie_842 =
+               (if ((neq_int_ (integer_of_int32 (C_154:
+                                                ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (C_153:
+                begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2
+                end)
+               else
+                (C_152:
+                begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2
+                end)) in void)
+              else
+               (C_151:
+               (let jessie_844 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
+               void)));
+              (C_156:
               begin
-                (let jessie_827 =
-                (let jessie_823 =
-                (C_142:
-                ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-                (let jessie_826 = ((shift buch_CurTrans_tmp) (0)) in
-                (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_826) jessie_823))) in
+                (let jessie_850 =
+                (let jessie_846 = !tmp_0_2 in
+                (let jessie_849 = ((shift buch_CurStates) (0)) in
+                (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_849) jessie_846))) in
                 void);
-               (C_147:
+               (C_160:
                begin
-                 (let jessie_833 =
-                 (let jessie_829 =
-                 (C_145:
-                 ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-                 (let jessie_832 = ((shift buch_CurTrans_tmp) (1)) in
-                 (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_832) jessie_829))) in
+                 (let jessie_856 =
+                 (let jessie_852 =
+                 (C_158:
+                 (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                         (C_157:
+                                                         ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                          ((shift buch_CurStates_old) (1)))))) (0))
+                                         then (1) else (0)))) in
+                 (let jessie_855 = ((shift buch_CurStates) (1)) in
+                 (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_855) jessie_852))) in
                  void);
-                (C_150:
-                begin
-                  (let jessie_839 =
-                  (let jessie_835 =
-                  (C_148:
-                  ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-                  (let jessie_838 = ((shift buch_CurTrans_tmp) (2)) in
-                  (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_838) jessie_835))) in
-                  void);
-                 (if ((eq_int_ (integer_of_int32 !status)) (0))
+                (if ((eq_int_ (integer_of_int32 !status)) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_166:
+                                                  ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                   ((shift buch_CurStates_old) (0)))))) (0))
                  then
-                  (let jessie_842 =
-                  (if ((neq_int_ (integer_of_int32 (C_154:
-                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                    ((shift buch_CurStates_old) (0)))))) (0))
+                  (let jessie_859 =
+                  (if ((neq_int_ (integer_of_int32 (C_165:
+                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
+                                                    ((shift buch_CurStates) (0)))))) (0))
                   then
-                   (C_153:
+                   (C_164:
                    begin
-                     (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
+                     (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
                   else
-                   (C_152:
+                   (C_163:
                    begin
-                     (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+                     (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
                   void)
                  else
-                  (C_151:
-                  (let jessie_844 =
-                  (tmp_0_2 := (safe_int32_of_integer_ (0))) in void)));
-                 (C_156:
+                  (C_162:
+                  (let jessie_861 =
+                  (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)))
+                else
+                 (C_161:
+                 (let jessie_863 =
+                 (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)));
+                (C_168:
+                begin
+                  (let jessie_869 =
+                  (let jessie_865 = !tmp_0_3 in
+                  (let jessie_868 = ((shift buch_CurTrans) (0)) in
+                  (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_868) jessie_865))) in
+                  void);
+                 (C_170:
                  begin
-                   (let jessie_850 =
-                   (let jessie_846 = !tmp_0_2 in
-                   (let jessie_849 = ((shift buch_CurStates) (0)) in
-                   (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_849) jessie_846))) in
+                   (let jessie_875 =
+                   (let jessie_871 = (safe_int32_of_integer_ (0)) in
+                   (let jessie_874 = ((shift buch_CurTrans) (1)) in
+                   (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_874) jessie_871))) in
                    void);
-                  (C_160:
-                  begin
-                    (let jessie_856 =
-                    (let jessie_852 =
-                    (C_158:
-                    (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
-                                                            (C_157:
-                                                            ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                             ((shift buch_CurStates_old) (1)))))) (0))
-                                            then (1) else (0)))) in
-                    (let jessie_855 = ((shift buch_CurStates) (1)) in
-                    (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_855) jessie_852))) in
-                    void);
-                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                  (if ((neq_int_ (integer_of_int32 (C_175:
+                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                    ((shift buch_CurStates_old) (1)))))) (0))
+                  then
+                   (let jessie_878 =
+                   (if ((neq_int_ (integer_of_int32 (C_174:
+                                                    ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
+                                                     ((shift buch_CurStates) (1)))))) (0))
                    then
-                    (if ((neq_int_ (integer_of_int32 (C_166:
-                                                     ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                      ((shift buch_CurStates_old) (0)))))) (0))
-                    then
-                     (let jessie_859 =
-                     (if ((neq_int_ (integer_of_int32 (C_165:
-                                                      ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
-                                                       ((shift buch_CurStates) (0)))))) (0))
-                     then
-                      (C_164:
-                      begin
-                        (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3
-                      end)
-                     else
-                      (C_163:
-                      begin
-                        (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
-                      end)) in void)
-                    else
-                     (C_162:
-                     (let jessie_861 =
-                     (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)))
-                   else
-                    (C_161:
-                    (let jessie_863 =
-                    (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)));
-                   (C_168:
-                   begin
-                     (let jessie_869 =
-                     (let jessie_865 = !tmp_0_3 in
-                     (let jessie_868 = ((shift buch_CurTrans) (0)) in
-                     (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_868) jessie_865))) in
-                     void);
-                    (C_170:
+                    (C_173:
                     begin
-                      (let jessie_875 =
-                      (let jessie_871 = (safe_int32_of_integer_ (0)) in
-                      (let jessie_874 = ((shift buch_CurTrans) (1)) in
-                      (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_874) jessie_871))) in
-                      void);
-                     (if ((neq_int_ (integer_of_int32 (C_175:
-                                                      ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                       ((shift buch_CurStates_old) (1)))))) (0))
-                     then
-                      (let jessie_878 =
-                      (if ((neq_int_ (integer_of_int32 (C_174:
-                                                       ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
-                                                        ((shift buch_CurStates) (1)))))) (0))
-                      then
-                       (C_173:
-                       begin
-                         (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1
-                       end)
-                      else
-                       (C_172:
-                       begin
-                         (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
-                       end)) in void)
-                     else
-                      (C_171:
-                      (let jessie_880 =
-                      (tmp_1_1 := (safe_int32_of_integer_ (0))) in void)));
-                     (C_177:
-                     begin
-                       (let jessie_886 =
-                       (let jessie_882 = !tmp_1_1 in
-                       (let jessie_885 = ((shift buch_CurTrans) (2)) in
-                       (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_885) jessie_882))) in
-                       void); (return := !__retres); (raise Return) end) end)
-                   end) end) end) end) end) end) end) end) end) end) end) end)
-       end) end) end)))); absurd  end with Return -> !return end))
+                      (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
+                   else
+                    (C_172:
+                    begin
+                      (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
+                   void)
+                  else
+                   (C_171:
+                   (let jessie_880 =
+                   (tmp_1_1 := (safe_int32_of_integer_ (0))) in void)));
+                  (C_177:
+                  begin
+                    (let jessie_886 =
+                    (let jessie_882 = !tmp_1_1 in
+                    (let jessie_885 = ((shift buch_CurTrans) (2)) in
+                    (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_885) jessie_882))) in
+                    void); (return := !__retres); (raise Return) end) end)
+                end) end) end) end) end) end) end) end) end) end) end) end))));
+    absurd  end with Return -> !return end))
   { (JC_416:
     ((JC_400:
      ((JC_396:
@@ -4076,182 +4089,173 @@ let main_ensures_default =
        begin
          (let jessie_711 =
          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
-         void);
-        (C_132:
+         void); (C_132: (JC_442: (op void))) end) end);
+      (C_133:
+      begin
+        (let jessie_713 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (C_134:
+       begin
+         (let jessie_715 =
+         (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in void);
+        (C_135:
         begin
-          (JC_442: (op void));
-         (C_133:
+          (let jessie_717 =
+          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+          void);
+         (C_138:
          begin
-           (let jessie_713 = (__retres := (safe_int32_of_integer_ (1))) in
+           (let jessie_723 =
+           (let jessie_719 =
+           (C_136:
+           ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+           (let jessie_722 = ((shift buch_CurStates_old) (0)) in
+           (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_722) jessie_719))) in
            void);
-          (C_134:
+          (C_141:
           begin
-            (let jessie_715 =
-            (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in
+            (let jessie_729 =
+            (let jessie_725 =
+            (C_139:
+            ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+            (let jessie_728 = ((shift buch_CurStates_old) (1)) in
+            (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_728) jessie_725))) in
             void);
-           (C_135:
+           (C_144:
            begin
-             (let jessie_717 =
-             (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+             (let jessie_735 =
+             (let jessie_731 =
+             (C_142:
+             ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+             (let jessie_734 = ((shift buch_CurTrans_tmp) (0)) in
+             (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_734) jessie_731))) in
              void);
-            (C_138:
+            (C_147:
             begin
-              (let jessie_723 =
-              (let jessie_719 =
-              (C_136:
-              ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-              (let jessie_722 = ((shift buch_CurStates_old) (0)) in
-              (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_722) jessie_719))) in
+              (let jessie_741 =
+              (let jessie_737 =
+              (C_145:
+              ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+              (let jessie_740 = ((shift buch_CurTrans_tmp) (1)) in
+              (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_740) jessie_737))) in
               void);
-             (C_141:
+             (C_150:
              begin
-               (let jessie_729 =
-               (let jessie_725 =
-               (C_139:
-               ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-               (let jessie_728 = ((shift buch_CurStates_old) (1)) in
-               (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_728) jessie_725))) in
+               (let jessie_747 =
+               (let jessie_743 =
+               (C_148:
+               ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+               (let jessie_746 = ((shift buch_CurTrans_tmp) (2)) in
+               (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_746) jessie_743))) in
                void);
-              (C_144:
+              (if ((eq_int_ (integer_of_int32 !status)) (0))
+              then
+               (let jessie_750 =
+               (if ((neq_int_ (integer_of_int32 (C_154:
+                                                ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (C_153:
+                begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2
+                end)
+               else
+                (C_152:
+                begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2
+                end)) in void)
+              else
+               (C_151:
+               (let jessie_752 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
+               void)));
+              (C_156:
               begin
-                (let jessie_735 =
-                (let jessie_731 =
-                (C_142:
-                ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-                (let jessie_734 = ((shift buch_CurTrans_tmp) (0)) in
-                (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_734) jessie_731))) in
+                (let jessie_758 =
+                (let jessie_754 = !tmp_0_2 in
+                (let jessie_757 = ((shift buch_CurStates) (0)) in
+                (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_757) jessie_754))) in
                 void);
-               (C_147:
+               (C_160:
                begin
-                 (let jessie_741 =
-                 (let jessie_737 =
-                 (C_145:
-                 ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-                 (let jessie_740 = ((shift buch_CurTrans_tmp) (1)) in
-                 (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_740) jessie_737))) in
+                 (let jessie_764 =
+                 (let jessie_760 =
+                 (C_158:
+                 (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                         (C_157:
+                                                         ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                          ((shift buch_CurStates_old) (1)))))) (0))
+                                         then (1) else (0)))) in
+                 (let jessie_763 = ((shift buch_CurStates) (1)) in
+                 (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_763) jessie_760))) in
                  void);
-                (C_150:
-                begin
-                  (let jessie_747 =
-                  (let jessie_743 =
-                  (C_148:
-                  ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-                  (let jessie_746 = ((shift buch_CurTrans_tmp) (2)) in
-                  (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_746) jessie_743))) in
-                  void);
-                 (if ((eq_int_ (integer_of_int32 !status)) (0))
+                (if ((eq_int_ (integer_of_int32 !status)) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_166:
+                                                  ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                   ((shift buch_CurStates_old) (0)))))) (0))
                  then
-                  (let jessie_750 =
-                  (if ((neq_int_ (integer_of_int32 (C_154:
-                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                    ((shift buch_CurStates_old) (0)))))) (0))
+                  (let jessie_767 =
+                  (if ((neq_int_ (integer_of_int32 (C_165:
+                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
+                                                    ((shift buch_CurStates) (0)))))) (0))
                   then
-                   (C_153:
+                   (C_164:
                    begin
-                     (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
+                     (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
                   else
-                   (C_152:
+                   (C_163:
                    begin
-                     (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+                     (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
                   void)
                  else
-                  (C_151:
-                  (let jessie_752 =
-                  (tmp_0_2 := (safe_int32_of_integer_ (0))) in void)));
-                 (C_156:
+                  (C_162:
+                  (let jessie_769 =
+                  (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)))
+                else
+                 (C_161:
+                 (let jessie_771 =
+                 (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)));
+                (C_168:
+                begin
+                  (let jessie_777 =
+                  (let jessie_773 = !tmp_0_3 in
+                  (let jessie_776 = ((shift buch_CurTrans) (0)) in
+                  (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_776) jessie_773))) in
+                  void);
+                 (C_170:
                  begin
-                   (let jessie_758 =
-                   (let jessie_754 = !tmp_0_2 in
-                   (let jessie_757 = ((shift buch_CurStates) (0)) in
-                   (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_757) jessie_754))) in
+                   (let jessie_783 =
+                   (let jessie_779 = (safe_int32_of_integer_ (0)) in
+                   (let jessie_782 = ((shift buch_CurTrans) (1)) in
+                   (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_782) jessie_779))) in
                    void);
-                  (C_160:
-                  begin
-                    (let jessie_764 =
-                    (let jessie_760 =
-                    (C_158:
-                    (safe_int32_of_integer_ (if ((neq_int_ (integer_of_int32 
-                                                            (C_157:
-                                                            ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                             ((shift buch_CurStates_old) (1)))))) (0))
-                                            then (1) else (0)))) in
-                    (let jessie_763 = ((shift buch_CurStates) (1)) in
-                    (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_763) jessie_760))) in
-                    void);
-                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                  (if ((neq_int_ (integer_of_int32 (C_175:
+                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                    ((shift buch_CurStates_old) (1)))))) (0))
+                  then
+                   (let jessie_786 =
+                   (if ((neq_int_ (integer_of_int32 (C_174:
+                                                    ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
+                                                     ((shift buch_CurStates) (1)))))) (0))
                    then
-                    (if ((neq_int_ (integer_of_int32 (C_166:
-                                                     ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                      ((shift buch_CurStates_old) (0)))))) (0))
-                    then
-                     (let jessie_767 =
-                     (if ((neq_int_ (integer_of_int32 (C_165:
-                                                      ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
-                                                       ((shift buch_CurStates) (0)))))) (0))
-                     then
-                      (C_164:
-                      begin
-                        (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3
-                      end)
-                     else
-                      (C_163:
-                      begin
-                        (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
-                      end)) in void)
-                    else
-                     (C_162:
-                     (let jessie_769 =
-                     (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)))
-                   else
-                    (C_161:
-                    (let jessie_771 =
-                    (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)));
-                   (C_168:
-                   begin
-                     (let jessie_777 =
-                     (let jessie_773 = !tmp_0_3 in
-                     (let jessie_776 = ((shift buch_CurTrans) (0)) in
-                     (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_776) jessie_773))) in
-                     void);
-                    (C_170:
+                    (C_173:
                     begin
-                      (let jessie_783 =
-                      (let jessie_779 = (safe_int32_of_integer_ (0)) in
-                      (let jessie_782 = ((shift buch_CurTrans) (1)) in
-                      (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_782) jessie_779))) in
-                      void);
-                     (if ((neq_int_ (integer_of_int32 (C_175:
-                                                      ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                       ((shift buch_CurStates_old) (1)))))) (0))
-                     then
-                      (let jessie_786 =
-                      (if ((neq_int_ (integer_of_int32 (C_174:
-                                                       ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
-                                                        ((shift buch_CurStates) (1)))))) (0))
-                      then
-                       (C_173:
-                       begin
-                         (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1
-                       end)
-                      else
-                       (C_172:
-                       begin
-                         (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
-                       end)) in void)
-                     else
-                      (C_171:
-                      (let jessie_788 =
-                      (tmp_1_1 := (safe_int32_of_integer_ (0))) in void)));
-                     (C_177:
-                     begin
-                       (let jessie_794 =
-                       (let jessie_790 = !tmp_1_1 in
-                       (let jessie_793 = ((shift buch_CurTrans) (2)) in
-                       (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_793) jessie_790))) in
-                       void); (return := !__retres); (raise Return) end) end)
-                   end) end) end) end) end) end) end) end) end) end) end) end)
-       end) end) end)))); absurd  end with Return -> !return end))
-  { (JC_362: true) }
+                      (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
+                   else
+                    (C_172:
+                    begin
+                      (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
+                   void)
+                  else
+                   (C_171:
+                   (let jessie_788 =
+                   (tmp_1_1 := (safe_int32_of_integer_ (0))) in void)));
+                  (C_177:
+                  begin
+                    (let jessie_794 =
+                    (let jessie_790 = !tmp_1_1 in
+                    (let jessie_793 = ((shift buch_CurTrans) (2)) in
+                    (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_793) jessie_790))) in
+                    void); (return := !__retres); (raise Return) end) end)
+                end) end) end) end) end) end) end) end) end) end) end) end))));
+    absurd  end with Return -> !return end)) { (JC_362: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -4365,182 +4369,174 @@ let main_safety =
        begin
          (let jessie_619 =
          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (0))) in
-         void);
-        (C_132:
+         void); (C_132: (JC_439: (op_requires void))) end) end);
+      (C_133:
+      begin
+        (let jessie_621 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (C_134:
+       begin
+         (let jessie_623 =
+         (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in void);
+        (C_135:
         begin
-          (JC_439: (op_requires void));
-         (C_133:
+          (let jessie_625 =
+          (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+          void);
+         (C_138:
          begin
-           (let jessie_621 = (__retres := (safe_int32_of_integer_ (1))) in
+           (let jessie_631 =
+           (let jessie_627 =
+           (C_136:
+           ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
+           (let jessie_630 = ((shift buch_CurStates_old) (0)) in
+           (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_630) jessie_627))) in
            void);
-          (C_134:
+          (C_141:
           begin
-            (let jessie_623 =
-            (buch_CurOperation := (safe_buch_ListOper_of_integer_ (1))) in
+            (let jessie_637 =
+            (let jessie_633 =
+            (C_139:
+            ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
+            (let jessie_636 = ((shift buch_CurStates_old) (1)) in
+            (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_636) jessie_633))) in
             void);
-           (C_135:
+           (C_144:
            begin
-             (let jessie_625 =
-             (buch_CurOpStatus := (safe_Buch_OpStatusList_of_integer_ (1))) in
+             (let jessie_643 =
+             (let jessie_639 =
+             (C_142:
+             ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
+             (let jessie_642 = ((shift buch_CurTrans_tmp) (0)) in
+             (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_642) jessie_639))) in
              void);
-            (C_138:
+            (C_147:
             begin
-              (let jessie_631 =
-              (let jessie_627 =
-              (C_136:
-              ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (0)))) in
-              (let jessie_630 = ((shift buch_CurStates_old) (0)) in
-              (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_630) jessie_627))) in
+              (let jessie_649 =
+              (let jessie_645 =
+              (C_145:
+              ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
+              (let jessie_648 = ((shift buch_CurTrans_tmp) (1)) in
+              (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_648) jessie_645))) in
               void);
-             (C_141:
+             (C_150:
              begin
-               (let jessie_637 =
-               (let jessie_633 =
-               (C_139:
-               ((safe_acc_ !int_P_int_M_buch_CurStates_1) ((shift buch_CurStates) (1)))) in
-               (let jessie_636 = ((shift buch_CurStates_old) (1)) in
-               (((safe_upd_ int_P_int_M_buch_CurStates_old_3) jessie_636) jessie_633))) in
+               (let jessie_655 =
+               (let jessie_651 =
+               (C_148:
+               ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
+               (let jessie_654 = ((shift buch_CurTrans_tmp) (2)) in
+               (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_654) jessie_651))) in
                void);
-              (C_144:
+              (if ((eq_int_ (integer_of_int32 !status)) (0))
+              then
+               (let jessie_658 =
+               (if ((neq_int_ (integer_of_int32 (C_154:
+                                                ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                 ((shift buch_CurStates_old) (0)))))) (0))
+               then
+                (C_153:
+                begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2
+                end)
+               else
+                (C_152:
+                begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2
+                end)) in void)
+              else
+               (C_151:
+               (let jessie_660 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
+               void)));
+              (C_156:
               begin
-                (let jessie_643 =
-                (let jessie_639 =
-                (C_142:
-                ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (0)))) in
-                (let jessie_642 = ((shift buch_CurTrans_tmp) (0)) in
-                (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_642) jessie_639))) in
+                (let jessie_666 =
+                (let jessie_662 = !tmp_0_2 in
+                (let jessie_665 = ((shift buch_CurStates) (0)) in
+                (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_665) jessie_662))) in
                 void);
-               (C_147:
+               (C_160:
                begin
-                 (let jessie_649 =
-                 (let jessie_645 =
-                 (C_145:
-                 ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (1)))) in
-                 (let jessie_648 = ((shift buch_CurTrans_tmp) (1)) in
-                 (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_648) jessie_645))) in
+                 (let jessie_672 =
+                 (let jessie_668 =
+                 (C_158:
+                 (JC_440:
+                 (int32_of_integer_ (if ((neq_int_ (integer_of_int32 
+                                                    (C_157:
+                                                    ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                     ((shift buch_CurStates_old) (1)))))) (0))
+                                    then (1) else (0))))) in
+                 (let jessie_671 = ((shift buch_CurStates) (1)) in
+                 (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_671) jessie_668))) in
                  void);
-                (C_150:
-                begin
-                  (let jessie_655 =
-                  (let jessie_651 =
-                  (C_148:
-                  ((safe_acc_ !int_P_int_M_buch_CurTrans_2) ((shift buch_CurTrans) (2)))) in
-                  (let jessie_654 = ((shift buch_CurTrans_tmp) (2)) in
-                  (((safe_upd_ int_P_int_M_buch_CurTrans_tmp_4) jessie_654) jessie_651))) in
-                  void);
-                 (if ((eq_int_ (integer_of_int32 !status)) (0))
+                (if ((eq_int_ (integer_of_int32 !status)) (0))
+                then
+                 (if ((neq_int_ (integer_of_int32 (C_166:
+                                                  ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                   ((shift buch_CurStates_old) (0)))))) (0))
                  then
-                  (let jessie_658 =
-                  (if ((neq_int_ (integer_of_int32 (C_154:
-                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                    ((shift buch_CurStates_old) (0)))))) (0))
+                  (let jessie_675 =
+                  (if ((neq_int_ (integer_of_int32 (C_165:
+                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
+                                                    ((shift buch_CurStates) (0)))))) (0))
                   then
-                   (C_153:
+                   (C_164:
                    begin
-                     (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
+                     (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
                   else
-                   (C_152:
+                   (C_163:
                    begin
-                     (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+                     (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
                   void)
                  else
-                  (C_151:
-                  (let jessie_660 =
-                  (tmp_0_2 := (safe_int32_of_integer_ (0))) in void)));
-                 (C_156:
+                  (C_162:
+                  (let jessie_677 =
+                  (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)))
+                else
+                 (C_161:
+                 (let jessie_679 =
+                 (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)));
+                (C_168:
+                begin
+                  (let jessie_685 =
+                  (let jessie_681 = !tmp_0_3 in
+                  (let jessie_684 = ((shift buch_CurTrans) (0)) in
+                  (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_684) jessie_681))) in
+                  void);
+                 (C_170:
                  begin
-                   (let jessie_666 =
-                   (let jessie_662 = !tmp_0_2 in
-                   (let jessie_665 = ((shift buch_CurStates) (0)) in
-                   (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_665) jessie_662))) in
+                   (let jessie_691 =
+                   (let jessie_687 = (safe_int32_of_integer_ (0)) in
+                   (let jessie_690 = ((shift buch_CurTrans) (1)) in
+                   (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_690) jessie_687))) in
                    void);
-                  (C_160:
-                  begin
-                    (let jessie_672 =
-                    (let jessie_668 =
-                    (C_158:
-                    (JC_440:
-                    (int32_of_integer_ (if ((neq_int_ (integer_of_int32 
-                                                       (C_157:
-                                                       ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                        ((shift buch_CurStates_old) (1)))))) (0))
-                                       then (1) else (0))))) in
-                    (let jessie_671 = ((shift buch_CurStates) (1)) in
-                    (((safe_upd_ int_P_int_M_buch_CurStates_1) jessie_671) jessie_668))) in
-                    void);
-                   (if ((eq_int_ (integer_of_int32 !status)) (0))
+                  (if ((neq_int_ (integer_of_int32 (C_175:
+                                                   ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
+                                                    ((shift buch_CurStates_old) (1)))))) (0))
+                  then
+                   (let jessie_694 =
+                   (if ((neq_int_ (integer_of_int32 (C_174:
+                                                    ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
+                                                     ((shift buch_CurStates) (1)))))) (0))
                    then
-                    (if ((neq_int_ (integer_of_int32 (C_166:
-                                                     ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                      ((shift buch_CurStates_old) (0)))))) (0))
-                    then
-                     (let jessie_675 =
-                     (if ((neq_int_ (integer_of_int32 (C_165:
-                                                      ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
-                                                       ((shift buch_CurStates) (0)))))) (0))
-                     then
-                      (C_164:
-                      begin
-                        (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3
-                      end)
-                     else
-                      (C_163:
-                      begin
-                        (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3
-                      end)) in void)
-                    else
-                     (C_162:
-                     (let jessie_677 =
-                     (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)))
-                   else
-                    (C_161:
-                    (let jessie_679 =
-                    (tmp_0_3 := (safe_int32_of_integer_ (0))) in void)));
-                   (C_168:
-                   begin
-                     (let jessie_685 =
-                     (let jessie_681 = !tmp_0_3 in
-                     (let jessie_684 = ((shift buch_CurTrans) (0)) in
-                     (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_684) jessie_681))) in
-                     void);
-                    (C_170:
+                    (C_173:
                     begin
-                      (let jessie_691 =
-                      (let jessie_687 = (safe_int32_of_integer_ (0)) in
-                      (let jessie_690 = ((shift buch_CurTrans) (1)) in
-                      (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_690) jessie_687))) in
-                      void);
-                     (if ((neq_int_ (integer_of_int32 (C_175:
-                                                      ((safe_acc_ !int_P_int_M_buch_CurStates_old_3) 
-                                                       ((shift buch_CurStates_old) (1)))))) (0))
-                     then
-                      (let jessie_694 =
-                      (if ((neq_int_ (integer_of_int32 (C_174:
-                                                       ((safe_acc_ !int_P_int_M_buch_CurStates_1) 
-                                                        ((shift buch_CurStates) (1)))))) (0))
-                      then
-                       (C_173:
-                       begin
-                         (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1
-                       end)
-                      else
-                       (C_172:
-                       begin
-                         (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1
-                       end)) in void)
-                     else
-                      (C_171:
-                      (let jessie_696 =
-                      (tmp_1_1 := (safe_int32_of_integer_ (0))) in void)));
-                     (C_177:
-                     begin
-                       (let jessie_702 =
-                       (let jessie_698 = !tmp_1_1 in
-                       (let jessie_701 = ((shift buch_CurTrans) (2)) in
-                       (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_701) jessie_698))) in
-                       void); (return := !__retres); (raise Return) end) end)
-                   end) end) end) end) end) end) end) end) end) end) end) end)
-       end) end) end)))); absurd  end with Return -> !return end))
+                      (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
+                   else
+                    (C_172:
+                    begin
+                      (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
+                   void)
+                  else
+                   (C_171:
+                   (let jessie_696 =
+                   (tmp_1_1 := (safe_int32_of_integer_ (0))) in void)));
+                  (C_177:
+                  begin
+                    (let jessie_702 =
+                    (let jessie_698 = !tmp_1_1 in
+                    (let jessie_701 = ((shift buch_CurTrans) (2)) in
+                    (((safe_upd_ int_P_int_M_buch_CurTrans_2) jessie_701) jessie_698))) in
+                    void); (return := !__retres); (raise Return) end) end)
+                end) end) end) end) end) end) end) end) end) end) end) end))));
+    absurd  end with Return -> !return end))
   { (JC_379:
     ((JC_364: inv(rr))
     and ((JC_365: valid_buch_CurStates(int_P_buch_CurStates_1_alloc_table))
@@ -5750,182 +5746,182 @@ why --project [...] why/t1_annot24.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/t1_annot24_po72.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po73.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po74.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po75.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po76.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po77.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po78.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po79.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po80.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po81.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po82.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po83.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po84.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po85.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po86.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po87.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po88.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po89.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "358" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "368" begin = "18" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po90.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po91.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po92.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po93.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po94.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po95.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po96.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po97.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po98.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po99.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po100.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po101.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po102.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po103.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po104.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po105.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po106.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/t1_annot24_po107.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "362" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.jessie/t1_annot24.jc" line = "373" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

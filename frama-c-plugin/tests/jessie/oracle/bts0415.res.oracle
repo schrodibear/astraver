@@ -83,29 +83,35 @@ behavior default:
            case 8:
            {  
               {  
-                 (assert for default: (C_7 : ((- 2147483648) <= 0)));
-                 ()
-              };
-              
-              (goto switch_0_break)
+                 {  
+                    (assert for default: (C_7 : ((- 2147483648) <= 0)));
+                    ()
+                 };
+                 
+                 (goto switch_0_break)
+              }
            }
            case 7:
            {  
               {  
-                 (assert for default: (C_8 : ((- 2147483647) <= 0)));
-                 ()
-              };
-              
-              (goto switch_0_break)
+                 {  
+                    (assert for default: (C_8 : ((- 2147483647) <= 0)));
+                    ()
+                 };
+                 
+                 (goto switch_0_break)
+              }
            }
            case 6:
            {  
               {  
-                 (assert for default: (C_9 : ((- 2147483646) <= 0)));
-                 ()
-              };
-              
-              (goto switch_0_break)
+                 {  
+                    (assert for default: (C_9 : ((- 2147483646) <= 0)));
+                    ()
+                 };
+                 
+                 (goto switch_0_break)
+              }
            }
          };
          (switch_0_break : ())

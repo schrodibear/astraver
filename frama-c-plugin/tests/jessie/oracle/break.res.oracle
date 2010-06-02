@@ -72,12 +72,14 @@ behavior default:
          {  
             {  (if (n >= 0) then () else 
                (goto while_1_break));
-               (if (n == 0) then 
-               {  (C_9 : (n = (C_8 : ((C_7 : (n + 1)) :> int32))));
-                  
-                  (goto while_1_break)
-               } else ());
-               (C_12 : (n = (C_11 : ((C_10 : (n - 1)) :> int32))))
+               
+               {  (if (n == 0) then 
+                  {  (C_9 : (n = (C_8 : ((C_7 : (n + 1)) :> int32))));
+                     
+                     (goto while_1_break)
+                  } else ());
+                  (C_12 : (n = (C_11 : ((C_10 : (n - 1)) :> int32))))
+               }
             }
          };
          (while_1_break : ())
@@ -104,12 +106,14 @@ behavior default:
          {  
             {  (if (n_0 >= 0) then () else 
                (goto while_2_break));
-               (if (n_0 == 1) then 
-               {  (C_19 : (n_0 = (C_18 : ((C_17 : (n_0 + 1)) :> int32))));
-                  
-                  (goto while_2_break)
-               } else ());
-               (C_22 : (n_0 = (C_21 : ((C_20 : (n_0 - 1)) :> int32))))
+               
+               {  (if (n_0 == 1) then 
+                  {  (C_19 : (n_0 = (C_18 : ((C_17 : (n_0 + 1)) :> int32))));
+                     
+                     (goto while_2_break)
+                  } else ());
+                  (C_22 : (n_0 = (C_21 : ((C_20 : (n_0 - 1)) :> int32))))
+               }
             }
          };
          (while_2_break : ())
@@ -137,8 +141,10 @@ behavior default:
          {  
             {  (if (i < 10) then () else 
                (goto while_3_break));
-               (if (i == 3) then 
-               (goto while_3_break) else ());
+               
+               {  (if (i == 3) then 
+                  (goto while_3_break) else ())
+               };
                (C_30 : (i = (C_29 : ((C_28 : (i + 1)) :> int32))))
             }
          };

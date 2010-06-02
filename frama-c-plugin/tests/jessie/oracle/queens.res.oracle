@@ -222,19 +222,21 @@ behavior default:
                   (goto while_0_break));
                   
                   {  
-                     (assert for default: (C_13 : (\exists integer x_11;
-                                                    ((iset(d) ==
-                                                       singleton(x_11)) &&
-                                                      in_(x_11, iset(e))))));
-                     ()
-                  };
-                  
-                  {  (C_20 : (tmp = (C_19 : t1((C_14 : (a_0 - d)),
-                                               (C_16 : ((C_15 : (b_0 + d)) *
-                                                         2)),
-                                               (C_18 : ((C_17 : (c_0 + d)) /
-                                                         2))))));
-                     (C_22 : (f = (C_21 : (f + tmp))))
+                     {  
+                        (assert for default: (C_13 : (\exists integer x_11;
+                                                       ((iset(d) ==
+                                                          singleton(x_11)) &&
+                                                         in_(x_11, iset(e))))));
+                        ()
+                     };
+                     
+                     {  (C_20 : (tmp = (C_19 : t1((C_14 : (a_0 - d)),
+                                                  (C_16 : ((C_15 : (b_0 + d)) *
+                                                            2)),
+                                                  (C_18 : ((C_17 : (c_0 + d)) /
+                                                            2))))));
+                        (C_22 : (f = (C_21 : (f + tmp))))
+                     }
                   };
                   (C_24 : (e = (C_23 : (e - d))))
                }
@@ -432,24 +434,30 @@ behavior default:
                   (goto while_1_break));
                   
                   {  
-                     (assert for default: (C_58 : (\exists integer x_12;
-                                                    ((iset(d_0) ==
-                                                       singleton(x_12)) &&
-                                                      in_(x_12, iset(a))))));
-                     ()
+                     {  
+                        (assert for default: (C_58 : (\exists integer x_12;
+                                                       ((iset(d_0) ==
+                                                          singleton(x_12)) &&
+                                                         in_(x_12, iset(a))))));
+                        ()
+                     };
+                     (C_62 : ((C_61 : (C_60 : (col + k)).int_M) = (C_59 : min_elt(
+                                                                  d_0))));
+                     (C_64 : (k = (C_63 : (k + 1))));
+                     
+                     {  (C_71 : (tmp_0 = (C_70 : t3((C_65 : (a - d_0)),
+                                                    (C_67 : ((C_66 : 
+                                                             (b +
+                                                               d_0)) *
+                                                              2)),
+                                                    (C_69 : ((C_68 : 
+                                                             (c +
+                                                               d_0)) /
+                                                              2))))));
+                        (C_73 : (f_0 = (C_72 : (f_0 + tmp_0))))
+                     };
+                     (C_75 : (k = (C_74 : (k - 1))))
                   };
-                  (C_62 : ((C_61 : (C_60 : (col + k)).int_M) = (C_59 : min_elt(
-                                                               d_0))));
-                  (C_64 : (k = (C_63 : (k + 1))));
-                  
-                  {  (C_71 : (tmp_0 = (C_70 : t3((C_65 : (a - d_0)),
-                                                 (C_67 : ((C_66 : (b + d_0)) *
-                                                           2)),
-                                                 (C_69 : ((C_68 : (c + d_0)) /
-                                                           2))))));
-                     (C_73 : (f_0 = (C_72 : (f_0 + tmp_0))))
-                  };
-                  (C_75 : (k = (C_74 : (k - 1))));
                   (C_77 : (e_0 = (C_76 : (e_0 - d_0))))
                }
             };
@@ -1461,29 +1469,31 @@ let t1_ensures_default =
                    else
                     (let jessie_36 = (raise (Goto_while_0_break_exc void)) in
                     void));
-                   (assert
-                   { (JC_24:
-                     (exists x_11:int.
-                      ((iset(d) = singleton(x_11)) and in_(x_11, iset(e))))) };
-                   void); void;
                    (let jessie_43 =
-                   (C_20:
                    begin
-                     (let jessie_41 =
-                     (tmp := (C_19:
-                             (let jessie_40 = (C_14: ((sub_int a_0_0) !d)) in
-                             (let jessie_39 =
-                             (C_16:
-                             ((mul_int (C_15: ((add_int b_0_0) !d))) (2))) in
-                             (let jessie_38 =
-                             (C_18:
-                             (JC_25:
-                             ((div_int (C_17: ((add_int c_0) !d))) (2)))) in
-                             (JC_26: (((t1 jessie_40) jessie_39) jessie_38))))))) in
-                     void);
-                    (C_22:
-                    begin   (f := (C_21: ((add_int !f) !tmp))); !f end) end) in
-                   void);
+                     (assert
+                     { (JC_24:
+                       (exists x_11:int.
+                        ((iset(d) = singleton(x_11)) and in_(x_11, iset(e))))) };
+                     void); void;
+                    (C_20:
+                    begin
+                      (let jessie_41 =
+                      (tmp := (C_19:
+                              (let jessie_40 =
+                              (C_14: ((sub_int a_0_0) !d)) in
+                              (let jessie_39 =
+                              (C_16:
+                              ((mul_int (C_15: ((add_int b_0_0) !d))) (2))) in
+                              (let jessie_38 =
+                              (C_18:
+                              (JC_25:
+                              ((div_int (C_17: ((add_int c_0) !d))) (2)))) in
+                              (JC_26: (((t1 jessie_40) jessie_39) jessie_38))))))) in
+                      void);
+                     (C_22:
+                     begin   (f := (C_21: ((add_int !f) !tmp))); !f end) end)
+                   end in void);
                    (C_24: begin   (e := (C_23: ((sub_int !e) !d))); !e end)
                   end) in void); (raise (Loop_continue_exc void)) end in
                 void) with Loop_continue_exc jessie_3 -> void end end done);
@@ -1541,34 +1551,36 @@ let t1_safety =
                    else
                     (let jessie_15 = (raise (Goto_while_0_break_exc void)) in
                     void));
-                   [ { } unit reads d,e
-                     { (JC_13:
-                       (exists x_11:int.
-                        ((iset(d) = singleton(x_11)) and in_(x_11, iset(e))))) } ];
-                   void;
                    (let jessie_22 =
-                   (C_20:
                    begin
-                     (let jessie_20 =
-                     (tmp := (C_19:
-                             (let jessie_19 = (C_14: ((sub_int a_0_0) !d)) in
-                             (let jessie_18 =
-                             (C_16:
-                             ((mul_int (C_15: ((add_int b_0_0) !d))) (2))) in
-                             (let jessie_17 =
-                             (C_18:
-                             (JC_14:
-                             ((div_int_ (C_17: ((add_int c_0) !d))) (2)))) in
-                             (JC_18:
-                             (assert
-                             { zwf_zero((JC_17 : card(iset(jessie_19))),
-                               (JC_16 : card(iset(a_0_0)))) };
-                             (JC_15:
-                             (((t1_requires jessie_19) jessie_18) jessie_17))))))))) in
-                     void);
-                    (C_22:
-                    begin   (f := (C_21: ((add_int !f) !tmp))); !f end) end) in
-                   void);
+                     [ { } unit reads d,e
+                       { (JC_13:
+                         (exists x_11:int.
+                          ((iset(d) = singleton(x_11))
+                          and in_(x_11, iset(e))))) } ]; void;
+                    (C_20:
+                    begin
+                      (let jessie_20 =
+                      (tmp := (C_19:
+                              (let jessie_19 =
+                              (C_14: ((sub_int a_0_0) !d)) in
+                              (let jessie_18 =
+                              (C_16:
+                              ((mul_int (C_15: ((add_int b_0_0) !d))) (2))) in
+                              (let jessie_17 =
+                              (C_18:
+                              (JC_14:
+                              ((div_int_ (C_17: ((add_int c_0) !d))) (2)))) in
+                              (JC_18:
+                              (assert
+                              { zwf_zero((JC_17 : card(iset(jessie_19))),
+                                (JC_16 : card(iset(a_0_0)))) };
+                              (JC_15:
+                              (((t1_requires jessie_19) jessie_18) jessie_17))))))))) in
+                      void);
+                     (C_22:
+                     begin   (f := (C_21: ((add_int !f) !tmp))); !f end) end)
+                   end in void);
                    (C_24: begin   (e := (C_23: ((sub_int !e) !d))); !e end)
                   end) in void); (raise (Loop_continue_exc void)) end in
                 void) with Loop_continue_exc jessie_3 -> void end end done);
@@ -1703,54 +1715,54 @@ let t3_ensures_default =
                    else
                     (let jessie_89 = (raise (Goto_while_1_break_exc void)) in
                     void));
-                   (assert
-                   { (JC_121:
-                     (exists x_12:int.
-                      ((iset(d_0) = singleton(x_12))
-                      and in_(x_12, iset(a_1))))) }; void); void;
-                   (C_62:
+                   (let jessie_107 =
                    begin
-                     (let jessie_96 =
-                     (let jessie_92 =
-                     (C_59:
-                     (let jessie_91 = !d_0 in
-                     (JC_122: (min_elt_0 jessie_91)))) in
-                     (let jessie_95 = (C_60: ((shift col) !k)) in
-                     (((safe_upd_ int_P_int_M) jessie_95) jessie_92))) in
-                     void);
-                    (C_64:
+                     (assert
+                     { (JC_121:
+                       (exists x_12:int.
+                        ((iset(d_0) = singleton(x_12))
+                        and in_(x_12, iset(a_1))))) }; void); void;
+                    (C_62:
                     begin
-                      (let jessie_98 = (k := (C_63: ((add_int !k) (1)))) in
+                      (let jessie_96 =
+                      (let jessie_92 =
+                      (C_59:
+                      (let jessie_91 = !d_0 in
+                      (JC_122: (min_elt_0 jessie_91)))) in
+                      (let jessie_95 = (C_60: ((shift col) !k)) in
+                      (((safe_upd_ int_P_int_M) jessie_95) jessie_92))) in
                       void);
-                     (let jessie_105 =
-                     (C_71:
+                     (C_64:
                      begin
-                       (let jessie_103 =
-                       (tmp_0 := (C_70:
-                                 (let jessie_102 =
-                                 (C_65: ((sub_int a_1) !d_0)) in
-                                 (let jessie_101 =
-                                 (C_67:
-                                 ((mul_int (C_66: ((add_int b_1) !d_0))) (2))) in
-                                 (let jessie_100 =
-                                 (C_69:
-                                 (JC_123:
-                                 ((div_int (C_68: ((add_int c) !d_0))) (2)))) in
-                                 (JC_124:
-                                 (((t3 jessie_102) jessie_101) jessie_100))))))) in
+                       (let jessie_98 = (k := (C_63: ((add_int !k) (1)))) in
                        void);
-                      (C_73:
-                      begin   (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0
-                      end) end) in void);
-                     (C_75:
-                     begin
-                       (let jessie_107 = (k := (C_74: ((sub_int !k) (1)))) in
-                       void);
-                      (C_77:
-                      begin   (e_0 := (C_76: ((sub_int !e_0) !d_0))); !e_0
-                      end) end) end) end) end) in void);
-                 (raise (Loop_continue_exc void)) end in void) with
-                Loop_continue_exc jessie_6 -> void end end done);
+                      (let jessie_105 =
+                      (C_71:
+                      begin
+                        (let jessie_103 =
+                        (tmp_0 := (C_70:
+                                  (let jessie_102 =
+                                  (C_65: ((sub_int a_1) !d_0)) in
+                                  (let jessie_101 =
+                                  (C_67:
+                                  ((mul_int (C_66: ((add_int b_1) !d_0))) (2))) in
+                                  (let jessie_100 =
+                                  (C_69:
+                                  (JC_123:
+                                  ((div_int (C_68: ((add_int c) !d_0))) (2)))) in
+                                  (JC_124:
+                                  (((t3 jessie_102) jessie_101) jessie_100))))))) in
+                        void);
+                       (C_73:
+                       begin   (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0
+                       end) end) in void);
+                      (C_75:
+                      begin   (k := (C_74: ((sub_int !k) (1)))); !k end) end)
+                    end) end in void);
+                   (C_77:
+                   begin   (e_0 := (C_76: ((sub_int !e_0) !d_0))); !e_0 end)
+                  end) in void); (raise (Loop_continue_exc void)) end in
+                void) with Loop_continue_exc jessie_6 -> void end end done);
             (raise (Goto_while_1_break_exc void)) end in void) with
            Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end end)
         else (C_39: (JC_125: (store_solution void)))); (return := !f_0);
@@ -1890,61 +1902,61 @@ let t3_safety =
                    else
                     (let jessie_57 = (raise (Goto_while_1_break_exc void)) in
                     void));
-                   [ { } unit reads d_0
-                     { (JC_100:
-                       (exists x_12:int.
-                        ((iset(d_0) = singleton(x_12))
-                        and in_(x_12, iset(a_1))))) } ]; void;
-                   (C_62:
+                   (let jessie_75 =
                    begin
-                     (let jessie_64 =
-                     (let jessie_60 =
-                     (C_59:
-                     (let jessie_59 = !d_0 in
-                     (JC_101: (min_elt_0_requires jessie_59)))) in
-                     (let jessie_61 = col in
-                     (let jessie_62 = !k in
-                     (let jessie_63 = ((shift jessie_61) jessie_62) in
-                     (JC_102:
-                     (((((offset_upd_ !int_P_alloc_table) int_P_int_M) jessie_61) jessie_62) jessie_60)))))) in
-                     void);
-                    (C_64:
+                     [ { } unit reads d_0
+                       { (JC_100:
+                         (exists x_12:int.
+                          ((iset(d_0) = singleton(x_12))
+                          and in_(x_12, iset(a_1))))) } ]; void;
+                    (C_62:
                     begin
-                      (let jessie_66 = (k := (C_63: ((add_int !k) (1)))) in
+                      (let jessie_64 =
+                      (let jessie_60 =
+                      (C_59:
+                      (let jessie_59 = !d_0 in
+                      (JC_101: (min_elt_0_requires jessie_59)))) in
+                      (let jessie_61 = col in
+                      (let jessie_62 = !k in
+                      (let jessie_63 = ((shift jessie_61) jessie_62) in
+                      (JC_102:
+                      (((((offset_upd_ !int_P_alloc_table) int_P_int_M) jessie_61) jessie_62) jessie_60)))))) in
                       void);
-                     (let jessie_73 =
-                     (C_71:
+                     (C_64:
                      begin
-                       (let jessie_71 =
-                       (tmp_0 := (C_70:
-                                 (let jessie_70 =
-                                 (C_65: ((sub_int a_1) !d_0)) in
-                                 (let jessie_69 =
-                                 (C_67:
-                                 ((mul_int (C_66: ((add_int b_1) !d_0))) (2))) in
-                                 (let jessie_68 =
-                                 (C_69:
-                                 (JC_103:
-                                 ((div_int_ (C_68: ((add_int c) !d_0))) (2)))) in
-                                 (JC_107:
-                                 (assert
-                                 { zwf_zero((JC_106 : card(iset(jessie_70))),
-                                   (JC_105 : card(iset(a_1)))) };
-                                 (JC_104:
-                                 (((t3_requires jessie_70) jessie_69) jessie_68))))))))) in
+                       (let jessie_66 = (k := (C_63: ((add_int !k) (1)))) in
                        void);
-                      (C_73:
-                      begin   (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0
-                      end) end) in void);
-                     (C_75:
-                     begin
-                       (let jessie_75 = (k := (C_74: ((sub_int !k) (1)))) in
-                       void);
-                      (C_77:
-                      begin   (e_0 := (C_76: ((sub_int !e_0) !d_0))); !e_0
-                      end) end) end) end) end) in void);
-                 (raise (Loop_continue_exc void)) end in void) with
-                Loop_continue_exc jessie_6 -> void end end done);
+                      (let jessie_73 =
+                      (C_71:
+                      begin
+                        (let jessie_71 =
+                        (tmp_0 := (C_70:
+                                  (let jessie_70 =
+                                  (C_65: ((sub_int a_1) !d_0)) in
+                                  (let jessie_69 =
+                                  (C_67:
+                                  ((mul_int (C_66: ((add_int b_1) !d_0))) (2))) in
+                                  (let jessie_68 =
+                                  (C_69:
+                                  (JC_103:
+                                  ((div_int_ (C_68: ((add_int c) !d_0))) (2)))) in
+                                  (JC_107:
+                                  (assert
+                                  { zwf_zero((JC_106 : card(iset(jessie_70))),
+                                    (JC_105 : card(iset(a_1)))) };
+                                  (JC_104:
+                                  (((t3_requires jessie_70) jessie_69) jessie_68))))))))) in
+                        void);
+                       (C_73:
+                       begin   (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0
+                       end) end) in void);
+                      (C_75:
+                      begin   (k := (C_74: ((sub_int !k) (1)))); !k end) end)
+                    end) end in void);
+                   (C_77:
+                   begin   (e_0 := (C_76: ((sub_int !e_0) !d_0))); !e_0 end)
+                  end) in void); (raise (Loop_continue_exc void)) end in
+                void) with Loop_continue_exc jessie_6 -> void end end done);
             (raise (Goto_while_1_break_exc void)) end in void) with
            Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end end)
         else (C_39: (JC_109: (store_solution_requires void))));
@@ -1958,21 +1970,21 @@ why --project [...] why/queens.why
   <lemma name="dont_bother_me_I_am_a_ghost_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po1.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "266" begin = "0" end = "125"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "268" begin = "0" end = "125"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dont_bother_me_I_am_a_ghost_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po2.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "270" begin = "0" end = "188"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "272" begin = "0" end = "188"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dont_bother_me_I_am_a_ghost_3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po3.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "276" begin = "0" end = "125"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "278" begin = "0" end = "125"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1986,24 +1998,24 @@ why --project [...] why/queens.why
   <lemma name="partial_solution_eq_prefix">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po5.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "293" begin = "0" end = "230"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "295" begin = "0" end = "230"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="partial_solution_eq_prefix">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "293" begin = "0" end = "230"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "295" begin = "0" end = "230"/>
   </function>
   <function name="iset_c_min_elt_help">
     <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "182" begin = "0" end = "97"/>
   </function>
   <function name="dont_bother_me_I_am_a_ghost_3">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "276" begin = "0" end = "125"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "278" begin = "0" end = "125"/>
   </function>
   <function name="dont_bother_me_I_am_a_ghost_2">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "270" begin = "0" end = "188"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "272" begin = "0" end = "188"/>
   </function>
   <function name="dont_bother_me_I_am_a_ghost_1">
-    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "266" begin = "0" end = "125"/>
+    <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "268" begin = "0" end = "125"/>
   </function>
   <function name="Function t3">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -2014,12 +2026,12 @@ why --project [...] why/queens.why
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po65.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "433" begin = "27" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "436" begin = "30" end = "154"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queens_po66.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "433" begin = "27" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "436" begin = "30" end = "154"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2029,11 +2041,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1437" begin = "35" end = "140"/>
+      <location file = "why/queens.why" line = "1443" begin = "36" end = "142"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1437" begin = "35" end = "140"/>
+      <location file = "why/queens.why" line = "1443" begin = "36" end = "142"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2144,11 +2156,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po42.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "386" begin = "12" end = "3677"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po43.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "386" begin = "12" end = "3677"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po44.why">
@@ -2192,11 +2204,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po54.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "386" begin = "12" end = "3677"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po55.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "12" end = "3328"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "386" begin = "12" end = "3677"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po56.why">
@@ -2242,11 +2254,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1070" begin = "31" end = "132"/>
+      <location file = "why/queens.why" line = "1074" begin = "32" end = "134"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1070" begin = "31" end = "132"/>
+      <location file = "why/queens.why" line = "1074" begin = "32" end = "134"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po32.why">

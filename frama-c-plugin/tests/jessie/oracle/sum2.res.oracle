@@ -84,7 +84,9 @@ behavior default:
          {  
             {  (if (i < n) then () else 
                (goto while_0_break));
-               (C_12 : (s = (C_11 : (s + (C_10 : (C_9 : (t + i)).int_M)))));
+               
+               {  (C_12 : (s = (C_11 : (s + (C_10 : (C_9 : (t + i)).int_M)))))
+               };
                (C_14 : (i = (C_13 : (i + 1))))
             }
          };
@@ -120,12 +122,14 @@ behavior default:
          {  
             {  (if (i_0 < n_0) then () else 
                (goto while_1_break));
-               (C_33 : ((C_32 : (C_31 : (t_0 + i_0)).int_M) = (C_30 : 
-                                                              ((C_29 : 
-                                                               (C_28 : 
-                                                               (t_0 +
-                                                                 i_0)).int_M) +
-                                                                1))));
+               
+               {  (C_33 : ((C_32 : (C_31 : (t_0 + i_0)).int_M) = (C_30 : 
+                                                                 ((C_29 : 
+                                                                  (C_28 : 
+                                                                  (t_0 +
+                                                                    i_0)).int_M) +
+                                                                   1))))
+               };
                (C_35 : (i_0 = (C_34 : (i_0 + 1))))
             }
          };
@@ -592,18 +596,18 @@ let test1_ensures_default =
                  else
                   (let jessie_23 = (raise (Goto_while_0_break_exc void)) in
                   void));
+                (let jessie_25 =
                 (C_12:
                 begin
-                  (let jessie_25 =
                   (s := (C_11:
                         ((add_int !s) (C_10:
                                       ((safe_acc_ int_P_int_M_t_2) (C_9:
-                                                                   ((shift t_0) !i_3))))))) in
-                  void);
-                 (C_14:
-                 begin   (i_3 := (C_13: ((add_int !i_3) (1)))); !i_3 end) end)
-               end in void); (raise (Loop_continue_exc void)) end in void)
-             with Loop_continue_exc jessie_3 -> void end end done);
+                                                                   ((shift t_0) !i_3)))))));
+                 !s end) in void);
+                (C_14:
+                begin   (i_3 := (C_13: ((add_int !i_3) (1)))); !i_3 end) end in
+               void); (raise (Loop_continue_exc void)) end in void) with
+             Loop_continue_exc jessie_3 -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (return := !s); (raise Return) end) end))); absurd  end with Return ->
@@ -651,18 +655,18 @@ let test1_safety =
                  else
                   (let jessie_11 = (raise (Goto_while_0_break_exc void)) in
                   void));
+                (let jessie_13 =
                 (C_12:
                 begin
-                  (let jessie_13 =
                   (s := (C_11:
                         ((add_int !s) (C_10:
                                       (JC_22:
-                                      ((((offset_acc_ int_P_t_2_alloc_table) int_P_int_M_t_2) t_0) !i_3)))))) in
-                  void);
-                 (C_14:
-                 begin   (i_3 := (C_13: ((add_int !i_3) (1)))); !i_3 end) end)
-               end in void); (raise (Loop_continue_exc void)) end in void)
-             with Loop_continue_exc jessie_3 -> void end end done);
+                                      ((((offset_acc_ int_P_t_2_alloc_table) int_P_int_M_t_2) t_0) !i_3))))));
+                 !s end) in void);
+                (C_14:
+                begin   (i_3 := (C_13: ((add_int !i_3) (1)))); !i_3 end) end in
+               void); (raise (Loop_continue_exc void)) end in void) with
+             Loop_continue_exc jessie_3 -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (return := !s); (raise Return) end) end))); absurd  end with Return ->
@@ -712,21 +716,21 @@ let test2_ensures_default =
                 else
                  (let jessie_46 = (raise (Goto_while_1_break_exc void)) in
                  void));
+               (let jessie_52 =
                (C_33:
+               (let jessie_48 =
+               (C_30:
+               ((add_int (C_29:
+                         ((safe_acc_ !int_P_int_M_t_0_3) (C_28:
+                                                         ((shift t_0_0) !i_0_0))))) (1))) in
+               (let jessie_51 = (C_31: ((shift t_0_0) !i_0_0)) in
                begin
-                 (let jessie_52 =
-                 (let jessie_48 =
-                 (C_30:
-                 ((add_int (C_29:
-                           ((safe_acc_ !int_P_int_M_t_0_3) (C_28:
-                                                           ((shift t_0_0) !i_0_0))))) (1))) in
-                 (let jessie_51 = (C_31: ((shift t_0_0) !i_0_0)) in
-                 (((safe_upd_ int_P_int_M_t_0_3) jessie_51) jessie_48))) in
-                 void);
-                (C_35:
-                begin   (i_0_0 := (C_34: ((add_int !i_0_0) (1)))); !i_0_0 end)
-               end) end in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_6 -> void end end done);
+                 (((safe_upd_ int_P_int_M_t_0_3) jessie_51) jessie_48);
+                jessie_48 end))) in void);
+               (C_35:
+               begin   (i_0_0 := (C_34: ((add_int !i_0_0) (1)))); !i_0_0 end)
+              end in void); (raise (Loop_continue_exc void)) end in void)
+            with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
        Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
@@ -778,24 +782,24 @@ let test2_safety =
                 else
                  (let jessie_33 = (raise (Goto_while_1_break_exc void)) in
                  void));
+               (let jessie_39 =
                (C_33:
+               (let jessie_35 =
+               (C_30:
+               ((add_int (C_29:
+                         (JC_56:
+                         ((((offset_acc_ int_P_t_0_3_alloc_table) !int_P_int_M_t_0_3) t_0_0) !i_0_0)))) (1))) in
+               (let jessie_36 = t_0_0 in
+               (let jessie_37 = !i_0_0 in
+               (let jessie_38 = ((shift jessie_36) jessie_37) in
                begin
-                 (let jessie_39 =
-                 (let jessie_35 =
-                 (C_30:
-                 ((add_int (C_29:
-                           (JC_56:
-                           ((((offset_acc_ int_P_t_0_3_alloc_table) !int_P_int_M_t_0_3) t_0_0) !i_0_0)))) (1))) in
-                 (let jessie_36 = t_0_0 in
-                 (let jessie_37 = !i_0_0 in
-                 (let jessie_38 = ((shift jessie_36) jessie_37) in
                  (JC_57:
-                 (((((offset_upd_ int_P_t_0_3_alloc_table) int_P_int_M_t_0_3) jessie_36) jessie_37) jessie_35)))))) in
-                 void);
-                (C_35:
-                begin   (i_0_0 := (C_34: ((add_int !i_0_0) (1)))); !i_0_0 end)
-               end) end in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_6 -> void end end done);
+                 (((((offset_upd_ int_P_t_0_3_alloc_table) int_P_int_M_t_0_3) jessie_36) jessie_37) jessie_35));
+                jessie_35 end))))) in void);
+               (C_35:
+               begin   (i_0_0 := (C_34: ((add_int !i_0_0) (1)))); !i_0_0 end)
+              end in void); (raise (Loop_continue_exc void)) end in void)
+            with Loop_continue_exc jessie_6 -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
        Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
@@ -819,12 +823,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po24.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "117" begin = "24" end = "432"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "120" begin = "27" end = "450"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po25.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "117" begin = "24" end = "432"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "120" begin = "27" end = "450"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -851,7 +855,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum2_po15.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "106" begin = "9" end = "984"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "108" begin = "9" end = "1035"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/sum2_po16.why">
@@ -867,7 +871,7 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum2_po19.why">
-      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "106" begin = "9" end = "984"/>
+      <location file = "PPCHOME/tests/jessie/sum2.jessie/sum2.jc" line = "108" begin = "9" end = "1035"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/sum2_po20.why">

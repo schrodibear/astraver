@@ -83,13 +83,15 @@ behavior not_equal:
          {  
             {  (if (first1 != last1) then () else 
                (goto while_0_break));
-               (if ((C_9 : first1.int_M) != (C_8 : first2.int_M)) then 
-               {  (C_7 : (__retres = 0));
-                  
-                  (goto return_label)
-               } else ());
-               (C_11 : (first1 = (C_10 : (first1 + 1))));
-               (C_13 : (first2 = (C_12 : (first2 + 1))))
+               
+               {  (if ((C_9 : first1.int_M) != (C_8 : first2.int_M)) then 
+                  {  (C_7 : (__retres = 0));
+                     
+                     (goto return_label)
+                  } else ());
+                  (C_11 : (first1 = (C_10 : (first1 + 1))));
+                  (C_13 : (first2 = (C_12 : (first2 + 1))))
+               }
             }
          };
          (while_0_break : ())

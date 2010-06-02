@@ -48,12 +48,14 @@ behavior default:
          {  
             {  (if (n > 0) then () else 
                (goto while_0_break));
-               (if (n == 5) then 
-               {  (C_4 : (n = 0));
-                  
-                  (goto __Cont)
-               } else ());
-               (C_7 : (n = (C_6 : ((C_5 : (n - 1)) :> int32))));
+               
+               {  (if (n == 5) then 
+                  {  (C_4 : (n = 0));
+                     
+                     (goto __Cont)
+                  } else ());
+                  (C_7 : (n = (C_6 : ((C_5 : (n - 1)) :> int32))))
+               };
                (__Cont : ())
             }
          };
@@ -82,11 +84,13 @@ behavior default:
          {  
             {  (if (i < 10) then () else 
                (goto while_1_break));
-               (if (i == 5) then 
-               {  (C_13 : (i = 6));
-                  
-                  (goto __Cont)
-               } else ());
+               
+               {  (if (i == 5) then 
+                  {  (C_13 : (i = 6));
+                     
+                     (goto __Cont)
+                  } else ())
+               };
                (__Cont : ());
                (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
             }
@@ -115,11 +119,13 @@ behavior default:
          {  
             {  (if (i_0 < 6) then () else 
                (goto while_2_break));
-               (if (i_0 == 5) then 
-               {  (C_23 : (i_0 = 6));
-                  
-                  (goto __Cont)
-               } else ());
+               
+               {  (if (i_0 == 5) then 
+                  {  (C_23 : (i_0 = 6));
+                     
+                     (goto __Cont)
+                  } else ())
+               };
                (__Cont : ());
                (C_26 : (i_0 = (C_25 : ((C_24 : (i_0 + 1)) :> int32))))
             }
@@ -451,22 +457,23 @@ let f1_ensures_default =
                  else
                   (let jessie_27 = (raise (Goto_while_0_break_exc void)) in
                   void));
-                (if ((eq_int_ (integer_of_int32 !n)) (5))
-                then
-                 (let jessie_30 =
-                 (C_4:
-                 begin
-                   (let jessie_29 = (n := (safe_int32_of_integer_ (0))) in
-                   void); (raise (Goto___Cont_exc void)) end) in void)
-                else void);
-                (C_7:
+                (let jessie_32 =
                 begin
-                  (let jessie_32 =
-                  (n := (C_6:
-                        (safe_int32_of_integer_ (C_5:
-                                                ((sub_int (integer_of_int32 !n)) (1)))))) in
-                  void); (raise (Goto___Cont_exc void)) end) end in void)
-               with Goto___Cont_exc jessie_1 -> (__Cont: void) end;
+                  (if ((eq_int_ (integer_of_int32 !n)) (5))
+                  then
+                   (let jessie_30 =
+                   (C_4:
+                   begin
+                     (let jessie_29 = (n := (safe_int32_of_integer_ (0))) in
+                     void); (raise (Goto___Cont_exc void)) end) in void)
+                  else void);
+                 (C_7:
+                 begin
+                   (n := (C_6:
+                         (safe_int32_of_integer_ (C_5:
+                                                 ((sub_int (integer_of_int32 !n)) (1))))));
+                  !n end) end in void); (raise (Goto___Cont_exc void)) end in
+               void) with Goto___Cont_exc jessie_1 -> (__Cont: void) end;
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_4 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -503,23 +510,24 @@ let f1_safety =
                  else
                   (let jessie_15 = (raise (Goto_while_0_break_exc void)) in
                   void));
-                (if ((eq_int_ (integer_of_int32 !n)) (5))
-                then
-                 (let jessie_18 =
-                 (C_4:
-                 begin
-                   (let jessie_17 = (n := (safe_int32_of_integer_ (0))) in
-                   void); (raise (Goto___Cont_exc void)) end) in void)
-                else void);
-                (C_7:
+                (let jessie_20 =
                 begin
-                  (let jessie_20 =
-                  (n := (C_6:
-                        (JC_13:
-                        (int32_of_integer_ (C_5:
-                                           ((sub_int (integer_of_int32 !n)) (1))))))) in
-                  void); (raise (Goto___Cont_exc void)) end) end in void)
-               with Goto___Cont_exc jessie_1 -> (__Cont: void) end;
+                  (if ((eq_int_ (integer_of_int32 !n)) (5))
+                  then
+                   (let jessie_18 =
+                   (C_4:
+                   begin
+                     (let jessie_17 = (n := (safe_int32_of_integer_ (0))) in
+                     void); (raise (Goto___Cont_exc void)) end) in void)
+                  else void);
+                 (C_7:
+                 begin
+                   (n := (C_6:
+                         (JC_13:
+                         (int32_of_integer_ (C_5:
+                                            ((sub_int (integer_of_int32 !n)) (1)))))));
+                  !n end) end in void); (raise (Goto___Cont_exc void)) end in
+               void) with Goto___Cont_exc jessie_1 -> (__Cont: void) end;
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_4 -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -862,11 +870,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/continue_po6.why">
-      <location file = "why/continue.why" line = "360" begin = "43" end = "72"/>
+      <location file = "why/continue.why" line = "361" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/continue_po7.why">
-      <location file = "why/continue.why" line = "360" begin = "43" end = "72"/>
+      <location file = "why/continue.why" line = "361" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

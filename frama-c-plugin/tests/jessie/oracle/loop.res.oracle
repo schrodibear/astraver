@@ -48,9 +48,11 @@ behavior default:
                (goto while_0_break));
                
                {  
-                  (assert for default: (C_2 : ((C_3 : (0 <= i)) &&
-                                                (C_4 : (i < n)))));
-                  ()
+                  {  
+                     (assert for default: (C_2 : ((C_3 : (0 <= i)) &&
+                                                   (C_4 : (i < n)))));
+                     ()
+                  }
                };
                (C_7 : (i = (C_6 : ((C_5 : (i + 1)) :> int32))))
             }

@@ -74,8 +74,10 @@ behavior default:
          {  
             {  (if (i < 10) then () else 
                (goto while_1_break));
-               (C_14 : (j = (C_13 : ((C_12 : (j + 1)) :> int32))));
-               (C_17 : (k = (C_16 : ((C_15 : (k - 1)) :> int32))));
+               
+               {  (C_14 : (j = (C_13 : ((C_12 : (j + 1)) :> int32))));
+                  (C_17 : (k = (C_16 : ((C_15 : (k - 1)) :> int32))))
+               };
                (C_20 : (i = (C_19 : ((C_18 : (i + 1)) :> int32))))
             }
          };
@@ -507,6 +509,7 @@ let f_ensures_default =
                   else
                    (let jessie_51 = (raise (Goto_while_1_break_exc void)) in
                    void));
+                 (let jessie_55 =
                  (C_14:
                  begin
                    (let jessie_53 =
@@ -516,18 +519,16 @@ let f_ensures_default =
                    void);
                   (C_17:
                   begin
-                    (let jessie_55 =
                     (mutable_k := (C_16:
                                   (safe_int32_of_integer_ (C_15:
-                                                          ((sub_int (integer_of_int32 !mutable_k)) (1)))))) in
-                    void);
-                   (C_20:
-                   begin
-                     (mutable_i := (C_19:
-                                   (safe_int32_of_integer_ (C_18:
-                                                           ((add_int 
-                                                             (integer_of_int32 !mutable_i)) (1))))));
-                    !mutable_i end) end) end) end in void);
+                                                          ((sub_int (integer_of_int32 !mutable_k)) (1))))));
+                   !mutable_k end) end) in void);
+                 (C_20:
+                 begin
+                   (mutable_i := (C_19:
+                                 (safe_int32_of_integer_ (C_18:
+                                                         ((add_int (integer_of_int32 !mutable_i)) (1))))));
+                  !mutable_i end) end in void);
                (raise (Loop_continue_exc void)) end in void) with
               Loop_continue_exc jessie_5 -> void end end done);
           (raise (Goto_while_1_break_exc void)) end in void) with
@@ -573,6 +574,7 @@ let f_safety =
                   else
                    (let jessie_36 = (raise (Goto_while_1_break_exc void)) in
                    void));
+                 (let jessie_40 =
                  (C_14:
                  begin
                    (let jessie_38 =
@@ -583,19 +585,18 @@ let f_safety =
                    void);
                   (C_17:
                   begin
-                    (let jessie_40 =
                     (mutable_k := (C_16:
                                   (JC_29:
                                   (int32_of_integer_ (C_15:
-                                                     ((sub_int (integer_of_int32 !mutable_k)) (1))))))) in
-                    void);
-                   (C_20:
-                   begin
-                     (mutable_i := (C_19:
-                                   (JC_30:
-                                   (int32_of_integer_ (C_18:
-                                                      ((add_int (integer_of_int32 !mutable_i)) (1)))))));
-                    !mutable_i end) end) end) end in void);
+                                                     ((sub_int (integer_of_int32 !mutable_k)) (1)))))));
+                   !mutable_k end) end) in void);
+                 (C_20:
+                 begin
+                   (mutable_i := (C_19:
+                                 (JC_30:
+                                 (int32_of_integer_ (C_18:
+                                                    ((add_int (integer_of_int32 !mutable_i)) (1)))))));
+                  !mutable_i end) end in void);
                (raise (Loop_continue_exc void)) end in void) with
               Loop_continue_exc jessie_5 -> void end end done);
           (raise (Goto_while_1_break_exc void)) end in void) with

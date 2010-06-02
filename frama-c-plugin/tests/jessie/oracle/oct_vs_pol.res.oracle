@@ -53,9 +53,11 @@ behavior default:
             {  (if (0 <= j) then (if (j <= 9) then () else 
                                  (goto while_0_break)) else 
                (goto while_0_break));
-               (C_7 : (i = (C_6 : ((C_5 : ((C_4 : ((C_3 : (i * 10)) :> int32)) +
-                                            j)) :> int32))));
-               (C_10 : (k = (C_9 : ((C_8 : (k + 1)) :> int32))))
+               
+               {  (C_7 : (i = (C_6 : ((C_5 : ((C_4 : ((C_3 : (i * 10)) :> int32)) +
+                                               j)) :> int32))));
+                  (C_10 : (k = (C_9 : ((C_8 : (k + 1)) :> int32))))
+               }
             }
          };
          (while_0_break : ())

@@ -164,8 +164,10 @@ behavior in_interval:
          {  
             {  (if (i < n) then () else 
                (goto while_0_break));
-               (if (z <= (C_13 : (C_12 : (x + i)).double_M)) then 
-               (goto while_0_break) else ());
+               
+               {  (if (z <= (C_13 : (C_12 : (x + i)).double_M)) then 
+                  (goto while_0_break) else ())
+               };
                (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
             }
          };

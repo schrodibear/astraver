@@ -237,25 +237,28 @@ behavior default:
                };
                (if (child <= high) then () else 
                (goto while_0_break));
-               (if ((C_29 : ((C_28 : (child + 1)) :> uint32)) <= high) then 
-               (if ((C_27 : (C_26 : (a_0 +
-                                      (C_25 : ((C_24 : (child + 1)) :> uint32)))).int_M) >=
-                     (C_23 : (C_22 : (a_0 + child)).int_M)) then (C_21 : (child = 
-                                                                 (C_20 : (
-                                                                 (C_19 : 
-                                                                 (child +
-                                                                   1)) :> uint32)))) else ()) else ());
-               (if (v >= (C_31 : (C_30 : (a_0 + child)).int_M)) then 
-               (goto while_0_break) else ());
-               (C_36 : ((C_35 : (C_34 : (a_0 + i)).int_M) = (C_33 : (C_32 : 
-                                                                    (a_0 +
-                                                                    child)).int_M)));
                
-               {  
-                  (assert for default: (C_37 : Hnode{Here}(a_0, i, high)));
-                  ()
-               };
-               (C_38 : (i = child))
+               {  (if ((C_29 : ((C_28 : (child + 1)) :> uint32)) <= high) then 
+                  (if ((C_27 : (C_26 : (a_0 +
+                                         (C_25 : ((C_24 : (child + 1)) :> uint32)))).int_M) >=
+                        (C_23 : (C_22 : (a_0 + child)).int_M)) then (C_21 : (child = 
+                                                                    (C_20 : (
+                                                                    (C_19 : 
+                                                                    (child +
+                                                                    1)) :> uint32)))) else ()) else ());
+                  (if (v >= (C_31 : (C_30 : (a_0 + child)).int_M)) then 
+                  (goto while_0_break) else ());
+                  (C_36 : ((C_35 : (C_34 : (a_0 + i)).int_M) = (C_33 : 
+                                                               (C_32 : 
+                                                               (a_0 +
+                                                                 child)).int_M)));
+                  
+                  {  
+                     (assert for default: (C_37 : Hnode{Here}(a_0, i, high)));
+                     ()
+                  };
+                  (C_38 : (i = child))
+               }
             }
          };
          (while_0_break : ())
@@ -2009,12 +2012,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po108.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "244" begin = "24" end = "234"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "245" begin = "27" end = "293"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po109.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "244" begin = "24" end = "234"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "245" begin = "27" end = "293"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2027,12 +2030,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po112.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "257" begin = "15" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "260" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po113.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "257" begin = "15" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "260" begin = "15" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2063,11 +2066,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2675"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2675"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
@@ -2099,11 +2102,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2675"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2537"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "207" begin = "9" end = "2675"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">
@@ -2179,27 +2182,27 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po42.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "297" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po43.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "297" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po44.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "297" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po45.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "297" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po46.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "294" begin = "23" end = "303"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "297" begin = "23" end = "303"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2252,12 +2255,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po57.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "327" begin = "27" end = "287"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "287"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po58.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "327" begin = "27" end = "287"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "27" end = "287"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2272,27 +2275,27 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po61.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "334" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po62.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "334" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po63.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "334" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po64.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "334" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po65.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "331" begin = "27" end = "164"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "334" begin = "27" end = "164"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

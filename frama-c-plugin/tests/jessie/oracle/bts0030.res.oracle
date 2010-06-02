@@ -39,16 +39,16 @@ type void_P = [void_P]
 
 int32 lexicographical_compare_array(int_P[..] a, int32 length_a, int_P[..] b,
                                     int32 length_b)
-  requires (C_37 : (0 <= length_a));
-  requires (C_36 : (0 <= length_b));
-  requires (C_33 : ((C_34 : (\offset_min(a) <= 0)) &&
-                     (C_35 : (\offset_max(a) >= (length_a - 1)))));
-  requires (C_30 : ((C_31 : (\offset_min(b) <= 0)) &&
-                     (C_32 : (\offset_max(b) >= (length_b - 1)))));
+  requires (C_36 : (0 <= length_a));
+  requires (C_35 : (0 <= length_b));
+  requires (C_32 : ((C_33 : (\offset_min(a) <= 0)) &&
+                     (C_34 : (\offset_max(a) >= (length_a - 1)))));
+  requires (C_29 : ((C_30 : (\offset_min(b) <= 0)) &&
+                     (C_31 : (\offset_max(b) >= (length_b - 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_27 : ((C_28 : ((\result == 1) || (\result == 0))) &&
-                    (C_29 : ((((\exists integer k1_1;
+  ensures (C_26 : ((C_27 : ((\result == 1) || (\result == 0))) &&
+                    (C_28 : ((((\exists integer k1_1;
                                  ((((0 <= k1_1) &&
                                      (k1_1 < \at(length_a,Old))) &&
                                     ((0 <= k1_1) &&
@@ -99,26 +99,29 @@ behavior default:
             {  (if (i != length_a) then (if (i != length_b) then () else 
                                         (goto while_0_break)) else 
                (goto while_0_break));
-               (if ((C_14 : (C_13 : (a + i)).int_M) <
-                     (C_12 : (C_11 : (b + i)).int_M)) then 
-               {  
+               
+               {  (if ((C_14 : (C_13 : (a + i)).int_M) <
+                        (C_12 : (C_11 : (b + i)).int_M)) then 
                   {  
-                     (assert for default: (C_9 : (\exists integer k1;
-                                                   (((0 <= k1) && (k1 <= i)) &&
-                                                     ((a + k1).int_M <
-                                                       (b + k1).int_M)))));
-                     ()
-                  };
-                  (C_10 : (__retres = 1));
-                  
-                  (goto return_label)
-               } else ());
-               (if ((C_19 : (C_18 : (b + i)).int_M) <
-                     (C_17 : (C_16 : (a + i)).int_M)) then 
-               {  (C_15 : (__retres = 0));
-                  
-                  (goto return_label)
-               } else ());
+                     {  
+                        (assert for default: (C_9 : (\exists integer k1;
+                                                      (((0 <= k1) &&
+                                                         (k1 <= i)) &&
+                                                        ((a + k1).int_M <
+                                                          (b + k1).int_M)))));
+                        ()
+                     };
+                     (C_10 : (__retres = 1));
+                     
+                     (goto return_label)
+                  } else ());
+                  (if ((C_19 : (C_18 : (b + i)).int_M) <
+                        (C_17 : (C_16 : (a + i)).int_M)) then 
+                  {  (C_15 : (__retres = 0));
+                     
+                     (goto return_label)
+                  } else ())
+               };
                (C_22 : (i = (C_21 : ((C_20 : (i + 1)) :> int32))))
             }
          };
@@ -127,7 +130,7 @@ behavior default:
       (if (i == length_a) then (if (i != length_b) then 
                                {  
                                   {  
-                                     (assert for default: (C_25 : ((\exists integer k1_0;
+                                     (assert for default: (C_23 : ((\exists integer k1_0;
                                                                     ((((0 <=
                                                                     k1_0) &&
                                                                     (k1_0 <
@@ -151,20 +154,17 @@ behavior default:
                                                                     (b + k2).int_M)))))));
                                      ()
                                   };
-                                  (C_26 : (__retres = 1));
+                                  (C_24 : (__retres = 1));
                                   
                                   (goto return_label)
                                } else 
-                               {  (C_24 : (__retres = 0));
-                                  
-                                  (goto return_label)
-                               }) else 
-      {  (C_23 : (__retres = 0));
-         
-         (goto return_label)
-      });
-      (return_label : 
-      (return __retres))
+                               (goto _LAND)) else 
+      (goto _LAND));
+      (_LAND : 
+      {  (C_25 : (__retres = 0));
+         (return_label : 
+         (return __retres))
+      })
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0030.jessie/bts0030.cloc bts0030.jessie/bts0030.jc
@@ -179,6 +179,8 @@ type int_P
 type padding
 
 type void_P
+
+exception Goto__LAND_exc of unit
 
 exception Goto_while_0_break_exc of unit
 
@@ -682,7 +684,7 @@ let lexicographical_compare_array_ensures_default =
      (let i = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_53 =
+      (let jessie_49 =
       (C_1:
       begin
         (let jessie_31 = (i := (safe_int32_of_integer_ (0))) in void);
@@ -773,7 +775,7 @@ let lexicographical_compare_array_ensures_default =
                         (safe_int32_of_integer_ (C_20:
                                                 ((add_int (integer_of_int32 !i)) (1))))));
                  !i end) end in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_4 -> void end end done);
+             void) with Loop_continue_exc jessie_5 -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (if ((eq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
@@ -802,25 +804,23 @@ let lexicographical_compare_array_ensures_default =
                                               shift(a, k2))),
                       integer_of_int32(select(int_P_int_M_b_2, shift(b, k2))))))))) };
            void); void;
-          (C_26:
+          (C_24:
           begin
             (let jessie_45 = (__retres := (safe_int32_of_integer_ (1))) in
             void); (raise (Return_label_exc void)) end) end in void)
-        else
-         (let jessie_49 =
-         (C_24:
-         begin
-           (let jessie_48 = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void))
-       else
-        (let jessie_52 =
-        (C_23:
-        begin
-          (let jessie_51 = (__retres := (safe_int32_of_integer_ (0))) in
-          void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end) in void) with
-      Return_label_exc jessie_2 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end));
+        else (let jessie_47 = (raise (Goto__LAND_exc void)) in void))
+       else (let jessie_48 = (raise (Goto__LAND_exc void)) in void));
+       (raise (Goto__LAND_exc void)) end) in void) with
+      Goto__LAND_exc jessie_3 ->
+      (_LAND:
+      try
+       (let jessie_52 =
+       (C_25:
+       begin
+         (let jessie_51 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (raise (Return_label_exc void)) end) in void) with
+       Return_label_exc jessie_2 ->
+       (return_label: begin   (return := !__retres); (raise Return) end) end) end));
     absurd  end with Return -> !return end))
   { (JC_19:
     ((JC_17:
@@ -888,12 +888,12 @@ let lexicographical_compare_array_safety =
      (let i = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_28 =
+      (let jessie_25 =
       (C_1:
       begin
-        (let jessie_6 = (i := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_7 = (i := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_18 =
+        (let jessie_19 =
         begin
           (loop_1:
           while true do
@@ -918,19 +918,19 @@ let lexicographical_compare_array_safety =
                            integer_of_int32(select(int_P_int_M_b_2,
                                             shift(b, k))))))))) } ];
             try
-             (let jessie_17 =
+             (let jessie_18 =
              begin
-               (let jessie_16 =
+               (let jessie_17 =
                begin
                  (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
                  then
                   (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
                   then void
                   else
-                   (let jessie_7 = (raise (Goto_while_0_break_exc void)) in
+                   (let jessie_8 = (raise (Goto_while_0_break_exc void)) in
                    void))
                  else
-                  (let jessie_8 = (raise (Goto_while_0_break_exc void)) in
+                  (let jessie_9 = (raise (Goto_while_0_break_exc void)) in
                   void));
                 (if ((lt_int_ (integer_of_int32 (C_14:
                                                 (JC_37:
@@ -941,7 +941,7 @@ let lexicographical_compare_array_safety =
                                        ((((offset_acc_ int_P_b_2_alloc_table) int_P_int_M_b_2) b) 
                                         (integer_of_int32 !i))))))
                 then
-                 (let jessie_11 =
+                 (let jessie_12 =
                  begin
                    [ { } unit reads i
                      { (JC_39:
@@ -955,7 +955,7 @@ let lexicographical_compare_array_safety =
                   void;
                   (C_10:
                   begin
-                    (let jessie_10 =
+                    (let jessie_11 =
                     (__retres := (safe_int32_of_integer_ (1))) in void);
                    (raise (Return_label_exc void)) end) end in void)
                 else void);
@@ -968,10 +968,10 @@ let lexicographical_compare_array_safety =
                                        ((((offset_acc_ int_P_a_1_alloc_table) int_P_int_M_a_1) a) 
                                         (integer_of_int32 !i))))))
                 then
-                 (let jessie_14 =
+                 (let jessie_15 =
                  (C_15:
                  begin
-                   (let jessie_13 =
+                   (let jessie_14 =
                    (__retres := (safe_int32_of_integer_ (0))) in void);
                   (raise (Return_label_exc void)) end) in void) else void);
                 (C_22:
@@ -981,14 +981,14 @@ let lexicographical_compare_array_safety =
                         (int32_of_integer_ (C_20:
                                            ((add_int (integer_of_int32 !i)) (1)))))));
                  !i end) end in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_4 -> void end end done);
+             void) with Loop_continue_exc jessie_5 -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (if ((eq_int_ (integer_of_int32 !i)) (integer_of_int32 length_a))
        then
         (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
         then
-         (let jessie_21 =
+         (let jessie_22 =
          begin
            [ { } unit
              { (JC_43:
@@ -1010,25 +1010,23 @@ let lexicographical_compare_array_safety =
                                                 shift(a, k2))),
                         integer_of_int32(select(int_P_int_M_b_2,
                                          shift(b, k2))))))))) } ]; void;
-          (C_26:
+          (C_24:
           begin
-            (let jessie_20 = (__retres := (safe_int32_of_integer_ (1))) in
+            (let jessie_21 = (__retres := (safe_int32_of_integer_ (1))) in
             void); (raise (Return_label_exc void)) end) end in void)
-        else
-         (let jessie_24 =
-         (C_24:
-         begin
-           (let jessie_23 = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void))
-       else
-        (let jessie_27 =
-        (C_23:
-        begin
-          (let jessie_26 = (__retres := (safe_int32_of_integer_ (0))) in
-          void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end) in void) with
-      Return_label_exc jessie_2 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end));
+        else (let jessie_23 = (raise (Goto__LAND_exc void)) in void))
+       else (let jessie_24 = (raise (Goto__LAND_exc void)) in void));
+       (raise (Goto__LAND_exc void)) end) in void) with
+      Goto__LAND_exc jessie_3 ->
+      (_LAND:
+      try
+       (let jessie_28 =
+       (C_25:
+       begin
+         (let jessie_27 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (raise (Return_label_exc void)) end) in void) with
+       Return_label_exc jessie_2 ->
+       (return_label: begin   (return := !__retres); (raise Return) end) end) end));
     absurd  end with Return -> !return end)) { true }
 
 
@@ -1038,11 +1036,6 @@ why --project [...] why/bts0030.why
   <function name="Function lexicographical_compare_array">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/bts0030_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "41" begin = "8" end = "10"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/bts0030_po16.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "41" begin = "8" end = "10"/>
       <explain kind = "Pre"
@@ -1059,7 +1052,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0030_po19.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "49" begin = "8" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "41" begin = "8" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1079,9 +1072,9 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0030_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "39" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "49" begin = "8" end = "10"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0030_po24.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "39" begin = "4" end = "7"/>
@@ -1089,12 +1082,21 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0030_po25.why">
-      <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
-      <explain kind = "VarDecr"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "39" begin = "4" end = "7"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0030_po26.why">
       <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0030_po27.why">
+      <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0030_po28.why">
+      <location file = "why/bts0030.why" line = "860" begin = "47" end = "51"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
@@ -1152,6 +1154,10 @@ text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0030_po14.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "22" begin = "1" end = "204"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0030_po15.why">
+      <location file = "why/bts0030.why" line = "655" begin = "5" end = "2480"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

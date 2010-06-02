@@ -67,8 +67,10 @@ behavior default:
          {  
             {  (if (j >= y) then () else 
                (goto while_0_break));
-               (C_9 : (i = (C_8 : ((C_7 : (i + 1)) :> int32))));
-               (C_12 : (j = (C_11 : ((C_10 : (j - y)) :> int32))))
+               
+               {  (C_9 : (i = (C_8 : ((C_7 : (i + 1)) :> int32))));
+                  (C_12 : (j = (C_11 : ((C_10 : (j - y)) :> int32))))
+               }
             }
          };
          (while_0_break : ())

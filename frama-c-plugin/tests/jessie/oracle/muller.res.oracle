@@ -113,11 +113,13 @@ behavior default:
          {  
             {  (if (i < length) then () else 
                (goto while_0_break));
-               (if ((C_18 : (C_17 : (t + i)).int_M) > 0) then (C_16 : (count = 
-                                                              (C_15 : (
-                                                              (C_14 : 
-                                                              (count +
-                                                                1)) :> int32)))) else ());
+               
+               {  (if ((C_18 : (C_17 : (t + i)).int_M) > 0) then (C_16 : (count = 
+                                                                 (C_15 : (
+                                                                 (C_14 : 
+                                                                 (count +
+                                                                   1)) :> int32)))) else ())
+               };
                (C_21 : (i = (C_20 : ((C_19 : (i + 1)) :> int32))))
             }
          };
@@ -140,16 +142,18 @@ behavior default:
          {  
             {  (if (i < length) then () else 
                (goto while_1_break));
-               (if ((C_46 : (C_45 : (t + i)).int_M) > 0) then 
-               {  
-                  {  (C_36 : (tmp_0 = count));
-                     (C_39 : (count = (C_38 : ((C_37 : (count + 1)) :> int32))))
-                  };
-                  (C_44 : ((C_43 : (C_42 : (u + tmp_0)).int_M) = (C_41 : 
-                                                                 (C_40 : 
-                                                                 (t +
-                                                                   i)).int_M)))
-               } else ());
+               
+               {  (if ((C_46 : (C_45 : (t + i)).int_M) > 0) then 
+                  {  
+                     {  (C_36 : (tmp_0 = count));
+                        (C_39 : (count = (C_38 : ((C_37 : (count + 1)) :> int32))))
+                     };
+                     (C_44 : ((C_43 : (C_42 : (u + tmp_0)).int_M) = (C_41 : 
+                                                                    (C_40 : 
+                                                                    (t +
+                                                                    i)).int_M)))
+                  } else ())
+               };
                (C_49 : (i = (C_48 : ((C_47 : (i + 1)) :> int32))))
             }
          };
@@ -1057,12 +1061,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po37.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "141" begin = "27" end = "295"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "144" begin = "30" end = "305"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po38.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "141" begin = "27" end = "295"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "144" begin = "30" end = "305"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -333,45 +333,48 @@ behavior default:
                   {  
                      {  (if (k_0 < K_1) then () else 
                         (goto while_4_break));
-                        (C_93 : (let __cil_tmp = (C_84 : fmod())
-                                in (C_92 : ((C_91 : (C_90 : (X_0 +
-                                                              (C_89 : (
-                                                              (C_88 : 
-                                                              ((C_87 : (
-                                                               (C_86 : 
-                                                               (i_0 *
-                                                                 LDX_0)) :> int32)) +
-                                                                k_0)) :> int32)))).double_M) = 
-                                   (C_85 : (__cil_tmp :> double))))));
-                        (if ((C_115 : (C_114 : (X_0 +
-                                                 (C_113 : ((C_112 : ((C_111 : (
-                                                                    (C_110 : 
-                                                                    (i_0 *
+                        
+                        {  (C_93 : (let __cil_tmp = (C_84 : fmod())
+                                   in (C_92 : ((C_91 : (C_90 : (X_0 +
+                                                                 (C_89 : (
+                                                                 (C_88 : 
+                                                                 ((C_87 : (
+                                                                  (C_86 : 
+                                                                  (i_0 *
                                                                     LDX_0)) :> int32)) +
-                                                                    k_0)) :> int32)))).double_M) <
-                              (C_109 : (0 :> double))) then (C_108 : (
-                                                            (C_107 : 
-                                                            (C_106 : 
-                                                            (X_0 +
-                                                              (C_105 : (
-                                                              (C_104 : 
-                                                              ((C_103 : (
-                                                               (C_102 : 
+                                                                   k_0)) :> int32)))).double_M) = 
+                                      (C_85 : (__cil_tmp :> double))))));
+                           (if ((C_115 : (C_114 : (X_0 +
+                                                    (C_113 : ((C_112 : 
+                                                              ((C_111 : (
+                                                               (C_110 : 
                                                                (i_0 *
                                                                  LDX_0)) :> int32)) +
-                                                                k_0)) :> int32)))).double_M) = 
-                                                            (C_101 : 
-                                                            ((C_100 : 
-                                                             (C_99 : 
-                                                             (X_0 +
-                                                               (C_98 : (
-                                                               (C_97 : 
-                                                               ((C_96 : (
-                                                                (C_95 : 
-                                                                (i_0 *
-                                                                  LDX_0)) :> int32)) +
-                                                                 k_0)) :> int32)))).double_M) +
-                                                              (C_94 : (p_2 :> double)))))) else ());
+                                                                k_0)) :> int32)))).double_M) <
+                                 (C_109 : (0 :> double))) then (C_108 : (
+                                                               (C_107 : 
+                                                               (C_106 : 
+                                                               (X_0 +
+                                                                 (C_105 : (
+                                                                 (C_104 : 
+                                                                 ((C_103 : (
+                                                                  (C_102 : 
+                                                                  (i_0 *
+                                                                    LDX_0)) :> int32)) +
+                                                                   k_0)) :> int32)))).double_M) = 
+                                                               (C_101 : 
+                                                               ((C_100 : 
+                                                                (C_99 : 
+                                                                (X_0 +
+                                                                  (C_98 : (
+                                                                  (C_97 : 
+                                                                  ((C_96 : (
+                                                                   (C_95 : 
+                                                                   (i_0 *
+                                                                    LDX_0)) :> int32)) +
+                                                                    k_0)) :> int32)))).double_M) +
+                                                                 (C_94 : (p_2 :> double)))))) else ())
+                        };
                         (C_118 : (k_0 = (C_117 : ((C_116 : (k_0 + 1)) :> int32))))
                      }
                   };
@@ -530,10 +533,13 @@ behavior default:
                                          -53)) :> int32)) !=
                      0) then () else 
                (goto while_8_break));
-               (C_193 : (pp = (C_192 : (pp * (C_191 : (p :> double))))));
-               (C_198 : (p2 = (C_197 : (p2 *
-                                         (C_196 : ((C_195 : ((C_194 : 
-                                                             (p - 2)) :> int32)) :> double))))));
+               
+               {  (C_193 : (pp = (C_192 : (pp * (C_191 : (p :> double))))));
+                  (C_198 : (p2 = (C_197 : (p2 *
+                                            (C_196 : ((C_195 : ((C_194 : 
+                                                                (p -
+                                                                  2)) :> int32)) :> double))))))
+               };
                (C_201 : (N_4 = (C_200 : ((C_199 : (N_4 + 1)) :> int32))))
             }
          };
@@ -611,9 +617,7 @@ behavior default:
             (assert for default: (C_242 : (N <= 55)));
             ()
          };
-         
-         {  (C_243 : DTRSM(N, K, A, LDA, B, LDB))
-         };
+         (C_243 : DTRSM(N, K, A, LDA, B, LDB));
          (C_244 : DREMM(N, K, p_0, B, LDB))
       } else 
       {  (C_222 : (P = (C_221 : ((C_220 : (N / 2)) :> int32))));
@@ -2438,14 +2442,14 @@ let DREMM_ensures_default =
                                                                   (integer_of_int32 LDX_0_0))))))) 
                                                               (integer_of_int32 !k_0_0)))))))) in
                            (((safe_upd_ double_P_double_M_X_0_7) jessie_129) jessie_126))) in
-                           void)) else void);
-                          (C_118:
-                          begin
-                            (k_0_0 := (C_117:
-                                      (safe_int32_of_integer_ (C_116:
-                                                              ((add_int 
-                                                                (integer_of_int32 !k_0_0)) (1))))));
-                           !k_0_0 end) end) end in void);
+                           void)) else void) end);
+                         (C_118:
+                         begin
+                           (k_0_0 := (C_117:
+                                     (safe_int32_of_integer_ (C_116:
+                                                             ((add_int 
+                                                               (integer_of_int32 !k_0_0)) (1))))));
+                          !k_0_0 end) end in void);
                        (raise (Loop_continue_exc void)) end in void) with
                       Loop_continue_exc jessie_13 -> void end end done);
                   (raise (Goto_while_4_break_exc void)) end in void) with
@@ -2646,14 +2650,14 @@ let DREMM_safety =
                            ((shift jessie_100) jessie_101) in
                            (JC_141:
                            (((((offset_upd_ double_P_X_0_7_alloc_table) double_P_double_M_X_0_7) jessie_100) jessie_101) jessie_99)))))) in
-                           void)) else void);
-                          (C_118:
-                          begin
-                            (k_0_0 := (C_117:
-                                      (JC_142:
-                                      (int32_of_integer_ (C_116:
-                                                         ((add_int (integer_of_int32 !k_0_0)) (1)))))));
-                           !k_0_0 end) end) end in void);
+                           void)) else void) end);
+                         (C_118:
+                         begin
+                           (k_0_0 := (C_117:
+                                     (JC_142:
+                                     (int32_of_integer_ (C_116:
+                                                        ((add_int (integer_of_int32 !k_0_0)) (1)))))));
+                          !k_0_0 end) end in void);
                        (raise (Loop_continue_exc void)) end in void) with
                       Loop_continue_exc jessie_13 -> void end end done);
                   (raise (Goto_while_4_break_exc void)) end in void) with
@@ -3167,23 +3171,24 @@ let LZ_TRSM_ensures_default =
          (assert { (JC_305: le_int(integer_of_int32(N_4), (55))) }; void);
         void;
         (C_243:
-        (let jessie_306 = N_4 in
-        (let jessie_305 = K in
-        (let jessie_304 = A in
-        (let jessie_303 = LDA in
-        (let jessie_302 = B in
-        (let jessie_301 = LDB in
-        (JC_306:
-        ((((((((((DTRSM jessie_306) jessie_305) jessie_304) jessie_303) jessie_302) jessie_301) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10)))))))));
-        (C_244:
-        (let jessie_311 = N_4 in
-        (let jessie_310 = K in
-        (let jessie_309 = p_0_0 in
-        (let jessie_308 = B in
-        (let jessie_307 = LDB in
-        (JC_307:
-        (((((((DREMM jessie_311) jessie_310) jessie_309) jessie_308) jessie_307) double_P_double_M_B_11) double_P_B_11_alloc_table))))))))
-       end
+        begin
+          (let jessie_306 = N_4 in
+          (let jessie_305 = K in
+          (let jessie_304 = A in
+          (let jessie_303 = LDA in
+          (let jessie_302 = B in
+          (let jessie_301 = LDB in
+          (JC_306:
+          ((((((((((DTRSM jessie_306) jessie_305) jessie_304) jessie_303) jessie_302) jessie_301) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))));
+         (C_244:
+         (let jessie_311 = N_4 in
+         (let jessie_310 = K in
+         (let jessie_309 = p_0_0 in
+         (let jessie_308 = B in
+         (let jessie_307 = LDB in
+         (JC_307:
+         (((((((DREMM jessie_311) jessie_310) jessie_309) jessie_308) jessie_307) double_P_double_M_B_11) double_P_B_11_alloc_table))))))))
+        end) end
       else
        (C_222:
        begin
@@ -3323,23 +3328,24 @@ let LZ_TRSM_safety =
          [ { } unit { (JC_288: le_int(integer_of_int32(N_4), (55))) } ];
         void;
         (C_243:
-        (let jessie_259 = N_4 in
-        (let jessie_258 = K in
-        (let jessie_257 = A in
-        (let jessie_256 = LDA in
-        (let jessie_255 = B in
-        (let jessie_254 = LDB in
-        (JC_289:
-        ((((((((((DTRSM_requires jessie_259) jessie_258) jessie_257) jessie_256) jessie_255) jessie_254) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10)))))))));
-        (C_244:
-        (let jessie_264 = N_4 in
-        (let jessie_263 = K in
-        (let jessie_262 = p_0_0 in
-        (let jessie_261 = B in
-        (let jessie_260 = LDB in
-        (JC_290:
-        (((((((DREMM_requires jessie_264) jessie_263) jessie_262) jessie_261) jessie_260) double_P_double_M_B_11) double_P_B_11_alloc_table))))))))
-       end
+        begin
+          (let jessie_259 = N_4 in
+          (let jessie_258 = K in
+          (let jessie_257 = A in
+          (let jessie_256 = LDA in
+          (let jessie_255 = B in
+          (let jessie_254 = LDB in
+          (JC_289:
+          ((((((((((DTRSM_requires jessie_259) jessie_258) jessie_257) jessie_256) jessie_255) jessie_254) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))));
+         (C_244:
+         (let jessie_264 = N_4 in
+         (let jessie_263 = K in
+         (let jessie_262 = p_0_0 in
+         (let jessie_261 = B in
+         (let jessie_260 = LDB in
+         (JC_290:
+         (((((((DREMM_requires jessie_264) jessie_263) jessie_262) jessie_261) jessie_260) double_P_double_M_B_11) double_P_B_11_alloc_table))))))))
+        end) end
       else
        (C_222:
        begin
@@ -3505,6 +3511,7 @@ let Nmax_ensures_default =
                   else
                    (let jessie_215 = (raise (Goto_while_8_break_exc void)) in
                    void));
+                 (let jessie_219 =
                  (C_193:
                  begin
                    (let jessie_217 =
@@ -3517,7 +3524,6 @@ let Nmax_ensures_default =
                    void);
                   (C_198:
                   begin
-                    (let jessie_219 =
                     (p2_0 := (C_197:
                              (JC_246:
                              (((mul_double_safe nearest_even) !p2_0) 
@@ -3528,17 +3534,16 @@ let Nmax_ensures_default =
                                                                     (safe_int32_of_integer_ 
                                                                     (C_194:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 p_0)) (2))))))))))))) in
-                    void);
-                   (C_201:
-                   begin
-                     (N_4_0 := (C_200:
-                               (safe_int32_of_integer_ (C_199:
-                                                       ((add_int (integer_of_int32 !N_4_0)) (1))))));
-                    !N_4_0 end) end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_27 -> void end end done);
-          (raise (Goto_while_8_break_exc void)) end in void) with
+                                                                    (integer_of_int32 p_0)) (2)))))))))))));
+                   !p2_0 end) end) in void);
+                 (C_201:
+                 begin
+                   (N_4_0 := (C_200:
+                             (safe_int32_of_integer_ (C_199:
+                                                     ((add_int (integer_of_int32 !N_4_0)) (1))))));
+                  !N_4_0 end) end in void); (raise (Loop_continue_exc void))
+              end in void) with Loop_continue_exc jessie_27 -> void end end
+           done); (raise (Goto_while_8_break_exc void)) end in void) with
          Goto_while_8_break_exc jessie_25 -> (while_8_break: void) end;
         (return := !N_4_0); (raise Return) end) end) end)))); absurd  end
    with Return -> !return end))
@@ -3623,6 +3628,7 @@ let Nmax_safety =
                   else
                    (let jessie_199 = (raise (Goto_while_8_break_exc void)) in
                    void));
+                 (let jessie_203 =
                  (C_193:
                  begin
                    (let jessie_201 =
@@ -3636,7 +3642,6 @@ let Nmax_safety =
                    void);
                   (C_198:
                   begin
-                    (let jessie_203 =
                     (p2_0 := (C_197:
                              (JC_237:
                              (((mul_double nearest_even) !p2_0) (C_196:
@@ -3649,18 +3654,17 @@ let Nmax_safety =
                                                                    (int32_of_integer_ 
                                                                     (C_194:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 p_0)) (2))))))))))))))) in
-                    void);
-                   (C_201:
-                   begin
-                     (N_4_0 := (C_200:
-                               (JC_238:
-                               (int32_of_integer_ (C_199:
-                                                  ((add_int (integer_of_int32 !N_4_0)) (1)))))));
-                    !N_4_0 end) end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_27 -> void end end done);
-          (raise (Goto_while_8_break_exc void)) end in void) with
+                                                                    (integer_of_int32 p_0)) (2)))))))))))))));
+                   !p2_0 end) end) in void);
+                 (C_201:
+                 begin
+                   (N_4_0 := (C_200:
+                             (JC_238:
+                             (int32_of_integer_ (C_199:
+                                                ((add_int (integer_of_int32 !N_4_0)) (1)))))));
+                  !N_4_0 end) end in void); (raise (Loop_continue_exc void))
+              end in void) with Loop_continue_exc jessie_27 -> void end end
+           done); (raise (Goto_while_8_break_exc void)) end in void) with
          Goto_while_8_break_exc jessie_25 -> (while_8_break: void) end;
         (return := !N_4_0); (raise Return) end) end) end)))); absurd  end
    with Return -> !return end)) { true }
@@ -3927,11 +3931,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po233.why">
-      <location file = "why/bts0112.why" line = "2936" begin = "47" end = "48"/>
+      <location file = "why/bts0112.why" line = "2937" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po234.why">
-      <location file = "why/bts0112.why" line = "2936" begin = "47" end = "48"/>
+      <location file = "why/bts0112.why" line = "2937" begin = "47" end = "48"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3967,22 +3971,22 @@ text = "ArithOverflow"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po170.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "607" begin = "21" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "612" begin = "18" end = "45"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po171.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "607" begin = "21" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "612" begin = "18" end = "45"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po172.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "607" begin = "21" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "612" begin = "18" end = "45"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po173.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "609" begin = "18" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4042,35 +4046,35 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po185.why">
-      <location file = "why/bts0112.why" line = "2749" begin = "21" end = "39"/>
+      <location file = "why/bts0112.why" line = "2751" begin = "21" end = "39"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po186.why">
-      <location file = "why/bts0112.why" line = "2749" begin = "21" end = "39"/>
+      <location file = "why/bts0112.why" line = "2751" begin = "21" end = "39"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po187.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po188.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po189.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po190.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po191.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4085,75 +4089,75 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po194.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po195.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po196.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po197.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po198.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po199.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po200.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po201.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "631" begin = "18" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po202.why">
-      <location file = "why/bts0112.why" line = "2791" begin = "22" end = "40"/>
+      <location file = "why/bts0112.why" line = "2793" begin = "22" end = "40"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po203.why">
-      <location file = "why/bts0112.why" line = "2791" begin = "22" end = "40"/>
+      <location file = "why/bts0112.why" line = "2793" begin = "22" end = "40"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0112_po204.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po205.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po206.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po207.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po208.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4317,12 +4321,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po152.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "434" begin = "43" end = "2660"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "437" begin = "43" end = "2660"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0112_po153.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "434" begin = "43" end = "2660"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "437" begin = "43" end = "2660"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -4383,19 +4387,19 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0112_po118.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "413" begin = "9" end = "3916"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "416" begin = "9" end = "3916"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po119.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "429" begin = "27" end = "3039"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "432" begin = "27" end = "3039"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po120.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "421" begin = "18" end = "3517"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "424" begin = "18" end = "3517"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po121.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "413" begin = "9" end = "3916"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "416" begin = "9" end = "3916"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po122.why">
@@ -4585,15 +4589,15 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0112_po77.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "315" begin = "9" end = "3629"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "315" begin = "9" end = "3830"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po78.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "323" begin = "18" end = "3269"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "323" begin = "18" end = "3470"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po79.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "315" begin = "9" end = "3629"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "315" begin = "9" end = "3830"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po80.why">

@@ -635,55 +635,57 @@ behavior default:
 }
 
 int32 shift_left_signed_safe(int32 x_24, int32 y_16)
-  requires (C_99 : true);
+  requires (C_96 : true);
 behavior default:
-  ensures (C_98 : true);
+  ensures (C_95 : true);
 {  
    (var int32 __retres_14);
    
    {  (if (x_24 < 0) then 
-      {  (C_96 : (__retres_14 = 0));
+      (goto _LOR) else (if (y_16 < 0) then 
+                       (goto _LOR) else (if ((C_92 : (y_16 :> uint32)) >= 32) then 
+                                        (goto _LOR) else 
+                                        {  
+                                           (assert for default: (C_82 : 
+                                                                (y_16 <
+                                                                  32)));
+                                           
+                                           (assert for default: (C_81 : 
+                                                                (y_16 >=
+                                                                  0)));
+                                           (if (x_24 >
+                                                 (C_91 : ((C_90 : (2147483647 >>>
+                                                                    y_16)) :> int32))) then 
+                                           (goto _LOR) else 
+                                           {  
+                                              {  
+                                                 (assert for default: 
+                                                 (C_86 : (x_24 <=
+                                                           (2147483647 >>>
+                                                             y_16))));
+                                                 
+                                                 (assert for default: 
+                                                 (C_85 : (x_24 >= 0)));
+                                                 
+                                                 (assert for default: 
+                                                 (C_84 : (y_16 < 32)));
+                                                 
+                                                 (assert for default: 
+                                                 (C_83 : (y_16 >= 0)));
+                                                 (C_89 : (__retres_14 = 
+                                                 (C_88 : ((C_87 : (x_24 <<
+                                                                    y_16)) :> int32))))
+                                              };
+                                              
+                                              (goto return_label)
+                                           })
+                                        })));
+      (_LOR : 
+      {  (C_93 : (__retres_14 = 0));
          
          (goto return_label)
-      } else (if (y_16 < 0) then 
-             {  (C_95 : (__retres_14 = 0));
-                
-                (goto return_label)
-             } else (if ((C_94 : (y_16 :> uint32)) >= 32) then 
-                    {  (C_93 : (__retres_14 = 0));
-                       
-                       (goto return_label)
-                    } else 
-                    {  
-                       (assert for default: (C_82 : (y_16 < 32)));
-                       
-                       (assert for default: (C_81 : (y_16 >= 0)));
-                       (if (x_24 >
-                             (C_92 : ((C_91 : (2147483647 >>> y_16)) :> int32))) then 
-                       {  (C_90 : (__retres_14 = 0));
-                          
-                          (goto return_label)
-                       } else 
-                       {  
-                          {  
-                             (assert for default: (C_86 : (x_24 <=
-                                                            (2147483647 >>>
-                                                              y_16))));
-                             
-                             (assert for default: (C_85 : (x_24 >= 0)));
-                             
-                             (assert for default: (C_84 : (y_16 < 32)));
-                             
-                             (assert for default: (C_83 : (y_16 >= 0)));
-                             (C_89 : (__retres_14 = (C_88 : ((C_87 : 
-                                                             (x_24 <<
-                                                               y_16)) :> int32))))
-                          };
-                          
-                          (goto return_label)
-                       })
-                    })));
-      (C_97 : (__retres_14 = 0));
+      });
+      (C_94 : (__retres_14 = 0));
       (return_label : 
       (return __retres_14))
    }
@@ -691,14 +693,14 @@ behavior default:
 
 uint32 shift_left_unsigned_wrong(uint32 x_35, uint32 y_23)
 behavior default:
-  ensures (C_104 : true);
+  ensures (C_101 : true);
 {  
    (var uint32 __retres_15);
    
    {  
       {  
-         (assert for default: (C_100 : (32 < 32)));
-         (C_103 : (__retres_15 = (C_102 : ((C_101 : (x_35 * 4294967296)) :> uint32))))
+         (assert for default: (C_97 : (32 < 32)));
+         (C_100 : (__retres_15 = (C_99 : ((C_98 : (x_35 * 4294967296)) :> uint32))))
       };
       
       (return __retres_15)
@@ -707,14 +709,14 @@ behavior default:
 
 uint32 shift_left_unsigned_unsafe(uint32 x_2, uint32 y_0)
 behavior default:
-  ensures (C_109 : true);
+  ensures (C_106 : true);
 {  
    (var uint32 __retres_16);
    
    {  
       {  
-         (assert for default: (C_105 : (y_0 < 32)));
-         (C_108 : (__retres_16 = (C_107 : ((C_106 : (x_2 << y_0)) :> uint32))))
+         (assert for default: (C_102 : (y_0 < 32)));
+         (C_105 : (__retres_16 = (C_104 : ((C_103 : (x_2 << y_0)) :> uint32))))
       };
       
       (return __retres_16)
@@ -722,21 +724,21 @@ behavior default:
 }
 
 uint32 shift_left_unsigned_safe(uint32 x_13, uint32 y_9)
-  requires (C_116 : true);
+  requires (C_113 : true);
 behavior default:
-  ensures (C_115 : true);
+  ensures (C_112 : true);
 {  
    (var uint32 __retres_17);
    
    {  (if (y_9 >= 32) then 
-      {  (C_114 : (__retres_17 = 0));
+      {  (C_111 : (__retres_17 = 0));
          
          (goto return_label)
       } else 
       {  
          {  
-            (assert for default: (C_110 : (y_9 < 32)));
-            (C_113 : (__retres_17 = (C_112 : ((C_111 : (x_13 << y_9)) :> uint32))))
+            (assert for default: (C_107 : (y_9 < 32)));
+            (C_110 : (__retres_17 = (C_109 : ((C_108 : (x_13 << y_9)) :> uint32))))
          };
          
          (goto return_label)
@@ -748,14 +750,14 @@ behavior default:
 
 int32 shift_right_signed_wrong_1(int32 x_23, int32 y_15)
 behavior default:
-  ensures (C_121 : true);
+  ensures (C_118 : true);
 {  
    (var int32 __retres_18);
    
    {  
       {  
-         (assert for default: (C_117 : (-1 >= 0)));
-         (C_120 : (__retres_18 = (C_119 : ((C_118 : (x_23 >>> -1)) :> int32))))
+         (assert for default: (C_114 : (-1 >= 0)));
+         (C_117 : (__retres_18 = (C_116 : ((C_115 : (x_23 >>> -1)) :> int32))))
       };
       
       (return __retres_18)
@@ -764,14 +766,14 @@ behavior default:
 
 int32 shift_right_signed_wrong_2(int32 x_31, int32 y_21)
 behavior default:
-  ensures (C_126 : true);
+  ensures (C_123 : true);
 {  
    (var int32 __retres_19);
    
    {  
       {  
-         (assert for default: (C_122 : (32 < 32)));
-         (C_125 : (__retres_19 = (C_124 : ((C_123 : (x_31 / 4294967296)) :> int32))))
+         (assert for default: (C_119 : (32 < 32)));
+         (C_122 : (__retres_19 = (C_121 : ((C_120 : (x_31 / 4294967296)) :> int32))))
       };
       
       (return __retres_19)
@@ -780,16 +782,16 @@ behavior default:
 
 int32 shift_right_signed_unsafe(int32 x_0, int32 y)
 behavior default:
-  ensures (C_132 : true);
+  ensures (C_129 : true);
 {  
    (var int32 __retres_20);
    
    {  
       {  
-         (assert for default: (C_128 : (y < 32)));
+         (assert for default: (C_125 : (y < 32)));
          
-         (assert for default: (C_127 : (y >= 0)));
-         (C_131 : (__retres_20 = (C_130 : ((C_129 : (x_0 >>> y)) :> int32))))
+         (assert for default: (C_124 : (y >= 0)));
+         (C_128 : (__retres_20 = (C_127 : ((C_126 : (x_0 >>> y)) :> int32))))
       };
       
       (return __retres_20)
@@ -797,32 +799,33 @@ behavior default:
 }
 
 int32 shift_right_signed_safe(int32 x_12, int32 y_8)
-  requires (C_143 : true);
+  requires (C_139 : true);
 behavior default:
-  ensures (C_142 : true);
+  ensures (C_138 : true);
 {  
    (var int32 __retres_21);
    
    {  (if (y_8 < 0) then 
-      {  (C_140 : (__retres_21 = 0));
+      (goto _LOR) else (if ((C_135 : (y_8 :> uint32)) >= 32) then 
+                       (goto _LOR) else 
+                       {  
+                          {  
+                             (assert for default: (C_131 : (y_8 < 32)));
+                             
+                             (assert for default: (C_130 : (y_8 >= 0)));
+                             (C_134 : (__retres_21 = (C_133 : ((C_132 : 
+                                                               (x_12 >>>
+                                                                 y_8)) :> int32))))
+                          };
+                          
+                          (goto return_label)
+                       }));
+      (_LOR : 
+      {  (C_136 : (__retres_21 = 0));
          
          (goto return_label)
-      } else (if ((C_139 : (y_8 :> uint32)) >= 32) then 
-             {  (C_138 : (__retres_21 = 0));
-                
-                (goto return_label)
-             } else 
-             {  
-                {  
-                   (assert for default: (C_134 : (y_8 < 32)));
-                   
-                   (assert for default: (C_133 : (y_8 >= 0)));
-                   (C_137 : (__retres_21 = (C_136 : ((C_135 : (x_12 >>> y_8)) :> int32))))
-                };
-                
-                (goto return_label)
-             }));
-      (C_141 : (__retres_21 = 0));
+      });
+      (C_137 : (__retres_21 = 0));
       (return_label : 
       (return __retres_21))
    }
@@ -830,14 +833,14 @@ behavior default:
 
 uint32 shift_right_unsigned_wrong(uint32 x_20, uint32 y_14)
 behavior default:
-  ensures (C_148 : true);
+  ensures (C_144 : true);
 {  
    (var uint32 __retres_22);
    
    {  
       {  
-         (assert for default: (C_144 : (32 < 32)));
-         (C_147 : (__retres_22 = (C_146 : ((C_145 : (x_20 / 4294967296)) :> uint32))))
+         (assert for default: (C_140 : (32 < 32)));
+         (C_143 : (__retres_22 = (C_142 : ((C_141 : (x_20 / 4294967296)) :> uint32))))
       };
       
       (return __retres_22)
@@ -846,14 +849,14 @@ behavior default:
 
 uint32 shift_right_unsigned_unsafe(uint32 x_30, uint32 y_20)
 behavior default:
-  ensures (C_153 : true);
+  ensures (C_149 : true);
 {  
    (var uint32 __retres_23);
    
    {  
       {  
-         (assert for default: (C_149 : (y_20 < 32)));
-         (C_152 : (__retres_23 = (C_151 : ((C_150 : (x_30 >> y_20)) :> uint32))))
+         (assert for default: (C_145 : (y_20 < 32)));
+         (C_148 : (__retres_23 = (C_147 : ((C_146 : (x_30 >> y_20)) :> uint32))))
       };
       
       (return __retres_23)
@@ -861,21 +864,21 @@ behavior default:
 }
 
 uint32 shift_right_unsigned_safe(uint32 x_40, uint32 y_28)
-  requires (C_160 : true);
+  requires (C_156 : true);
 behavior default:
-  ensures (C_159 : true);
+  ensures (C_155 : true);
 {  
    (var uint32 __retres_24);
    
    {  (if (y_28 >= 32) then 
-      {  (C_158 : (__retres_24 = 0));
+      {  (C_154 : (__retres_24 = 0));
          
          (goto return_label)
       } else 
       {  
          {  
-            (assert for default: (C_154 : (y_28 < 32)));
-            (C_157 : (__retres_24 = (C_156 : ((C_155 : (x_40 >> y_28)) :> uint32))))
+            (assert for default: (C_150 : (y_28 < 32)));
+            (C_153 : (__retres_24 = (C_152 : ((C_151 : (x_40 >> y_28)) :> uint32))))
          };
          
          (goto return_label)
@@ -887,45 +890,45 @@ behavior default:
 
 int32 null_ptr_wrong(int_P[..] x_11)
 behavior default:
-  ensures (C_164 : true);
+  ensures (C_160 : true);
 {  
    (var int32 __retres_25);
    
-   {  (C_161 : (x_11 = null));
-      (C_163 : (__retres_25 = (C_162 : x_11.int_M)));
+   {  (C_157 : (x_11 = null));
+      (C_159 : (__retres_25 = (C_158 : x_11.int_M)));
       
       (return __retres_25)
    }
 }
 
 int32 null_ptr_unsafe(int_P[..] x_15)
-  requires (C_168 : ((C_169 : (\offset_min(x_15) <= 0)) &&
-                      (C_170 : (\offset_max(x_15) >= 0))));
+  requires (C_164 : ((C_165 : (\offset_min(x_15) <= 0)) &&
+                      (C_166 : (\offset_max(x_15) >= 0))));
 behavior default:
-  ensures (C_167 : true);
+  ensures (C_163 : true);
 {  
    (var int32 __retres_26);
    
-   {  (C_166 : (__retres_26 = (C_165 : x_15.int_M)));
+   {  (C_162 : (__retres_26 = (C_161 : x_15.int_M)));
       
       (return __retres_26)
    }
 }
 
 int32 null_ptr_safe(int_P[..] x_22)
-  requires (C_175 : (((\offset_min(x_22) <= 0) && (\offset_max(x_22) >= 0)) ||
+  requires (C_171 : (((\offset_min(x_22) <= 0) && (\offset_max(x_22) >= 0)) ||
                       (x_22 == null)));
 behavior default:
-  ensures (C_174 : true);
+  ensures (C_170 : true);
 {  
    (var int32 __retres_27);
    
    {  (if (x_22 == null) then 
-      {  (C_173 : (__retres_27 = 0));
+      {  (C_169 : (__retres_27 = 0));
          
          (goto return_label)
       } else 
-      {  (C_172 : (__retres_27 = (C_171 : x_22.int_M)));
+      {  (C_168 : (__retres_27 = (C_167 : x_22.int_M)));
          
          (goto return_label)
       });
@@ -936,17 +939,17 @@ behavior default:
 
 int_P[..] bad_local_pointer()
 behavior default:
-  ensures (C_180 : ((C_181 : (\offset_min(\result) <= 0)) &&
-                     (C_182 : (\offset_max(\result) >= 0))));
+  ensures (C_176 : ((C_177 : (\offset_min(\result) <= 0)) &&
+                     (C_178 : (\offset_max(\result) >= 0))));
 {  
    (var int_P[0] x_41);
    
    (var int_P[..] __retres_28);
    
-   {  (C_177 : (x_41 = (C_176 : (new int_P[1]))));
-      (C_178 : (__retres_28 = x_41));
+   {  (C_173 : (x_41 = (C_172 : (new int_P[1]))));
+      (C_174 : (__retres_28 = x_41));
       
-      {  (C_179 : (free(x_41)));
+      {  (C_175 : (free(x_41)));
          
          (return __retres_28)
       }
@@ -955,14 +958,14 @@ behavior default:
 
 int32 stack_access_wrong()
 behavior default:
-  ensures (C_187 : true);
+  ensures (C_183 : true);
 {  
    (var int_P[..] x_42);
    
    (var int32 __retres_29);
    
-   {  (C_184 : (x_42 = (C_183 : bad_local_pointer())));
-      (C_186 : (__retres_29 = (C_185 : x_42.int_M)));
+   {  (C_180 : (x_42 = (C_179 : bad_local_pointer())));
+      (C_182 : (__retres_29 = (C_181 : x_42.int_M)));
       
       (return __retres_29)
    }
@@ -970,7 +973,7 @@ behavior default:
 
 int32 ptr_sub_wrong()
 behavior default:
-  ensures (C_200 : true);
+  ensures (C_196 : true);
 {  
    (var int_P[0..19] a_0);
    
@@ -982,14 +985,14 @@ behavior default:
    
    (var int32 __retres_30);
    
-   {  (C_189 : (a_0 = (C_188 : (new int_P[20]))));
-      (C_191 : (b = (C_190 : (new int_P[10]))));
-      (C_193 : (x_43 = (C_192 : (a_0 + 2))));
-      (C_194 : (y_29 = b));
-      (C_197 : (__retres_30 = (C_196 : ((C_195 : (x_43 - y_29)) :> int32))));
+   {  (C_185 : (a_0 = (C_184 : (new int_P[20]))));
+      (C_187 : (b = (C_186 : (new int_P[10]))));
+      (C_189 : (x_43 = (C_188 : (a_0 + 2))));
+      (C_190 : (y_29 = b));
+      (C_193 : (__retres_30 = (C_192 : ((C_191 : (x_43 - y_29)) :> int32))));
       
-      {  (C_198 : (free(a_0)));
-         (C_199 : (free(b)));
+      {  (C_194 : (free(a_0)));
+         (C_195 : (free(b)));
          
          (return __retres_30)
       }
@@ -997,25 +1000,25 @@ behavior default:
 }
 
 int32 ptr_sub_unsafe(int_P[..] x_8, int_P[..] y_6)
-  requires (C_205 : (((C_207 : (\offset_min(x_8) <= 0)) &&
-                       (C_208 : (\offset_max(x_8) >= 0))) &&
-                      ((C_210 : (\offset_min(y_6) <= 0)) &&
-                        (C_211 : (\offset_max(y_6) >= 0)))));
+  requires (C_201 : (((C_203 : (\offset_min(x_8) <= 0)) &&
+                       (C_204 : (\offset_max(x_8) >= 0))) &&
+                      ((C_206 : (\offset_min(y_6) <= 0)) &&
+                        (C_207 : (\offset_max(y_6) >= 0)))));
 behavior default:
-  ensures (C_204 : true);
+  ensures (C_200 : true);
 {  
    (var int32 __retres_31);
    
-   {  (C_203 : (__retres_31 = (C_202 : ((C_201 : (x_8 - y_6)) :> int32))));
+   {  (C_199 : (__retres_31 = (C_198 : ((C_197 : (x_8 - y_6)) :> int32))));
       
       (return __retres_31)
    }
 }
 
 int32 ptr_sub_safe()
-  requires (C_222 : true);
+  requires (C_218 : true);
 behavior default:
-  ensures (C_221 : true);
+  ensures (C_217 : true);
 {  
    (var int_P[0..2] a_0_0);
    
@@ -1025,12 +1028,12 @@ behavior default:
    
    (var int32 __retres_32);
    
-   {  (C_213 : (a_0_0 = (C_212 : (new int_P[3]))));
-      (C_215 : (x_44 = (C_214 : (a_0_0 + 2))));
-      (C_216 : (y_30 = a_0_0));
-      (C_219 : (__retres_32 = (C_218 : ((C_217 : (x_44 - y_30)) :> int32))));
+   {  (C_209 : (a_0_0 = (C_208 : (new int_P[3]))));
+      (C_211 : (x_44 = (C_210 : (a_0_0 + 2))));
+      (C_212 : (y_30 = a_0_0));
+      (C_215 : (__retres_32 = (C_214 : ((C_213 : (x_44 - y_30)) :> int32))));
       
-      {  (C_220 : (free(a_0_0)));
+      {  (C_216 : (free(a_0_0)));
          
          (return __retres_32)
       }
@@ -1044,30 +1047,30 @@ invariant valid_a :
 
 int32 oob_pointer_wrong(uint32 x_25)
 behavior default:
-  ensures (C_228 : true);
+  ensures (C_224 : true);
 {  
    (var int_P[..] i_6);
    
    (var int32 __retres_33);
    
-   {  (C_225 : (i_6 = (C_224 : ((C_223 : (a + x_25)) + 2))));
-      (C_227 : (__retres_33 = (C_226 : i_6.int_M)));
+   {  (C_221 : (i_6 = (C_220 : ((C_219 : (a + x_25)) + 2))));
+      (C_223 : (__retres_33 = (C_222 : i_6.int_M)));
       
       (return __retres_33)
    }
 }
 
 int32 oob_pointer_unsafe(uint32 x_34)
-  requires (C_234 : ((C_235 : (0 <= x_34)) && (C_236 : (x_34 < 2))));
+  requires (C_230 : ((C_231 : (0 <= x_34)) && (C_232 : (x_34 < 2))));
 behavior default:
-  ensures (C_233 : true);
+  ensures (C_229 : true);
 {  
    (var int_P[..] i_7);
    
    (var int32 __retres_34);
    
-   {  (C_230 : (i_7 = (C_229 : (a + x_34))));
-      (C_232 : (__retres_34 = (C_231 : i_7.int_M)));
+   {  (C_226 : (i_7 = (C_225 : (a + x_34))));
+      (C_228 : (__retres_34 = (C_227 : i_7.int_M)));
       
       (return __retres_34)
    }
@@ -1075,19 +1078,19 @@ behavior default:
 
 int32 oob_pointer_safe(uint32 x_1)
 behavior default:
-  ensures (C_242 : true);
+  ensures (C_238 : true);
 {  
    (var int_P[..] i_8);
    
    (var int32 __retres_35);
    
    {  (if (x_1 < 2) then 
-      {  (C_239 : (i_8 = (C_238 : (a + x_1))));
-         (C_241 : (__retres_35 = (C_240 : i_8.int_M)));
+      {  (C_235 : (i_8 = (C_234 : (a + x_1))));
+         (C_237 : (__retres_35 = (C_236 : i_8.int_M)));
          
          (goto return_label)
       } else 
-      {  (C_237 : (__retres_35 = 0));
+      {  (C_233 : (__retres_35 = 0));
          
          (goto return_label)
       });
@@ -1098,43 +1101,43 @@ behavior default:
 
 int32 array_bounds_wrong(uint32 i_0)
 behavior default:
-  ensures (C_247 : true);
+  ensures (C_243 : true);
 {  
    (var int32 __retres_36);
    
-   {  (C_246 : (__retres_36 = (C_245 : (a +
-                                         (C_244 : ((C_243 : (2 + i_0)) :> uint32))).int_M)));
+   {  (C_242 : (__retres_36 = (C_241 : (a +
+                                         (C_240 : ((C_239 : (2 + i_0)) :> uint32))).int_M)));
       
       (return __retres_36)
    }
 }
 
 int32 array_bounds_unsafe(uint32 i_1)
-  requires (C_251 : (i_1 < 2));
+  requires (C_247 : (i_1 < 2));
 behavior default:
-  ensures (C_250 : true);
+  ensures (C_246 : true);
 {  
    (var int32 __retres_37);
    
-   {  (C_249 : (__retres_37 = (C_248 : (a + i_1).int_M)));
+   {  (C_245 : (__retres_37 = (C_244 : (a + i_1).int_M)));
       
       (return __retres_37)
    }
 }
 
 int32 array_bounds_safe(uint32 i_3)
-  requires (C_257 : true);
+  requires (C_253 : true);
 behavior default:
-  ensures (C_256 : true);
+  ensures (C_252 : true);
 {  
    (var int32 __retres_38);
    
    {  (if (i_3 < 2) then 
-      {  (C_255 : (__retres_38 = (C_254 : (a + i_3).int_M)));
+      {  (C_251 : (__retres_38 = (C_250 : (a + i_3).int_M)));
          
          (goto return_label)
       } else 
-      {  (C_253 : (__retres_38 = (C_252 : (a + 0).int_M)));
+      {  (C_249 : (__retres_38 = (C_248 : (a + 0).int_M)));
          
          (goto return_label)
       });
@@ -1145,7 +1148,7 @@ behavior default:
 
 int32 initialization_wrong()
 behavior default:
-  ensures (C_258 : true);
+  ensures (C_254 : true);
 {  
    (var int32 x_45);
    
@@ -1155,26 +1158,26 @@ behavior default:
 }
 
 int32 initialization_unsafe(int32 i_5)
-  requires (C_261 : (i_5 != 0));
+  requires (C_257 : (i_5 != 0));
 behavior default:
-  ensures (C_260 : true);
+  ensures (C_256 : true);
 {  
    (var int32 x_46);
    
-   {  (if (i_5 != 0) then (C_259 : (x_46 = 1)) else ());
+   {  (if (i_5 != 0) then (C_255 : (x_46 = 1)) else ());
       
       (return x_46)
    }
 }
 
 int32 initialization_safe(int32 i)
-  requires (C_265 : true);
+  requires (C_261 : true);
 behavior default:
-  ensures (C_264 : true);
+  ensures (C_260 : true);
 {  
    (var int32 x_47);
    
-   {  (if (i != 0) then (C_263 : (x_47 = 1)) else (C_262 : (x_47 = 2)));
+   {  (if (i != 0) then (C_259 : (x_47 = 1)) else (C_258 : (x_47 = 2)));
       
       (return x_47)
    }
@@ -1182,16 +1185,16 @@ behavior default:
 
 int32 signed_overflow_wrong(int32 x_10)
 behavior default:
-  ensures (C_274 : true);
+  ensures (C_270 : true);
 {  
    (var int32 __retres_39);
    
    {  (if (x_10 > 0) then 
-      {  (C_273 : (__retres_39 = (C_272 : ((C_271 : (x_10 + 2147483647)) :> int32))));
+      {  (C_269 : (__retres_39 = (C_268 : ((C_267 : (x_10 + 2147483647)) :> int32))));
          
          (goto return_label)
       } else 
-      {  (C_270 : (__retres_39 = (C_269 : ((C_268 : ((C_267 : ((C_266 : 
+      {  (C_266 : (__retres_39 = (C_265 : ((C_264 : ((C_263 : ((C_262 : 
                                                                (x_10 -
                                                                  1)) :> int32)) -
                                                       2147483647)) :> int32))));
@@ -1204,31 +1207,31 @@ behavior default:
 }
 
 int32 signed_overflow_unsafe(int32 x_14)
-  requires (C_279 : (x_14 <= (2147483647 - 10)));
+  requires (C_275 : (x_14 <= (2147483647 - 10)));
 behavior default:
-  ensures (C_278 : true);
+  ensures (C_274 : true);
 {  
    (var int32 __retres_40);
    
-   {  (C_277 : (__retres_40 = (C_276 : ((C_275 : (x_14 + 10)) :> int32))));
+   {  (C_273 : (__retres_40 = (C_272 : ((C_271 : (x_14 + 10)) :> int32))));
       
       (return __retres_40)
    }
 }
 
 int32 signed_overflow_safe(int32 x_21)
-  requires (C_287 : true);
+  requires (C_283 : true);
 behavior default:
-  ensures (C_286 : true);
+  ensures (C_282 : true);
 {  
    (var int32 __retres_41);
    
    {  (if (x_21 < 0) then 
-      {  (C_285 : (__retres_41 = (C_284 : ((C_283 : (x_21 + 2147483647)) :> int32))));
+      {  (C_281 : (__retres_41 = (C_280 : ((C_279 : (x_21 + 2147483647)) :> int32))));
          
          (goto return_label)
       } else 
-      {  (C_282 : (__retres_41 = (C_281 : ((C_280 : (x_21 - 2147483647)) :> int32))));
+      {  (C_278 : (__retres_41 = (C_277 : ((C_276 : (x_21 - 2147483647)) :> int32))));
          
          (goto return_label)
       });
@@ -1239,47 +1242,47 @@ behavior default:
 
 int32 missing_return_wrong(int32 x_29)
 behavior default:
-  ensures (C_289 : true);
+  ensures (C_285 : true);
 {  
    (var int32 __retres_42);
    
-   {  (C_288 : (__retres_42 = 0));
+   {  (C_284 : (__retres_42 = 0));
       
       (return __retres_42)
    }
 }
 
 int32 missing_return_unsafe(int32 x_33)
-  requires (C_293 : (x_33 < 0));
+  requires (C_289 : (x_33 < 0));
 behavior default:
-  ensures (C_292 : true);
+  ensures (C_288 : true);
 {  
    (var int32 __retres_43);
    
    {  (if (x_33 < 0) then 
-      {  (C_290 : (__retres_43 = 0));
+      {  (C_286 : (__retres_43 = 0));
          
          (goto return_label)
       } else ());
-      (C_291 : (__retres_43 = 0));
+      (C_287 : (__retres_43 = 0));
       (return_label : 
       (return __retres_43))
    }
 }
 
 int32 missing_return_safe(int32 x)
-  requires (C_297 : true);
+  requires (C_293 : true);
 behavior default:
-  ensures (C_296 : true);
+  ensures (C_292 : true);
 {  
    (var int32 __retres_44);
    
    {  (if (x < 0) then 
-      {  (C_295 : (__retres_44 = 0));
+      {  (C_291 : (__retres_44 = 0));
          
          (goto return_label)
       } else 
-      {  (C_294 : (__retres_44 = 1));
+      {  (C_290 : (__retres_44 = 1));
          
          (goto return_label)
       });
@@ -1290,7 +1293,7 @@ behavior default:
 
 int32 multiple_update_wrong_1(int_P[..] x_7, int_P[..] y_5)
 behavior default:
-  ensures (C_307 : true);
+  ensures (C_303 : true);
 {  
    (var int32 tmp);
    
@@ -1299,12 +1302,12 @@ behavior default:
    (var int32 __retres_45);
    
    {  
-      {  (C_298 : (tmp = 0));
-         (C_300 : ((C_299 : x_7.int_M) = tmp));
-         (C_301 : (tmp_0 = 0));
-         (C_303 : ((C_302 : x_7.int_M) = tmp_0))
+      {  (C_294 : (tmp = 0));
+         (C_296 : ((C_295 : x_7.int_M) = tmp));
+         (C_297 : (tmp_0 = 0));
+         (C_299 : ((C_298 : x_7.int_M) = tmp_0))
       };
-      (C_306 : (__retres_45 = (C_305 : ((C_304 : (tmp + tmp_0)) :> int32))));
+      (C_302 : (__retres_45 = (C_301 : ((C_300 : (tmp + tmp_0)) :> int32))));
       
       (return __retres_45)
    }
@@ -1312,11 +1315,11 @@ behavior default:
 
 int32 multiple_update_wrong_2(int32 i_2)
 behavior default:
-  ensures (C_314 : true);
+  ensures (C_310 : true);
 {  
    {  
-      {  (C_310 : (i_2 = (C_309 : ((C_308 : (i_2 + 1)) :> int32))));
-         (C_313 : (i_2 = (C_312 : ((C_311 : (i_2 + 1)) :> int32))))
+      {  (C_306 : (i_2 = (C_305 : ((C_304 : (i_2 + 1)) :> int32))));
+         (C_309 : (i_2 = (C_308 : ((C_307 : (i_2 + 1)) :> int32))))
       };
       
       (return i_2)
@@ -1325,16 +1328,16 @@ behavior default:
 
 int32 multiple_update_wrong_3(int32 i_4)
 behavior default:
-  ensures (C_321 : true);
+  ensures (C_317 : true);
 {  
    (var int32 tmp_0_0);
    
    {  
       {  
-         {  (C_315 : (tmp_0_0 = i_4));
-            (C_318 : (i_4 = (C_317 : ((C_316 : (i_4 + 1)) :> int32))))
+         {  (C_311 : (tmp_0_0 = i_4));
+            (C_314 : (i_4 = (C_313 : ((C_312 : (i_4 + 1)) :> int32))))
          };
-         (C_320 : ((C_319 : (a + tmp_0_0).int_M) = i_4))
+         (C_316 : ((C_315 : (a + tmp_0_0).int_M) = i_4))
       };
       
       (return i_4)
@@ -1342,9 +1345,9 @@ behavior default:
 }
 
 int32 multiple_update_unsafe(int_P[..] x_32, int_P[..] y_22)
-  requires (C_332 : (x_32 != y_22));
+  requires (C_328 : (x_32 != y_22));
 behavior default:
-  ensures (C_331 : true);
+  ensures (C_327 : true);
 {  
    (var int32 tmp_0_1);
    
@@ -1353,21 +1356,21 @@ behavior default:
    (var int32 __retres_46);
    
    {  
-      {  (C_322 : (tmp_0_1 = 0));
-         (C_324 : ((C_323 : x_32.int_M) = tmp_0_1));
-         (C_325 : (tmp_0_2 = 0));
-         (C_327 : ((C_326 : y_22.int_M) = tmp_0_2))
+      {  (C_318 : (tmp_0_1 = 0));
+         (C_320 : ((C_319 : x_32.int_M) = tmp_0_1));
+         (C_321 : (tmp_0_2 = 0));
+         (C_323 : ((C_322 : y_22.int_M) = tmp_0_2))
       };
-      (C_330 : (__retres_46 = (C_329 : ((C_328 : (tmp_0_1 + tmp_0_2)) :> int32))));
+      (C_326 : (__retres_46 = (C_325 : ((C_324 : (tmp_0_1 + tmp_0_2)) :> int32))));
       
       (return __retres_46)
    }
 }
 
 int32 multiple_update_safe(int_P[..] x_4, int_P[..] y_2)
-  requires (C_344 : true);
+  requires (C_340 : true);
 behavior default:
-  ensures (C_343 : true);
+  ensures (C_339 : true);
 {  
    (var int32 tmp_0_3);
    
@@ -1376,17 +1379,17 @@ behavior default:
    (var int32 __retres_47);
    
    {  (if (x_4 == y_2) then 
-      {  (C_342 : (__retres_47 = 0));
+      {  (C_338 : (__retres_47 = 0));
          
          (goto return_label)
       } else 
       {  
-         {  (C_333 : (tmp_0_3 = 0));
-            (C_335 : ((C_334 : x_4.int_M) = tmp_0_3));
-            (C_336 : (tmp_0_4 = 0));
-            (C_338 : ((C_337 : y_2.int_M) = tmp_0_4))
+         {  (C_329 : (tmp_0_3 = 0));
+            (C_331 : ((C_330 : x_4.int_M) = tmp_0_3));
+            (C_332 : (tmp_0_4 = 0));
+            (C_334 : ((C_333 : y_2.int_M) = tmp_0_4))
          };
-         (C_341 : (__retres_47 = (C_340 : ((C_339 : (tmp_0_3 + tmp_0_4)) :> int32))));
+         (C_337 : (__retres_47 = (C_336 : ((C_335 : (tmp_0_3 + tmp_0_4)) :> int32))));
          
          (goto return_label)
       });
@@ -1398,24 +1401,24 @@ behavior default:
 int32 foo(int32 unnamed, int32 unnamed_0)
 behavior default:
   assigns \nothing;
-  ensures (C_345 : true);
+  ensures (C_341 : true);
 ;
 
 int32 bar()
 behavior default:
   assigns \nothing;
-  ensures (C_346 : true);
+  ensures (C_342 : true);
 ;
 
 int32 baz()
 behavior default:
   assigns \nothing;
-  ensures (C_347 : true);
+  ensures (C_343 : true);
 ;
 
 int32 order_of_arg_eval()
 behavior default:
-  ensures (C_354 : true);
+  ensures (C_350 : true);
 {  
    (var int32 tmp_0_5);
    
@@ -1424,10 +1427,10 @@ behavior default:
    (var int32 tmp_1);
    
    {  
-      {  (C_349 : (tmp_0_5 = (C_348 : baz())));
-         (C_351 : (tmp_0_6 = (C_350 : bar())))
+      {  (C_345 : (tmp_0_5 = (C_344 : baz())));
+         (C_347 : (tmp_0_6 = (C_346 : bar())))
       };
-      (C_353 : (tmp_1 = (C_352 : foo(tmp_0_6, tmp_0_5))));
+      (C_349 : (tmp_1 = (C_348 : foo(tmp_0_6, tmp_0_5))));
       
       (return tmp_1)
    }
@@ -1435,14 +1438,14 @@ behavior default:
 
 int32 volatile_cast_wrong(int_P[..] ip)
 behavior default:
-  ensures (C_358 : true);
+  ensures (C_354 : true);
 {  
    (var int_P[..] x_48);
    
    (var int32 __retres_48);
    
-   {  (C_355 : (x_48 = ip));
-      (C_357 : (__retres_48 = (C_356 : x_48.int_M)));
+   {  (C_351 : (x_48 = ip));
+      (C_353 : (__retres_48 = (C_352 : x_48.int_M)));
       
       (return __retres_48)
    }
@@ -1450,15 +1453,15 @@ behavior default:
 
 int32 const_cast_wrong(int_P[..] ip_0)
 behavior default:
-  ensures (C_363 : true);
+  ensures (C_359 : true);
 {  
    (var int_P[..] x_49);
    
    (var int32 __retres_49);
    
-   {  (C_359 : (x_49 = ip_0));
-      (C_361 : ((C_360 : x_49.int_M) = 1));
-      (C_362 : (__retres_49 = 1));
+   {  (C_355 : (x_49 = ip_0));
+      (C_357 : ((C_356 : x_49.int_M) = 1));
+      (C_358 : (__retres_49 = 1));
       
       (return __retres_49)
    }
@@ -1466,12 +1469,12 @@ behavior default:
 
 unit mod_string()
 behavior default:
-  ensures (C_368 : true);
+  ensures (C_364 : true);
 {  
    (var char_P[..] str);
    
-   {  (C_364 : (str = __string_abc));
-      (C_367 : ((C_366 : (C_365 : (str + 2)).char_M) = 122));
+   {  (C_360 : (str = __string_abc));
+      (C_363 : ((C_362 : (C_361 : (str + 2)).char_M) = 122));
       
       (return ())
    }
@@ -1498,6 +1501,8 @@ type uint32
 type unsigned_short_P
 
 type void_P
+
+exception Goto__LOR_exc of unit
 
 exception Loop_continue_exc of unit
 
@@ -4223,27 +4228,27 @@ let array_bounds_safe_ensures_default =
    begin
      (let __retres_38 = ref (any_int32 void) in
      try
-      (let jessie_449 =
+      (let jessie_443 =
       begin
         (if ((lt_int_ (integer_of_uint32 i_3)) (2))
         then
-         (let jessie_445 =
-         (C_255:
+         (let jessie_439 =
+         (C_251:
          begin
-           (let jessie_444 =
-           (__retres_38 := (C_254:
+           (let jessie_438 =
+           (__retres_38 := (C_250:
                            ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 i_3))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_448 =
-         (C_253:
+         (let jessie_442 =
+         (C_249:
          begin
-           (let jessie_447 =
-           (__retres_38 := (C_252:
+           (let jessie_441 =
+           (__retres_38 := (C_248:
                            ((safe_acc_ !int_P_int_M_a_2) ((shift a) (0))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_11 ->
+      Return_label_exc jessie_13 ->
       (return_label: begin   (return := !__retres_38); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_930: true) }
 
@@ -4258,29 +4263,29 @@ let array_bounds_safe_safety =
    begin
      (let __retres_38 = ref (any_int32 void) in
      try
-      (let jessie_441 =
+      (let jessie_435 =
       begin
         (if ((lt_int_ (integer_of_uint32 i_3)) (2))
         then
-         (let jessie_437 =
-         (C_255:
+         (let jessie_431 =
+         (C_251:
          begin
-           (let jessie_436 =
-           (__retres_38 := (C_254:
+           (let jessie_430 =
+           (__retres_38 := (C_250:
                            (JC_938:
                            ((((offset_acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) a) 
                             (integer_of_uint32 i_3))))) in void);
           (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_440 =
-         (C_253:
+         (let jessie_434 =
+         (C_249:
          begin
-           (let jessie_439 =
-           (__retres_38 := (C_252:
+           (let jessie_433 =
+           (__retres_38 := (C_248:
                            ((safe_acc_ !int_P_int_M_a_2) ((shift a) (0))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_11 ->
+      Return_label_exc jessie_13 ->
       (return_label: begin   (return := !__retres_38); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_934:
@@ -4298,10 +4303,10 @@ let array_bounds_unsafe_ensures_default =
   try
    begin
      (let __retres_37 = ref (any_int32 void) in
-     (C_249:
+     (C_245:
      begin
-       (let jessie_433 =
-       (__retres_37 := (C_248:
+       (let jessie_427 =
+       (__retres_37 := (C_244:
                        ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 i_1))))) in
        void); (return := !__retres_37); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_913: true) }
@@ -4317,10 +4322,10 @@ let array_bounds_unsafe_safety =
   try
    begin
      (let __retres_37 = ref (any_int32 void) in
-     (C_249:
+     (C_245:
      begin
-       (let jessie_430 =
-       (__retres_37 := (C_248:
+       (let jessie_424 =
+       (__retres_37 := (C_244:
                        (JC_921:
                        ((((offset_acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) a) 
                         (integer_of_uint32 i_1))))) in void);
@@ -4340,14 +4345,14 @@ let array_bounds_wrong_ensures_default =
   try
    begin
      (let __retres_36 = ref (any_int32 void) in
-     (C_246:
+     (C_242:
      begin
-       (let jessie_427 =
-       (__retres_36 := (C_245:
+       (let jessie_421 =
+       (__retres_36 := (C_241:
                        ((safe_acc_ !int_P_int_M_a_2) ((shift a) (integer_of_uint32 
-                                                                 (C_244:
+                                                                 (C_240:
                                                                  (safe_uint32_of_integer_ 
-                                                                  (C_243:
+                                                                  (C_239:
                                                                   ((add_int (2)) 
                                                                    (integer_of_uint32 i_0)))))))))) in
        void); (return := !__retres_36); (raise Return) end)); absurd  end
@@ -4363,15 +4368,15 @@ let array_bounds_wrong_safety =
   try
    begin
      (let __retres_36 = ref (any_int32 void) in
-     (C_246:
+     (C_242:
      begin
-       (let jessie_424 =
-       (__retres_36 := (C_245:
+       (let jessie_418 =
+       (__retres_36 := (C_241:
                        (JC_902:
                        ((((offset_acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) a) 
-                        (integer_of_uint32 (C_244:
+                        (integer_of_uint32 (C_240:
                                            (JC_901:
-                                           (uint32_of_integer_ (C_243:
+                                           (uint32_of_integer_ (C_239:
                                                                ((add_int (2)) 
                                                                 (integer_of_uint32 i_0))))))))))) in
        void); (return := !__retres_36); (raise Return) end)); absurd  end
@@ -4391,17 +4396,17 @@ let bad_local_pointer_ensures_default =
    begin
      (let x_41 = ref (any_pointer void) in
      (let __retres_28 = ref (any_pointer void) in
-     (C_177:
+     (C_173:
      begin
-       (let jessie_323 =
-       (x_41 := (C_176:
+       (let jessie_317 =
+       (x_41 := (C_172:
                 (JC_738:
                 (((alloc_struct_int_P (1)) int_P_result_21_alloc_table) int_P_result_21_tag_table)))) in
        void);
-      (C_178:
+      (C_174:
       begin
-        (let jessie_325 = (__retres_28 := !x_41) in void);
-       (C_179:
+        (let jessie_319 = (__retres_28 := !x_41) in void);
+       (C_175:
        begin
          ((safe_free_parameter int_P_result_21_alloc_table) !x_41);
         (return := !__retres_28); (raise Return) end) end) end))); absurd 
@@ -4422,21 +4427,21 @@ let bad_local_pointer_safety =
    begin
      (let x_41 = ref (any_pointer void) in
      (let __retres_28 = ref (any_pointer void) in
-     (C_177:
+     (C_173:
      begin
-       (let jessie_318 =
-       (x_41 := (let jessie_317 =
-                (C_176:
+       (let jessie_312 =
+       (x_41 := (let jessie_311 =
+                (C_172:
                 (JC_736:
                 (((alloc_struct_int_P_requires (1)) int_P_result_21_alloc_table) int_P_result_21_tag_table))) in
                 (JC_737:
                 (assert
-                { ge_int(offset_max(int_P_result_21_alloc_table, jessie_317),
-                  (0)) }; jessie_317)))) in void);
-      (C_178:
+                { ge_int(offset_max(int_P_result_21_alloc_table, jessie_311),
+                  (0)) }; jessie_311)))) in void);
+      (C_174:
       begin
-        (let jessie_320 = (__retres_28 := !x_41) in void);
-       (C_179:
+        (let jessie_314 = (__retres_28 := !x_41) in void);
+       (C_175:
        begin
          ((free_parameter int_P_result_21_alloc_table) !x_41);
         (return := !__retres_28); (raise Return) end) end) end))); absurd 
@@ -4456,18 +4461,18 @@ let const_cast_wrong_ensures_default =
    begin
      (let x_49 = ref (any_pointer void) in
      (let __retres_49 = ref (any_int32 void) in
-     (C_359:
+     (C_355:
      begin
-       (let jessie_737 = (x_49 := ip_0) in void);
-      (C_361:
+       (let jessie_731 = (x_49 := ip_0) in void);
+      (C_357:
       begin
-        (let jessie_743 =
-        (let jessie_739 = (safe_int32_of_integer_ (1)) in
-        (let jessie_742 = !x_49 in
-        (((safe_upd_ int_P_int_M_ip_0_32) jessie_742) jessie_739))) in void);
-       (C_362:
+        (let jessie_737 =
+        (let jessie_733 = (safe_int32_of_integer_ (1)) in
+        (let jessie_736 = !x_49 in
+        (((safe_upd_ int_P_int_M_ip_0_32) jessie_736) jessie_733))) in void);
+       (C_358:
        begin
-         (let jessie_745 = (__retres_49 := (safe_int32_of_integer_ (1))) in
+         (let jessie_739 = (__retres_49 := (safe_int32_of_integer_ (1))) in
          void); (return := !__retres_49); (raise Return) end) end) end)));
     absurd  end with Return -> !return end)) { (JC_1291: true) }
 
@@ -4482,20 +4487,20 @@ let const_cast_wrong_safety =
    begin
      (let x_49 = ref (any_pointer void) in
      (let __retres_49 = ref (any_int32 void) in
-     (C_359:
+     (C_355:
      begin
-       (let jessie_726 = (x_49 := ip_0) in void);
-      (C_361:
+       (let jessie_720 = (x_49 := ip_0) in void);
+      (C_357:
       begin
-        (let jessie_732 =
-        (let jessie_728 = (safe_int32_of_integer_ (1)) in
-        (let jessie_731 = !x_49 in
+        (let jessie_726 =
+        (let jessie_722 = (safe_int32_of_integer_ (1)) in
+        (let jessie_725 = !x_49 in
         (JC_1299:
-        ((((upd_ int_P_ip_0_32_alloc_table) int_P_int_M_ip_0_32) jessie_731) jessie_728)))) in
+        ((((upd_ int_P_ip_0_32_alloc_table) int_P_int_M_ip_0_32) jessie_725) jessie_722)))) in
         void);
-       (C_362:
+       (C_358:
        begin
-         (let jessie_734 = (__retres_49 := (safe_int32_of_integer_ (1))) in
+         (let jessie_728 = (__retres_49 := (safe_int32_of_integer_ (1))) in
          void); (return := !__retres_49); (raise Return) end) end) end)));
     absurd  end with Return -> !return end))
   { (JC_1295:
@@ -4513,20 +4518,20 @@ let div0_safe_ensures_default =
    begin
      (let __retres_2 = ref (any_int32 void) in
      try
-      (let jessie_49 =
+      (let jessie_51 =
       begin
         (if ((eq_int_ (integer_of_int32 y_19)) (0))
         then
-         (let jessie_45 =
+         (let jessie_47 =
          (C_18:
          begin
-           (let jessie_44 = (__retres_2 := (safe_int32_of_integer_ (0))) in
+           (let jessie_46 = (__retres_2 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_48 =
+         (let jessie_50 =
          (C_17:
          begin
-           (let jessie_47 =
+           (let jessie_49 =
            (__retres_2 := (C_16:
                           (safe_int32_of_integer_ (C_15:
                                                   (JC_202:
@@ -4549,20 +4554,20 @@ let div0_safe_pos_ensures_default =
    begin
      (let __retres_3 = ref (any_int32 void) in
      try
-      (let jessie_65 =
+      (let jessie_67 =
       begin
         (if ((le_int_ (integer_of_int32 y_26)) (0))
         then
-         (let jessie_61 =
+         (let jessie_63 =
          (C_24:
          begin
-           (let jessie_60 = (__retres_3 := (safe_int32_of_integer_ (0))) in
+           (let jessie_62 = (__retres_3 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_64 =
+         (let jessie_66 =
          (C_23:
          begin
-           (let jessie_63 =
+           (let jessie_65 =
            (__retres_3 := (C_22:
                           (safe_int32_of_integer_ (C_21:
                                                   (JC_221:
@@ -4585,20 +4590,20 @@ let div0_safe_pos_safety =
    begin
      (let __retres_3 = ref (any_int32 void) in
      try
-      (let jessie_57 =
+      (let jessie_59 =
       begin
         (if ((le_int_ (integer_of_int32 y_26)) (0))
         then
-         (let jessie_53 =
+         (let jessie_55 =
          (C_24:
          begin
-           (let jessie_52 = (__retres_3 := (safe_int32_of_integer_ (0))) in
+           (let jessie_54 = (__retres_3 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_56 =
+         (let jessie_58 =
          (C_23:
          begin
-           (let jessie_55 =
+           (let jessie_57 =
            (__retres_3 := (C_22:
                           (JC_220:
                           (int32_of_integer_ (C_21:
@@ -4625,20 +4630,20 @@ let div0_safe_safety =
    begin
      (let __retres_2 = ref (any_int32 void) in
      try
-      (let jessie_41 =
+      (let jessie_43 =
       begin
         (if ((eq_int_ (integer_of_int32 y_19)) (0))
         then
-         (let jessie_37 =
+         (let jessie_39 =
          (C_18:
          begin
-           (let jessie_36 = (__retres_2 := (safe_int32_of_integer_ (0))) in
+           (let jessie_38 = (__retres_2 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_40 =
+         (let jessie_42 =
          (C_17:
          begin
-           (let jessie_39 =
+           (let jessie_41 =
            (__retres_2 := (C_16:
                           (JC_201:
                           (int32_of_integer_ (C_15:
@@ -4667,7 +4672,7 @@ let div0_unsafe_ensures_default =
      (let __retres_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_27 =
+       (let jessie_29 =
        (__retres_0 := (C_6:
                       (safe_int32_of_integer_ (C_5:
                                               (JC_162:
@@ -4689,7 +4694,7 @@ let div0_unsafe_pos_ensures_default =
      (let __retres_1 = ref (any_int32 void) in
      (C_12:
      begin
-       (let jessie_33 =
+       (let jessie_35 =
        (__retres_1 := (C_11:
                       (safe_int32_of_integer_ (C_10:
                                               (JC_183:
@@ -4711,7 +4716,7 @@ let div0_unsafe_pos_safety =
      (let __retres_1 = ref (any_int32 void) in
      (C_12:
      begin
-       (let jessie_30 =
+       (let jessie_32 =
        (__retres_1 := (C_11:
                       (JC_182:
                       (int32_of_integer_ (C_10:
@@ -4737,7 +4742,7 @@ let div0_unsafe_safety =
      (let __retres_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_24 =
+       (let jessie_26 =
        (__retres_0 := (C_6:
                       (JC_161:
                       (int32_of_integer_ (C_5:
@@ -4762,7 +4767,7 @@ let div0_wrong_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_21 =
+       (let jessie_23 =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
                                             (JC_141:
@@ -4782,7 +4787,7 @@ let div0_wrong_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_18 =
+       (let jessie_20 =
        (__retres := (C_2:
                     (JC_140:
                     (int32_of_integer_ (C_1:
@@ -4805,12 +4810,12 @@ let initialization_safe_ensures_default =
    begin
      (let x_47 = ref (any_int32 void) in
      begin
-       (let jessie_465 =
+       (let jessie_459 =
        (if ((neq_int_ (integer_of_int32 i)) (0))
        then
-        (C_263: begin   (x_47 := (safe_int32_of_integer_ (1))); !x_47 end)
+        (C_259: begin   (x_47 := (safe_int32_of_integer_ (1))); !x_47 end)
        else
-        (C_262: begin   (x_47 := (safe_int32_of_integer_ (2))); !x_47 end)) in
+        (C_258: begin   (x_47 := (safe_int32_of_integer_ (2))); !x_47 end)) in
        void); (return := !x_47); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_981: true) }
 
@@ -4825,12 +4830,12 @@ let initialization_safe_safety =
    begin
      (let x_47 = ref (any_int32 void) in
      begin
-       (let jessie_461 =
+       (let jessie_455 =
        (if ((neq_int_ (integer_of_int32 i)) (0))
        then
-        (C_263: begin   (x_47 := (safe_int32_of_integer_ (1))); !x_47 end)
+        (C_259: begin   (x_47 := (safe_int32_of_integer_ (1))); !x_47 end)
        else
-        (C_262: begin   (x_47 := (safe_int32_of_integer_ (2))); !x_47 end)) in
+        (C_258: begin   (x_47 := (safe_int32_of_integer_ (2))); !x_47 end)) in
        void); (return := !x_47); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_985:
@@ -4851,8 +4856,8 @@ let initialization_unsafe_ensures_default =
      begin
        (if ((neq_int_ (integer_of_int32 i_5)) (0))
        then
-        (C_259:
-        (let jessie_457 = (x_46 := (safe_int32_of_integer_ (1))) in void))
+        (C_255:
+        (let jessie_451 = (x_46 := (safe_int32_of_integer_ (1))) in void))
        else void); (return := !x_46); (raise Return) end); absurd  end with
    Return -> !return end)) { (JC_965: true) }
 
@@ -4870,8 +4875,8 @@ let initialization_unsafe_safety =
      begin
        (if ((neq_int_ (integer_of_int32 i_5)) (0))
        then
-        (C_259:
-        (let jessie_454 = (x_46 := (safe_int32_of_integer_ (1))) in void))
+        (C_255:
+        (let jessie_448 = (x_46 := (safe_int32_of_integer_ (1))) in void))
        else void); (return := !x_46); (raise Return) end); absurd  end with
    Return -> !return end))
   { (JC_969:
@@ -4918,23 +4923,23 @@ let missing_return_safe_ensures_default =
    begin
      (let __retres_44 = ref (any_int32 void) in
      try
-      (let jessie_539 =
+      (let jessie_533 =
       begin
         (if ((lt_int_ (integer_of_int32 x)) (0))
         then
-         (let jessie_535 =
-         (C_295:
+         (let jessie_529 =
+         (C_291:
          begin
-           (let jessie_534 = (__retres_44 := (safe_int32_of_integer_ (0))) in
+           (let jessie_528 = (__retres_44 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_538 =
-         (C_294:
+         (let jessie_532 =
+         (C_290:
          begin
-           (let jessie_537 = (__retres_44 := (safe_int32_of_integer_ (1))) in
+           (let jessie_531 = (__retres_44 := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_15 ->
+      Return_label_exc jessie_17 ->
       (return_label: begin   (return := !__retres_44); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_1087: true) }
 
@@ -4949,23 +4954,23 @@ let missing_return_safe_safety =
    begin
      (let __retres_44 = ref (any_int32 void) in
      try
-      (let jessie_531 =
+      (let jessie_525 =
       begin
         (if ((lt_int_ (integer_of_int32 x)) (0))
         then
-         (let jessie_527 =
-         (C_295:
+         (let jessie_521 =
+         (C_291:
          begin
-           (let jessie_526 = (__retres_44 := (safe_int32_of_integer_ (0))) in
+           (let jessie_520 = (__retres_44 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_530 =
-         (C_294:
+         (let jessie_524 =
+         (C_290:
          begin
-           (let jessie_529 = (__retres_44 := (safe_int32_of_integer_ (1))) in
+           (let jessie_523 = (__retres_44 := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_15 ->
+      Return_label_exc jessie_17 ->
       (return_label: begin   (return := !__retres_44); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_1091:
@@ -4984,20 +4989,20 @@ let missing_return_unsafe_ensures_default =
    begin
      (let __retres_43 = ref (any_int32 void) in
      try
-      (let jessie_523 =
+      (let jessie_517 =
       begin
         (if ((lt_int_ (integer_of_int32 x_33)) (0))
         then
-         (let jessie_520 =
-         (C_290:
+         (let jessie_514 =
+         (C_286:
          begin
-           (let jessie_519 = (__retres_43 := (safe_int32_of_integer_ (0))) in
+           (let jessie_513 = (__retres_43 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_291:
+       (C_287:
        begin
-         (let jessie_522 = (__retres_43 := (safe_int32_of_integer_ (0))) in
+         (let jessie_516 = (__retres_43 := (safe_int32_of_integer_ (0))) in
          void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_14 ->
+      Return_label_exc jessie_16 ->
       (return_label: begin   (return := !__retres_43); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_1071: true) }
 
@@ -5013,20 +5018,20 @@ let missing_return_unsafe_safety =
    begin
      (let __retres_43 = ref (any_int32 void) in
      try
-      (let jessie_516 =
+      (let jessie_510 =
       begin
         (if ((lt_int_ (integer_of_int32 x_33)) (0))
         then
-         (let jessie_513 =
-         (C_290:
+         (let jessie_507 =
+         (C_286:
          begin
-           (let jessie_512 = (__retres_43 := (safe_int32_of_integer_ (0))) in
+           (let jessie_506 = (__retres_43 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_291:
+       (C_287:
        begin
-         (let jessie_515 = (__retres_43 := (safe_int32_of_integer_ (0))) in
+         (let jessie_509 = (__retres_43 := (safe_int32_of_integer_ (0))) in
          void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_14 ->
+      Return_label_exc jessie_16 ->
       (return_label: begin   (return := !__retres_43); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_1075:
@@ -5043,9 +5048,9 @@ let missing_return_wrong_ensures_default =
   try
    begin
      (let __retres_42 = ref (any_int32 void) in
-     (C_288:
+     (C_284:
      begin
-       (let jessie_509 = (__retres_42 := (safe_int32_of_integer_ (0))) in
+       (let jessie_503 = (__retres_42 := (safe_int32_of_integer_ (0))) in
        void); (return := !__retres_42); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_1053: true) }
 
@@ -5059,9 +5064,9 @@ let missing_return_wrong_safety =
   try
    begin
      (let __retres_42 = ref (any_int32 void) in
-     (C_288:
+     (C_284:
      begin
-       (let jessie_506 = (__retres_42 := (safe_int32_of_integer_ (0))) in
+       (let jessie_500 = (__retres_42 := (safe_int32_of_integer_ (0))) in
        void); (return := !__retres_42); (raise Return) end)); absurd  end
    with Return -> !return end))
   { (JC_1057:
@@ -5079,20 +5084,20 @@ let mod0_safe_ensures_default =
    begin
      (let __retres_9 = ref (any_int32 void) in
      try
-      (let jessie_121 =
+      (let jessie_123 =
       begin
         (if ((eq_int_ (integer_of_int32 y_11)) (0))
         then
-         (let jessie_117 =
+         (let jessie_119 =
          (C_54:
          begin
-           (let jessie_116 = (__retres_9 := (safe_int32_of_integer_ (0))) in
+           (let jessie_118 = (__retres_9 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_120 =
+         (let jessie_122 =
          (C_53:
          begin
-           (let jessie_119 =
+           (let jessie_121 =
            (__retres_9 := (C_52:
                           (safe_int32_of_integer_ (C_51:
                                                   (JC_339:
@@ -5115,20 +5120,20 @@ let mod0_safe_safety =
    begin
      (let __retres_9 = ref (any_int32 void) in
      try
-      (let jessie_113 =
+      (let jessie_115 =
       begin
         (if ((eq_int_ (integer_of_int32 y_11)) (0))
         then
-         (let jessie_109 =
+         (let jessie_111 =
          (C_54:
          begin
-           (let jessie_108 = (__retres_9 := (safe_int32_of_integer_ (0))) in
+           (let jessie_110 = (__retres_9 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_112 =
+         (let jessie_114 =
          (C_53:
          begin
-           (let jessie_111 =
+           (let jessie_113 =
            (__retres_9 := (C_52:
                           (JC_338:
                           (int32_of_integer_ (C_51:
@@ -5157,7 +5162,7 @@ let mod0_unsafe_ensures_default =
      (let __retres_8 = ref (any_int32 void) in
      (C_48:
      begin
-       (let jessie_105 =
+       (let jessie_107 =
        (__retres_8 := (C_47:
                       (safe_int32_of_integer_ (C_46:
                                               (JC_320:
@@ -5179,7 +5184,7 @@ let mod0_unsafe_safety =
      (let __retres_8 = ref (any_int32 void) in
      (C_48:
      begin
-       (let jessie_102 =
+       (let jessie_104 =
        (__retres_8 := (C_47:
                       (JC_319:
                       (int32_of_integer_ (C_46:
@@ -5204,7 +5209,7 @@ let mod0_wrong_ensures_default =
      (let __retres_7 = ref (any_int32 void) in
      (C_44:
      begin
-       (let jessie_99 =
+       (let jessie_101 =
        (__retres_7 := (C_43:
                       (safe_int32_of_integer_ (C_42:
                                               (JC_299:
@@ -5224,7 +5229,7 @@ let mod0_wrong_safety =
      (let __retres_7 = ref (any_int32 void) in
      (C_44:
      begin
-       (let jessie_96 =
+       (let jessie_98 =
        (__retres_7 := (C_43:
                       (JC_298:
                       (int32_of_integer_ (C_42:
@@ -5245,15 +5250,15 @@ let mod_string_ensures_default =
   try
    begin
      (let str = ref (any_pointer void) in
-     (C_364:
+     (C_360:
      begin
-       (let jessie_756 = (str := __string_abc) in void);
-      (C_367:
+       (let jessie_750 = (str := __string_abc) in void);
+      (C_363:
       begin
-        (let jessie_762 =
-        (let jessie_758 = (safe_int8_of_integer_ (122)) in
-        (let jessie_761 = (C_365: ((shift !str) (2))) in
-        (((safe_upd_ char_P_char_M___string_abc_1) jessie_761) jessie_758))) in
+        (let jessie_756 =
+        (let jessie_752 = (safe_int8_of_integer_ (122)) in
+        (let jessie_755 = (C_361: ((shift !str) (2))) in
+        (((safe_upd_ char_P_char_M___string_abc_1) jessie_755) jessie_752))) in
         void); (raise Return) end) end)); (raise Return) end with Return ->
    void end) { (JC_1308: true) }
 
@@ -5266,18 +5271,18 @@ let mod_string_safety =
   try
    begin
      (let str = ref (any_pointer void) in
-     (C_364:
+     (C_360:
      begin
-       (let jessie_748 = (str := __string_abc) in void);
-      (C_367:
+       (let jessie_742 = (str := __string_abc) in void);
+      (C_363:
       begin
-        (let jessie_754 =
-        (let jessie_750 = (safe_int8_of_integer_ (122)) in
-        (let jessie_751 = !str in
-        (let jessie_752 = (2) in
-        (let jessie_753 = ((shift jessie_751) jessie_752) in
+        (let jessie_748 =
+        (let jessie_744 = (safe_int8_of_integer_ (122)) in
+        (let jessie_745 = !str in
+        (let jessie_746 = (2) in
+        (let jessie_747 = ((shift jessie_745) jessie_746) in
         (JC_1316:
-        (((((offset_upd_ !char_P___string_abc_1_alloc_table) char_P_char_M___string_abc_1) jessie_751) jessie_752) jessie_750)))))) in
+        (((((offset_upd_ !char_P___string_abc_1_alloc_table) char_P_char_M___string_abc_1) jessie_745) jessie_746) jessie_744)))))) in
         void); (raise Return) end) end)); (raise Return) end with Return ->
    void end)
   { (JC_1312:
@@ -5297,50 +5302,50 @@ let multiple_update_safe_ensures_default =
      (let tmp_0_4 = ref (any_int32 void) in
      (let __retres_47 = ref (any_int32 void) in
      try
-      (let jessie_695 =
+      (let jessie_689 =
       begin
         (if ((safe_eq_pointer x_4) y_2)
         then
-         (let jessie_675 =
-         (C_342:
+         (let jessie_669 =
+         (C_338:
          begin
-           (let jessie_674 = (__retres_47 := (safe_int32_of_integer_ (0))) in
+           (let jessie_668 = (__retres_47 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_694 =
+         (let jessie_688 =
          begin
-           (let jessie_691 =
-           (C_333:
+           (let jessie_685 =
+           (C_329:
            begin
-             (let jessie_677 = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
+             (let jessie_671 = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
              void);
-            (C_335:
+            (C_331:
             begin
-              (let jessie_683 =
-              (let jessie_679 = !tmp_0_3 in
-              (let jessie_682 = x_4 in
-              (((safe_upd_ int_P_int_M_x_4_29) jessie_682) jessie_679))) in
+              (let jessie_677 =
+              (let jessie_673 = !tmp_0_3 in
+              (let jessie_676 = x_4 in
+              (((safe_upd_ int_P_int_M_x_4_29) jessie_676) jessie_673))) in
               void);
-             (C_336:
+             (C_332:
              begin
-               (let jessie_685 = (tmp_0_4 := (safe_int32_of_integer_ (0))) in
+               (let jessie_679 = (tmp_0_4 := (safe_int32_of_integer_ (0))) in
                void);
-              (C_338:
-              (let jessie_687 = !tmp_0_4 in
-              (let jessie_690 = y_2 in
+              (C_334:
+              (let jessie_681 = !tmp_0_4 in
+              (let jessie_684 = y_2 in
               begin
-                (((safe_upd_ int_P_int_M_x_4_29) jessie_690) jessie_687);
-               jessie_687 end))) end) end) end) in void);
-          (C_341:
+                (((safe_upd_ int_P_int_M_x_4_29) jessie_684) jessie_681);
+               jessie_681 end))) end) end) end) in void);
+          (C_337:
           begin
-            (let jessie_693 =
-            (__retres_47 := (C_340:
-                            (safe_int32_of_integer_ (C_339:
+            (let jessie_687 =
+            (__retres_47 := (C_336:
+                            (safe_int32_of_integer_ (C_335:
                                                     ((add_int (integer_of_int32 !tmp_0_3)) 
                                                      (integer_of_int32 !tmp_0_4)))))) in
             void); (raise (Return_label_exc void)) end) end in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_16 ->
+      Return_label_exc jessie_18 ->
       (return_label: begin   (return := !__retres_47); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_1179: true) }
 
@@ -5357,53 +5362,53 @@ let multiple_update_safe_safety =
      (let tmp_0_4 = ref (any_int32 void) in
      (let __retres_47 = ref (any_int32 void) in
      try
-      (let jessie_671 =
+      (let jessie_665 =
       begin
         (if ((eq_pointer x_4) y_2)
         then
-         (let jessie_651 =
-         (C_342:
+         (let jessie_645 =
+         (C_338:
          begin
-           (let jessie_650 = (__retres_47 := (safe_int32_of_integer_ (0))) in
+           (let jessie_644 = (__retres_47 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_670 =
+         (let jessie_664 =
          begin
-           (let jessie_667 =
-           (C_333:
+           (let jessie_661 =
+           (C_329:
            begin
-             (let jessie_653 = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
+             (let jessie_647 = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
              void);
-            (C_335:
+            (C_331:
             begin
-              (let jessie_659 =
-              (let jessie_655 = !tmp_0_3 in
-              (let jessie_658 = x_4 in
+              (let jessie_653 =
+              (let jessie_649 = !tmp_0_3 in
+              (let jessie_652 = x_4 in
               (JC_1187:
-              ((((upd_ int_P_x_4_29_alloc_table) int_P_int_M_x_4_29) jessie_658) jessie_655)))) in
+              ((((upd_ int_P_x_4_29_alloc_table) int_P_int_M_x_4_29) jessie_652) jessie_649)))) in
               void);
-             (C_336:
+             (C_332:
              begin
-               (let jessie_661 = (tmp_0_4 := (safe_int32_of_integer_ (0))) in
+               (let jessie_655 = (tmp_0_4 := (safe_int32_of_integer_ (0))) in
                void);
-              (C_338:
-              (let jessie_663 = !tmp_0_4 in
-              (let jessie_666 = y_2 in
+              (C_334:
+              (let jessie_657 = !tmp_0_4 in
+              (let jessie_660 = y_2 in
               begin
                 (JC_1188:
-                ((((upd_ int_P_x_4_29_alloc_table) int_P_int_M_x_4_29) jessie_666) jessie_663));
-               jessie_663 end))) end) end) end) in void);
-          (C_341:
+                ((((upd_ int_P_x_4_29_alloc_table) int_P_int_M_x_4_29) jessie_660) jessie_657));
+               jessie_657 end))) end) end) end) in void);
+          (C_337:
           begin
-            (let jessie_669 =
-            (__retres_47 := (C_340:
+            (let jessie_663 =
+            (__retres_47 := (C_336:
                             (JC_1189:
-                            (int32_of_integer_ (C_339:
+                            (int32_of_integer_ (C_335:
                                                ((add_int (integer_of_int32 !tmp_0_3)) 
                                                 (integer_of_int32 !tmp_0_4))))))) in
             void); (raise (Return_label_exc void)) end) end in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_16 ->
+      Return_label_exc jessie_18 ->
       (return_label: begin   (return := !__retres_47); (raise Return) end) end)));
     absurd  end with Return -> !return end))
   { (JC_1183:
@@ -5424,32 +5429,32 @@ let multiple_update_unsafe_ensures_default =
      (let tmp_0_2 = ref (any_int32 void) in
      (let __retres_46 = ref (any_int32 void) in
      begin
-       (let jessie_645 =
-       (C_322:
+       (let jessie_639 =
+       (C_318:
        begin
-         (let jessie_631 = (tmp_0_1 := (safe_int32_of_integer_ (0))) in void);
-        (C_324:
+         (let jessie_625 = (tmp_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (C_320:
         begin
-          (let jessie_637 =
-          (let jessie_633 = !tmp_0_1 in
-          (let jessie_636 = x_32 in
-          (((safe_upd_ int_P_int_M_x_32_27) jessie_636) jessie_633))) in
+          (let jessie_631 =
+          (let jessie_627 = !tmp_0_1 in
+          (let jessie_630 = x_32 in
+          (((safe_upd_ int_P_int_M_x_32_27) jessie_630) jessie_627))) in
           void);
-         (C_325:
+         (C_321:
          begin
-           (let jessie_639 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
+           (let jessie_633 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
            void);
-          (C_327:
-          (let jessie_641 = !tmp_0_2 in
-          (let jessie_644 = y_22 in
+          (C_323:
+          (let jessie_635 = !tmp_0_2 in
+          (let jessie_638 = y_22 in
           begin
-            (((safe_upd_ int_P_int_M_y_22_28) jessie_644) jessie_641);
-           jessie_641 end))) end) end) end) in void);
-      (C_330:
+            (((safe_upd_ int_P_int_M_y_22_28) jessie_638) jessie_635);
+           jessie_635 end))) end) end) end) in void);
+      (C_326:
       begin
-        (let jessie_647 =
-        (__retres_46 := (C_329:
-                        (safe_int32_of_integer_ (C_328:
+        (let jessie_641 =
+        (__retres_46 := (C_325:
+                        (safe_int32_of_integer_ (C_324:
                                                 ((add_int (integer_of_int32 !tmp_0_1)) 
                                                  (integer_of_int32 !tmp_0_2)))))) in
         void); (return := !__retres_46); (raise Return) end) end))); 
@@ -5469,35 +5474,35 @@ let multiple_update_unsafe_safety =
      (let tmp_0_2 = ref (any_int32 void) in
      (let __retres_46 = ref (any_int32 void) in
      begin
-       (let jessie_626 =
-       (C_322:
+       (let jessie_620 =
+       (C_318:
        begin
-         (let jessie_612 = (tmp_0_1 := (safe_int32_of_integer_ (0))) in void);
-        (C_324:
+         (let jessie_606 = (tmp_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (C_320:
         begin
-          (let jessie_618 =
-          (let jessie_614 = !tmp_0_1 in
-          (let jessie_617 = x_32 in
+          (let jessie_612 =
+          (let jessie_608 = !tmp_0_1 in
+          (let jessie_611 = x_32 in
           (JC_1168:
-          ((((upd_ int_P_x_32_27_alloc_table) int_P_int_M_x_32_27) jessie_617) jessie_614)))) in
+          ((((upd_ int_P_x_32_27_alloc_table) int_P_int_M_x_32_27) jessie_611) jessie_608)))) in
           void);
-         (C_325:
+         (C_321:
          begin
-           (let jessie_620 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
+           (let jessie_614 = (tmp_0_2 := (safe_int32_of_integer_ (0))) in
            void);
-          (C_327:
-          (let jessie_622 = !tmp_0_2 in
-          (let jessie_625 = y_22 in
+          (C_323:
+          (let jessie_616 = !tmp_0_2 in
+          (let jessie_619 = y_22 in
           begin
             (JC_1169:
-            ((((upd_ int_P_y_22_28_alloc_table) int_P_int_M_y_22_28) jessie_625) jessie_622));
-           jessie_622 end))) end) end) end) in void);
-      (C_330:
+            ((((upd_ int_P_y_22_28_alloc_table) int_P_int_M_y_22_28) jessie_619) jessie_616));
+           jessie_616 end))) end) end) end) in void);
+      (C_326:
       begin
-        (let jessie_628 =
-        (__retres_46 := (C_329:
+        (let jessie_622 =
+        (__retres_46 := (C_325:
                         (JC_1170:
-                        (int32_of_integer_ (C_328:
+                        (int32_of_integer_ (C_324:
                                            ((add_int (integer_of_int32 !tmp_0_1)) 
                                             (integer_of_int32 !tmp_0_2))))))) in
         void); (return := !__retres_46); (raise Return) end) end))); 
@@ -5519,30 +5524,30 @@ let multiple_update_wrong_1_ensures_default =
      (let tmp_0 = ref (any_int32 void) in
      (let __retres_45 = ref (any_int32 void) in
      begin
-       (let jessie_575 =
-       (C_298:
+       (let jessie_569 =
+       (C_294:
        begin
-         (let jessie_561 = (tmp := (safe_int32_of_integer_ (0))) in void);
-        (C_300:
+         (let jessie_555 = (tmp := (safe_int32_of_integer_ (0))) in void);
+        (C_296:
         begin
-          (let jessie_567 =
-          (let jessie_563 = !tmp in
-          (let jessie_566 = x_7 in
-          (((safe_upd_ int_P_int_M_x_7_25) jessie_566) jessie_563))) in void);
-         (C_301:
+          (let jessie_561 =
+          (let jessie_557 = !tmp in
+          (let jessie_560 = x_7 in
+          (((safe_upd_ int_P_int_M_x_7_25) jessie_560) jessie_557))) in void);
+         (C_297:
          begin
-           (let jessie_569 = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
-          (C_303:
-          (let jessie_571 = !tmp_0 in
-          (let jessie_574 = x_7 in
+           (let jessie_563 = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
+          (C_299:
+          (let jessie_565 = !tmp_0 in
+          (let jessie_568 = x_7 in
           begin
-            (((safe_upd_ int_P_int_M_x_7_25) jessie_574) jessie_571);
-           jessie_571 end))) end) end) end) in void);
-      (C_306:
+            (((safe_upd_ int_P_int_M_x_7_25) jessie_568) jessie_565);
+           jessie_565 end))) end) end) end) in void);
+      (C_302:
       begin
-        (let jessie_577 =
-        (__retres_45 := (C_305:
-                        (safe_int32_of_integer_ (C_304:
+        (let jessie_571 =
+        (__retres_45 := (C_301:
+                        (safe_int32_of_integer_ (C_300:
                                                 ((add_int (integer_of_int32 !tmp)) 
                                                  (integer_of_int32 !tmp_0)))))) in
         void); (return := !__retres_45); (raise Return) end) end))); 
@@ -5561,34 +5566,34 @@ let multiple_update_wrong_1_safety =
      (let tmp_0 = ref (any_int32 void) in
      (let __retres_45 = ref (any_int32 void) in
      begin
-       (let jessie_556 =
-       (C_298:
+       (let jessie_550 =
+       (C_294:
        begin
-         (let jessie_542 = (tmp := (safe_int32_of_integer_ (0))) in void);
-        (C_300:
+         (let jessie_536 = (tmp := (safe_int32_of_integer_ (0))) in void);
+        (C_296:
         begin
-          (let jessie_548 =
-          (let jessie_544 = !tmp in
-          (let jessie_547 = x_7 in
+          (let jessie_542 =
+          (let jessie_538 = !tmp in
+          (let jessie_541 = x_7 in
           (JC_1111:
-          ((((upd_ int_P_x_7_25_alloc_table) int_P_int_M_x_7_25) jessie_547) jessie_544)))) in
+          ((((upd_ int_P_x_7_25_alloc_table) int_P_int_M_x_7_25) jessie_541) jessie_538)))) in
           void);
-         (C_301:
+         (C_297:
          begin
-           (let jessie_550 = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
-          (C_303:
-          (let jessie_552 = !tmp_0 in
-          (let jessie_555 = x_7 in
+           (let jessie_544 = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
+          (C_299:
+          (let jessie_546 = !tmp_0 in
+          (let jessie_549 = x_7 in
           begin
             (JC_1112:
-            ((((upd_ int_P_x_7_25_alloc_table) int_P_int_M_x_7_25) jessie_555) jessie_552));
-           jessie_552 end))) end) end) end) in void);
-      (C_306:
+            ((((upd_ int_P_x_7_25_alloc_table) int_P_int_M_x_7_25) jessie_549) jessie_546));
+           jessie_546 end))) end) end) end) in void);
+      (C_302:
       begin
-        (let jessie_558 =
-        (__retres_45 := (C_305:
+        (let jessie_552 =
+        (__retres_45 := (C_301:
                         (JC_1113:
-                        (int32_of_integer_ (C_304:
+                        (int32_of_integer_ (C_300:
                                            ((add_int (integer_of_int32 !tmp)) 
                                             (integer_of_int32 !tmp_0))))))) in
         void); (return := !__retres_45); (raise Return) end) end))); 
@@ -5607,18 +5612,18 @@ let multiple_update_wrong_2_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let jessie_587 =
-     (C_310:
+     (let jessie_581 =
+     (C_306:
      begin
-       (let jessie_585 =
-       (mutable_i_2 := (C_309:
-                       (safe_int32_of_integer_ (C_308:
+       (let jessie_579 =
+       (mutable_i_2 := (C_305:
+                       (safe_int32_of_integer_ (C_304:
                                                ((add_int (integer_of_int32 !mutable_i_2)) (1)))))) in
        void);
-      (C_313:
+      (C_309:
       begin
-        (mutable_i_2 := (C_312:
-                        (safe_int32_of_integer_ (C_311:
+        (mutable_i_2 := (C_308:
+                        (safe_int32_of_integer_ (C_307:
                                                 ((add_int (integer_of_int32 !mutable_i_2)) (1))))));
        !mutable_i_2 end) end) in void); (return := !mutable_i_2);
     (raise Return); absurd  end with Return -> !return end)))
@@ -5634,20 +5639,20 @@ let multiple_update_wrong_2_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let jessie_582 =
-     (C_310:
+     (let jessie_576 =
+     (C_306:
      begin
-       (let jessie_580 =
-       (mutable_i_2 := (C_309:
+       (let jessie_574 =
+       (mutable_i_2 := (C_305:
                        (JC_1130:
-                       (int32_of_integer_ (C_308:
+                       (int32_of_integer_ (C_304:
                                           ((add_int (integer_of_int32 !mutable_i_2)) (1))))))) in
        void);
-      (C_313:
+      (C_309:
       begin
-        (mutable_i_2 := (C_312:
+        (mutable_i_2 := (C_308:
                         (JC_1131:
-                        (int32_of_integer_ (C_311:
+                        (int32_of_integer_ (C_307:
                                            ((add_int (integer_of_int32 !mutable_i_2)) (1)))))));
        !mutable_i_2 end) end) in void); (return := !mutable_i_2);
     (raise Return); absurd  end with Return -> !return end)))
@@ -5667,23 +5672,23 @@ let multiple_update_wrong_3_ensures_default =
    begin
      (let tmp_0_0 = ref (any_int32 void) in
      begin
-       (let jessie_609 =
+       (let jessie_603 =
        begin
-         (let jessie_603 =
-         (C_315:
+         (let jessie_597 =
+         (C_311:
          begin
-           (let jessie_601 = (tmp_0_0 := !mutable_i_4) in void);
-          (C_318:
+           (let jessie_595 = (tmp_0_0 := !mutable_i_4) in void);
+          (C_314:
           begin
-            (mutable_i_4 := (C_317:
-                            (safe_int32_of_integer_ (C_316:
+            (mutable_i_4 := (C_313:
+                            (safe_int32_of_integer_ (C_312:
                                                     ((add_int (integer_of_int32 !mutable_i_4)) (1))))));
            !mutable_i_4 end) end) in void);
-        (C_320:
-        (let jessie_605 = !mutable_i_4 in
-        (let jessie_608 = ((shift a) (integer_of_int32 !tmp_0_0)) in
+        (C_316:
+        (let jessie_599 = !mutable_i_4 in
+        (let jessie_602 = ((shift a) (integer_of_int32 !tmp_0_0)) in
         begin
-          (((safe_upd_ int_P_int_M_a_2) jessie_608) jessie_605); jessie_605
+          (((safe_upd_ int_P_int_M_a_2) jessie_602) jessie_599); jessie_599
         end))) end in void); (return := !mutable_i_4); (raise Return) end);
     absurd  end with Return -> !return end))) { (JC_1140: true) }
 
@@ -5699,28 +5704,28 @@ let multiple_update_wrong_3_safety =
    begin
      (let tmp_0_0 = ref (any_int32 void) in
      begin
-       (let jessie_598 =
+       (let jessie_592 =
        begin
-         (let jessie_592 =
-         (C_315:
+         (let jessie_586 =
+         (C_311:
          begin
-           (let jessie_590 = (tmp_0_0 := !mutable_i_4) in void);
-          (C_318:
+           (let jessie_584 = (tmp_0_0 := !mutable_i_4) in void);
+          (C_314:
           begin
-            (mutable_i_4 := (C_317:
+            (mutable_i_4 := (C_313:
                             (JC_1148:
-                            (int32_of_integer_ (C_316:
+                            (int32_of_integer_ (C_312:
                                                ((add_int (integer_of_int32 !mutable_i_4)) (1)))))));
            !mutable_i_4 end) end) in void);
-        (C_320:
-        (let jessie_594 = !mutable_i_4 in
-        (let jessie_595 = a in
-        (let jessie_596 = (integer_of_int32 !tmp_0_0) in
-        (let jessie_597 = ((shift jessie_595) jessie_596) in
+        (C_316:
+        (let jessie_588 = !mutable_i_4 in
+        (let jessie_589 = a in
+        (let jessie_590 = (integer_of_int32 !tmp_0_0) in
+        (let jessie_591 = ((shift jessie_589) jessie_590) in
         begin
           (JC_1149:
-          (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_595) jessie_596) jessie_594));
-         jessie_594 end))))) end in void); (return := !mutable_i_4);
+          (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_589) jessie_590) jessie_588));
+         jessie_588 end))))) end in void); (return := !mutable_i_4);
       (raise Return) end); absurd  end with Return -> !return end)))
   { (JC_1144:
     ((JC_1142: valid___string_abc(char_P___string_abc_1_alloc_table))
@@ -5741,24 +5746,24 @@ let null_ptr_safe_ensures_default =
    begin
      (let __retres_27 = ref (any_int32 void) in
      try
-      (let jessie_315 =
+      (let jessie_309 =
       begin
         (if ((safe_eq_pointer x_22) null)
         then
-         (let jessie_311 =
-         (C_173:
+         (let jessie_305 =
+         (C_169:
          begin
-           (let jessie_310 = (__retres_27 := (safe_int32_of_integer_ (0))) in
+           (let jessie_304 = (__retres_27 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_314 =
-         (C_172:
+         (let jessie_308 =
+         (C_168:
          begin
-           (let jessie_313 =
-           (__retres_27 := (C_171: ((safe_acc_ int_P_int_M_x_22_20) x_22))) in
+           (let jessie_307 =
+           (__retres_27 := (C_167: ((safe_acc_ int_P_int_M_x_22_20) x_22))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_9 ->
+      Return_label_exc jessie_11 ->
       (return_label: begin   (return := !__retres_27); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_707: true) }
 
@@ -5777,26 +5782,26 @@ let null_ptr_safe_safety =
    begin
      (let __retres_27 = ref (any_int32 void) in
      try
-      (let jessie_307 =
+      (let jessie_301 =
       begin
         (if ((eq_pointer x_22) null)
         then
-         (let jessie_303 =
-         (C_173:
+         (let jessie_297 =
+         (C_169:
          begin
-           (let jessie_302 = (__retres_27 := (safe_int32_of_integer_ (0))) in
+           (let jessie_296 = (__retres_27 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_306 =
-         (C_172:
+         (let jessie_300 =
+         (C_168:
          begin
-           (let jessie_305 =
-           (__retres_27 := (C_171:
+           (let jessie_299 =
+           (__retres_27 := (C_167:
                            (JC_715:
                            (((acc_ int_P_x_22_20_alloc_table) int_P_int_M_x_22_20) x_22)))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_9 ->
+      Return_label_exc jessie_11 ->
       (return_label: begin   (return := !__retres_27); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_711:
@@ -5816,10 +5821,10 @@ let null_ptr_unsafe_ensures_default =
   try
    begin
      (let __retres_26 = ref (any_int32 void) in
-     (C_166:
+     (C_162:
      begin
-       (let jessie_299 =
-       (__retres_26 := (C_165: ((safe_acc_ int_P_int_M_x_15_19) x_15))) in
+       (let jessie_293 =
+       (__retres_26 := (C_161: ((safe_acc_ int_P_int_M_x_15_19) x_15))) in
        void); (return := !__retres_26); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_688: true) }
 
@@ -5836,10 +5841,10 @@ let null_ptr_unsafe_safety =
   try
    begin
      (let __retres_26 = ref (any_int32 void) in
-     (C_166:
+     (C_162:
      begin
-       (let jessie_296 =
-       (__retres_26 := (C_165:
+       (let jessie_290 =
+       (__retres_26 := (C_161:
                        (JC_696:
                        (((acc_ int_P_x_15_19_alloc_table) int_P_int_M_x_15_19) x_15)))) in
        void); (return := !__retres_26); (raise Return) end)); absurd  end
@@ -5859,13 +5864,13 @@ let null_ptr_wrong_ensures_default =
   try
    begin
      (let __retres_25 = ref (any_int32 void) in
-     (C_161:
+     (C_157:
      begin
-       (let jessie_291 = (mutable_x_11 := null) in void);
-      (C_163:
+       (let jessie_285 = (mutable_x_11 := null) in void);
+      (C_159:
       begin
-        (let jessie_293 =
-        (__retres_25 := (C_162:
+        (let jessie_287 =
+        (__retres_25 := (C_158:
                         ((safe_acc_ int_P_int_M_x_11_18) !mutable_x_11))) in
         void); (return := !__retres_25); (raise Return) end) end)); absurd 
    end with Return -> !return end))) { (JC_665: true) }
@@ -5881,13 +5886,13 @@ let null_ptr_wrong_safety =
   try
    begin
      (let __retres_25 = ref (any_int32 void) in
-     (C_161:
+     (C_157:
      begin
-       (let jessie_286 = (mutable_x_11 := null) in void);
-      (C_163:
+       (let jessie_280 = (mutable_x_11 := null) in void);
+      (C_159:
       begin
-        (let jessie_288 =
-        (__retres_25 := (C_162:
+        (let jessie_282 =
+        (__retres_25 := (C_158:
                         (JC_673:
                         (((acc_ int_P_x_11_18_alloc_table) int_P_int_M_x_11_18) !mutable_x_11)))) in
         void); (return := !__retres_25); (raise Return) end) end)); absurd 
@@ -5908,28 +5913,28 @@ let oob_pointer_safe_ensures_default =
      (let i_8_0 = ref (any_pointer void) in
      (let __retres_35 = ref (any_int32 void) in
      try
-      (let jessie_421 =
+      (let jessie_415 =
       begin
         (if ((lt_int_ (integer_of_uint32 x_1)) (2))
         then
-         (let jessie_417 =
-         (C_239:
+         (let jessie_411 =
+         (C_235:
          begin
-           (let jessie_414 =
-           (i_8_0 := (C_238: ((shift a) (integer_of_uint32 x_1)))) in void);
-          (C_241:
+           (let jessie_408 =
+           (i_8_0 := (C_234: ((shift a) (integer_of_uint32 x_1)))) in void);
+          (C_237:
           begin
-            (let jessie_416 =
-            (__retres_35 := (C_240: ((safe_acc_ !int_P_int_M_a_2) !i_8_0))) in
+            (let jessie_410 =
+            (__retres_35 := (C_236: ((safe_acc_ !int_P_int_M_a_2) !i_8_0))) in
             void); (raise (Return_label_exc void)) end) end) in void)
         else
-         (let jessie_420 =
-         (C_237:
+         (let jessie_414 =
+         (C_233:
          begin
-           (let jessie_419 = (__retres_35 := (safe_int32_of_integer_ (0))) in
+           (let jessie_413 = (__retres_35 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_10 ->
+      Return_label_exc jessie_12 ->
       (return_label: begin   (return := !__retres_35); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_876: true) }
 
@@ -5945,30 +5950,30 @@ let oob_pointer_safe_safety =
      (let i_8_0 = ref (any_pointer void) in
      (let __retres_35 = ref (any_int32 void) in
      try
-      (let jessie_411 =
+      (let jessie_405 =
       begin
         (if ((lt_int_ (integer_of_uint32 x_1)) (2))
         then
-         (let jessie_407 =
-         (C_239:
+         (let jessie_401 =
+         (C_235:
          begin
-           (let jessie_404 =
-           (i_8_0 := (C_238: ((shift a) (integer_of_uint32 x_1)))) in void);
-          (C_241:
+           (let jessie_398 =
+           (i_8_0 := (C_234: ((shift a) (integer_of_uint32 x_1)))) in void);
+          (C_237:
           begin
-            (let jessie_406 =
-            (__retres_35 := (C_240:
+            (let jessie_400 =
+            (__retres_35 := (C_236:
                             (JC_884:
                             (((acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) !i_8_0)))) in
             void); (raise (Return_label_exc void)) end) end) in void)
         else
-         (let jessie_410 =
-         (C_237:
+         (let jessie_404 =
+         (C_233:
          begin
-           (let jessie_409 = (__retres_35 := (safe_int32_of_integer_ (0))) in
+           (let jessie_403 = (__retres_35 := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_10 ->
+      Return_label_exc jessie_12 ->
       (return_label: begin   (return := !__retres_35); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_880:
@@ -5989,14 +5994,14 @@ let oob_pointer_unsafe_ensures_default =
    begin
      (let i_7_0 = ref (any_pointer void) in
      (let __retres_34 = ref (any_int32 void) in
-     (C_230:
+     (C_226:
      begin
-       (let jessie_399 =
-       (i_7_0 := (C_229: ((shift a) (integer_of_uint32 x_34)))) in void);
-      (C_232:
+       (let jessie_393 =
+       (i_7_0 := (C_225: ((shift a) (integer_of_uint32 x_34)))) in void);
+      (C_228:
       begin
-        (let jessie_401 =
-        (__retres_34 := (C_231: ((safe_acc_ !int_P_int_M_a_2) !i_7_0))) in
+        (let jessie_395 =
+        (__retres_34 := (C_227: ((safe_acc_ !int_P_int_M_a_2) !i_7_0))) in
         void); (return := !__retres_34); (raise Return) end) end))); 
     absurd  end with Return -> !return end)) { (JC_859: true) }
 
@@ -6014,14 +6019,14 @@ let oob_pointer_unsafe_safety =
    begin
      (let i_7_0 = ref (any_pointer void) in
      (let __retres_34 = ref (any_int32 void) in
-     (C_230:
+     (C_226:
      begin
-       (let jessie_394 =
-       (i_7_0 := (C_229: ((shift a) (integer_of_uint32 x_34)))) in void);
-      (C_232:
+       (let jessie_388 =
+       (i_7_0 := (C_225: ((shift a) (integer_of_uint32 x_34)))) in void);
+      (C_228:
       begin
-        (let jessie_396 =
-        (__retres_34 := (C_231:
+        (let jessie_390 =
+        (__retres_34 := (C_227:
                         (JC_867:
                         (((acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) !i_7_0)))) in
         void); (return := !__retres_34); (raise Return) end) end))); 
@@ -6041,16 +6046,16 @@ let oob_pointer_wrong_ensures_default =
    begin
      (let i_6_1 = ref (any_pointer void) in
      (let __retres_33 = ref (any_int32 void) in
-     (C_225:
+     (C_221:
      begin
-       (let jessie_389 =
-       (i_6_1 := (C_224:
-                 ((shift (C_223: ((shift a) (integer_of_uint32 x_25)))) (2)))) in
+       (let jessie_383 =
+       (i_6_1 := (C_220:
+                 ((shift (C_219: ((shift a) (integer_of_uint32 x_25)))) (2)))) in
        void);
-      (C_227:
+      (C_223:
       begin
-        (let jessie_391 =
-        (__retres_33 := (C_226: ((safe_acc_ !int_P_int_M_a_2) !i_6_1))) in
+        (let jessie_385 =
+        (__retres_33 := (C_222: ((safe_acc_ !int_P_int_M_a_2) !i_6_1))) in
         void); (return := !__retres_33); (raise Return) end) end))); 
     absurd  end with Return -> !return end)) { (JC_836: true) }
 
@@ -6065,16 +6070,16 @@ let oob_pointer_wrong_safety =
    begin
      (let i_6_1 = ref (any_pointer void) in
      (let __retres_33 = ref (any_int32 void) in
-     (C_225:
+     (C_221:
      begin
-       (let jessie_384 =
-       (i_6_1 := (C_224:
-                 ((shift (C_223: ((shift a) (integer_of_uint32 x_25)))) (2)))) in
+       (let jessie_378 =
+       (i_6_1 := (C_220:
+                 ((shift (C_219: ((shift a) (integer_of_uint32 x_25)))) (2)))) in
        void);
-      (C_227:
+      (C_223:
       begin
-        (let jessie_386 =
-        (__retres_33 := (C_226:
+        (let jessie_380 =
+        (__retres_33 := (C_222:
                         (JC_844:
                         (((acc_ !int_P_a_2_alloc_table) !int_P_int_M_a_2) !i_6_1)))) in
         void); (return := !__retres_33); (raise Return) end) end))); 
@@ -6096,21 +6101,21 @@ let order_of_arg_eval_ensures_default =
      (let tmp_0_6 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      begin
-       (let jessie_709 =
-       (C_349:
+       (let jessie_703 =
+       (C_345:
        begin
-         (let jessie_707 = (tmp_0_5 := (C_348: (JC_1263: (baz void)))) in
+         (let jessie_701 = (tmp_0_5 := (C_344: (JC_1263: (baz void)))) in
          void);
-        (C_351:
-        begin   (tmp_0_6 := (C_350: (JC_1264: (bar void)))); !tmp_0_6 end)
+        (C_347:
+        begin   (tmp_0_6 := (C_346: (JC_1264: (bar void)))); !tmp_0_6 end)
        end) in void);
-      (C_353:
+      (C_349:
       begin
-        (let jessie_713 =
-        (tmp_1 := (C_352:
-                  (let jessie_712 = !tmp_0_6 in
-                  (let jessie_711 = !tmp_0_5 in
-                  (JC_1265: ((foo jessie_712) jessie_711)))))) in void);
+        (let jessie_707 =
+        (tmp_1 := (C_348:
+                  (let jessie_706 = !tmp_0_6 in
+                  (let jessie_705 = !tmp_0_5 in
+                  (JC_1265: ((foo jessie_706) jessie_705)))))) in void);
        (return := !tmp_1); (raise Return) end) end))); absurd  end with
    Return -> !return end)) { (JC_1252: true) }
 
@@ -6127,22 +6132,22 @@ let order_of_arg_eval_safety =
      (let tmp_0_6 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      begin
-       (let jessie_700 =
-       (C_349:
+       (let jessie_694 =
+       (C_345:
        begin
-         (let jessie_698 =
-         (tmp_0_5 := (C_348: (JC_1260: (baz_requires void)))) in void);
-        (C_351:
+         (let jessie_692 =
+         (tmp_0_5 := (C_344: (JC_1260: (baz_requires void)))) in void);
+        (C_347:
         begin
-          (tmp_0_6 := (C_350: (JC_1261: (bar_requires void)))); !tmp_0_6 end)
+          (tmp_0_6 := (C_346: (JC_1261: (bar_requires void)))); !tmp_0_6 end)
        end) in void);
-      (C_353:
+      (C_349:
       begin
-        (let jessie_704 =
-        (tmp_1 := (C_352:
-                  (let jessie_703 = !tmp_0_6 in
-                  (let jessie_702 = !tmp_0_5 in
-                  (JC_1262: ((foo_requires jessie_703) jessie_702)))))) in
+        (let jessie_698 =
+        (tmp_1 := (C_348:
+                  (let jessie_697 = !tmp_0_6 in
+                  (let jessie_696 = !tmp_0_5 in
+                  (JC_1262: ((foo_requires jessie_697) jessie_696)))))) in
         void); (return := !tmp_1); (raise Return) end) end))); absurd  end
    with Return -> !return end))
   { (JC_1256:
@@ -6164,27 +6169,27 @@ let ptr_sub_safe_ensures_default =
      (let x_44 = ref (any_pointer void) in
      (let y_30 = ref (any_pointer void) in
      (let __retres_32 = ref (any_int32 void) in
-     (C_213:
+     (C_209:
      begin
-       (let jessie_375 =
-       (a_0_0 := (C_212:
+       (let jessie_369 =
+       (a_0_0 := (C_208:
                  (JC_827:
                  (((alloc_struct_int_P (3)) int_P_a_0_0_93_alloc_table) int_P_a_0_0_93_tag_table)))) in
        void);
-      (C_215:
+      (C_211:
       begin
-        (let jessie_377 = (x_44 := (C_214: ((shift !a_0_0) (2)))) in void);
-       (C_216:
+        (let jessie_371 = (x_44 := (C_210: ((shift !a_0_0) (2)))) in void);
+       (C_212:
        begin
-         (let jessie_379 = (y_30 := !a_0_0) in void);
-        (C_219:
+         (let jessie_373 = (y_30 := !a_0_0) in void);
+        (C_215:
         begin
-          (let jessie_381 =
-          (__retres_32 := (C_218:
-                          (safe_int32_of_integer_ (C_217:
+          (let jessie_375 =
+          (__retres_32 := (C_214:
+                          (safe_int32_of_integer_ (C_213:
                                                   ((safe_sub_pointer_ !x_44) !y_30))))) in
           void);
-         (C_220:
+         (C_216:
          begin
            ((safe_free_parameter int_P_a_0_0_93_alloc_table) !a_0_0);
           (return := !__retres_32); (raise Return) end) end) end) end) end)))))));
@@ -6205,32 +6210,32 @@ let ptr_sub_safe_safety =
      (let x_44 = ref (any_pointer void) in
      (let y_30 = ref (any_pointer void) in
      (let __retres_32 = ref (any_int32 void) in
-     (C_213:
+     (C_209:
      begin
-       (let jessie_366 =
-       (a_0_0 := (let jessie_365 =
-                 (C_212:
+       (let jessie_360 =
+       (a_0_0 := (let jessie_359 =
+                 (C_208:
                  (JC_824:
                  (((alloc_struct_int_P_requires (3)) int_P_a_0_0_93_alloc_table) int_P_a_0_0_93_tag_table))) in
                  (JC_825:
                  (assert
-                 { ge_int(offset_max(int_P_a_0_0_93_alloc_table, jessie_365),
-                   (2)) }; jessie_365)))) in void);
-      (C_215:
+                 { ge_int(offset_max(int_P_a_0_0_93_alloc_table, jessie_359),
+                   (2)) }; jessie_359)))) in void);
+      (C_211:
       begin
-        (let jessie_368 = (x_44 := (C_214: ((shift !a_0_0) (2)))) in void);
-       (C_216:
+        (let jessie_362 = (x_44 := (C_210: ((shift !a_0_0) (2)))) in void);
+       (C_212:
        begin
-         (let jessie_370 = (y_30 := !a_0_0) in void);
-        (C_219:
+         (let jessie_364 = (y_30 := !a_0_0) in void);
+        (C_215:
         begin
-          (let jessie_372 =
-          (__retres_32 := (C_218:
+          (let jessie_366 =
+          (__retres_32 := (C_214:
                           (JC_826:
-                          (int32_of_integer_ (C_217:
+                          (int32_of_integer_ (C_213:
                                              ((sub_pointer_ !x_44) !y_30)))))) in
           void);
-         (C_220:
+         (C_216:
          begin
            ((free_parameter int_P_a_0_0_93_alloc_table) !a_0_0);
           (return := !__retres_32); (raise Return) end) end) end) end) end)))))));
@@ -6256,11 +6261,11 @@ let ptr_sub_unsafe_ensures_default =
   try
    begin
      (let __retres_31 = ref (any_int32 void) in
-     (C_203:
+     (C_199:
      begin
-       (let jessie_363 =
-       (__retres_31 := (C_202:
-                       (safe_int32_of_integer_ (C_201:
+       (let jessie_357 =
+       (__retres_31 := (C_198:
+                       (safe_int32_of_integer_ (C_197:
                                                ((safe_sub_pointer_ x_8) y_6))))) in
        void); (return := !__retres_31); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_799: true) }
@@ -6282,12 +6287,12 @@ let ptr_sub_unsafe_safety =
   try
    begin
      (let __retres_31 = ref (any_int32 void) in
-     (C_203:
+     (C_199:
      begin
-       (let jessie_360 =
-       (__retres_31 := (C_202:
+       (let jessie_354 =
+       (__retres_31 := (C_198:
                        (JC_807:
-                       (int32_of_integer_ (C_201: ((sub_pointer_ x_8) y_6)))))) in
+                       (int32_of_integer_ (C_197: ((sub_pointer_ x_8) y_6)))))) in
        void); (return := !__retres_31); (raise Return) end)); absurd  end
    with Return -> !return end))
   { (JC_803:
@@ -6310,37 +6315,37 @@ let ptr_sub_wrong_ensures_default =
      (let x_43 = ref (any_pointer void) in
      (let y_29 = ref (any_pointer void) in
      (let __retres_30 = ref (any_int32 void) in
-     (C_189:
+     (C_185:
      begin
-       (let jessie_349 =
-       (a_0 := (C_188:
+       (let jessie_343 =
+       (a_0 := (C_184:
                (JC_779:
                (((alloc_struct_int_P (20)) int_P_a_0_87_alloc_table) int_P_a_0_87_tag_table)))) in
        void);
-      (C_191:
+      (C_187:
       begin
-        (let jessie_351 =
-        (b := (C_190:
+        (let jessie_345 =
+        (b := (C_186:
               (JC_780:
               (((alloc_struct_int_P (10)) int_P_a_0_87_alloc_table) int_P_a_0_87_tag_table)))) in
         void);
-       (C_193:
+       (C_189:
        begin
-         (let jessie_353 = (x_43 := (C_192: ((shift !a_0) (2)))) in void);
-        (C_194:
+         (let jessie_347 = (x_43 := (C_188: ((shift !a_0) (2)))) in void);
+        (C_190:
         begin
-          (let jessie_355 = (y_29 := !b) in void);
-         (C_197:
+          (let jessie_349 = (y_29 := !b) in void);
+         (C_193:
          begin
-           (let jessie_357 =
-           (__retres_30 := (C_196:
-                           (safe_int32_of_integer_ (C_195:
+           (let jessie_351 =
+           (__retres_30 := (C_192:
+                           (safe_int32_of_integer_ (C_191:
                                                    ((safe_sub_pointer_ !x_43) !y_29))))) in
            void);
-          (C_198:
+          (C_194:
           begin
             ((safe_free_parameter int_P_a_0_87_alloc_table) !a_0);
-           (C_199:
+           (C_195:
            begin
              ((safe_free_parameter int_P_a_0_87_alloc_table) !b);
             (return := !__retres_30); (raise Return) end) end) end) end) end)
@@ -6363,46 +6368,46 @@ let ptr_sub_wrong_safety =
      (let x_43 = ref (any_pointer void) in
      (let y_29 = ref (any_pointer void) in
      (let __retres_30 = ref (any_int32 void) in
-     (C_189:
+     (C_185:
      begin
-       (let jessie_338 =
-       (a_0 := (let jessie_337 =
-               (C_188:
+       (let jessie_332 =
+       (a_0 := (let jessie_331 =
+               (C_184:
                (JC_774:
                (((alloc_struct_int_P_requires (20)) int_P_a_0_87_alloc_table) int_P_a_0_87_tag_table))) in
                (JC_775:
                (assert
-               { ge_int(offset_max(int_P_a_0_87_alloc_table, jessie_337),
-                 (19)) }; jessie_337)))) in void);
-      (C_191:
+               { ge_int(offset_max(int_P_a_0_87_alloc_table, jessie_331),
+                 (19)) }; jessie_331)))) in void);
+      (C_187:
       begin
-        (let jessie_340 =
-        (b := (let jessie_339 =
-              (C_190:
+        (let jessie_334 =
+        (b := (let jessie_333 =
+              (C_186:
               (JC_776:
               (((alloc_struct_int_P_requires (10)) int_P_a_0_87_alloc_table) int_P_a_0_87_tag_table))) in
               (JC_777:
               (assert
-              { ge_int(offset_max(int_P_a_0_87_alloc_table, jessie_339), (9)) };
-              jessie_339)))) in void);
-       (C_193:
+              { ge_int(offset_max(int_P_a_0_87_alloc_table, jessie_333), (9)) };
+              jessie_333)))) in void);
+       (C_189:
        begin
-         (let jessie_342 = (x_43 := (C_192: ((shift !a_0) (2)))) in void);
-        (C_194:
+         (let jessie_336 = (x_43 := (C_188: ((shift !a_0) (2)))) in void);
+        (C_190:
         begin
-          (let jessie_344 = (y_29 := !b) in void);
-         (C_197:
+          (let jessie_338 = (y_29 := !b) in void);
+         (C_193:
          begin
-           (let jessie_346 =
-           (__retres_30 := (C_196:
+           (let jessie_340 =
+           (__retres_30 := (C_192:
                            (JC_778:
-                           (int32_of_integer_ (C_195:
+                           (int32_of_integer_ (C_191:
                                               ((sub_pointer_ !x_43) !y_29)))))) in
            void);
-          (C_198:
+          (C_194:
           begin
             ((free_parameter int_P_a_0_87_alloc_table) !a_0);
-           (C_199:
+           (C_195:
            begin
              ((free_parameter int_P_a_0_87_alloc_table) !b);
             (return := !__retres_30); (raise Return) end) end) end) end) end)
@@ -6422,80 +6427,72 @@ let shift_left_signed_safe_ensures_default =
    begin
      (let __retres_14 = ref (any_int32 void) in
      try
-      (let jessie_183 =
+      (let jessie_177 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_24)) (0))
-        then
-         (let jessie_168 =
-         (C_96:
+        try
+         (let jessie_171 =
          begin
-           (let jessie_167 = (__retres_14 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
-        else
-         (if ((lt_int_ (integer_of_int32 y_16)) (0))
-         then
-          (let jessie_171 =
-          (C_95:
-          begin
-            (let jessie_170 =
-            (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-           (raise (Return_label_exc void)) end) in void)
-         else
-          (if ((ge_int_ (integer_of_uint32 (C_94:
-                                           (safe_uint32_of_integer_ (integer_of_int32 y_16))))) (32))
-          then
+           (if ((lt_int_ (integer_of_int32 x_24)) (0))
+           then (let jessie_164 = (raise (Goto__LOR_exc void)) in void)
+           else
+            (if ((lt_int_ (integer_of_int32 y_16)) (0))
+            then (let jessie_165 = (raise (Goto__LOR_exc void)) in void)
+            else
+             (if ((ge_int_ (integer_of_uint32 (C_92:
+                                              (safe_uint32_of_integer_ 
+                                               (integer_of_int32 y_16))))) (32))
+             then (let jessie_166 = (raise (Goto__LOR_exc void)) in void)
+             else
+              begin
+                (assert { (JC_452: lt_int(integer_of_int32(y_16), (32))) };
+                void);
+               (assert { (JC_453: ge_int(integer_of_int32(y_16), (0))) };
+               void);
+               (if ((gt_int_ (integer_of_int32 x_24)) (integer_of_int32 
+                                                       (C_91:
+                                                       (safe_int32_of_integer_ 
+                                                        (C_90:
+                                                        ((asr (2147483647)) 
+                                                         (integer_of_int32 y_16)))))))
+               then (let jessie_167 = (raise (Goto__LOR_exc void)) in void)
+               else
+                (let jessie_170 =
+                begin
+                  (let jessie_169 =
+                  begin
+                    (assert
+                    { (JC_454:
+                      le_int(integer_of_int32(x_24),
+                      asr((2147483647), integer_of_int32(y_16)))) }; void);
+                   (assert { (JC_455: ge_int(integer_of_int32(x_24), (0))) };
+                   void);
+                   (assert
+                   { (JC_456: lt_int(integer_of_int32(y_16), (32))) }; void);
+                   (assert { (JC_457: ge_int(integer_of_int32(y_16), (0))) };
+                   void);
+                   (C_89:
+                   begin
+                     (__retres_14 := (C_88:
+                                     (safe_int32_of_integer_ (C_87:
+                                                             ((lsl (integer_of_int32 x_24)) 
+                                                              (integer_of_int32 y_16))))));
+                    !__retres_14 end) end in void);
+                 (raise (Return_label_exc void)) end in void)) end)));
+          (raise (Goto__LOR_exc void)) end in void) with
+         Goto__LOR_exc jessie_5 ->
+         (let jessie_176 =
+         (_LOR:
+         begin
            (let jessie_174 =
            (C_93:
            begin
              (let jessie_173 =
              (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-            (raise (Return_label_exc void)) end) in void)
-          else
-           begin
-             (assert { (JC_452: lt_int(integer_of_int32(y_16), (32))) };
-             void);
-            (assert { (JC_453: ge_int(integer_of_int32(y_16), (0))) }; void);
-            (if ((gt_int_ (integer_of_int32 x_24)) (integer_of_int32 
-                                                    (C_92:
-                                                    (safe_int32_of_integer_ 
-                                                     (C_91:
-                                                     ((asr (2147483647)) 
-                                                      (integer_of_int32 y_16)))))))
-            then
-             (let jessie_177 =
-             (C_90:
-             begin
-               (let jessie_176 =
-               (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-              (raise (Return_label_exc void)) end) in void)
-            else
-             (let jessie_180 =
-             begin
-               (let jessie_179 =
-               begin
-                 (assert
-                 { (JC_454:
-                   le_int(integer_of_int32(x_24),
-                   asr((2147483647), integer_of_int32(y_16)))) }; void);
-                (assert { (JC_455: ge_int(integer_of_int32(x_24), (0))) };
-                void);
-                (assert { (JC_456: lt_int(integer_of_int32(y_16), (32))) };
-                void);
-                (assert { (JC_457: ge_int(integer_of_int32(y_16), (0))) };
-                void);
-                (C_89:
-                begin
-                  (__retres_14 := (C_88:
-                                  (safe_int32_of_integer_ (C_87:
-                                                          ((lsl (integer_of_int32 x_24)) 
-                                                           (integer_of_int32 y_16))))));
-                 !__retres_14 end) end in void);
-              (raise (Return_label_exc void)) end in void)) end)));
-       (C_97:
-       begin
-         (let jessie_182 = (__retres_14 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_5 ->
+            (raise (Return_label_exc void)) end) in void);
+          (C_94:
+          begin   (__retres_14 := (safe_int32_of_integer_ (0))); !__retres_14
+          end) end) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_6 ->
       (return_label: begin   (return := !__retres_14); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_435: true) }
 
@@ -6510,79 +6507,72 @@ let shift_left_signed_safe_safety =
    begin
      (let __retres_14 = ref (any_int32 void) in
      try
-      (let jessie_164 =
+      (let jessie_162 =
       begin
-        (if ((lt_int_ (integer_of_int32 x_24)) (0))
-        then
-         (let jessie_149 =
-         (C_96:
+        try
+         (let jessie_156 =
          begin
-           (let jessie_148 = (__retres_14 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
-        else
-         (if ((lt_int_ (integer_of_int32 y_16)) (0))
-         then
-          (let jessie_152 =
-          (C_95:
-          begin
-            (let jessie_151 =
-            (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-           (raise (Return_label_exc void)) end) in void)
-         else
-          (if ((ge_int_ (integer_of_uint32 (C_94:
-                                           (JC_443:
-                                           (uint32_of_integer_ (integer_of_int32 y_16)))))) (32))
-          then
-           (let jessie_155 =
+           (if ((lt_int_ (integer_of_int32 x_24)) (0))
+           then (let jessie_149 = (raise (Goto__LOR_exc void)) in void)
+           else
+            (if ((lt_int_ (integer_of_int32 y_16)) (0))
+            then (let jessie_150 = (raise (Goto__LOR_exc void)) in void)
+            else
+             (if ((ge_int_ (integer_of_uint32 (C_92:
+                                              (JC_443:
+                                              (uint32_of_integer_ (integer_of_int32 y_16)))))) (32))
+             then (let jessie_151 = (raise (Goto__LOR_exc void)) in void)
+             else
+              begin
+                [ { } unit { (JC_444: lt_int(integer_of_int32(y_16), (32))) } ];
+               [ { } unit { (JC_445: ge_int(integer_of_int32(y_16), (0))) } ];
+               (if ((gt_int_ (integer_of_int32 x_24)) (integer_of_int32 
+                                                       (C_91:
+                                                       (JC_446:
+                                                       (int32_of_integer_ 
+                                                        (C_90:
+                                                        ((asr (2147483647)) 
+                                                         (integer_of_int32 y_16))))))))
+               then (let jessie_152 = (raise (Goto__LOR_exc void)) in void)
+               else
+                (let jessie_155 =
+                begin
+                  (let jessie_154 =
+                  begin
+                    [ { } unit
+                      { (JC_447:
+                        le_int(integer_of_int32(x_24),
+                        asr((2147483647), integer_of_int32(y_16)))) } ];
+                   [ { } unit
+                     { (JC_448: ge_int(integer_of_int32(x_24), (0))) } ];
+                   [ { } unit
+                     { (JC_449: lt_int(integer_of_int32(y_16), (32))) } ];
+                   [ { } unit
+                     { (JC_450: ge_int(integer_of_int32(y_16), (0))) } ];
+                   (C_89:
+                   begin
+                     (__retres_14 := (C_88:
+                                     (JC_451:
+                                     (int32_of_integer_ (C_87:
+                                                        ((lsl (integer_of_int32 x_24)) 
+                                                         (integer_of_int32 y_16)))))));
+                    !__retres_14 end) end in void);
+                 (raise (Return_label_exc void)) end in void)) end)));
+          (raise (Goto__LOR_exc void)) end in void) with
+         Goto__LOR_exc jessie_5 ->
+         (let jessie_161 =
+         (_LOR:
+         begin
+           (let jessie_159 =
            (C_93:
            begin
-             (let jessie_154 =
-             (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-            (raise (Return_label_exc void)) end) in void)
-          else
-           begin
-             [ { } unit { (JC_444: lt_int(integer_of_int32(y_16), (32))) } ];
-            [ { } unit { (JC_445: ge_int(integer_of_int32(y_16), (0))) } ];
-            (if ((gt_int_ (integer_of_int32 x_24)) (integer_of_int32 
-                                                    (C_92:
-                                                    (JC_446:
-                                                    (int32_of_integer_ 
-                                                     (C_91:
-                                                     ((asr (2147483647)) 
-                                                      (integer_of_int32 y_16))))))))
-            then
              (let jessie_158 =
-             (C_90:
-             begin
-               (let jessie_157 =
-               (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-              (raise (Return_label_exc void)) end) in void)
-            else
-             (let jessie_161 =
-             begin
-               (let jessie_160 =
-               begin
-                 [ { } unit
-                   { (JC_447:
-                     le_int(integer_of_int32(x_24),
-                     asr((2147483647), integer_of_int32(y_16)))) } ];
-                [ { } unit { (JC_448: ge_int(integer_of_int32(x_24), (0))) } ];
-                [ { } unit { (JC_449: lt_int(integer_of_int32(y_16), (32))) } ];
-                [ { } unit { (JC_450: ge_int(integer_of_int32(y_16), (0))) } ];
-                (C_89:
-                begin
-                  (__retres_14 := (C_88:
-                                  (JC_451:
-                                  (int32_of_integer_ (C_87:
-                                                     ((lsl (integer_of_int32 x_24)) 
-                                                      (integer_of_int32 y_16)))))));
-                 !__retres_14 end) end in void);
-              (raise (Return_label_exc void)) end in void)) end)));
-       (C_97:
-       begin
-         (let jessie_163 = (__retres_14 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_5 ->
+             (__retres_14 := (safe_int32_of_integer_ (0))) in void);
+            (raise (Return_label_exc void)) end) in void);
+          (C_94:
+          begin   (__retres_14 := (safe_int32_of_integer_ (0))); !__retres_14
+          end) end) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_6 ->
       (return_label: begin   (return := !__retres_14); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_439:
@@ -6600,7 +6590,7 @@ let shift_left_signed_unsafe_ensures_default =
    begin
      (let __retres_13 = ref (any_int32 void) in
      begin
-       (let jessie_145 =
+       (let jessie_147 =
        begin
          (assert
          { (JC_423:
@@ -6630,7 +6620,7 @@ let shift_left_signed_unsafe_safety =
    begin
      (let __retres_13 = ref (any_int32 void) in
      begin
-       (let jessie_142 =
+       (let jessie_144 =
        begin
          [ { } unit
            { (JC_418:
@@ -6663,7 +6653,7 @@ let shift_left_signed_wrong_1_ensures_default =
    begin
      (let __retres_10 = ref (any_int32 void) in
      begin
-       (let jessie_127 =
+       (let jessie_129 =
        begin
          (assert { (JC_360: lt_int((32), (32))) }; void);
         (assert { (JC_361: le_int(integer_of_int32(x_26), (0))) }; void);
@@ -6688,7 +6678,7 @@ let shift_left_signed_wrong_1_safety =
    begin
      (let __retres_10 = ref (any_int32 void) in
      begin
-       (let jessie_124 =
+       (let jessie_126 =
        begin
          [ { } unit { (JC_356: lt_int((32), (32))) } ];
         [ { } unit { (JC_357: le_int(integer_of_int32(x_26), (0))) } ];
@@ -6716,7 +6706,7 @@ let shift_left_signed_wrong_2_ensures_default =
    begin
      (let __retres_11 = ref (any_int32 void) in
      begin
-       (let jessie_133 =
+       (let jessie_135 =
        begin
          (assert { (JC_383: ge_int(neg_int((1)), (0))) }; void);
         (assert
@@ -6745,7 +6735,7 @@ let shift_left_signed_wrong_2_safety =
    begin
      (let __retres_11 = ref (any_int32 void) in
      begin
-       (let jessie_130 =
+       (let jessie_132 =
        begin
          [ { } unit { (JC_379: ge_int(neg_int((1)), (0))) } ];
         [ { } unit
@@ -6777,7 +6767,7 @@ let shift_left_signed_wrong_3_ensures_default =
      (let __retres_12 = ref (any_int32 void) in
      (C_71:
      begin
-       (let jessie_139 =
+       (let jessie_141 =
        (__retres_12 := (safe_int32_of_integer_ (neg_int (64)))) in void);
       (return := !__retres_12); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_394: true) }
@@ -6794,7 +6784,7 @@ let shift_left_signed_wrong_3_safety =
      (let __retres_12 = ref (any_int32 void) in
      (C_71:
      begin
-       (let jessie_136 =
+       (let jessie_138 =
        (__retres_12 := (safe_int32_of_integer_ (neg_int (64)))) in void);
       (return := !__retres_12); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -6813,32 +6803,32 @@ let shift_left_unsigned_safe_ensures_default =
    begin
      (let __retres_17 = ref (any_uint32 void) in
      try
-      (let jessie_211 =
+      (let jessie_205 =
       begin
         (if ((ge_int_ (integer_of_uint32 y_9)) (32))
         then
-         (let jessie_207 =
-         (C_114:
+         (let jessie_201 =
+         (C_111:
          begin
-           (let jessie_206 =
+           (let jessie_200 =
            (__retres_17 := (safe_uint32_of_integer_ (0))) in void);
           (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_210 =
+         (let jessie_204 =
          begin
-           (let jessie_209 =
+           (let jessie_203 =
            begin
              (assert { (JC_514: lt_int(integer_of_uint32(y_9), (32))) };
              void);
-            (C_113:
+            (C_110:
             begin
-              (__retres_17 := (C_112:
-                              (safe_uint32_of_integer_ (C_111:
+              (__retres_17 := (C_109:
+                              (safe_uint32_of_integer_ (C_108:
                                                        ((lsl (integer_of_uint32 x_13)) 
                                                         (integer_of_uint32 y_9))))));
              !__retres_17 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_6 ->
+      Return_label_exc jessie_7 ->
       (return_label: begin   (return := !__retres_17); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_504: true) }
 
@@ -6853,32 +6843,32 @@ let shift_left_unsigned_safe_safety =
    begin
      (let __retres_17 = ref (any_uint32 void) in
      try
-      (let jessie_203 =
+      (let jessie_197 =
       begin
         (if ((ge_int_ (integer_of_uint32 y_9)) (32))
         then
-         (let jessie_199 =
-         (C_114:
+         (let jessie_193 =
+         (C_111:
          begin
-           (let jessie_198 =
+           (let jessie_192 =
            (__retres_17 := (safe_uint32_of_integer_ (0))) in void);
           (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_202 =
+         (let jessie_196 =
          begin
-           (let jessie_201 =
+           (let jessie_195 =
            begin
              [ { } unit { (JC_512: lt_int(integer_of_uint32(y_9), (32))) } ];
-            (C_113:
+            (C_110:
             begin
-              (__retres_17 := (C_112:
+              (__retres_17 := (C_109:
                               (JC_513:
-                              (uint32_of_integer_ (C_111:
+                              (uint32_of_integer_ (C_108:
                                                   ((lsl (integer_of_uint32 x_13)) 
                                                    (integer_of_uint32 y_9)))))));
              !__retres_17 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_6 ->
+      Return_label_exc jessie_7 ->
       (return_label: begin   (return := !__retres_17); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_508:
@@ -6896,13 +6886,13 @@ let shift_left_unsigned_unsafe_ensures_default =
    begin
      (let __retres_16 = ref (any_uint32 void) in
      begin
-       (let jessie_195 =
+       (let jessie_189 =
        begin
          (assert { (JC_495: lt_int(integer_of_uint32(y_0), (32))) }; void);
-        (C_108:
+        (C_105:
         begin
-          (__retres_16 := (C_107:
-                          (safe_uint32_of_integer_ (C_106:
+          (__retres_16 := (C_104:
+                          (safe_uint32_of_integer_ (C_103:
                                                    ((lsl (integer_of_uint32 x_2)) 
                                                     (integer_of_uint32 y_0))))));
          !__retres_16 end) end in void); (return := !__retres_16);
@@ -6920,14 +6910,14 @@ let shift_left_unsigned_unsafe_safety =
    begin
      (let __retres_16 = ref (any_uint32 void) in
      begin
-       (let jessie_192 =
+       (let jessie_186 =
        begin
          [ { } unit { (JC_493: lt_int(integer_of_uint32(y_0), (32))) } ];
-        (C_108:
+        (C_105:
         begin
-          (__retres_16 := (C_107:
+          (__retres_16 := (C_104:
                           (JC_494:
-                          (uint32_of_integer_ (C_106:
+                          (uint32_of_integer_ (C_103:
                                               ((lsl (integer_of_uint32 x_2)) 
                                                (integer_of_uint32 y_0)))))));
          !__retres_16 end) end in void); (return := !__retres_16);
@@ -6947,13 +6937,13 @@ let shift_left_unsigned_wrong_ensures_default =
    begin
      (let __retres_15 = ref (any_uint32 void) in
      begin
-       (let jessie_189 =
+       (let jessie_183 =
        begin
          (assert { (JC_476: lt_int((32), (32))) }; void);
-        (C_103:
+        (C_100:
         begin
-          (__retres_15 := (C_102:
-                          (safe_uint32_of_integer_ (C_101:
+          (__retres_15 := (C_99:
+                          (safe_uint32_of_integer_ (C_98:
                                                    ((mul_int (integer_of_uint32 x_35)) (4294967296))))));
          !__retres_15 end) end in void); (return := !__retres_15);
       (raise Return) end); absurd  end with Return -> !return end))
@@ -6970,14 +6960,14 @@ let shift_left_unsigned_wrong_safety =
    begin
      (let __retres_15 = ref (any_uint32 void) in
      begin
-       (let jessie_186 =
+       (let jessie_180 =
        begin
          [ { } unit { (JC_474: lt_int((32), (32))) } ];
-        (C_103:
+        (C_100:
         begin
-          (__retres_15 := (C_102:
+          (__retres_15 := (C_99:
                           (JC_475:
-                          (uint32_of_integer_ (C_101:
+                          (uint32_of_integer_ (C_98:
                                               ((mul_int (integer_of_uint32 x_35)) (4294967296)))))));
          !__retres_15 end) end in void); (return := !__retres_15);
       (raise Return) end); absurd  end with Return -> !return end))
@@ -6996,46 +6986,50 @@ let shift_right_signed_safe_ensures_default =
    begin
      (let __retres_21 = ref (any_int32 void) in
      try
-      (let jessie_255 =
+      (let jessie_249 =
       begin
-        (if ((lt_int_ (integer_of_int32 y_8)) (0))
-        then
-         (let jessie_246 =
-         (C_140:
+        try
+         (let jessie_243 =
          begin
-           (let jessie_245 = (__retres_21 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
-        else
-         (if ((ge_int_ (integer_of_uint32 (C_139:
-                                          (safe_uint32_of_integer_ (integer_of_int32 y_8))))) (32))
-         then
-          (let jessie_249 =
-          (C_138:
-          begin
-            (let jessie_248 =
-            (__retres_21 := (safe_int32_of_integer_ (0))) in void);
-           (raise (Return_label_exc void)) end) in void)
-         else
-          (let jessie_252 =
-          begin
-            (let jessie_251 =
-            begin
-              (assert { (JC_596: lt_int(integer_of_int32(y_8), (32))) };
-              void);
-             (assert { (JC_597: ge_int(integer_of_int32(y_8), (0))) }; void);
-             (C_137:
+           (if ((lt_int_ (integer_of_int32 y_8)) (0))
+           then (let jessie_238 = (raise (Goto__LOR_exc void)) in void)
+           else
+            (if ((ge_int_ (integer_of_uint32 (C_135:
+                                             (safe_uint32_of_integer_ 
+                                              (integer_of_int32 y_8))))) (32))
+            then (let jessie_239 = (raise (Goto__LOR_exc void)) in void)
+            else
+             (let jessie_242 =
              begin
-               (__retres_21 := (C_136:
-                               (safe_int32_of_integer_ (C_135:
-                                                       ((asr (integer_of_int32 x_12)) 
-                                                        (integer_of_int32 y_8))))));
-              !__retres_21 end) end in void); (raise (Return_label_exc void))
-          end in void)));
-       (C_141:
-       begin
-         (let jessie_254 = (__retres_21 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_7 ->
+               (let jessie_241 =
+               begin
+                 (assert { (JC_596: lt_int(integer_of_int32(y_8), (32))) };
+                 void);
+                (assert { (JC_597: ge_int(integer_of_int32(y_8), (0))) };
+                void);
+                (C_134:
+                begin
+                  (__retres_21 := (C_133:
+                                  (safe_int32_of_integer_ (C_132:
+                                                          ((asr (integer_of_int32 x_12)) 
+                                                           (integer_of_int32 y_8))))));
+                 !__retres_21 end) end in void);
+              (raise (Return_label_exc void)) end in void)));
+          (raise (Goto__LOR_exc void)) end in void) with
+         Goto__LOR_exc jessie_8 ->
+         (let jessie_248 =
+         (_LOR:
+         begin
+           (let jessie_246 =
+           (C_136:
+           begin
+             (let jessie_245 =
+             (__retres_21 := (safe_int32_of_integer_ (0))) in void);
+            (raise (Return_label_exc void)) end) in void);
+          (C_137:
+          begin   (__retres_21 := (safe_int32_of_integer_ (0))); !__retres_21
+          end) end) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_9 ->
       (return_label: begin   (return := !__retres_21); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_584: true) }
 
@@ -7050,47 +7044,49 @@ let shift_right_signed_safe_safety =
    begin
      (let __retres_21 = ref (any_int32 void) in
      try
-      (let jessie_242 =
+      (let jessie_236 =
       begin
-        (if ((lt_int_ (integer_of_int32 y_8)) (0))
-        then
-         (let jessie_233 =
-         (C_140:
+        try
+         (let jessie_230 =
          begin
-           (let jessie_232 = (__retres_21 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
-        else
-         (if ((ge_int_ (integer_of_uint32 (C_139:
-                                          (JC_592:
-                                          (uint32_of_integer_ (integer_of_int32 y_8)))))) (32))
-         then
-          (let jessie_236 =
-          (C_138:
-          begin
-            (let jessie_235 =
-            (__retres_21 := (safe_int32_of_integer_ (0))) in void);
-           (raise (Return_label_exc void)) end) in void)
-         else
-          (let jessie_239 =
-          begin
-            (let jessie_238 =
-            begin
-              [ { } unit { (JC_593: lt_int(integer_of_int32(y_8), (32))) } ];
-             [ { } unit { (JC_594: ge_int(integer_of_int32(y_8), (0))) } ];
-             (C_137:
+           (if ((lt_int_ (integer_of_int32 y_8)) (0))
+           then (let jessie_225 = (raise (Goto__LOR_exc void)) in void)
+           else
+            (if ((ge_int_ (integer_of_uint32 (C_135:
+                                             (JC_592:
+                                             (uint32_of_integer_ (integer_of_int32 y_8)))))) (32))
+            then (let jessie_226 = (raise (Goto__LOR_exc void)) in void)
+            else
+             (let jessie_229 =
              begin
-               (__retres_21 := (C_136:
-                               (JC_595:
-                               (int32_of_integer_ (C_135:
-                                                  ((asr (integer_of_int32 x_12)) 
-                                                   (integer_of_int32 y_8)))))));
-              !__retres_21 end) end in void); (raise (Return_label_exc void))
-          end in void)));
-       (C_141:
-       begin
-         (let jessie_241 = (__retres_21 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_7 ->
+               (let jessie_228 =
+               begin
+                 [ { } unit { (JC_593: lt_int(integer_of_int32(y_8), (32))) } ];
+                [ { } unit { (JC_594: ge_int(integer_of_int32(y_8), (0))) } ];
+                (C_134:
+                begin
+                  (__retres_21 := (C_133:
+                                  (JC_595:
+                                  (int32_of_integer_ (C_132:
+                                                     ((asr (integer_of_int32 x_12)) 
+                                                      (integer_of_int32 y_8)))))));
+                 !__retres_21 end) end in void);
+              (raise (Return_label_exc void)) end in void)));
+          (raise (Goto__LOR_exc void)) end in void) with
+         Goto__LOR_exc jessie_8 ->
+         (let jessie_235 =
+         (_LOR:
+         begin
+           (let jessie_233 =
+           (C_136:
+           begin
+             (let jessie_232 =
+             (__retres_21 := (safe_int32_of_integer_ (0))) in void);
+            (raise (Return_label_exc void)) end) in void);
+          (C_137:
+          begin   (__retres_21 := (safe_int32_of_integer_ (0))); !__retres_21
+          end) end) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_9 ->
       (return_label: begin   (return := !__retres_21); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_588:
@@ -7108,14 +7104,14 @@ let shift_right_signed_unsafe_ensures_default =
    begin
      (let __retres_20 = ref (any_int32 void) in
      begin
-       (let jessie_229 =
+       (let jessie_223 =
        begin
          (assert { (JC_574: lt_int(integer_of_int32(y), (32))) }; void);
         (assert { (JC_575: ge_int(integer_of_int32(y), (0))) }; void);
-        (C_131:
+        (C_128:
         begin
-          (__retres_20 := (C_130:
-                          (safe_int32_of_integer_ (C_129:
+          (__retres_20 := (C_127:
+                          (safe_int32_of_integer_ (C_126:
                                                   ((asr (integer_of_int32 x_0)) 
                                                    (integer_of_int32 y))))));
          !__retres_20 end) end in void); (return := !__retres_20);
@@ -7133,15 +7129,15 @@ let shift_right_signed_unsafe_safety =
    begin
      (let __retres_20 = ref (any_int32 void) in
      begin
-       (let jessie_226 =
+       (let jessie_220 =
        begin
          [ { } unit { (JC_571: lt_int(integer_of_int32(y), (32))) } ];
         [ { } unit { (JC_572: ge_int(integer_of_int32(y), (0))) } ];
-        (C_131:
+        (C_128:
         begin
-          (__retres_20 := (C_130:
+          (__retres_20 := (C_127:
                           (JC_573:
-                          (int32_of_integer_ (C_129:
+                          (int32_of_integer_ (C_126:
                                              ((asr (integer_of_int32 x_0)) 
                                               (integer_of_int32 y)))))));
          !__retres_20 end) end in void); (return := !__retres_20);
@@ -7161,13 +7157,13 @@ let shift_right_signed_wrong_1_ensures_default =
    begin
      (let __retres_18 = ref (any_int32 void) in
      begin
-       (let jessie_217 =
+       (let jessie_211 =
        begin
          (assert { (JC_533: ge_int(neg_int((1)), (0))) }; void);
-        (C_120:
+        (C_117:
         begin
-          (__retres_18 := (C_119:
-                          (safe_int32_of_integer_ (C_118:
+          (__retres_18 := (C_116:
+                          (safe_int32_of_integer_ (C_115:
                                                   ((asr (integer_of_int32 x_23)) 
                                                    (neg_int (1)))))));
          !__retres_18 end) end in void); (return := !__retres_18);
@@ -7185,14 +7181,14 @@ let shift_right_signed_wrong_1_safety =
    begin
      (let __retres_18 = ref (any_int32 void) in
      begin
-       (let jessie_214 =
+       (let jessie_208 =
        begin
          [ { } unit { (JC_531: ge_int(neg_int((1)), (0))) } ];
-        (C_120:
+        (C_117:
         begin
-          (__retres_18 := (C_119:
+          (__retres_18 := (C_116:
                           (JC_532:
-                          (int32_of_integer_ (C_118:
+                          (int32_of_integer_ (C_115:
                                              ((asr (integer_of_int32 x_23)) 
                                               (neg_int (1))))))));
          !__retres_18 end) end in void); (return := !__retres_18);
@@ -7212,13 +7208,13 @@ let shift_right_signed_wrong_2_ensures_default =
    begin
      (let __retres_19 = ref (any_int32 void) in
      begin
-       (let jessie_223 =
+       (let jessie_217 =
        begin
          (assert { (JC_553: lt_int((32), (32))) }; void);
-        (C_125:
+        (C_122:
         begin
-          (__retres_19 := (C_124:
-                          (safe_int32_of_integer_ (C_123:
+          (__retres_19 := (C_121:
+                          (safe_int32_of_integer_ (C_120:
                                                   (JC_554:
                                                   ((div_int (integer_of_int32 x_31)) (4294967296)))))));
          !__retres_19 end) end in void); (return := !__retres_19);
@@ -7236,14 +7232,14 @@ let shift_right_signed_wrong_2_safety =
    begin
      (let __retres_19 = ref (any_int32 void) in
      begin
-       (let jessie_220 =
+       (let jessie_214 =
        begin
          [ { } unit { (JC_550: lt_int((32), (32))) } ];
-        (C_125:
+        (C_122:
         begin
-          (__retres_19 := (C_124:
+          (__retres_19 := (C_121:
                           (JC_552:
-                          (int32_of_integer_ (C_123:
+                          (int32_of_integer_ (C_120:
                                              (JC_551:
                                              ((div_int_ (integer_of_int32 x_31)) (4294967296))))))));
          !__retres_19 end) end in void); (return := !__retres_19);
@@ -7263,32 +7259,32 @@ let shift_right_unsigned_safe_ensures_default =
    begin
      (let __retres_24 = ref (any_uint32 void) in
      try
-      (let jessie_283 =
+      (let jessie_277 =
       begin
         (if ((ge_int_ (integer_of_uint32 y_28)) (32))
         then
-         (let jessie_279 =
-         (C_158:
+         (let jessie_273 =
+         (C_154:
          begin
-           (let jessie_278 =
+           (let jessie_272 =
            (__retres_24 := (safe_uint32_of_integer_ (0))) in void);
           (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_282 =
+         (let jessie_276 =
          begin
-           (let jessie_281 =
+           (let jessie_275 =
            begin
              (assert { (JC_656: lt_int(integer_of_uint32(y_28), (32))) };
              void);
-            (C_157:
+            (C_153:
             begin
-              (__retres_24 := (C_156:
-                              (safe_uint32_of_integer_ (C_155:
+              (__retres_24 := (C_152:
+                              (safe_uint32_of_integer_ (C_151:
                                                        ((lsr (integer_of_uint32 x_40)) 
                                                         (integer_of_uint32 y_28))))));
              !__retres_24 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_8 ->
+      Return_label_exc jessie_10 ->
       (return_label: begin   (return := !__retres_24); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_646: true) }
 
@@ -7303,32 +7299,32 @@ let shift_right_unsigned_safe_safety =
    begin
      (let __retres_24 = ref (any_uint32 void) in
      try
-      (let jessie_275 =
+      (let jessie_269 =
       begin
         (if ((ge_int_ (integer_of_uint32 y_28)) (32))
         then
-         (let jessie_271 =
-         (C_158:
+         (let jessie_265 =
+         (C_154:
          begin
-           (let jessie_270 =
+           (let jessie_264 =
            (__retres_24 := (safe_uint32_of_integer_ (0))) in void);
           (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_274 =
+         (let jessie_268 =
          begin
-           (let jessie_273 =
+           (let jessie_267 =
            begin
              [ { } unit { (JC_654: lt_int(integer_of_uint32(y_28), (32))) } ];
-            (C_157:
+            (C_153:
             begin
-              (__retres_24 := (C_156:
+              (__retres_24 := (C_152:
                               (JC_655:
-                              (uint32_of_integer_ (C_155:
+                              (uint32_of_integer_ (C_151:
                                                   ((lsr (integer_of_uint32 x_40)) 
                                                    (integer_of_uint32 y_28)))))));
              !__retres_24 end) end in void); (raise (Return_label_exc void))
          end in void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_8 ->
+      Return_label_exc jessie_10 ->
       (return_label: begin   (return := !__retres_24); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_650:
@@ -7346,13 +7342,13 @@ let shift_right_unsigned_unsafe_ensures_default =
    begin
      (let __retres_23 = ref (any_uint32 void) in
      begin
-       (let jessie_267 =
+       (let jessie_261 =
        begin
          (assert { (JC_637: lt_int(integer_of_uint32(y_20), (32))) }; void);
-        (C_152:
+        (C_148:
         begin
-          (__retres_23 := (C_151:
-                          (safe_uint32_of_integer_ (C_150:
+          (__retres_23 := (C_147:
+                          (safe_uint32_of_integer_ (C_146:
                                                    ((lsr (integer_of_uint32 x_30)) 
                                                     (integer_of_uint32 y_20))))));
          !__retres_23 end) end in void); (return := !__retres_23);
@@ -7370,14 +7366,14 @@ let shift_right_unsigned_unsafe_safety =
    begin
      (let __retres_23 = ref (any_uint32 void) in
      begin
-       (let jessie_264 =
+       (let jessie_258 =
        begin
          [ { } unit { (JC_635: lt_int(integer_of_uint32(y_20), (32))) } ];
-        (C_152:
+        (C_148:
         begin
-          (__retres_23 := (C_151:
+          (__retres_23 := (C_147:
                           (JC_636:
-                          (uint32_of_integer_ (C_150:
+                          (uint32_of_integer_ (C_146:
                                               ((lsr (integer_of_uint32 x_30)) 
                                                (integer_of_uint32 y_20)))))));
          !__retres_23 end) end in void); (return := !__retres_23);
@@ -7397,13 +7393,13 @@ let shift_right_unsigned_wrong_ensures_default =
    begin
      (let __retres_22 = ref (any_uint32 void) in
      begin
-       (let jessie_261 =
+       (let jessie_255 =
        begin
          (assert { (JC_617: lt_int((32), (32))) }; void);
-        (C_147:
+        (C_143:
         begin
-          (__retres_22 := (C_146:
-                          (safe_uint32_of_integer_ (C_145:
+          (__retres_22 := (C_142:
+                          (safe_uint32_of_integer_ (C_141:
                                                    (JC_618:
                                                    ((div_int (integer_of_uint32 x_20)) (4294967296)))))));
          !__retres_22 end) end in void); (return := !__retres_22);
@@ -7421,14 +7417,14 @@ let shift_right_unsigned_wrong_safety =
    begin
      (let __retres_22 = ref (any_uint32 void) in
      begin
-       (let jessie_258 =
+       (let jessie_252 =
        begin
          [ { } unit { (JC_614: lt_int((32), (32))) } ];
-        (C_147:
+        (C_143:
         begin
-          (__retres_22 := (C_146:
+          (__retres_22 := (C_142:
                           (JC_616:
-                          (uint32_of_integer_ (C_145:
+                          (uint32_of_integer_ (C_141:
                                               (JC_615:
                                               ((div_int_ (integer_of_uint32 x_20)) (4294967296))))))));
          !__retres_22 end) end in void); (return := !__retres_22);
@@ -7448,29 +7444,29 @@ let signed_overflow_safe_ensures_default =
    begin
      (let __retres_41 = ref (any_int32 void) in
      try
-      (let jessie_503 =
+      (let jessie_497 =
       begin
         (if ((lt_int_ (integer_of_int32 x_21)) (0))
         then
-         (let jessie_499 =
-         (C_285:
+         (let jessie_493 =
+         (C_281:
          begin
-           (let jessie_498 =
-           (__retres_41 := (C_284:
-                           (safe_int32_of_integer_ (C_283:
+           (let jessie_492 =
+           (__retres_41 := (C_280:
+                           (safe_int32_of_integer_ (C_279:
                                                    ((add_int (integer_of_int32 x_21)) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_502 =
-         (C_282:
+         (let jessie_496 =
+         (C_278:
          begin
-           (let jessie_501 =
-           (__retres_41 := (C_281:
-                           (safe_int32_of_integer_ (C_280:
+           (let jessie_495 =
+           (__retres_41 := (C_277:
+                           (safe_int32_of_integer_ (C_276:
                                                    ((sub_int (integer_of_int32 x_21)) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_13 ->
+      Return_label_exc jessie_15 ->
       (return_label: begin   (return := !__retres_41); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_1035: true) }
 
@@ -7485,31 +7481,31 @@ let signed_overflow_safe_safety =
    begin
      (let __retres_41 = ref (any_int32 void) in
      try
-      (let jessie_495 =
+      (let jessie_489 =
       begin
         (if ((lt_int_ (integer_of_int32 x_21)) (0))
         then
-         (let jessie_491 =
-         (C_285:
+         (let jessie_485 =
+         (C_281:
          begin
-           (let jessie_490 =
-           (__retres_41 := (C_284:
+           (let jessie_484 =
+           (__retres_41 := (C_280:
                            (JC_1043:
-                           (int32_of_integer_ (C_283:
+                           (int32_of_integer_ (C_279:
                                               ((add_int (integer_of_int32 x_21)) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_494 =
-         (C_282:
+         (let jessie_488 =
+         (C_278:
          begin
-           (let jessie_493 =
-           (__retres_41 := (C_281:
+           (let jessie_487 =
+           (__retres_41 := (C_277:
                            (JC_1044:
-                           (int32_of_integer_ (C_280:
+                           (int32_of_integer_ (C_276:
                                               ((sub_int (integer_of_int32 x_21)) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_13 ->
+      Return_label_exc jessie_15 ->
       (return_label: begin   (return := !__retres_41); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_1039:
@@ -7527,11 +7523,11 @@ let signed_overflow_unsafe_ensures_default =
   try
    begin
      (let __retres_40 = ref (any_int32 void) in
-     (C_277:
+     (C_273:
      begin
-       (let jessie_487 =
-       (__retres_40 := (C_276:
-                       (safe_int32_of_integer_ (C_275:
+       (let jessie_481 =
+       (__retres_40 := (C_272:
+                       (safe_int32_of_integer_ (C_271:
                                                ((add_int (integer_of_int32 x_14)) (10)))))) in
        void); (return := !__retres_40); (raise Return) end)); absurd  end
    with Return -> !return end)) { (JC_1018: true) }
@@ -7547,12 +7543,12 @@ let signed_overflow_unsafe_safety =
   try
    begin
      (let __retres_40 = ref (any_int32 void) in
-     (C_277:
+     (C_273:
      begin
-       (let jessie_484 =
-       (__retres_40 := (C_276:
+       (let jessie_478 =
+       (__retres_40 := (C_272:
                        (JC_1026:
-                       (int32_of_integer_ (C_275:
+                       (int32_of_integer_ (C_271:
                                           ((add_int (integer_of_int32 x_14)) (10))))))) in
        void); (return := !__retres_40); (raise Return) end)); absurd  end
    with Return -> !return end))
@@ -7571,34 +7567,34 @@ let signed_overflow_wrong_ensures_default =
    begin
      (let __retres_39 = ref (any_int32 void) in
      try
-      (let jessie_481 =
+      (let jessie_475 =
       begin
         (if ((gt_int_ (integer_of_int32 x_10)) (0))
         then
-         (let jessie_477 =
-         (C_273:
+         (let jessie_471 =
+         (C_269:
          begin
-           (let jessie_476 =
-           (__retres_39 := (C_272:
-                           (safe_int32_of_integer_ (C_271:
+           (let jessie_470 =
+           (__retres_39 := (C_268:
+                           (safe_int32_of_integer_ (C_267:
                                                    ((add_int (integer_of_int32 x_10)) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_480 =
-         (C_270:
+         (let jessie_474 =
+         (C_266:
          begin
-           (let jessie_479 =
-           (__retres_39 := (C_269:
-                           (safe_int32_of_integer_ (C_268:
+           (let jessie_473 =
+           (__retres_39 := (C_265:
+                           (safe_int32_of_integer_ (C_264:
                                                    ((sub_int (integer_of_int32 
-                                                              (C_267:
+                                                              (C_263:
                                                               (safe_int32_of_integer_ 
-                                                               (C_266:
+                                                               (C_262:
                                                                ((sub_int 
                                                                  (integer_of_int32 x_10)) (1))))))) (2147483647)))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_12 ->
+      Return_label_exc jessie_14 ->
       (return_label: begin   (return := !__retres_39); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_997: true) }
 
@@ -7613,36 +7609,36 @@ let signed_overflow_wrong_safety =
    begin
      (let __retres_39 = ref (any_int32 void) in
      try
-      (let jessie_473 =
+      (let jessie_467 =
       begin
         (if ((gt_int_ (integer_of_int32 x_10)) (0))
         then
-         (let jessie_469 =
-         (C_273:
+         (let jessie_463 =
+         (C_269:
          begin
-           (let jessie_468 =
-           (__retres_39 := (C_272:
+           (let jessie_462 =
+           (__retres_39 := (C_268:
                            (JC_1005:
-                           (int32_of_integer_ (C_271:
+                           (int32_of_integer_ (C_267:
                                               ((add_int (integer_of_int32 x_10)) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_472 =
-         (C_270:
+         (let jessie_466 =
+         (C_266:
          begin
-           (let jessie_471 =
-           (__retres_39 := (C_269:
+           (let jessie_465 =
+           (__retres_39 := (C_265:
                            (JC_1007:
-                           (int32_of_integer_ (C_268:
+                           (int32_of_integer_ (C_264:
                                               ((sub_int (integer_of_int32 
-                                                         (C_267:
+                                                         (C_263:
                                                          (JC_1006:
                                                          (int32_of_integer_ 
-                                                          (C_266:
+                                                          (C_262:
                                                           ((sub_int (integer_of_int32 x_10)) (1)))))))) (2147483647))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_12 ->
+      Return_label_exc jessie_14 ->
       (return_label: begin   (return := !__retres_39); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_1001:
@@ -7663,17 +7659,17 @@ let stack_access_wrong_ensures_default =
      (let int_P_int_M_x_42_85 = (any_memory void) in
      (let x_42 = ref (any_pointer void) in
      (let __retres_29 = ref (any_int32 void) in
-     (C_184:
+     (C_180:
      begin
-       (let jessie_333 =
-       (x_42 := (C_183:
+       (let jessie_327 =
+       (x_42 := (C_179:
                 (JC_757:
                 ((bad_local_pointer int_P_x_42_85_alloc_table) int_P_x_42_85_tag_table)))) in
        void);
-      (C_186:
+      (C_182:
       begin
-        (let jessie_335 =
-        (__retres_29 := (C_185: ((safe_acc_ int_P_int_M_x_42_85) !x_42))) in
+        (let jessie_329 =
+        (__retres_29 := (C_181: ((safe_acc_ int_P_int_M_x_42_85) !x_42))) in
         void); (return := !__retres_29); (raise Return) end) end))))));
     absurd  end with Return -> !return end)) { (JC_747: true) }
 
@@ -7691,17 +7687,17 @@ let stack_access_wrong_safety =
      (let int_P_int_M_x_42_85 = (any_memory void) in
      (let x_42 = ref (any_pointer void) in
      (let __retres_29 = ref (any_int32 void) in
-     (C_184:
+     (C_180:
      begin
-       (let jessie_328 =
-       (x_42 := (C_183:
+       (let jessie_322 =
+       (x_42 := (C_179:
                 (JC_755:
                 ((bad_local_pointer_requires int_P_x_42_85_alloc_table) int_P_x_42_85_tag_table)))) in
        void);
-      (C_186:
+      (C_182:
       begin
-        (let jessie_330 =
-        (__retres_29 := (C_185:
+        (let jessie_324 =
+        (__retres_29 := (C_181:
                         (JC_756:
                         (((acc_ !int_P_x_42_85_alloc_table) int_P_int_M_x_42_85) !x_42)))) in
         void); (return := !__retres_29); (raise Return) end) end))))));
@@ -7721,20 +7717,20 @@ let udiv0_safe_ensures_default =
    begin
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (let jessie_93 =
+      (let jessie_95 =
       begin
         (if ((eq_int_ (integer_of_uint32 y_18)) (0))
         then
-         (let jessie_89 =
+         (let jessie_91 =
          (C_39:
          begin
-           (let jessie_88 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
+           (let jessie_90 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_92 =
+         (let jessie_94 =
          (C_38:
          begin
-           (let jessie_91 =
+           (let jessie_93 =
            (__retres_6 := (C_37:
                           (safe_uint32_of_integer_ (C_36:
                                                    (JC_280:
@@ -7757,20 +7753,20 @@ let udiv0_safe_safety =
    begin
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (let jessie_85 =
+      (let jessie_87 =
       begin
         (if ((eq_int_ (integer_of_uint32 y_18)) (0))
         then
-         (let jessie_81 =
+         (let jessie_83 =
          (C_39:
          begin
-           (let jessie_80 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
+           (let jessie_82 = (__retres_6 := (safe_uint32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void)
         else
-         (let jessie_84 =
+         (let jessie_86 =
          (C_38:
          begin
-           (let jessie_83 =
+           (let jessie_85 =
            (__retres_6 := (C_37:
                           (JC_279:
                           (uint32_of_integer_ (C_36:
@@ -7799,7 +7795,7 @@ let udiv0_unsafe_ensures_default =
      (let __retres_5 = ref (any_uint32 void) in
      (C_33:
      begin
-       (let jessie_77 =
+       (let jessie_79 =
        (__retres_5 := (C_32:
                       (safe_uint32_of_integer_ (C_31:
                                                (JC_261:
@@ -7821,7 +7817,7 @@ let udiv0_unsafe_safety =
      (let __retres_5 = ref (any_uint32 void) in
      (C_33:
      begin
-       (let jessie_74 =
+       (let jessie_76 =
        (__retres_5 := (C_32:
                       (JC_260:
                       (uint32_of_integer_ (C_31:
@@ -7846,7 +7842,7 @@ let udiv0_wrong_ensures_default =
      (let __retres_4 = ref (any_uint32 void) in
      (C_29:
      begin
-       (let jessie_71 =
+       (let jessie_73 =
        (__retres_4 := (C_28:
                       (safe_uint32_of_integer_ (C_27:
                                                (JC_240:
@@ -7866,7 +7862,7 @@ let udiv0_wrong_safety =
      (let __retres_4 = ref (any_uint32 void) in
      (C_29:
      begin
-       (let jessie_68 =
+       (let jessie_70 =
        (__retres_4 := (C_28:
                       (JC_239:
                       (uint32_of_integer_ (C_27:
@@ -7889,13 +7885,13 @@ let volatile_cast_wrong_ensures_default =
    begin
      (let x_48 = ref (any_pointer void) in
      (let __retres_48 = ref (any_int32 void) in
-     (C_355:
+     (C_351:
      begin
-       (let jessie_721 = (x_48 := ip) in void);
-      (C_357:
+       (let jessie_715 = (x_48 := ip) in void);
+      (C_353:
       begin
-        (let jessie_723 =
-        (__retres_48 := (C_356: ((safe_acc_ int_P_int_M_ip_31) !x_48))) in
+        (let jessie_717 =
+        (__retres_48 := (C_352: ((safe_acc_ int_P_int_M_ip_31) !x_48))) in
         void); (return := !__retres_48); (raise Return) end) end))); 
     absurd  end with Return -> !return end)) { (JC_1274: true) }
 
@@ -7910,13 +7906,13 @@ let volatile_cast_wrong_safety =
    begin
      (let x_48 = ref (any_pointer void) in
      (let __retres_48 = ref (any_int32 void) in
-     (C_355:
+     (C_351:
      begin
-       (let jessie_716 = (x_48 := ip) in void);
-      (C_357:
+       (let jessie_710 = (x_48 := ip) in void);
+      (C_353:
       begin
-        (let jessie_718 =
-        (__retres_48 := (C_356:
+        (let jessie_712 =
+        (__retres_48 := (C_352:
                         (JC_1282:
                         (((acc_ int_P_ip_31_alloc_table) int_P_int_M_ip_31) !x_48)))) in
         void); (return := !__retres_48); (raise Return) end) end))); 
@@ -8470,7 +8466,7 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po110.why">
-      <location file = "why/undef.why" line = "4896" begin = "17" end = "96"/>
+      <location file = "why/undef.why" line = "4898" begin = "17" end = "96"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po111.why">
@@ -8479,11 +8475,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po112.why">
-      <location file = "why/undef.why" line = "4907" begin = "16" end = "77"/>
+      <location file = "why/undef.why" line = "4909" begin = "16" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po113.why">
-      <location file = "why/undef.why" line = "4921" begin = "47" end = "73"/>
+      <location file = "why/undef.why" line = "4923" begin = "47" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8498,12 +8494,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po116.why">
-      <location file = "why/undef.why" line = "4925" begin = "13" end = "59"/>
+      <location file = "why/undef.why" line = "4927" begin = "13" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po117.why">
-      <location file = "why/undef.why" line = "4928" begin = "14" end = "58"/>
+      <location file = "why/undef.why" line = "4930" begin = "14" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8513,7 +8509,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po104.why">
-      <location file = "why/undef.why" line = "4811" begin = "51" end = "73"/>
+      <location file = "why/undef.why" line = "4813" begin = "51" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8546,11 +8542,11 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po99.why">
-      <location file = "why/undef.why" line = "4738" begin = "19" end = "101"/>
+      <location file = "why/undef.why" line = "4740" begin = "19" end = "101"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po100.why">
-      <location file = "why/undef.why" line = "4752" begin = "46" end = "72"/>
+      <location file = "why/undef.why" line = "4754" begin = "46" end = "72"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8565,7 +8561,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po103.why">
-      <location file = "why/undef.why" line = "4756" begin = "12" end = "62"/>
+      <location file = "why/undef.why" line = "4758" begin = "12" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8669,7 +8665,7 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po79.why">
-      <location file = "why/undef.why" line = "4303" begin = "13" end = "35"/>
+      <location file = "why/undef.why" line = "4305" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8707,12 +8703,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po77.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1325" begin = "19" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1328" begin = "19" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po78.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1325" begin = "19" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1328" begin = "19" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8747,22 +8743,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po65.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1291" begin = "19" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1294" begin = "19" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po66.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1291" begin = "19" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1294" begin = "19" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po67.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1293" begin = "19" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1296" begin = "19" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po68.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1293" begin = "19" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1296" begin = "19" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8782,22 +8778,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po57.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1345" begin = "19" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1348" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po58.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1345" begin = "19" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1348" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po59.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1347" begin = "19" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1350" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po60.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1347" begin = "19" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1350" begin = "19" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8825,27 +8821,27 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po50.why">
-      <location file = "why/undef.why" line = "3883" begin = "13" end = "33"/>
+      <location file = "why/undef.why" line = "3885" begin = "13" end = "33"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po51.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1373" begin = "22" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1376" begin = "22" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po52.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1373" begin = "22" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1376" begin = "22" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po53.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1375" begin = "22" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1378" begin = "22" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po54.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1375" begin = "22" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1378" begin = "22" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8865,12 +8861,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po48.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1462" begin = "16" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1465" begin = "16" end = "58"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po49.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1462" begin = "16" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1465" begin = "16" end = "58"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -9082,12 +9078,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po16.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1448" begin = "16" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1451" begin = "16" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po17.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1448" begin = "16" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1451" begin = "16" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -9102,11 +9098,11 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po14.why">
-      <location file = "why/undef.why" line = "2955" begin = "18" end = "100"/>
+      <location file = "why/undef.why" line = "2957" begin = "18" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po15.why">
-      <location file = "why/undef.why" line = "2962" begin = "10" end = "60"/>
+      <location file = "why/undef.why" line = "2964" begin = "10" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

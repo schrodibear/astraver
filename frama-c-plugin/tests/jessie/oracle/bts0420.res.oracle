@@ -70,21 +70,26 @@ behavior default:
             {  
                {  (if (i < 9) then () else 
                   (goto while_0_break));
-                  (C_13 : ((C_12 : (C_11 : (a + 0)).int_M) = (C_10 : 
-                                                             ((C_9 : 
-                                                              (C_8 : 
-                                                              (a + 0)).int_M) +
-                                                               (C_7 : 
-                                                               (C_6 : 
-                                                               (b + i)).int_M)))));
-                  (C_21 : ((C_20 : (C_19 : (b + 0)).int_M) = (C_18 : 
-                                                             ((C_17 : 
-                                                              (C_16 : 
-                                                              (b + 0)).int_M) +
-                                                               (C_15 : 
-                                                               (C_14 : 
-                                                               (a +
-                                                                 i)).int_M)))));
+                  
+                  {  (C_13 : ((C_12 : (C_11 : (a + 0)).int_M) = (C_10 : 
+                                                                ((C_9 : 
+                                                                 (C_8 : 
+                                                                 (a +
+                                                                   0)).int_M) +
+                                                                  (C_7 : 
+                                                                  (C_6 : 
+                                                                  (b +
+                                                                    i)).int_M)))));
+                     (C_21 : ((C_20 : (C_19 : (b + 0)).int_M) = (C_18 : 
+                                                                ((C_17 : 
+                                                                 (C_16 : 
+                                                                 (b +
+                                                                   0)).int_M) +
+                                                                  (C_15 : 
+                                                                  (C_14 : 
+                                                                  (a +
+                                                                    i)).int_M)))))
+                  };
                   (C_23 : (i = (C_22 : (i + 1))))
                }
             };
@@ -93,14 +98,16 @@ behavior default:
       });
       (L2 : 
       {  
-         (assert for default: (C_24 : (((e{L1}(a, b) && p{L1, L2}(a)) &&
-                                         e{L2}(a, b)) ==>
-                                        p{L1,
-                                        L2}(b))));
-         ()
-      });
-      
-      (return ())
+         {  
+            (assert for default: (C_24 : (((e{L1}(a, b) && p{L1, L2}(a)) &&
+                                            e{L2}(a, b)) ==>
+                                           p{L1,
+                                           L2}(b))));
+            ()
+         };
+         
+         (return ())
+      })
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0420.jessie/bts0420.cloc bts0420.jessie/bts0420.jc
@@ -492,6 +499,7 @@ let ftest_ensures_default =
                   else
                    (let jessie_25 = (raise (Goto_while_0_break_exc void)) in
                    void));
+                 (let jessie_37 =
                  (C_13:
                  begin
                    (let jessie_31 =
@@ -506,22 +514,21 @@ let ftest_ensures_default =
                    (((safe_upd_ int_P_int_M_a_4) jessie_30) jessie_27))) in
                    void);
                   (C_21:
+                  (let jessie_33 =
+                  (C_18:
+                  ((add_int (C_17:
+                            ((safe_acc_ !int_P_int_M_b_5) (C_16:
+                                                          ((shift b_0) (0)))))) 
+                   (C_15:
+                   ((safe_acc_ !int_P_int_M_a_4) (C_14: ((shift a_1) !i)))))) in
+                  (let jessie_36 = (C_19: ((shift b_0) (0))) in
                   begin
-                    (let jessie_37 =
-                    (let jessie_33 =
-                    (C_18:
-                    ((add_int (C_17:
-                              ((safe_acc_ !int_P_int_M_b_5) (C_16:
-                                                            ((shift b_0) (0)))))) 
-                     (C_15:
-                     ((safe_acc_ !int_P_int_M_a_4) (C_14: ((shift a_1) !i)))))) in
-                    (let jessie_36 = (C_19: ((shift b_0) (0))) in
-                    (((safe_upd_ int_P_int_M_b_5) jessie_36) jessie_33))) in
-                    void);
-                   (C_23: begin   (i := (C_22: ((add_int !i) (1)))); !i end)
-                  end) end) end in void); (raise (Loop_continue_exc void))
-              end in void) with Loop_continue_exc jessie_3 -> void end end
-           done); (raise (Goto_while_0_break_exc void)) end in void) with
+                    (((safe_upd_ int_P_int_M_b_5) jessie_36) jessie_33);
+                   jessie_33 end))) end) in void);
+                 (C_23: begin   (i := (C_22: ((add_int !i) (1)))); !i end)
+                end in void); (raise (Loop_continue_exc void)) end in void)
+              with Loop_continue_exc jessie_3 -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end end);
       (L2:
       begin
@@ -569,6 +576,7 @@ let ftest_safety =
                   else
                    (let jessie_6 = (raise (Goto_while_0_break_exc void)) in
                    void));
+                 (let jessie_18 =
                  (C_13:
                  begin
                    (let jessie_12 =
@@ -585,24 +593,23 @@ let ftest_safety =
                    ((((upd_ int_P_a_4_alloc_table) int_P_int_M_a_4) jessie_11) jessie_8)))) in
                    void);
                   (C_21:
+                  (let jessie_14 =
+                  (C_18:
+                  ((add_int (C_17:
+                            (JC_26:
+                            (((acc_ int_P_b_5_alloc_table) !int_P_int_M_b_5) b_0)))) 
+                   (C_15:
+                   (JC_27:
+                   ((((offset_acc_ int_P_a_4_alloc_table) !int_P_int_M_a_4) a_1) !i))))) in
+                  (let jessie_17 = b_0 in
                   begin
-                    (let jessie_18 =
-                    (let jessie_14 =
-                    (C_18:
-                    ((add_int (C_17:
-                              (JC_26:
-                              (((acc_ int_P_b_5_alloc_table) !int_P_int_M_b_5) b_0)))) 
-                     (C_15:
-                     (JC_27:
-                     ((((offset_acc_ int_P_a_4_alloc_table) !int_P_int_M_a_4) a_1) !i))))) in
-                    (let jessie_17 = b_0 in
                     (JC_28:
-                    ((((upd_ int_P_b_5_alloc_table) int_P_int_M_b_5) jessie_17) jessie_14)))) in
-                    void);
-                   (C_23: begin   (i := (C_22: ((add_int !i) (1)))); !i end)
-                  end) end) end in void); (raise (Loop_continue_exc void))
-              end in void) with Loop_continue_exc jessie_3 -> void end end
-           done); (raise (Goto_while_0_break_exc void)) end in void) with
+                    ((((upd_ int_P_b_5_alloc_table) int_P_int_M_b_5) jessie_17) jessie_14));
+                   jessie_14 end))) end) in void);
+                 (C_23: begin   (i := (C_22: ((add_int !i) (1)))); !i end)
+                end in void); (raise (Loop_continue_exc void)) end in void)
+              with Loop_continue_exc jessie_3 -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end end);
       (L2:
       begin
@@ -638,12 +645,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0420_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "67" begin = "27" end = "512"/>
+      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "68" begin = "30" end = "668"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0420_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "67" begin = "27" end = "512"/>
+      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "68" begin = "30" end = "668"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -668,12 +675,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0420_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "74" begin = "27" end = "581"/>
+      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "77" begin = "30" end = "672"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0420_po16.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "74" begin = "27" end = "581"/>
+      <location file = "PPCHOME/tests/jessie/bts0420.jessie/bts0420.jc" line = "77" begin = "30" end = "672"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

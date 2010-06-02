@@ -73,9 +73,12 @@ behavior default:
                };
                (if (tmp > 0) then () else 
                (goto while_0_break));
-               (C_14 : ((C_13 : (C_12 : (t2 + i)).int_M) = (C_11 : (C_10 : 
-                                                                   (t1 +
-                                                                    i)).int_M)))
+               
+               {  (C_14 : ((C_13 : (C_12 : (t2 + i)).int_M) = (C_11 : 
+                                                              (C_10 : 
+                                                              (t1 +
+                                                                i)).int_M)))
+               }
             }
          };
          (while_0_break : ())
@@ -679,12 +682,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_po10.why">
-      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "70" begin = "24" end = "227"/>
+      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "71" begin = "27" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_po11.why">
-      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "70" begin = "24" end = "227"/>
+      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "71" begin = "27" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

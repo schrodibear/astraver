@@ -106,8 +106,10 @@ behavior default:
          {  
             {  (if (x >= (10.0 :> double)) then () else 
                (goto while_0_break));
-               (C_29 : (n_1 = (C_28 : (n_1 + 1))));
-               (C_31 : (x = (C_30 : (x - (1.0 :> double)))))
+               
+               {  (C_29 : (n_1 = (C_28 : (n_1 + 1))));
+                  (C_31 : (x = (C_30 : (x - (1.0 :> double)))))
+               }
             }
          };
          (while_0_break : ())

@@ -62,8 +62,10 @@ behavior default:
          {  
             {  (if (y != x) then () else 
                (goto while_0_break));
-               (C_5 : (y = x));
-               (C_7 : (x = (C_6 : (x + (1.0 :> float)))))
+               
+               {  (C_5 : (y = x));
+                  (C_7 : (x = (C_6 : (x + (1.0 :> float)))))
+               }
             }
          };
          (while_0_break : ())
