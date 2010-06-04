@@ -422,6 +422,9 @@ type expr =
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
+  | MultiAssign of string * Loc.position * (string * expr) list * 
+      expr * string * expr * string * 
+      (int * bool * bool * string) list
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
   | App of expr * expr
@@ -482,14 +485,48 @@ let make_label label e = Label (label, e)
 
 let make_pre pre e =  Triple(false,pre,e,LTrue,[])
 
-let append e1 e2 =
+
+let compare_parallel_assign (i,_,_,_) (j,_,_,_) =
+  let c = Pervasives.compare i j in
+  if c = 0 then raise Exit else c
+
+let rec append e1 e2 =
   match e1,e2 with
     | Void,_ -> e2
     | _,Void -> e1
-    | Block(l1),Block(l2) -> Block(l1@l2)
-    | Block(l1),_ -> Block(l1@[e2])
-    | _,Block(l2) -> Block(e1::l2)
+    | Block(l1),Block(l2) -> Block(List.fold_right append_list l1 l2)
+    | Block(l1),_ -> Block(List.fold_right append_list l1 [e2])
+    | _,Block(l2) -> Block(append_list e1 l2)
     | _ -> Block [e1;e2]
+
+and append_list e l =
+  match e,l with
+    | _,[] -> [e]
+    | MultiAssign(mark1,pos1,lets1,a1,tmpe1,e1,f1,l1), 
+        MultiAssign(_,_,lets2,a2,_tmpe2,e2,f2,l2)::rem -> 
+          if a1 = a2 && e1 = e2 && f1 = f2 then
+            begin
+              (*
+                Format.eprintf "pre_append, a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
+                fprintf_expr a1 fprintf_expr a2 
+                fprintf_expr e1 fprintf_expr e2 f1 f2;
+              *)
+              try
+                let l = List.merge compare_parallel_assign l1 l2 in
+                (*
+                  Format.eprintf "pre_append, merge successful!@.";             
+                *)
+                MultiAssign(mark1,pos1,lets1@lets2,a1,tmpe1,e1,f1,l)::rem
+              with Exit ->
+                (*
+                  Format.eprintf "pre_append, merge failed...@.";             
+                *)
+                e::l
+            end
+          else
+            e::l
+    | _ -> e::l
+        
 ;;
 
 let rec iter_expr f e =
@@ -514,6 +551,7 @@ let rec iter_expr f e =
 	List.iter (iter_expr f) e2
     | Block(el) -> List.iter (iter_expr f) el
     | Assign(id,e) -> f id; iter_expr f e
+    | MultiAssign _ -> assert false
     | Let(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | Let_ref(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | App(e1,e2) -> iter_expr f e1; iter_expr f e2
@@ -574,6 +612,7 @@ let rec fprintf_expr form e =
     | Assign(id,e) ->
 	fprintf form "@[<hov 1>(%s := %a)@]" 
 	  id fprintf_expr e
+    | MultiAssign _ -> assert false
     | Let(id,e1,e2) ->
 	fprintf form "@[<hov 0>(let %s =@ %a in@ %a)@]" id
 	  fprintf_expr e1 fprintf_expr e2

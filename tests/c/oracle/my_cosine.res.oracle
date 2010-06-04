@@ -51,8 +51,6 @@ End:
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/my_cosine.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated for behavior default
-[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir tests/c/my_cosine.jessie
 [jessie] File tests/c/my_cosine.jessie/my_cosine.jc written.
 [jessie] File tests/c/my_cosine.jessie/my_cosine.cloc written.
@@ -552,6 +550,14 @@ yices: smtlib/my_cosine_why.smt
 
 cvc3: smtlib/my_cosine_why.smt
 	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
+
+smtlib-v1: smtlib-v1/my_cosine_why.smt
+smtlib-v1/%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1
+smtlib-v1/%_why.smt: why/%.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+verit: smtlib-v1/my_cosine_why.smt
+	@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)
 
 gui stat: my_cosine.stat
 

@@ -509,19 +509,36 @@ let add_exception_effect fef exc =
 (*                                  Unions                                   *)
 (*****************************************************************************)
 
+(*
+<<<<<<< .working
 type shift_offset =
   | Int_offset of string
   | Expr_offset of Jc_fenv.expr
   | Term_offset of Jc_fenv.term
+=======
+*)
+type shift_offset =
+  | Int_offset of int
+  | Expr_offset of Jc_fenv.expr
+  | Term_offset of Jc_fenv.term
+(*
+>>>>>>> .merge-right.r4285
+*)
 
 let offset_of_expr e =
   match e#node with
-    | JCEconst (JCCinteger s) -> Int_offset s
+    | JCEconst (JCCinteger s) -> 
+        (try
+           Int_offset (int_of_string s)
+         with Failure _ -> Expr_offset e)
     | _ -> Expr_offset e
 
 let offset_of_term t =
   match t#node with
-    | JCTconst (JCCinteger s) -> Int_offset s
+    | JCTconst (JCCinteger s) -> 
+        (try
+           Int_offset (int_of_string s)
+         with Failure _ -> Term_offset t)
     | _ -> Term_offset t
 
 let offset_of_field fi =
@@ -530,12 +547,29 @@ let offset_of_field fi =
         Format.eprintf "Jc_effect.offset_of_field: fi=%s@."
           fi.jc_field_info_name;
         assert false
+(*
+<<<<<<< .working
     | Some off -> Int_offset (string_of_int off)
+=======
+*)
+    | Some off -> Int_offset off
+(*
+>>>>>>> .merge-right.r4285
+*)
 
 let mult_offset i off =
   match off with
+(*
+<<<<<<< .working
     | Int_offset j -> Int_offset (string_of_int (i * (int_of_string j)))
     | Expr_offset e ->
+=======
+*)
+    | Int_offset j -> Int_offset (i * j)
+    | Expr_offset e ->
+(*
+>>>>>>> .merge-right.r4285
+*)
 	let ie = Expr.mkint ~value:i ()  in
 	let mule =
 	  Expr.mkbinary
@@ -552,9 +586,19 @@ let mult_offset i off =
 
 let add_offset off1 off2 =
   match off1,off2 with
+(*
+<<<<<<< .working
     | Int_offset i, Int_offset j ->
 	let k = int_of_string i + int_of_string j in
 	Int_offset (string_of_int k)
+=======
+*)
+    | Int_offset i, Int_offset j ->
+	let k = i + j in
+	Int_offset k
+(*
+>>>>>>> .merge-right.r4285
+*)
     | Expr_offset e1, Expr_offset e2 ->
 	let adde =
 	  Expr.mkbinary
@@ -563,9 +607,19 @@ let add_offset off1 off2 =
 	Expr_offset adde
     | Expr_offset e, Int_offset i
     | Int_offset i, Expr_offset e ->
+(*
+<<<<<<< .working
 	let ie = Expr.mkint ~valuestr:i ()  in
 	let adde =
 	  Expr.mkbinary
+=======
+*)
+	let ie = Expr.mkint ~value:i ()  in
+	let adde =
+	  Expr.mkbinary
+(*
+>>>>>>> .merge-right.r4285
+*)
 	    ~expr1:ie ~op:(`Badd,`Integer) ~expr2:e ~typ:integer_type ()
 	in
 	Expr_offset adde
@@ -577,9 +631,19 @@ let add_offset off1 off2 =
 	Term_offset addt
     | Term_offset t, Int_offset i
     | Int_offset i, Term_offset t ->
+(*
+<<<<<<< .working
 	let it = Term.mkint ~valuestr:i ()  in
 	let addt =
 	  Term.mkbinary
+=======
+*)
+	let it = Term.mkint ~value:i ()  in
+	let addt =
+	  Term.mkbinary
+(*
+>>>>>>> .merge-right.r4285
+*)
 	    ~term1:it ~op:(`Badd,`Integer) ~term2:t ~typ:integer_type ()
 	in
 	Term_offset addt
@@ -618,7 +682,15 @@ let possible_union_access e fi_opt =
   let fieldoffbytes fi =
     match field_offset_in_bytes fi with
       | None -> assert false
+(*
+<<<<<<< .working
       | Some off -> Int_offset (string_of_int off)
+=======
+*)
+      | Some off -> Int_offset off
+(*
+>>>>>>> .merge-right.r4285
+*)
   in
   (* Count offset in bytes before last field access in union *)
   let rec access e =
@@ -643,11 +715,11 @@ let possible_union_access e fi_opt =
 	  end
       | JCEalloc(_e1,st) ->
 	  if struct_of_union st then
-	    Some(e,Int_offset "0")
+	    Some(e,Int_offset 0)
 	  else None
       | _ ->
 	  if type_is_union e#typ then
-	    Some (e,Int_offset "0")
+	    Some (e,Int_offset 0)
 	  else None
   in
   match fi_opt with
@@ -700,7 +772,15 @@ let tpossible_union_access t fi_opt =
   let fieldoffbytes fi =
     match field_offset_in_bytes fi with
       | None -> assert false
+(*
+<<<<<<< .working
       | Some off -> Int_offset (string_of_int off)
+=======
+*)
+      | Some off -> Int_offset off
+(*
+>>>>>>> .merge-right.r4285
+*)
   in
   (* Count offset in bytes before last field access in union *)
   let rec access t =
@@ -725,7 +805,7 @@ let tpossible_union_access t fi_opt =
 	  end
       | _ ->
 	  if type_is_union t#typ then
-	    Some (t,Int_offset "0")
+	    Some (t,Int_offset 0)
 	  else None
   in
 

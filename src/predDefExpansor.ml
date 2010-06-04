@@ -85,10 +85,16 @@ let rec expand = function
       begin 
 	try
 	  let tvars,argl,p = Hashtbl.find pred_def id in
+(*
+          Format.eprintf "predDefExpansor: expanding def of %s@." (Ident.string id);
+*)
 	  let st = subst_many argl tl in
 	  let sty = List.fold_left2 (fun s v t -> Vmap.add v t s) Vmap.empty tvars i in
 	  subst_in_predicate st sty p
 	with Not_found ->
+(*
+          Format.eprintf "predDefExpansor: NOT expanding def of %s@." (Ident.string id);
+*)
 	  p
       end
   | p -> 

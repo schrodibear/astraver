@@ -236,7 +236,7 @@ let rec create_var = function
         Termtbl.find gen_table t
       with Not_found ->
         let n = Ident.string (fresh_var ()) in
-        (*Format.printf "creating var for %a {%i}@." Util.print_term t (HashedTerm.hash t);*)
+        Format.eprintf "creating var for %a {%i}@." Util.print_term t (HashedTerm.hash t);
         Termtbl.replace gen_table t n;
         n
 
@@ -334,6 +334,7 @@ let rec term = function
   (* anything else is generalized as a fresh variable *)
   | Tapp _ as t ->
       Gvar (create_var t)
+
 
 let termo t = try Some (term (subst_var t)) with NotGappa -> None
 

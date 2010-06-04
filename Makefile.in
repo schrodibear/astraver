@@ -369,7 +369,7 @@ ifeq ($(FRAMAC),yes)
 JESSIE_PLUGIN_PATH=frama-c-plugin
 $(JESSIE_PLUGIN_BYTE): jc/jc.cmo $(JCCMO) $(CMO)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
-	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cmo
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cma
 
 $(JESSIE_PLUGIN_OPT): $(JCLIB) $(JCCMX) $(CMX)
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
@@ -735,7 +735,7 @@ bench-tc:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) -tc"
 
 test:: $(BINARY) $(WHYVO)
-	$(BINARY) -d -V -coq bench/test.ml
+	[ ! -f bench/test.ml ] || $(BINARY) -d -V -coq bench/test.ml
 
 .PHONY: examples examples-c
 

@@ -156,7 +156,7 @@ let banner () =
 Welcome to GWhy (the Graphical VC viewer for the Why platform)
 This is Why version " ^ Version.version ^ 
 ", compiled on " ^ Version.date ^ "
-Copyright (c) 2002-2007 ProVal team, INRIA
+Copyright (c) 2002-2010 ProVal team, INRIA
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)"
 
 let move_to_source = function

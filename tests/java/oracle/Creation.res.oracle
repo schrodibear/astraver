@@ -475,6 +475,13 @@ why/%_why.why: WHYOPT=-alt-ergo -dir why
 why/%_why.why: why/%.why
 	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
+gappa: gappa/Creation_why.gappa
+	@echo 'Running Gappa on proof obligations' && ($(DP) $^)
+
+gappa/%_why.gappa: WHYOPT=-gappa -dir gappa
+gappa/%_why.gappa: why/%.why
+	@echo 'why -gappa [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
 cvcl: cvcl/Creation_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
@@ -512,6 +519,14 @@ yices: smtlib/Creation_why.smt
 
 cvc3: smtlib/Creation_why.smt
 	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
+
+smtlib-v1: smtlib-v1/Creation_why.smt
+smtlib-v1/%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1
+smtlib-v1/%_why.smt: why/%.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+verit: smtlib-v1/Creation_why.smt
+	@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)
 
 gui stat: Creation.stat
 

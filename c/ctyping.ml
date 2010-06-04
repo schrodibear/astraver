@@ -353,7 +353,7 @@ let warn_for_read_only loc e =
   | TEvar (Fun_info _f) ->
       warning loc ("function assignment (ignored)")
   | _ when e.texpr_type.ctype_const ->
-      warning loc "assigment of read-only location"
+      warning loc "assignment of read-only location"
   | _ -> 
       ()
 

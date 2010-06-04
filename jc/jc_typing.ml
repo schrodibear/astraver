@@ -3299,7 +3299,7 @@ of an invariant policy";
                     "A Gen_separation inc or cni pragma should \
                      have 2 arguments (%i given)" (List.length li)
               | _ -> typing_error loc 
-                  "I dont know that kind of Gen_separation pragma : %s" kind in
+                  "I don't know that kind of Gen_separation pragma : %s" kind in
             create_pragma_gen_sep_logic loc kind id li
           end;
 	acc

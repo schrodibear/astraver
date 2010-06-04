@@ -379,6 +379,7 @@ parameter bound_upd_:
   { m = store(m@,shift(p,off),v) }
 
 (* bounded update with safe left bound *)
+(* unused
 parameter lsafe_bound_upd_: 
   m: ('t,'v) memory ref -> p:'t pointer -> off:int -> rb:int -> v:'v ->
   { off <= rb }
@@ -386,6 +387,7 @@ parameter lsafe_bound_upd_:
   reads m
   writes m
   { m = store(m@,shift(p,off),v) }
+*)
 
 (* bounded update with safe right bound *)
 parameter rsafe_bound_upd_: 

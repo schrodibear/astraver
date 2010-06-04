@@ -135,7 +135,7 @@ let find_label lbl lbls =
   try
     let name,_,_ = List.nth lbls lbl.lbl_pos in
     name
-  with Failure "nth" -> "*Unkown label*"
+  with Failure "nth" -> "*Unknown label*"
 
 let rec get_record_labels ty tenv =
   match get_type_descr ty tenv with

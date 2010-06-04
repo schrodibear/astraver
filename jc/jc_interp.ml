@@ -912,7 +912,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
               let e' = LApp("select",[ mem; t1' ]) in
 	      (* Retrieve subpart of bitvector for specific subfield *)
 	      let off = match off with
-		| Int_offset s -> int_of_string s
+		| Int_offset s -> s
 		| _ -> assert false (* TODO *)
 	      in
 	      let size = 
@@ -1398,13 +1398,13 @@ let reads ~type_safe ~global_assertion locs (mc,r) =
 (******************************************************************************)
 
 let bounded lb rb s =
-  let n = Num.num_of_string s in Num.le_num lb n && Num.le_num n rb
+  let n = Num.num_of_int s in Num.le_num lb n && Num.le_num n rb
 
 let lbounded lb s =
-  let n = Num.num_of_string s in Num.le_num lb n
+  let n = Num.num_of_int s in Num.le_num lb n
 
 let rbounded rb s =
-  let n = Num.num_of_string s in Num.le_num n rb
+  let n = Num.num_of_int s in Num.le_num n rb
 
 let rec const_int_term t =
   match t # node with
@@ -1542,11 +1542,21 @@ let destruct_pointer e =
   let ptre, off = match e # node with
     | JCEshift (e1, e2) ->
 	e1, 
-	(let no = const_int_expr e2 in
-	   Option_misc.fold 
-	     (fun n _ -> 
-		Int_offset (Num.string_of_num n)) no (Expr_offset e2))
+(*
+<<<<<<< .working
+	(match const_int_expr e2 with
+	   | Some n -> Int_offset (Num.string_of_num n)
+           | None -> Expr_offset e2)
     | _ -> e, Int_offset "0"
+=======
+*)
+	(match const_int_expr e2 with
+	   | Some n -> Int_offset (Num.int_of_num n)
+           | None -> Expr_offset e2)
+    | _ -> e, Int_offset 0
+(*
+>>>>>>> .merge-right.r4285
+*)
   in
     match ptre # typ with
       | JCTpointer (_, lb, rb) -> ptre, off, lb, rb
@@ -1697,7 +1707,7 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
 	    letspi, 
             make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
               [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
-	| Int_offset s, None, None when int_of_string s = 0 ->
+	| Int_offset s, None, None when s = 0 ->
 	    [ (tmp1, p') ], 
             make_guarded_app ~mark PointerDeref pos "upd_" 
               [ alloc; mem ; Var tmp1; Var tmp2 ]
@@ -1747,7 +1757,7 @@ and make_upd_union mark pos off e1 fi tmp2 =
       let deref = make_deref_simple mark pos e1 fi in
       (* Replace subpart of bitvector for specific subfield *)
       let off = match off with
-	| Int_offset s -> int_of_string s
+	| Int_offset s -> s
 	| _ -> assert false (* TODO *)
       in
       let off = string_of_int off and size = string_of_int size in
@@ -1852,7 +1862,7 @@ and make_deref_simple mark pos e fi =
 	| p, (Int_offset s as off), _, Some rb when rbounded rb s ->
             make_guarded_app ~mark IndexBounds pos "rsafe_rbound_acc_" 
               [ alloc; mem; expr p; offset off ]
-	| p, Int_offset s, None, None when int_of_string s = 0 ->
+	| p, Int_offset s, None, None when s = 0 ->
             make_guarded_app ~mark PointerDeref pos "acc_" 
               [ alloc; mem ; expr p ]
 	| p, off, _, _ ->
@@ -1867,7 +1877,7 @@ and make_deref_union mark pos off e fi =
   let e' = make_deref_simple mark pos e fi in
   (* Retrieve subpart of bitvector for specific subfield *)
   let off = match off with
-    | Int_offset s -> int_of_string s
+    | Int_offset s -> s
     | _ -> assert false (* TODO *)
   in
   let size = 
@@ -1952,7 +1962,7 @@ and make_deref mark pos e1 fi =
 	make_deref_bytes mark pos e1 fi
 
 and offset = function
-  | Int_offset s -> Cte (Prim_int s)
+  | Int_offset s -> Cte (Prim_int (string_of_int s))
   | Expr_offset e -> 
       coerce ~check_int_overflow:(safety_checking())
         e#mark e#pos integer_type e#typ e
@@ -2488,7 +2498,20 @@ and expr e =
     | JCEassign_var(v,e1) -> 
 	let e1' = value_assigned e#mark e#pos v.jc_var_info_type e1 in
 	let e' = Assign(v.jc_var_info_final_name,e1') in
-	if e#typ = Jc_pervasives.unit_type then e' else append e' (var v)
+	if e#typ = Jc_pervasives.unit_type then 
+          begin
+(*
+            eprintf "JCEassign(%s,..) : has type unit@." v.jc_var_info_name;
+*)
+            e' 
+          end
+        else 
+          begin
+(*
+            eprintf "JCEassign(%s,..) : DOES NOT have type unit@." v.jc_var_info_name;
+*)
+            append e' (var v)
+          end
     | JCEassign_heap(e1,fi,e2) -> 
 	let e2' = value_assigned e#mark e#pos fi.jc_field_info_type e2 in
 	(* Define temporary variable for value assigned *)

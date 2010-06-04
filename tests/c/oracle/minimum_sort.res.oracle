@@ -66,8 +66,6 @@ End:
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/minimum_sort.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated for behavior default
-[kernel] No code for function free, default assigns generated for behavior default
 [jessie] Producing Jessie files in subdir tests/c/minimum_sort.jessie
 [jessie] File tests/c/minimum_sort.jessie/minimum_sort.jc written.
 [jessie] File tests/c/minimum_sort.jessie/minimum_sort.cloc written.
@@ -212,39 +210,44 @@ behavior permutation:
          {  
             {  (if (i_0 < (C_29 : (n - 1))) then () else 
                (goto while_0_break));
-               (C_32 : (mv = (C_31 : (C_30 : (t_0 + i_0)).int_M)));
-               (C_33 : (mi = i_0));
-               (C_35 : (j_0 = (C_34 : (i_0 + 1))));
                
-               {  
-                  loop 
-                  behavior sorted:
-                    invariant (C_43 : ((C_44 : (mv == (t_0 + mi).int_M)) &&
-                                        (C_45 : (\forall integer k_0;
-                                                  (((i_0 <= k_0) &&
-                                                     (k_0 < j_0)) ==>
-                                                    ((t_0 + k_0).int_M >= mv))))));
-                  behavior default:
-                    invariant (C_38 : ((C_39 : (i_0 < j_0)) &&
-                                        ((C_41 : (i_0 <= mi)) &&
-                                          (C_42 : (mi < n)))));
-                  behavior permutation:
-                    invariant (C_36 : Permut{Pre, Here}(t_0, 0, (n - 1)));
-                  variant (C_37 : (n - j_0));
-                  while (true)
+               {  (C_32 : (mv = (C_31 : (C_30 : (t_0 + i_0)).int_M)));
+                  (C_33 : (mi = i_0));
+                  (C_35 : (j_0 = (C_34 : (i_0 + 1))));
+                  
                   {  
-                     {  (if (j_0 < n) then () else 
-                        (goto while_1_break));
-                        (if ((C_51 : (C_50 : (t_0 + j_0)).int_M) < mv) then 
-                        {  (C_46 : (mi = j_0));
-                           (C_49 : (mv = (C_48 : (C_47 : (t_0 + j_0)).int_M)))
-                        } else ());
-                        (C_53 : (j_0 = (C_52 : (j_0 + 1))))
-                     }
+                     loop 
+                     behavior sorted:
+                       invariant (C_43 : ((C_44 : (mv == (t_0 + mi).int_M)) &&
+                                           (C_45 : (\forall integer k_0;
+                                                     (((i_0 <= k_0) &&
+                                                        (k_0 < j_0)) ==>
+                                                       ((t_0 + k_0).int_M >=
+                                                         mv))))));
+                     behavior default:
+                       invariant (C_38 : ((C_39 : (i_0 < j_0)) &&
+                                           ((C_41 : (i_0 <= mi)) &&
+                                             (C_42 : (mi < n)))));
+                     behavior permutation:
+                       invariant (C_36 : Permut{Pre, Here}(t_0, 0, (n - 1)));
+                     variant (C_37 : (n - j_0));
+                     while (true)
+                     {  
+                        {  (if (j_0 < n) then () else 
+                           (goto while_1_break));
+                           
+                           {  (if ((C_51 : (C_50 : (t_0 + j_0)).int_M) < mv) then 
+                              {  (C_46 : (mi = j_0));
+                                 (C_49 : (mv = (C_48 : (C_47 : (t_0 + j_0)).int_M)))
+                              } else ())
+                           };
+                           (C_53 : (j_0 = (C_52 : (j_0 + 1))))
+                        }
+                     };
+                     (while_1_break : ())
                   };
-                  (while_1_break : ())
+                  (C_54 : swap(t_0, i_0, mi))
                };
-               (C_54 : swap(t_0, i_0, mi));
                (C_56 : (i_0 = (C_55 : (i_0 + 1))))
             }
          };
@@ -774,6 +777,14 @@ yices: smtlib/minimum_sort_why.smt
 cvc3: smtlib/minimum_sort_why.smt
 	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
 
+smtlib-v1: smtlib-v1/minimum_sort_why.smt
+smtlib-v1/%_why.smt:  WHYOPT=-smtlib --smtlib-v1 --encoding sstrat --exp goal -dir smtlib-v1
+smtlib-v1/%_why.smt: why/%.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+verit: smtlib-v1/minimum_sort_why.smt
+	@echo 'Running VeriT on proof obligations' && ($(DP) -smt-solver verit $^)
+
 gui stat: minimum_sort.stat
 
 %.stat: why/%.why
@@ -800,15 +811,15 @@ end = -1
 
 [JC_91]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_92]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_40]
 file = "HOME/tests/c/minimum_sort.c"
@@ -819,9 +830,9 @@ end = 39
 [JC_93]
 kind = UserCall
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 173
-begin = 23
-end = 41
+line = 177
+begin = 26
+end = 44
 
 [JC_41]
 file = "HOME/tests/c/minimum_sort.c"
@@ -875,7 +886,7 @@ end = 31
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_98]
 file = "HOME/"
@@ -887,7 +898,7 @@ end = -1
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_1]
 file = "HOME/tests/c/minimum_sort.c"
@@ -899,13 +910,13 @@ end = 24
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_99]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_47]
 kind = PointerDeref
@@ -1006,9 +1017,9 @@ end = 24
 
 [JC_107]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_9]
 file = "HOME/tests/c/minimum_sort.c"
@@ -1018,16 +1029,16 @@ end = 39
 
 [JC_108]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_109]
 kind = UserCall
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 173
-begin = 23
-end = 41
+line = 177
+begin = 26
+end = 44
 
 [JC_50]
 file = "HOME/tests/c/minimum_sort.c"
@@ -1049,15 +1060,15 @@ end = -1
 
 [JC_53]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_54]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_55]
 kind = PointerDeref
@@ -1082,9 +1093,9 @@ end = 24
 [JC_58]
 kind = UserCall
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 173
-begin = 23
-end = 41
+line = 177
+begin = 26
+end = 44
 
 [JC_59]
 file = "HOME/tests/c/minimum_sort.c"
@@ -1148,7 +1159,7 @@ end = 39
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_12]
 file = "HOME/"
@@ -1160,7 +1171,7 @@ end = -1
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_13]
 file = "HOME/tests/c/minimum_sort.c"
@@ -1236,15 +1247,15 @@ end = -1
 
 [JC_71]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_72]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 146
-begin = 18
-end = 1310
+line = 147
+begin = 21
+end = 1511
 
 [JC_20]
 file = "HOME/"
@@ -1255,9 +1266,9 @@ end = -1
 [JC_73]
 kind = UserCall
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
-line = 173
-begin = 23
-end = 41
+line = 177
+begin = 26
+end = 44
 
 [JC_21]
 kind = PointerDeref
@@ -1395,13 +1406,13 @@ end = -1
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_82]
 file = "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc"
 line = 122
 begin = 9
-end = 2614
+end = 2872
 
 [JC_30]
 file = "HOME/tests/c/minimum_sort.c"
@@ -2043,18 +2054,16 @@ let min_sort_ensures_default =
                      Goto_while_1_break_exc jessie_1 ->
                      (while_1_break: void) end;
                     (C_54:
-                    begin
-                      (let jessie_84 = t_0 in
-                      (let jessie_83 = !i_0_1 in
-                      (let jessie_82 = !mi in
-                      (JC_73:
-                      (((((swap jessie_84) jessie_83) jessie_82) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                     (C_56:
-                     begin
-                       (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1 end)
-                    end) end) end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_7 -> void end end done);
+                    (let jessie_84 = t_0 in
+                    (let jessie_83 = !i_0_1 in
+                    (let jessie_82 = !mi in
+                    (JC_73:
+                    (((((swap jessie_84) jessie_83) jessie_82) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                   end) end) end);
+                 (C_56:
+                 begin   (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1
+                 end) end in void); (raise (Loop_continue_exc void)) end in
+              void) with Loop_continue_exc jessie_7 -> void end end done);
           (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
         (raise (Return_label_exc void)) end) end in void) with
@@ -2168,18 +2177,16 @@ let min_sort_ensures_permutation =
                      Goto_while_1_break_exc jessie_1 ->
                      (while_1_break: void) end;
                     (C_54:
-                    begin
-                      (let jessie_138 = t_0 in
-                      (let jessie_137 = !i_0_1 in
-                      (let jessie_136 = !mi in
-                      (JC_109:
-                      (((((swap jessie_138) jessie_137) jessie_136) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                     (C_56:
-                     begin
-                       (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1 end)
-                    end) end) end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_7 -> void end end done);
+                    (let jessie_138 = t_0 in
+                    (let jessie_137 = !i_0_1 in
+                    (let jessie_136 = !mi in
+                    (JC_109:
+                    (((((swap jessie_138) jessie_137) jessie_136) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                   end) end) end);
+                 (C_56:
+                 begin   (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1
+                 end) end in void); (raise (Loop_continue_exc void)) end in
+              void) with Loop_continue_exc jessie_7 -> void end end done);
           (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
         (raise (Return_label_exc void)) end) end in void) with
@@ -2310,18 +2317,16 @@ let min_sort_ensures_sorted =
                      Goto_while_1_break_exc jessie_1 ->
                      (while_1_break: void) end;
                     (C_54:
-                    begin
-                      (let jessie_111 = t_0 in
-                      (let jessie_110 = !i_0_1 in
-                      (let jessie_109 = !mi in
-                      (JC_93:
-                      (((((swap jessie_111) jessie_110) jessie_109) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                     (C_56:
-                     begin
-                       (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1 end)
-                    end) end) end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_7 -> void end end done);
+                    (let jessie_111 = t_0 in
+                    (let jessie_110 = !i_0_1 in
+                    (let jessie_109 = !mi in
+                    (JC_93:
+                    (((((swap jessie_111) jessie_110) jessie_109) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                   end) end) end);
+                 (C_56:
+                 begin   (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1
+                 end) end in void); (raise (Loop_continue_exc void)) end in
+              void) with Loop_continue_exc jessie_7 -> void end end done);
           (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
         (raise (Return_label_exc void)) end) end in void) with
@@ -2430,18 +2435,16 @@ let min_sort_safety =
                      Goto_while_1_break_exc jessie_1 ->
                      (while_1_break: void) end;
                     (C_54:
-                    begin
-                      (let jessie_57 = t_0 in
-                      (let jessie_56 = !i_0_1 in
-                      (let jessie_55 = !mi in
-                      (JC_58:
-                      (((((swap_requires jessie_57) jessie_56) jessie_55) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
-                     (C_56:
-                     begin
-                       (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1 end)
-                    end) end) end) end) end in void);
-               (raise (Loop_continue_exc void)) end in void) with
-              Loop_continue_exc jessie_7 -> void end end done);
+                    (let jessie_57 = t_0 in
+                    (let jessie_56 = !i_0_1 in
+                    (let jessie_55 = !mi in
+                    (JC_58:
+                    (((((swap_requires jessie_57) jessie_56) jessie_55) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table))))))
+                   end) end) end);
+                 (C_56:
+                 begin   (i_0_1 := (C_55: ((add_int !i_0_1) (1)))); !i_0_1
+                 end) end in void); (raise (Loop_continue_exc void)) end in
+              void) with Loop_continue_exc jessie_7 -> void end end done);
           (raise (Goto_while_0_break_exc void)) end in void) with
          Goto_while_0_break_exc jessie_2 -> (while_0_break: void) end;
         (raise (Return_label_exc void)) end) end in void) with
@@ -7097,7 +7100,7 @@ why -simplify [...] why/minimum_sort.why
 (FORALL (j_0_1_1)
 (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< (- n j_0_1_1) (- n j_0_1_0)))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_9, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 173, characters 23-41
+;; min_sort_safety_po_9, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 177, characters 26-44
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7128,7 +7131,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (>= j_0_1_0 n)
 (>= (offset_max int_P_t_0_5_alloc_table t_0) i_0_1_0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_10, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 173, characters 23-41
+;; min_sort_safety_po_10, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 177, characters 26-44
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)
@@ -7158,7 +7161,7 @@ why -simplify [...] why/minimum_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (>= j_0_1_0 n) (<= (offset_min int_P_t_0_5_alloc_table t_0) mi0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_11, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 173, characters 23-41
+;; min_sort_safety_po_11, File "HOME/tests/c/minimum_sort.jessie/minimum_sort.jc", line 177, characters 26-44
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (int_P_t_0_5_alloc_table)

@@ -132,6 +132,24 @@ type expr =
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
+  | MultiAssign of string * Loc.position * (string * expr) list * 
+      expr * string * expr * string *  
+      (int * bool * bool * string) list
+      (* 
+
+         this construction is not in Why, but a temporary construction
+         used by jessie to denote "parallel updates"
+         
+         [MultiAssign(mark,pos,lets,alloc,tmpe,e,f,l)] where [l]
+         is a list of pair (i,b1,b2,e') for distincts i, denotes the
+         parallel updates (lets) let tmpe = e in (tmpe+i).f = e'
+
+         booleans [b1] and [b2] indicates whether it is safe to ignore
+         bound checking on the left resp on the right
+         
+         [alloc] is the allocation table for safety conditions
+         [lets] is a sequence of local bindings for expressions e'
+      *)
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
   | App of expr * expr
