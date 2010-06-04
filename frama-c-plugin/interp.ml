@@ -2117,7 +2117,7 @@ let rec statement s =
     | UnspecifiedSequence seq ->
         (* [VP] TODO: take into account undefined behavior tied to the
           effects of the statements... *)
-        JCPEblock(statement_list (List.map (fun (x,_,_,_) -> x) seq))
+        JCPEblock(statement_list (List.map (fun (x,_,_,_,_) -> x) seq))
 
     | TryFinally _ | TryExcept _ -> assert false
   in
