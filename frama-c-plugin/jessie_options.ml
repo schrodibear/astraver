@@ -45,7 +45,7 @@ module ProjectName =
        let option_name = "-jessie-project-name"
        let arg_name = ""
        let descr = "specify project name for Jessie analysis"
-       let kind = State.Tuning
+       let kind = `Tuning
      end)
 
 module Behavior =
@@ -55,14 +55,14 @@ module Behavior =
        let arg_name = ""
        let descr =
 	 "restrict verification to a specific behavior (safety, default or a user-defined behavior)"
-       let kind = State.Correctness
+       let kind = `Correctness
      end)
 
 module Analysis =
   False(struct
 	  let option_name = "-jessie"
 	  let descr = "perform C to Jessie translation"
-          let kind = State.Tuning
+          let kind = `Tuning
 	end)
 
 module ForceAdHocNormalization =
@@ -70,7 +70,7 @@ module ForceAdHocNormalization =
           let option_name = "-jessie-adhoc-normalization"
           let descr =
             "enforce code normalization in a mode suitable for Jessie plugin."
-          let kind = State.Tuning
+          let kind = `Tuning
         end)
 
 let () =
@@ -109,7 +109,7 @@ module JcOpt =
 	      let module_name = "-jessie-jc-opt"
 	      let arg_name = ""
 	      let descr = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
-              let kind = State.Tuning
+              let kind = `Tuning
 	    end)
 
 module WhyOpt =
@@ -119,7 +119,7 @@ module WhyOpt =
        let module_name = "-jessie-why-opt"
        let arg_name = ""
        let descr = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
-       let kind = State.Tuning
+       let kind = `Tuning
      end)
 
 module GenOnly =
@@ -127,7 +127,7 @@ module GenOnly =
 	  let option_name = "-jessie-gen-only"
 	  let module_name = "-jessie-gen-only"
 	  let descr = "only generates jessie code (for developer use)"
-          let kind = State.Tuning
+          let kind = `Tuning
 	end)
 
 module InferAnnot =
@@ -137,7 +137,7 @@ module InferAnnot =
        let module_name = "-jessie-infer-annot"
        let arg_name = ""
        let descr = "infer function annotations (inv, pre, spre, wpre)"
-       let kind = State.Correctness
+       let kind = `Correctness
      end)
 
 module CpuLimit =
@@ -147,7 +147,7 @@ module CpuLimit =
        let module_name = "-jessie-cpu-limit"
        let arg_name = ""
        let descr = "set the time limit in sec. for the analysis"
-       let kind = State.Tuning
+       let kind = `Tuning
      end)
 
 module AbsDomain =
@@ -158,7 +158,7 @@ module AbsDomain =
        let default = "poly"
        let arg_name = ""
        let descr = "use specified abstract domain (box, oct or poly)"
-       let kind = State.Tuning
+       let kind = `Tuning
      end)
 
 module Atp =
@@ -169,7 +169,7 @@ module Atp =
        let default = "gui"
        let arg_name = ""
        let descr = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
-       let kind = State.Tuning
+       let kind = `Tuning
      end)
 
 module HintLevel =
@@ -179,7 +179,7 @@ module HintLevel =
        let module_name = "-jessie-hint-level"
        let arg_name = ""
        let descr = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
-       let kind = State.Tuning
+       let kind = `Tuning
      end)
 
 (*
