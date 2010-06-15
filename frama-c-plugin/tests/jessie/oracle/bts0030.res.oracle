@@ -87,13 +87,13 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_8 : (\forall integer k;
+           invariant (C_6 : ((C_7 : (0 <= i)) && (C_8 : (i <= length_a))));
+         behavior default:
+           invariant (C_3 : ((C_4 : (0 <= i)) && (C_5 : (i <= length_b))));
+         behavior default:
+           invariant (C_2 : (\forall integer k;
                               (((0 <= k) && (k < i)) ==>
                                 ((a + k).int_M == (b + k).int_M))));
-         behavior default:
-           invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= length_b))));
-         behavior default:
-           invariant (C_2 : ((C_3 : (0 <= i)) && (C_4 : (i <= length_a))));
          while (true)
          {  
             {  (if (i != length_a) then (if (i != length_b) then () else 
@@ -694,22 +694,21 @@ let lexicographical_compare_array_ensures_default =
           (loop_2:
           while true do
           { invariant
-              ((JC_46:
-               ((JC_44: le_int((0), integer_of_int32(i)))
-               and (JC_45:
-                   le_int(integer_of_int32(i), integer_of_int32(length_a)))))
-              and ((JC_49:
-                   ((JC_47: le_int((0), integer_of_int32(i)))
-                   and (JC_48:
+              ((JC_44:
+               (forall k:int.
+                ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
+                 eq_int(integer_of_int32(select(int_P_int_M_a_1, shift(a, k))),
+                 integer_of_int32(select(int_P_int_M_b_2, shift(b, k)))))))
+              and ((JC_47:
+                   ((JC_45: le_int((0), integer_of_int32(i)))
+                   and (JC_46:
                        le_int(integer_of_int32(i),
                        integer_of_int32(length_b)))))
                   and (JC_50:
-                      (forall k:int.
-                       ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
-                        eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                shift(a, k))),
-                        integer_of_int32(select(int_P_int_M_b_2, shift(b, k)))))))))
-             }
+                      ((JC_48: le_int((0), integer_of_int32(i)))
+                      and (JC_49:
+                          le_int(integer_of_int32(i),
+                          integer_of_int32(length_a)))))))  }
            begin
              [ { } unit { true } ];
             try
@@ -900,23 +899,22 @@ let lexicographical_compare_array_safety =
           { invariant (JC_35: true) variant (0) }
            begin
              [ { } unit reads i
-               { ((JC_29:
-                  ((JC_27: le_int((0), integer_of_int32(i)))
-                  and (JC_28:
-                      le_int(integer_of_int32(i), integer_of_int32(length_a)))))
-                 and ((JC_32:
-                      ((JC_30: le_int((0), integer_of_int32(i)))
-                      and (JC_31:
+               { ((JC_27:
+                  (forall k:int.
+                   ((le_int((0), k) and lt_int(k, integer_of_int32(i))) ->
+                    eq_int(integer_of_int32(select(int_P_int_M_a_1,
+                                            shift(a, k))),
+                    integer_of_int32(select(int_P_int_M_b_2, shift(b, k)))))))
+                 and ((JC_30:
+                      ((JC_28: le_int((0), integer_of_int32(i)))
+                      and (JC_29:
                           le_int(integer_of_int32(i),
                           integer_of_int32(length_b)))))
                      and (JC_33:
-                         (forall k:int.
-                          ((le_int((0), k)
-                           and lt_int(k, integer_of_int32(i))) ->
-                           eq_int(integer_of_int32(select(int_P_int_M_a_1,
-                                                   shift(a, k))),
-                           integer_of_int32(select(int_P_int_M_b_2,
-                                            shift(b, k))))))))) } ];
+                         ((JC_31: le_int((0), integer_of_int32(i)))
+                         and (JC_32:
+                             le_int(integer_of_int32(i),
+                             integer_of_int32(length_a))))))) } ];
             try
              (let jessie_18 =
              begin
@@ -1087,37 +1085,37 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0030_po26.why">
-      <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
+      <location file = "why/bts0030.why" line = "729" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0030_po27.why">
-      <location file = "why/bts0030.why" line = "730" begin = "45" end = "46"/>
+      <location file = "why/bts0030.why" line = "729" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0030_po28.why">
-      <location file = "why/bts0030.why" line = "860" begin = "47" end = "51"/>
+      <location file = "why/bts0030.why" line = "858" begin = "47" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0030_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "19" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "37" begin = "19" end = "65"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0030_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "24" end = "37"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0030_po3.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "35" begin = "19" end = "25"/>
       <explain kind = "LoopInvInit"/>
     </goal>
-    <goal why_file="why/bts0030_po4.why">
+    <goal why_file="why/bts0030_po3.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "35" begin = "24" end = "37"/>
       <explain kind = "LoopInvInit"/>
     </goal>
+    <goal why_file="why/bts0030_po4.why">
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "19" end = "25"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
     <goal why_file="why/bts0030_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "37" begin = "19" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "24" end = "37"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0030_po6.why">
@@ -1125,23 +1123,23 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0030_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "19" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "37" begin = "19" end = "65"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0030_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "24" end = "37"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0030_po9.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "35" begin = "19" end = "25"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
-    <goal why_file="why/bts0030_po10.why">
+    <goal why_file="why/bts0030_po9.why">
       <location file = "PPCHOME/tests/jessie/bts0030.c" line = "35" begin = "24" end = "37"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/bts0030_po10.why">
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "19" end = "25"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/bts0030_po11.why">
-      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "37" begin = "19" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/bts0030.c" line = "34" begin = "24" end = "37"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0030_po12.why">
@@ -1157,7 +1155,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0030_po15.why">
-      <location file = "why/bts0030.why" line = "655" begin = "5" end = "2480"/>
+      <location file = "why/bts0030.why" line = "654" begin = "5" end = "2480"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

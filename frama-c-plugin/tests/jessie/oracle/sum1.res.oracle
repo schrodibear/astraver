@@ -46,8 +46,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((C_4 : (x == i)) && (C_5 : (i <= 10))));
-         variant (C_6 : (10 - i));
+           invariant (C_4 : ((C_5 : (x == i)) && (C_6 : (i <= 10))));
+         variant (C_3 : (10 - i));
          while (true)
          {  
             {  (if (i < 10) then () else 

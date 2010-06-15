@@ -77,13 +77,13 @@ behavior default:
       {  
          loop 
          behavior default:
-           
-           assigns i;
-         behavior default:
            invariant (C_3 : (((C_5 : (0 <= i)) && (C_6 : (i <= 5))) &&
                               (C_7 : (((0 <= i) && (i <= 5)) ==>
                                        (5 >=
                                          cpt{Here}(t, (u :> real), 0, (i - 1)))))));
+         behavior default:
+           
+           assigns i;
          behavior default:
            
            assigns tmp_1;

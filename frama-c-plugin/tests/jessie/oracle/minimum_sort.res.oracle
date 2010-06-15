@@ -126,20 +126,20 @@ behavior permutation:
       
       {  
          loop 
-         behavior permutation:
-           invariant (C_27 : Permut{Pre, Here}(t_0, 0, (n - 1)));
+         behavior default:
+           invariant (C_26 : ((C_27 : (0 <= i_0)) && (C_28 : (i_0 < n))));
          behavior sorted:
-           invariant (C_24 : ((C_25 : Sorted{Here}(t_0, 0, i_0)) &&
-                               (C_26 : (\forall integer k1;
+           invariant (C_23 : ((C_24 : Sorted{Here}(t_0, 0, i_0)) &&
+                               (C_25 : (\forall integer k1;
                                          (\forall integer k2;
                                            (((0 <= k1) &&
                                               ((k1 < i_0) &&
                                                 ((i_0 <= k2) && (k2 < n)))) ==>
                                              ((t_0 + k1).int_M <=
                                                (t_0 + k2).int_M)))))));
-         behavior default:
-           invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 < n))));
-         variant (C_28 : (n - i_0));
+         behavior permutation:
+           invariant (C_22 : Permut{Pre, Here}(t_0, 0, (n - 1)));
+         variant (C_21 : (n - i_0));
          while (true)
          {  
             {  (if (i_0 < (C_29 : (n - 1))) then () else 
@@ -151,20 +151,20 @@ behavior permutation:
                   
                   {  
                      loop 
+                     behavior default:
+                       invariant (C_41 : ((C_42 : (i_0 < j_0)) &&
+                                           ((C_44 : (i_0 <= mi)) &&
+                                             (C_45 : (mi < n)))));
                      behavior sorted:
-                       invariant (C_43 : ((C_44 : (mv == (t_0 + mi).int_M)) &&
-                                           (C_45 : (\forall integer k_0;
+                       invariant (C_38 : ((C_39 : (mv == (t_0 + mi).int_M)) &&
+                                           (C_40 : (\forall integer k_0;
                                                      (((i_0 <= k_0) &&
                                                         (k_0 < j_0)) ==>
                                                        ((t_0 + k_0).int_M >=
                                                          mv))))));
-                     behavior default:
-                       invariant (C_38 : ((C_39 : (i_0 < j_0)) &&
-                                           ((C_41 : (i_0 <= mi)) &&
-                                             (C_42 : (mi < n)))));
                      behavior permutation:
-                       invariant (C_36 : Permut{Pre, Here}(t_0, 0, (n - 1)));
-                     variant (C_37 : (n - j_0));
+                       invariant (C_37 : Permut{Pre, Here}(t_0, 0, (n - 1)));
+                     variant (C_36 : (n - j_0));
                      while (true)
                      {  
                         {  (if (j_0 < n) then () else 

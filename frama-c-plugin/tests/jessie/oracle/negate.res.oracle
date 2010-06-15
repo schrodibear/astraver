@@ -49,14 +49,14 @@ behavior default:
       {  
          loop 
          behavior default:
-           
-           assigns (t + [0..(i - 1)]).int_M;
-         behavior default:
            invariant (C_3 : (((C_5 : (0 <= i)) && (C_6 : (i <= n))) &&
                               (C_7 : (\forall integer k;
                                        (((0 <= k) && (k < i)) ==>
                                          ((t + k).int_M ==
                                            (- \at((t + k).int_M,Pre))))))));
+         behavior default:
+           
+           assigns (t + [0..(i - 1)]).int_M;
          variant (C_2 : (n - i));
          while (true)
          {  

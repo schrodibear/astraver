@@ -213,8 +213,8 @@ behavior default:
          {  
             loop 
             behavior default:
-              invariant (C_8 : included(iset(e), \at(iset(e),L)));
-            variant (C_9 : card(iset(e)));
+              invariant (C_9 : included(iset(e), \at(iset(e),L)));
+            variant (C_8 : card(iset(e)));
             while (true)
             {  
                {  (C_12 : (d = (C_11 : (e & (C_10 : (- e))))));
@@ -393,26 +393,14 @@ behavior default:
          {  
             loop 
             behavior default:
-              
-              assigns ((sol + [s..]).int_xM + [..]).int_M;
-            behavior default:
-              
-              assigns k;
-            behavior default:
-              
-              assigns s;
-            behavior default:
-              
-              assigns (col + [k..]).int_M;
-            behavior default:
-              invariant (C_41 : (((((((C_47 : included(iset(e_0),
+              invariant (C_42 : (((((((C_48 : included(iset(e_0),
                                                        \at(iset(e_0),L))) &&
-                                       (C_48 : (f_0 == (s - \at(s,L))))) &&
-                                      (C_49 : (f_0 >= 0))) &&
-                                     (C_50 : (k == \at(k,L)))) &&
-                                    (C_51 : partial_solution{Here}(k, col))) &&
-                                   (C_52 : sorted{Here}(sol, \at(s,L), s))) &&
-                                  (C_53 : (\forall int_P[..] t_2;
+                                       (C_49 : (f_0 == (s - \at(s,L))))) &&
+                                      (C_50 : (f_0 >= 0))) &&
+                                     (C_51 : (k == \at(k,L)))) &&
+                                    (C_52 : partial_solution{Here}(k, col))) &&
+                                   (C_53 : sorted{Here}(sol, \at(s,L), s))) &&
+                                  (C_54 : (\forall int_P[..] t_2;
                                             ((solution{Here}(t_2) &&
                                                (\exists integer di;
                                                  ((in_(di,
@@ -426,7 +414,19 @@ behavior default:
                                                    (i_19 < s)) &&
                                                   eq_sol{Here}(t_2,
                                                                (sol + i_19).int_xM))))))));
-            variant (C_54 : card(iset(e_0)));
+            behavior default:
+              
+              assigns (col + [k..]).int_M;
+            behavior default:
+              
+              assigns s;
+            behavior default:
+              
+              assigns k;
+            behavior default:
+              
+              assigns ((sol + [s..]).int_xM + [..]).int_M;
+            variant (C_41 : card(iset(e_0)));
             while (true)
             {  
                {  (C_57 : (d_0 = (C_56 : (e_0 & (C_55 : (- e_0))))));
@@ -485,9 +485,9 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_104 : (-1 >= 0)));
+         (assert for default: (C_104 : (-1 <= (2147483647 >>> n))));
          
-         (assert for default: (C_103 : (-1 <= (2147483647 >>> n))));
+         (assert for default: (C_103 : (-1 >= 0)));
          
          (assert for default: (C_102 : (n < 32)));
          
@@ -1364,9 +1364,9 @@ let queens_ensures_default =
      begin
        (let jessie_123 =
        begin
-         (assert { (JC_151: ge_int(neg_int((1)), (0))) }; void);
-        (assert { (JC_152: le_int(neg_int((1)), asr((2147483647), n_0))) };
-        void); (assert { (JC_153: lt_int(n_0, (32))) }; void);
+         (assert { (JC_151: le_int(neg_int((1)), asr((2147483647), n_0))) };
+         void); (assert { (JC_152: ge_int(neg_int((1)), (0))) }; void);
+        (assert { (JC_153: lt_int(n_0, (32))) }; void);
         (assert { (JC_154: ge_int(n_0, (0))) }; void);
         (C_108:
         begin
@@ -1404,8 +1404,9 @@ let queens_safety =
      begin
        (let jessie_117 =
        begin
-         [ { } unit { (JC_146: ge_int(neg_int((1)), (0))) } ];
-        [ { } unit { (JC_147: le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+         [ { } unit
+           { (JC_146: le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+        [ { } unit { (JC_147: ge_int(neg_int((1)), (0))) } ];
         [ { } unit { (JC_148: lt_int(n_0, (32))) } ];
         [ { } unit { (JC_149: ge_int(n_0, (0))) } ];
         (C_108:
@@ -1688,10 +1689,9 @@ let t3_ensures_default =
                  and ((JC_119:
                       not_assigns(int_P_alloc_table@loop_4,
                       int_P_int_M@loop_4, int_P_int_M,
-                      pset_union(pset_all(pset_deref(int_xP_int_xM,
-                                          pset_range_right(pset_singleton(sol),
-                                          s))),
-                      pset_range_right(pset_singleton(col), k))))
+                      pset_union(pset_range_right(pset_singleton(col), k),
+                      pset_all(pset_deref(int_xP_int_xM,
+                               pset_range_right(pset_singleton(sol), s))))))
                      and (JC_120:
                          not_assigns(int_P_alloc_table@init,
                          int_P_int_M@init, int_P_int_M,
@@ -2254,11 +2254,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1074" begin = "32" end = "134"/>
+      <location file = "why/queens.why" line = "1075" begin = "32" end = "134"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1074" begin = "32" end = "134"/>
+      <location file = "why/queens.why" line = "1075" begin = "32" end = "134"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po32.why">

@@ -133,10 +133,10 @@ behavior in_interval:
          behavior default:
            invariant (C_9 : ((C_10 : (1 <= i)) && (C_11 : (i <= n))));
          behavior default:
-           invariant (C_7 : (\forall integer j_0;
+           invariant (C_8 : (\forall integer j_0;
                               (((0 <= j_0) && (j_0 < i)) ==>
                                 ((z :> real) > ((x + j_0).double_M :> real)))));
-         variant (C_8 : (n - i));
+         variant (C_7 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 

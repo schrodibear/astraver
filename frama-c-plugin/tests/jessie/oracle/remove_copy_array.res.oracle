@@ -135,27 +135,26 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_12 : (\forall integer k_1;
-                               ((! ((0 <= k_1) && (k_1 < j))) ==>
-                                 ((b + k_1).int_M ==
-                                   \at((b + k_1).int_M,Pre)))));
+           invariant (C_10 : ((C_11 : (0 <= i)) && (C_12 : (i <= length))));
          behavior default:
-           invariant (C_9 : ((C_10 : (0 <= j)) && (C_11 : (j <= length))));
+           invariant (C_9 : (j <= i));
          behavior default:
-           invariant (C_8 : (j <= i));
+           invariant (C_6 : ((C_7 : (0 <= j)) && (C_8 : (j <= length))));
          behavior default:
-           invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= length))));
+           invariant (C_5 : (\forall integer k_1;
+                              ((! ((0 <= k_1) && (k_1 < j))) ==>
+                                ((b + k_1).int_M == \at((b + k_1).int_M,Pre)))));
          behavior default:
-           
-           assigns (b + [0..(j - 1)]).int_M;
+           invariant (C_4 : (\forall integer k_2;
+                              (((0 <= k_2) && (k_2 < j)) ==>
+                                ((b + k_2).int_M != value))));
          behavior default:
-           invariant (C_4 : (j ==
+           invariant (C_3 : (j ==
                               spec_remove_copy{Pre,
                               Here}(a, (i - 1), b, (j - 1), value)));
          behavior default:
-           invariant (C_3 : (\forall integer k_2;
-                              (((0 <= k_2) && (k_2 < j)) ==>
-                                ((b + k_2).int_M != value))));
+           
+           assigns (b + [0..(j - 1)]).int_M;
          while (true)
          {  
             {  (if (i < length) then () else 
@@ -750,40 +749,39 @@ let remove_copy_array_ensures_default =
           while true do
           { invariant
               (((JC_51:
-                (forall k_2:int.
-                 ((le_int((0), k_2) and lt_int(k_2, integer_of_int32(j_4))) ->
-                  neq_int(integer_of_int32(select(int_P_int_M_b_6,
-                                           shift(b_1, k_2))),
-                  integer_of_int32(value_0)))))
+                eq_int(integer_of_int32(j_4),
+                spec_remove_copy(a_1, sub_int(integer_of_int32(i_5), (1)),
+                b_1, sub_int(integer_of_int32(j_4), (1)), value_0,
+                int_P_int_M_b_6, int_P_int_M_a_5@init)))
                and ((JC_52:
-                    eq_int(integer_of_int32(j_4),
-                    spec_remove_copy(a_1,
-                    sub_int(integer_of_int32(i_5), (1)), b_1,
-                    sub_int(integer_of_int32(j_4), (1)), value_0,
-                    int_P_int_M_b_6, int_P_int_M_a_5@init)))
-                   and ((JC_55:
-                        ((JC_53: le_int((0), integer_of_int32(i_5)))
-                        and (JC_54:
-                            le_int(integer_of_int32(i_5),
-                            integer_of_int32(length)))))
+                    (forall k_2:int.
+                     ((le_int((0), k_2)
+                      and lt_int(k_2, integer_of_int32(j_4))) ->
+                      neq_int(integer_of_int32(select(int_P_int_M_b_6,
+                                               shift(b_1, k_2))),
+                      integer_of_int32(value_0)))))
+                   and ((JC_53:
+                        (forall k_1:int.
+                         ((not (le_int((0), k_1)
+                               and lt_int(k_1, integer_of_int32(j_4)))) ->
+                          eq_int(integer_of_int32(select(int_P_int_M_b_6,
+                                                  shift(b_1, k_1))),
+                          integer_of_int32(select(int_P_int_M_b_6@init,
+                                           shift(b_1@init, k_1@init)))))))
                        and ((JC_56:
-                            le_int(integer_of_int32(j_4),
-                            integer_of_int32(i_5)))
-                           and ((JC_59:
-                                ((JC_57: le_int((0), integer_of_int32(j_4)))
-                                and (JC_58:
-                                    le_int(integer_of_int32(j_4),
-                                    integer_of_int32(length)))))
+                            ((JC_54: le_int((0), integer_of_int32(j_4)))
+                            and (JC_55:
+                                le_int(integer_of_int32(j_4),
+                                integer_of_int32(length)))))
+                           and ((JC_57:
+                                le_int(integer_of_int32(j_4),
+                                integer_of_int32(i_5)))
                                and (JC_60:
-                                   (forall k_1:int.
-                                    ((not (le_int((0), k_1)
-                                          and lt_int(k_1,
-                                              integer_of_int32(j_4)))) ->
-                                     eq_int(integer_of_int32(select(int_P_int_M_b_6,
-                                                             shift(b_1, k_1))),
-                                     integer_of_int32(select(int_P_int_M_b_6@init,
-                                                      shift(b_1@init,
-                                                      k_1@init))))))))))))
+                                   ((JC_58:
+                                    le_int((0), integer_of_int32(i_5)))
+                                   and (JC_59:
+                                       le_int(integer_of_int32(i_5),
+                                       integer_of_int32(length))))))))))
               and ((JC_62:
                    not_assigns(int_P_b_6_alloc_table@loop_2,
                    int_P_int_M_b_6@loop_2, int_P_int_M_b_6,
@@ -904,42 +902,39 @@ let remove_copy_array_safety =
            begin
              [ { } unit reads i_5,int_P_int_M_b_6,j_4
                { ((JC_33:
-                  (forall k_2:int.
-                   ((le_int((0), k_2) and lt_int(k_2, integer_of_int32(j_4))) ->
-                    neq_int(integer_of_int32(select(int_P_int_M_b_6,
-                                             shift(b_1, k_2))),
-                    integer_of_int32(value_0)))))
+                  eq_int(integer_of_int32(j_4),
+                  spec_remove_copy(a_1, sub_int(integer_of_int32(i_5), (1)),
+                  b_1, sub_int(integer_of_int32(j_4), (1)), value_0,
+                  int_P_int_M_b_6, int_P_int_M_a_5@init)))
                  and ((JC_34:
-                      eq_int(integer_of_int32(j_4),
-                      spec_remove_copy(a_1,
-                      sub_int(integer_of_int32(i_5), (1)), b_1,
-                      sub_int(integer_of_int32(j_4), (1)), value_0,
-                      int_P_int_M_b_6, int_P_int_M_a_5@init)))
-                     and ((JC_37:
-                          ((JC_35: le_int((0), integer_of_int32(i_5)))
-                          and (JC_36:
-                              le_int(integer_of_int32(i_5),
-                              integer_of_int32(length)))))
+                      (forall k_2:int.
+                       ((le_int((0), k_2)
+                        and lt_int(k_2, integer_of_int32(j_4))) ->
+                        neq_int(integer_of_int32(select(int_P_int_M_b_6,
+                                                 shift(b_1, k_2))),
+                        integer_of_int32(value_0)))))
+                     and ((JC_35:
+                          (forall k_1:int.
+                           ((not (le_int((0), k_1)
+                                 and lt_int(k_1, integer_of_int32(j_4)))) ->
+                            eq_int(integer_of_int32(select(int_P_int_M_b_6,
+                                                    shift(b_1, k_1))),
+                            integer_of_int32(select(int_P_int_M_b_6@init,
+                                             shift(b_1@init, k_1@init)))))))
                          and ((JC_38:
-                              le_int(integer_of_int32(j_4),
-                              integer_of_int32(i_5)))
-                             and ((JC_41:
-                                  ((JC_39:
-                                   le_int((0), integer_of_int32(j_4)))
-                                  and (JC_40:
-                                      le_int(integer_of_int32(j_4),
-                                      integer_of_int32(length)))))
+                              ((JC_36: le_int((0), integer_of_int32(j_4)))
+                              and (JC_37:
+                                  le_int(integer_of_int32(j_4),
+                                  integer_of_int32(length)))))
+                             and ((JC_39:
+                                  le_int(integer_of_int32(j_4),
+                                  integer_of_int32(i_5)))
                                  and (JC_42:
-                                     (forall k_1:int.
-                                      ((not (le_int((0), k_1)
-                                            and lt_int(k_1,
-                                                integer_of_int32(j_4)))) ->
-                                       eq_int(integer_of_int32(select(int_P_int_M_b_6,
-                                                               shift(b_1,
-                                                               k_1))),
-                                       integer_of_int32(select(int_P_int_M_b_6@init,
-                                                        shift(b_1@init,
-                                                        k_1@init)))))))))))) } ];
+                                     ((JC_40:
+                                      le_int((0), integer_of_int32(i_5)))
+                                     and (JC_41:
+                                         le_int(integer_of_int32(i_5),
+                                         integer_of_int32(length)))))))))) } ];
             try
              (let jessie_19 =
              begin
@@ -1019,12 +1014,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/remove_copy_array_po30.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "158" begin = "27" end = "216"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "157" begin = "27" end = "216"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/remove_copy_array_po31.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "158" begin = "27" end = "216"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "157" begin = "27" end = "216"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1049,29 +1044,29 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/remove_copy_array_po36.why">
-      <location file = "why/remove_copy_array.why" line = "725" begin = "45" end = "46"/>
+      <location file = "why/remove_copy_array.why" line = "724" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/remove_copy_array_po37.why">
-      <location file = "why/remove_copy_array.why" line = "725" begin = "45" end = "46"/>
+      <location file = "why/remove_copy_array.why" line = "724" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/remove_copy_array_po1.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "16" begin = "18" end = "65"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po2.why">
       <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "19" begin = "18" end = "72"/>
       <explain kind = "LoopInvInit"/>
     </goal>
+    <goal why_file="why/remove_copy_array_po2.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "16" begin = "18" end = "65"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
     <goal why_file="why/remove_copy_array_po3.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "18" end = "24"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po4.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "23" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "23" end = "34"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po5.why">
@@ -1079,59 +1074,59 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po6.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "18" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "18" end = "24"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po7.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "23" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "23" end = "34"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po8.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1610"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1573"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po9.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1610"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1573"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/remove_copy_array_po10.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "16" begin = "18" end = "65"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po11.why">
       <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "19" begin = "18" end = "72"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/remove_copy_array_po11.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "16" begin = "18" end = "65"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/remove_copy_array_po12.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "18" end = "24"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po13.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "23" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po14.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "10" begin = "18" end = "24"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po15.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "18" end = "24"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po16.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "23" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po17.why">
       <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "14" begin = "18" end = "78"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/remove_copy_array_po13.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "18" end = "24"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po14.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "11" begin = "23" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po15.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "10" begin = "18" end = "24"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po16.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "18" end = "24"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po17.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "9" begin = "23" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/remove_copy_array_po18.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1610"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1573"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/remove_copy_array_po19.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1610"/>
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "130" begin = "9" end = "1573"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/remove_copy_array_po20.why">

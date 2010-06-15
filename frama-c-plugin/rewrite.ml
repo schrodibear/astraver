@@ -155,8 +155,9 @@ let rename_entities file =
     (fun annot gen ->
        let rec replace_annot annot = match annot with
 	 | Dfun_or_pred _ -> annot
-	 | Daxiomatic(id, l) -> Daxiomatic(id, List.map replace_annot l)
-	 | Dtype(infos) ->
+	 | Daxiomatic(id, l, loc) ->
+             Daxiomatic(id, List.map replace_annot l,loc)
+	 | Dtype(infos,loc) ->
 	     Dtype({ infos with
                        lt_name = unique_logic_name infos.lt_name;
                        lt_def =
@@ -170,10 +171,12 @@ let rename_entities file =
                                              unique_logic_name x.ctor_name})
                                       cons)
                               | (LTsyn _) as def -> def)
-                         infos.lt_def;})
-	 | Dlemma(name,is_axiom,labels,poly,property) ->
-	     Dlemma(unique_logic_name name,is_axiom,labels,poly,property)
-	 | Dtype_annot _info | Dinvariant _info ->
+                         infos.lt_def;},
+                   loc
+                  )
+	 | Dlemma(name,is_axiom,labels,poly,property,loc) ->
+	     Dlemma(unique_logic_name name,is_axiom,labels,poly,property,loc)
+	 | Dtype_annot _ | Dinvariant _ ->
 	     (* Useful ? harmless ?
 		info.l_name <- unique_logic_name info.l_name;
 	     *)
@@ -367,7 +370,7 @@ class replaceStringConstants =
     globinv.l_labels <- [ LogicLabel "Here" ];
     globinv.l_body <- LBpred (predicate v.vdecl p);
     attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-    attach_global (GAnnot(Dinvariant globinv,v.vdecl));
+    attach_global (GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl));
     with Exit -> ()
     end;
     v

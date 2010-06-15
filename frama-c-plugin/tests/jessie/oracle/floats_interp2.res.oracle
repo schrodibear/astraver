@@ -154,12 +154,12 @@ behavior in_interval:
       {  
          loop 
          behavior default:
-           invariant (C_10 : (\forall integer j_0;
-                               (((0 <= j_0) && (j_0 < i)) ==>
-                                 ((z :> real) > ((x + j_0).double_M :> real)))));
+           invariant (C_9 : ((C_10 : (1 <= i)) && (C_11 : (i <= n))));
          behavior default:
-           invariant (C_7 : ((C_8 : (1 <= i)) && (C_9 : (i <= n))));
-         variant (C_11 : (n - i));
+           invariant (C_8 : (\forall integer j_0;
+                              (((0 <= j_0) && (j_0 < i)) ==>
+                                ((z :> real) > ((x + j_0).double_M :> real)))));
+         variant (C_7 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -991,17 +991,16 @@ let interp_lin_ensures_default =
            (loop_2:
            while true do
            { invariant
-               ((JC_94:
-                ((JC_92: le_int((1), integer_of_int32(i_2)))
-                and (JC_93:
-                    le_int(integer_of_int32(i_2), integer_of_int32(n_0)))))
+               ((JC_92:
+                (forall j_0:int.
+                 ((le_int((0), j_0) and lt_int(j_0, integer_of_int32(i_2))) ->
+                  gt_real(double_value(z_0),
+                  double_value(select(double_P_double_M_x_3, shift(x, j_0)))))))
                and (JC_95:
-                   (forall j_0:int.
-                    ((le_int((0), j_0)
-                     and lt_int(j_0, integer_of_int32(i_2))) ->
-                     gt_real(double_value(z_0),
-                     double_value(select(double_P_double_M_x_3,
-                                  shift(x, j_0))))))))  }
+                   ((JC_93: le_int((1), integer_of_int32(i_2)))
+                   and (JC_94:
+                       le_int(integer_of_int32(i_2), integer_of_int32(n_0))))))
+              }
             begin
               [ { } unit { true } ];
              try
@@ -1266,17 +1265,18 @@ let interp_lin_ensures_in_interval =
            { invariant (JC_199: true)  }
             begin
               [ { } unit reads i_2
-                { ((JC_196:
-                   ((JC_194: le_int((1), integer_of_int32(i_2)))
-                   and (JC_195:
-                       le_int(integer_of_int32(i_2), integer_of_int32(n_0)))))
+                { ((JC_194:
+                   (forall j_0:int.
+                    ((le_int((0), j_0)
+                     and lt_int(j_0, integer_of_int32(i_2))) ->
+                     gt_real(double_value(z_0),
+                     double_value(select(double_P_double_M_x_3,
+                                  shift(x, j_0)))))))
                   and (JC_197:
-                      (forall j_0:int.
-                       ((le_int((0), j_0)
-                        and lt_int(j_0, integer_of_int32(i_2))) ->
-                        gt_real(double_value(z_0),
-                        double_value(select(double_P_double_M_x_3,
-                                     shift(x, j_0)))))))) } ];
+                      ((JC_195: le_int((1), integer_of_int32(i_2)))
+                      and (JC_196:
+                          le_int(integer_of_int32(i_2),
+                          integer_of_int32(n_0)))))) } ];
              try
               (let jessie_150 =
               begin
@@ -1589,17 +1589,18 @@ let interp_lin_ensures_too_high =
            { invariant (JC_165: true)  }
             begin
               [ { } unit reads i_2
-                { ((JC_162:
-                   ((JC_160: le_int((1), integer_of_int32(i_2)))
-                   and (JC_161:
-                       le_int(integer_of_int32(i_2), integer_of_int32(n_0)))))
+                { ((JC_160:
+                   (forall j_0:int.
+                    ((le_int((0), j_0)
+                     and lt_int(j_0, integer_of_int32(i_2))) ->
+                     gt_real(double_value(z_0),
+                     double_value(select(double_P_double_M_x_3,
+                                  shift(x, j_0)))))))
                   and (JC_163:
-                      (forall j_0:int.
-                       ((le_int((0), j_0)
-                        and lt_int(j_0, integer_of_int32(i_2))) ->
-                        gt_real(double_value(z_0),
-                        double_value(select(double_P_double_M_x_3,
-                                     shift(x, j_0)))))))) } ];
+                      ((JC_161: le_int((1), integer_of_int32(i_2)))
+                      and (JC_162:
+                          le_int(integer_of_int32(i_2),
+                          integer_of_int32(n_0)))))) } ];
              try
               (let jessie_116 =
               begin
@@ -1871,17 +1872,18 @@ let interp_lin_ensures_too_low =
            { invariant (JC_131: true)  }
             begin
               [ { } unit reads i_2
-                { ((JC_128:
-                   ((JC_126: le_int((1), integer_of_int32(i_2)))
-                   and (JC_127:
-                       le_int(integer_of_int32(i_2), integer_of_int32(n_0)))))
+                { ((JC_126:
+                   (forall j_0:int.
+                    ((le_int((0), j_0)
+                     and lt_int(j_0, integer_of_int32(i_2))) ->
+                     gt_real(double_value(z_0),
+                     double_value(select(double_P_double_M_x_3,
+                                  shift(x, j_0)))))))
                   and (JC_129:
-                      (forall j_0:int.
-                       ((le_int((0), j_0)
-                        and lt_int(j_0, integer_of_int32(i_2))) ->
-                        gt_real(double_value(z_0),
-                        double_value(select(double_P_double_M_x_3,
-                                     shift(x, j_0)))))))) } ];
+                      ((JC_127: le_int((1), integer_of_int32(i_2)))
+                      and (JC_128:
+                          le_int(integer_of_int32(i_2),
+                          integer_of_int32(n_0)))))) } ];
              try
               (let jessie_82 =
               begin
@@ -2152,17 +2154,18 @@ let interp_lin_safety =
                               integer_of_int32(i_2))) }
             begin
               [ { } unit reads i_2
-                { ((JC_49:
-                   ((JC_47: le_int((1), integer_of_int32(i_2)))
-                   and (JC_48:
-                       le_int(integer_of_int32(i_2), integer_of_int32(n_0)))))
+                { ((JC_47:
+                   (forall j_0:int.
+                    ((le_int((0), j_0)
+                     and lt_int(j_0, integer_of_int32(i_2))) ->
+                     gt_real(double_value(z_0),
+                     double_value(select(double_P_double_M_x_3,
+                                  shift(x, j_0)))))))
                   and (JC_50:
-                      (forall j_0:int.
-                       ((le_int((0), j_0)
-                        and lt_int(j_0, integer_of_int32(i_2))) ->
-                        gt_real(double_value(z_0),
-                        double_value(select(double_P_double_M_x_3,
-                                     shift(x, j_0)))))))) } ];
+                      ((JC_48: le_int((1), integer_of_int32(i_2)))
+                      and (JC_49:
+                          le_int(integer_of_int32(i_2),
+                          integer_of_int32(n_0)))))) } ];
              try
               (let jessie_14 =
               begin
@@ -2617,27 +2620,27 @@ text = "FPOverflow"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/floats_interp2_po6.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "98" begin = "21" end = "63"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp2_po7.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp2_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "98" begin = "21" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "26" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/floats_interp2_po9.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "98" begin = "21" end = "63"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp2_po10.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "26" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp2_po11.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "98" begin = "21" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "97" begin = "26" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/floats_interp2_po12.why">

@@ -77,9 +77,9 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : (((C_5 : (0 <= i)) && (C_6 : (i <= n))) &&
-                              (C_7 : (s == sum{Here}(t, 0, i)))));
-         variant (C_8 : (n - i));
+           invariant (C_4 : (((C_6 : (0 <= i)) && (C_7 : (i <= n))) &&
+                              (C_8 : (s == sum{Here}(t, 0, i)))));
+         variant (C_3 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -113,11 +113,11 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_22 : (((C_24 : (0 <= i_0)) && (C_25 : (i_0 <= n_0))) &&
-                               (C_26 : (sum{Here}(t_0, 0, n_0) ==
+           invariant (C_23 : (((C_25 : (0 <= i_0)) && (C_26 : (i_0 <= n_0))) &&
+                               (C_27 : (sum{Here}(t_0, 0, n_0) ==
                                          (\at(sum{Pre}(t_0, 0, n_0),Pre) +
                                            i_0)))));
-         variant (C_27 : (n_0 - i_0));
+         variant (C_22 : (n_0 - i_0));
          while (true)
          {  
             {  (if (i_0 < n_0) then () else 

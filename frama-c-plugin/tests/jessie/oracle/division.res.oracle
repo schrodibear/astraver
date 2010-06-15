@@ -60,9 +60,9 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_3 : ((C_4 : (x == ((i * y) + j))) &&
-                              (C_5 : (0 <= j))));
-         variant (C_6 : j);
+           invariant (C_4 : ((C_5 : (x == ((i * y) + j))) &&
+                              (C_6 : (0 <= j))));
+         variant (C_3 : j);
          while (true)
          {  
             {  (if (j >= y) then () else 

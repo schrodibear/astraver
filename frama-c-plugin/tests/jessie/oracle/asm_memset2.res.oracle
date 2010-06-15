@@ -73,13 +73,13 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_7 : (\forall integer k;
+           invariant (C_3 : ((C_4 : (i_min_0 <= i)) &&
+                              ((C_6 : (i <= (i_max_0 + 1))) &&
+                                (C_7 : ((i_max_0 + 1) <= 4294967295)))));
+         behavior default:
+           invariant (C_2 : (\forall integer k;
                               (((i_min_0 <= k) && (k < i)) ==>
                                 ((Adresse_0 + k).unsigned_char_M == ValOct))));
-         behavior default:
-           invariant (C_2 : ((C_3 : (i_min_0 <= i)) &&
-                              ((C_5 : (i <= (i_max_0 + 1))) &&
-                                (C_6 : ((i_max_0 + 1) <= 4294967295)))));
          while (true)
          {  
             {  (if (i <= i_max_0) then () else 
@@ -116,13 +116,13 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_27 : (\forall integer k_1;
+           invariant (C_23 : ((C_24 : (i_min <= i_0)) &&
+                               ((C_26 : (i_0 <= (i_max + 1))) &&
+                                 (C_27 : ((i_max + 1) <= 4294967295)))));
+         behavior default:
+           invariant (C_22 : (\forall integer k_1;
                                (((i_min <= k_1) && (k_1 < i_0)) ==>
                                  ((Adresse + k_1).unsigned_long_M == ValMot))));
-         behavior default:
-           invariant (C_22 : ((C_23 : (i_min <= i_0)) &&
-                               ((C_25 : (i_0 <= (i_max + 1))) &&
-                                 (C_26 : ((i_max + 1) <= 4294967295)))));
          while (true)
          {  
             {  (if (i_0 <= i_max) then () else 
@@ -1876,22 +1876,22 @@ let memset_uchar_ensures_default =
          (loop_2:
          while true do
          { invariant
-             (((JC_34:
-               ((JC_31:
-                le_int(integer_of_uint32(i_min_0), integer_of_uint32(i)))
-               and ((JC_32:
-                    le_int(integer_of_uint32(i),
-                    add_int(integer_of_uint32(i_max_0), (1))))
-                   and (JC_33:
-                       le_int(add_int(integer_of_uint32(i_max_0), (1)),
-                       (4294967295))))))
+             (((JC_31:
+               (forall k:int.
+                ((le_int(integer_of_uint32(i_min_0), k)
+                 and lt_int(k, integer_of_uint32(i))) ->
+                 eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
+                                         shift(Adresse_0, k))),
+                 integer_of_uint8(ValOct)))))
               and (JC_35:
-                  (forall k:int.
-                   ((le_int(integer_of_uint32(i_min_0), k)
-                    and lt_int(k, integer_of_uint32(i))) ->
-                    eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
-                                            shift(Adresse_0, k))),
-                    integer_of_uint8(ValOct))))))
+                  ((JC_32:
+                   le_int(integer_of_uint32(i_min_0), integer_of_uint32(i)))
+                  and ((JC_33:
+                       le_int(integer_of_uint32(i),
+                       add_int(integer_of_uint32(i_max_0), (1))))
+                      and (JC_34:
+                          le_int(add_int(integer_of_uint32(i_max_0), (1)),
+                          (4294967295)))))))
              and (JC_37:
                  not_assigns(unsigned_char_P_Adresse_0_1_alloc_table@init,
                  unsigned_char_P_unsigned_char_M_Adresse_0_1@init,
@@ -1972,22 +1972,22 @@ let memset_uchar_safety =
          { invariant (JC_27: true) variant (0) }
           begin
             [ { } unit reads i,unsigned_char_P_unsigned_char_M_Adresse_0_1
-              { ((JC_24:
-                 ((JC_21:
-                  le_int(integer_of_uint32(i_min_0), integer_of_uint32(i)))
-                 and ((JC_22:
-                      le_int(integer_of_uint32(i),
-                      add_int(integer_of_uint32(i_max_0), (1))))
-                     and (JC_23:
-                         le_int(add_int(integer_of_uint32(i_max_0), (1)),
-                         (4294967295))))))
+              { ((JC_21:
+                 (forall k:int.
+                  ((le_int(integer_of_uint32(i_min_0), k)
+                   and lt_int(k, integer_of_uint32(i))) ->
+                   eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
+                                           shift(Adresse_0, k))),
+                   integer_of_uint8(ValOct)))))
                 and (JC_25:
-                    (forall k:int.
-                     ((le_int(integer_of_uint32(i_min_0), k)
-                      and lt_int(k, integer_of_uint32(i))) ->
-                      eq_int(integer_of_uint8(select(unsigned_char_P_unsigned_char_M_Adresse_0_1,
-                                              shift(Adresse_0, k))),
-                      integer_of_uint8(ValOct)))))) } ];
+                    ((JC_22:
+                     le_int(integer_of_uint32(i_min_0), integer_of_uint32(i)))
+                    and ((JC_23:
+                         le_int(integer_of_uint32(i),
+                         add_int(integer_of_uint32(i_max_0), (1))))
+                        and (JC_24:
+                            le_int(add_int(integer_of_uint32(i_max_0), (1)),
+                            (4294967295))))))) } ];
            try
             (let jessie_18 =
             begin
@@ -2047,22 +2047,22 @@ let memset_uint_ensures_default =
          (loop_4:
          while true do
          { invariant
-             ((JC_68:
-              ((JC_65:
-               le_int(integer_of_uint32(i_min), integer_of_uint32(i_0)))
-              and ((JC_66:
-                   le_int(integer_of_uint32(i_0),
-                   add_int(integer_of_uint32(i_max), (1))))
-                  and (JC_67:
-                      le_int(add_int(integer_of_uint32(i_max), (1)),
-                      (4294967295))))))
+             ((JC_65:
+              (forall k_1:int.
+               ((le_int(integer_of_uint32(i_min), k_1)
+                and lt_int(k_1, integer_of_uint32(i_0))) ->
+                eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
+                                         shift(Adresse, k_1))),
+                integer_of_uint32(ValMot)))))
              and (JC_69:
-                 (forall k_1:int.
-                  ((le_int(integer_of_uint32(i_min), k_1)
-                   and lt_int(k_1, integer_of_uint32(i_0))) ->
-                   eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
-                                            shift(Adresse, k_1))),
-                   integer_of_uint32(ValMot))))))  }
+                 ((JC_66:
+                  le_int(integer_of_uint32(i_min), integer_of_uint32(i_0)))
+                 and ((JC_67:
+                      le_int(integer_of_uint32(i_0),
+                      add_int(integer_of_uint32(i_max), (1))))
+                     and (JC_68:
+                         le_int(add_int(integer_of_uint32(i_max), (1)),
+                         (4294967295)))))))  }
           begin
             [ { } unit { true } ];
            try
@@ -2129,22 +2129,22 @@ let memset_uint_safety =
          { invariant (JC_61: true) variant (0) }
           begin
             [ { } unit reads i_0,unsigned_long_P_unsigned_long_M_Adresse_2
-              { ((JC_58:
-                 ((JC_55:
-                  le_int(integer_of_uint32(i_min), integer_of_uint32(i_0)))
-                 and ((JC_56:
-                      le_int(integer_of_uint32(i_0),
-                      add_int(integer_of_uint32(i_max), (1))))
-                     and (JC_57:
-                         le_int(add_int(integer_of_uint32(i_max), (1)),
-                         (4294967295))))))
+              { ((JC_55:
+                 (forall k_1:int.
+                  ((le_int(integer_of_uint32(i_min), k_1)
+                   and lt_int(k_1, integer_of_uint32(i_0))) ->
+                   eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
+                                            shift(Adresse, k_1))),
+                   integer_of_uint32(ValMot)))))
                 and (JC_59:
-                    (forall k_1:int.
-                     ((le_int(integer_of_uint32(i_min), k_1)
-                      and lt_int(k_1, integer_of_uint32(i_0))) ->
-                      eq_int(integer_of_uint32(select(unsigned_long_P_unsigned_long_M_Adresse_2,
-                                               shift(Adresse, k_1))),
-                      integer_of_uint32(ValMot)))))) } ];
+                    ((JC_56:
+                     le_int(integer_of_uint32(i_min), integer_of_uint32(i_0)))
+                    and ((JC_57:
+                         le_int(integer_of_uint32(i_0),
+                         add_int(integer_of_uint32(i_max), (1))))
+                        and (JC_58:
+                            le_int(add_int(integer_of_uint32(i_max), (1)),
+                            (4294967295))))))) } ];
            try
             (let jessie_44 =
             begin

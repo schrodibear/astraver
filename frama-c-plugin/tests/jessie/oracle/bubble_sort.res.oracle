@@ -140,19 +140,19 @@ behavior permutation:
       
       {  
          loop 
-         behavior permutation:
-           invariant (C_30 : Permut{Pre, Here}(a, 0, (length - 1)));
          behavior sorted:
-           invariant (C_29 : (\forall integer k_2;
+           invariant (C_30 : (fixed_up == up));
+         behavior sorted:
+           invariant (C_27 : ((C_28 : (0 < up)) && (C_29 : (up <= length))));
+         behavior sorted:
+           invariant (C_26 : sorted{Here}(a, 0, (up - 1)));
+         behavior sorted:
+           invariant (C_25 : (\forall integer k_2;
                                (((up < k_2) && (k_2 < length)) ==>
                                  ((a + k_2).int_M ==
                                    \at((a + k_2).int_M,Pre)))));
-         behavior sorted:
-           invariant (C_28 : sorted{Here}(a, 0, (up - 1)));
-         behavior sorted:
-           invariant (C_25 : ((C_26 : (0 < up)) && (C_27 : (up <= length))));
-         behavior sorted:
-           invariant (C_24 : (fixed_up == up));
+         behavior permutation:
+           invariant (C_24 : Permut{Pre, Here}(a, 0, (length - 1)));
          while (true)
          {  
             {  (if (up < length) then () else 
@@ -186,29 +186,29 @@ behavior permutation:
                      loop 
                      behavior sorted:
                        invariant (C_50 : (fixed_up == up));
-                     behavior permutation:
-                       invariant (C_49 : Permut{Pre,
-                                 Here}(a, 0, (length - 1)));
                      behavior sorted:
-                       invariant (C_48 : (((0 < down) && (down < up)) ==>
-                                           ((a + (down - 1)).int_M <=
-                                             (a + (down + 1)).int_M)));
+                       invariant (C_47 : ((C_48 : (0 <= down)) &&
+                                           (C_49 : (down < length))));
                      behavior sorted:
-                       invariant (C_47 : (\forall integer k_1;
+                       invariant (C_42 : ((C_43 : (0 <= down)) &&
+                                           ((C_45 : (down <= up)) &&
+                                             (C_46 : (up < length)))));
+                     behavior sorted:
+                       invariant (C_41 : sorted{Here}(a, 0, (down - 1)));
+                     behavior sorted:
+                       invariant (C_40 : sorted{Here}(a, down, up));
+                     behavior sorted:
+                       invariant (C_39 : (\forall integer k_1;
                                            (((up < k_1) && (k_1 < length)) ==>
                                              ((a + k_1).int_M ==
                                                \at((a + k_1).int_M,Pre)))));
                      behavior sorted:
-                       invariant (C_46 : sorted{Here}(a, down, up));
-                     behavior sorted:
-                       invariant (C_45 : sorted{Here}(a, 0, (down - 1)));
-                     behavior sorted:
-                       invariant (C_40 : ((C_41 : (0 <= down)) &&
-                                           ((C_43 : (down <= up)) &&
-                                             (C_44 : (up < length)))));
-                     behavior sorted:
-                       invariant (C_37 : ((C_38 : (0 <= down)) &&
-                                           (C_39 : (down < length))));
+                       invariant (C_38 : (((0 < down) && (down < up)) ==>
+                                           ((a + (down - 1)).int_M <=
+                                             (a + (down + 1)).int_M)));
+                     behavior permutation:
+                       invariant (C_37 : Permut{Pre,
+                                 Here}(a, 0, (length - 1)));
                      while (true)
                      {  
                         {  (if (0 < down) then (if ((C_56 : (C_55 : (a +
@@ -1167,23 +1167,24 @@ let bubble_sort_ensures_sorted =
           while true do
           { invariant
               ((JC_101:
-               eq_int(integer_of_int32(fixed_up), integer_of_int32(up)))
-              and ((JC_104:
-                   ((JC_102: lt_int((0), integer_of_int32(up)))
-                   and (JC_103:
-                       le_int(integer_of_int32(up), integer_of_int32(length)))))
+               (forall k_2:int.
+                ((lt_int(integer_of_int32(up), k_2)
+                 and lt_int(k_2, integer_of_int32(length))) ->
+                 eq_int(integer_of_int32(select(int_P_int_M_a_5,
+                                         shift(a_2, k_2))),
+                 integer_of_int32(select(int_P_int_M_a_5@init,
+                                  shift(a_2@init, k_2@init)))))))
+              and ((JC_102:
+                   sorted(a_2, (0), sub_int(integer_of_int32(up), (1)),
+                   int_P_int_M_a_5))
                   and ((JC_105:
-                       sorted(a_2, (0), sub_int(integer_of_int32(up), (1)),
-                       int_P_int_M_a_5))
+                       ((JC_103: lt_int((0), integer_of_int32(up)))
+                       and (JC_104:
+                           le_int(integer_of_int32(up),
+                           integer_of_int32(length)))))
                       and (JC_106:
-                          (forall k_2:int.
-                           ((lt_int(integer_of_int32(up), k_2)
-                            and lt_int(k_2, integer_of_int32(length))) ->
-                            eq_int(integer_of_int32(select(int_P_int_M_a_5,
-                                                    shift(a_2, k_2))),
-                            integer_of_int32(select(int_P_int_M_a_5@init,
-                                             shift(a_2@init, k_2@init))))))))))
-             }
+                          eq_int(integer_of_int32(fixed_up),
+                          integer_of_int32(up))))))  }
            begin
              [ { } unit { true } ];
             try
@@ -1220,53 +1221,50 @@ let bubble_sort_ensures_sorted =
                      (loop_6:
                      while true do
                      { invariant
-                         ((JC_116:
-                          ((JC_114: le_int((0), integer_of_int32(down)))
-                          and (JC_115:
-                              lt_int(integer_of_int32(down),
-                              integer_of_int32(length)))))
-                         and ((JC_120:
-                              ((JC_117: le_int((0), integer_of_int32(down)))
-                              and ((JC_118:
-                                   le_int(integer_of_int32(down),
-                                   integer_of_int32(up)))
-                                  and (JC_119:
-                                      lt_int(integer_of_int32(up),
-                                      integer_of_int32(length))))))
-                             and ((JC_121:
-                                  sorted(a_2, (0),
-                                  sub_int(integer_of_int32(down), (1)),
-                                  int_P_int_M_a_5))
-                                 and ((JC_122:
-                                      sorted(a_2, integer_of_int32(down),
-                                      integer_of_int32(up), int_P_int_M_a_5))
-                                     and ((JC_123:
-                                          (forall k_1:int.
-                                           ((lt_int(integer_of_int32(up),
-                                             k_1)
-                                            and lt_int(k_1,
-                                                integer_of_int32(length))) ->
-                                            eq_int(integer_of_int32(select(int_P_int_M_a_5,
-                                                                    shift(a_2,
-                                                                    k_1))),
-                                            integer_of_int32(select(int_P_int_M_a_5@init,
-                                                             shift(a_2@init,
-                                                             k_1@init)))))))
+                         ((JC_114:
+                          ((lt_int((0), integer_of_int32(down))
+                           and lt_int(integer_of_int32(down),
+                               integer_of_int32(up))) ->
+                           le_int(integer_of_int32(select(int_P_int_M_a_5,
+                                                   shift(a_2,
+                                                   sub_int(integer_of_int32(down),
+                                                   (1))))),
+                           integer_of_int32(select(int_P_int_M_a_5,
+                                            shift(a_2,
+                                            add_int(integer_of_int32(down),
+                                            (1))))))))
+                         and ((JC_115:
+                              (forall k_1:int.
+                               ((lt_int(integer_of_int32(up), k_1)
+                                and lt_int(k_1, integer_of_int32(length))) ->
+                                eq_int(integer_of_int32(select(int_P_int_M_a_5,
+                                                        shift(a_2, k_1))),
+                                integer_of_int32(select(int_P_int_M_a_5@init,
+                                                 shift(a_2@init, k_1@init)))))))
+                             and ((JC_116:
+                                  sorted(a_2, integer_of_int32(down),
+                                  integer_of_int32(up), int_P_int_M_a_5))
+                                 and ((JC_117:
+                                      sorted(a_2, (0),
+                                      sub_int(integer_of_int32(down), (1)),
+                                      int_P_int_M_a_5))
+                                     and ((JC_121:
+                                          ((JC_118:
+                                           le_int((0),
+                                           integer_of_int32(down)))
+                                          and ((JC_119:
+                                               le_int(integer_of_int32(down),
+                                               integer_of_int32(up)))
+                                              and (JC_120:
+                                                  lt_int(integer_of_int32(up),
+                                                  integer_of_int32(length))))))
                                          and ((JC_124:
-                                              ((lt_int((0),
-                                                integer_of_int32(down))
-                                               and lt_int(integer_of_int32(down),
-                                                   integer_of_int32(up))) ->
-                                               le_int(integer_of_int32(
-                                                      select(int_P_int_M_a_5,
-                                                      shift(a_2,
-                                                      sub_int(integer_of_int32(down),
-                                                      (1))))),
-                                               integer_of_int32(select(int_P_int_M_a_5,
-                                                                shift(a_2,
-                                                                add_int(
-                                                                integer_of_int32(down),
-                                                                (1))))))))
+                                              ((JC_122:
+                                               le_int((0),
+                                               integer_of_int32(down)))
+                                              and (JC_123:
+                                                  lt_int(integer_of_int32(down),
+                                                  integer_of_int32(length)))))
                                              and (JC_125:
                                                  eq_int(integer_of_int32(fixed_up),
                                                  integer_of_int32(up)))))))))
@@ -1766,7 +1764,7 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Normal behavior `sorted'">
     <goal why_file="why/bubble_sort_po9.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "80" begin = "18" end = "36"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po10.why">
@@ -1778,7 +1776,7 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po12.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "80" begin = "18" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po13.why">
@@ -1790,27 +1788,27 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po15.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po16.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po19.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "103" begin = "19" end = "85"/>
       <explain kind = "LoopInvInit"/>
     </goal>
+    <goal why_file="why/bubble_sort_po17.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po18.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po19.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
     <goal why_file="why/bubble_sort_po20.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bubble_sort_po21.why">
@@ -1854,35 +1852,35 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po31.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po32.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "28" end = "41"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po33.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po34.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po35.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po36.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "102" begin = "19" end = "38"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po37.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "103" begin = "19" end = "85"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/bubble_sort_po33.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "102" begin = "19" end = "38"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po34.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "101" begin = "19" end = "39"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po35.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "19" end = "28"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po36.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "100" begin = "24" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po37.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "23" end = "32"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/bubble_sort_po38.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "105" begin = "19" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "99" begin = "28" end = "41"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po39.why">
@@ -1894,23 +1892,23 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bubble_sort_po41.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "81" begin = "18" end = "83"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po42.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "24"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po43.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "22" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bubble_sort_po44.why">
       <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "80" begin = "18" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/bubble_sort_po43.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "18" end = "24"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bubble_sort_po44.why">
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "79" begin = "22" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/bubble_sort_po45.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "81" begin = "18" end = "83"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.c" line = "78" begin = "18" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bubble_sort_po46.why">

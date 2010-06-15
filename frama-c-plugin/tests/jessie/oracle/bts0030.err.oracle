@@ -1,4 +1,4 @@
-File "why/bts0030.why", line 655, characters 5-2480:
+File "why/bts0030.why", line 654, characters 5-2480:
 warning: no postcondition for exception Return_label_exc; false inserted
-File "why/bts0030.why", line 860, characters 47-51:
+File "why/bts0030.why", line 858, characters 47-51:
 warning: no postcondition for exception Return_label_exc; false inserted

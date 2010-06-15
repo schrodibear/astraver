@@ -78,13 +78,13 @@ behavior failure:
       
       {  
          loop 
+         behavior default:
+           invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n - 1)))));
          behavior failure:
-           invariant (C_9 : (\forall integer k;
+           invariant (C_6 : (\forall integer k;
                               ((((0 <= k) && (k < n)) &&
                                  ((t + k).long_M == v)) ==>
                                 ((l <= k) && (k <= u)))));
-         behavior default:
-           invariant (C_6 : ((C_7 : (0 <= l)) && (C_8 : (u <= (n - 1)))));
          variant (C_5 : (u - l));
          while (true)
          {  

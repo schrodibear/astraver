@@ -69,9 +69,9 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_11 : ((C_12 : p{L, Here}(a)) &&
-                               ((C_14 : (0 <= k1)) && (C_15 : (k1 <= len1)))));
-         variant (C_16 : (len1 - k1));
+           invariant (C_12 : ((C_13 : p{L, Here}(a)) &&
+                               ((C_15 : (0 <= k1)) && (C_16 : (k1 <= len1)))));
+         variant (C_11 : (len1 - k1));
          while (true)
          {  
             {  (if (k1 < len1) then () else 

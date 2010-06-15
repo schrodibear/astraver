@@ -2176,8 +2176,10 @@ let logic_variable v =
   let name = opt_app (fun v -> v.vname) v.lv_name v.lv_origin in
   ltype v.lv_type, name
 
-let rec annotation is_axiomatic annot pos = match annot with
-  | Dfun_or_pred info ->
+let rec annotation is_axiomatic annot =
+  match annot with
+  | Dfun_or_pred (info,pos) ->
+      CurrentLoc.set pos;
       begin try
         let params = List.map logic_variable info.l_profile in
         let body =
@@ -2211,41 +2213,49 @@ let rec annotation is_axiomatic annot pos = match annot with
                          name,[],
                          logic_labels info.l_labels,
                          params,body)])
-      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
-	warning "Dropping declaration of predicate %s@." info.l_var_info.lv_name ;
-        []
+      with (Unsupported _ | NotImplemented _)
+        when drop_on_unsupported_feature ->
+	  warning "Dropping declaration of predicate %s@."
+            info.l_var_info.lv_name ;
+          []
       end
 
-  | Dlemma(name,is_axiom,labels,_poly,property) ->
+  | Dlemma(name,is_axiom,labels,_poly,property,pos) ->
+      CurrentLoc.set pos;
       begin try
         [JCDlemma(name,is_axiom,[],logic_labels labels,pred property)]
-      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
-        warning "Dropping lemma %s@." name ;
-        []
+      with (Unsupported _ | NotImplemented _)
+          when drop_on_unsupported_feature ->
+            warning "Dropping lemma %s@." name; []
       end
 
-  | Dinvariant property ->
+  | Dinvariant (property,pos) ->
       begin try
+        CurrentLoc.set pos;
 	let n = translated_name property [] in
         [JCDglobal_inv(n,pred (Logic_utils.get_pred_body property))]
-      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
-        warning "Dropping invariant %s@." property.l_var_info.lv_name ;
-        []
+      with (Unsupported _ | NotImplemented _)
+          when drop_on_unsupported_feature ->
+            warning "Dropping invariant %s@." property.l_var_info.lv_name ;
+            []
       end
 
-  | Dtype_annot annot ->
+  | Dtype_annot (annot,pos) ->
       begin try
+        CurrentLoc.set pos;
 	let n = translated_name annot [] in
         [JCDlogic(
            None,n, [],logic_labels annot.l_labels,
            List.map logic_variable annot.l_profile,
            JCexpr(pred (Logic_utils.get_pred_body annot)))]
-      with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->
-        warning "Dropping type invariant %s@." annot.l_var_info.lv_name;
-        []
+      with (Unsupported _ | NotImplemented _)
+          when drop_on_unsupported_feature ->
+            warning "Dropping type invariant %s@." annot.l_var_info.lv_name;
+            []
       end
 
-  | Dtype info when info.lt_params=[] ->
+  | Dtype (info,pos) when info.lt_params=[] ->
+      CurrentLoc.set pos;
       let myself = mktype (JCPTidentifier (info.lt_name,[])) in
       let mydecl = JCDlogic_type (info.lt_name,[]) in
       let axiomatic ctors =
@@ -2365,15 +2375,16 @@ let rec annotation is_axiomatic annot pos = match annot with
              [JCDaxiomatic (info.lt_name ^ "_axiomatic",
                             List.map (fun x -> mkdecl x pos) axiomatic)])
 
-  | Dtype _info ->
+  | Dtype _ ->
       (* TODO *)
       Extlib.not_yet_implemented "Interp.annotation Dtype"
 
-  | Daxiomatic(id,l) ->
+  | Daxiomatic(id,l,pos) ->
+      CurrentLoc.set pos;
       (*
 	Format.eprintf "Translating axiomatic %s into jessie code@." id;
       *)
-      let l = List.fold_left (fun acc d -> (annotation true d pos)@acc) [] l in
+      let l = List.fold_left (fun acc d -> (annotation true d)@acc) [] l in
       [JCDaxiomatic(id,List.map (fun d -> mkdecl  d pos)
                       (List.rev l))]
 
@@ -2611,7 +2622,7 @@ let global vardefs g =
 
     | GText _ -> [] (* Ignore text in Jessie *)
 
-    | GAnnot(la,pos) -> annotation false la pos
+    | GAnnot(la,_) -> annotation false la
 
   in
   List.map (fun dnode -> mkdecl dnode pos) dnodes

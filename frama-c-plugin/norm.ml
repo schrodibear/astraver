@@ -273,7 +273,7 @@ object(self)
           globinv.l_labels <- [ LogicLabel "Here" ];
           globinv.l_body <- LBpred (predicate v.vdecl p);
           attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
-          ChangeTo [g;GAnnot(Dinvariant globinv,v.vdecl)]
+          ChangeTo [g;GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl)]
         else DoChildren
     | GVarDecl _ | GFun _ | GAnnot _ -> DoChildren
     | GCompTag _ | GType _ | GCompTagDecl _ | GEnumTagDecl _
@@ -425,16 +425,16 @@ object
           ChangeDoChildrenPost
             (Dlogic_axiomatic(name,poly,params,rt,axioms), fun x -> x)
 *)
-      | Dfun_or_pred li ->
+      | Dfun_or_pred (li,loc) ->
           List.iter var li.l_profile;
           begin
             match li.l_type with
               | None -> DoChildren
               | Some rt ->
                   let li' = { li with l_type = Some (return_type rt)}  in
-                  ChangeDoChildrenPost (Dfun_or_pred li', fun x -> x)
+                  ChangeDoChildrenPost (Dfun_or_pred (li',loc), fun x -> x)
           end
-      | Dtype_annot annot ->
+      | Dtype_annot (annot,loc) ->
           begin match (List.hd annot.l_profile).lv_type with
             | Ctype ty when isStructOrUnionType ty ->
                 change_this_type := true;
@@ -445,7 +445,7 @@ object
                 }
                 in
                 ChangeDoChildrenPost
-                  (Dtype_annot annot, fun x -> change_this_type := false; x)
+                  (Dtype_annot (annot,loc), fun x -> change_this_type := false; x)
             | Ctype _ | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ ->
                 DoChildren
           end
@@ -946,7 +946,7 @@ object(self)
                 globinv.l_body <- LBpred (predicate v.vdecl p);
                 attach_globaction
 		  (fun () -> Logic_utils.add_logic_function globinv);
-                [g; GAnnot(Dinvariant globinv,v.vdecl)]
+                [g; GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl)]
               else [g]
           | _ -> assert false
         in

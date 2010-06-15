@@ -108,20 +108,20 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_11 : (index_dest ==
-                               (index_a - nb_occ{Pre}(a, 0, index_a, value))));
+           invariant (C_9 : ((C_10 : (0 <= index_a)) &&
+                              (C_11 : (index_a <= length))));
          behavior default:
-           invariant (C_10 : (\forall integer k;
-                               (((0 <= k) && (k < index_dest)) ==>
-                                 ((dest + k).int_M != value))));
+           invariant (C_8 : (index_dest <= index_a));
          behavior default:
-           invariant (C_7 : ((C_8 : (0 <= index_dest)) &&
-                              (C_9 : (index_dest <= length))));
+           invariant (C_5 : ((C_6 : (0 <= index_dest)) &&
+                              (C_7 : (index_dest <= length))));
          behavior default:
-           invariant (C_6 : (index_dest <= index_a));
+           invariant (C_4 : (\forall integer k;
+                              (((0 <= k) && (k < index_dest)) ==>
+                                ((dest + k).int_M != value))));
          behavior default:
-           invariant (C_3 : ((C_4 : (0 <= index_a)) &&
-                              (C_5 : (index_a <= length))));
+           invariant (C_3 : (index_dest ==
+                              (index_a - nb_occ{Pre}(a, 0, index_a, value))));
          while (true)
          {  
             {  (if (index_a != length) then () else 
@@ -656,32 +656,33 @@ let remove_copy_array_ensures_default =
           (loop_2:
           while true do
           { invariant
-              ((JC_44:
-               ((JC_42: le_int((0), integer_of_int32(index_a)))
-               and (JC_43:
-                   le_int(integer_of_int32(index_a),
-                   integer_of_int32(length_0)))))
-              and ((JC_45:
-                   le_int(integer_of_int32(index_dest),
-                   integer_of_int32(index_a)))
-                  and ((JC_48:
-                       ((JC_46: le_int((0), integer_of_int32(index_dest)))
-                       and (JC_47:
+              ((JC_42:
+               eq_int(integer_of_int32(index_dest),
+               sub_int(integer_of_int32(index_a),
+               nb_occ(a_1, (0), integer_of_int32(index_a), value_0,
+               int_P_a_4_alloc_table@init, int_P_int_M_a_4@init))))
+              and ((JC_43:
+                   (forall k:int.
+                    ((le_int((0), k)
+                     and lt_int(k, integer_of_int32(index_dest))) ->
+                     neq_int(integer_of_int32(select(int_P_int_M_dest_5,
+                                              shift(dest, k))),
+                     integer_of_int32(value_0)))))
+                  and ((JC_46:
+                       ((JC_44: le_int((0), integer_of_int32(index_dest)))
+                       and (JC_45:
                            le_int(integer_of_int32(index_dest),
                            integer_of_int32(length_0)))))
-                      and ((JC_49:
-                           (forall k:int.
-                            ((le_int((0), k)
-                             and lt_int(k, integer_of_int32(index_dest))) ->
-                             neq_int(integer_of_int32(select(int_P_int_M_dest_5,
-                                                      shift(dest, k))),
-                             integer_of_int32(value_0)))))
+                      and ((JC_47:
+                           le_int(integer_of_int32(index_dest),
+                           integer_of_int32(index_a)))
                           and (JC_50:
-                              eq_int(integer_of_int32(index_dest),
-                              sub_int(integer_of_int32(index_a),
-                              nb_occ(a_1, (0), integer_of_int32(index_a),
-                              value_0, int_P_a_4_alloc_table@init,
-                              int_P_int_M_a_4@init))))))))  }
+                              ((JC_48:
+                               le_int((0), integer_of_int32(index_a)))
+                              and (JC_49:
+                                  le_int(integer_of_int32(index_a),
+                                  integer_of_int32(length_0))))))))) 
+             }
            begin
              [ { } unit { true } ];
             try
@@ -779,32 +780,32 @@ let remove_copy_array_safety =
           { invariant (JC_35: true) variant (0) }
            begin
              [ { } unit reads index_a,index_dest,int_P_int_M_dest_5
-               { ((JC_27:
-                  ((JC_25: le_int((0), integer_of_int32(index_a)))
-                  and (JC_26:
-                      le_int(integer_of_int32(index_a),
-                      integer_of_int32(length_0)))))
-                 and ((JC_28:
-                      le_int(integer_of_int32(index_dest),
-                      integer_of_int32(index_a)))
-                     and ((JC_31:
-                          ((JC_29: le_int((0), integer_of_int32(index_dest)))
-                          and (JC_30:
+               { ((JC_25:
+                  eq_int(integer_of_int32(index_dest),
+                  sub_int(integer_of_int32(index_a),
+                  nb_occ(a_1, (0), integer_of_int32(index_a), value_0,
+                  int_P_a_4_alloc_table@init, int_P_int_M_a_4@init))))
+                 and ((JC_26:
+                      (forall k:int.
+                       ((le_int((0), k)
+                        and lt_int(k, integer_of_int32(index_dest))) ->
+                        neq_int(integer_of_int32(select(int_P_int_M_dest_5,
+                                                 shift(dest, k))),
+                        integer_of_int32(value_0)))))
+                     and ((JC_29:
+                          ((JC_27: le_int((0), integer_of_int32(index_dest)))
+                          and (JC_28:
                               le_int(integer_of_int32(index_dest),
                               integer_of_int32(length_0)))))
-                         and ((JC_32:
-                              (forall k:int.
-                               ((le_int((0), k)
-                                and lt_int(k, integer_of_int32(index_dest))) ->
-                                neq_int(integer_of_int32(select(int_P_int_M_dest_5,
-                                                         shift(dest, k))),
-                                integer_of_int32(value_0)))))
+                         and ((JC_30:
+                              le_int(integer_of_int32(index_dest),
+                              integer_of_int32(index_a)))
                              and (JC_33:
-                                 eq_int(integer_of_int32(index_dest),
-                                 sub_int(integer_of_int32(index_a),
-                                 nb_occ(a_1, (0), integer_of_int32(index_a),
-                                 value_0, int_P_a_4_alloc_table@init,
-                                 int_P_int_M_a_4@init)))))))) } ];
+                                 ((JC_31:
+                                  le_int((0), integer_of_int32(index_a)))
+                                 and (JC_32:
+                                     le_int(integer_of_int32(index_a),
+                                     integer_of_int32(length_0))))))))) } ];
             try
              (let jessie_19 =
              begin
@@ -914,69 +915,69 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/weber9_po27.why">
-      <location file = "why/weber9.why" line = "636" begin = "45" end = "46"/>
+      <location file = "why/weber9.why" line = "637" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber9_po28.why">
-      <location file = "why/weber9.why" line = "636" begin = "45" end = "46"/>
+      <location file = "why/weber9.why" line = "637" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/weber9_po1.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "15" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "44" begin = "15" end = "72"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po2.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "20" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "43" begin = "15" end = "74"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po3.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "40" begin = "15" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "15" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po4.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "15" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "20" end = "40"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po5.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "20" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "40" begin = "15" end = "36"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po6.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "43" begin = "15" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "15" end = "27"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po7.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "44" begin = "15" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "20" end = "37"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/weber9_po8.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "15" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "44" begin = "15" end = "72"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber9_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "20" end = "37"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber9_po10.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "40" begin = "15" end = "36"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber9_po11.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "15" end = "30"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber9_po12.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "20" end = "40"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/weber9_po13.why">
       <location file = "PPCHOME/tests/jessie/weber9.c" line = "43" begin = "15" end = "74"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/weber9_po10.why">
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "15" end = "30"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber9_po11.why">
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "41" begin = "20" end = "40"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber9_po12.why">
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "40" begin = "15" end = "36"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber9_po13.why">
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "15" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/weber9_po14.why">
-      <location file = "PPCHOME/tests/jessie/weber9.c" line = "44" begin = "15" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/weber9.c" line = "39" begin = "20" end = "37"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber9_po15.why">

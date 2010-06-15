@@ -95,27 +95,26 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_12 : (\forall integer x;
-                               ((x != val) ==>
-                                 (cnt{Here}(a, i, x) == cnt{Here}(b, j, x)))));
+           invariant (C_8 : ((C_9 : (0 <= j)) &&
+                              ((C_11 : (j <= i)) && (C_12 : (i <= n)))));
          behavior default:
-           invariant (C_11 : (\forall integer k;
-                               (((0 <= k) && (k < j)) ==>
-                                 ((b + k).int_M != val))));
+           invariant (C_7 : (\forall integer k;
+                              (((j <= k) && (k < n)) ==>
+                                ((b + k).int_M == \at((b + k).int_M,Pre)))));
          behavior default:
-           invariant (C_10 : (\forall integer k_0;
-                               (((j <= k_0) && (k_0 < n)) ==>
-                                 ((b + k_0).int_M ==
-                                   \at((b + k_0).int_M,Pre)))));
+           invariant (C_6 : (\forall integer k_0;
+                              (((0 <= k_0) && (k_0 < j)) ==>
+                                ((b + k_0).int_M != val))));
          behavior default:
-           invariant (C_5 : ((C_6 : (0 <= j)) &&
-                              ((C_8 : (j <= i)) && (C_9 : (i <= n)))));
+           invariant (C_5 : (\forall integer x;
+                              ((x != val) ==>
+                                (cnt{Here}(a, i, x) == cnt{Here}(b, j, x)))));
+         behavior default:
+           invariant (C_4 : (j == (i - cnt{Here}(a, i, val))));
          behavior default:
            
            assigns (b + [0..(j - 1)]).int_M;
-         behavior default:
-           invariant (C_3 : (j == (i - cnt{Here}(a, i, val))));
-         variant (C_4 : (n - i));
+         variant (C_3 : (n - i));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -616,25 +615,26 @@ let remove_copy_ensures_default =
           { invariant
               (((JC_50:
                 eq_int(j, sub_int(i, cnt(a_0, i, val_0, int_P_int_M_a_2))))
-               and ((JC_54:
-                    ((JC_51: le_int((0), j))
-                    and ((JC_52: le_int(j, i)) and (JC_53: le_int(i, n_0)))))
-                   and ((JC_55:
+               and ((JC_51:
+                    (forall x:int.
+                     (neq_int(x, val_0) ->
+                      eq_int(cnt(a_0, i, x, int_P_int_M_a_2),
+                      cnt(b, j, x, int_P_int_M_b_3)))))
+                   and ((JC_52:
                         (forall k_0:int.
-                         ((le_int(j, k_0) and lt_int(k_0, n_0)) ->
-                          eq_int(select(int_P_int_M_b_3, shift(b, k_0)),
-                          select(int_P_int_M_b_3@init,
-                          shift(b@init, k_0@init))))))
-                       and ((JC_56:
+                         ((le_int((0), k_0) and lt_int(k_0, j)) ->
+                          neq_int(select(int_P_int_M_b_3, shift(b, k_0)),
+                          val_0))))
+                       and ((JC_53:
                             (forall k:int.
-                             ((le_int((0), k) and lt_int(k, j)) ->
-                              neq_int(select(int_P_int_M_b_3, shift(b, k)),
-                              val_0))))
+                             ((le_int(j, k) and lt_int(k, n_0)) ->
+                              eq_int(select(int_P_int_M_b_3, shift(b, k)),
+                              select(int_P_int_M_b_3@init,
+                              shift(b@init, k@init))))))
                            and (JC_57:
-                               (forall x:int.
-                                (neq_int(x, val_0) ->
-                                 eq_int(cnt(a_0, i, x, int_P_int_M_a_2),
-                                 cnt(b, j, x, int_P_int_M_b_3)))))))))
+                               ((JC_54: le_int((0), j))
+                               and ((JC_55: le_int(j, i))
+                                   and (JC_56: le_int(i, n_0)))))))))
               and ((JC_59:
                    not_assigns(int_P_b_3_alloc_table@loop_2,
                    int_P_int_M_b_3@loop_2, int_P_int_M_b_3,
@@ -739,25 +739,26 @@ let remove_copy_safety =
              [ { } unit reads i,int_P_int_M_b_3,j
                { ((JC_35:
                   eq_int(j, sub_int(i, cnt(a_0, i, val_0, int_P_int_M_a_2))))
-                 and ((JC_39:
-                      ((JC_36: le_int((0), j))
-                      and ((JC_37: le_int(j, i)) and (JC_38: le_int(i, n_0)))))
-                     and ((JC_40:
+                 and ((JC_36:
+                      (forall x:int.
+                       (neq_int(x, val_0) ->
+                        eq_int(cnt(a_0, i, x, int_P_int_M_a_2),
+                        cnt(b, j, x, int_P_int_M_b_3)))))
+                     and ((JC_37:
                           (forall k_0:int.
-                           ((le_int(j, k_0) and lt_int(k_0, n_0)) ->
-                            eq_int(select(int_P_int_M_b_3, shift(b, k_0)),
-                            select(int_P_int_M_b_3@init,
-                            shift(b@init, k_0@init))))))
-                         and ((JC_41:
+                           ((le_int((0), k_0) and lt_int(k_0, j)) ->
+                            neq_int(select(int_P_int_M_b_3, shift(b, k_0)),
+                            val_0))))
+                         and ((JC_38:
                               (forall k:int.
-                               ((le_int((0), k) and lt_int(k, j)) ->
-                                neq_int(select(int_P_int_M_b_3, shift(b, k)),
-                                val_0))))
+                               ((le_int(j, k) and lt_int(k, n_0)) ->
+                                eq_int(select(int_P_int_M_b_3, shift(b, k)),
+                                select(int_P_int_M_b_3@init,
+                                shift(b@init, k@init))))))
                              and (JC_42:
-                                 (forall x:int.
-                                  (neq_int(x, val_0) ->
-                                   eq_int(cnt(a_0, i, x, int_P_int_M_a_2),
-                                   cnt(b, j, x, int_P_int_M_b_3))))))))) } ];
+                                 ((JC_39: le_int((0), j))
+                                 and ((JC_40: le_int(j, i))
+                                     and (JC_41: le_int(i, n_0))))))))) } ];
             try
              (let jessie_19 =
              begin
@@ -848,31 +849,31 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po2.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "19" end = "25"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/burghart1_po3.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "24" end = "30"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/burghart1_po4.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "29" end = "35"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/burghart1_po5.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "69" begin = "19" end = "60"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/burghart1_po6.why">
       <location file = "PPCHOME/tests/jessie/burghart1.c" line = "70" begin = "19" end = "91"/>
       <explain kind = "LoopInvInit"/>
     </goal>
+    <goal why_file="why/burghart1_po3.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "69" begin = "19" end = "60"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/burghart1_po4.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "19" end = "25"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/burghart1_po5.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "24" end = "30"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/burghart1_po6.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "29" end = "35"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
     <goal why_file="why/burghart1_po7.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1491"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1447"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po8.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1491"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1447"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/burghart1_po9.why">
@@ -880,35 +881,35 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po10.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "19" end = "25"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/burghart1_po11.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "24" end = "30"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/burghart1_po12.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "29" end = "35"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/burghart1_po13.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "68" begin = "19" end = "70"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/burghart1_po14.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "69" begin = "19" end = "60"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/burghart1_po15.why">
       <location file = "PPCHOME/tests/jessie/burghart1.c" line = "70" begin = "19" end = "91"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
+    <goal why_file="why/burghart1_po11.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "69" begin = "19" end = "60"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/burghart1_po12.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "68" begin = "19" end = "70"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/burghart1_po13.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "19" end = "25"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/burghart1_po14.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "24" end = "30"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/burghart1_po15.why">
+      <location file = "PPCHOME/tests/jessie/burghart1.c" line = "66" begin = "29" end = "35"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
     <goal why_file="why/burghart1_po16.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1491"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1447"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po17.why">
-      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1491"/>
+      <location file = "PPCHOME/tests/jessie/burghart1.jessie/burghart1.jc" line = "90" begin = "9" end = "1447"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/burghart1_po18.why">

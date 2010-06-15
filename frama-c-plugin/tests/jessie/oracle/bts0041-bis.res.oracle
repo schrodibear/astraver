@@ -521,10 +521,10 @@ behavior default:
       {  
          loop 
          behavior default:
+           invariant (C_34 : (0 <= j));
+         behavior default:
            
            assigns (a_0 + [..]).int_M;
-         behavior default:
-           invariant (C_34 : (0 <= j));
          while (true)
          {  
             {  (if (j < aLength) then () else 

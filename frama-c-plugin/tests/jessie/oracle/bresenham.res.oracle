@@ -93,9 +93,9 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_9 : (((C_11 : (0 <= x)) && (C_12 : (x <= (x2 + 1)))) &&
-                              (C_13 : Invariant{Here}(x, y, e))));
-         variant (C_14 : (x2 - x));
+           invariant (C_10 : (((C_12 : (0 <= x)) && (C_13 : (x <= (x2 + 1)))) &&
+                               (C_14 : Invariant{Here}(x, y, e))));
+         variant (C_9 : (x2 - x));
          while (true)
          {  
             {  (if (x <= x2) then () else 

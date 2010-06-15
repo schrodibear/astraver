@@ -62,15 +62,15 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_6 : (\forall int32 m_0;
-                              (((0 <= m_0) && (m_0 < n)) ==>
-                                ((b + m_0).int_M == \at((b + m_0).int_M,Pre)))));
+           invariant (C_4 : ((C_5 : (0 <= i)) && (C_6 : (i <= n))));
          behavior default:
-           invariant (C_3 : ((C_4 : (0 <= i)) && (C_5 : (i <= n))));
+           invariant (C_3 : (\forall int32 m;
+                              (((0 <= m) && (m < n)) ==>
+                                ((b + m).int_M == \at((b + m).int_M,Pre)))));
          behavior default:
-           invariant (C_2 : (\forall int32 m;
-                              (((0 <= m) && (m < i)) ==>
-                                ((a + m).int_M == (b + m).int_M))));
+           invariant (C_2 : (\forall int32 m_0;
+                              (((0 <= m_0) && (m_0 < i)) ==>
+                                ((a + m_0).int_M == (b + m_0).int_M))));
          while (true)
          {  
             {  (if (i < n) then () else 
@@ -537,27 +537,26 @@ let array_cpy_ensures_default =
          while true do
          { invariant
              ((JC_32:
-              (forall m:int32.
-               ((le_int((0), integer_of_int32(m))
-                and lt_int(integer_of_int32(m), integer_of_int32(i_0))) ->
+              (forall m_0:int32.
+               ((le_int((0), integer_of_int32(m_0))
+                and lt_int(integer_of_int32(m_0), integer_of_int32(i_0))) ->
                 eq_int(integer_of_int32(select(int_P_int_M_a_3,
-                                        shift(a_0, integer_of_int32(m)))),
+                                        shift(a_0, integer_of_int32(m_0)))),
                 integer_of_int32(select(int_P_int_M_b_4,
-                                 shift(b_0, integer_of_int32(m))))))))
-             and ((JC_35:
-                  ((JC_33: le_int((0), integer_of_int32(i_0)))
-                  and (JC_34:
-                      le_int(integer_of_int32(i_0), integer_of_int32(n)))))
+                                 shift(b_0, integer_of_int32(m_0))))))))
+             and ((JC_33:
+                  (forall m:int32.
+                   ((le_int((0), integer_of_int32(m))
+                    and lt_int(integer_of_int32(m), integer_of_int32(n))) ->
+                    eq_int(integer_of_int32(select(int_P_int_M_b_4,
+                                            shift(b_0, integer_of_int32(m)))),
+                    integer_of_int32(select(int_P_int_M_b_4@init,
+                                     shift(b_0@init,
+                                     integer_of_int32(m@init))))))))
                  and (JC_36:
-                     (forall m_0:int32.
-                      ((le_int((0), integer_of_int32(m_0))
-                       and lt_int(integer_of_int32(m_0), integer_of_int32(n))) ->
-                       eq_int(integer_of_int32(select(int_P_int_M_b_4,
-                                               shift(b_0,
-                                               integer_of_int32(m_0)))),
-                       integer_of_int32(select(int_P_int_M_b_4@init,
-                                        shift(b_0@init,
-                                        integer_of_int32(m_0@init))))))))))
+                     ((JC_34: le_int((0), integer_of_int32(i_0)))
+                     and (JC_35:
+                         le_int(integer_of_int32(i_0), integer_of_int32(n)))))))
             }
           begin
             [ { } unit { true } ];
@@ -632,28 +631,28 @@ let array_cpy_safety =
           begin
             [ { } unit reads i_0,int_P_int_M_a_3
               { ((JC_21:
-                 (forall m:int32.
-                  ((le_int((0), integer_of_int32(m))
-                   and lt_int(integer_of_int32(m), integer_of_int32(i_0))) ->
+                 (forall m_0:int32.
+                  ((le_int((0), integer_of_int32(m_0))
+                   and lt_int(integer_of_int32(m_0), integer_of_int32(i_0))) ->
                    eq_int(integer_of_int32(select(int_P_int_M_a_3,
-                                           shift(a_0, integer_of_int32(m)))),
+                                           shift(a_0, integer_of_int32(m_0)))),
                    integer_of_int32(select(int_P_int_M_b_4,
-                                    shift(b_0, integer_of_int32(m))))))))
-                and ((JC_24:
-                     ((JC_22: le_int((0), integer_of_int32(i_0)))
-                     and (JC_23:
-                         le_int(integer_of_int32(i_0), integer_of_int32(n)))))
+                                    shift(b_0, integer_of_int32(m_0))))))))
+                and ((JC_22:
+                     (forall m:int32.
+                      ((le_int((0), integer_of_int32(m))
+                       and lt_int(integer_of_int32(m), integer_of_int32(n))) ->
+                       eq_int(integer_of_int32(select(int_P_int_M_b_4,
+                                               shift(b_0,
+                                               integer_of_int32(m)))),
+                       integer_of_int32(select(int_P_int_M_b_4@init,
+                                        shift(b_0@init,
+                                        integer_of_int32(m@init))))))))
                     and (JC_25:
-                        (forall m_0:int32.
-                         ((le_int((0), integer_of_int32(m_0))
-                          and lt_int(integer_of_int32(m_0),
-                              integer_of_int32(n))) ->
-                          eq_int(integer_of_int32(select(int_P_int_M_b_4,
-                                                  shift(b_0,
-                                                  integer_of_int32(m_0)))),
-                          integer_of_int32(select(int_P_int_M_b_4@init,
-                                           shift(b_0@init,
-                                           integer_of_int32(m_0@init)))))))))) } ];
+                        ((JC_23: le_int((0), integer_of_int32(i_0)))
+                        and (JC_24:
+                            le_int(integer_of_int32(i_0),
+                            integer_of_int32(n))))))) } ];
            try
             (let jessie_15 =
             begin
@@ -730,11 +729,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/weber1_po14.why">
-      <location file = "why/weber1.why" line = "541" begin = "44" end = "45"/>
+      <location file = "why/weber1.why" line = "540" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber1_po15.why">
-      <location file = "why/weber1.why" line = "541" begin = "44" end = "45"/>
+      <location file = "why/weber1.why" line = "540" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

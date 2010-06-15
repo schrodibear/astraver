@@ -87,10 +87,11 @@ behavior default:
          {  
             loop 
             behavior default:
-              invariant (C_3 : (((C_5 : (0 <= c)) &&
-                                  ((C_7 : (c <= i)) && (C_8 : (i <= n)))) &&
-                                 (C_9 : (c == nb_occ{Here}(a, 0, (i - 1), d)))));
-            variant (C_10 : (n - i));
+              invariant (C_4 : (((C_6 : (0 <= c)) &&
+                                  ((C_8 : (c <= i)) && (C_9 : (i <= n)))) &&
+                                 (C_10 : (c ==
+                                           nb_occ{Here}(a, 0, (i - 1), d)))));
+            variant (C_3 : (n - i));
             while (true)
             {  
                {  (if (i < n) then () else 

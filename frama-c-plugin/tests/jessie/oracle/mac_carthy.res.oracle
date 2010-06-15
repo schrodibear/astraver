@@ -117,9 +117,9 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_14 : (iter_f(n, x) == \at(iter_f(n, x),Pre)));
+           invariant (C_14 : (n >= 0));
          behavior default:
-           invariant (C_13 : (n >= 0));
+           invariant (C_13 : (iter_f(n, x) == \at(iter_f(n, x),Pre)));
          while (true)
          {  
             {  (if (n > 0) then () else 
@@ -554,10 +554,10 @@ let f91_nonrec_ensures_default =
         (loop_2:
         while true do
         { invariant
-            ((JC_40: ge_int(mutable_n_1, (0)))
-            and (JC_41:
-                eq_int(iter_f(mutable_n_1, mutable_x_0),
-                iter_f(mutable_n_1@init, mutable_x_0@init))))  }
+            ((JC_40:
+             eq_int(iter_f(mutable_n_1, mutable_x_0),
+             iter_f(mutable_n_1@init, mutable_x_0@init)))
+            and (JC_41: ge_int(mutable_n_1, (0))))  }
          begin
            [ { } unit { true } ];
           try
@@ -614,10 +614,10 @@ let f91_nonrec_safety =
         { invariant (JC_38: true) variant (0) }
          begin
            [ { } unit reads mutable_n_1,mutable_x_0
-             { ((JC_35: ge_int(mutable_n_1, (0)))
-               and (JC_36:
-                   eq_int(iter_f(mutable_n_1, mutable_x_0),
-                   iter_f(mutable_n_1@init, mutable_x_0@init)))) } ];
+             { ((JC_35:
+                eq_int(iter_f(mutable_n_1, mutable_x_0),
+                iter_f(mutable_n_1@init, mutable_x_0@init)))
+               and (JC_36: ge_int(mutable_n_1, (0)))) } ];
           try
            (let jessie_69 =
            begin
@@ -728,11 +728,11 @@ why --project [...] why/mac_carthy.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/mac_carthy_po4.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "56" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "57" begin = "21" end = "56"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/mac_carthy_po5.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "57" begin = "21" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "56" begin = "21" end = "27"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/mac_carthy_po6.why">

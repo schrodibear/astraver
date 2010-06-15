@@ -173,13 +173,13 @@ behavior default:
       {  
          loop 
          behavior default:
-           
-           assigns (Y + [0..((((i - 1) * LDY) + K_0) - 1)]).double_M;
-         behavior default:
            invariant (C_2 : (((C_4 : (0 <= i)) && (C_5 : (i <= N_0))) &&
                               (C_6 : is_exact_int_mat_bounded_by{Here}(
                               Y, LDY, i, K_0, (((1 - p_1) * (p_1 - 1)) * M),
                               (p_1 - 1)))));
+         behavior default:
+           
+           assigns (Y + [0..((((i - 1) * LDY) + K_0) - 1)]).double_M;
          while (true)
          {  
             {  (if (i < N_0) then () else 
@@ -207,9 +207,6 @@ behavior default:
                         {  
                            loop 
                            behavior default:
-                             
-                             assigns (Y + ((i * LDY) + k)).double_M;
-                           behavior default:
                              invariant (C_14 : ((((((C_19 : (0 <= j)) &&
                                                      (C_20 : (j <= M))) &&
                                                     (C_21 : (\double_round_error(
@@ -231,6 +228,9 @@ behavior default:
                                                  (C_24 : (((Y +
                                                              ((i * LDY) + k)).double_M :> real) <=
                                                            (p_1 - 1)))));
+                           behavior default:
+                             
+                             assigns (Y + ((i * LDY) + k)).double_M;
                            while (true)
                            {  
                               {  (if (j < M) then () else 
