@@ -1482,8 +1482,6 @@ let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
           | AVariant _ -> assert false
           | AStmtSpec _ -> assert false
         end
-    | RTE _ -> acc (* RTE are generated later in the PO generation. *)
-
 
 (*****************************************************************************)
 (* Cil to Jessie translation of coding constructs                            *)
