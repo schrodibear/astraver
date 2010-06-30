@@ -75,15 +75,13 @@ let specialize s =
 let rec pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "Bool.bool"
-  | PTunit -> fprintf fmt "Unit.unit"
+  | PTunit -> fprintf fmt "Tuple0.tuple0"
   | PTreal -> fprintf fmt "real"
-  | PTexternal ([],id) -> fprintf fmt "%a" ident id
   | PTvar {tag=t; type_val=None} -> type_var fmt t
   | PTvar {tag=_t; type_val=Some pt} -> pure_type fmt pt
-  | PTexternal ([t],id) -> 
-      fprintf fmt "%a %a" pure_type t ident id
-  | PTexternal (l,id) -> fprintf fmt "(%a) %a" 
-      (print_list comma pure_type) l ident id
+  | PTexternal ([],id) -> fprintf fmt "%a" ident id
+  | PTexternal (l,id) -> fprintf fmt "(%a %a)"
+      ident id (print_list space pure_type) l
 
 let print_builtin fmt = function
   | id when id == t_add_int -> Pp.string fmt "Int.(+)"
@@ -115,7 +113,7 @@ let rec term fmt = function
       then fprintf fmt "Bool.True"
       else fprintf fmt "Bool.False"
   | Tconst ConstUnit -> 
-      fprintf fmt "Unit.Unit" 
+      fprintf fmt "()"
   | Tconst (ConstFloat c) ->
       Print_real.print fmt c
   | Tvar id | Tderef id -> ident fmt id
@@ -129,8 +127,8 @@ let rec term fmt = function
       begin match tl with
         | [] -> fprintf fmt "(%a : %a)" ident id pure_type ret_type
         | _ ->
-            fprintf fmt "(%a(%a) : %a)" 
-              print_builtin id (print_list comma term) tl
+            fprintf fmt "(%a %a : %a)"
+              print_builtin id (print_list space term) tl
               pure_type ret_type
       end      
   | Tnamed (User n, t) ->
@@ -149,7 +147,7 @@ let rec predicate fmt = function
   | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "@[false (* was well_founded(...) *)@]" 
   | Papp (id, l, _) ->
-      fprintf fmt "%a(%a)" print_builtin id (print_list comma term) l
+      fprintf fmt "(%a %a)" print_builtin id (print_list space term) l
   | Ptrue ->
       fprintf fmt "true"
   | Pfalse ->
@@ -217,43 +215,41 @@ let sequent fmt (ctx, p) =
   predicate fmt p
 
 let logic_binder fmt (id, pt) =
-  fprintf fmt "%a: %a" ident id pure_type pt
+  fprintf fmt "(%a : %a)" ident id pure_type pt
 
 let logic_type fmt = function
   | Predicate [] -> ()
   | Function ([], pt) -> fprintf fmt " : %a" pure_type pt
-  | Predicate ptl -> fprintf fmt "(%a)" (print_list comma pure_type) ptl
+  | Predicate ptl -> fprintf fmt "%a" (print_list space pure_type) ptl
   | Function (ptl, pt) -> 
-      fprintf fmt "(%a) : %a" (print_list comma pure_type) ptl pure_type pt
+      fprintf fmt "%a : %a" (print_list space pure_type) ptl pure_type pt
 
 let type_parameters fmt l = 
   let type_var fmt id = fprintf fmt "'%s" id in
   match l with
   | [] -> ()
-  | [id] -> fprintf fmt "%a " type_var id
-  | l -> fprintf fmt "(%a) " (print_list comma type_var) l
+  | l -> fprintf fmt "%a " (print_list space type_var) l
 
 let alg_type_parameters fmt = function
   | [] -> ()
-  | [id] -> fprintf fmt "%a " pure_type id
-  | l -> fprintf fmt "(%a) " (print_list comma pure_type) l
+  | l -> fprintf fmt "%a " (print_list space pure_type) l
 
 let alg_type_constructor fmt (c,pl) =
   match pl with
   | [] -> fprintf fmt "| %a" ident c
-  | _  -> fprintf fmt "| %a (@[%a@])" ident c
-            (print_list comma pure_type) pl
+  | _  -> fprintf fmt "| %a @[%a@]" ident c
+            (print_list space pure_type) pl
 
 let alg_type_single fmt (_, id, d) =
   let vs,cs = specialize d in
-  fprintf fmt "@[%a%a@] =@\n  @[%a@]"
-    alg_type_parameters vs ident id
+  fprintf fmt "@[%a %a@] =@\n  @[%a@]"
+    ident id alg_type_parameters vs
     (print_list newline alg_type_constructor) cs
 
 let decl fmt d = 
   match d with
   | Dtype (_, id, pl) ->
-      fprintf fmt "@[type %a%a@]" type_parameters pl ident id
+      fprintf fmt "@[type %a%a@]" ident id type_parameters pl
   | Dalgtype ls ->
       let andsep fmt () = fprintf fmt "@\n" in
       fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
@@ -262,28 +258,28 @@ let decl fmt d =
       fprintf fmt "@[logic %a %a@]" ident id logic_type lt
   | Dpredicate_def (_, id, def) ->
       let bl,p = specialize def in
-      fprintf fmt "@[<hov 2>logic %a(%a) =@ %a@]" ident id 
-	(print_list comma logic_binder) bl predicate p
+      fprintf fmt "@[<hov 2>logic %a %a =@ %a@]" ident id 
+	(print_list space logic_binder) bl predicate p
   | Dinductive_def (_, id, indcases) ->
       let bl,l = specialize indcases in
       begin match l with
         | [] ->       fprintf fmt 
-	    "@[<hov 0>inductive %a(%a)@]" 
+	    "@[<hov 0>inductive %a %a@]" 
 	      ident id 
-	      (print_list comma pure_type) bl 
+	      (print_list space pure_type) bl 
         | _ ->
             fprintf fmt 
-	      "@[<hov 0>inductive %a(%a)@] =@\n  @[<v 0>%a@]@\n@\n@]" 
+	      "@[<hov 0>inductive %a %a@] =@\n  @[<v 0>%a@]@\n@\n@]" 
 	      ident id 
-	      (print_list comma pure_type) bl 
+	      (print_list space pure_type) bl 
 	      (print_list newline 
 	         (fun fmt (id,p) -> fprintf fmt "@[| %a: %a@]" 
                     ident_capitalize id predicate p)) l
       end
   | Dfunction_def (_, id, def) ->
       let bl,pt,t = specialize def in
-      fprintf fmt "@[<hov 2>logic %a(%a) : %a =@ %a@]" ident id
-	(print_list comma logic_binder) bl pure_type pt term t
+      fprintf fmt "@[<hov 2>logic %a %a : %a =@ %a@]" ident id
+	(print_list space logic_binder) bl pure_type pt term t
   | Daxiom (_, id, p) ->
       let p = specialize p in
       fprintf fmt "@[<hov 2>axiom %s:@ %a@]" 
@@ -297,10 +293,10 @@ let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
 let print_file fmt = 
   fprintf fmt "@[<hov 2>theory Why2@\n";
+  fprintf fmt "use Tuple0@\n";
   fprintf fmt "use int.Int@\n";
   fprintf fmt "use real.Real@\n";
   fprintf fmt "use bool.Bool@\n";
-  fprintf fmt "use unit.Unit@\n";
   iter (decl fmt);
   fprintf fmt "@]@\nend@?"
 
