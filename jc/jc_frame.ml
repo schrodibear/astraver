@@ -56,20 +56,23 @@ open Jc_interp
 open Jc_frame_notin
 
 (*****)
-let test_correct = function
-  | `Logic (f,_,_params) -> 
-      if List.length f.jc_logic_info_labels <> 1 then
-        failwith "Separation predicate generation :
+
+let test_correct_logic f =
+  if List.length f.jc_logic_info_labels <> 1 then
+    failwith "Separation predicate generation :
  Logic must have only one label"
-      else
-        MemoryMap.iter
-          (fun (mc,_distr) _labs -> 
-             match mc with 
-               | JCmem_field _ -> ()
-               | _ -> failwith "Separation predicate generation :
+  else
+    MemoryMap.iter
+      (fun (mc,_distr) _labs -> 
+        match mc with 
+          | JCmem_field _ -> ()
+          | _ -> failwith "Separation predicate generation :
  Only simple memory model"         
-          )
-          f.jc_logic_info_effects.jc_effect_memories
+      )
+      f.jc_logic_info_effects.jc_effect_memories
+
+let test_correct = function
+  | `Logic (f,_,_) -> test_correct_logic f      
   | `Pointer _g -> ()
 
 let if_in_restr restr e = 
@@ -129,12 +132,12 @@ let separation_between queue kind acc a b =
         let mems = inter_memory (finfo,frestr) (ginfo,grestr) in
         MemoryMap.fold
           (fun mem (labf,labg) acc ->
-             let memlf = (mem,labf) in
-             let memlg = (mem,labg) in
+             let memlf = NotIn.from_memory false (mem,labf) in
+             let memlg = NotIn.from_memory false (mem,labg) in
              let disj acc = 
                Queue.add (finfo,(`Disj ,memlf)) queue;
                Queue.add (ginfo,(`Disj ,memlg)) queue;
-               (`Disj (g,f,mem))::acc in
+               (`Disj ((g,memlg),(f,memlf)))::acc in
              match kind with
                | `Sep -> disj acc
                | `Inc -> assert false (* Not Done anymore *)
@@ -149,10 +152,10 @@ let separation_between queue kind acc a b =
              let lab = LogicLabelSet.choose lab in
              if is_same_field mem pa && if_in_restr frestr (fst mem)
              then 
-               let meml = (mem,lab) in
+               let meml = NotIn.from_memory false (mem,lab) in
                let inn acc = 
                  Queue.add (finfo,(`In, meml))  queue;
-                 (`In(pa,f,mem))::acc in
+                 (`In(pa,f,meml))::acc in
                match kind, a with
                  | `Sep, _ -> inn acc
                  | `Inc, `Logic _ -> assert false (* Not Done anymore *)
@@ -207,10 +210,12 @@ let notin_name mem f =
   f.jc_logic_info_final_name^mem_name^notin_suffix
 *)
 
-let in_name mem f = 
+let in_name2 mem f = 
   let mem_name = memory_name mem in  
   f.jc_logic_info_final_name^mem_name^in_suffix
 
+
+let mk_tvar a = new term a.jc_var_info_type (JCTvar a)
 
 let user_predicate_code queue id kind pred =
   let (logic,_) = Hashtbl.find Jc_typing.logic_functions_table id in
@@ -221,29 +226,23 @@ let user_predicate_code queue id kind pred =
       [lab] -> lab | _ -> LabelHere in
   let trad_code = function
     | `Diff (a,b) -> 
-        let ta = tvar ~label_in_name:true lab a in
-        let tb = tvar ~label_in_name:true lab b in
-        LNot (make_eq ta tb)
+      new assertion (JCArelation (mk_tvar a,(`Bneq,`Pointer),mk_tvar b))
     | `In (a,(f,fparams),mem) -> 
-        let params = List.map (fun (s,_) -> LVar s) 
-          (make_args ~parameters:fparams f) in
-        let ta = tvar ~label_in_name:true lab a in
-        LNot (MyBag.make_in ta (LApp(in_name mem f,params)))
-    | `Disj ((f,fparams),(g,gparams),mem) -> 
-        let g_params = List.map (fun (s,_) -> LVar s) 
-          (make_args ~parameters:gparams g) in
-        let in_g = LApp(in_name mem g,g_params) in
-        let f_params = List.map (fun (s,_) -> LVar s)
-          (make_args ~parameters:fparams f) in
-        let in_f = LApp(in_name mem f,f_params) in
-        LPred(disj_pred,[in_f;in_g]) in
+        let params = List.map mk_tvar fparams in
+        (*(make_args ~parameters:fparams f)*)
+        let app = app_in_logic f params lab mem in
+        let app = MyBag.make_jc_in [mk_tvar a;app] in
+        new assertion (JCAnot app)
+    | `Disj (((f,fparams),memf),((g,gparams),memg)) -> 
+      let fparams = List.map mk_tvar fparams in
+      let gparams = List.map mk_tvar gparams in
+        (*(make_args ~parameters:fparams f)*)
+      let fapp = app_in_logic f fparams lab memf in
+      let gapp = app_in_logic g gparams lab memg in
+      MyBag.make_jc_disj [fapp;gapp] in
   let code = List.map trad_code code in
-  let code = make_and_list code in
-  let args = make_args logic in
-  Predicate(false,
-            logic.jc_logic_info_name,
-            args,
-            code)
+  let code = new assertion (JCAand code) in
+  Hashtbl.replace Jc_typing.logic_functions_table id (logic,JCAssertion code)
 
 let pragma_gen_sep = Jc_typing.pragma_gen_sep
 
@@ -251,26 +250,26 @@ let predicates_to_generate = Hashtbl.create 10
 
 let compute_needed_predicates () = 
   let queue = Queue.create () in
-  Hashtbl.iter (fun key value ->
-                  match value with
-                    | (kind,params,None) -> 
-                        let code = user_predicate_code queue key kind params in
-                        Hashtbl.replace pragma_gen_sep key 
-                          (kind,params,Some code)
-                    | (_,_,Some _) -> assert false)
+  Hashtbl.iter (fun key (kind,preds) -> 
+    user_predicate_code queue key kind preds)
     pragma_gen_sep;
   (* use the call graph to add the others needed definitions*)
   while not (Queue.is_empty queue) do
-    let (f,((_,(mem,_)) as e)) = Queue.pop queue in
+    let (f,((_,mem) as e)) = Queue.pop queue in
     let tag = f.jc_logic_info_tag in
     let l = Hashtbl.find_all predicates_to_generate tag in
     if not (List.mem e l) 
     then 
       begin 
-        if MemoryMap.mem mem 
+        if MemoryMap.mem mem.NotIn.mem
           f.jc_logic_info_effects.jc_effect_memories
         then
           begin
+            begin
+              match e with
+                | `In, mem -> ignore (get_in_logic f mem)
+                | `Disj, _ -> ()
+            end;
             Hashtbl.add predicates_to_generate tag e;
             (* The user predicate has a particular traitement *)
             if not (Hashtbl.mem pragma_gen_sep f.jc_logic_info_tag) then
@@ -560,70 +559,6 @@ let reduce f = function
 let (|>) x y = y x
 
 let select_name = "select"
-
-module NotIn =
-struct
-  type t = {
-    for_one : bool; (*true if its not a bag but one element (a singleton) *)
-    mem : Memory.t;
-    label : label;
-    mem_name : string;
-    name : string;
-    ty_mem : logic_type;
-  }
-    
-  let compare t1 t2 = Memory.compare t1.mem t2.mem
-      
-  let from_memory for_one (((mc,_distr) as m),label) = 
-    let (s,_,_) = tmemory_param ~label_in_name:true label m
-      (*memory_name (mc,distr)*) in
-    if for_one
-    then     
-      {for_one = true;
-       mem = m;
-       label = label;
-       mem_name = s;
-       name = s^in_suffix^"_elt";
-       ty_mem = memory_type mc}
-    else
-      {for_one = false;
-       mem = m;
-       label = label;
-       mem_name = s;
-       name = s^in_suffix;
-       ty_mem = memory_type mc}
-
-  let is_memory t m = 
-    (*Jc_options.lprintf "is_memory : %s = %s@." m t.mem_name;*)
-    m = t.mem_name
-  let is_memory_var t = function
-    | LVar m -> is_memory t m
-    | _ -> false
-
-  let notin_args t = LVar (t.name)
-
-  let for_one t = t.for_one
-  let name t = t.name
-  let var t = LVar t.name
-  let ty_elt t = raw_pointer_type (fst (deconstruct_memory_type_args t.ty_mem))
-  let ty_elt_val t = snd (deconstruct_memory_type_args t.ty_mem)
-
-  let ty t = 
-    let ty = ty_elt t in
-    if t.for_one 
-    then ty 
-    else MyBag.ty ty
-
-  let mem_name t = t.mem_name
-  let mem_name2 t = 
-    let mem_name = memory_name t.mem in
-    if t.for_one 
-    then mem_name^"_elt"
-    else mem_name
-end
-
-module NotInSet = Set.Make(NotIn)
-module NotInMap = Map.Make(NotIn)
 
 let push_not e = 
   let rec pos = function
@@ -1501,8 +1436,6 @@ struct
         (interp s lt) lt
     | _ -> failwith "Not Implemented, not in formula"
 
-  let in_name notin s = s^(NotIn.mem_name2 notin)^in_suffix
-
   let in_interp_app var notin s lt =
     if s = select_name then
       match lt with
@@ -1551,8 +1484,8 @@ struct
            d'inductif en 1 unique axiom*)
       | [Inductive (_,f_name,params,l)] -> 
         let name = (in_name notin f_name) in
-        Jc_options.lprintf "Generate logic in : %s :@." name;
-        let acc = Logic(false, name, params, NotIn.ty notin)::acc in
+        Jc_options.lprintf "Define logic in : %s :@." name;
+        (* let acc = Logic(false, name, params, NotIn.ty notin)::acc in *)
         let var = ("jc_var",NotIn.ty_elt notin) in
         let gen_case acc (ident,assertion) =
           let effects = inductive_extract_effect assertion in
@@ -1602,7 +1535,7 @@ struct
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_In notin ta_conv acc
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a" 
-          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;acc
+          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
 
   let rec define_disj notin ta_conv acc = 
     match ta_conv with 
@@ -1651,8 +1584,8 @@ struct
           let term = extract_term ax_asser in
           let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
           define_disj notin ta_conv acc
-      | _ -> assert false
-
+      | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a" 
+          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
 
   let gen axiom_name f_name gen_framed in_update params framed_params = 
     let elt = "elt"^tmp_suffix in
@@ -1778,13 +1711,37 @@ let tr_logic_fun_aux f ta acc =
   (* generation of ft *)
   let acc =
     if Jc_options.gen_frame_rule_with_ft 
-    then 
-      begin 
+    then if Hashtbl.mem pragma_gen_sep f.jc_logic_info_tag
+      then begin
+        (* use_predicate *)
+        let (_,which) = Hashtbl.find pragma_gen_sep f.jc_logic_info_tag in
+        let todos =
+          Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
+        let fold acc = function
+          | `Logic (f,_,params) -> (f,make_args ~parameters:params f) ::acc
+          | `Pointer _ -> acc in
+        let framed = List.fold_left fold [] which in
+        let args = make_args f in
+        let print_todo fmt = function
+          | (`In,_) -> fprintf fmt "in"
+          | (`Disj,_) -> fprintf fmt "disj" in
+        Jc_options.lprintf "user predicate %s asks to generate : %a@."
+          f.jc_logic_info_name (Pp.print_list Pp.comma print_todo) todos;
+        let make_todo acc (todo,notin) =
+          match todo with
+            | `In ->
+              InDisj.in_for_in f.jc_logic_info_name args notin framed acc
+            | `Disj ->
+              InDisj.disj_for_in f.jc_logic_info_name args notin framed acc in
+        let acc = List.fold_left make_todo acc todos in
+        acc
+      end
+      else begin 
         let f_name = f.jc_logic_info_final_name in
         let todos = 
           Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
         let filter_notin acc = function
-          | (`In , mem) -> (NotIn.from_memory false mem)::acc
+          | (`In , notin) -> notin::acc
           | _ -> acc in
         (* notin_updates is used to create the frames axioms *)
         let notin_updates = List.fold_left filter_notin [] todos in
@@ -1793,10 +1750,9 @@ let tr_logic_fun_aux f ta acc =
            | (`In,_) -> fprintf fmt "in" in
         Jc_options.lprintf "%s asks to generate : %a@." 
           f_name (Pp.print_list Pp.comma print_todo) todos;
-        let make_todo acc (todo,mem) =
+        let make_todo acc (todo,notin) =
           match todo with
             | `In -> 
-                let notin = NotIn.from_memory false mem in
                 let acc = InDisj.define_In notin fun_def acc in
                 let acc =
                   List.fold_left
@@ -1804,7 +1760,6 @@ let tr_logic_fun_aux f ta acc =
                     acc notin_updates in
                 acc
             | `Disj -> 
-                let notin = NotIn.from_memory false mem in
                 let acc = InDisj.define_disj notin fun_def acc  in
                 acc in
         let acc = List.fold_left make_todo acc todos in
@@ -1813,30 +1768,6 @@ let tr_logic_fun_aux f ta acc =
           acc notin_updates
       end
     else acc in 
-  acc
-
-let user_predicate_ft f _ which acc =
-  let todos =
-    Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
-  let fold acc = function
-    | `Logic (f,_,params) -> (f,make_args ~parameters:params f) ::acc
-    | `Pointer _ -> acc in
-  let framed = List.fold_left fold [] which in
-  let args = make_args f in
-  let print_todo fmt = function
-    | (`In,_) -> fprintf fmt "in"
-    | (`Disj,_) -> fprintf fmt "disj" in
-  Jc_options.lprintf "user predicate %s asks to generate : %a@."
-    f.jc_logic_info_name (Pp.print_list Pp.comma print_todo) todos;
-  let make_todo acc (todo,mem) =
-    match todo with
-      | `In ->
-          let notin = NotIn.from_memory false mem in
-          InDisj.in_for_in f.jc_logic_info_name args notin framed acc
-      | `Disj ->
-          let notin = NotIn.from_memory false mem in
-          InDisj.disj_for_in f.jc_logic_info_name args notin framed acc in
-  let acc = List.fold_left make_todo acc todos in
   acc
 
 
@@ -1908,15 +1839,7 @@ let user_predicate_ft f _ which acc =
 (*     ) li.jc_logic_info_effects.jc_effect_memories acc *)
 
 
-let tr_logic_fun ft ta acc = 
-  (* If the logic function is a user generated predicate then
-     we replaced it by the one previously computed *)
-  if Jc_options.gen_frame_rule_with_ft &&
-    Hashtbl.mem pragma_gen_sep ft.jc_logic_info_tag
-  then match Hashtbl.find pragma_gen_sep ft.jc_logic_info_tag with
-    | (_,_,None) -> assert false
-    | (_,w,Some code) -> user_predicate_ft ft ta w (code::acc)
-  else tr_logic_fun_aux ft ta acc
+let tr_logic_fun ft ta acc = tr_logic_fun_aux ft ta acc
 
 (*
   Local Variables: 

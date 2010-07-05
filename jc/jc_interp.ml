@@ -539,6 +539,7 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
       (* identity *)
     | JCTnative t, JCTnative u when t = u -> e'
     | (JCTlogic _|JCTtype_var _), (JCTlogic _|JCTtype_var _) when aux ty_dst ty_src -> e'
+    | (JCTtype_var _, JCTpointer _) -> e'
     | JCTany, JCTany -> e'
       (* between integer/enum and real *)
     | JCTnative Treal, JCTnative Tinteger -> 

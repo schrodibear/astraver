@@ -63,12 +63,14 @@ type jc_type =
   | JCTenum of enum_info
   | JCTpointer of pointer_class * Num.num option * Num.num option
   | JCTnull
-  | JCTany (* used when typing (if ... then raise E else ...): raise E is any *)
+  | JCTany (* used when typing (if ... then raise E else ...): 
+              raise E is any *)
   | JCTtype_var of type_var_info
 
 and type_var_info =  { jc_type_var_info_name : string;
                        jc_type_var_info_tag : int;
-                       jc_type_var_info_univ : bool} (* The variable is universally quantified *)
+                       jc_type_var_info_univ : bool} 
+(* The variable is universally quantified *)
 
 and pointer_class =
   | JCtag of struct_info * jc_type list (* struct_info, type parameters *)

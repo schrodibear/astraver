@@ -173,6 +173,14 @@ let main () =
     (* phase 8: computation of effects *)
     compute_effects logic_components components;
 
+    (* (optional) 
+       generation of the separation predicates : compute the needed 
+       generated predicates *)
+    if Jc_options.gen_frame_rule_with_ft then
+      (Jc_options.lprintf "Compute needed predicates@.";
+       Jc_frame.compute_needed_predicates ());
+
+
     (* (optional) phase 9: checking structure invariants *)
     begin match !Jc_options.inv_sem with
       | InvOwnership ->
@@ -297,11 +305,6 @@ let main () =
     in
     push_decls (treat_enum_pairs enumlist);
 
-    (* generation of the separation predicates : compute the needed 
-       generated predicates *)
-    if Jc_options.gen_frame_rule_with_ft then
-      (Jc_options.lprintf "Compute needed predicates@.";
-       Jc_frame.compute_needed_predicates ());
 
     (* production phase 4.1: generation of Why logic functions *)
     Jc_options.lprintf "Translate logic functions@.";

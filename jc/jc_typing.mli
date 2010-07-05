@@ -109,12 +109,10 @@ val type_labels_in_decl : nexpr decl -> unit
 val pragma_gen_sep :  (int,
    [ `Sep | `Inc | `Cni] *
    [ `Logic of Jc_fenv.logic_info * string list * Jc_env.var_info list
-   | `Pointer of Jc_env.var_info ] list 
-                       * Output.why_decl option) Jc_stdlib.Hashtbl.t
+   | `Pointer of Jc_env.var_info ] list) Jc_stdlib.Hashtbl.t
 
-val pragma_gen_frame : (int,
-   Jc_envset.StringMap.key * Jc_envset.StringMap.key * Jc_env.var_info list *
-   Output.why_decl option)
+val pragma_gen_frame : 
+  (int, Jc_fenv.logic_info * Jc_fenv.logic_info * Jc_env.var_info list)
   Jc_stdlib.Hashtbl.t
 
 val comparable_types : jc_type -> jc_type -> bool
