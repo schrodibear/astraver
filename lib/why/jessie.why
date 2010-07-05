@@ -917,12 +917,12 @@ axiom disj_sym : forall s1,s2 : 'a mybag[disj_mybag(s1,s2)]. disj_mybag(s1,s2) -
 (* footprint, memory after, memory before *)
 logic frame_between : 'a pointer mybag, ('a,'b) memory, ('a,'b) memory -> prop
 
-axiom refl :
+axiom frame_between_refl :
       forall sa : 'a pointer mybag.
       forall m : ('a,'b) memory[frame_between(sa,m,m)].
       frame_between(sa,m,m)
 
-axiom gen :
+axiom frame_between_gen :
       forall sa : 'a pointer mybag.
       forall m1,m2 : ('a,'b) memory.
       forall p : 'a pointer.

@@ -1363,6 +1363,8 @@ sig
     NotIn.t ->
     Output.why_decl list ->
     Output.why_decl list -> Output.why_decl list
+  val define_frame_between : Jc_frame_notin.NotIn.t ->
+  Output.why_decl list -> Output.why_decl list -> Output.why_decl list
   val def_frame_in :  string -> NotIn.t -> (string * Output.logic_type) list ->
     Output.why_decl list -> NotIn.t list -> Output.why_decl list
   val def_frame : string -> bool -> (string * Output.logic_type) list ->
@@ -1490,15 +1492,21 @@ struct
     else
     LPred(disj_pred,[LVar (fst var);LApp(in_name notin s, lt)])
 
+  let frame_between_interp_app var_mem notin s lt =
+    assert (s <> select_name);
+    LPred(frame_between_name, [LApp(in_name notin s, lt);
+                               LVar (fst var_mem);
+                               LVar (NotIn.mem_name notin)])
+
   let mem_are_compatible notin (_,lt) =
     List.exists (NotIn.is_memory_var notin) lt
 
   let inductive_to_axioms name (pname,var,fname,lt) l acc =
-    let var = ((fst var)^tmp_suffix,snd var) in
-    let lt = List.map (fun (s,ty) -> (s^tmp_suffix,ty)) lt in 
     let constr acc (ident,assertion) = 
       Axiom (name^fname^ident,assertion)::acc in
     let acc = List.fold_left constr acc l in
+    let var = ((fst var)^tmp_suffix,snd var) in
+    let lt = List.map (fun (s,ty) -> (s^tmp_suffix,ty)) lt in 
     let rec rewrite = function
       | LForall(v,t,_,a) -> LExists(v,t,[],rewrite a)
       | LImpl(f1,f2) -> LAnd(f1,rewrite f2)
@@ -1625,6 +1633,76 @@ struct
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a" 
           (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
 
+  let rec add_triggers tr = function
+    | LForall(vn,vt,[],(LForall _ as t)) -> LForall(vn,vt,[],add_triggers tr t)
+    | LForall(vn,vt,trs,t) -> LForall(vn,vt,tr::trs,t)
+    | _ -> assert false
+
+  let rec define_frame_between notin ta_conv acc = 
+    match ta_conv with 
+        (* Devrait peut-être utiliser la vrai transformation 
+           d'inductif en 1 unique axiom*)
+      | [Inductive (_,f_name,_,l)] -> 
+        let name = (in_name notin f_name) in
+        Jc_options.lprintf "Define logic in : %s :@." name;
+        (* let acc = Logic(false, name, params, NotIn.ty notin)::acc in *)
+        let var = ("jc_mem", notin.NotIn.ty_mem) in
+        let gen_case acc (ident,assertion) =
+          let effects = inductive_extract_effect assertion in
+          let effects = 
+            List.filter (fun (s,_) -> not (s = select_name)) effects in
+          let effects = List.filter (mem_are_compatible notin) effects in
+          let nb = ref 0 in
+          let rewrite acc (seff,lteff) =
+            incr nb;
+            let frameeff = frame_between_interp_app var notin seff lteff in
+            let rw s lt =
+              make_impl frameeff (frame_between_interp_app var notin s lt) in
+            let assertion =
+              LForall(fst var,snd var,[],
+                      rewrite_inductive_case rw assertion) in
+            let assertion = add_triggers [LPatP frameeff] assertion in
+            (ident^(string_of_int !nb), assertion) :: acc in
+          List.fold_left rewrite acc effects in
+        let l = List.fold_left gen_case [] l in
+        let constr acc (ident,assertion) = 
+          Axiom (frame_between_name^f_name^ident,assertion)::acc in
+        List.fold_left constr acc l
+      | [Function (_,f_name,params,_,term)] ->
+          let name = in_name notin f_name in
+          Jc_options.lprintf "Generate logic notin (fun): %s :@." name;
+          let acc = Logic(false,
+                          name,
+                          params,
+                          NotIn.ty notin)::acc in
+          let axiom_name = "axiom"^"_in_"^(NotIn.mem_name2 notin)^f_name in
+          Jc_options.lprintf "Generate axiom notin : %s :@." axiom_name;
+          let var = ("jc_mem",NotIn.ty notin) in
+          let interp s lt = 
+            if mem_are_compatible notin (s,lt) && s <> select_name
+            then frame_between_interp_app var notin s lt
+            else LFalse in
+          let asser = term_interp_or interp term in
+          let conclu = frame_between_interp_app var notin f_name 
+            (List.map (fun (x,_) -> LVar x) params) in
+          let asser = make_equiv asser conclu in
+          let params = var::params in
+          let asser = make_forall_list params [] asser in
+          let asser = Axiom (axiom_name,asser) in
+          asser::acc
+      | [Logic(_bool,f_name,params,_ltype);
+         Axiom(_,ax_asser)] ->
+          let rec extract_term = function
+            | LForall (_,_,_,asser) -> extract_term asser
+            | LPred("eq", [ _; b ]) -> b
+            | _ -> assert false (* constructed by tr_fun_def *) in
+          let term = extract_term ax_asser in
+          let ta_conv = [Function (_bool,f_name,params,_ltype,term)] in
+          define_frame_between notin ta_conv acc
+      | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a" 
+          (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+
+
   let gen axiom_name f_name gen_framed in_update params framed_params =
     (* frame for one update *)
     let elt = "elt"^tmp_suffix in
@@ -1632,8 +1710,9 @@ struct
     let framed_normal_params = framed_params
       |> List.map fst in
     let framed_update_params = 
+      let notin_mem_name = NotIn.mem_name in_update in
       List.map (fun name ->
-	if name = NotIn.mem_name in_update then
+	if name = notin_mem_name then
 	  LApp("store",[LVar name;LVar elt;LVar elt_val])
 	else LVar name
       ) framed_normal_params in
@@ -1667,7 +1746,7 @@ struct
     (* frame for many update *)
     let mems = List.map (fun notin ->
       let mem_name = NotIn.mem_name notin in
-      let ft = "ft"^tmp_suffix in
+      let ft = "ft"^mem_name^tmp_suffix in
       let mem1 = mem_name in
       let mem2 = mem_name^"2" in
       (ft,mem1,mem2,notin)) notins in
@@ -1869,6 +1948,7 @@ let tr_logic_fun_aux f ta acc =
           match todo with
             | `In -> 
                 let acc = InDisj.define_In notin fun_def acc in
+                let acc = InDisj.define_frame_between notin fun_def acc in
                 let acc = 
                   InDisj.def_frame_in f_name notin params acc notin_updates in
                 acc
