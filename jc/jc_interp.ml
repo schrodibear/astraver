@@ -2459,7 +2459,11 @@ and expr e =
 		    LPred(r,[this_measure_why;cur_measure_why])
 		  in
 		  make_check ~mark:e#mark ~kind:VarDecr e#pos 
-		    (Assert(`ASSERT,pre,call))		  
+(* Francois mardi 29 juin 2010 : `ASSERT -> `CHECK
+   if this_measure_why = 0 and cur_measure_why = 0 then this assert is not 
+   false (0>0) so all the remaining goal are trivial. *)
+		    (Assert(`CHECK,pre,call))	
+
                   with Exit -> call
 		else call
 	      in
