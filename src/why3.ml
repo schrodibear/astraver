@@ -143,7 +143,8 @@ let rec predicate fmt = function
   | Papp (id, [t1; t2], _) when is_neq id ->
       fprintf fmt "(%a <> %a)" term t1 term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[(Int.(<=)(0,%a) and@ Int.(<)(%a,%a))@]" term b term a term b
+      fprintf fmt "@[(Int.(<=)(0,%a) and@ Int.(<)(%a,%a))@]"
+        term b term a term b
   | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "@[false (* was well_founded(...) *)@]" 
   | Papp (id, l, _) ->
@@ -161,9 +162,9 @@ let rec predicate fmt = function
 	term a predicate b predicate c
   | Pand (_, _, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" predicate a predicate b
-  | Forallb (_, ptrue, pfalse) ->
-      fprintf fmt "(@[forallb(%a,@ %a)@])" 
-	predicate ptrue predicate pfalse
+  | Forallb (_, _ptrue, _pfalse) -> assert false (* TODO What is it? *)
+      (* fprintf fmt "(@[forallb(%a,@ %a)@])"  *)
+      (*   predicate ptrue predicate pfalse *)
   | Por (a, b) ->
       fprintf fmt "(@[%a or@ %a@])" predicate a predicate b
   | Pnot a ->
@@ -249,7 +250,7 @@ let alg_type_single fmt (_, id, d) =
 let decl fmt d = 
   match d with
   | Dtype (_, id, pl) ->
-      fprintf fmt "@[type %a%a@]" ident id type_parameters pl
+      fprintf fmt "@[type %a %a@]" ident id type_parameters pl
   | Dalgtype ls ->
       let andsep fmt () = fprintf fmt "@\n" in
       fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
