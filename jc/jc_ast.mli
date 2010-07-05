@@ -272,6 +272,7 @@ type 'expr decl_node =
   | JCDabstract_domain of Jc_env.abstract_domain 
   | JCDint_model of Jc_env.int_model
   | JCDpragma_gen_sep of string * string * (ptype * string list) list
+  | JCDpragma_gen_frame of string * string
   | JCDaxiomatic of string * 'expr decl list
 
 

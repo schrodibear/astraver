@@ -463,6 +463,8 @@ let rec pdecl fmt d =
           print_pair ptype (print_list semi string) in
         fprintf fmt "# Gen_Separation %s %s(%a)\n" kind s 
           (print_list comma print_ptype_r) l
+    | JCDpragma_gen_frame (name,logic) ->
+      fprintf fmt "# Gen_Frame %s %s" name logic
     | JCDaxiomatic(id,l) ->
 	fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
 	  (print_list space pdecl) l

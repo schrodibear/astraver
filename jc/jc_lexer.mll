@@ -297,6 +297,7 @@ rule token = parse
         space* ((rL | rD)+ as v) space* '\n'
       { pragma lexbuf id v; newline lexbuf; token lexbuf } 
   | '#' ' '* "Gen_Separation" { PRAGMA_GEN_SEP }
+  | '#' ' '* "Gen_Frame" { PRAGMA_GEN_FRAME }
   | rL (rL | rD)*           { match lexeme lexbuf with
 				| "_" -> UNDERSCORE
 				| s -> IDENTIFIER s }

@@ -84,6 +84,8 @@ let variables_env = Hashtbl.create 97
 
 (* Store the generated user predicates *)
 let pragma_gen_sep = Hashtbl.create 10
+let pragma_gen_frame = Hashtbl.create 10
+
 (* Keep the pragma which are defined 
    before one of its argument *)
 let pragma_before_def = Hashtbl.create 10
@@ -835,7 +837,7 @@ let rec term env e =
           in
           vi.jc_var_info_type, vi.jc_var_info_region, JCTvar vi
 	with Not_found ->
-          (* François : Où teste-t-on que pi n'a pas d'argument? *)
+          (* FranÃ§ois : OÃ¹ teste-t-on que pi n'a pas d'argument? *)
 	  let pi = 
             try Hashtbl.find logic_functions_env id with Not_found ->
               typing_error e#pos "unbound term identifier %s" id
@@ -2447,7 +2449,7 @@ let rec type_labels_in_decl d = match d#node with
   | JCDtermination_policy _ | JCDlogic_var _ ->
       ()
   | JCDaxiomatic(_id,l) -> List.iter type_labels_in_decl l
-  | JCDpragma_gen_sep _ -> ()
+  | JCDpragma_gen_sep _ | JCDpragma_gen_frame _ -> ()
 
 
 (* <====== A partir d'ici, c'est pas encore fait *)
@@ -2871,6 +2873,56 @@ let update_axiomatic axiomatic pi =
   
 exception Identifier_Not_found of string
 
+let create_pragma_gen_frame loc id logic =
+  let info = 
+    try 
+      find_logic_info logic
+    with Not_found -> typing_error loc "logic unknown %s" logic in
+  let params = info.jc_logic_info_parameters in
+  let pi = make_pred id in
+  pi.jc_logic_info_parameters <- params;
+  let label1 = LabelName { 
+    label_info_name = "L1";
+    label_info_final_name = "L1";
+    times_used = 0;
+  } in
+  let label2 = LabelName { 
+    label_info_name = "L2";
+    label_info_final_name = "L2";
+    times_used = 0;
+  } in
+  pi.jc_logic_info_labels <- [label1;label2];
+  Hashtbl.replace logic_functions_env id pi;
+  let def = 
+    let param = List.map 
+      (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
+      params in
+    begin
+      match info.jc_logic_info_result_type with
+        | None ->
+          let app label = new assertion (JCAapp {jc_app_fun = info;
+                             jc_app_args = param;
+                             jc_app_region_assoc = [];
+                             jc_app_label_assoc = 
+              label_assoc loc "bug in the generation" 
+                (Some label) info.jc_logic_info_labels []
+                 }) in
+          make_and (app label1) (app label2)
+        | Some ty -> 
+          let term label = new term ~pos:loc ~typ:ty
+            (JCTapp {jc_app_fun = info;
+                     jc_app_args = param;
+                     jc_app_region_assoc = [];
+                     jc_app_label_assoc = 
+                label_assoc loc "bug in the generation" 
+                  (Some label) info.jc_logic_info_labels []}) in
+          new assertion (make_rel_bin_op loc `Beq (term label1) (term label2))
+    end in
+  let def = JCAssertion def in
+  Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
+  Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag
+    (id,logic,params,(None:Output.why_decl option))
+
 
 let create_pragma_gen_sep_logic_aux loc kind id li =
   let translate_param (p,restr) = 
@@ -3270,7 +3322,7 @@ of an invariant policy";
 		    end
 		      (*
 			| JCaxiomatic l ->
-			JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
+			JCAxiomatic(List.map (fun (id,e) -> (id,assertion param(_env e)) l)
 		      *)
 	      | JCinductive _ ->
 		  typing_error d#pos
@@ -3299,10 +3351,17 @@ of an invariant policy";
                     "A Gen_separation inc or cni pragma should \
                      have 2 arguments (%i given)" (List.length li)
               | _ -> typing_error loc 
-                  "I don't know that kind of Gen_separation pragma : %s" kind in
+                  "I don't know that kind of Gen_separation pragma : %s" 
+                kind in
             create_pragma_gen_sep_logic loc kind id li
           end;
 	acc
+    | JCDpragma_gen_frame(name,logic) -> 
+        if Jc_options.gen_frame_rule_with_ft && not only_types then
+	  begin
+            create_pragma_gen_frame loc name logic
+          end;
+      acc
     | JCDaxiomatic(id,l) -> 
 	Jc_options.lprintf "Typing axiomatic %s@." id;
 	let data = 

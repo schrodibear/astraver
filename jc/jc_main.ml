@@ -297,7 +297,8 @@ let main () =
     in
     push_decls (treat_enum_pairs enumlist);
 
-    (* generation of the separation predicates : compute the needed generated predicates *)
+    (* generation of the separation predicates : compute the needed 
+       generated predicates *)
     if Jc_options.gen_frame_rule_with_ft then
       (Jc_options.lprintf "Compute needed predicates@.";
        Jc_frame.compute_needed_predicates ());

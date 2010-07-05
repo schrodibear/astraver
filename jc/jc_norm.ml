@@ -687,7 +687,8 @@ let rec decl d =
     | JCDannotation_policy _
     | JCDseparation_policy _
     | JCDinvariant_policy _
-    | JCDpragma_gen_sep _ as e -> e
+    | JCDpragma_gen_sep _
+    | JCDpragma_gen_frame _ as e -> e
 
 
   in new decl ~pos:d#pos dnode

@@ -112,6 +112,11 @@ val pragma_gen_sep :  (int,
    | `Pointer of Jc_env.var_info ] list 
                        * Output.why_decl option) Jc_stdlib.Hashtbl.t
 
+val pragma_gen_frame : (int,
+   Jc_envset.StringMap.key * Jc_envset.StringMap.key * Jc_env.var_info list *
+   Output.why_decl option)
+  Jc_stdlib.Hashtbl.t
+
 val comparable_types : jc_type -> jc_type -> bool
 
 (*
