@@ -930,3 +930,11 @@ axiom frame_between_gen :
       frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
       frame_between(sa,store(m1,p,v),m2)
 
+axiom frame_between_pointer :
+      forall sa : 'a pointer mybag.
+      forall m1,m2 : ('a,'b) memory.
+      forall p : 'a pointer.
+      forall v : 'b[frame_between(sa,m1,m2),select(m1,p)|
+                    frame_between(sa,m1,m2),select(m2,p)].
+      frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
+      select(m1,p) = select(m2,p)
