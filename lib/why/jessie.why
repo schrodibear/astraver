@@ -918,6 +918,15 @@ axiom sub_refl :
       forall sa : 'a pointer mybag[sub_mybag(sa,sa)].
       sub_mybag(sa,sa)
 
+axiom sub_disj : forall s1,s2,s3 : 'a mybag
+      [disj_mybag(s1,s2),sub_mybag(s2,s3)|disj_mybag(s1,s3),sub_mybag(s2,s3)].
+      disj_mybag(s1,s2) -> sub_mybag(s2,s3) -> disj_mybag(s1,s3)
+
+axiom sub_in : forall s1,s2 : 'a mybag. forall p : 'a
+      [in_mybag(p,s1),sub_mybag(s1,s2)|in_mybag(p,s2),sub_mybag(s1,s2)].
+      (not in_mybag(p,s2)) -> sub_mybag(s1,s2) -> (not in_mybag(p,s1))
+
+
 (* for the frame_rule *)
 
 (* footprint, memory after, memory before *)
@@ -933,7 +942,7 @@ axiom frame_between_gen :
       forall m1,m2 : ('a,'b) memory.
       forall p : 'a pointer.
       forall v : 'b[frame_between(sa,m1,store(m2,p,v))].
-      frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
+      frame_between(sa,m1,m2) -> in_mybag(p,sa) -> 
       frame_between(sa,store(m1,p,v),m2)
 
 axiom frame_between_gen2 :

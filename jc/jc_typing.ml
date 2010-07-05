@@ -2878,9 +2878,12 @@ let create_pragma_gen_frame loc id logic =
     try 
       find_logic_info logic
     with Not_found -> typing_error loc "logic unknown %s" logic in
-  let params = info.jc_logic_info_parameters in
+  let params1 = info.jc_logic_info_parameters in
+  let params2 = List.map (fun v -> var ~unique:true v.jc_var_info_type 
+    (v.jc_var_info_name^"_dest"))
+    info.jc_logic_info_parameters in
   let pi = make_pred id in
-  pi.jc_logic_info_parameters <- params;
+  pi.jc_logic_info_parameters <- params1@params2;
   let label1 = LabelName { 
     label_info_name = "L1";
     label_info_final_name = "L1";
@@ -2894,34 +2897,34 @@ let create_pragma_gen_frame loc id logic =
   pi.jc_logic_info_labels <- [label1;label2];
   Hashtbl.replace logic_functions_env id pi;
   let def = 
-    let param = List.map 
+    let params param = List.map 
       (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
-      params in
+      param in
     begin
       match info.jc_logic_info_result_type with
         | None ->
-          let app label = new assertion (JCAapp {jc_app_fun = info;
-                             jc_app_args = param;
+          let app label param = new assertion (JCAapp {jc_app_fun = info;
+                             jc_app_args = params param;
                              jc_app_region_assoc = [];
                              jc_app_label_assoc = 
               label_assoc loc "bug in the generation" 
                 (Some label) info.jc_logic_info_labels []
                  }) in
-          make_and (app label1) (app label2)
+          make_and (app label1 params1) (app label2 params2)
         | Some ty -> 
-          let term label = new term ~pos:loc ~typ:ty
+          let term label param = new term ~pos:loc ~typ:ty
             (JCTapp {jc_app_fun = info;
-                     jc_app_args = param;
+                     jc_app_args = params param;
                      jc_app_region_assoc = [];
                      jc_app_label_assoc = 
                 label_assoc loc "bug in the generation" 
                   (Some label) info.jc_logic_info_labels []}) in
-          new assertion (make_rel_bin_op loc `Beq (term label1) (term label2))
+          new assertion (make_rel_bin_op loc `Beq
+                           (term label1 params1) (term label2 params2))
     end in
   let def = JCAssertion def in
   Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
-  Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag
-    (pi,info)
+  Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag (pi,info,params1,params2)
 
 
 let create_pragma_gen_sep_logic_aux loc kind id li =

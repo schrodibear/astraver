@@ -237,9 +237,10 @@ let frame_between ftin notin labels =
 
 
 let compute_predicate_framed () =
-  let aux tag (pi, info) =
+  let aux tag (pi, info,params1,params2) =
       test_correct_logic info;
-      let params = List.map mk_tvar pi.jc_logic_info_parameters in
+      let params1 = List.map mk_tvar params1 in
+      let params2 = List.map mk_tvar params2 in
       let label1,label2 = match pi.jc_logic_info_labels with
         | [label1;label2] -> label1,label2
         | _ -> assert false in
@@ -248,9 +249,9 @@ let compute_predicate_framed () =
         (fun mem labs acc -> 
           let lab = Jc_envset.LogicLabelSet.choose labs in
           let notin = NotIn.from_memory false (mem,lab) in
-          let app = app_in_logic info params label1 notin in
+          let app = app_in_logic info params1 label1 notin in
           let app1 = frame_between app notin pi.jc_logic_info_labels in
-          let app2 = app_in_logic info params label2 notin in
+          let app2 = app_in_logic info params2 label2 notin in
           let app2 = MyBag.make_jc_sub [app2;app] in
           app2::app1::acc) mems [] in
       let ass = new assertion (JCAand apps) in
@@ -1486,7 +1487,7 @@ struct
   let in_interp_app var notin s lt =
     if s = select_name then
       match lt with
-        | [_;p] -> LNot (make_eq (LVar (fst var)) p)
+        | [_;p] -> make_eq (LVar (fst var)) p
         | _ -> assert false
     else
     LPred(in_pred,[LVar (fst var);LApp(in_name notin s, lt)])
@@ -1778,6 +1779,8 @@ struct
         let var = ("jc_var",NotIn.ty notin) in
         let gen_case acc (ident,assertion) =
           let effects = inductive_extract_effect assertion in
+          let effects = 
+            List.filter (fun (s,_) -> not (s = select_name)) effects in
           let effects = List.filter (mem_are_compatible notin) effects in
           let rw seff lteff s lt =
             LImpl(sub_interp_app (`Var var) notin (`App (seff,lteff)),
@@ -1839,6 +1842,8 @@ struct
         let var = ("jc_var",NotIn.ty notin) in
         let gen_case acc (ident,assertion) =
           let effects = inductive_extract_effect assertion in
+          let effects = 
+            List.filter (fun (s,_) -> not (s = select_name)) effects in
           let effects = List.filter (mem_are_compatible notin) effects in
           let rw s lt =
             List.fold_left (fun acc (seff,lteff) ->
