@@ -1566,9 +1566,9 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(x:Object pointer,
+predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x), (0))
+ eq_int(offset_max(Object_alloc_table, x_0), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -2222,18 +2222,18 @@ parameter cons_TestSuperConstructor_requires :
         Creation_simple_val, pset_singleton(this_4@))))) }
 
 parameter non_null_Object :
- x_0:Object pointer ->
+ x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+     else (x_1 = null))) }
 
 parameter non_null_Object_requires :
- x_0:Object pointer ->
+ x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+     else (x_1 = null))) }
 
 let Creation_test1_ensures_default =
  fun (tt : unit) ->
@@ -3553,6 +3553,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type Object
 
 type interface
@@ -3567,9 +3668,9 @@ logic Exception_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-predicate Non_null_Object(x: Object pointer,
+predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  x_0) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4737,6 +4838,125 @@ why -simplify [...] why/Creation.why
  (EQ (offset_max a1 p) (offset_max a2 p)))))))
 
 (BG_PUSH
+ ;; Why axiom disj_sym
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|) (EQ (disj_mybag s2 s1) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom sub_refl
+ (FORALL (sa) (EQ (sub_mybag sa sa) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom sub_disj
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom sub_in
+ (FORALL (s1 s2 p)
+ (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))
+
+ (FORALL (s2 p)
+ (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
+ (FORALL (s1)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_refl
+ (FORALL (sa m) (EQ (frame_between sa m m) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen
+ (FORALL (sa m1 m2 p v)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (in_mybag p sa) |@true|)
+ (EQ (frame_between sa (|why__store| m1 p v) m2) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (p)
+ (IMPLIES (EQ (in_mybag p sa) |@true|)
+ (FORALL (v) (EQ (frame_between sa (|why__store| m1 p v) m2) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen2
+ (FORALL (sa m1 m2 m3)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (frame_between sa m2 m3) |@true|)
+ (EQ (frame_between sa m1 m3) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (m3)
+ (IMPLIES (EQ (frame_between sa m2 m3) |@true|)
+ (EQ (frame_between sa m1 m3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen_sub1
+ (FORALL (s12 s23 s13 m1 m2 m3)
+ (IMPLIES (EQ (sub_mybag s12 s13) |@true|)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|)))))
+
+ (FORALL (s12 s13)
+ (IMPLIES (EQ (sub_mybag s12 s13) |@true|)
+ (FORALL (m2 m1)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (FORALL (s23 m3)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen_sub2
+ (FORALL (s12 s23 s13 m1 m2 m3)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (IMPLIES (EQ (sub_mybag s23 s13) |@true|)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|)))))
+
+ (FORALL (s12 m1 m2)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (FORALL (s13 s23)
+ (IMPLIES (EQ (sub_mybag s23 s13) |@true|)
+ (FORALL (m3)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_pointer
+ (FORALL (sa m1 m2 p v)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (NOT (EQ (in_mybag p sa) |@true|))
+ (EQ (select m1 p) (select m2 p)))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (p)
+ (IMPLIES (NOT (EQ (in_mybag p sa) |@true|))
+ (FORALL (v) (EQ (select m1 p) (select m2 p))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_sub
+ (FORALL (sa sb m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (sub_mybag sa sb) |@true|)
+ (EQ (frame_between sb m1 m2) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (sb)
+ (IMPLIES (EQ (sub_mybag sa sb) |@true|)
+ (EQ (frame_between sb m1 m2) |@true|))))))
+
+(BG_PUSH
  ;; Why axiom Creation_parenttag_Object
  (EQ (parenttag Creation_tag Object_tag) |@true|))
 
@@ -4744,8 +4964,8 @@ why -simplify [...] why/Creation.why
  ;; Why axiom Exception_parenttag_Object
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object x Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x) 0))
+(DEFPRED (Non_null_Object x_0 Object_alloc_table)
+  (EQ (offset_max Object_alloc_table x_0) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -6003,6 +6223,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type Object
 
 type interface
@@ -6017,9 +6338,9 @@ logic Exception_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-predicate Non_null_Object(x: Object pointer,
+predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  x_0) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 

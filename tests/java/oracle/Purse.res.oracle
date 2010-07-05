@@ -2320,9 +2320,9 @@ logic NoCreditException_tag:  -> Object tag_id
 axiom NoCreditException_parenttag_Exception :
  parenttag(NoCreditException_tag, Exception_tag)
 
-predicate Non_null_Object(x:Object pointer,
+predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x), (0))
+ eq_int(offset_max(Object_alloc_table, x_0), (0))
 
 logic Object_tag:  -> Object tag_id
 
@@ -2583,29 +2583,29 @@ parameter Purse_balance : (Object, int) memory ref
 
 parameter Purse_credit :
  this_6:Object pointer ->
-  s_0:int ->
+  s_0_0:int ->
    { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
    { ((JC_180: balance_non_negative(this_6, Purse_balance))
      and (JC_178:
          ((JC_176:
           eq_int(select(Purse_balance, this_6),
-          add_int(select(Purse_balance@, this_6@), s_0)))
+          add_int(select(Purse_balance@, this_6@), s_0_0)))
          and (JC_177:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_singleton(this_6@)))))) }
 
 parameter Purse_credit_requires :
  this_6:Object pointer ->
-  s_0:int ->
+  s_0_0:int ->
    { (JC_168:
-     ((JC_167: ge_int(s_0, (0)))
+     ((JC_167: ge_int(s_0_0, (0)))
      and balance_non_negative(this_6, Purse_balance)))}
    unit reads Object_alloc_table,Purse_balance writes Purse_balance
    { ((JC_180: balance_non_negative(this_6, Purse_balance))
      and (JC_178:
          ((JC_176:
           eq_int(select(Purse_balance, this_6),
-          add_int(select(Purse_balance@, this_6@), s_0)))
+          add_int(select(Purse_balance@, this_6@), s_0_0)))
          and (JC_177:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_singleton(this_6@)))))) }
@@ -2735,11 +2735,11 @@ parameter Throwable_printStackTrace :
 
 parameter Throwable_printStackTrace_PrintStream :
  this_14:Object pointer ->
-  s:Object pointer -> { } unit reads Object_alloc_table { true }
+  s_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Throwable_printStackTrace_PrintStream_requires :
  this_14:Object pointer ->
-  s:Object pointer -> { } unit reads Object_alloc_table { true }
+  s_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter Throwable_printStackTrace_requires :
  this_13:Object pointer -> { } unit reads Object_alloc_table { true }
@@ -3199,54 +3199,56 @@ parameter cons_Throwable_requires :
   { true }
 
 parameter non_null_Object :
- x_0:Object pointer ->
+ x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+     else (x_1 = null))) }
 
 parameter non_null_Object_requires :
- x_0:Object pointer ->
+ x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
-    (if result then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+     else (x_1 = null))) }
 
 let Purse_credit_ensures_default =
- fun (this_6 : Object pointer) (s_0 : int) ->
+ fun (this_6 : Object pointer) (s_0_0 : int) ->
   { (valid_struct_Purse(this_6, (0), (0), Object_alloc_table)
     and (JC_171:
-        ((JC_170: ge_int(s_0, (0)))
+        ((JC_170: ge_int(s_0_0, (0)))
         and balance_non_negative(this_6, Purse_balance)))) }
   (init:
   try
    begin
      (let jessie_180 =
      (K_6:
-     (let jessie_176 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
+     (let jessie_176 =
+     ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0_0) in
      (let jessie_179 = this_6 in
      begin   (((safe_upd_ Purse_balance) jessie_179) jessie_176); jessie_176
      end))) in void); (raise Return) end with Return -> void end)
   { (JC_175:
     ((JC_173:
      eq_int(select(Purse_balance, this_6),
-     add_int(select(Purse_balance@, this_6@), s_0)))
+     add_int(select(Purse_balance@, this_6@), s_0_0)))
     and (JC_174:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
         pset_singleton(this_6@))))) }
 
 let Purse_credit_safety =
- fun (this_6 : Object pointer) (s_0 : int) ->
+ fun (this_6 : Object pointer) (s_0_0 : int) ->
   { (valid_struct_Purse(this_6, (0), (0), Object_alloc_table)
     and (JC_171:
-        ((JC_170: ge_int(s_0, (0)))
+        ((JC_170: ge_int(s_0_0, (0)))
         and balance_non_negative(this_6, Purse_balance)))) }
   (init:
   try
    begin
      (let jessie_174 =
      (K_6:
-     (let jessie_170 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
+     (let jessie_170 =
+     ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0_0) in
      (let jessie_173 = this_6 in
      begin   (((safe_upd_ Purse_balance) jessie_173) jessie_170); jessie_170
      end))) in void); (raise Return) end with Return -> void end)
@@ -3715,7 +3717,7 @@ why --project [...] why/Purse.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po14.why">
-      <location file = "why/Purse.why" line = "1091" begin = "16" end = "71"/>
+      <location file = "why/Purse.why" line = "1093" begin = "16" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -4596,6 +4598,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type Object
 
 type interface
@@ -4613,9 +4716,9 @@ logic NoCreditException_tag : Object tag_id
 axiom NoCreditException_parenttag_Exception: parenttag(NoCreditException_tag,
   Exception_tag)
 
-predicate Non_null_Object(x: Object pointer,
+predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  x_0) = 0)
 
 logic Object_tag : Object tag_id
 
@@ -5025,38 +5128,38 @@ goal cons_Purse_safety_po_1:
 ========== file tests/java/why/Purse_po1.why ==========
 goal Purse_credit_ensures_default_po_1:
   forall this_6:Object pointer.
-  forall s_0:int.
+  forall s_0_0:int.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
    ("JC_171":
-   (("JC_170": (s_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0))) ->
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
   ("JC_175":
   ("JC_173":
   ("JC_173": (select(Purse_balance0, this_6) = (select(Purse_balance,
-  this_6) + s_0)))))
+  this_6) + s_0_0)))))
 
 ========== file tests/java/why/Purse_po2.why ==========
 goal Purse_credit_ensures_default_po_2:
   forall this_6:Object pointer.
-  forall s_0:int.
+  forall s_0_0:int.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
    ("JC_171":
-   (("JC_170": (s_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0))) ->
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
   ("JC_175":
   ("JC_174":
   ("JC_174": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
@@ -5065,18 +5168,18 @@ goal Purse_credit_ensures_default_po_2:
 ========== file tests/java/why/Purse_po3.why ==========
 goal Purse_credit_safety_po_1:
   forall this_6:Object pointer.
-  forall s_0:int.
+  forall s_0_0:int.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
    ("JC_171":
-   (("JC_170": (s_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0))) ->
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
   ("JC_179": balance_non_negative(this_6, Purse_balance0))
 
 ========== file tests/java/why/Purse_po4.why ==========
@@ -5848,6 +5951,125 @@ why -simplify [...] why/Purse.why
  (EQ (offset_max a1 p) (offset_max a2 p)))))))
 
 (BG_PUSH
+ ;; Why axiom disj_sym
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|) (EQ (disj_mybag s2 s1) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom sub_refl
+ (FORALL (sa) (EQ (sub_mybag sa sa) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom sub_disj
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom sub_in
+ (FORALL (s1 s2 p)
+ (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))
+
+ (FORALL (s2 p)
+ (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
+ (FORALL (s1)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_refl
+ (FORALL (sa m) (EQ (frame_between sa m m) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen
+ (FORALL (sa m1 m2 p v)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (in_mybag p sa) |@true|)
+ (EQ (frame_between sa (|why__store| m1 p v) m2) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (p)
+ (IMPLIES (EQ (in_mybag p sa) |@true|)
+ (FORALL (v) (EQ (frame_between sa (|why__store| m1 p v) m2) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen2
+ (FORALL (sa m1 m2 m3)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (frame_between sa m2 m3) |@true|)
+ (EQ (frame_between sa m1 m3) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (m3)
+ (IMPLIES (EQ (frame_between sa m2 m3) |@true|)
+ (EQ (frame_between sa m1 m3) |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen_sub1
+ (FORALL (s12 s23 s13 m1 m2 m3)
+ (IMPLIES (EQ (sub_mybag s12 s13) |@true|)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|)))))
+
+ (FORALL (s12 s13)
+ (IMPLIES (EQ (sub_mybag s12 s13) |@true|)
+ (FORALL (m2 m1)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (FORALL (s23 m3)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_gen_sub2
+ (FORALL (s12 s23 s13 m1 m2 m3)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (IMPLIES (EQ (sub_mybag s23 s13) |@true|)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|)))))
+
+ (FORALL (s12 m1 m2)
+ (IMPLIES (EQ (frame_between s12 m1 m2) |@true|)
+ (FORALL (s13 s23)
+ (IMPLIES (EQ (sub_mybag s23 s13) |@true|)
+ (FORALL (m3)
+ (IMPLIES (EQ (frame_between s23 m2 m3) |@true|)
+ (EQ (frame_between s13 m1 m3) |@true|))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_pointer
+ (FORALL (sa m1 m2 p v)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (NOT (EQ (in_mybag p sa) |@true|))
+ (EQ (select m1 p) (select m2 p)))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (p)
+ (IMPLIES (NOT (EQ (in_mybag p sa) |@true|))
+ (FORALL (v) (EQ (select m1 p) (select m2 p))))))))
+
+(BG_PUSH
+ ;; Why axiom frame_between_sub
+ (FORALL (sa sb m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (IMPLIES (EQ (sub_mybag sa sb) |@true|)
+ (EQ (frame_between sb m1 m2) |@true|))))
+
+ (FORALL (sa m1 m2)
+ (IMPLIES (EQ (frame_between sa m1 m2) |@true|)
+ (FORALL (sb)
+ (IMPLIES (EQ (sub_mybag sa sb) |@true|)
+ (EQ (frame_between sb m1 m2) |@true|))))))
+
+(BG_PUSH
  ;; Why axiom Exception_parenttag_Throwable
  (EQ (parenttag Exception_tag Throwable_tag) |@true|))
 
@@ -5859,8 +6081,8 @@ why -simplify [...] why/Purse.why
  ;; Why axiom NoCreditException_parenttag_Exception
  (EQ (parenttag NoCreditException_tag Exception_tag) |@true|))
 
-(DEFPRED (Non_null_Object x Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x) 0))
+(DEFPRED (Non_null_Object x_0 Object_alloc_table)
+  (EQ (offset_max Object_alloc_table x_0) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -6070,45 +6292,45 @@ why -simplify [...] why/Purse.why
 
 ;; Purse_credit_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 54, characters 16-44
 (FORALL (this_6)
-(FORALL (s_0)
+(FORALL (s_0_0)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
 (IMPLIES (AND (valid_struct_Purse this_6 0 0 Object_alloc_table)
-         (AND (>= s_0 0) (balance_non_negative this_6 Purse_balance)))
+         (AND (>= s_0_0 0) (balance_non_negative this_6 Purse_balance)))
 (FORALL (result)
 (IMPLIES (EQ result (select Purse_balance this_6))
 (FORALL (Purse_balance0)
 (IMPLIES (EQ Purse_balance0
-         (|why__store| Purse_balance this_6 (+ result s_0)))
-(EQ (select Purse_balance0 this_6) (+ (select Purse_balance this_6) s_0)))))))))))
+         (|why__store| Purse_balance this_6 (+ result s_0_0)))
+(EQ (select Purse_balance0 this_6) (+ (select Purse_balance this_6) s_0_0)))))))))))
 
 ;; Purse_credit_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 56, characters 16-22
 (FORALL (this_6)
-(FORALL (s_0)
+(FORALL (s_0_0)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
 (IMPLIES (AND (valid_struct_Purse this_6 0 0 Object_alloc_table)
-         (AND (>= s_0 0) (balance_non_negative this_6 Purse_balance)))
+         (AND (>= s_0_0 0) (balance_non_negative this_6 Purse_balance)))
 (FORALL (result)
 (IMPLIES (EQ result (select Purse_balance this_6))
 (FORALL (Purse_balance0)
 (IMPLIES (EQ Purse_balance0
-         (|why__store| Purse_balance this_6 (+ result s_0)))
+         (|why__store| Purse_balance this_6 (+ result s_0_0)))
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6)))))))))))
 
 ;; Purse_credit_safety_po_1, File "HOME/tests/java/Purse.java", line 56, characters 16-22
 (FORALL (this_6)
-(FORALL (s_0)
+(FORALL (s_0_0)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
 (IMPLIES (AND (valid_struct_Purse this_6 0 0 Object_alloc_table)
-         (AND (>= s_0 0) (balance_non_negative this_6 Purse_balance)))
+         (AND (>= s_0_0 0) (balance_non_negative this_6 Purse_balance)))
 (FORALL (result)
 (IMPLIES (EQ result (select Purse_balance this_6))
 (FORALL (Purse_balance0)
 (IMPLIES (EQ Purse_balance0
-         (|why__store| Purse_balance this_6 (+ result s_0)))
+         (|why__store| Purse_balance this_6 (+ result s_0_0)))
 (balance_non_negative this_6 Purse_balance0))))))))))
 
 ;; Purse_getBalance_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 74, characters 16-34
@@ -6293,7 +6515,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1091, characters 16-71
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1093, characters 16-71
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -7149,6 +7371,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type Object
 
 type interface
@@ -7166,9 +7489,9 @@ logic NoCreditException_tag : Object tag_id
 axiom NoCreditException_parenttag_Exception: parenttag(NoCreditException_tag,
   Exception_tag)
 
-predicate Non_null_Object(x: Object pointer,
+predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  x_0) = 0)
 
 logic Object_tag : Object tag_id
 
@@ -7419,37 +7742,37 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 goal Purse_credit_ensures_default_po_1:
   forall this_6:Object pointer.
-  forall s_0:int.
+  forall s_0_0:int.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
    ("JC_171":
-   (("JC_170": (s_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0))) ->
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
   ("JC_175":
   ("JC_173":
   ("JC_173": (select(Purse_balance0, this_6) = (select(Purse_balance,
-  this_6) + s_0)))))
+  this_6) + s_0_0)))))
 
 goal Purse_credit_ensures_default_po_2:
   forall this_6:Object pointer.
-  forall s_0:int.
+  forall s_0_0:int.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
    ("JC_171":
-   (("JC_170": (s_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0))) ->
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
   ("JC_175":
   ("JC_174":
   ("JC_174": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
@@ -7457,18 +7780,18 @@ goal Purse_credit_ensures_default_po_2:
 
 goal Purse_credit_safety_po_1:
   forall this_6:Object pointer.
-  forall s_0:int.
+  forall s_0_0:int.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
    ("JC_171":
-   (("JC_170": (s_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0))) ->
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
   ("JC_179": balance_non_negative(this_6, Purse_balance0))
 
 goal Purse_getBalance_ensures_default_po_1:

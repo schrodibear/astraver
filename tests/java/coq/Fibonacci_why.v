@@ -25,8 +25,8 @@ Admitted.
   (parenttag Fibonacci_tag Object_tag).
 Admitted.
 
-(*Why predicate*) Definition Non_null_Object  (x:(pointer Object)) (Object_alloc_table:(alloc_table Object))
-  := (offset_max Object_alloc_table x) = 0.
+(*Why predicate*) Definition Non_null_Object  (x_0:(pointer Object)) (Object_alloc_table:(alloc_table Object))
+  := (offset_max Object_alloc_table x_0) = 0.
 
 (*Why axiom*) Lemma Object_int : (int_of_tag Object_tag) = 1.
 Admitted.

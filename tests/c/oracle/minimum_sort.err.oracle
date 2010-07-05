@@ -1,7 +1,1 @@
-Warning: recursive definition of Permut in generated file
-Warning: recursive definition of Permut in generated file
-Warning: recursive definition of Permut in generated file
-Warning: recursive definition of Permut in generated file
-Warning: recursive definition of Permut in generated file
-Warning: recursive definition of Permut in generated file
-Warning: recursive definition of Permut in generated file
+tests/c/minimum_sort.c:5:21: error: sorting.h: Aucun fichier ou dossier de ce type
