@@ -380,11 +380,11 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A707:Set) (a:(alloc_table A707)) (p:(pointer A707))
+(*Why predicate*) Definition valid (A832:Set) (a:(alloc_table A832)) (p:(pointer A832))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
-(*Why predicate*) Definition same_block (A708:Set) (p:(pointer A708)) (q:(pointer A708))
+(*Why predicate*) Definition same_block (A833:Set) (p:(pointer A833)) (q:(pointer A833))
   := (base_block p) = (base_block q).
 Implicit Arguments same_block.
 
@@ -646,12 +646,12 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A755:Set) (ps1:(pset A755)) (ps2:(pset A755))
-  := (forall (p:(pointer A755)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A880:Set) (ps1:(pset A880)) (ps2:(pset A880))
+  := (forall (p:(pointer A880)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
-(*Why predicate*) Definition pset_included (A756:Set) (ps1:(pset A756)) (ps2:(pset A756))
-  := (forall (p:(pointer A756)), ((in_pset p ps1) -> (in_pset p ps2))).
+(*Why predicate*) Definition pset_included (A881:Set) (ps1:(pset A881)) (ps2:(pset A881))
+  := (forall (p:(pointer A881)), ((in_pset p ps1) -> (in_pset p ps2))).
 Implicit Arguments pset_included.
 
 (*Why axiom*) Lemma pset_included_self :
@@ -789,8 +789,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A776:Set) (A775:Set) (a:(alloc_table A775)) (m1:(memory A775 A776)) (m2:(memory A775 A776)) (l:(pset A775))
-  := (forall (p:(pointer A775)),
+(*Why predicate*) Definition not_assigns (A901:Set) (A900:Set) (a:(alloc_table A900)) (m1:(memory A900 A901)) (m2:(memory A900 A901)) (l:(pset A900))
+  := (forall (p:(pointer A900)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -892,7 +892,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A795:Set) (a:(tag_table A795)) (p:(pointer A795)) (t:(tag_id A795))
+(*Why predicate*) Definition instanceof (A920:Set) (a:(tag_table A920)) (p:(pointer A920)) (t:(tag_id A920))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -919,8 +919,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A800:Set) (t:(tag_id A800))
-  := (parenttag t (@bottom_tag A800)).
+(*Why predicate*) Definition root_tag (A925:Set) (t:(tag_id A925))
+  := (parenttag t (@bottom_tag A925)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -932,7 +932,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A802:Set) (tag_table:(tag_table A802)) (mutable:(memory A802 (tag_id A802))) (this:(pointer A802))
+(*Why predicate*) Definition fully_packed (A927:Set) (tag_table:(tag_table A927)) (mutable:(memory A927 (tag_id A927))) (this:(pointer A927))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -1005,7 +1005,7 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why predicate*) Definition alloc_fresh (A804:Set) (a:(alloc_table A804)) (p:(pointer A804)) (n:Z)
+(*Why predicate*) Definition alloc_fresh (A929:Set) (a:(alloc_table A929)) (p:(pointer A929)) (n:Z)
   := (forall (i:Z), (0 <= i /\ i < n -> ~(valid a (shift p i)))).
 Implicit Arguments alloc_fresh.
 
@@ -1088,19 +1088,44 @@ Implicit Arguments disj_mybag.
    (forall (s2:(mybag A1)), ((disj_mybag s1 s2) -> (disj_mybag s2 s1)))).
 Admitted.
 
+(*Why logic*) Definition sub_mybag :
+  forall (A1:Set), (mybag A1) -> (mybag A1) -> Prop.
+Admitted.
+Implicit Arguments sub_mybag.
+
+(*Why axiom*) Lemma sub_refl :
+  forall (A1:Set), (forall (sa:(mybag (pointer A1))), (sub_mybag sa sa)).
+Admitted.
+
+(*Why axiom*) Lemma sub_disj :
+  forall (A1:Set),
+  (forall (s1:(mybag A1)),
+   (forall (s2:(mybag A1)),
+    (forall (s3:(mybag A1)),
+     ((disj_mybag s1 s2) -> ((sub_mybag s2 s3) -> (disj_mybag s1 s3)))))).
+Admitted.
+
+(*Why axiom*) Lemma sub_in :
+  forall (A1:Set),
+  (forall (s1:(mybag A1)),
+   (forall (s2:(mybag A1)),
+    (forall (p:A1),
+     (~(in_mybag p s2) -> ((sub_mybag s1 s2) -> ~(in_mybag p s1)))))).
+Admitted.
+
 (*Why logic*) Definition frame_between :
   forall (A1:Set), forall (A2:Set), (mybag (pointer A1)) -> (memory A1 A2)
   -> (memory A1 A2) -> Prop.
 Admitted.
 Implicit Arguments frame_between.
 
-(*Why axiom*) Lemma refl :
+(*Why axiom*) Lemma frame_between_refl :
   forall (A1:Set), forall (A2:Set),
   (forall (sa:(mybag (pointer A1))),
    (forall (m:(memory A1 A2)), (frame_between sa m m))).
 Admitted.
 
-(*Why axiom*) Lemma gen :
+(*Why axiom*) Lemma frame_between_gen :
   forall (A1:Set), forall (A2:Set),
   (forall (sa:(mybag (pointer A1))),
    (forall (m1:(memory A1 A2)),
@@ -1108,6 +1133,63 @@ Admitted.
      (forall (p:(pointer A1)),
       (forall (v:A2),
        ((frame_between sa m1 m2) ->
-        (~(in_mybag p sa) -> (frame_between sa (store m1 p v) m2)))))))).
+        ((in_mybag p sa) -> (frame_between sa (store m1 p v) m2)))))))).
+Admitted.
+
+(*Why axiom*) Lemma frame_between_gen2 :
+  forall (A1:Set), forall (A2:Set),
+  (forall (sa:(mybag (pointer A1))),
+   (forall (m1:(memory A1 A2)),
+    (forall (m2:(memory A1 A2)),
+     (forall (m3:(memory A1 A2)),
+      ((frame_between sa m1 m2) ->
+       ((frame_between sa m2 m3) -> (frame_between sa m1 m3))))))).
+Admitted.
+
+(*Why axiom*) Lemma frame_between_gen_sub1 :
+  forall (A1:Set), forall (A2:Set),
+  (forall (s12:(mybag (pointer A1))),
+   (forall (s23:(mybag (pointer A1))),
+    (forall (s13:(mybag (pointer A1))),
+     (forall (m1:(memory A1 A2)),
+      (forall (m2:(memory A1 A2)),
+       (forall (m3:(memory A1 A2)),
+        ((sub_mybag s12 s13) ->
+         ((frame_between s12 m1 m2) ->
+          ((frame_between s23 m2 m3) -> (frame_between s13 m1 m3)))))))))).
+Admitted.
+
+(*Why axiom*) Lemma frame_between_gen_sub2 :
+  forall (A1:Set), forall (A2:Set),
+  (forall (s12:(mybag (pointer A1))),
+   (forall (s23:(mybag (pointer A1))),
+    (forall (s13:(mybag (pointer A1))),
+     (forall (m1:(memory A1 A2)),
+      (forall (m2:(memory A1 A2)),
+       (forall (m3:(memory A1 A2)),
+        ((frame_between s12 m1 m2) ->
+         ((sub_mybag s23 s13) ->
+          ((frame_between s23 m2 m3) -> (frame_between s13 m1 m3)))))))))).
+Admitted.
+
+(*Why axiom*) Lemma frame_between_pointer :
+  forall (A1:Set), forall (A2:Set),
+  (forall (sa:(mybag (pointer A1))),
+   (forall (m1:(memory A1 A2)),
+    (forall (m2:(memory A1 A2)),
+     (forall (p:(pointer A1)),
+      (forall (v:A2),
+       ((frame_between sa m1 m2) ->
+        (~(in_mybag p sa) -> (select m1 p) = (select m2 p)))))))).
+Admitted.
+
+(*Why axiom*) Lemma frame_between_sub :
+  forall (A1:Set), forall (A2:Set),
+  (forall (sa:(mybag (pointer A1))),
+   (forall (sb:(mybag (pointer A1))),
+    (forall (m1:(memory A1 A2)),
+     (forall (m2:(memory A1 A2)),
+      ((frame_between sa m1 m2) ->
+       ((sub_mybag sa sb) -> (frame_between sb m1 m2))))))).
 Admitted.
 
