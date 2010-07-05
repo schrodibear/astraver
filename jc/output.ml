@@ -149,6 +149,12 @@ let is_not_true a =
 
 let make_var s = LVar s
 
+let make_not a1 =
+  match unname a1 with
+    | LTrue -> LFalse
+    | LFalse -> LTrue
+    | _ -> LNot a1
+
 let make_or a1 a2 =
   match (unname a1,unname a2) with
     | (LTrue,_) -> LTrue
@@ -197,6 +203,8 @@ let make_equiv a1 a2 =
   match (unname a1,unname a2) with
     | (LTrue,_) -> a2
     | (_,LTrue) -> a1
+    | (LFalse,_) -> make_not a2
+    | (_,LFalse) -> make_not a1
     | (_,_) -> LIff(a1,a2)
 
 let rec iter_assertion f a =

@@ -1466,10 +1466,10 @@ struct
     let fnF = pred_interp_and interp in
     match e with
     | LTrue | LFalse -> LTrue
-    | LAnd(f1,f2) -> LAnd (fnF f1, fnF f2)
-    | LOr(f1,f2) -> LAnd(LImpl (f1,fnF f1),LImpl(f2,fnF f2))
+    | LAnd(f1,f2) -> make_and (fnF f1) (fnF f2)
+    | LOr(f1,f2) -> make_and (make_impl f1 (fnF f1)) (make_impl f2 (fnF f2))
     | LForall (s,lt,_,f) -> LForall(s,lt,[],fnF f)
-    | LExists (s,lt,_,f) -> LForall(s,lt,[],LImpl(f,fnF f))
+    | LExists (s,lt,_,f) -> LForall(s,lt,[],make_impl f (fnF f))
     | LPred(s,lt) -> List.fold_left (fun acc e -> LAnd(acc,fnT e)) 
         (interp s lt) lt
     | _ -> failwith "Not Implemented, not in formula"
