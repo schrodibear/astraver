@@ -2921,7 +2921,7 @@ let create_pragma_gen_frame loc id logic =
   let def = JCAssertion def in
   Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
   Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag
-    (pi,info,params)
+    (pi,info)
 
 
 let create_pragma_gen_sep_logic_aux loc kind id li =

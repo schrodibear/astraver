@@ -527,19 +527,23 @@ let float_of_real f x =
       | `Float, "0.1" -> "0x0.199999Ap0"
       | _ -> raise Not_found
 
-let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
+let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos
+    ty_dst ty_src e e' =
   let rec aux a b = 
     match a,b with
       | JCTlogic (t,tl), JCTlogic (u,ul) when t = u -> List.for_all2 aux tl ul
       | JCTtype_var _, JCTtype_var _ -> true (*jc_typing take care of that*)
       | (JCTtype_var _, _) | (_,JCTtype_var _) -> true
+      | JCTpointer (JCroot rt1,_,_), JCTpointer (JCroot rt2,_,_) -> rt1 == rt2
       | _ -> false
   in
   match ty_dst, ty_src with
       (* identity *)
     | JCTnative t, JCTnative u when t = u -> e'
-    | (JCTlogic _|JCTtype_var _), (JCTlogic _|JCTtype_var _) when aux ty_dst ty_src -> e'
+    | (JCTlogic _|JCTtype_var _), (JCTlogic _|JCTtype_var _) 
+      when aux ty_dst ty_src -> e'
     | (JCTtype_var _, JCTpointer _) -> e'
+    | JCTpointer _, JCTpointer _ when aux ty_dst ty_src -> e'
     | JCTany, JCTany -> e'
       (* between integer/enum and real *)
     | JCTnative Treal, JCTnative Tinteger -> 

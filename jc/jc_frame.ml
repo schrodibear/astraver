@@ -217,6 +217,43 @@ let in_name2 mem f =
 
 let mk_tvar a = new term a.jc_var_info_type (JCTvar a)
 
+let frame_between_name = "frame_between"
+
+let frame_between ftin notin labels =
+  let pid = make_pred frame_between_name in
+  pid.jc_logic_info_final_name <- frame_between_name; (* ugly *)
+  let var = Jc_pervasives.var (NotIn.jc_ty notin) "a" in
+  pid.jc_logic_info_parameters <- [var];
+  let ef = {empty_effects with jc_effect_memories =
+      MemoryMap.add notin.NotIn.mem 
+        (LogicLabelSet.of_list labels) MemoryMap.empty} in
+  pid.jc_logic_info_effects <- ef;
+  pid.jc_logic_info_labels <- labels;
+  let app = { jc_app_fun = pid;
+              jc_app_args = [ftin];
+              jc_app_region_assoc = [];
+              jc_app_label_assoc = List.combine labels labels} in
+  new assertion (JCAapp app)
+
+
+let compute_predicate_framed () =
+  let aux tag (pi, info) =
+      test_correct_logic info;
+      let params = List.map mk_tvar pi.jc_logic_info_parameters in
+      let label1 = List.hd pi.jc_logic_info_labels in
+      let mems = info.jc_logic_info_effects.jc_effect_memories in
+      let apps = Jc_region.MemoryMap.fold
+        (fun mem labs acc -> 
+          let lab = Jc_envset.LogicLabelSet.choose labs in
+          let notin = NotIn.from_memory false (mem,lab) in
+          let app = app_in_logic info params label1 notin in
+          let app = frame_between app notin pi.jc_logic_info_labels in
+          app::acc) mems [] in
+      let ass = new assertion (JCAand apps) in
+      Hashtbl.replace Jc_typing.logic_functions_table tag
+        (pi,JCAssertion ass) in
+  Hashtbl.iter aux Jc_typing.pragma_gen_frame
+
 let user_predicate_code queue id kind pred =
   let (logic,_) = Hashtbl.find Jc_typing.logic_functions_table id in
   Jc_options.lprintf "Generate code of %s with %i params@." 
@@ -277,7 +314,8 @@ let compute_needed_predicates () =
                 f.jc_logic_info_calls
           end
       end;
-  done
+  done;
+  compute_predicate_framed ()
                         
 (*****)
 
@@ -1587,7 +1625,8 @@ struct
       | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a" 
           (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
 
-  let gen axiom_name f_name gen_framed in_update params framed_params = 
+  let gen axiom_name f_name gen_framed in_update params framed_params =
+    (* frame for one update *)
     let elt = "elt"^tmp_suffix in
     let elt_val = "elt_val"^tmp_suffix in
     let framed_normal_params = framed_params
@@ -1624,17 +1663,62 @@ struct
       (NotIn.mem_name in_update) in
     Axiom(axiom_name,a)
 
+  let gen_many axiom_name f_name gen_framed in_update params framed_params =
+    (* frame for many update *)
+    let mem1 = NotIn.mem_name in_update in
+    let mem2 = "mem"^tmp_suffix in
+    let ft_tmp = "ft"^tmp_suffix in
+    let framed_normal_params = framed_params
+      |> List.map fst in
+    let framed_update_params = 
+      List.map (fun name ->
+	if name = mem1 then LVar mem2 else LVar name
+      ) framed_normal_params in
+    let framed_normal_params = framed_normal_params
+      |> List.map make_var in
+    let params = params
+      |> List.map fst 
+      |> List.map make_var in
+    let sepa1 = LPred(frame_between_name, [LVar ft_tmp;
+                                           LVar mem2;
+                                           LVar mem1]) in
+    let sepa2 = LPred(disj_pred,[LVar ft_tmp;
+                                 LApp(in_name in_update f_name,params)]) in
+    let a,trig = 
+      match gen_framed with
+        | `Pred gen_framed ->
+            let pred_normal = gen_framed framed_normal_params in
+            let pred_update = gen_framed framed_update_params in
+            LImpl(pred_normal,pred_update),LPatP pred_update
+        | `Term gen_framed ->
+            let term_normal = gen_framed framed_normal_params in
+            let term_update = gen_framed framed_update_params in
+            make_eq term_normal term_update, LPatT term_update in
+    let a = LImpl(sepa1,LImpl(sepa2,a)) in
+    let a = make_forall_list framed_params [[LPatP sepa1;trig]] a in
+    let a = LForall (ft_tmp,NotIn.ty in_update,[],
+                     LForall (mem2,in_update.NotIn.ty_mem,[],a)) in
+    let axiom_name = "axiom"^"_no_frame_"^axiom_name^
+      (NotIn.mem_name in_update) in
+    Axiom(axiom_name,a)
+
+    
+
   let def_frame_in f_name notin params acc notin_update =
     let in_name = in_name notin f_name in
     let gen_framed params = LApp(in_name,params) in
-    (gen in_name f_name (`Term gen_framed) notin_update params params)::acc
+    (gen in_name f_name (`Term gen_framed) notin_update params params)
+    ::(gen_many in_name f_name (`Term gen_framed) notin_update params params)
+    ::acc
 
   let def_frame f_name is_pred params acc notin_update =
     let gen_framed =
       if is_pred
       then `Pred (fun params -> LPred(f_name,params))
       else `Term (fun params -> LApp(f_name,params)) in
-    (gen f_name f_name gen_framed notin_update params params)::acc
+    (gen f_name f_name gen_framed notin_update params params)
+    ::(gen_many f_name f_name gen_framed notin_update params params)
+    ::acc
        
   let in_for_in f_name args notin framed acc =
     let name = in_name notin f_name in

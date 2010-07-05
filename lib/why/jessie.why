@@ -901,3 +901,32 @@ parameter safe_free_parameter:
 exception Return
 
 
+(* Frame predicate *)
+(* Logic definitions used for separation pragma *)
+(* For in *)
+type 'a mybag
+
+logic in_mybag : 'a,'a mybag -> prop
+
+logic disj_mybag : 'a mybag, 'a mybag -> prop
+
+axiom disj_sym : forall s1,s2 : 'a mybag[disj_mybag(s1,s2)]. disj_mybag(s1,s2) -> disj_mybag(s2,s1)
+
+(* for the frame_rule *)
+
+(* footprint, memory after, memory before *)
+logic frame_between : 'a pointer mybag, ('a,'b) memory, ('a,'b) memory -> prop
+
+axiom refl :
+      forall sa : 'a pointer mybag.
+      forall m : ('a,'b) memory[frame_between(sa,m,m)].
+      frame_between(sa,m,m)
+
+axiom gen :
+      forall sa : 'a pointer mybag.
+      forall m1,m2 : ('a,'b) memory.
+      forall p : 'a pointer.
+      forall v : 'b[frame_between(sa,m1,store(m2,p,v))].
+      frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
+      frame_between(sa,store(m1,p,v),m2)
+
