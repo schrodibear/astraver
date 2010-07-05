@@ -189,6 +189,10 @@ let make_impl a1 a2 =
     | (_,LFalse) -> LNot(a1)
     | (_,_) -> LImpl(a1,a2)
 
+let rec make_impl_list conclu = function
+  | [] -> conclu
+  | a::l -> LImpl(a,make_impl_list conclu l)
+
 let make_equiv a1 a2 =
   match (unname a1,unname a2) with
     | (LTrue,_) -> a2
@@ -984,7 +988,8 @@ let print_pos fmt =
 	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
        Option_misc.iter
 	 (fun n -> fprintf fmt "formula = \"%s\"@\n" n) formula;
-       fprintf fmt "file = \"%s\"@\n" (String.escaped (abs_fname b.Lexing.pos_fname));
+       fprintf fmt "file = \"%s\"@\n" 
+         (String.escaped (abs_fname b.Lexing.pos_fname));
        let l = b.Lexing.pos_lnum in
        let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
        let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in

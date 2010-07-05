@@ -1364,9 +1364,9 @@ sig
     Output.why_decl list ->
     Output.why_decl list -> Output.why_decl list
   val def_frame_in :  string -> NotIn.t -> (string * Output.logic_type) list ->
-    Output.why_decl list -> NotIn.t -> Output.why_decl list
+    Output.why_decl list -> NotIn.t list -> Output.why_decl list
   val def_frame : string -> bool -> (string * Output.logic_type) list ->
-    Output.why_decl list -> NotIn.t -> Output.why_decl list
+    Output.why_decl list -> NotIn.t list -> Output.why_decl list
   val in_for_in : string -> (string * Output.logic_type) list ->
     NotIn.t -> (Jc_fenv.logic_info * (string * 'k) list) list ->
     Output.why_decl list -> Output.why_decl list
@@ -1663,28 +1663,39 @@ struct
       (NotIn.mem_name in_update) in
     Axiom(axiom_name,a)
 
-  let gen_many axiom_name f_name gen_framed in_update params framed_params =
+  let gen_many axiom_name f_name gen_framed notins params framed_params =
     (* frame for many update *)
-    let mem1 = NotIn.mem_name in_update in
-    let mem2 = "mem"^tmp_suffix in
-    let ft_tmp = "ft"^tmp_suffix in
+    let mems = List.map (fun notin ->
+      let mem_name = NotIn.mem_name notin in
+      let ft = "ft"^tmp_suffix in
+      let mem1 = mem_name in
+      let mem2 = mem_name^"2" in
+      (ft,mem1,mem2,notin)) notins in
     let framed_normal_params = framed_params
       |> List.map fst in
+    let rec assoc_default mem default = function
+      | [] -> default
+      | (_,mem1,mem2,_)::_ when mem = mem1 -> mem2
+      | _::l -> assoc_default mem default l in
     let framed_update_params = 
-      List.map (fun name ->
-	if name = mem1 then LVar mem2 else LVar name
-      ) framed_normal_params in
+      List.map (fun name -> LVar (assoc_default name name mems))
+        framed_normal_params in
     let framed_normal_params = framed_normal_params
       |> List.map make_var in
     let params = params
       |> List.map fst 
       |> List.map make_var in
-    let sepa1 = LPred(frame_between_name, [LVar ft_tmp;
-                                           LVar mem2;
-                                           LVar mem1]) in
-    let sepa2 = LPred(disj_pred,[LVar ft_tmp;
-                                 LApp(in_name in_update f_name,params)]) in
-    let a,trig = 
+    let make_hyp (ft,mem1,mem2,notin) =
+      let sepa1 = LPred(frame_between_name, [LVar ft;
+                                             LVar mem2;
+                                             LVar mem1]) in
+      let sepa2 = LPred(disj_pred,[LVar ft; 
+                                   LApp(in_name notin f_name,params)]) in
+      (sepa1,sepa2) in
+    let hyps = List.map make_hyp mems in
+    let impls = List.fold_left 
+      (fun acc (sepa1,sepa2) -> sepa1::sepa2::acc) [] hyps in
+    let conclu,trig = 
       match gen_framed with
         | `Pred gen_framed ->
             let pred_normal = gen_framed framed_normal_params in
@@ -1694,31 +1705,51 @@ struct
             let term_normal = gen_framed framed_normal_params in
             let term_update = gen_framed framed_update_params in
             make_eq term_normal term_update, LPatT term_update in
-    let a = LImpl(sepa1,LImpl(sepa2,a)) in
-    let a = make_forall_list framed_params [[LPatP sepa1;trig]] a in
-    let a = LForall (ft_tmp,NotIn.ty in_update,[],
-                     LForall (mem2,in_update.NotIn.ty_mem,[],a)) in
+    let a = make_impl_list conclu impls  in
+    let trigs = List.fold_left 
+      (fun acc (sepa1,_) -> (LPatP sepa1)::acc) [trig] hyps in
+    let a = make_forall_list framed_params [trigs] a in
+    let make_foralls acc (ft,_,mem2,notin) =
+      (ft,NotIn.ty notin)::(mem2,notin.NotIn.ty_mem)::acc in
+    let foralls = List.fold_left make_foralls [] mems in
+    let a = make_forall_list foralls [] a in
     let axiom_name = "axiom"^"_no_frame_"^axiom_name^
-      (NotIn.mem_name in_update) in
+      (String.concat "_"
+         (List.map (fun (_,_,_,notin) -> NotIn.mem_name notin) mems))
+    in
     Axiom(axiom_name,a)
 
     
 
-  let def_frame_in f_name notin params acc notin_update =
+  let def_frame_in f_name notin params acc notin_updates =
     let in_name = in_name notin f_name in
-    let gen_framed params = LApp(in_name,params) in
-    (gen in_name f_name (`Term gen_framed) notin_update params params)
-    ::(gen_many in_name f_name (`Term gen_framed) notin_update params params)
-    ::acc
+    let gen_framed = `Term (fun params -> LApp(in_name,params)) in
+    let acc = List.fold_left 
+        (fun acc notin_update -> 
+         (gen in_name f_name gen_framed notin_update params params) ::acc)
+        acc notin_updates in
+    let acc = List.fold_all_part 
+      (fun acc part -> match part with | [] -> acc (* trivial axiom *)
+        | notin_updates ->
+          gen_many in_name f_name gen_framed notin_updates params params ::acc)
+      acc notin_updates in
+    acc
 
-  let def_frame f_name is_pred params acc notin_update =
+  let def_frame f_name is_pred params acc notin_updates =
     let gen_framed =
       if is_pred
       then `Pred (fun params -> LPred(f_name,params))
       else `Term (fun params -> LApp(f_name,params)) in
-    (gen f_name f_name gen_framed notin_update params params)
-    ::(gen_many f_name f_name gen_framed notin_update params params)
-    ::acc
+    let acc = List.fold_left
+      (fun acc notin_update ->
+        (gen f_name f_name gen_framed notin_update params params)::acc) 
+      acc notin_updates in
+    let acc = List.fold_all_part 
+      (fun acc part -> match part with | [] -> acc (* trivial axiom *)
+        | notin_updates ->
+          gen_many f_name f_name gen_framed notin_updates params params ::acc)
+      acc notin_updates in
+    acc
        
   let in_for_in f_name args notin framed acc =
     let name = in_name notin f_name in
@@ -1838,18 +1869,15 @@ let tr_logic_fun_aux f ta acc =
           match todo with
             | `In -> 
                 let acc = InDisj.define_In notin fun_def acc in
-                let acc =
-                  List.fold_left
-                    (InDisj.def_frame_in f_name notin params)
-                    acc notin_updates in
+                let acc = 
+                  InDisj.def_frame_in f_name notin params acc notin_updates in
                 acc
             | `Disj -> 
                 let acc = InDisj.define_disj notin fun_def acc  in
                 acc in
         let acc = List.fold_left make_todo acc todos in
         let is_pred = f.jc_logic_info_result_type = None in
-        List.fold_left (InDisj.def_frame f_name is_pred params)
-          acc notin_updates
+        InDisj.def_frame f_name is_pred params acc notin_updates
       end
     else acc in 
   acc

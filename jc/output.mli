@@ -91,6 +91,7 @@ val make_and_list : assertion list -> assertion
 val make_forall_list : (string * logic_type) list -> trigger list list 
   -> assertion -> assertion
 val make_impl : assertion -> assertion -> assertion
+val make_impl_list : assertion -> assertion list -> assertion
 val make_equiv : assertion -> assertion -> assertion
 
 val fprintf_assertion : Format.formatter -> assertion -> unit

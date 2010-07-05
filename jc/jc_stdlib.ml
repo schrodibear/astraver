@@ -62,7 +62,12 @@ module List = struct
       (fun (rev,acc) e -> let (e,acc) = (f acc e) in (e::rev,acc)) 
       ([],acc) l in
     (List.rev rev,acc)
-    
+
+  let fold_all_part f acc =
+    let rec aux acc part = function
+    | [] -> f acc part
+    | a::l -> aux (aux acc (a::part) l) part l in
+    aux acc []
 
 end
 
