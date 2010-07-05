@@ -59,6 +59,8 @@ type term =
   | TIf of term * term * term
   | TLet of string * term * term
 
+val match_term : (string * term) list -> term -> term -> (string * term) list
+
 val fprintf_term : Format.formatter -> term -> unit
 
 type assertion = 

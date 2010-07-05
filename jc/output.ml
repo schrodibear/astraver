@@ -75,6 +75,12 @@ let rec iter_term f t =
   | TLet(id,t1,t2) -> 
       f id; iter_term f t1; iter_term f t2
 
+let rec match_term acc t1 t2 =
+  match t1, t2 with
+    | LVar id, _ -> (id,t2)::acc
+    | LApp(id1,l1), LApp(id2,l2) when id1 = id2 -> 
+      List.fold_left2 match_term acc l1 l2
+    | _ -> invalid_arg "match_term : t1 is not a valid context"
 
 let rec fprintf_term form t =
   match t with

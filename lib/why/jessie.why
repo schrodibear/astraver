@@ -912,6 +912,12 @@ logic disj_mybag : 'a mybag, 'a mybag -> prop
 
 axiom disj_sym : forall s1,s2 : 'a mybag[disj_mybag(s1,s2)]. disj_mybag(s1,s2) -> disj_mybag(s2,s1)
 
+logic sub_mybag : 'a mybag, 'a mybag -> prop
+
+axiom sub_refl :
+      forall sa : 'a pointer mybag[sub_mybag(sa,sa)].
+      sub_mybag(sa,sa)
+
 (* for the frame_rule *)
 
 (* footprint, memory after, memory before *)
@@ -930,6 +936,30 @@ axiom frame_between_gen :
       frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
       frame_between(sa,store(m1,p,v),m2)
 
+axiom frame_between_gen2 :
+      forall sa : 'a pointer mybag.
+      forall m1,m2,m3 : ('a,'b) memory
+      [frame_between(sa,m1,m2),frame_between(sa,m1,m3)|
+       frame_between(sa,m2,m3),frame_between(sa,m1,m3)].
+      frame_between(sa,m1,m2) -> frame_between(sa,m2,m3) ->
+      frame_between(sa,m1,m3)
+
+axiom frame_between_gen_sub1 :
+      forall s12,s23,s13 : 'a pointer mybag.
+      forall m1,m2,m3 : ('a,'b) memory
+      [frame_between(s12,m1,m2),frame_between(s13,m1,m3)].
+      sub_mybag(s12,s13) -> frame_between(s12,m1,m2) ->
+      frame_between(s23,m2,m3) ->
+      frame_between(s13,m1,m3)
+
+axiom frame_between_gen_sub2 :
+      forall s12,s23,s13 : 'a pointer mybag.
+      forall m1,m2,m3 : ('a,'b) memory
+      [frame_between(s23,m2,m3),frame_between(s13,m1,m3)].
+      frame_between(s12,m1,m2) ->
+      sub_mybag(s23,s13) -> frame_between(s23,m2,m3) ->
+      frame_between(s13,m1,m3)
+
 axiom frame_between_pointer :
       forall sa : 'a pointer mybag.
       forall m1,m2 : ('a,'b) memory.
@@ -938,3 +968,11 @@ axiom frame_between_pointer :
                     frame_between(sa,m1,m2),select(m2,p)].
       frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
       select(m1,p) = select(m2,p)
+
+axiom frame_between_sub :
+      forall sa : 'a pointer mybag.
+      forall sb : 'a pointer mybag.
+      forall m1,m2 : ('a,'b) memory
+      [frame_between(sa,m1,m2),sub_mybag(sa,sb)].
+      frame_between(sa,m1,m2) -> sub_mybag(sa,sb) ->
+      frame_between(sb,m1,m2)

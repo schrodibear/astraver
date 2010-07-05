@@ -56,6 +56,7 @@ let notin_suffix = "_notin"*)
 let in_pred = "in_mybag"
 let in_suffix = "_in"
 let disj_pred = "disj_mybag"
+let sub_pred = "sub_mybag"
 let mybag_suffix = "mybag"
 let tmp_suffix = "_tmp_name"
 
@@ -149,6 +150,26 @@ struct
                        jc_app_region_assoc = [];
                        jc_app_label_assoc = []
                      })
+
+
+  let isub = 
+    let pid = make_pred sub_pred in
+    let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
+    pid.jc_logic_info_poly_args <- [tvar];
+    let tvar = JCTtype_var tvar in
+    pid.jc_logic_info_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
+                                     Jc_pervasives.var (jc_ty tvar) "s2"];
+    pid
+
+  let make_jc_sub l =
+    new assertion (JCAapp
+                     {
+                       jc_app_fun = isub;
+                       jc_app_args = l;
+                       jc_app_region_assoc = [];
+                       jc_app_label_assoc = []
+                     })
+
 
 
 
@@ -290,4 +311,5 @@ let app_in_logic f fparams label notin =
              jc_app_label_assoc = 
       List.map (fun e -> (e,label)) fin.jc_logic_info_labels} in
   new term (NotIn.jc_ty notin) (JCTapp app)
+
   
