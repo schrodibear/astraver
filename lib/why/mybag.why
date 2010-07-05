@@ -4,6 +4,10 @@ type 'a mybag
 
 logic in_mybag : 'a,'a mybag -> prop
 
+logic disj_mybag : 'a mybag, 'a mybag -> prop
+
+axiom disj_sym : forall s1,s2 : 'a mybag[disj_mybag(s1,s2)]. disj_mybag(s1,s2) -> disj_mybag(s2,s1)
+
 (* For frame rule *)
 type myframe
 

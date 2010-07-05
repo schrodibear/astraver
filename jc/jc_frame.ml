@@ -53,8 +53,11 @@ open Pp
 open Jc_interp
 
 let prop_type = "prop"
-let ft_suffix = "_ft"
-let notin_suffix = "_notin"
+(*let ft_suffix = "_ft"
+let notin_suffix = "_notin"*)
+let in_pred = "in_mybag"
+let in_suffix = "_in"
+let disj_pred = "disj_mybag"
 let mybag_suffix = "mybag"
 let tmp_suffix = "_tmp_name"
 
@@ -222,20 +225,14 @@ let separation_between queue kind acc a b =
           (fun mem (labf,labg) acc ->
              let memlf = (mem,labf) in
              let memlg = (mem,labg) in
-             let inc acc = 
-               Queue.add (finfo,(`Notin (ginfo,memlg),memlf)) queue;
-               Queue.add (ginfo,(`Ft, memlg)) queue;
-               Queue.add (ginfo,(`Ft_pt,memlg)) queue;
-               (`Notin_ft (g,f,mem))::acc in
-             let cni acc = 
-               Queue.add (ginfo,(`Notin (finfo,memlf), memlg)) queue;
-               Queue.add (finfo,(`Ft,memlf)) queue;
-               Queue.add (finfo,(`Ft_pt,memlf)) queue;
-               (`Notin_ft (f,g,mem))::acc in
+             let disj acc = 
+               Queue.add (finfo,(`Disj ,memlf)) queue;
+               Queue.add (ginfo,(`Disj ,memlg)) queue;
+               (`Disj (g,f,mem))::acc in
              match kind with
-               | `Sep -> cni (inc acc)
-               | `Inc -> inc acc
-               | `Cni -> cni acc
+               | `Sep -> disj acc
+               | `Inc -> assert false (* Not Done anymore *)
+               | `Cni -> assert false (* Not Done anymore *)
           )
           mems acc
     | (`Logic (finfo,frestr,fparams), `Pointer pa) 
@@ -247,19 +244,15 @@ let separation_between queue kind acc a b =
              if is_same_field mem pa && if_in_restr frestr (fst mem)
              then 
                let meml = (mem,lab) in
-               let incl acc = 
-                 Queue.add (finfo,(`Notin_pt, meml))  queue;
-                 (`Notin(pa,f,mem))::acc in
-               let incp acc = 
-                 Queue.add (finfo,(`Ft_pt, meml)) queue;
-                 Queue.add (finfo,(`Ft, meml)) queue;
-                 (`Ft_pt (f,pa,mem))::acc in
+               let inn acc = 
+                 Queue.add (finfo,(`In, meml))  queue;
+                 (`In(pa,f,mem))::acc in
                match kind, a with
-                 | `Sep, _ -> incl (incp acc)
-                 | `Inc, `Logic _ -> incl acc
-                 | `Inc, `Pointer _ -> incp acc
-                 | `Cni, `Logic _ -> incp acc
-                 | `Cni, `Pointer _ -> incl acc
+                 | `Sep, _ -> inn acc
+                 | `Inc, `Logic _ -> assert false (* Not Done anymore *)
+                 | `Inc, `Pointer _ -> assert false (* Not Done anymore *)
+                 | `Cni, `Logic _ -> assert false (* Not Done anymore *)
+                 | `Cni, `Pointer _ -> assert false (* Not Done anymore *)
              else acc)
           finfo.jc_logic_info_effects.jc_effect_memories acc
     | `Pointer a, `Pointer b ->
@@ -294,7 +287,7 @@ let make_args ?(uniquify_usual=false) ?parameters f =
   let params = params @ model_params in
   let params = List.map (fun (n,_v,ty') -> (n,ty')) params in
   params
-
+(*
 let ft_name mem f = 
   let mem_name = memory_name mem in
   f.jc_logic_info_final_name^mem_name^ft_suffix
@@ -306,6 +299,12 @@ let ftpt_name mem f =
 let notin_name mem f = 
   let mem_name = memory_name mem in  
   f.jc_logic_info_final_name^mem_name^notin_suffix
+*)
+
+let in_name mem f = 
+  let mem_name = memory_name mem in  
+  f.jc_logic_info_final_name^mem_name^in_suffix
+
 
 let user_predicate_code queue id kind pred =
   let (logic,_) = Hashtbl.find Jc_typing.logic_functions_table id in
@@ -319,25 +318,19 @@ let user_predicate_code queue id kind pred =
         let ta = tvar ~label_in_name:true lab a in
         let tb = tvar ~label_in_name:true lab b in
         LNot (make_eq ta tb)
-    | `Notin (a,(f,fparams),mem) -> 
+    | `In (a,(f,fparams),mem) -> 
         let params = List.map (fun (s,_) -> LVar s) 
           (make_args ~parameters:fparams f) in
         let ta = tvar ~label_in_name:true lab a in
-        MyBag.make_in ta (LApp(notin_name mem f,params))
-    | `Ft_pt ((f,fparams),a,mem) -> 
-        let params = List.map (fun (s,_) -> LVar s) 
-          (make_args ~parameters:fparams f) in
-        let ta = tvar ~label_in_name:true lab a in
-        let params = ta::params in
-        LPred(ftpt_name mem f,params)
-    | `Notin_ft ((f,fparams),(g,gparams),mem) -> 
+        LNot (MyBag.make_in ta (LApp(in_name mem f,params)))
+    | `Disj ((f,fparams),(g,gparams),mem) -> 
         let g_params = List.map (fun (s,_) -> LVar s) 
           (make_args ~parameters:gparams g) in
-        let tg = LApp(notin_name mem g,g_params) in
+        let in_g = LApp(in_name mem g,g_params) in
         let f_params = List.map (fun (s,_) -> LVar s)
           (make_args ~parameters:fparams f) in
-        let f_params = tg::f_params in
-        LPred(ft_name mem f,f_params) in
+        let in_f = LApp(in_name mem f,f_params) in
+        LPred(disj_pred,[in_f;in_g]) in
   let code = List.map trad_code code in
   let code = make_and_list code in
   let args = make_args logic in
@@ -684,14 +677,14 @@ struct
        mem = m;
        label = label;
        mem_name = s;
-       name = s^notin_suffix^"_elt";
+       name = s^in_suffix^"_elt";
        ty_mem = memory_type mc}
     else
       {for_one = false;
        mem = m;
        label = label;
        mem_name = s;
-       name = s^notin_suffix;
+       name = s^in_suffix;
        ty_mem = memory_type mc}
 
   let is_memory t m = 
@@ -757,7 +750,7 @@ let push_not e =
     | LForall _ | LExists _ | LPred _ | LNamed _ -> assert false in
   pos e
 
-module Def_ft_pred : 
+(*module Def_ft_pred : 
 sig  val def_ft_pred : for_one:bool -> 'a ->
        NotIn.t -> 
        Output.why_decl list -> Output.why_decl list -> Output.why_decl list
@@ -1026,7 +1019,7 @@ struct
     let ft_name = ft_name notin f.jc_logic_info_name in
     Predicate(false,ft_name,args,code)::acc          
 end
-
+*)
 
 
 let tr_params_usual_model_aux f =
@@ -1044,26 +1037,15 @@ let tr_params_usual_model_aux f =
     let model_params = _3to2 model_params in
     usual_params,model_params
 
-
-module Def_notin :
-sig  val def_notin : 'a ->  NotIn.t ->
+(*
+module Def_in :
+sig  val def_in : 'a ->  NotIn.t ->
        Output.why_decl list -> Output.why_decl list ->
        Jc_fenv.logic_info * NotIn.t
        -> Output.why_decl list
-     val def_frame_ft_elt: string -> NotIn.t ->
-       (string * Output.logic_type) list ->
-       Output.why_decl list -> NotIn.t -> Output.why_decl list
-     val def_frame : string -> bool -> (string * Output.logic_type) list ->
+     val def_disj : string -> bool -> (string * Output.logic_type) list ->
        Output.why_decl list -> NotIn.t  -> Output.why_decl list
-     val def_notin_logic :
-       NotIn.t ->
-       Output.why_decl list -> Output.why_decl list -> Output.why_decl list
-     val def_frame_ft_notin :
-       string * NotIn.t * (string * Output.logic_type) list ->
-       Jc_fenv.logic_info * NotIn.t ->
-       Output.why_decl list -> NotInMap.key list ->
-       Output.why_decl list
-     val def_frame_notin :
+     val def_frame_in :
         string -> NotIn.t ->
        (string * Output.logic_type) list ->
        Output.why_decl list -> NotIn.t -> Output.why_decl list
@@ -1078,29 +1060,28 @@ end
   =
 struct
   
-  let notin_name notin s = s^(NotIn.mem_name2 notin)^notin_suffix
-  let gen_ft_name notin s = s^(NotIn.mem_name2 notin)^ft_suffix
-  let gen_ft_name_elt notin s = s^(NotIn.mem_name2 notin)^"_elt"^ft_suffix
+  let notin_name notin s = s^(NotIn.mem_name2 notin)^in_suffix
+  (* let gen_ft_name notin s = s^(NotIn.mem_name2 notin)^ft_suffix *)
+  (* let gen_ft_name_elt notin s = s^(NotIn.mem_name2 notin)^"_elt"^ft_suffix
+   *)
 
-  let conv_app_pred (f_name,f_notin,f_lt) notin s lt =
+  let conv_app_pred var_in notin s lt =
     let notin_name = notin_name notin s in
-    let ft_name = gen_ft_name f_notin f_name in
-    LPred(ft_name,LApp (notin_name,lt)::f_lt)
+    LPred(disj_name,[LApp (notin_name,lt);var_in])
 
-  let conv_app_pred_pt (f_name,f_notin,f_lt) elt =
-    let ft_name = gen_ft_name_elt f_notin f_name in
-    LPred(ft_name,elt::f_lt)
+  let conv_app_pred_pt var_in elt =
+    LNot (LPred(in_pred,[elt;var_in]))
 
-  let trad_app ft notin e =
+  let trad_app var_in notin e =
     match e with
       | LApp (s,[memory;elt]) when s = select_name -> 
           if NotIn.is_memory_var notin memory
-          then conv_app_pred_pt ft elt
+          then conv_app_pred_pt var_in elt
           else LTrue
       | LApp (s,_) when s = select_name ->  assert false (*really impossible*)
       | LApp (s,lt) -> 
           if List.exists (NotIn.is_memory_var notin) lt
-          then conv_app_pred ft notin s lt
+          then conv_app_pred var_in notin s lt
           else LTrue
       | _ -> assert false
 
@@ -1112,12 +1093,12 @@ struct
           else LTrue
       | _ -> assert false
 
-  let rec term_extract_effect ft notin acc e =
+  let rec term_extract_effect notin acc e =
     match e with
       | LConst _ | LVar _ | LVarAtLabel _ -> acc
-      | Tnamed (_,t) -> term_extract_effect ft notin acc t
-      | LApp (_,lt) -> (trad_app ft notin e)::
-          (List.fold_left (term_extract_effect ft notin) acc lt)
+      | Tnamed (_,t) -> term_extract_effect notin acc t
+      | LApp (_,lt) -> (trad_app notin e)::
+          (List.fold_left (term_extract_effect notin) acc lt)
       | TIf _ -> assert false
       | TLet _ -> assert false
 
@@ -1160,7 +1141,7 @@ struct
 
   (*let def_no_update f_name notin_update params prop =
     gen f_name f_name prop notin_update params []*)
-
+(*
   let def_frame_ft f_name notin params acc notin_update =
     let ft_name = Def_ft_pred.ft_name notin f_name in
     let p = (NotIn.name notin,NotIn.ty notin) in 
@@ -1175,7 +1156,7 @@ struct
     let ax = gen ft_name f_name (`Pred gen_framed) notin_update params 
       (p::params) in
     ax::acc
-
+*)
   let def_frame_notin f_name notin params acc notin_update =
     let notin_name = notin_name notin f_name in
     let gen_framed params = LApp(notin_name,params) in
@@ -1187,7 +1168,7 @@ struct
       then `Pred (fun params -> LPred(f_name,params))
       else `Term (fun params -> LApp(f_name,params)) in
     (gen f_name f_name gen_framed notin_update params params)::acc
-
+(*
   let gen_frame2 (f_name,notin,params) (ft_name,ft_notin,ft_params)
       acc (notin_notin_update, ft_notin_update) =
     let forall_params = remove_double Pervasives.compare
@@ -1275,17 +1256,8 @@ struct
     let ft_params = ft_params_usual @ ft_params_model in
     let ft = (ft_name,ft_notin,ft_params) in
     List.fold_left (gen_frame2 (f_name,notin,params) ft) acc notin_updates
-
-  let rec def_notin _f notin ta_conv acc ((ft,ft_notin) as ft_o) =
-    let ft_name = ft.jc_logic_info_name in
-    let ft_params_usual,ft_params_model = tr_params_usual_model_aux ft in
-    let ft_params_usual = 
-      List.map (fun (x,ty) -> "_JC_ft_"^x,ty)  ft_params_usual in
-    let ft_params_model = List.map (fun (x,ty) -> x,ty)
-      ft_params_model in
-    let ft = (ft_name,ft_notin,
-              List.map (fun (x,_) -> LVar x)
-                (ft_params_usual @ ft_params_model)) in
+*)
+  let rec def_notin _f notin ta_conv acc =
     match ta_conv with 
         (* Devrait peut-être utiliser la vrai transformation 
            d'inductif en 1 unique axiom*)
@@ -1294,8 +1266,8 @@ struct
             | LNot _a -> assert false (*gen_one_neg notin acc a*)
             | LPred (_,lt) as e -> 
                 let acc = List.fold_left 
-                  (term_extract_effect ft notin) acc lt in
-                (trad_pred ft notin e)::acc
+                  (term_extract_effect notin) acc lt in
+                (trad_pred notin e)::acc
             | LNamed (_,a) -> gen_one_neg notin acc a
             | LAnd (a,b) ->
                 gen_one_neg notin (gen_one_neg notin acc b) a
@@ -1317,8 +1289,7 @@ struct
             | (LAnd _ | LOr _) -> assert false 
             | a -> gen_one_pos ~impl notin acc a in
           
-          let name = (gen_ft_name ft_notin ft_name) ^ 
-            (notin_name notin f_name) in
+          let name = (notin_name notin f_name) in
           Jc_options.lprintf "Generate logic notin : %s :@." name;
           let acc = Logic(false,
                           name,
@@ -1338,6 +1309,7 @@ struct
                let asser = Axiom (axiom_name,asser) in
                asser::acc
             ) acc l in
+          (* The other side *)
           let params = List.map (fun (s,ty) -> ("_JC_"^s,ty)) params in
           let conjs = List.map
             (fun (_ident,assertion) ->
@@ -1500,7 +1472,188 @@ struct
 
 
 end
+*)
 
+module InDisj :
+sig
+  val define_In :
+    NotIn.t ->
+    Output.why_decl list ->
+    Output.why_decl list -> Output.why_decl list
+  val define_disj :
+    NotIn.t ->
+    Output.why_decl list ->
+    Output.why_decl list -> Output.why_decl list
+  val def_frame_in :  string -> NotIn.t -> (string * Output.logic_type) list ->
+    Output.why_decl list -> NotIn.t -> Output.why_decl list
+  val def_frame : string -> bool -> (string * Output.logic_type) list ->
+    Output.why_decl list -> NotIn.t -> Output.why_decl list
+end =
+struct
+
+
+  let trad_app s lt = (s,lt)
+
+  let rec term_extract_application acc e =
+    match e with
+      | LConst _ | LVar _ | LVarAtLabel _ -> acc
+      | Tnamed (_,t) -> term_extract_application acc t
+      | LApp (s,lt) -> (trad_app s lt)::
+          (List.fold_left term_extract_application acc lt)
+      | TIf _ -> assert false
+      | TLet _ -> assert false
+
+  let pred_extract_effect s lt acc =
+    (trad_app s lt)::(List.fold_left term_extract_application acc lt)
+
+  let inductive_extract_effect = 
+    let rec iee e acc =
+      match e with
+        | LTrue | LFalse -> acc
+        | LImpl(f1,f2) -> (iee f2) (neg f1 acc)
+        | LPred(_) -> acc
+        | _ -> failwith "Inductive must be forall x,.. Pn -> ... -> P1"
+    and neg e acc =
+      match e with
+        | LTrue | LFalse -> acc
+        | LAnd (f1,f2) -> neg f1 (neg f2 acc)
+        | LPred(s,lt) -> pred_extract_effect s lt acc
+        | _ -> failwith "Inductive must be forall x,.. (Pn && Pj) -> ... -> P1"
+    and rq = function
+        | LForall (_,_,_,f) -> rq f
+        | e -> iee e [] in
+    rq
+
+  let rec rewrite_inductive_case rw = function
+    | LForall (s,ty,_,f) -> LForall(s,ty,[],rewrite_inductive_case rw f)
+    | LTrue | LFalse as e -> e
+    | LImpl(f1,f2) -> LImpl(f1,rewrite_inductive_case rw f2)
+    | LPred(s,lt) -> rw s lt
+    | _ -> failwith "Inductive must be forall x,.. Pn -> ... -> P1"
+    
+
+  let rec pred_interp_or interp e =
+    let fnF = pred_interp_or interp in
+    match e with
+    | LTrue | LFalse -> LFalse
+    | LAnd(f1,f2) -> LOr (fnF f1, fnF f2)
+    | LOr(f1,f2) -> LOr(LAnd (f1,fnF f1),LAnd(f2,fnF f2))
+    | LForall (s,lt,_,f) -> LExists(s,lt,[],fnF f)
+    | LExists (s,lt,_,f) -> LExists(s,lt,[],LAnd(f,fnF f))
+    | LPred(s,lt) -> interp s lt
+    | _ -> failwith "Not Implemented, not in formula"
+
+
+  let rec pred_interp_and interp e =
+    let fnF = pred_interp_and interp in
+    match e with
+    | LTrue | LFalse -> LTrue
+    | LAnd(f1,f2) -> LAnd (fnF f1, fnF f2)
+    | LOr(f1,f2) -> LAnd(LImpl (f1,fnF f1),LImpl(f2,fnF f2))
+    | LForall (s,lt,_,f) -> LForall(s,lt,[],fnF f)
+    | LExists (s,lt,_,f) -> LForall(s,lt,[],LImpl(f,fnF f))
+    | LPred(s,lt) -> interp s lt
+    | _ -> failwith "Not Implemented, not in formula"
+
+  let notin_name notin s = s^(NotIn.mem_name2 notin)^in_suffix
+
+  let in_interp_app var notin s lt =
+    if s = select_name then
+      match lt with
+        | [_;p] -> LNot (make_eq (LVar (fst var)) p)
+        | _ -> assert false
+    else
+    LPred(in_pred,[LVar (fst var);LApp(notin_name notin s, lt)])
+
+  let disj_interp_app var notin s lt =
+    if s = select_name then
+      match lt with
+        | [_;p] -> LPred(in_pred,[p;LVar (fst var)])
+        | _ -> assert false
+    else
+    LPred(disj_pred,[LVar (fst var);LApp(notin_name notin s, lt)])
+
+  let mem_are_compatible notin (_,lt) =
+    List.exists (NotIn.is_memory_var notin) lt
+
+  let inductive_to_axioms (pname,var,fname,lt) l acc =
+    let constr acc (ident,assertion) = Axiom (ident,assertion)::acc in
+    let acc = List.fold_left constr acc l in
+    let rec rewrite = function
+      | LForall(v,t,_,a) -> LExists(v,t,[],rewrite a)
+      | LImpl(f1,f2) -> LAnd(f1,rewrite f2)
+      | LPred(_,[var2;LApp(_,lt2)]) -> 
+        let eqs = (var,var2) :: (List.combine lt lt2) in
+        let eqs = List.map (fun (a1,a2) -> make_eq (LVar (fst a1)) a2) eqs in
+        make_and_list eqs
+      | _ -> assert false in
+    let assertions = List.map (fun (_,a) -> rewrite a) l in
+    let assertions = make_or_list assertions in
+    let pred = LPred(pname,
+                     [LVar (fst var);
+                      LApp(fname,List.map (fun var -> LVar (fst var)) lt)]) in
+    let assertion = LImpl(pred,assertions) in
+    let assertion = make_forall_list (var::lt) [] assertion in
+    Axiom ("axiom_"^pname^"_"^fname,assertion) :: acc
+
+  let define_In notin ta_conv acc = 
+    match ta_conv with 
+        (* Devrait peut-être utiliser la vrai transformation 
+           d'inductif en 1 unique axiom*)
+      | [Inductive (_,f_name,params,l)] -> 
+        let name = (notin_name notin f_name) in
+        Jc_options.lprintf "Generate logic in : %s :@." name;
+        let acc = Logic(false, name, params, NotIn.ty notin)::acc in
+        let var = ("jc_var",NotIn.ty_elt notin) in
+        let gen_case acc (ident,assertion) =
+          let effects = inductive_extract_effect assertion in
+          let effects = List.filter (mem_are_compatible notin) effects in
+          let rw seff lteff s lt =
+            LImpl(in_interp_app var notin seff lteff,
+                  in_interp_app var notin s lt) in
+          let nb = ref 0 in
+          let rewrite acc (seff,lteff) = 
+            incr nb;
+            let assertion =
+              LForall(fst var,snd var,[],
+                      rewrite_inductive_case (rw seff lteff) assertion) in
+            (ident^(string_of_int !nb), assertion) :: acc in
+          List.fold_left rewrite acc effects in
+        let l = List.fold_left gen_case [] l in
+        inductive_to_axioms (in_pred,var,name,params) l acc
+      | _ -> assert false
+
+  let define_disj notin ta_conv acc = 
+    match ta_conv with 
+      (* Devrait peut-être utiliser la vrai transformation 
+         d'inductif en 1 unique axiom*)
+      | [Inductive (_,f_name,params,l)] -> 
+        let name = (notin_name notin f_name) in
+        Jc_options.lprintf "Generate logic in : %s :@." name;
+        let acc = Logic(false, name, params, NotIn.ty notin)::acc in
+        let var = ("jc_var",NotIn.ty notin) in
+        let gen_case acc (ident,assertion) =
+          let effects = inductive_extract_effect assertion in
+          let effects = List.filter (mem_are_compatible notin) effects in
+          let rw s lt =
+            List.fold_left (fun acc (seff,lteff) ->
+              LImpl(disj_interp_app var notin seff lteff,acc))
+              (disj_interp_app var notin s lt) effects in
+          let rewrite acc = 
+            let assertion =
+              LForall(fst var,snd var,[],
+                      rewrite_inductive_case rw assertion) in
+            (ident, assertion) :: acc in
+          rewrite acc in
+        let l = List.fold_left gen_case [] l in
+        inductive_to_axioms (disj_pred,var,name,params) l acc
+      | _ -> assert false
+
+  let def_frame_in _f_name _notin _params acc _notin_frame = acc
+
+  let def_frame _f_name _notin _params acc _notin_frame = acc
+
+end
     
 let tr_params_usual_model f =
   let usual_params,model_params = tr_params_usual_model_aux f in
@@ -1546,85 +1699,69 @@ let tr_logic_fun_aux f ta acc =
         let todos = 
           Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
         let filter_notin acc = function
-          | ((`Notin _| `Notin_pt) , mem) -> (NotIn.from_memory false mem)::acc
+          | (`In , mem) -> (NotIn.from_memory false mem)::acc
           | _ -> acc in
         (* notin_updates is used to create the frames axioms *)
         let notin_updates = List.fold_left filter_notin [] todos in
         let print_todo fmt = function
-           | (`Ft,_) -> fprintf fmt "ft"
-           | (`Notin _,_) -> fprintf fmt "notin"
-           | (`Notin_pt,_) -> fprintf fmt "notin_pt"
-           | (`Ft_pt,_) -> fprintf fmt "ft_pt" in
+           | (`Disj,_) -> fprintf fmt "disj"
+           | (`In,_) -> fprintf fmt "in" in
         Jc_options.lprintf "%s asks to generate : %a@." 
           f_name (Pp.print_list Pp.comma print_todo) todos;
         let make_todo acc (todo,mem) =
           match todo with
-            | `Ft -> 
+            | `In -> 
                 let notin = NotIn.from_memory false mem in
-                let acc = Def_ft_pred.def_ft_pred ~for_one:false
-                  f notin fun_def acc in acc
-            | `Notin (ft,ft_mem) -> 
-                let notin = NotIn.from_memory false mem in
-                let ft_notin = NotIn.from_memory false ft_mem in
-                let ft = (ft,ft_notin) in
-                let acc = Def_notin.def_notin f notin fun_def acc ft  in
-                let acc = 
-                  List.fold_left 
-                    (Def_notin.def_frame_notin f_name notin params)
+                let acc = InDisj.define_In notin fun_def acc in
+                let acc =
+                  List.fold_left
+                    (InDisj.def_frame_in f_name notin params)
                     acc notin_updates in
-                Def_notin.def_frame_ft_notin (f_name,notin,params) ft
-                  acc notin_updates
-            | `Notin_pt -> (* TODO frame and dont do it if notin *)
+                acc
+            | `Disj -> 
                 let notin = NotIn.from_memory false mem in
-                Def_notin.def_notin_logic notin fun_def acc
-            | `Ft_pt -> 
-                let notin = NotIn.from_memory true mem in
-                let acc = Def_ft_pred.def_ft_pred 
-                  ~for_one:true
-                  f notin fun_def acc in
-                let notin = NotIn.from_memory false mem in
-                List.fold_left (Def_notin.def_frame_ft_elt f_name notin params)
-                  acc notin_updates in
+                let acc = InDisj.define_disj notin fun_def acc  in
+                acc in
         let acc = List.fold_left make_todo acc todos in
         let is_pred = f.jc_logic_info_result_type = None in
-        List.fold_left (Def_notin.def_frame f_name is_pred params) 
+        List.fold_left (InDisj.def_frame f_name is_pred params)
           acc notin_updates
       end
     else acc in 
   acc
 
-let user_predicate_ft f _ which acc =
-  let todos =
-    Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in
-  let fold acc = function
-    | `Logic (f,_,params) -> (f,make_args ~parameters:params f) ::acc
-    | `Pointer _ -> acc in
-  let framed = List.fold_left fold [] which in
-  let args = make_args f in
-  let print_todo fmt = function
-    | (`Ft,_) -> fprintf fmt "ft"
-    | (`Notin _,_) -> fprintf fmt "notin"
-    | (`Notin_pt,_) -> fprintf fmt "notin_pt"
-    | (`Ft_pt,_) -> fprintf fmt "ft_pt" in
-  Jc_options.lprintf "user predicate %s asks to generate : %a@."
-    f.jc_logic_info_name (Pp.print_list Pp.comma print_todo) todos;
-  let make_todo acc (todo,mem) =
-    match todo with
-      | `Ft ->
-          let notin = NotIn.from_memory false mem in
-          Def_ft_pred.ft_for_ft f args notin framed acc
-      | `Notin (ft,ft_mem) ->
-          let notin = NotIn.from_memory false mem in
-          let ft_notin = NotIn.from_memory false ft_mem in
-          let ft = (ft,ft_notin) in
-          Def_notin.notin_for_notin f args notin ft framed acc
-      | `Notin_pt -> (* TODO frame and dont do it if notin *)
-          acc
-      | `Ft_pt ->
-          let notin = NotIn.from_memory true mem in
-          Def_ft_pred.ft_for_ft f args notin framed acc in
-  let acc = List.fold_left make_todo acc todos in
-  acc  
+(* let user_predicate_ft f _ which acc = *)
+(*   let todos = *)
+(*     Hashtbl.find_all predicates_to_generate f.jc_logic_info_tag in *)
+(*   let fold acc = function *)
+(*     | `Logic (f,_,params) -> (f,make_args ~parameters:params f) ::acc *)
+(*     | `Pointer _ -> acc in *)
+(*   let framed = List.fold_left fold [] which in *)
+(*   let args = make_args f in *)
+(*   let print_todo fmt = function *)
+(*     | (`Ft,_) -> fprintf fmt "ft" *)
+(*     | (`Notin _,_) -> fprintf fmt "notin" *)
+(*     | (`Notin_pt,_) -> fprintf fmt "notin_pt" *)
+(*     | (`Ft_pt,_) -> fprintf fmt "ft_pt" in *)
+(*   Jc_options.lprintf "user predicate %s asks to generate : %a@." *)
+(*     f.jc_logic_info_name (Pp.print_list Pp.comma print_todo) todos; *)
+(*   let make_todo acc (todo,mem) = *)
+(*     match todo with *)
+(*       | `Ft -> *)
+(*           let notin = NotIn.from_memory false mem in *)
+(*           Def_ft_pred.ft_for_ft f args notin framed acc *)
+(*       | `Notin (ft,ft_mem) -> *)
+(*           let notin = NotIn.from_memory false mem in *)
+(*           let ft_notin = NotIn.from_memory false ft_mem in *)
+(*           let ft = (ft,ft_notin) in *)
+(*           Def_notin.notin_for_notin f args notin ft framed acc *)
+(*       | `Notin_pt -> (\* TODO frame and dont do it if notin *\) *)
+(*           acc *)
+(*       | `Ft_pt -> *)
+(*           let notin = NotIn.from_memory true mem in *)
+(*           Def_ft_pred.ft_for_ft f args notin framed acc in *)
+(*   let acc = List.fold_left make_todo acc todos in *)
+(*   acc   *)
 
 
 (*   (\* full_separated axioms. *\) *)
@@ -1702,7 +1839,7 @@ let tr_logic_fun ft ta acc =
     Hashtbl.mem pragma_gen_sep ft.jc_logic_info_tag
   then match Hashtbl.find pragma_gen_sep ft.jc_logic_info_tag with
     | (_,_,None) -> assert false
-    | (_,w,Some code) -> user_predicate_ft ft ta w (code::acc)
+    | (_,_,Some code) -> code::acc
   else tr_logic_fun_aux ft ta acc
 
 (*
