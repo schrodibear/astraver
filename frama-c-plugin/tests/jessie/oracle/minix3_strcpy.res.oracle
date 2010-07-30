@@ -527,15 +527,15 @@ logic memchr: char_P pointer, int, int, (char_P, int8) memory -> bool
 
 axiom memchr_def :
  (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
-  (forall s_0:char_P pointer.
+  (forall s_0_0:char_P pointer.
    (forall c_0:int.
     (forall n_3:int.
-     (eq_bool(memchr(s_0, c_0, n_3, char_P_char_M_s_3_at_L), true)
+     (eq_bool(memchr(s_0_0, c_0, n_3, char_P_char_M_s_3_at_L), true)
      <-> (exists i_0:int32.
           (le_int((0), integer_of_int32(i_0))
           and (lt_int(integer_of_int32(i_0), n_3)
               and eq_int(integer_of_int8(select(char_P_char_M_s_3_at_L,
-                                         shift(s_0, integer_of_int32(i_0)))),
+                                         shift(s_0_0, integer_of_int32(i_0)))),
                   c_0)))))))))
 
 logic memcmp: char_P pointer, char_P pointer, int, (char_P, int8) memory,
@@ -544,13 +544,13 @@ logic memcmp: char_P pointer, char_P pointer, int, (char_P, int8) memory,
 axiom memcmp_range :
  (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
   (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
-   (forall s1_0:char_P pointer.
+   (forall s1_0_0:char_P pointer.
     (forall s2_0_0:char_P pointer.
      (forall n_0:int.
       (le_int(sub_int(neg_int((2147483647)), (1)),
-       memcmp(s1_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
+       memcmp(s1_0_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
        char_P_char_M_s1_1_at_L))
-      and le_int(memcmp(s1_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
+      and le_int(memcmp(s1_0_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
                  char_P_char_M_s1_1_at_L),
           (2147483647))))))))
 
@@ -559,14 +559,14 @@ logic strlen: char_P pointer, (char_P, int8) memory -> int
 axiom memcmp_strlen_left :
  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
   (forall s1_2:char_P pointer.
-   (forall s2_2:char_P pointer.
+   (forall s2_2_0:char_P pointer.
     (forall n_6:int.
-     ((eq_int(memcmp(s1_2, s2_2, n_6, char_P_char_M_s_3_5_at_L,
+     ((eq_int(memcmp(s1_2, s2_2_0, n_6, char_P_char_M_s_3_5_at_L,
               char_P_char_M_s_3_5_at_L),
        (0))
       and lt_int(strlen(s1_2, char_P_char_M_s_3_5_at_L), n_6)) ->
       eq_int(strlen(s1_2, char_P_char_M_s_3_5_at_L),
-      strlen(s2_2, char_P_char_M_s_3_5_at_L)))))))
+      strlen(s2_2_0, char_P_char_M_s_3_5_at_L)))))))
 
 axiom memcmp_strlen_right :
  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
@@ -613,17 +613,17 @@ axiom memcmp_strlen_shift_right :
 axiom memcmp_zero :
  (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
   (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
-   (forall s1_1:char_P pointer.
-    (forall s2_1:char_P pointer.
+   (forall s1_1_0:char_P pointer.
+    (forall s2_1_0:char_P pointer.
      (forall n_1:int.
-      (eq_int(memcmp(s1_1, s2_1, n_1, char_P_char_M_s2_2_at_L,
+      (eq_int(memcmp(s1_1_0, s2_1_0, n_1, char_P_char_M_s2_2_at_L,
               char_P_char_M_s1_1_at_L),
        (0))
       <-> (forall i:int.
            ((le_int((0), i) and lt_int(i, n_1)) ->
             eq_int(integer_of_int8(select(char_P_char_M_s1_1_at_L,
-                                   shift(s1_1, i))),
-            integer_of_int8(select(char_P_char_M_s2_2_at_L, shift(s2_1, i))))))))))))
+                                   shift(s1_1_0, i))),
+            integer_of_int8(select(char_P_char_M_s2_2_at_L, shift(s2_1_0, i))))))))))))
 
 logic memset: char_P pointer, int, int, (char_P, int8) memory -> bool
 
@@ -649,12 +649,12 @@ axiom no_assign_memchr_0 :
     (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
      (forall n_2:int.
       (forall c:int.
-       (forall s:char_P pointer.
+       (forall s_0:char_P pointer.
         ((pset_disjoint(tmp,
-          pset_range(pset_singleton(s), (0), sub_int(n_2, (1))))
+          pset_range(pset_singleton(s_0), (0), sub_int(n_2, (1))))
          and not_assigns(tmpalloc, char_P_char_M_s_3_at_L, tmpmem, tmp)) ->
-         (memchr(s, c, n_2, char_P_char_M_s_3_at_L) = memchr(s, c, n_2,
-                                                      tmpmem))))))))))
+         (memchr(s_0, c, n_2, char_P_char_M_s_3_at_L) = memchr(s_0, c, n_2,
+                                                        tmpmem))))))))))
 
 axiom no_assign_memcmp_0 :
  (forall tmp:char_P pset.
@@ -663,13 +663,13 @@ axiom no_assign_memcmp_0 :
     (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
      (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
       (forall n:int.
-       (forall s2:char_P pointer.
-        (forall s1:char_P pointer.
+       (forall s2_1:char_P pointer.
+        (forall s1_1:char_P pointer.
          ((pset_disjoint(tmp,
-           pset_range(pset_singleton(s2), (0), sub_int(n, (1))))
+           pset_range(pset_singleton(s2_1), (0), sub_int(n, (1))))
           and not_assigns(tmpalloc, char_P_char_M_s2_2_at_L, tmpmem, tmp)) ->
-          (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-           char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n, tmpmem,
+          (memcmp(s1_1, s2_1, n, char_P_char_M_s2_2_at_L,
+           char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n, tmpmem,
                                       char_P_char_M_s1_1_at_L)))))))))))
 
 axiom no_assign_memcmp_1 :
@@ -679,13 +679,13 @@ axiom no_assign_memcmp_1 :
     (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
      (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
       (forall n:int.
-       (forall s2:char_P pointer.
-        (forall s1:char_P pointer.
+       (forall s2_1:char_P pointer.
+        (forall s1_1:char_P pointer.
          ((pset_disjoint(tmp,
-           pset_range(pset_singleton(s1), (0), sub_int(n, (1))))
+           pset_range(pset_singleton(s1_1), (0), sub_int(n, (1))))
           and not_assigns(tmpalloc, char_P_char_M_s1_1_at_L, tmpmem, tmp)) ->
-          (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-           char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+          (memcmp(s1_1, s2_1, n, char_P_char_M_s2_2_at_L,
+           char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n,
                                       char_P_char_M_s2_2_at_L, tmpmem)))))))))))
 
 axiom no_assign_memset_0 :
@@ -913,12 +913,12 @@ axiom no_update_memchr_0 :
    (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
     (forall n_2:int.
      (forall c:int.
-      (forall s:char_P pointer.
+      (forall s_0:char_P pointer.
        ((not in_pset(tmp,
-             pset_range(pset_singleton(s), (0), sub_int(n_2, (1))))) ->
-        (memchr(s, c, n_2, char_P_char_M_s_3_at_L) = memchr(s, c, n_2,
-                                                     store(char_P_char_M_s_3_at_L,
-                                                     tmp, tmpval))))))))))
+             pset_range(pset_singleton(s_0), (0), sub_int(n_2, (1))))) ->
+        (memchr(s_0, c, n_2, char_P_char_M_s_3_at_L) = memchr(s_0, c, n_2,
+                                                       store(char_P_char_M_s_3_at_L,
+                                                       tmp, tmpval))))))))))
 
 axiom no_update_memcmp_0 :
  (forall tmp:char_P pointer.
@@ -926,13 +926,14 @@ axiom no_update_memcmp_0 :
    (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
      (forall n:int.
-      (forall s2:char_P pointer.
-       (forall s1:char_P pointer.
+      (forall s2_1:char_P pointer.
+       (forall s1_1:char_P pointer.
         ((not in_pset(tmp,
-              pset_range(pset_singleton(s2), (0), sub_int(n, (1))))) ->
-         (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L, char_P_char_M_s1_1_at_L) = 
-         memcmp(s1, s2, n, store(char_P_char_M_s2_2_at_L, tmp, tmpval),
-         char_P_char_M_s1_1_at_L))))))))))
+              pset_range(pset_singleton(s2_1), (0), sub_int(n, (1))))) ->
+         (memcmp(s1_1, s2_1, n, char_P_char_M_s2_2_at_L,
+          char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n,
+                                     store(char_P_char_M_s2_2_at_L, tmp,
+                                     tmpval), char_P_char_M_s1_1_at_L))))))))))
 
 axiom no_update_memcmp_1 :
  (forall tmp:char_P pointer.
@@ -940,13 +941,15 @@ axiom no_update_memcmp_1 :
    (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
      (forall n:int.
-      (forall s2:char_P pointer.
-       (forall s1:char_P pointer.
+      (forall s2_1:char_P pointer.
+       (forall s1_1:char_P pointer.
         ((not in_pset(tmp,
-              pset_range(pset_singleton(s1), (0), sub_int(n, (1))))) ->
-         (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L, char_P_char_M_s1_1_at_L) = 
-         memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-         store(char_P_char_M_s1_1_at_L, tmp, tmpval)))))))))))
+              pset_range(pset_singleton(s1_1), (0), sub_int(n, (1))))) ->
+         (memcmp(s1_1, s2_1, n, char_P_char_M_s2_2_at_L,
+          char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n,
+                                     char_P_char_M_s2_2_at_L,
+                                     store(char_P_char_M_s1_1_at_L, tmp,
+                                     tmpval)))))))))))
 
 axiom no_update_memset_0 :
  (forall tmp:char_P pointer.
@@ -1845,7 +1848,7 @@ parameter safe_uint16_of_integer_ :
 
 parameter strcpy :
  ret:char_P pointer ->
-  s2_0:char_P pointer ->
+  s2_2:char_P pointer ->
    char_P_char_M_ret_20:(char_P, int8) memory ref ->
     char_P_s2_21_alloc_table:char_P alloc_table ->
      char_P_ret_20_alloc_table:char_P alloc_table ->
@@ -1854,13 +1857,13 @@ parameter strcpy :
 
 parameter strcpy_requires :
  ret:char_P pointer ->
-  s2_0:char_P pointer ->
+  s2_2:char_P pointer ->
    char_P_char_M_ret_20:(char_P, int8) memory ref ->
     char_P_s2_21_alloc_table:char_P alloc_table ->
      char_P_ret_20_alloc_table:char_P alloc_table ->
       char_P_char_M_s2_21:(char_P, int8) memory ->
        { (JC_1:
-         valid_string(s2_0, char_P_s2_21_alloc_table, char_P_char_M_s2_21))}
+         valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21))}
        char_P pointer writes char_P_char_M_ret_20 { true }
 
 parameter uint16_of_integer_ :
@@ -1869,9 +1872,9 @@ parameter uint16_of_integer_ :
   { eq_int(integer_of_uint16(result), x) }
 
 let strcpy_ensures_default =
- fun (ret : char_P pointer) (s2_0 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
-  { (JC_3: valid_string(s2_0, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
-  (let mutable_s2_0 = ref s2_0 in
+ fun (ret : char_P pointer) (s2_2 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
+  { (JC_3: valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
+  (let mutable_s2_2 = ref s2_2 in
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -1906,11 +1909,11 @@ let strcpy_ensures_default =
                (let jessie_37 =
                (C_5:
                begin
-                 (let jessie_33 = (tmp_1 := !mutable_s2_0) in void);
+                 (let jessie_33 = (tmp_1 := !mutable_s2_2) in void);
                 (C_7:
                 begin
                   (let jessie_35 =
-                  (mutable_s2_0 := (C_6: ((shift !mutable_s2_0) (1)))) in
+                  (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in
                   void);
                  (C_9:
                  begin
@@ -1933,9 +1936,9 @@ let strcpy_ensures_default =
    !return end))) { (JC_5: true) }
 
 let strcpy_safety =
- fun (ret : char_P pointer) (s2_0 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
-  { (JC_3: valid_string(s2_0, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
-  (let mutable_s2_0 = ref s2_0 in
+ fun (ret : char_P pointer) (s2_2 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
+  { (JC_3: valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
+  (let mutable_s2_2 = ref s2_2 in
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -1970,11 +1973,11 @@ let strcpy_safety =
                (let jessie_15 =
                (C_5:
                begin
-                 (let jessie_11 = (tmp_1 := !mutable_s2_0) in void);
+                 (let jessie_11 = (tmp_1 := !mutable_s2_2) in void);
                 (C_7:
                 begin
                   (let jessie_13 =
-                  (mutable_s2_0 := (C_6: ((shift !mutable_s2_0) (1)))) in
+                  (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in
                   void);
                  (C_9:
                  begin
@@ -2027,11 +2030,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po5.why">
-      <location file = "why/minix3_strcpy.why" line = "1522" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1525" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po6.why">
-      <location file = "why/minix3_strcpy.why" line = "1522" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1525" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2823,6 +2826,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type char_P
 
 type int32
@@ -2911,14 +3015,14 @@ logic memchr : char_P pointer, int, int, (char_P, int8) memory -> bool
 
 axiom memchr_def:
   (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
-    (forall s_0:char_P pointer.
+    (forall s_0_0:char_P pointer.
       (forall c_0:int.
         (forall n_3:int.
-          ((memchr(s_0, c_0, n_3, char_P_char_M_s_3_at_L) = true) <->
+          ((memchr(s_0_0, c_0, n_3, char_P_char_M_s_3_at_L) = true) <->
            (exists i_0:int32.
              ((0 <= integer_of_int32(i_0)) and
               ((integer_of_int32(i_0) < n_3) and
-               (integer_of_int8(select(char_P_char_M_s_3_at_L, shift(s_0,
+               (integer_of_int8(select(char_P_char_M_s_3_at_L, shift(s_0_0,
                integer_of_int32(i_0)))) = c_0)))))))))
 
 logic memcmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
@@ -2927,12 +3031,12 @@ logic memcmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
 axiom memcmp_range:
   (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
-      (forall s1_0:char_P pointer.
+      (forall s1_0_0:char_P pointer.
         (forall s2_0_0:char_P pointer.
           (forall n_0:int.
-            ((((-2147483647) - 1) <= memcmp(s1_0, s2_0_0, n_0,
+            ((((-2147483647) - 1) <= memcmp(s1_0_0, s2_0_0, n_0,
              char_P_char_M_s2_2_at_L, char_P_char_M_s1_1_at_L)) and
-             (memcmp(s1_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
+             (memcmp(s1_0_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
              char_P_char_M_s1_1_at_L) <= 2147483647)))))))
 
 logic strlen : char_P pointer, (char_P, int8) memory -> int
@@ -2940,12 +3044,12 @@ logic strlen : char_P pointer, (char_P, int8) memory -> int
 axiom memcmp_strlen_left:
   (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
     (forall s1_2:char_P pointer.
-      (forall s2_2:char_P pointer.
+      (forall s2_2_0:char_P pointer.
         (forall n_6:int.
-          (((memcmp(s1_2, s2_2, n_6, char_P_char_M_s_3_5_at_L,
+          (((memcmp(s1_2, s2_2_0, n_6, char_P_char_M_s_3_5_at_L,
             char_P_char_M_s_3_5_at_L) = 0) and (strlen(s1_2,
             char_P_char_M_s_3_5_at_L) < n_6)) ->
-           (strlen(s1_2, char_P_char_M_s_3_5_at_L) = strlen(s2_2,
+           (strlen(s1_2, char_P_char_M_s_3_5_at_L) = strlen(s2_2_0,
            char_P_char_M_s_3_5_at_L)))))))
 
 axiom memcmp_strlen_right:
@@ -2988,16 +3092,17 @@ axiom memcmp_strlen_shift_right:
 axiom memcmp_zero:
   (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
-      (forall s1_1:char_P pointer.
-        (forall s2_1:char_P pointer.
+      (forall s1_1_0:char_P pointer.
+        (forall s2_1_0:char_P pointer.
           (forall n_1:int.
-            ((memcmp(s1_1, s2_1, n_1, char_P_char_M_s2_2_at_L,
+            ((memcmp(s1_1_0, s2_1_0, n_1, char_P_char_M_s2_2_at_L,
              char_P_char_M_s1_1_at_L) = 0) <->
              (forall i:int.
                (((0 <= i) and (i < n_1)) ->
-                (integer_of_int8(select(char_P_char_M_s1_1_at_L, shift(s1_1,
+                (integer_of_int8(select(char_P_char_M_s1_1_at_L,
+                shift(s1_1_0,
                 i))) = integer_of_int8(select(char_P_char_M_s2_2_at_L,
-                shift(s2_1, i))))))))))))
+                shift(s2_1_0, i))))))))))))
 
 logic memset : char_P pointer, int, int, (char_P, int8) memory -> bool
 
@@ -3022,12 +3127,12 @@ axiom no_assign_memchr_0:
         (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
           (forall n_2:int.
             (forall c:int.
-              (forall s:char_P pointer.
-                ((pset_disjoint(tmp, pset_range(pset_singleton(s), 0,
+              (forall s_0:char_P pointer.
+                ((pset_disjoint(tmp, pset_range(pset_singleton(s_0), 0,
                   (n_2 - 1))) and not_assigns(tmpalloc,
                   char_P_char_M_s_3_at_L, tmpmem, tmp)) ->
-                 (memchr(s, c, n_2, char_P_char_M_s_3_at_L) = memchr(s, c,
-                 n_2, tmpmem))))))))))
+                 (memchr(s_0, c, n_2, char_P_char_M_s_3_at_L) = memchr(s_0,
+                 c, n_2, tmpmem))))))))))
 
 axiom no_assign_memcmp_0:
   (forall tmp:char_P pset.
@@ -3036,13 +3141,13 @@ axiom no_assign_memcmp_0:
         (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
           (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
             (forall n:int.
-              (forall s2:char_P pointer.
-                (forall s1:char_P pointer.
-                  ((pset_disjoint(tmp, pset_range(pset_singleton(s2), 0,
+              (forall s2_1:char_P pointer.
+                (forall s1_1:char_P pointer.
+                  ((pset_disjoint(tmp, pset_range(pset_singleton(s2_1), 0,
                     (n - 1))) and not_assigns(tmpalloc,
                     char_P_char_M_s2_2_at_L, tmpmem, tmp)) ->
-                   (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-                   char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n, tmpmem,
+                   (memcmp(s1_1, s2_1, n, char_P_char_M_s2_2_at_L,
+                   char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n, tmpmem,
                    char_P_char_M_s1_1_at_L)))))))))))
 
 axiom no_assign_memcmp_1:
@@ -3052,13 +3157,13 @@ axiom no_assign_memcmp_1:
         (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
           (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
             (forall n:int.
-              (forall s2:char_P pointer.
-                (forall s1:char_P pointer.
-                  ((pset_disjoint(tmp, pset_range(pset_singleton(s1), 0,
+              (forall s2_1:char_P pointer.
+                (forall s1_1:char_P pointer.
+                  ((pset_disjoint(tmp, pset_range(pset_singleton(s1_1), 0,
                     (n - 1))) and not_assigns(tmpalloc,
                     char_P_char_M_s1_1_at_L, tmpmem, tmp)) ->
-                   (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-                   char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+                   (memcmp(s1_1, s2_1, n, char_P_char_M_s2_2_at_L,
+                   char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n,
                    char_P_char_M_s2_2_at_L, tmpmem)))))))))))
 
 axiom no_assign_memset_0:
@@ -3287,10 +3392,10 @@ axiom no_update_memchr_0:
       (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
         (forall n_2:int.
           (forall c:int.
-            (forall s:char_P pointer.
-              ((not in_pset(tmp, pset_range(pset_singleton(s), 0,
-               (n_2 - 1)))) -> (memchr(s, c, n_2,
-               char_P_char_M_s_3_at_L) = memchr(s, c, n_2,
+            (forall s_0:char_P pointer.
+              ((not in_pset(tmp, pset_range(pset_singleton(s_0), 0,
+               (n_2 - 1)))) -> (memchr(s_0, c, n_2,
+               char_P_char_M_s_3_at_L) = memchr(s_0, c, n_2,
                store(char_P_char_M_s_3_at_L, tmp, tmpval))))))))))
 
 axiom no_update_memcmp_0:
@@ -3299,11 +3404,12 @@ axiom no_update_memcmp_0:
       (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
         (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
           (forall n:int.
-            (forall s2:char_P pointer.
-              (forall s1:char_P pointer.
-                ((not in_pset(tmp, pset_range(pset_singleton(s2), 0,
-                 (n - 1)))) -> (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-                 char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+            (forall s2_1:char_P pointer.
+              (forall s1_1:char_P pointer.
+                ((not in_pset(tmp, pset_range(pset_singleton(s2_1), 0,
+                 (n - 1)))) -> (memcmp(s1_1, s2_1, n,
+                 char_P_char_M_s2_2_at_L,
+                 char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n,
                  store(char_P_char_M_s2_2_at_L, tmp, tmpval),
                  char_P_char_M_s1_1_at_L))))))))))
 
@@ -3313,11 +3419,12 @@ axiom no_update_memcmp_1:
       (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
         (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
           (forall n:int.
-            (forall s2:char_P pointer.
-              (forall s1:char_P pointer.
-                ((not in_pset(tmp, pset_range(pset_singleton(s1), 0,
-                 (n - 1)))) -> (memcmp(s1, s2, n, char_P_char_M_s2_2_at_L,
-                 char_P_char_M_s1_1_at_L) = memcmp(s1, s2, n,
+            (forall s2_1:char_P pointer.
+              (forall s1_1:char_P pointer.
+                ((not in_pset(tmp, pset_range(pset_singleton(s1_1), 0,
+                 (n - 1)))) -> (memcmp(s1_1, s2_1, n,
+                 char_P_char_M_s2_2_at_L,
+                 char_P_char_M_s1_1_at_L) = memcmp(s1_1, s2_1, n,
                  char_P_char_M_s2_2_at_L, store(char_P_char_M_s1_1_at_L, tmp,
                  tmpval)))))))))))
 

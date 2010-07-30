@@ -1005,15 +1005,15 @@ logic memchr: char_P pointer, int, int, (char_P, int8) memory -> bool
 
 axiom memchr_def :
  (forall char_P_char_M_s_7_at_L:(char_P, int8) memory.
-  (forall s_0:char_P pointer.
+  (forall s_0_0:char_P pointer.
    (forall c_0:int.
     (forall n_3:int.
-     (eq_bool(memchr(s_0, c_0, n_3, char_P_char_M_s_7_at_L), true)
+     (eq_bool(memchr(s_0_0, c_0, n_3, char_P_char_M_s_7_at_L), true)
      <-> (exists i_0:int32.
           (le_int((0), integer_of_int32(i_0))
           and (lt_int(integer_of_int32(i_0), n_3)
               and eq_int(integer_of_int8(select(char_P_char_M_s_7_at_L,
-                                         shift(s_0, integer_of_int32(i_0)))),
+                                         shift(s_0_0, integer_of_int32(i_0)))),
                   c_0)))))))))
 
 logic memcmp: char_P pointer, char_P pointer, int, (char_P, int8) memory,
@@ -1022,13 +1022,13 @@ logic memcmp: char_P pointer, char_P pointer, int, (char_P, int8) memory,
 axiom memcmp_range :
  (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
   (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
-   (forall s1_0:char_P pointer.
-    (forall s2_0:char_P pointer.
+   (forall s1_0_0:char_P pointer.
+    (forall s2_0_0:char_P pointer.
      (forall n_0:int.
       (le_int(sub_int(neg_int((2147483647)), (1)),
-       memcmp(s1_0, s2_0, n_0, char_P_char_M_s2_6_at_L,
+       memcmp(s1_0_0, s2_0_0, n_0, char_P_char_M_s2_6_at_L,
        char_P_char_M_s1_5_at_L))
-      and le_int(memcmp(s1_0, s2_0, n_0, char_P_char_M_s2_6_at_L,
+      and le_int(memcmp(s1_0_0, s2_0_0, n_0, char_P_char_M_s2_6_at_L,
                  char_P_char_M_s1_5_at_L),
           (2147483647))))))))
 
@@ -1091,17 +1091,17 @@ axiom memcmp_strlen_shift_right :
 axiom memcmp_zero :
  (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
   (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
-   (forall s1_1:char_P pointer.
-    (forall s2_1:char_P pointer.
+   (forall s1_1_0:char_P pointer.
+    (forall s2_1_0:char_P pointer.
      (forall n_1:int.
-      (eq_int(memcmp(s1_1, s2_1, n_1, char_P_char_M_s2_6_at_L,
+      (eq_int(memcmp(s1_1_0, s2_1_0, n_1, char_P_char_M_s2_6_at_L,
               char_P_char_M_s1_5_at_L),
        (0))
       <-> (forall i:int.
            ((le_int((0), i) and lt_int(i, n_1)) ->
             eq_int(integer_of_int8(select(char_P_char_M_s1_5_at_L,
-                                   shift(s1_1, i))),
-            integer_of_int8(select(char_P_char_M_s2_6_at_L, shift(s2_1, i))))))))))))
+                                   shift(s1_1_0, i))),
+            integer_of_int8(select(char_P_char_M_s2_6_at_L, shift(s2_1_0, i))))))))))))
 
 logic memset: char_P pointer, int, int, (char_P, int8) memory -> bool
 
@@ -1127,12 +1127,12 @@ axiom no_assign_memchr_0 :
     (forall char_P_char_M_s_7_at_L:(char_P, int8) memory.
      (forall n_2:int.
       (forall c:int.
-       (forall s:char_P pointer.
+       (forall s_0:char_P pointer.
         ((pset_disjoint(tmp,
-          pset_range(pset_singleton(s), (0), sub_int(n_2, (1))))
+          pset_range(pset_singleton(s_0), (0), sub_int(n_2, (1))))
          and not_assigns(tmpalloc, char_P_char_M_s_7_at_L, tmpmem, tmp)) ->
-         (memchr(s, c, n_2, char_P_char_M_s_7_at_L) = memchr(s, c, n_2,
-                                                      tmpmem))))))))))
+         (memchr(s_0, c, n_2, char_P_char_M_s_7_at_L) = memchr(s_0, c, n_2,
+                                                        tmpmem))))))))))
 
 axiom no_assign_memcmp_0 :
  (forall tmp:char_P pset.
@@ -1141,13 +1141,13 @@ axiom no_assign_memcmp_0 :
     (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
      (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
       (forall n:int.
-       (forall s2:char_P pointer.
-        (forall s1:char_P pointer.
+       (forall s2_1:char_P pointer.
+        (forall s1_1:char_P pointer.
          ((pset_disjoint(tmp,
-           pset_range(pset_singleton(s2), (0), sub_int(n, (1))))
+           pset_range(pset_singleton(s2_1), (0), sub_int(n, (1))))
           and not_assigns(tmpalloc, char_P_char_M_s2_6_at_L, tmpmem, tmp)) ->
-          (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-           char_P_char_M_s1_5_at_L) = memcmp(s1, s2, n, tmpmem,
+          (memcmp(s1_1, s2_1, n, char_P_char_M_s2_6_at_L,
+           char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n, tmpmem,
                                       char_P_char_M_s1_5_at_L)))))))))))
 
 axiom no_assign_memcmp_1 :
@@ -1157,13 +1157,13 @@ axiom no_assign_memcmp_1 :
     (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
      (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
       (forall n:int.
-       (forall s2:char_P pointer.
-        (forall s1:char_P pointer.
+       (forall s2_1:char_P pointer.
+        (forall s1_1:char_P pointer.
          ((pset_disjoint(tmp,
-           pset_range(pset_singleton(s1), (0), sub_int(n, (1))))
+           pset_range(pset_singleton(s1_1), (0), sub_int(n, (1))))
           and not_assigns(tmpalloc, char_P_char_M_s1_5_at_L, tmpmem, tmp)) ->
-          (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-           char_P_char_M_s1_5_at_L) = memcmp(s1, s2, n,
+          (memcmp(s1_1, s2_1, n, char_P_char_M_s2_6_at_L,
+           char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n,
                                       char_P_char_M_s2_6_at_L, tmpmem)))))))))))
 
 axiom no_assign_memset_0 :
@@ -1391,12 +1391,12 @@ axiom no_update_memchr_0 :
    (forall char_P_char_M_s_7_at_L:(char_P, int8) memory.
     (forall n_2:int.
      (forall c:int.
-      (forall s:char_P pointer.
+      (forall s_0:char_P pointer.
        ((not in_pset(tmp,
-             pset_range(pset_singleton(s), (0), sub_int(n_2, (1))))) ->
-        (memchr(s, c, n_2, char_P_char_M_s_7_at_L) = memchr(s, c, n_2,
-                                                     store(char_P_char_M_s_7_at_L,
-                                                     tmp, tmpval))))))))))
+             pset_range(pset_singleton(s_0), (0), sub_int(n_2, (1))))) ->
+        (memchr(s_0, c, n_2, char_P_char_M_s_7_at_L) = memchr(s_0, c, n_2,
+                                                       store(char_P_char_M_s_7_at_L,
+                                                       tmp, tmpval))))))))))
 
 axiom no_update_memcmp_0 :
  (forall tmp:char_P pointer.
@@ -1404,13 +1404,14 @@ axiom no_update_memcmp_0 :
    (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
      (forall n:int.
-      (forall s2:char_P pointer.
-       (forall s1:char_P pointer.
+      (forall s2_1:char_P pointer.
+       (forall s1_1:char_P pointer.
         ((not in_pset(tmp,
-              pset_range(pset_singleton(s2), (0), sub_int(n, (1))))) ->
-         (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L, char_P_char_M_s1_5_at_L) = 
-         memcmp(s1, s2, n, store(char_P_char_M_s2_6_at_L, tmp, tmpval),
-         char_P_char_M_s1_5_at_L))))))))))
+              pset_range(pset_singleton(s2_1), (0), sub_int(n, (1))))) ->
+         (memcmp(s1_1, s2_1, n, char_P_char_M_s2_6_at_L,
+          char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n,
+                                     store(char_P_char_M_s2_6_at_L, tmp,
+                                     tmpval), char_P_char_M_s1_5_at_L))))))))))
 
 axiom no_update_memcmp_1 :
  (forall tmp:char_P pointer.
@@ -1418,13 +1419,15 @@ axiom no_update_memcmp_1 :
    (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
      (forall n:int.
-      (forall s2:char_P pointer.
-       (forall s1:char_P pointer.
+      (forall s2_1:char_P pointer.
+       (forall s1_1:char_P pointer.
         ((not in_pset(tmp,
-              pset_range(pset_singleton(s1), (0), sub_int(n, (1))))) ->
-         (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L, char_P_char_M_s1_5_at_L) = 
-         memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-         store(char_P_char_M_s1_5_at_L, tmp, tmpval)))))))))))
+              pset_range(pset_singleton(s1_1), (0), sub_int(n, (1))))) ->
+         (memcmp(s1_1, s2_1, n, char_P_char_M_s2_6_at_L,
+          char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n,
+                                     char_P_char_M_s2_6_at_L,
+                                     store(char_P_char_M_s1_5_at_L, tmp,
+                                     tmpval)))))))))))
 
 axiom no_update_memset_0 :
  (forall tmp:char_P pointer.
@@ -2715,7 +2718,7 @@ parameter next_set_of_n_elements_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter nlz :
- x:uint32 ->
+ x_0:uint32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_249:
@@ -2741,7 +2744,7 @@ parameter nlz :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter nlz_requires :
- x:uint32 ->
+ x_0:uint32 ->
   { (JC_218:
     ((JC_210:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3045,7 +3048,7 @@ parameter snoob :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob1 :
- x_0:uint32 ->
+ x_0_0:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_412:
@@ -3071,7 +3074,7 @@ parameter snoob1 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob1_requires :
- x_0:uint32 ->
+ x_0_0:uint32 ->
   { (JC_381:
     ((JC_373:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4110,7 +4113,7 @@ let next_set_of_n_elements_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let nlz_ensures_default =
- fun (x : uint32) ->
+ fun (x_0 : uint32) ->
   { (JC_228:
     ((JC_220:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4132,7 +4135,7 @@ let nlz_ensures_default =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_227:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x = ref x in
+  (let mutable_x_0 = ref x_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4142,7 +4145,7 @@ let nlz_ensures_default =
      try
       (let jessie_114 =
       begin
-        (if ((eq_int_ (integer_of_uint32 !mutable_x)) (0))
+        (if ((eq_int_ (integer_of_uint32 !mutable_x_0)) (0))
         then
          (let jessie_91 =
          (C_43:
@@ -4152,7 +4155,7 @@ let nlz_ensures_default =
        (C_44:
        begin
          (let jessie_93 = (n_0_0 := (safe_int32_of_integer_ (0))) in void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (65535))
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (65535))
         then
          (let jessie_97 =
          (C_47:
@@ -4164,11 +4167,11 @@ let nlz_ensures_default =
            void);
           (C_50:
           begin
-            (mutable_x := (C_49:
-                          (safe_uint32_of_integer_ (C_48:
-                                                   ((mul_int (integer_of_uint32 !mutable_x)) (65536))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (16777215))
+            (mutable_x_0 := (C_49:
+                            (safe_uint32_of_integer_ (C_48:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (65536))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (16777215))
         then
          (let jessie_101 =
          (C_53:
@@ -4180,11 +4183,11 @@ let nlz_ensures_default =
            void);
           (C_56:
           begin
-            (mutable_x := (C_55:
-                          (safe_uint32_of_integer_ (C_54:
-                                                   ((mul_int (integer_of_uint32 !mutable_x)) (256))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (268435455))
+            (mutable_x_0 := (C_55:
+                            (safe_uint32_of_integer_ (C_54:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (256))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (268435455))
         then
          (let jessie_105 =
          (C_59:
@@ -4196,11 +4199,11 @@ let nlz_ensures_default =
            void);
           (C_62:
           begin
-            (mutable_x := (C_61:
-                          (safe_uint32_of_integer_ (C_60:
-                                                   ((mul_int (integer_of_uint32 !mutable_x)) (16))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (1073741823))
+            (mutable_x_0 := (C_61:
+                            (safe_uint32_of_integer_ (C_60:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (16))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (1073741823))
         then
          (let jessie_109 =
          (C_65:
@@ -4212,11 +4215,11 @@ let nlz_ensures_default =
            void);
           (C_68:
           begin
-            (mutable_x := (C_67:
-                          (safe_uint32_of_integer_ (C_66:
-                                                   ((mul_int (integer_of_uint32 !mutable_x)) (4))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (2147483647))
+            (mutable_x_0 := (C_67:
+                            (safe_uint32_of_integer_ (C_66:
+                                                     ((mul_int (integer_of_uint32 !mutable_x_0)) (4))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (2147483647))
         then
          (C_71:
          (let jessie_111 =
@@ -4233,7 +4236,7 @@ let nlz_ensures_default =
     absurd  end with Return -> !return end))) { (JC_230: true) }
 
 let nlz_safety =
- fun (x : uint32) ->
+ fun (x_0 : uint32) ->
   { (JC_228:
     ((JC_220:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4255,7 +4258,7 @@ let nlz_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_227:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x = ref x in
+  (let mutable_x_0 = ref x_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4265,7 +4268,7 @@ let nlz_safety =
      try
       (let jessie_87 =
       begin
-        (if ((eq_int_ (integer_of_uint32 !mutable_x)) (0))
+        (if ((eq_int_ (integer_of_uint32 !mutable_x_0)) (0))
         then
          (let jessie_64 =
          (C_43:
@@ -4275,7 +4278,7 @@ let nlz_safety =
        (C_44:
        begin
          (let jessie_66 = (n_0_0 := (safe_int32_of_integer_ (0))) in void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (65535))
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (65535))
         then
          (let jessie_70 =
          (C_47:
@@ -4288,12 +4291,12 @@ let nlz_safety =
            void);
           (C_50:
           begin
-            (mutable_x := (C_49:
-                          (JC_251:
-                          (uint32_of_integer_ (C_48:
-                                              ((mul_int (integer_of_uint32 !mutable_x)) (65536)))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (16777215))
+            (mutable_x_0 := (C_49:
+                            (JC_251:
+                            (uint32_of_integer_ (C_48:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (65536)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (16777215))
         then
          (let jessie_74 =
          (C_53:
@@ -4306,12 +4309,12 @@ let nlz_safety =
            void);
           (C_56:
           begin
-            (mutable_x := (C_55:
-                          (JC_253:
-                          (uint32_of_integer_ (C_54:
-                                              ((mul_int (integer_of_uint32 !mutable_x)) (256)))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (268435455))
+            (mutable_x_0 := (C_55:
+                            (JC_253:
+                            (uint32_of_integer_ (C_54:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (256)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (268435455))
         then
          (let jessie_78 =
          (C_59:
@@ -4324,12 +4327,12 @@ let nlz_safety =
            void);
           (C_62:
           begin
-            (mutable_x := (C_61:
-                          (JC_255:
-                          (uint32_of_integer_ (C_60:
-                                              ((mul_int (integer_of_uint32 !mutable_x)) (16)))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (1073741823))
+            (mutable_x_0 := (C_61:
+                            (JC_255:
+                            (uint32_of_integer_ (C_60:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (16)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (1073741823))
         then
          (let jessie_82 =
          (C_65:
@@ -4342,12 +4345,12 @@ let nlz_safety =
            void);
           (C_68:
           begin
-            (mutable_x := (C_67:
-                          (JC_257:
-                          (uint32_of_integer_ (C_66:
-                                              ((mul_int (integer_of_uint32 !mutable_x)) (4)))))));
-           !mutable_x end) end) in void) else void);
-        (if ((le_int_ (integer_of_uint32 !mutable_x)) (2147483647))
+            (mutable_x_0 := (C_67:
+                            (JC_257:
+                            (uint32_of_integer_ (C_66:
+                                                ((mul_int (integer_of_uint32 !mutable_x_0)) (4)))))));
+           !mutable_x_0 end) end) in void) else void);
+        (if ((le_int_ (integer_of_uint32 !mutable_x_0)) (2147483647))
         then
          (C_71:
          (let jessie_84 =
@@ -4987,7 +4990,7 @@ let pop_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob1_ensures_default =
- fun (x_0 : uint32) ->
+ fun (x_0_0 : uint32) ->
   { (JC_391:
     ((JC_383:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5023,19 +5026,19 @@ let snoob1_ensures_default =
        (let jessie_179 =
        (smallest_0 := (C_134:
                       (safe_uint32_of_integer_ (C_133:
-                                               ((bw_and (integer_of_uint32 x_0)) 
+                                               ((bw_and (integer_of_uint32 x_0_0)) 
                                                 (integer_of_uint32 (C_132:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_131:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x_0))))))))))) in
+                                                                    (integer_of_uint32 x_0_0))))))))))) in
        void);
       (C_138:
       begin
         (let jessie_181 =
         (ripple_0 := (C_137:
                      (safe_uint32_of_integer_ (C_136:
-                                              ((add_int (integer_of_uint32 x_0)) 
+                                              ((add_int (integer_of_uint32 x_0_0)) 
                                                (integer_of_uint32 !smallest_0)))))) in
         void);
        (C_141:
@@ -5043,7 +5046,7 @@ let snoob1_ensures_default =
          (let jessie_183 =
          (ones_0 := (C_140:
                     (safe_uint32_of_integer_ (C_139:
-                                             ((bw_xor (integer_of_uint32 x_0)) 
+                                             ((bw_xor (integer_of_uint32 x_0_0)) 
                                               (integer_of_uint32 !ripple_0)))))) in
          void);
         (let jessie_188 =
@@ -5051,7 +5054,7 @@ let snoob1_ensures_default =
         begin
           (let jessie_186 =
           (tmp := (C_142:
-                  (let jessie_185 = x_0 in (JC_422: (ntz jessie_185))))) in
+                  (let jessie_185 = x_0_0 in (JC_422: (ntz jessie_185))))) in
           void);
          (assert
          { (JC_423: lt_int(add_int((2), integer_of_int32(tmp)), (32))) };
@@ -5078,7 +5081,7 @@ let snoob1_ensures_default =
     absurd  end with Return -> !return end)) { (JC_393: true) }
 
 let snoob1_safety =
- fun (x_0 : uint32) ->
+ fun (x_0_0 : uint32) ->
   { (JC_391:
     ((JC_383:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5115,13 +5118,13 @@ let snoob1_safety =
        (smallest_0 := (C_134:
                       (JC_414:
                       (uint32_of_integer_ (C_133:
-                                          ((bw_and (integer_of_uint32 x_0)) 
+                                          ((bw_and (integer_of_uint32 x_0_0)) 
                                            (integer_of_uint32 (C_132:
                                                               (JC_413:
                                                               (uint32_of_integer_ 
                                                                (C_131:
                                                                (neg_int 
-                                                                (integer_of_uint32 x_0))))))))))))) in
+                                                                (integer_of_uint32 x_0_0))))))))))))) in
        void);
       (C_138:
       begin
@@ -5129,7 +5132,7 @@ let snoob1_safety =
         (ripple_0 := (C_137:
                      (JC_415:
                      (uint32_of_integer_ (C_136:
-                                         ((add_int (integer_of_uint32 x_0)) 
+                                         ((add_int (integer_of_uint32 x_0_0)) 
                                           (integer_of_uint32 !smallest_0))))))) in
         void);
        (C_141:
@@ -5138,7 +5141,7 @@ let snoob1_safety =
          (ones_0 := (C_140:
                     (JC_416:
                     (uint32_of_integer_ (C_139:
-                                        ((bw_xor (integer_of_uint32 x_0)) 
+                                        ((bw_xor (integer_of_uint32 x_0_0)) 
                                          (integer_of_uint32 !ripple_0))))))) in
          void);
         (let jessie_174 =
@@ -5146,7 +5149,7 @@ let snoob1_safety =
         begin
           (let jessie_172 =
           (tmp := (C_142:
-                  (let jessie_171 = x_0 in
+                  (let jessie_171 = x_0_0 in
                   (JC_417: (ntz_requires jessie_171))))) in void);
          [ { } unit reads tmp
            { (JC_418: lt_int(add_int((2), integer_of_int32(tmp)), (32))) } ];
@@ -6161,11 +6164,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po352.why">
-      <location file = "why/hd_snoob.why" line = "4958" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "4961" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po353.why">
-      <location file = "why/hd_snoob.why" line = "4958" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "4961" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po354.why">
@@ -7947,11 +7950,11 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po103.why">
-      <location file = "why/hd_snoob.why" line = "2914" begin = "52" end = "53"/>
+      <location file = "why/hd_snoob.why" line = "2917" begin = "52" end = "53"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po104.why">
-      <location file = "why/hd_snoob.why" line = "2914" begin = "52" end = "53"/>
+      <location file = "why/hd_snoob.why" line = "2917" begin = "52" end = "53"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po105.why">
@@ -8785,6 +8788,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type __string_Argument_must_be_an_integer_from_1_to_7___3
 
 type __string_Need_exactly_one_argument__an_integer_from_1_to_7___4
@@ -8919,14 +9023,14 @@ logic memchr : char_P pointer, int, int, (char_P, int8) memory -> bool
 
 axiom memchr_def:
   (forall char_P_char_M_s_7_at_L:(char_P, int8) memory.
-    (forall s_0:char_P pointer.
+    (forall s_0_0:char_P pointer.
       (forall c_0:int.
         (forall n_3:int.
-          ((memchr(s_0, c_0, n_3, char_P_char_M_s_7_at_L) = true) <->
+          ((memchr(s_0_0, c_0, n_3, char_P_char_M_s_7_at_L) = true) <->
            (exists i_0:int32.
              ((0 <= integer_of_int32(i_0)) and
               ((integer_of_int32(i_0) < n_3) and
-               (integer_of_int8(select(char_P_char_M_s_7_at_L, shift(s_0,
+               (integer_of_int8(select(char_P_char_M_s_7_at_L, shift(s_0_0,
                integer_of_int32(i_0)))) = c_0)))))))))
 
 logic memcmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
@@ -8935,12 +9039,12 @@ logic memcmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
 axiom memcmp_range:
   (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
-      (forall s1_0:char_P pointer.
-        (forall s2_0:char_P pointer.
+      (forall s1_0_0:char_P pointer.
+        (forall s2_0_0:char_P pointer.
           (forall n_0:int.
-            ((((-2147483647) - 1) <= memcmp(s1_0, s2_0, n_0,
+            ((((-2147483647) - 1) <= memcmp(s1_0_0, s2_0_0, n_0,
              char_P_char_M_s2_6_at_L, char_P_char_M_s1_5_at_L)) and
-             (memcmp(s1_0, s2_0, n_0, char_P_char_M_s2_6_at_L,
+             (memcmp(s1_0_0, s2_0_0, n_0, char_P_char_M_s2_6_at_L,
              char_P_char_M_s1_5_at_L) <= 2147483647)))))))
 
 logic strlen : char_P pointer, (char_P, int8) memory -> int
@@ -8996,16 +9100,17 @@ axiom memcmp_strlen_shift_right:
 axiom memcmp_zero:
   (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
     (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
-      (forall s1_1:char_P pointer.
-        (forall s2_1:char_P pointer.
+      (forall s1_1_0:char_P pointer.
+        (forall s2_1_0:char_P pointer.
           (forall n_1:int.
-            ((memcmp(s1_1, s2_1, n_1, char_P_char_M_s2_6_at_L,
+            ((memcmp(s1_1_0, s2_1_0, n_1, char_P_char_M_s2_6_at_L,
              char_P_char_M_s1_5_at_L) = 0) <->
              (forall i:int.
                (((0 <= i) and (i < n_1)) ->
-                (integer_of_int8(select(char_P_char_M_s1_5_at_L, shift(s1_1,
+                (integer_of_int8(select(char_P_char_M_s1_5_at_L,
+                shift(s1_1_0,
                 i))) = integer_of_int8(select(char_P_char_M_s2_6_at_L,
-                shift(s2_1, i))))))))))))
+                shift(s2_1_0, i))))))))))))
 
 logic memset : char_P pointer, int, int, (char_P, int8) memory -> bool
 
@@ -9030,12 +9135,12 @@ axiom no_assign_memchr_0:
         (forall char_P_char_M_s_7_at_L:(char_P, int8) memory.
           (forall n_2:int.
             (forall c:int.
-              (forall s:char_P pointer.
-                ((pset_disjoint(tmp, pset_range(pset_singleton(s), 0,
+              (forall s_0:char_P pointer.
+                ((pset_disjoint(tmp, pset_range(pset_singleton(s_0), 0,
                   (n_2 - 1))) and not_assigns(tmpalloc,
                   char_P_char_M_s_7_at_L, tmpmem, tmp)) ->
-                 (memchr(s, c, n_2, char_P_char_M_s_7_at_L) = memchr(s, c,
-                 n_2, tmpmem))))))))))
+                 (memchr(s_0, c, n_2, char_P_char_M_s_7_at_L) = memchr(s_0,
+                 c, n_2, tmpmem))))))))))
 
 axiom no_assign_memcmp_0:
   (forall tmp:char_P pset.
@@ -9044,13 +9149,13 @@ axiom no_assign_memcmp_0:
         (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
           (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
             (forall n:int.
-              (forall s2:char_P pointer.
-                (forall s1:char_P pointer.
-                  ((pset_disjoint(tmp, pset_range(pset_singleton(s2), 0,
+              (forall s2_1:char_P pointer.
+                (forall s1_1:char_P pointer.
+                  ((pset_disjoint(tmp, pset_range(pset_singleton(s2_1), 0,
                     (n - 1))) and not_assigns(tmpalloc,
                     char_P_char_M_s2_6_at_L, tmpmem, tmp)) ->
-                   (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-                   char_P_char_M_s1_5_at_L) = memcmp(s1, s2, n, tmpmem,
+                   (memcmp(s1_1, s2_1, n, char_P_char_M_s2_6_at_L,
+                   char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n, tmpmem,
                    char_P_char_M_s1_5_at_L)))))))))))
 
 axiom no_assign_memcmp_1:
@@ -9060,13 +9165,13 @@ axiom no_assign_memcmp_1:
         (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
           (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
             (forall n:int.
-              (forall s2:char_P pointer.
-                (forall s1:char_P pointer.
-                  ((pset_disjoint(tmp, pset_range(pset_singleton(s1), 0,
+              (forall s2_1:char_P pointer.
+                (forall s1_1:char_P pointer.
+                  ((pset_disjoint(tmp, pset_range(pset_singleton(s1_1), 0,
                     (n - 1))) and not_assigns(tmpalloc,
                     char_P_char_M_s1_5_at_L, tmpmem, tmp)) ->
-                   (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-                   char_P_char_M_s1_5_at_L) = memcmp(s1, s2, n,
+                   (memcmp(s1_1, s2_1, n, char_P_char_M_s2_6_at_L,
+                   char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n,
                    char_P_char_M_s2_6_at_L, tmpmem)))))))))))
 
 axiom no_assign_memset_0:
@@ -9295,10 +9400,10 @@ axiom no_update_memchr_0:
       (forall char_P_char_M_s_7_at_L:(char_P, int8) memory.
         (forall n_2:int.
           (forall c:int.
-            (forall s:char_P pointer.
-              ((not in_pset(tmp, pset_range(pset_singleton(s), 0,
-               (n_2 - 1)))) -> (memchr(s, c, n_2,
-               char_P_char_M_s_7_at_L) = memchr(s, c, n_2,
+            (forall s_0:char_P pointer.
+              ((not in_pset(tmp, pset_range(pset_singleton(s_0), 0,
+               (n_2 - 1)))) -> (memchr(s_0, c, n_2,
+               char_P_char_M_s_7_at_L) = memchr(s_0, c, n_2,
                store(char_P_char_M_s_7_at_L, tmp, tmpval))))))))))
 
 axiom no_update_memcmp_0:
@@ -9307,11 +9412,12 @@ axiom no_update_memcmp_0:
       (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
         (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
           (forall n:int.
-            (forall s2:char_P pointer.
-              (forall s1:char_P pointer.
-                ((not in_pset(tmp, pset_range(pset_singleton(s2), 0,
-                 (n - 1)))) -> (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-                 char_P_char_M_s1_5_at_L) = memcmp(s1, s2, n,
+            (forall s2_1:char_P pointer.
+              (forall s1_1:char_P pointer.
+                ((not in_pset(tmp, pset_range(pset_singleton(s2_1), 0,
+                 (n - 1)))) -> (memcmp(s1_1, s2_1, n,
+                 char_P_char_M_s2_6_at_L,
+                 char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n,
                  store(char_P_char_M_s2_6_at_L, tmp, tmpval),
                  char_P_char_M_s1_5_at_L))))))))))
 
@@ -9321,11 +9427,12 @@ axiom no_update_memcmp_1:
       (forall char_P_char_M_s1_5_at_L:(char_P, int8) memory.
         (forall char_P_char_M_s2_6_at_L:(char_P, int8) memory.
           (forall n:int.
-            (forall s2:char_P pointer.
-              (forall s1:char_P pointer.
-                ((not in_pset(tmp, pset_range(pset_singleton(s1), 0,
-                 (n - 1)))) -> (memcmp(s1, s2, n, char_P_char_M_s2_6_at_L,
-                 char_P_char_M_s1_5_at_L) = memcmp(s1, s2, n,
+            (forall s2_1:char_P pointer.
+              (forall s1_1:char_P pointer.
+                ((not in_pset(tmp, pset_range(pset_singleton(s1_1), 0,
+                 (n - 1)))) -> (memcmp(s1_1, s2_1, n,
+                 char_P_char_M_s2_6_at_L,
+                 char_P_char_M_s1_5_at_L) = memcmp(s1_1, s2_1, n,
                  char_P_char_M_s2_6_at_L, store(char_P_char_M_s1_5_at_L, tmp,
                  tmpval)))))))))))
 

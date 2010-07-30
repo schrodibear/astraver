@@ -136,22 +136,22 @@ axiom int8_range :
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 goal le_mul :
- (forall x:real.
+ (forall x_0:real.
   (forall y:real.
    (forall z:real.
     (forall t:real.
-     ((le_real(0.0, x)
-      and (le_real(x, y) and (le_real(0.0, z) and le_real(z, t)))) ->
-      le_real(mul_real(x, z), mul_real(y, t)))))))
+     ((le_real(0.0, x_0)
+      and (le_real(x_0, y) and (le_real(0.0, z) and le_real(z, t)))) ->
+      le_real(mul_real(x_0, z), mul_real(y, t)))))))
 
 axiom le_mul_as_axiom :
- (forall x:real.
+ (forall x_0:real.
   (forall y:real.
    (forall z:real.
     (forall t:real.
-     ((le_real(0.0, x)
-      and (le_real(x, y) and (le_real(0.0, z) and le_real(z, t)))) ->
-      le_real(mul_real(x, z), mul_real(y, t)))))))
+     ((le_real(0.0, x_0)
+      and (le_real(x_0, y) and (le_real(0.0, z) and le_real(z, t)))) ->
+      le_real(mul_real(x_0, z), mul_real(y, t)))))))
 
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -1286,6 +1286,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type mode =
   | nearest_even
   | to_zero
@@ -1965,12 +2066,12 @@ axiom int8_range:
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 axiom le_mul_as_axiom:
-  (forall x:real.
+  (forall x_0:real.
     (forall y:real.
       (forall z:real.
         (forall t:real.
-          (((0.0 <= x) and ((x <= y) and ((0.0 <= z) and (z <= t)))) ->
-           ((x * z) <= (y * t)))))))
+          (((0.0 <= x_0) and ((x_0 <= y) and ((0.0 <= z) and (z <= t)))) ->
+           ((x_0 * z) <= (y * t)))))))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,

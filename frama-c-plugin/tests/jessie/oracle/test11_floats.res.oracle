@@ -199,23 +199,23 @@ axiom void_P_tags :
    instanceof(void_P_tag_table, x, void_P_tag)))
 
 parameter Sterbenz :
- x:single ->
+ x_0:single ->
   y:single ->
    { } single
    { (JC_10:
      eq_real(single_value(result),
-     sub_real(single_value(x@), single_value(y@)))) }
+     sub_real(single_value(x_0@), single_value(y@)))) }
 
 parameter Sterbenz_requires :
- x:single ->
+ x_0:single ->
   y:single ->
    { (JC_3:
-     ((JC_1: le_real(div_real(single_value(y), 2.0), single_value(x)))
-     and (JC_2: le_real(single_value(x), mul_real(2.0, single_value(y))))))}
+     ((JC_1: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
+     and (JC_2: le_real(single_value(x_0), mul_real(2.0, single_value(y))))))}
    single
    { (JC_10:
      eq_real(single_value(result),
-     sub_real(single_value(x@), single_value(y@)))) }
+     sub_real(single_value(x_0@), single_value(y@)))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -310,11 +310,11 @@ parameter alloc_struct_void_P_requires :
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- x_0:double -> { } double { (JC_20: eq_real(double_value(result), 1.0)) }
+ x_0_0:double -> { } double { (JC_20: eq_real(double_value(result), 1.0)) }
 
 parameter f_requires :
- x_0:double ->
-  { (JC_15: eq_real(2.0, double_value(x_0)))} double
+ x_0_0:double ->
+  { (JC_15: eq_real(2.0, double_value(x_0_0)))} double
   { (JC_20: eq_real(double_value(result), 1.0)) }
 
 parameter int8_of_integer_ :
@@ -326,10 +326,10 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let Sterbenz_ensures_default =
- fun (x : single) (y : single) ->
+ fun (x_0 : single) (y : single) ->
   { (JC_7:
-    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x)))
-    and (JC_6: le_real(single_value(x), mul_real(2.0, single_value(y)))))) }
+    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
+    and (JC_6: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -338,18 +338,18 @@ let Sterbenz_ensures_default =
      (C_2:
      begin
        (let jessie_5 =
-       (__retres := (C_1: (JC_14: (((sub_single_safe nearest_even) x) y)))) in
+       (__retres := (C_1: (JC_14: (((sub_single_safe nearest_even) x_0) y)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_9:
     eq_real(single_value(result),
-    sub_real(single_value(x@), single_value(y@)))) }
+    sub_real(single_value(x_0@), single_value(y@)))) }
 
 let Sterbenz_safety =
- fun (x : single) (y : single) ->
+ fun (x_0 : single) (y : single) ->
   { (JC_7:
-    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x)))
-    and (JC_6: le_real(single_value(x), mul_real(2.0, single_value(y)))))) }
+    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
+    and (JC_6: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -358,13 +358,13 @@ let Sterbenz_safety =
      (C_2:
      begin
        (let jessie_2 =
-       (__retres := (C_1: (JC_13: (((sub_single nearest_even) x) y)))) in
+       (__retres := (C_1: (JC_13: (((sub_single nearest_even) x_0) y)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let f_ensures_default =
- fun (x_0 : double) ->
-  { (JC_17: eq_real(2.0, double_value(x_0))) }
+ fun (x_0_0 : double) ->
+  { (JC_17: eq_real(2.0, double_value(x_0_0))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -376,7 +376,7 @@ let f_ensures_default =
        (let jessie_20 =
        (tmp := (C_8:
                (let jessie_19 =
-               (C_7: ((double_to_single nearest_even) x_0)) in
+               (C_7: ((double_to_single nearest_even) x_0_0)) in
                (let jessie_18 = (single_of_real_exact 1.0) in
                (JC_28: ((Sterbenz jessie_19) jessie_18)))))) in void);
       (C_14:
@@ -384,7 +384,7 @@ let f_ensures_default =
         (let jessie_25 =
         (let __cil_tmp =
         (C_11:
-        (let jessie_23 = (C_10: ((double_to_single nearest_even) x_0)) in
+        (let jessie_23 = (C_10: ((double_to_single nearest_even) x_0_0)) in
         (let jessie_22 = !tmp in (JC_29: ((Sterbenz jessie_23) jessie_22))))) in
         (C_13:
         begin
@@ -394,8 +394,8 @@ let f_ensures_default =
   { (JC_19: eq_real(double_value(result), 1.0)) }
 
 let f_safety =
- fun (x_0 : double) ->
-  { (JC_17: eq_real(2.0, double_value(x_0))) }
+ fun (x_0_0 : double) ->
+  { (JC_17: eq_real(2.0, double_value(x_0_0))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -407,7 +407,7 @@ let f_safety =
        (let jessie_10 =
        (tmp := (C_8:
                (let jessie_9 =
-               (C_7: (JC_23: ((double_to_single nearest_even) x_0))) in
+               (C_7: (JC_23: ((double_to_single nearest_even) x_0_0))) in
                (let jessie_8 = (single_of_real_exact 1.0) in
                (JC_24: ((Sterbenz_requires jessie_9) jessie_8)))))) in void);
       (C_14:
@@ -416,7 +416,7 @@ let f_safety =
         (let __cil_tmp =
         (C_11:
         (let jessie_13 =
-        (C_10: (JC_25: ((double_to_single nearest_even) x_0))) in
+        (C_10: (JC_25: ((double_to_single nearest_even) x_0_0))) in
         (let jessie_12 = !tmp in
         (JC_26: ((Sterbenz_requires jessie_13) jessie_12))))) in
         (C_13:
@@ -1263,6 +1263,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type mode =
   | nearest_even

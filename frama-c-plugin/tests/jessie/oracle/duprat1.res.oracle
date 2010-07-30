@@ -314,32 +314,32 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter ftest :
- x:int32 ->
+ x_0:int32 ->
   y:int32 ->
    { } int32
    { (JC_10:
      ((JC_8:
-      ((eq_bool(cond1(integer_of_int32(x@)), true)
+      ((eq_bool(cond1(integer_of_int32(x_0@)), true)
        and eq_bool(cond2(integer_of_int32(y@)), true)) ->
        eq_int(integer_of_int32(result), (1))))
      and (JC_9:
          eq_int(integer_of_int32(result),
-         (if cond3(cond1(integer_of_int32(x@)), cond2(integer_of_int32(y@)))
-          then (1) else (0)))))) }
+         (if cond3(cond1(integer_of_int32(x_0@)),
+             cond2(integer_of_int32(y@))) then (1) else (0)))))) }
 
 parameter ftest_requires :
- x:int32 ->
+ x_0:int32 ->
   y:int32 ->
    { } int32
    { (JC_10:
      ((JC_8:
-      ((eq_bool(cond1(integer_of_int32(x@)), true)
+      ((eq_bool(cond1(integer_of_int32(x_0@)), true)
        and eq_bool(cond2(integer_of_int32(y@)), true)) ->
        eq_int(integer_of_int32(result), (1))))
      and (JC_9:
          eq_int(integer_of_int32(result),
-         (if cond3(cond1(integer_of_int32(x@)), cond2(integer_of_int32(y@)))
-          then (1) else (0)))))) }
+         (if cond3(cond1(integer_of_int32(x_0@)),
+             cond2(integer_of_int32(y@))) then (1) else (0)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -358,7 +358,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let ftest_ensures_default =
- fun (x : int32) (y : int32) ->
+ fun (x_0 : int32) (y : int32) ->
   { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -366,7 +366,7 @@ let ftest_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (if ((gt_int_ (integer_of_int32 x)) (0))
+       (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (let jessie_9 =
         (if ((lt_int_ (integer_of_int32 y)) (10))
@@ -380,16 +380,16 @@ let ftest_ensures_default =
    !return end))
   { (JC_7:
     ((JC_5:
-     ((eq_bool(cond1(integer_of_int32(x@)), true)
+     ((eq_bool(cond1(integer_of_int32(x_0@)), true)
       and eq_bool(cond2(integer_of_int32(y@)), true)) ->
       eq_int(integer_of_int32(result), (1))))
     and (JC_6:
         eq_int(integer_of_int32(result),
-        (if cond3(cond1(integer_of_int32(x@)), cond2(integer_of_int32(y@)))
+        (if cond3(cond1(integer_of_int32(x_0@)), cond2(integer_of_int32(y@)))
          then (1) else (0)))))) }
 
 let ftest_safety =
- fun (x : int32) (y : int32) ->
+ fun (x_0 : int32) (y : int32) ->
   { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -397,7 +397,7 @@ let ftest_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (if ((gt_int_ (integer_of_int32 x)) (0))
+       (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
         (let jessie_3 =
         (if ((lt_int_ (integer_of_int32 y)) (10))
@@ -1212,6 +1212,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type char_P
 

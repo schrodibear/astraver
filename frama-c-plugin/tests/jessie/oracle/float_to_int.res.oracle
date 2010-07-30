@@ -262,74 +262,78 @@ parameter alloc_struct_void_P_requires :
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
 parameter f :
- x:double ->
+ x_0:double ->
   { } int
-  { ((le_real(double_value(x@), 0.0) ->
+  { ((le_real(double_value(x_0@), 0.0) ->
       (JC_32:
       ((JC_27: ge_int((0), result))
-      and ((JC_28: ge_real(real_of_int(result), double_value(x@)))
+      and ((JC_28: ge_real(real_of_int(result), double_value(x_0@)))
           and ((JC_29:
-               gt_real(double_value(x@), real_of_int(sub_int(result, (1)))))
+               gt_real(double_value(x_0@), real_of_int(sub_int(result, (1)))))
               and ((JC_30:
                    ge_real(1.0,
-                   sub_real(real_of_int(result), double_value(x@))))
+                   sub_real(real_of_int(result), double_value(x_0@))))
                   and (JC_31:
-                      ge_real(sub_real(real_of_int(result), double_value(x@)),
+                      ge_real(sub_real(real_of_int(result),
+                              double_value(x_0@)),
                       0.0))))))))
-    and ((ge_real(double_value(x@), 0.0) ->
+    and ((ge_real(double_value(x_0@), 0.0) ->
           (JC_20:
           ((JC_15: le_int((0), result))
-          and ((JC_16: le_real(real_of_int(result), double_value(x@)))
+          and ((JC_16: le_real(real_of_int(result), double_value(x_0@)))
               and ((JC_17:
-                   lt_real(double_value(x@),
+                   lt_real(double_value(x_0@),
                    real_of_int(add_int(result, (1)))))
                   and ((JC_18:
                        le_real(neg_real(1.0),
-                       sub_real(real_of_int(result), double_value(x@))))
+                       sub_real(real_of_int(result), double_value(x_0@))))
                       and (JC_19:
                           le_real(sub_real(real_of_int(result),
-                                  double_value(x@)),
+                                  double_value(x_0@)),
                           0.0))))))))
         and (JC_6:
-            le_real(abs_real(sub_real(real_of_int(result), double_value(x@))),
+            le_real(abs_real(sub_real(real_of_int(result),
+                             double_value(x_0@))),
             1.0)))) }
 
 parameter f_requires :
- x:double ->
-  { (JC_1: le_real(abs_real(double_value(x)), 0x1p30))} int
-  { ((le_real(double_value(x@), 0.0) ->
+ x_0:double ->
+  { (JC_1: le_real(abs_real(double_value(x_0)), 0x1p30))} int
+  { ((le_real(double_value(x_0@), 0.0) ->
       (JC_32:
       ((JC_27: ge_int((0), result))
-      and ((JC_28: ge_real(real_of_int(result), double_value(x@)))
+      and ((JC_28: ge_real(real_of_int(result), double_value(x_0@)))
           and ((JC_29:
-               gt_real(double_value(x@), real_of_int(sub_int(result, (1)))))
+               gt_real(double_value(x_0@), real_of_int(sub_int(result, (1)))))
               and ((JC_30:
                    ge_real(1.0,
-                   sub_real(real_of_int(result), double_value(x@))))
+                   sub_real(real_of_int(result), double_value(x_0@))))
                   and (JC_31:
-                      ge_real(sub_real(real_of_int(result), double_value(x@)),
+                      ge_real(sub_real(real_of_int(result),
+                              double_value(x_0@)),
                       0.0))))))))
-    and ((ge_real(double_value(x@), 0.0) ->
+    and ((ge_real(double_value(x_0@), 0.0) ->
           (JC_20:
           ((JC_15: le_int((0), result))
-          and ((JC_16: le_real(real_of_int(result), double_value(x@)))
+          and ((JC_16: le_real(real_of_int(result), double_value(x_0@)))
               and ((JC_17:
-                   lt_real(double_value(x@),
+                   lt_real(double_value(x_0@),
                    real_of_int(add_int(result, (1)))))
                   and ((JC_18:
                        le_real(neg_real(1.0),
-                       sub_real(real_of_int(result), double_value(x@))))
+                       sub_real(real_of_int(result), double_value(x_0@))))
                       and (JC_19:
                           le_real(sub_real(real_of_int(result),
-                                  double_value(x@)),
+                                  double_value(x_0@)),
                           0.0))))))))
         and (JC_6:
-            le_real(abs_real(sub_real(real_of_int(result), double_value(x@))),
+            le_real(abs_real(sub_real(real_of_int(result),
+                             double_value(x_0@))),
             1.0)))) }
 
 let f_ensures_default =
- fun (x : double) ->
-  { (JC_3: le_real(abs_real(double_value(x)), 0x1p30)) }
+ fun (x_0 : double) ->
+  { (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -339,16 +343,16 @@ let f_ensures_default =
      begin
        (let jessie_7 =
        (i := (C_2:
-             (let jessie_6 = (C_1: (double_value x)) in
+             (let jessie_6 = (C_1: (double_value x_0)) in
              (truncate_real_to_int jessie_6)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_5:
-    le_real(abs_real(sub_real(real_of_int(result), double_value(x@))), 1.0)) }
+    le_real(abs_real(sub_real(real_of_int(result), double_value(x_0@))), 1.0)) }
 
 let f_ensures_negative =
- fun (x : double) ->
-  { (le_real(double_value(x), 0.0)
-    and (JC_3: le_real(abs_real(double_value(x)), 0x1p30))) }
+ fun (x_0 : double) ->
+  { (le_real(double_value(x_0), 0.0)
+    and (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -358,25 +362,25 @@ let f_ensures_negative =
      begin
        (let jessie_15 =
        (i := (C_2:
-             (let jessie_14 = (C_1: (double_value x)) in
+             (let jessie_14 = (C_1: (double_value x_0)) in
              (truncate_real_to_int jessie_14)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_26:
     ((JC_21: ge_int((0), result))
-    and ((JC_22: ge_real(real_of_int(result), double_value(x@)))
+    and ((JC_22: ge_real(real_of_int(result), double_value(x_0@)))
         and ((JC_23:
-             gt_real(double_value(x@), real_of_int(sub_int(result, (1)))))
+             gt_real(double_value(x_0@), real_of_int(sub_int(result, (1)))))
             and ((JC_24:
                  ge_real(1.0,
-                 sub_real(real_of_int(result), double_value(x@))))
+                 sub_real(real_of_int(result), double_value(x_0@))))
                 and (JC_25:
-                    ge_real(sub_real(real_of_int(result), double_value(x@)),
+                    ge_real(sub_real(real_of_int(result), double_value(x_0@)),
                     0.0))))))) }
 
 let f_ensures_positive =
- fun (x : double) ->
-  { (ge_real(double_value(x), 0.0)
-    and (JC_3: le_real(abs_real(double_value(x)), 0x1p30))) }
+ fun (x_0 : double) ->
+  { (ge_real(double_value(x_0), 0.0)
+    and (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -386,24 +390,24 @@ let f_ensures_positive =
      begin
        (let jessie_11 =
        (i := (C_2:
-             (let jessie_10 = (C_1: (double_value x)) in
+             (let jessie_10 = (C_1: (double_value x_0)) in
              (truncate_real_to_int jessie_10)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_14:
     ((JC_9: le_int((0), result))
-    and ((JC_10: le_real(real_of_int(result), double_value(x@)))
+    and ((JC_10: le_real(real_of_int(result), double_value(x_0@)))
         and ((JC_11:
-             lt_real(double_value(x@), real_of_int(add_int(result, (1)))))
+             lt_real(double_value(x_0@), real_of_int(add_int(result, (1)))))
             and ((JC_12:
                  le_real(neg_real(1.0),
-                 sub_real(real_of_int(result), double_value(x@))))
+                 sub_real(real_of_int(result), double_value(x_0@))))
                 and (JC_13:
-                    le_real(sub_real(real_of_int(result), double_value(x@)),
+                    le_real(sub_real(real_of_int(result), double_value(x_0@)),
                     0.0))))))) }
 
 let f_safety =
- fun (x : double) ->
-  { (JC_3: le_real(abs_real(double_value(x)), 0x1p30)) }
+ fun (x_0 : double) ->
+  { (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -413,7 +417,7 @@ let f_safety =
      begin
        (let jessie_3 =
        (i := (C_2:
-             (let jessie_2 = (C_1: (double_value x)) in
+             (let jessie_2 = (C_1: (double_value x_0)) in
              (truncate_real_to_int jessie_2)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
@@ -1261,6 +1265,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type mode =
   | nearest_even

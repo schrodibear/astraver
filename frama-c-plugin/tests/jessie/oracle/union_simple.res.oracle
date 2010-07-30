@@ -487,14 +487,14 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- x:__anonunion_U_1 pointer ->
+ x_0:__anonunion_U_1 pointer ->
   __anonunion_U_1_fields_x_1:(__anonunion_U_1, bitvector) memory ref ->
    __anonunion_U_1_x_1_alloc_table:__anonunion_U_1 alloc_table ->
     { } unit reads __anonunion_U_1_fields_x_1
     writes __anonunion_U_1_fields_x_1 { true }
 
 parameter f_requires :
- x:__anonunion_U_1 pointer ->
+ x_0:__anonunion_U_1 pointer ->
   __anonunion_U_1_fields_x_1:(__anonunion_U_1, bitvector) memory ref ->
    __anonunion_U_1_x_1_alloc_table:__anonunion_U_1 alloc_table ->
     { } unit reads __anonunion_U_1_fields_x_1
@@ -581,7 +581,7 @@ parameter struct_void_P_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
 let f_ensures_default =
- fun (x : __anonunion_U_1 pointer) (__anonunion_U_1_fields_x_1 : (__anonunion_U_1, bitvector) memory ref) (__anonunion_U_1_x_1_alloc_table : __anonunion_U_1 alloc_table) ->
+ fun (x_0 : __anonunion_U_1 pointer) (__anonunion_U_1_fields_x_1 : (__anonunion_U_1, bitvector) memory ref) (__anonunion_U_1_x_1_alloc_table : __anonunion_U_1 alloc_table) ->
   { (JC_4: true) }
   (init:
   try
@@ -590,7 +590,7 @@ let f_ensures_default =
      begin
        (let jessie_24 =
        (let jessie_18 = (safe_int32_of_integer_ (1)) in
-       (let jessie_19 = (C_1: x) in
+       (let jessie_19 = (C_1: x_0) in
        (let jessie_20 =
        ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) (C_1:
                                                                   jessie_19))) (0)) (4)) 
@@ -601,14 +601,14 @@ let f_ensures_default =
       (assert
       { (JC_15:
         eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
-                                                                 x),
+                                                                 x_0),
                                                    (0), (4)))),
         (1))) }; void); void;
       (C_7:
       begin
         (let jessie_32 =
         (let jessie_26 = (safe_int8_of_integer_ (1)) in
-        (let jessie_27 = (C_5: x) in
+        (let jessie_27 = (C_5: x_0) in
         (let jessie_28 =
         ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) (C_5:
                                                                    jessie_27))) (0)) (1)) 
@@ -619,13 +619,13 @@ let f_ensures_default =
        (assert
        { (JC_16:
          eq_int(integer_of_int8(int8_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
-                                                                x),
+                                                                x_0),
                                                   (0), (1)))),
          (1))) }; void); void; (raise Return) end) end); (raise Return) end
    with Return -> void end) { (JC_5: true) }
 
 let f_safety =
- fun (x : __anonunion_U_1 pointer) (__anonunion_U_1_fields_x_1 : (__anonunion_U_1, bitvector) memory ref) (__anonunion_U_1_x_1_alloc_table : __anonunion_U_1 alloc_table) ->
+ fun (x_0 : __anonunion_U_1 pointer) (__anonunion_U_1_fields_x_1 : (__anonunion_U_1, bitvector) memory ref) (__anonunion_U_1_x_1_alloc_table : __anonunion_U_1 alloc_table) ->
   { (JC_4: true) }
   (init:
   try
@@ -634,7 +634,7 @@ let f_safety =
      begin
        (let jessie_8 =
        (let jessie_2 = (safe_int32_of_integer_ (1)) in
-       (let jessie_3 = (C_1: x) in
+       (let jessie_3 = (C_1: x_0) in
        (let jessie_4 =
        ((((replace_bytes (JC_9:
                          (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
@@ -646,14 +646,14 @@ let f_safety =
       [ { } unit reads __anonunion_U_1_fields_x_1
         { (JC_11:
           eq_int(integer_of_int32(int32_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
-                                                                   x),
+                                                                   x_0),
                                                      (0), (4)))),
           (1))) } ]; void;
       (C_7:
       begin
         (let jessie_16 =
         (let jessie_10 = (safe_int8_of_integer_ (1)) in
-        (let jessie_11 = (C_5: x) in
+        (let jessie_11 = (C_5: x_0) in
         (let jessie_12 =
         ((((replace_bytes (JC_12:
                           (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
@@ -665,7 +665,7 @@ let f_safety =
        [ { } unit reads __anonunion_U_1_fields_x_1
          { (JC_14:
            eq_int(integer_of_int8(int8_of_bitvector(extract_bytes(select(__anonunion_U_1_fields_x_1,
-                                                                  x),
+                                                                  x_0),
                                                     (0), (1)))),
            (1))) } ]; void; (raise Return) end) end); (raise Return) end with
    Return -> void end) { true }
@@ -1515,6 +1515,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type bitvector
 

@@ -300,34 +300,34 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter y : single ref
 
-parameter x : double ref
+parameter x_0 : double ref
 
 parameter f :
  tt:unit ->
-  { } unit reads x,y writes x,y
+  { } unit reads x_0,y writes x_0,y
   { (JC_10:
-    ((JC_8: eq_real(double_value(x), 1.0))
+    ((JC_8: eq_real(double_value(x_0), 1.0))
     and (JC_9: eq_real(single_value(y), 1.0)))) }
 
 parameter f_requires :
  tt:unit ->
-  { } unit reads x,y writes x,y
+  { } unit reads x_0,y writes x_0,y
   { (JC_10:
-    ((JC_8: eq_real(double_value(x), 1.0))
+    ((JC_8: eq_real(double_value(x_0), 1.0))
     and (JC_9: eq_real(single_value(y), 1.0)))) }
 
 parameter g :
  tt:unit ->
-  { } unit reads x,y writes x,y
+  { } unit reads x_0,y writes x_0,y
   { (JC_42:
-    ((JC_40: eq_real(double_value(x), 9.0))
+    ((JC_40: eq_real(double_value(x_0), 9.0))
     and (JC_41: eq_real(single_value(y), 9.0)))) }
 
 parameter g_requires :
  tt:unit ->
-  { } unit reads x,y writes x,y
+  { } unit reads x_0,y writes x_0,y
   { (JC_42:
-    ((JC_40: eq_real(double_value(x), 9.0))
+    ((JC_40: eq_real(double_value(x_0), 9.0))
     and (JC_41: eq_real(single_value(y), 9.0)))) }
 
 parameter int8_of_integer_ :
@@ -347,25 +347,25 @@ let f_ensures_default =
      (C_6:
      begin
        (let jessie_6 =
-       (x := (C_5:
-             (JC_27:
-             (((add_double_safe nearest_even) (C_4:
-                                              (JC_25:
-                                              (((add_double_safe nearest_even) 
-                                                (C_3:
-                                                (JC_23:
-                                                (((div_double_safe nearest_even) 
-                                                  (double_of_real_exact 1.0)) 
-                                                 (double_of_real_exact 3.0))))) 
-                                               (C_2:
-                                               (JC_24:
-                                               (((div_double_safe nearest_even) 
-                                                 (double_of_real_exact 1.0)) 
-                                                (double_of_real_exact 3.0)))))))) 
-              (C_1:
-              (JC_26:
-              (((div_double_safe nearest_even) (double_of_real_exact 1.0)) 
-               (double_of_real_exact 3.0)))))))) in void);
+       (x_0 := (C_5:
+               (JC_27:
+               (((add_double_safe nearest_even) (C_4:
+                                                (JC_25:
+                                                (((add_double_safe nearest_even) 
+                                                  (C_3:
+                                                  (JC_23:
+                                                  (((div_double_safe nearest_even) 
+                                                    (double_of_real_exact 1.0)) 
+                                                   (double_of_real_exact 3.0))))) 
+                                                 (C_2:
+                                                 (JC_24:
+                                                 (((div_double_safe nearest_even) 
+                                                   (double_of_real_exact 1.0)) 
+                                                  (double_of_real_exact 3.0)))))))) 
+                (C_1:
+                (JC_26:
+                (((div_double_safe nearest_even) (double_of_real_exact 1.0)) 
+                 (double_of_real_exact 3.0)))))))) in void);
       (C_12:
       begin
         (let jessie_8 =
@@ -390,7 +390,7 @@ let f_ensures_default =
                 (single_of_real_exact 3.0)))))))) in void); (raise Return)
       end) end); (raise Return) end with Return -> void end)
   { (JC_7:
-    ((JC_5: eq_real(double_value(x), 1.0))
+    ((JC_5: eq_real(double_value(x_0), 1.0))
     and (JC_6: eq_real(single_value(y), 1.0)))) }
 
 let f_safety =
@@ -402,25 +402,25 @@ let f_safety =
      (C_6:
      begin
        (let jessie_2 =
-       (x := (C_5:
-             (JC_17:
-             (((add_double nearest_even) (C_4:
-                                         (JC_15:
-                                         (((add_double nearest_even) 
-                                           (C_3:
-                                           (JC_13:
-                                           (((div_double nearest_even) 
-                                             (double_of_real_exact 1.0)) 
-                                            (double_of_real_exact 3.0))))) 
-                                          (C_2:
-                                          (JC_14:
-                                          (((div_double nearest_even) 
-                                            (double_of_real_exact 1.0)) 
-                                           (double_of_real_exact 3.0)))))))) 
-              (C_1:
-              (JC_16:
-              (((div_double nearest_even) (double_of_real_exact 1.0)) 
-               (double_of_real_exact 3.0)))))))) in void);
+       (x_0 := (C_5:
+               (JC_17:
+               (((add_double nearest_even) (C_4:
+                                           (JC_15:
+                                           (((add_double nearest_even) 
+                                             (C_3:
+                                             (JC_13:
+                                             (((div_double nearest_even) 
+                                               (double_of_real_exact 1.0)) 
+                                              (double_of_real_exact 3.0))))) 
+                                            (C_2:
+                                            (JC_14:
+                                            (((div_double nearest_even) 
+                                              (double_of_real_exact 1.0)) 
+                                             (double_of_real_exact 3.0)))))))) 
+                (C_1:
+                (JC_16:
+                (((div_double nearest_even) (double_of_real_exact 1.0)) 
+                 (double_of_real_exact 3.0)))))))) in void);
       (C_12:
       begin
         (let jessie_4 =
@@ -454,25 +454,25 @@ let g_ensures_default =
      (C_21:
      begin
        (let jessie_14 =
-       (x := (C_20:
-             (JC_59:
-             (((add_double_safe nearest_even) (C_19:
-                                              (JC_57:
-                                              (((add_double_safe nearest_even) 
-                                                (C_18:
-                                                (JC_55:
-                                                (((mul_double_safe nearest_even) 
-                                                  (double_of_real_exact 1.0)) 
-                                                 (double_of_real_exact 3.0))))) 
-                                               (C_17:
-                                               (JC_56:
-                                               (((mul_double_safe nearest_even) 
-                                                 (double_of_real_exact 1.0)) 
-                                                (double_of_real_exact 3.0)))))))) 
-              (C_16:
-              (JC_58:
-              (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) 
-               (double_of_real_exact 3.0)))))))) in void);
+       (x_0 := (C_20:
+               (JC_59:
+               (((add_double_safe nearest_even) (C_19:
+                                                (JC_57:
+                                                (((add_double_safe nearest_even) 
+                                                  (C_18:
+                                                  (JC_55:
+                                                  (((mul_double_safe nearest_even) 
+                                                    (double_of_real_exact 1.0)) 
+                                                   (double_of_real_exact 3.0))))) 
+                                                 (C_17:
+                                                 (JC_56:
+                                                 (((mul_double_safe nearest_even) 
+                                                   (double_of_real_exact 1.0)) 
+                                                  (double_of_real_exact 3.0)))))))) 
+                (C_16:
+                (JC_58:
+                (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) 
+                 (double_of_real_exact 3.0)))))))) in void);
       (C_27:
       begin
         (let jessie_16 =
@@ -497,7 +497,7 @@ let g_ensures_default =
                 (single_of_real_exact 3.0)))))))) in void); (raise Return)
       end) end); (raise Return) end with Return -> void end)
   { (JC_39:
-    ((JC_37: eq_real(double_value(x), 9.0))
+    ((JC_37: eq_real(double_value(x_0), 9.0))
     and (JC_38: eq_real(single_value(y), 9.0)))) }
 
 let g_safety =
@@ -509,25 +509,25 @@ let g_safety =
      (C_21:
      begin
        (let jessie_10 =
-       (x := (C_20:
-             (JC_49:
-             (((add_double nearest_even) (C_19:
-                                         (JC_47:
-                                         (((add_double nearest_even) 
-                                           (C_18:
-                                           (JC_45:
-                                           (((mul_double nearest_even) 
-                                             (double_of_real_exact 1.0)) 
-                                            (double_of_real_exact 3.0))))) 
-                                          (C_17:
-                                          (JC_46:
-                                          (((mul_double nearest_even) 
-                                            (double_of_real_exact 1.0)) 
-                                           (double_of_real_exact 3.0)))))))) 
-              (C_16:
-              (JC_48:
-              (((mul_double nearest_even) (double_of_real_exact 1.0)) 
-               (double_of_real_exact 3.0)))))))) in void);
+       (x_0 := (C_20:
+               (JC_49:
+               (((add_double nearest_even) (C_19:
+                                           (JC_47:
+                                           (((add_double nearest_even) 
+                                             (C_18:
+                                             (JC_45:
+                                             (((mul_double nearest_even) 
+                                               (double_of_real_exact 1.0)) 
+                                              (double_of_real_exact 3.0))))) 
+                                            (C_17:
+                                            (JC_46:
+                                            (((mul_double nearest_even) 
+                                              (double_of_real_exact 1.0)) 
+                                             (double_of_real_exact 3.0)))))))) 
+                (C_16:
+                (JC_48:
+                (((mul_double nearest_even) (double_of_real_exact 1.0)) 
+                 (double_of_real_exact 3.0)))))))) in void);
       (C_27:
       begin
         (let jessie_12 =
@@ -1502,6 +1502,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type mode =
   | nearest_even

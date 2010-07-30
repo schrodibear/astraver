@@ -126,8 +126,8 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-function l_sign(x:real) : int =
- (if ge_real_bool(x, 0.0) then (1) else neg_int((1)))
+function l_sign(x_0:real) : int =
+ (if ge_real_bool(x_0, 0.0) then (1) else neg_int((1)))
 
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -351,30 +351,30 @@ parameter eps_line_requires :
                mul_real(double_exact(sy@), double_exact(vx@)))))))) }
 
 parameter sign :
- x_0:double ->
+ x_1:double ->
   e1:double ->
    e2:double ->
     { } int
     { (JC_14:
       ((JC_12:
-       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0@)))))
+       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_1@)))))
       and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 parameter sign_requires :
- x_0:double ->
+ x_1:double ->
   e1:double ->
    e2:double ->
     { (JC_3:
       ((JC_1:
        le_real(double_value(e1),
-       sub_real(double_value(x_0), double_exact(x_0))))
+       sub_real(double_value(x_1), double_exact(x_1))))
       and (JC_2:
-          le_real(sub_real(double_value(x_0), double_exact(x_0)),
+          le_real(sub_real(double_value(x_1), double_exact(x_1)),
           double_value(e2)))))}
     int
     { (JC_14:
       ((JC_12:
-       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0@)))))
+       (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_1@)))))
       and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 let eps_line_ensures_default =
@@ -394,49 +394,50 @@ let eps_line_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (let s1 = ref (any_int void) in
-     (let s2 = ref (any_int void) in
+     (let s1_1 = ref (any_int void) in
+     (let s2_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      (C_15:
      begin
        (let jessie_39 =
-       (s1 := (C_14:
-              (let jessie_38 =
-              (C_12:
-              (JC_58:
-              (((add_double_safe nearest_even) (C_11:
-                                               (JC_56:
-                                               (((mul_double_safe nearest_even) sx) vx)))) 
-               (C_10: (JC_57: (((mul_double_safe nearest_even) sy) vy)))))) in
-              (let jessie_37 =
-              (C_13:
-              (JC_55:
-              ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
-              (let jessie_36 =
-              ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
-              (JC_59: (((sign jessie_38) jessie_37) jessie_36))))))) in void);
+       (s1_1 := (C_14:
+                (let jessie_38 =
+                (C_12:
+                (JC_58:
+                (((add_double_safe nearest_even) (C_11:
+                                                 (JC_56:
+                                                 (((mul_double_safe nearest_even) sx) vx)))) 
+                 (C_10: (JC_57: (((mul_double_safe nearest_even) sy) vy)))))) in
+                (let jessie_37 =
+                (C_13:
+                (JC_55:
+                ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
+                (let jessie_36 =
+                ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
+                (JC_59: (((sign jessie_38) jessie_37) jessie_36))))))) in
+       void);
       (C_21:
       begin
         (let jessie_44 =
-        (s2 := (C_20:
-               (let jessie_43 =
-               (C_18:
-               (JC_63:
-               (((sub_double_safe nearest_even) (C_17:
-                                                (JC_61:
-                                                (((mul_double_safe nearest_even) sx) vy)))) 
-                (C_16: (JC_62: (((mul_double_safe nearest_even) sy) vx)))))) in
-               (let jessie_42 =
-               (C_19:
-               (JC_60:
-               ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
-               (let jessie_41 =
-               ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
-               (JC_64: (((sign jessie_43) jessie_42) jessie_41))))))) in
+        (s2_1 := (C_20:
+                 (let jessie_43 =
+                 (C_18:
+                 (JC_63:
+                 (((sub_double_safe nearest_even) (C_17:
+                                                  (JC_61:
+                                                  (((mul_double_safe nearest_even) sx) vy)))) 
+                  (C_16: (JC_62: (((mul_double_safe nearest_even) sy) vx)))))) in
+                 (let jessie_42 =
+                 (C_19:
+                 (JC_60:
+                 ((neg_double_safe nearest_even) ((double_of_real_safe nearest_even) 0x1.9000000001ap-45)))) in
+                 (let jessie_41 =
+                 ((double_of_real_safe nearest_even) 0x1.9000000001ap-45) in
+                 (JC_64: (((sign jessie_43) jessie_42) jessie_41))))))) in
         void);
        (C_23:
        begin
-         (let jessie_46 = (__retres_0 := (C_22: ((mul_int !s1) !s2))) in
+         (let jessie_46 = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
          void); (return := !__retres_0); (raise Return) end) end) end))));
     absurd  end with Return -> !return end))
   { (JC_37:
@@ -464,63 +465,63 @@ let eps_line_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let s1 = ref (any_int void) in
-     (let s2 = ref (any_int void) in
+     (let s1_1 = ref (any_int void) in
+     (let s2_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      (C_15:
      begin
        (let jessie_26 =
-       (s1 := (C_14:
-              (let jessie_25 =
-              (C_12:
-              (JC_46:
-              (((add_double nearest_even) (C_11:
-                                          (JC_44:
-                                          (((mul_double nearest_even) sx) vx)))) 
-               (C_10: (JC_45: (((mul_double nearest_even) sy) vy)))))) in
-              (let jessie_24 =
-              (C_13:
-              (JC_43:
-              ((neg_double nearest_even) (JC_42:
-                                         ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
-              (let jessie_23 =
-              (JC_41: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
-              (JC_47: (((sign_requires jessie_25) jessie_24) jessie_23))))))) in
+       (s1_1 := (C_14:
+                (let jessie_25 =
+                (C_12:
+                (JC_46:
+                (((add_double nearest_even) (C_11:
+                                            (JC_44:
+                                            (((mul_double nearest_even) sx) vx)))) 
+                 (C_10: (JC_45: (((mul_double nearest_even) sy) vy)))))) in
+                (let jessie_24 =
+                (C_13:
+                (JC_43:
+                ((neg_double nearest_even) (JC_42:
+                                           ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
+                (let jessie_23 =
+                (JC_41: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
+                (JC_47: (((sign_requires jessie_25) jessie_24) jessie_23))))))) in
        void);
       (C_21:
       begin
         (let jessie_31 =
-        (s2 := (C_20:
-               (let jessie_30 =
-               (C_18:
-               (JC_53:
-               (((sub_double nearest_even) (C_17:
-                                           (JC_51:
-                                           (((mul_double nearest_even) sx) vy)))) 
-                (C_16: (JC_52: (((mul_double nearest_even) sy) vx)))))) in
-               (let jessie_29 =
-               (C_19:
-               (JC_50:
-               ((neg_double nearest_even) (JC_49:
-                                          ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
-               (let jessie_28 =
-               (JC_48: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
-               (JC_54: (((sign_requires jessie_30) jessie_29) jessie_28))))))) in
+        (s2_1 := (C_20:
+                 (let jessie_30 =
+                 (C_18:
+                 (JC_53:
+                 (((sub_double nearest_even) (C_17:
+                                             (JC_51:
+                                             (((mul_double nearest_even) sx) vy)))) 
+                  (C_16: (JC_52: (((mul_double nearest_even) sy) vx)))))) in
+                 (let jessie_29 =
+                 (C_19:
+                 (JC_50:
+                 ((neg_double nearest_even) (JC_49:
+                                            ((double_of_real nearest_even) 0x1.9000000001ap-45))))) in
+                 (let jessie_28 =
+                 (JC_48: ((double_of_real nearest_even) 0x1.9000000001ap-45)) in
+                 (JC_54: (((sign_requires jessie_30) jessie_29) jessie_28))))))) in
         void);
        (C_23:
        begin
-         (let jessie_33 = (__retres_0 := (C_22: ((mul_int !s1) !s2))) in
+         (let jessie_33 = (__retres_0 := (C_22: ((mul_int !s1_1) !s2_1))) in
          void); (return := !__retres_0); (raise Return) end) end) end))));
     absurd  end with Return -> !return end)) { true }
 
 let sign_ensures_default =
- fun (x_0 : double) (e1 : double) (e2 : double) ->
+ fun (x_1 : double) (e1 : double) (e2 : double) ->
   { (JC_7:
     ((JC_5:
      le_real(double_value(e1),
-     sub_real(double_value(x_0), double_exact(x_0))))
+     sub_real(double_value(x_1), double_exact(x_1))))
     and (JC_6:
-        le_real(sub_real(double_value(x_0), double_exact(x_0)),
+        le_real(sub_real(double_value(x_1), double_exact(x_1)),
         double_value(e2))))) }
   (init:
   (let return = ref (any_int void) in
@@ -530,14 +531,14 @@ let sign_ensures_default =
      try
       (let jessie_20 =
       begin
-        (if ((gt_double x_0) e2)
+        (if ((gt_double x_1) e2)
         then
          (let jessie_14 =
          (C_1:
          begin
            (let jessie_13 = (__retres := (1)) in void);
           (raise (Return_label_exc void)) end) in void) else void);
-       (if ((lt_double x_0) e1)
+       (if ((lt_double x_1) e1)
        then
         (let jessie_17 =
         (C_2:
@@ -553,17 +554,17 @@ let sign_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_11:
     ((JC_9:
-     (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_0@)))))
+     (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_1@)))))
     and (JC_10: le_real(abs_real(real_of_int(result)), 1.0)))) }
 
 let sign_safety =
- fun (x_0 : double) (e1 : double) (e2 : double) ->
+ fun (x_1 : double) (e1 : double) (e2 : double) ->
   { (JC_7:
     ((JC_5:
      le_real(double_value(e1),
-     sub_real(double_value(x_0), double_exact(x_0))))
+     sub_real(double_value(x_1), double_exact(x_1))))
     and (JC_6:
-        le_real(sub_real(double_value(x_0), double_exact(x_0)),
+        le_real(sub_real(double_value(x_1), double_exact(x_1)),
         double_value(e2))))) }
   (init:
   (let return = ref (any_int void) in
@@ -573,14 +574,14 @@ let sign_safety =
      try
       (let jessie_10 =
       begin
-        (if ((gt_double x_0) e2)
+        (if ((gt_double x_1) e2)
         then
          (let jessie_4 =
          (C_1:
          begin
            (let jessie_3 = (__retres := (1)) in void);
           (raise (Return_label_exc void)) end) in void) else void);
-       (if ((lt_double x_0) e1)
+       (if ((lt_double x_1) e1)
        then
         (let jessie_7 =
         (C_2:
@@ -1490,6 +1491,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type mode =
   | nearest_even
   | to_zero
@@ -1761,7 +1863,7 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-function l_sign(x: real) : int = ite(ge_real_bool(x, 0.0), 1, (-1))
+function l_sign(x_0: real) : int = ite(ge_real_bool(x_0, 0.0), 1, (-1))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,

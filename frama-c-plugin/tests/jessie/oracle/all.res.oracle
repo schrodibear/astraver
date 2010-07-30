@@ -541,133 +541,133 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter int_P_t_1_alloc_table : int_P alloc_table ref
 
-parameter x : int32 ref
+parameter x_0 : int32 ref
 
 parameter f1 :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x writes x
+  { } unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_19: valid_t(int_P_t_1_alloc_table))
-    and (JC_17: eq_int(integer_of_int32(x), (0)))) }
+    and (JC_17: eq_int(integer_of_int32(x_0), (0)))) }
 
 parameter f1_requires :
  tt:unit ->
   { (JC_12: valid_t(int_P_t_1_alloc_table))} unit
-  reads int_P_t_1_alloc_table,x writes x
+  reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_19: valid_t(int_P_t_1_alloc_table))
-    and (JC_17: eq_int(integer_of_int32(x), (0)))) }
+    and (JC_17: eq_int(integer_of_int32(x_0), (0)))) }
 
 parameter f2 :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x writes x
+  { } unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_31: valid_t(int_P_t_1_alloc_table))
-    and (JC_29: eq_int(integer_of_int32(x), (1)))) }
+    and (JC_29: eq_int(integer_of_int32(x_0), (1)))) }
 
 parameter f2_requires :
  tt:unit ->
   { (JC_22:
-    ((JC_20: eq_int(integer_of_int32(x), (0)))
+    ((JC_20: eq_int(integer_of_int32(x_0), (0)))
     and (JC_21: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x writes x
+  unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_31: valid_t(int_P_t_1_alloc_table))
-    and (JC_29: eq_int(integer_of_int32(x), (1)))) }
+    and (JC_29: eq_int(integer_of_int32(x_0), (1)))) }
 
 parameter f3 :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x writes x
+  { } unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_44: valid_t(int_P_t_1_alloc_table))
-    and (JC_42: eq_int(integer_of_int32(x), (1)))) }
+    and (JC_42: eq_int(integer_of_int32(x_0), (1)))) }
 
 parameter f3_requires :
  tt:unit ->
   { (JC_35:
-    ((JC_33: eq_int(integer_of_int32(x), (0)))
+    ((JC_33: eq_int(integer_of_int32(x_0), (0)))
     and (JC_34: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x writes x
+  unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_44: valid_t(int_P_t_1_alloc_table))
-    and (JC_42: eq_int(integer_of_int32(x), (1)))) }
+    and (JC_42: eq_int(integer_of_int32(x_0), (1)))) }
 
 parameter y : int32 ref
 
 parameter f4 :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x,y writes x,y
+  { } unit reads int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_61: valid_t(int_P_t_1_alloc_table))
     and (JC_59:
-        ((JC_57: eq_int(integer_of_int32(x), (1)))
+        ((JC_57: eq_int(integer_of_int32(x_0), (1)))
         and (JC_58: eq_int(integer_of_int32(y), (0)))))) }
 
 parameter f4_requires :
  tt:unit ->
   { (JC_48:
-    ((JC_46: eq_int(integer_of_int32(x), (0)))
+    ((JC_46: eq_int(integer_of_int32(x_0), (0)))
     and (JC_47: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x,y writes x,y
+  unit reads int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_61: valid_t(int_P_t_1_alloc_table))
     and (JC_59:
-        ((JC_57: eq_int(integer_of_int32(x), (1)))
+        ((JC_57: eq_int(integer_of_int32(x_0), (1)))
         and (JC_58: eq_int(integer_of_int32(y), (0)))))) }
 
 parameter f5 :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x,y writes x,y
+  { } unit reads int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_78: valid_t(int_P_t_1_alloc_table))
     and (JC_76:
-        ((JC_74: eq_int(integer_of_int32(x), (1)))
+        ((JC_74: eq_int(integer_of_int32(x_0), (1)))
         and (JC_75: eq_int(integer_of_int32(y), (1)))))) }
 
 parameter f5_requires :
  tt:unit ->
   { (JC_65:
-    ((JC_63: eq_int(integer_of_int32(x), (0)))
+    ((JC_63: eq_int(integer_of_int32(x_0), (0)))
     and (JC_64: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x,y writes x,y
+  unit reads int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_78: valid_t(int_P_t_1_alloc_table))
     and (JC_76:
-        ((JC_74: eq_int(integer_of_int32(x), (1)))
+        ((JC_74: eq_int(integer_of_int32(x_0), (1)))
         and (JC_75: eq_int(integer_of_int32(y), (1)))))) }
 
 parameter f6 :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x writes x
+  { } unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_91: valid_t(int_P_t_1_alloc_table))
-    and (JC_89: eq_int(integer_of_int32(x), (3)))) }
+    and (JC_89: eq_int(integer_of_int32(x_0), (3)))) }
 
 parameter f6_requires :
  tt:unit ->
   { (JC_82:
-    ((JC_80: eq_int(integer_of_int32(x), (1)))
+    ((JC_80: eq_int(integer_of_int32(x_0), (1)))
     and (JC_81: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x writes x
+  unit reads int_P_t_1_alloc_table,x_0 writes x_0
   { ((JC_91: valid_t(int_P_t_1_alloc_table))
-    and (JC_89: eq_int(integer_of_int32(x), (3)))) }
+    and (JC_89: eq_int(integer_of_int32(x_0), (3)))) }
 
 parameter f7a :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x,y writes y
+  { } unit reads int_P_t_1_alloc_table,x_0,y writes y
   { ((JC_104: valid_t(int_P_t_1_alloc_table))
     and (JC_102: eq_int(integer_of_int32(y), (1)))) }
 
 parameter f7a_requires :
  tt:unit ->
   { (JC_95:
-    ((JC_93: eq_int(integer_of_int32(x), (0)))
+    ((JC_93: eq_int(integer_of_int32(x_0), (0)))
     and (JC_94: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x,y writes y
+  unit reads int_P_t_1_alloc_table,x_0,y writes y
   { ((JC_104: valid_t(int_P_t_1_alloc_table))
     and (JC_102: eq_int(integer_of_int32(y), (1)))) }
 
 parameter f7b :
  tt:unit ->
-  { } unit reads int_P_t_1_alloc_table,x,y writes y
+  { } unit reads int_P_t_1_alloc_table,x_0,y writes y
   { ((JC_116: valid_t(int_P_t_1_alloc_table))
     and (JC_114: eq_int(integer_of_int32(y), (2)))) }
 
 parameter f7b_requires :
  tt:unit ->
   { (JC_107:
-    ((JC_105: neq_int(integer_of_int32(x), (0)))
+    ((JC_105: neq_int(integer_of_int32(x_0), (0)))
     and (JC_106: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_t_1_alloc_table,x,y writes y
+  unit reads int_P_t_1_alloc_table,x_0,y writes y
   { ((JC_116: valid_t(int_P_t_1_alloc_table))
     and (JC_114: eq_int(integer_of_int32(y), (2)))) }
 
@@ -707,7 +707,7 @@ parameter t1_requires :
 
 parameter t2 :
  tt:unit ->
-  { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
+  { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_144: valid_t(int_P_t_1_alloc_table))
     and (JC_142: eq_int(integer_of_int32(y), (1)))) }
 
@@ -715,18 +715,18 @@ parameter t2_requires :
  tt:unit ->
   { (JC_133:
     ((JC_131:
-     ((JC_129: eq_int(integer_of_int32(x), (0)))
+     ((JC_129: eq_int(integer_of_int32(x_0), (0)))
      and (JC_130:
          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))),
          (1)))))
     and (JC_132: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
+  unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_144: valid_t(int_P_t_1_alloc_table))
     and (JC_142: eq_int(integer_of_int32(y), (1)))) }
 
 parameter t3 :
  tt:unit ->
-  { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
+  { } unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_162: valid_t(int_P_t_1_alloc_table))
     and (JC_160: eq_int(integer_of_int32(y), (1)))) }
 
@@ -734,12 +734,12 @@ parameter t3_requires :
  tt:unit ->
   { (JC_151:
     ((JC_149:
-     ((JC_147: eq_int(integer_of_int32(x), (0)))
+     ((JC_147: eq_int(integer_of_int32(x_0), (0)))
      and (JC_148:
          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (1)))),
          (1)))))
     and (JC_150: valid_t(int_P_t_1_alloc_table))))}
-  unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x,y writes x,y
+  unit reads int_P_int_M_t_1,int_P_t_1_alloc_table,x_0,y writes x_0,y
   { ((JC_162: valid_t(int_P_t_1_alloc_table))
     and (JC_160: eq_int(integer_of_int32(y), (1)))) }
 
@@ -751,9 +751,9 @@ let f1_ensures_default =
    begin
      (C_1:
      begin
-       (let jessie_4 = (x := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_4 = (x_0 := (safe_int32_of_integer_ (0))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_16: eq_int(integer_of_int32(x), (0))) }
+  { (JC_16: eq_int(integer_of_int32(x_0), (0))) }
 
 let f1_safety =
  fun (tt : unit) ->
@@ -763,14 +763,14 @@ let f1_safety =
    begin
      (C_1:
      begin
-       (let jessie_2 = (x := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_2 = (x_0 := (safe_int32_of_integer_ (0))) in void);
       (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_18: valid_t(int_P_t_1_alloc_table)) }
 
 let f2_ensures_default =
  fun (tt : unit) ->
   { (JC_26:
-    ((JC_24: eq_int(integer_of_int32(x), (0)))
+    ((JC_24: eq_int(integer_of_int32(x_0), (0)))
     and (JC_25: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -778,16 +778,16 @@ let f2_ensures_default =
      (C_5:
      begin
        (let jessie_8 =
-       (x := (C_4:
-             (safe_int32_of_integer_ (C_3:
-                                     ((add_int (integer_of_int32 !x)) (1)))))) in
+       (x_0 := (C_4:
+               (safe_int32_of_integer_ (C_3:
+                                       ((add_int (integer_of_int32 !x_0)) (1)))))) in
        void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_28: eq_int(integer_of_int32(x), (1))) }
+  { (JC_28: eq_int(integer_of_int32(x_0), (1))) }
 
 let f2_safety =
  fun (tt : unit) ->
   { (JC_26:
-    ((JC_24: eq_int(integer_of_int32(x), (0)))
+    ((JC_24: eq_int(integer_of_int32(x_0), (0)))
     and (JC_25: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -795,16 +795,17 @@ let f2_safety =
      (C_5:
      begin
        (let jessie_6 =
-       (x := (C_4:
-             (JC_32:
-             (int32_of_integer_ (C_3: ((add_int (integer_of_int32 !x)) (1))))))) in
+       (x_0 := (C_4:
+               (JC_32:
+               (int32_of_integer_ (C_3:
+                                  ((add_int (integer_of_int32 !x_0)) (1))))))) in
        void); (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_30: valid_t(int_P_t_1_alloc_table)) }
 
 let f3_ensures_default =
  fun (tt : unit) ->
   { (JC_39:
-    ((JC_37: eq_int(integer_of_int32(x), (0)))
+    ((JC_37: eq_int(integer_of_int32(x_0), (0)))
     and (JC_38: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -812,16 +813,16 @@ let f3_ensures_default =
      (C_10:
      begin
        (let jessie_12 =
-       (x := (C_9:
-             (safe_int32_of_integer_ (C_8:
-                                     ((add_int (integer_of_int32 !x)) (1)))))) in
+       (x_0 := (C_9:
+               (safe_int32_of_integer_ (C_8:
+                                       ((add_int (integer_of_int32 !x_0)) (1)))))) in
        void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_41: eq_int(integer_of_int32(x), (1))) }
+  { (JC_41: eq_int(integer_of_int32(x_0), (1))) }
 
 let f3_safety =
  fun (tt : unit) ->
   { (JC_39:
-    ((JC_37: eq_int(integer_of_int32(x), (0)))
+    ((JC_37: eq_int(integer_of_int32(x_0), (0)))
     and (JC_38: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -829,16 +830,17 @@ let f3_safety =
      (C_10:
      begin
        (let jessie_10 =
-       (x := (C_9:
-             (JC_45:
-             (int32_of_integer_ (C_8: ((add_int (integer_of_int32 !x)) (1))))))) in
+       (x_0 := (C_9:
+               (JC_45:
+               (int32_of_integer_ (C_8:
+                                  ((add_int (integer_of_int32 !x_0)) (1))))))) in
        void); (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_43: valid_t(int_P_t_1_alloc_table)) }
 
 let f4_ensures_default =
  fun (tt : unit) ->
   { (JC_52:
-    ((JC_50: eq_int(integer_of_int32(x), (0)))
+    ((JC_50: eq_int(integer_of_int32(x_0), (0)))
     and (JC_51: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -846,25 +848,25 @@ let f4_ensures_default =
      (let tmp = ref (any_int32 void) in
      (C_13:
      begin
-       (let jessie_20 = (tmp := !x) in void);
+       (let jessie_20 = (tmp := !x_0) in void);
       (C_16:
       begin
         (let jessie_22 =
-        (x := (C_15:
-              (safe_int32_of_integer_ (C_14:
-                                      ((add_int (integer_of_int32 !x)) (1)))))) in
+        (x_0 := (C_15:
+                (safe_int32_of_integer_ (C_14:
+                                        ((add_int (integer_of_int32 !x_0)) (1)))))) in
         void);
        (C_17:
        begin   (let jessie_24 = (y := !tmp) in void); (raise Return) end) end)
      end)); (raise Return) end with Return -> void end)
   { (JC_56:
-    ((JC_54: eq_int(integer_of_int32(x), (1)))
+    ((JC_54: eq_int(integer_of_int32(x_0), (1)))
     and (JC_55: eq_int(integer_of_int32(y), (0))))) }
 
 let f4_safety =
  fun (tt : unit) ->
   { (JC_52:
-    ((JC_50: eq_int(integer_of_int32(x), (0)))
+    ((JC_50: eq_int(integer_of_int32(x_0), (0)))
     and (JC_51: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -872,14 +874,14 @@ let f4_safety =
      (let tmp = ref (any_int32 void) in
      (C_13:
      begin
-       (let jessie_14 = (tmp := !x) in void);
+       (let jessie_14 = (tmp := !x_0) in void);
       (C_16:
       begin
         (let jessie_16 =
-        (x := (C_15:
-              (JC_62:
-              (int32_of_integer_ (C_14:
-                                 ((add_int (integer_of_int32 !x)) (1))))))) in
+        (x_0 := (C_15:
+                (JC_62:
+                (int32_of_integer_ (C_14:
+                                   ((add_int (integer_of_int32 !x_0)) (1))))))) in
         void);
        (C_17:
        begin   (let jessie_18 = (y := !tmp) in void); (raise Return) end) end)
@@ -889,7 +891,7 @@ let f4_safety =
 let f5_ensures_default =
  fun (tt : unit) ->
   { (JC_69:
-    ((JC_67: eq_int(integer_of_int32(x), (0)))
+    ((JC_67: eq_int(integer_of_int32(x_0), (0)))
     and (JC_68: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -898,19 +900,19 @@ let f5_ensures_default =
      (C_24:
      begin
        (let jessie_30 =
-       (x := (C_23:
-             (safe_int32_of_integer_ (C_22:
-                                     ((add_int (integer_of_int32 !x)) (1)))))) in
-       void); (C_25: begin   (y := !x); !y end) end) in void);
+       (x_0 := (C_23:
+               (safe_int32_of_integer_ (C_22:
+                                       ((add_int (integer_of_int32 !x_0)) (1)))))) in
+       void); (C_25: begin   (y := !x_0); !y end) end) in void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_73:
-    ((JC_71: eq_int(integer_of_int32(x), (1)))
+    ((JC_71: eq_int(integer_of_int32(x_0), (1)))
     and (JC_72: eq_int(integer_of_int32(y), (1))))) }
 
 let f5_safety =
  fun (tt : unit) ->
   { (JC_69:
-    ((JC_67: eq_int(integer_of_int32(x), (0)))
+    ((JC_67: eq_int(integer_of_int32(x_0), (0)))
     and (JC_68: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -919,17 +921,18 @@ let f5_safety =
      (C_24:
      begin
        (let jessie_26 =
-       (x := (C_23:
-             (JC_79:
-             (int32_of_integer_ (C_22: ((add_int (integer_of_int32 !x)) (1))))))) in
-       void); (C_25: begin   (y := !x); !y end) end) in void);
+       (x_0 := (C_23:
+               (JC_79:
+               (int32_of_integer_ (C_22:
+                                  ((add_int (integer_of_int32 !x_0)) (1))))))) in
+       void); (C_25: begin   (y := !x_0); !y end) end) in void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_77: valid_t(int_P_t_1_alloc_table)) }
 
 let f6_ensures_default =
  fun (tt : unit) ->
   { (JC_86:
-    ((JC_84: eq_int(integer_of_int32(x), (1)))
+    ((JC_84: eq_int(integer_of_int32(x_0), (1)))
     and (JC_85: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -937,16 +940,16 @@ let f6_ensures_default =
      (C_32:
      begin
        (let jessie_36 =
-       (x := (C_31:
-             (safe_int32_of_integer_ (C_30:
-                                     ((add_int (integer_of_int32 !x)) (2)))))) in
+       (x_0 := (C_31:
+               (safe_int32_of_integer_ (C_30:
+                                       ((add_int (integer_of_int32 !x_0)) (2)))))) in
        void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_88: eq_int(integer_of_int32(x), (3))) }
+  { (JC_88: eq_int(integer_of_int32(x_0), (3))) }
 
 let f6_safety =
  fun (tt : unit) ->
   { (JC_86:
-    ((JC_84: eq_int(integer_of_int32(x), (1)))
+    ((JC_84: eq_int(integer_of_int32(x_0), (1)))
     and (JC_85: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
@@ -954,22 +957,23 @@ let f6_safety =
      (C_32:
      begin
        (let jessie_34 =
-       (x := (C_31:
-             (JC_92:
-             (int32_of_integer_ (C_30: ((add_int (integer_of_int32 !x)) (2))))))) in
+       (x_0 := (C_31:
+               (JC_92:
+               (int32_of_integer_ (C_30:
+                                  ((add_int (integer_of_int32 !x_0)) (2))))))) in
        void); (raise Return) end); (raise Return) end with Return -> void end)
   { (JC_90: valid_t(int_P_t_1_alloc_table)) }
 
 let f7a_ensures_default =
  fun (tt : unit) ->
   { (JC_99:
-    ((JC_97: eq_int(integer_of_int32(x), (0)))
+    ((JC_97: eq_int(integer_of_int32(x_0), (0)))
     and (JC_98: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
      (let jessie_42 =
-     (if ((eq_int_ (integer_of_int32 !x)) (0))
+     (if ((eq_int_ (integer_of_int32 !x_0)) (0))
      then (C_36: begin   (y := (safe_int32_of_integer_ (1))); !y end)
      else (C_35: begin   (y := (safe_int32_of_integer_ (2))); !y end)) in
      void); (raise Return); (raise Return) end with Return -> void end)
@@ -978,13 +982,13 @@ let f7a_ensures_default =
 let f7a_safety =
  fun (tt : unit) ->
   { (JC_99:
-    ((JC_97: eq_int(integer_of_int32(x), (0)))
+    ((JC_97: eq_int(integer_of_int32(x_0), (0)))
     and (JC_98: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
      (let jessie_39 =
-     (if ((eq_int_ (integer_of_int32 !x)) (0))
+     (if ((eq_int_ (integer_of_int32 !x_0)) (0))
      then (C_36: begin   (y := (safe_int32_of_integer_ (1))); !y end)
      else (C_35: begin   (y := (safe_int32_of_integer_ (2))); !y end)) in
      void); (raise Return); (raise Return) end with Return -> void end)
@@ -993,13 +997,13 @@ let f7a_safety =
 let f7b_ensures_default =
  fun (tt : unit) ->
   { (JC_111:
-    ((JC_109: neq_int(integer_of_int32(x), (0)))
+    ((JC_109: neq_int(integer_of_int32(x_0), (0)))
     and (JC_110: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
      (let jessie_48 =
-     (if ((eq_int_ (integer_of_int32 !x)) (0))
+     (if ((eq_int_ (integer_of_int32 !x_0)) (0))
      then (C_40: begin   (y := (safe_int32_of_integer_ (1))); !y end)
      else (C_39: begin   (y := (safe_int32_of_integer_ (2))); !y end)) in
      void); (raise Return); (raise Return) end with Return -> void end)
@@ -1008,13 +1012,13 @@ let f7b_ensures_default =
 let f7b_safety =
  fun (tt : unit) ->
   { (JC_111:
-    ((JC_109: neq_int(integer_of_int32(x), (0)))
+    ((JC_109: neq_int(integer_of_int32(x_0), (0)))
     and (JC_110: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
      (let jessie_45 =
-     (if ((eq_int_ (integer_of_int32 !x)) (0))
+     (if ((eq_int_ (integer_of_int32 !x_0)) (0))
      then (C_40: begin   (y := (safe_int32_of_integer_ (1))); !y end)
      else (C_39: begin   (y := (safe_int32_of_integer_ (2))); !y end)) in
      void); (raise Return); (raise Return) end with Return -> void end)
@@ -1056,7 +1060,7 @@ let t2_ensures_default =
  fun (tt : unit) ->
   { (JC_139:
     ((JC_137:
-     ((JC_135: eq_int(integer_of_int32(x), (0)))
+     ((JC_135: eq_int(integer_of_int32(x_0), (0)))
      and (JC_136:
          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))),
          (1)))))
@@ -1071,13 +1075,13 @@ let t2_ensures_default =
          (let jessie_62 =
          (C_47:
          begin
-           (let jessie_60 = (tmp_0 := !x) in void);
+           (let jessie_60 = (tmp_0 := !x_0) in void);
           (C_50:
           begin
-            (x := (C_49:
-                  (safe_int32_of_integer_ (C_48:
-                                          ((add_int (integer_of_int32 !x)) (1))))));
-           !x end) end) in void);
+            (x_0 := (C_49:
+                    (safe_int32_of_integer_ (C_48:
+                                            ((add_int (integer_of_int32 !x_0)) (1))))));
+           !x_0 end) end) in void);
         (C_52:
         begin
           (y := (C_51:
@@ -1089,7 +1093,7 @@ let t2_safety =
  fun (tt : unit) ->
   { (JC_139:
     ((JC_137:
-     ((JC_135: eq_int(integer_of_int32(x), (0)))
+     ((JC_135: eq_int(integer_of_int32(x_0), (0)))
      and (JC_136:
          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (0)))),
          (1)))))
@@ -1104,14 +1108,14 @@ let t2_safety =
          (let jessie_56 =
          (C_47:
          begin
-           (let jessie_54 = (tmp_0 := !x) in void);
+           (let jessie_54 = (tmp_0 := !x_0) in void);
           (C_50:
           begin
-            (x := (C_49:
-                  (JC_145:
-                  (int32_of_integer_ (C_48:
-                                     ((add_int (integer_of_int32 !x)) (1)))))));
-           !x end) end) in void);
+            (x_0 := (C_49:
+                    (JC_145:
+                    (int32_of_integer_ (C_48:
+                                       ((add_int (integer_of_int32 !x_0)) (1)))))));
+           !x_0 end) end) in void);
         (C_52:
         begin
           (y := (C_51:
@@ -1125,7 +1129,7 @@ let t3_ensures_default =
  fun (tt : unit) ->
   { (JC_157:
     ((JC_155:
-     ((JC_153: eq_int(integer_of_int32(x), (0)))
+     ((JC_153: eq_int(integer_of_int32(x_0), (0)))
      and (JC_154:
          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (1)))),
          (1)))))
@@ -1137,14 +1141,14 @@ let t3_ensures_default =
      (C_59:
      begin
        (let jessie_70 =
-       (x := (C_58:
-             (safe_int32_of_integer_ (C_57:
-                                     ((add_int (integer_of_int32 !x)) (1)))))) in
+       (x_0 := (C_58:
+               (safe_int32_of_integer_ (C_57:
+                                       ((add_int (integer_of_int32 !x_0)) (1)))))) in
        void);
       (C_61:
       begin
         (y := (C_60:
-              ((safe_acc_ !int_P_int_M_t_1) ((shift t) (integer_of_int32 !x)))));
+              ((safe_acc_ !int_P_int_M_t_1) ((shift t) (integer_of_int32 !x_0)))));
        !y end) end) in void); (raise Return); (raise Return) end with
    Return -> void end) { (JC_159: eq_int(integer_of_int32(y), (1))) }
 
@@ -1152,7 +1156,7 @@ let t3_safety =
  fun (tt : unit) ->
   { (JC_157:
     ((JC_155:
-     ((JC_153: eq_int(integer_of_int32(x), (0)))
+     ((JC_153: eq_int(integer_of_int32(x_0), (0)))
      and (JC_154:
          eq_int(integer_of_int32(select(int_P_int_M_t_1, shift(t, (1)))),
          (1)))))
@@ -1164,16 +1168,17 @@ let t3_safety =
      (C_59:
      begin
        (let jessie_66 =
-       (x := (C_58:
-             (JC_163:
-             (int32_of_integer_ (C_57: ((add_int (integer_of_int32 !x)) (1))))))) in
+       (x_0 := (C_58:
+               (JC_163:
+               (int32_of_integer_ (C_57:
+                                  ((add_int (integer_of_int32 !x_0)) (1))))))) in
        void);
       (C_61:
       begin
         (y := (C_60:
               (JC_164:
               ((((offset_acc_ !int_P_t_1_alloc_table) !int_P_int_M_t_1) t) 
-               (integer_of_int32 !x))))); !y end) end) in void);
+               (integer_of_int32 !x_0))))); !y end) end) in void);
     (raise Return); (raise Return) end with Return -> void end)
   { (JC_161: valid_t(int_P_t_1_alloc_table)) }
 
@@ -2178,6 +2183,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type char_P
 

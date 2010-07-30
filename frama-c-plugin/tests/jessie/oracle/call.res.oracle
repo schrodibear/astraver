@@ -326,8 +326,6 @@ parameter f_requires :
     { (JC_1: eq_int(integer_of_int32(y), integer_of_int32(ddd)))} int32
     { (JC_7: eq_int(integer_of_int32(result), integer_of_int32(z@))) }
 
-parameter x : int32 ref
-
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -338,13 +336,17 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
+parameter x_0 : int32 ref
+
 parameter main :
  tt:unit ->
-  { } unit reads x writes x { (JC_17: eq_int(integer_of_int32(x), (2))) }
+  { } unit reads x_0 writes x_0
+  { (JC_17: eq_int(integer_of_int32(x_0), (2))) }
 
 parameter main_requires :
  tt:unit ->
-  { } unit reads x writes x { (JC_17: eq_int(integer_of_int32(x), (2))) }
+  { } unit reads x_0 writes x_0
+  { (JC_17: eq_int(integer_of_int32(x_0), (2))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -410,24 +412,24 @@ let main_ensures_default =
    begin
      (C_8:
      begin
-       (let jessie_25 = (x := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_25 = (x_0 := (safe_int32_of_integer_ (0))) in void);
       (C_11:
       begin
         (let jessie_27 =
-        (x := (C_10:
-              (safe_int32_of_integer_ (C_9:
-                                      ((add_int (integer_of_int32 !x)) (1)))))) in
+        (x_0 := (C_10:
+                (safe_int32_of_integer_ (C_9:
+                                        ((add_int (integer_of_int32 !x_0)) (1)))))) in
         void);
        (C_13:
        begin
          (let jessie_32 =
-         (x := (C_12:
-               (let jessie_31 = (safe_int32_of_integer_ (1)) in
-               (let jessie_30 = !x in
-               (let jessie_29 = (safe_int32_of_integer_ (2)) in
-               (JC_22: (((f jessie_31) jessie_30) jessie_29))))))) in void);
+         (x_0 := (C_12:
+                 (let jessie_31 = (safe_int32_of_integer_ (1)) in
+                 (let jessie_30 = !x_0 in
+                 (let jessie_29 = (safe_int32_of_integer_ (2)) in
+                 (JC_22: (((f jessie_31) jessie_30) jessie_29))))))) in void);
         (raise Return) end) end) end); (raise Return) end with Return ->
-   void end) { (JC_16: eq_int(integer_of_int32(x), (2))) }
+   void end) { (JC_16: eq_int(integer_of_int32(x_0), (2))) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -437,22 +439,23 @@ let main_safety =
    begin
      (C_8:
      begin
-       (let jessie_16 = (x := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_16 = (x_0 := (safe_int32_of_integer_ (0))) in void);
       (C_11:
       begin
         (let jessie_18 =
-        (x := (C_10:
-              (JC_20:
-              (int32_of_integer_ (C_9: ((add_int (integer_of_int32 !x)) (1))))))) in
+        (x_0 := (C_10:
+                (JC_20:
+                (int32_of_integer_ (C_9:
+                                   ((add_int (integer_of_int32 !x_0)) (1))))))) in
         void);
        (C_13:
        begin
          (let jessie_23 =
-         (x := (C_12:
-               (let jessie_22 = (safe_int32_of_integer_ (1)) in
-               (let jessie_21 = !x in
-               (let jessie_20 = (safe_int32_of_integer_ (2)) in
-               (JC_21: (((f_requires jessie_22) jessie_21) jessie_20))))))) in
+         (x_0 := (C_12:
+                 (let jessie_22 = (safe_int32_of_integer_ (1)) in
+                 (let jessie_21 = !x_0 in
+                 (let jessie_20 = (safe_int32_of_integer_ (2)) in
+                 (JC_21: (((f_requires jessie_22) jessie_21) jessie_20))))))) in
          void); (raise Return) end) end) end); (raise Return) end with
    Return -> void end) { true }
 
@@ -1293,6 +1296,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type char_P
 

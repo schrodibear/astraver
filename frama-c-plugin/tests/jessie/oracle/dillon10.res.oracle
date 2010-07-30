@@ -197,7 +197,7 @@ predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-logic s:  -> int_P pointer
+logic s_0:  -> int_P pointer
 
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -475,19 +475,19 @@ let main_ensures_default =
      begin
        (let jessie_12 =
        (let jessie_8 = (safe_int32_of_integer_ (1)) in
-       (let jessie_11 = s in
+       (let jessie_11 = s_0 in
        (((safe_upd_ int_P_int_M_s_1) jessie_11) jessie_8))) in void);
       (assert { true };
       (((C_5:
         begin
-          (let jessie_13 = s in (JC_34: (f1 jessie_13)));
-         (C_6: (let jessie_14 = s in (JC_35: (f2 jessie_14)))) end))
+          (let jessie_13 = s_0 in (JC_34: (f1 jessie_13)));
+         (C_6: (let jessie_14 = s_0 in (JC_35: (f2 jessie_14)))) end))
       {{ ((JC_32: (true = true))
          and (JC_33:
              not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
              int_P_int_M_s_1, pset_empty))) }}));
       (assert
-      { (JC_36: eq_int(integer_of_int32(select(int_P_int_M_s_1, s)), (1))) };
+      { (JC_36: eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) };
       void); void; (raise Return) end); (raise Return) end with Return ->
    void end) { (JC_25: true) }
 
@@ -501,7 +501,7 @@ let main_safety =
      begin
        (let jessie_6 =
        (let jessie_2 = (safe_int32_of_integer_ (1)) in
-       (let jessie_5 = s in
+       (let jessie_5 = s_0 in
        (((safe_upd_ int_P_int_M_s_1) jessie_5) jessie_2))) in void);
       [ { } unit
         { ((JC_29: (true = true))
@@ -509,7 +509,8 @@ let main_safety =
               not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
               int_P_int_M_s_1, pset_empty))) } ];
       [ { } unit reads int_P_int_M_s_1
-        { (JC_31: eq_int(integer_of_int32(select(int_P_int_M_s_1, s)), (1))) } ];
+        { (JC_31:
+          eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) } ];
       void; (raise Return) end); (raise Return) end with Return -> void end)
   { true }
 
@@ -1317,6 +1318,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type char_P
 
 type int32
@@ -1435,7 +1537,7 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
 
-logic s : int_P pointer
+logic s_0 : int_P pointer
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

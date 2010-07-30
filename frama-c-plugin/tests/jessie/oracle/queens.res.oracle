@@ -547,7 +547,7 @@ axiom below_def :
   (forall i_11:int.
    (in_(i_11, below(n_0_0)) <-> (le_int((0), i_11) and lt_int(i_11, n_0_0)))))
 
-axiom card_nonneg : (forall s_1:int_set. ge_int(card(s_1), (0)))
+axiom card_nonneg : (forall s_1_0:int_set. ge_int(card(s_1_0), (0)))
 
 logic char_P_tag:  -> char_P tag_id
 
@@ -745,14 +745,14 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-predicate lt_sol(s1:int_P pointer, s2:int_P pointer,
+predicate lt_sol(s1_1:int_P pointer, s2_1:int_P pointer,
  int_P_int_M_at_L:(int_P, int) memory) =
  (exists i_17:int.
   (le_int((0), i_17)
   and (lt_int(i_17, N)
-      and (eq_prefix(s1, s2, i_17, int_P_int_M_at_L)
-          and lt_int(select(int_P_int_M_at_L, shift(s1, i_17)),
-              select(int_P_int_M_at_L, shift(s2, i_17)))))))
+      and (eq_prefix(s1_1, s2_1, i_17, int_P_int_M_at_L)
+          and lt_int(select(int_P_int_M_at_L, shift(s1_1, i_17)),
+              select(int_P_int_M_at_L, shift(s2_1, i_17)))))))
 
 axiom min_elt_def :
  (forall s_8:int_set.
@@ -1188,15 +1188,15 @@ parameter min_elt_0_requires :
   { (JC_27: neq_int(x_1, (0)))} int
   { (JC_33: eq_int(result, min_elt(iset(x_1@)))) }
 
-parameter s : int ref
+parameter s_0 : int ref
 
 parameter queens :
  n_0:int ->
-  { } int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
-  writes int_P_int_M,k,s
+  { } int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s_0
+  writes int_P_int_M,k,s_0
   { (JC_143:
-    ((JC_140: eq_int(result, s))
-    and ((JC_141: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
+    ((JC_140: eq_int(result, s_0))
+    and ((JC_141: sorted(sol, (0), s_0, int_P_int_M, int_xP_int_xM))
         and (JC_142:
             (forall t_4:int_P pointer.
              (solution(t_4, int_P_int_M)
@@ -1211,12 +1211,12 @@ parameter queens_requires :
  n_0:int ->
   { (JC_129:
     ((JC_126: eq_int(n_0, N))
-    and ((JC_127: eq_int(s, (0))) and (JC_128: eq_int(k, (0))))))}
-  int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
-  writes int_P_int_M,k,s
+    and ((JC_127: eq_int(s_0, (0))) and (JC_128: eq_int(k, (0))))))}
+  int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s_0
+  writes int_P_int_M,k,s_0
   { (JC_143:
-    ((JC_140: eq_int(result, s))
-    and ((JC_141: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
+    ((JC_140: eq_int(result, s_0))
+    and ((JC_141: sorted(sol, (0), s_0, int_P_int_M, int_xP_int_xM))
         and (JC_142:
             (forall t_4:int_P pointer.
              (solution(t_4, int_P_int_M)
@@ -1229,32 +1229,33 @@ parameter queens_requires :
 
 parameter store_solution :
  tt:unit ->
-  { } unit reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,s
-  writes int_P_int_M,s
+  { } unit reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,s_0
+  writes int_P_int_M,s_0
   { (JC_50:
     ((JC_48:
-     ((JC_46: eq_int(s, add_int(s@, (1))))
+     ((JC_46: eq_int(s_0, add_int(s_0@, (1))))
      and (JC_47:
-         eq_sol(select(int_xP_int_xM, shift(sol, s@)), col, int_P_int_M))))
+         eq_sol(select(int_xP_int_xM, shift(sol, s_0@)), col, int_P_int_M))))
     and (JC_49:
         not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
         pset_range(pset_deref(int_xP_int_xM@,
-                   pset_range(pset_singleton(sol@), s@, s@)),
+                   pset_range(pset_singleton(sol@), s_0@, s_0@)),
         (0), sub_int(N, (1))))))) }
 
 parameter store_solution_requires :
  tt:unit ->
   { (JC_37: solution(col, int_P_int_M))} unit
-  reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,s writes int_P_int_M,s
+  reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,s_0
+  writes int_P_int_M,s_0
   { (JC_50:
     ((JC_48:
-     ((JC_46: eq_int(s, add_int(s@, (1))))
+     ((JC_46: eq_int(s_0, add_int(s_0@, (1))))
      and (JC_47:
-         eq_sol(select(int_xP_int_xM, shift(sol, s@)), col, int_P_int_M))))
+         eq_sol(select(int_xP_int_xM, shift(sol, s_0@)), col, int_P_int_M))))
     and (JC_49:
         not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
         pset_range(pset_deref(int_xP_int_xM@,
-                   pset_range(pset_singleton(sol@), s@, s@)),
+                   pset_range(pset_singleton(sol@), s_0@, s_0@)),
         (0), sub_int(N, (1))))))) }
 
 parameter t1 : a_0_0:int -> b_0_0:int -> c_0:int -> { } int { true }
@@ -1265,28 +1266,29 @@ parameter t3 :
  a_1:int ->
   b_1:int ->
    c:int ->
-    { } int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
-    writes int_P_int_M,k,s
+    { } int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s_0
+    writes int_P_int_M,k,s_0
     { (JC_86:
       ((JC_84:
-       ((JC_79: eq_int(result, sub_int(s, s@)))
+       ((JC_79: eq_int(result, sub_int(s_0, s_0@)))
        and ((JC_80: ge_int(result, (0)))
            and ((JC_81: eq_int(k, k@))
-               and ((JC_82: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
+               and ((JC_82:
+                    sorted(sol, s_0@, s_0, int_P_int_M, int_xP_int_xM))
                    and (JC_83:
                        (forall t_3:int_P pointer.
                         ((solution(t_3, int_P_int_M)
                          and eq_prefix(col, t_3, k, int_P_int_M))
                         <-> (exists i_23:int.
-                             (le_int(s@, i_23)
-                             and (lt_int(i_23, s)
+                             (le_int(s_0@, i_23)
+                             and (lt_int(i_23, s_0)
                                  and eq_sol(t_3,
                                      select(int_xP_int_xM, shift(sol, i_23)),
                                      int_P_int_M))))))))))))
       and (JC_85:
           not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
           pset_union(pset_all(pset_deref(int_xP_int_xM@,
-                              pset_range_right(pset_singleton(sol@), s@))),
+                              pset_range_right(pset_singleton(sol@), s_0@))),
           pset_range_right(pset_singleton(col@), k@)))))) }
 
 parameter t3_requires :
@@ -1296,7 +1298,7 @@ parameter t3_requires :
     { (JC_60:
       ((JC_53: le_int((0), k))
       and ((JC_54: eq_int(add_int(k, card(iset(a_1))), N))
-          and ((JC_55: le_int((0), s))
+          and ((JC_55: le_int((0), s_0))
               and ((JC_56:
                    (forall i_20:int.
                     (in_(i_20, iset(a_1))
@@ -1327,35 +1329,36 @@ parameter t3_requires :
                                                  shift(col, j_5)),
                                           sub_int(add_int(i_22, k), j_5)))))))))
                           and (JC_59: partial_solution(k, col, int_P_int_M)))))))))}
-    int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s
-    writes int_P_int_M,k,s
+    int reads int_P_alloc_table,int_P_int_M,int_xP_int_xM,k,s_0
+    writes int_P_int_M,k,s_0
     { (JC_86:
       ((JC_84:
-       ((JC_79: eq_int(result, sub_int(s, s@)))
+       ((JC_79: eq_int(result, sub_int(s_0, s_0@)))
        and ((JC_80: ge_int(result, (0)))
            and ((JC_81: eq_int(k, k@))
-               and ((JC_82: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
+               and ((JC_82:
+                    sorted(sol, s_0@, s_0, int_P_int_M, int_xP_int_xM))
                    and (JC_83:
                        (forall t_3:int_P pointer.
                         ((solution(t_3, int_P_int_M)
                          and eq_prefix(col, t_3, k, int_P_int_M))
                         <-> (exists i_23:int.
-                             (le_int(s@, i_23)
-                             and (lt_int(i_23, s)
+                             (le_int(s_0@, i_23)
+                             and (lt_int(i_23, s_0)
                                  and eq_sol(t_3,
                                      select(int_xP_int_xM, shift(sol, i_23)),
                                      int_P_int_M))))))))))))
       and (JC_85:
           not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
           pset_union(pset_all(pset_deref(int_xP_int_xM@,
-                              pset_range_right(pset_singleton(sol@), s@))),
+                              pset_range_right(pset_singleton(sol@), s_0@))),
           pset_range_right(pset_singleton(col@), k@)))))) }
 
 let queens_ensures_default =
  fun (n_0 : int) ->
   { (JC_134:
     ((JC_131: eq_int(n_0, N))
-    and ((JC_132: eq_int(s, (0))) and (JC_133: eq_int(k, (0)))))) }
+    and ((JC_132: eq_int(s_0, (0))) and (JC_133: eq_int(k, (0)))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1379,8 +1382,8 @@ let queens_ensures_default =
          !tmp_1 end) end in void); (return := !tmp_1); (raise Return) end);
     absurd  end with Return -> !return end))
   { (JC_139:
-    ((JC_136: eq_int(result, s))
-    and ((JC_137: sorted(sol, (0), s, int_P_int_M, int_xP_int_xM))
+    ((JC_136: eq_int(result, s_0))
+    and ((JC_137: sorted(sol, (0), s_0, int_P_int_M, int_xP_int_xM))
         and (JC_138:
             (forall t_4:int_P pointer.
              (solution(t_4, int_P_int_M)
@@ -1395,7 +1398,7 @@ let queens_safety =
  fun (n_0 : int) ->
   { (JC_134:
     ((JC_131: eq_int(n_0, N))
-    and ((JC_132: eq_int(s, (0))) and (JC_133: eq_int(k, (0)))))) }
+    and ((JC_132: eq_int(s_0, (0))) and (JC_133: eq_int(k, (0)))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1573,7 +1576,7 @@ let t1_safety =
                               (JC_14:
                               ((div_int_ (C_17: ((add_int c_0) !d))) (2)))) in
                               (JC_18:
-                              (assert
+                              (check
                               { zwf_zero((JC_17 : card(iset(jessie_19))),
                                 (JC_16 : card(iset(a_0_0)))) };
                               (JC_15:
@@ -1595,7 +1598,7 @@ let t3_ensures_default =
   { (JC_69:
     ((JC_62: le_int((0), k))
     and ((JC_63: eq_int(add_int(k, card(iset(a_1))), N))
-        and ((JC_64: le_int((0), s))
+        and ((JC_64: le_int((0), s_0))
             and ((JC_65:
                  (forall i_20:int.
                   (in_(i_20, iset(a_1))
@@ -1659,13 +1662,13 @@ let t3_ensures_default =
              { invariant
                  ((JC_117:
                   ((JC_110: included(iset(e_0), iset(e_0@L)))
-                  and ((JC_111: eq_int(f_0, sub_int(s, s@L)))
+                  and ((JC_111: eq_int(f_0, sub_int(s_0, s_0@L)))
                       and ((JC_112: ge_int(f_0, (0)))
                           and ((JC_113: eq_int(k, k@L))
                               and ((JC_114:
                                    partial_solution(k, col, int_P_int_M))
                                   and ((JC_115:
-                                       sorted(sol, s@L, s, int_P_int_M,
+                                       sorted(sol, s_0@L, s_0, int_P_int_M,
                                        int_xP_int_xM))
                                       and (JC_116:
                                           (forall t_2:int_P pointer.
@@ -1680,8 +1683,8 @@ let t3_ensures_default =
                                                                 shift(t_2, k)),
                                                          di)))))
                                            <-> (exists i_19:int.
-                                                (le_int(s@L, i_19)
-                                                and (lt_int(i_19, s)
+                                                (le_int(s_0@L, i_19)
+                                                and (lt_int(i_19, s_0)
                                                     and eq_sol(t_2,
                                                         select(int_xP_int_xM,
                                                         shift(sol, i_19)),
@@ -1691,13 +1694,13 @@ let t3_ensures_default =
                       int_P_int_M@loop_4, int_P_int_M,
                       pset_union(pset_range_right(pset_singleton(col), k),
                       pset_all(pset_deref(int_xP_int_xM,
-                               pset_range_right(pset_singleton(sol), s))))))
+                               pset_range_right(pset_singleton(sol), s_0))))))
                      and (JC_120:
                          not_assigns(int_P_alloc_table@init,
                          int_P_int_M@init, int_P_int_M,
                          pset_union(pset_all(pset_deref(int_xP_int_xM@init,
                                              pset_range_right(pset_singleton(sol@init),
-                                             s@init))),
+                                             s_0@init))),
                          pset_range_right(pset_singleton(col@init), k@init))))))
                 }
               begin
@@ -1770,24 +1773,24 @@ let t3_ensures_default =
    !return end))
   { (JC_78:
     ((JC_76:
-     ((JC_71: eq_int(result, sub_int(s, s@)))
+     ((JC_71: eq_int(result, sub_int(s_0, s_0@)))
      and ((JC_72: ge_int(result, (0)))
          and ((JC_73: eq_int(k, k@))
-             and ((JC_74: sorted(sol, s@, s, int_P_int_M, int_xP_int_xM))
+             and ((JC_74: sorted(sol, s_0@, s_0, int_P_int_M, int_xP_int_xM))
                  and (JC_75:
                      (forall t_3:int_P pointer.
                       ((solution(t_3, int_P_int_M)
                        and eq_prefix(col, t_3, k, int_P_int_M))
                       <-> (exists i_23:int.
-                           (le_int(s@, i_23)
-                           and (lt_int(i_23, s)
+                           (le_int(s_0@, i_23)
+                           and (lt_int(i_23, s_0)
                                and eq_sol(t_3,
                                    select(int_xP_int_xM, shift(sol, i_23)),
                                    int_P_int_M))))))))))))
     and (JC_77:
         not_assigns(int_P_alloc_table@, int_P_int_M@, int_P_int_M,
         pset_union(pset_all(pset_deref(int_xP_int_xM@,
-                            pset_range_right(pset_singleton(sol@), s@))),
+                            pset_range_right(pset_singleton(sol@), s_0@))),
         pset_range_right(pset_singleton(col@), k@)))))) }
 
 let t3_safety =
@@ -1795,7 +1798,7 @@ let t3_safety =
   { (JC_69:
     ((JC_62: le_int((0), k))
     and ((JC_63: eq_int(add_int(k, card(iset(a_1))), N))
-        and ((JC_64: le_int((0), s))
+        and ((JC_64: le_int((0), s_0))
             and ((JC_65:
                  (forall i_20:int.
                   (in_(i_20, iset(a_1))
@@ -1858,16 +1861,16 @@ let t3_safety =
              while true do
              { invariant (JC_98: true) variant (JC_108 : card(iset(e_0))) }
               begin
-                [ { } unit reads e_0,f_0,int_P_int_M,int_xP_int_xM,k,s
+                [ { } unit reads e_0,f_0,int_P_int_M,int_xP_int_xM,k,s_0
                   { (JC_96:
                     ((JC_89: included(iset(e_0), iset(e_0@L)))
-                    and ((JC_90: eq_int(f_0, sub_int(s, s@L)))
+                    and ((JC_90: eq_int(f_0, sub_int(s_0, s_0@L)))
                         and ((JC_91: ge_int(f_0, (0)))
                             and ((JC_92: eq_int(k, k@L))
                                 and ((JC_93:
                                      partial_solution(k, col, int_P_int_M))
                                     and ((JC_94:
-                                         sorted(sol, s@L, s, int_P_int_M,
+                                         sorted(sol, s_0@L, s_0, int_P_int_M,
                                          int_xP_int_xM))
                                         and (JC_95:
                                             (forall t_2:int_P pointer.
@@ -1883,8 +1886,8 @@ let t3_safety =
                                                                   k)),
                                                            di)))))
                                              <-> (exists i_19:int.
-                                                  (le_int(s@L, i_19)
-                                                  and (lt_int(i_19, s)
+                                                  (le_int(s_0@L, i_19)
+                                                  and (lt_int(i_19, s_0)
                                                       and eq_sol(t_2,
                                                           select(int_xP_int_xM,
                                                           shift(sol, i_19)),
@@ -1941,7 +1944,7 @@ let t3_safety =
                                   (JC_103:
                                   ((div_int_ (C_68: ((add_int c) !d_0))) (2)))) in
                                   (JC_107:
-                                  (assert
+                                  (check
                                   { zwf_zero((JC_106 : card(iset(jessie_70))),
                                     (JC_105 : card(iset(a_1)))) };
                                   (JC_104:
@@ -2041,12 +2044,12 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1443" begin = "36" end = "142"/>
-      <explain kind = "Assert"/>
+      <location file = "why/queens.why" line = "1446" begin = "36" end = "142"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1443" begin = "36" end = "142"/>
-      <explain kind = "Assert"/>
+      <location file = "why/queens.why" line = "1446" begin = "36" end = "142"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po70.why">
       <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
@@ -2254,12 +2257,12 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1075" begin = "32" end = "134"/>
-      <explain kind = "Assert"/>
+      <location file = "why/queens.why" line = "1078" begin = "32" end = "134"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1075" begin = "32" end = "134"/>
-      <explain kind = "Assert"/>
+      <location file = "why/queens.why" line = "1078" begin = "32" end = "134"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po32.why">
       <location file = "PPCHOME/tests/jessie/queens.c" line = "167" begin = "21" end = "34"/>
@@ -3171,6 +3174,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type char_P
 
 type int_P
@@ -3208,7 +3312,7 @@ axiom below_def:
     (forall i_11:int.
       (in_(i_11, below(n_0_0)) <-> ((0 <= i_11) and (i_11 < n_0_0)))))
 
-axiom card_nonneg: (forall s_1:int_set. (card(s_1) >= 0))
+axiom card_nonneg: (forall s_1_0:int_set. (card(s_1_0) >= 0))
 
 logic char_P_tag : char_P tag_id
 
@@ -3371,14 +3475,14 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-predicate lt_sol(s1: int_P pointer, s2: int_P pointer,
+predicate lt_sol(s1_1: int_P pointer, s2_1: int_P pointer,
   int_P_int_M_at_L: (int_P, int) memory) =
   (exists i_17:int.
     ((0 <= i_17) and
      ((i_17 < N) and
-      (eq_prefix(s1, s2, i_17, int_P_int_M_at_L) and
-       (select(int_P_int_M_at_L, shift(s1, i_17)) < select(int_P_int_M_at_L,
-       shift(s2, i_17)))))))
+      (eq_prefix(s1_1, s2_1, i_17, int_P_int_M_at_L) and
+       (select(int_P_int_M_at_L, shift(s1_1,
+       i_17)) < select(int_P_int_M_at_L, shift(s2_1, i_17)))))))
 
 axiom min_elt_def:
   (forall s_8:int_set.

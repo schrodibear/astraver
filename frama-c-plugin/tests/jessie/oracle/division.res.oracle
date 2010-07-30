@@ -130,18 +130,18 @@ axiom distr_left_as_axiom :
     add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
 
 goal distr_right :
- (forall x_0:int.
+ (forall x_1:int.
   (forall y_0:int.
    (forall z:int.
-    eq_int(mul_int(x_0, add_int(y_0, z)),
-    add_int(mul_int(x_0, y_0), mul_int(x_0, z))))))
+    eq_int(mul_int(x_1, add_int(y_0, z)),
+    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
 
 axiom distr_right_as_axiom :
- (forall x_0:int.
+ (forall x_1:int.
   (forall y_0:int.
    (forall z:int.
-    eq_int(mul_int(x_0, add_int(y_0, z)),
-    add_int(mul_int(x_0, y_0), mul_int(x_0, z))))))
+    eq_int(mul_int(x_1, add_int(y_0, z)),
+    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
 
 logic integer_of_int32: int32 -> int
 
@@ -360,25 +360,25 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter division :
- x:int32 ->
+ x_0:int32 ->
   y:int32 ->
    { } int32
    { (JC_10:
      (exists r:int.
-      (eq_int(integer_of_int32(x@),
+      (eq_int(integer_of_int32(x_0@),
        add_int(mul_int(integer_of_int32(result), integer_of_int32(y@)), r))
       and (le_int((0), r) and lt_int(r, integer_of_int32(y@)))))) }
 
 parameter division_requires :
- x:int32 ->
+ x_0:int32 ->
   y:int32 ->
    { (JC_3:
-     ((JC_1: ge_int(integer_of_int32(x), (0)))
+     ((JC_1: ge_int(integer_of_int32(x_0), (0)))
      and (JC_2: gt_int(integer_of_int32(y), (0)))))}
    int32
    { (JC_10:
      (exists r:int.
-      (eq_int(integer_of_int32(x@),
+      (eq_int(integer_of_int32(x_0@),
        add_int(mul_int(integer_of_int32(result), integer_of_int32(y@)), r))
       and (le_int((0), r) and lt_int(r, integer_of_int32(y@)))))) }
 
@@ -399,9 +399,9 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let division_ensures_default =
- fun (x : int32) (y : int32) ->
+ fun (x_0 : int32) (y : int32) ->
   { (JC_7:
-    ((JC_5: ge_int(integer_of_int32(x), (0)))
+    ((JC_5: ge_int(integer_of_int32(x_0), (0)))
     and (JC_6: gt_int(integer_of_int32(y), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -414,7 +414,7 @@ let division_ensures_default =
        (let jessie_17 = (i := (safe_int32_of_integer_ (0))) in void);
       (C_2:
       begin
-        (let jessie_19 = (j := x) in void);
+        (let jessie_19 = (j := x_0) in void);
        try
         (let jessie_26 =
         begin
@@ -423,7 +423,7 @@ let division_ensures_default =
           { invariant
               (JC_24:
               ((JC_22:
-               eq_int(integer_of_int32(x),
+               eq_int(integer_of_int32(x_0),
                add_int(mul_int(integer_of_int32(i), integer_of_int32(y)),
                integer_of_int32(j))))
               and (JC_23: le_int((0), integer_of_int32(j)))))  }
@@ -460,14 +460,14 @@ let division_ensures_default =
    !return end))
   { (JC_9:
     (exists r:int.
-     (eq_int(integer_of_int32(x@),
+     (eq_int(integer_of_int32(x_0@),
       add_int(mul_int(integer_of_int32(result), integer_of_int32(y@)), r))
      and (le_int((0), r) and lt_int(r, integer_of_int32(y@)))))) }
 
 let division_safety =
- fun (x : int32) (y : int32) ->
+ fun (x_0 : int32) (y : int32) ->
   { (JC_7:
-    ((JC_5: ge_int(integer_of_int32(x), (0)))
+    ((JC_5: ge_int(integer_of_int32(x_0), (0)))
     and (JC_6: gt_int(integer_of_int32(y), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -480,7 +480,7 @@ let division_safety =
        (let jessie_5 = (i := (safe_int32_of_integer_ (0))) in void);
       (C_2:
       begin
-        (let jessie_7 = (j := x) in void);
+        (let jessie_7 = (j := x_0) in void);
        try
         (let jessie_14 =
         begin
@@ -491,7 +491,7 @@ let division_safety =
              [ { } unit reads i,j
                { (JC_15:
                  ((JC_13:
-                  eq_int(integer_of_int32(x),
+                  eq_int(integer_of_int32(x_0),
                   add_int(mul_int(integer_of_int32(i), integer_of_int32(y)),
                   integer_of_int32(j))))
                  and (JC_14: le_int((0), integer_of_int32(j))))) } ];
@@ -1393,6 +1393,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type char_P
 
 type int32
@@ -1427,9 +1528,9 @@ axiom distr_left_as_axiom:
         (((x_0_0 + y_0_0) * z_0) = ((x_0_0 * z_0) + (y_0_0 * z_0))))))
 
 axiom distr_right_as_axiom:
-  (forall x_0:int.
+  (forall x_1:int.
     (forall y_0:int.
-      (forall z:int. ((x_0 * (y_0 + z)) = ((x_0 * y_0) + (x_0 * z))))))
+      (forall z:int. ((x_1 * (y_0 + z)) = ((x_1 * y_0) + (x_1 * z))))))
 
 logic integer_of_int32 : int32 -> int
 

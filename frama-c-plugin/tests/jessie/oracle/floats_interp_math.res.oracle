@@ -379,7 +379,7 @@ axiom void_P_tags :
 parameter i_f : int32 ref
 
 parameter InterPolate :
- x:real ->
+ x_0:real ->
   X:double_P pointer ->
    Y:double_P pointer ->
     V:double_P pointer ->
@@ -416,8 +416,8 @@ parameter InterPolate :
                                shift(X@, k_2@)))))))
                             and (le_real(select(double_P_double_M_X_1@,
                                          shift(X@, (0))),
-                                 x@)
-                                and lt_real(x@,
+                                 x_0@)
+                                and lt_real(x_0@,
                                     select(double_P_double_M_X_1@,
                                     shift(X@, integer_of_int32(n@))))))))) ->
                 (JC_40:
@@ -429,7 +429,7 @@ parameter InterPolate :
                         eq_real(result,
                         add_real(select(double_P_double_M_Y_2,
                                  shift(Y@, integer_of_int32(i_f))),
-                        div_real(mul_real(sub_real(x@,
+                        div_real(mul_real(sub_real(x_0@,
                                           select(double_P_double_M_X_1,
                                           shift(X@, integer_of_int32(i_f)))),
                                  sub_real(select(double_P_double_M_Y_2,
@@ -466,7 +466,7 @@ parameter InterPolate :
                                             shift(X@, add_int(k_1@, (1)))),
                                    select(double_P_double_M_X_1@,
                                    shift(X@, k_1@)))))))
-                                and ge_real(x@,
+                                and ge_real(x_0@,
                                     select(double_P_double_M_X_1@,
                                     shift(X@, integer_of_int32(n@)))))))) ->
                     (JC_32:
@@ -498,7 +498,7 @@ parameter InterPolate :
                                                shift(X@, add_int(k_0@, (1)))),
                                       select(double_P_double_M_X_1@,
                                       shift(X@, k_0@)))))))
-                                   and lt_real(x@,
+                                   and lt_real(x_0@,
                                        select(double_P_double_M_X_1@,
                                        shift(X@, (0)))))))) ->
                        (JC_30:
@@ -506,7 +506,7 @@ parameter InterPolate :
                        select(double_P_double_M_Y_2, shift(Y@, (0)))))))) }
 
 parameter InterPolate_requires :
- x:real ->
+ x_0:real ->
   X:double_P pointer ->
    Y:double_P pointer ->
     V:double_P pointer ->
@@ -584,8 +584,8 @@ parameter InterPolate_requires :
                                shift(X@, k_2@)))))))
                             and (le_real(select(double_P_double_M_X_1@,
                                          shift(X@, (0))),
-                                 x@)
-                                and lt_real(x@,
+                                 x_0@)
+                                and lt_real(x_0@,
                                     select(double_P_double_M_X_1@,
                                     shift(X@, integer_of_int32(n@))))))))) ->
                 (JC_40:
@@ -597,7 +597,7 @@ parameter InterPolate_requires :
                         eq_real(result,
                         add_real(select(double_P_double_M_Y_2,
                                  shift(Y@, integer_of_int32(i_f))),
-                        div_real(mul_real(sub_real(x@,
+                        div_real(mul_real(sub_real(x_0@,
                                           select(double_P_double_M_X_1,
                                           shift(X@, integer_of_int32(i_f)))),
                                  sub_real(select(double_P_double_M_Y_2,
@@ -634,7 +634,7 @@ parameter InterPolate_requires :
                                             shift(X@, add_int(k_1@, (1)))),
                                    select(double_P_double_M_X_1@,
                                    shift(X@, k_1@)))))))
-                                and ge_real(x@,
+                                and ge_real(x_0@,
                                     select(double_P_double_M_X_1@,
                                     shift(X@, integer_of_int32(n@)))))))) ->
                     (JC_32:
@@ -666,7 +666,7 @@ parameter InterPolate_requires :
                                                shift(X@, add_int(k_0@, (1)))),
                                       select(double_P_double_M_X_1@,
                                       shift(X@, k_0@)))))))
-                                   and lt_real(x@,
+                                   and lt_real(x_0@,
                                        select(double_P_double_M_X_1@,
                                        shift(X@, (0)))))))) ->
                        (JC_30:
@@ -829,7 +829,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let InterPolate_ensures_big =
- fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
   { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
       select(double_P_double_M_Y_2, shift(Y, (1))))
      and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
@@ -847,7 +847,7 @@ let InterPolate_ensures_big =
                     sub_real(select(double_P_double_M_X_1,
                              shift(X, add_int(k_1, (1)))),
                     select(double_P_double_M_X_1, shift(X, k_1)))))))
-                 and ge_real(x,
+                 and ge_real(x_0,
                      select(double_P_double_M_X_1,
                      shift(X, integer_of_int32(n))))))))
     and (JC_23:
@@ -911,10 +911,10 @@ let InterPolate_ensures_big =
                                                                    ((add_int 
                                                                     (integer_of_int32 n)) (1))))))) (2))))))) in
         void);
-       (if ((ge_real_ x) (C_9:
-                         ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                            ((shift X) 
-                                                             (integer_of_int32 !m))))))
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
        then (C_7: (let jessie_66 = (i := !m) in void)) else void);
        (C_10:
        begin
@@ -931,7 +931,7 @@ let InterPolate_ensures_big =
                    (forall k:int.
                     ((le_int(integer_of_int32(i0), k)
                      and lt_int(k, integer_of_int32(i))) ->
-                     ge_real(x,
+                     ge_real(x_0,
                      select(double_P_double_M_X_1,
                      shift(X, integer_of_int32(i)))))))
                   and (JC_90:
@@ -946,14 +946,14 @@ let InterPolate_ensures_big =
                 begin
                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                   then
-                   (if ((ge_real_ x) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 !i)) (1)))))))))))
+                   (if ((ge_real_ x_0) (C_21:
+                                       ((safe_acc_ double_P_double_M_X_1) 
+                                        (C_20:
+                                        ((shift X) (integer_of_int32 
+                                                    (C_19:
+                                                    (safe_int32_of_integer_ 
+                                                     (C_18:
+                                                     ((add_int (integer_of_int32 !i)) (1)))))))))))
                    then void
                    else
                     (let jessie_69 = (raise (Goto_while_0_break_exc void)) in
@@ -985,10 +985,10 @@ let InterPolate_ensures_big =
                                     (C_34: ((shift Y) (integer_of_int32 !i)))))) 
                          (C_33:
                          ((mul_real (C_32:
-                                    ((sub_real x) (C_31:
-                                                  ((safe_acc_ double_P_double_M_X_1) 
-                                                   (C_30:
-                                                   ((shift X) (integer_of_int32 !i)))))))) 
+                                    ((sub_real x_0) (C_31:
+                                                    ((safe_acc_ double_P_double_M_X_1) 
+                                                     (C_30:
+                                                     ((shift X) (integer_of_int32 !i)))))))) 
                           (C_29:
                           ((safe_acc_ double_P_double_M_V_3) (C_28:
                                                              ((shift V) 
@@ -1000,7 +1000,7 @@ let InterPolate_ensures_big =
     select(double_P_double_M_Y_2, shift(Y@, integer_of_int32(n@))))) }
 
 let InterPolate_ensures_default =
- fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
   { (JC_23:
     ((JC_13: le_int((3), integer_of_int32(n)))
     and ((JC_14: le_int(integer_of_int32(n), (17)))
@@ -1060,10 +1060,10 @@ let InterPolate_ensures_default =
                                                                    ((add_int 
                                                                     (integer_of_int32 n)) (1))))))) (2))))))) in
         void);
-       (if ((ge_real_ x) (C_9:
-                         ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                            ((shift X) 
-                                                             (integer_of_int32 !m))))))
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
        then (C_7: (let jessie_28 = (i := !m) in void)) else void);
        (C_10:
        begin
@@ -1078,7 +1078,7 @@ let InterPolate_ensures_default =
                 (forall k:int.
                  ((le_int(integer_of_int32(i0), k)
                   and lt_int(k, integer_of_int32(i))) ->
-                  ge_real(x,
+                  ge_real(x_0,
                   select(double_P_double_M_X_1,
                   shift(X, integer_of_int32(i)))))))
                and (JC_67:
@@ -1096,14 +1096,14 @@ let InterPolate_ensures_default =
                 begin
                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                   then
-                   (if ((ge_real_ x) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 !i)) (1)))))))))))
+                   (if ((ge_real_ x_0) (C_21:
+                                       ((safe_acc_ double_P_double_M_X_1) 
+                                        (C_20:
+                                        ((shift X) (integer_of_int32 
+                                                    (C_19:
+                                                    (safe_int32_of_integer_ 
+                                                     (C_18:
+                                                     ((add_int (integer_of_int32 !i)) (1)))))))))))
                    then void
                    else
                     (let jessie_31 = (raise (Goto_while_0_break_exc void)) in
@@ -1132,10 +1132,10 @@ let InterPolate_ensures_default =
                                     (C_34: ((shift Y) (integer_of_int32 !i)))))) 
                          (C_33:
                          ((mul_real (C_32:
-                                    ((sub_real x) (C_31:
-                                                  ((safe_acc_ double_P_double_M_X_1) 
-                                                   (C_30:
-                                                   ((shift X) (integer_of_int32 !i)))))))) 
+                                    ((sub_real x_0) (C_31:
+                                                    ((safe_acc_ double_P_double_M_X_1) 
+                                                     (C_30:
+                                                     ((shift X) (integer_of_int32 !i)))))))) 
                           (C_29:
                           ((safe_acc_ double_P_double_M_V_3) (C_28:
                                                              ((shift V) 
@@ -1144,7 +1144,7 @@ let InterPolate_ensures_default =
      end))))); absurd  end with Return -> !return end)) { (JC_25: true) }
 
 let InterPolate_ensures_inter =
- fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
   { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
       select(double_P_double_M_Y_2, shift(Y, (1))))
      and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
@@ -1163,8 +1163,8 @@ let InterPolate_ensures_inter =
                              shift(X, add_int(k_2, (1)))),
                     select(double_P_double_M_X_1, shift(X, k_2)))))))
                  and (le_real(select(double_P_double_M_X_1, shift(X, (0))),
-                      x)
-                     and lt_real(x,
+                      x_0)
+                     and lt_real(x_0,
                          select(double_P_double_M_X_1,
                          shift(X, integer_of_int32(n)))))))))
     and (JC_23:
@@ -1228,10 +1228,10 @@ let InterPolate_ensures_inter =
                                                                    ((add_int 
                                                                     (integer_of_int32 n)) (1))))))) (2))))))) in
         void);
-       (if ((ge_real_ x) (C_9:
-                         ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                            ((shift X) 
-                                                             (integer_of_int32 !m))))))
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
        then (C_7: (let jessie_85 = (i := !m) in void)) else void);
        (C_10:
        begin
@@ -1248,7 +1248,7 @@ let InterPolate_ensures_inter =
                    (forall k:int.
                     ((le_int(integer_of_int32(i0), k)
                      and lt_int(k, integer_of_int32(i))) ->
-                     ge_real(x,
+                     ge_real(x_0,
                      select(double_P_double_M_X_1,
                      shift(X, integer_of_int32(i)))))))
                   and (JC_101:
@@ -1263,14 +1263,14 @@ let InterPolate_ensures_inter =
                 begin
                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                   then
-                   (if ((ge_real_ x) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 !i)) (1)))))))))))
+                   (if ((ge_real_ x_0) (C_21:
+                                       ((safe_acc_ double_P_double_M_X_1) 
+                                        (C_20:
+                                        ((shift X) (integer_of_int32 
+                                                    (C_19:
+                                                    (safe_int32_of_integer_ 
+                                                     (C_18:
+                                                     ((add_int (integer_of_int32 !i)) (1)))))))))))
                    then void
                    else
                     (let jessie_88 = (raise (Goto_while_0_break_exc void)) in
@@ -1299,10 +1299,10 @@ let InterPolate_ensures_inter =
                                     (C_34: ((shift Y) (integer_of_int32 !i)))))) 
                          (C_33:
                          ((mul_real (C_32:
-                                    ((sub_real x) (C_31:
-                                                  ((safe_acc_ double_P_double_M_X_1) 
-                                                   (C_30:
-                                                   ((shift X) (integer_of_int32 !i)))))))) 
+                                    ((sub_real x_0) (C_31:
+                                                    ((safe_acc_ double_P_double_M_X_1) 
+                                                     (C_30:
+                                                     ((shift X) (integer_of_int32 !i)))))))) 
                           (C_29:
                           ((safe_acc_ double_P_double_M_V_3) (C_28:
                                                              ((shift V) 
@@ -1317,7 +1317,7 @@ let InterPolate_ensures_inter =
             eq_real(result,
             add_real(select(double_P_double_M_Y_2,
                      shift(Y@, integer_of_int32(i_f))),
-            div_real(mul_real(sub_real(x@,
+            div_real(mul_real(sub_real(x_0@,
                               select(double_P_double_M_X_1,
                               shift(X@, integer_of_int32(i_f)))),
                      sub_real(select(double_P_double_M_Y_2,
@@ -1329,7 +1329,7 @@ let InterPolate_ensures_inter =
             select(double_P_double_M_X_1, shift(X@, integer_of_int32(i_f))))))))))) }
 
 let InterPolate_ensures_small =
- fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
   { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
       select(double_P_double_M_Y_2, shift(Y, (1))))
      and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
@@ -1347,7 +1347,8 @@ let InterPolate_ensures_small =
                     sub_real(select(double_P_double_M_X_1,
                              shift(X, add_int(k_0, (1)))),
                     select(double_P_double_M_X_1, shift(X, k_0)))))))
-                 and lt_real(x, select(double_P_double_M_X_1, shift(X, (0))))))))
+                 and lt_real(x_0,
+                     select(double_P_double_M_X_1, shift(X, (0))))))))
     and (JC_23:
         ((JC_13: le_int((3), integer_of_int32(n)))
         and ((JC_14: le_int(integer_of_int32(n), (17)))
@@ -1409,10 +1410,10 @@ let InterPolate_ensures_small =
                                                                    ((add_int 
                                                                     (integer_of_int32 n)) (1))))))) (2))))))) in
         void);
-       (if ((ge_real_ x) (C_9:
-                         ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                            ((shift X) 
-                                                             (integer_of_int32 !m))))))
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
        then (C_7: (let jessie_47 = (i := !m) in void)) else void);
        (C_10:
        begin
@@ -1430,7 +1431,7 @@ let InterPolate_ensures_small =
                    (forall k:int.
                     ((le_int(integer_of_int32(i0), k)
                      and lt_int(k, integer_of_int32(i))) ->
-                     ge_real(x,
+                     ge_real(x_0,
                      select(double_P_double_M_X_1,
                      shift(X, integer_of_int32(i)))))))
                   and (JC_79:
@@ -1445,14 +1446,14 @@ let InterPolate_ensures_small =
                 begin
                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                   then
-                   (if ((ge_real_ x) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 !i)) (1)))))))))))
+                   (if ((ge_real_ x_0) (C_21:
+                                       ((safe_acc_ double_P_double_M_X_1) 
+                                        (C_20:
+                                        ((shift X) (integer_of_int32 
+                                                    (C_19:
+                                                    (safe_int32_of_integer_ 
+                                                     (C_18:
+                                                     ((add_int (integer_of_int32 !i)) (1)))))))))))
                    then void
                    else
                     (let jessie_50 = (raise (Goto_while_0_break_exc void)) in
@@ -1483,10 +1484,10 @@ let InterPolate_ensures_small =
                                     (C_34: ((shift Y) (integer_of_int32 !i)))))) 
                          (C_33:
                          ((mul_real (C_32:
-                                    ((sub_real x) (C_31:
-                                                  ((safe_acc_ double_P_double_M_X_1) 
-                                                   (C_30:
-                                                   ((shift X) (integer_of_int32 !i)))))))) 
+                                    ((sub_real x_0) (C_31:
+                                                    ((safe_acc_ double_P_double_M_X_1) 
+                                                     (C_30:
+                                                     ((shift X) (integer_of_int32 !i)))))))) 
                           (C_29:
                           ((safe_acc_ double_P_double_M_V_3) (C_28:
                                                              ((shift V) 
@@ -1496,7 +1497,7 @@ let InterPolate_ensures_small =
   { (JC_29: eq_real(result, select(double_P_double_M_Y_2, shift(Y@, (0))))) }
 
 let InterPolate_safety =
- fun (x : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
   { (JC_23:
     ((JC_13: le_int((3), integer_of_int32(n)))
     and ((JC_14: le_int(integer_of_int32(n), (17)))
@@ -1558,10 +1559,10 @@ let InterPolate_safety =
                                                                ((add_int 
                                                                  (integer_of_int32 n)) (1)))))))) (2)))))))) in
         void);
-       (if ((ge_real_ x) (C_9:
-                         (JC_44:
-                         ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
-                          (integer_of_int32 !m)))))
+       (if ((ge_real_ x_0) (C_9:
+                           (JC_44:
+                           ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                            (integer_of_int32 !m)))))
        then (C_7: (let jessie_9 = (i := !m) in void)) else void);
        (C_10:
        begin
@@ -1580,7 +1581,7 @@ let InterPolate_safety =
                    (forall k:int.
                     ((le_int(integer_of_int32(i0), k)
                      and lt_int(k, integer_of_int32(i))) ->
-                     ge_real(x,
+                     ge_real(x_0,
                      select(double_P_double_M_X_1,
                      shift(X, integer_of_int32(i)))))))
                   and (JC_49:
@@ -1595,14 +1596,15 @@ let InterPolate_safety =
                 begin
                   (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                   then
-                   (if ((ge_real_ x) (C_21:
-                                     (JC_54:
-                                     ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
-                                      (integer_of_int32 (C_19:
-                                                        (JC_53:
-                                                        (int32_of_integer_ 
-                                                         (C_18:
-                                                         ((add_int (integer_of_int32 !i)) (1)))))))))))
+                   (if ((ge_real_ x_0) (C_21:
+                                       (JC_54:
+                                       ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                                        (integer_of_int32 (C_19:
+                                                          (JC_53:
+                                                          (int32_of_integer_ 
+                                                           (C_18:
+                                                           ((add_int 
+                                                             (integer_of_int32 !i)) (1)))))))))))
                    then void
                    else
                     (let jessie_12 = (raise (Goto_while_0_break_exc void)) in
@@ -1633,7 +1635,7 @@ let InterPolate_safety =
                                     (integer_of_int32 !i))))) (C_33:
                                                               ((mul_real 
                                                                 (C_32:
-                                                                ((sub_real x) 
+                                                                ((sub_real x_0) 
                                                                  (C_31:
                                                                  (JC_60:
                                                                  ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
@@ -2611,6 +2613,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type char_P
 

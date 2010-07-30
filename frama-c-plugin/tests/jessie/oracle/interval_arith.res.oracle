@@ -500,8 +500,8 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-predicate dif_sign(x_1:double, y_1:double) =
- (double_sign(x_1) <> double_sign(y_1))
+predicate dif_sign(x_2:double, y_1:double) =
+ (double_sign(x_2) <> double_sign(y_1))
 
 predicate double_le_real(x_1_0:double, y_1_0:real) =
  ((double_is_finite(x_1_0) and le_real(double_value(x_1_0), y_1_0))
@@ -512,8 +512,8 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-predicate real_le_double(x_2:real, y_2:double) =
- ((double_is_finite(y_2) and le_real(x_2, double_value(y_2)))
+predicate real_le_double(x_2_0:real, y_2:double) =
+ ((double_is_finite(y_2) and le_real(x_2_0, double_value(y_2)))
  or double_is_plus_infinity(y_2))
 
 predicate in_interval(a:real, l:double, u:double) =
@@ -761,24 +761,24 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter max :
- x:double ->
+ x_1:double ->
   y:double ->
    { } double
    { (JC_34:
-     ((JC_31: le_double(x@, result))
+     ((JC_31: le_double(x_1@, result))
      and ((JC_32: le_double(y@, result))
-         and (JC_33: (eq_double(result, x@) or eq_double(result, y@)))))) }
+         and (JC_33: (eq_double(result, x_1@) or eq_double(result, y@)))))) }
 
 parameter max_requires :
- x:double ->
+ x_1:double ->
   y:double ->
    { (JC_21:
-     ((JC_19: (not double_is_NaN(x))) and (JC_20: (not double_is_NaN(y)))))}
+     ((JC_19: (not double_is_NaN(x_1))) and (JC_20: (not double_is_NaN(y)))))}
    double
    { (JC_34:
-     ((JC_31: le_double(x@, result))
+     ((JC_31: le_double(x_1@, result))
      and ((JC_32: le_double(y@, result))
-         and (JC_33: (eq_double(result, x@) or eq_double(result, y@)))))) }
+         and (JC_33: (eq_double(result, x_1@) or eq_double(result, y@)))))) }
 
 parameter min :
  x_0:double ->
@@ -816,31 +816,31 @@ parameter mul :
               in_interval(mul_real(a_1, b_0_0), zl, zu))))))) }
 
 parameter mul_dn :
- x_2_0:double ->
+ x_2_1:double ->
   y_2_0:double ->
    { } double
    { (JC_51:
      double_le_real(result,
-     mul_real(double_value(x_2_0@), double_value(y_2_0@)))) }
+     mul_real(double_value(x_2_1@), double_value(y_2_0@)))) }
 
 parameter mul_dn_requires :
- x_2_0:double ->
+ x_2_1:double ->
   y_2_0:double ->
    { (JC_41:
-     ((JC_37: (not double_is_NaN(x_2_0)))
+     ((JC_37: (not double_is_NaN(x_2_1)))
      and ((JC_38: (not double_is_NaN(y_2_0)))
          and ((JC_39:
-              (double_is_infinite(x_2_0) ->
+              (double_is_infinite(x_2_1) ->
                (neq_real(double_value(y_2_0), 0.0)
-               and dif_sign(x_2_0, y_2_0))))
+               and dif_sign(x_2_1, y_2_0))))
              and (JC_40:
                  (double_is_infinite(y_2_0) ->
-                  (neq_real(double_value(x_2_0), 0.0)
-                  and dif_sign(x_2_0, y_2_0))))))))}
+                  (neq_real(double_value(x_2_1), 0.0)
+                  and dif_sign(x_2_1, y_2_0))))))))}
    double
    { (JC_51:
      double_le_real(result,
-     mul_real(double_value(x_2_0@), double_value(y_2_0@)))) }
+     mul_real(double_value(x_2_1@), double_value(y_2_0@)))) }
 
 parameter mul_requires :
  xl_1:double ->
@@ -954,9 +954,9 @@ let add_safety =
    void end) { true }
 
 let max_ensures_default =
- fun (x : double) (y : double) ->
+ fun (x_1 : double) (y : double) ->
   { (JC_25:
-    ((JC_23: (not double_is_NaN(x))) and (JC_24: (not double_is_NaN(y))))) }
+    ((JC_23: (not double_is_NaN(x_1))) and (JC_24: (not double_is_NaN(y))))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -964,19 +964,20 @@ let max_ensures_default =
      (let tmp_0 = ref (any_double void) in
      begin
        (let jessie_15 =
-       (if ((gt_double x) y) then (C_12: begin   (tmp_0 := x); !tmp_0 end)
+       (if ((gt_double x_1) y)
+       then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
        else (C_11: begin   (tmp_0 := y); !tmp_0 end)) in void);
       (return := !tmp_0); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_30:
-    ((JC_27: le_double(x@, result))
+    ((JC_27: le_double(x_1@, result))
     and ((JC_28: le_double(y@, result))
-        and (JC_29: (eq_double(result, x@) or eq_double(result, y@)))))) }
+        and (JC_29: (eq_double(result, x_1@) or eq_double(result, y@)))))) }
 
 let max_safety =
- fun (x : double) (y : double) ->
+ fun (x_1 : double) (y : double) ->
   { (JC_25:
-    ((JC_23: (not double_is_NaN(x))) and (JC_24: (not double_is_NaN(y))))) }
+    ((JC_23: (not double_is_NaN(x_1))) and (JC_24: (not double_is_NaN(y))))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -984,7 +985,8 @@ let max_safety =
      (let tmp_0 = ref (any_double void) in
      begin
        (let jessie_11 =
-       (if ((gt_double x) y) then (C_12: begin   (tmp_0 := x); !tmp_0 end)
+       (if ((gt_double x_1) y)
+       then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
        else (C_11: begin   (tmp_0 := y); !tmp_0 end)) in void);
       (return := !tmp_0); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
@@ -1026,17 +1028,17 @@ let min_safety =
    !return end)) { true }
 
 let mul_dn_ensures_default =
- fun (x_2_0 : double) (y_2_0 : double) ->
+ fun (x_2_1 : double) (y_2_0 : double) ->
   { (JC_47:
-    ((JC_43: (not double_is_NaN(x_2_0)))
+    ((JC_43: (not double_is_NaN(x_2_1)))
     and ((JC_44: (not double_is_NaN(y_2_0)))
         and ((JC_45:
-             (double_is_infinite(x_2_0) ->
-              (neq_real(double_value(y_2_0), 0.0) and dif_sign(x_2_0, y_2_0))))
+             (double_is_infinite(x_2_1) ->
+              (neq_real(double_value(y_2_0), 0.0) and dif_sign(x_2_1, y_2_0))))
             and (JC_46:
                 (double_is_infinite(y_2_0) ->
-                 (neq_real(double_value(x_2_0), 0.0)
-                 and dif_sign(x_2_0, y_2_0)))))))) }
+                 (neq_real(double_value(x_2_1), 0.0)
+                 and dif_sign(x_2_1, y_2_0)))))))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -1045,25 +1047,25 @@ let mul_dn_ensures_default =
      (C_22:
      begin
        (let jessie_21 =
-       (z := (C_21: (JC_56: (((mul_double down) x_2_0) y_2_0)))) in void);
+       (z := (C_21: (JC_56: (((mul_double down) x_2_1) y_2_0)))) in void);
       (return := !z); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_49:
     double_le_real(result,
-    mul_real(double_value(x_2_0@), double_value(y_2_0@)))) }
+    mul_real(double_value(x_2_1@), double_value(y_2_0@)))) }
 
 let mul_dn_safety =
- fun (x_2_0 : double) (y_2_0 : double) ->
+ fun (x_2_1 : double) (y_2_0 : double) ->
   { (JC_47:
-    ((JC_43: (not double_is_NaN(x_2_0)))
+    ((JC_43: (not double_is_NaN(x_2_1)))
     and ((JC_44: (not double_is_NaN(y_2_0)))
         and ((JC_45:
-             (double_is_infinite(x_2_0) ->
-              (neq_real(double_value(y_2_0), 0.0) and dif_sign(x_2_0, y_2_0))))
+             (double_is_infinite(x_2_1) ->
+              (neq_real(double_value(y_2_0), 0.0) and dif_sign(x_2_1, y_2_0))))
             and (JC_46:
                 (double_is_infinite(y_2_0) ->
-                 (neq_real(double_value(x_2_0), 0.0)
-                 and dif_sign(x_2_0, y_2_0)))))))) }
+                 (neq_real(double_value(x_2_1), 0.0)
+                 and dif_sign(x_2_1, y_2_0)))))))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -1072,7 +1074,7 @@ let mul_dn_safety =
      (C_22:
      begin
        (let jessie_18 =
-       (z := (C_21: (JC_55: (((mul_double down) x_2_0) y_2_0)))) in void);
+       (z := (C_21: (JC_55: (((mul_double down) x_2_1) y_2_0)))) in void);
       (return := !z); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
@@ -3496,6 +3498,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type mode =
   | nearest_even
   | to_zero
@@ -4158,8 +4261,8 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-predicate dif_sign(x_1: double, y_1: double) =
-  (double_sign(x_1) <> double_sign(y_1))
+predicate dif_sign(x_2: double, y_1: double) =
+  (double_sign(x_2) <> double_sign(y_1))
 
 predicate double_le_real(x_1_0: double, y_1_0: real) =
   ((double_is_finite(x_1_0) and (double_value(x_1_0) <= y_1_0)) or
@@ -4170,8 +4273,8 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-predicate real_le_double(x_2: real, y_2: double) =
-  ((double_is_finite(y_2) and (x_2 <= double_value(y_2))) or
+predicate real_le_double(x_2_0: real, y_2: double) =
+  ((double_is_finite(y_2) and (x_2_0 <= double_value(y_2))) or
    double_is_plus_infinity(y_2))
 
 predicate in_interval(a: real, l: double, u: double) =

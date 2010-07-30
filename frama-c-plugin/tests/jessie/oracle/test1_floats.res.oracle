@@ -215,16 +215,16 @@ axiom char_P_tags :
    instanceof(char_P_tag_table, x, char_P_tag)))
 
 goal cos_lipschitz :
- (forall x_0_0:real.
+ (forall x_0_1:real.
   (forall y_0:real.
-   le_real(abs_real(sub_real(cos(x_0_0), cos(y_0))),
-   abs_real(sub_real(x_0_0, y_0)))))
+   le_real(abs_real(sub_real(cos(x_0_1), cos(y_0))),
+   abs_real(sub_real(x_0_1, y_0)))))
 
 axiom cos_lipschitz_as_axiom :
- (forall x_0_0:real.
+ (forall x_0_1:real.
   (forall y_0:real.
-   le_real(abs_real(sub_real(cos(x_0_0), cos(y_0))),
-   abs_real(sub_real(x_0_0, y_0)))))
+   le_real(abs_real(sub_real(cos(x_0_1), cos(y_0))),
+   abs_real(sub_real(x_0_1, y_0)))))
 
 logic integer_of_int8: int8 -> int
 
@@ -424,29 +424,31 @@ parameter alloc_struct_void_P_requires :
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter cosine1a :
- x_0:single ->
+ x_0_0:single ->
   { } single
   { (JC_50:
     ((JC_48:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0@)))),
+     le_real(abs_real(sub_real(single_exact(result),
+                      cos(single_exact(x_0_0@)))),
      0x1p-24))
     and (JC_49:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_0@), 0x3p-24))))) }
+        add_real(single_round_error(x_0_0@), 0x3p-24))))) }
 
 parameter cosine1a_requires :
- x_0:single ->
+ x_0_0:single ->
   { (JC_39:
-    ((JC_37: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_38: le_real(single_round_error(x_0), 0x1p-20))))}
+    ((JC_37: le_real(abs_real(single_exact(x_0_0)), 0x1p-5))
+    and (JC_38: le_real(single_round_error(x_0_0), 0x1p-20))))}
   single
   { (JC_50:
     ((JC_48:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0@)))),
+     le_real(abs_real(sub_real(single_exact(result),
+                      cos(single_exact(x_0_0@)))),
      0x1p-24))
     and (JC_49:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_0@), 0x3p-24))))) }
+        add_real(single_round_error(x_0_0@), 0x3p-24))))) }
 
 parameter cosine1b :
  x_2:single ->
@@ -463,20 +465,20 @@ parameter cosine1b_requires :
     0x1p-20)) }
 
 parameter cosine2 :
- x:single ->
+ x_0:single ->
   { } single
   { (JC_26:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
     0x1p-23)) }
 
 parameter cosine2_requires :
- x:single ->
+ x_0:single ->
   { (JC_19:
-    ((JC_17: le_real(abs_real(single_value(x)), 0x1p-5))
-    and (JC_18: eq_real(single_round_error(x), 0.0))))}
+    ((JC_17: le_real(abs_real(single_value(x_0)), 0x1p-5))
+    and (JC_18: eq_real(single_round_error(x_0), 0.0))))}
   single
   { (JC_26:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
     0x1p-23)) }
 
 parameter int8_of_integer_ :
@@ -502,10 +504,10 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let cosine1a_ensures_default =
- fun (x_0 : single) ->
+ fun (x_0_0 : single) ->
   { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_0), 0x1p-20)))) }
+    ((JC_41: le_real(abs_real(single_exact(x_0_0)), 0x1p-5))
+    and (JC_42: le_real(single_round_error(x_0_0), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -513,8 +515,8 @@ let cosine1a_ensures_default =
      (let r_0 = ref (any_single void) in
      begin
        (assert
-       { (JC_60: le_real(abs_real(single_value(x_0)), 0x1.0002p-5)) }; void);
-      void;
+       { (JC_60: le_real(abs_real(single_value(x_0_0)), 0x1.0002p-5)) };
+       void); void;
       (let jessie_17 =
       (C_21:
       begin
@@ -525,38 +527,41 @@ let cosine1a_ensures_default =
                  (JC_62:
                  (((mul_single_safe nearest_even) (C_18:
                                                   (JC_61:
-                                                  (((mul_single_safe nearest_even) x_0) x_0)))) 
+                                                  (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
                   (single_of_real_exact 0.5)))))))); !r_0 end) in void);
       (assert
       { (JC_64:
-        le_real(abs_real(sub_real(single_exact(r_0), cos(single_exact(x_0)))),
+        le_real(abs_real(sub_real(single_exact(r_0),
+                         cos(single_exact(x_0_0)))),
         0x1p-24)) }; void); void;
       (assert
       { (JC_65:
         le_real(abs_real(sub_real(sub_real(1.0,
-                                  mul_real(mul_real(single_value(x_0),
-                                           single_value(x_0)),
+                                  mul_real(mul_real(single_value(x_0_0),
+                                           single_value(x_0_0)),
                                   0.5)),
-                         cos(single_value(x_0)))),
+                         cos(single_value(x_0_0)))),
         0x1p-24)) }; void); void;
       (assert
       { (JC_66:
-        le_real(abs_real(sub_real(single_value(r_0), cos(single_value(x_0)))),
+        le_real(abs_real(sub_real(single_value(r_0),
+                         cos(single_value(x_0_0)))),
         0x1p-23)) }; void); void; (return := !r_0); (raise Return) end);
     absurd  end with Return -> !return end))
   { (JC_47:
     ((JC_45:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0@)))),
+     le_real(abs_real(sub_real(single_exact(result),
+                      cos(single_exact(x_0_0@)))),
      0x1p-24))
     and (JC_46:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_0@), 0x3p-24))))) }
+        add_real(single_round_error(x_0_0@), 0x3p-24))))) }
 
 let cosine1a_safety =
- fun (x_0 : single) ->
+ fun (x_0_0 : single) ->
   { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_0), 0x1p-20)))) }
+    ((JC_41: le_real(abs_real(single_exact(x_0_0)), 0x1p-5))
+    and (JC_42: le_real(single_round_error(x_0_0), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -564,7 +569,7 @@ let cosine1a_safety =
      (let r_0 = ref (any_single void) in
      begin
        [ { } unit
-         { (JC_53: le_real(abs_real(single_value(x_0)), 0x1.0002p-5)) } ];
+         { (JC_53: le_real(abs_real(single_value(x_0_0)), 0x1.0002p-5)) } ];
       void;
       (let jessie_14 =
       (C_21:
@@ -576,25 +581,25 @@ let cosine1a_safety =
                  (JC_55:
                  (((mul_single nearest_even) (C_18:
                                              (JC_54:
-                                             (((mul_single nearest_even) x_0) x_0)))) 
+                                             (((mul_single nearest_even) x_0_0) x_0_0)))) 
                   (single_of_real_exact 0.5)))))))); !r_0 end) in void);
       [ { } unit reads r_0
         { (JC_57:
           le_real(abs_real(sub_real(single_exact(r_0),
-                           cos(single_exact(x_0)))),
+                           cos(single_exact(x_0_0)))),
           0x1p-24)) } ]; void;
       [ { } unit
         { (JC_58:
           le_real(abs_real(sub_real(sub_real(1.0,
-                                    mul_real(mul_real(single_value(x_0),
-                                             single_value(x_0)),
+                                    mul_real(mul_real(single_value(x_0_0),
+                                             single_value(x_0_0)),
                                     0.5)),
-                           cos(single_value(x_0)))),
+                           cos(single_value(x_0_0)))),
           0x1p-24)) } ]; void;
       [ { } unit reads r_0
         { (JC_59:
           le_real(abs_real(sub_real(single_value(r_0),
-                           cos(single_value(x_0)))),
+                           cos(single_value(x_0_0)))),
           0x1p-23)) } ]; void; (return := !r_0); (raise Return) end); 
     absurd  end with Return -> !return end)) { true }
 
@@ -666,10 +671,10 @@ let cosine1b_safety =
    Return -> !return end)) { true }
 
 let cosine2_ensures_default =
- fun (x : single) ->
+ fun (x_0 : single) ->
   { (JC_23:
-    ((JC_21: le_real(abs_real(single_value(x)), 0x1p-5))
-    and (JC_22: eq_real(single_round_error(x), 0.0)))) }
+    ((JC_21: le_real(abs_real(single_value(x_0)), 0x1p-5))
+    and (JC_22: eq_real(single_round_error(x_0), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -685,22 +690,22 @@ let cosine2_ensures_default =
               (JC_34:
               (((mul_single_safe nearest_even) (C_8:
                                                (JC_33:
-                                               (((mul_single_safe nearest_even) x) x)))) 
+                                               (((mul_single_safe nearest_even) x_0) x_0)))) 
                (single_of_real_exact 0.5)))))))) in void);
       (assert
       { (JC_36:
-        le_real(abs_real(sub_real(single_exact(r), cos(single_value(x)))),
+        le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0)))),
         0x1p-24)) }; void); void; (return := !r); (raise Return) end));
     absurd  end with Return -> !return end))
   { (JC_25:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
     0x1p-23)) }
 
 let cosine2_safety =
- fun (x : single) ->
+ fun (x_0 : single) ->
   { (JC_23:
-    ((JC_21: le_real(abs_real(single_value(x)), 0x1p-5))
-    and (JC_22: eq_real(single_round_error(x), 0.0)))) }
+    ((JC_21: le_real(abs_real(single_value(x_0)), 0x1p-5))
+    and (JC_22: eq_real(single_round_error(x_0), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -716,11 +721,11 @@ let cosine2_safety =
               (JC_30:
               (((mul_single nearest_even) (C_8:
                                           (JC_29:
-                                          (((mul_single nearest_even) x) x)))) 
+                                          (((mul_single nearest_even) x_0) x_0)))) 
                (single_of_real_exact 0.5)))))))) in void);
       [ { } unit reads r
         { (JC_32:
-          le_real(abs_real(sub_real(single_exact(r), cos(single_value(x)))),
+          le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0)))),
           0x1p-24)) } ]; void; (return := !r); (raise Return) end)); 
     absurd  end with Return -> !return end)) { true }
 
@@ -1738,6 +1743,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type mode =
   | nearest_even
   | to_zero
@@ -1989,9 +2095,9 @@ axiom char_P_tags:
       x, char_P_tag)))
 
 axiom cos_lipschitz_as_axiom:
-  (forall x_0_0:real.
+  (forall x_0_1:real.
     (forall y_0:real.
-      (abs_real((cos(x_0_0) - cos(y_0))) <= abs_real((x_0_0 - y_0)))))
+      (abs_real((cos(x_0_1) - cos(y_0))) <= abs_real((x_0_1 - y_0)))))
 
 logic integer_of_int8 : int8 -> int
 

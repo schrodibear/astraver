@@ -366,11 +366,11 @@ axiom bag_of_tree_def_1 : (bag_of_tree(Empty) = empty_bag)
 
 axiom bag_of_tree_def_2 :
  (forall l_0:tree.
-  (forall x_5:int.
+  (forall x_5_0:int.
    (forall r_0:tree.
-    (bag_of_tree(Node(l_0, x_5, r_0)) = add_bag(x_5,
-                                        union_bag(bag_of_tree(l_0),
-                                        bag_of_tree(r_0)))))))
+    (bag_of_tree(Node(l_0, x_5_0, r_0)) = add_bag(x_5_0,
+                                          union_bag(bag_of_tree(l_0),
+                                          bag_of_tree(r_0)))))))
 
 logic char_P_tag:  -> char_P tag_id
 
@@ -392,16 +392,16 @@ axiom char_P_tags :
 logic integer_of_int32: int32 -> int
 
 goal div2_1 :
- (forall x_3:int32.
-  (le_int((0), integer_of_int32(x_3)) ->
-   (le_int((0), div_int(integer_of_int32(x_3), (2)))
-   and le_int(div_int(integer_of_int32(x_3), (2)), integer_of_int32(x_3)))))
+ (forall x_5:int32.
+  (le_int((0), integer_of_int32(x_5)) ->
+   (le_int((0), div_int(integer_of_int32(x_5), (2)))
+   and le_int(div_int(integer_of_int32(x_5), (2)), integer_of_int32(x_5)))))
 
 axiom div2_1_as_axiom :
- (forall x_3:int32.
-  (le_int((0), integer_of_int32(x_3)) ->
-   (le_int((0), div_int(integer_of_int32(x_3), (2)))
-   and le_int(div_int(integer_of_int32(x_3), (2)), integer_of_int32(x_3)))))
+ (forall x_5:int32.
+  (le_int((0), integer_of_int32(x_5)) ->
+   (le_int((0), div_int(integer_of_int32(x_5), (2)))
+   and le_int(div_int(integer_of_int32(x_5), (2)), integer_of_int32(x_5)))))
 
 predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
@@ -946,7 +946,7 @@ parameter pop_requires :
             int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter push :
- x:int32 ->
+ x_3:int32 ->
   { } unit reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
   writes int_P_int_M_heap_1,size
   { ((JC_60:
@@ -955,14 +955,14 @@ parameter push :
          and (JC_59: is_heap_inv(int_P_int_M_heap_1, size)))))
     and (JC_52:
         ((JC_50:
-         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x@),
+         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x_3@),
                                             model(int_P_int_M_heap_1@, size@))))
         and (JC_51:
             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
             int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter push_requires :
- x:int32 ->
+ x_3:int32 ->
   { (JC_39:
     ((JC_35: lt_int(integer_of_int32(size), sub_int((100), (1))))
     and ((JC_36: valid_heap(int_P_heap_1_alloc_table))
@@ -976,7 +976,7 @@ parameter push_requires :
          and (JC_59: is_heap_inv(int_P_int_M_heap_1, size)))))
     and (JC_52:
         ((JC_50:
-         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x@),
+         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x_3@),
                                             model(int_P_int_M_heap_1@, size@))))
         and (JC_51:
             not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
@@ -1373,7 +1373,7 @@ let pop_safety =
         and (JC_137: is_heap_inv(int_P_int_M_heap_1, size))))) }
 
 let push_ensures_default =
- fun (x : int32) ->
+ fun (x_3 : int32) ->
   { (JC_45:
     ((JC_41: lt_int(integer_of_int32(size), sub_int((100), (1))))
     and ((JC_42: valid_heap(int_P_heap_1_alloc_table))
@@ -1458,7 +1458,7 @@ let push_ensures_default =
                         ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) 
                                                           (integer_of_int32 !parent))))) in
                   void);
-                 (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x))
+                 (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
                  then
                   (let jessie_44 = (raise (Goto_while_0_break_exc void)) in
                   void) else void);
@@ -1476,7 +1476,7 @@ let push_ensures_default =
       (C_23:
       begin
         (let jessie_60 =
-        (let jessie_56 = x in
+        (let jessie_56 = x_3 in
         (let jessie_59 = ((shift heap) (integer_of_int32 !i)) in
         (((safe_upd_ int_P_int_M_heap_1) jessie_59) jessie_56))) in void);
        (C_26:
@@ -1489,14 +1489,14 @@ let push_ensures_default =
    Return -> void end)
   { (JC_49:
     ((JC_47:
-     (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x@),
+     (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x_3@),
                                         model(int_P_int_M_heap_1@, size@))))
     and (JC_48:
         not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
         int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))) }
 
 let push_safety =
- fun (x : int32) ->
+ fun (x_3 : int32) ->
   { (JC_45:
     ((JC_41: lt_int(integer_of_int32(size), sub_int((100), (1))))
     and ((JC_42: valid_heap(int_P_heap_1_alloc_table))
@@ -1574,7 +1574,7 @@ let push_safety =
                         (JC_72:
                         ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
                          (integer_of_int32 !parent))))) in void);
-                 (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x))
+                 (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
                  then
                   (let jessie_18 = (raise (Goto_while_0_break_exc void)) in
                   void) else void);
@@ -1595,7 +1595,7 @@ let push_safety =
       (C_23:
       begin
         (let jessie_34 =
-        (let jessie_30 = x in
+        (let jessie_30 = x_3 in
         (let jessie_31 = heap in
         (let jessie_32 = (integer_of_int32 !i) in
         (let jessie_33 = ((shift jessie_31) jessie_32) in
@@ -2824,6 +2824,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type bag
 
 type char_P
@@ -2860,8 +2961,8 @@ axiom bag_of_tree_def_1: (bag_of_tree(Empty) = empty_bag)
 
 axiom bag_of_tree_def_2:
   (forall l_0:tree.
-    (forall x_5:int.
-      (forall r_0:tree. (bag_of_tree(Node(l_0, x_5, r_0)) = add_bag(x_5,
+    (forall x_5_0:int.
+      (forall r_0:tree. (bag_of_tree(Node(l_0, x_5_0, r_0)) = add_bag(x_5_0,
         union_bag(bag_of_tree(l_0), bag_of_tree(r_0)))))))
 
 logic char_P_tag : char_P tag_id
@@ -2884,10 +2985,10 @@ axiom char_P_tags:
 logic integer_of_int32 : int32 -> int
 
 axiom div2_1_as_axiom:
-  (forall x_3:int32.
-    ((0 <= integer_of_int32(x_3)) ->
-     ((0 <= (integer_of_int32(x_3) / 2)) and
-      ((integer_of_int32(x_3) / 2) <= integer_of_int32(x_3)))))
+  (forall x_5:int32.
+    ((0 <= integer_of_int32(x_5)) ->
+     ((0 <= (integer_of_int32(x_5) / 2)) and
+      ((integer_of_int32(x_5) / 2) <= integer_of_int32(x_5)))))
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))

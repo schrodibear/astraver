@@ -331,11 +331,11 @@ let f_ensures_default =
   (init:
   try
    begin
-     (let x_0 = ref (any_single void) in
+     (let x_1 = ref (any_single void) in
      (let y = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_16 = (x_0 := (single_of_real_exact 1.0)) in void);
+       (let jessie_16 = (x_1 := (single_of_real_exact 1.0)) in void);
       (C_2:
       begin
         (let jessie_18 = (y := (single_of_real_exact 0.0)) in void);
@@ -347,7 +347,7 @@ let f_ensures_default =
           { invariant
               (JC_18:
               (lt_real(single_value(y), 0x2.0p24) ->
-               eq_real(sub_real(single_value(x_0), single_value(y)), 1.0)))
+               eq_real(sub_real(single_value(x_1), single_value(y)), 1.0)))
              }
            begin
              [ { } unit { true } ];
@@ -356,26 +356,26 @@ let f_ensures_default =
              begin
                (let jessie_23 =
                begin
-                 (if ((ne_single !y) !x_0) then void
+                 (if ((ne_single !y) !x_1) then void
                  else
                   (let jessie_19 = (raise (Goto_while_0_break_exc void)) in
                   void));
                 (C_5:
                 begin
-                  (let jessie_21 = (y := !x_0) in void);
+                  (let jessie_21 = (y := !x_1) in void);
                  (C_7:
                  begin
-                   (x_0 := (C_6:
+                   (x_1 := (C_6:
                            (JC_22:
-                           (((add_single_safe nearest_even) !x_0) (single_of_real_exact 1.0)))));
-                  !x_0 end) end) end in void);
+                           (((add_single_safe nearest_even) !x_1) (single_of_real_exact 1.0)))));
+                  !x_1 end) end) end in void);
               (raise (Loop_continue_exc void)) end in void) with
              Loop_continue_exc jessie_3 -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
        (assert
        { (JC_25:
-         ((JC_23: eq_real(single_value(x_0), single_value(y)))
+         ((JC_23: eq_real(single_value(x_1), single_value(y)))
          and (JC_24: eq_real(single_value(y), 0x2.0p24)))) }; void); void;
        (raise Return) end) end))); (raise Return) end with Return -> void end)
   { (JC_5: true) }
@@ -386,11 +386,11 @@ let f_safety =
   (init:
   try
    begin
-     (let x_0 = ref (any_single void) in
+     (let x_1 = ref (any_single void) in
      (let y = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_5 = (x_0 := (single_of_real_exact 1.0)) in void);
+       (let jessie_5 = (x_1 := (single_of_real_exact 1.0)) in void);
       (C_2:
       begin
         (let jessie_7 = (y := (single_of_real_exact 0.0)) in void);
@@ -402,35 +402,35 @@ let f_safety =
           { invariant (JC_11: true)
             variant (JC_14 : sub_int((16777216), truncate(single_value(y)))) }
            begin
-             [ { } unit reads x_0,y
+             [ { } unit reads x_1,y
                { (JC_9:
                  (lt_real(single_value(y), 0x2.0p24) ->
-                  eq_real(sub_real(single_value(x_0), single_value(y)), 1.0))) } ];
+                  eq_real(sub_real(single_value(x_1), single_value(y)), 1.0))) } ];
             try
              (let jessie_13 =
              begin
                (let jessie_12 =
                begin
-                 (if ((ne_single !y) !x_0) then void
+                 (if ((ne_single !y) !x_1) then void
                  else
                   (let jessie_8 = (raise (Goto_while_0_break_exc void)) in
                   void));
                 (C_5:
                 begin
-                  (let jessie_10 = (y := !x_0) in void);
+                  (let jessie_10 = (y := !x_1) in void);
                  (C_7:
                  begin
-                   (x_0 := (C_6:
+                   (x_1 := (C_6:
                            (JC_13:
-                           (((add_single nearest_even) !x_0) (single_of_real_exact 1.0)))));
-                  !x_0 end) end) end in void);
+                           (((add_single nearest_even) !x_1) (single_of_real_exact 1.0)))));
+                  !x_1 end) end) end in void);
               (raise (Loop_continue_exc void)) end in void) with
              Loop_continue_exc jessie_3 -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
         Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
-       [ { } unit reads x_0,y
+       [ { } unit reads x_1,y
          { (JC_17:
-           ((JC_15: eq_real(single_value(x_0), single_value(y)))
+           ((JC_15: eq_real(single_value(x_1), single_value(y)))
            and (JC_16: eq_real(single_value(y), 0x2.0p24)))) } ]; void;
        (raise Return) end) end))); (raise Return) end with Return -> void end)
   { true }
@@ -1261,6 +1261,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type mode =
   | nearest_even

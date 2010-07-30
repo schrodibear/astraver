@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0199.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0199.c"
 bts0199.c:17:[kernel] user error: Case statement with a non-constant
-[kernel] user error: Error during linking
-[kernel] user error: your code cannot be parsed; aborting analysis.
-[kernel] Frama-C aborted because of an invalid user input.
+[kernel] user error: Target code cannot be parsed; aborting analysis.
+[kernel] Frama-C aborted because of invalid user input.

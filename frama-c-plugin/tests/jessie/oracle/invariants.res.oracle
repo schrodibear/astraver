@@ -131,13 +131,13 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic s:  -> s_0 pointer
+logic s_0:  -> s_0 pointer
 
 predicate i(s_0_y_s_1:(s_0, int32) memory, s_0_x_s_1:(s_0, int32) memory) =
- (le_int((0), integer_of_int32(select(s_0_x_s_1, s)))
- and (le_int(integer_of_int32(select(s_0_x_s_1, s)),
-      integer_of_int32(select(s_0_y_s_1, s)))
-     and le_int(integer_of_int32(select(s_0_y_s_1, s)), (100))))
+ (le_int((0), integer_of_int32(select(s_0_x_s_1, s_0)))
+ and (le_int(integer_of_int32(select(s_0_x_s_1, s_0)),
+      integer_of_int32(select(s_0_y_s_1, s_0)))
+     and le_int(integer_of_int32(select(s_0_y_s_1, s_0)), (100))))
 
 logic int32_of_integer: int -> int32
 
@@ -322,8 +322,8 @@ predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
  and (offset_max(void_P_alloc_table, p) >= b))
 
 predicate valid_s(s_0_s_1_alloc_table:s_0 alloc_table) =
- (le_int(offset_min(s_0_s_1_alloc_table, s), (0))
- and ge_int(offset_max(s_0_s_1_alloc_table, s), (0)))
+ (le_int(offset_min(s_0_s_1_alloc_table, s_0), (0))
+ and ge_int(offset_max(s_0_s_1_alloc_table, s_0), (0)))
 
 predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -612,7 +612,7 @@ let f_ensures_default =
        (t := (C_3:
              (safe_int32_of_integer_ (C_2:
                                      ((add_int (integer_of_int32 (C_1:
-                                                                 ((safe_acc_ !s_0_x_s_1) s)))) 
+                                                                 ((safe_acc_ !s_0_x_s_1) s_0)))) 
                                       (integer_of_int32 n)))))) in void);
       (if ((le_int_ (integer_of_int32 !t)) (integer_of_int32 (C_12:
                                                              (safe_int32_of_integer_ 
@@ -620,7 +620,7 @@ let f_ensures_default =
                                                               ((sub_int 
                                                                 (integer_of_int32 
                                                                  (C_10:
-                                                                 ((safe_acc_ !s_0_y_s_1) s)))) (20)))))))
+                                                                 ((safe_acc_ !s_0_y_s_1) s_0)))) (20)))))))
       then
        (C_9:
        (let jessie_16 =
@@ -631,7 +631,7 @@ let f_ensures_default =
                                                                  (C_5:
                                                                  ((safe_acc_ !int_P_int_M_c_2) 
                                                                   ((shift c) (0))))))))) in
-       (let jessie_15 = s in (((safe_upd_ s_0_x_s_1) jessie_15) jessie_12))) in
+       (let jessie_15 = s_0 in (((safe_upd_ s_0_x_s_1) jessie_15) jessie_12))) in
        void)) else void); (raise Return) end)); (raise Return) end with
    Return -> void end) { (JC_19: true) }
 
@@ -654,7 +654,7 @@ let f_safety =
              (JC_31:
              (int32_of_integer_ (C_2:
                                 ((add_int (integer_of_int32 (C_1:
-                                                            ((safe_acc_ !s_0_x_s_1) s)))) 
+                                                            ((safe_acc_ !s_0_x_s_1) s_0)))) 
                                  (integer_of_int32 n))))))) in void);
       (if ((le_int_ (integer_of_int32 !t)) (integer_of_int32 (C_12:
                                                              (JC_32:
@@ -663,7 +663,7 @@ let f_safety =
                                                               ((sub_int 
                                                                 (integer_of_int32 
                                                                  (C_10:
-                                                                 ((safe_acc_ !s_0_y_s_1) s)))) (20))))))))
+                                                                 ((safe_acc_ !s_0_y_s_1) s_0)))) (20))))))))
       then
        (C_9:
        (let jessie_8 =
@@ -675,7 +675,7 @@ let f_safety =
                                                             (C_5:
                                                             ((safe_acc_ !int_P_int_M_c_2) 
                                                              ((shift c) (0)))))))))) in
-       (let jessie_7 = s in (((safe_upd_ s_0_x_s_1) jessie_7) jessie_4))) in
+       (let jessie_7 = s_0 in (((safe_upd_ s_0_x_s_1) jessie_7) jessie_4))) in
        void)) else void); (raise Return) end)); (raise Return) end with
    Return -> void end)
   { (JC_25:
@@ -1526,6 +1526,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type c_2
 
 type char_P
@@ -1576,13 +1677,13 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-logic s : s_0 pointer
+logic s_0 : s_0 pointer
 
 predicate i(s_0_y_s_1: (s_0, int32) memory, s_0_x_s_1: (s_0, int32) memory) =
-  ((0 <= integer_of_int32(select(s_0_x_s_1, s))) and
+  ((0 <= integer_of_int32(select(s_0_x_s_1, s_0))) and
    ((integer_of_int32(select(s_0_x_s_1,
-    s)) <= integer_of_int32(select(s_0_y_s_1, s))) and
-    (integer_of_int32(select(s_0_y_s_1, s)) <= 100)))
+    s_0)) <= integer_of_int32(select(s_0_y_s_1, s_0))) and
+    (integer_of_int32(select(s_0_y_s_1, s_0)) <= 100)))
 
 logic int32_of_integer : int -> int32
 
@@ -1771,8 +1872,8 @@ predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
    (offset_max(void_P_alloc_table, p) >= b))
 
 predicate valid_s(s_0_s_1_alloc_table: s_0 alloc_table) =
-  ((offset_min(s_0_s_1_alloc_table, s) <= 0) and
-   (offset_max(s_0_s_1_alloc_table, s) >= 0))
+  ((offset_min(s_0_s_1_alloc_table, s_0) <= 0) and
+   (offset_max(s_0_s_1_alloc_table, s_0) >= 0))
 
 predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

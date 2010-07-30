@@ -119,30 +119,32 @@ axiom char_P_tags :
    instanceof(char_P_tag_table, x, char_P_tag)))
 
 goal dist1 :
- (forall x:int.
+ (forall x_0:int.
   (forall y:int.
    (forall z:int.
-    eq_int(mul_int(x, add_int(y, z)), add_int(mul_int(x, y), mul_int(x, z))))))
+    eq_int(mul_int(x_0, add_int(y, z)),
+    add_int(mul_int(x_0, y), mul_int(x_0, z))))))
 
 axiom dist1_as_axiom :
- (forall x:int.
+ (forall x_0:int.
   (forall y:int.
    (forall z:int.
-    eq_int(mul_int(x, add_int(y, z)), add_int(mul_int(x, y), mul_int(x, z))))))
+    eq_int(mul_int(x_0, add_int(y, z)),
+    add_int(mul_int(x_0, y), mul_int(x_0, z))))))
 
 goal dist2 :
- (forall x_0:int.
+ (forall x_0_0:int.
   (forall y_0:int.
    (forall z_0:int.
-    eq_int(mul_int(add_int(x_0, y_0), z_0),
-    add_int(mul_int(x_0, z_0), mul_int(y_0, z_0))))))
+    eq_int(mul_int(add_int(x_0_0, y_0), z_0),
+    add_int(mul_int(x_0_0, z_0), mul_int(y_0, z_0))))))
 
 axiom dist2_as_axiom :
- (forall x_0:int.
+ (forall x_0_0:int.
   (forall y_0:int.
    (forall z_0:int.
-    eq_int(mul_int(add_int(x_0, y_0), z_0),
-    add_int(mul_int(x_0, z_0), mul_int(y_0, z_0))))))
+    eq_int(mul_int(add_int(x_0_0, y_0), z_0),
+    add_int(mul_int(x_0_0, z_0), mul_int(y_0, z_0))))))
 
 logic integer_of_int32: int32 -> int
 
@@ -1465,6 +1467,107 @@ axiom alloc_extends_except_offset_max:
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
 
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
+
 type char_P
 
 type int32
@@ -1493,13 +1596,15 @@ axiom char_P_tags:
       x, char_P_tag)))
 
 axiom dist1_as_axiom:
-  (forall x:int.
-    (forall y:int. (forall z:int. ((x * (y + z)) = ((x * y) + (x * z))))))
+  (forall x_0:int.
+    (forall y:int.
+      (forall z:int. ((x_0 * (y + z)) = ((x_0 * y) + (x_0 * z))))))
 
 axiom dist2_as_axiom:
-  (forall x_0:int.
+  (forall x_0_0:int.
     (forall y_0:int.
-      (forall z_0:int. (((x_0 + y_0) * z_0) = ((x_0 * z_0) + (y_0 * z_0))))))
+      (forall z_0:int.
+        (((x_0_0 + y_0) * z_0) = ((x_0_0 * z_0) + (y_0 * z_0))))))
 
 logic integer_of_int32 : int32 -> int
 

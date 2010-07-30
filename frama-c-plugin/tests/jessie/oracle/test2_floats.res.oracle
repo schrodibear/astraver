@@ -300,20 +300,20 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 parameter sqrt :
- x:double ->
+ x_0:double ->
   { } double
   { (JC_7:
     eq_real(double_value(result),
     double_value(round_double_logic(nearest_even,
-                 sqrt_real(double_value(x@)))))) }
+                 sqrt_real(double_value(x_0@)))))) }
 
 parameter sqrt_requires :
- x:double ->
+ x_0:double ->
   { } double
   { (JC_7:
     eq_real(double_value(result),
     double_value(round_double_logic(nearest_even,
-                 sqrt_real(double_value(x@)))))) }
+                 sqrt_real(double_value(x_0@)))))) }
 
 let poly_ensures_default =
  fun (tt : unit) ->
@@ -322,7 +322,7 @@ let poly_ensures_default =
   (let return = ref (any_double void) in
   try
    begin
-     (let x_0 = ref (any_double void) in
+     (let x_0_0 = ref (any_double void) in
      (let tmp = ref (any_double void) in
      (let __retres = ref (any_double void) in
      (C_3:
@@ -334,9 +334,9 @@ let poly_ensures_default =
       (C_5:
       begin
         (let jessie_13 =
-        (x_0 := (C_4:
-                (JC_25:
-                (((div_double_safe nearest_even) !tmp) (double_of_real_exact 2.0))))) in
+        (x_0_0 := (C_4:
+                  (JC_25:
+                  (((div_double_safe nearest_even) !tmp) (double_of_real_exact 2.0))))) in
         void);
        (C_9:
        begin
@@ -349,7 +349,7 @@ let poly_ensures_default =
                                                          (C_6:
                                                          (JC_26:
                                                          (((mul_double_safe nearest_even) 
-                                                           (double_of_real_exact 2.0)) !x_0)))) !x_0)))) 
+                                                           (double_of_real_exact 2.0)) !x_0_0)))) !x_0_0)))) 
                        (double_of_real_exact 1.0))))) in void);
         (return := !__retres); (raise Return) end) end) end)))); absurd  end
    with Return -> !return end))
@@ -362,7 +362,7 @@ let poly_safety =
   (let return = ref (any_double void) in
   try
    begin
-     (let x_0 = ref (any_double void) in
+     (let x_0_0 = ref (any_double void) in
      (let tmp = ref (any_double void) in
      (let __retres = ref (any_double void) in
      (C_3:
@@ -374,9 +374,9 @@ let poly_safety =
       (C_5:
       begin
         (let jessie_5 =
-        (x_0 := (C_4:
-                (JC_20:
-                (((div_double nearest_even) !tmp) (double_of_real_exact 2.0))))) in
+        (x_0_0 := (C_4:
+                  (JC_20:
+                  (((div_double nearest_even) !tmp) (double_of_real_exact 2.0))))) in
         void);
        (C_9:
        begin
@@ -389,7 +389,7 @@ let poly_safety =
                                                     (C_6:
                                                     (JC_21:
                                                     (((mul_double nearest_even) 
-                                                      (double_of_real_exact 2.0)) !x_0)))) !x_0)))) 
+                                                      (double_of_real_exact 2.0)) !x_0_0)))) !x_0_0)))) 
                        (double_of_real_exact 1.0))))) in void);
         (return := !__retres); (raise Return) end) end) end)))); absurd  end
    with Return -> !return end)) { true }
@@ -1220,6 +1220,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type mode =
   | nearest_even

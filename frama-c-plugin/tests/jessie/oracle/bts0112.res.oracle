@@ -3394,7 +3394,7 @@ let LZ_TRSM_safety =
                                                             (integer_of_int32 LDB))))))))) in
            (let jessie_269 = LDB in
            (JC_298:
-           (assert { zwf_zero((0), (0)) };
+           (check { zwf_zero((0), (0)) };
            (JC_297:
            (((((((((((LZ_TRSM_requires jessie_275) jessie_274) jessie_273) jessie_272) jessie_271) jessie_270) jessie_269) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10)))))))))));
           (C_239:
@@ -3436,7 +3436,7 @@ let LZ_TRSM_safety =
             (let jessie_292 = B in
             (let jessie_291 = LDB in
             (JC_303:
-            (assert { zwf_zero((0), (0)) };
+            (check { zwf_zero((0), (0)) };
             (JC_302:
             (((((((((((LZ_TRSM_requires jessie_297) jessie_296) jessie_295) jessie_294) jessie_293) jessie_292) jessie_291) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))))))))
            end) end) end) end) end)); (raise Return) end))); (raise Return)
@@ -4046,12 +4046,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po185.why">
-      <location file = "why/bts0112.why" line = "2751" begin = "21" end = "39"/>
-      <explain kind = "Assert"/>
+      <location file = "why/bts0112.why" line = "2751" begin = "20" end = "38"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po186.why">
-      <location file = "why/bts0112.why" line = "2751" begin = "21" end = "39"/>
-      <explain kind = "Assert"/>
+      <location file = "why/bts0112.why" line = "2751" begin = "20" end = "38"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po187.why">
       <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
@@ -4129,12 +4129,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po202.why">
-      <location file = "why/bts0112.why" line = "2793" begin = "22" end = "40"/>
-      <explain kind = "Assert"/>
+      <location file = "why/bts0112.why" line = "2793" begin = "21" end = "39"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po203.why">
-      <location file = "why/bts0112.why" line = "2793" begin = "22" end = "40"/>
-      <explain kind = "Assert"/>
+      <location file = "why/bts0112.why" line = "2793" begin = "21" end = "39"/>
+      <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po204.why">
       <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
@@ -5743,6 +5743,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type mode =
   | nearest_even

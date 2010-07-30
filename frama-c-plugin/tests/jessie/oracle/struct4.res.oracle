@@ -673,14 +673,14 @@ let f_ensures_default =
      (let S_x_4_tag_table = ref (any_tag_table void) in
      (let S_x_4_alloc_table = ref (any_alloc_table void) in
      (let A_x_4_alloc_table = ref (any_alloc_table void) in
-     (let x = ref (any_pointer void) in
+     (let x_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
        (let jessie_61 =
-       (x := (C_1:
-             (JC_23:
-             ((((((alloc_struct_S (1)) A_x_4_alloc_table) S_x_4_alloc_table) S_x_4_tag_table) !S_a_x_4) !S_c_x_4)))) in
+       (x_0 := (C_1:
+               (JC_23:
+               ((((((alloc_struct_S (1)) A_x_4_alloc_table) S_x_4_alloc_table) S_x_4_tag_table) !S_a_x_4) !S_c_x_4)))) in
        void);
       (let jessie_103 =
       (C_7:
@@ -688,21 +688,22 @@ let f_ensures_default =
         (let jessie_67 =
         (let jessie_63 =
         (C_4: ((safe_acc_ A_v_v_x_2) (C_3: ((safe_acc_ S_a_v_x_2) v_x)))) in
-        (let jessie_66 = (C_5: ((safe_acc_ !S_a_x_4) !x)) in
+        (let jessie_66 = (C_5: ((safe_acc_ !S_a_x_4) !x_0)) in
         (((safe_upd_ A_v_x_4) jessie_66) jessie_63))) in void);
        (C_10:
        begin
          (let jessie_73 =
          (let jessie_69 = (C_8: ((safe_acc_ S_b_v_x_2) v_x)) in
-         (let jessie_72 = !x in (((safe_upd_ S_b_x_4) jessie_72) jessie_69))) in
-         void);
+         (let jessie_72 = !x_0 in
+         (((safe_upd_ S_b_x_4) jessie_72) jessie_69))) in void);
         (C_15:
         begin
           (let jessie_79 =
           (let jessie_75 =
           (C_12:
           ((safe_acc_ A_v_v_x_2) ((shift (C_11: ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
-          (let jessie_78 = ((shift (C_13: ((safe_acc_ !S_c_x_4) !x))) (0)) in
+          (let jessie_78 =
+          ((shift (C_13: ((safe_acc_ !S_c_x_4) !x_0))) (0)) in
           (((safe_upd_ A_v_x_4) jessie_78) jessie_75))) in void);
          (C_20:
          begin
@@ -711,7 +712,7 @@ let f_ensures_default =
            (C_17:
            ((safe_acc_ A_v_v_x_2) ((shift (C_16: ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
            (let jessie_84 =
-           ((shift (C_18: ((safe_acc_ !S_c_x_4) !x))) (1)) in
+           ((shift (C_18: ((safe_acc_ !S_c_x_4) !x_0))) (1)) in
            (((safe_upd_ A_v_x_4) jessie_84) jessie_81))) in void);
           (C_25:
           begin
@@ -721,17 +722,17 @@ let f_ensures_default =
             ((safe_acc_ A_v_v_x_2) ((shift (C_21:
                                            ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
             (let jessie_90 =
-            ((shift (C_23: ((safe_acc_ !S_c_x_4) !x))) (2)) in
+            ((shift (C_23: ((safe_acc_ !S_c_x_4) !x_0))) (2)) in
             (((safe_upd_ A_v_x_4) jessie_90) jessie_87))) in void);
            (C_28:
            begin
              (let jessie_97 =
              (let jessie_93 = (C_26: ((safe_acc_ S_s_v_x_2) v_x)) in
-             (let jessie_96 = !x in
+             (let jessie_96 = !x_0 in
              (((safe_upd_ S_s_x_4) jessie_96) jessie_93))) in void);
             (C_31:
             (let jessie_99 = (C_29: ((safe_acc_ S_i_v_x_2) v_x)) in
-            (let jessie_102 = !x in
+            (let jessie_102 = !x_0 in
             begin   (((safe_upd_ S_i_x_4) jessie_102) jessie_99); jessie_99
             end))) end) end) end) end) end) end) in void);
       (C_35:
@@ -739,7 +740,7 @@ let f_ensures_default =
         (let jessie_109 =
         (let jessie_105 = (safe_uint8_of_integer_ (0)) in
         (let jessie_108 =
-        (C_33: ((safe_acc_ S_a_s_3) (C_32: ((safe_acc_ !S_s_x_4) !x)))) in
+        (C_33: ((safe_acc_ S_a_s_3) (C_32: ((safe_acc_ !S_s_x_4) !x_0)))) in
         (((safe_upd_ A_v_s_3) jessie_108) jessie_105))) in void);
        (C_37:
        begin
@@ -755,11 +756,11 @@ let f_ensures_default =
                                                                  ((safe_acc_ !A_v_x_4) 
                                                                   ((shift 
                                                                     (C_38:
-                                                                    ((safe_acc_ !S_c_x_4) !x))) (1)))))))) in
+                                                                    ((safe_acc_ !S_c_x_4) !x_0))) (1)))))))) in
           void);
          (C_42:
          begin
-           ((safe_free_parameter S_x_4_alloc_table) !x);
+           ((safe_free_parameter S_x_4_alloc_table) !x_0);
           (return := !__retres); (raise Return) end) end) end) end) end)))))))))))));
     absurd  end with Return -> !return end)) { (JC_14: true) }
 
@@ -789,40 +790,41 @@ let f_safety =
      (let S_x_4_tag_table = ref (any_tag_table void) in
      (let S_x_4_alloc_table = ref (any_alloc_table void) in
      (let A_x_4_alloc_table = ref (any_alloc_table void) in
-     (let x = ref (any_pointer void) in
+     (let x_0 = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
        (let jessie_2 =
-       (x := (let jessie_1 =
-             (C_1:
-             (JC_18:
-             ((((((alloc_struct_S_requires (1)) A_x_4_alloc_table) S_x_4_alloc_table) S_x_4_tag_table) !S_a_x_4) !S_c_x_4))) in
-             (JC_19:
-             (assert
-             { ge_int(offset_max(S_x_4_alloc_table, jessie_1), (0)) };
-             jessie_1)))) in void);
+       (x_0 := (let jessie_1 =
+               (C_1:
+               (JC_18:
+               ((((((alloc_struct_S_requires (1)) A_x_4_alloc_table) S_x_4_alloc_table) S_x_4_tag_table) !S_a_x_4) !S_c_x_4))) in
+               (JC_19:
+               (assert
+               { ge_int(offset_max(S_x_4_alloc_table, jessie_1), (0)) };
+               jessie_1)))) in void);
       (let jessie_44 =
       (C_7:
       begin
         (let jessie_8 =
         (let jessie_4 =
         (C_4: ((safe_acc_ A_v_v_x_2) (C_3: ((safe_acc_ S_a_v_x_2) v_x)))) in
-        (let jessie_7 = (C_5: ((safe_acc_ !S_a_x_4) !x)) in
+        (let jessie_7 = (C_5: ((safe_acc_ !S_a_x_4) !x_0)) in
         (((safe_upd_ A_v_x_4) jessie_7) jessie_4))) in void);
        (C_10:
        begin
          (let jessie_14 =
          (let jessie_10 = (C_8: ((safe_acc_ S_b_v_x_2) v_x)) in
-         (let jessie_13 = !x in (((safe_upd_ S_b_x_4) jessie_13) jessie_10))) in
-         void);
+         (let jessie_13 = !x_0 in
+         (((safe_upd_ S_b_x_4) jessie_13) jessie_10))) in void);
         (C_15:
         begin
           (let jessie_20 =
           (let jessie_16 =
           (C_12:
           ((safe_acc_ A_v_v_x_2) ((shift (C_11: ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
-          (let jessie_19 = ((shift (C_13: ((safe_acc_ !S_c_x_4) !x))) (0)) in
+          (let jessie_19 =
+          ((shift (C_13: ((safe_acc_ !S_c_x_4) !x_0))) (0)) in
           (((safe_upd_ A_v_x_4) jessie_19) jessie_16))) in void);
          (C_20:
          begin
@@ -831,7 +833,7 @@ let f_safety =
            (C_17:
            ((safe_acc_ A_v_v_x_2) ((shift (C_16: ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
            (let jessie_25 =
-           ((shift (C_18: ((safe_acc_ !S_c_x_4) !x))) (1)) in
+           ((shift (C_18: ((safe_acc_ !S_c_x_4) !x_0))) (1)) in
            (((safe_upd_ A_v_x_4) jessie_25) jessie_22))) in void);
           (C_25:
           begin
@@ -841,17 +843,17 @@ let f_safety =
             ((safe_acc_ A_v_v_x_2) ((shift (C_21:
                                            ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
             (let jessie_31 =
-            ((shift (C_23: ((safe_acc_ !S_c_x_4) !x))) (2)) in
+            ((shift (C_23: ((safe_acc_ !S_c_x_4) !x_0))) (2)) in
             (((safe_upd_ A_v_x_4) jessie_31) jessie_28))) in void);
            (C_28:
            begin
              (let jessie_38 =
              (let jessie_34 = (C_26: ((safe_acc_ S_s_v_x_2) v_x)) in
-             (let jessie_37 = !x in
+             (let jessie_37 = !x_0 in
              (((safe_upd_ S_s_x_4) jessie_37) jessie_34))) in void);
             (C_31:
             (let jessie_40 = (C_29: ((safe_acc_ S_i_v_x_2) v_x)) in
-            (let jessie_43 = !x in
+            (let jessie_43 = !x_0 in
             begin   (((safe_upd_ S_i_x_4) jessie_43) jessie_40); jessie_40
             end))) end) end) end) end) end) end) in void);
       (C_35:
@@ -861,7 +863,8 @@ let f_safety =
         (let jessie_49 =
         (C_33:
         (JC_21:
-        (((acc_ S_s_3_alloc_table) S_a_s_3) (C_32: ((safe_acc_ !S_s_x_4) !x))))) in
+        (((acc_ S_s_3_alloc_table) S_a_s_3) (C_32:
+                                            ((safe_acc_ !S_s_x_4) !x_0))))) in
         (((safe_upd_ A_v_s_3) jessie_49) jessie_46))) in void);
        (C_37:
        begin
@@ -878,11 +881,11 @@ let f_safety =
                                                             ((safe_acc_ !A_v_x_4) 
                                                              ((shift 
                                                                (C_38:
-                                                               ((safe_acc_ !S_c_x_4) !x))) (1))))))))) in
+                                                               ((safe_acc_ !S_c_x_4) !x_0))) (1))))))))) in
           void);
          (C_42:
          begin
-           ((free_parameter S_x_4_alloc_table) !x); (return := !__retres);
+           ((free_parameter S_x_4_alloc_table) !x_0); (return := !__retres);
           (raise Return) end) end) end) end) end))))))))))))); absurd  end
    with Return -> !return end)) { (JC_16: valid_aaa(S_aaa_1_alloc_table)) }
 
@@ -899,7 +902,7 @@ why --project [...] why/struct4.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct4_po2.why">
-      <location file = "why/struct4.why" line = "710" begin = "15" end = "67"/>
+      <location file = "why/struct4.why" line = "711" begin = "17" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct4_po3.why">
@@ -923,7 +926,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct4_po7.why">
-      <location file = "why/struct4.why" line = "792" begin = "12" end = "49"/>
+      <location file = "why/struct4.why" line = "795" begin = "12" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1719,6 +1722,107 @@ axiom alloc_extends_except_offset_max:
          (forall p:'a1 pointer.
            ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
             p) = offset_max(a2, p))))))))
+
+type 'a mybag
+
+logic in_mybag : 'a1, 'a1 mybag -> prop
+
+logic disj_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom disj_sym:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag [disj_mybag(s1, s2)].
+      (disj_mybag(s1, s2) -> disj_mybag(s2, s1))))
+
+logic sub_mybag : 'a1 mybag, 'a1 mybag -> prop
+
+axiom sub_refl:
+  (forall sa:'a1 pointer mybag [sub_mybag(sa, sa)]. sub_mybag(sa, sa))
+
+axiom sub_disj:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
+        disj_mybag(s1, s3), sub_mybag(s2, s3)].
+        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+
+axiom sub_in:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall p:'a1 [in_mybag(p, s1), sub_mybag(s1, s2)| in_mybag(p, s2),
+        sub_mybag(s1, s2)].
+        ((not in_mybag(p, s2)) ->
+         (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
+'a2) memory -> prop
+
+axiom frame_between_refl:
+  (forall sa:'a1 pointer mybag.
+    (forall m:('a1, 'a2) memory [frame_between(sa, m, m)]. frame_between(sa,
+      m, m)))
+
+axiom frame_between_gen:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, store(m2, p, v))].
+            (frame_between(sa, m1, m2) ->
+             (in_mybag(p, sa) -> frame_between(sa, store(m1, p, v), m2))))))))
+
+axiom frame_between_gen2:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          frame_between(sa, m1, m3)| frame_between(sa, m2, m3),
+          frame_between(sa, m1, m3)].
+          (frame_between(sa, m1, m2) ->
+           (frame_between(sa, m2, m3) -> frame_between(sa, m1, m3)))))))
+
+axiom frame_between_gen_sub1:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s12, m1, m2),
+              frame_between(s13, m1, m3)].
+              (sub_mybag(s12, s13) ->
+               (frame_between(s12, m1, m2) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_gen_sub2:
+  (forall s12:'a1 pointer mybag.
+    (forall s23:'a1 pointer mybag.
+      (forall s13:'a1 pointer mybag.
+        (forall m1:('a1, 'a2) memory.
+          (forall m2:('a1, 'a2) memory.
+            (forall m3:('a1, 'a2) memory [frame_between(s23, m2, m3),
+              frame_between(s13, m1, m3)].
+              (frame_between(s12, m1, m2) ->
+               (sub_mybag(s23, s13) ->
+                (frame_between(s23, m2, m3) -> frame_between(s13, m1, m3))))))))))
+
+axiom frame_between_pointer:
+  (forall sa:'a1 pointer mybag.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall p:'a1 pointer.
+          (forall v:'a2 [frame_between(sa, m1, m2), select(m1, p)|
+            frame_between(sa, m1, m2), select(m2, p)].
+            (frame_between(sa, m1, m2) ->
+             ((not in_mybag(p, sa)) -> (select(m1, p) = select(m2, p)))))))))
+
+axiom frame_between_sub:
+  (forall sa:'a1 pointer mybag.
+    (forall sb:'a1 pointer mybag.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory [frame_between(sa, m1, m2),
+          sub_mybag(sa, sb)].
+          (frame_between(sa, m1, m2) ->
+           (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
 type A
 

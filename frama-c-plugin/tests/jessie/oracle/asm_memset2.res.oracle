@@ -320,20 +320,22 @@ axiom char_P_tags :
    instanceof(char_P_tag_table, x, char_P_tag)))
 
 goal div4 :
- (forall x:int. (ge_int(x, (0)) -> le_int(mul_int((4), div_int(x, (4))), x)))
+ (forall x_0:int.
+  (ge_int(x_0, (0)) -> le_int(mul_int((4), div_int(x_0, (4))), x_0)))
 
 axiom div4_as_axiom :
- (forall x:int. (ge_int(x, (0)) -> le_int(mul_int((4), div_int(x, (4))), x)))
+ (forall x_0:int.
+  (ge_int(x_0, (0)) -> le_int(mul_int((4), div_int(x_0, (4))), x_0)))
 
 goal div4_not_mod4 :
- (forall x_0:int.
-  ((gt_int(x_0, (0)) and neq_int(mod_int(x_0, (4)), (0))) ->
-   lt_int(mul_int((4), div_int(x_0, (4))), x_0)))
+ (forall x_0_0:int.
+  ((gt_int(x_0_0, (0)) and neq_int(mod_int(x_0_0, (4)), (0))) ->
+   lt_int(mul_int((4), div_int(x_0_0, (4))), x_0_0)))
 
 axiom div4_not_mod4_as_axiom :
- (forall x_0:int.
-  ((gt_int(x_0, (0)) and neq_int(mod_int(x_0, (4)), (0))) ->
-   lt_int(mul_int((4), div_int(x_0, (4))), x_0)))
+ (forall x_0_0:int.
+  ((gt_int(x_0_0, (0)) and neq_int(mod_int(x_0_0, (4)), (0))) ->
+   lt_int(mul_int((4), div_int(x_0_0, (4))), x_0_0)))
 
 logic integer_of_int8: int8 -> int
 
@@ -1200,13 +1202,13 @@ let memset_burst4_ensures_aligned_data =
   (init:
   try
    begin
-     (let s = ref (any_pointer void) in
+     (let s_0 = ref (any_pointer void) in
      (let index_oct = ref (any_uint32 void) in
      (let align = ref (any_uint32 void) in
      (let nb_mots_alignes = ref (any_uint32 void) in
      (C_43:
      begin
-       (let jessie_148 = (s := (C_42: Adresse_1)) in void);
+       (let jessie_148 = (s_0 := (C_42: Adresse_1)) in void);
       (C_44:
       begin
         (let jessie_150 = (index_oct := (safe_uint32_of_integer_ (0))) in
@@ -1234,7 +1236,7 @@ let memset_burst4_ensures_aligned_data =
             begin
               ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
              ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-             (let jessie_156 = !s in
+             (let jessie_156 = !s_0 in
              (let jessie_155 = ValOct_0 in
              (let jessie_154 = !index_oct in
              (let jessie_153 =
@@ -1290,7 +1292,7 @@ let memset_burst4_ensures_aligned_data =
          begin
            ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
           ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-          (let jessie_167 = !s in
+          (let jessie_167 = !s_0 in
           (let jessie_166 = ValOct_0 in
           (let jessie_165 = !index_oct in
           (let jessie_164 =
@@ -1330,13 +1332,13 @@ let memset_burst4_ensures_default =
   (init:
   try
    begin
-     (let s = ref (any_pointer void) in
+     (let s_0 = ref (any_pointer void) in
      (let index_oct = ref (any_uint32 void) in
      (let align = ref (any_uint32 void) in
      (let nb_mots_alignes = ref (any_uint32 void) in
      (C_43:
      begin
-       (let jessie_82 = (s := (C_42: Adresse_1)) in void);
+       (let jessie_82 = (s_0 := (C_42: Adresse_1)) in void);
       (C_44:
       begin
         (let jessie_84 = (index_oct := (safe_uint32_of_integer_ (0))) in
@@ -1364,7 +1366,7 @@ let memset_burst4_ensures_default =
             begin
               ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
              ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-             (let jessie_90 = !s in
+             (let jessie_90 = !s_0 in
              (let jessie_89 = ValOct_0 in
              (let jessie_88 = !index_oct in
              (let jessie_87 =
@@ -1420,7 +1422,7 @@ let memset_burst4_ensures_default =
          begin
            ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
           ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-          (let jessie_101 = !s in
+          (let jessie_101 = !s_0 in
           (let jessie_100 = ValOct_0 in
           (let jessie_99 = !index_oct in
           (let jessie_98 =
@@ -1454,13 +1456,13 @@ let memset_burst4_ensures_misaligned_data =
   (init:
   try
    begin
-     (let s = ref (any_pointer void) in
+     (let s_0 = ref (any_pointer void) in
      (let index_oct = ref (any_uint32 void) in
      (let align = ref (any_uint32 void) in
      (let nb_mots_alignes = ref (any_uint32 void) in
      (C_43:
      begin
-       (let jessie_126 = (s := (C_42: Adresse_1)) in void);
+       (let jessie_126 = (s_0 := (C_42: Adresse_1)) in void);
       (C_44:
       begin
         (let jessie_128 = (index_oct := (safe_uint32_of_integer_ (0))) in
@@ -1488,7 +1490,7 @@ let memset_burst4_ensures_misaligned_data =
             begin
               ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
              ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-             (let jessie_134 = !s in
+             (let jessie_134 = !s_0 in
              (let jessie_133 = ValOct_0 in
              (let jessie_132 = !index_oct in
              (let jessie_131 =
@@ -1507,8 +1509,8 @@ let memset_burst4_ensures_misaligned_data =
               ((le_int((0), k_3)
                and le_int(k_3, sub_int((3), integer_of_uint32(addr_mod4)))) ->
                eq_int(integer_of_uint8(uint8_of_bitvector(select_bytes(bitvector_Adresse_1_3,
-                                                          shift(s, k_3), (0),
-                                                          (1)))),
+                                                          shift(s_0, k_3),
+                                                          (0), (1)))),
                integer_of_uint8(ValOct_0))))) }; void); void;
            (C_54:
            begin
@@ -1553,7 +1555,7 @@ let memset_burst4_ensures_misaligned_data =
          begin
            ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
           ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-          (let jessie_145 = !s in
+          (let jessie_145 = !s_0 in
           (let jessie_144 = ValOct_0 in
           (let jessie_143 = !index_oct in
           (let jessie_142 =
@@ -1608,13 +1610,13 @@ let memset_burst4_ensures_small_data =
   (init:
   try
    begin
-     (let s = ref (any_pointer void) in
+     (let s_0 = ref (any_pointer void) in
      (let index_oct = ref (any_uint32 void) in
      (let align = ref (any_uint32 void) in
      (let nb_mots_alignes = ref (any_uint32 void) in
      (C_43:
      begin
-       (let jessie_104 = (s := (C_42: Adresse_1)) in void);
+       (let jessie_104 = (s_0 := (C_42: Adresse_1)) in void);
       (C_44:
       begin
         (let jessie_106 = (index_oct := (safe_uint32_of_integer_ (0))) in
@@ -1642,7 +1644,7 @@ let memset_burst4_ensures_small_data =
             begin
               ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
              ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-             (let jessie_112 = !s in
+             (let jessie_112 = !s_0 in
              (let jessie_111 = ValOct_0 in
              (let jessie_110 = !index_oct in
              (let jessie_109 =
@@ -1698,7 +1700,7 @@ let memset_burst4_ensures_small_data =
          begin
            ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
           ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-          (let jessie_123 = !s in
+          (let jessie_123 = !s_0 in
           (let jessie_122 = ValOct_0 in
           (let jessie_121 = !index_oct in
           (let jessie_120 =
@@ -1738,13 +1740,13 @@ let memset_burst4_safety =
   (init:
   try
    begin
-     (let s = ref (any_pointer void) in
+     (let s_0 = ref (any_pointer void) in
      (let index_oct = ref (any_uint32 void) in
      (let align = ref (any_uint32 void) in
      (let nb_mots_alignes = ref (any_uint32 void) in
      (C_43:
      begin
-       (let jessie_60 = (s := (C_42: Adresse_1)) in void);
+       (let jessie_60 = (s_0 := (C_42: Adresse_1)) in void);
       (C_44:
       begin
         (let jessie_62 = (index_oct := (safe_uint32_of_integer_ (0))) in
@@ -1773,7 +1775,7 @@ let memset_burst4_safety =
             begin
               ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
              ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-             (let jessie_68 = !s in
+             (let jessie_68 = !s_0 in
              (let jessie_67 = ValOct_0 in
              (let jessie_66 = !index_oct in
              (let jessie_65 =
@@ -1834,7 +1836,7 @@ let memset_burst4_safety =
          begin
            ((struct_unsigned_char_P_alloc_of_bitvector unsigned_char_P_Adresse_1_3_alloc_table) bitvector_Adresse_1_3_alloc_table);
           ((struct_unsigned_char_P_mem_of_bitvector unsigned_char_P_unsigned_char_M_Adresse_1_3) !bitvector_Adresse_1_3);
-          (let jessie_79 = !s in
+          (let jessie_79 = !s_0 in
           (let jessie_78 = ValOct_0 in
           (let jessie_77 = !index_oct in
           (let jessie_76 =
