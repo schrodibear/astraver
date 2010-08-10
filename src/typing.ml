@@ -603,6 +603,7 @@ let rec typef ?(userlabel="") lab env expr =
 		expected_type a.ploc (result_type t_a) tx;
 		begin match t_a with
 		(* argument is pure: it is substituted *)
+(***
    	        | { desc = Expression ta } when post t_a = None ->
 		    let kapp = type_c_subst_oldify env x ta kapp in
 		    let _,_,papp,_ = decomp_type_c kapp in
@@ -626,6 +627,7 @@ let rec typef ?(userlabel="") lab env expr =
 				  ~post:kapp.t_post (AppTerm (t_f, ta, kapp))))
 		    in
 		    loop_args t_f (result_type t_f) ra
+***)
  	        (* otherwise we transform into [let v = arg in (f v)] *)
 		| _ ->
 		    let _,eapp,_,_ = decomp_type_c kapp in
