@@ -565,19 +565,19 @@ why --project [...] why/roux_labels.why
   <function name="Function g">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/roux_labels_po6.why">
+    <goal why_file="why/roux_labels_po7.why">
       <location file = "PPCHOME/tests/jessie/roux_labels.jessie/roux_labels.jc" line = "55" begin = "13" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/roux_labels_po7.why">
+    <goal why_file="why/roux_labels_po8.why">
       <location file = "PPCHOME/tests/jessie/roux_labels.jessie/roux_labels.jc" line = "55" begin = "13" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/roux_labels_po5.why">
+    <goal why_file="why/roux_labels_po6.why">
       <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "10" begin = "11" end = "36"/>
       <explain kind = "Post"/>
     </goal>
@@ -592,11 +592,16 @@ text = "UserCall"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/roux_labels_po3.why">
-      <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "6" begin = "14" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "6" begin = "1" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/roux_labels_po4.why">
+      <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "6" begin = "14" end = "15"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/roux_labels_po5.why">
       <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "6" begin = "14" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

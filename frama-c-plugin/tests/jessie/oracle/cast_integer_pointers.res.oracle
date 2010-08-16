@@ -3321,19 +3321,19 @@ why --project [...] why/cast_integer_pointers.why
   <function name="Function uint_to_int">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/cast_integer_pointers_po24.why">
+    <goal why_file="why/cast_integer_pointers_po26.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "13" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/cast_integer_pointers_po25.why">
+    <goal why_file="why/cast_integer_pointers_po27.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "13" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `identity'">
-    <goal why_file="why/cast_integer_pointers_po23.why">
+    <goal why_file="why/cast_integer_pointers_po25.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "9" begin = "14" end = "28"/>
       <explain kind = "Post"/>
     </goal>
@@ -3342,17 +3342,22 @@ text = "PointerDeref"/>
   <function name="Function uchar_ptr">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/cast_integer_pointers_po20.why">
+    <goal why_file="why/cast_integer_pointers_po21.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "28" begin = "34" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/cast_integer_pointers_po21.why">
+    <goal why_file="why/cast_integer_pointers_po22.why">
+      <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "28" begin = "34" end = "40"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po23.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "28" begin = "34" end = "40"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/cast_integer_pointers_po22.why">
+    <goal why_file="why/cast_integer_pointers_po24.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "28" begin = "34" end = "40"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -3370,9 +3375,14 @@ text = "PointerDeref"/>
     <goal why_file="why/cast_integer_pointers_po18.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "31" begin = "32" end = "38"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_integer_pointers_po19.why">
+      <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "31" begin = "32" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po20.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "31" begin = "32" end = "38"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>

@@ -24,7 +24,7 @@
 
 /* useless since there is a reads clause @
   lemma cnt_footprint{L,M} :
-     \forall int*a, integer n, int x; 
+     \forall int*a, integer n, int x;
      (\forall integer k; 0 <= k < n ==> \at(a[k],L) == \at(a[k],M))
      ==>
      cnt{L}(a,n,x) == cnt{M}(a,n,x);

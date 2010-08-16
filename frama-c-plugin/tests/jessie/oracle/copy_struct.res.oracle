@@ -2000,64 +2000,84 @@ why --project [...] why/copy_struct.why
   <function name="Function idp">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/copy_struct_po48.why">
+    <goal why_file="why/copy_struct_po53.why">
       <location file = "PPCHOME/tests/jessie/" line = "0" begin = "-1" end = "-1"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/copy_struct_po49.why">
+    <goal why_file="why/copy_struct_po54.why">
       <location file = "why/copy_struct.why" line = "1685" begin = "22" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po50.why">
+    <goal why_file="why/copy_struct_po55.why">
       <location file = "PPCHOME/tests/jessie/" line = "0" begin = "-1" end = "-1"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/copy_struct_po51.why">
+    <goal why_file="why/copy_struct_po56.why">
       <location file = "why/copy_struct.why" line = "1697" begin = "26" end = "144"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po52.why">
+    <goal why_file="why/copy_struct_po57.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/copy_struct_po53.why">
+    <goal why_file="why/copy_struct_po58.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/copy_struct_po54.why">
+    <goal why_file="why/copy_struct_po59.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/copy_struct_po55.why">
+    <goal why_file="why/copy_struct_po60.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/copy_struct_po56.why">
+    <goal why_file="why/copy_struct_po61.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po62.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po63.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po64.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "33" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po65.why">
       <location file = "why/copy_struct.why" line = "1786" begin = "14" end = "66"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/copy_struct_po44.why">
+    <goal why_file="why/copy_struct_po49.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "29" begin = "12" end = "33"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/copy_struct_po45.why">
+    <goal why_file="why/copy_struct_po50.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "29" begin = "37" end = "58"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/copy_struct_po46.why">
+    <goal why_file="why/copy_struct_po51.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "30" begin = "12" end = "33"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/copy_struct_po47.why">
+    <goal why_file="why/copy_struct_po52.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "30" begin = "37" end = "58"/>
       <explain kind = "Post"/>
     </goal>
@@ -2066,44 +2086,44 @@ text = ""/>
   <function name="Function id">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/copy_struct_po39.why">
+    <goal why_file="why/copy_struct_po44.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "24" begin = "21" end = "22"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/copy_struct_po40.why">
+    <goal why_file="why/copy_struct_po45.why">
       <location file = "why/copy_struct.why" line = "1444" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po41.why">
+    <goal why_file="why/copy_struct_po46.why">
       <location file = "PPCHOME/tests/jessie/" line = "0" begin = "-1" end = "-1"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/copy_struct_po42.why">
+    <goal why_file="why/copy_struct_po47.why">
       <location file = "why/copy_struct.why" line = "1455" begin = "24" end = "106"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po43.why">
+    <goal why_file="why/copy_struct_po48.why">
       <location file = "why/copy_struct.why" line = "1524" begin = "14" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/copy_struct_po35.why">
+    <goal why_file="why/copy_struct_po40.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "21" begin = "12" end = "32"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/copy_struct_po36.why">
+    <goal why_file="why/copy_struct_po41.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "21" begin = "36" end = "56"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/copy_struct_po37.why">
+    <goal why_file="why/copy_struct_po42.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "22" begin = "12" end = "32"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/copy_struct_po38.why">
+    <goal why_file="why/copy_struct_po43.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "22" begin = "36" end = "56"/>
       <explain kind = "Post"/>
     </goal>
@@ -2112,86 +2132,91 @@ text = ""/>
   <function name="Function g">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/copy_struct_po22.why">
+    <goal why_file="why/copy_struct_po26.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "39" begin = "11" end = "15"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/copy_struct_po23.why">
+    <goal why_file="why/copy_struct_po27.why">
       <location file = "why/copy_struct.why" line = "1118" begin = "18" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po24.why">
+    <goal why_file="why/copy_struct_po28.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "40" begin = "11" end = "16"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/copy_struct_po25.why">
+    <goal why_file="why/copy_struct_po29.why">
       <location file = "why/copy_struct.why" line = "1129" begin = "20" end = "99"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po26.why">
+    <goal why_file="why/copy_struct_po30.why">
       <location file = "why/copy_struct.why" line = "1138" begin = "27" end = "305"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po27.why">
+    <goal why_file="why/copy_struct_po31.why">
       <location file = "why/copy_struct.why" line = "1138" begin = "27" end = "305"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po28.why">
+    <goal why_file="why/copy_struct_po32.why">
       <location file = "why/copy_struct.why" line = "1184" begin = "17" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/copy_struct_po29.why">
+    <goal why_file="why/copy_struct_po33.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "40" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/copy_struct_po30.why">
+    <goal why_file="why/copy_struct_po34.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "40" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/copy_struct_po31.why">
+    <goal why_file="why/copy_struct_po35.why">
       <location file = "why/copy_struct.why" line = "1231" begin = "17" end = "75"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/copy_struct_po32.why">
+    <goal why_file="why/copy_struct_po36.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "45" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/copy_struct_po33.why">
+    <goal why_file="why/copy_struct_po37.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "45" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po38.why">
       <location file = "why/copy_struct.why" line = "1286" begin = "13" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/copy_struct_po34.why">
+    <goal why_file="why/copy_struct_po39.why">
       <location file = "why/copy_struct.why" line = "1289" begin = "14" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/copy_struct_po17.why">
+    <goal why_file="why/copy_struct_po21.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "42" begin = "13" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po18.why">
+    <goal why_file="why/copy_struct_po22.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "44" begin = "13" end = "32"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po19.why">
+    <goal why_file="why/copy_struct_po23.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "46" begin = "13" end = "34"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po20.why">
+    <goal why_file="why/copy_struct_po24.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "47" begin = "13" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/copy_struct_po21.why">
+    <goal why_file="why/copy_struct_po25.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "47" begin = "23" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
@@ -2256,6 +2281,26 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_struct_po16.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "18" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po17.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "18" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po18.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "18" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po19.why">
+      <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "18" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/copy_struct_po20.why">
       <location file = "PPCHOME/tests/jessie/copy_struct.c" line = "18" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

@@ -819,19 +819,19 @@ why --project [...] why/array_field_addr.why
   <function name="Function g">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/array_field_addr_po6.why">
+    <goal why_file="why/array_field_addr_po7.why">
       <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "52" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/array_field_addr_po7.why">
+    <goal why_file="why/array_field_addr_po8.why">
       <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "52" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/array_field_addr_po5.why">
+    <goal why_file="why/array_field_addr_po6.why">
       <location file = "PPCHOME/tests/jessie/array_field_addr.c" line = "7" begin = "12" end = "19"/>
       <explain kind = "Post"/>
     </goal>
@@ -846,11 +846,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/array_field_addr_po3.why">
+      <location file = "PPCHOME/tests/jessie/array_field_addr.c" line = "15" begin = "2" end = "3"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/array_field_addr_po4.why">
       <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "66" begin = "13" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
-    <goal why_file="why/array_field_addr_po4.why">
+    <goal why_file="why/array_field_addr_po5.why">
       <location file = "PPCHOME/tests/jessie/array_field_addr.jessie/array_field_addr.jc" line = "66" begin = "13" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>

@@ -467,6 +467,11 @@ why --project [...] why/clash_alloc.why
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
+    <goal why_file="why/clash_alloc_po2.why">
+      <location file = "PPCHOME/tests/jessie/clash_alloc.c" line = "32" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
     </behavior>
   </function>
 </project>

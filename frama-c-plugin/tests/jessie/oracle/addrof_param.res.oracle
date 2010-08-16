@@ -1085,7 +1085,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_param_po28.why">
-      <location file = "PPCHOME/tests/jessie/addrof_param.jessie/addrof_param.jc" line = "83" begin = "15" end = "66"/>
+      <location file = "PPCHOME/tests/jessie/addrof_param.c" line = "22" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1095,11 +1095,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_param_po30.why">
-      <location file = "PPCHOME/tests/jessie/addrof_param.jessie/addrof_param.jc" line = "84" begin = "15" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/addrof_param.jessie/addrof_param.jc" line = "83" begin = "15" end = "66"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_param_po31.why">
+      <location file = "PPCHOME/tests/jessie/addrof_param.jessie/addrof_param.jc" line = "84" begin = "15" end = "36"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/addrof_param_po32.why">
       <location file = "PPCHOME/tests/jessie/addrof_param.jessie/addrof_param.jc" line = "84" begin = "15" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

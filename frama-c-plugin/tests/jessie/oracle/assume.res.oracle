@@ -505,11 +505,16 @@ why --project [...] why/assume.why
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assume_po3.why">
-      <location file = "PPCHOME/tests/jessie/assume.c" line = "9" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/assume.c" line = "8" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assume_po4.why">
+      <location file = "PPCHOME/tests/jessie/assume.c" line = "9" begin = "4" end = "5"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/assume_po5.why">
       <location file = "PPCHOME/tests/jessie/assume.c" line = "9" begin = "4" end = "5"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

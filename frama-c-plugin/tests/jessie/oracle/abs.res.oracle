@@ -489,7 +489,7 @@ why --project [...] why/abs.why
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/abs_po10.why">
-      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -499,6 +499,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/abs_po12.why">
+      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/abs_po13.why">
+      <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/abs_po14.why">
       <location file = "PPCHOME/tests/jessie/abs.c" line = "40" begin = "14" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

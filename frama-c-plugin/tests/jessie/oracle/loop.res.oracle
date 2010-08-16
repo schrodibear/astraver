@@ -436,21 +436,21 @@ why --project [...] why/loop.why
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/loop_po2.why">
-      <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "2" end = "5"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
     <goal why_file="why/loop_po3.why">
       <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/loop_po4.why">
+      <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "2" end = "5"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/loop_po5.why">
       <location file = "why/loop.why" line = "334" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/loop_po5.why">
+    <goal why_file="why/loop_po6.why">
       <location file = "why/loop.why" line = "334" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
@@ -458,6 +458,10 @@ text = "ArithOverflow"/>
     <behavior name="Default behavior">
     <goal why_file="why/loop_po1.why">
       <location file = "PPCHOME/tests/jessie/loop.c" line = "10" begin = "15" end = "21"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/loop_po2.why">
+      <location file = "PPCHOME/tests/jessie/loop.c" line = "10" begin = "20" end = "25"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

@@ -711,11 +711,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0160_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0160.jessie/bts0160.jc" line = "55" begin = "14" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0160.c" line = "19" begin = "1" end = "2"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0160_po7.why">
+      <location file = "PPCHOME/tests/jessie/bts0160.jessie/bts0160.jc" line = "55" begin = "14" end = "45"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0160_po8.why">
       <location file = "PPCHOME/tests/jessie/bts0160.jessie/bts0160.jc" line = "55" begin = "14" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

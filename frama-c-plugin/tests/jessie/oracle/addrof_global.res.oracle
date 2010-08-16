@@ -912,7 +912,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po22.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "77" begin = "15" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -922,11 +922,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po24.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "77" begin = "15" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po25.why">
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "40"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/addrof_global_po26.why">
       <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

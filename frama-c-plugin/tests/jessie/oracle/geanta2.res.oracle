@@ -730,7 +730,7 @@ text = "PointerDeref"/>
     <goal why_file="why/geanta2_po10.why">
       <location file = "PPCHOME/tests/jessie/geanta2.c" line = "27" begin = "0" end = "2"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta2_po11.why">
       <location file = "PPCHOME/tests/jessie/geanta2.c" line = "27" begin = "0" end = "2"/>
@@ -738,9 +738,9 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/geanta2_po12.why">
-      <location file = "PPCHOME/tests/jessie/geanta2.c" line = "30" begin = "0" end = "1"/>
+      <location file = "PPCHOME/tests/jessie/geanta2.c" line = "27" begin = "0" end = "2"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/geanta2_po13.why">
       <location file = "PPCHOME/tests/jessie/geanta2.c" line = "30" begin = "0" end = "1"/>
@@ -748,11 +748,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta2_po14.why">
-      <location file = "PPCHOME/tests/jessie/geanta2.c" line = "32" begin = "0" end = "1"/>
+      <location file = "PPCHOME/tests/jessie/geanta2.c" line = "30" begin = "0" end = "1"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta2_po15.why">
+      <location file = "PPCHOME/tests/jessie/geanta2.c" line = "32" begin = "0" end = "1"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/geanta2_po16.why">
       <location file = "PPCHOME/tests/jessie/geanta2.c" line = "32" begin = "0" end = "1"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

@@ -898,11 +898,16 @@ why --project [...] why/enum.why
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po10.why">
-      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "75" begin = "15" end = "128"/>
+      <location file = "PPCHOME/tests/jessie/enum.c" line = "39" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/enum_po11.why">
+      <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "75" begin = "15" end = "128"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/enum_po12.why">
       <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "75" begin = "15" end = "128"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

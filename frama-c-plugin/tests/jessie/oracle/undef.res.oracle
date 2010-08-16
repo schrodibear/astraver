@@ -7933,12 +7933,12 @@ why --project [...] why/undef.why
   <function name="Function volatile_cast_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po200.why">
+    <goal why_file="why/undef_po211.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "639" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po201.why">
+    <goal why_file="why/undef_po212.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "639" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -7948,17 +7948,17 @@ text = "PointerDeref"/>
   <function name="Function udiv0_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po197.why">
+    <goal why_file="why/undef_po208.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "74" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/undef_po198.why">
+    <goal why_file="why/undef_po209.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "74" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po199.why">
+    <goal why_file="why/undef_po210.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "74" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -7968,21 +7968,26 @@ text = "ArithOverflow"/>
   <function name="Function udiv0_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po193.why">
+    <goal why_file="why/undef_po203.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "81" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/undef_po204.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "81" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po194.why">
+    <goal why_file="why/undef_po205.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "81" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po195.why">
+    <goal why_file="why/undef_po206.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "79" begin = "0" end = "12"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po196.why">
+    <goal why_file="why/undef_po207.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "79" begin = "0" end = "12"/>
       <explain kind = "Post"/>
     </goal>
@@ -7991,12 +7996,17 @@ text = "ArithOverflow"/>
   <function name="Function udiv0_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po191.why">
+    <goal why_file="why/undef_po200.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "94" begin = "6" end = "12"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/undef_po201.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "94" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po192.why">
+    <goal why_file="why/undef_po202.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "94" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8006,12 +8016,12 @@ text = "ArithOverflow"/>
   <function name="Function stack_access_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po189.why">
+    <goal why_file="why/undef_po198.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "331" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po190.why">
+    <goal why_file="why/undef_po199.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "331" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -8021,32 +8031,32 @@ text = "PointerDeref"/>
   <function name="Function signed_overflow_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po183.why">
+    <goal why_file="why/undef_po192.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "511" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po184.why">
+    <goal why_file="why/undef_po193.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "511" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po185.why">
+    <goal why_file="why/undef_po194.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "515" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po186.why">
+    <goal why_file="why/undef_po195.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "515" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po187.why">
+    <goal why_file="why/undef_po196.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "515" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po188.why">
+    <goal why_file="why/undef_po197.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "515" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8056,21 +8066,21 @@ text = "ArithOverflow"/>
   <function name="Function signed_overflow_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po179.why">
+    <goal why_file="why/undef_po188.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "523" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po180.why">
+    <goal why_file="why/undef_po189.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "523" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po181.why">
+    <goal why_file="why/undef_po190.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "521" begin = "0" end = "22"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po182.why">
+    <goal why_file="why/undef_po191.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "521" begin = "0" end = "22"/>
       <explain kind = "Post"/>
     </goal>
@@ -8079,22 +8089,22 @@ text = "ArithOverflow"/>
   <function name="Function signed_overflow_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po175.why">
+    <goal why_file="why/undef_po184.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "532" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po176.why">
+    <goal why_file="why/undef_po185.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "532" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po177.why">
+    <goal why_file="why/undef_po186.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "536" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po178.why">
+    <goal why_file="why/undef_po187.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "536" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8104,24 +8114,24 @@ text = "ArithOverflow"/>
   <function name="Function shift_right_unsigned_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po172.why">
+    <goal why_file="why/undef_po181.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/undef_po173.why">
+    <goal why_file="why/undef_po182.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po174.why">
+    <goal why_file="why/undef_po183.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po171.why">
+    <goal why_file="why/undef_po180.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8130,19 +8140,19 @@ text = "ArithOverflow"/>
   <function name="Function shift_right_unsigned_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po169.why">
+    <goal why_file="why/undef_po178.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "268" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po170.why">
+    <goal why_file="why/undef_po179.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "268" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po168.why">
+    <goal why_file="why/undef_po177.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "268" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8151,39 +8161,45 @@ text = "ArithOverflow"/>
   <function name="Function shift_right_unsigned_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po166.why">
+    <goal why_file="why/undef_po175.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "281" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po167.why">
+    <goal why_file="why/undef_po176.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "281" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
+    </goal>
+    </behavior>
+    <behavior name="Default behavior">
+    <goal why_file="why/undef_po174.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "281" begin = "6" end = "12"/>
+      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
   <function name="Function shift_right_signed_wrong_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po163.why">
+    <goal why_file="why/undef_po171.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/undef_po164.why">
+    <goal why_file="why/undef_po172.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po165.why">
+    <goal why_file="why/undef_po173.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po162.why">
+    <goal why_file="why/undef_po170.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8192,19 +8208,19 @@ text = "ArithOverflow"/>
   <function name="Function shift_right_signed_wrong_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po160.why">
+    <goal why_file="why/undef_po168.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "220" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po161.why">
+    <goal why_file="why/undef_po169.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "220" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po159.why">
+    <goal why_file="why/undef_po167.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "220" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8213,23 +8229,23 @@ text = "ArithOverflow"/>
   <function name="Function shift_right_signed_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po157.why">
+    <goal why_file="why/undef_po165.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po158.why">
+    <goal why_file="why/undef_po166.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po155.why">
+    <goal why_file="why/undef_po163.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po156.why">
+    <goal why_file="why/undef_po164.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8238,29 +8254,33 @@ text = "ArithOverflow"/>
   <function name="Function shift_right_signed_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po151.why">
+    <goal why_file="why/undef_po159.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "242" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po152.why">
+    <goal why_file="why/undef_po160.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "242" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po153.why">
+    <goal why_file="why/undef_po161.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po154.why">
+    <goal why_file="why/undef_po162.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po150.why">
+    <goal why_file="why/undef_po157.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "6" end = "12"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po158.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "6" end = "12"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8269,19 +8289,19 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_unsigned_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po148.why">
+    <goal why_file="why/undef_po155.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "184" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po149.why">
+    <goal why_file="why/undef_po156.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "184" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po147.why">
+    <goal why_file="why/undef_po154.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "184" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8290,19 +8310,19 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_unsigned_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po145.why">
+    <goal why_file="why/undef_po152.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "192" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po146.why">
+    <goal why_file="why/undef_po153.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "192" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po144.why">
+    <goal why_file="why/undef_po151.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "192" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8311,15 +8331,21 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_unsigned_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po142.why">
+    <goal why_file="why/undef_po149.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "205" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po143.why">
+    <goal why_file="why/undef_po150.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "205" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
+    </goal>
+    </behavior>
+    <behavior name="Default behavior">
+    <goal why_file="why/undef_po148.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "205" begin = "6" end = "12"/>
+      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
@@ -8329,27 +8355,27 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_signed_wrong_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po140.why">
+    <goal why_file="why/undef_po146.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po141.why">
+    <goal why_file="why/undef_po147.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po137.why">
+    <goal why_file="why/undef_po143.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po138.why">
+    <goal why_file="why/undef_po144.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po139.why">
+    <goal why_file="why/undef_po145.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8358,27 +8384,27 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_signed_wrong_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po135.why">
+    <goal why_file="why/undef_po141.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po136.why">
+    <goal why_file="why/undef_po142.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po132.why">
+    <goal why_file="why/undef_po138.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po133.why">
+    <goal why_file="why/undef_po139.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po134.why">
+    <goal why_file="why/undef_po140.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8387,31 +8413,31 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_signed_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po130.why">
+    <goal why_file="why/undef_po136.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po131.why">
+    <goal why_file="why/undef_po137.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po126.why">
+    <goal why_file="why/undef_po132.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po127.why">
+    <goal why_file="why/undef_po133.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po128.why">
+    <goal why_file="why/undef_po134.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po129.why">
+    <goal why_file="why/undef_po135.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "2" end = "8"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8420,43 +8446,51 @@ text = "ArithOverflow"/>
   <function name="Function shift_left_signed_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po120.why">
+    <goal why_file="why/undef_po126.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "165" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po121.why">
+    <goal why_file="why/undef_po127.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "165" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po122.why">
+    <goal why_file="why/undef_po128.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "165" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po123.why">
+    <goal why_file="why/undef_po129.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "165" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po124.why">
+    <goal why_file="why/undef_po130.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po125.why">
+    <goal why_file="why/undef_po131.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/undef_po118.why">
+    <goal why_file="why/undef_po122.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "165" begin = "2" end = "4"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po119.why">
+    <goal why_file="why/undef_po123.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "165" begin = "2" end = "4"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po124.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "6" end = "12"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po125.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "6" end = "12"/>
       <explain kind = "Assert"/>
     </goal>
@@ -8465,45 +8499,45 @@ text = "ArithOverflow"/>
   <function name="Function ptr_sub_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po109.why">
+    <goal why_file="why/undef_po113.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "374" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/undef_po110.why">
+    <goal why_file="why/undef_po114.why">
       <location file = "why/undef.why" line = "4903" begin = "17" end = "96"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po111.why">
+    <goal why_file="why/undef_po115.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "375" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/undef_po112.why">
+    <goal why_file="why/undef_po116.why">
       <location file = "why/undef.why" line = "4914" begin = "16" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po113.why">
+    <goal why_file="why/undef_po117.why">
       <location file = "why/undef.why" line = "4928" begin = "47" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/undef_po114.why">
+    <goal why_file="why/undef_po118.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "379" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po115.why">
+    <goal why_file="why/undef_po119.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "379" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po116.why">
+    <goal why_file="why/undef_po120.why">
       <location file = "why/undef.why" line = "4932" begin = "13" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/undef_po117.why">
+    <goal why_file="why/undef_po121.why">
       <location file = "why/undef.why" line = "4935" begin = "14" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
@@ -8513,26 +8547,26 @@ text = ""/>
   <function name="Function ptr_sub_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po104.why">
+    <goal why_file="why/undef_po108.why">
       <location file = "why/undef.why" line = "4818" begin = "51" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/undef_po105.why">
+    <goal why_file="why/undef_po109.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "388" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po106.why">
+    <goal why_file="why/undef_po110.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "388" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po107.why">
+    <goal why_file="why/undef_po111.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "386" begin = "0" end = "14"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po108.why">
+    <goal why_file="why/undef_po112.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "386" begin = "0" end = "14"/>
       <explain kind = "Post"/>
     </goal>
@@ -8541,31 +8575,31 @@ text = "ArithOverflow"/>
   <function name="Function ptr_sub_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po98.why">
+    <goal why_file="why/undef_po102.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "395" begin = "6" end = "7"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/undef_po99.why">
+    <goal why_file="why/undef_po103.why">
       <location file = "why/undef.why" line = "4745" begin = "19" end = "101"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/undef_po100.why">
+    <goal why_file="why/undef_po104.why">
       <location file = "why/undef.why" line = "4759" begin = "46" end = "72"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/undef_po101.why">
+    <goal why_file="why/undef_po105.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "399" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po102.why">
+    <goal why_file="why/undef_po106.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "399" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po103.why">
+    <goal why_file="why/undef_po107.why">
       <location file = "why/undef.why" line = "4763" begin = "12" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
@@ -8578,12 +8612,12 @@ text = ""/>
   <function name="Function oob_pointer_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po96.why">
+    <goal why_file="why/undef_po100.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "411" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po97.why">
+    <goal why_file="why/undef_po101.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "411" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -8593,21 +8627,21 @@ text = "PointerDeref"/>
   <function name="Function oob_pointer_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po92.why">
+    <goal why_file="why/undef_po96.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "419" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po93.why">
+    <goal why_file="why/undef_po97.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "419" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po94.why">
+    <goal why_file="why/undef_po98.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "416" begin = "0" end = "18"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po95.why">
+    <goal why_file="why/undef_po99.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "416" begin = "0" end = "18"/>
       <explain kind = "Post"/>
     </goal>
@@ -8616,12 +8650,12 @@ text = "PointerDeref"/>
   <function name="Function oob_pointer_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po90.why">
+    <goal why_file="why/undef_po94.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "429" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po91.why">
+    <goal why_file="why/undef_po95.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "429" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -8631,12 +8665,12 @@ text = "PointerDeref"/>
   <function name="Function null_ptr_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po88.why">
+    <goal why_file="why/undef_po92.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "292" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po89.why">
+    <goal why_file="why/undef_po93.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "292" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -8646,21 +8680,21 @@ text = "PointerDeref"/>
   <function name="Function null_ptr_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po84.why">
+    <goal why_file="why/undef_po88.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "299" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po85.why">
+    <goal why_file="why/undef_po89.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "299" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po86.why">
+    <goal why_file="why/undef_po90.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "297" begin = "0" end = "15"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po87.why">
+    <goal why_file="why/undef_po91.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "297" begin = "0" end = "15"/>
       <explain kind = "Post"/>
     </goal>
@@ -8669,26 +8703,26 @@ text = "PointerDeref"/>
   <function name="Function null_ptr_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po79.why">
+    <goal why_file="why/undef_po83.why">
       <location file = "why/undef.why" line = "4310" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/undef_po80.why">
+    <goal why_file="why/undef_po84.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "312" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po81.why">
+    <goal why_file="why/undef_po85.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "312" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po82.why">
+    <goal why_file="why/undef_po86.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "304" begin = "0" end = "13"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po83.why">
+    <goal why_file="why/undef_po87.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "304" begin = "0" end = "13"/>
       <explain kind = "Post"/>
     </goal>
@@ -8697,22 +8731,22 @@ text = "PointerDeref"/>
   <function name="Function multiple_update_wrong_3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po75.why">
+    <goal why_file="why/undef_po79.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "591" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po76.why">
+    <goal why_file="why/undef_po80.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "591" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po77.why">
+    <goal why_file="why/undef_po81.why">
       <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1328" begin = "19" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po78.why">
+    <goal why_file="why/undef_po82.why">
       <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1328" begin = "19" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -8722,22 +8756,22 @@ text = "PointerDeref"/>
   <function name="Function multiple_update_wrong_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po71.why">
+    <goal why_file="why/undef_po75.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "583" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po72.why">
+    <goal why_file="why/undef_po76.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "583" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po73.why">
+    <goal why_file="why/undef_po77.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "583" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po74.why">
+    <goal why_file="why/undef_po78.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "583" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8747,32 +8781,32 @@ text = "ArithOverflow"/>
   <function name="Function multiple_update_wrong_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po65.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1294" begin = "19" end = "44"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po66.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1294" begin = "19" end = "44"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po67.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1296" begin = "19" end = "46"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po68.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1296" begin = "19" end = "46"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/undef_po69.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1294" begin = "19" end = "44"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po70.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1294" begin = "19" end = "44"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po71.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1296" begin = "19" end = "46"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po72.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1296" begin = "19" end = "46"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po73.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "576" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po70.why">
+    <goal why_file="why/undef_po74.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "576" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8782,41 +8816,41 @@ text = "ArithOverflow"/>
   <function name="Function multiple_update_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po57.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1348" begin = "19" end = "49"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po58.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1348" begin = "19" end = "49"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po59.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1350" begin = "19" end = "49"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po60.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1350" begin = "19" end = "49"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/undef_po61.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "599" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1348" begin = "19" end = "49"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po62.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1348" begin = "19" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po63.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1350" begin = "19" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po64.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1350" begin = "19" end = "49"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po65.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "599" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po63.why">
+    <goal why_file="why/undef_po66.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "599" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/undef_po67.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "597" begin = "0" end = "22"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po64.why">
+    <goal why_file="why/undef_po68.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "597" begin = "0" end = "22"/>
       <explain kind = "Post"/>
     </goal>
@@ -8825,37 +8859,37 @@ text = "ArithOverflow"/>
   <function name="Function multiple_update_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po50.why">
+    <goal why_file="why/undef_po54.why">
       <location file = "why/undef.why" line = "3890" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/undef_po51.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1376" begin = "22" end = "51"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po52.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1376" begin = "22" end = "51"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po53.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1378" begin = "22" end = "51"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/undef_po54.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1378" begin = "22" end = "51"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/undef_po55.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1376" begin = "22" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po56.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1376" begin = "22" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po57.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1378" begin = "22" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po58.why">
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1378" begin = "22" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/undef_po59.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "612" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po56.why">
+    <goal why_file="why/undef_po60.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "612" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8865,12 +8899,12 @@ text = "ArithOverflow"/>
   <function name="Function mod_string">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po48.why">
+    <goal why_file="why/undef_po52.why">
       <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1465" begin = "16" end = "58"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/undef_po49.why">
+    <goal why_file="why/undef_po53.why">
       <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1465" begin = "16" end = "58"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
@@ -8880,17 +8914,17 @@ text = "PointerDeref"/>
   <function name="Function mod0_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po45.why">
+    <goal why_file="why/undef_po49.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/undef_po46.why">
+    <goal why_file="why/undef_po50.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po47.why">
+    <goal why_file="why/undef_po51.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "104" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8900,21 +8934,26 @@ text = "ArithOverflow"/>
   <function name="Function mod0_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po41.why">
+    <goal why_file="why/undef_po44.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "111" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/undef_po45.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "111" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po42.why">
+    <goal why_file="why/undef_po46.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "111" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po43.why">
+    <goal why_file="why/undef_po47.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "109" begin = "0" end = "11"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po44.why">
+    <goal why_file="why/undef_po48.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "109" begin = "0" end = "11"/>
       <explain kind = "Post"/>
     </goal>
@@ -8923,12 +8962,17 @@ text = "ArithOverflow"/>
   <function name="Function mod0_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po39.why">
+    <goal why_file="why/undef_po41.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "124" begin = "6" end = "12"/>
+      <explain kind = "Pre"
+text = "DivByZero"/>
+    </goal>
+    <goal why_file="why/undef_po42.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "124" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po40.why">
+    <goal why_file="why/undef_po43.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "124" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8941,11 +8985,11 @@ text = "ArithOverflow"/>
   <function name="Function missing_return_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po37.why">
+    <goal why_file="why/undef_po39.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "550" begin = "0" end = "21"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po38.why">
+    <goal why_file="why/undef_po40.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "550" begin = "0" end = "21"/>
       <explain kind = "Post"/>
     </goal>
@@ -8960,11 +9004,11 @@ text = "ArithOverflow"/>
   <function name="Function initialization_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po35.why">
+    <goal why_file="why/undef_po37.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "479" begin = "0" end = "21"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po36.why">
+    <goal why_file="why/undef_po38.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "479" begin = "0" end = "21"/>
       <explain kind = "Post"/>
     </goal>
@@ -8976,17 +9020,17 @@ text = "ArithOverflow"/>
   <function name="Function div0_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po32.why">
+    <goal why_file="why/undef_po34.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "25" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/undef_po33.why">
+    <goal why_file="why/undef_po35.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "25" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po34.why">
+    <goal why_file="why/undef_po36.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "25" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -8996,15 +9040,10 @@ text = "ArithOverflow"/>
   <function name="Function div0_unsafe_pos">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po23.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "39" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "DivByZero"/>
-    </goal>
     <goal why_file="why/undef_po24.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "39" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/undef_po25.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "39" begin = "2" end = "8"/>
@@ -9012,10 +9051,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po26.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "39" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/undef_po27.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "37" begin = "0" end = "15"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po27.why">
+    <goal why_file="why/undef_po28.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "37" begin = "0" end = "15"/>
       <explain kind = "Post"/>
     </goal>
@@ -9024,21 +9068,26 @@ text = "ArithOverflow"/>
   <function name="Function div0_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po28.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "32" begin = "2" end = "8"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
     <goal why_file="why/undef_po29.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "32" begin = "2" end = "8"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/undef_po30.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "32" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/undef_po31.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "32" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/undef_po32.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "30" begin = "0" end = "11"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/undef_po31.why">
+    <goal why_file="why/undef_po33.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "30" begin = "0" end = "11"/>
       <explain kind = "Post"/>
     </goal>
@@ -9070,9 +9119,14 @@ text = "ArithOverflow"/>
     <goal why_file="why/undef_po21.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "52" begin = "6" end = "12"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/undef_po22.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "52" begin = "6" end = "12"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/undef_po23.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "52" begin = "6" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>

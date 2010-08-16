@@ -1221,7 +1221,7 @@ why --project [...] why/minimum_sort.why
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po40.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.c" line = "11" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.c" line = "10" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1231,7 +1231,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po42.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "92" begin = "14" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.c" line = "11" begin = "2" end = "3"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1241,11 +1241,16 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po44.why">
-      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "92" begin = "14" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minimum_sort_po45.why">
+      <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "51"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/minimum_sort_po46.why">
       <location file = "PPCHOME/tests/jessie/minimum_sort.jessie/minimum_sort.jc" line = "93" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>

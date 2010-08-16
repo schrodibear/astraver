@@ -2761,55 +2761,45 @@ why --project [...] why/forum_cifre.why
   <function name="Function strncpy">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/forum_cifre_po8.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/forum_cifre_po9.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/forum_cifre_po10.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "433" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po11.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "433" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po12.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "433" begin = "30" end = "57"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po13.why">
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "433" begin = "30" end = "57"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po14.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/forum_cifre_po14.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/forum_cifre_po15.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "36" begin = "4" end = "9"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po16.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po17.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po18.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
@@ -2822,21 +2812,31 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po20.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "463" begin = "36" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po21.why">
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "38" begin = "4" end = "6"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po22.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "463" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/forum_cifre_po22.why">
+    <goal why_file="why/forum_cifre_po23.why">
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "463" begin = "36" end = "61"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po24.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "39" begin = "6" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/forum_cifre_po23.why">
+    <goal why_file="why/forum_cifre_po25.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "39" begin = "6" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
@@ -2852,11 +2852,21 @@ text = "ArithOverflow"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po6.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "60" begin = "2" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "59" begin = "2" end = "4"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po7.why">
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "60" begin = "2" end = "9"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po8.why">
+      <location file = "PPCHOME/tests/jessie/forum_cifre.c" line = "60" begin = "2" end = "9"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po9.why">
       <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "504" begin = "14" end = "71"/>
       <explain kind = "Pre"
 text = "UserCall"/>
