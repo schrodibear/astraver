@@ -1,3 +1,5 @@
+Warning, generating a dummy variant for loop. Please provide a real variant or set termination policy to user or never
+Warning, generating a dummy variant for loop. Please provide a real variant or set termination policy to user or never
 Fatal error: exception Assert_failure("src/fastwp.ml", 48, 17)
 make: *** [why/asm_memset2.wpr] Error 2
 make: *** [asm_memset2.regtest] Error 2
