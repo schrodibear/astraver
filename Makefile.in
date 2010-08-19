@@ -116,7 +116,7 @@ PVSLIB = @PVSLIB@
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
-            jc/numconst.ml \
+            jc/numconst.ml jc/jc_stdlib.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
 	    jc/jc_ai.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
@@ -339,6 +339,14 @@ JCCMO = src/version.cmo \
 	jc/jc_frame.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
+
+jc/jc_stdlib.ml: jc/jc_stdlib_lt312.ml jc/jc_stdlib_ge312.ml
+	rm -f $@
+	case $(OCAMLVERSION) in \
+         3.0*|3.10*|3.11*) cp jc/jc_stdlib_lt312.ml $@ ;; \
+         *) cp jc/jc_stdlib_ge312.ml $@ ;; \
+        esac
+	chmod -w $@
 
 $(JCCMX_EXPORT): OFLAGS:=$(OFLAGS) -for-pack Jc
 
