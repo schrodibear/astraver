@@ -64,7 +64,7 @@ let jc_axiom = "_jc_axiom_"
 
 let id_uniq = let c = ref 0 in fun () -> incr c; string_of_int !c
 
-let remove_double compare l = 
+let remove_double compare l =
   match List.fast_sort compare l with
     | [] -> []
     | ele::l ->
@@ -75,7 +75,7 @@ let remove_double compare l =
         ele::(aux ele l)
 
 (** Petits Modules bien utiles *)
-module MyBag = 
+module MyBag =
 struct
   let add_suffix s = s^"_"^mybag_suffix
 
@@ -94,7 +94,7 @@ struct
   let all = LVar nall
 
   let make_rem elt set =
-    if set == empty 
+    if set == empty
     then empty
     else LApp(nrem,[elt;set])
 
@@ -115,7 +115,7 @@ struct
     | {logic_type_args = [ty]} -> ty
     | _ -> assert false
 
-  let iin = 
+  let iin =
     let pid = make_pred nin in
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a_in" in
     pid.jc_logic_info_poly_args <- [tvar];
@@ -123,7 +123,7 @@ struct
     pid.jc_logic_info_parameters <- [Jc_pervasives.var tvar "x";
                                      Jc_pervasives.var (jc_ty tvar) "s"];
     pid
-    
+
   let make_jc_in l =
     new assertion (JCAapp
                      {
@@ -133,7 +133,7 @@ struct
                        jc_app_label_assoc = []
                      })
 
-  let idisj = 
+  let idisj =
     let pid = make_pred ndisj in
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
     pid.jc_logic_info_poly_args <- [tvar];
@@ -141,7 +141,7 @@ struct
     pid.jc_logic_info_parameters <- [Jc_pervasives.var (jc_ty tvar) "s1";
                                      Jc_pervasives.var (jc_ty tvar) "s2"];
     pid
-    
+
   let make_jc_disj l =
     new assertion (JCAapp
                      {
@@ -152,7 +152,7 @@ struct
                      })
 
 
-  let isub = 
+  let isub =
     let pid = make_pred sub_pred in
     let tvar = Jc_type_var.type_var_from_string ~univ:true "a" in
     pid.jc_logic_info_poly_args <- [tvar];
@@ -174,7 +174,7 @@ struct
 
 
   type elt_set =
-      [ `Empty | `All | `MyBag of term 
+      [ `Empty | `All | `MyBag of term
       | `Elt of term]
 
   (* this order is important *)
@@ -184,7 +184,7 @@ struct
     | `Elt _ -> 3
     | `MyBag _ -> 4
 
-  let compare e1 e2 = 
+  let compare e1 e2 =
     let c = compare (num e1) (num e2) in
     if c <> 0 then c else compare e1 e2
 
@@ -194,7 +194,7 @@ struct
     | `MyBag s -> fprintf fmt "mybag(%a)" Output.fprintf_term s
     | `Elt s -> fprintf fmt "elt(%a)" Output.fprintf_term s
 
- (* let make_inter_rem_list (l:elt_set list) = 
+ (* let make_inter_rem_list (l:elt_set list) =
     let rec aux  = function
     | [] -> all
     | `Empty::_ -> empty
@@ -219,14 +219,14 @@ struct
     name : string;
     ty_mem : logic_type;
   }
-    
+
   let compare t1 t2 = Memory.compare t1.mem t2.mem
-      
-  let from_memory for_one (((mc,_distr) as m),label) = 
+
+  let from_memory for_one (((mc,_distr) as m),label) =
     let (s,_,_) = tmemory_param ~label_in_name:true label m
       (*memory_name (mc,distr)*) in
     if for_one
-    then     
+    then
       {for_one = true;
        mem = m;
        label = label;
@@ -241,7 +241,7 @@ struct
        name = s^in_suffix;
        ty_mem = memory_type mc}
 
-  let is_memory t m = 
+  let is_memory t m =
     (*Jc_options.lprintf "is_memory : %s = %s@." m t.mem_name;*)
     m = t.mem_name
   let is_memory_var t = function
@@ -259,21 +259,21 @@ struct
   let jc_ty_elt t =
     let root = match alloc_class_of_mem_class (fst t.mem) with
       | JCalloc_root r -> r
-      | JCalloc_bitvector _ -> assert false in
+      | JCalloc_bitvector -> assert false in
     JCTpointer(JCroot root,None,None)
 
   let jc_ty t = MyBag.jc_ty (jc_ty_elt t)
-    
-  let ty t = 
+
+  let ty t =
     let ty = ty_elt t in
-    if t.for_one 
-    then ty 
+    if t.for_one
+    then ty
     else MyBag.ty ty
 
   let mem_name t = t.mem_name
-  let mem_name2 t = 
+  let mem_name2 t =
     let mem_name = memory_name t.mem in
-    if t.for_one 
+    if t.for_one
     then mem_name^"_elt"
     else mem_name
 end
@@ -308,8 +308,6 @@ let app_in_logic f fparams label notin =
   let app = {jc_app_fun = fin;
              jc_app_args = fparams;
              jc_app_region_assoc = [];
-             jc_app_label_assoc = 
+             jc_app_label_assoc =
       List.map (fun e -> (e,label)) fin.jc_logic_info_labels} in
   new term (NotIn.jc_ty notin) (JCTapp app)
-
-  
