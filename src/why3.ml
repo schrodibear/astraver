@@ -143,7 +143,7 @@ let rec predicate fmt = function
   | Papp (id, [t1; t2], _) when is_neq id ->
       fprintf fmt "(%a <> %a)" term t1 term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[(Int.(<=)(0,%a) and@ Int.(<)(%a,%a))@]"
+      fprintf fmt "@[((Int.(<=) 0 %a) and@ (Int.(<) %a %a))@]"
         term b term a term b
   | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "@[false (* was well_founded(...) *)@]" 
