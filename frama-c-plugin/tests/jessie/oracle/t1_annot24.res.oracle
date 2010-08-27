@@ -5669,7 +5669,7 @@ why --project [...] why/t1_annot24.why
     </behavior>
     <behavior name="Normal behavior `Buchi_property_behavior'">
     <goal why_file="why/t1_annot24_po126.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "220" begin = "14" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "220" begin = "15" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/t1_annot24_po127.why">
@@ -6003,7 +6003,7 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Normal behavior `Buchi_property_behavior'">
     <goal why_file="why/t1_annot24_po54.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "250" begin = "14" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "250" begin = "15" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/t1_annot24_po55.why">
@@ -6162,7 +6162,7 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Normal behavior `j'">
     <goal why_file="why/t1_annot24_po19.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "193" begin = "14" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "193" begin = "15" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/t1_annot24_po20.why">
@@ -6228,7 +6228,7 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Normal behavior `Buchi_property_behavior'">
     <goal why_file="why/t1_annot24_po1.why">
-      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "187" begin = "14" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "187" begin = "15" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/t1_annot24_po2.why">

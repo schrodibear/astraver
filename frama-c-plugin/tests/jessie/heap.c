@@ -118,9 +118,9 @@ int size = 0;
 
 /*@ global invariant size_inv : 0 <= size < MAXSIZE; */
 
-//@ global invariant is_heap_inv: is_heap(tree_of_array(heap, 0, size));
+//@ global invariant is_heap_inv: is_heap(tree_of_array(heap+0, 0, size));
 
-//@ logic bag model{L} = bag_of_tree(tree_of_array(heap, 0, size));
+//@ logic bag model{L} = bag_of_tree(tree_of_array(heap+0, 0, size));
 
 /**** the code ************************************************************/
 
@@ -145,11 +145,11 @@ void push(int x) {
   /*@ loop invariant
     @   0 <= i <= size &&
     @   (i == size ==>
-    @      is_heap(tree_of_array(heap, 0, size)) &&
+    @      is_heap(tree_of_array(heap+0, 0, size)) &&
     @      model == model{Pre}) &&
     @   (i < size ==>
-    @      is_heap(tree_of_array(heap, 0, size+1)) &&
-    @      bag_of_tree(tree_of_array(heap, 0, size+1)) ==
+    @      is_heap(tree_of_array(heap+0, 0, size+1)) &&
+    @      bag_of_tree(tree_of_array(heap+0, 0, size+1)) ==
     @      add_bag(heap[i], \at(model,Pre)));
     @ loop assigns
     @   heap[..];

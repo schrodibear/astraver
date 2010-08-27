@@ -166,10 +166,10 @@ invariant size_inv :
 ((0 <= size) && (size < 100))
 
 invariant is_heap_inv :
-is_heap(tree_of_array{Here}(heap, 0, size))
+is_heap(tree_of_array{Here}((heap + 0), 0, size))
 
 logic bag model{L}() =
-bag_of_tree(tree_of_array{L}(heap, 0, size))
+bag_of_tree(tree_of_array{L}((heap + 0), 0, size))
 
 unit clear()
 behavior default:
@@ -206,13 +206,14 @@ behavior default:
            invariant (C_5 : ((((C_8 : (0 <= i)) && (C_9 : (i <= size))) &&
                                (C_10 : ((i == size) ==>
                                          (is_heap(tree_of_array{Here}(
-                                                  heap, 0, size)) &&
+                                                  (heap + 0), 0, size)) &&
                                            (model{Here}() == model{Pre}()))))) &&
                               (C_11 : ((i < size) ==>
                                         (is_heap(tree_of_array{Here}(
-                                                 heap, 0, (size + 1))) &&
+                                                 (heap + 0), 0, (size + 1))) &&
                                           (bag_of_tree(tree_of_array{Here}(
-                                                       heap, 0, (size + 1))) ==
+                                                       (heap + 0), 0,
+                                                       (size + 1))) ==
                                             add_bag((heap + i).int_M,
                                                     \at(model{Pre}(),Pre))))))));
          variant (C_4 : i);
@@ -493,7 +494,8 @@ axiom is_heap_def_5 :
 logic tree_of_array: int_P pointer, int, int, (int_P, int32) memory -> tree
 
 predicate is_heap_inv(int_P_int_M_heap_1:(int_P, int32) memory, size:int32) =
- is_heap(tree_of_array(heap, (0), integer_of_int32(size), int_P_int_M_heap_1))
+ is_heap(tree_of_array(shift(heap, (0)), (0), integer_of_int32(size),
+         int_P_int_M_heap_1))
 
 logic occ_bag: int, bag -> int
 
@@ -516,8 +518,8 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
 
 function model(int_P_int_M_heap_1_at_L:(int_P, int32) memory,
  size_at_L:int32) : bag =
- bag_of_tree(tree_of_array(heap, (0), integer_of_int32(size_at_L),
-             int_P_int_M_heap_1_at_L))
+ bag_of_tree(tree_of_array(shift(heap, (0)), (0),
+             integer_of_int32(size_at_L), int_P_int_M_heap_1_at_L))
 
 axiom no_assign_tree_of_array_0 :
  (forall tmp:int_P pset.
@@ -1400,17 +1402,18 @@ let push_ensures_default =
                    le_int(integer_of_int32(i), integer_of_int32(size)))
                   and ((JC_79:
                        (eq_int(integer_of_int32(i), integer_of_int32(size)) ->
-                        (is_heap(tree_of_array(heap, (0),
+                        (is_heap(tree_of_array(shift(heap, (0)), (0),
                                  integer_of_int32(size), int_P_int_M_heap_1))
                         and (model(int_P_int_M_heap_1, size) = model(int_P_int_M_heap_1@init,
                                                                size@init)))))
                       and (JC_80:
                           (lt_int(integer_of_int32(i),
                            integer_of_int32(size)) ->
-                           (is_heap(tree_of_array(heap, (0),
+                           (is_heap(tree_of_array(shift(heap, (0)), (0),
                                     add_int(integer_of_int32(size), (1)),
                                     int_P_int_M_heap_1))
-                           and (bag_of_tree(tree_of_array(heap, (0),
+                           and (bag_of_tree(tree_of_array(shift(heap, (0)),
+                                            (0),
                                             add_int(integer_of_int32(size),
                                             (1)), int_P_int_M_heap_1)) = 
                                add_bag(integer_of_int32(select(int_P_int_M_heap_1,
@@ -1525,7 +1528,7 @@ let push_safety =
                      le_int(integer_of_int32(i), integer_of_int32(size)))
                     and ((JC_63:
                          (eq_int(integer_of_int32(i), integer_of_int32(size)) ->
-                          (is_heap(tree_of_array(heap, (0),
+                          (is_heap(tree_of_array(shift(heap, (0)), (0),
                                    integer_of_int32(size),
                                    int_P_int_M_heap_1))
                           and (model(int_P_int_M_heap_1, size) = model(int_P_int_M_heap_1@init,
@@ -1533,10 +1536,11 @@ let push_safety =
                         and (JC_64:
                             (lt_int(integer_of_int32(i),
                              integer_of_int32(size)) ->
-                             (is_heap(tree_of_array(heap, (0),
+                             (is_heap(tree_of_array(shift(heap, (0)), (0),
                                       add_int(integer_of_int32(size), (1)),
                                       int_P_int_M_heap_1))
-                             and (bag_of_tree(tree_of_array(heap, (0),
+                             and (bag_of_tree(tree_of_array(shift(heap, (0)),
+                                              (0),
                                               add_int(integer_of_int32(size),
                                               (1)), int_P_int_M_heap_1)) = 
                                  add_bag(integer_of_int32(select(int_P_int_M_heap_1,
@@ -1669,30 +1673,30 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po76.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "225" begin = "27" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "226" begin = "27" end = "56"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po77.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "225" begin = "27" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "226" begin = "27" end = "56"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "why/heap.why" line = "1197" begin = "43" end = "72"/>
+      <location file = "why/heap.why" line = "1199" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1197" begin = "43" end = "72"/>
+      <location file = "why/heap.why" line = "1199" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "232" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "233" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po81.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "232" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "233" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1729,23 +1733,23 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po54.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "147" begin = "8" end = "106"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "147" begin = "8" end = "108"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po55.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "178"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po56.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "178"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po57.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1725"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1798"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1725"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1798"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
@@ -1757,27 +1761,27 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po61.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "147" begin = "8" end = "106"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "147" begin = "8" end = "108"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po62.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "147" begin = "8" end = "106"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "147" begin = "8" end = "108"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po63.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "178"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po64.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "178"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po65.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1725"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1798"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1725"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "9" end = "1798"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">
@@ -1904,12 +1908,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po43.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "302" begin = "30" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "303" begin = "30" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po44.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "302" begin = "30" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "303" begin = "30" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1922,12 +1926,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po47.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "310" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "311" begin = "18" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "310" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "311" begin = "18" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1954,11 +1958,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po11.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "278" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "279" begin = "12" end = "1452"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "278" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "279" begin = "12" end = "1452"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
@@ -1970,11 +1974,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po15.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "278" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "279" begin = "12" end = "1452"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "278" begin = "12" end = "1452"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "279" begin = "12" end = "1452"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">
@@ -3082,8 +3086,8 @@ axiom is_heap_def_5:
 logic tree_of_array : int_P pointer, int, int, (int_P, int32) memory -> tree
 
 predicate is_heap_inv(int_P_int_M_heap_1: (int_P, int32) memory,
-  size: int32) = is_heap(tree_of_array(heap, 0, integer_of_int32(size),
-  int_P_int_M_heap_1))
+  size: int32) = is_heap(tree_of_array(shift(heap, 0), 0,
+  integer_of_int32(size), int_P_int_M_heap_1))
 
 logic occ_bag : int, bag -> int
 
@@ -3104,7 +3108,7 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   p) <= a)
 
 function model(int_P_int_M_heap_1_at_L: (int_P, int32) memory,
-  size_at_L: int32) : bag = bag_of_tree(tree_of_array(heap, 0,
+  size_at_L: int32) : bag = bag_of_tree(tree_of_array(shift(heap, 0), 0,
   integer_of_int32(size_at_L), int_P_int_M_heap_1_at_L))
 
 axiom no_assign_tree_of_array_0:

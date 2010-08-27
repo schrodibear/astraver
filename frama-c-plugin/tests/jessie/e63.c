@@ -1,5 +1,7 @@
 
-typedef float TYP ;
+//typedef float TYP ;
+
+#define TYP float
 
 /* Tentatives de plusieurs théories : en espérant que cette dernière est correcte */
 
@@ -42,9 +44,9 @@ void f()
 /* Bien entendu, on cherche à éviter ce découpage fastidieux en
    sous-intervalles */
 
-//@ assert incr(t,0,14);
+//@ assert incr(t+0,0,14);
 
-//@ assert incr2(t,0,14);
+//@ assert incr2(t+0,0,14);
 
 
 // Quid d'un intervalle encore plus grand ?
@@ -60,9 +62,9 @@ void f()
           80.,81.,82.,83.,84.,85.,86.,87.,88.,89.,
           90.,91.,92.,93.,94.,95.,96.,97.,98.,99.};
 
-//@ assert incr(t2,0,99);
+//@ assert incr(t2+0,0,99);
 
-//@ assert incr2(t2,0,99);
+//@ assert incr2(t2+0,0,99);
 
 }
 

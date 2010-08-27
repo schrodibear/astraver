@@ -62,9 +62,9 @@ void f()
   // @ assert incr2(t,0,9);
   // @ assert incr2(t,0,19);
 
-  //@ assert incr3(t,0,4);
-  //@ assert incr3(t,0,9);
-  //@ assert incr3(t,0,19);
+  //@ assert incr3(t+0,0,4);
+  //@ assert incr3(t+0,0,9);
+  //@ assert incr3(t+0,0,19);
 
 }
 

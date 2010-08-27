@@ -290,11 +290,11 @@ Please submit `feature request' report."
 	fatal
 	  "Unexpected failure.@\nPlease submit bug report (Ref. \"%s:%d:%d\")."
 	  file a b
-    | exn ->
+    (*| exn ->
 	fatal
 	  "Unexpected exception.@\nPlease submit bug report (Ref. \"%s\")."
 	  (Printexc.to_string exn)
-
+*)
 let run_and_catch_error =
   Dynamic.register
     "run_analysis"

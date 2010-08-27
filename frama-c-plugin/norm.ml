@@ -1506,7 +1506,12 @@ object(self)
           else
             (* Here is the case where a transformation is needed *)
             Some(TPtr(self#new_wrapper_for_type elemty,attr))
-      | TArray _ -> None (* TODO: change in assert false *)
+      | TArray (_,len,size,attr) ->
+          (*[VP-20100826] Can happen in case of logic term translation *)
+          let elemty = element_type ty in
+          if is_wrapper_type elemty then Some ty
+          else if isStructOrUnionType elemty then None
+          else Some (TArray(self#new_wrapper_for_type elemty,len,size,attr))
       | TFun _ -> None
       | TNamed(typeinfo,_attr) ->
           begin match self#wrap_type_if_needed typeinfo.ttype with
@@ -1636,22 +1641,49 @@ class removeUselessCasts =
               typeSig (typeRemoveAttributes ["const";"volatile"]
                          (unrollType (pointed_type ety)))
             in
-            if Cilutil.equals tysig etysig then
-              e
-            else etop
+            if Cilutil.equals tysig etysig then e else etop
           else etop
       | _ -> etop
   in
+  let preaction_term term =
+    match term.term_node with
+      | TCastE(ty,t) ->
+          if isPointerType ty && Logic_utils.isLogicPointer t then
+            (* Ignore type qualifiers *)
+            let tysig =
+              Logic_utils.type_sig_logic (unrollType (pointed_type ty))
+            in
+            let ttysig =
+              match t.term_type with
+                  Ctype tty ->
+                    if isPointerType tty then
+                      Logic_utils.type_sig_logic (unrollType (pointed_type tty))
+                    else
+                      Logic_utils.type_sig_logic (unrollType (element_type tty))
+                | ty -> fatal "Not a pointer type '%a'" d_logic_type ty
+            in
+            if Cilutil.equals tysig ttysig then
+              if Logic_utils.isLogicPointerType t.term_type then t
+              else
+                (match t.term_node with
+                   | TLval lv -> Logic_const.term (TStartOf lv) (Ctype ty)
+                   | TStartOf _ -> t
+                   | _ ->
+                       fatal
+                         "Unexpected array expression casted into pointer: %a"
+                         d_term t
+                )
+            else term
+          else term
+      | _ -> term
+  in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace
 
-  method vexpr e =
-    ChangeDoChildrenPost (preaction_expr e, fun x -> x)
+  method vexpr e = ChangeDoChildrenPost (preaction_expr e, fun x -> x)
 
-  method vterm =
-    do_on_term (Some preaction_expr,None)
+  method vterm t = ChangeDoChildrenPost (preaction_term t, fun x -> x)
 
 end
 

@@ -54,7 +54,7 @@ axiomatic EqMessage {
 
 unit f()
 behavior default:
-  ensures (C_1 : eq_message{Here}((Page.Texte + 9).char__x__1__M, 0));
+  ensures (C_1 : eq_message{Here}(((Page.Texte + 9).char__x__1__M + 0), 0));
 {  
    {  
       (return ())
@@ -613,10 +613,11 @@ parameter f :
   reads __anonstruct_T_CompositionPage_1_Page_1_alloc_table,__anonstruct_T_CompositionPage_1_Texte_Page_1,char__x__1__P_char__x__1__M_Page_1
   { ((JC_9: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))
     and (JC_7:
-        eq_message(select(char__x__1__P_char__x__1__M_Page_1,
-                   shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
-                         Page),
-                   (9))),
+        eq_message(shift(select(char__x__1__P_char__x__1__M_Page_1,
+                         shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
+                               Page),
+                         (9))),
+                   (0)),
         (0)))) }
 
 parameter f_requires :
@@ -626,10 +627,11 @@ parameter f_requires :
   reads __anonstruct_T_CompositionPage_1_Page_1_alloc_table,__anonstruct_T_CompositionPage_1_Texte_Page_1,char__x__1__P_char__x__1__M_Page_1
   { ((JC_9: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))
     and (JC_7:
-        eq_message(select(char__x__1__P_char__x__1__M_Page_1,
-                   shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
-                         Page),
-                   (9))),
+        eq_message(shift(select(char__x__1__P_char__x__1__M_Page_1,
+                         shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
+                               Page),
+                         (9))),
+                   (0)),
         (0)))) }
 
 parameter int8_of_integer_ :
@@ -646,10 +648,11 @@ let f_ensures_default =
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
   { (JC_6:
-    eq_message(select(char__x__1__P_char__x__1__M_Page_1,
-               shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
-                     Page),
-               (9))),
+    eq_message(shift(select(char__x__1__P_char__x__1__M_Page_1,
+                     shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
+                           Page),
+                     (9))),
+               (0)),
     (0))) }
 
 let f_safety =
@@ -667,7 +670,7 @@ why --project [...] why/array_double.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/array_double_po1.why">
-      <location file = "PPCHOME/tests/jessie/array_double.c" line = "17" begin = "12" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/array_double.c" line = "17" begin = "12" end = "41"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

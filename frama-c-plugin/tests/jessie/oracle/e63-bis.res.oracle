@@ -171,17 +171,17 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_23 : incr3{Here}(t, 0, 4)));
+         (assert for default: (C_23 : incr3{Here}((t + 0), 0, 4)));
          ()
       };
       
       {  
-         (assert for default: (C_24 : incr3{Here}(t, 0, 9)));
+         (assert for default: (C_24 : incr3{Here}((t + 0), 0, 9)));
          ()
       };
       
       {  
-         (assert for default: (C_25 : incr3{Here}(t, 0, 19)));
+         (assert for default: (C_25 : incr3{Here}((t + 0), 0, 19)));
          ()
       };
       
@@ -664,12 +664,15 @@ let f_ensures_default =
       { (JC_54:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
         19.)) }; void); void;
-      (assert { (JC_55: incr3(t_4, (0), (4), float_P_float_M_t_6)) }; void);
-      void;
-      (assert { (JC_56: incr3(t_4, (0), (9), float_P_float_M_t_6)) }; void);
-      void;
-      (assert { (JC_57: incr3(t_4, (0), (19), float_P_float_M_t_6)) }; void);
-      void;
+      (assert
+      { (JC_55: incr3(shift(t_4, (0)), (0), (4), float_P_float_M_t_6)) };
+      void); void;
+      (assert
+      { (JC_56: incr3(shift(t_4, (0)), (0), (9), float_P_float_M_t_6)) };
+      void); void;
+      (assert
+      { (JC_57: incr3(shift(t_4, (0)), (0), (19), float_P_float_M_t_6)) };
+      void); void;
       (C_26:
       begin
         ((safe_free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
@@ -778,11 +781,14 @@ let f_safety =
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
           19.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_31: incr3(t_4, (0), (4), float_P_float_M_t_6)) } ]; void;
+        { (JC_31: incr3(shift(t_4, (0)), (0), (4), float_P_float_M_t_6)) } ];
+      void;
       [ { } unit reads t_4
-        { (JC_32: incr3(t_4, (0), (9), float_P_float_M_t_6)) } ]; void;
+        { (JC_32: incr3(shift(t_4, (0)), (0), (9), float_P_float_M_t_6)) } ];
+      void;
       [ { } unit reads t_4
-        { (JC_33: incr3(t_4, (0), (19), float_P_float_M_t_6)) } ]; void;
+        { (JC_33: incr3(shift(t_4, (0)), (0), (19), float_P_float_M_t_6)) } ];
+      void;
       (C_26:
       begin   ((free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
       end) end))))); (raise Return) end with Return -> void end) { true }
@@ -800,11 +806,11 @@ why --project [...] why/e63-bis.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "504" begin = "17" end = "76"/>
+      <location file = "why/e63-bis.why" line = "507" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "593" begin = "15" end = "60"/>
+      <location file = "why/e63-bis.why" line = "599" begin = "15" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -891,15 +897,15 @@ text = ""/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po21.why">
-      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "65" begin = "13" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "65" begin = "13" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po22.why">
-      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "66" begin = "13" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "66" begin = "13" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po23.why">
-      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "67" begin = "13" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "67" begin = "13" end = "28"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

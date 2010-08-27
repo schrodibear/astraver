@@ -14,12 +14,12 @@ T_CompositionPage Page;
 
 void f();
 
-//@ ensures eq_message(Page.Texte[9],0);
+//@ ensures eq_message(&*Page.Texte[9],0);
 void f() {
   //  StrCpy(Page.Texte[9]);
 }
 
-/* 
+/*
 Local Variables:
 compile-command: "LC_ALL=C make array_double"
 End:
