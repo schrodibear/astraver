@@ -53,11 +53,16 @@ behavior default:
 
 unit main()
 behavior default:
-  ensures (C_14 : (x == 2));
+  ensures (C_15 : (x == 2));
 {  
+   (var int32 tmp_0);
+   
    {  (C_8 : (x = 0));
-      (C_11 : (x = (C_10 : ((C_9 : (x + 1)) :> int32))));
-      (C_13 : (x = (C_12 : f(1, x, 2))));
+      
+      {  (C_11 : (x = (C_10 : ((C_9 : (x + 1)) :> int32))));
+         (C_12 : (tmp_0 = x));
+         (C_14 : (x = (C_13 : f(1, tmp_0, 2))))
+      };
       
       (return ())
    }
@@ -410,26 +415,30 @@ let main_ensures_default =
   (init:
   try
    begin
+     (let tmp_0 = ref (any_int32 void) in
      (C_8:
      begin
-       (let jessie_25 = (x_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_27 = (x_0 := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_36 =
       (C_11:
       begin
-        (let jessie_27 =
+        (let jessie_29 =
         (x_0 := (C_10:
                 (safe_int32_of_integer_ (C_9:
                                         ((add_int (integer_of_int32 !x_0)) (1)))))) in
         void);
-       (C_13:
+       (C_12:
        begin
-         (let jessie_32 =
-         (x_0 := (C_12:
-                 (let jessie_31 = (safe_int32_of_integer_ (1)) in
-                 (let jessie_30 = !x_0 in
-                 (let jessie_29 = (safe_int32_of_integer_ (2)) in
-                 (JC_22: (((f jessie_31) jessie_30) jessie_29))))))) in void);
-        (raise Return) end) end) end); (raise Return) end with Return ->
-   void end) { (JC_16: eq_int(integer_of_int32(x_0), (2))) }
+         (let jessie_31 = (tmp_0 := !x_0) in void);
+        (C_14:
+        begin
+          (x_0 := (C_13:
+                  (let jessie_35 = (safe_int32_of_integer_ (1)) in
+                  (let jessie_34 = !tmp_0 in
+                  (let jessie_33 = (safe_int32_of_integer_ (2)) in
+                  (JC_22: (((f jessie_35) jessie_34) jessie_33))))))); !x_0
+        end) end) end) in void); (raise Return) end)); (raise Return) end
+   with Return -> void end) { (JC_16: eq_int(integer_of_int32(x_0), (2))) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -437,9 +446,11 @@ let main_safety =
   (init:
   try
    begin
+     (let tmp_0 = ref (any_int32 void) in
      (C_8:
      begin
        (let jessie_16 = (x_0 := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_25 =
       (C_11:
       begin
         (let jessie_18 =
@@ -448,16 +459,18 @@ let main_safety =
                 (int32_of_integer_ (C_9:
                                    ((add_int (integer_of_int32 !x_0)) (1))))))) in
         void);
-       (C_13:
+       (C_12:
        begin
-         (let jessie_23 =
-         (x_0 := (C_12:
-                 (let jessie_22 = (safe_int32_of_integer_ (1)) in
-                 (let jessie_21 = !x_0 in
-                 (let jessie_20 = (safe_int32_of_integer_ (2)) in
-                 (JC_21: (((f_requires jessie_22) jessie_21) jessie_20))))))) in
-         void); (raise Return) end) end) end); (raise Return) end with
-   Return -> void end) { true }
+         (let jessie_20 = (tmp_0 := !x_0) in void);
+        (C_14:
+        begin
+          (x_0 := (C_13:
+                  (let jessie_24 = (safe_int32_of_integer_ (1)) in
+                  (let jessie_23 = !tmp_0 in
+                  (let jessie_22 = (safe_int32_of_integer_ (2)) in
+                  (JC_21: (((f_requires jessie_24) jessie_23) jessie_22)))))));
+         !x_0 end) end) end) in void); (raise Return) end)); (raise Return)
+   end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C call.jessie --quiet -f call.makefile project

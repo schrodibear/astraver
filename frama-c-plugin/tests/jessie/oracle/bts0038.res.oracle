@@ -80,15 +80,17 @@ behavior default:
 {  
    (var int_P[0..1] a_0);
    
-   (var int32 tmp);
+   (var int32 tmp_0);
    
    (var int32 __retres);
    
    {  (C_12 : (a_0 = (C_11 : (new int_P[2]))));
       (C_14 : ((C_13 : (a_0 + 0).int_M) = 1));
       (C_16 : ((C_15 : (a_0 + 1).int_M) = 2));
-      (C_18 : (tmp = (C_17 : foo(a_0))));
-      (C_19 : printf());
+      
+      {  (C_18 : (tmp_0 = (C_17 : foo(a_0))));
+         (C_19 : printf())
+      };
       (C_20 : (__retres = 0));
       
       {  (C_21 : (free(a_0)));
@@ -639,7 +641,7 @@ let main_ensures_default =
      (let int_P_a_0_5_tag_table = ref (any_tag_table void) in
      (let int_P_a_0_5_alloc_table = ref (any_alloc_table void) in
      (let a_0 = ref (any_pointer void) in
-     (let tmp = ref (any_int32 void) in
+     (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_12:
      begin
@@ -660,27 +662,24 @@ let main_ensures_default =
          (let jessie_53 = (safe_int32_of_integer_ (2)) in
          (let jessie_56 = ((shift !a_0) (1)) in
          (((safe_upd_ int_P_int_M_a_0_5) jessie_56) jessie_53))) in void);
+        (let jessie_61 =
         (C_18:
         begin
           (let jessie_60 =
-          (tmp := (C_17:
-                  (let jessie_59 = !a_0 in
-                  (JC_49:
-                  (((foo jessie_59) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
+          (tmp_0 := (C_17:
+                    (let jessie_59 = !a_0 in
+                    (JC_49:
+                    (((foo jessie_59) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
+          void); (C_19: (JC_50: (printf void))) end) in void);
+        (C_20:
+        begin
+          (let jessie_63 = (__retres := (safe_int32_of_integer_ (0))) in
           void);
-         (C_19:
+         (C_21:
          begin
-           (let jessie_61 = (JC_50: (printf void)) in void);
-          (C_20:
-          begin
-            (let jessie_63 = (__retres := (safe_int32_of_integer_ (0))) in
-            void);
-           (C_21:
-           begin
-             ((safe_free_parameter int_P_a_0_5_alloc_table) !a_0);
-            (return := !__retres); (raise Return) end) end) end) end) end)
-      end) end))))))); absurd  end with Return -> !return end))
-  { (JC_40: true) }
+           ((safe_free_parameter int_P_a_0_5_alloc_table) !a_0);
+          (return := !__retres); (raise Return) end) end) end) end) end)))))));
+    absurd  end with Return -> !return end)) { (JC_40: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -693,7 +692,7 @@ let main_safety =
      (let int_P_a_0_5_tag_table = ref (any_tag_table void) in
      (let int_P_a_0_5_alloc_table = ref (any_alloc_table void) in
      (let a_0 = ref (any_pointer void) in
-     (let tmp = ref (any_int32 void) in
+     (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_12:
      begin
@@ -718,26 +717,24 @@ let main_safety =
          (let jessie_32 = (safe_int32_of_integer_ (2)) in
          (let jessie_35 = ((shift !a_0) (1)) in
          (((safe_upd_ int_P_int_M_a_0_5) jessie_35) jessie_32))) in void);
+        (let jessie_40 =
         (C_18:
         begin
           (let jessie_39 =
-          (tmp := (C_17:
-                  (let jessie_38 = !a_0 in
-                  (JC_46:
-                  (((foo_requires jessie_38) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
+          (tmp_0 := (C_17:
+                    (let jessie_38 = !a_0 in
+                    (JC_46:
+                    (((foo_requires jessie_38) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
+          void); (C_19: (JC_47: (printf_requires void))) end) in void);
+        (C_20:
+        begin
+          (let jessie_42 = (__retres := (safe_int32_of_integer_ (0))) in
           void);
-         (C_19:
+         (C_21:
          begin
-           (let jessie_40 = (JC_47: (printf_requires void)) in void);
-          (C_20:
-          begin
-            (let jessie_42 = (__retres := (safe_int32_of_integer_ (0))) in
-            void);
-           (C_21:
-           begin
-             ((free_parameter int_P_a_0_5_alloc_table) !a_0);
-            (return := !__retres); (raise Return) end) end) end) end) end)
-      end) end))))))); absurd  end with Return -> !return end))
+           ((free_parameter int_P_a_0_5_alloc_table) !a_0);
+          (return := !__retres); (raise Return) end) end) end) end) end)))))));
+    absurd  end with Return -> !return end))
   { (JC_42: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 

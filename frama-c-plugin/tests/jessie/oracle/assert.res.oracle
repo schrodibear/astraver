@@ -59,13 +59,18 @@ behavior default:
 
 unit g()
 behavior default:
-  ensures (C_11 : true);
+  ensures (C_13 : true);
 {  
    (var int32 tmp);
    
-   {  (C_9 : (tmp = (C_8 : f(1))));
-      
-      (assert for default: (C_10 : (tmp > 0)));
+   (var int32 tmp_0);
+   
+   {  
+      {  (C_9 : (tmp = (C_8 : f(1))));
+         (C_11 : (tmp_0 = (C_10 : ((if (tmp > 0) then 1 else 0) :> int32))));
+         
+         (assert for default: (C_12 : (tmp_0 != 0)))
+      };
       
       (return ())
    }
@@ -415,15 +420,23 @@ let g_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_9:
+     (let tmp_0 = ref (any_int32 void) in
      begin
-       (let jessie_14 =
-       (tmp := (C_8:
-               (let jessie_13 = (safe_int32_of_integer_ (1)) in
-               (JC_35: (f jessie_13))))) in void);
-      (assert { (JC_36: gt_int(integer_of_int32(tmp), (0))) }; void);
-      (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_29: true) }
+       (C_9:
+       begin
+         (let jessie_16 =
+         (tmp := (C_8:
+                 (let jessie_15 = (safe_int32_of_integer_ (1)) in
+                 (JC_36: (f jessie_15))))) in void);
+        (C_11:
+        begin
+          (let jessie_18 =
+          (tmp_0 := (C_10:
+                    (safe_int32_of_integer_ (if ((gt_int_ (integer_of_int32 !tmp)) (0))
+                                            then (1) else (0))))) in void);
+         (assert { (JC_37: neq_int(integer_of_int32(tmp_0), (0))) }; void)
+        end) end); (raise Return) end)); (raise Return) end with Return ->
+   void end) { (JC_29: true) }
 
 let g_safety =
  fun (tt : unit) ->
@@ -432,13 +445,23 @@ let g_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_9:
+     (let tmp_0 = ref (any_int32 void) in
      begin
-       (let jessie_11 =
-       (tmp := (C_8:
-               (let jessie_10 = (safe_int32_of_integer_ (1)) in
-               (JC_33: (f_requires jessie_10))))) in void);
-      [ { } unit reads tmp { (JC_34: gt_int(integer_of_int32(tmp), (0))) } ];
+       (C_9:
+       begin
+         (let jessie_11 =
+         (tmp := (C_8:
+                 (let jessie_10 = (safe_int32_of_integer_ (1)) in
+                 (JC_33: (f_requires jessie_10))))) in void);
+        (C_11:
+        begin
+          (let jessie_13 =
+          (tmp_0 := (C_10:
+                    (JC_34:
+                    (int32_of_integer_ (if ((gt_int_ (integer_of_int32 !tmp)) (0))
+                                       then (1) else (0)))))) in void);
+         [ { } unit reads tmp_0
+           { (JC_35: neq_int(integer_of_int32(tmp_0), (0))) } ] end) end);
       (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 
@@ -448,6 +471,18 @@ why --project [...] why/assert.why
 <project name="assert" context="why/assert_ctx.why">
   <function name="Function g">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/assert_po4.why">
+      <location file = "PPCHOME/tests/jessie/assert.c" line = "17" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/assert_po5.why">
+      <location file = "PPCHOME/tests/jessie/assert.c" line = "17" begin = "2" end = "8"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/assert_po3.why">
       <location file = "PPCHOME/tests/jessie/assert.c" line = "17" begin = "2" end = "8"/>

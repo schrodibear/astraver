@@ -125,12 +125,14 @@ int32 main()
 behavior default:
   ensures (C_26 : true);
 {  
-   (var float tmp);
+   (var float tmp_0);
    
    (var int32 __retres);
    
-   {  (C_23 : (tmp = (C_22 : f_single(100))));
-      (C_24 : printf());
+   {  
+      {  (C_23 : (tmp_0 = (C_22 : f_single(100))));
+         (C_24 : printf())
+      };
       (C_25 : (__retres = 0));
       
       (return __retres)
@@ -695,22 +697,22 @@ let main_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let tmp = ref (any_single void) in
+     (let tmp_0 = ref (any_single void) in
      (let __retres = ref (any_int32 void) in
-     (C_23:
      begin
-       (let jessie_37 =
-       (tmp := (C_22:
-               (let jessie_36 = (safe_int32_of_integer_ (100)) in
-               (JC_66: (f_single jessie_36))))) in void);
-      (C_24:
-      begin
-        (let jessie_38 = (JC_67: (printf void)) in void);
-       (C_25:
+       (let jessie_38 =
+       (C_23:
        begin
-         (let jessie_40 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end) end))); absurd  end
-   with Return -> !return end)) { (JC_60: true) }
+         (let jessie_37 =
+         (tmp_0 := (C_22:
+                   (let jessie_36 = (safe_int32_of_integer_ (100)) in
+                   (JC_66: (f_single jessie_36))))) in void);
+        (C_24: (JC_67: (printf void))) end) in void);
+      (C_25:
+      begin
+        (let jessie_40 = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
+   Return -> !return end)) { (JC_60: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -720,22 +722,22 @@ let main_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let tmp = ref (any_single void) in
+     (let tmp_0 = ref (any_single void) in
      (let __retres = ref (any_int32 void) in
-     (C_23:
      begin
-       (let jessie_30 =
-       (tmp := (C_22:
-               (let jessie_29 = (safe_int32_of_integer_ (100)) in
-               (JC_64: (f_single_requires jessie_29))))) in void);
-      (C_24:
-      begin
-        (let jessie_31 = (JC_65: (printf_requires void)) in void);
-       (C_25:
+       (let jessie_31 =
+       (C_23:
        begin
-         (let jessie_33 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres); (raise Return) end) end) end))); absurd  end
-   with Return -> !return end))
+         (let jessie_30 =
+         (tmp_0 := (C_22:
+                   (let jessie_29 = (safe_int32_of_integer_ (100)) in
+                   (JC_64: (f_single_requires jessie_29))))) in void);
+        (C_24: (JC_65: (printf_requires void))) end) in void);
+      (C_25:
+      begin
+        (let jessie_33 = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres); (raise Return) end) end)); absurd  end with
+   Return -> !return end))
   { (JC_62:
     valid___string_float___2__15f_(char_P___string_float___2__15f__1_alloc_table)) }
 

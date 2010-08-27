@@ -1422,17 +1422,17 @@ behavior default:
 {  
    (var int32 tmp_0_5);
    
-   (var int32 tmp_0_6);
+   (var int32 tmp_2);
    
-   (var int32 tmp_1);
+   (var int32 tmp_3);
    
    {  
       {  (C_345 : (tmp_0_5 = (C_344 : baz())));
-         (C_347 : (tmp_0_6 = (C_346 : bar())))
+         (C_347 : (tmp_2 = (C_346 : bar())));
+         (C_349 : (tmp_3 = (C_348 : foo(tmp_2, tmp_0_5))))
       };
-      (C_349 : (tmp_1 = (C_348 : foo(tmp_0_6, tmp_0_5))));
       
-      (return tmp_1)
+      (return tmp_3)
    }
 }
 
@@ -6103,26 +6103,26 @@ let order_of_arg_eval_ensures_default =
   try
    begin
      (let tmp_0_5 = ref (any_int32 void) in
-     (let tmp_0_6 = ref (any_int32 void) in
-     (let tmp_1 = ref (any_int32 void) in
+     (let tmp_2 = ref (any_int32 void) in
+     (let tmp_3 = ref (any_int32 void) in
      begin
-       (let jessie_703 =
+       (let jessie_707 =
        (C_345:
        begin
          (let jessie_701 = (tmp_0_5 := (C_344: (JC_1263: (baz void)))) in
          void);
         (C_347:
-        begin   (tmp_0_6 := (C_346: (JC_1264: (bar void)))); !tmp_0_6 end)
-       end) in void);
-      (C_349:
-      begin
-        (let jessie_707 =
-        (tmp_1 := (C_348:
-                  (let jessie_706 = !tmp_0_6 in
-                  (let jessie_705 = !tmp_0_5 in
-                  (JC_1265: ((foo jessie_706) jessie_705)))))) in void);
-       (return := !tmp_1); (raise Return) end) end))); absurd  end with
-   Return -> !return end)) { (JC_1252: true) }
+        begin
+          (let jessie_703 = (tmp_2 := (C_346: (JC_1264: (bar void)))) in
+          void);
+         (C_349:
+         begin
+           (tmp_3 := (C_348:
+                     (let jessie_706 = !tmp_2 in
+                     (let jessie_705 = !tmp_0_5 in
+                     (JC_1265: ((foo jessie_706) jessie_705)))))); !tmp_3 end)
+        end) end) in void); (return := !tmp_3); (raise Return) end))); 
+    absurd  end with Return -> !return end)) { (JC_1252: true) }
 
 let order_of_arg_eval_safety =
  fun (tt : unit) ->
@@ -6134,27 +6134,26 @@ let order_of_arg_eval_safety =
   try
    begin
      (let tmp_0_5 = ref (any_int32 void) in
-     (let tmp_0_6 = ref (any_int32 void) in
-     (let tmp_1 = ref (any_int32 void) in
+     (let tmp_2 = ref (any_int32 void) in
+     (let tmp_3 = ref (any_int32 void) in
      begin
-       (let jessie_694 =
+       (let jessie_698 =
        (C_345:
        begin
          (let jessie_692 =
          (tmp_0_5 := (C_344: (JC_1260: (baz_requires void)))) in void);
         (C_347:
         begin
-          (tmp_0_6 := (C_346: (JC_1261: (bar_requires void)))); !tmp_0_6 end)
-       end) in void);
-      (C_349:
-      begin
-        (let jessie_698 =
-        (tmp_1 := (C_348:
-                  (let jessie_697 = !tmp_0_6 in
-                  (let jessie_696 = !tmp_0_5 in
-                  (JC_1262: ((foo_requires jessie_697) jessie_696)))))) in
-        void); (return := !tmp_1); (raise Return) end) end))); absurd  end
-   with Return -> !return end))
+          (let jessie_694 =
+          (tmp_2 := (C_346: (JC_1261: (bar_requires void)))) in void);
+         (C_349:
+         begin
+           (tmp_3 := (C_348:
+                     (let jessie_697 = !tmp_2 in
+                     (let jessie_696 = !tmp_0_5 in
+                     (JC_1262: ((foo_requires jessie_697) jessie_696))))));
+          !tmp_3 end) end) end) in void); (return := !tmp_3); (raise Return)
+     end))); absurd  end with Return -> !return end))
   { (JC_1256:
     ((JC_1254: valid___string_abc(char_P___string_abc_1_alloc_table))
     and (JC_1255: valid_a(int_P_a_2_alloc_table)))) }
@@ -8505,7 +8504,7 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po114.why">
-      <location file = "why/undef.why" line = "4903" begin = "17" end = "96"/>
+      <location file = "why/undef.why" line = "4902" begin = "17" end = "96"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po115.why">
@@ -8514,11 +8513,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po116.why">
-      <location file = "why/undef.why" line = "4914" begin = "16" end = "77"/>
+      <location file = "why/undef.why" line = "4913" begin = "16" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po117.why">
-      <location file = "why/undef.why" line = "4928" begin = "47" end = "73"/>
+      <location file = "why/undef.why" line = "4927" begin = "47" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8533,12 +8532,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po120.why">
-      <location file = "why/undef.why" line = "4932" begin = "13" end = "59"/>
+      <location file = "why/undef.why" line = "4931" begin = "13" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po121.why">
-      <location file = "why/undef.why" line = "4935" begin = "14" end = "58"/>
+      <location file = "why/undef.why" line = "4934" begin = "14" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8548,7 +8547,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po108.why">
-      <location file = "why/undef.why" line = "4818" begin = "51" end = "73"/>
+      <location file = "why/undef.why" line = "4817" begin = "51" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8581,11 +8580,11 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po103.why">
-      <location file = "why/undef.why" line = "4745" begin = "19" end = "101"/>
+      <location file = "why/undef.why" line = "4744" begin = "19" end = "101"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po104.why">
-      <location file = "why/undef.why" line = "4759" begin = "46" end = "72"/>
+      <location file = "why/undef.why" line = "4758" begin = "46" end = "72"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8600,7 +8599,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po107.why">
-      <location file = "why/undef.why" line = "4763" begin = "12" end = "62"/>
+      <location file = "why/undef.why" line = "4762" begin = "12" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

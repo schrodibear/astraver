@@ -49,14 +49,16 @@ float f(float x_0)
 behavior default:
   ensures (C_11 : ((\result :> real) == 1.0));
 {  
-   (var float tmp);
-   
    (var float tmp_0);
    
-   {  (C_8 : (tmp = (C_7 : Sterbenz(x_0, (1. :> float)))));
-      (C_10 : (tmp_0 = (C_9 : Sterbenz(x_0, tmp))));
+   (var float tmp_1);
+   
+   {  
+      {  (C_8 : (tmp_0 = (C_7 : Sterbenz(x_0, (1. :> float)))));
+         (C_10 : (tmp_1 = (C_9 : Sterbenz(x_0, tmp_0))))
+      };
       
-      (return tmp_0)
+      (return tmp_1)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs test3_floats.jessie/test3_floats.cloc test3_floats.jessie/test3_floats.jc
@@ -367,24 +369,26 @@ let f_ensures_default =
   (let return = ref (any_single void) in
   try
    begin
-     (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_single void) in
-     (C_8:
+     (let tmp_1 = ref (any_single void) in
      begin
-       (let jessie_19 =
-       (tmp := (C_7:
-               (let jessie_18 = x_0_0 in
-               (let jessie_17 = (single_of_real_exact 1.) in
-               (JC_25: ((Sterbenz jessie_18) jessie_17)))))) in void);
-      (C_10:
-      begin
-        (let jessie_23 =
-        (tmp_0 := (C_9:
-                  (let jessie_22 = x_0_0 in
-                  (let jessie_21 = !tmp in
-                  (JC_26: ((Sterbenz jessie_22) jessie_21)))))) in void);
-       (return := !tmp_0); (raise Return) end) end))); absurd  end with
-   Return -> !return end)) { (JC_19: eq_real(single_value(result), 1.0)) }
+       (let jessie_23 =
+       (C_8:
+       begin
+         (let jessie_19 =
+         (tmp_0 := (C_7:
+                   (let jessie_18 = x_0_0 in
+                   (let jessie_17 = (single_of_real_exact 1.) in
+                   (JC_25: ((Sterbenz jessie_18) jessie_17)))))) in void);
+        (C_10:
+        begin
+          (tmp_1 := (C_9:
+                    (let jessie_22 = x_0_0 in
+                    (let jessie_21 = !tmp_0 in
+                    (JC_26: ((Sterbenz jessie_22) jessie_21)))))); !tmp_1 end)
+       end) in void); (return := !tmp_1); (raise Return) end)); absurd  end
+   with Return -> !return end))
+  { (JC_19: eq_real(single_value(result), 1.0)) }
 
 let f_safety =
  fun (x_0_0 : single) ->
@@ -393,24 +397,26 @@ let f_safety =
   (let return = ref (any_single void) in
   try
    begin
-     (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_single void) in
-     (C_8:
+     (let tmp_1 = ref (any_single void) in
      begin
-       (let jessie_10 =
-       (tmp := (C_7:
-               (let jessie_9 = x_0_0 in
-               (let jessie_8 = (single_of_real_exact 1.) in
-               (JC_23: ((Sterbenz_requires jessie_9) jessie_8)))))) in void);
-      (C_10:
-      begin
-        (let jessie_14 =
-        (tmp_0 := (C_9:
-                  (let jessie_13 = x_0_0 in
-                  (let jessie_12 = !tmp in
-                  (JC_24: ((Sterbenz_requires jessie_13) jessie_12)))))) in
-        void); (return := !tmp_0); (raise Return) end) end))); absurd  end
-   with Return -> !return end)) { true }
+       (let jessie_14 =
+       (C_8:
+       begin
+         (let jessie_10 =
+         (tmp_0 := (C_7:
+                   (let jessie_9 = x_0_0 in
+                   (let jessie_8 = (single_of_real_exact 1.) in
+                   (JC_23: ((Sterbenz_requires jessie_9) jessie_8)))))) in
+         void);
+        (C_10:
+        begin
+          (tmp_1 := (C_9:
+                    (let jessie_13 = x_0_0 in
+                    (let jessie_12 = !tmp_0 in
+                    (JC_24: ((Sterbenz_requires jessie_13) jessie_12))))));
+         !tmp_1 end) end) in void); (return := !tmp_1); (raise Return) end));
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test3_floats.jessie --quiet -f test3_floats.makefile project

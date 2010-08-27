@@ -49,16 +49,19 @@ double f(double x_0)
 behavior default:
   ensures (C_15 : ((\result :> real) == 1.0));
 {  
-   (var float tmp);
+   (var float tmp_0);
    
-   (var double tmp_0);
+   (var double tmp_1);
    
-   {  (C_9 : (tmp = (C_8 : Sterbenz((C_7 : (x_0 :> float)), (1.0 :> float)))));
-      (C_14 : (let __cil_tmp =
-              (C_11 : Sterbenz((C_10 : (x_0 :> float)), tmp))
-              in (C_13 : (tmp_0 = (C_12 : (__cil_tmp :> double))))));
+   {  
+      {  (C_9 : (tmp_0 = (C_8 : Sterbenz((C_7 : (x_0 :> float)),
+                                         (1.0 :> float)))));
+         (C_14 : (let __cil_tmp =
+                 (C_11 : Sterbenz((C_10 : (x_0 :> float)), tmp_0))
+                 in (C_13 : (tmp_1 = (C_12 : (__cil_tmp :> double))))))
+      };
       
-      (return tmp_0)
+      (return tmp_1)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs test11_floats.jessie/test11_floats.cloc test11_floats.jessie/test11_floats.jc
@@ -369,27 +372,27 @@ let f_ensures_default =
   (let return = ref (any_double void) in
   try
    begin
-     (let tmp = ref (any_single void) in
-     (let tmp_0 = ref (any_double void) in
-     (C_9:
+     (let tmp_0 = ref (any_single void) in
+     (let tmp_1 = ref (any_double void) in
      begin
-       (let jessie_20 =
-       (tmp := (C_8:
-               (let jessie_19 =
-               (C_7: ((double_to_single nearest_even) x_0_0)) in
-               (let jessie_18 = (single_of_real_exact 1.0) in
-               (JC_28: ((Sterbenz jessie_19) jessie_18)))))) in void);
-      (C_14:
-      begin
-        (let jessie_25 =
+       (let jessie_25 =
+       (C_9:
+       begin
+         (let jessie_20 =
+         (tmp_0 := (C_8:
+                   (let jessie_19 =
+                   (C_7: ((double_to_single nearest_even) x_0_0)) in
+                   (let jessie_18 = (single_of_real_exact 1.0) in
+                   (JC_28: ((Sterbenz jessie_19) jessie_18)))))) in void);
+        (C_14:
         (let __cil_tmp =
         (C_11:
         (let jessie_23 = (C_10: ((double_to_single nearest_even) x_0_0)) in
-        (let jessie_22 = !tmp in (JC_29: ((Sterbenz jessie_23) jessie_22))))) in
+        (let jessie_22 = !tmp_0 in (JC_29: ((Sterbenz jessie_23) jessie_22))))) in
         (C_13:
         begin
-          (tmp_0 := (C_12: ((single_to_double nearest_even) __cil_tmp)));
-         !tmp_0 end)) in void); (return := !tmp_0); (raise Return) end) end)));
+          (tmp_1 := (C_12: ((single_to_double nearest_even) __cil_tmp)));
+         !tmp_1 end))) end) in void); (return := !tmp_1); (raise Return) end));
     absurd  end with Return -> !return end))
   { (JC_19: eq_real(double_value(result), 1.0)) }
 
@@ -400,30 +403,31 @@ let f_safety =
   (let return = ref (any_double void) in
   try
    begin
-     (let tmp = ref (any_single void) in
-     (let tmp_0 = ref (any_double void) in
-     (C_9:
+     (let tmp_0 = ref (any_single void) in
+     (let tmp_1 = ref (any_double void) in
      begin
-       (let jessie_10 =
-       (tmp := (C_8:
-               (let jessie_9 =
-               (C_7: (JC_23: ((double_to_single nearest_even) x_0_0))) in
-               (let jessie_8 = (single_of_real_exact 1.0) in
-               (JC_24: ((Sterbenz_requires jessie_9) jessie_8)))))) in void);
-      (C_14:
-      begin
-        (let jessie_15 =
+       (let jessie_15 =
+       (C_9:
+       begin
+         (let jessie_10 =
+         (tmp_0 := (C_8:
+                   (let jessie_9 =
+                   (C_7: (JC_23: ((double_to_single nearest_even) x_0_0))) in
+                   (let jessie_8 = (single_of_real_exact 1.0) in
+                   (JC_24: ((Sterbenz_requires jessie_9) jessie_8)))))) in
+         void);
+        (C_14:
         (let __cil_tmp =
         (C_11:
         (let jessie_13 =
         (C_10: (JC_25: ((double_to_single nearest_even) x_0_0))) in
-        (let jessie_12 = !tmp in
+        (let jessie_12 = !tmp_0 in
         (JC_26: ((Sterbenz_requires jessie_13) jessie_12))))) in
         (C_13:
         begin
-          (tmp_0 := (C_12:
+          (tmp_1 := (C_12:
                     (JC_27: ((single_to_double nearest_even) __cil_tmp))));
-         !tmp_0 end)) in void); (return := !tmp_0); (raise Return) end) end)));
+         !tmp_1 end))) end) in void); (return := !tmp_1); (raise Return) end));
     absurd  end with Return -> !return end)) { true }
 
 
