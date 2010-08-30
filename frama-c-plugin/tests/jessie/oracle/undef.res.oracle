@@ -1422,17 +1422,17 @@ behavior default:
 {  
    (var int32 tmp_0_5);
    
-   (var int32 tmp_2);
+   (var int32 tmp_0_6);
    
-   (var int32 tmp_3);
+   (var int32 tmp_1);
    
    {  
       {  (C_345 : (tmp_0_5 = (C_344 : baz())));
-         (C_347 : (tmp_2 = (C_346 : bar())));
-         (C_349 : (tmp_3 = (C_348 : foo(tmp_2, tmp_0_5))))
+         (C_347 : (tmp_0_6 = (C_346 : bar())));
+         (C_349 : (tmp_1 = (C_348 : foo(tmp_0_6, tmp_0_5))))
       };
       
-      (return tmp_3)
+      (return tmp_1)
    }
 }
 
@@ -6103,8 +6103,8 @@ let order_of_arg_eval_ensures_default =
   try
    begin
      (let tmp_0_5 = ref (any_int32 void) in
-     (let tmp_2 = ref (any_int32 void) in
-     (let tmp_3 = ref (any_int32 void) in
+     (let tmp_0_6 = ref (any_int32 void) in
+     (let tmp_1 = ref (any_int32 void) in
      begin
        (let jessie_707 =
        (C_345:
@@ -6113,15 +6113,15 @@ let order_of_arg_eval_ensures_default =
          void);
         (C_347:
         begin
-          (let jessie_703 = (tmp_2 := (C_346: (JC_1264: (bar void)))) in
+          (let jessie_703 = (tmp_0_6 := (C_346: (JC_1264: (bar void)))) in
           void);
          (C_349:
          begin
-           (tmp_3 := (C_348:
-                     (let jessie_706 = !tmp_2 in
+           (tmp_1 := (C_348:
+                     (let jessie_706 = !tmp_0_6 in
                      (let jessie_705 = !tmp_0_5 in
-                     (JC_1265: ((foo jessie_706) jessie_705)))))); !tmp_3 end)
-        end) end) in void); (return := !tmp_3); (raise Return) end))); 
+                     (JC_1265: ((foo jessie_706) jessie_705)))))); !tmp_1 end)
+        end) end) in void); (return := !tmp_1); (raise Return) end))); 
     absurd  end with Return -> !return end)) { (JC_1252: true) }
 
 let order_of_arg_eval_safety =
@@ -6134,8 +6134,8 @@ let order_of_arg_eval_safety =
   try
    begin
      (let tmp_0_5 = ref (any_int32 void) in
-     (let tmp_2 = ref (any_int32 void) in
-     (let tmp_3 = ref (any_int32 void) in
+     (let tmp_0_6 = ref (any_int32 void) in
+     (let tmp_1 = ref (any_int32 void) in
      begin
        (let jessie_698 =
        (C_345:
@@ -6145,14 +6145,14 @@ let order_of_arg_eval_safety =
         (C_347:
         begin
           (let jessie_694 =
-          (tmp_2 := (C_346: (JC_1261: (bar_requires void)))) in void);
+          (tmp_0_6 := (C_346: (JC_1261: (bar_requires void)))) in void);
          (C_349:
          begin
-           (tmp_3 := (C_348:
-                     (let jessie_697 = !tmp_2 in
+           (tmp_1 := (C_348:
+                     (let jessie_697 = !tmp_0_6 in
                      (let jessie_696 = !tmp_0_5 in
                      (JC_1262: ((foo_requires jessie_697) jessie_696))))));
-          !tmp_3 end) end) end) in void); (return := !tmp_3); (raise Return)
+          !tmp_1 end) end) end) in void); (return := !tmp_1); (raise Return)
      end))); absurd  end with Return -> !return end))
   { (JC_1256:
     ((JC_1254: valid___string_abc(char_P___string_abc_1_alloc_table))

@@ -80,7 +80,7 @@ behavior default:
 {  
    (var int_P[0..1] a_0);
    
-   (var int32 tmp_0);
+   (var int32 tmp);
    
    (var int32 __retres);
    
@@ -88,7 +88,7 @@ behavior default:
       (C_14 : ((C_13 : (a_0 + 0).int_M) = 1));
       (C_16 : ((C_15 : (a_0 + 1).int_M) = 2));
       
-      {  (C_18 : (tmp_0 = (C_17 : foo(a_0))));
+      {  (C_18 : (tmp = (C_17 : foo(a_0))));
          (C_19 : printf())
       };
       (C_20 : (__retres = 0));
@@ -641,7 +641,7 @@ let main_ensures_default =
      (let int_P_a_0_5_tag_table = ref (any_tag_table void) in
      (let int_P_a_0_5_alloc_table = ref (any_alloc_table void) in
      (let a_0 = ref (any_pointer void) in
-     (let tmp_0 = ref (any_int32 void) in
+     (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_12:
      begin
@@ -666,10 +666,10 @@ let main_ensures_default =
         (C_18:
         begin
           (let jessie_60 =
-          (tmp_0 := (C_17:
-                    (let jessie_59 = !a_0 in
-                    (JC_49:
-                    (((foo jessie_59) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
+          (tmp := (C_17:
+                  (let jessie_59 = !a_0 in
+                  (JC_49:
+                  (((foo jessie_59) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
           void); (C_19: (JC_50: (printf void))) end) in void);
         (C_20:
         begin
@@ -692,7 +692,7 @@ let main_safety =
      (let int_P_a_0_5_tag_table = ref (any_tag_table void) in
      (let int_P_a_0_5_alloc_table = ref (any_alloc_table void) in
      (let a_0 = ref (any_pointer void) in
-     (let tmp_0 = ref (any_int32 void) in
+     (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_12:
      begin
@@ -721,10 +721,10 @@ let main_safety =
         (C_18:
         begin
           (let jessie_39 =
-          (tmp_0 := (C_17:
-                    (let jessie_38 = !a_0 in
-                    (JC_46:
-                    (((foo_requires jessie_38) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
+          (tmp := (C_17:
+                  (let jessie_38 = !a_0 in
+                  (JC_46:
+                  (((foo_requires jessie_38) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table))))) in
           void); (C_19: (JC_47: (printf_requires void))) end) in void);
         (C_20:
         begin

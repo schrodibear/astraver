@@ -91,13 +91,13 @@ behavior default:
 {  
    (var __anonstruct_ts_1[0] x_0);
    
-   (var float_P[..] tmp_0);
+   (var float_P[..] tmp);
    
    {  (C_10 : (x_0 = (C_9 : (new __anonstruct_ts_1[1]))));
       (C_13 : ((C_12 : x_0.f1) = (C_11 : ((9.0 :> double) :> float))));
       
-      {  (C_15 : (tmp_0 = (C_14 : simulated_cast_to_float_ptr(x_0))));
-         (C_16 : f(tmp_0))
+      {  (C_15 : (tmp = (C_14 : simulated_cast_to_float_ptr(x_0))));
+         (C_16 : f(tmp))
       };
       
       {  (C_17 : (free(x_0)));
@@ -711,10 +711,10 @@ let main_ensures_default =
      ref (any_alloc_table void) in
      (let __anonstruct_ts_1_f2_x_0_11 = (any_memory void) in
      (let __anonstruct_ts_1_f0_x_0_11 = (any_memory void) in
-     (let float_P_float_M_tmp_0_12 = (any_memory void) in
-     (let float_P_tmp_0_12_alloc_table = (any_alloc_table void) in
+     (let float_P_float_M_tmp_12 = (any_memory void) in
+     (let float_P_tmp_12_alloc_table = (any_alloc_table void) in
      (let x_0_0 = ref (any_pointer void) in
-     (let tmp_0 = ref (any_pointer void) in
+     (let tmp = ref (any_pointer void) in
      (C_10:
      begin
        (let jessie_18 =
@@ -733,15 +733,15 @@ let main_ensures_default =
        (C_15:
        begin
          (let jessie_27 =
-         (tmp_0 := (C_14:
-                   (let jessie_26 = !x_0_0 in
-                   (JC_40:
-                   (((((((simulated_cast_to_float_ptr jessie_26) float_P_tmp_0_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_0_12))))) in
+         (tmp := (C_14:
+                 (let jessie_26 = !x_0_0 in
+                 (JC_40:
+                 (((((((simulated_cast_to_float_ptr jessie_26) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
          void);
         (C_16:
-        (let jessie_28 = !tmp_0 in
+        (let jessie_28 = !tmp in
         (JC_41:
-        (((f jessie_28) float_P_tmp_0_12_alloc_table) float_P_float_M_tmp_0_12))))
+        (((f jessie_28) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12))))
        end);
        (C_17:
        begin
@@ -761,10 +761,10 @@ let main_safety =
      ref (any_alloc_table void) in
      (let __anonstruct_ts_1_f2_x_0_11 = (any_memory void) in
      (let __anonstruct_ts_1_f0_x_0_11 = (any_memory void) in
-     (let float_P_float_M_tmp_0_12 = (any_memory void) in
-     (let float_P_tmp_0_12_alloc_table = (any_alloc_table void) in
+     (let float_P_float_M_tmp_12 = (any_memory void) in
+     (let float_P_tmp_12_alloc_table = (any_alloc_table void) in
      (let x_0_0 = ref (any_pointer void) in
-     (let tmp_0 = ref (any_pointer void) in
+     (let tmp = ref (any_pointer void) in
      (C_10:
      begin
        (let jessie_6 =
@@ -789,15 +789,15 @@ let main_safety =
        (C_15:
        begin
          (let jessie_15 =
-         (tmp_0 := (C_14:
-                   (let jessie_14 = !x_0_0 in
-                   (JC_37:
-                   (((((((simulated_cast_to_float_ptr_requires jessie_14) float_P_tmp_0_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_0_12))))) in
+         (tmp := (C_14:
+                 (let jessie_14 = !x_0_0 in
+                 (JC_37:
+                 (((((((simulated_cast_to_float_ptr_requires jessie_14) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
          void);
         (C_16:
-        (let jessie_16 = !tmp_0 in
+        (let jessie_16 = !tmp in
         (JC_38:
-        (((f_requires jessie_16) float_P_tmp_0_12_alloc_table) float_P_float_M_tmp_0_12))))
+        (((f_requires jessie_16) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12))))
        end);
        (C_17:
        begin
@@ -822,12 +822,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon7_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "94" begin = "17" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "94" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "94" begin = "17" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "94" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
