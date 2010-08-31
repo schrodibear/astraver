@@ -36,7 +36,7 @@ integer sign(double x, double e1, double e2)
 behavior default:
   ensures (C_4 : ((C_5 : ((\result != 0) ==>
                            (\result == l_sign(\double_exact(\at(x,Old)))))) &&
-                   (C_6 : (\real_abs(\result) <= 1))));
+                   (C_6 : (\integer_abs(\result) <= 1))));
 {  
    (var integer __retres);
    
@@ -358,7 +358,7 @@ parameter sign :
     { (JC_14:
       ((JC_12:
        (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_1@)))))
-      and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
+      and (JC_13: le_int(abs_int(result), (1))))) }
 
 parameter sign_requires :
  x_1:double ->
@@ -375,7 +375,7 @@ parameter sign_requires :
     { (JC_14:
       ((JC_12:
        (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_1@)))))
-      and (JC_13: le_real(abs_real(real_of_int(result)), 1.0)))) }
+      and (JC_13: le_int(abs_int(result), (1))))) }
 
 let eps_line_ensures_default =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
@@ -555,7 +555,7 @@ let sign_ensures_default =
   { (JC_11:
     ((JC_9:
      (neq_int(result, (0)) -> eq_int(result, l_sign(double_exact(x_1@)))))
-    and (JC_10: le_real(abs_real(real_of_int(result)), 1.0)))) }
+    and (JC_10: le_int(abs_int(result), (1))))) }
 
 let sign_safety =
  fun (x_1 : double) (e1 : double) (e2 : double) ->
