@@ -394,7 +394,7 @@ why --project [...] why/test_floats.why
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test_floats_po3.why">
-      <location file = "PPCHOME/tests/jessie/test_floats.c" line = "4" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test_floats.c" line = "4" begin = "9" end = "18"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

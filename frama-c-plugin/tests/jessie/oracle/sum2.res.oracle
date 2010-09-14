@@ -814,12 +814,12 @@ why --project [...] why/sum2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/sum2_po22.why">
-      <location file = "PPCHOME/tests/jessie/sum2.c" line = "72" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/sum2.c" line = "72" begin = "4" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po23.why">
-      <location file = "PPCHOME/tests/jessie/sum2.c" line = "72" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/sum2.c" line = "72" begin = "4" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -889,12 +889,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/sum2_po8.why">
-      <location file = "PPCHOME/tests/jessie/sum2.c" line = "54" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/sum2.c" line = "54" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/sum2_po9.why">
-      <location file = "PPCHOME/tests/jessie/sum2.c" line = "54" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/sum2.c" line = "54" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

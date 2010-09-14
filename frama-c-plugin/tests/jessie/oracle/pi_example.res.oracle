@@ -613,7 +613,7 @@ why --project [...] why/pi_example.why
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/pi_example_po13.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "33" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "33" begin = "12" end = "24"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -642,7 +642,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/pi_example_po8.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "20" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "20" begin = "9" end = "21"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -663,12 +663,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/pi_example_po4.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/pi_example_po5.why">
-      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pi_example.c" line = "11" begin = "9" end = "24"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

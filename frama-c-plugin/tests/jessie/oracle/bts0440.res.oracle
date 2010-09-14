@@ -481,22 +481,22 @@ why --project [...] why/bts0440.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0440_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0440_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0440_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "4" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0440_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0440.c" line = "14" begin = "4" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

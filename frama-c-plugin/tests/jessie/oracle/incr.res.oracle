@@ -527,12 +527,12 @@ why --project [...] why/incr.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/incr_po2.why">
-      <location file = "PPCHOME/tests/jessie/incr.c" line = "9" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/incr.c" line = "9" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/incr_po3.why">
-      <location file = "PPCHOME/tests/jessie/incr.c" line = "9" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/incr.c" line = "9" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

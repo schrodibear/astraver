@@ -433,27 +433,27 @@ why --project [...] why/hollas4.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/hollas4_po5.why">
-      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "22" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hollas4_po6.why">
-      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "22" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hollas4_po7.why">
-      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "19" end = "27"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/hollas4_po8.why">
-      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "19" end = "27"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hollas4_po9.why">
-      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/hollas4.c" line = "11" begin = "19" end = "27"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

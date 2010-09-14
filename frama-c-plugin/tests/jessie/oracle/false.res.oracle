@@ -1016,12 +1016,12 @@ text = "IndexBounds"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/false_po4.why">
-      <location file = "PPCHOME/tests/jessie/false.c" line = "44" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/false.c" line = "44" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/false_po5.why">
-      <location file = "PPCHOME/tests/jessie/false.c" line = "44" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/false.c" line = "44" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -973,12 +973,12 @@ why --project [...] why/struct.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/struct_po21.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "52" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "52" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po22.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "52" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "52" begin = "12" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1002,22 +1002,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/struct_po4.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po5.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po6.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct_po7.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "35" begin = "2" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1032,32 +1032,32 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po10.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po11.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po12.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po13.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_po14.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "9" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct_po15.why">
-      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct.c" line = "36" begin = "9" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

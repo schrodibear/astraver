@@ -561,42 +561,42 @@ why --project [...] why/count_bits.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/count_bits_po4.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "20" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po5.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "20" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po6.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po7.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "18" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po8.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "32" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "32" end = "35"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po9.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "32" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "32" end = "35"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po10.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/count_bits_po11.why">
-      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/count_bits.c" line = "34" begin = "24" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

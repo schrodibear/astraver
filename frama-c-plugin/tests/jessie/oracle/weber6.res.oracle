@@ -897,22 +897,22 @@ why --project [...] why/weber6.why
 text = ""/>
     </goal>
     <goal why_file="why/weber6_po12.why">
-      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "8" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber6_po13.why">
-      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "8" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber6_po14.why">
-      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "19" end = "26"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber6_po15.why">
-      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/weber6.c" line = "29" begin = "19" end = "26"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

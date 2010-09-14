@@ -1180,12 +1180,12 @@ why --project [...] why/addrof_field.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_field_po26.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "11" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "11" begin = "4" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_field_po27.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "11" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "11" begin = "4" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1211,22 +1211,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_field_po19.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "5" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_field_po20.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "5" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_field_po21.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "4" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_field_po22.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "4" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

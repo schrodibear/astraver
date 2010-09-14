@@ -972,12 +972,12 @@ why --project [...] why/dassault_1.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/dassault_1_po2.why">
-      <location file = "PPCHOME/tests/jessie/dassault_1.c" line = "53" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/dassault_1.c" line = "53" begin = "9" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/dassault_1_po3.why">
-      <location file = "PPCHOME/tests/jessie/dassault_1.c" line = "53" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/dassault_1.c" line = "53" begin = "9" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

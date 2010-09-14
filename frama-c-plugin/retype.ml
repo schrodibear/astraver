@@ -84,7 +84,8 @@ class retypeIntField
 	begin match lastOffset off with
 	  | Field(fi,_) ->
 	      begin try
-		new_exp (CastE(FieldinfoHashtbl.find cast_field_to_type fi,e))
+		new_exp ~loc:e.eloc
+                  (CastE(FieldinfoHashtbl.find cast_field_to_type fi,e))
 	      with Not_found -> e end
 	  | _ -> e
 	end

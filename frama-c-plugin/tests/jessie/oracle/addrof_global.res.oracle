@@ -897,22 +897,22 @@ why --project [...] why/addrof_global.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po19.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "8" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po20.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "8" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po21.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po22.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.c" line = "23" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

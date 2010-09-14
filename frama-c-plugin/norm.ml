@@ -102,7 +102,8 @@ class retypeArrayVariables =
       | Var v ->
           if VarinfoSet.mem v !varset then begin
             let strawv = VarinfoHashtbl.find var_to_strawvar v in
-            let host = Mem(mkInfo(new_exp (Lval(Var strawv,NoOffset)))) in
+            let loc = Cil_const.CurrentLoc.get() in
+            let host = Mem(mkInfo(new_exp ~loc (Lval(Var strawv,NoOffset)))) in
             let off =
               lift_offset (VarinfoHashtbl.find var_to_array_type v) off
             in
@@ -122,22 +123,25 @@ class retypeArrayVariables =
       | Mem _ -> lv
   in
 
-  let rec preaction_expr e = match e.enode with
+  let rec preaction_expr e =
+    let loc = e.eloc in
+    match e.enode with
     | StartOf(Var v,off) ->
         if VarinfoSet.mem v !varset then begin
           let ty = VarinfoHashtbl.find var_to_array_type v in
           let strawv = VarinfoHashtbl.find var_to_strawvar v in
           match lift_offset ty off with
-            | NoOffset -> new_exp (Lval(Var strawv,NoOffset))
+            | NoOffset -> new_exp ~loc (Lval(Var strawv,NoOffset))
             | Index(ie,NoOffset) ->
                 let ptrty = TPtr(element_type ty,[]) in
-                new_exp (BinOp(PlusPI,
-                               new_exp (Lval(Var strawv,NoOffset)),
+                new_exp ~loc (BinOp(PlusPI,
+                               new_exp ~loc (Lval(Var strawv,NoOffset)),
                                ie,ptrty))
             | Index _ | Field _ ->
                 (* Field with address taken treated separately *)
-                new_exp(StartOf
-                          (Mem(new_exp(Lval(Var strawv,NoOffset))),off))
+                new_exp ~loc
+                  (StartOf
+                     (Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
         end else e
     | AddrOf(Var v,off) ->
         if VarinfoSet.mem v !varset then begin
@@ -146,13 +150,14 @@ class retypeArrayVariables =
           match lift_offset ty off with
             | Index(ie,NoOffset) ->
                 let ptrty = TPtr(element_type ty,[]) in
-                new_exp (BinOp(PlusPI,
-                               new_exp (Lval(Var strawv,NoOffset)),
-                               ie,ptrty))
+                new_exp ~loc
+                  (BinOp(PlusPI,
+                         new_exp ~loc (Lval(Var strawv,NoOffset)), ie,ptrty))
             | NoOffset -> assert false
             | Index _ | Field _ ->
                 (* Field with address taken treated separately *)
-                new_exp (AddrOf(Mem(new_exp(Lval(Var strawv,NoOffset))),off))
+                new_exp ~loc
+                  (AddrOf(Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
         end else e
     | BinOp(PlusPI,e1,e2,opty) ->
         begin match (stripInfo e1).enode with
@@ -175,8 +180,10 @@ class retypeArrayVariables =
                 let subty = direct_element_type ty in
                 if isArrayType subty then
                   let siz = array_size subty in
-                  let e2 = new_exp(BinOp(Mult,e2,constant_expr siz,intType)) in
-                  new_exp (BinOp(PlusPI,e1,e2,opty))
+                  let e2 =
+                    new_exp ~loc:e2.eloc
+                      (BinOp(Mult,e2,constant_expr siz,intType)) in
+                  new_exp ~loc (BinOp(PlusPI,e1,e2,opty))
                 else e
               else e
           | _ -> e
@@ -368,7 +375,8 @@ class retypeLogicFunctions =
             var lv;
           if LogicVarSet.mem lv !varset then
             let tlval =
-              mkterm (TLval(host,TNoOffset)) lv.lv_type locUnknown
+              mkterm (TLval(host,TNoOffset)) lv.lv_type
+                (Cil_const.CurrentLoc.get())
             in
             TMem tlval
           else host
@@ -565,7 +573,7 @@ class expandStructAssign () =
                 (* Type of [newv] is set at that point. *)
                 let tlval =
                   mkterm (TLval(TVar newlv,TNoOffset)) (Ctype newv.vtype)
-                    locUnknown
+                    (Cil_const.CurrentLoc.get())
                 in
                 TMem tlval
               with Not_found -> TVar v
@@ -582,7 +590,8 @@ class expandStructAssign () =
             let newlv = addOffsetLval (Field(fi,NoOffset)) lv in
             let newe = match e.enode with
               | Lval elv ->
-                  new_exp (Lval(addOffsetLval (Field(fi,NoOffset)) elv))
+                  new_exp ~loc:e.eloc
+                    (Lval(addOffsetLval (Field(fi,NoOffset)) elv))
               | _ ->
                   (* Other possibilities like [CastE] should have been
                      transformed at this point. *)
@@ -597,7 +606,8 @@ class expandStructAssign () =
             let newlv = addOffsetLval (Index(cste,NoOffset)) lv in
             let newe = match e.enode with
               | Lval elv ->
-                  new_exp (Lval (addOffsetLval (Index(cste,NoOffset)) elv))
+                  new_exp ~loc:e.eloc
+                    (Lval (addOffsetLval (Index(cste,NoOffset)) elv))
               | _ ->
                   (* Other possibilities like [CastE] should have been
                      transformed at this point. *)
@@ -671,8 +681,10 @@ object
         newv.vtype <- mkTRef newv.vtype;
         v.vformal <- false;
         let rhs =
-          new_exp(Lval
-                    (mkMem (new_exp(Lval(Var newv,NoOffset))) NoOffset))
+          new_exp ~loc:v.vdecl
+            (Lval
+               (mkMem
+                  (new_exp ~loc:v.vdecl (Lval(Var newv,NoOffset))) NoOffset))
         in
         let copy = mkassign_statement (Var v,NoOffset) rhs v.vdecl in
         add_pending_statement ~beginning:true copy;
@@ -703,13 +715,13 @@ object
     DoChildren
 
   method vbehavior b =
-    let lval lv = expand lv (typeOfLval lv) locUnknown in
+    let lval loc lv = expand lv (typeOfLval lv) loc in
     let term t = match t.term_node with
       | TLval tlv ->
           let lv,env =
             !Db.Properties.Interp.force_term_lval_to_lval tlv
           in
-          let lvlist = lval lv in
+          let lvlist = lval t.term_loc lv in
           let tslvlist =
             List.map (!Db.Properties.Interp.force_back_lval_to_term_lval env)
               lvlist
@@ -764,7 +776,9 @@ object
 (*                 ChangeTo { s with skind = skind; } *)
 (*             | _ -> assert false (\* Should not be possible *\) *)
           let lv = Var(the !return_var),NoOffset in
-          let ret = mkStmt (Return(Some(Cabs2cil.mkAddrOfAndMark lv),loc)) in
+          let ret =
+            mkStmt (Return(Some(Cabs2cil.mkAddrOfAndMark loc lv),loc))
+          in
           let assigns = expand_assign lv e (typeOf e) loc in
           let assigns = List.map (fun i -> mkStmt(Instr i)) assigns in
           let block = Block (mkBlock (assigns @ [ret])) in
@@ -784,7 +798,7 @@ object
             (* Type of [arg] has not been changed. *)
             if isStructOrUnionType (typeOf arg) then
               match arg.enode with
-              | Lval lv -> Cabs2cil.mkAddrOfAndMark lv
+              | Lval lv -> Cabs2cil.mkAddrOfAndMark loc lv
               | _ -> assert false (* Should not be possible *)
             else arg
           ) args in
@@ -803,9 +817,10 @@ object
                   let tmplv = Var tmpv, NoOffset in
                   let call = Call(Some tmplv,callee,args,loc) in
                   let deref =
-                    new_exp (Lval(mkMem
-                                    (new_exp (Lval(Var tmpv,NoOffset)))
-                                    NoOffset))
+                    new_exp ~loc
+                      (Lval
+                         (mkMem
+                            (new_exp ~loc (Lval(Var tmpv,NoOffset))) NoOffset))
                   in
                   let assign = mkassign lv deref loc in
                   let free = mkfree tmpv loc in
@@ -862,7 +877,8 @@ class retypeStructVariables =
     let host = match host with
       | Var v ->
           if VarinfoSet.mem v !varset then
-            Mem(mkInfo(new_exp(Lval(Var v,NoOffset))))
+            Mem(mkInfo(new_exp ~loc:(Cil_const.CurrentLoc.get())
+                         (Lval(Var v,NoOffset))))
           else
             Var v
       | Mem _e -> host
@@ -871,7 +887,8 @@ class retypeStructVariables =
   in
   let postaction_tlval (host,off) =
     let add_deref host v =
-      TMem(mkterm (TLval (host,TNoOffset)) v.lv_type locUnknown)
+      TMem(mkterm (TLval (host,TNoOffset)) v.lv_type
+             (Cil_const.CurrentLoc.get()))
     in
     let host = match host with
       | TVar v ->
@@ -1075,7 +1092,9 @@ class retypeAddressTaken =
           if VarinfoSet.mem v !varset then
             begin
               assert (isPointerType v.vtype);
-              Mem(mkInfo(new_exp(Lval(Var v,NoOffset))))
+              Mem(mkInfo
+                    (new_exp ~loc:(Cil_const.CurrentLoc.get())
+                       (Lval(Var v,NoOffset))))
             end
           else host
       | Mem _e -> host
@@ -1087,7 +1106,11 @@ class retypeAddressTaken =
     | Field(fi,_) ->
         if FieldinfoSet.mem fi !fieldset then
           (assert (isPointerType fi.ftype);
-          mkMem (mkInfo(new_exp(Lval(host,off)))) NoOffset)
+          mkMem
+            (mkInfo
+               (new_exp
+                  ~loc:(Cil_const.CurrentLoc.get())
+                  (Lval(host,off)))) NoOffset)
         else
           host,off
     | _ ->
@@ -1097,7 +1120,7 @@ class retypeAddressTaken =
   let postaction_tlval (host,off) =
     let add_deref host ty =
       force_app_term_type (fun ty -> assert (isPointerType ty)) ty;
-      TMem(mkterm (TLval (host,TNoOffset)) ty locUnknown)
+      TMem(mkterm (TLval (host,TNoOffset)) ty (Cil_const.CurrentLoc.get()))
     in
     let host = match host with
       | TVar v ->
@@ -1212,13 +1235,14 @@ object
         end;
       (* allocate/deallocate formals *)
       begin try
+        let loc = v.vdecl in
         (* [varpairs] holds pairs of (local,formal) to initialize due to
          * the transformation for formals whose address is taken.
          *)
         let fv = List.assoc v !varpairs in
-        let lhs = mkMem (new_exp (Lval(Var v,NoOffset))) NoOffset in
-        let rhs = new_exp (Lval(Var fv,NoOffset)) in
-        let assign = mkassign_statement lhs rhs v.vdecl in
+        let lhs = mkMem (new_exp ~loc (Lval(Var v,NoOffset))) NoOffset in
+        let rhs = new_exp ~loc (Lval(Var fv,NoOffset)) in
+        let assign = mkassign_statement lhs rhs loc in
         add_pending_statement ~beginning:true assign
       with Not_found -> () end
     ) f.slocals;
@@ -1326,7 +1350,10 @@ class retypeFields =
          | Field(_,_)
          | Index(_, Field (_,_))
          | Index(_, NoOffset) as nextoff ->
-             Mem(mkInfo(new_exp(Lval curlv))),nextoff
+             Mem
+               (mkInfo
+                  (new_exp ~loc:(Cil_const.CurrentLoc.get()) (Lval curlv))),
+             nextoff
          | Index (_, Index _) -> assert false
       ) initlv initlist
   in
@@ -1341,15 +1368,15 @@ class retypeFields =
          * otherwise [retype_address_taken] would have taken care of it.
          * Do not check it though, because type was modified in place.
          *)
-        new_exp (Lval lv)
-    | AddrOf(Mem e,Index(ie,NoOffset)) ->
-        let ptrty = TPtr(typeOf e,[]) in
-        new_exp (BinOp(PlusPI,e,ie,ptrty))
+        new_exp ~loc:e.eloc (Lval lv)
+    | AddrOf(Mem e',Index(ie,NoOffset)) ->
+        let ptrty = TPtr(typeOf e',[]) in
+        new_exp ~loc:e.eloc (BinOp(PlusPI,e',ie,ptrty))
     | StartOf(Mem _e,Index(_ie,NoOffset) as lv) ->
-        new_exp (Lval lv)
+        new_exp ~loc:e.eloc (Lval lv)
     | AddrOf(Mem _e,Index(_ie,Field(_,NoOffset)) as lv)
     | StartOf(Mem _e,Index(_ie,Field(_,NoOffset)) as lv) ->
-        new_exp (Lval lv)
+        new_exp ~loc: e.eloc (Lval lv)
     | AddrOf(Mem _e,Index(_ie,_)) | StartOf(Mem _e,Index(_ie,_)) ->
         assert false
     | _ -> e
@@ -1555,10 +1582,12 @@ object(self)
                     if is_array_reference_type newtyp then
                       lv
                     else
-                      Mem(new_exp(BinOp(PlusPI,e,ie,newtyp))), NoOffset
+                      (Mem
+                         (new_exp ~loc:e.eloc
+                            (BinOp(PlusPI,e,ie,newtyp))),
+                       NoOffset)
                   in
                   let newlv = addOffsetLval (Field (newfi, NoOffset)) newlv in
-(*                   begin try ignore (typeOfLval newlv) with _ -> assert false end; *)
                   newlv
               | None -> lv
           else lv
@@ -1764,7 +1793,7 @@ object
     let preaction e = match e.enode with
       | AddrOf(Mem ptre,Index(ie,NoOffset)) ->
           let ptrty = typeOf e in
-          new_exp (BinOp (PlusPI, ptre, ie, ptrty))
+          new_exp ~loc:e.eloc (BinOp (PlusPI, ptre, ie, ptrty))
       | _ -> e
     in
     ChangeDoChildrenPost (preaction e, fun x -> x)

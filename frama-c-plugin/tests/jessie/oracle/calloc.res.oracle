@@ -2101,22 +2101,22 @@ why --project [...] why/calloc.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/calloc_po2.why">
-      <location file = "PPCHOME/tests/jessie/calloc.c" line = "6" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/calloc.c" line = "6" begin = "15" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po3.why">
-      <location file = "PPCHOME/tests/jessie/calloc.c" line = "7" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/calloc.c" line = "7" begin = "19" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/calloc_po4.why">
-      <location file = "PPCHOME/tests/jessie/calloc.c" line = "7" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/calloc.c" line = "7" begin = "19" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/calloc_po5.why">
-      <location file = "PPCHOME/tests/jessie/calloc.c" line = "7" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/calloc.c" line = "7" begin = "12" end = "38"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>

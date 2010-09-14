@@ -1496,21 +1496,16 @@ let set_curFundec, get_curFundec =
             let res = emptyFunction "@empty@" in cf := Some res; res
         | Some res -> res))
 
-let rec expr pos e =
-  (* Precise the location if possible *)
-  let pos = match e.enode with Info(_,einfo) -> einfo.exp_loc | _ -> pos in
-
-  let expr = expr pos in
-  let integral_expr = integral_expr pos in
+let rec expr e =
 
   let enode =
     let e = stripInfo e in
     match e.enode with
     | Info _ -> assert false
 
-    | Const c -> const ~in_code:true pos c
+    | Const c -> const ~in_code:true e.eloc c
 
-    | Lval lv -> (lval pos lv)#node
+    | Lval lv -> (lval e.eloc lv)#node
 
     | SizeOf _ | SizeOfE _ | SizeOfStr _ | AlignOf _ | AlignOfE _ ->
         assert false (* Should be removed by constant folding *)
@@ -1520,7 +1515,7 @@ let rec expr pos e =
 
     | UnOp(op,e,_ty) ->
         let e =
-          locate (mkexpr (JCPEunary(unop op,expr e)) pos)
+          locate (mkexpr (JCPEunary(unop op,expr e)) e.eloc)
         in
         e#node
 
@@ -1529,22 +1524,24 @@ let rec expr pos e =
 
     | BinOp(op,e1,e2,_ty) ->
         let e =
-          locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) pos)
+          locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
         in
         e#node
 
     | CastE(ty,e')
         when isIntegralType ty && isFloatingType (typeOf e') ->
-        let e = locate (mkexpr (JCPEcast(expr e',mktype (JCPTnative Treal))) pos) in
+        let e1 =
+          locate (mkexpr (JCPEcast(expr e',mktype (JCPTnative Treal))) e.eloc)
+        in
 	let e =
-	  locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[e])) pos)
+	  locate (mkexpr (JCPEapp("\\truncate_real_to_int",[],[e1])) e.eloc)
 	in e#node
 
     | CastE(ty,e') when isIntegralType ty && isArithmeticType (typeOf e') ->
         (integral_expr e)#node
 
-    | CastE(ty,e) when isFloatingType ty && isArithmeticType (typeOf e) ->
-        let e = locate (mkexpr (JCPEcast(expr e,ctype ty)) pos) in
+    | CastE(ty,e') when isFloatingType ty && isArithmeticType (typeOf e') ->
+        let e = locate (mkexpr (JCPEcast(expr e',ctype ty)) e.eloc) in
         e#node
 
     | CastE(ty,e') when isIntegralType ty && isPointerType (typeOf e') ->
@@ -1581,7 +1578,7 @@ let rec expr pos e =
 (*                 else *)
                   (* bitwise cast *)
                   let enode = JCPEcast(expr e,ctype ptrty) in
-                  let e = locate (mkexpr enode pos) in
+                  let e = locate (mkexpr enode e.eloc) in
                   e#node
 (*                   let _,ptr_to_ptr = type_conversion ptrty ety in *)
 (*                   JCPEapp(ptr_to_ptr,[],[expr e]) *)
@@ -1609,19 +1606,14 @@ let rec expr pos e =
 
     | AddrOf _lv -> assert false (* Should have been rewritten *)
 
-    | StartOf lv -> (lval pos lv)#node
+    | StartOf lv -> (lval e.eloc lv)#node
   in
-  mkexpr enode pos
+  mkexpr enode e.eloc
 
 (* Function called when expecting a boolean in Jessie, i.e. when translating
    a test or a sub-expression of an "or" or "and".
 *)
-and boolean_expr pos e =
-  (* Precise the posation if possible *)
-  let pos = match e.enode with Info(_,einfo) -> einfo.exp_loc | _ -> pos in
-
-  let expr = expr pos in
-  let boolean_expr = boolean_expr pos in
+and boolean_expr e =
   let boolean_node_from_expr ty e =
     if isPointerType ty then JCPEbinary(e,`Bneq,null_expr)
     else if isArithmeticType ty then JCPEbinary (e,`Bneq,zero_expr)
@@ -1647,46 +1639,43 @@ and boolean_expr pos e =
           JCPEbinary(expr e1,binop op,expr e2)
         else
           (* Pointer comparison is translated as subtraction *)
-          let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) pos in
+          let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) e.eloc in
           JCPEbinary(sube,binop op,zero_expr)
 
     | _ -> boolean_node_from_expr (typeOf e) (expr e)
   in
-  mkexpr enode pos
+  mkexpr enode e.eloc
 
 (* Function called instead of plain [expr] when the evaluation result should
  * fit in a C integral type.
  *)
-and integral_expr pos e =
+and integral_expr e =
 
-  let rec int_expr pos e =
-    let expr = expr pos in
-    let int_expr = int_expr pos in
-    let boolean_expr = boolean_expr pos in
+  let rec int_expr e =
     let node_from_boolean_expr e = JCPEif(e,one_expr,zero_expr) in
 
     let enode = match e.enode with
-      | UnOp(LNot,e,_ty) ->
-          let e = mkexpr (JCPEunary(unop LNot,boolean_expr e)) pos in
+      | UnOp(LNot,e',_ty) ->
+          let e = mkexpr (JCPEunary(unop LNot,boolean_expr e')) e.eloc in
           node_from_boolean_expr e
 
-      | UnOp(op,e,_ty) ->
+      | UnOp(op,e',_ty) ->
           let e =
-            locate (mkexpr (JCPEunary(unop op,expr e)) pos)
+            locate (mkexpr (JCPEunary(unop op,expr e')) e.eloc)
           in
           e#node
 
       | BinOp((LAnd | LOr) as op,e1,e2,_ty) ->
           let e =
-            mkexpr (JCPEbinary(boolean_expr e1,binop op,boolean_expr e2)) pos
+            mkexpr (JCPEbinary(boolean_expr e1,binop op,boolean_expr e2)) e.eloc
           in
           node_from_boolean_expr e
 
       | BinOp((Lt | Gt | Le | Ge as op),e1,e2,_ty)
           when isPointerType (typeOf e1) ->
           (* Pointer comparison is translated as subtraction *)
-          let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) pos in
-          let e = mkexpr (JCPEbinary(sube,binop op,zero_expr)) pos in
+          let sube = mkexpr (JCPEbinary(expr e1,`Bsub,expr e2)) e.eloc in
+          let e = mkexpr (JCPEbinary(sube,binop op,zero_expr)) e.eloc in
           node_from_boolean_expr e
 
 (*       | BinOp((Eq | Ne as op),e1,e2,_ty) *)
@@ -1698,11 +1687,11 @@ and integral_expr pos e =
 (*           node_from_boolean_expr e *)
 
       | BinOp((Eq | Ne) as op,e1,e2,_ty) ->
-          let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) pos in
+          let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc in
           node_from_boolean_expr e
 
       | BinOp((Lt | Gt | Le | Ge) as op,e1,e2,_ty) ->
-          let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) pos in
+          let e = mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc in
           node_from_boolean_expr e
 
       | BinOp(Shiftrt,e1,e2,_ty) ->
@@ -1710,13 +1699,13 @@ and integral_expr pos e =
             | Some i when i >= 0L && i < 63L ->
                 (* Right shift by constant is division by constant *)
                 let pow = constant_expr (power_of_two i) in
-                locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) pos)
+                locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) e.eloc)
             | _ ->
                 let op =
                   if isSignedInteger (typeOf e1) then `Barith_shift_right
                   else `Blogical_shift_right
                 in
-                locate (mkexpr (JCPEbinary(expr e1,op,expr e2)) pos)
+                locate (mkexpr (JCPEbinary(expr e1,op,expr e2)) e.eloc)
           in
           e#node
 
@@ -1725,41 +1714,41 @@ and integral_expr pos e =
             | Some i when i >= 0L && i < 63L ->
                 (* Left shift by constant is multiplication by constant *)
                 let pow = constant_expr (power_of_two i) in
-                locate (mkexpr (JCPEbinary(expr e1,`Bmul,expr pow)) pos)
+                locate (mkexpr (JCPEbinary(expr e1,`Bmul,expr pow)) e.eloc)
             | _ ->
-                locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) pos)
+                locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
           in
           e#node
 
       | BinOp(op,e1,e2,_ty) ->
           let e =
-            locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) pos)
+            locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
           in
           e#node
 
       | CastE(ty,e1) when isFloatingType (typeOf e1) ->
-          let e1' = locate (mkexpr (JCPEcast(expr e1,ltype Linteger)) pos) in
+          let e1' = locate (mkexpr (JCPEcast(expr e1,ltype Linteger)) e.eloc) in
           if !int_model = IMexact then
             e1'#node
           else
-            let e2' = locate (mkexpr (JCPEcast(e1',ctype ty)) pos) in
+            let e2' = locate (mkexpr (JCPEcast(e1',ctype ty)) e.eloc) in
             e2'#node
 
-      | CastE(ty,e) when isIntegralType (typeOf e) ->
+      | CastE(ty,e1) when isIntegralType (typeOf e1) ->
           if !int_model = IMexact then
-            (int_expr e)#node
+            (int_expr e1)#node
           else
-            let e = locate (mkexpr (JCPEcast(int_expr e,ctype ty)) pos) in
+            let e = locate (mkexpr (JCPEcast(int_expr e1,ctype ty)) e.eloc) in
             e#node
 
       | _ -> (expr e)#node
     in
-    mkexpr enode pos
+    mkexpr enode e.eloc
   in
 
   match e.enode with
-    | CastE _ -> int_expr pos e
-    | _ -> int_expr pos (new_exp(CastE(typeOf e,e)))
+    | CastE _ -> int_expr e
+    | _ -> int_expr (new_exp ~loc:e.eloc (CastE(typeOf e,e)))
 
 and lval pos = function
   | Var v, NoOffset -> mkexpr (JCPEvar v.vname) pos
@@ -1770,7 +1759,7 @@ and lval pos = function
 
   | Mem e, Field(fi,off) ->
       assert (off = NoOffset); (* Others should have been rewritten *)
-      let e = expr pos e in
+      let e = expr e in
       if not fi.fcomp.cstruct then (* field of union *)
         locate (mkexpr (JCPEcast(e,ctype fi.ftype)) pos)
       else
@@ -1782,7 +1771,10 @@ and lval pos = function
             let caste =
               locate
                 (mkexpr
-                   (JCPEcast(e,ctype (TPtr(TComp(repfi.fcomp, empty_size_cache (),[]),[])))) pos)
+                   (JCPEcast(e,
+                             ctype (TPtr(TComp(repfi.fcomp,
+                                               empty_size_cache (),[]),[]))))
+                   pos)
             in
             caste,repfi
         in
@@ -1791,7 +1783,7 @@ and lval pos = function
   | Mem e, Index(ie,Field(fi,off)) ->
       assert (off = NoOffset); (* Others should have been rewritten *)
       (* Normalization made it equivalent to simple add *)
-      let e = mkexpr (JCPEbinary(expr pos e,`Badd,expr pos ie)) pos in
+      let e = mkexpr (JCPEbinary(expr e,`Badd,expr ie)) pos in
       if not fi.fcomp.cstruct then (* field of union *)
         locate (mkexpr (JCPEcast(e,ctype fi.ftype)) pos)
       else
@@ -1803,14 +1795,18 @@ and lval pos = function
             let caste =
               locate
                 (mkexpr
-                   (JCPEcast(e,ctype (TPtr(TComp(repfi.fcomp, empty_size_cache (),[]),[])))) pos)
+                   (JCPEcast(e,
+                             ctype (TPtr(TComp(repfi.fcomp,
+                                               empty_size_cache (),[]),[]))))
+                   pos)
             in
             caste,repfi
         in
         locate (mkexpr (JCPEderef(e,fi.fname)) pos)
 
   | Mem _e, Index _ as lv ->
-      Jessie_options.fatal ~current:true "Unexpected lval %a" !Ast_printer.d_lval lv
+      Jessie_options.fatal
+        ~current:true "Unexpected lval %a" !Ast_printer.d_lval lv
 
 let keep_only_declared_nb_of_arguments vi l =
   let _,args,is_variadic, _ = splitFunctionTypeVI vi in
@@ -1822,25 +1818,25 @@ let keep_only_declared_nb_of_arguments vi l =
 
 let rec instruction = function
   | Set(lv,e,pos) ->
-      let enode = JCPEassign(lval pos lv,expr pos e) in
+      let enode = JCPEassign(lval pos lv,expr e) in
       (locate (mkexpr enode pos))#node
 
   | Call(None,{enode = Lval(Var v,NoOffset)},eargs,pos) ->
       if is_assert_function v then
         JCPEassert([new identifier name_of_default_behavior],
-                   Aassert,locate (boolean_expr pos (as_singleton eargs)))
+                   Aassert,locate (boolean_expr (as_singleton eargs)))
       else
         let enode =
           if is_free_function v then
             let arg = as_singleton eargs in
             let subarg = stripCasts arg in
             let arg = if isPointerType (typeOf subarg) then subarg else arg in
-            JCPEfree(expr pos arg)
+            JCPEfree(expr arg)
           else
             JCPEapp(v.vname,[],
                     keep_only_declared_nb_of_arguments
                       v
-                      (List.map (expr pos) eargs))
+                      (List.map expr eargs))
         in
         (locate (mkexpr enode pos))#node
 
@@ -1855,6 +1851,7 @@ let rec instruction = function
               match eargs with [ _; arg ] -> arg | _ -> assert false
           in
           let arg = stripInfo arg in
+          let loc = arg.eloc in
           let ty,arg = match arg.enode with
             | Info _ -> assert false
             | Const c when is_integral_const c ->
@@ -1866,19 +1863,18 @@ let rec instruction = function
                 when is_integral_const c ->
                 let factor = (value_of_integral_expr arg) / lvsiz in
                 let siz =
-                  if factor = Int64.one then
-                    expr pos nelem
+                  if factor = Int64.one then expr nelem
                   else
                     let factor = constant_expr factor in
-                    expr pos (new_exp(BinOp(Mult,nelem,factor,typeOf arg)))
+                    expr
+                      (new_exp ~loc (BinOp(Mult,nelem,factor,typeOf arg)))
                 in
                 lvtyp, siz
             | _ ->
-                if lvsiz = Int64.one then
-                  lvtyp, expr pos arg
+                if lvsiz = Int64.one then lvtyp, expr arg
                 else
-                  let esiz = constant_expr lvsiz in
-                  lvtyp, expr pos (new_exp (BinOp(Div,arg,esiz,typeOf arg)))
+                  let esiz = constant_expr ~loc lvsiz in
+                  lvtyp, expr (new_exp ~loc (BinOp(Div,arg,esiz,typeOf arg)))
           in
           let name_of_type = match unrollType ty with
             | TComp(compinfo,_,_) -> compinfo.cname
@@ -1891,6 +1887,7 @@ let rec instruction = function
             | _ -> assert false
           in
           let arg = stripInfo elsize in
+          let loc = arg.eloc in
           let ty,arg = match arg.enode with
             | Info _ -> assert false
             | Const c when is_integral_const c ->
@@ -1899,21 +1896,21 @@ let rec instruction = function
                 let factor = (value_of_integral_expr arg) / lvsiz in
                 let siz =
                   if factor = Int64.one then
-                    expr pos nelem
+                    expr nelem
                   else
-                    let factor = constant_expr factor in
-                    expr pos (new_exp (BinOp(Mult,nelem,factor,typeOf arg)))
+                    let factor = constant_expr ~loc factor in
+                    expr (new_exp ~loc (BinOp(Mult,nelem,factor,typeOf arg)))
                 in
                 lvtyp, siz
             | _ ->
                 let lvtyp = pointed_type (typeOfLval lv) in
                 let lvsiz = (bits_sizeof lvtyp) lsr 3 in
-                let esiz = constant_expr lvsiz in
+                let esiz = constant_expr ~loc lvsiz in
                 lvtyp,
-                expr pos
-                  (new_exp
+                expr
+                  (new_exp ~loc
                      (BinOp(Div,
-                            new_exp (BinOp(Mult,nelem,elsize,typeOf arg)),
+                            new_exp ~loc (BinOp(Mult,nelem,elsize,typeOf arg)),
                             esiz,
                             typeOf arg)))
           in
@@ -1926,7 +1923,7 @@ let rec instruction = function
           JCPEapp(v.vname,[],
                   keep_only_declared_nb_of_arguments
                     v
-                    (List.map (expr pos) eargs))
+                    (List.map expr eargs))
       in
       let lvty = typeOfLval lv in
       let call = locate (mkexpr enode pos) in
@@ -1940,8 +1937,8 @@ let rec instruction = function
         else
           let tmpv = makeTempVar (get_curFundec()) (getReturnType v.vtype) in
           let tmplv = Var tmpv, NoOffset in
-          let cast = new_exp (CastE(lvty,new_exp(Lval tmplv))) in
-          let tmpassign = JCPEassign(lval pos lv,expr pos cast) in
+          let cast = new_exp ~loc:pos (CastE(lvty,new_exp(Lval tmplv))) in
+          let tmpassign = JCPEassign(lval pos lv,expr cast) in
           JCPElet(None,tmpv.vname,Some call,locate (mkexpr tmpassign pos))
       in
       (locate (mkexpr enode pos))#node
@@ -1981,8 +1978,7 @@ let rec statement s =
   let snode = match s.skind with
     | Instr i -> instruction i
 
-    | Return(Some e,pos) ->
-        JCPEreturn(expr pos e)
+    | Return(Some e,_) -> JCPEreturn(expr e)
 
     | Return(None,_pos) ->
         JCPEreturn(mkexpr (JCPEconst JCCvoid) pos)
@@ -2001,8 +1997,8 @@ let rec statement s =
     | Continue _pos ->
         assert false (* Should not occur after [prepareCFG] *)
 
-    | If(e,bl1,bl2,pos) ->
-        JCPEif(boolean_expr pos e,block bl1,block bl2)
+    | If(e,bl1,bl2,_) ->
+        JCPEif(boolean_expr e,block bl1,block bl2)
 
     | Switch(e,bl,slist,pos) ->
         let case_blocks stat_list case_list =
@@ -2037,7 +2033,7 @@ let rec statement s =
         in
         let switch_label = function
           | Label _ -> assert false
-          | Case(e,pos) -> Some(expr pos e)
+          | Case(e,_) -> Some(expr e)
           | Default _ -> None
         in
         let case = function
@@ -2049,7 +2045,7 @@ let rec statement s =
               labs, slist
         in
         let case_list = List.map case (case_blocks bl.bstmts slist) in
-        JCPEswitch(expr pos e,case_list)
+        JCPEswitch(expr e,case_list)
 
     | Loop (_,bl,_pos,_continue_stmt,_break_stmt) ->
 	let loop_annot =

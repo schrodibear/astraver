@@ -882,22 +882,22 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_and_field_po11.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "24" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "24" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po12.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "24" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "24" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po13.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "25" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "25" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po14.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "25" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "25" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -922,22 +922,22 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_and_field_po3.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "18" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "18" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po4.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "18" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "18" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po5.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "19" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "19" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po6.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "19" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "19" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

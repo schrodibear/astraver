@@ -1119,22 +1119,22 @@ why --project [...] why/all_zeros.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_zeros_po23.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "19" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po24.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "19" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po25.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po26.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "43" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1147,12 +1147,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po29.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "44" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "44" begin = "9" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po30.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "44" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "44" begin = "9" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1196,22 +1196,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_zeros_po9.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "26" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "30" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po10.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "26" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "30" end = "34"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po11.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po12.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "54" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1263,22 +1263,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_zeros_po39.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po40.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po41.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "20" end = "24"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po42.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "32" begin = "20" end = "24"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1291,12 +1291,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po45.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "33" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "33" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_zeros_po46.why">
-      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "33" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/all_zeros.c" line = "33" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

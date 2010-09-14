@@ -464,12 +464,12 @@ why --project [...] why/see.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/see_po6.why">
-      <location file = "PPCHOME/tests/jessie/see.c" line = "41" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/see.c" line = "41" begin = "7" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/see_po7.why">
-      <location file = "PPCHOME/tests/jessie/see.c" line = "41" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/see.c" line = "41" begin = "7" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -485,12 +485,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/see_po3.why">
-      <location file = "PPCHOME/tests/jessie/see.c" line = "34" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/see.c" line = "34" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/see_po4.why">
-      <location file = "PPCHOME/tests/jessie/see.c" line = "34" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/see.c" line = "34" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

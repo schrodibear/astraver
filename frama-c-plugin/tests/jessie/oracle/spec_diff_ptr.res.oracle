@@ -470,12 +470,12 @@ why --project [...] why/spec_diff_ptr.why
 text = ""/>
     </goal>
     <goal why_file="why/spec_diff_ptr_po3.why">
-      <location file = "PPCHOME/tests/jessie/spec_diff_ptr.c" line = "28" begin = "25" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/spec_diff_ptr.c" line = "28" begin = "32" end = "35"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/spec_diff_ptr_po4.why">
-      <location file = "PPCHOME/tests/jessie/spec_diff_ptr.c" line = "28" begin = "25" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/spec_diff_ptr.c" line = "28" begin = "32" end = "35"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

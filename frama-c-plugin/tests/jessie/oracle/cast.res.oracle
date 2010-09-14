@@ -846,12 +846,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/cast_po15.why">
-      <location file = "PPCHOME/tests/jessie/cast.c" line = "21" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/cast.c" line = "21" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/cast_po16.why">
-      <location file = "PPCHOME/tests/jessie/cast.c" line = "21" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/cast.c" line = "21" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -912,12 +912,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po10.why">
-      <location file = "PPCHOME/tests/jessie/cast.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/cast.c" line = "16" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/cast_po11.why">
-      <location file = "PPCHOME/tests/jessie/cast.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/cast.c" line = "16" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

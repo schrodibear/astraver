@@ -647,22 +647,22 @@ why --project [...] why/permut_search.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/permut_search_po3.why">
-      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "11" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "11" begin = "8" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search_po4.why">
-      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "11" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "11" begin = "8" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search_po5.why">
-      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "12" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "12" begin = "10" end = "18"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/permut_search_po6.why">
-      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "12" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "12" begin = "10" end = "18"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

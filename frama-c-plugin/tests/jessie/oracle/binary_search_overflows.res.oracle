@@ -881,87 +881,87 @@ why --project [...] why/binary_search_overflows.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/binary_search_overflows_po19.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "15" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "15" begin = "17" end = "20"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po20.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "15" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "15" begin = "17" end = "20"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po21.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "17" end = "20"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po22.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "17" end = "20"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po23.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "16" end = "25"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po24.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "16" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po25.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "16" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po26.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "12" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po27.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "24" begin = "12" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po28.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "26" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "26" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po29.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "26" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "26" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po30.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "27" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "27" begin = "10" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po31.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "27" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "27" begin = "10" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po32.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "28" begin = "9" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "28" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po33.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "28" begin = "9" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "28" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po34.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "29" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "29" begin = "10" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/binary_search_overflows_po35.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "29" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "29" begin = "10" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

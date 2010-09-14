@@ -443,7 +443,7 @@ why --project [...] why/test5_floats.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/test5_floats_po5.why">
-      <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "16" begin = "26" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/test5_floats.c" line = "16" begin = "26" end = "35"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

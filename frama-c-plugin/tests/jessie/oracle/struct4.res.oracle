@@ -906,22 +906,22 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct4_po3.why">
-      <location file = "PPCHOME/tests/jessie/struct4.c" line = "55" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/struct4.c" line = "55" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct4_po4.why">
-      <location file = "PPCHOME/tests/jessie/struct4.c" line = "55" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/struct4.c" line = "55" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct4_po5.why">
-      <location file = "PPCHOME/tests/jessie/struct4.c" line = "57" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct4.c" line = "57" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct4_po6.why">
-      <location file = "PPCHOME/tests/jessie/struct4.c" line = "57" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/struct4.c" line = "57" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

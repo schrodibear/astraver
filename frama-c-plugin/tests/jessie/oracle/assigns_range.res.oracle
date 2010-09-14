@@ -1063,12 +1063,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assigns_range_po8.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.c" line = "59" begin = "1" end = "2"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.c" line = "59" begin = "3" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/assigns_range_po9.why">
-      <location file = "PPCHOME/tests/jessie/assigns_range.c" line = "59" begin = "1" end = "2"/>
+      <location file = "PPCHOME/tests/jessie/assigns_range.c" line = "59" begin = "3" end = "8"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

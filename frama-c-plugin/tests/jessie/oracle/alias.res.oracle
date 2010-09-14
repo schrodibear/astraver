@@ -691,32 +691,32 @@ why --project [...] why/alias.why
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alias_po11.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/alias_po12.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/alias_po13.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/alias_po14.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/alias_po15.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/alias_po16.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "38" begin = "9" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -746,12 +746,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/alias_po6.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "31" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "31" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/alias_po7.why">
-      <location file = "PPCHOME/tests/jessie/alias.c" line = "31" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/alias.c" line = "31" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

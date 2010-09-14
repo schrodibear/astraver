@@ -751,12 +751,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "12" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "12" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "12" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "12" begin = "4" end = "9"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

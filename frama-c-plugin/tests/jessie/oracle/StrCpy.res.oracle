@@ -452,22 +452,22 @@ why --project [...] why/StrCpy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/StrCpy_po1.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "9" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "9" begin = "9" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po2.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "9" begin = "2" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "9" begin = "9" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po3.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "11" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "11" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po4.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "11" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.c" line = "11" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -1733,12 +1733,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po28.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "46" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "46" begin = "24" end = "27"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct_hack_po29.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "46" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "46" begin = "24" end = "27"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1810,12 +1810,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po12.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "30" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "30" begin = "24" end = "27"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct_hack_po13.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "30" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "30" begin = "24" end = "27"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1887,12 +1887,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/struct_hack_po44.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "14" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "14" begin = "23" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/struct_hack_po45.why">
-      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "14" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/struct_hack.c" line = "14" begin = "23" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

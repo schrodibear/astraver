@@ -540,7 +540,7 @@ why --project [...] why/bts0362.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0362_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0362.c" line = "25" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0362.c" line = "25" begin = "11" end = "12"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>

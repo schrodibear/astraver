@@ -578,12 +578,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bitvector_po3.why">
-      <location file = "PPCHOME/tests/jessie/bitvector.c" line = "8" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bitvector.c" line = "8" begin = "9" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bitvector_po4.why">
-      <location file = "PPCHOME/tests/jessie/bitvector.c" line = "8" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bitvector.c" line = "8" begin = "9" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

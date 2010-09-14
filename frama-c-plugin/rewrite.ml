@@ -29,9 +29,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 (* Import from Cil *)
+open Cabs
 open Cil_types
 open Cil
 open Cilutil
@@ -252,7 +251,7 @@ object
   method vexpr e = match e.enode with
     | AddrOf lv ->
 	if isArrayType(typeOfLval lv) then
-	  ChangeDoChildrenPost (new_exp (StartOf lv), fun x -> x)
+	  ChangeDoChildrenPost (new_exp ~loc:e.eloc (StartOf lv), fun x -> x)
 	else DoChildren
     | _ -> DoChildren
 
@@ -285,13 +284,17 @@ class replaceStringConstants =
   let wstring_to_var = Hashtbl.create 17 in
 
   (* Use the Cil translation on initializers. First translate to primitive
-   * AST to later apply translation in [Cabs.blockInitializer].
+   * AST to later apply translation in [blockInitializer].
    *)
   let string_cabs_init s =
-    Cabs.SINGLE_INIT(Cabs.CONSTANT(Cabs.CONST_STRING s))
+    SINGLE_INIT(
+      { expr_node = CONSTANT(CONST_STRING s); expr_loc = Cabshelper.cabslu }
+    )
   in
   let wstring_cabs_init ws =
-    Cabs.SINGLE_INIT(Cabs.CONSTANT(Cabs.CONST_WSTRING ws))
+    SINGLE_INIT(
+      { expr_node = CONSTANT(CONST_WSTRING ws); expr_loc = Cabshelper.cabslu }
+    )
   in
 
   (* Name of variable should be as close as possible to the string it
@@ -362,7 +365,7 @@ class replaceStringConstants =
       else
 	mkterm (Tapp(strlen,[],[tv])) strlen_type v.vdecl
     in
-    let size = constant_term locUnknown (Int64.of_int size) in
+    let size = constant_term v.vdecl (Int64.of_int size) in
     let psize = Prel(Req,strsize,size) in
     let p = Pand(predicate v.vdecl pstring,predicate v.vdecl psize) in
     let globinv =
@@ -388,7 +391,7 @@ object
 	       make_glob ~wstring:false (string_var s) (String.length s)
 		 (string_cabs_init s))
 	in
-	ChangeTo (new_exp (StartOf(Var v,NoOffset)))
+	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v,NoOffset)))
     | Const(CWStr ws) ->
 	let v =
 	  findOrAdd wstring_to_var ws
@@ -396,7 +399,7 @@ object
 	       make_glob ~wstring:true (wstring_var ()) (List.length ws - 1)
 		 (wstring_cabs_init ws))
 	in
-	ChangeTo (new_exp (StartOf(Var v,NoOffset)))
+	ChangeTo (new_exp ~loc:e.eloc (StartOf(Var v,NoOffset)))
     | _ -> DoChildren
 
   method vglob_aux = function
@@ -461,8 +464,10 @@ class rewritePointerCompare =
   let preaction_expr e = match e.enode with
     | BinOp((Lt | Gt | Le | Ge | Eq | Ne as op),e1,e2,ty)
 	when isPointerType (typeOf e1) && not (is_null_expr e2) ->
-	new_exp
-          (BinOp(op,new_exp(BinOp(MinusPP,e1,e2,theMachine.ptrdiffType)),
+	new_exp ~loc:e.eloc
+          (BinOp(op,
+                 new_exp ~loc:e.eloc
+                   (BinOp(MinusPP,e1,e2,theMachine.ptrdiffType)),
 	         constant_expr 0L,ty))
     | _ -> e
   in
@@ -516,15 +521,21 @@ let rec destruct_pointer e = match (stripInfo e).enode with
 	| Some(v,None) ->
 	    begin match op with
 	      | PlusPI | IndexPI -> Some(v,Some e2)
-	      | MinusPI -> Some(v,Some(new_exp(UnOp(Neg,e2,typeOf e2))))
+	      | MinusPI ->
+                  Some(v,
+                       Some(new_exp ~loc:e.eloc (UnOp(Neg,e2,typeOf e2))))
 	      | _ -> assert false
 	    end
 	| Some(v,Some off) ->
 	    begin match op with
 	      | PlusPI | IndexPI ->
-                  Some(v,Some(new_exp(BinOp(PlusA,off,e2,typeOf e2))))
+                  Some(v,
+                       Some(new_exp ~loc:e.eloc
+                              (BinOp(PlusA,off,e2,typeOf e2))))
 	      | MinusPI ->
-                  Some(v,Some(new_exp(BinOp(MinusA,off,e2,typeOf e2))))
+                  Some(v,
+                       Some(new_exp ~loc:e.eloc
+                              (BinOp(MinusA,off,e2,typeOf e2))))
 	      | _ -> assert false
 	    end
       end
@@ -682,19 +693,21 @@ class rewriteCursorPointers
    * no offset needed.
    *)
   let expr_offset v =
+    let loc = Cil_const.CurrentLoc.get () in
     if v.vformal then
       let voff = VarinfoHashtbl.find cursor_to_offset v in
-      new_exp(Lval(Var voff,NoOffset))
+      new_exp ~loc (Lval(Var voff,NoOffset))
     else
       let voff = VarinfoHashtbl.find cursor_to_offset v in
       let vb = VarinfoHashtbl.find cursor_to_base v in
       if VarinfoHashtbl.mem formal_to_base vb then
 	let voff2 = VarinfoHashtbl.find cursor_to_offset vb in
-	new_exp(BinOp(PlusA,
-                      new_exp (Lval(Var voff,NoOffset)),
-                      new_exp (Lval(Var voff2,NoOffset)),
-	              theMachine.ptrdiffType))
-      else new_exp (Lval(Var voff,NoOffset))
+	new_exp ~loc
+          (BinOp(PlusA,
+                 new_exp ~loc (Lval(Var voff,NoOffset)),
+                 new_exp ~loc (Lval(Var voff2,NoOffset)),
+	         theMachine.ptrdiffType))
+      else new_exp ~loc (Lval(Var voff,NoOffset))
   in
   (* Find basis for variable [v] *)
   let var_base v =
@@ -710,10 +723,11 @@ class rewriteCursorPointers
       raise Not_found
   in
   let lval_base vb =
+    let loc = Cil_const.CurrentLoc.get () in
     if isArrayType vb.vtype then
-      new_exp (StartOf(Var vb,NoOffset))
+      new_exp ~loc (StartOf(Var vb,NoOffset))
     else
-      new_exp (Lval(Var vb,NoOffset))
+      new_exp ~loc (Lval(Var vb,NoOffset))
   in
   let preaction_expr e = match e.enode with
     | BinOp(MinusPP,e1,e2,_) ->
@@ -732,22 +746,26 @@ class rewriteCursorPointers
                   | Some off,None | None,Some off -> Some off
                   | Some off1,Some off2 ->
                       Some
-                        (new_exp(BinOp(PlusA,off1,off2,theMachine.ptrdiffType)))
+                        (new_exp ~loc:e.eloc
+                           (BinOp(PlusA,off1,off2,theMachine.ptrdiffType)))
                 in
                 let offopt2 = match v2offopt,offopt2 with
                   | None,None -> None
                   | Some off,None | None,Some off -> Some off
                   | Some off1,Some off2 ->
                       Some
-                        (new_exp(BinOp(PlusA,off1,off2,theMachine.ptrdiffType)))
+                        (new_exp ~loc:e.eloc
+                           (BinOp(PlusA,off1,off2,theMachine.ptrdiffType)))
                 in
                 match offopt1,offopt2 with
                   | Some off1,Some off2 ->
-		      new_exp(BinOp(MinusA,off1,off2,theMachine.ptrdiffType))
+		      new_exp ~loc:e.eloc
+                        (BinOp(MinusA,off1,off2,theMachine.ptrdiffType))
                   | Some off1,None ->
 		      off1
                   | None,Some off2 ->
-	              new_exp(UnOp(Neg,off2,theMachine.ptrdiffType))
+	              new_exp ~loc:e.eloc
+                        (UnOp(Neg,off2,theMachine.ptrdiffType))
                   | None,None ->
 		      constant_expr 0L
               else e
@@ -761,7 +779,8 @@ class rewriteCursorPointers
 	   * the second one only on local array variables.
 	   *)
 	  let vb = var_base v in
-	  new_exp (BinOp(PlusPI,lval_base vb,expr_offset v,v.vtype))
+	  new_exp ~loc:e.eloc
+            (BinOp(PlusPI,lval_base vb,expr_offset v,v.vtype))
 	with Not_found -> e end
     | _ -> e
   in
@@ -784,14 +803,17 @@ object
 	  local v; (* Create an offset variable for this formal *)
 	  let voff = VarinfoHashtbl.find cursor_to_offset v in
 	  let vb = VarinfoHashtbl.find formal_to_base v in
+          let loc = CurrentLoc.get () in
 	  let initst =
 	    mkStmt(
-	      Instr(Set((Var voff,NoOffset),
-	                new_exp (BinOp(MinusPP,
-                                       new_exp (Lval(Var v,NoOffset)),
-                                       lval_base vb,
-		                       theMachine.ptrdiffType)),
-			CurrentLoc.get())))
+	      Instr(
+                Set((Var voff,NoOffset),
+	            new_exp ~loc:(CurrentLoc.get())
+                      (BinOp (MinusPP,
+                              new_exp ~loc (Lval(Var v,NoOffset)),
+                              lval_base vb,
+		              theMachine.ptrdiffType)),
+		    loc)))
 	  in
 	  add_pending_statement ~beginning:true initst
 	end
@@ -826,7 +848,8 @@ object
 	      | None -> assert false
 	      | Some(v2,Some e) ->
 		  begin try
-                    new_exp (BinOp(PlusA,expr_offset v2,e,almost_integer_type))
+                    new_exp ~loc:e.eloc
+                      (BinOp(PlusA,expr_offset v2,e,almost_integer_type))
 		  with Not_found -> assert false end
 	      | Some(v2,None) ->
 		  begin try expr_offset v2
@@ -846,7 +869,8 @@ object
 	      | None -> assert false
 	      | Some(v2,Some e) ->
 		  begin try
-                    new_exp (BinOp(PlusA,expr_offset v2,e,almost_integer_type))
+                    new_exp ~loc:e.eloc
+                      (BinOp(PlusA,expr_offset v2,e,almost_integer_type))
 		  with Not_found -> e end
 	      | Some(v2,None) ->
 		  begin try expr_offset v2
@@ -923,15 +947,22 @@ let rec destruct_integer e = match e.enode with
 	| Some(v,None) ->
 	    begin match op with
 	      | PlusA -> Some(v,Some e2)
-	      | MinusA -> Some(v,Some(new_exp(UnOp(Neg,e2,almost_integer_type))))
+	      | MinusA ->
+                  Some(v,
+                       Some(new_exp ~loc:e.eloc
+                              (UnOp(Neg,e2,almost_integer_type))))
 	      | _ -> assert false
 	    end
 	| Some(v,Some off) ->
 	    begin match op with
 	      | PlusA ->
-                  Some(v,Some(new_exp(BinOp(PlusA,off,e2,almost_integer_type))))
+                  Some(v,
+                       Some(new_exp ~loc:e.eloc
+                              (BinOp(PlusA,off,e2,almost_integer_type))))
 	      | MinusA ->
-                  Some(v,Some(new_exp(BinOp(MinusA,off,e2,almost_integer_type))))
+                  Some(v,
+                       Some(new_exp ~loc:e.eloc
+                              (BinOp(MinusA,off,e2,almost_integer_type))))
 	      | _ -> assert false
 	    end
       end
@@ -1031,10 +1062,11 @@ class rewriteCursorIntegers
 	begin try
 	  let vb = VarinfoHashtbl.find cursor_to_base v in
 	  let voff = VarinfoHashtbl.find cursor_to_offset v in
-	  new_exp(BinOp(PlusA,
-                        new_exp(Lval(Var vb,NoOffset)),
-                        new_exp(Lval(Var voff,NoOffset)),
-                        v.vtype))
+	  new_exp ~loc:e.eloc
+            (BinOp(PlusA,
+                   new_exp ~loc:e.eloc (Lval(Var vb,NoOffset)),
+                   new_exp ~loc:e.eloc (Lval(Var voff,NoOffset)),
+                   v.vtype))
 	with Not_found -> e end
     | _ -> e
   in
@@ -1096,15 +1128,16 @@ object
 	    | Some(v2,Some e) ->
 		begin try
 		  let voff2 = VarinfoHashtbl.find cursor_to_offset v2 in
-		  new_exp(BinOp(PlusA,
-                                new_exp (Lval(Var voff2,NoOffset)),
-                                e,
-                                almost_integer_type))
+		  new_exp ~loc:e.eloc
+                    (BinOp(PlusA,
+                           new_exp ~loc:e.eloc (Lval(Var voff2,NoOffset)),
+                           e,
+                           almost_integer_type))
 		with Not_found -> e end
 	    | Some(v2,None) ->
 		begin try
 		  let voff2 = VarinfoHashtbl.find cursor_to_offset v2 in
-		  new_exp (Lval(Var voff2,NoOffset))
+		  new_exp ~loc (Lval(Var voff2,NoOffset))
 		with Not_found -> constant_expr 0L end
 	  in
 	  ChangeDoChildrenPost
@@ -1265,9 +1298,7 @@ object(self)
     begin match destruct_string_access e with None -> () | Some(v,off) ->
       if hasAttribute name_of_string_declspec (typeAttrs v.vtype) then
 	(* A string should be accessed within its bounds *)
-	let off =
-	  !Db.Properties.Interp.force_exp_to_term locUnknown off
-	in
+	let off = !Db.Properties.Interp.force_exp_to_term off in
 	let app = within_bounds ~strict:false v off in
 	let cur_stmt = the self#current_stmt in
 	Annotations.add_alarm
@@ -1289,9 +1320,7 @@ object(self)
 		  (* A string should be tested within its bounds, and
 		     depending on the result, the offset is either before
 		     or equal to the length of the string *)
-		  let off =
-		    !Db.Properties.Interp.force_exp_to_term locUnknown off
-		  in
+		  let off = !Db.Properties.Interp.force_exp_to_term off in
 		  let rel1 = within_bounds ~strict:true v off in
 		  let supst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
 		  Annotations.add_alarm
@@ -1321,23 +1350,17 @@ object(self)
 		      if test_to_null then fbl.bstmts <- eqst :: fbl.bstmts
 		    end
 	  end; s
-      | Instr(Set(lv,e,_loc)) when is_null_expr e ->
+      | Instr(Set(lv,e,loc)) when is_null_expr e ->
 	  if Jessie_options.HintLevel.get () > 1 then
 	    match lval_destruct_string_access ~through_tmp:true lv with
 	      | None -> ()
 	      | Some(v,off) ->
-		  let off =
-		    !Db.Properties.Interp.force_exp_to_term locUnknown off
-		  in
+		  let off = !Db.Properties.Interp.force_exp_to_term off in
 		  (* Help ATP with proving the bound on [strlen(v)] by
 		     asserting the obvious equality *)
-		  let lv' = !Db.Properties.Interp.force_lval_to_term_lval
-		    locUnknown lv
-		  in
-		  let e' = !Db.Properties.Interp.force_exp_to_term
-		    locUnknown e
-		  in
-		  let lvt = mkterm (TLval lv') strlen_type locUnknown in
+		  let lv' = !Db.Properties.Interp.force_lval_to_term_lval lv in
+		  let e' = !Db.Properties.Interp.force_exp_to_term e in
+		  let lvt = mkterm (TLval lv') strlen_type loc in
 		  let rel =
 		    Logic_const.new_predicate (Logic_const.prel (Req,lvt,e'))
 		  in
@@ -1424,9 +1447,11 @@ object(self)
 	  begin match possible_value_of_integral_expr e2' with
 	    | Some i when i >= 0L -> ()
 	    | _ ->
-		let check = new_exp (BinOp(Ge,e2',constant_expr 0L,intType)) in
 		let check =
-		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
+                  new_exp ~loc:e.eloc (BinOp(Ge,e2',constant_expr 0L,intType))
+                in
+		let check =
+                  !Db.Properties.Interp.force_exp_to_predicate check
 		in
 		Annotations.add_alarm
 		  cur_stmt
@@ -1442,9 +1467,10 @@ object(self)
 	  | Some i when i < max_right -> ()
 	  | _ ->
 	      let max_right = constant_expr max_right in
-	      let check = new_exp (BinOp(Lt,e2',max_right,intType)) in
 	      let check =
-		!Db.Properties.Interp.force_exp_to_predicate locUnknown check
+                new_exp ~loc:e.eloc (BinOp(Lt,e2',max_right,intType)) in
+	      let check =
+		!Db.Properties.Interp.force_exp_to_predicate check
 	      in
 	      Annotations.add_alarm
 		cur_stmt
@@ -1458,9 +1484,11 @@ object(self)
 	  begin match possible_value_of_integral_expr e1' with
 	    | Some i when i >= 0L -> ()
 	    | _ ->
-		let check = new_exp (BinOp(Ge,e1',constant_expr 0L,intType)) in
 		let check =
-		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
+                  new_exp ~loc:e.eloc
+                    (BinOp(Ge,e1',constant_expr 0L,intType)) in
+		let check =
+		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
 		Annotations.add_alarm
 		  cur_stmt
@@ -1485,9 +1513,11 @@ object(self)
 		 *)
 		let i = Int64.to_int i in
 		let max_left = constant_expr (Int64.shift_right max_int i) in
-		let check = new_exp (BinOp(Le,e1',max_left,intType)) in
 		let check =
-		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
+                  new_exp ~loc:e.eloc (BinOp(Le,e1',max_left,intType))
+                in
+		let check =
+		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
 		Annotations.add_alarm
 		  cur_stmt
@@ -1497,10 +1527,14 @@ object(self)
 		  check
 	    | _ ->
 		let max_int = constant_expr max_int in
-		let max_left = new_exp (BinOp(Shiftrt,max_int,e2',intType)) in
-		let check = new_exp (BinOp(Le,e1',max_left,intType)) in
+		let max_left =
+                  new_exp ~loc:e.eloc (BinOp(Shiftrt,max_int,e2',intType))
+                in
+		let check = new_exp ~loc:e.eloc
+                  (BinOp(Le,e1',max_left,intType))
+                in
 		let check =
-		  !Db.Properties.Interp.force_exp_to_predicate locUnknown check
+		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
 		Annotations.add_alarm
 		  cur_stmt

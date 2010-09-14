@@ -1248,12 +1248,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po46.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "113" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "113" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po47.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "113" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "113" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1273,72 +1273,72 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po32.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "7" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po33.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "7" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po34.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "7" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po35.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "7" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po36.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po37.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "101" begin = "2" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po38.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po39.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po40.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "13" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po41.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "102" begin = "13" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po42.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "16" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po43.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "16" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po44.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po45.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "103" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1348,12 +1348,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po26.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "91" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "91" begin = "8" end = "13"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po27.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "91" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "91" begin = "8" end = "13"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1381,12 +1381,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po20.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "74" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "74" begin = "10" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po21.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "74" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "74" begin = "10" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1422,22 +1422,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po12.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/trace_po13.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/trace_po14.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/trace_po15.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "58" begin = "9" end = "14"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1447,22 +1447,22 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po8.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "43" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "43" begin = "11" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po9.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "43" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "43" begin = "11" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po10.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "45" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "45" begin = "8" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po11.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "45" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "45" begin = "8" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1486,12 +1486,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/trace_po3.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "28" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "28" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/trace_po4.why">
-      <location file = "PPCHOME/tests/jessie/trace.c" line = "28" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/trace.c" line = "28" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

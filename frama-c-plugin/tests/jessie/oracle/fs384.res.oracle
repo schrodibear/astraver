@@ -488,12 +488,12 @@ why --project [...] why/fs384.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/fs384_po1.why">
-      <location file = "PPCHOME/tests/jessie/fs384.c" line = "6" begin = "1" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/fs384.c" line = "6" begin = "16" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs384_po2.why">
-      <location file = "PPCHOME/tests/jessie/fs384.c" line = "6" begin = "1" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/fs384.c" line = "6" begin = "16" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

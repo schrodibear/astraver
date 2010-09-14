@@ -564,12 +564,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0361_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0361.c" line = "8" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0361.c" line = "8" begin = "6" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0361_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0361.c" line = "8" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0361.c" line = "8" begin = "6" end = "9"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

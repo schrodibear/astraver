@@ -787,12 +787,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/passing_po8.why">
-      <location file = "PPCHOME/tests/jessie/passing.c" line = "37" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/passing.c" line = "37" begin = "24" end = "26"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/passing_po9.why">
-      <location file = "PPCHOME/tests/jessie/passing.c" line = "37" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/passing.c" line = "37" begin = "24" end = "26"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

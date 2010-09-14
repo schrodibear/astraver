@@ -371,7 +371,7 @@ why --project [...] why/fact.why
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po4.why">
-      <location file = "PPCHOME/tests/jessie/fact.c" line = "48" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/fact.c" line = "48" begin = "13" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

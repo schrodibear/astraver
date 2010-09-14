@@ -851,7 +851,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_union_po5.why">
-      <location file = "PPCHOME/tests/jessie/pointer_union.c" line = "11" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/pointer_union.c" line = "11" begin = "15" end = "34"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
@@ -866,12 +866,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_union_po8.why">
-      <location file = "PPCHOME/tests/jessie/pointer_union.c" line = "12" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/pointer_union.c" line = "12" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_union_po9.why">
-      <location file = "PPCHOME/tests/jessie/pointer_union.c" line = "12" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/pointer_union.c" line = "12" begin = "3" end = "7"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

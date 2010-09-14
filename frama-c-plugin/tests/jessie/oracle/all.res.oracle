@@ -1190,22 +1190,22 @@ why --project [...] why/all.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po28.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po29.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po30.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_po31.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "74" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1221,22 +1221,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po23.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po24.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po25.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_po26.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "70" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1279,12 +1279,12 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po17.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "52" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "52" begin = "12" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po18.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "52" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "52" begin = "12" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1300,12 +1300,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po14.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "48" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "48" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po15.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "48" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "48" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1325,12 +1325,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po10.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "44" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "44" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po11.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "44" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "44" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1350,12 +1350,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po6.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "40" begin = "12" end = "14"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "40" begin = "12" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po7.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "40" begin = "12" end = "14"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "40" begin = "12" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1371,12 +1371,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/all_po3.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "36" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "36" begin = "12" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/all_po4.why">
-      <location file = "PPCHOME/tests/jessie/all.c" line = "36" begin = "12" end = "13"/>
+      <location file = "PPCHOME/tests/jessie/all.c" line = "36" begin = "12" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

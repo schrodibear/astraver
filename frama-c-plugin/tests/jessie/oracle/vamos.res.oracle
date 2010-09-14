@@ -1145,12 +1145,12 @@ why --project [...] why/vamos.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/vamos_po10.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "56" begin = "2" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "56" begin = "21" end = "31"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po11.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "56" begin = "2" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "56" begin = "21" end = "31"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1160,22 +1160,22 @@ text = "ArithOverflow"/>
 text = ""/>
     </goal>
     <goal why_file="why/vamos_po13.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "4" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po14.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "4" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po15.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "4" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po16.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "4" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "69" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1185,32 +1185,32 @@ text = "ArithOverflow"/>
 text = ""/>
     </goal>
     <goal why_file="why/vamos_po18.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "1" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "19" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po19.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "1" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "19" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po20.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "1" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "19" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po21.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "1" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "72" begin = "19" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po22.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "74" begin = "1" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "74" begin = "14" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po23.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "74" begin = "1" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "74" begin = "14" end = "35"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1225,12 +1225,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po26.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "76" begin = "6" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "76" begin = "10" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po27.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "76" begin = "6" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "76" begin = "10" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1240,32 +1240,32 @@ text = "PointerDeref"/>
 text = ""/>
     </goal>
     <goal why_file="why/vamos_po29.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "82" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "82" begin = "7" end = "31"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po30.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "82" begin = "3" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "82" begin = "7" end = "31"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po31.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "83" begin = "5" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "83" begin = "20" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po32.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "83" begin = "5" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "83" begin = "20" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po33.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "84" begin = "3" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "84" begin = "20" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po34.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "84" begin = "3" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "84" begin = "20" end = "40"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1278,12 +1278,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po37.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "91" begin = "4" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "91" begin = "22" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po38.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "91" begin = "4" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "91" begin = "22" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

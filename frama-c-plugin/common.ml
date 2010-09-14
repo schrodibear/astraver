@@ -989,18 +989,16 @@ let mkpred pnode loc =
   }
 
 let mkInfo e =
-  match e.enode with Info _ -> e | _ ->
-    let einfo = {
-      exp_loc = locUnknown;
-      (* In many cases, the correct type may not be available, as
-       * the expression may result from a conversion from a term or a tset.
-       * Calling [typeOf] on such an expression may raise an error.
-       * Therefore, put here a dummy type until tsets correctly typed.
-       *)
-      exp_type = Ctype voidType; (* Ctype(typeOf e); *)
-      exp_name = [];
-    } in
-    new_exp (Info(e,einfo))
+  match e.enode with
+      Info _ -> e
+    | _ ->
+        let einfo = { exp_type = Ctype voidType; exp_name = [] } in
+        (* In many cases, the correct type may not be available, as
+         * the expression may result from a conversion from a term or a tset.
+         * Calling [typeOf] on such an expression may raise an error.
+         * Therefore, put here a dummy type until tsets correctly typed.
+         *)
+        new_exp ~loc:e.eloc (Info(e,einfo))
 
 (* Manipulation of offsets *)
 
@@ -1020,19 +1018,22 @@ let is_last_offset = function
  * same array that would be flattened to a single dimensional array.
  *)
 let rec lift_offset ty = function
-  | Index(idx1,(Index(_idx2, _off) as suboff)) ->
+  | Index(idx1,(Index(idx2, _off) as suboff)) ->
       let subty = direct_element_type ty in
       let siz = array_size subty in
       begin match lift_offset subty suboff with
 	| Index(idx, off) ->
-	    let mulidx = new_exp (BinOp(Mult,idx1,constant_expr siz,intType)) in
+	    let mulidx =
+              new_exp ~loc:idx2.eloc
+                (BinOp(Mult,idx1,constant_expr siz,intType)) in
 	    (* Keep info at top-level for visitors on terms that where
 	     * translated to expressions. Those expect these info when
 	     * translating back to term.
 	     *)
 	    let addidx =
-	      map_under_info (fun _e ->
-                                new_exp (BinOp(PlusA,mulidx,idx,intType))) idx1
+	      map_under_info
+                (fun e ->
+                   new_exp ~loc:e.eloc (BinOp(PlusA,mulidx,idx,intType))) idx1
 	    in
 	    Index(addidx,off)
 	| _ -> assert false
@@ -1044,7 +1045,10 @@ let rec lift_offset ty = function
 	(* Keep info at top-level *)
 	let mulidx =
 	  map_under_info
-	    (fun _e -> new_exp (BinOp(Mult,idx1,constant_expr siz,intType))) idx1
+	    (fun e ->
+               new_exp ~loc:e.eloc
+                 (BinOp(Mult,idx1,constant_expr siz,intType)))
+            idx1
 	in
 	Index(mulidx,NoOffset)
       else off
@@ -1119,14 +1123,14 @@ let free_function () =
     f
 
 let mkalloc v ty loc =
-  let callee = new_exp (Lval(Var(malloc_function ()),NoOffset)) in
+  let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
   let arg = sizeOf ty in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 
 let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))
 
 let mkalloc_array v ty num loc =
-  let callee = new_exp (Lval(Var(malloc_function ()),NoOffset)) in
+  let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
   let arg = constant_expr (Int64.mul num (Int64.of_int (sizeOf_int ty))) in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 
@@ -1134,8 +1138,8 @@ let mkalloc_array_statement v ty num loc =
   mkStmt (Instr(mkalloc_array v ty num loc))
 
 let mkfree v loc =
-  let callee = new_exp (Lval(Var(free_function ()),NoOffset)) in
-  let arg = new_exp (Lval(Var v,NoOffset)) in
+  let callee = new_exp ~loc (Lval(Var(free_function ()),NoOffset)) in
+  let arg = new_exp ~loc (Lval(Var v,NoOffset)) in
   Call(None,callee,[arg],loc)
 
 let mkfree_statement v loc = mkStmt (Instr(mkfree v loc))

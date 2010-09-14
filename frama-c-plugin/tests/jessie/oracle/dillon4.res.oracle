@@ -664,12 +664,12 @@ why --project [...] why/dillon4.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/dillon4_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/dillon4_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

@@ -599,72 +599,72 @@ why --project [...] why/arith.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/arith_po7.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "22" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "22" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po8.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "22" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "22" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po9.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "23" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "23" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po10.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "23" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "23" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po11.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "11" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po12.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "11" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po13.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "7" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po14.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "7" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po15.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "7" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po16.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "7" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po17.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "7" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po18.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "7" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po19.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/arith_po20.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

@@ -3029,22 +3029,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "11" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po11.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "11" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "11" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po13.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "44" begin = "11" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

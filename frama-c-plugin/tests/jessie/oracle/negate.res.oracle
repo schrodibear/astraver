@@ -572,12 +572,12 @@ why --project [...] why/negate.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/negate_po13.why">
-      <location file = "PPCHOME/tests/jessie/negate.c" line = "16" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/negate.c" line = "16" begin = "12" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/negate_po14.why">
-      <location file = "PPCHOME/tests/jessie/negate.c" line = "16" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/negate.c" line = "16" begin = "12" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

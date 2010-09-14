@@ -644,12 +644,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs350_po5.why">
-      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "28" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "35" end = "42"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs350_po6.why">
-      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "28" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "35" end = "42"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -664,12 +664,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs350_po9.why">
-      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "23" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs350_po10.why">
-      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/fs350.c" line = "10" begin = "23" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

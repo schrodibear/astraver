@@ -1224,12 +1224,12 @@ why --project [...] why/ref_glob.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po26.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "73" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "73" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po27.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "73" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "73" begin = "3" end = "5"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1284,22 +1284,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/ref_glob_po10.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "59" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "59" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po11.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "59" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "59" begin = "13" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po12.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "60" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "60" begin = "4" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po13.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "60" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "60" begin = "4" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1314,12 +1314,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/ref_glob_po16.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "61" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "61" begin = "4" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/ref_glob_po17.why">
-      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "61" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/ref_glob.c" line = "61" begin = "4" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

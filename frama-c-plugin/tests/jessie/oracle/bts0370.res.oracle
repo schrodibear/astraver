@@ -813,12 +813,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0370_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "9" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0370_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "9" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "16" end = "19"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -831,12 +831,12 @@ text = "ArithOverflow"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0370_po11.why">
-      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "9" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "13" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0370_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "9" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/bts0370.c" line = "20" begin = "13" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

@@ -813,22 +813,22 @@ why --project [...] why/geanta1.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/geanta1_po11.why">
-      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "14" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "26" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta1_po12.why">
-      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "14" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "26" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta1_po13.why">
-      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "35" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "47" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta1_po14.why">
-      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "35" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/geanta1.c" line = "19" begin = "47" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

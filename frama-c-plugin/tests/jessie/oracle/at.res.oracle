@@ -446,32 +446,32 @@ why --project [...] why/at.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/at_po4.why">
-      <location file = "PPCHOME/tests/jessie/at.c" line = "8" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/at.c" line = "8" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/at_po5.why">
-      <location file = "PPCHOME/tests/jessie/at.c" line = "8" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/at.c" line = "8" begin = "2" end = "8"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/at_po6.why">
-      <location file = "PPCHOME/tests/jessie/at.c" line = "10" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/at.c" line = "10" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/at_po7.why">
-      <location file = "PPCHOME/tests/jessie/at.c" line = "10" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/at.c" line = "10" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/at_po8.why">
-      <location file = "PPCHOME/tests/jessie/at.c" line = "12" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/at.c" line = "12" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/at_po9.why">
-      <location file = "PPCHOME/tests/jessie/at.c" line = "12" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/at.c" line = "12" begin = "2" end = "5"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

@@ -534,27 +534,27 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po4.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "15" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "15" begin = "13" end = "23"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po5.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "16" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "16" begin = "13" end = "23"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po6.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "17" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "17" begin = "13" end = "24"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po7.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "15" end = "18"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po8.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.c" line = "18" begin = "15" end = "22"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

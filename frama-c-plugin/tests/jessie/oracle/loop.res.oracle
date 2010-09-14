@@ -437,12 +437,12 @@ why --project [...] why/loop.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/loop_po3.why">
-      <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/loop_po4.why">
-      <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/loop.c" line = "9" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

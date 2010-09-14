@@ -366,17 +366,17 @@ why --project [...] why/bts0473.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0473_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0473.c" line = "4" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/bts0473.c" line = "4" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/bts0473_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0473.c" line = "4" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/bts0473.c" line = "4" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0473_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0473.c" line = "4" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/bts0473.c" line = "4" begin = "6" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

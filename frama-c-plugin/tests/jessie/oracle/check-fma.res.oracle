@@ -512,27 +512,27 @@ why --project [...] why/check-fma.why
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po5.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "6" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "6" begin = "20" end = "29"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po6.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "6" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "6" begin = "13" end = "30"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po7.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "8" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "8" begin = "13" end = "22"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po8.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "19" end = "24"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/check-fma_po9.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.c" line = "10" begin = "15" end = "24"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

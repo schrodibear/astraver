@@ -555,22 +555,22 @@ why --project [...] why/division.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/division_po8.why">
-      <location file = "PPCHOME/tests/jessie/division.c" line = "13" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/division.c" line = "13" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/division_po9.why">
-      <location file = "PPCHOME/tests/jessie/division.c" line = "13" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/division.c" line = "13" begin = "4" end = "7"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/division_po10.why">
-      <location file = "PPCHOME/tests/jessie/division.c" line = "14" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/division.c" line = "14" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/division_po11.why">
-      <location file = "PPCHOME/tests/jessie/division.c" line = "14" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/division.c" line = "14" begin = "4" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

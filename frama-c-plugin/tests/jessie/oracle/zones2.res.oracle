@@ -861,52 +861,52 @@ why --project [...] why/zones2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/zones2_po2.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po3.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po4.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "9" end = "19"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po5.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "9" end = "19"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po6.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "22" end = "26"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po7.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "22" end = "26"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po8.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "22" end = "32"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po9.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "22" end = "32"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/zones2_po10.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "9" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/zones2_po11.why">
-      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/zones2.c" line = "42" begin = "9" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

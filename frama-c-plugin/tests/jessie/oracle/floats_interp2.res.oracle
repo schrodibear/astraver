@@ -2430,42 +2430,42 @@ why --project [...] why/floats_interp2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_interp2_po36.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "11" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po37.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "11" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po38.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "24" end = "28"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po39.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "95" begin = "24" end = "28"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po40.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "23" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "32" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po41.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "23" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "32" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po42.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "17" end = "20"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po43.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "101" begin = "17" end = "20"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2478,117 +2478,117 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/floats_interp2_po46.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po47.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "21" end = "24"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po48.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "19" end = "25"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po49.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "12" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "102" begin = "19" end = "25"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po50.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po51.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po52.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po53.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "104" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po54.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po55.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "18" end = "21"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po56.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po57.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "108" begin = "16" end = "22"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po58.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "14" end = "18"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po59.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "110" begin = "14" end = "18"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po60.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po61.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/floats_interp2_po62.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "113" begin = "13" end = "24"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po63.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "116" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "116" begin = "13" end = "21"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po64.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "13" end = "16"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po65.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "119" begin = "13" end = "16"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po66.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "21" end = "28"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po67.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "18" end = "29"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp2_po68.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp2.c" line = "121" begin = "13" end = "29"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

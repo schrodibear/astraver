@@ -699,12 +699,12 @@ why --project [...] why/weber1.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber1_po8.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "5" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "12" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber1_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "5" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "12" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -719,12 +719,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber1_po12.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "18" begin = "8" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "18" begin = "26" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/weber1_po13.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "18" begin = "8" end = "11"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "18" begin = "26" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

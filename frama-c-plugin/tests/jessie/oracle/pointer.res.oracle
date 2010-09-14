@@ -1456,12 +1456,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po57.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "79" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "79" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po58.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "79" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "79" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1486,22 +1486,22 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/pointer_po49.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "24" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "31" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/pointer_po50.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "24" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "31" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/pointer_po51.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "24" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "31" end = "40"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po52.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "24" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "58" begin = "31" end = "40"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1522,17 +1522,17 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po36.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "53" begin = "2" end = "3"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "53" begin = "12" end = "31"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/pointer_po37.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "54" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "54" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/pointer_po38.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "54" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "54" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1548,22 +1548,22 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/pointer_po40.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/pointer_po41.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/pointer_po42.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/pointer_po43.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "48" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1597,22 +1597,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po10.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "12" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po11.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "12" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po12.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "9" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po13.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "9" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1627,12 +1627,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po16.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "12" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po17.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "39" begin = "12" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1670,32 +1670,32 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po25.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "10" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po26.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "10" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po27.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "10" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po28.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "10" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po29.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "9" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po30.why">
-      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/pointer.c" line = "32" begin = "9" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

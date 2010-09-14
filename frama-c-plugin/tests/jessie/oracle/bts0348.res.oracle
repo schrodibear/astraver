@@ -514,12 +514,12 @@ why --project [...] why/bts0348.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0348_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "33" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "33" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0348_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "33" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "33" begin = "9" end = "11"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -529,12 +529,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0348_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "27" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "27" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0348_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "27" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "27" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -544,12 +544,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0348_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "21" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "21" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0348_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "21" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "21" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -559,12 +559,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0348_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "15" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "15" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0348_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "15" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0348.c" line = "15" begin = "9" end = "12"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

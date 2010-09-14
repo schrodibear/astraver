@@ -739,12 +739,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/cast_call_po5.why">
-      <location file = "PPCHOME/tests/jessie/cast_call.c" line = "15" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/cast_call.c" line = "15" begin = "12" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/cast_call_po6.why">
-      <location file = "PPCHOME/tests/jessie/cast_call.c" line = "15" begin = "2" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/cast_call.c" line = "15" begin = "12" end = "24"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

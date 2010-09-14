@@ -744,12 +744,12 @@ text = "AllocSize"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0369_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0369.c" line = "24" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0369.c" line = "24" begin = "8" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0369_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0369.c" line = "24" begin = "4" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/bts0369.c" line = "24" begin = "8" end = "17"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

@@ -708,32 +708,32 @@ why --project [...] why/nb_occ.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/nb_occ_po10.why">
-      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/nb_occ_po11.why">
-      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/nb_occ_po12.why">
-      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "19" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "19" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/nb_occ_po13.why">
-      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "19" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "29" begin = "19" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/nb_occ_po14.why">
-      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "28" begin = "7" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "28" begin = "25" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/nb_occ_po15.why">
-      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "28" begin = "7" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/nb_occ.c" line = "28" begin = "25" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

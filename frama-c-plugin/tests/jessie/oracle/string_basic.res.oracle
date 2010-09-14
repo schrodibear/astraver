@@ -1062,12 +1062,12 @@ why --project [...] why/string_basic.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po26.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "39" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "39" begin = "11" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po27.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "39" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "39" begin = "11" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1092,12 +1092,12 @@ text = "AllocSize"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/string_basic_po22.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "26" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "26" begin = "11" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po23.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "26" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "26" begin = "11" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1118,12 +1118,12 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po17.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "33" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "33" begin = "11" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po18.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "33" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "33" begin = "11" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1139,12 +1139,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po14.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "20" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "20" begin = "11" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po15.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "20" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "20" begin = "11" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1160,22 +1160,22 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po7.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "6" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/string_basic_po8.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "6" end = "10"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/string_basic_po9.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "6" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/string_basic_po10.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "2" end = "4"/>
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "13" begin = "6" end = "10"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>

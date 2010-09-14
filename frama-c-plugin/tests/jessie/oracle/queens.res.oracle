@@ -2024,7 +2024,7 @@ why --project [...] why/queens.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/queens_po64.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "291" begin = "16" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "291" begin = "25" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2039,7 +2039,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queens_po67.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "28" end = "35"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
@@ -2052,62 +2052,62 @@ text = "DivByZero"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po70.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po71.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po72.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po73.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po74.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po75.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po76.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po77.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po78.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po79.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po80.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po81.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "293" begin = "11" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2120,7 +2120,7 @@ text = "UserCall"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/queens_po84.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "297" begin = "4" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "297" begin = "4" end = "20"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2252,7 +2252,7 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/queens_po29.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "170" begin = "6" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "170" begin = "24" end = "31"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
@@ -2292,81 +2292,81 @@ text = "DivByZero"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/queens_po14.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po15.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po16.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po17.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po18.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po19.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po20.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po21.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po22.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po23.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po24.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po25.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "9" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/queens_po6.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "14" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po7.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "14" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po8.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "14" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po9.why">
-      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/queens.c" line = "310" begin = "14" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/queens_po10.why">

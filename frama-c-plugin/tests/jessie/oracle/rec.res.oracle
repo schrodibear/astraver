@@ -419,12 +419,12 @@ why --project [...] why/rec.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/rec_po2.why">
-      <location file = "PPCHOME/tests/jessie/rec.c" line = "36" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/rec.c" line = "36" begin = "13" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/rec_po3.why">
-      <location file = "PPCHOME/tests/jessie/rec.c" line = "36" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/rec.c" line = "36" begin = "13" end = "18"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -437,7 +437,7 @@ text = "ArithOverflow"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec_po6.why">
-      <location file = "PPCHOME/tests/jessie/rec.c" line = "36" begin = "4" end = "10"/>
+      <location file = "PPCHOME/tests/jessie/rec.c" line = "36" begin = "11" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

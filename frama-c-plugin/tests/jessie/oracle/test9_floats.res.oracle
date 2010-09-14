@@ -382,12 +382,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po4.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "24" end = "38"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po5.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "10" end = "38"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -397,22 +397,22 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "47" end = "61"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po8.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "41" end = "61"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po9.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "9" end = "62"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test9_floats_po10.why">
-      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/test9_floats.c" line = "12" begin = "9" end = "62"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

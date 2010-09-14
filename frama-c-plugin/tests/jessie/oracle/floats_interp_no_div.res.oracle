@@ -554,17 +554,17 @@ why --project [...] why/floats_interp_no_div.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/floats_interp_no_div_po6.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_no_div.c" line = "26" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_no_div.c" line = "26" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_no_div_po7.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_no_div.c" line = "29" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_no_div.c" line = "29" begin = "13" end = "16"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/floats_interp_no_div_po8.why">
-      <location file = "PPCHOME/tests/jessie/floats_interp_no_div.c" line = "35" begin = "2" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/floats_interp_no_div.c" line = "35" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

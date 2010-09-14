@@ -1182,62 +1182,62 @@ why --project [...] why/min_sort.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/min_sort_po3.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "14" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po4.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "14" end = "17"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po5.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "23" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "23" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/min_sort_po6.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "23" begin = "4" end = "6"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "23" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/min_sort_po7.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "11" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po8.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "11" end = "14"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po9.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "25" begin = "6" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "25" begin = "10" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/min_sort_po10.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "25" begin = "6" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "25" begin = "10" end = "14"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/min_sort_po11.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "26" begin = "10" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "26" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/min_sort_po12.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "26" begin = "10" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "26" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/min_sort_po13.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "23" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po14.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "4" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "24" begin = "23" end = "26"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1270,12 +1270,12 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po21.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "19" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po22.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "2" end = "5"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "21" begin = "19" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
