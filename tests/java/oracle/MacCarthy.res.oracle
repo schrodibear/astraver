@@ -437,6 +437,9 @@ why3: why/MacCarthy_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/MacCarthy_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include MacCarthy.depend
 
 depend: coq/MacCarthy_why.v
@@ -1959,11 +1962,11 @@ let MacCarthy_f91_ensures_default =
      then
       begin
         (return := (K_7:
-                   (let jessie_6 =
+                   (let jessie_<num> =
                    (K_6:
-                   (let jessie_7 = (K_5: ((add_int n) (11))) in
-                   (JC_31: (MacCarthy_f91 jessie_7)))) in
-                   (JC_32: (MacCarthy_f91 jessie_6))))); (raise Return) end
+                   (let jessie_<num> = (K_5: ((add_int n) (11))) in
+                   (JC_31: (MacCarthy_f91 jessie_<num>)))) in
+                   (JC_32: (MacCarthy_f91 jessie_<num>))))); (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd  end with Return -> !return end)) { (JC_15: true) }
 
@@ -1978,11 +1981,11 @@ let MacCarthy_f91_ensures_greater_than_100 =
      then
       begin
         (return := (K_7:
-                   (let jessie_14 =
+                   (let jessie_<num> =
                    (K_6:
-                   (let jessie_15 = (K_5: ((add_int n) (11))) in
-                   (JC_35: (MacCarthy_f91 jessie_15)))) in
-                   (JC_36: (MacCarthy_f91 jessie_14))))); (raise Return) end
+                   (let jessie_<num> = (K_5: ((add_int n) (11))) in
+                   (JC_35: (MacCarthy_f91 jessie_<num>)))) in
+                   (JC_36: (MacCarthy_f91 jessie_<num>))))); (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd  end with Return -> !return end))
   { (JC_21: eq_int(result, sub_int(n, (10)))) }
@@ -1998,11 +2001,11 @@ let MacCarthy_f91_ensures_less_than_101 =
      then
       begin
         (return := (K_7:
-                   (let jessie_10 =
+                   (let jessie_<num> =
                    (K_6:
-                   (let jessie_11 = (K_5: ((add_int n) (11))) in
-                   (JC_33: (MacCarthy_f91 jessie_11)))) in
-                   (JC_34: (MacCarthy_f91 jessie_10))))); (raise Return) end
+                   (let jessie_<num> = (K_5: ((add_int n) (11))) in
+                   (JC_33: (MacCarthy_f91 jessie_<num>)))) in
+                   (JC_34: (MacCarthy_f91 jessie_<num>))))); (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd  end with Return -> !return end))
   { (JC_19: eq_int(result, (91))) }
@@ -2018,19 +2021,19 @@ let MacCarthy_f91_safety =
      then
       begin
         (return := (K_7:
-                   (let jessie_2 =
+                   (let jessie_<num> =
                    (K_6:
-                   (let jessie_3 = (K_5: ((add_int n) (11))) in
+                   (let jessie_<num> = (K_5: ((add_int n) (11))) in
                    (JC_26:
                    (check
-                   { zwf_zero((JC_25 : sub_int((101), jessie_3)),
+                   { zwf_zero((JC_25 : sub_int((101), jessie_<num>)),
                      (JC_24 : sub_int((101), n))) };
-                   (JC_23: (MacCarthy_f91_requires jessie_3)))))) in
+                   (JC_23: (MacCarthy_f91_requires jessie_<num>)))))) in
                    (JC_30:
                    (check
-                   { zwf_zero((JC_29 : sub_int((101), jessie_2)),
+                   { zwf_zero((JC_29 : sub_int((101), jessie_<num>)),
                      (JC_28 : sub_int((101), n))) };
-                   (JC_27: (MacCarthy_f91_requires jessie_2)))))));
+                   (JC_27: (MacCarthy_f91_requires jessie_<num>)))))));
        (raise Return) end
      else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd  end with Return -> !return end)) { true }

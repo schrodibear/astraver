@@ -560,6 +560,9 @@ why3: why/BinarySearch_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/BinarySearch_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include BinarySearch.depend
 
 depend: coq/BinarySearch_why.v
@@ -2084,9 +2087,9 @@ let BinarySearch_binary_search_ensures_default =
      (let u =
      ref (K_24:
          (safe_int32_of_integer_ ((sub_int (K_23:
-                                           (let jessie_17 = t_0 in
+                                           (let jessie_<num> = t_0 in
                                            (JC_65:
-                                           (java_array_length_intM jessie_17))))) (1)))) in
+                                           (java_array_length_intM jessie_<num>))))) (1)))) in
      begin
        try
         (loop_2:
@@ -2101,7 +2104,7 @@ let BinarySearch_binary_search_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_25 =
+           (let jessie_<num> =
            begin
              (if (K_21:
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
@@ -2124,7 +2127,7 @@ let BinarySearch_binary_search_ensures_default =
                                                ((shift t_0) (integer_of_int32 m)))))) 
                    (integer_of_int32 v)))
               then
-               (let jessie_20 =
+               (let jessie_<num> =
                (l := (K_15:
                      (safe_int32_of_integer_ ((add_int (integer_of_int32 m)) (1))))) in
                void)
@@ -2135,14 +2138,14 @@ let BinarySearch_binary_search_ensures_default =
                                                 ((shift t_0) (integer_of_int32 m)))))) 
                     (integer_of_int32 v)))
                then
-                (let jessie_22 =
+                (let jessie_<num> =
                 (u := (K_12:
                       (safe_int32_of_integer_ ((sub_int (integer_of_int32 m)) (1))))) in
                 void) else begin   (return := m); (raise Return) end)))
-             else (let jessie_24 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_2 -> void end end done) with
-        Loop_exit_exc jessie_1 -> void end;
+           Loop_continue_exc jessie_<num> -> void end end done) with
+        Loop_exit_exc jessie_<num> -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_37:
@@ -2172,9 +2175,9 @@ let BinarySearch_binary_search_ensures_failure =
      (let u =
      ref (K_24:
          (safe_int32_of_integer_ ((sub_int (K_23:
-                                           (let jessie_41 = t_0 in
+                                           (let jessie_<num> = t_0 in
                                            (JC_81:
-                                           (java_array_length_intM jessie_41))))) (1)))) in
+                                           (java_array_length_intM jessie_<num>))))) (1)))) in
      begin
        try
         (loop_4:
@@ -2198,7 +2201,7 @@ let BinarySearch_binary_search_ensures_failure =
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
           try
-           (let jessie_49 =
+           (let jessie_<num> =
            begin
              (if (K_21:
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
@@ -2221,7 +2224,7 @@ let BinarySearch_binary_search_ensures_failure =
                                                ((shift t_0) (integer_of_int32 m)))))) 
                    (integer_of_int32 v)))
               then
-               (let jessie_44 =
+               (let jessie_<num> =
                (l := (K_15:
                      (safe_int32_of_integer_ ((add_int (integer_of_int32 m)) (1))))) in
                void)
@@ -2232,14 +2235,14 @@ let BinarySearch_binary_search_ensures_failure =
                                                 ((shift t_0) (integer_of_int32 m)))))) 
                     (integer_of_int32 v)))
                then
-                (let jessie_46 =
+                (let jessie_<num> =
                 (u := (K_12:
                       (safe_int32_of_integer_ ((sub_int (integer_of_int32 m)) (1))))) in
                 void) else begin   (return := m); (raise Return) end)))
-             else (let jessie_48 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_2 -> void end end done) with
-        Loop_exit_exc jessie_1 -> void end;
+           Loop_continue_exc jessie_<num> -> void end end done) with
+        Loop_exit_exc jessie_<num> -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_45:
@@ -2262,9 +2265,9 @@ let BinarySearch_binary_search_ensures_success =
      (let u =
      ref (K_24:
          (safe_int32_of_integer_ ((sub_int (K_23:
-                                           (let jessie_29 = t_0 in
+                                           (let jessie_<num> = t_0 in
                                            (JC_73:
-                                           (java_array_length_intM jessie_29))))) (1)))) in
+                                           (java_array_length_intM jessie_<num>))))) (1)))) in
      begin
        try
         (loop_3:
@@ -2279,7 +2282,7 @@ let BinarySearch_binary_search_ensures_success =
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
           try
-           (let jessie_37 =
+           (let jessie_<num> =
            begin
              (if (K_21:
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
@@ -2302,7 +2305,7 @@ let BinarySearch_binary_search_ensures_success =
                                                ((shift t_0) (integer_of_int32 m)))))) 
                    (integer_of_int32 v)))
               then
-               (let jessie_32 =
+               (let jessie_<num> =
                (l := (K_15:
                      (safe_int32_of_integer_ ((add_int (integer_of_int32 m)) (1))))) in
                void)
@@ -2313,14 +2316,14 @@ let BinarySearch_binary_search_ensures_success =
                                                 ((shift t_0) (integer_of_int32 m)))))) 
                     (integer_of_int32 v)))
                then
-                (let jessie_34 =
+                (let jessie_<num> =
                 (u := (K_12:
                       (safe_int32_of_integer_ ((sub_int (integer_of_int32 m)) (1))))) in
                 void) else begin   (return := m); (raise Return) end)))
-             else (let jessie_36 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_2 -> void end end done) with
-        Loop_exit_exc jessie_1 -> void end;
+           Loop_continue_exc jessie_<num> -> void end end done) with
+        Loop_exit_exc jessie_<num> -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end))
   { (JC_43:
@@ -2342,14 +2345,14 @@ let BinarySearch_binary_search_safety =
      ref (K_24:
          (JC_49:
          (int32_of_integer_ ((sub_int (K_23:
-                                      (let jessie_5 = t_0 in
+                                      (let jessie_<num> = t_0 in
                                       (JC_48:
                                       (assert
                                       { ge_int(offset_max(Object_alloc_table,
-                                               jessie_5),
+                                               jessie_<num>),
                                         (-1)) };
                                       (JC_47:
-                                      (java_array_length_intM_requires jessie_5))))))) (1))))) in
+                                      (java_array_length_intM_requires jessie_<num>))))))) (1))))) in
      begin
        try
         (loop_1:
@@ -2365,7 +2368,7 @@ let BinarySearch_binary_search_safety =
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)))))) } ];
           try
-           (let jessie_13 =
+           (let jessie_<num> =
            begin
              (if (K_21:
                  ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
@@ -2393,7 +2396,7 @@ let BinarySearch_binary_search_safety =
                                                (integer_of_int32 m)))))) 
                    (integer_of_int32 v)))
               then
-               (let jessie_8 =
+               (let jessie_<num> =
                (l := (K_15:
                      (JC_61:
                      (int32_of_integer_ ((add_int (integer_of_int32 m)) (1)))))) in
@@ -2406,15 +2409,15 @@ let BinarySearch_binary_search_safety =
                                                 (integer_of_int32 m)))))) 
                     (integer_of_int32 v)))
                then
-                (let jessie_10 =
+                (let jessie_<num> =
                 (u := (K_12:
                       (JC_63:
                       (int32_of_integer_ ((sub_int (integer_of_int32 m)) (1)))))) in
                 void) else begin   (return := m); (raise Return) end)))
-             else (let jessie_12 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_2 -> void end end done) with
-        Loop_exit_exc jessie_1 -> void end;
+           Loop_continue_exc jessie_<num> -> void end end done) with
+        Loop_exit_exc jessie_<num> -> void end;
       (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }

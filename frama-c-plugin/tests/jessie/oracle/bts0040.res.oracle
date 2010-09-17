@@ -538,7 +538,7 @@ parameter g :
   float_P_float_M_y_1:(float_P, single) memory ref ->
    float_P_y_1_alloc_table:float_P alloc_table ->
     { } unit writes float_P_float_M_y_1
-    { (JC_8:
+    { (JC_<somenum>:
       not_assigns(float_P_y_1_alloc_table@, float_P_float_M_y_1@,
       float_P_float_M_y_1, pset_singleton(y@))) }
 
@@ -547,7 +547,7 @@ parameter g_requires :
   float_P_float_M_y_1:(float_P, single) memory ref ->
    float_P_y_1_alloc_table:float_P alloc_table ->
     { } unit writes float_P_float_M_y_1
-    { (JC_8:
+    { (JC_<somenum>:
       not_assigns(float_P_y_1_alloc_table@, float_P_float_M_y_1@,
       float_P_float_M_y_1, pset_singleton(y@))) }
 
@@ -561,33 +561,30 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (c : __anonstruct_las_1 pointer) (float_P_float_M_c_2 : (float_P, single) memory ref) (__anonstruct_las_1_c_2_alloc_table : __anonstruct_las_1 alloc_table) (float_P_c_2_alloc_table : float_P alloc_table) (__anonstruct_las_1_k_c_2 : (__anonstruct_las_1, float_P pointer) memory) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_3:
    begin
-     (C_3:
-     begin
-       (let jessie_2 = (C_2: ((safe_acc_ __anonstruct_las_1_k_c_2) c)) in
-       (JC_21: (((g jessie_2) float_P_float_M_c_2) float_P_c_2_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_15: true) }
+     (let jessie_<somenum> = (C_2: ((safe_acc_ __anonstruct_las_1_k_c_2) c)) in
+     (JC_<somenum>: (((g jessie_<somenum>) float_P_float_M_c_2) float_P_c_2_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (c : __anonstruct_las_1 pointer) (float_P_float_M_c_2 : (float_P, single) memory ref) (__anonstruct_las_1_c_2_alloc_table : __anonstruct_las_1 alloc_table) (float_P_c_2_alloc_table : float_P alloc_table) (__anonstruct_las_1_k_c_2 : (__anonstruct_las_1, float_P pointer) memory) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_3:
    begin
-     (C_3:
-     begin
-       (let jessie_1 =
-       (C_2:
-       (JC_19:
-       (((acc_ __anonstruct_las_1_c_2_alloc_table) __anonstruct_las_1_k_c_2) c))) in
-       (JC_20:
-       (((g_requires jessie_1) float_P_float_M_c_2) float_P_c_2_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> =
+     (C_2:
+     (JC_<somenum>:
+     (((acc_ __anonstruct_las_1_c_2_alloc_table) __anonstruct_las_1_k_c_2) c))) in
+     (JC_<somenum>:
+     (((g_requires jessie_<somenum>) float_P_float_M_c_2) float_P_c_2_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0040.jessie --quiet -f bts0040.makefile project

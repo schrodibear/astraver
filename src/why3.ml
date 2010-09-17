@@ -48,14 +48,31 @@ let push_decl d =
 let iter = Encoding.iter
 
 
-let capitalize s =
+(*
+  let capitalize s =
   let is_alpha n = ('a' <= n && n <= 'z') || ('A' <= n && n <= 'Z') in
   let s = if not (is_alpha s.[0]) then "Un"^s else s in
   String.capitalize s
+*)
 
-let ident = Ident.print
+let ident fmt s = 
+  let s = Ident.string s in
+  let s = 
+    if 'A' <= s.[0] && s.[0] <= 'Z' then "_" ^ s  else s
+  in
+  pp_print_string fmt s
+
+let string_capitalize fmt s =
+  let s = 
+    if s.[0] = '_' then "U"^s else 
+    if 'a' <= s.[0] && s.[0] <= 'z' 
+    then String.capitalize s
+    else s
+  in
+  pp_print_string fmt s
+
 let ident_capitalize fmt s = 
-  pp_print_string fmt (capitalize (Ident.string s))
+  string_capitalize fmt (Ident.string s)
 
 let type_vars = Hashtbl.create 17
 
@@ -72,38 +89,76 @@ let specialize s =
     (fun tv -> incr n; Hashtbl.add type_vars tv.tag !n) s.Env.scheme_vars;
   s.Env.scheme_type
 
+let t_single = Ident.create "single"
+let t_double = Ident.create "double"
+let t_mode = Ident.create "mode"
+
+let print_builtin_type fmt = function
+  | id when id == t_single -> Pp.string fmt "Single.single"
+  | id when id == t_double -> Pp.string fmt "Double.double"
+  | id when id == t_mode -> Pp.string fmt "Rounding.mode"
+  | id -> ident fmt id
+
 let rec pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "Bool.bool"
-  | PTunit -> fprintf fmt "Tuple0.tuple0"
+  | PTunit -> fprintf fmt "()"
   | PTreal -> fprintf fmt "real"
+  | PTexternal ([],id) -> print_builtin_type fmt id
   | PTvar {tag=t; type_val=None} -> type_var fmt t
   | PTvar {tag=_t; type_val=Some pt} -> pure_type fmt pt
-  | PTexternal ([],id) -> fprintf fmt "%a" ident id
   | PTexternal (l,id) -> fprintf fmt "(%a %a)"
       ident id (print_list space pure_type) l
 
-let print_builtin fmt = function
-  | id when id == t_add_int -> Pp.string fmt "Int.(+)"
-  | id when id == t_sub_int -> Pp.string fmt "Int.(-)"
-  | id when id == t_mul_int -> Pp.string fmt "Int.(*)"
-  | id when id == t_div_int -> Pp.string fmt "Int.(/)"
-  | id when id == t_mod_int -> Pp.string fmt "Int.(%)"
-  | id when id == t_neg_int -> Pp.string fmt "Int.(-_)"
-  | id when id == t_add_real -> Pp.string fmt "Real.(+)"
-  | id when id == t_sub_real -> Pp.string fmt "Real.(-)"
-  | id when id == t_mul_real -> Pp.string fmt "Real.(*)"
-  | id when id == t_div_real -> Pp.string fmt "Real.(/)"
-  | id when id == t_neg_real -> Pp.string fmt "Real.(-_)"
-  | id when id == t_lt_int -> Pp.string fmt "Int.(<)" 
-  | id when id == t_le_int -> Pp.string fmt "Int.(<=)"
-  | id when id == t_gt_int -> Pp.string fmt "Int.(>)"
-  | id when id == t_ge_int -> Pp.string fmt "Int.(>=)"
-  | id when id == t_lt_real -> Pp.string fmt "Real.(<)" 
-  | id when id == t_le_real -> Pp.string fmt "Real.(<=)"
-  | id when id == t_gt_real -> Pp.string fmt "Real.(>)"
-  | id when id == t_ge_real -> Pp.string fmt "Real.(>=)"
-  | id -> ident fmt id
+
+
+
+let builtins_table =  
+    [
+      t_add_int , "Int.(+)";
+      t_sub_int , "Int.(-)";
+      t_mul_int , "Int.(*)";
+      t_div_int , "ComputerDivision.div";
+      t_mod_int , "ComputerDivision.mod";
+      t_neg_int , "Int.(-_)";
+      t_add_real , "Real.(+)";
+      t_sub_real , "Real.(-)";
+      t_mul_real , "Real.(*)";
+      t_div_real , "Real.(/)";
+      t_neg_real , "Real.(-_)";
+      t_lt_int , "Int.(<)" ;
+      t_le_int , "Int.(<=)";
+      t_gt_int , "Int.(>)";
+      t_ge_int , "Int.(>=)";
+      t_lt_real , "Real.(<)" ;
+      t_le_real , "Real.(<=)";
+      t_gt_real , "Real.(>)";
+      t_abs_real , "AbsReal.abs";
+      t_abs_int , "AbsInt.abs";
+
+      Ident.create "nearest_even", "Rounding.NearestTiesToEven" ;
+      Ident.create "to_zero", "Rounding.ToZero" ;
+      Ident.create "up", "Rounding.Up" ;
+      Ident.create "down", "Rounding.Down" ;
+      Ident.create "nearest_away", "Rounding.NearTiesToAway" ;
+
+      Ident.create "round_single", "Single.round" ;
+      Ident.create "round_double", "Double.round" ;
+      Ident.create "single_value", "Single.value";
+      Ident.create "double_value", "Double.value";
+    ]
+
+let constructor_table = Hashtbl.create 17
+
+let print_builtin fmt id = 
+  try
+    let s = List.assq id builtins_table in
+    Pp.string fmt s
+  with Not_found -> 
+    if Hashtbl.mem constructor_table id
+    then
+      ident_capitalize fmt id
+    else ident fmt id
 
 let rec term fmt = function
   | Tconst (ConstInt n) -> 
@@ -125,7 +180,9 @@ let rec term fmt = function
           | Predicate _ -> assert false
           | Function (_,ret_type) -> ret_type in
       begin match tl with
+(*
         | [] -> fprintf fmt "(%a : %a)" ident id pure_type ret_type
+*)
         | _ ->
             fprintf fmt "(%a %a : %a)"
               print_builtin id (print_list space term) tl
@@ -229,17 +286,18 @@ let type_parameters fmt l =
   let type_var fmt id = fprintf fmt "'%s" id in
   match l with
   | [] -> ()
-  | l -> fprintf fmt "%a " (print_list space type_var) l
+  | l -> fprintf fmt " %a" (print_list space type_var) l
 
 let alg_type_parameters fmt = function
   | [] -> ()
   | l -> fprintf fmt "%a " (print_list space pure_type) l
 
 let alg_type_constructor fmt (c,pl) =
+  Hashtbl.add constructor_table c ();
   match pl with
-  | [] -> fprintf fmt "| %a" ident c
-  | _  -> fprintf fmt "| %a @[%a@]" ident c
-            (print_list space pure_type) pl
+  | [] -> fprintf fmt "| %a" ident_capitalize c
+  | _  -> fprintf fmt "| %a (@[%a@])" ident_capitalize c
+            (print_list space (* or comma ? *) pure_type) pl
 
 let alg_type_single fmt (_, id, d) =
   let vs,cs = specialize d in
@@ -250,7 +308,7 @@ let alg_type_single fmt (_, id, d) =
 let decl fmt d = 
   match d with
   | Dtype (_, id, pl) ->
-      fprintf fmt "@[type %a %a@]" ident id type_parameters pl
+      fprintf fmt "@[type %a%a@]" ident id type_parameters pl 
   | Dalgtype ls ->
       let andsep fmt () = fprintf fmt "@\n" in
       fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
@@ -283,8 +341,8 @@ let decl fmt d =
 	(print_list space logic_binder) bl pure_type pt term t
   | Daxiom (_, id, p) ->
       let p = specialize p in
-      fprintf fmt "@[<hov 2>axiom %s:@ %a@]" 
-        (capitalize id) predicate p
+      fprintf fmt "@[<hov 2>axiom %a:@ %a@]" 
+        string_capitalize id predicate p
   | Dgoal (_, _expl, id, sq) ->
       let sq = specialize sq in
       fprintf fmt "@[<hov 2>goal %s:@\n%a@]" 
@@ -292,11 +350,15 @@ let decl fmt d =
 
 let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
+(*
 let print_file fmt = 
   fprintf fmt "@[<hov 2>theory Why2@\n";
   fprintf fmt "use Tuple0@\n";
   fprintf fmt "use int.Int@\n";
+  fprintf fmt "use int.Abs as AbsInt@\n";
+  fprintf fmt "use int.ComputerDivision@\n";
   fprintf fmt "use real.Real@\n";
+  fprintf fmt "use real.Abs as AbsReal@\n";
   fprintf fmt "use bool.Bool@\n";
   iter (decl fmt);
   fprintf fmt "@]@\nend@?"
@@ -314,6 +376,9 @@ let print_traces fmt =
 
 let output_file f =
   print_in_file print_file (Options.out_file (f ^ "_why3.why"))
+*)
+
+(*
 
 let output_files f =
   eprintf "Starting Multi-Why output with basename %s@." f;
@@ -348,42 +413,57 @@ let push_or_output_decl =
 	    print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl)) ftr
       | d -> push_decl d
 
+*)
+
 module SMap = Map.Make(String)
 
-let output_project f =
-  let po = ref 0 in
+let escape s =
+  let s = String.copy s in
+  for i = 0 to String.length s - 1 do
+    match s.[i] with
+      | ' ' | '\'' | '`' -> s.[i] <- '_'
+      | _ -> ()
+  done;
+  s
+
+let print_structured_file f fmt =
+  fprintf fmt "@[<hov 2>theory %s_ctx@\n" f;
+  fprintf fmt "use int.Int@\n";
+  fprintf fmt "use int.Abs as AbsInt@\n";
+  fprintf fmt "use int.ComputerDivision@\n";
+  fprintf fmt "use real.Real@\n";
+  fprintf fmt "use real.Abs as AbsReal@\n";
+  fprintf fmt "use bool.Bool@\n";
+  fprintf fmt "use floating_point.Rounding@\n";
+  fprintf fmt "use floating_point.Single@\n";
+  fprintf fmt "use floating_point.Double@\n";
   let lemmas = ref [] in
   let functions = ref SMap.empty in
-  print_in_file
-    (fun ctxfmt ->
-       iter 
-	 (function 
-	    | Dgoal (_,e,_id,_) as d -> 
-		incr po;
-		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
-		print_in_file (fun fmt -> decl fmt d) fpo;
-		begin
-		  match e.vc_kind with
-		    | EKLemma -> 
-			lemmas := (e,fpo) :: !lemmas;
-		    | _ ->
-			let fn = e.lemma_or_fun_name in
-			let behs =
-			  try SMap.find fn !functions
-			  with Not_found -> SMap.empty
-			in
-			let vcs =
-			  try SMap.find e.behavior behs 
-			  with Not_found -> []
-			in
-			let behs =
-			  SMap.add e.behavior ((e,fpo)::vcs) behs
-			in
-			functions := SMap.add fn behs !functions;
-		end
-	    | d -> 
-		decl ctxfmt d))
-    (f ^ "_ctx.why");
+  iter 
+    (function 
+       | Dgoal (_,e,_id,_) as d -> 
+	   begin
+	     match e.vc_kind with
+	       | EKLemma -> 
+		   lemmas := d :: !lemmas;
+	       | _ ->
+		   let fn = e.lemma_or_fun_name in
+		   let behs =
+		     try SMap.find fn !functions
+		     with Not_found -> SMap.empty
+		   in
+		   let vcs =
+		     try SMap.find e.behavior behs 
+		     with Not_found -> []
+		   in
+		   let behs =
+		     SMap.add e.behavior (d::vcs) behs
+		   in
+		   functions := SMap.add fn behs !functions;
+	   end
+       | d -> 
+	   decl fmt d);
+  (* add any function which have no VC *)
   Hashtbl.iter 
     (fun _key (fn,_beh,_loc) -> 
        try
@@ -391,30 +471,32 @@ let output_project f =
        with Not_found ->
 	 functions := SMap.add fn SMap.empty !functions)  
     Util.program_locs ;
-  let p = Project.create (Filename.basename f) in
-  Project.set_project_context_file p (f ^ "_ctx.why");      
-  List.iter
-    (fun (expl,fpo) ->      
-       let n = expl.lemma_or_fun_name in
-       let _ = Project.add_lemma p n expl fpo in ())
-    !lemmas;
+  (* outputs the lemmas and close the ctx theory*)
+  List.iter (decl fmt) (List.rev !lemmas);
+  fprintf fmt "@]@\nend@\n@.";
+  (* outputs the VCs *)
   SMap.iter
     (fun fname behs ->
+(*
        let floc =
 	 try 
 	   let (_,_,floc) = Hashtbl.find Util.program_locs fname in
 	   floc
 	 with Not_found -> Loc.dummy_floc
        in
-       let f = Project.add_function p fname floc in
+*)
        SMap.iter
 	 (fun beh vcs ->
-	    let be = Project.add_behavior f beh floc in
-	    List.iter
-	      (fun (expl,fpo) ->
-		 let _ = Project.add_goal be expl fpo in ())
-	      vcs)
+	    fprintf fmt "@[<hov 2>theory %s_%s@\n" (escape fname) (escape beh);
+	    fprintf fmt "use import %s_ctx@\n" f;
+	    List.iter (decl fmt) (List.rev vcs);
+	    fprintf fmt "@]@\nend@\n@.")
 	 behs)
-    !functions;
-  Project.save p f;
-  p
+    !functions
+
+let output_structured_file f =
+  print_in_file 
+    (print_structured_file (String.capitalize (Filename.basename f))) 
+    (Options.out_file (f ^ "_why3.why"))
+
+let output_file = output_structured_file

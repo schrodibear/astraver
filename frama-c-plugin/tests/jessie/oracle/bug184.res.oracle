@@ -324,7 +324,7 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_x_0 = ref x_0 in
   (init:
   (let return = ref (any_int32 void) in
@@ -332,19 +332,19 @@ let main_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_22 =
+      (let jessie_<somenum> =
+      (C_14:
       begin
         (if ((ge_int_ (integer_of_int32 !mutable_x_0)) (10))
         then
-         (C_2:
-         (let jessie_14 = (mutable_x_0 := (safe_int32_of_integer_ (10))) in
-         void))
+         (let jessie_<somenum> =
+         (C_2: (mutable_x_0 := (safe_int32_of_integer_ (10)))) in void)
         else
          (if ((le_int_ (integer_of_int32 !mutable_x_0)) (0))
          then
-          (C_1:
-          (let jessie_16 = (mutable_x_0 := (safe_int32_of_integer_ (0))) in
-          void)) else void));
+          (let jessie_<somenum> =
+          (C_1: (mutable_x_0 := (safe_int32_of_integer_ (0)))) in void)
+         else void));
        (if ((gt_int_ (integer_of_int32 (C_13:
                                        (safe_int32_of_integer_ (C_12:
                                                                ((sub_int 
@@ -356,13 +356,13 @@ let main_ensures_default =
                                                                     (integer_of_int32 !mutable_x_0)) 
                                                                     (integer_of_int32 !mutable_x_0))))))) (10))))))) (0))
        then
-        (let jessie_19 =
+        (let jessie_<somenum> =
         (C_9:
         begin
-          (let jessie_18 =
+          (let jessie_<somenum> =
           (__retres := (C_8:
                        (safe_int32_of_integer_ (C_7:
-                                               (JC_15:
+                                               (JC_<somenum>:
                                                ((div_int (1)) (integer_of_int32 
                                                                (C_6:
                                                                (safe_int32_of_integer_ 
@@ -376,17 +376,15 @@ let main_ensures_default =
                                                                     (integer_of_int32 !mutable_x_0)) 
                                                                     (integer_of_int32 !mutable_x_0))))))) (8)))))))))))) in
           void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_14:
-       begin
-         (let jessie_21 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
-    absurd  end with Return -> !return end))) { (JC_5: true) }
+    absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_x_0 = ref x_0 in
   (init:
   (let return = ref (any_int32 void) in
@@ -394,59 +392,57 @@ let main_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_11 =
+      (let jessie_<somenum> =
+      (C_14:
       begin
         (if ((ge_int_ (integer_of_int32 !mutable_x_0)) (10))
         then
-         (C_2:
-         (let jessie_3 = (mutable_x_0 := (safe_int32_of_integer_ (10))) in
-         void))
+         (let jessie_<somenum> =
+         (C_2: (mutable_x_0 := (safe_int32_of_integer_ (10)))) in void)
         else
          (if ((le_int_ (integer_of_int32 !mutable_x_0)) (0))
          then
-          (C_1:
-          (let jessie_5 = (mutable_x_0 := (safe_int32_of_integer_ (0))) in
-          void)) else void));
+          (let jessie_<somenum> =
+          (C_1: (mutable_x_0 := (safe_int32_of_integer_ (0)))) in void)
+         else void));
        (if ((gt_int_ (integer_of_int32 (C_13:
-                                       (JC_10:
+                                       (JC_<somenum>:
                                        (int32_of_integer_ (C_12:
                                                           ((sub_int (integer_of_int32 
                                                                     (C_11:
-                                                                    (JC_9:
+                                                                    (JC_<somenum>:
                                                                     (int32_of_integer_ 
                                                                     (C_10:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !mutable_x_0)) 
                                                                     (integer_of_int32 !mutable_x_0)))))))) (10)))))))) (0))
        then
-        (let jessie_8 =
+        (let jessie_<somenum> =
         (C_9:
         begin
-          (let jessie_7 =
+          (let jessie_<somenum> =
           (__retres := (C_8:
-                       (JC_14:
+                       (JC_<somenum>:
                        (int32_of_integer_ (C_7:
-                                          (JC_13:
+                                          (JC_<somenum>:
                                           ((div_int_ (1)) (integer_of_int32 
                                                            (C_6:
-                                                           (JC_12:
+                                                           (JC_<somenum>:
                                                            (int32_of_integer_ 
                                                             (C_5:
                                                             ((sub_int 
                                                               (integer_of_int32 
                                                                (C_4:
-                                                               (JC_11:
+                                                               (JC_<somenum>:
                                                                (int32_of_integer_ 
                                                                 (C_3:
                                                                 ((mul_int 
                                                                   (integer_of_int32 !mutable_x_0)) 
                                                                  (integer_of_int32 !mutable_x_0)))))))) (8)))))))))))))) in
           void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_14:
-       begin
-         (let jessie_10 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))) { true }
 

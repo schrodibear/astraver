@@ -302,7 +302,7 @@ parameter atoi :
   char_P_char_M_c_1:(char_P, int8) memory ref ->
    char_P_c_1_alloc_table:char_P alloc_table ->
     { } int32 writes char_P_char_M_c_1
-    { (JC_8:
+    { (JC_<somenum>:
       not_assigns(char_P_c_1_alloc_table@, char_P_char_M_c_1@,
       char_P_char_M_c_1, pset_singleton(c@))) }
 
@@ -311,7 +311,7 @@ parameter atoi_requires :
   char_P_char_M_c_1:(char_P, int8) memory ref ->
    char_P_c_1_alloc_table:char_P alloc_table ->
     { } int32 writes char_P_char_M_c_1
-    { (JC_8:
+    { (JC_<somenum>:
       not_assigns(char_P_c_1_alloc_table@, char_P_char_M_c_1@,
       char_P_char_M_c_1, pset_singleton(c@))) }
 
@@ -337,7 +337,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -345,16 +345,16 @@ let f_ensures_default =
      (let char_P_null_2_alloc_table = (any_alloc_table void) in
      (C_2:
      begin
-       (let jessie_4 =
-       (let jessie_3 = null in
-       (JC_20:
-       (((atoi jessie_3) char_P_char_M_null_2) char_P_null_2_alloc_table))) in
+       (let jessie_<somenum> =
+       (let jessie_<somenum> = null in
+       (JC_<somenum>:
+       (((atoi jessie_<somenum>) char_P_char_M_null_2) char_P_null_2_alloc_table))) in
        void); (raise Return) end))); (raise Return) end with Return ->
-   void end) { (JC_15: true) }
+   void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -362,10 +362,10 @@ let f_safety =
      (let char_P_null_2_alloc_table = (any_alloc_table void) in
      (C_2:
      begin
-       (let jessie_2 =
-       (let jessie_1 = null in
-       (JC_19:
-       (((atoi_requires jessie_1) char_P_char_M_null_2) char_P_null_2_alloc_table))) in
+       (let jessie_<somenum> =
+       (let jessie_<somenum> = null in
+       (JC_<somenum>:
+       (((atoi_requires jessie_<somenum>) char_P_char_M_null_2) char_P_null_2_alloc_table))) in
        void); (raise Return) end))); (raise Return) end with Return ->
    void end) { true }
 

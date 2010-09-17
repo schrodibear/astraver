@@ -267,6 +267,9 @@ why3: why/Literals_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/Literals_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include Literals.depend
 
 depend: coq/Literals_why.v

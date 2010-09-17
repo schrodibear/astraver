@@ -338,29 +338,29 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (i : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (assert { (JC_10: gt_int(integer_of_int32(i), (0))) }; void); void;
+     (assert { (JC_<somenum>: gt_int(integer_of_int32(i), (0))) }; void); void;
     (return := i); (raise Return); absurd  end with Return -> !return end))
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (i : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     [ { } unit { (JC_9: gt_int(integer_of_int32(i), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: gt_int(integer_of_int32(i), (0))) } ]; void;
     (return := i); (raise Return); absurd  end with Return -> !return end))
   { true }
 
 let ff_ensures_default =
  fun (i_0 : int32) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -368,16 +368,16 @@ let ff_ensures_default =
      (let j = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_7 = (j := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
       (assert
-      { (JC_20:
+      { (JC_<somenum>:
         gt_int(add_int(integer_of_int32(i_0), integer_of_int32(j)), (0))) };
       void); void; (return := i_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_15: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let ff_safety =
  fun (i_0 : int32) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -385,9 +385,9 @@ let ff_safety =
      (let j = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_4 = (j := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (1))) in void);
       [ { } unit reads j
-        { (JC_19:
+        { (JC_<somenum>:
           gt_int(add_int(integer_of_int32(i_0), integer_of_int32(j)), (0))) } ];
       void; (return := i_0); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }

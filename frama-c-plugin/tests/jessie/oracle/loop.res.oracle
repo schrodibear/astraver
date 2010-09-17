@@ -318,7 +318,7 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f : n:int32 -> { } unit { true }
 
 parameter f_requires :
- n:int32 -> { (JC_1: ge_int(integer_of_int32(n), (0)))} unit { true }
+ n:int32 -> { (JC_<somenum>: ge_int(integer_of_int32(n), (0)))} unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -338,94 +338,92 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (n : int32) ->
-  { (JC_3: ge_int(integer_of_int32(n), (0))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(n), (0))) }
   (init:
   try
    begin
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_12 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_17 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
-         { invariant (JC_17: true)  }
+         { invariant (JC_<somenum>: true)  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_16 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_15 =
+              (let jessie_<somenum> =
+              (C_7:
               begin
                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                 then void
                 else
-                 (let jessie_13 = (raise (Goto_while_0_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
                (assert
-               { (JC_21:
-                 ((JC_19: le_int((0), integer_of_int32(i)))
-                 and (JC_20:
+               { (JC_<somenum>:
+                 ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                 and (JC_<somenum>:
                      lt_int(integer_of_int32(i), integer_of_int32(n))))) };
                void); void;
-               (C_7:
-               begin
-                 (i := (C_6:
-                       (safe_int32_of_integer_ (C_5:
-                                               ((add_int (integer_of_int32 !i)) (1))))));
-                !i end) end in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_3 -> void end end done);
+               (i := (C_6:
+                     (safe_int32_of_integer_ (C_5:
+                                             ((add_int (integer_of_int32 !i)) (1))))));
+               !i end) in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (n : int32) ->
-  { (JC_3: ge_int(integer_of_int32(n), (0))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(n), (0))) }
   (init:
   try
    begin
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_10 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_10: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_9 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_8 =
+              (let jessie_<somenum> =
+              (C_7:
               begin
                 (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
                 then void
                 else
-                 (let jessie_6 = (raise (Goto_while_0_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
                [ { } unit reads i
-                 { (JC_14:
-                   ((JC_12: le_int((0), integer_of_int32(i)))
-                   and (JC_13:
+                 { (JC_<somenum>:
+                   ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+                   and (JC_<somenum>:
                        lt_int(integer_of_int32(i), integer_of_int32(n))))) } ];
                void;
-               (C_7:
-               begin
-                 (i := (C_6:
-                       (JC_15:
-                       (int32_of_integer_ (C_5:
-                                          ((add_int (integer_of_int32 !i)) (1)))))));
-                !i end) end in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_3 -> void end end done);
+               (i := (C_6:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_5:
+                                        ((add_int (integer_of_int32 !i)) (1)))))));
+               !i end) in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 
@@ -447,11 +445,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/loop_po5.why">
-      <location file = "why/loop.why" line = "334" begin = "44" end = "45"/>
+      <location file = "why/loop.why" line = "333" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/loop_po6.why">
-      <location file = "why/loop.why" line = "334" begin = "44" end = "45"/>
+      <location file = "why/loop.why" line = "333" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

@@ -446,7 +446,7 @@ parameter copy :
       int_P_t1_1_alloc_table:int_P alloc_table ->
        int_P_int_M_t1_1:(int_P, int32) memory ->
         { } unit reads int_P_int_M_t2_2 writes int_P_int_M_t2_2
-        { (JC_14:
+        { (JC_<somenum>:
           (forall k_0:int32.
            ((le_int((0), integer_of_int32(k_0))
             and lt_int(integer_of_int32(k_0), integer_of_int32(n@))) ->
@@ -463,18 +463,18 @@ parameter copy_requires :
      int_P_t2_2_alloc_table:int_P alloc_table ->
       int_P_t1_1_alloc_table:int_P alloc_table ->
        int_P_int_M_t1_1:(int_P, int32) memory ->
-        { (JC_5:
-          ((JC_1: le_int(offset_min(int_P_t1_1_alloc_table, t1), (0)))
-          and ((JC_2:
+        { (JC_<somenum>:
+          ((JC_<somenum>: le_int(offset_min(int_P_t1_1_alloc_table, t1), (0)))
+          and ((JC_<somenum>:
                ge_int(offset_max(int_P_t1_1_alloc_table, t1),
                integer_of_int32(n)))
-              and ((JC_3:
+              and ((JC_<somenum>:
                    le_int(offset_min(int_P_t2_2_alloc_table, t2), (0)))
-                  and (JC_4:
+                  and (JC_<somenum>:
                       ge_int(offset_max(int_P_t2_2_alloc_table, t2),
                       integer_of_int32(n)))))))}
         unit reads int_P_int_M_t2_2 writes int_P_int_M_t2_2
-        { (JC_14:
+        { (JC_<somenum>:
           (forall k_0:int32.
            ((le_int((0), integer_of_int32(k_0))
             and lt_int(integer_of_int32(k_0), integer_of_int32(n@))) ->
@@ -501,12 +501,12 @@ parameter safe_int8_of_integer_ :
 
 let copy_ensures_default =
  fun (t1 : int_P pointer) (t2 : int_P pointer) (n : int32) (int_P_int_M_t2_2 : (int_P, int32) memory ref) (int_P_t1_1_alloc_table : int_P alloc_table) (int_P_t2_2_alloc_table : int_P alloc_table) (int_P_int_M_t1_1 : (int_P, int32) memory) ->
-  { (JC_11:
-    ((JC_7: le_int(offset_min(int_P_t1_1_alloc_table, t1), (0)))
-    and ((JC_8:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_t1_1_alloc_table, t1), (0)))
+    and ((JC_<somenum>:
          ge_int(offset_max(int_P_t1_1_alloc_table, t1), integer_of_int32(n)))
-        and ((JC_9: le_int(offset_min(int_P_t2_2_alloc_table, t2), (0)))
-            and (JC_10:
+        and ((JC_<somenum>: le_int(offset_min(int_P_t2_2_alloc_table, t2), (0)))
+            and (JC_<somenum>:
                 ge_int(offset_max(int_P_t2_2_alloc_table, t2),
                 integer_of_int32(n))))))) }
   (init:
@@ -516,16 +516,16 @@ let copy_ensures_default =
      (let tmp = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_20 = (i := n) in void);
+       (let jessie_<somenum> = (i := n) in void);
       try
-       (let jessie_33 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
          { invariant
-             (JC_29:
-             ((JC_27: le_int(integer_of_int32(i), integer_of_int32(n)))
-             and (JC_28:
+             (JC_<somenum>:
+             ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(n)))
+             and (JC_<somenum>:
                  (forall k:int32.
                   ((le_int(integer_of_int32(i), integer_of_int32(k))
                    and lt_int(integer_of_int32(k), integer_of_int32(n))) ->
@@ -537,39 +537,40 @@ let copy_ensures_default =
           begin
             [ { } unit { true } ];
            try
-            (let jessie_32 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_31 =
+              (let jessie_<somenum> =
               begin
-                (let jessie_24 =
+                (let jessie_<somenum> =
                 (C_6:
+                (C_9:
                 begin
-                  (let jessie_22 = (tmp := !i) in void);
-                 (C_9:
-                 begin
-                   (i := (C_8:
-                         (safe_int32_of_integer_ (C_7:
-                                                 ((sub_int (integer_of_int32 !i)) (1))))));
-                  !i end) end) in void); void;
+                  (let jessie_<somenum> = (tmp := !i) in void);
+                 (i := (C_8:
+                       (safe_int32_of_integer_ (C_7:
+                                               ((sub_int (integer_of_int32 !i)) (1))))));
+                 !i end)) in void); void;
                (if ((gt_int_ (integer_of_int32 !tmp)) (0)) then void
                else
-                (let jessie_25 = (raise (Goto_while_0_break_exc void)) in
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                 void));
                (C_14:
-               (let jessie_27 =
+               (let jessie_<somenum> =
                (C_11:
                ((safe_acc_ int_P_int_M_t1_1) (C_10:
                                              ((shift t1) (integer_of_int32 !i))))) in
-               (let jessie_30 = (C_12: ((shift t2) (integer_of_int32 !i))) in
+               (let jessie_<somenum> = t2 in
+               (let jessie_<somenum> = (integer_of_int32 !i) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (((safe_upd_ int_P_int_M_t2_2) jessie_30) jessie_27);
-                jessie_27 end))) end in void);
+                 (((safe_upd_ int_P_int_M_t2_2) jessie_<somenum>) jessie_<somenum>);
+                jessie_<somenum> end))))) end in void);
              (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end))); (raise Return) end with Return -> void end)
-  { (JC_13:
+  { (JC_<somenum>:
     (forall k_0:int32.
      ((le_int((0), integer_of_int32(k_0))
       and lt_int(integer_of_int32(k_0), integer_of_int32(n@))) ->
@@ -580,12 +581,12 @@ let copy_ensures_default =
 
 let copy_safety =
  fun (t1 : int_P pointer) (t2 : int_P pointer) (n : int32) (int_P_int_M_t2_2 : (int_P, int32) memory ref) (int_P_t1_1_alloc_table : int_P alloc_table) (int_P_t2_2_alloc_table : int_P alloc_table) (int_P_int_M_t1_1 : (int_P, int32) memory) ->
-  { (JC_11:
-    ((JC_7: le_int(offset_min(int_P_t1_1_alloc_table, t1), (0)))
-    and ((JC_8:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_t1_1_alloc_table, t1), (0)))
+    and ((JC_<somenum>:
          ge_int(offset_max(int_P_t1_1_alloc_table, t1), integer_of_int32(n)))
-        and ((JC_9: le_int(offset_min(int_P_t2_2_alloc_table, t2), (0)))
-            and (JC_10:
+        and ((JC_<somenum>: le_int(offset_min(int_P_t2_2_alloc_table, t2), (0)))
+            and (JC_<somenum>:
                 ge_int(offset_max(int_P_t2_2_alloc_table, t2),
                 integer_of_int32(n))))))) }
   (init:
@@ -595,18 +596,18 @@ let copy_safety =
      (let tmp = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (i := n) in void);
+       (let jessie_<somenum> = (i := n) in void);
       try
-       (let jessie_18 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_21: true) variant integer_of_int32((JC_26 : i)) }
+         { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : i)) }
           begin
             [ { } unit reads i,int_P_int_M_t2_2
-              { (JC_19:
-                ((JC_17: le_int(integer_of_int32(i), integer_of_int32(n)))
-                and (JC_18:
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(n)))
+                and (JC_<somenum>:
                     (forall k:int32.
                      ((le_int(integer_of_int32(i), integer_of_int32(k))
                       and lt_int(integer_of_int32(k), integer_of_int32(n))) ->
@@ -615,42 +616,41 @@ let copy_safety =
                       integer_of_int32(select(int_P_int_M_t1_1,
                                        shift(t1, integer_of_int32(k)))))))))) } ];
            try
-            (let jessie_17 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_16 =
+              (let jessie_<somenum> =
               begin
-                (let jessie_9 =
+                (let jessie_<somenum> =
                 (C_6:
+                (C_9:
                 begin
-                  (let jessie_7 = (tmp := !i) in void);
-                 (C_9:
-                 begin
-                   (i := (C_8:
-                         (JC_23:
-                         (int32_of_integer_ (C_7:
-                                            ((sub_int (integer_of_int32 !i)) (1)))))));
-                  !i end) end) in void); void;
+                  (let jessie_<somenum> = (tmp := !i) in void);
+                 (i := (C_8:
+                       (JC_<somenum>:
+                       (int32_of_integer_ (C_7:
+                                          ((sub_int (integer_of_int32 !i)) (1)))))));
+                 !i end)) in void); void;
                (if ((gt_int_ (integer_of_int32 !tmp)) (0)) then void
                else
-                (let jessie_10 = (raise (Goto_while_0_break_exc void)) in
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                 void));
                (C_14:
-               (let jessie_12 =
+               (let jessie_<somenum> =
                (C_11:
-               (JC_24:
+               (JC_<somenum>:
                ((((offset_acc_ int_P_t1_1_alloc_table) int_P_int_M_t1_1) t1) 
                 (integer_of_int32 !i)))) in
-               (let jessie_13 = t2 in
-               (let jessie_14 = (integer_of_int32 !i) in
-               (let jessie_15 = ((shift jessie_13) jessie_14) in
+               (let jessie_<somenum> = t2 in
+               (let jessie_<somenum> = (integer_of_int32 !i) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (JC_25:
-                 (((((offset_upd_ int_P_t2_2_alloc_table) int_P_int_M_t2_2) jessie_13) jessie_14) jessie_12));
-                jessie_12 end))))) end in void);
+                 (JC_<somenum>:
+                 (((((offset_upd_ int_P_t2_2_alloc_table) int_P_int_M_t2_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+                jessie_<somenum> end))))) end in void);
              (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end))); (raise Return) end with Return -> void end)
   { true }
 
@@ -692,11 +692,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_po12.why">
-      <location file = "why/copy.why" line = "514" begin = "43" end = "72"/>
+      <location file = "why/copy.why" line = "515" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/copy_po13.why">
-      <location file = "why/copy.why" line = "514" begin = "43" end = "72"/>
+      <location file = "why/copy.why" line = "515" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

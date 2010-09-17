@@ -579,7 +579,7 @@ parameter f :
   { } unit
   reads __anonstruct_las_1_c_v_1,__anonstruct_las_1_v_1_alloc_table,int_P_v_1_alloc_table
   writes int_P_int_M_v_1
-  { (JC_29: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 parameter f2 :
  x_0:__anonstruct_las_1 pointer ->
@@ -589,7 +589,7 @@ parameter f2 :
      __anonstruct_las_1_c_x_3:(__anonstruct_las_1, int_P pointer) memory ->
       { } unit reads __anonstruct_las_1_v_1_alloc_table
       writes int_P_int_M_x_3
-      { (JC_47: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+      { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 parameter f2_requires :
  x_0:__anonstruct_las_1 pointer ->
@@ -597,30 +597,30 @@ parameter f2_requires :
    int_P_x_3_alloc_table:int_P alloc_table ->
     __anonstruct_las_1_x_3_alloc_table:__anonstruct_las_1 alloc_table ->
      __anonstruct_las_1_c_x_3:(__anonstruct_las_1, int_P pointer) memory ->
-      { (JC_36:
-        ((JC_34:
-         ((JC_32:
+      { (JC_<somenum>:
+        ((JC_<somenum>:
+         ((JC_<somenum>:
           le_int(offset_min(__anonstruct_las_1_x_3_alloc_table, x_0), (0)))
-         and (JC_33:
+         and (JC_<somenum>:
              ge_int(offset_max(__anonstruct_las_1_x_3_alloc_table, x_0), (0)))))
-        and (JC_35: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
+        and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
       unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_x_3
-      { (JC_47: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+      { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_22: valid_v(__anonstruct_las_1_v_1_alloc_table))} unit
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))} unit
   reads __anonstruct_las_1_c_v_1,__anonstruct_las_1_v_1_alloc_table,int_P_v_1_alloc_table
   writes int_P_int_M_v_1
-  { (JC_29: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 parameter g :
  p:int_P pointer ->
   int_P_int_M_p_2:(int_P, int32) memory ref ->
    int_P_p_2_alloc_table:int_P alloc_table ->
     { } unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_p_2
-    { ((JC_21: valid_v(__anonstruct_las_1_v_1_alloc_table))
-      and (JC_19:
+    { ((JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))
+      and (JC_<somenum>:
           not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
           int_P_int_M_p_2, pset_singleton(p@)))) }
 
@@ -628,14 +628,14 @@ parameter g_requires :
  p:int_P pointer ->
   int_P_int_M_p_2:(int_P, int32) memory ref ->
    int_P_p_2_alloc_table:int_P alloc_table ->
-    { (JC_8:
-      ((JC_6:
-       ((JC_4: le_int(offset_min(int_P_p_2_alloc_table, p), (0)))
-       and (JC_5: ge_int(offset_max(int_P_p_2_alloc_table, p), (0)))))
-      and (JC_7: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
+    { (JC_<somenum>:
+      ((JC_<somenum>:
+       ((JC_<somenum>: le_int(offset_min(int_P_p_2_alloc_table, p), (0)))
+       and (JC_<somenum>: ge_int(offset_max(int_P_p_2_alloc_table, p), (0)))))
+      and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
     unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_p_2
-    { ((JC_21: valid_v(__anonstruct_las_1_v_1_alloc_table))
-      and (JC_19:
+    { ((JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))
+      and (JC_<somenum>:
           not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
           int_P_int_M_p_2, pset_singleton(p@)))) }
 
@@ -657,72 +657,67 @@ parameter safe_int8_of_integer_ :
 
 let f2_ensures_default =
  fun (x_0 : __anonstruct_las_1 pointer) (int_P_int_M_x_3 : (int_P, int32) memory ref) (__anonstruct_las_1_x_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_x_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_c_x_3 : (__anonstruct_las_1, int_P pointer) memory) ->
-  { (JC_42:
-    ((JC_40:
-     ((JC_38:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>:
       le_int(offset_min(__anonstruct_las_1_x_3_alloc_table, x_0), (0)))
-     and (JC_39:
+     and (JC_<somenum>:
          ge_int(offset_max(__anonstruct_las_1_x_3_alloc_table, x_0), (0)))))
-    and (JC_41: valid_v(__anonstruct_las_1_v_1_alloc_table)))) }
+    and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)))) }
   (init:
   try
+   (C_9:
    begin
-     (C_9:
-     begin
-       (let jessie_4 = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x_0)) in
-       (JC_50: (((g jessie_4) int_P_int_M_x_3) int_P_x_3_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_44: true) }
+     (let jessie_<somenum> = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x_0)) in
+     (JC_<somenum>: (((g jessie_<somenum>) int_P_int_M_x_3) int_P_x_3_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f2_safety =
  fun (x_0 : __anonstruct_las_1 pointer) (int_P_int_M_x_3 : (int_P, int32) memory ref) (__anonstruct_las_1_x_3_alloc_table : __anonstruct_las_1 alloc_table) (int_P_x_3_alloc_table : int_P alloc_table) (__anonstruct_las_1_c_x_3 : (__anonstruct_las_1, int_P pointer) memory) ->
-  { (JC_42:
-    ((JC_40:
-     ((JC_38:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>:
       le_int(offset_min(__anonstruct_las_1_x_3_alloc_table, x_0), (0)))
-     and (JC_39:
+     and (JC_<somenum>:
          ge_int(offset_max(__anonstruct_las_1_x_3_alloc_table, x_0), (0)))))
-    and (JC_41: valid_v(__anonstruct_las_1_v_1_alloc_table)))) }
+    and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)))) }
   (init:
   try
+   (C_9:
    begin
-     (C_9:
-     begin
-       (let jessie_3 =
-       (C_8:
-       (JC_48:
-       (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x_0))) in
-       (JC_49:
-       (((g_requires jessie_3) int_P_int_M_x_3) int_P_x_3_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_46: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+     (let jessie_<somenum> =
+     (C_8:
+     (JC_<somenum>:
+     (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x_0))) in
+     (JC_<somenum>: (((g_requires jessie_<somenum>) int_P_int_M_x_3) int_P_x_3_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_24: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
+   (C_6:
    begin
-     (C_6:
-     begin
-       (let jessie_2 = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
-       (JC_31: (((g jessie_2) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_26: true) }
+     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+     (JC_<somenum>: (((g jessie_<somenum>) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_24: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
+   (C_6:
    begin
-     (C_6:
-     begin
-       (let jessie_1 = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
-       (JC_30:
-       (((g_requires jessie_1) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_28: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+     (JC_<somenum>:
+     (((g_requires jessie_<somenum>) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0102.jessie --quiet -f bts0102.makefile project

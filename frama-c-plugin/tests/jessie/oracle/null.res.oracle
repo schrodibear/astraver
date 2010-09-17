@@ -408,15 +408,15 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter f : tt:unit -> { } int_P pointer { (JC_6: (result = null)) }
+parameter f : tt:unit -> { } int_P pointer { (JC_<somenum>: (result = null)) }
 
 parameter f_requires :
- tt:unit -> { } int_P pointer { (JC_6: (result = null)) }
+ tt:unit -> { } int_P pointer { (JC_<somenum>: (result = null)) }
 
-parameter g : tt:unit -> { } int_P pointer { (JC_14: (result = null)) }
+parameter g : tt:unit -> { } int_P pointer { (JC_<somenum>: (result = null)) }
 
 parameter g_requires :
- tt:unit -> { } int_P pointer { (JC_14: (result = null)) }
+ tt:unit -> { } int_P pointer { (JC_<somenum>: (result = null)) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -436,7 +436,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -444,13 +444,13 @@ let f_ensures_default =
      (let p = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_5 = (p := null) in void); (return := !p); (raise Return)
+       (let jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
      end)); absurd  end with Return -> !return end))
-  { (JC_5: (result = null)) }
+  { (JC_<somenum>: (result = null)) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -458,12 +458,12 @@ let f_safety =
      (let p = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_2 = (p := null) in void); (return := !p); (raise Return)
+       (let jessie_<somenum> = (p := null) in void); (return := !p); (raise Return)
      end)); absurd  end with Return -> !return end)) { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -471,13 +471,13 @@ let g_ensures_default =
      (let p_0 = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_11 = (p_0 := null) in void); (return := !p_0);
+       (let jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_13: (result = null)) }
+  { (JC_<somenum>: (result = null)) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -485,7 +485,7 @@ let g_safety =
      (let p_0 = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_8 = (p_0 := null) in void); (return := !p_0);
+       (let jessie_<somenum> = (p_0 := null) in void); (return := !p_0);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 

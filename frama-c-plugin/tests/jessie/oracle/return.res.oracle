@@ -449,7 +449,7 @@ parameter safe_int8_of_integer_ :
 
 let cast_null_ensures_default =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -457,13 +457,13 @@ let cast_null_ensures_default =
      (let __retres_0 = ref (any_pointer void) in
      (C_4:
      begin
-       (let jessie_20 = (__retres_0 := null) in void);
+       (let jessie_<somenum> = (__retres_0 := null) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_13: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let cast_null_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -471,13 +471,13 @@ let cast_null_safety =
      (let __retres_0 = ref (any_pointer void) in
      (C_4:
      begin
-       (let jessie_17 = (__retres_0 := null) in void);
+       (let jessie_<somenum> = (__retres_0 := null) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -485,26 +485,25 @@ let f_ensures_default =
      (let x_0 = (any_int32 void) in
      (let __retres = ref (any_pointer void) in
      try
-      (let jessie_14 =
+      (let jessie_<somenum> =
+      (C_2:
       begin
         (if ((neq_int_ (integer_of_int32 x_0)) (0))
         then
-         (let jessie_11 =
+         (let jessie_<somenum> =
          (C_1:
          begin
-           (let jessie_10 = (__retres := p) in void);
+           (let jessie_<somenum> = (__retres := p) in void);
           (raise (Return_label_exc void)) end) in void) else void);
-       (C_2:
-       begin
-         (let jessie_13 = (__retres := p) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := p) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
-    absurd  end with Return -> !return end)) { (JC_5: true) }
+    absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -512,20 +511,19 @@ let f_safety =
      (let x_0 = (any_int32 void) in
      (let __retres = ref (any_pointer void) in
      try
-      (let jessie_7 =
+      (let jessie_<somenum> =
+      (C_2:
       begin
         (if ((neq_int_ (integer_of_int32 x_0)) (0))
         then
-         (let jessie_4 =
+         (let jessie_<somenum> =
          (C_1:
          begin
-           (let jessie_3 = (__retres := p) in void);
+           (let jessie_<somenum> = (__retres := p) in void);
           (raise (Return_label_exc void)) end) in void) else void);
-       (C_2:
-       begin
-         (let jessie_6 = (__retres := p) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := p) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 

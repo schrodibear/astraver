@@ -102,7 +102,7 @@ val mkInfo : Cil_types.exp -> Cil_types.exp
 
 val lift_offset : Cil_types.typ -> Cil_types.offset -> Cil_types.offset
 
-val mkTRef : Cil_types.typ -> Cil_types.typ
+val mkTRef : Cil_types.typ -> string -> Cil_types.typ
 
 val mkTRefArray :
   Cil_types.typ * Cil_types.exp * Cil_types.attributes ->

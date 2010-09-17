@@ -290,21 +290,21 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     (assert { (JC_10: (not eq_bool(not_0(true), true))) }; void); void;
+     (assert { (JC_<somenum>: (not eq_bool(not_0(true), true))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     [ { } unit { (JC_9: (not eq_bool(not_0(true), true))) } ]; void;
+     [ { } unit { (JC_<somenum>: (not eq_bool(not_0(true), true))) } ]; void;
     (raise Return); (raise Return) end with Return -> void end) { true }
 
 

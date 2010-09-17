@@ -294,7 +294,7 @@ parameter f :
  x_0:int32 ->
   y:int32 ->
    { } int32
-   { (JC_6:
+   { (JC_<somenum>:
      eq_int(integer_of_int32(result),
      add_int(integer_of_int32(x_0@), integer_of_int32(y@)))) }
 
@@ -302,7 +302,7 @@ parameter f_requires :
  x_0:int32 ->
   y:int32 ->
    { } int32
-   { (JC_6:
+   { (JC_<somenum>:
      eq_int(integer_of_int32(result),
      add_int(integer_of_int32(x_0@), integer_of_int32(y@)))) }
 
@@ -324,43 +324,41 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_x_0 = ref x_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
+   (C_3:
    begin
-     (C_3:
-     begin
-       (let jessie_5 =
-       (mutable_x_0 := (C_2:
-                       (safe_int32_of_integer_ (C_1:
-                                               ((add_int (integer_of_int32 !mutable_x_0)) 
-                                                (integer_of_int32 y)))))) in
-       void); (return := !mutable_x_0); (raise Return) end); absurd  end with
+     (let jessie_<somenum> =
+     (mutable_x_0 := (C_2:
+                     (safe_int32_of_integer_ (C_1:
+                                             ((add_int (integer_of_int32 !mutable_x_0)) 
+                                              (integer_of_int32 y)))))) in
+     void); (return := !mutable_x_0); (raise Return); absurd  end) with
    Return -> !return end)))
-  { (JC_5:
+  { (JC_<somenum>:
     eq_int(integer_of_int32(result),
     add_int(integer_of_int32(x_0@), integer_of_int32(y@)))) }
 
 let f_safety =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_x_0 = ref x_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
+   (C_3:
    begin
-     (C_3:
-     begin
-       (let jessie_2 =
-       (mutable_x_0 := (C_2:
-                       (JC_9:
-                       (int32_of_integer_ (C_1:
-                                          ((add_int (integer_of_int32 !mutable_x_0)) 
-                                           (integer_of_int32 y))))))) in
-       void); (return := !mutable_x_0); (raise Return) end); absurd  end with
-   Return -> !return end))) { true }
+     (let jessie_<somenum> =
+     (mutable_x_0 := (C_2:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_1:
+                                        ((add_int (integer_of_int32 !mutable_x_0)) 
+                                         (integer_of_int32 y))))))) in void);
+    (return := !mutable_x_0); (raise Return); absurd  end) with Return ->
+   !return end))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C param.jessie --quiet -f param.makefile project

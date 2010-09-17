@@ -506,6 +506,9 @@ why3: why/SideEffects_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/SideEffects_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include SideEffects.depend
 
 depend: coq/SideEffects_why.v
@@ -1674,71 +1677,70 @@ let SideEffects_m1_ensures_default =
    begin
      (let i = ref (K_36: (0)) in
      (K_3:
+     (K_7:
+     (K_9:
+     (K_15:
+     (K_17:
+     (K_25:
+     (K_27:
      begin
-       (let jessie_45 =
-       (let jessie_38 = (1) in
-       (let jessie_41 =
-       ((shift t) (K_2:
-                  (let jessie_1 = !i in
-                  begin
-                    (let jessie_44 = (i := ((add_int jessie_1) (1))) in void);
-                   jessie_1 end))) in
-       (((safe_upd_ intM_intP) jessie_41) jessie_38))) in void);
-      (K_7:
-      begin
-        (assert
-        { (JC_62:
-          ((JC_60: eq_int(select(intM_intP, shift(t, (0))), (1)))
-          and (JC_61: eq_int(i, (1))))) }; void);
-       (K_9:
+       (let jessie_<num> =
+       (let jessie_<num> = (1) in
+       (let jessie_<num> = t in
+       (let jessie_<num> =
+       (K_2:
+       (let jessie_<num> = !i in
        begin
-         (let jessie_52 =
-         (let jessie_47 = (2) in
-         (let jessie_50 =
-         ((shift t) (K_8: begin   (i := ((add_int !i) (1))); !i end)) in
-         (((safe_upd_ intM_intP) jessie_50) jessie_47))) in void);
-        (K_15:
-        begin
-          (assert
-          { (JC_66:
-            ((JC_63: eq_int(select(intM_intP, shift(t, (0))), (1)))
-            and ((JC_64: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                and (JC_65: eq_int(i, (2)))))) }; void);
-         (K_17:
-         begin
-           (let jessie_59 =
-           (let jessie_54 = (3) in
-           (let jessie_57 =
-           ((shift t) (K_16: begin   (i := ((sub_int !i) (1))); !i end)) in
-           (((safe_upd_ intM_intP) jessie_57) jessie_54))) in void);
-          (K_25:
-          begin
-            (assert
-            { (JC_71:
-              ((JC_67: eq_int(select(intM_intP, shift(t, (0))), (1)))
-              and ((JC_68: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                  and ((JC_69: eq_int(select(intM_intP, shift(t, (1))), (3)))
-                      and (JC_70: eq_int(i, (1))))))) }; void);
-           (K_27:
-           begin
-             (let jessie_68 =
-             (let jessie_61 = (4) in
-             (let jessie_64 =
-             ((shift t) (K_26:
-                        (let jessie_2 = !i in
-                        begin
-                          (let jessie_67 = (i := ((sub_int jessie_2) (1))) in
-                          void); jessie_2 end))) in
-             (((safe_upd_ intM_intP) jessie_64) jessie_61))) in void);
-            (K_35:
-            (assert
-            { (JC_76:
-              ((JC_72: eq_int(select(intM_intP, shift(t, (0))), (1)))
-              and ((JC_73: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                  and ((JC_74: eq_int(select(intM_intP, shift(t, (1))), (4)))
-                      and (JC_75: eq_int(i, (0))))))) }; void)) end) end) end)
-        end) end) end) end)); (raise Return) end with Return -> void end)
-  { (JC_35: true) }
+         (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void); jessie_<num>
+       end)) in
+       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+      (assert
+      { (JC_62:
+        ((JC_60: eq_int(select(intM_intP, shift(t, (0))), (1)))
+        and (JC_61: eq_int(i, (1))))) }; void);
+      (let jessie_<num> =
+      (let jessie_<num> = (2) in
+      (let jessie_<num> = t in
+      (let jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+      (assert
+      { (JC_66:
+        ((JC_63: eq_int(select(intM_intP, shift(t, (0))), (1)))
+        and ((JC_64: eq_int(select(intM_intP, shift(t, (2))), (2)))
+            and (JC_65: eq_int(i, (2)))))) }; void);
+      (let jessie_<num> =
+      (let jessie_<num> = (3) in
+      (let jessie_<num> = t in
+      (let jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+      (assert
+      { (JC_71:
+        ((JC_67: eq_int(select(intM_intP, shift(t, (0))), (1)))
+        and ((JC_68: eq_int(select(intM_intP, shift(t, (2))), (2)))
+            and ((JC_69: eq_int(select(intM_intP, shift(t, (1))), (3)))
+                and (JC_70: eq_int(i, (1))))))) }; void);
+      (let jessie_<num> =
+      (let jessie_<num> = (4) in
+      (let jessie_<num> = t in
+      (let jessie_<num> =
+      (K_26:
+      (let jessie_<num> = !i in
+      begin
+        (let jessie_<num> = (i := ((sub_int jessie_<num>) (1))) in void); jessie_<num>
+      end)) in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
+      (K_35:
+      (assert
+      { (JC_76:
+        ((JC_72: eq_int(select(intM_intP, shift(t, (0))), (1)))
+        and ((JC_73: eq_int(select(intM_intP, shift(t, (2))), (2)))
+            and ((JC_74: eq_int(select(intM_intP, shift(t, (1))), (4)))
+                and (JC_75: eq_int(i, (0))))))) }; void)) end))))))));
+    (raise Return) end with Return -> void end) { (JC_35: true) }
 
 let SideEffects_m1_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
@@ -1751,88 +1753,78 @@ let SideEffects_m1_safety =
    begin
      (let i = ref (K_36: (0)) in
      (K_3:
+     (K_7:
+     (K_9:
+     (K_15:
+     (K_17:
+     (K_25:
+     (K_27:
      begin
-       (let jessie_12 =
-       (let jessie_5 = (1) in
-       (let jessie_6 = t in
-       (let jessie_7 =
+       (let jessie_<num> =
+       (let jessie_<num> = (1) in
+       (let jessie_<num> = t in
+       (let jessie_<num> =
        (K_2:
-       (let jessie_1 = !i in
+       (let jessie_<num> = !i in
        begin
-         (let jessie_11 = (i := ((add_int jessie_1) (1))) in void); jessie_1
+         (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void); jessie_<num>
        end)) in
-       (let jessie_8 = ((shift jessie_6) jessie_7) in
+       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
        (JC_39:
-       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_6) jessie_7) jessie_5)))))) in
+       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
        void);
-      (K_7:
+      [ { } unit reads i,intM_intP
+        { (JC_42:
+          ((JC_40: eq_int(select(intM_intP, shift(t, (0))), (1)))
+          and (JC_41: eq_int(i, (1))))) } ];
+      (let jessie_<num> =
+      (let jessie_<num> = (2) in
+      (let jessie_<num> = t in
+      (let jessie_<num> = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (JC_43:
+      (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+      void);
+      [ { } unit reads i,intM_intP
+        { (JC_47:
+          ((JC_44: eq_int(select(intM_intP, shift(t, (0))), (1)))
+          and ((JC_45: eq_int(select(intM_intP, shift(t, (2))), (2)))
+              and (JC_46: eq_int(i, (2)))))) } ];
+      (let jessie_<num> =
+      (let jessie_<num> = (3) in
+      (let jessie_<num> = t in
+      (let jessie_<num> = (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (JC_48:
+      (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+      void);
+      [ { } unit reads i,intM_intP
+        { (JC_53:
+          ((JC_49: eq_int(select(intM_intP, shift(t, (0))), (1)))
+          and ((JC_50: eq_int(select(intM_intP, shift(t, (2))), (2)))
+              and ((JC_51: eq_int(select(intM_intP, shift(t, (1))), (3)))
+                  and (JC_52: eq_int(i, (1))))))) } ];
+      (let jessie_<num> =
+      (let jessie_<num> = (4) in
+      (let jessie_<num> = t in
+      (let jessie_<num> =
+      (K_26:
+      (let jessie_<num> = !i in
       begin
-        [ { } unit reads i,intM_intP
-          { (JC_42:
-            ((JC_40: eq_int(select(intM_intP, shift(t, (0))), (1)))
-            and (JC_41: eq_int(i, (1))))) } ];
-       (K_9:
-       begin
-         (let jessie_19 =
-         (let jessie_14 = (2) in
-         (let jessie_15 = t in
-         (let jessie_16 = (K_8: begin   (i := ((add_int !i) (1))); !i end) in
-         (let jessie_17 = ((shift jessie_15) jessie_16) in
-         (JC_43:
-         (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) jessie_14)))))) in
-         void);
-        (K_15:
-        begin
-          [ { } unit reads i,intM_intP
-            { (JC_47:
-              ((JC_44: eq_int(select(intM_intP, shift(t, (0))), (1)))
-              and ((JC_45: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                  and (JC_46: eq_int(i, (2)))))) } ];
-         (K_17:
-         begin
-           (let jessie_26 =
-           (let jessie_21 = (3) in
-           (let jessie_22 = t in
-           (let jessie_23 =
-           (K_16: begin   (i := ((sub_int !i) (1))); !i end) in
-           (let jessie_24 = ((shift jessie_22) jessie_23) in
-           (JC_48:
-           (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_22) jessie_23) jessie_21)))))) in
-           void);
-          (K_25:
-          begin
-            [ { } unit reads i,intM_intP
-              { (JC_53:
-                ((JC_49: eq_int(select(intM_intP, shift(t, (0))), (1)))
-                and ((JC_50: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                    and ((JC_51:
-                         eq_int(select(intM_intP, shift(t, (1))), (3)))
-                        and (JC_52: eq_int(i, (1))))))) } ];
-           (K_27:
-           begin
-             (let jessie_35 =
-             (let jessie_28 = (4) in
-             (let jessie_29 = t in
-             (let jessie_30 =
-             (K_26:
-             (let jessie_2 = !i in
-             begin
-               (let jessie_34 = (i := ((sub_int jessie_2) (1))) in void);
-              jessie_2 end)) in
-             (let jessie_31 = ((shift jessie_29) jessie_30) in
-             (JC_54:
-             (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_29) jessie_30) jessie_28)))))) in
-             void);
-            (K_35:
-            [ { } unit reads i,intM_intP
-              { (JC_59:
-                ((JC_55: eq_int(select(intM_intP, shift(t, (0))), (1)))
-                and ((JC_56: eq_int(select(intM_intP, shift(t, (2))), (2)))
-                    and ((JC_57:
-                         eq_int(select(intM_intP, shift(t, (1))), (4)))
-                        and (JC_58: eq_int(i, (0))))))) } ]) end) end) end)
-        end) end) end) end)); (raise Return) end with Return -> void end)
-  { true }
+        (let jessie_<num> = (i := ((sub_int jessie_<num>) (1))) in void); jessie_<num>
+      end)) in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      (JC_54:
+      (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
+      void);
+      (K_35:
+      [ { } unit reads i,intM_intP
+        { (JC_59:
+          ((JC_55: eq_int(select(intM_intP, shift(t, (0))), (1)))
+          and ((JC_56: eq_int(select(intM_intP, shift(t, (2))), (2)))
+              and ((JC_57: eq_int(select(intM_intP, shift(t, (1))), (4)))
+                  and (JC_58: eq_int(i, (0))))))) } ]) end))))))));
+    (raise Return) end with Return -> void end) { true }
 
 let cons_SideEffects_ensures_default =
  fun (this_1 : Object pointer) ->

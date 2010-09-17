@@ -567,22 +567,22 @@ parameter f :
   { } unit
   reads __anonstruct_las_1_a_v_1,__anonstruct_las_1_v_1_alloc_table,int_P_v_1_alloc_table
   writes int_P_int_M_v_1
-  { (JC_28: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_21: valid_v(__anonstruct_las_1_v_1_alloc_table))} unit
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))} unit
   reads __anonstruct_las_1_a_v_1,__anonstruct_las_1_v_1_alloc_table,int_P_v_1_alloc_table
   writes int_P_int_M_v_1
-  { (JC_28: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 parameter g :
  p:int_P pointer ->
   int_P_int_M_p_2:(int_P, int32) memory ref ->
    int_P_p_2_alloc_table:int_P alloc_table ->
     { } unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_p_2
-    { ((JC_20: valid_v(__anonstruct_las_1_v_1_alloc_table))
-      and (JC_18:
+    { ((JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))
+      and (JC_<somenum>:
           not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
           int_P_int_M_p_2, pset_singleton(p@)))) }
 
@@ -590,14 +590,14 @@ parameter g_requires :
  p:int_P pointer ->
   int_P_int_M_p_2:(int_P, int32) memory ref ->
    int_P_p_2_alloc_table:int_P alloc_table ->
-    { (JC_7:
-      ((JC_5:
-       ((JC_3: le_int(offset_min(int_P_p_2_alloc_table, p), (0)))
-       and (JC_4: ge_int(offset_max(int_P_p_2_alloc_table, p), (0)))))
-      and (JC_6: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
+    { (JC_<somenum>:
+      ((JC_<somenum>:
+       ((JC_<somenum>: le_int(offset_min(int_P_p_2_alloc_table, p), (0)))
+       and (JC_<somenum>: ge_int(offset_max(int_P_p_2_alloc_table, p), (0)))))
+      and (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))))}
     unit reads __anonstruct_las_1_v_1_alloc_table writes int_P_int_M_p_2
-    { ((JC_20: valid_v(__anonstruct_las_1_v_1_alloc_table))
-      and (JC_18:
+    { ((JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table))
+      and (JC_<somenum>:
           not_assigns(int_P_p_2_alloc_table@, int_P_int_M_p_2@,
           int_P_int_M_p_2, pset_singleton(p@)))) }
 
@@ -619,30 +619,28 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_23: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
+   (C_6:
    begin
-     (C_6:
-     begin
-       (let jessie_2 = (C_5: ((safe_acc_ !__anonstruct_las_1_a_v_1) v)) in
-       (JC_30: (((g jessie_2) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_25: true) }
+     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_a_v_1) v)) in
+     (JC_<somenum>: (((g jessie_<somenum>) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_23: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
   (init:
   try
+   (C_6:
    begin
-     (C_6:
-     begin
-       (let jessie_1 = (C_5: ((safe_acc_ !__anonstruct_las_1_a_v_1) v)) in
-       (JC_29:
-       (((g_requires jessie_1) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_27: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
+     (let jessie_<somenum> = (C_5: ((safe_acc_ !__anonstruct_las_1_a_v_1) v)) in
+     (JC_<somenum>:
+     (((g_requires jessie_<somenum>) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: valid_v(__anonstruct_las_1_v_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dillon6.jessie --quiet -f dillon6.makefile project

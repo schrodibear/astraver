@@ -1,7 +1,7 @@
 
-//typedef float TYP ;
+#pragma JessieFloatModel(math)
 
-#define TYP float
+typedef float TYP ;
 
 /* Tentatives de plusieurs théories : en espérant que cette dernière est correcte */
 

@@ -411,10 +411,10 @@ parameter f_requires :
  p:int_P pointer ->
   q:int_P pointer ->
    int_P_p_1_alloc_table:int_P alloc_table ->
-    { (JC_4:
-      ((JC_1: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-      and ((JC_2: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
-          and (JC_3:
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+      and ((JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
+          and (JC_<somenum>:
               (not (le_int(offset_min(int_P_p_1_alloc_table, q), (0))
                    and ge_int(offset_max(int_P_p_1_alloc_table, q), (0))))))))}
     unit { true }
@@ -437,33 +437,33 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (p : int_P pointer) (q : int_P pointer) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_9:
-    ((JC_6: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and ((JC_7: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
-        and (JC_8:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
+        and (JC_<somenum>:
             (not (le_int(offset_min(int_P_p_1_alloc_table, q), (0))
                  and ge_int(offset_max(int_P_p_1_alloc_table, q), (0)))))))) }
   (init:
   try
    begin
      (if ((safe_eq_pointer p) q)
-     then begin   (assert { (JC_16: eq_int((0), (1))) }; void); void end
+     then begin   (assert { (JC_<somenum>: eq_int((0), (1))) }; void); void end
      else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_11: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (p : int_P pointer) (q : int_P pointer) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_9:
-    ((JC_6: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and ((JC_7: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
-        and (JC_8:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))
+        and (JC_<somenum>:
             (not (le_int(offset_min(int_P_p_1_alloc_table, q), (0))
                  and ge_int(offset_max(int_P_p_1_alloc_table, q), (0)))))))) }
   (init:
   try
    begin
      (if ((eq_pointer p) q)
-     then begin   [ { } unit { (JC_15: eq_int((0), (1))) } ]; void end
+     then begin   [ { } unit { (JC_<somenum>: eq_int((0), (1))) } ]; void end
      else void); (raise Return); (raise Return) end with Return -> void end)
   { true }
 

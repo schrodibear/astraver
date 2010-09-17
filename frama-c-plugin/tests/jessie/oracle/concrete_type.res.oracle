@@ -297,15 +297,15 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f :
  y:int32 ->
   { } int32
-  { (JC_6:
+  { (JC_<somenum>:
     (forall x_0:int32.
      (eq_int(integer_of_int32(x_0), integer_of_int32(y@)) ->
       le_int(integer_of_int32(x_0), integer_of_int32(result))))) }
 
 parameter f_requires :
  y:int32 ->
-  { (JC_1: le_int(integer_of_int32(y), (10)))} int32
-  { (JC_6:
+  { (JC_<somenum>: le_int(integer_of_int32(y), (10)))} int32
+  { (JC_<somenum>:
     (forall x_0:int32.
      (eq_int(integer_of_int32(x_0), integer_of_int32(y@)) ->
       le_int(integer_of_int32(x_0), integer_of_int32(result))))) }
@@ -328,7 +328,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (y : int32) ->
-  { (JC_3: le_int(integer_of_int32(y), (10))) }
+  { (JC_<somenum>: le_int(integer_of_int32(y), (10))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -336,20 +336,20 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
                                             ((add_int (integer_of_int32 y)) (2)))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_5:
+  { (JC_<somenum>:
     (forall x_0:int32.
      (eq_int(integer_of_int32(x_0), integer_of_int32(y@)) ->
       le_int(integer_of_int32(x_0), integer_of_int32(result))))) }
 
 let f_safety =
  fun (y : int32) ->
-  { (JC_3: le_int(integer_of_int32(y), (10))) }
+  { (JC_<somenum>: le_int(integer_of_int32(y), (10))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -357,9 +357,9 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
-                    (JC_9:
+                    (JC_<somenum>:
                     (int32_of_integer_ (C_1:
                                        ((add_int (integer_of_int32 y)) (2))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with

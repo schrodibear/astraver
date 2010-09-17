@@ -410,13 +410,13 @@ parameter int8_of_integer_ :
 parameter m2 :
  x_0:int_P pointer ->
   y:int_P pointer ->
-   { } int32 { (JC_6: gt_int(integer_of_int32(result), (0))) }
+   { } int32 { (JC_<somenum>: gt_int(integer_of_int32(result), (0))) }
 
 parameter m2_requires :
  x_0:int_P pointer ->
   y:int_P pointer ->
-   { (JC_1: gt_int(sub_pointer(x_0, y), (0)))} int32
-   { (JC_6: gt_int(integer_of_int32(result), (0))) }
+   { (JC_<somenum>: gt_int(sub_pointer(x_0, y), (0)))} int32
+   { (JC_<somenum>: gt_int(integer_of_int32(result), (0))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -426,7 +426,7 @@ parameter safe_int8_of_integer_ :
 
 let m2_ensures_default =
  fun (x_0 : int_P pointer) (y : int_P pointer) ->
-  { (JC_3: gt_int(sub_pointer(x_0, y), (0))) }
+  { (JC_<somenum>: gt_int(sub_pointer(x_0, y), (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -434,16 +434,16 @@ let m2_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
                                             ((safe_sub_pointer_ x_0) y))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_5: gt_int(integer_of_int32(result), (0))) }
+   Return -> !return end)) { (JC_<somenum>: gt_int(integer_of_int32(result), (0))) }
 
 let m2_safety =
  fun (x_0 : int_P pointer) (y : int_P pointer) ->
-  { (JC_3: gt_int(sub_pointer(x_0, y), (0))) }
+  { (JC_<somenum>: gt_int(sub_pointer(x_0, y), (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -451,9 +451,9 @@ let m2_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
-                    (JC_9: (int32_of_integer_ (C_1: ((sub_pointer_ x_0) y)))))) in
+                    (JC_<somenum>: (int32_of_integer_ (C_1: ((sub_pointer_ x_0) y)))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

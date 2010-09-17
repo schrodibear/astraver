@@ -611,8 +611,8 @@ parameter f :
  tt:unit ->
   { } unit
   reads __anonstruct_T_CompositionPage_1_Page_1_alloc_table,__anonstruct_T_CompositionPage_1_Texte_Page_1,char__x__1__P_char__x__1__M_Page_1
-  { ((JC_9: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))
-    and (JC_7:
+  { ((JC_<somenum>: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))
+    and (JC_<somenum>:
         eq_message(shift(select(char__x__1__P_char__x__1__M_Page_1,
                          shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
                                Page),
@@ -622,11 +622,11 @@ parameter f :
 
 parameter f_requires :
  tt:unit ->
-  { (JC_2: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))}
+  { (JC_<somenum>: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))}
   unit
   reads __anonstruct_T_CompositionPage_1_Page_1_alloc_table,__anonstruct_T_CompositionPage_1_Texte_Page_1,char__x__1__P_char__x__1__M_Page_1
-  { ((JC_9: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))
-    and (JC_7:
+  { ((JC_<somenum>: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table))
+    and (JC_<somenum>:
         eq_message(shift(select(char__x__1__P_char__x__1__M_Page_1,
                          shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
                                Page),
@@ -644,10 +644,10 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table)) }
+  { (JC_<somenum>: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table)) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_6:
+  { (JC_<somenum>:
     eq_message(shift(select(char__x__1__P_char__x__1__M_Page_1,
                      shift(select(__anonstruct_T_CompositionPage_1_Texte_Page_1,
                            Page),
@@ -657,10 +657,10 @@ let f_ensures_default =
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table)) }
+  { (JC_<somenum>: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table)) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_8: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table)) }
+  { (JC_<somenum>: valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C array_double.jessie --quiet -f array_double.makefile project

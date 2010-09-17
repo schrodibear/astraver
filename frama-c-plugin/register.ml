@@ -250,9 +250,15 @@ let run () =
       Sys.chdir jessie_subdir;
 
 
+      let atp = Jessie_options.Atp.get () in
+      let jessie_opt = 
+	match atp with
+	  | "why3" | "why3ide" -> ""
+	  | _ -> "-why-opt -split-user-conj"
+      in
       let cmd =
 	make_command
-	  [ env_opt; jessie_cmd; "-why-opt -split-user-conj";
+	  [ env_opt; jessie_cmd; jessie_opt ;
 	    verbose_opt; why_opt; jc_opt; debug_opt; behav_opt;
 	    "-locs"; locname; filename ]
       in
@@ -268,7 +274,7 @@ let run () =
       *)
 
       Jessie_options.feedback "Calling VCs generator.";
-      sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ (Jessie_options.Atp.get ()));
+      sys_command (timeout ^ "make -f " ^ makefile ^ " " ^ atp);
       flush_all ()
 
   with Exit -> ()

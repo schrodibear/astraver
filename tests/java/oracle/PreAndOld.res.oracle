@@ -305,6 +305,9 @@ why3: why/PreAndOld_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/PreAndOld_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include PreAndOld.depend
 
 depend: coq/PreAndOld_why.v
@@ -1065,7 +1068,7 @@ let PreAndOld_g_ensures_default =
    begin
      (let tmp = (K_7: !PreAndOld_y) in
      begin
-       (let jessie_7 = (PreAndOld_y := (12)) in void);
+       (let jessie_<num> = (PreAndOld_y := (12)) in void);
       (return := (K_6: ((add_int x_2) tmp))); (raise Return) end); absurd 
    end with Return -> !return end))
   { (JC_18:
@@ -1082,7 +1085,7 @@ let PreAndOld_g_safety =
    begin
      (let tmp = (K_7: !PreAndOld_y) in
      begin
-       (let jessie_3 = (PreAndOld_y := (12)) in void);
+       (let jessie_<num> = (PreAndOld_y := (12)) in void);
       (return := (K_6: ((add_int x_2) tmp))); (raise Return) end); absurd 
    end with Return -> !return end)) { true }
 

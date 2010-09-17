@@ -349,7 +349,7 @@ parameter safe_int8_of_integer_ :
 
 let r_strcpy_ensures_default =
  fun (dest : char_P pointer) (src : char_P pointer) (char_P_char_M_dest_1 : (char_P, int8) memory ref) (char_P_dest_1_alloc_table : char_P alloc_table) (char_P_src_2_alloc_table : char_P alloc_table) (char_P_char_M_src_2 : (char_P, int8) memory) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -358,61 +358,59 @@ let r_strcpy_ensures_default =
      (let tmp = ref (any_int8 void) in
      (C_1:
      begin
-       (let jessie_21 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_34 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
-         { invariant (JC_18: true)  }
+         { invariant (JC_<somenum>: true)  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_33 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_32 =
+              (let jessie_<somenum> =
+              (C_4:
+              (C_7:
+              (C_13:
               begin
-                (C_4:
-                begin
-                  (let jessie_23 =
-                  (tmp := (C_3:
-                          ((safe_acc_ char_P_char_M_src_2) (C_2:
-                                                           ((shift src) 
-                                                            (integer_of_int32 !i)))))) in
-                  void);
-                 (C_7:
-                 begin
-                   (let jessie_29 =
-                   (let jessie_25 = !tmp in
-                   (let jessie_28 =
-                   (C_5: ((shift dest) (integer_of_int32 !i))) in
-                   (((safe_upd_ char_P_char_M_dest_1) jessie_28) jessie_25))) in
-                   void);
-                  (if ((eq_int_ (integer_of_int32 (C_10:
-                                                  (safe_int32_of_integer_ 
-                                                   (integer_of_int8 (C_9:
-                                                                    ((safe_acc_ char_P_char_M_src_2) 
-                                                                    (C_8:
-                                                                    ((shift src) 
-                                                                    (integer_of_int32 !i)))))))))) (0))
-                  then
-                   (let jessie_30 = (raise (Goto_while_0_break_exc void)) in
-                   void) else void) end) end);
-               (C_13:
-               begin
-                 (i := (C_12:
-                       (safe_int32_of_integer_ (C_11:
-                                               ((add_int (integer_of_int32 !i)) (1))))));
-                !i end) end in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_3 -> void end end done);
+                (let jessie_<somenum> =
+                (tmp := (C_3:
+                        ((safe_acc_ char_P_char_M_src_2) (C_2:
+                                                         ((shift src) 
+                                                          (integer_of_int32 !i)))))) in
+                void);
+               (let jessie_<somenum> =
+               (let jessie_<somenum> = !tmp in
+               (let jessie_<somenum> = dest in
+               (let jessie_<somenum> = (integer_of_int32 !i) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (((safe_upd_ char_P_char_M_dest_1) jessie_<somenum>) jessie_<somenum>))))) in
+               void);
+               (if ((eq_int_ (integer_of_int32 (C_10:
+                                               (safe_int32_of_integer_ 
+                                                (integer_of_int8 (C_9:
+                                                                 ((safe_acc_ char_P_char_M_src_2) 
+                                                                  (C_8:
+                                                                  ((shift src) 
+                                                                   (integer_of_int32 !i)))))))))) (0))
+               then
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void) else void);
+               (i := (C_12:
+                     (safe_int32_of_integer_ (C_11:
+                                             ((add_int (integer_of_int32 !i)) (1))))));
+               !i end))) in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (return := dest); (raise Return) end))); absurd  end with Return ->
-   !return end)) { (JC_5: true) }
+   !return end)) { (JC_<somenum>: true) }
 
 let r_strcpy_safety =
  fun (dest : char_P pointer) (src : char_P pointer) (char_P_char_M_dest_1 : (char_P, int8) memory ref) (char_P_dest_1_alloc_table : char_P alloc_table) (char_P_src_2_alloc_table : char_P alloc_table) (char_P_char_M_src_2 : (char_P, int8) memory) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -421,57 +419,54 @@ let r_strcpy_safety =
      (let tmp = ref (any_int8 void) in
      (C_1:
      begin
-       (let jessie_5 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_18 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_10: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_17 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_16 =
+              (let jessie_<somenum> =
+              (C_4:
+              (C_7:
+              (C_13:
               begin
-                (C_4:
-                begin
-                  (let jessie_7 =
-                  (tmp := (C_3:
-                          (JC_12:
-                          ((((offset_acc_ char_P_src_2_alloc_table) char_P_char_M_src_2) src) 
-                           (integer_of_int32 !i))))) in void);
-                 (C_7:
-                 begin
-                   (let jessie_13 =
-                   (let jessie_9 = !tmp in
-                   (let jessie_10 = dest in
-                   (let jessie_11 = (integer_of_int32 !i) in
-                   (let jessie_12 = ((shift jessie_10) jessie_11) in
-                   (JC_13:
-                   (((((offset_upd_ char_P_dest_1_alloc_table) char_P_char_M_dest_1) jessie_10) jessie_11) jessie_9)))))) in
-                   void);
-                  (if ((eq_int_ (integer_of_int32 (C_10:
-                                                  (JC_15:
-                                                  (int32_of_integer_ 
-                                                   (integer_of_int8 (C_9:
-                                                                    (JC_14:
-                                                                    ((((offset_acc_ char_P_src_2_alloc_table) char_P_char_M_src_2) src) 
+                (let jessie_<somenum> =
+                (tmp := (C_3:
+                        (JC_<somenum>:
+                        ((((offset_acc_ char_P_src_2_alloc_table) char_P_char_M_src_2) src) 
+                         (integer_of_int32 !i))))) in void);
+               (let jessie_<somenum> =
+               (let jessie_<somenum> = !tmp in
+               (let jessie_<somenum> = dest in
+               (let jessie_<somenum> = (integer_of_int32 !i) in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+               (JC_<somenum>:
+               (((((offset_upd_ char_P_dest_1_alloc_table) char_P_char_M_dest_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+               void);
+               (if ((eq_int_ (integer_of_int32 (C_10:
+                                               (JC_<somenum>:
+                                               (int32_of_integer_ (integer_of_int8 
+                                                                   (C_9:
+                                                                   (JC_<somenum>:
+                                                                   ((((offset_acc_ char_P_src_2_alloc_table) char_P_char_M_src_2) src) 
                                                                     (integer_of_int32 !i)))))))))) (0))
-                  then
-                   (let jessie_14 = (raise (Goto_while_0_break_exc void)) in
-                   void) else void) end) end);
-               (C_13:
-               begin
-                 (i := (C_12:
-                       (JC_16:
-                       (int32_of_integer_ (C_11:
-                                          ((add_int (integer_of_int32 !i)) (1)))))));
-                !i end) end in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_3 -> void end end done);
+               then
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void) else void);
+               (i := (C_12:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_11:
+                                        ((add_int (integer_of_int32 !i)) (1)))))));
+               !i end))) in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (return := dest); (raise Return) end))); absurd  end with Return ->
    !return end)) { true }
 
@@ -533,11 +528,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/r_strcpy_po11.why">
-      <location file = "why/r_strcpy.why" line = "366" begin = "44" end = "45"/>
+      <location file = "why/r_strcpy.why" line = "364" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/r_strcpy_po12.why">
-      <location file = "why/r_strcpy.why" line = "366" begin = "44" end = "45"/>
+      <location file = "why/r_strcpy.why" line = "364" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

@@ -438,7 +438,7 @@ parameter safe_int8_of_integer_ :
 
 let ftest_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -449,48 +449,43 @@ let ftest_ensures_default =
      (let b = ref (any_pointer void) in
      (let tmp = ref (any_int32 void) in
      (C_2:
+     (C_3:
+     (M:
+     (C_11:
      begin
-       (let jessie_16 =
+       (let jessie_<somenum> =
        (b := (C_1:
-             (JC_14:
+             (JC_<somenum>:
              (((alloc_struct_int_P (10)) int_P_b_1_alloc_table) int_P_b_1_tag_table)))) in
-       void);
-      (C_3:
+       void); (let jessie_<somenum> = (j := (safe_int32_of_integer_ (3))) in void);
+      (let jessie_<somenum> =
       begin
-        (let jessie_18 = (j := (safe_int32_of_integer_ (3))) in void);
-       (M:
-       begin
-         (let jessie_28 =
-         begin
-           (let jessie_22 =
-           (C_4:
-           begin
-             (let jessie_20 = (tmp := !j) in void);
-            (C_7:
-            begin
-              (j := (C_6:
-                    (safe_int32_of_integer_ (C_5:
-                                            ((add_int (integer_of_int32 !j)) (1))))));
-             !j end) end) in void);
-          (C_9:
-          (let jessie_24 = (safe_int32_of_integer_ (3)) in
-          (let jessie_27 = ((shift !b) (integer_of_int32 !tmp)) in
-          begin
-            (((safe_upd_ int_P_int_M_b_1) jessie_27) jessie_24); jessie_24
-          end))) end in void);
-        (assert
-        { (JC_15:
-          eq_int(integer_of_int32(j), add_int(integer_of_int32(j@M), (1)))) };
-        void); void;
-        (C_11:
+        (let jessie_<somenum> =
+        (C_4:
+        (C_7:
         begin
-          ((safe_free_parameter int_P_b_1_alloc_table) !b); (raise Return)
-        end) end) end) end))))))); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+          (let jessie_<somenum> = (tmp := !j) in void);
+         (j := (C_6:
+               (safe_int32_of_integer_ (C_5:
+                                       ((add_int (integer_of_int32 !j)) (1))))));
+         !j end)) in void);
+       (C_9:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+       (let jessie_<somenum> = !b in
+       (let jessie_<somenum> = (integer_of_int32 !tmp) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       begin   (((safe_upd_ int_P_int_M_b_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
+       end))))) end in void);
+      (assert
+      { (JC_<somenum>:
+        eq_int(integer_of_int32(j), add_int(integer_of_int32(j@M), (1)))) };
+      void); void; ((safe_free_parameter int_P_b_1_alloc_table) !b);
+      (raise Return) end)))))))))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let ftest_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -501,51 +496,46 @@ let ftest_safety =
      (let b = ref (any_pointer void) in
      (let tmp = ref (any_int32 void) in
      (C_2:
+     (C_3:
+     (M:
+     (C_11:
      begin
-       (let jessie_2 =
-       (b := (let jessie_1 =
+       (let jessie_<somenum> =
+       (b := (let jessie_<somenum> =
              (C_1:
-             (JC_9:
+             (JC_<somenum>:
              (((alloc_struct_int_P_requires (10)) int_P_b_1_alloc_table) int_P_b_1_tag_table))) in
-             (JC_10:
+             (JC_<somenum>:
              (assert
-             { ge_int(offset_max(int_P_b_1_alloc_table, jessie_1), (9)) };
-             jessie_1)))) in void);
-      (C_3:
+             { ge_int(offset_max(int_P_b_1_alloc_table, jessie_<somenum>), (9)) };
+             jessie_<somenum>)))) in void);
+      (let jessie_<somenum> = (j := (safe_int32_of_integer_ (3))) in void);
+      (let jessie_<somenum> =
       begin
-        (let jessie_4 = (j := (safe_int32_of_integer_ (3))) in void);
-       (M:
+        (let jessie_<somenum> =
+        (C_4:
+        (C_7:
+        begin
+          (let jessie_<somenum> = (tmp := !j) in void);
+         (j := (C_6:
+               (JC_<somenum>:
+               (int32_of_integer_ (C_5:
+                                  ((add_int (integer_of_int32 !j)) (1)))))));
+         !j end)) in void);
+       (C_9:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+       (let jessie_<somenum> = !b in
+       (let jessie_<somenum> = (integer_of_int32 !tmp) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        begin
-         (let jessie_14 =
-         begin
-           (let jessie_8 =
-           (C_4:
-           begin
-             (let jessie_6 = (tmp := !j) in void);
-            (C_7:
-            begin
-              (j := (C_6:
-                    (JC_11:
-                    (int32_of_integer_ (C_5:
-                                       ((add_int (integer_of_int32 !j)) (1)))))));
-             !j end) end) in void);
-          (C_9:
-          (let jessie_10 = (safe_int32_of_integer_ (3)) in
-          (let jessie_11 = !b in
-          (let jessie_12 = (integer_of_int32 !tmp) in
-          (let jessie_13 = ((shift jessie_11) jessie_12) in
-          begin
-            (JC_12:
-            (((((offset_upd_ !int_P_b_1_alloc_table) int_P_int_M_b_1) jessie_11) jessie_12) jessie_10));
-           jessie_10 end))))) end in void);
-        [ { } unit reads j
-          { (JC_13:
-            eq_int(integer_of_int32(j), add_int(integer_of_int32(j@M), (1)))) } ];
-        void;
-        (C_11:
-        begin   ((free_parameter int_P_b_1_alloc_table) !b); (raise Return)
-        end) end) end) end))))))); (raise Return) end with Return -> void end)
-  { true }
+         (JC_<somenum>:
+         (((((offset_upd_ !int_P_b_1_alloc_table) int_P_int_M_b_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+        jessie_<somenum> end))))) end in void);
+      [ { } unit reads j
+        { (JC_<somenum>:
+          eq_int(integer_of_int32(j), add_int(integer_of_int32(j@M), (1)))) } ];
+      void; ((free_parameter int_P_b_1_alloc_table) !b); (raise Return) end))))))))));
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0361.jessie --quiet -f bts0361.makefile project
@@ -560,7 +550,7 @@ why --project [...] why/bts0361.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0361_po3.why">
-      <location file = "why/bts0361.why" line = "441" begin = "15" end = "71"/>
+      <location file = "why/bts0361.why" line = "439" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0361_po4.why">
@@ -584,7 +574,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0361_po8.why">
-      <location file = "why/bts0361.why" line = "475" begin = "17" end = "58"/>
+      <location file = "why/bts0361.why" line = "466" begin = "13" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

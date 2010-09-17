@@ -2104,40 +2104,40 @@ parameter assign_char :
   { } unit
   reads char_P___string_something_1_alloc_table,char_P_c_75_alloc_table,char_P_char_M___string_something_1,char_P_char_M_c_75,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
   writes char_xP_char_xM_c_3
-  { ((JC_123:
-     ((JC_119:
+  { ((JC_<somenum>:
+     ((JC_<somenum>:
       valid___string_something(char_P___string_something_1_alloc_table,
       char_P_char_M___string_something_1))
-     and ((JC_120:
+     and ((JC_<somenum>:
           valid___string_something_0(char_P___string_something_1_alloc_table))
-         and ((JC_121: valid_a(int_P_a_2_alloc_table))
-             and (JC_122: valid_c(char_xP_c_3_alloc_table))))))
-    and (JC_113:
+         and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+    and (JC_<somenum>:
         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
         char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))) }
 
 parameter assign_char_requires :
  tt:unit ->
-  { (JC_102:
-    ((JC_98:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_99:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_100: valid_a(int_P_a_2_alloc_table))
-            and (JC_101: valid_c(char_xP_c_3_alloc_table))))))}
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
   unit
   reads char_P___string_something_1_alloc_table,char_P_c_75_alloc_table,char_P_char_M___string_something_1,char_P_char_M_c_75,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
   writes char_xP_char_xM_c_3
-  { ((JC_123:
-     ((JC_119:
+  { ((JC_<somenum>:
+     ((JC_<somenum>:
       valid___string_something(char_P___string_something_1_alloc_table,
       char_P_char_M___string_something_1))
-     and ((JC_120:
+     and ((JC_<somenum>:
           valid___string_something_0(char_P___string_something_1_alloc_table))
-         and ((JC_121: valid_a(int_P_a_2_alloc_table))
-             and (JC_122: valid_c(char_xP_c_3_alloc_table))))))
-    and (JC_113:
+         and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+    and (JC_<somenum>:
         not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
         char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))) }
 
@@ -2148,40 +2148,40 @@ parameter assign_int :
   { } unit
   reads char_P___string_something_1_alloc_table,char_P_char_M___string_something_1,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
   writes int_P_int_M_a_2
-  { ((JC_84:
-     ((JC_80:
+  { ((JC_<somenum>:
+     ((JC_<somenum>:
       valid___string_something(char_P___string_something_1_alloc_table,
       char_P_char_M___string_something_1))
-     and ((JC_81:
+     and ((JC_<somenum>:
           valid___string_something_0(char_P___string_something_1_alloc_table))
-         and ((JC_82: valid_a(int_P_a_2_alloc_table))
-             and (JC_83: valid_c(char_xP_c_3_alloc_table))))))
-    and (JC_74:
+         and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+    and (JC_<somenum>:
         not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
         int_P_int_M_a_2, pset_all(pset_singleton(a@))))) }
 
 parameter assign_int_requires :
  tt:unit ->
-  { (JC_63:
-    ((JC_59:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_60:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_61: valid_a(int_P_a_2_alloc_table))
-            and (JC_62: valid_c(char_xP_c_3_alloc_table))))))}
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
   unit
   reads char_P___string_something_1_alloc_table,char_P_char_M___string_something_1,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
   writes int_P_int_M_a_2
-  { ((JC_84:
-     ((JC_80:
+  { ((JC_<somenum>:
+     ((JC_<somenum>:
       valid___string_something(char_P___string_something_1_alloc_table,
       char_P_char_M___string_something_1))
-     and ((JC_81:
+     and ((JC_<somenum>:
           valid___string_something_0(char_P___string_something_1_alloc_table))
-         and ((JC_82: valid_a(int_P_a_2_alloc_table))
-             and (JC_83: valid_c(char_xP_c_3_alloc_table))))))
-    and (JC_74:
+         and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+    and (JC_<somenum>:
         not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
         int_P_int_M_a_2, pset_all(pset_singleton(a@))))) }
 
@@ -2193,15 +2193,15 @@ parameter foo :
      { } unit
      reads char_P___string_something_1_alloc_table,char_P_char_M___string_something_1,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
      writes int_P_int_M_a_0_26
-     { ((JC_204:
-        ((JC_200:
+     { ((JC_<somenum>:
+        ((JC_<somenum>:
          valid___string_something(char_P___string_something_1_alloc_table,
          char_P_char_M___string_something_1))
-        and ((JC_201:
+        and ((JC_<somenum>:
              valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_202: valid_a(int_P_a_2_alloc_table))
-                and (JC_203: valid_c(char_xP_c_3_alloc_table))))))
-       and (JC_194:
+            and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+       and (JC_<somenum>:
            not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
            int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@))))) }
 
@@ -2210,31 +2210,31 @@ parameter foo_requires :
   aLength:int ->
    int_P_int_M_a_0_26:(int_P, int) memory ref ->
     int_P_a_0_26_alloc_table:int_P alloc_table ->
-     { (JC_180:
-       ((JC_175:
-        ((JC_173: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
-        and (JC_174:
+     { (JC_<somenum>:
+       ((JC_<somenum>:
+        ((JC_<somenum>: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
+        and (JC_<somenum>:
             ge_int(offset_max(int_P_a_0_26_alloc_table, a_0),
             sub_int(aLength, (1))))))
-       and ((JC_176:
+       and ((JC_<somenum>:
             valid___string_something(char_P___string_something_1_alloc_table,
             char_P_char_M___string_something_1))
-           and ((JC_177:
+           and ((JC_<somenum>:
                 valid___string_something_0(char_P___string_something_1_alloc_table))
-               and ((JC_178: valid_a(int_P_a_2_alloc_table))
-                   and (JC_179: valid_c(char_xP_c_3_alloc_table)))))))}
+               and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
      unit
      reads char_P___string_something_1_alloc_table,char_P_char_M___string_something_1,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
      writes int_P_int_M_a_0_26
-     { ((JC_204:
-        ((JC_200:
+     { ((JC_<somenum>:
+        ((JC_<somenum>:
          valid___string_something(char_P___string_something_1_alloc_table,
          char_P_char_M___string_something_1))
-        and ((JC_201:
+        and ((JC_<somenum>:
              valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_202: valid_a(int_P_a_2_alloc_table))
-                and (JC_203: valid_c(char_xP_c_3_alloc_table))))))
-       and (JC_194:
+            and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+       and (JC_<somenum>:
            not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
            int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@))))) }
 
@@ -2243,48 +2243,48 @@ parameter main :
   { } unit
   reads char_P___string_something_1_alloc_table,char_P_c_75_alloc_table,char_P_char_M___string_something_1,char_P_char_M_c_75,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
   writes char_xP_char_xM_c_3,int_P_int_M_a_2
-  { ((JC_168:
-     ((JC_164:
+  { ((JC_<somenum>:
+     ((JC_<somenum>:
       valid___string_something(char_P___string_something_1_alloc_table,
       char_P_char_M___string_something_1))
-     and ((JC_165:
+     and ((JC_<somenum>:
           valid___string_something_0(char_P___string_something_1_alloc_table))
-         and ((JC_166: valid_a(int_P_a_2_alloc_table))
-             and (JC_167: valid_c(char_xP_c_3_alloc_table))))))
-    and (JC_158:
-        ((JC_156:
+         and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+    and (JC_<somenum>:
+        ((JC_<somenum>:
          not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
          char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
-        and (JC_157:
+        and (JC_<somenum>:
             not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
             int_P_int_M_a_2, pset_all(pset_singleton(a@))))))) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_143:
-    ((JC_139:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_140:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_141: valid_a(int_P_a_2_alloc_table))
-            and (JC_142: valid_c(char_xP_c_3_alloc_table))))))}
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
   unit
   reads char_P___string_something_1_alloc_table,char_P_c_75_alloc_table,char_P_char_M___string_something_1,char_P_char_M_c_75,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
   writes char_xP_char_xM_c_3,int_P_int_M_a_2
-  { ((JC_168:
-     ((JC_164:
+  { ((JC_<somenum>:
+     ((JC_<somenum>:
       valid___string_something(char_P___string_something_1_alloc_table,
       char_P_char_M___string_something_1))
-     and ((JC_165:
+     and ((JC_<somenum>:
           valid___string_something_0(char_P___string_something_1_alloc_table))
-         and ((JC_166: valid_a(int_P_a_2_alloc_table))
-             and (JC_167: valid_c(char_xP_c_3_alloc_table))))))
-    and (JC_158:
-        ((JC_156:
+         and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+    and (JC_<somenum>:
+        ((JC_<somenum>:
          not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
          char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
-        and (JC_157:
+        and (JC_<somenum>:
             not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
             int_P_int_M_a_2, pset_all(pset_singleton(a@))))))) }
 
@@ -2297,27 +2297,27 @@ parameter strndup :
       char_P_char_M_s_23:(char_P, int) memory ->
        { } char_P pointer
        reads char_P___string_something_1_alloc_table,char_P_char_M___string_something_1,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
-       { ((JC_58:
-          ((JC_54:
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
            valid___string_something(char_P___string_something_1_alloc_table,
            char_P_char_M___string_something_1))
-          and ((JC_55:
+          and ((JC_<somenum>:
                valid___string_something_0(char_P___string_something_1_alloc_table))
-              and ((JC_56: valid_a(int_P_a_2_alloc_table))
-                  and (JC_57: valid_c(char_xP_c_3_alloc_table))))))
-         and (JC_47:
-             ((JC_42:
+              and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>:
               le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
-             and ((JC_43:
+             and ((JC_<somenum>:
                   ge_int(offset_max(char_P_result_24_alloc_table, result),
                   minimum(strlen(s_2@, char_P_char_M_s_23), n_0@)))
-                 and ((JC_44:
+                 and ((JC_<somenum>:
                       valid_string(result, char_P_result_24_alloc_table,
                       char_P_char_M_result_24))
-                     and ((JC_45:
+                     and ((JC_<somenum>:
                           le_int(strlen(result, char_P_char_M_result_24),
                           n_0@))
-                         and (JC_46:
+                         and (JC_<somenum>:
                              eq_int(strncmp(result, s_2@, n_0@,
                                     char_P_char_M_s_23,
                                     char_P_char_M_result_24),
@@ -2330,39 +2330,39 @@ parameter strndup_requires :
     char_P_s_23_alloc_table:char_P alloc_table ->
      char_P_char_M_result_24:(char_P, int) memory ->
       char_P_char_M_s_23:(char_P, int) memory ->
-       { (JC_26:
-         ((JC_21:
+       { (JC_<somenum>:
+         ((JC_<somenum>:
           valid_string(s_2, char_P_s_23_alloc_table, char_P_char_M_s_23))
-         and ((JC_22:
+         and ((JC_<somenum>:
               valid___string_something(char_P___string_something_1_alloc_table,
               char_P_char_M___string_something_1))
-             and ((JC_23:
+             and ((JC_<somenum>:
                   valid___string_something_0(char_P___string_something_1_alloc_table))
-                 and ((JC_24: valid_a(int_P_a_2_alloc_table))
-                     and (JC_25: valid_c(char_xP_c_3_alloc_table)))))))}
+                 and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
        char_P pointer
        reads char_P___string_something_1_alloc_table,char_P_char_M___string_something_1,char_xP_c_3_alloc_table,int_P_a_2_alloc_table
-       { ((JC_58:
-          ((JC_54:
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
            valid___string_something(char_P___string_something_1_alloc_table,
            char_P_char_M___string_something_1))
-          and ((JC_55:
+          and ((JC_<somenum>:
                valid___string_something_0(char_P___string_something_1_alloc_table))
-              and ((JC_56: valid_a(int_P_a_2_alloc_table))
-                  and (JC_57: valid_c(char_xP_c_3_alloc_table))))))
-         and (JC_47:
-             ((JC_42:
+              and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>:
               le_int(offset_min(char_P_result_24_alloc_table, result), (0)))
-             and ((JC_43:
+             and ((JC_<somenum>:
                   ge_int(offset_max(char_P_result_24_alloc_table, result),
                   minimum(strlen(s_2@, char_P_char_M_s_23), n_0@)))
-                 and ((JC_44:
+                 and ((JC_<somenum>:
                       valid_string(result, char_P_result_24_alloc_table,
                       char_P_char_M_result_24))
-                     and ((JC_45:
+                     and ((JC_<somenum>:
                           le_int(strlen(result, char_P_char_M_result_24),
                           n_0@))
-                         and (JC_46:
+                         and (JC_<somenum>:
                              eq_int(strncmp(result, s_2@, n_0@,
                                     char_P_char_M_s_23,
                                     char_P_char_M_result_24),
@@ -2370,436 +2370,440 @@ parameter strndup_requires :
 
 let assign_char_ensures_default =
  fun (tt : unit) ->
-  { (JC_108:
-    ((JC_104:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_105:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_106: valid_a(int_P_a_2_alloc_table))
-            and (JC_107: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
      (let i_0_0 = ref (any_int void) in
      (C_20:
      begin
-       (let jessie_52 = (i_0_0 := (0)) in void);
+       (let jessie_<somenum> = (i_0_0 := (0)) in void);
       try
-       (let jessie_65 =
+       (let jessie_<somenum> =
        begin
          (loop_4:
          while true do
          { invariant
-             ((JC_134:
-              ((JC_132: le_int((0), i_0_0))
-              and (JC_133: le_int(i_0_0, (12)))))
-             and (JC_136:
+             ((JC_<somenum>:
+              ((JC_<somenum>: le_int((0), i_0_0))
+              and (JC_<somenum>: le_int(i_0_0, (12)))))
+             and (JC_<somenum>:
                  not_assigns(char_xP_c_3_alloc_table@init,
                  char_xP_char_xM_c_3@init, char_xP_char_xM_c_3,
                  pset_all(pset_singleton(c@init)))))  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_64 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_63 =
+              (let jessie_<somenum> =
+              (C_28:
               begin
                 (if ((lt_int_ !i_0_0) (12)) then void
                 else
-                 (let jessie_53 = (raise (Goto_while_1_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
                  void));
-               (let jessie_61 =
+               (let jessie_<somenum> =
                (C_26:
-               (let jessie_57 =
+               (let jessie_<somenum> =
                (C_24:
-               (let jessie_56 = __string_something in
-               (let jessie_55 = (12) in
-               (JC_138:
-               ((((((strndup jessie_56) jessie_55) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
-               (let jessie_60 = ((shift c) !i_0_0) in
+               (let jessie_<somenum> = __string_something in
+               (let jessie_<somenum> = (12) in
+               (JC_<somenum>:
+               ((((((strndup jessie_<somenum>) jessie_<somenum>) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
+               (let jessie_<somenum> = c in
+               (let jessie_<somenum> = !i_0_0 in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (((safe_upd_ char_xP_char_xM_c_3) jessie_60) jessie_57);
-                jessie_57 end))) in void);
-               (C_28:
-               begin   (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end)
-              end in void); (raise (Loop_continue_exc void)) end in void)
-            with Loop_continue_exc jessie_6 -> void end end done);
+                 (((safe_upd_ char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>);
+                jessie_<somenum> end))))) in void);
+               (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end) in
+              void); (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
-       Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
+       Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_111:
+  { (JC_<somenum>:
     not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
     char_xP_char_xM_c_3, pset_all(pset_singleton(c@)))) }
 
 let assign_char_safety =
  fun (tt : unit) ->
-  { (JC_108:
-    ((JC_104:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_105:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_106: valid_a(int_P_a_2_alloc_table))
-            and (JC_107: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
      (let i_0_0 = ref (any_int void) in
      (C_20:
      begin
-       (let jessie_37 = (i_0_0 := (0)) in void);
+       (let jessie_<somenum> = (i_0_0 := (0)) in void);
       try
-       (let jessie_50 =
+       (let jessie_<somenum> =
        begin
          (loop_3:
          while true do
-         { invariant (JC_128: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit reads i_0_0
-              { (JC_126:
-                ((JC_124: le_int((0), i_0_0))
-                and (JC_125: le_int(i_0_0, (12))))) } ];
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int((0), i_0_0))
+                and (JC_<somenum>: le_int(i_0_0, (12))))) } ];
            try
-            (let jessie_49 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_48 =
+              (let jessie_<somenum> =
+              (C_28:
               begin
                 (if ((lt_int_ !i_0_0) (12)) then void
                 else
-                 (let jessie_38 = (raise (Goto_while_1_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
                  void));
-               (let jessie_46 =
+               (let jessie_<somenum> =
                (C_26:
-               (let jessie_42 =
+               (let jessie_<somenum> =
                (C_24:
-               (let jessie_41 = __string_something in
-               (let jessie_40 = (12) in
-               (JC_130:
-               ((((((strndup_requires jessie_41) jessie_40) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
-               (let jessie_43 = c in
-               (let jessie_44 = !i_0_0 in
-               (let jessie_45 = ((shift jessie_43) jessie_44) in
+               (let jessie_<somenum> = __string_something in
+               (let jessie_<somenum> = (12) in
+               (JC_<somenum>:
+               ((((((strndup_requires jessie_<somenum>) jessie_<somenum>) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
+               (let jessie_<somenum> = c in
+               (let jessie_<somenum> = !i_0_0 in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (JC_131:
-                 (((((offset_upd_ !char_xP_c_3_alloc_table) char_xP_char_xM_c_3) jessie_43) jessie_44) jessie_42));
-                jessie_42 end))))) in void);
-               (C_28:
-               begin   (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end)
-              end in void); (raise (Loop_continue_exc void)) end in void)
-            with Loop_continue_exc jessie_6 -> void end end done);
+                 (JC_<somenum>:
+                 (((((offset_upd_ !char_xP_c_3_alloc_table) char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+                jessie_<somenum> end))))) in void);
+               (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end) in
+              void); (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
-       Goto_while_1_break_exc jessie_4 -> (while_1_break: void) end;
+       Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_118:
-    ((JC_114:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_115:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_116: valid_a(int_P_a_2_alloc_table))
-            and (JC_117: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
 
 let assign_int_ensures_default =
  fun (tt : unit) ->
-  { (JC_69:
-    ((JC_65:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_66:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_67: valid_a(int_P_a_2_alloc_table))
-            and (JC_68: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
      (let i_27 = ref (any_int void) in
      (C_11:
      begin
-       (let jessie_24 = (i_27 := (0)) in void);
+       (let jessie_<somenum> = (i_27 := (0)) in void);
       try
-       (let jessie_35 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
          { invariant
-             ((JC_94:
-              ((JC_92: le_int((0), i_27)) and (JC_93: le_int(i_27, (12)))))
-             and (JC_96:
+             ((JC_<somenum>:
+              ((JC_<somenum>: le_int((0), i_27)) and (JC_<somenum>: le_int(i_27, (12)))))
+             and (JC_<somenum>:
                  not_assigns(int_P_a_2_alloc_table@init,
                  int_P_int_M_a_2@init, int_P_int_M_a_2,
                  pset_all(pset_singleton(a@init)))))  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_34 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_33 =
+              (let jessie_<somenum> =
+              (C_18:
               begin
                 (if ((lt_int_ !i_27) (12)) then void
                 else
-                 (let jessie_25 = (raise (Goto_while_0_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
-               (let jessie_31 =
+               (let jessie_<somenum> =
                (C_16:
-               (let jessie_27 = (69) in
-               (let jessie_30 = ((shift a) !i_27) in
+               (let jessie_<somenum> = (69) in
+               (let jessie_<somenum> = a in
+               (let jessie_<somenum> = !i_27 in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (((safe_upd_ int_P_int_M_a_2) jessie_30) jessie_27);
-                jessie_27 end))) in void);
-               (C_18:
-               begin   (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end)
-              end in void); (raise (Loop_continue_exc void)) end in void)
-            with Loop_continue_exc jessie_3 -> void end end done);
+                 (((safe_upd_ int_P_int_M_a_2) jessie_<somenum>) jessie_<somenum>);
+                jessie_<somenum> end))))) in void);
+               (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end) in void);
+             (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_72:
+  { (JC_<somenum>:
     not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@, int_P_int_M_a_2,
     pset_all(pset_singleton(a@)))) }
 
 let assign_int_safety =
  fun (tt : unit) ->
-  { (JC_69:
-    ((JC_65:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_66:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_67: valid_a(int_P_a_2_alloc_table))
-            and (JC_68: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
    begin
      (let i_27 = ref (any_int void) in
      (C_11:
      begin
-       (let jessie_11 = (i_27 := (0)) in void);
+       (let jessie_<somenum> = (i_27 := (0)) in void);
       try
-       (let jessie_22 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_89: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit reads i_27
-              { (JC_87:
-                ((JC_85: le_int((0), i_27)) and (JC_86: le_int(i_27, (12))))) } ];
+              { (JC_<somenum>:
+                ((JC_<somenum>: le_int((0), i_27)) and (JC_<somenum>: le_int(i_27, (12))))) } ];
            try
-            (let jessie_21 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_20 =
+              (let jessie_<somenum> =
+              (C_18:
               begin
                 (if ((lt_int_ !i_27) (12)) then void
                 else
-                 (let jessie_12 = (raise (Goto_while_0_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
-               (let jessie_18 =
+               (let jessie_<somenum> =
                (C_16:
-               (let jessie_14 = (69) in
-               (let jessie_15 = a in
-               (let jessie_16 = !i_27 in
-               (let jessie_17 = ((shift jessie_15) jessie_16) in
+               (let jessie_<somenum> = (69) in
+               (let jessie_<somenum> = a in
+               (let jessie_<somenum> = !i_27 in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (JC_91:
-                 (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_15) jessie_16) jessie_14));
-                jessie_14 end))))) in void);
-               (C_18:
-               begin   (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end)
-              end in void); (raise (Loop_continue_exc void)) end in void)
-            with Loop_continue_exc jessie_3 -> void end end done);
+                 (JC_<somenum>:
+                 (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+                jessie_<somenum> end))))) in void);
+               (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end) in void);
+             (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_79:
-    ((JC_75:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_76:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_77: valid_a(int_P_a_2_alloc_table))
-            and (JC_78: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
 
 let foo_ensures_default =
  fun (a_0 : int_P pointer) (aLength : int) (int_P_int_M_a_0_26 : (int_P, int) memory ref) (int_P_a_0_26_alloc_table : int_P alloc_table) ->
-  { (JC_189:
-    ((JC_184:
-     ((JC_182: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
-     and (JC_183:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
+     and (JC_<somenum>:
          ge_int(offset_max(int_P_a_0_26_alloc_table, a_0),
          sub_int(aLength, (1))))))
-    and ((JC_185:
+    and ((JC_<somenum>:
          valid___string_something(char_P___string_something_1_alloc_table,
          char_P_char_M___string_something_1))
-        and ((JC_186:
+        and ((JC_<somenum>:
              valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_187: valid_a(int_P_a_2_alloc_table))
-                and (JC_188: valid_c(char_xP_c_3_alloc_table))))))) }
+            and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))) }
   (init:
   try
    begin
      (let j_3 = ref (any_int void) in
      (C_33:
      begin
-       (let jessie_80 = (j_3 := (0)) in void);
+       (let jessie_<somenum> = (j_3 := (0)) in void);
       try
-       (let jessie_91 =
+       (let jessie_<somenum> =
        begin
          (loop_6:
          while true do
          { invariant
-             ((JC_210: le_int((0), j_3))
-             and (JC_212:
+             ((JC_<somenum>: le_int((0), j_3))
+             and (JC_<somenum>:
                  not_assigns(int_P_a_0_26_alloc_table@init,
                  int_P_int_M_a_0_26@init, int_P_int_M_a_0_26,
                  pset_all(pset_singleton(a_0@init)))))  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_90 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_89 =
+              (let jessie_<somenum> =
+              (C_39:
               begin
                 (if ((lt_int_ !j_3) aLength) then void
                 else
-                 (let jessie_81 = (raise (Goto_while_2_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_2_break_exc void)) in
                  void));
-               (let jessie_87 =
+               (let jessie_<somenum> =
                (C_37:
-               (let jessie_83 = (0) in
-               (let jessie_86 = (C_35: ((shift a_0) !j_3)) in
+               (let jessie_<somenum> = (0) in
+               (let jessie_<somenum> = a_0 in
+               (let jessie_<somenum> = !j_3 in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (((safe_upd_ int_P_int_M_a_0_26) jessie_86) jessie_83);
-                jessie_83 end))) in void);
-               (C_39:
-               begin   (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) end in
-              void); (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_9 -> void end end done);
+                 (((safe_upd_ int_P_int_M_a_0_26) jessie_<somenum>) jessie_<somenum>);
+                jessie_<somenum> end))))) in void);
+               (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) in void);
+             (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_2_break_exc void)) end in void) with
-       Goto_while_2_break_exc jessie_7 -> (while_2_break: void) end;
+       Goto_while_2_break_exc jessie_<somenum> -> (while_2_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_192:
+  { (JC_<somenum>:
     not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
     int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@)))) }
 
 let foo_safety =
  fun (a_0 : int_P pointer) (aLength : int) (int_P_int_M_a_0_26 : (int_P, int) memory ref) (int_P_a_0_26_alloc_table : int_P alloc_table) ->
-  { (JC_189:
-    ((JC_184:
-     ((JC_182: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
-     and (JC_183:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: le_int(offset_min(int_P_a_0_26_alloc_table, a_0), (0)))
+     and (JC_<somenum>:
          ge_int(offset_max(int_P_a_0_26_alloc_table, a_0),
          sub_int(aLength, (1))))))
-    and ((JC_185:
+    and ((JC_<somenum>:
          valid___string_something(char_P___string_something_1_alloc_table,
          char_P_char_M___string_something_1))
-        and ((JC_186:
+        and ((JC_<somenum>:
              valid___string_something_0(char_P___string_something_1_alloc_table))
-            and ((JC_187: valid_a(int_P_a_2_alloc_table))
-                and (JC_188: valid_c(char_xP_c_3_alloc_table))))))) }
+            and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+                and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))) }
   (init:
   try
    begin
      (let j_3 = ref (any_int void) in
      (C_33:
      begin
-       (let jessie_67 = (j_3 := (0)) in void);
+       (let jessie_<somenum> = (j_3 := (0)) in void);
       try
-       (let jessie_78 =
+       (let jessie_<somenum> =
        begin
          (loop_5:
          while true do
-         { invariant (JC_207: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
-            [ { } unit reads j_3 { (JC_205: le_int((0), j_3)) } ];
+            [ { } unit reads j_3 { (JC_<somenum>: le_int((0), j_3)) } ];
            try
-            (let jessie_77 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_76 =
+              (let jessie_<somenum> =
+              (C_39:
               begin
                 (if ((lt_int_ !j_3) aLength) then void
                 else
-                 (let jessie_68 = (raise (Goto_while_2_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_2_break_exc void)) in
                  void));
-               (let jessie_74 =
+               (let jessie_<somenum> =
                (C_37:
-               (let jessie_70 = (0) in
-               (let jessie_71 = a_0 in
-               (let jessie_72 = !j_3 in
-               (let jessie_73 = ((shift jessie_71) jessie_72) in
+               (let jessie_<somenum> = (0) in
+               (let jessie_<somenum> = a_0 in
+               (let jessie_<somenum> = !j_3 in
+               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
-                 (JC_209:
-                 (((((offset_upd_ int_P_a_0_26_alloc_table) int_P_int_M_a_0_26) jessie_71) jessie_72) jessie_70));
-                jessie_70 end))))) in void);
-               (C_39:
-               begin   (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) end in
-              void); (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_9 -> void end end done);
+                 (JC_<somenum>:
+                 (((((offset_upd_ int_P_a_0_26_alloc_table) int_P_int_M_a_0_26) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+                jessie_<somenum> end))))) in void);
+               (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) in void);
+             (raise (Loop_continue_exc void)) end in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_2_break_exc void)) end in void) with
-       Goto_while_2_break_exc jessie_7 -> (while_2_break: void) end;
+       Goto_while_2_break_exc jessie_<somenum> -> (while_2_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_199:
-    ((JC_195:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_196:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_197: valid_a(int_P_a_2_alloc_table))
-            and (JC_198: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_149:
-    ((JC_145:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_146:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_147: valid_a(int_P_a_2_alloc_table))
-            and (JC_148: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
+   (C_30:
+   (C_31:
    begin
-     (C_30:
-     begin
-       (JC_171: (assign_int void));
-      (C_31: begin   (JC_172: (assign_char void)); (raise Return) end) end);
-    (raise Return) end with Return -> void end)
-  { (JC_154:
-    ((JC_152:
+     (JC_<somenum>: (assign_int void)); (JC_<somenum>: (assign_char void));
+    (raise Return); (raise Return) end)) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
      char_xP_char_xM_c_3, pset_all(pset_singleton(c@))))
-    and (JC_153:
+    and (JC_<somenum>:
         not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@,
         int_P_int_M_a_2, pset_all(pset_singleton(a@)))))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_149:
-    ((JC_145:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_146:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_147: valid_a(int_P_a_2_alloc_table))
-            and (JC_148: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
+   (C_30:
+   (C_31:
    begin
-     (C_30:
-     begin
-       (JC_169: (assign_int_requires void));
-      (C_31:
-      begin   (JC_170: (assign_char_requires void)); (raise Return) end) end);
-    (raise Return) end with Return -> void end)
-  { (JC_163:
-    ((JC_159:
+     (JC_<somenum>: (assign_int_requires void));
+    (JC_<somenum>: (assign_char_requires void)); (raise Return); (raise Return) end))
+   with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
      char_P_char_M___string_something_1))
-    and ((JC_160:
+    and ((JC_<somenum>:
          valid___string_something_0(char_P___string_something_1_alloc_table))
-        and ((JC_161: valid_a(int_P_a_2_alloc_table))
-            and (JC_162: valid_c(char_xP_c_3_alloc_table)))))) }
+        and ((JC_<somenum>: valid_a(int_P_a_2_alloc_table))
+            and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0041.jessie --quiet -f bts0041.makefile project
@@ -2876,11 +2880,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po40.why">
-      <location file = "why/bts0041.why" line = "2177" begin = "45" end = "46"/>
+      <location file = "why/bts0041.why" line = "2183" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po41.why">
-      <location file = "why/bts0041.why" line = "2177" begin = "45" end = "46"/>
+      <location file = "why/bts0041.why" line = "2183" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po42.why">
@@ -2937,11 +2941,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po28.why">
-      <location file = "why/bts0041.why" line = "2048" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "2052" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po29.why">
-      <location file = "why/bts0041.why" line = "2048" begin = "44" end = "45"/>
+      <location file = "why/bts0041.why" line = "2052" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po30.why">
@@ -3022,11 +3026,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041_po14.why">
-      <location file = "why/bts0041.why" line = "1922" begin = "45" end = "46"/>
+      <location file = "why/bts0041.why" line = "1924" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po15.why">
-      <location file = "why/bts0041.why" line = "1922" begin = "45" end = "46"/>
+      <location file = "why/bts0041.why" line = "1924" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041_po16.why">

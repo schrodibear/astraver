@@ -319,6 +319,9 @@ why3: why/NameConflicts_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/NameConflicts_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include NameConflicts.depend
 
 depend: coq/NameConflicts_why.v
@@ -1401,11 +1404,12 @@ let NameConflicts_setI_ensures_default =
   (init:
   try
    begin
-     (let jessie_12 =
+     (let jessie_<num> =
      (K_1:
-     (let jessie_8 = i in
-     (let jessie_11 = this_2 in
-     begin   (((safe_upd_ NameConflicts_i) jessie_11) jessie_8); jessie_8 end))) in
+     (let jessie_<num> = i in
+     begin
+       (let jessie_<num> = this_2 in
+       (((safe_upd_ NameConflicts_i) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end) { (JC_15: true) }
 
 let NameConflicts_setI_safety =
@@ -1414,11 +1418,12 @@ let NameConflicts_setI_safety =
   (init:
   try
    begin
-     (let jessie_6 =
+     (let jessie_<num> =
      (K_1:
-     (let jessie_2 = i in
-     (let jessie_5 = this_2 in
-     begin   (((safe_upd_ NameConflicts_i) jessie_5) jessie_2); jessie_2 end))) in
+     (let jessie_<num> = i in
+     begin
+       (let jessie_<num> = this_2 in
+       (((safe_upd_ NameConflicts_i) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end) { true }
 
 let cons_NameConflicts_ensures_default =
@@ -1427,17 +1432,16 @@ let cons_NameConflicts_ensures_default =
   (init:
   try
    begin
-     (let jessie_44 =
+     (let jessie_<num> =
      begin
-       (let jessie_38 =
-       (let jessie_34 = (safe_int32_of_integer_ (0)) in
-       (let jessie_37 = this_3 in
-       (((safe_upd_ NameConflicts_i) jessie_37) jessie_34))) in void);
-      (let jessie_40 = (safe_int32_of_integer_ (0)) in
-      (let jessie_43 = this_3 in
+       (let jessie_<num> = (safe_int32_of_integer_ (0)) in
+       (let jessie_<num> = this_3 in
+       (((safe_upd_ NameConflicts_i) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_int32_of_integer_ (0)) in
       begin
-        (((safe_upd_ NameConflicts_field) jessie_43) jessie_40); jessie_40
-      end)) end in void); (raise Return) end with Return -> void end)
+        (let jessie_<num> = this_3 in
+        (((safe_upd_ NameConflicts_field) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end)
   { (JC_41: true) }
 
 let cons_NameConflicts_safety =
@@ -1446,17 +1450,16 @@ let cons_NameConflicts_safety =
   (init:
   try
    begin
-     (let jessie_32 =
+     (let jessie_<num> =
      begin
-       (let jessie_26 =
-       (let jessie_22 = (safe_int32_of_integer_ (0)) in
-       (let jessie_25 = this_3 in
-       (((safe_upd_ NameConflicts_i) jessie_25) jessie_22))) in void);
-      (let jessie_28 = (safe_int32_of_integer_ (0)) in
-      (let jessie_31 = this_3 in
+       (let jessie_<num> = (safe_int32_of_integer_ (0)) in
+       (let jessie_<num> = this_3 in
+       (((safe_upd_ NameConflicts_i) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_int32_of_integer_ (0)) in
       begin
-        (((safe_upd_ NameConflicts_field) jessie_31) jessie_28); jessie_28
-      end)) end in void); (raise Return) end with Return -> void end)
+        (let jessie_<num> = this_3 in
+        (((safe_upd_ NameConflicts_field) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end) 
   { true }
 
 

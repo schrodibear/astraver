@@ -404,7 +404,7 @@ object
         | Ctype rt when isStructOrUnionType rt ->
             begin
               change_result_type := true;
-              let ty = Ctype(mkTRef rt) in
+              let ty = Ctype(mkTRef rt "Norm.vannotation") in
               new_result_type := ty;
               ty
             end
@@ -449,7 +449,7 @@ object
                 this_name := (List.hd annot.l_profile).lv_name;
                 let annot = { annot with
                                 l_profile = [{ (List.hd annot.l_profile) with
-                                                 lv_type = Ctype(mkTRef ty)}];
+                                                 lv_type = Ctype(mkTRef ty "Norm.annot, Dtype_annot")}];
                 }
                 in
                 ChangeDoChildrenPost
@@ -484,7 +484,7 @@ object
                             {
                               arg with
                                 term_node = TAddrOf lv;
-                                term_type = Ctype(mkTRef ty);
+                                term_type = Ctype(mkTRef ty "Norm.vterm");
                             }
                         | _ -> assert false (* Should not be possible *)
                     else arg
@@ -513,7 +513,7 @@ object
                         {
                           arg with
                             term_node = TAddrOf lv;
-                            term_type = Ctype(mkTRef ty);
+                            term_type = Ctype(mkTRef ty "Norm.vpredicate");
                         }
                     | _ -> assert false (* Should not be possible *)
                 else arg
@@ -653,7 +653,7 @@ object
   method vglob_aux =
     let retype_func fvi =
       let formal (n,ty,a) =
-        let ty = if isStructOrUnionType ty then mkTRef ty else ty in
+        let ty = if isStructOrUnionType ty then mkTRef ty "Norm.vglob_aux" else ty in
         n, ty, a
       in
       let rt,params,isva,a = splitFunctionTypeVI fvi in
@@ -661,7 +661,7 @@ object
         | None -> None
         | Some p -> Some(List.map formal p)
       in
-      let rt = if isStructOrUnionType rt then mkTRef rt else rt in
+      let rt = if isStructOrUnionType rt then mkTRef rt "Norm.vgloab_aux(2)" else rt in
       fvi.vtype <- TFun(rt,params,isva,a)
     in
     function
@@ -678,7 +678,7 @@ object
     let var v =
       if isStructOrUnionType v.vtype then
         let newv = copyVarinfo v (unique_name ("v_" ^ v.vname)) in
-        newv.vtype <- mkTRef newv.vtype;
+        newv.vtype <- mkTRef newv.vtype "Norm.vfunc";
         v.vformal <- false;
         let rhs =
           new_exp ~loc:v.vdecl
@@ -709,8 +709,8 @@ object
       return_var := None;
     (* Change return type. *)
     new_return_type :=
-      if isStructOrUnionType rt then Some(mkTRef rt) else None;
-    let rt = if isStructOrUnionType rt then mkTRef rt else rt in
+      if isStructOrUnionType rt then Some(mkTRef rt "Norm.vfunc(3)") else None;
+    let rt = if isStructOrUnionType rt then mkTRef rt "Norm.vfunc(4)" else rt in
     setReturnType f rt;
     DoChildren
 
@@ -813,7 +813,7 @@ object
                 (* Type of [lv] has not been changed. *)
                 let lvty = typeOfLval lv in
                 if isStructOrUnionType lvty then
-                  let tmpv = makeTempVar !curFundec (mkTRef lvty) in
+                  let tmpv = makeTempVar !curFundec (mkTRef lvty "Norm.vinst") in
                   let tmplv = Var tmpv, NoOffset in
                   let call = Call(Some tmplv,callee,args,loc) in
                   let deref =
@@ -913,7 +913,7 @@ object(self)
   method vvdec v =
     if isStructOrUnionType v.vtype && not v.vformal then
       begin
-        v.vtype <- mkTRef v.vtype;
+        v.vtype <- mkTRef v.vtype "Norm.vvdec";
         varset := VarinfoSet.add v !varset
       end;
     DoChildren
@@ -933,7 +933,7 @@ object(self)
     let newty =
       app_term_type
         (fun ty ->
-           Ctype (if isStructOrUnionType ty then mkTRef ty else ty))
+           Ctype (if isStructOrUnionType ty then mkTRef ty "Norm.vlogic_var_decl" else ty))
         v.lv_type v.lv_type
     in
     v.lv_type <- newty;
@@ -1066,21 +1066,21 @@ class retypeAddressTaken =
   let retype_var v =
     if retypable_var v then
       begin
-        v.vtype <- mkTRef v.vtype;
+        v.vtype <- mkTRef v.vtype "Norm.retype_var";
         assert (isPointerType v.vtype);
         varset := VarinfoSet.add v !varset
       end
   in
   let retype_lvar v =
     if retypable_lvar v then begin
-      v.lv_type <- Ctype (force_app_term_type mkTRef v.lv_type);
+      v.lv_type <- Ctype (force_app_term_type (fun x -> mkTRef x "Norm.retyp_lvar") v.lv_type);
       lvarset := LogicVarSet.add v !lvarset
     end
   in
   let retype_field fi =
     if retypable_field fi then
       begin
-        fi.ftype <- mkTRef fi.ftype;
+        fi.ftype <- mkTRef fi.ftype "Norm.retype_field";
         assert (isPointerType fi.ftype);
         fieldset := FieldinfoSet.add fi !fieldset
       end
@@ -1390,7 +1390,7 @@ object
     | GCompTag (compinfo,_) ->
         let field fi =
           if isStructOrUnionType fi.ftype then
-            fi.ftype <- mkTRef fi.ftype
+            fi.ftype <- mkTRef fi.ftype "Norm.vglob_aux(2)"
           else if isArrayType fi.ftype then
             begin
               FieldinfoHashtbl.replace field_to_array_type fi fi.ftype;
@@ -1529,7 +1529,7 @@ object(self)
             Some(mkTRefArray(self#new_wrapper_for_type elemty,size,[]))
           else if is_reference_type ty then
             (* Do not lose the information that this type is a reference *)
-            Some(mkTRef(self#new_wrapper_for_type elemty))
+            Some(mkTRef(self#new_wrapper_for_type elemty)"Norm.private wrap_type_if_needed")
           else
             (* Here is the case where a transformation is needed *)
             Some(TPtr(self#new_wrapper_for_type elemty,attr))

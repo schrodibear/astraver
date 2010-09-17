@@ -304,25 +304,25 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter foo :
  a:int32 ->
   { } int32
-  { (JC_22:
-    ((JC_18: le_int((0), integer_of_int32(result)))
-    and ((JC_19: le_int(integer_of_int32(result), (11)))
-        and ((JC_20: le_int((0), integer_of_int32(result)))
-            and (JC_21: le_int(integer_of_int32(result), (10))))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int32(result)))
+    and ((JC_<somenum>: le_int(integer_of_int32(result), (11)))
+        and ((JC_<somenum>: le_int((0), integer_of_int32(result)))
+            and (JC_<somenum>: le_int(integer_of_int32(result), (10))))))) }
 
 parameter foo_requires :
  a:int32 ->
-  { (JC_5:
-    ((JC_1: le_int((0), integer_of_int32(a)))
-    and ((JC_2: le_int(integer_of_int32(a), (10)))
-        and ((JC_3: le_int((0), integer_of_int32(a)))
-            and (JC_4: le_int(integer_of_int32(a), (11)))))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int32(a)))
+    and ((JC_<somenum>: le_int(integer_of_int32(a), (10)))
+        and ((JC_<somenum>: le_int((0), integer_of_int32(a)))
+            and (JC_<somenum>: le_int(integer_of_int32(a), (11)))))))}
   int32
-  { (JC_22:
-    ((JC_18: le_int((0), integer_of_int32(result)))
-    and ((JC_19: le_int(integer_of_int32(result), (11)))
-        and ((JC_20: le_int((0), integer_of_int32(result)))
-            and (JC_21: le_int(integer_of_int32(result), (10))))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int32(result)))
+    and ((JC_<somenum>: le_int(integer_of_int32(result), (11)))
+        and ((JC_<somenum>: le_int((0), integer_of_int32(result)))
+            and (JC_<somenum>: le_int(integer_of_int32(result), (10))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -342,28 +342,29 @@ parameter safe_int8_of_integer_ :
 
 let foo_ensures_default =
  fun (a : int32) ->
-  { (JC_11:
-    ((JC_7: le_int((0), integer_of_int32(a)))
-    and ((JC_8: le_int(integer_of_int32(a), (10)))
-        and ((JC_9: le_int((0), integer_of_int32(a)))
-            and (JC_10: le_int(integer_of_int32(a), (11))))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int32(a)))
+    and ((JC_<somenum>: le_int(integer_of_int32(a), (10)))
+        and ((JC_<somenum>: le_int((0), integer_of_int32(a)))
+            and (JC_<somenum>: le_int(integer_of_int32(a), (11))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_14 =
+      (let jessie_<somenum> =
+      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 a)) (11))
         then
-         (let jessie_11 =
+         (let jessie_<somenum> =
          (C_5:
          begin
-           (let jessie_10 =
+           (let jessie_<somenum> =
            (__retres := (C_4:
                         (safe_int32_of_integer_ (C_3:
-                                                (JC_28:
+                                                (JC_<somenum>:
                                                 ((div_int (1)) (integer_of_int32 
                                                                 (C_2:
                                                                 (safe_int32_of_integer_ 
@@ -371,57 +372,54 @@ let foo_ensures_default =
                                                                  ((sub_int 
                                                                    (integer_of_int32 a)) (11)))))))))))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_6:
-       begin
-         (let jessie_13 = (__retres := a) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := a) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
-  { (JC_17:
-    ((JC_13: le_int((0), integer_of_int32(result)))
-    and ((JC_14: le_int(integer_of_int32(result), (11)))
-        and ((JC_15: le_int((0), integer_of_int32(result)))
-            and (JC_16: le_int(integer_of_int32(result), (10))))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int32(result)))
+    and ((JC_<somenum>: le_int(integer_of_int32(result), (11)))
+        and ((JC_<somenum>: le_int((0), integer_of_int32(result)))
+            and (JC_<somenum>: le_int(integer_of_int32(result), (10))))))) }
 
 let foo_safety =
  fun (a : int32) ->
-  { (JC_11:
-    ((JC_7: le_int((0), integer_of_int32(a)))
-    and ((JC_8: le_int(integer_of_int32(a), (10)))
-        and ((JC_9: le_int((0), integer_of_int32(a)))
-            and (JC_10: le_int(integer_of_int32(a), (11))))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int32(a)))
+    and ((JC_<somenum>: le_int(integer_of_int32(a), (10)))
+        and ((JC_<somenum>: le_int((0), integer_of_int32(a)))
+            and (JC_<somenum>: le_int(integer_of_int32(a), (11))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_7 =
+      (let jessie_<somenum> =
+      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 a)) (11))
         then
-         (let jessie_4 =
+         (let jessie_<somenum> =
          (C_5:
          begin
-           (let jessie_3 =
+           (let jessie_<somenum> =
            (__retres := (C_4:
-                        (JC_27:
+                        (JC_<somenum>:
                         (int32_of_integer_ (C_3:
-                                           (JC_26:
+                                           (JC_<somenum>:
                                            ((div_int_ (1)) (integer_of_int32 
                                                             (C_2:
-                                                            (JC_25:
+                                                            (JC_<somenum>:
                                                             (int32_of_integer_ 
                                                              (C_1:
                                                              ((sub_int 
                                                                (integer_of_int32 a)) (11)))))))))))))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_6:
-       begin
-         (let jessie_6 = (__retres := a) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := a) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

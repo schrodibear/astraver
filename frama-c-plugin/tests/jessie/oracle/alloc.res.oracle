@@ -312,11 +312,11 @@ parameter ptr1 : char_P pointer ref
 
 parameter f :
  tt:unit ->
-  { } unit reads ptr1,ptr2 writes ptr1,ptr2 { (JC_16: (ptr1 <> ptr2)) }
+  { } unit reads ptr1,ptr2 writes ptr1,ptr2 { (JC_<somenum>: (ptr1 <> ptr2)) }
 
 parameter f_requires :
  tt:unit ->
-  { } unit reads ptr1,ptr2 writes ptr1,ptr2 { (JC_16: (ptr1 <> ptr2)) }
+  { } unit reads ptr1,ptr2 writes ptr1,ptr2 { (JC_<somenum>: (ptr1 <> ptr2)) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -336,45 +336,39 @@ parameter uint32_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_3:
+   (C_5:
    begin
-     (C_3:
-     begin
-       (let jessie_9 =
-       (ptr1 := (C_2:
-                (let jessie_8 = (safe_uint32_of_integer_ (10)) in
-                (JC_21: (alloc jessie_8))))) in void);
-      (C_5:
-      begin
-        (let jessie_12 =
-        (ptr2 := (C_4:
-                 (let jessie_11 = (safe_uint32_of_integer_ (10)) in
-                 (JC_22: (alloc jessie_11))))) in void); (raise Return) end)
-     end); (raise Return) end with Return -> void end)
-  { (JC_15: (ptr1 <> ptr2)) }
+     (let jessie_<somenum> =
+     (ptr1 := (C_2:
+              (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+              (JC_<somenum>: (alloc jessie_<somenum>))))) in void);
+    (let jessie_<somenum> =
+    (ptr2 := (C_4:
+             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>: (alloc jessie_<somenum>))))) in void); (raise Return);
+    (raise Return) end)) with Return -> void end) { (JC_<somenum>: (ptr1 <> ptr2)) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_3:
+   (C_5:
    begin
-     (C_3:
-     begin
-       (let jessie_3 =
-       (ptr1 := (C_2:
-                (let jessie_2 = (safe_uint32_of_integer_ (10)) in
-                (JC_19: (alloc_requires jessie_2))))) in void);
-      (C_5:
-      begin
-        (let jessie_6 =
-        (ptr2 := (C_4:
-                 (let jessie_5 = (safe_uint32_of_integer_ (10)) in
-                 (JC_20: (alloc_requires jessie_5))))) in void);
-       (raise Return) end) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> =
+     (ptr1 := (C_2:
+              (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+              (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void);
+    (let jessie_<somenum> =
+    (ptr2 := (C_4:
+             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>: (alloc_requires jessie_<somenum>))))) in void); (raise Return);
+    (raise Return) end)) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C alloc.jessie --quiet -f alloc.makefile project

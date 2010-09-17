@@ -320,43 +320,41 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let x_0 = ref (any_int32 void) in
      (C_1:
+     (L:
      begin
-       (let jessie_7 = (x_0 := (safe_int32_of_integer_ (1))) in void);
-      (L:
-      begin
-        (C_2: (let jessie_9 = (x_0 := (safe_int32_of_integer_ (2))) in void));
-       (assert
-       { (JC_10:
-         eq_int(integer_of_int32(x_0@L), sub_int(integer_of_int32(x_0), (1)))) };
-       void); void; (return := !x_0); (raise Return) end) end)); absurd  end
-   with Return -> !return end)) { (JC_5: true) }
+       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (1))) in void);
+      (let jessie_<somenum> = (C_2: (x_0 := (safe_int32_of_integer_ (2)))) in void);
+      (assert
+      { (JC_<somenum>:
+        eq_int(integer_of_int32(x_0@L), sub_int(integer_of_int32(x_0), (1)))) };
+      void); void; (return := !x_0); (raise Return) end))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let x_0 = ref (any_int32 void) in
      (C_1:
+     (L:
      begin
-       (let jessie_2 = (x_0 := (safe_int32_of_integer_ (1))) in void);
-      (L:
-      begin
-        (C_2: (let jessie_4 = (x_0 := (safe_int32_of_integer_ (2))) in void));
-       [ { } unit reads x_0
-         { (JC_9:
-           eq_int(integer_of_int32(x_0@L),
-           sub_int(integer_of_int32(x_0), (1)))) } ]; void; (return := !x_0);
-       (raise Return) end) end)); absurd  end with Return -> !return end))
+       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (1))) in void);
+      (let jessie_<somenum> = (C_2: (x_0 := (safe_int32_of_integer_ (2)))) in void);
+      [ { } unit reads x_0
+        { (JC_<somenum>:
+          eq_int(integer_of_int32(x_0@L),
+          sub_int(integer_of_int32(x_0), (1)))) } ]; void; (return := !x_0);
+      (raise Return) end))); absurd  end with Return -> !return end))
   { true }
 
 

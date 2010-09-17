@@ -420,9 +420,9 @@ parameter g :
   int_P_int_M_p_1:(int_P, int32) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_14:
-      ((JC_12: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
-      and (JC_13:
+    { (JC_<somenum>:
+      ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
+      and (JC_<somenum>:
           not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
           int_P_int_M_p_1, pset_singleton(p@))))) }
 
@@ -430,13 +430,13 @@ parameter g_requires :
  p:int_P pointer ->
   int_P_int_M_p_1:(int_P, int32) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
-    { (JC_3:
-      ((JC_1: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-      and (JC_2: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))))}
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+      and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))))}
     unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_14:
-      ((JC_12: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
-      and (JC_13:
+    { (JC_<somenum>:
+      ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
+      and (JC_<somenum>:
           not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
           int_P_int_M_p_1, pset_singleton(p@))))) }
 
@@ -458,93 +458,92 @@ parameter safe_int8_of_integer_ :
 
 let g_ensures_default =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_6: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
   (init:
   try
    begin
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_16 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_25 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
          { invariant
-             (JC_22:
+             (JC_<somenum>:
              not_assigns(int_P_p_1_alloc_table@init, int_P_int_M_p_1@init,
              int_P_int_M_p_1, pset_singleton(p@init)))  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_24 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_23 =
+              (let jessie_<somenum> =
               begin
                 (if true then void
                 else
-                 (let jessie_17 = (raise (Goto_while_0_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
                (C_3:
-               (let jessie_19 = (safe_int32_of_integer_ (3)) in
-               (let jessie_22 = p in
+               (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
                begin
-                 (((safe_upd_ int_P_int_M_p_1) jessie_22) jessie_19);
-                jessie_19 end))) end in void);
+                 (let jessie_<somenum> = p in
+                 (((safe_upd_ int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>));
+                jessie_<somenum> end)) end in void);
              (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_11:
-    ((JC_9: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
-    and (JC_10:
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
+    and (JC_<somenum>:
         not_assigns(int_P_p_1_alloc_table@, int_P_int_M_p_1@,
         int_P_int_M_p_1, pset_singleton(p@))))) }
 
 let g_safety =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_6: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
   (init:
   try
    begin
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_14 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_18: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_13 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_12 =
+              (let jessie_<somenum> =
               begin
                 (if true then void
                 else
-                 (let jessie_6 = (raise (Goto_while_0_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
                (C_3:
-               (let jessie_8 = (safe_int32_of_integer_ (3)) in
-               (let jessie_11 = p in
+               (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
                begin
-                 (JC_20:
-                 ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_11) jessie_8));
-                jessie_8 end))) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+                 (let jessie_<somenum> = p in
+                 (JC_<somenum>:
+                 ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>)));
+                jessie_<somenum> end)) end in void); (raise (Loop_continue_exc void))
+            end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 

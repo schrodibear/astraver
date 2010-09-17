@@ -100,7 +100,8 @@ let rec fprintf_term form t =
   | LApp(id,[])
   | LVar(id) -> fprintf form "%s" id
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
-  | Tnamed(lab,t) -> fprintf form "(%s : %a)" lab fprintf_term t
+  | Tnamed(lab,t) -> 
+      fprintf form "(%s : %a)" lab fprintf_term t
   | TIf(t1,t2,t3) -> 
       fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]" 
 	fprintf_term t1 fprintf_term t2 fprintf_term t3
@@ -308,7 +309,7 @@ let rec fprintf_assertion form a =
   | LPred (id, []) -> 
       fprintf form "%s" id
   | LNamed (n, a) ->
-      fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a
+      fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a 
 
 and fprintf_triggers fmt trigs = 
   let pat fmt = function
@@ -424,7 +425,7 @@ type opaque = bool
 
 type assert_kind = [`ASSERT | `CHECK]
 
-type expr =
+type expr_node =
   | Cte of constant
   | Var of string
   | And of expr * expr
@@ -441,7 +442,7 @@ type expr =
   | Block of expr list
   | Assign of string * expr
   | MultiAssign of string * Loc.position * (string * expr) list * 
-      expr * string * expr * string * 
+      bool * term * expr * string * expr * string * 
       (int * bool * bool * string) list
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
@@ -453,102 +454,25 @@ type expr =
   | Triple of opaque * 
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
+(*
   | Label of string * expr
+*)
   | BlackBox of why_type
   | Absurd
   | Loc of Lexing.position * expr
+
+and expr = 
+    { expr_labels : string list;
+      expr_node : expr_node;
+    }
 ;;
 
-let make_or_expr a1 a2 =
-  match (a1,a2) with
-    | (Cte (Prim_bool true),_) -> Cte (Prim_bool true)
-    | (_,Cte (Prim_bool true)) -> Cte (Prim_bool true)
-    | (Cte (Prim_bool false),_) -> a2
-    | (_,Cte (Prim_bool false)) -> a1
-    | (_,_) -> Or(a1,a2)
-
-let make_and_expr a1 a2 =
-  match (a1,a2) with
-    | (Cte (Prim_bool true),_) -> a2
-    | (_,Cte (Prim_bool true)) -> a1
-    | (Cte (Prim_bool false),_) -> Cte (Prim_bool false)
-    | (_,Cte (Prim_bool false)) ->Cte (Prim_bool false)
-    | (_,_) -> And(a1,a2)
-
-
-let make_app_rec ~logic f l = 
-  let rec make_rec accu = function
-    | [] -> accu
-    | e::r -> make_rec (App(accu,e)) r
-  in
-  match l with
-    | [] -> if logic then make_rec f [] else make_rec f [Void]
-    | l -> make_rec f l
-;;
-
-let make_app id l = make_app_rec ~logic:false (Var id) l
-
-let make_logic_app id l = make_app_rec ~logic:true (Var id) l
-
-let make_app_e = make_app_rec ~logic:false
-
-let make_while cond inv var e =
-  let body = 
-    match e with
-      | Block(l) -> l
-      | _ -> [e]
-  in While(cond,inv,var,body)
-
-let make_label label e = Label (label, e)
-
-let make_pre pre e =  Triple(false,pre,e,LTrue,[])
-
-
-let compare_parallel_assign (i,_,_,_) (j,_,_,_) =
-  let c = Pervasives.compare i j in
-  if c = 0 then raise Exit else c
-
-let rec append e1 e2 =
-  match e1,e2 with
-    | Void,_ -> e2
-    | _,Void -> e1
-    | Block(l1),Block(l2) -> Block(List.fold_right append_list l1 l2)
-    | Block(l1),_ -> Block(List.fold_right append_list l1 [e2])
-    | _,Block(l2) -> Block(append_list e1 l2)
-    | _ -> Block [e1;e2]
-
-and append_list e l =
-  match e,l with
-    | _,[] -> [e]
-    | MultiAssign(mark1,pos1,lets1,a1,tmpe1,e1,f1,l1), 
-        MultiAssign(_,_,lets2,a2,_tmpe2,e2,f2,l2)::rem -> 
-          if a1 = a2 && e1 = e2 && f1 = f2 then
-            begin
-              (*
-                Format.eprintf "pre_append, a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
-                fprintf_expr a1 fprintf_expr a2 
-                fprintf_expr e1 fprintf_expr e2 f1 f2;
-              *)
-              try
-                let l = List.merge compare_parallel_assign l1 l2 in
-                (*
-                  Format.eprintf "pre_append, merge successful!@.";             
-                *)
-                MultiAssign(mark1,pos1,lets1@lets2,a1,tmpe1,e1,f1,l)::rem
-              with Exit ->
-                (*
-                  Format.eprintf "pre_append, merge failed...@.";             
-                *)
-                e::l
-            end
-          else
-            e::l
-    | _ -> e::l
-        
-;;
+let mk_expr e = { expr_labels = []; expr_node = e }
+let mk_var s = mk_expr (Var s)
+let void = mk_expr Void
 
 let rec iter_expr f e =
-  match e with
+  match e.expr_node with
     | Cte(_c) -> ()
     | Var(id) -> f id
     | And(e1,e2) -> iter_expr f e1; iter_expr f e2
@@ -569,7 +493,9 @@ let rec iter_expr f e =
 	List.iter (iter_expr f) e2
     | Block(el) -> List.iter (iter_expr f) el
     | Assign(id,e) -> f id; iter_expr f e
-    | MultiAssign _ -> assert false
+    | MultiAssign _ -> 
+        eprintf "Fatal error: Output.iter_expr called on MultiAssign@.";
+        assert false 
     | Let(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | Let_ref(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | App(e1,e2) -> iter_expr f e1; iter_expr f e2
@@ -587,7 +513,10 @@ let rec iter_expr f e =
 	iter_assertion f post;
 	List.iter (fun (_,a) -> iter_assertion f a) exceps
     | Assert(_,p, e) -> iter_assertion f p; iter_expr f e
-    | Label (_,e) | Loc (_,e) -> iter_expr f e
+(*
+    | Label (_,e) 
+*)
+    | Loc (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
     | Absurd -> ()
 
@@ -597,7 +526,7 @@ let fprintf_variant form = function
   | Some (t, None) -> fprintf form "variant %a" fprintf_term t
   | Some (t, Some r) -> fprintf form "variant %a for %s" fprintf_term t r
 	  
-let rec fprintf_expr form e =
+let rec fprintf_expr_node form e =
   match e with
     | Cte(c) -> fprintf_constant form c
     | Var(id) -> fprintf form "%s" id
@@ -630,7 +559,8 @@ let rec fprintf_expr form e =
     | Assign(id,e) ->
 	fprintf form "@[<hov 1>(%s := %a)@]" 
 	  id fprintf_expr e
-    | MultiAssign _ -> assert false
+    | MultiAssign _ -> 
+	fprintf form "@[<hov 1>(MultiAssign ...)@]" 
     | Let(id,e1,e2) ->
 	fprintf form "@[<hov 0>(let %s =@ %a in@ %a)@]" id
 	  fprintf_expr e1 fprintf_expr e2
@@ -702,8 +632,10 @@ let rec fprintf_expr form e =
 	fprintf form "@[<hov 0>(%s@ { %a };@ %a)@]" 
           (match k with `ASSERT -> "assert" | `CHECK -> "check")
 	  fprintf_assertion p fprintf_expr e
+(*
     | Label (s, e) ->
 	fprintf form "@[<hov 0>(%s:@ %a)@]" s fprintf_expr e
+*)
     | BlackBox(t) ->
 	fprintf form "@[<hov 0>[ %a ]@]" 
 	  (fprintf_type false) t
@@ -715,6 +647,19 @@ let rec fprintf_expr form e =
 	fprintf form "@[#%S %d %d#%a@]" l.pos_fname l.pos_lnum 
 	  (l.pos_cnum - l.pos_bol) fprintf_expr e
 	*)
+
+and fprintf_expr form e =
+  let rec aux l =
+    match l with 
+      | [] -> fprintf_expr_node form e.expr_node
+      | s::l ->
+(*
+          if s="L2" then Format.eprintf "Output.fprintf_expr: printing label %s for expression %a@." s fprintf_expr_node e.expr_node;
+*)
+          fprintf form "@[<hov 0>(%s:@ " s;
+          aux l;
+          fprintf form ")@]"
+  in aux e.expr_labels 
 
 and fprintf_expr_list form l =
   match l with
@@ -730,6 +675,141 @@ and fprintf_expr_end_list form l =
 	fprintf form ";@ %a" fprintf_expr e;
 	fprintf_expr_end_list form l
 ;;
+
+let make_or_expr a1 a2 =
+  match (a1.expr_node,a2.expr_node) with
+    | (Cte (Prim_bool true),_) -> a1
+    | (_,Cte (Prim_bool true)) -> a2
+    | (Cte (Prim_bool false),_) -> a2
+    | (_,Cte (Prim_bool false)) -> a1
+    | (_,_) -> mk_expr (Or(a1,a2))
+
+let make_and_expr a1 a2 =
+  match (a1.expr_node,a2.expr_node) with
+    | (Cte (Prim_bool true),_) -> a2
+    | (_,Cte (Prim_bool true)) -> a1
+    | (Cte (Prim_bool false),_) -> a1
+    | (_,Cte (Prim_bool false)) -> a2
+    | (_,_) -> mk_expr (And(a1,a2))
+
+
+let make_app_rec ~logic f l = 
+  let rec make_rec accu = function
+    | [] -> accu
+    | e::r -> make_rec (mk_expr (App(accu,e))) r
+  in
+  match l with
+    | [] -> if logic then make_rec f [] else make_rec f [void]
+    | l -> make_rec f l
+;;
+
+let make_app id l = make_app_rec ~logic:false (mk_var id) l
+
+let make_logic_app id l = make_app_rec ~logic:true (mk_var id) l
+
+let make_app_e = make_app_rec ~logic:false
+
+let make_while cond inv var e =
+  let body = 
+    match e.expr_node with
+      | Block(l) -> l
+      | _ -> [e]
+  in mk_expr (While(cond,inv,var,body))
+
+let make_label label e = 
+(*
+  if label = "L2" then Format.eprintf "Output.make_label: adding label %s@." label;
+*)
+  { e with expr_labels = label :: e.expr_labels }
+
+let make_pre pre e =  mk_expr (Triple(false,pre,e,LTrue,[]))
+
+
+
+
+let compare_parallel_assign (i,_,_,_) (j,_,_,_) =
+  let c = Pervasives.compare i j in
+  if c = 0 then raise Exit else c
+
+
+let append_list e l =
+(*
+  Format.eprintf "Entering append_list@.";
+*)
+  match l with
+    | [] -> [e]
+    | e'::rem ->
+        match e.expr_node,e'.expr_node with
+          | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1), 
+            MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2) ->
+              (*
+                Format.eprintf 
+                "Found multi-assigns: a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
+                fprintf_expr a1 fprintf_expr a2 
+                fprintf_expr e1 fprintf_expr e2 f1 f2;
+              *)
+              if a1 = a2 && e1 = e2 && f1 = f2 then
+                begin
+                  try
+                    let l = List.merge compare_parallel_assign l1 l2 in
+                    (*
+                      Format.eprintf "append_list, merge successful!@.";             
+                    *)
+                    { expr_labels = e.expr_labels @ e'.expr_labels ;
+                      expr_node = 
+                        MultiAssign(mark1,pos1,lets1@lets2,isrefa1,ta1,a1,tmpe1,e1,f1,l) }
+                    ::rem
+                  with Exit ->
+                    (*
+                      Format.eprintf "append_list, merge failed...@.";             
+                    *)
+                    e::l
+                end
+              else
+                begin
+                  (*
+                    Format.eprintf "do not match@.";
+                  *)
+                  e::l
+                end
+          | MultiAssign _, _e' ->
+              (*
+                Format.eprintf "MultiAssign not followed by MultiAssign but by %a@."
+                fprintf_expr e';
+              *)
+              e::l
+          | _, MultiAssign _ ->
+              (*
+                Format.eprintf "MultiAssign not preceeded by MultiAssign@.";
+              *)
+              e::l
+          | _ -> 
+              (*
+                Format.eprintf "no MultiAssign at all@.";
+              *)
+              e::l
+        
+
+let make_block labels l =
+  match l with
+      | [] -> assert false
+      | [e] -> {e with expr_labels = labels @ e.expr_labels }
+      | _ -> { expr_labels = labels ; expr_node = Block l }
+ 
+
+let append e1 e2 =
+  match e1.expr_node,e2.expr_node with
+    | Void,_ -> assert (e1.expr_labels = []); e2
+    | _,Void -> assert (e2.expr_labels = []); e1
+    | Block(l1),Block(l2) -> 
+        make_block (e1.expr_labels@e2.expr_labels) 
+          (List.fold_right append_list l1 l2)
+    | Block(l1),_ -> 
+        make_block e1.expr_labels (List.fold_right append_list l1 [e2])
+    | _,Block(l2) -> 
+        make_block e2 .expr_labels (append_list e1 l2)
+    | _ -> make_block [] (append_list e1 [e2])
+
 
 type why_decl =
   | Param of bool * string * why_type         (*r parameter in why *)

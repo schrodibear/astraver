@@ -32,7 +32,10 @@ axiom offset_max_bytes_def:
 (* encoding of unions *)
 
 logic extract_bytes: bitvector, int, int -> bitvector
+      (* extract_bytes(v,i,j) returns the subvector of v between i and j *) 
 logic replace_bytes: bitvector, int, int, bitvector -> bitvector
+      (* replace_bytes(v,i,j,w) returns the vector v obtained
+        by putting w between i and j *) 
 
 axiom select_store_eq_union:
   forall o1:int. forall s1:int. forall o2:int. forall s2:int.
@@ -40,6 +43,7 @@ axiom select_store_eq_union:
   [extract_bytes(replace_bytes(v1,o1,s1,v2),o2,s2)].
   o1 = o2 and s1 = s2
     -> extract_bytes(replace_bytes(v1,o1,s1,v2),o2,s2) = v2
+  (* { v1 with o1..s1 = v2 } [o1..s1] == v2 *)
 
 axiom select_store_neq_union:
   forall o1:int. forall s1:int. forall o2:int. forall s2:int.

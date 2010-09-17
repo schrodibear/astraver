@@ -286,7 +286,7 @@ parameter f1_requires : n:int -> { } int { true }
 parameter f2 : x_0:int -> y:int -> { } int { true }
 
 parameter f2_requires :
- x_0:int -> y:int -> { (JC_21: lt_int(mul_int(x_0, y), (0)))} int { true }
+ x_0:int -> y:int -> { (JC_<somenum>: lt_int(mul_int(x_0, y), (0)))} int { true }
 
 let f1_ensures_b1 =
  fun (n : int) ->
@@ -298,9 +298,9 @@ let f1_ensures_b1 =
      (let __retres = ref (any_int void) in
      (C_2:
      begin
-       (let jessie_8 = (__retres := (C_1: ((add_int n) (1)))) in void);
+       (let jessie_<somenum> = (__retres := (C_1: ((add_int n) (1)))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_9: true) }
+   !return end)) { (JC_<somenum>: true) }
 
 let f1_ensures_b2 =
  fun (n : int) ->
@@ -312,29 +312,29 @@ let f1_ensures_b2 =
      (let __retres = ref (any_int void) in
      (C_2:
      begin
-       (let jessie_11 = (__retres := (C_1: ((add_int n) (1)))) in void);
+       (let jessie_<somenum> = (__retres := (C_1: ((add_int n) (1)))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_11: true) }
+   !return end)) { (JC_<somenum>: true) }
 
 let f1_ensures_default =
  fun (n : int) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (check { (JC_15: (not (gt_int(n, (0)) and le_int(n, (0))))) }; void);
-    (check { (JC_16: (le_int(n, (0)) or gt_int(n, (0)))) }; void);
+     (check { (JC_<somenum>: (not (gt_int(n, (0)) and le_int(n, (0))))) }; void);
+    (check { (JC_<somenum>: (le_int(n, (0)) or gt_int(n, (0)))) }; void);
     (let __retres = ref (any_int void) in
     (C_2:
     begin
-      (let jessie_5 = (__retres := (C_1: ((add_int n) (1)))) in void);
+      (let jessie_<somenum> = (__retres := (C_1: ((add_int n) (1)))) in void);
      (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_5: true) }
+   !return end)) { (JC_<somenum>: true) }
 
 let f1_safety =
  fun (n : int) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -342,13 +342,13 @@ let f1_safety =
      (let __retres = ref (any_int void) in
      (C_2:
      begin
-       (let jessie_2 = (__retres := (C_1: ((add_int n) (1)))) in void);
+       (let jessie_<somenum> = (__retres := (C_1: ((add_int n) (1)))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 let f2_ensures_b1 =
  fun (x_0 : int) (y : int) ->
-  { (ge_int(x_0, (0)) and (JC_23: lt_int(mul_int(x_0, y), (0)))) }
+  { (ge_int(x_0, (0)) and (JC_<somenum>: lt_int(mul_int(x_0, y), (0)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -356,13 +356,13 @@ let f2_ensures_b1 =
      (let __retres_0 = ref (any_int void) in
      (C_7:
      begin
-       (let jessie_20 = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
+       (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_29: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f2_ensures_b2 =
  fun (x_0 : int) (y : int) ->
-  { (ge_int(y, (0)) and (JC_23: lt_int(mul_int(x_0, y), (0)))) }
+  { (ge_int(y, (0)) and (JC_<somenum>: lt_int(mul_int(x_0, y), (0)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -370,29 +370,29 @@ let f2_ensures_b2 =
      (let __retres_0 = ref (any_int void) in
      (C_7:
      begin
-       (let jessie_23 = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
+       (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_31: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f2_ensures_default =
  fun (x_0 : int) (y : int) ->
-  { (JC_23: lt_int(mul_int(x_0, y), (0))) }
+  { (JC_<somenum>: lt_int(mul_int(x_0, y), (0))) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (check { (JC_35: (not (ge_int(x_0, (0)) and ge_int(y, (0))))) }; void);
-    (check { (JC_36: (ge_int(y, (0)) or ge_int(x_0, (0)))) }; void);
+     (check { (JC_<somenum>: (not (ge_int(x_0, (0)) and ge_int(y, (0))))) }; void);
+    (check { (JC_<somenum>: (ge_int(y, (0)) or ge_int(x_0, (0)))) }; void);
     (let __retres_0 = ref (any_int void) in
     (C_7:
     begin
-      (let jessie_17 = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
+      (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
      (return := !__retres_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_25: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f2_safety =
  fun (x_0 : int) (y : int) ->
-  { (JC_23: lt_int(mul_int(x_0, y), (0))) }
+  { (JC_<somenum>: lt_int(mul_int(x_0, y), (0))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -400,7 +400,7 @@ let f2_safety =
      (let __retres_0 = ref (any_int void) in
      (C_7:
      begin
-       (let jessie_14 = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
+       (let jessie_<somenum> = (__retres_0 := (C_6: ((add_int x_0) y))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

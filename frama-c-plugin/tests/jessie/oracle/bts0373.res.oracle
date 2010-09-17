@@ -310,12 +310,12 @@ parameter int8_of_integer_ :
 parameter main :
  tt:unit ->
   { } int32
-  { ((JC_9: toto) and (JC_7: eq_int(integer_of_int32(result), (0)))) }
+  { ((JC_<somenum>: toto) and (JC_<somenum>: eq_int(integer_of_int32(result), (0)))) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_2: toto)} int32
-  { ((JC_9: toto) and (JC_7: eq_int(integer_of_int32(result), (0)))) }
+  { (JC_<somenum>: toto)} int32
+  { ((JC_<somenum>: toto) and (JC_<somenum>: eq_int(integer_of_int32(result), (0)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -325,7 +325,7 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: toto) }
+  { (JC_<somenum>: toto) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -333,13 +333,13 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_6: eq_int(integer_of_int32(result), (0))) }
+   !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_4: toto) }
+  { (JC_<somenum>: toto) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -347,9 +347,9 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_2 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_8: toto) }
+   !return end)) { (JC_<somenum>: toto) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0373.jessie --quiet -f bts0373.makefile project

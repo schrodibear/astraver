@@ -303,12 +303,12 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- x_0:int32 -> { } int32 { (JC_7: eq_int(integer_of_int32(result), (0))) }
+ x_0:int32 -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 parameter f_requires :
  x_0:int32 ->
-  { (JC_1: ge_int(integer_of_int32(x_0), (0)))} int32
-  { (JC_7: eq_int(integer_of_int32(result), (0))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(x_0), (0)))} int32
+  { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -328,7 +328,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : int32) ->
-  { (JC_3: ge_int(integer_of_int32(x_0), (0))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(x_0), (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -336,36 +336,34 @@ let f_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_20 =
+      (let jessie_<somenum> =
+      (C_5:
+      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (let jessie_14 =
+         (let jessie_<somenum> =
          (C_1:
          begin
-           (let jessie_13 = (__retres := (safe_int32_of_integer_ (0))) in
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_5:
-       begin
-         (let jessie_17 =
-         (tmp := (C_4:
-                 (let jessie_16 =
-                 (C_3:
-                 (safe_int32_of_integer_ (C_2:
-                                         ((sub_int (integer_of_int32 x_0)) (1))))) in
-                 (JC_14: (f jessie_16))))) in void);
-        (C_6:
-        begin
-          (let jessie_19 = (__retres := !tmp) in void);
-         (raise (Return_label_exc void)) end) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> =
+       (tmp := (C_4:
+               (let jessie_<somenum> =
+               (C_3:
+               (safe_int32_of_integer_ (C_2:
+                                       ((sub_int (integer_of_int32 x_0)) (1))))) in
+               (JC_<somenum>: (f jessie_<somenum>))))) in void);
+       (let jessie_<somenum> = (__retres := !tmp) in void);
+       (raise (Return_label_exc void)) end)) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
-  { (JC_5: eq_int(integer_of_int32(result), (0))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 let f_safety =
  fun (x_0 : int32) ->
-  { (JC_3: ge_int(integer_of_int32(x_0), (0))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(x_0), (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -373,32 +371,29 @@ let f_safety =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_10 =
+      (let jessie_<somenum> =
+      (C_5:
+      (C_6:
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (let jessie_4 =
+         (let jessie_<somenum> =
          (C_1:
          begin
-           (let jessie_3 = (__retres := (safe_int32_of_integer_ (0))) in
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_5:
-       begin
-         (let jessie_7 =
-         (tmp := (C_4:
-                 (let jessie_6 =
-                 (C_3:
-                 (JC_11:
-                 (int32_of_integer_ (C_2:
-                                    ((sub_int (integer_of_int32 x_0)) (1)))))) in
-                 (JC_13:
-                 (check { zwf_zero((0), (0)) };
-                 (JC_12: (f_requires jessie_6))))))) in void);
-        (C_6:
-        begin
-          (let jessie_9 = (__retres := !tmp) in void);
-         (raise (Return_label_exc void)) end) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> =
+       (tmp := (C_4:
+               (let jessie_<somenum> =
+               (C_3:
+               (JC_<somenum>:
+               (int32_of_integer_ (C_2:
+                                  ((sub_int (integer_of_int32 x_0)) (1)))))) in
+               (JC_<somenum>:
+               (check { zwf_zero((0), (0)) }; (JC_<somenum>: (f_requires jessie_<somenum>))))))) in
+       void); (let jessie_<somenum> = (__retres := !tmp) in void);
+       (raise (Return_label_exc void)) end)) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -420,11 +415,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/rec2_po4.why">
-      <location file = "why/rec2.why" line = "340" begin = "26" end = "44"/>
+      <location file = "why/rec2.why" line = "338" begin = "24" end = "42"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec2_po5.why">
-      <location file = "why/rec2.why" line = "340" begin = "26" end = "44"/>
+      <location file = "why/rec2.why" line = "338" begin = "24" end = "42"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/rec2_po6.why">

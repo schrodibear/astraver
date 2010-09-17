@@ -536,16 +536,16 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (2))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (2))) }
 
 parameter f_requires :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (2))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (2))) }
 
 parameter g :
- tt:unit -> { } int32 { (JC_17: eq_int(integer_of_int32(result), (3))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (3))) }
 
 parameter g_requires :
- tt:unit -> { } int32 { (JC_17: eq_int(integer_of_int32(result), (3))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (3))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -565,7 +565,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -577,38 +577,28 @@ let f_ensures_default =
      (let a = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
+     (C_4:
+     (C_6:
+     (C_8:
+     (C_9:
      begin
-       (let jessie_19 =
+       (let jessie_<somenum> =
        (a := (C_1:
-             (JC_11:
+             (JC_<somenum>:
              (((alloc_struct_S (1)) S_a_1_alloc_table) S_a_1_tag_table)))) in
        void);
-      (C_4:
-      begin
-        (let jessie_25 =
-        (let jessie_21 = (safe_int32_of_integer_ (1)) in
-        (let jessie_24 = !a in (((safe_upd_ S_x_a_1) jessie_24) jessie_21))) in
-        void);
-       (C_6:
-       begin
-         (let jessie_31 =
-         (let jessie_27 = (safe_int32_of_integer_ (2)) in
-         (let jessie_30 = !a in (((safe_upd_ S_y_a_1) jessie_30) jessie_27))) in
-         void);
-        (C_8:
-        begin
-          (let jessie_33 = (__retres := (C_7: ((safe_acc_ !S_y_a_1) !a))) in
-          void);
-         (C_9:
-         begin
-           ((safe_free_parameter S_a_1_alloc_table) !a);
-          (return := !__retres); (raise Return) end) end) end) end) end)))))));
-    absurd  end with Return -> !return end))
-  { (JC_5: eq_int(integer_of_int32(result), (2))) }
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !a in (((safe_upd_ S_x_a_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+      (let jessie_<somenum> = !a in (((safe_upd_ S_y_a_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres := (C_7: ((safe_acc_ !S_y_a_1) !a))) in
+      void); ((safe_free_parameter S_a_1_alloc_table) !a);
+      (return := !__retres); (raise Return) end))))))))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (2))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -620,41 +610,32 @@ let f_safety =
      (let a = ref (any_pointer void) in
      (let __retres = ref (any_int32 void) in
      (C_2:
+     (C_4:
+     (C_6:
+     (C_8:
+     (C_9:
      begin
-       (let jessie_2 =
-       (a := (let jessie_1 =
+       (let jessie_<somenum> =
+       (a := (let jessie_<somenum> =
              (C_1:
-             (JC_9:
+             (JC_<somenum>:
              (((alloc_struct_S_requires (1)) S_a_1_alloc_table) S_a_1_tag_table))) in
-             (JC_10:
+             (JC_<somenum>:
              (assert
-             { ge_int(offset_max(S_a_1_alloc_table, jessie_1), (0)) };
-             jessie_1)))) in void);
-      (C_4:
-      begin
-        (let jessie_8 =
-        (let jessie_4 = (safe_int32_of_integer_ (1)) in
-        (let jessie_7 = !a in (((safe_upd_ S_x_a_1) jessie_7) jessie_4))) in
-        void);
-       (C_6:
-       begin
-         (let jessie_14 =
-         (let jessie_10 = (safe_int32_of_integer_ (2)) in
-         (let jessie_13 = !a in (((safe_upd_ S_y_a_1) jessie_13) jessie_10))) in
-         void);
-        (C_8:
-        begin
-          (let jessie_16 = (__retres := (C_7: ((safe_acc_ !S_y_a_1) !a))) in
-          void);
-         (C_9:
-         begin
-           ((free_parameter S_a_1_alloc_table) !a); (return := !__retres);
-          (raise Return) end) end) end) end) end))))))); absurd  end with
-   Return -> !return end)) { true }
+             { ge_int(offset_max(S_a_1_alloc_table, jessie_<somenum>), (0)) };
+             jessie_<somenum>)))) in void);
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !a in (((safe_upd_ S_x_a_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+      (let jessie_<somenum> = !a in (((safe_upd_ S_y_a_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres := (C_7: ((safe_acc_ !S_y_a_1) !a))) in
+      void); ((free_parameter S_a_1_alloc_table) !a); (return := !__retres);
+      (raise Return) end))))))))))); absurd  end with Return -> !return end))
+  { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { (JC_15: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -670,47 +651,36 @@ let g_ensures_default =
      (let u = ref (any_pointer void) in
      (let __retres_0 = ref (any_int32 void) in
      (C_12:
+     (C_14:
+     (C_17:
+     (C_20:
+     (C_23:
+     (C_24:
      begin
-       (let jessie_59 =
+       (let jessie_<somenum> =
        (u := (C_11:
-             (JC_22:
+             (JC_<somenum>:
              (((((alloc_struct_U (1)) S_u_3_alloc_table) U_u_3_alloc_table) U_u_3_tag_table) !U_s_u_3)))) in
        void);
-      (C_14:
-      begin
-        (let jessie_65 =
-        (let jessie_61 = (safe_int32_of_integer_ (1)) in
-        (let jessie_64 = !u in (((safe_upd_ U_z_u_3) jessie_64) jessie_61))) in
-        void);
-       (C_17:
-       begin
-         (let jessie_71 =
-         (let jessie_67 = (safe_int32_of_integer_ (2)) in
-         (let jessie_70 = (C_15: ((safe_acc_ !U_s_u_3) !u)) in
-         (((safe_upd_ S_x_u_3) jessie_70) jessie_67))) in void);
-        (C_20:
-        begin
-          (let jessie_77 =
-          (let jessie_73 = (safe_int32_of_integer_ (3)) in
-          (let jessie_76 = (C_18: ((safe_acc_ !U_s_u_3) !u)) in
-          (((safe_upd_ S_y_u_3) jessie_76) jessie_73))) in void);
-         (C_23:
-         begin
-           (let jessie_79 =
-           (__retres_0 := (C_22:
-                          ((safe_acc_ !S_y_u_3) (C_21:
-                                                ((safe_acc_ !U_s_u_3) !u))))) in
-           void);
-          (C_24:
-          begin
-            ((safe_free_parameter U_u_3_alloc_table) !u);
-           (return := !__retres_0); (raise Return) end) end) end) end) end)
-     end))))))))))); absurd  end with Return -> !return end))
-  { (JC_16: eq_int(integer_of_int32(result), (3))) }
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !u in (((safe_upd_ U_z_u_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+      (let jessie_<somenum> = (C_15: ((safe_acc_ !U_s_u_3) !u)) in
+      (((safe_upd_ S_x_u_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+      (let jessie_<somenum> = (C_18: ((safe_acc_ !U_s_u_3) !u)) in
+      (((safe_upd_ S_y_u_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
+      (__retres_0 := (C_22:
+                     ((safe_acc_ !S_y_u_3) (C_21: ((safe_acc_ !U_s_u_3) !u))))) in
+      void); ((safe_free_parameter U_u_3_alloc_table) !u);
+      (return := !__retres_0); (raise Return) end)))))))))))))))); absurd 
+   end with Return -> !return end))
+  { (JC_<somenum>: eq_int(integer_of_int32(result), (3))) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_15: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -726,45 +696,34 @@ let g_safety =
      (let u = ref (any_pointer void) in
      (let __retres_0 = ref (any_int32 void) in
      (C_12:
+     (C_14:
+     (C_17:
+     (C_20:
+     (C_23:
+     (C_24:
      begin
-       (let jessie_36 =
-       (u := (let jessie_35 =
+       (let jessie_<somenum> =
+       (u := (let jessie_<somenum> =
              (C_11:
-             (JC_20:
+             (JC_<somenum>:
              (((((alloc_struct_U_requires (1)) S_u_3_alloc_table) U_u_3_alloc_table) U_u_3_tag_table) !U_s_u_3))) in
-             (JC_21:
+             (JC_<somenum>:
              (assert
-             { ge_int(offset_max(U_u_3_alloc_table, jessie_35), (0)) };
-             jessie_35)))) in void);
-      (C_14:
-      begin
-        (let jessie_42 =
-        (let jessie_38 = (safe_int32_of_integer_ (1)) in
-        (let jessie_41 = !u in (((safe_upd_ U_z_u_3) jessie_41) jessie_38))) in
-        void);
-       (C_17:
-       begin
-         (let jessie_48 =
-         (let jessie_44 = (safe_int32_of_integer_ (2)) in
-         (let jessie_47 = (C_15: ((safe_acc_ !U_s_u_3) !u)) in
-         (((safe_upd_ S_x_u_3) jessie_47) jessie_44))) in void);
-        (C_20:
-        begin
-          (let jessie_54 =
-          (let jessie_50 = (safe_int32_of_integer_ (3)) in
-          (let jessie_53 = (C_18: ((safe_acc_ !U_s_u_3) !u)) in
-          (((safe_upd_ S_y_u_3) jessie_53) jessie_50))) in void);
-         (C_23:
-         begin
-           (let jessie_56 =
-           (__retres_0 := (C_22:
-                          ((safe_acc_ !S_y_u_3) (C_21:
-                                                ((safe_acc_ !U_s_u_3) !u))))) in
-           void);
-          (C_24:
-          begin
-            ((free_parameter U_u_3_alloc_table) !u); (return := !__retres_0);
-           (raise Return) end) end) end) end) end) end))))))))))); absurd 
+             { ge_int(offset_max(U_u_3_alloc_table, jessie_<somenum>), (0)) };
+             jessie_<somenum>)))) in void);
+      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+      (let jessie_<somenum> = !u in (((safe_upd_ U_z_u_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+      (let jessie_<somenum> = (C_15: ((safe_acc_ !U_s_u_3) !u)) in
+      (((safe_upd_ S_x_u_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+      (let jessie_<somenum> = (C_18: ((safe_acc_ !U_s_u_3) !u)) in
+      (((safe_upd_ S_y_u_3) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
+      (__retres_0 := (C_22:
+                     ((safe_acc_ !S_y_u_3) (C_21: ((safe_acc_ !U_s_u_3) !u))))) in
+      void); ((free_parameter U_u_3_alloc_table) !u);
+      (return := !__retres_0); (raise Return) end)))))))))))))))); absurd 
    end with Return -> !return end)) { true }
 
 
@@ -780,11 +739,11 @@ why --project [...] why/struct3.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct3_po7.why">
-      <location file = "why/struct3.why" line = "649" begin = "15" end = "68"/>
+      <location file = "why/struct3.why" line = "624" begin = "15" end = "68"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct3_po8.why">
-      <location file = "why/struct3.why" line = "678" begin = "13" end = "50"/>
+      <location file = "why/struct3.why" line = "637" begin = "14" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -805,11 +764,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/struct3_po3.why">
-      <location file = "why/struct3.why" line = "543" begin = "15" end = "67"/>
+      <location file = "why/struct3.why" line = "537" begin = "15" end = "67"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/struct3_po4.why">
-      <location file = "why/struct3.why" line = "563" begin = "12" end = "49"/>
+      <location file = "why/struct3.why" line = "544" begin = "14" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

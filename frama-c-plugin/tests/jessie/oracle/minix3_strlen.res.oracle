@@ -1871,7 +1871,7 @@ parameter strlen_0_requires :
  org:char_P pointer ->
   char_P_org_20_alloc_table:char_P alloc_table ->
    char_P_char_M_org_20:(char_P, int8) memory ->
-    { (JC_1:
+    { (JC_<somenum>:
       valid_string(org, char_P_org_20_alloc_table, char_P_char_M_org_20))}
     uint32 { true }
 
@@ -1887,7 +1887,7 @@ parameter uint32_of_integer_ :
 
 let strlen_ensures_default =
  fun (org : char_P pointer) (char_P_org_20_alloc_table : char_P alloc_table) (char_P_char_M_org_20 : (char_P, int8) memory) ->
-  { (JC_3:
+  { (JC_<somenum>:
     valid_string(org, char_P_org_20_alloc_table, char_P_char_M_org_20)) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -1897,51 +1897,46 @@ let strlen_ensures_default =
      (let tmp = ref (any_pointer void) in
      (let __retres = ref (any_uint32 void) in
      (C_1:
+     (C_7:
+     (C_10:
      begin
-       (let jessie_19 = (s_32 := org) in void);
+       (let jessie_<somenum> = (s_32 := org) in void);
       try
-       (let jessie_26 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
-         { invariant (JC_15: true)  }
+         { invariant (JC_<somenum>: true)  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_25 =
+            (let jessie_<somenum> =
+            (C_2:
+            (C_4:
             begin
-              (C_2:
-              begin
-                (let jessie_21 = (tmp := !s_32) in void);
-               (C_4:
-               begin
-                 (let jessie_23 = (s_32 := (C_3: ((shift !s_32) (1)))) in
-                 void);
-                (if ((neq_int_ (integer_of_int8 (C_5:
-                                                ((safe_acc_ char_P_char_M_org_20) !tmp)))) (0))
-                then void
-                else
-                 (let jessie_24 = (raise (Goto_while_0_break_exc void)) in
-                 void)) end) end); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_3 -> void end end done);
+              (let jessie_<somenum> = (tmp := !s_32) in void);
+             (let jessie_<somenum> = (s_32 := (C_3: ((shift !s_32) (1)))) in void);
+             (if ((neq_int_ (integer_of_int8 (C_5:
+                                             ((safe_acc_ char_P_char_M_org_20) !tmp)))) (0))
+             then void
+             else
+              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             (raise (Loop_continue_exc void)) end)) in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
-      (C_7:
-      begin
-        (let jessie_28 = (s_32 := (C_6: ((shift !s_32) (neg_int (1))))) in
-        void);
-       (C_10:
-       begin
-         (let jessie_30 =
-         (__retres := (C_9:
-                      (safe_uint32_of_integer_ (C_8:
-                                               ((safe_sub_pointer_ !s_32) org))))) in
-         void); (return := !__retres); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { (JC_5: true) }
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
+      (let jessie_<somenum> = (s_32 := (C_6: ((shift !s_32) (neg_int (1))))) in
+      void);
+      (let jessie_<somenum> =
+      (__retres := (C_9:
+                   (safe_uint32_of_integer_ (C_8:
+                                            ((safe_sub_pointer_ !s_32) org))))) in
+      void); (return := !__retres); (raise Return) end)))))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let strlen_safety =
  fun (org : char_P pointer) (char_P_org_20_alloc_table : char_P alloc_table) (char_P_char_M_org_20 : (char_P, int8) memory) ->
-  { (JC_3:
+  { (JC_<somenum>:
     valid_string(org, char_P_org_20_alloc_table, char_P_char_M_org_20)) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -1951,48 +1946,43 @@ let strlen_safety =
      (let tmp = ref (any_pointer void) in
      (let __retres = ref (any_uint32 void) in
      (C_1:
+     (C_7:
+     (C_10:
      begin
-       (let jessie_5 = (s_32 := org) in void);
+       (let jessie_<somenum> = (s_32 := org) in void);
       try
-       (let jessie_12 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_10: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_11 =
+            (let jessie_<somenum> =
+            (C_2:
+            (C_4:
             begin
-              (C_2:
-              begin
-                (let jessie_7 = (tmp := !s_32) in void);
-               (C_4:
-               begin
-                 (let jessie_9 = (s_32 := (C_3: ((shift !s_32) (1)))) in
-                 void);
-                (if ((neq_int_ (integer_of_int8 (C_5:
-                                                (JC_12:
-                                                (((acc_ char_P_org_20_alloc_table) char_P_char_M_org_20) !tmp))))) (0))
-                then void
-                else
-                 (let jessie_10 = (raise (Goto_while_0_break_exc void)) in
-                 void)) end) end); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_3 -> void end end done);
+              (let jessie_<somenum> = (tmp := !s_32) in void);
+             (let jessie_<somenum> = (s_32 := (C_3: ((shift !s_32) (1)))) in void);
+             (if ((neq_int_ (integer_of_int8 (C_5:
+                                             (JC_<somenum>:
+                                             (((acc_ char_P_org_20_alloc_table) char_P_char_M_org_20) !tmp))))) (0))
+             then void
+             else
+              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             (raise (Loop_continue_exc void)) end)) in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
-      (C_7:
-      begin
-        (let jessie_14 = (s_32 := (C_6: ((shift !s_32) (neg_int (1))))) in
-        void);
-       (C_10:
-       begin
-         (let jessie_16 =
-         (__retres := (C_9:
-                      (JC_13:
-                      (uint32_of_integer_ (C_8: ((sub_pointer_ !s_32) org)))))) in
-         void); (return := !__retres); (raise Return) end) end) end))));
-    absurd  end with Return -> !return end)) { true }
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
+      (let jessie_<somenum> = (s_32 := (C_6: ((shift !s_32) (neg_int (1))))) in
+      void);
+      (let jessie_<somenum> =
+      (__retres := (C_9:
+                   (JC_<somenum>:
+                   (uint32_of_integer_ (C_8: ((sub_pointer_ !s_32) org)))))) in
+      void); (return := !__retres); (raise Return) end)))))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C minix3_strlen.jessie --quiet -f minix3_strlen.makefile project
@@ -2012,15 +2002,15 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strlen_po3.why">
-      <location file = "why/minix3_strlen.why" line = "1536" begin = "44" end = "45"/>
+      <location file = "why/minix3_strlen.why" line = "1533" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po4.why">
-      <location file = "why/minix3_strlen.why" line = "1536" begin = "44" end = "45"/>
+      <location file = "why/minix3_strlen.why" line = "1533" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po5.why">
-      <location file = "why/minix3_strlen.why" line = "1568" begin = "49" end = "73"/>
+      <location file = "why/minix3_strlen.why" line = "1558" begin = "46" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

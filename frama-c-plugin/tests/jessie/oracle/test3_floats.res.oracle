@@ -203,18 +203,18 @@ parameter Sterbenz :
  x_0:single ->
   y:single ->
    { } single
-   { (JC_10:
+   { (JC_<somenum>:
      eq_real(single_value(result),
      sub_real(single_value(x_0@), single_value(y@)))) }
 
 parameter Sterbenz_requires :
  x_0:single ->
   y:single ->
-   { (JC_3:
-     ((JC_1: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
-     and (JC_2: le_real(single_value(x_0), mul_real(2.0, single_value(y))))))}
+   { (JC_<somenum>:
+     ((JC_<somenum>: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
+     and (JC_<somenum>: le_real(single_value(x_0), mul_real(2.0, single_value(y))))))}
    single
-   { (JC_10:
+   { (JC_<somenum>:
      eq_real(single_value(result),
      sub_real(single_value(x_0@), single_value(y@)))) }
 
@@ -311,12 +311,12 @@ parameter alloc_struct_void_P_requires :
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- x_0_0:single -> { } single { (JC_20: eq_real(single_value(result), 1.0)) }
+ x_0_0:single -> { } single { (JC_<somenum>: eq_real(single_value(result), 1.0)) }
 
 parameter f_requires :
  x_0_0:single ->
-  { (JC_15: eq_real(2.0, single_value(x_0_0)))} single
-  { (JC_20: eq_real(single_value(result), 1.0)) }
+  { (JC_<somenum>: eq_real(2.0, single_value(x_0_0)))} single
+  { (JC_<somenum>: eq_real(single_value(result), 1.0)) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -328,9 +328,9 @@ parameter safe_int8_of_integer_ :
 
 let Sterbenz_ensures_default =
  fun (x_0 : single) (y : single) ->
-  { (JC_7:
-    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
-    and (JC_6: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
+    and (JC_<somenum>: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -338,19 +338,19 @@ let Sterbenz_ensures_default =
      (let __retres = ref (any_single void) in
      (C_2:
      begin
-       (let jessie_5 =
-       (__retres := (C_1: (JC_14: (((sub_single_safe nearest_even) x_0) y)))) in
+       (let jessie_<somenum> =
+       (__retres := (C_1: (JC_<somenum>: (((sub_single_safe nearest_even) x_0) y)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_9:
+  { (JC_<somenum>:
     eq_real(single_value(result),
     sub_real(single_value(x_0@), single_value(y@)))) }
 
 let Sterbenz_safety =
  fun (x_0 : single) (y : single) ->
-  { (JC_7:
-    ((JC_5: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
-    and (JC_6: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(div_real(single_value(y), 2.0), single_value(x_0)))
+    and (JC_<somenum>: le_real(single_value(x_0), mul_real(2.0, single_value(y)))))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -358,14 +358,14 @@ let Sterbenz_safety =
      (let __retres = ref (any_single void) in
      (C_2:
      begin
-       (let jessie_2 =
-       (__retres := (C_1: (JC_13: (((sub_single nearest_even) x_0) y)))) in
+       (let jessie_<somenum> =
+       (__retres := (C_1: (JC_<somenum>: (((sub_single nearest_even) x_0) y)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let f_ensures_default =
  fun (x_0_0 : single) ->
-  { (JC_17: eq_real(2.0, single_value(x_0_0))) }
+  { (JC_<somenum>: eq_real(2.0, single_value(x_0_0))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -373,28 +373,26 @@ let f_ensures_default =
      (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_single void) in
      begin
-       (let jessie_23 =
+       (let jessie_<somenum> =
        (C_8:
+       (C_10:
        begin
-         (let jessie_19 =
+         (let jessie_<somenum> =
          (tmp := (C_7:
-                 (let jessie_18 = x_0_0 in
-                 (let jessie_17 = (single_of_real_exact 1.) in
-                 (JC_25: ((Sterbenz jessie_18) jessie_17)))))) in void);
+                 (let jessie_<somenum> = x_0_0 in
+                 (let jessie_<somenum> = (single_of_real_exact 1.) in
+                 (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))) in void);
         void;
-        (C_10:
-        begin
-          (tmp_0 := (C_9:
-                    (let jessie_22 = x_0_0 in
-                    (let jessie_21 = !tmp in
-                    (JC_26: ((Sterbenz jessie_22) jessie_21)))))); !tmp_0 end)
-       end) in void); (return := !tmp_0); (raise Return) end)); absurd  end
-   with Return -> !return end))
-  { (JC_19: eq_real(single_value(result), 1.0)) }
+        (tmp_0 := (C_9:
+                  (let jessie_<somenum> = x_0_0 in
+                  (let jessie_<somenum> = !tmp in
+                  (JC_<somenum>: ((Sterbenz jessie_<somenum>) jessie_<somenum>)))))); !tmp_0 end)) in
+       void); (return := !tmp_0); (raise Return) end)); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: eq_real(single_value(result), 1.0)) }
 
 let f_safety =
  fun (x_0_0 : single) ->
-  { (JC_17: eq_real(2.0, single_value(x_0_0))) }
+  { (JC_<somenum>: eq_real(2.0, single_value(x_0_0))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -402,22 +400,21 @@ let f_safety =
      (let tmp = ref (any_single void) in
      (let tmp_0 = ref (any_single void) in
      begin
-       (let jessie_14 =
+       (let jessie_<somenum> =
        (C_8:
+       (C_10:
        begin
-         (let jessie_10 =
+         (let jessie_<somenum> =
          (tmp := (C_7:
-                 (let jessie_9 = x_0_0 in
-                 (let jessie_8 = (single_of_real_exact 1.) in
-                 (JC_23: ((Sterbenz_requires jessie_9) jessie_8)))))) in
+                 (let jessie_<somenum> = x_0_0 in
+                 (let jessie_<somenum> = (single_of_real_exact 1.) in
+                 (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>)))))) in
          void); void;
-        (C_10:
-        begin
-          (tmp_0 := (C_9:
-                    (let jessie_13 = x_0_0 in
-                    (let jessie_12 = !tmp in
-                    (JC_24: ((Sterbenz_requires jessie_13) jessie_12))))));
-         !tmp_0 end) end) in void); (return := !tmp_0); (raise Return) end));
+        (tmp_0 := (C_9:
+                  (let jessie_<somenum> = x_0_0 in
+                  (let jessie_<somenum> = !tmp in
+                  (JC_<somenum>: ((Sterbenz_requires jessie_<somenum>) jessie_<somenum>))))));
+        !tmp_0 end)) in void); (return := !tmp_0); (raise Return) end));
     absurd  end with Return -> !return end)) { true }
 
 

@@ -359,7 +359,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -367,21 +367,20 @@ let f_ensures_default =
      (let y = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_1:
+     (C_5:
      begin
-       (let jessie_8 = (y := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_10 =
+       (let jessie_<somenum> = (y := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_<somenum> =
       (assert { true }; (((C_2: begin   (y := x_0); !y end))
-      {{ (JC_11: eq_int(integer_of_int32(y), (3))) }})) in void);
-      (assert { (JC_12: gt_int(integer_of_int32(y), (0))) }; void); void;
-      (C_5:
-      begin
-        (let jessie_12 = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end))); absurd  end with
-   Return -> !return end)) { (JC_5: true) }
+      {{ (JC_<somenum>: eq_int(integer_of_int32(y), (3))) }})) in void);
+      (assert { (JC_<somenum>: gt_int(integer_of_int32(y), (0))) }; void); void;
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end)))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_0 : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -389,53 +388,52 @@ let f_safety =
      (let y = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      (C_1:
+     (C_5:
      begin
-       (let jessie_2 = (y := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_3 =
-      [ { } int32 { (JC_9: eq_int(integer_of_int32(y), (3))) } ] in void);
-      [ { } unit reads y { (JC_10: gt_int(integer_of_int32(y), (0))) } ];
+       (let jessie_<somenum> = (y := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_<somenum> =
+      [ { } int32 { (JC_<somenum>: eq_int(integer_of_int32(y), (3))) } ] in void);
+      [ { } unit reads y { (JC_<somenum>: gt_int(integer_of_int32(y), (0))) } ];
       void;
-      (C_5:
-      begin
-        (let jessie_5 = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end))); absurd  end with
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (x_0_0 : int32) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (let y_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_18 = (y_0 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_20 =
+       (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_<somenum> =
       begin
-        [ { } unit { (JC_24: gt_int(integer_of_int32(x_0_0), (0))) } ];
+        [ { } unit { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0))) } ];
        (assert { true }; (((C_8: begin   (y_0 := x_0_0); !y_0 end))
-       {{ (JC_25: eq_int(integer_of_int32(y_0), integer_of_int32(x_0_0))) }}))
+       {{ (JC_<somenum>: eq_int(integer_of_int32(y_0), integer_of_int32(x_0_0))) }}))
       end in void);
-      (assert { (JC_26: gt_int(integer_of_int32(y_0), (0))) }; void); void;
+      (assert { (JC_<somenum>: gt_int(integer_of_int32(y_0), (0))) }; void); void;
       (raise Return) end)); (raise Return) end with Return -> void end)
-  { (JC_17: true) }
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (x_0_0 : int32) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (let y_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_15 = (y_0 := (safe_int32_of_integer_ (0))) in void);
-      (let jessie_16 =
-      [ { (JC_21: gt_int(integer_of_int32(x_0_0), (0)))} int32
-        { (JC_22: eq_int(integer_of_int32(y_0), integer_of_int32(x_0_0))) } ] in
+       (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_<somenum> =
+      [ { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0)))} int32
+        { (JC_<somenum>: eq_int(integer_of_int32(y_0), integer_of_int32(x_0_0))) } ] in
       void);
-      [ { } unit reads y_0 { (JC_23: gt_int(integer_of_int32(y_0), (0))) } ];
+      [ { } unit reads y_0 { (JC_<somenum>: gt_int(integer_of_int32(y_0), (0))) } ];
       void; (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
 

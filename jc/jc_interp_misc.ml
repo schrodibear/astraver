@@ -368,27 +368,27 @@ let tr_var_base_type v =
 let tr_var_type v =
   tr_type ~region:v.jc_var_info_region v.jc_var_info_type
 
-let any_value = function
-  | JCTnative ty ->
-      begin match ty with
-	| Tunit -> Void
-	| Tboolean -> App(Var "any_bool", Void)
-	| Tinteger -> App(Var "any_int", Void)
-	| Treal -> App(Var "any_real", Void)
-	| Tgenfloat _ -> App(Var ("any_"^(native_name ty)), Void)
-	| Tstring -> App(Var "any_string", Void)
-      end
-  | JCTnull
-  | JCTpointer _ -> App(Var "any_pointer", Void)
-  | JCTenum ri -> App (Var(fun_any_enum ri), Void)
-  | JCTlogic _ as ty ->
-      let t =
-        Annot_type(LTrue, Base_type (tr_base_type ty), [], [], LTrue, [])
-      in BlackBox t
-  | JCTany -> assert false
-  | JCTtype_var _ -> assert false (* TODO: need environment *)
-
-
+let any_value t = 
+  match t with 
+    | JCTnative ty -> 
+        begin match ty with
+	  | Tunit -> void
+	  | Tboolean -> make_app "any_bool" [void]
+	  | Tinteger -> make_app "any_int" [void]
+	  | Treal -> make_app "any_real" [void]
+	  | Tgenfloat _ -> make_app ("any_"^(native_name ty)) [void]
+	  | Tstring -> make_app "any_string" [void]
+        end
+    | JCTnull 
+    | JCTpointer _ -> make_app "any_pointer" [void]
+    | JCTenum ri -> make_app (fun_any_enum ri) [void]
+    | JCTlogic _ as ty -> 
+        let t = 
+          Annot_type(LTrue, Base_type (tr_base_type ty), [], [], LTrue, [])
+        in mk_expr (BlackBox t)
+    | JCTany -> assert false
+    | JCTtype_var _ -> assert false (* TODO: need environment *)
+     
 (* model types *)
 
 let pset_type ac = raw_pset_type (alloc_class_type ac)
@@ -425,7 +425,7 @@ let any_value' ty' =
     else if is_memory_type ty' then "any_memory"
     else assert false
   in
-  App(Var anyfun,Void)
+  make_app anyfun [void]
 
 
 (******************************************************************************)
@@ -461,10 +461,10 @@ let lvar ~constant ~label_in_name lab n =
 
 (* simple variables *)
 
-let plain_var n = Var n
-let deref_var n = Deref n
+let plain_var n = mk_var n
+let deref_var n = mk_expr (Deref n)
 
-let var_name' = function
+let var_name' e = match e.expr_node with
   | Var n | Deref n -> n
   | _ -> assert false
 
@@ -530,8 +530,8 @@ let mutable_tag_table infunction (vi,r) =
 	infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
   else true
 
-let plain_memory_var (mc,r) = Var (memory_name (mc,r))
-let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
+let plain_memory_var (mc,r) = mk_var (memory_name (mc,r))
+let deref_memory_var (mc,r) = mk_expr (Deref (memory_name (mc,r)))
 
 let memory_var ?(test_current_function=false) (mc,r) =
   if test_current_function && !current_function = None then
@@ -559,8 +559,8 @@ let tmemory_param ~label_in_name lab (mc,r) =
   let ty' = memory_type mc in
   n, v, ty'
 
-let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
-let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
+let plain_alloc_table_var (ac,r) = mk_var (alloc_table_name (ac,r))
+let deref_alloc_table_var (ac,r) = mk_expr (Deref (alloc_table_name (ac,r)))
 
 let alloc_table_var ?(test_current_function=false) (ac,r) =
   if test_current_function && !current_function = None then
@@ -575,7 +575,7 @@ let talloc_table_var ~label_in_name lab (ac,r) =
     | None -> false (* Variables at different labels should be different *)
     | Some infunction -> not (mutable_alloc_table infunction (ac,r))
   in
-  lvar ~constant ~label_in_name lab alloc
+  not constant,lvar ~constant ~label_in_name lab alloc
 
 let talloc_table_param ~label_in_name lab (ac,r) =
   let alloc = alloc_table_name (ac,r) in
@@ -588,8 +588,8 @@ let talloc_table_param ~label_in_name lab (ac,r) =
   let ty' = alloc_table_type ac in
   n, v, ty'
 
-let plain_tag_table_var (vi,r) = Var (tag_table_name (vi,r))
-let deref_tag_table_var (vi,r) = Deref (tag_table_name (vi,r))
+let plain_tag_table_var (vi,r) = mk_var (tag_table_name (vi,r))
+let deref_tag_table_var (vi,r) = mk_expr (Deref (tag_table_name (vi,r)))
 
 let tag_table_var (vi,r) =
   if mutable_tag_table (get_current_function ()) (vi,r) then
@@ -941,13 +941,13 @@ let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
 let define_locals ?(reads=[]) ?(writes=[]) e' =
   let e' =
-    List.fold_left
-      (fun acc (n,ty') -> Let(n,any_value' ty',acc))
+    List.fold_left 
+      (fun acc (n,ty') -> mk_expr (Let(n,any_value' ty',acc)))
       e' reads
   in
   let e' =
-    List.fold_left
-      (fun acc (n,ty') -> Let_ref(n,any_value' ty',acc))
+    List.fold_left 
+      (fun acc (n,ty') -> mk_expr (Let_ref(n,any_value' ty',acc)))
       e' writes
   in
   e'
@@ -1131,7 +1131,7 @@ let make_alloc_param ~check_size ac pc =
   (* parameters and effects *)
   let writes = alloc_write_parameters (ac,dummy_region) pc in
   let write_effects =
-    List.map (function (Var n,_ty') -> n | _ -> assert false) writes
+    List.map (function ({ expr_node = Var n},_ty') -> n | _ -> assert false) writes
   in
   let write_params =
     List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
@@ -1140,10 +1140,10 @@ let make_alloc_param ~check_size ac pc =
   let read_params =
     List.map (fun (n,ty') -> (n,Base_type ty')) reads
   in
-  let params = [ (Var n,Base_type why_integer_type) ] in
+  let params = [ (mk_var n,Base_type why_integer_type) ] in
   let params = params @ write_params @ read_params in
   let params =
-    List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) params
+    List.map (function ({expr_node = Var n},ty') -> (n,ty') | _ -> assert false) params
   in
   (* precondition *)
   let pre =
@@ -1297,7 +1297,7 @@ let make_ofbit_alloc_param_app r pc =
 	make_app (alloc_of_bitvector_param_name pc) args
     | JCroot rt ->
 	match rt.jc_root_info_kind with
-	  | Rvariant -> Void
+	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
   in
@@ -1313,7 +1313,7 @@ let make_ofbit_mem_param_app r pc =
 	make_app (mem_of_bitvector_param_name pc) args
     | JCroot rt ->
 	match rt.jc_root_info_kind with
-	  | Rvariant -> Void
+	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
   in
@@ -1329,7 +1329,7 @@ let make_tobit_alloc_param_app r pc =
 	make_app (alloc_to_bitvector_param_name pc) args
     | JCroot rt ->
 	match rt.jc_root_info_kind with
-	  | Rvariant -> Void
+	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
   in
@@ -1344,7 +1344,7 @@ let make_tobit_mem_param_app r pc =
 	make_app (mem_to_bitvector_param_name pc) args
     | JCroot rt ->
 	match rt.jc_root_info_kind with
-	  | Rvariant -> Void
+	  | Rvariant -> void
 	  | RdiscrUnion -> assert false (* TODO *)
 	  | RplainUnion -> assert false (* TODO *)
   in
@@ -1984,21 +1984,21 @@ let write_parameters
     write_model_parameters ~type_safe ~mode:`MFunParam
       ~callee_reads ~callee_writes ~region_list ~params ()
   in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+  List.map (function ({expr_node = Var n},ty') -> (n,ty') | _ -> assert false) vars'
 
 let write_locals ~region_list ~callee_reads ~callee_writes ~params =
   let vars' =
     write_model_parameters ~type_safe:false ~mode:`MLocal
       ~callee_reads ~callee_writes ~region_list ~params ()
   in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+  List.map (function ({expr_node = Var n},ty') -> (n,ty') | _ -> assert false) vars'
 
 let write_effects ~callee_reads ~callee_writes ~region_list ~params =
   let vars' =
     write_model_parameters ~type_safe:true ~mode:`MEffect
       ~callee_reads ~callee_writes ~region_list ~params ()
   in
-  List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
+  List.map (function ({expr_node = Var n},_ty') -> n | _ -> assert false) vars'
 
 let local_write_effects ~callee_reads ~callee_writes =
   let vars' =
@@ -2041,16 +2041,17 @@ let read_parameters
     read_model_parameters ~type_safe ~mode:`MFunParam
       ~callee_reads ~callee_writes ~region_list ~params ~already_used ()
   in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+  List.map (function ({expr_node = Var n},ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_locals ~region_list ~callee_reads ~callee_writes ~params =
   let vars' =
     read_model_parameters ~type_safe:false ~mode:`MLocal
       ~callee_reads ~callee_writes ~region_list ~params ~already_used:[] ()
   in
-  List.map (function (Var n,ty') -> (n,ty') | (Deref n,ty') ->
-	      printf "Deref %s with type %a@." n Output.fprintf_logic_type ty';
-	      assert false
+  List.map (function ({expr_node = Var n},ty') -> (n,ty') 
+              | ({expr_node = Deref n},ty') -> 
+	          printf "Deref %s with type %a@." n Output.fprintf_logic_type ty';
+	          assert false
 	      | _ -> assert false
 	   ) vars'
 
@@ -2241,28 +2242,28 @@ let make_bitwise_arguments alloc_wpointers alloc_rpointers
 	 let alloc_locals,alloc_ofapp =
 	   if PointerSet.mem_region r bw_alloc_pointers then
 	     make_ofbit_alloc_param_app r pc
-	   else [], Void
+	   else [], void
 	 in
 	 let mem_locals,mem_ofapp =
 	   if PointerSet.mem pointer bw_mem_pointers then
 	     make_ofbit_mem_param_app r pc
-	   else [], Void
+	   else [], void
 	 in
 	 let alloc_toapp =
 	   if PointerSet.mem_region r bw_alloc_wpointers then
 	     make_tobit_alloc_param_app r pc
-	   else Void
+	   else void
 	 in
 	 let mem_toapp =
 	   if PointerSet.mem pointer bw_mem_wpointers then
 	     make_tobit_mem_param_app r pc
-	   else Void
+	   else void
 	 in
 	 let locals = alloc_locals @ mem_locals in
 	 let ofapp = append alloc_ofapp mem_ofapp in
 	 let toapp = append alloc_toapp mem_toapp in
 	 locals @ acc, append ofapp pro, append toapp epi
-      ) ([],Void,Void) (PointerSet.to_list bw_pointers)
+      ) ([],void,void) (PointerSet.to_list bw_pointers) 
   in
   let locals =
     fst (List.fold_left

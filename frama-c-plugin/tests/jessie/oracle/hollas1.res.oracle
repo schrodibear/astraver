@@ -361,7 +361,7 @@ parameter Copy :
       int_P_int_M_p_2:(int_P, int) memory ->
        { } unit reads char_P___string__d__1_alloc_table
        writes int_P_int_M_q_3
-       { (JC_21: valid___string__d_(char_P___string__d__1_alloc_table)) }
+       { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter Copy_requires :
  p:int_P pointer ->
@@ -370,9 +370,9 @@ parameter Copy_requires :
     int_P_q_3_alloc_table:int_P alloc_table ->
      int_P_p_2_alloc_table:int_P alloc_table ->
       int_P_int_M_p_2:(int_P, int) memory ->
-       { (JC_14: valid___string__d_(char_P___string__d__1_alloc_table))} unit
+       { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))} unit
        reads char_P___string__d__1_alloc_table writes int_P_int_M_q_3
-       { (JC_21: valid___string__d_(char_P___string__d__1_alloc_table)) }
+       { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter Copy_requires_specialized :
  p:int_P pointer ->
@@ -380,9 +380,9 @@ parameter Copy_requires_specialized :
    int_P_int_M_q_3:(int_P, int) memory ref ->
     int_P_q_3_alloc_table:int_P alloc_table ->
      int_P_p_2_alloc_table:int_P alloc_table ->
-      { (JC_14: valid___string__d_(char_P___string__d__1_alloc_table))} unit
+      { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))} unit
       reads char_P___string__d__1_alloc_table writes int_P_int_M_q_3
-      { (JC_21: valid___string__d_(char_P___string__d__1_alloc_table)) }
+      { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter Copy_specialized :
  p:int_P pointer ->
@@ -391,18 +391,18 @@ parameter Copy_specialized :
     int_P_q_3_alloc_table:int_P alloc_table ->
      int_P_p_2_alloc_table:int_P alloc_table ->
       { } unit reads char_P___string__d__1_alloc_table writes int_P_int_M_q_3
-      { (JC_21: valid___string__d_(char_P___string__d__1_alloc_table)) }
+      { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter __globinit_whole_program :
  tt:unit ->
   { } unit reads char_P___string__d__1_alloc_table
-  { (JC_13: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter __globinit_whole_program_requires :
  tt:unit ->
-  { (JC_6: valid___string__d_(char_P___string__d__1_alloc_table))} unit
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))} unit
   reads char_P___string__d__1_alloc_table
-  { (JC_13: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -544,52 +544,52 @@ parameter foo :
    int_P_a_4_alloc_table:int_P alloc_table ->
     { } int reads char_P___string__d__1_alloc_table,int_P_int_M_a_4
     writes int_P_int_M_a_4
-    { (JC_32: valid___string__d_(char_P___string__d__1_alloc_table)) }
+    { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter foo_requires :
  a:int_P pointer ->
   int_P_int_M_a_4:(int_P, int) memory ref ->
    int_P_a_4_alloc_table:int_P alloc_table ->
-    { (JC_25: valid___string__d_(char_P___string__d__1_alloc_table))} int
+    { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))} int
     reads char_P___string__d__1_alloc_table,int_P_int_M_a_4
     writes int_P_int_M_a_4
-    { (JC_32: valid___string__d_(char_P___string__d__1_alloc_table)) }
+    { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter main :
  tt:unit ->
   { } int reads char_P___string__d__1_alloc_table
-  { (JC_53: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_46: valid___string__d_(char_P___string__d__1_alloc_table))} int
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))} int
   reads char_P___string__d__1_alloc_table
-  { (JC_53: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter printf :
  tt:unit ->
   { } int reads char_P___string__d__1_alloc_table
-  { (JC_45: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 parameter printf_requires :
  tt:unit ->
-  { (JC_36: valid___string__d_(char_P___string__d__1_alloc_table))} int
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))} int
   reads char_P___string__d__1_alloc_table
-  { (JC_45: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 let Copy_ensures_default =
  fun (p : int_P pointer) (q : int_P pointer) (int_P_int_M_q_3 : (int_P, int) memory ref) (int_P_p_2_alloc_table : int_P alloc_table) (int_P_q_3_alloc_table : int_P alloc_table) (int_P_int_M_p_2 : (int_P, int) memory) ->
   { ((true = true)
-    and (JC_16: valid___string__d_(char_P___string__d__1_alloc_table))) }
+    and (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))) }
   (init:
   try
    begin
      (C_4:
      begin
-       (let jessie_10 = (let jessie_6 = (C_2:
+       (let jessie_<somenum> = (let jessie_<somenum> = (C_2:
                                         ((safe_acc_ int_P_int_M_p_2) p)) in
-                        (let jessie_9 = q in
-                        (((safe_upd_ int_P_int_M_q_3) jessie_9) jessie_6))) in
+                        (let jessie_<somenum> = q in
+                        (((safe_upd_ int_P_int_M_q_3) jessie_<somenum>) jessie_<somenum>))) in
        void);
       (raise Return)
      end);
@@ -598,22 +598,22 @@ let Copy_ensures_default =
    with
    Return ->
    void end)
-  { (JC_18: true) }
+  { (JC_<somenum>: true) }
 
 let Copy_safety =
  fun (p : int_P pointer) (q : int_P pointer) (int_P_int_M_q_3 : (int_P, int) memory ref) (int_P_p_2_alloc_table : int_P alloc_table) (int_P_q_3_alloc_table : int_P alloc_table) (int_P_int_M_p_2 : (int_P, int) memory) ->
-  { (JC_16: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
   (init:
   try
    begin
      (C_4:
      begin
-       (let jessie_5 = (let jessie_1 = (C_2:
-                                       (JC_23:
+       (let jessie_<somenum> = (let jessie_<somenum> = (C_2:
+                                       (JC_<somenum>:
                                        (((acc_ int_P_p_2_alloc_table) int_P_int_M_p_2) p))) in
-                       (let jessie_4 = q in
-                       (JC_24:
-                       ((((upd_ int_P_q_3_alloc_table) int_P_int_M_q_3) jessie_4) jessie_1)))) in
+                       (let jessie_<somenum> = q in
+                       (JC_<somenum>:
+                       ((((upd_ int_P_q_3_alloc_table) int_P_int_M_q_3) jessie_<somenum>) jessie_<somenum>)))) in
        void);
       (raise Return)
      end);
@@ -622,12 +622,12 @@ let Copy_safety =
    with
    Return ->
    void end)
-  { (JC_20: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 let foo_ensures_default =
  fun (a : int_P pointer) (int_P_int_M_a_4 : (int_P, int) memory ref) (int_P_a_4_alloc_table : int_P alloc_table) ->
   { ((true = true)
-    and (JC_27: valid___string__d_(char_P___string__d__1_alloc_table))) }
+    and (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -635,10 +635,10 @@ let foo_ensures_default =
      (let i = ref (any_int void) in
      (C_6:
      begin
-       (let jessie_14 = (i := (1)) in void);
+       (let jessie_<somenum> = (i := (1)) in void);
       (C_9:
       begin
-        (JC_35:
+        (JC_<somenum>:
         (((((Copy_specialized (C_7: ((shift a) (0)))) (C_8: ((shift a) !i))) int_P_int_M_a_4) int_P_a_4_alloc_table) int_P_a_4_alloc_table));
        (return := !i);
        (raise Return)
@@ -649,11 +649,11 @@ let foo_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_29: true) }
+  { (JC_<somenum>: true) }
 
 let foo_safety =
  fun (a : int_P pointer) (int_P_int_M_a_4 : (int_P, int) memory ref) (int_P_a_4_alloc_table : int_P alloc_table) ->
-  { (JC_27: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -661,14 +661,14 @@ let foo_safety =
      (let i = ref (any_int void) in
      (C_6:
      begin
-       (let jessie_11 = (i := (1)) in void);
+       (let jessie_<somenum> = (i := (1)) in void);
       (C_9:
       begin
-        (JC_34:
+        (JC_<somenum>:
         (assert
         { pset_disjoint(pset_range(pset_singleton(a), (0), (0)),
           pset_range(pset_singleton(a), i, i)) };
-        (JC_33:
+        (JC_<somenum>:
         (((((Copy_requires_specialized (C_7: ((shift a) (0)))) (C_8:
                                                                ((shift a) !i))) int_P_int_M_a_4) int_P_a_4_alloc_table) int_P_a_4_alloc_table))));
        (return := !i);
@@ -680,12 +680,12 @@ let foo_safety =
    with
    Return ->
    !return end))
-  { (JC_31: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 let main_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_48: valid___string__d_(char_P___string__d__1_alloc_table))) }
+    and (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -698,37 +698,37 @@ let main_ensures_default =
      (let __retres = ref (any_int void) in
      (C_13:
      begin
-       (let jessie_35 = (a_0 := (C_12:
-                                (JC_61:
+       (let jessie_<somenum> = (a_0 := (C_12:
+                                (JC_<somenum>:
                                 (((alloc_struct_int_P (2)) int_P_a_0_5_alloc_table) int_P_a_0_5_tag_table)))) in
        void);
       (C_14:
       begin
-        (JC_62: (__globinit_whole_program void));
+        (JC_<somenum>: (__globinit_whole_program void));
        (C_16:
        begin
-         (let jessie_40 = (let jessie_36 = (1) in
-                          (let jessie_39 = ((shift !a_0) (0)) in
-                          (((safe_upd_ int_P_int_M_a_0_5) jessie_39) jessie_36))) in
+         (let jessie_<somenum> = (let jessie_<somenum> = (1) in
+                          (let jessie_<somenum> = ((shift !a_0) (0)) in
+                          (((safe_upd_ int_P_int_M_a_0_5) jessie_<somenum>) jessie_<somenum>))) in
          void);
         (C_18:
         begin
-          (let jessie_45 = (let jessie_41 = (2) in
-                           (let jessie_44 = ((shift !a_0) (1)) in
-                           (((safe_upd_ int_P_int_M_a_0_5) jessie_44) jessie_41))) in
+          (let jessie_<somenum> = (let jessie_<somenum> = (2) in
+                           (let jessie_<somenum> = ((shift !a_0) (1)) in
+                           (((safe_upd_ int_P_int_M_a_0_5) jessie_<somenum>) jessie_<somenum>))) in
           void);
          (C_20:
          begin
-           (let jessie_48 = (tmp := (C_19:
-                                    (JC_64:
+           (let jessie_<somenum> = (tmp := (C_19:
+                                    (JC_<somenum>:
                                     (((foo !a_0) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table)))) in
            void);
           (C_21:
           begin
-            (let jessie_49 = (JC_65: (printf void)) in void);
+            (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
            (C_22:
            begin
-             (let jessie_50 = (__retres := (0)) in void);
+             (let jessie_<somenum> = (__retres := (0)) in void);
             (C_23:
             begin
               ((safe_free_parameter int_P_a_0_5_alloc_table) !a_0);
@@ -747,11 +747,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_50: true) }
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_48: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -764,43 +764,43 @@ let main_safety =
      (let __retres = ref (any_int void) in
      (C_13:
      begin
-       (let jessie_18 = (a_0 := (let jessie_17 = (C_12:
-                                                 (JC_54:
+       (let jessie_<somenum> = (a_0 := (let jessie_<somenum> = (C_12:
+                                                 (JC_<somenum>:
                                                  (((alloc_struct_int_P_requires (2)) int_P_a_0_5_alloc_table) int_P_a_0_5_tag_table))) in
-                                (JC_55:
+                                (JC_<somenum>:
                                 (assert
                                 { ge_int(offset_max(int_P_a_0_5_alloc_table,
-                                         jessie_17),
+                                         jessie_<somenum>),
                                   (1)) };
-                                jessie_17)))) in
+                                jessie_<somenum>)))) in
        void);
       (C_14:
       begin
-        (JC_56: (__globinit_whole_program_requires void));
+        (JC_<somenum>: (__globinit_whole_program_requires void));
        (C_16:
        begin
-         (let jessie_23 = (let jessie_19 = (1) in
-                          (let jessie_22 = ((shift !a_0) (0)) in
-                          (((safe_upd_ int_P_int_M_a_0_5) jessie_22) jessie_19))) in
+         (let jessie_<somenum> = (let jessie_<somenum> = (1) in
+                          (let jessie_<somenum> = ((shift !a_0) (0)) in
+                          (((safe_upd_ int_P_int_M_a_0_5) jessie_<somenum>) jessie_<somenum>))) in
          void);
         (C_18:
         begin
-          (let jessie_28 = (let jessie_24 = (2) in
-                           (let jessie_27 = ((shift !a_0) (1)) in
-                           (((safe_upd_ int_P_int_M_a_0_5) jessie_27) jessie_24))) in
+          (let jessie_<somenum> = (let jessie_<somenum> = (2) in
+                           (let jessie_<somenum> = ((shift !a_0) (1)) in
+                           (((safe_upd_ int_P_int_M_a_0_5) jessie_<somenum>) jessie_<somenum>))) in
           void);
          (C_20:
          begin
-           (let jessie_31 = (tmp := (C_19:
-                                    (JC_58:
+           (let jessie_<somenum> = (tmp := (C_19:
+                                    (JC_<somenum>:
                                     (((foo_requires !a_0) int_P_int_M_a_0_5) !int_P_a_0_5_alloc_table)))) in
            void);
           (C_21:
           begin
-            (let jessie_32 = (JC_59: (printf_requires void)) in void);
+            (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
            (C_22:
            begin
-             (let jessie_33 = (__retres := (0)) in void);
+             (let jessie_<somenum> = (__retres := (0)) in void);
             (C_23:
             begin
               ((free_parameter int_P_a_0_5_alloc_table) !a_0);
@@ -819,7 +819,7 @@ let main_safety =
    with
    Return ->
    !return end))
-  { (JC_52: valid___string__d_(char_P___string__d__1_alloc_table)) }
+  { (JC_<somenum>: valid___string__d_(char_P___string__d__1_alloc_table)) }
 
 
 WHYLIB=PPCHOME/why/lib WHYEXEC=PPCHOME/why/bin/why.opt GWHYEXEC=PPCHOME/why/bin/gwhy.opt make --quiet -C hollas1.jessie --quiet -f hollas1.makefile project

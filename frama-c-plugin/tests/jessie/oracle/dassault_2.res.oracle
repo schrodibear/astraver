@@ -295,7 +295,7 @@ parameter g : Def_Rv:int32 -> { } unit { true }
 
 parameter g_requires :
  Def_Rv:int32 ->
-  { (JC_1: eq_int(integer_of_int32(Def_Rv), (1)))} unit { true }
+  { (JC_<somenum>: eq_int(integer_of_int32(Def_Rv), (1)))} unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -315,28 +315,26 @@ parameter safe_int8_of_integer_ :
 
 let g_ensures_default =
  fun (Def_Rv : int32) ->
-  { (JC_3: eq_int(integer_of_int32(Def_Rv), (1))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(Def_Rv), (1))) }
   (let mutable_Def_Rv = ref Def_Rv in
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       (let jessie_4 = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end))
-  { (JC_5: true) }
+     (let jessie_<somenum> = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
+     void); (raise Return); (raise Return) end) with Return -> void end))
+  { (JC_<somenum>: true) }
 
 let g_safety =
  fun (Def_Rv : int32) ->
-  { (JC_3: eq_int(integer_of_int32(Def_Rv), (1))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(Def_Rv), (1))) }
   (let mutable_Def_Rv = ref Def_Rv in
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       (let jessie_2 = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end))
+     (let jessie_<somenum> = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
+     void); (raise Return); (raise Return) end) with Return -> void end))
   { true }
 
 

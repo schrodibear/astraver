@@ -305,10 +305,10 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f1 :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (18))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (18))) }
 
 parameter f1_requires :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (18))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (18))) }
 
 parameter f2 : tt:unit -> { } int32 { true }
 
@@ -332,7 +332,7 @@ parameter safe_int8_of_integer_ :
 
 let f1_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -340,13 +340,13 @@ let f1_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (__retres := (safe_int32_of_integer_ (18))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (18))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_5: eq_int(integer_of_int32(result), (18))) }
+   !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (18))) }
 
 let f1_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -354,13 +354,13 @@ let f1_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_2 = (__retres := (safe_int32_of_integer_ (18))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (18))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 let f2_ensures_default =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -368,13 +368,13 @@ let f2_ensures_default =
      (let i = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_11 = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
        void); (return := !i); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_13: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f2_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -382,7 +382,7 @@ let f2_safety =
      (let i = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_8 = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (65536)))) in
        void); (return := !i); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

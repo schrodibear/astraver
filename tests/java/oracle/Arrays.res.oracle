@@ -975,6 +975,9 @@ why3: why/Arrays_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/Arrays_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include Arrays.depend
 
 depend: coq/Arrays_why.v
@@ -2880,8 +2883,8 @@ let Arrays_arrayShift_ensures_default =
      (let j_0 =
      ref (K_64:
          ((sub_int (K_63:
-                   (let jessie_115 = t_2 in
-                   (JC_168: (java_array_length_intM jessie_115))))) (1))) in
+                   (let jessie_<num> = t_2 in
+                   (JC_168: (java_array_length_intM jessie_<num>))))) (1))) in
      try
       (loop_8:
       while true do
@@ -2908,29 +2911,31 @@ let Arrays_arrayShift_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_123 =
+         (let jessie_<num> =
          begin
            (if (K_73: ((gt_int_ !j_0) (0)))
            then
-            (let jessie_121 =
+            (let jessie_<num> =
             (K_71:
-            (let jessie_117 =
+            (let jessie_<num> =
             (K_70:
             ((safe_acc_ !intM_intP) ((shift t_2) (K_69: ((sub_int !j_0) (1)))))) in
-            (let jessie_120 = ((shift t_2) !j_0) in
+            (let jessie_<num> = t_2 in
+            (let jessie_<num> = !j_0 in
+            (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
             begin
-              (((safe_upd_ intM_intP) jessie_120) jessie_117); jessie_117 end))) in
+              (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>); jessie_<num> end))))) in
             void)
-           else (let jessie_122 = (raise (Loop_exit_exc void)) in void));
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_9 ->
-         (let jessie_127 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_72:
-         (let jessie_7 = !j_0 in
+         (let jessie_<num> = !j_0 in
          begin
-           (let jessie_126 = (j_0 := ((sub_int jessie_7) (1))) in void);
-          jessie_7 end)) in void) end end done) with
-      Loop_exit_exc jessie_8 -> void end); (raise Return) end with Return ->
+           (let jessie_<num> = (j_0 := ((sub_int jessie_<num>) (1))) in void);
+          jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (raise Return) end with Return ->
    void end)
   { (JC_153:
     (forall i_0:int.
@@ -2949,11 +2954,11 @@ let Arrays_arrayShift_safety =
      (let j_0 =
      ref (K_64:
          ((sub_int (K_63:
-                   (let jessie_101 = t_2 in
+                   (let jessie_<num> = t_2 in
                    (JC_158:
                    (assert
-                   { ge_int(offset_max(Object_alloc_table, jessie_101), (-1)) };
-                   (JC_157: (java_array_length_intM_requires jessie_101))))))) (1))) in
+                   { ge_int(offset_max(Object_alloc_table, jessie_<num>), (-1)) };
+                   (JC_157: (java_array_length_intM_requires jessie_<num>))))))) (1))) in
      try
       (loop_7:
       while true do
@@ -2980,34 +2985,34 @@ let Arrays_arrayShift_safety =
                             select(intM_intP@init,
                             shift(t_2@init, sub_int(i_2@init, (1))))))))))))) } ];
         try
-         (let jessie_109 =
+         (let jessie_<num> =
          begin
            (if (K_73: ((gt_int_ !j_0) (0)))
            then
-            (let jessie_107 =
+            (let jessie_<num> =
             (K_71:
-            (let jessie_103 =
+            (let jessie_<num> =
             (K_70:
             (JC_165:
             ((((offset_acc_ !Object_alloc_table) !intM_intP) t_2) (K_69:
                                                                   ((sub_int !j_0) (1)))))) in
-            (let jessie_104 = t_2 in
-            (let jessie_105 = !j_0 in
-            (let jessie_106 = ((shift jessie_104) jessie_105) in
+            (let jessie_<num> = t_2 in
+            (let jessie_<num> = !j_0 in
+            (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
             begin
               (JC_166:
-              (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_104) jessie_105) jessie_103));
-             jessie_103 end))))) in void)
-           else (let jessie_108 = (raise (Loop_exit_exc void)) in void));
+              (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
+             jessie_<num> end))))) in void)
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_9 ->
-         (let jessie_113 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_72:
-         (let jessie_7 = !j_0 in
+         (let jessie_<num> = !j_0 in
          begin
-           (let jessie_112 = (j_0 := ((sub_int jessie_7) (1))) in void);
-          jessie_7 end)) in void) end end done) with
-      Loop_exit_exc jessie_8 -> void end); (raise Return) end with Return ->
+           (let jessie_<num> = (j_0 := ((sub_int jessie_<num>) (1))) in void);
+          jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (raise Return) end with Return ->
    void end) { true }
 
 let Arrays_findMax2_ensures_default =
@@ -3046,32 +3051,32 @@ let Arrays_findMax2_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_79 =
+           (let jessie_<num> =
            begin
              (if (K_58:
                  ((lt_int_ !i_3) (K_57:
-                                 (let jessie_73 = t_1 in
-                                 (JC_137: (java_array_length_intM jessie_73))))))
+                                 (let jessie_<num> = t_1 in
+                                 (JC_137: (java_array_length_intM jessie_<num>))))))
              then
               (if (K_55:
                   ((gt_int_ (K_54:
                             ((safe_acc_ !intM_intP) ((shift t_1) !i_3)))) !m))
               then
-               (let jessie_77 =
+               (let jessie_<num> =
                begin
-                 (let jessie_75 = (r := !i_3) in void);
+                 (let jessie_<num> = (r := !i_3) in void);
                 (m := (K_53: ((safe_acc_ !intM_intP) ((shift t_1) !i_3))));
                 !m end in void) else void)
-             else (let jessie_78 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_6 ->
-           (let jessie_83 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_56:
-           (let jessie_4 = !i_3 in
+           (let jessie_<num> = !i_3 in
            begin
-             (let jessie_82 = (i_3 := ((add_int jessie_4) (1))) in void);
-            jessie_4 end)) in void) end end done) with
-        Loop_exit_exc jessie_5 -> void end); (return := !r); (raise Return)
+             (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !r); (raise Return)
      end)); absurd  end with Return -> !return end)) { (JC_99: true) }
 
 let Arrays_findMax2_ensures_max_found =
@@ -3110,32 +3115,32 @@ let Arrays_findMax2_ensures_max_found =
                                    is_max(t_1, r, i_3, Object_alloc_table,
                                    intM_intP)))))))) } ];
           try
-           (let jessie_94 =
+           (let jessie_<num> =
            begin
              (if (K_58:
                  ((lt_int_ !i_3) (K_57:
-                                 (let jessie_88 = t_1 in
-                                 (JC_148: (java_array_length_intM jessie_88))))))
+                                 (let jessie_<num> = t_1 in
+                                 (JC_148: (java_array_length_intM jessie_<num>))))))
              then
               (if (K_55:
                   ((gt_int_ (K_54:
                             ((safe_acc_ !intM_intP) ((shift t_1) !i_3)))) !m))
               then
-               (let jessie_92 =
+               (let jessie_<num> =
                begin
-                 (let jessie_90 = (r := !i_3) in void);
+                 (let jessie_<num> = (r := !i_3) in void);
                 (m := (K_53: ((safe_acc_ !intM_intP) ((shift t_1) !i_3))));
                 !m end in void) else void)
-             else (let jessie_93 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_6 ->
-           (let jessie_98 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_56:
-           (let jessie_4 = !i_3 in
+           (let jessie_<num> = !i_3 in
            begin
-             (let jessie_97 = (i_3 := ((add_int jessie_4) (1))) in void);
-            jessie_4 end)) in void) end end done) with
-        Loop_exit_exc jessie_5 -> void end); (return := !r); (raise Return)
+             (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !r); (raise Return)
      end)); absurd  end with Return -> !return end))
   { (JC_106:
     ((JC_103: le_int((0), result))
@@ -3189,41 +3194,41 @@ let Arrays_findMax2_safety =
                                    is_max(t_1, r, i_3, Object_alloc_table,
                                    intM_intP)))))))) } ];
           try
-           (let jessie_64 =
+           (let jessie_<num> =
            begin
              (if (K_58:
                  ((lt_int_ !i_3) (K_57:
-                                 (let jessie_58 = t_1 in
+                                 (let jessie_<num> = t_1 in
                                  (JC_123:
                                  (assert
                                  { ge_int(offset_max(Object_alloc_table,
-                                          jessie_58),
+                                          jessie_<num>),
                                    (-1)) };
                                  (JC_122:
-                                 (java_array_length_intM_requires jessie_58))))))))
+                                 (java_array_length_intM_requires jessie_<num>))))))))
              then
               (if (K_55:
                   ((gt_int_ (K_54:
                             (JC_124:
                             ((((offset_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3)))) !m))
               then
-               (let jessie_62 =
+               (let jessie_<num> =
                begin
-                 (let jessie_60 = (r := !i_3) in void);
+                 (let jessie_<num> = (r := !i_3) in void);
                 (m := (K_53:
                       (JC_125:
                       ((((offset_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3))));
                 !m end in void) else void)
-             else (let jessie_63 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_6 ->
-           (let jessie_68 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_56:
-           (let jessie_4 = !i_3 in
+           (let jessie_<num> = !i_3 in
            begin
-             (let jessie_67 = (i_3 := ((add_int jessie_4) (1))) in void);
-            jessie_4 end)) in void) end end done) with
-        Loop_exit_exc jessie_5 -> void end); (return := !r); (raise Return)
+             (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !r); (raise Return)
      end)); absurd  end with Return -> !return end)) { true }
 
 let Arrays_findMax_ensures_default =
@@ -3267,32 +3272,32 @@ let Arrays_findMax_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_34 =
+           (let jessie_<num> =
            begin
              (if (K_29:
                  ((lt_int_ !i_5) (K_28:
-                                 (let jessie_28 = t_0 in
-                                 (JC_79: (java_array_length_intM jessie_28))))))
+                                 (let jessie_<num> = t_0 in
+                                 (JC_79: (java_array_length_intM jessie_<num>))))))
              then
               (if (K_26:
                   ((gt_int_ (K_25:
                             ((safe_acc_ !intM_intP) ((shift t_0) !i_5)))) !m_0))
               then
-               (let jessie_32 =
+               (let jessie_<num> =
                begin
-                 (let jessie_30 = (r_0 := !i_5) in void);
+                 (let jessie_<num> = (r_0 := !i_5) in void);
                 (m_0 := (K_24: ((safe_acc_ !intM_intP) ((shift t_0) !i_5))));
                 !m_0 end in void) else void)
-             else (let jessie_33 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_3 ->
-           (let jessie_38 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_27:
-           (let jessie_1 = !i_5 in
+           (let jessie_<num> = !i_5 in
            begin
-             (let jessie_37 = (i_5 := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_2 -> void end); (return := !r_0); (raise Return)
+             (let jessie_<num> = (i_5 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !r_0); (raise Return)
      end)); absurd  end with Return -> !return end)) { (JC_41: true) }
 
 let Arrays_findMax_ensures_max_found =
@@ -3338,32 +3343,32 @@ let Arrays_findMax_ensures_max_found =
                                             shift(t_0, j_1)),
                                      m_0)))))))))) } ];
           try
-           (let jessie_49 =
+           (let jessie_<num> =
            begin
              (if (K_29:
                  ((lt_int_ !i_5) (K_28:
-                                 (let jessie_43 = t_0 in
-                                 (JC_90: (java_array_length_intM jessie_43))))))
+                                 (let jessie_<num> = t_0 in
+                                 (JC_90: (java_array_length_intM jessie_<num>))))))
              then
               (if (K_26:
                   ((gt_int_ (K_25:
                             ((safe_acc_ !intM_intP) ((shift t_0) !i_5)))) !m_0))
               then
-               (let jessie_47 =
+               (let jessie_<num> =
                begin
-                 (let jessie_45 = (r_0 := !i_5) in void);
+                 (let jessie_<num> = (r_0 := !i_5) in void);
                 (m_0 := (K_24: ((safe_acc_ !intM_intP) ((shift t_0) !i_5))));
                 !m_0 end in void) else void)
-             else (let jessie_48 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_3 ->
-           (let jessie_53 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_27:
-           (let jessie_1 = !i_5 in
+           (let jessie_<num> = !i_5 in
            begin
-             (let jessie_52 = (i_5 := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_2 -> void end); (return := !r_0); (raise Return)
+             (let jessie_<num> = (i_5 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !r_0); (raise Return)
      end)); absurd  end with Return -> !return end))
   { (JC_48:
     ((JC_45: le_int((0), result))
@@ -3427,41 +3432,41 @@ let Arrays_findMax_safety =
                                             shift(t_0, j_1)),
                                      m_0)))))))))) } ];
           try
-           (let jessie_19 =
+           (let jessie_<num> =
            begin
              (if (K_29:
                  ((lt_int_ !i_5) (K_28:
-                                 (let jessie_13 = t_0 in
+                                 (let jessie_<num> = t_0 in
                                  (JC_65:
                                  (assert
                                  { ge_int(offset_max(Object_alloc_table,
-                                          jessie_13),
+                                          jessie_<num>),
                                    (-1)) };
                                  (JC_64:
-                                 (java_array_length_intM_requires jessie_13))))))))
+                                 (java_array_length_intM_requires jessie_<num>))))))))
              then
               (if (K_26:
                   ((gt_int_ (K_25:
                             (JC_66:
                             ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_5)))) !m_0))
               then
-               (let jessie_17 =
+               (let jessie_<num> =
                begin
-                 (let jessie_15 = (r_0 := !i_5) in void);
+                 (let jessie_<num> = (r_0 := !i_5) in void);
                 (m_0 := (K_24:
                         (JC_67:
                         ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_5))));
                 !m_0 end in void) else void)
-             else (let jessie_18 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_3 ->
-           (let jessie_23 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_27:
-           (let jessie_1 = !i_5 in
+           (let jessie_<num> = !i_5 in
            begin
-             (let jessie_22 = (i_5 := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_2 -> void end); (return := !r_0); (raise Return)
+             (let jessie_<num> = (i_5 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !r_0); (raise Return)
      end)); absurd  end with Return -> !return end)) { true }
 
 let cons_Arrays_ensures_default =
@@ -3490,7 +3495,7 @@ why --project [...] why/Arrays.why
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po38.why">
-      <location file = "why/Arrays.why" line = "1021" begin = "35" end = "167"/>
+      <location file = "why/Arrays.why" line = "1023" begin = "35" end = "167"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po39.why">
@@ -3618,7 +3623,7 @@ text = "PointerDeref"/>
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po67.why">
-      <location file = "why/Arrays.why" line = "1259" begin = "35" end = "167"/>
+      <location file = "why/Arrays.why" line = "1261" begin = "35" end = "167"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po68.why">
@@ -3741,7 +3746,7 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "777" begin = "21" end = "77"/>
+      <location file = "why/Arrays.why" line = "779" begin = "21" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -8537,7 +8542,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 777, characters 21-77
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 779, characters 21-77
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_2 0 Object_alloc_table)
@@ -9286,7 +9291,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1)))
 (<= 0 (offset_max Object_alloc_table t_1)))))
 
-;; Arrays_findMax2_safety_po_2, File "why/Arrays.why", line 1021, characters 35-167
+;; Arrays_findMax2_safety_po_2, File "why/Arrays.why", line 1023, characters 35-167
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10121,7 +10126,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767))))
 (<= 0 (offset_max Object_alloc_table t_0)))))
 
-;; Arrays_findMax_safety_po_2, File "why/Arrays.why", line 1259, characters 35-167
+;; Arrays_findMax_safety_po_2, File "why/Arrays.why", line 1261, characters 35-167
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

@@ -329,7 +329,7 @@ parameter f : x_1:int32 -> y_0:int32 -> { } int32 { true }
 parameter f_requires :
  x_1:int32 ->
   y_0:int32 ->
-   { (JC_1:
+   { (JC_<somenum>:
      strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(y_0)),
      char_P_char_M_foo_6, char_P_char_M_foo_5))}
    int32 { true }
@@ -352,7 +352,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_1 : int32) (y_0 : int32) ->
-  { (JC_3:
+  { (JC_<somenum>:
     strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(y_0)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
   (init:
@@ -364,17 +364,17 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
                                             ((add_int (integer_of_int32 x_1)) 
                                              (integer_of_int32 y_0)))))) in
        void); (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_5: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_1 : int32) (y_0 : int32) ->
-  { (JC_3:
+  { (JC_<somenum>:
     strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(y_0)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
   (init:
@@ -386,9 +386,9 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
-                    (JC_9:
+                    (JC_<somenum>:
                     (int32_of_integer_ (C_1:
                                        ((add_int (integer_of_int32 x_1)) 
                                         (integer_of_int32 y_0))))))) in void);

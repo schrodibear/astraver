@@ -447,7 +447,7 @@ parameter strerror_requires :
 
 let strerror_ensures_default =
  fun (errnum : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -455,16 +455,16 @@ let strerror_ensures_default =
      (let __retres = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
                     ((safe_acc_ !char_const___xP_char_const___xM__sys_errlist_1) 
                      (C_1: ((shift _sys_errlist) (integer_of_int32 errnum)))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_5: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let strerror_safety =
  fun (errnum : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -472,9 +472,9 @@ let strerror_safety =
      (let __retres = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
-                    (JC_9:
+                    (JC_<somenum>:
                     ((((offset_acc_ !char_const___xP__sys_errlist_1_alloc_table) !char_const___xP_char_const___xM__sys_errlist_1) _sys_errlist) 
                      (integer_of_int32 errnum))))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->

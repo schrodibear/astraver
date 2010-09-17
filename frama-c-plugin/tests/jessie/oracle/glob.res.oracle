@@ -312,24 +312,24 @@ parameter g : int32 ref
 parameter f :
  tt:unit ->
   { } unit reads g writes g
-  { (JC_10: ((JC_8: gzero(g)) and (JC_9: eq_int(integer_of_int32(g), (0))))) }
+  { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: eq_int(integer_of_int32(g), (0))))) }
 
 parameter f_requires :
  tt:unit ->
   { } unit reads g writes g
-  { (JC_10: ((JC_8: gzero(g)) and (JC_9: eq_int(integer_of_int32(g), (0))))) }
+  { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: eq_int(integer_of_int32(g), (0))))) }
 
 parameter h :
  tt:unit ->
   { } unit reads g writes g
-  { (JC_22:
-    ((JC_20: gzero(g)) and (JC_21: eq_int(integer_of_int32(g), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: gzero(g)) and (JC_<somenum>: eq_int(integer_of_int32(g), (0))))) }
 
 parameter h_requires :
  tt:unit ->
   { } unit reads g writes g
-  { (JC_22:
-    ((JC_20: gzero(g)) and (JC_21: eq_int(integer_of_int32(g), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: gzero(g)) and (JC_<somenum>: eq_int(integer_of_int32(g), (0))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -349,47 +349,42 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       (let jessie_4 = (g := (safe_int32_of_integer_ (0))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_7: ((JC_5: gzero(g)) and (JC_6: eq_int(integer_of_int32(g), (0))))) }
+     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: ((JC_<somenum>: gzero(g)) and (JC_<somenum>: eq_int(integer_of_int32(g), (0))))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       (let jessie_2 = (g := (safe_int32_of_integer_ (0))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (0))) in void);
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
-  try
-   begin
-     (C_5: begin   (JC_26: (f void)); (raise Return) end); (raise Return) end
+  try (C_5: begin   (JC_<somenum>: (f void)); (raise Return); (raise Return) end)
    with Return -> void end)
-  { (JC_19:
-    ((JC_17: gzero(g)) and (JC_18: eq_int(integer_of_int32(g), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: gzero(g)) and (JC_<somenum>: eq_int(integer_of_int32(g), (0))))) }
 
 let h_safety =
  fun (tt : unit) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
-   begin
-     (C_5: begin   (JC_25: (f_requires void)); (raise Return) end);
-    (raise Return) end with Return -> void end) { true }
+   (C_5:
+   begin   (JC_<somenum>: (f_requires void)); (raise Return); (raise Return) end)
+   with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C glob.jessie --quiet -f glob.makefile project

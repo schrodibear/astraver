@@ -232,8 +232,11 @@ let name_of_integral_type ?bitsize ty =
 
 let arraylen_attr_name = "arraylen"
 
-let mkTRef elemty =
+let mkTRef elemty _msg =
   (* Define the same arguments as for [mkTRefArray] *)
+(*
+  Format.eprintf "mkTRef, coming from %s@." msg;
+*)
   let size = constant_expr 1L and attr = [] in
   (* Do the same as in [mkTRefArray] *)
   let siz = expToAttrParam size in
@@ -254,7 +257,11 @@ let mkTRefArray (elemty,size,attr) =
 
 let reference_size ty =
   match findAttribute arraylen_attr_name (typeAttrs ty) with
-    | [AInt i] -> Int64.of_int i
+    | [AInt i] -> 
+(*
+        eprintf "AInt has argument %d@." i;
+*)
+        Int64.of_int i
     | _ -> assert false
 
 let is_reference_type ty =

@@ -311,14 +311,14 @@ parameter x_0 : int32 ref
 parameter f :
  y:int32 ->
   { } int32 reads x_0 writes x_0
-  { (JC_6:
+  { (JC_<somenum>:
     eq_int(integer_of_int32(x_0),
     add_int(add_int((2), integer_of_int32(x_0@)), integer_of_int32(y@)))) }
 
 parameter f_requires :
  y:int32 ->
   { } int32 reads x_0 writes x_0
-  { (JC_6:
+  { (JC_<somenum>:
     eq_int(integer_of_int32(x_0),
     add_int(add_int((2), integer_of_int32(x_0@)), integer_of_int32(y@)))) }
 
@@ -340,103 +340,85 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
+   (C_3:
+   (L1:
+   (C_6:
+   (L2:
+   (C_9:
    begin
-     (C_3:
-     begin
-       (let jessie_9 =
-       (x_0 := (C_2:
-               (safe_int32_of_integer_ (C_1:
-                                       ((add_int (integer_of_int32 !x_0)) 
-                                        (integer_of_int32 y)))))) in void);
-      (L1:
-      begin
-        void;
-       (C_6:
-       begin
-         (let jessie_11 =
-         (x_0 := (C_5:
-                 (safe_int32_of_integer_ (C_4:
-                                         ((add_int (integer_of_int32 !x_0)) (1)))))) in
-         void);
-        (L2:
-        begin
-          void;
-         (C_9:
-         begin
-           (let jessie_13 =
-           (x_0 := (C_8:
-                   (safe_int32_of_integer_ (C_7:
-                                           ((add_int (integer_of_int32 !x_0)) (1)))))) in
-           void);
-          (assert
-          { (JC_14:
-            eq_int(integer_of_int32(x_0@L1),
-            add_int(integer_of_int32(x_0@init), integer_of_int32(y)))) };
-          void); void;
-          (assert
-          { (JC_15:
-            eq_int(integer_of_int32(x_0@L2),
-            add_int(add_int((1), integer_of_int32(x_0@init)),
-            integer_of_int32(y)))) }; void); void; (return := !x_0);
-          (raise Return) end) end) end) end) end); absurd  end with Return ->
-   !return end))
-  { (JC_5:
+     (let jessie_<somenum> =
+     (x_0 := (C_2:
+             (safe_int32_of_integer_ (C_1:
+                                     ((add_int (integer_of_int32 !x_0)) 
+                                      (integer_of_int32 y)))))) in void);
+    void;
+    (let jessie_<somenum> =
+    (x_0 := (C_5:
+            (safe_int32_of_integer_ (C_4:
+                                    ((add_int (integer_of_int32 !x_0)) (1)))))) in
+    void); void;
+    (let jessie_<somenum> =
+    (x_0 := (C_8:
+            (safe_int32_of_integer_ (C_7:
+                                    ((add_int (integer_of_int32 !x_0)) (1)))))) in
+    void);
+    (assert
+    { (JC_<somenum>:
+      eq_int(integer_of_int32(x_0@L1),
+      add_int(integer_of_int32(x_0@init), integer_of_int32(y)))) }; void);
+    void;
+    (assert
+    { (JC_<somenum>:
+      eq_int(integer_of_int32(x_0@L2),
+      add_int(add_int((1), integer_of_int32(x_0@init)), integer_of_int32(y)))) };
+    void); void; (return := !x_0); (raise Return); absurd  end))))) with
+   Return -> !return end))
+  { (JC_<somenum>:
     eq_int(integer_of_int32(x_0),
     add_int(add_int((2), integer_of_int32(x_0@)), integer_of_int32(y@)))) }
 
 let f_safety =
  fun (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
+   (C_3:
+   (L1:
+   (C_6:
+   (L2:
+   (C_9:
    begin
-     (C_3:
-     begin
-       (let jessie_2 =
-       (x_0 := (C_2:
-               (JC_9:
-               (int32_of_integer_ (C_1:
-                                  ((add_int (integer_of_int32 !x_0)) 
-                                   (integer_of_int32 y))))))) in void);
-      (L1:
-      begin
-        void;
-       (C_6:
-       begin
-         (let jessie_4 =
-         (x_0 := (C_5:
-                 (JC_10:
-                 (int32_of_integer_ (C_4:
-                                    ((add_int (integer_of_int32 !x_0)) (1))))))) in
-         void);
-        (L2:
-        begin
-          void;
-         (C_9:
-         begin
-           (let jessie_6 =
-           (x_0 := (C_8:
-                   (JC_11:
-                   (int32_of_integer_ (C_7:
-                                      ((add_int (integer_of_int32 !x_0)) (1))))))) in
-           void);
-          [ { } unit reads x_0
-            { (JC_12:
-              eq_int(integer_of_int32(x_0@L1),
-              add_int(integer_of_int32(x_0@init), integer_of_int32(y)))) } ];
-          void;
-          [ { } unit reads x_0
-            { (JC_13:
-              eq_int(integer_of_int32(x_0@L2),
-              add_int(add_int((1), integer_of_int32(x_0@init)),
-              integer_of_int32(y)))) } ]; void; (return := !x_0);
-          (raise Return) end) end) end) end) end); absurd  end with Return ->
-   !return end)) { true }
+     (let jessie_<somenum> =
+     (x_0 := (C_2:
+             (JC_<somenum>:
+             (int32_of_integer_ (C_1:
+                                ((add_int (integer_of_int32 !x_0)) (integer_of_int32 y))))))) in
+     void); void;
+    (let jessie_<somenum> =
+    (x_0 := (C_5:
+            (JC_<somenum>:
+            (int32_of_integer_ (C_4: ((add_int (integer_of_int32 !x_0)) (1))))))) in
+    void); void;
+    (let jessie_<somenum> =
+    (x_0 := (C_8:
+            (JC_<somenum>:
+            (int32_of_integer_ (C_7: ((add_int (integer_of_int32 !x_0)) (1))))))) in
+    void);
+    [ { } unit reads x_0
+      { (JC_<somenum>:
+        eq_int(integer_of_int32(x_0@L1),
+        add_int(integer_of_int32(x_0@init), integer_of_int32(y)))) } ]; void;
+    [ { } unit reads x_0
+      { (JC_<somenum>:
+        eq_int(integer_of_int32(x_0@L2),
+        add_int(add_int((1), integer_of_int32(x_0@init)),
+        integer_of_int32(y)))) } ]; void; (return := !x_0); (raise Return);
+    absurd  end))))) with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C at.jessie --quiet -f at.makefile project

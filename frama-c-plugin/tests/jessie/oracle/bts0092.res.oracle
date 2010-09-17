@@ -327,14 +327,14 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f :
  x_1:int32 ->
   { } int32
-  { (JC_6:
+  { (JC_<somenum>:
     strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
 
 parameter f_requires :
  x_1:int32 ->
   { } int32
-  { (JC_6:
+  { (JC_<somenum>:
     strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
 
@@ -356,7 +356,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_1 : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_x_1 = ref x_1 in
   (init:
   (let return = ref (any_int32 void) in
@@ -366,23 +366,22 @@ let f_ensures_default =
      (let char_P_char_M_foo_5 = (any_memory void) in
      (let tmp = ref (any_int32 void) in
      (C_1:
+     (C_4:
      begin
-       (let jessie_7 = (tmp := !mutable_x_1) in void);
-      (C_4:
-      begin
-        (let jessie_9 =
-        (mutable_x_1 := (C_3:
-                        (safe_int32_of_integer_ (C_2:
-                                                ((add_int (integer_of_int32 !mutable_x_1)) (1)))))) in
-        void); (return := !tmp); (raise Return) end) end)))); absurd  end
-   with Return -> !return end)))
-  { (JC_5:
+       (let jessie_<somenum> = (tmp := !mutable_x_1) in void);
+      (let jessie_<somenum> =
+      (mutable_x_1 := (C_3:
+                      (safe_int32_of_integer_ (C_2:
+                                              ((add_int (integer_of_int32 !mutable_x_1)) (1)))))) in
+      void); (return := !tmp); (raise Return) end))))); absurd  end with
+   Return -> !return end)))
+  { (JC_<somenum>:
     strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
     char_P_char_M_foo_6, char_P_char_M_foo_5)) }
 
 let f_safety =
  fun (x_1 : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_x_1 = ref x_1 in
   (init:
   (let return = ref (any_int32 void) in
@@ -392,17 +391,16 @@ let f_safety =
      (let char_P_char_M_foo_5 = (any_memory void) in
      (let tmp = ref (any_int32 void) in
      (C_1:
+     (C_4:
      begin
-       (let jessie_2 = (tmp := !mutable_x_1) in void);
-      (C_4:
-      begin
-        (let jessie_4 =
-        (mutable_x_1 := (C_3:
-                        (JC_9:
-                        (int32_of_integer_ (C_2:
-                                           ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
-        void); (return := !tmp); (raise Return) end) end)))); absurd  end
-   with Return -> !return end))) { true }
+       (let jessie_<somenum> = (tmp := !mutable_x_1) in void);
+      (let jessie_<somenum> =
+      (mutable_x_1 := (C_3:
+                      (JC_<somenum>:
+                      (int32_of_integer_ (C_2:
+                                         ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
+      void); (return := !tmp); (raise Return) end))))); absurd  end with
+   Return -> !return end))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0092.jessie --quiet -f bts0092.makefile project

@@ -38,7 +38,9 @@ val push_decl : Logic_decl.t -> unit
 (* [push_or_output_decl d] either pushes the goal in a queue like [push_decl]
    for declarations other than goals, and produces a file for goal 
    declarations much as what [output_files] does. *)
+(*
 val push_or_output_decl : Logic_decl.t -> unit
+*)
 
 val reset : unit -> unit
 

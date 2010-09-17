@@ -2365,6 +2365,10 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEeqtype _ | JCNErange _ | JCNEsubtype _ ->
         typing_error e#pos "construction not allowed in expressions"
   in
+(*
+  if !lab = "L2" then
+    Format.eprintf "Jc_typing.expr: adding label L2@.";
+*)
   new expr
     ~pos: e#pos
     ~typ: ty

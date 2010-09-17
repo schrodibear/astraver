@@ -296,14 +296,14 @@ parameter abs1 :
   int_P_int_M_p_1:(int_P, int32) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_28: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
+    { (JC_<somenum>: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
 
 parameter abs1_requires :
  p:int_P pointer ->
   int_P_int_M_p_1:(int_P, int32) memory ref ->
    int_P_p_1_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_1 writes int_P_int_M_p_1
-    { (JC_28: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
+    { (JC_<somenum>: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -444,10 +444,10 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (0))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 parameter f_requires :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (0))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -463,26 +463,26 @@ parameter max :
  x_0:int32 ->
   y:int32 ->
    { } int32
-   { ((JC_22:
+   { ((JC_<somenum>:
       (forall z:int32.
        ((ge_int(integer_of_int32(z), integer_of_int32(x_0@))
         and ge_int(integer_of_int32(z), integer_of_int32(y@))) ->
         ge_int(integer_of_int32(z), integer_of_int32(result)))))
-     and ((JC_20: ge_int(integer_of_int32(result), integer_of_int32(y@)))
-         and (JC_18:
+     and ((JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(y@)))
+         and (JC_<somenum>:
              ge_int(integer_of_int32(result), integer_of_int32(x_0@))))) }
 
 parameter max_requires :
  x_0:int32 ->
   y:int32 ->
    { } int32
-   { ((JC_22:
+   { ((JC_<somenum>:
       (forall z:int32.
        ((ge_int(integer_of_int32(z), integer_of_int32(x_0@))
         and ge_int(integer_of_int32(z), integer_of_int32(y@))) ->
         ge_int(integer_of_int32(z), integer_of_int32(result)))))
-     and ((JC_20: ge_int(integer_of_int32(result), integer_of_int32(y@)))
-         and (JC_18:
+     and ((JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(y@)))
+         and (JC_<somenum>:
              ge_int(integer_of_int32(result), integer_of_int32(x_0@))))) }
 
 parameter safe_int32_of_integer_ :
@@ -493,52 +493,48 @@ parameter safe_int8_of_integer_ :
 
 let abs1_ensures_default =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_26: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (if ((lt_int_ (integer_of_int32 (C_14: ((safe_acc_ !int_P_int_M_p_1) p)))) (0))
      then
-      (C_13:
-      (let jessie_38 =
-      (let jessie_34 =
+      (let jessie_<somenum> =
       (C_11:
       (safe_int32_of_integer_ (C_10:
                               ((sub_int (0)) (integer_of_int32 (C_9:
                                                                ((safe_acc_ !int_P_int_M_p_1) p))))))) in
-      (let jessie_37 = p in
-      (((safe_upd_ int_P_int_M_p_1) jessie_37) jessie_34))) in void))
-     else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_27: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
+      (let jessie_<somenum> = p in
+      (((safe_upd_ int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>))) else void);
+    (raise Return); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: ge_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (0))) }
 
 let abs1_safety =
  fun (p : int_P pointer) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_26: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (if ((lt_int_ (integer_of_int32 (C_14:
-                                     (JC_31:
+                                     (JC_<somenum>:
                                      (((acc_ int_P_p_1_alloc_table) !int_P_int_M_p_1) p))))) (0))
      then
-      (C_13:
-      (let jessie_32 =
-      (let jessie_28 =
+      (let jessie_<somenum> =
       (C_11:
-      (JC_33:
+      (JC_<somenum>:
       (int32_of_integer_ (C_10:
                          ((sub_int (0)) (integer_of_int32 (C_9:
-                                                          (JC_32:
+                                                          (JC_<somenum>:
                                                           (((acc_ int_P_p_1_alloc_table) !int_P_int_M_p_1) p))))))))) in
-      (let jessie_31 = p in
-      (JC_34:
-      ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_31) jessie_28)))) in
-      void)) else void); (raise Return); (raise Return) end with Return ->
-   void end) { true }
+      (let jessie_<somenum> = p in
+      (JC_<somenum>:
+      ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>))))
+     else void); (raise Return); (raise Return) end with Return -> void end)
+  { true }
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -546,13 +542,13 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_5: eq_int(integer_of_int32(result), (0))) }
+   !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -560,73 +556,73 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_2 = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 let max_ensures_default =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_13 =
+       (let jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
        then (C_4: begin   (tmp := x_0); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_13: true) }
+  { (JC_<somenum>: true) }
 
 let max_ensures_result_ge_x =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_17 =
+       (let jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
        then (C_4: begin   (tmp := x_0); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_17: ge_int(integer_of_int32(result), integer_of_int32(x_0@))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(x_0@))) }
 
 let max_ensures_result_ge_y =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_21 =
+       (let jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
        then (C_4: begin   (tmp := x_0); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_19: ge_int(integer_of_int32(result), integer_of_int32(y@))) }
+  { (JC_<somenum>: ge_int(integer_of_int32(result), integer_of_int32(y@))) }
 
 let max_ensures_result_is_lub =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_25 =
+       (let jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
        then (C_4: begin   (tmp := x_0); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);
       (raise Return) end); absurd  end with Return -> !return end))
-  { (JC_21:
+  { (JC_<somenum>:
     (forall z:int32.
      ((ge_int(integer_of_int32(z), integer_of_int32(x_0@))
       and ge_int(integer_of_int32(z), integer_of_int32(y@))) ->
@@ -634,14 +630,14 @@ let max_ensures_result_is_lub =
 
 let max_safety =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_9 =
+       (let jessie_<somenum> =
        (if ((gt_int_ (integer_of_int32 x_0)) (integer_of_int32 y))
        then (C_4: begin   (tmp := x_0); !tmp end)
        else (C_3: begin   (tmp := y); !tmp end)) in void); (return := !tmp);

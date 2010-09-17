@@ -467,51 +467,46 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_24: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_4:
    begin
-     (C_4:
-     begin
-       (let jessie_12 =
-       (let jessie_8 = (safe_int32_of_integer_ (1)) in
-       (let jessie_11 = s_0 in
-       (((safe_upd_ int_P_int_M_s_1) jessie_11) jessie_8))) in void);
-      (assert { true };
-      (((C_5:
-        begin
-          (let jessie_13 = s_0 in (JC_34: (f1 jessie_13)));
-         (C_6: (let jessie_14 = s_0 in (JC_35: (f2 jessie_14)))) end))
-      {{ ((JC_32: (true = true))
-         and (JC_33:
-             not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
-             int_P_int_M_s_1, pset_empty))) }}));
-      (assert
-      { (JC_36: eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) };
-      void); void; (raise Return) end); (raise Return) end with Return ->
-   void end) { (JC_25: true) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let jessie_<somenum> = s_0 in
+     (((safe_upd_ int_P_int_M_s_1) jessie_<somenum>) jessie_<somenum>)));
+    (assert { true };
+    (((C_5:
+      begin
+        (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1 jessie_<somenum>)));
+       (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2 jessie_<somenum>)))) end))
+    {{ ((JC_<somenum>: (true = true))
+       and (JC_<somenum>:
+           not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
+           int_P_int_M_s_1, pset_empty))) }}));
+    (assert
+    { (JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) };
+    void); void; (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_24: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_4:
    begin
-     (C_4:
-     begin
-       (let jessie_6 =
-       (let jessie_2 = (safe_int32_of_integer_ (1)) in
-       (let jessie_5 = s_0 in
-       (((safe_upd_ int_P_int_M_s_1) jessie_5) jessie_2))) in void);
-      [ { } unit
-        { ((JC_29: (true = true))
-          and (JC_30:
-              not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
-              int_P_int_M_s_1, pset_empty))) } ];
-      [ { } unit reads int_P_int_M_s_1
-        { (JC_31:
-          eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) } ];
-      void; (raise Return) end); (raise Return) end with Return -> void end)
+     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let jessie_<somenum> = s_0 in
+     (((safe_upd_ int_P_int_M_s_1) jessie_<somenum>) jessie_<somenum>)));
+    [ { } unit
+      { ((JC_<somenum>: (true = true))
+        and (JC_<somenum>:
+            not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
+            int_P_int_M_s_1, pset_empty))) } ];
+    [ { } unit reads int_P_int_M_s_1
+      { (JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) } ];
+    void; (raise Return); (raise Return) end) with Return -> void end)
   { true }
 
 

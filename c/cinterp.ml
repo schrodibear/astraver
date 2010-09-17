@@ -134,9 +134,9 @@ let is_bin_op = function
   | _ -> false
 
 let rec is_pure e =
-  match e with
+  match e.expr_node with
     | Var _ | Deref _ | Cte _ -> true
-    | App(Var id,l) -> is_bin_op id && is_pure l
+    | App({ expr_node = Var id},l) -> is_bin_op id && is_pure l
     | App(e1,e2) -> is_pure e1 && is_pure e2
     | _ -> false
 
@@ -667,7 +667,7 @@ let interp_predicate_opt label old_label pred =
 
 
 let guarded_app f kind loc x y =
-  Output.Label (reg_loc ~kind loc, f x y)
+ make_label (reg_loc ~kind loc) (f x y)
 
 let guarded_make_app = guarded_app Output.make_app
 
@@ -678,8 +678,8 @@ let guarded_build_complex_app =
 
 
 let rounding_mode () = match !fp_rounding_mode with
-  | RM_dynamic -> Deref "rounding_mode"
-  | m -> Var (string_of_rounding_mode m)
+  | RM_dynamic -> mk_expr (Deref "rounding_mode")
+  | m -> mk_var (string_of_rounding_mode m)
 
 let interp_float_of_int ft e =
   let e = make_app "real_of_int" [e] in
@@ -762,24 +762,25 @@ let of_int loc (_,i as ik) e =
 
 let int_of (_,i as ik) e =
   if machine_ints && i <> ExactInt then
-    let name = Cenv.int_type_for ik in App (Var ("of_" ^ name), e)
+    let name = Cenv.int_type_for ik in make_app ("of_" ^ name) [e]
   else
     e
 
 let enum_of_int tag e =
   if enum_check then
-    let name = Cenv.enum_type_for tag in App (Var (name ^ "_of_int"), e)
+    let name = Cenv.enum_type_for tag in make_app (name ^ "_of_int") [e]
   else
     e
 
 let int_of_enum tag e =
   if enum_check then
-    let name = Cenv.enum_type_for tag in App (Var ("of_" ^ name), e)
+    let name = Cenv.enum_type_for tag in make_app ("of_" ^ name) [e]
   else
     e
 
 let guard_1 g e =
-  let v = tmp_var () in Let (v, e, Output.Assert (`ASSERT,g (LVar v), Var v))
+  let v = tmp_var () in 
+  mk_expr (Let (v, e, mk_expr (Output.Assert (`ASSERT,g (LVar v), mk_var v))))
 
 (* int conversion ty1 -> ty2 *)
 let interp_int_conversion loc ty1 ty2 e = 
@@ -831,12 +832,12 @@ let float_binop ~cmp fk opr ops opd opq =
       | Real -> opr
     in
     if cmp || fk = Real then
-      Var op
+      mk_var op
     else
-      App (Var (if fp_overflow_check then op ^ "_" else op), 
-	   rounding_mode ())
+      make_app (if fp_overflow_check then op ^ "_" else op)
+	[rounding_mode ()]
   else
-    Var opr
+    mk_var opr
 
 let float_unop fk = function
   | Cast.Uminus -> 
@@ -847,9 +848,9 @@ let float_unop fk = function
 	  | LongDouble -> "neg_quad"
 	  | Real -> assert false
 	in
-	App (Var op, rounding_mode ())
+	mk_expr (App (mk_var op, rounding_mode ()))
       else 
-	Var "neg_real"
+	mk_var "neg_real"
   | _ -> assert false
 
 (* arithmetic operations with overflow guards *)
@@ -1032,13 +1033,13 @@ open Cast
 
 let interp_bin_op = function
   | Badd_int _ | Bsub_int _ | Bmul_int _ | Bdiv_int _ | Bmod_int _ as op ->
-      Var (int_op op)
-  | Blt_int -> Var "lt_int_"
-  | Bgt_int -> Var "gt_int_"
-  | Ble_int -> Var "le_int_"
-  | Bge_int -> Var "ge_int_"
-  | Beq_int -> Var "eq_int_"
-  | Bneq_int -> Var "neq_int_" 
+      mk_var (int_op op)
+  | Blt_int -> mk_var "lt_int_"
+  | Bgt_int -> mk_var "gt_int_"
+  | Ble_int -> mk_var "le_int_"
+  | Bge_int -> mk_var "ge_int_"
+  | Beq_int -> mk_var "eq_int_"
+  | Bneq_int -> mk_var "neq_int_" 
   | Badd_float fk -> 
       float_binop ~cmp:false fk "add_real" "add_single" "add_double" "add_quad"
   | Bsub_float fk -> 
@@ -1060,26 +1061,27 @@ let interp_bin_op = function
       float_binop ~cmp:true fk "eq_real_" "eq_single" "eq_double" "eq_quad"
   | Bneq_float fk ->
       float_binop ~cmp:true fk "neq_real_" "neq_single" "neq_double" "neq_quad"
-  | Blt_pointer -> Var "lt_pointer_"
-  | Bgt_pointer -> Var "gt_pointer_"
-  | Ble_pointer -> Var "le_pointer_"
-  | Bge_pointer -> Var "ge_pointer_"
-  | Beq_pointer -> Var "eq_pointer"
-  | Bneq_pointer -> Var "neq_pointer" 
-  | Badd_pointer_int -> Var "shift_"
-  | Bsub_pointer -> Var "sub_pointer_"
-  | Bbw_and -> Var "bw_and"
-  | Bbw_xor -> Var "bw_xor"
-  | Bbw_or -> Var "bw_or"
-  | Bshift_left -> Var "lsl"
-  | Bshift_right -> Var "lsr"
+  | Blt_pointer -> mk_var "lt_pointer_"
+  | Bgt_pointer -> mk_var "gt_pointer_"
+  | Ble_pointer -> mk_var "le_pointer_"
+  | Bge_pointer -> mk_var "ge_pointer_"
+  | Beq_pointer -> mk_var "eq_pointer"
+  | Bneq_pointer -> mk_var "neq_pointer" 
+  | Badd_pointer_int -> mk_var "shift_"
+  | Bsub_pointer -> mk_var "sub_pointer_"
+  | Bbw_and -> mk_var "bw_and"
+  | Bbw_xor -> mk_var "bw_xor"
+  | Bbw_or -> mk_var "bw_or"
+  | Bshift_left -> mk_var "lsl"
+  | Bshift_right -> mk_var "lsr"
   (* should not happen *)
   | Badd | Bsub | Bmul | Bdiv | Bmod 
   | Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor ->
       assert false
 
-let int_one = Cte(Prim_int "1")
-let int_minus_one = Cte(Prim_int "(-1)")
+let int_zero = mk_expr (Cte(Prim_int "0"))
+let int_one = mk_expr (Cte(Prim_int "1"))
+let int_minus_one = mk_expr (Cte(Prim_int "(-1)"))
 
 let any_float fk = 
   if floats then match fk with
@@ -1092,30 +1094,30 @@ let any_float fk =
 
 let float_of_real r fk = 
   if floats then match fk with
-    | Float -> App (App (Var "r_to_s", rounding_mode ()), r)
-    | Double  -> App (App (Var "r_to_d", rounding_mode ()), r)
-    | LongDouble  -> App (App (Var "r_to_q", rounding_mode ()), r)
+    | Float -> make_app "r_to_s" [ rounding_mode (); r] 
+    | Double  -> make_app "r_to_d" [ rounding_mode () ; r]
+    | LongDouble  -> make_app "r_to_q" [ rounding_mode () ; r]
     | Real -> r
   else
     r
 
-let real_zero = Cte(Prim_real "0.0")
+let real_zero = mk_expr (Cte(Prim_real "0.0"))
 let float_zero = float_of_real real_zero
 
-let real_one = Cte(Prim_real "1.0")
+let real_one = mk_expr (Cte(Prim_real "1.0"))
 let float_one = float_of_real real_one
 
 let interp_incr_op ty op = match ty.Ctypes.ctype_node, op with
-  | (Tenum _ | Tint _), (Upostfix_inc | Uprefix_inc) -> Var "add_int", int_one
-  | (Tenum _ | Tint _), (Upostfix_dec | Uprefix_dec) -> Var "sub_int", int_one
+  | (Tenum _ | Tint _), (Upostfix_inc | Uprefix_inc) -> mk_var "add_int", int_one
+  | (Tenum _ | Tint _), (Upostfix_dec | Uprefix_dec) -> mk_var "sub_int", int_one
   | Tfloat fk, (Upostfix_inc | Uprefix_inc) -> 
       interp_bin_op (Badd_float fk), float_one fk
   | Tfloat fk, (Upostfix_dec | Uprefix_dec) -> 
       interp_bin_op (Bsub_float fk), float_one fk
   | (Tpointer _ | Tarray _), 
-    (Upostfix_inc | Uprefix_inc) -> Var "shift_", int_one
+    (Upostfix_inc | Uprefix_inc) -> mk_var "shift_", int_one
   | (Tpointer _ | Tarray _), 
-    (Upostfix_dec | Uprefix_dec) -> Var "shift_", int_minus_one
+    (Upostfix_dec | Uprefix_dec) -> mk_var "shift_", int_minus_one
   | _ -> assert false
 
 type interp_lvalue =
@@ -1126,31 +1128,31 @@ let build_complex_app e args =
   let rec build n e args =
     match args with
       | [] -> e
-      | [p] -> App(e,p)
-      | ((Var _) | (Cte _) as p)::l ->
-	  build n (App(e,p)) l
+      | [p] -> mk_expr (App(e,p))
+      | ({ expr_node = (Var _) | (Cte _)} as p)::l ->
+	  build n (mk_expr (App(e,p))) l
       | p::l ->
 	  let v = tmp_var () in
-	  Let(v,p, build (succ n) (App(e,Var(v))) l)
+	  mk_expr (Let(v,p, build (succ n) (mk_expr (App(e,mk_var v))) l))
   in
   match args with
-    | [] -> App(e,Void)
+    | [] -> mk_expr (App(e,void))
     | _ -> build 1 e args
 
 let build_minimal_app e args =
   match args with
-    | [] -> App(e,Void)
+    | [] -> mk_expr (App(e,void))
     | _ ->
 	if List.for_all is_pure args then
-	  List.fold_left (fun acc x -> App(acc,x)) e args
+	  List.fold_left (fun acc x -> mk_expr(App(acc,x))) e args
 	else
 	  build_complex_app e args
 
-let bin_op loc op t1 t2 = match op, t1, t2 with
+let bin_op loc op t1 t2 = match op, t1.expr_node, t2.expr_node with
   | Badd_pointer_int, _, Cte (Prim_int "0") ->
       t1
   | Beq_int, Cte (Prim_int n1), Cte (Prim_int n2) ->
-      Cte (Prim_bool (n1 = n2))
+      mk_expr (Cte (Prim_bool (n1 = n2)))
   | (Bdiv_int _ | Bmod_int _), _, _ ->
       guarded_make_app_e DivByZero loc (interp_bin_op op) [t1; t2]
   | _ ->
@@ -1158,13 +1160,16 @@ let bin_op loc op t1 t2 = match op, t1, t2 with
 
 let rec interp_expr e =
   let w = interp_expr_loc e in
-  if e.nexpr_loc = Loc.dummy_position then w else Loc (fst e.nexpr_loc, w)
+  if e.nexpr_loc = Loc.dummy_position then w else 
+    mk_expr (Loc (fst e.nexpr_loc, w))
 
 and interp_expr_loc e =
   let loc = e.nexpr_loc in
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
-	let t = Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c))) in
+	let t = 
+          mk_expr (Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c))))
+        in
 	if machine_ints then begin 
 	  match e.nexpr_type.Ctypes.ctype_node with
 	  | Tint si -> of_int loc si t
@@ -1173,10 +1178,10 @@ and interp_expr_loc e =
 	end else 
 	  t
     | NEconstant (RealConstant c) ->
-	Cte (Prim_real c)
+	mk_expr (Cte (Prim_real c))
     | NEvar( Var_info v) -> 
 	let n = heap_var_name v in
-	if v.var_is_assigned then Deref n else Var n
+	if v.var_is_assigned then mk_expr (Deref n) else mk_var n
     | NEvar (Fun_info _v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | NEbinary (_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
@@ -1186,10 +1191,11 @@ and interp_expr_loc e =
 		  |Beq_pointer | Bneq_pointer 
 		  |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
     | NEunary (Unot, _) ->
-	let w = match interp_boolean_expr e with (* partial evaluation *)
-	  | Cte (Prim_bool true) -> Cte (Prim_int "1")
-	  | Cte (Prim_bool false) -> Cte (Prim_int "0")
-	  | e -> If (e, Cte (Prim_int "1"), Cte (Prim_int "0"))
+        let b = interp_boolean_expr e in
+	let w = match b.expr_node with (* partial evaluation *)
+	  | Cte (Prim_bool true) -> int_one
+	  | Cte (Prim_bool false) -> int_zero
+	  | _ -> mk_expr (If (b, int_one, int_zero))
 	in
 	interp_int_conversion loc c_exact_int e.nexpr_type w
     | NEbinary (e1, (Badd_int _ | Bsub_int _ | Bmul_int _ |
@@ -1207,32 +1213,32 @@ and interp_expr_loc e =
 	  match interp_lvalue e with
 	    | LocalRef v ->
 		let n = v.var_unique_name in
-		append (Assign(n,interp_expr e2)) (Deref n)
+		append (mk_expr (Assign(n,interp_expr e2))) (mk_expr (Deref n))
 	    | HeapRef (Valid(a,b),var,e1) ->
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
 		if (a <= Int64.zero && b > Int64.zero) then 
-		  Let(tmp1, e1,
-		      Let(tmp2, interp_expr e2,
-			  append (build_complex_app (Var "safe_upd_")
-				    [Var var; Var tmp1; Var tmp2])
-			    (Var tmp2)))
+		  mk_expr (Let(tmp1, e1,
+		      mk_expr(Let(tmp2, interp_expr e2,
+			  append (build_complex_app (mk_var "safe_upd_")
+				    [mk_var var; mk_var tmp1; mk_var tmp2])
+			    (mk_var tmp2)))))
 		else
-		  Let(tmp1, e1,
-		      Let(tmp2, interp_expr e2,
+		  mk_expr (Let(tmp1, e1,
+		      mk_expr (Let(tmp2, interp_expr e2,
 			  append (guarded_build_complex_app 
 				     PointerDeref loc "upd_"
-				     [Var var; Var tmp1; Var tmp2])
-			    (Var tmp2)))
+				     [mk_var var; mk_var tmp1; mk_var tmp2])
+			    (mk_var tmp2)))))
 	    | HeapRef (Not_valid,var,e1) ->	
 		let tmp1 = tmp_var () in
 		let tmp2 = tmp_var () in
-		Let(tmp1, e1,
-		    Let(tmp2, interp_expr e2,
+		mk_expr (Let(tmp1, e1,
+		    mk_expr (Let(tmp2, interp_expr e2,
 			append (guarded_build_complex_app 
 				   PointerDeref loc "upd_"
-				   [Var var; Var tmp1; Var tmp2])
-			  (Var tmp2)))
+				   [mk_var var; mk_var tmp1; mk_var tmp2])
+			  (mk_var tmp2)))))
 	end 
     | NEincr(op,e) -> 
 	interp_incr_expr op e
@@ -1241,51 +1247,52 @@ and interp_expr_loc e =
 	  | LocalRef(v) ->
 	      let n = v.var_unique_name in
 	      append
-	        (Assign(n, bin_op loc op (Deref n) (interp_expr e2)))
-	        (Deref n)
+	        (mk_expr (Assign(n, bin_op loc op (mk_expr(Deref n)) 
+                                   (interp_expr e2))))
+	        (mk_expr (Deref n))
 	  | HeapRef(Valid (a,b),var,e1) -> 
 	      let tmp1 = tmp_var () in
 	      let tmp2 = tmp_var () in
 	      if (a<= Int64.zero && b> Int64.zero)	  
 	      then
-		Let(tmp1, e1,
-		    Let(tmp2, 
+		mk_expr (Let(tmp1, e1,
+		    mk_expr (Let(tmp2, 
 			bin_op loc op
-			  (make_app "safe_acc_" [Var var; Var tmp1]) 
+			  (make_app "safe_acc_" [mk_var var; mk_var tmp1]) 
 			  (interp_expr e2),
 			append
-			  (build_complex_app (Var "safe_upd_") 
-				 [Var var; Var tmp1; Var tmp2])
-			  (Var tmp2))) 
+			  (build_complex_app (mk_var "safe_upd_") 
+				 [mk_var var; mk_var tmp1; mk_var tmp2])
+			  (mk_var tmp2)))))
 	      else
-		Let(tmp1, e1,
-			Let(tmp2, 
+		mk_expr (Let(tmp1, e1,
+			mk_expr (Let(tmp2, 
 			    bin_op loc op
-			      (make_app "acc_" [Var var; Var tmp1]) 
+			      (make_app "acc_" [mk_var var; mk_var tmp1]) 
 			      (interp_expr e2),
 			    append
-			      (build_complex_app (Var "safe_upd_") 
-				 [Var var; Var tmp1; Var tmp2])
-			      (Var tmp2))) 
-		| HeapRef(Not_valid,var,e1) ->
+			      (build_complex_app (mk_var "safe_upd_") 
+				 [mk_var var; mk_var tmp1; mk_var tmp2])
+			      (mk_var tmp2))) ))
+	  | HeapRef(Not_valid,var,e1) ->
 		    let tmp1 = tmp_var () in
 		    let tmp2 = tmp_var () in
-		    Let(tmp1, e1,
-			Let(tmp2, 
+		    mk_expr (Let(tmp1, e1,
+			mk_expr (Let(tmp2, 
 			    bin_op loc op
-			      (make_app "acc_" [Var var; Var tmp1]) 
+			      (make_app "acc_" [mk_var var; mk_var tmp1]) 
 			      (interp_expr e2),
 			    append
-			      (build_complex_app (Var "safe_upd_") 
-				 [Var var; Var tmp1; Var tmp2])
-			      (Var tmp2))) 
+			      (build_complex_app (mk_var "safe_upd_") 
+				 [mk_var var; mk_var tmp1; mk_var tmp2])
+			      (mk_var tmp2)))))
 	end 
     | NEseq(e1,e2) ->
 	append (interp_statement_expr e1) (interp_expr e2)
     | NEnop -> 
-	Void
+	void
     | NEcond(e1,e2,e3) ->
-	If (interp_boolean_expr e1, interp_expr e2, interp_expr e3)
+	mk_expr (If (interp_boolean_expr e1, interp_expr e2, interp_expr e3))
     | NEstring_literal _s -> 
 	unsupported e.nexpr_loc "string literal"
     | NEarrow (e,_z,s) ->
@@ -1302,10 +1309,10 @@ and interp_expr_loc e =
 	  match valid with 
 	    | Valid (a,b) ->
 		if (a<= Int64.zero && b>Int64.one)
-		then Output.make_app "safe_acc_" [Var(var);te] 
-		else guarded_make_app PointerDeref loc "acc_" [Var(var);te]
+		then Output.make_app "safe_acc_" [mk_var(var);te] 
+		else guarded_make_app PointerDeref loc "acc_" [mk_var(var);te]
 	    | Not_valid -> 
-		guarded_make_app PointerDeref loc "acc_" [Var(var);te] 
+		guarded_make_app PointerDeref loc "acc_" [mk_var(var);te] 
 	end
     | NEunary (Ustar, _e) -> assert false
     | NEunary (Uplus, e) ->
@@ -1336,7 +1343,7 @@ and interp_expr_loc e =
 	interp_call e args assoc
     | NEcast({Ctypes.ctype_node = Tpointer _}, 
 	     {nexpr_node = NEconstant (IntConstant "0")}) ->
-	Var "null"
+	mk_var "null"
     | NEcast (t,e1) -> 
 	begin match t.Ctypes.ctype_node, e1.nexpr_type.Ctypes.ctype_node with
 	  | (Tenum _ | Tint _), (Tenum _ | Tint _) ->
@@ -1362,7 +1369,8 @@ and interp_int_expr e =
 
 and interp_boolean_expr e =
   let w = interp_boolean_expr_loc e in
-  if e.nexpr_loc = Loc.dummy_position then w else Loc (fst e.nexpr_loc, w)
+  if e.nexpr_loc = Loc.dummy_position then w else 
+    mk_expr (Loc (fst e.nexpr_loc, w))
 
 and interp_boolean_expr_loc e = 
   let loc = e.nexpr_loc in
@@ -1377,24 +1385,24 @@ and interp_boolean_expr_loc e =
 		   |Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
 	bin_op loc op (interp_expr e1) (interp_expr e2)
     | NEbinary (e1, Band, e2) ->
-	And(interp_boolean_expr e1, interp_boolean_expr e2)
+        mk_expr (And(interp_boolean_expr e1,interp_boolean_expr e2))
     | NEbinary (e1, Bor, e2) ->
-	Or(interp_boolean_expr e1, interp_boolean_expr e2)
+	mk_expr (Or(interp_boolean_expr e1,interp_boolean_expr e2))
     | NEunary (Unot, e) ->
-	Not(interp_boolean_expr e)
+	mk_expr (Not(interp_boolean_expr e))
     (* otherwise e <> 0 *)
     | _ -> 
 	let e,cmp,zero = match e.nexpr_type.Ctypes.ctype_node with
 	  | Tenum _ | Tint _ -> 
-	      interp_int_expr e, "neq_int_", Cte (Prim_int "0")
+	      interp_int_expr e, "neq_int_", int_zero
 	  | Tfloat _fk -> 
-	      interp_expr e, "neq_real_", Cte (Prim_real "0.0")
+	      interp_expr e, "neq_real_", real_zero
 	  | Tarray _ | Tpointer _ -> 
-	      interp_expr e, "neq_pointer", Var "null"
+	      interp_expr e, "neq_pointer", mk_var "null"
 	  | _ -> 
 	      assert false
 	in
-	build_complex_app (Var cmp) [e; zero]
+	build_complex_app (mk_var cmp) [e; zero]
 
 and interp_incr_expr op e =
   let top,one = interp_incr_op e.nexpr_type op in
@@ -1405,46 +1413,47 @@ and interp_incr_expr op e =
 	begin
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
-		Let("caduceus",
-		    to_int (Deref v.var_unique_name),
+		mk_expr (Let("caduceus",
+		    to_int (mk_expr (Deref v.var_unique_name)),
 		    append 
-		      (Assign (v.var_unique_name,
-			       of_int (make_app_e top [Var "caduceus";one])))
-		      (Var "caduceus"))
+		      (mk_expr (Assign (v.var_unique_name,
+			       of_int (make_app_e top [mk_var "caduceus";one]))))
+		      (mk_var "caduceus")))
 	    | Uprefix_dec | Uprefix_inc ->
 		let n = v.var_unique_name in
 		append 
-		  (Assign(n, of_int (App(App(top, to_int (Deref n)), one))))
-		  (Deref n)
+		  (mk_expr (Assign(n, 
+                                   of_int (mk_expr (App(mk_expr (App(top, to_int (mk_expr (Deref n)))), one))))))
+		  (mk_expr (Deref n))
 	end
     | HeapRef(valid,var,e') ->
 	begin
 	  let acc = match valid with 
 	    | Valid(a,b) ->
 		if (a <= Int64.zero && b > Int64.one)
-		then make_app "safe_acc_" [Var var;Var "caduceus1"]
-		else make_app "acc_" [Var var;Var "caduceus1"] 
-	    | Not_valid -> make_app "acc_" [Var var;Var "caduceus1"] 
+		then make_app "safe_acc_" [mk_var var;mk_var "caduceus1"]
+		else make_app "acc_" [mk_var var;mk_var "caduceus1"] 
+	    | Not_valid -> make_app "acc_" [mk_var var;mk_var "caduceus1"] 
 	  in
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
-		Let("caduceus1",e',
-		    Let("caduceus2",
+		mk_expr (Let("caduceus1",e',
+		    mk_expr (Let("caduceus2",
 		        acc,
 			append
 			  (make_app "safe_upd_" 
-			     [Var var; Var "caduceus1";
+			     [mk_var var; mk_var "caduceus1";
 			      of_int (make_app_e top 
-					 [one; to_int (Var "caduceus2")])])
-			  (Var "caduceus2")))
+					 [one; to_int (mk_var "caduceus2")])])
+			  (mk_var "caduceus2")))))
 	    | Uprefix_dec | Uprefix_inc ->
-		Let("caduceus1",e',
-		    Let("caduceus2",
+		mk_expr (Let("caduceus1",e',
+		    mk_expr (Let("caduceus2",
 			of_int (make_app_e top [to_int acc; one]),
 			append
 			  (make_app "safe_upd_" 
-			     [Var var; Var "caduceus1"; Var "caduceus2"])
-			  (Var "caduceus2")))
+			     [mk_var var; mk_var "caduceus1"; mk_var "caduceus2"])
+			  (mk_var "caduceus2")))))
 	end		      
 
 and interp_lvalue e =
@@ -1469,8 +1478,8 @@ and interp_address e = match e.nexpr_node with
   | NEvar (Var_info v) -> 
       assert (v.var_is_referenced); 
        begin match e.nexpr_type.Ctypes.ctype_node with
-       | Tstruct _ | Tunion _ -> Deref v.var_unique_name
-       | _ -> Var v.var_unique_name
+       | Tstruct _ | Tunion _ -> mk_expr (Deref v.var_unique_name)
+       | _ -> mk_var v.var_unique_name
        end
   | NEvar (Fun_info _v) -> unsupported e.nexpr_loc "& operator on functions"
   | NEunary (Ustar, _) -> assert false
@@ -1490,12 +1499,12 @@ and interp_address e = match e.nexpr_node with
 	    begin 
 	      match valid with 
 		| Valid (a,b)-> if (a<= Int64.zero && Int64.zero < b) 
-		  then build_complex_app (Var "safe_acc_")
-		    [Var var; interp_expr e1]
-		  else build_complex_app (Var "acc_")
-		    [Var var; interp_expr e1]
-		| Not_valid -> build_complex_app (Var "acc_")
-		    [Var var; interp_expr e1]
+		  then build_complex_app (mk_var "safe_acc_")
+		    [mk_var var; interp_expr e1]
+		  else build_complex_app (mk_var "acc_")
+		    [mk_var var; interp_expr e1]
+		| Not_valid -> build_complex_app (mk_var "acc_")
+		    [mk_var var; interp_expr e1]
 	    end
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
       end
@@ -1508,21 +1517,21 @@ and interp_statement_expr e =
     | NEseq(e1,e2) ->
 	append (interp_statement_expr e1) (interp_statement_expr e2)
     | NEnop -> 
-	Void
+	void
     | NEassign(l,e) ->
 	begin
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
-		Assign(v.var_unique_name,interp_expr e)
+		mk_expr (Assign(v.var_unique_name,interp_expr e))
 	    | HeapRef(valid,var,e1) ->
 		  match valid with 
 		    | Valid (a,b) when a<= Int64.zero && Int64.zero <b ->
 			build_complex_app
-			  (Var "safe_upd_") [Var var;e1; interp_expr e]
+			  (mk_var "safe_upd_") [mk_var var;e1; interp_expr e]
 		    | Valid _ | Not_valid -> 
 			guarded_build_complex_app PointerDeref l.nexpr_loc
 			  "upd_" 
-			  [Var var;e1; interp_expr e]
+			  [mk_var var;e1; interp_expr e]
 	end 
     | NEincr(op,e) ->
 	let top,one = interp_incr_op e.nexpr_type op in
@@ -1531,48 +1540,49 @@ and interp_statement_expr e =
 	begin
 	  match interp_lvalue e with
 	    | LocalRef v ->
-		Assign(v.var_unique_name,
+		mk_expr (Assign(v.var_unique_name,
 		       of_int (make_app_e top 
-				  [to_int (Deref v.var_unique_name); one]))
+				  [to_int (mk_expr (Deref v.var_unique_name)); one])))
 	    | HeapRef(valid,var,e1) -> 
 		let acc = match valid with 
 		  | Valid(a,b) -> 
 		      if (a <= Int64.zero && Int64.zero < b) 
-		      then make_app "safe_acc_" [Var var; Var "caduceus1"]
-		      else  make_app "acc_"[Var var; Var "caduceus1"]
-		  | Not_valid ->  make_app "acc_"[Var var; Var "caduceus1"]
+		      then make_app "safe_acc_" [mk_var var; mk_var "caduceus1"]
+		      else  make_app "acc_"[mk_var var; mk_var "caduceus1"]
+		  | Not_valid ->  make_app "acc_"[mk_var var; mk_var "caduceus1"]
 		in
-		Let("caduceus1",e1,
-		    Let("caduceus2",
+		mk_expr (Let("caduceus1",e1,
+		    mk_expr (Let("caduceus2",
 		        to_int acc,
 			make_app "safe_upd_"
-			  [Var var; Var "caduceus1"; 
-			   of_int (make_app_e top [Var "caduceus2"; one])]))
+			  [mk_var var; mk_var "caduceus1"; 
+			   of_int (make_app_e top [mk_var "caduceus2"; one])]))))
 	end
     | NEcall {ncall_fun = e1;ncall_args =  args;ncall_zones_assoc = assoc} -> 
 	let app = interp_call e1 args assoc in
 	if e.nexpr_type.Ctypes.ctype_node = Tvoid then
 	  app
 	else
-	  Let (tmp_var (), app, Void)
+	  mk_expr (Let (tmp_var (), app, void))
     | NEassign_op (l, op, e) -> 
 	begin
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
 		let n = v.var_unique_name in
-		Assign(n, bin_op e.nexpr_loc op (Deref n) (interp_expr e))
+		mk_expr (Assign(n, bin_op e.nexpr_loc op (mk_expr (Deref n)) 
+                         (interp_expr e)))
 	    | HeapRef(valid,var,e1) -> 
 		let acc = match valid with 
 		  | Valid(a,b) -> if (a<= Int64.zero && Int64.zero <b) 
-		    then make_app "safe_acc_" [Var var;Var "caduceus1"]
-		    else make_app "acc_"[Var var;Var "caduceus1"]
-		  | Not_valid -> make_app "acc_"[Var var;Var "caduceus1"]
+		    then make_app "safe_acc_" [mk_var var;mk_var "caduceus1"]
+		    else make_app "acc_"[mk_var var;mk_var "caduceus1"]
+		  | Not_valid -> make_app "acc_"[mk_var var;mk_var "caduceus1"]
 		in
-		Let("caduceus1",e1,
-		    Let("caduceus2",acc ,
+		mk_expr (Let("caduceus1",e1,
+		    mk_expr (Let("caduceus2",acc ,
 			make_app "safe_upd_"
-			  [Var var; Var "caduceus1"; 
-			   bin_op e.nexpr_loc op (Var "caduceus2") (interp_expr e)]))
+			  [mk_var var; mk_var "caduceus1"; 
+			   bin_op e.nexpr_loc op (mk_var "caduceus2") (interp_expr e)]))))
 	end 
     | NEcast (_, _)
     | NEcond (_, _, _)
@@ -1599,11 +1609,11 @@ and interp_call e1 args assoc =
 	  (fun (z0,z1,s,_) l -> 
 	     let z = repr z1 in
 	     if z0.zone_is_var then
-	       Var(zoned_name s (Pointer z))::l
+	       mk_var(zoned_name s (Pointer z))::l
 	     else l)
 	  reads targs 
 	in
-	build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
+	build_complex_app (mk_var (v.fun_unique_name ^ "_parameter")) 
 	  targs
     | _ -> 
 	unsupported e1.nexpr_loc "call of a non-variable function"
@@ -2012,7 +2022,7 @@ let interp_invariant label effects annot =
 
 let new_label = let r = ref 0 in fun () -> incr r; "label_" ^ string_of_int !r
 
-let try_with_void ex e = Try (e, ex, None, Void)  
+let try_with_void ex e = mk_expr (Try (e, ex, None, void))
 
 let break b e = if b then try_with_void "Break" e else e
 
@@ -2035,13 +2045,14 @@ let catch_return e = match !abrupt_return with
   | None -> 
       e
   | Some "Return" ->
-      Try (e, "Return", None, Void)
+      mk_expr (Try (e, "Return", None, void))
   | Some "Return_pointer" ->
-      Let_ref("caduceus_return", Var "null",
-	      Try (e, "Return_pointer", None, Deref "caduceus_return"))
+      mk_expr 
+        (Let_ref("caduceus_return", mk_var "null",
+	         (mk_expr (Try (e, "Return_pointer", None, (mk_expr (Deref "caduceus_return")))))))
   | Some r ->
       let tmp = tmp_var () in
-      Try (append e Absurd, r, Some tmp, Var tmp)
+      mk_expr (Try (append e (mk_expr Absurd), r, Some tmp, mk_var tmp))
 
 let unreachable_block = function
   | [] -> ()
@@ -2059,9 +2070,10 @@ let make_switch_condition tmp l =
       IntMap.fold 
 	(fun _x n test -> 
 	   make_or_expr 
-	     (App(App (Var "eq_int_",Var tmp), interp_int_expr n)) test) 
+	     (mk_expr (App(mk_expr (App (mk_var "eq_int_", mk_var tmp)), 
+                           interp_int_expr n))) test) 
 	l
-	(Cte (Prim_bool false))
+	(mk_expr (Cte (Prim_bool false)))
     in
     (a,l)
     
@@ -2074,9 +2086,10 @@ let make_switch_condition_default tmp l used_cases=
     IntMap.fold 
       (fun _x e test -> 
 	 make_and_expr 
-	   (App(App (Var "neq_int_",Var tmp), interp_int_expr e)) test)
+	   (mk_expr (App(mk_expr (App (mk_var "neq_int_", mk_var tmp)), 
+                         interp_int_expr e))) test)
       fl
-      (Cte (Prim_bool true))
+      (mk_expr (Cte (Prim_bool true)))
   in
   cond,fl
 
@@ -2102,34 +2115,37 @@ let append_block e (f,l) = (append e f,l)
 
 let rec interp_statement ab may_break stat = 
   let e = interp_statement_loc ab may_break stat in
-  if stat.nst_loc = Loc.dummy_position then e else Loc (fst stat.nst_loc, e)
+  if stat.nst_loc = Loc.dummy_position then e else 
+    mk_expr (Loc (fst stat.nst_loc, e))
 
 and interp_statement_loc ab may_break stat = match stat.nst_node with
   | NSnop -> 
-      Void
+      void
   | NSexpr e ->
       interp_statement_expr e
   | NSreturn eopt ->
       if ab then match eopt with
 	| None -> 
 	    abrupt_return := Some "Return";
-	    Raise ("Return", None)
+	    mk_expr (Raise ("Return", None))
 	| Some e -> 
 	    let r = return_exn e.nexpr_type in 
 	    abrupt_return := Some r;
 	    if r = "Return_pointer" then
-	      Block [Assign ("caduceus_return", interp_expr e); 
-		     Raise ("Return_pointer", None)]
+	      mk_expr 
+                (Block([mk_expr (Assign ("caduceus_return", interp_expr e)); 
+		        mk_expr (Raise ("Return_pointer", None))]))
 	    else
-	      Raise (r, Some (interp_expr e))
+	      mk_expr (Raise (r, Some (interp_expr e)))
       else begin match eopt with
-	| None -> Void
+	| None -> void
 	| Some e -> interp_expr e
       end
   | NSif(e,s1,s2) -> 
-      If(interp_boolean_expr e,
-	 (interp_statement ab may_break s1), 
-	 (interp_statement ab may_break s2))
+      mk_expr 
+        (If(interp_boolean_expr e,
+	    (interp_statement ab may_break s1), 
+	    (interp_statement ab may_break s2)))
   | NSfor(annot,e1,e2,e3,body) ->
       let label = new_label () in
       let ef = 
@@ -2140,9 +2156,8 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
 	     (Ceffect.statement body))
       in
       let (inv,dec) = interp_invariant label ef annot in
-      Output.Label 
-	(label,
-	 append
+      make_label label
+	(append
 	   (interp_statement_expr e1)
 	   (break body.nst_break 
 	      (make_while (interp_boolean_expr e2) inv dec 
@@ -2156,33 +2171,32 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
 	Ceffect.ef_union (Ceffect.expr e) (Ceffect.statement s) 
       in
       let (inv,dec) = interp_invariant label ef annot in
-      Output.Label 
-	(label,
-	 break s.nst_break
-	    (make_while (interp_boolean_expr e) inv dec 
-	       (continue s.nst_continue 
-		  (interp_statement true (ref false) s))))
+      make_label label
+	(break s.nst_break
+	   (make_while (interp_boolean_expr e) inv dec 
+	      (continue s.nst_continue 
+		 (interp_statement true (ref false) s))))
   | NSdowhile(annot,s,e) -> 
       let label = new_label () in
       let ef = 	Ceffect.ef_union (Ceffect.expr e) (Ceffect.statement s) 
       in
       let (inv,dec) = interp_invariant label ef annot in
-      Output.Label 
-	(label,
-	 break true
-	   (make_while (Cte (Prim_bool true)) inv dec
+      make_label label
+	(break true
+	   (make_while (mk_expr (Cte (Prim_bool true))) inv dec
 	      (append 
 		 (continue s.nst_continue
 		    (interp_statement true (ref false) s))
-		 (If (Not (interp_boolean_expr e), 
-		      Raise ("Break", None), Void)))))
+		 (mk_expr (If (mk_expr (Not (interp_boolean_expr e)), 
+		               mk_expr (Raise("Break", None)), 
+                               void))))))
   | NSblock(b) -> 
       interp_block ab may_break b
   | NSbreak -> 
       may_break := true;
-      Raise ("Break", None)
+      mk_expr (Raise ("Break", None))
   | NScontinue -> 
-      Raise ("Continue", None)
+      mk_expr (Raise ("Continue", None))
   | NSlabel(lab,s) -> 
       if lab.times_used = 0 then
 	begin
@@ -2192,10 +2206,10 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       else
 	begin
 	  Hashtbl.add labels_table lab.label_info_name ();
-	  Output.Label (lab.label_info_name, interp_statement ab may_break s)
+	  make_label lab.label_info_name (interp_statement ab may_break s)
 	end
   | NSgoto(GotoForwardOuter,lab) ->
-      Raise ("Goto_" ^ lab.label_info_name, None)
+      mk_expr (Raise ("Goto_" ^ lab.label_info_name, None))
   | NSgoto(GotoForwardInner,_lab) ->
       unsupported stat.nst_loc "forward inner goto"
   | NSgoto(GotoBackward,_lab) ->
@@ -2207,20 +2221,20 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       let tmp = tmp_var() in
       let switch_may_break = ref false in
       let res = 
-	Output.Let(tmp, interp_int_expr e,
+	mk_expr (Output.Let(tmp, interp_int_expr e,
 		   interp_switch tmp (*ab*) true switch_may_break l 
-		     IntMap.empty used_cases false)
+		     IntMap.empty used_cases false))
       in
       if !switch_may_break then
-	Try(res,"Break", None,Void)
+	mk_expr (Try(res,"Break", None,void))
       else
 	res
   | NSassert(pred) -> 
-      Output.Assert(`ASSERT,interp_predicate None "init" pred, Void)
+      mk_expr (Output.Assert(`ASSERT,interp_predicate None "init" pred, void))
   | NSassume pred -> 
       (* Abusing assumptions endangers your proof ... *)
       let post,_ = interp_predicate None "init" pred, Void in
-      BlackBox (Annot_type (LTrue, unit_type, [], [], post, []))
+      mk_expr (BlackBox (Annot_type (LTrue, unit_type, [], [], post, [])))
   | NSlogic_label(_l) -> 
       assert false
 (*
@@ -2229,7 +2243,7 @@ Output.Label (l, Void)
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
       let pre,_,post = interp_spec false eff spec in
-      Triple(true,pre,interp_statement ab may_break s,post,[])
+      mk_expr (Triple(true,pre,interp_statement ab may_break s,post,[]))
   | NSdecl(ctype,v,init,rem) -> 
       lprintf 
 	"translating local declaration of %s@." v.var_unique_name;
@@ -2237,20 +2251,20 @@ Output.Label (l, Void)
 	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
 	      | Tenum s when enum_check ->    
-		  App (Var ("any_" ^ Cenv.enum_type_for s), Var "void") 
+		  mk_expr(App (mk_var ("any_" ^ Cenv.enum_type_for s), void) )
 	      | Tint (_,i as si) when i <> ExactInt && machine_ints ->
-		  App (Var ("any_" ^ Cenv.int_type_for si), Var "void")
+		  mk_expr(App (mk_var ("any_" ^ Cenv.int_type_for si), void))
 	      | Tenum _ | Tint _ ->
-		  App (Var "any_int", Var "void")
+		  mk_expr(App (mk_var "any_int", void))
 	      | Tfloat fk -> 
-		  App (Var (any_float fk), Var "void")
+		  mk_expr(App (mk_var (any_float fk), void))
 	      | Tarray (_,_, None) | Tpointer _ -> 
-		  App (Var "any_pointer", Var "void")
+		  mk_expr(App (mk_var "any_pointer", void))
 	      | Tarray (_,_, Some n) ->
-		  App (Var "alloca_parameter", 
-		       Cte (Prim_int (Int64.to_string n)))
+		  mk_expr(App (mk_var "alloca_parameter", 
+		       mk_expr (Cte (Prim_int (Int64.to_string n)))))
 	      | Tstruct _ | Tunion _ ->
-		  App (Var "alloca_parameter", Cte (Prim_int "1"))
+		  mk_expr(App (mk_var "alloca_parameter", mk_expr (Cte (Prim_int "1"))))
 	      | Tvoid | Tvar _ | Tfun _ -> 
 		  assert false
 	    end,([],[])
@@ -2263,20 +2277,20 @@ Output.Label (l, Void)
 				   acc@[interp_statement ab may_break x]) 
 		   [] decl in
       if v.var_is_static then (* if static then still globally declared *)
-	Block (decl@[interp_statement ab may_break rem])
+	make_block [] (decl@[interp_statement ab may_break rem])
       else
-	if v.var_is_assigned then
+	mk_expr (if v.var_is_assigned then
 	  Let_ref(v.var_unique_name,tinit,
-		 Block (decl@[interp_statement ab may_break rem]))
+		 make_block [] (decl@[interp_statement ab may_break rem]))
 	else
 	  Let(v.var_unique_name,tinit,
-	     Block (decl@[interp_statement ab may_break rem]))
+	     make_block [] (decl@[interp_statement ab may_break rem])))
 
 
 and interp_block ab may_break statements =
   let rec block = function
     | [] -> 
-	Void,[]
+	void,[]
     | { nst_loc = loc ; nst_node = NSlabel(lab,st) } :: bl ->
 	if lab.times_used = 0 then 
 	  begin
@@ -2286,10 +2300,11 @@ and interp_block ab may_break statements =
 	else
 	  let (be,bl) = block (st::bl) in
 	  Hashtbl.add labels_table lab.label_info_name ();
-	  Raise("Goto_"^lab.label_info_name,None),(lab,be)::bl
+	  (mk_expr(Raise("Goto_"^lab.label_info_name,None))),
+        (lab,be)::bl
     | {nst_loc = _loc ; nst_node = NSlogic_label(l) } :: bl -> 
 	  let (be,bl) = block bl in
-	  Output.Label(l, be), bl
+	  (make_label l be), bl
     | [s] ->
 	interp_statement ab may_break s,[]
     | { nst_node = NSnop } :: bl ->
@@ -2303,12 +2318,12 @@ and interp_block ab may_break statements =
 	      interp_statement ab may_break s,[]
 	  | true, false ->
 	      let (be,bl) = block (s1::bl) in
-	      If (interp_boolean_expr e, 
-		  be, interp_statement ab may_break s2), bl
+	      mk_expr (If (interp_boolean_expr e, 
+		           be, interp_statement ab may_break s2)), bl
 	  | false, true ->
 	      let (be,bl) = block (s2::bl) in
-	      If (interp_boolean_expr e,
-		  interp_statement ab may_break s1, be), bl
+	      mk_expr (If (interp_boolean_expr e,
+		           interp_statement ab may_break s1, be)), bl
 	end
     | s :: bl ->
 	if not s.nst_term then unreachable_block bl;
@@ -2317,7 +2332,7 @@ and interp_block ab may_break statements =
   let be,bl = block statements in
   List.fold_left 
     (fun acc (lab,e) ->
-       Try(acc,"Goto_"^lab.label_info_name,None,e)) be bl
+       mk_expr(Try(acc,"Goto_"^lab.label_info_name,None,e))) be bl
 
 
 and interp_switch tmp ab may_break l c used_cases post_default =
@@ -2330,16 +2345,16 @@ and interp_switch tmp ab may_break l c used_cases post_default =
 	  let (linstr,final) = interp_case ab may_break i in
 	  if final 
 	  then
-	    Output.If(a,
-		      Block linstr
+	    mk_expr(Output.If(a,
+		      make_block [] linstr
 			,
-			interp_switch tmp ab may_break l lc used_cases false)
+			interp_switch tmp ab may_break l lc used_cases false))
 	  else
-	    Block ((Output.If(a,
-			      Block linstr
+	    make_block [] ((mk_expr (Output.If(a,
+			      make_block [] linstr
 				,
-				Void))::[interp_switch tmp ab may_break l lc 
-					   used_cases true])	
+				void)))::[interp_switch tmp ab may_break l lc 
+					   used_cases true])
 	else  
 	  let (a,lc) = 
 	    if post_default
@@ -2356,16 +2371,17 @@ and interp_switch tmp ab may_break l c used_cases post_default =
 	  let (linstr,final) = interp_case ab may_break i in
 	  if final
 	  then
-	    Output.If(a,
-		      Block linstr,
+	    mk_expr(Output.If(a,
+		      make_block [] linstr,
 		      interp_switch tmp ab may_break l 
-			IntMap.empty used_cases false)
+			IntMap.empty used_cases false))
 	  else
-	    Block ([Output.If(a,
-			      Block linstr,
-			      Void);interp_switch tmp ab may_break 
-		      l lc  used_cases post_default])
-    | [] -> Void
+	    make_block [] [mk_expr (Output.If(a,
+			      make_block [] linstr,
+			      void));
+                        interp_switch tmp ab may_break 
+		          l lc  used_cases post_default]
+    | [] -> void
 
 and interp_case ab may_break i =
   match i with
@@ -2689,10 +2705,12 @@ let interp_c_fun _fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
 	     let tblock =
 	       List.fold_right
 		 (fun (mut_id,id) bl ->
-		    Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
+		    mk_expr (Let_ref(mut_id,mk_var id,bl)))
+                 list_of_refs tblock
+             in
 	     printf "generating Why code for function %s@." f;
 	     ((f, Def(why_name, 
-		      Fun(tparams,pre,tblock,post,[])))::why_code,
+		      mk_expr (Fun(tparams,pre,tblock,post,[]))))::why_code,
 	      tspec :: why_spec)
 	   with Error (_, Cerror.Unsupported s) ->
 	     lprintf "unsupported feature (%s); skipping function %s@." s f;

@@ -41,7 +41,7 @@
   @   \forall integer x y z; (x+y)*z == (x*z)+(y*z);
   @*/
 
-/* @ lemma distr_right_minus: 
+/*  lemma distr_right_minus: 
   @   \forall integer x y z; x*(y-z) == (x*y)-(x*z); 
   @*/
 

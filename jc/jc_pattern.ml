@@ -130,7 +130,7 @@ end
 module PatternTerm = Pattern(MakeTerm)
 
 let make_blackbox_annot pre ty reads writes post exn_posts =
-  BlackBox(Annot_type(pre, ty, reads, writes, post, exn_posts))
+  mk_expr(BlackBox(Annot_type(pre, ty, reads, writes, post, exn_posts)))
 
 let pattern_list_expr translate_body arg _r ty pbl =
   List.fold_left
@@ -145,12 +145,12 @@ let pattern_list_expr translate_body arg _r ty pbl =
        let post = LIf(LVar "result", cond, notcond) in
        let bbox = make_blackbox_annot LTrue bool_type reads writes post [] in
        let branch = List.fold_left
-	 (fun acc (name, ty) -> Let_ref(name, any_value ty, acc))
-	 (If(bbox, body, accbody))
+	 (fun acc (name, ty) -> mk_expr (Let_ref(name, any_value ty, acc)))
+         (mk_expr (If(bbox, body, accbody)))
 	 vars
        in
        branch)
-    Absurd
+    (mk_expr Absurd)
     (List.rev pbl)
 
 let pattern_list_term translate_body arg ty pbl default =

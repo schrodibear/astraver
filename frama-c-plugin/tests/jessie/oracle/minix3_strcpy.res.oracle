@@ -1862,7 +1862,7 @@ parameter strcpy_requires :
     char_P_s2_21_alloc_table:char_P alloc_table ->
      char_P_ret_20_alloc_table:char_P alloc_table ->
       char_P_char_M_s2_21:(char_P, int8) memory ->
-       { (JC_1:
+       { (JC_<somenum>:
          valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21))}
        char_P pointer writes char_P_char_M_ret_20 { true }
 
@@ -1873,7 +1873,7 @@ parameter uint16_of_integer_ :
 
 let strcpy_ensures_default =
  fun (ret : char_P pointer) (s2_2 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
-  { (JC_3: valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
+  { (JC_<somenum>: valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
   (let mutable_s2_2 = ref s2_2 in
   (init:
   (let return = ref (any_pointer void) in
@@ -1885,59 +1885,56 @@ let strcpy_ensures_default =
      (let tmp_1 = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_27 = (s1_15 := ret) in void);
+       (let jessie_<somenum> = (s1_15 := ret) in void);
       try
-       (let jessie_46 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
-         { invariant (JC_15: true)  }
+         { invariant (JC_<somenum>: true)  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_45 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_43 =
+              (let jessie_<somenum> =
               begin
-                (let jessie_31 =
+                (let jessie_<somenum> =
                 (C_2:
+                (C_4:
                 begin
-                  (let jessie_29 = (tmp := !s1_15) in void);
-                 (C_4:
-                 begin   (s1_15 := (C_3: ((shift !s1_15) (1)))); !s1_15 end)
-                end) in void);
-               (let jessie_37 =
+                  (let jessie_<somenum> = (tmp := !s1_15) in void);
+                 (s1_15 := (C_3: ((shift !s1_15) (1)))); !s1_15 end)) in
+                void);
+               (let jessie_<somenum> =
                (C_5:
+               (C_7:
+               (C_9:
                begin
-                 (let jessie_33 = (tmp_1 := !mutable_s2_2) in void);
-                (C_7:
-                begin
-                  (let jessie_35 =
-                  (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in
-                  void);
-                 (C_9:
-                 begin
-                   (tmp_0 := (C_8: ((safe_acc_ char_P_char_M_s2_21) !tmp_1)));
-                  !tmp_0 end) end) end) in void);
+                 (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
+                (let jessie_<somenum> =
+                (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
+                (tmp_0 := (C_8: ((safe_acc_ char_P_char_M_s2_21) !tmp_1)));
+                !tmp_0 end))) in void);
                (C_11:
-               (let jessie_39 = !tmp_0 in
-               (let jessie_42 = !tmp in
+               (let jessie_<somenum> = !tmp_0 in
                begin
-                 (((safe_upd_ char_P_char_M_ret_20) jessie_42) jessie_39);
-                jessie_39 end))) end in void);
+                 (let jessie_<somenum> = !tmp in
+                 (((safe_upd_ char_P_char_M_ret_20) jessie_<somenum>) jessie_<somenum>));
+                jessie_<somenum> end)) end in void);
              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
              else
-              (let jessie_44 = (raise (Goto_while_0_break_exc void)) in void));
+              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
              (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (return := ret); (raise Return) end))))); absurd  end with Return ->
-   !return end))) { (JC_5: true) }
+   !return end))) { (JC_<somenum>: true) }
 
 let strcpy_safety =
  fun (ret : char_P pointer) (s2_2 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
-  { (JC_3: valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
+  { (JC_<somenum>: valid_string(s2_2, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
   (let mutable_s2_2 = ref s2_2 in
   (init:
   (let return = ref (any_pointer void) in
@@ -1949,56 +1946,53 @@ let strcpy_safety =
      (let tmp_1 = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_5 = (s1_15 := ret) in void);
+       (let jessie_<somenum> = (s1_15 := ret) in void);
       try
-       (let jessie_24 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_10: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_23 =
+            (let jessie_<somenum> =
             begin
-              (let jessie_21 =
+              (let jessie_<somenum> =
               begin
-                (let jessie_9 =
+                (let jessie_<somenum> =
                 (C_2:
+                (C_4:
                 begin
-                  (let jessie_7 = (tmp := !s1_15) in void);
-                 (C_4:
-                 begin   (s1_15 := (C_3: ((shift !s1_15) (1)))); !s1_15 end)
-                end) in void);
-               (let jessie_15 =
+                  (let jessie_<somenum> = (tmp := !s1_15) in void);
+                 (s1_15 := (C_3: ((shift !s1_15) (1)))); !s1_15 end)) in
+                void);
+               (let jessie_<somenum> =
                (C_5:
+               (C_7:
+               (C_9:
                begin
-                 (let jessie_11 = (tmp_1 := !mutable_s2_2) in void);
-                (C_7:
-                begin
-                  (let jessie_13 =
-                  (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in
-                  void);
-                 (C_9:
-                 begin
-                   (tmp_0 := (C_8:
-                             (JC_12:
-                             (((acc_ char_P_s2_21_alloc_table) char_P_char_M_s2_21) !tmp_1))));
-                  !tmp_0 end) end) end) in void);
+                 (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
+                (let jessie_<somenum> =
+                (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
+                (tmp_0 := (C_8:
+                          (JC_<somenum>:
+                          (((acc_ char_P_s2_21_alloc_table) char_P_char_M_s2_21) !tmp_1))));
+                !tmp_0 end))) in void);
                (C_11:
-               (let jessie_17 = !tmp_0 in
-               (let jessie_20 = !tmp in
+               (let jessie_<somenum> = !tmp_0 in
                begin
-                 (JC_13:
-                 ((((upd_ char_P_ret_20_alloc_table) char_P_char_M_ret_20) jessie_20) jessie_17));
-                jessie_17 end))) end in void);
+                 (let jessie_<somenum> = !tmp in
+                 (JC_<somenum>:
+                 ((((upd_ char_P_ret_20_alloc_table) char_P_char_M_ret_20) jessie_<somenum>) jessie_<somenum>)));
+                jessie_<somenum> end)) end in void);
              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
              else
-              (let jessie_22 = (raise (Goto_while_0_break_exc void)) in void));
+              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
              (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (return := ret); (raise Return) end))))); absurd  end with Return ->
    !return end))) { true }
 
@@ -2030,11 +2024,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po5.why">
-      <location file = "why/minix3_strcpy.why" line = "1525" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1522" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po6.why">
-      <location file = "why/minix3_strcpy.why" line = "1525" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1522" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

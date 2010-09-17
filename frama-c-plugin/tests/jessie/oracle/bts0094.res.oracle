@@ -474,137 +474,137 @@ parameter ushort_range_requires : i_1:uint16 -> { } uint16 { true }
 
 let char_range_ensures_default =
  fun (i_0 : int8) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      (assert
-     { (JC_11: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) };
+     { (JC_<somenum>: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) };
      void); void;
-    (assert { (JC_12: le_int(integer_of_int8(i_0), (127))) }; void); void;
+    (assert { (JC_<somenum>: le_int(integer_of_int8(i_0), (127))) }; void); void;
     (return := i_0); (raise Return); absurd  end with Return -> !return end))
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let char_range_safety =
  fun (i_0 : int8) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      [ { } unit
-       { (JC_9: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) } ];
-    void; [ { } unit { (JC_10: le_int(integer_of_int8(i_0), (127))) } ];
+       { (JC_<somenum>: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) } ];
+    void; [ { } unit { (JC_<somenum>: le_int(integer_of_int8(i_0), (127))) } ];
     void; (return := i_0); (raise Return); absurd  end with Return ->
    !return end)) { true }
 
 let schar_range_ensures_default =
  fun (i_2 : int8) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      (assert
-     { (JC_23: ge_int(integer_of_int8(i_2), sub_int(neg_int((127)), (1)))) };
+     { (JC_<somenum>: ge_int(integer_of_int8(i_2), sub_int(neg_int((127)), (1)))) };
      void); void;
-    (assert { (JC_24: le_int(integer_of_int8(i_2), (127))) }; void); void;
+    (assert { (JC_<somenum>: le_int(integer_of_int8(i_2), (127))) }; void); void;
     (return := i_2); (raise Return); absurd  end with Return -> !return end))
-  { (JC_17: true) }
+  { (JC_<somenum>: true) }
 
 let schar_range_safety =
  fun (i_2 : int8) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      [ { } unit
-       { (JC_21: ge_int(integer_of_int8(i_2), sub_int(neg_int((127)), (1)))) } ];
-    void; [ { } unit { (JC_22: le_int(integer_of_int8(i_2), (127))) } ];
+       { (JC_<somenum>: ge_int(integer_of_int8(i_2), sub_int(neg_int((127)), (1)))) } ];
+    void; [ { } unit { (JC_<somenum>: le_int(integer_of_int8(i_2), (127))) } ];
     void; (return := i_2); (raise Return); absurd  end with Return ->
    !return end)) { true }
 
 let short_range_ensures_default =
  fun (i : int16) ->
-  { (JC_40: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int16 void) in
   try
    begin
      (assert
-     { (JC_47: ge_int(integer_of_int16(i), sub_int(neg_int((32767)), (1)))) };
+     { (JC_<somenum>: ge_int(integer_of_int16(i), sub_int(neg_int((32767)), (1)))) };
      void); void;
-    (assert { (JC_48: le_int(integer_of_int16(i), (32767))) }; void); void;
+    (assert { (JC_<somenum>: le_int(integer_of_int16(i), (32767))) }; void); void;
     (return := i); (raise Return); absurd  end with Return -> !return end))
-  { (JC_41: true) }
+  { (JC_<somenum>: true) }
 
 let short_range_safety =
  fun (i : int16) ->
-  { (JC_40: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int16 void) in
   try
    begin
      [ { } unit
-       { (JC_45: ge_int(integer_of_int16(i), sub_int(neg_int((32767)), (1)))) } ];
-    void; [ { } unit { (JC_46: le_int(integer_of_int16(i), (32767))) } ];
+       { (JC_<somenum>: ge_int(integer_of_int16(i), sub_int(neg_int((32767)), (1)))) } ];
+    void; [ { } unit { (JC_<somenum>: le_int(integer_of_int16(i), (32767))) } ];
     void; (return := i); (raise Return); absurd  end with Return ->
    !return end)) { true }
 
 let uchar_range_ensures_default =
  fun (i_3 : uint8) ->
-  { (JC_28: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint8 void) in
   try
    begin
-     (assert { (JC_35: ge_int(integer_of_uint8(i_3), (0))) }; void); void;
+     (assert { (JC_<somenum>: ge_int(integer_of_uint8(i_3), (0))) }; void); void;
     (assert
-    { (JC_36:
+    { (JC_<somenum>:
       le_int(integer_of_uint8(i_3), add_int(mul_int((127), (2)), (1)))) };
     void); void; (return := i_3); (raise Return); absurd  end with Return ->
-   !return end)) { (JC_29: true) }
+   !return end)) { (JC_<somenum>: true) }
 
 let uchar_range_safety =
  fun (i_3 : uint8) ->
-  { (JC_28: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint8 void) in
   try
    begin
-     [ { } unit { (JC_33: ge_int(integer_of_uint8(i_3), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: ge_int(integer_of_uint8(i_3), (0))) } ]; void;
     [ { } unit
-      { (JC_34:
+      { (JC_<somenum>:
         le_int(integer_of_uint8(i_3), add_int(mul_int((127), (2)), (1)))) } ];
     void; (return := i_3); (raise Return); absurd  end with Return ->
    !return end)) { true }
 
 let ushort_range_ensures_default =
  fun (i_1 : uint16) ->
-  { (JC_52: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint16 void) in
   try
    begin
-     (assert { (JC_59: ge_int(integer_of_uint16(i_1), (0))) }; void); void;
+     (assert { (JC_<somenum>: ge_int(integer_of_uint16(i_1), (0))) }; void); void;
     (assert
-    { (JC_60:
+    { (JC_<somenum>:
       le_int(integer_of_uint16(i_1), add_int(mul_int((32767), (2)), (1)))) };
     void); void; (return := i_1); (raise Return); absurd  end with Return ->
-   !return end)) { (JC_53: true) }
+   !return end)) { (JC_<somenum>: true) }
 
 let ushort_range_safety =
  fun (i_1 : uint16) ->
-  { (JC_52: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint16 void) in
   try
    begin
-     [ { } unit { (JC_57: ge_int(integer_of_uint16(i_1), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: ge_int(integer_of_uint16(i_1), (0))) } ]; void;
     [ { } unit
-      { (JC_58:
+      { (JC_<somenum>:
         le_int(integer_of_uint16(i_1), add_int(mul_int((32767), (2)), (1)))) } ];
     void; (return := i_1); (raise Return); absurd  end with Return ->
    !return end)) { true }

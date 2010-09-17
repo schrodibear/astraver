@@ -197,14 +197,19 @@ let generic full f targets =
        out "%%.stat: why/%%.why@\n";
        out "\t@@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
-
-       out "why3: why/%s@\n"
-	 (match targets with f::_ -> f^"_why3.why" | [] -> "");
+       let why3_target =
+	 (match targets with f::_ -> f^"_why3.why" | [] -> "")
+       in
+       out "why3: why/%s@\n" why3_target;
 
        out "why/%%_why3.why:  WHYOPT=-why3@\n";
        out "why/%%_why3.why: why/%%.why@\n";
        out "\t@@echo 'why -why3 [...] why/$*.why' \
             && $(WHY) $(JESSIELIBFILES) why/$*.why@\n";
+
+       out "why3ide: why/%s@\n" why3_target;
+       out "\t@@echo 'why3ide [...] $<' \
+            && why3ide $<@\n@\n";
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

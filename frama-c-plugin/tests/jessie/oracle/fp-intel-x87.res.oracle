@@ -412,26 +412,26 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (JC_27: (__globinit_whole_program void));
+       (JC_<somenum>: (__globinit_whole_program void));
       (C_3:
       begin
-        (let jessie_4 = (v := (((gen_float_of_real_safe Double) nearest_even) 0x1.0p600)) in
+        (let jessie_<somenum> = (v := (((gen_float_of_real_safe Double) nearest_even) 0x1.0p600)) in
         void);
        (C_6:
        begin
-         (let jessie_5 = (x := (((cast_gen_float_safe Double) nearest_even) 
+         (let jessie_<somenum> = (x := (((cast_gen_float_safe Double) nearest_even) 
                                 (C_5:
-                                (JC_31:
+                                (JC_<somenum>:
                                 ((((div_gen_float_safe Binary80) nearest_even) 
                                   (C_4:
-                                  (JC_30:
+                                  (JC_<somenum>:
                                   ((((mul_gen_float_safe Binary80) nearest_even) !v) !v)))) !v))))) in
          void);
-        (assert { (JC_32: eq_real(float_value(x), float_value(v))) }; void);
+        (assert { (JC_<somenum>: eq_real(float_value(x), float_value(v))) }; void);
         void;
         (C_8:
         begin
-          (let jessie_6 = (__retres := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
          (return := !__retres);
          (raise Return)
         end)
@@ -443,11 +443,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_13: true) }
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -457,29 +457,29 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (JC_17: (__globinit_whole_program_requires void));
+       (JC_<somenum>: (__globinit_whole_program_requires void));
       (C_3:
       begin
-        (let jessie_1 = (v := (JC_19:
+        (let jessie_<somenum> = (v := (JC_<somenum>:
                               (((gen_float_of_real Double) nearest_even) 0x1.0p600))) in
         void);
        (C_6:
        begin
-         (let jessie_2 = (x := (JC_25:
+         (let jessie_<somenum> = (x := (JC_<somenum>:
                                (((cast_gen_float Double) nearest_even) 
                                 (C_5:
-                                (JC_24:
+                                (JC_<somenum>:
                                 ((((div_gen_float Binary80) nearest_even) 
                                   (C_4:
-                                  (JC_23:
+                                  (JC_<somenum>:
                                   ((((mul_gen_float Binary80) nearest_even) !v) !v)))) !v)))))) in
          void);
         [ { } unit reads v,x
-          { (JC_26: eq_real(float_value(x), float_value(v))) } ];
+          { (JC_<somenum>: eq_real(float_value(x), float_value(v))) } ];
         void;
         (C_8:
         begin
-          (let jessie_3 = (__retres := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
          (return := !__retres);
          (raise Return)
         end)

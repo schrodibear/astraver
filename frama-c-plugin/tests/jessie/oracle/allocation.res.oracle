@@ -301,9 +301,9 @@ parameter f :
    char_P_result_1_tag_table:char_P tag_table ref ->
     { } char_P pointer reads char_P_result_1_alloc_table
     writes char_P_result_1_alloc_table,char_P_result_1_tag_table
-    { (JC_10:
-      ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
-      and (JC_9:
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
+      and (JC_<somenum>:
           ge_int(offset_max(char_P_result_1_alloc_table, result),
           sub_int(integer_of_int32(n@), (1)))))) }
 
@@ -311,12 +311,12 @@ parameter f_requires :
  n:int32 ->
   char_P_result_1_alloc_table:char_P alloc_table ref ->
    char_P_result_1_tag_table:char_P tag_table ref ->
-    { (JC_1: gt_int(integer_of_int32(n), (0)))} char_P pointer
+    { (JC_<somenum>: gt_int(integer_of_int32(n), (0)))} char_P pointer
     reads char_P_result_1_alloc_table
     writes char_P_result_1_alloc_table,char_P_result_1_tag_table
-    { (JC_10:
-      ((JC_8: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
-      and (JC_9:
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
+      and (JC_<somenum>:
           ge_int(offset_max(char_P_result_1_alloc_table, result),
           sub_int(integer_of_int32(n@), (1)))))) }
 
@@ -338,7 +338,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (n : int32) (char_P_result_1_alloc_table : char_P alloc_table ref) (char_P_result_1_tag_table : char_P tag_table ref) ->
-  { (JC_3: gt_int(integer_of_int32(n), (0))) }
+  { (JC_<somenum>: gt_int(integer_of_int32(n), (0))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -346,21 +346,21 @@ let f_ensures_default =
      (let i = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (i := (C_1:
-             (JC_14:
+             (JC_<somenum>:
              (((alloc_struct_char_P (integer_of_int32 n)) char_P_result_1_alloc_table) char_P_result_1_tag_table)))) in
        void); (return := !i); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_7:
-    ((JC_5: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
-    and (JC_6:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(char_P_result_1_alloc_table, result), (0)))
+    and (JC_<somenum>:
         ge_int(offset_max(char_P_result_1_alloc_table, result),
         sub_int(integer_of_int32(n@), (1)))))) }
 
 let f_safety =
  fun (n : int32) (char_P_result_1_alloc_table : char_P alloc_table ref) (char_P_result_1_tag_table : char_P tag_table ref) ->
-  { (JC_3: gt_int(integer_of_int32(n), (0))) }
+  { (JC_<somenum>: gt_int(integer_of_int32(n), (0))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -368,9 +368,9 @@ let f_safety =
      (let i = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (i := (C_1:
-             (JC_13:
+             (JC_<somenum>:
              (((alloc_struct_char_P_requires (integer_of_int32 n)) char_P_result_1_alloc_table) char_P_result_1_tag_table)))) in
        void); (return := !i); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }

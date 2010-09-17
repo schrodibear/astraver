@@ -451,9 +451,9 @@ parameter ftest_requires :
  b:int_P pointer ->
   int_P_int_M_b_2:(int_P, int32) memory ref ->
    int_P_b_2_alloc_table:int_P alloc_table ->
-    { (JC_3:
-      ((JC_1: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
-      and (JC_2: ge_int(offset_max(int_P_b_2_alloc_table, b), (8)))))}
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
+      and (JC_<somenum>: ge_int(offset_max(int_P_b_2_alloc_table, b), (8)))))}
     unit reads int_P_int_M_b_2 writes int_P_int_M_b_2 { true }
 
 parameter int32_of_integer_ :
@@ -475,59 +475,58 @@ parameter safe_int8_of_integer_ :
 let ftest_ensures_default =
  fun (b : int_P pointer) (int_P_int_M_b_2 : (int_P, int32) memory ref) (int_P_b_2_alloc_table : int_P alloc_table) ->
   { (valid_struct_int_P(b, (0), (0), int_P_b_2_alloc_table)
-    and (JC_7:
-        ((JC_5: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
-        and (JC_6: ge_int(offset_max(int_P_b_2_alloc_table, b), (8)))))) }
+    and (JC_<somenum>:
+        ((JC_<somenum>: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
+        and (JC_<somenum>: ge_int(offset_max(int_P_b_2_alloc_table, b), (8)))))) }
   (init:
   try
    begin
      (let int_P_int_M_c_5 = (any_memory void) in
      (M:
      begin
-       (C_3:
-       (let jessie_12 =
-       (let jessie_8 = (safe_int32_of_integer_ (5)) in
-       (let jessie_11 = (C_1: ((shift b) (4))) in
-       (((safe_upd_ int_P_int_M_b_2) jessie_11) jessie_8))) in void));
+       (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+       (let jessie_<somenum> = b in
+       (let jessie_<somenum> = (4) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
+       (((safe_upd_ int_P_int_M_b_2) jessie_<somenum>) jessie_<somenum>))))));
       (assert
-      { (JC_16:
+      { (JC_<somenum>:
         (forall c:int_P pointer.
          eq_int(s_0(c, (8), int_P_int_M_c_5), s_0(c, (8), int_P_int_M_c_5@M)))) };
       void); void;
       (assert
-      { (JC_17:
+      { (JC_<somenum>:
         eq_int(s_0(b, (8), int_P_int_M_b_2), s_0(b, (8), int_P_int_M_b_2@M))) };
       void); void; (raise Return) end)); (raise Return) end with Return ->
-   void end) { (JC_9: true) }
+   void end) { (JC_<somenum>: true) }
 
 let ftest_safety =
  fun (b : int_P pointer) (int_P_int_M_b_2 : (int_P, int32) memory ref) (int_P_b_2_alloc_table : int_P alloc_table) ->
   { (valid_struct_int_P(b, (0), (0), int_P_b_2_alloc_table)
-    and (JC_7:
-        ((JC_5: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
-        and (JC_6: ge_int(offset_max(int_P_b_2_alloc_table, b), (8)))))) }
+    and (JC_<somenum>:
+        ((JC_<somenum>: le_int(offset_min(int_P_b_2_alloc_table, b), (0)))
+        and (JC_<somenum>: ge_int(offset_max(int_P_b_2_alloc_table, b), (8)))))) }
   (init:
   try
    begin
      (let int_P_int_M_c_5 = (any_memory void) in
      (M:
      begin
-       (C_3:
-       (let jessie_6 =
-       (let jessie_2 = (safe_int32_of_integer_ (5)) in
-       (let jessie_3 = b in
-       (let jessie_4 = (4) in
-       (let jessie_5 = ((shift jessie_3) jessie_4) in
-       (JC_13:
-       (((((lsafe_lbound_upd_ int_P_b_2_alloc_table) int_P_int_M_b_2) jessie_3) jessie_4) jessie_2)))))) in
-       void));
+       (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
+       (let jessie_<somenum> = b in
+       (let jessie_<somenum> = (4) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
+       (JC_<somenum>:
+       (((((lsafe_lbound_upd_ int_P_b_2_alloc_table) int_P_int_M_b_2) jessie_<somenum>) (4)) jessie_<somenum>)))))));
       [ { } unit
-        { (JC_14:
+        { (JC_<somenum>:
           (forall c:int_P pointer.
            eq_int(s_0(c, (8), int_P_int_M_c_5),
            s_0(c, (8), int_P_int_M_c_5@M)))) } ]; void;
       [ { } unit reads int_P_int_M_b_2
-        { (JC_15:
+        { (JC_<somenum>:
           eq_int(s_0(b, (8), int_P_int_M_b_2),
           s_0(b, (8), int_P_int_M_b_2@M))) } ]; void; (raise Return) end));
     (raise Return) end with Return -> void end) { true }

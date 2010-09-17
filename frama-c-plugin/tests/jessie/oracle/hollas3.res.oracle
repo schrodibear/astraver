@@ -345,17 +345,17 @@ parameter foo :
  l:int32 ->
   h:int32 ->
    { } int32
-   { (JC_10:
-     ((JC_8: le_int(integer_of_int32(l@), integer_of_int32(result)))
-     and (JC_9: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
+   { (JC_<somenum>:
+     ((JC_<somenum>: le_int(integer_of_int32(l@), integer_of_int32(result)))
+     and (JC_<somenum>: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
 
 parameter foo_requires :
  l:int32 ->
   h:int32 ->
    { } int32
-   { (JC_10:
-     ((JC_8: le_int(integer_of_int32(l@), integer_of_int32(result)))
-     and (JC_9: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
+   { (JC_<somenum>:
+     ((JC_<somenum>: le_int(integer_of_int32(l@), integer_of_int32(result)))
+     and (JC_<somenum>: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -375,7 +375,7 @@ parameter safe_int8_of_integer_ :
 
 let foo_ensures_default =
  fun (l : int32) (h : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -383,10 +383,10 @@ let foo_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_5:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_4:
                     (safe_int32_of_integer_ (C_3:
-                                            (JC_16:
+                                            (JC_<somenum>:
                                             ((div_int (integer_of_int32 
                                                        (C_2:
                                                        (safe_int32_of_integer_ 
@@ -395,13 +395,13 @@ let foo_ensures_default =
                                                          (integer_of_int32 h))))))) (2))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_7:
-    ((JC_5: le_int(integer_of_int32(l@), integer_of_int32(result)))
-    and (JC_6: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(integer_of_int32(l@), integer_of_int32(result)))
+    and (JC_<somenum>: le_int(integer_of_int32(result), integer_of_int32(h@))))) }
 
 let foo_safety =
  fun (l : int32) (h : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -409,13 +409,13 @@ let foo_safety =
      (let __retres = ref (any_int32 void) in
      (C_5:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_4:
-                    (JC_15:
+                    (JC_<somenum>:
                     (int32_of_integer_ (C_3:
-                                       (JC_14:
+                                       (JC_<somenum>:
                                        ((div_int_ (integer_of_int32 (C_2:
-                                                                    (JC_13:
+                                                                    (JC_<somenum>:
                                                                     (int32_of_integer_ 
                                                                     (C_1:
                                                                     ((add_int 

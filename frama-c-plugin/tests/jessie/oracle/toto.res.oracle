@@ -486,18 +486,18 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (p : int_P pointer) (e : int32) (t : int32) (f_0 : int32) (r : int32) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (let tmp = ref (any_int32 void) in
      try
-      (let jessie_36 = begin
+      (let jessie_<somenum> = begin
                          try
-                          (let jessie_30 = begin
+                          (let jessie_<somenum> = begin
                                              (if ((neq_int_ (integer_of_int32 e)) (0))
                                              then
-                                              (let jessie_23 = (raise
+                                              (let jessie_<somenum> = (raise
                                                                 (Goto__LOR_exc
                                                                 void)) in
                                               void)
@@ -506,21 +506,21 @@ let f_ensures_default =
                                               then
                                                (if ((neq_int_ (integer_of_int32 f_0)) (0))
                                                then
-                                                (let jessie_24 = (raise
+                                                (let jessie_<somenum> = (raise
                                                                   (Goto__LOR_exc
                                                                   void)) in
                                                 void)
                                                else
                                                 (C_2:
-                                                (let jessie_26 = (tmp := 
+                                                (let jessie_<somenum> = (tmp := 
                                                                   (safe_int32_of_integer_ (0))) in
                                                 void)))
                                               else
                                                (C_1:
-                                               (let jessie_28 = (tmp := 
+                                               (let jessie_<somenum> = (tmp := 
                                                                  (safe_int32_of_integer_ (0))) in
                                                void))));
-                                            (let jessie_29 = (raise
+                                            (let jessie_<somenum> = (raise
                                                               (Goto__LOR_0_exc
                                                               void)) in
                                             void);
@@ -528,17 +528,17 @@ let f_ensures_default =
                                            end in
                           void)
                           with
-                          Goto__LOR_exc jessie_1 ->
+                          Goto__LOR_exc jessie_<somenum> ->
                           (_LOR:
                           begin
                             void;
                            (if ((neq_int_ (integer_of_int32 t)) (0))
                            then
                             (C_5:
-                            (let jessie_32 = (tmp := (safe_int32_of_integer_ (1))) in
+                            (let jessie_<somenum> = (tmp := (safe_int32_of_integer_ (1))) in
                             void))
                            else
-                            (let jessie_35 = (if ((neq_int_ (integer_of_int32 f_0)) (0))
+                            (let jessie_<somenum> = (if ((neq_int_ (integer_of_int32 f_0)) (0))
                                              then
                                               (C_4:
                                               begin
@@ -557,15 +557,15 @@ let f_ensures_default =
                        end in
       void)
       with
-      Goto__LOR_0_exc jessie_2 ->
+      Goto__LOR_0_exc jessie_<somenum> ->
       (_LOR_0:
       begin
         void;
        (C_7:
        begin
-         (let jessie_42 = (let jessie_38 = !tmp in
-                          (let jessie_41 = p in
-                          (((safe_upd_ int_P_int_M_p_1) jessie_41) jessie_38))) in
+         (let jessie_<somenum> = (let jessie_<somenum> = !tmp in
+                          (let jessie_<somenum> = p in
+                          (((safe_upd_ int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>))) in
          void);
         (raise Return)
        end)
@@ -575,22 +575,22 @@ let f_ensures_default =
    with
    Return ->
    void end)
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (p : int_P pointer) (e : int32) (t : int32) (f_0 : int32) (r : int32) (int_P_int_M_p_1 : (int_P, int32) memory ref) (int_P_p_1_alloc_table : int_P alloc_table) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (let tmp = ref (any_int32 void) in
      try
-      (let jessie_16 = begin
+      (let jessie_<somenum> = begin
                          try
-                          (let jessie_10 = begin
+                          (let jessie_<somenum> = begin
                                              (if ((neq_int_ (integer_of_int32 e)) (0))
                                              then
-                                              (let jessie_3 = (raise
+                                              (let jessie_<somenum> = (raise
                                                                (Goto__LOR_exc
                                                                void)) in
                                               void)
@@ -599,21 +599,21 @@ let f_safety =
                                               then
                                                (if ((neq_int_ (integer_of_int32 f_0)) (0))
                                                then
-                                                (let jessie_4 = (raise
+                                                (let jessie_<somenum> = (raise
                                                                  (Goto__LOR_exc
                                                                  void)) in
                                                 void)
                                                else
                                                 (C_2:
-                                                (let jessie_6 = (tmp := 
+                                                (let jessie_<somenum> = (tmp := 
                                                                  (safe_int32_of_integer_ (0))) in
                                                 void)))
                                               else
                                                (C_1:
-                                               (let jessie_8 = (tmp := 
+                                               (let jessie_<somenum> = (tmp := 
                                                                 (safe_int32_of_integer_ (0))) in
                                                void))));
-                                            (let jessie_9 = (raise
+                                            (let jessie_<somenum> = (raise
                                                              (Goto__LOR_0_exc
                                                              void)) in
                                             void);
@@ -621,17 +621,17 @@ let f_safety =
                                            end in
                           void)
                           with
-                          Goto__LOR_exc jessie_1 ->
+                          Goto__LOR_exc jessie_<somenum> ->
                           (_LOR:
                           begin
                             void;
                            (if ((neq_int_ (integer_of_int32 t)) (0))
                            then
                             (C_5:
-                            (let jessie_12 = (tmp := (safe_int32_of_integer_ (1))) in
+                            (let jessie_<somenum> = (tmp := (safe_int32_of_integer_ (1))) in
                             void))
                            else
-                            (let jessie_15 = (if ((neq_int_ (integer_of_int32 f_0)) (0))
+                            (let jessie_<somenum> = (if ((neq_int_ (integer_of_int32 f_0)) (0))
                                              then
                                               (C_4:
                                               begin
@@ -650,16 +650,16 @@ let f_safety =
                        end in
       void)
       with
-      Goto__LOR_0_exc jessie_2 ->
+      Goto__LOR_0_exc jessie_<somenum> ->
       (_LOR_0:
       begin
         void;
        (C_7:
        begin
-         (let jessie_22 = (let jessie_18 = !tmp in
-                          (let jessie_21 = p in
-                          (JC_9:
-                          ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_21) jessie_18)))) in
+         (let jessie_<somenum> = (let jessie_<somenum> = !tmp in
+                          (let jessie_<somenum> = p in
+                          (JC_<somenum>:
+                          ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>)))) in
          void);
         (raise Return)
        end)

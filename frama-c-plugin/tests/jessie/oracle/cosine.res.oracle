@@ -342,19 +342,19 @@ parameter int8_of_integer_ :
 
 parameter myc :
  x:real ->
-  { } real { ((true = true) -> (JC_7: le_real(abs_real(result), 1.0))) }
+  { } real { ((true = true) -> (JC_<somenum>: le_real(abs_real(result), 1.0))) }
 
 parameter myc_requires :
  x:real ->
-  { (JC_1: le_real(abs_real(x), 1.570796))} real
-  { ((true = true) -> (JC_7: le_real(abs_real(result), 1.0))) }
+  { (JC_<somenum>: le_real(abs_real(x), 1.570796))} real
+  { ((true = true) -> (JC_<somenum>: le_real(abs_real(result), 1.0))) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let myc_ensures_default =
  fun (x : real) ->
-  { ((true = true) and (JC_3: le_real(abs_real(x), 1.570796))) }
+  { ((true = true) and (JC_<somenum>: le_real(abs_real(x), 1.570796))) }
   (init:
   (let return = ref (any_real void) in
   try
@@ -364,19 +364,19 @@ let myc_ensures_default =
      (let __retres = ref (any_real void) in
      (C_2:
      begin
-       (let jessie_4 = (x2 := (C_1: ((mul_real x) x))) in void);
+       (let jessie_<somenum> = (x2 := (C_1: ((mul_real x) x))) in void);
       (C_4:
       begin
-        (let jessie_5 = (x4 := (C_3: ((mul_real !x2) !x2))) in void);
+        (let jessie_<somenum> = (x4 := (C_3: ((mul_real !x2) !x2))) in void);
        (C_9:
        begin
-         (let jessie_6 = (__retres := (C_8:
+         (let jessie_<somenum> = (__retres := (C_8:
                                       ((add_real (C_7:
                                                  ((sub_real 1.0) (C_6:
-                                                                 (JC_17:
+                                                                 (JC_<somenum>:
                                                                  ((div_real !x2) 2.0)))))) 
                                        (C_5:
-                                       (JC_18: ((div_real !x4) 24.0)))))) in
+                                       (JC_<somenum>: ((div_real !x4) 24.0)))))) in
          void);
         (return := !__retres);
         (raise Return)
@@ -388,11 +388,11 @@ let myc_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_5: le_real(abs_real(result), 1.0)) }
+  { (JC_<somenum>: le_real(abs_real(result), 1.0)) }
 
 let myc_safety =
  fun (x : real) ->
-  { (JC_3: le_real(abs_real(x), 1.570796)) }
+  { (JC_<somenum>: le_real(abs_real(x), 1.570796)) }
   (init:
   (let return = ref (any_real void) in
   try
@@ -402,19 +402,19 @@ let myc_safety =
      (let __retres = ref (any_real void) in
      (C_2:
      begin
-       (let jessie_1 = (x2 := (C_1: ((mul_real x) x))) in void);
+       (let jessie_<somenum> = (x2 := (C_1: ((mul_real x) x))) in void);
       (C_4:
       begin
-        (let jessie_2 = (x4 := (C_3: ((mul_real !x2) !x2))) in void);
+        (let jessie_<somenum> = (x4 := (C_3: ((mul_real !x2) !x2))) in void);
        (C_9:
        begin
-         (let jessie_3 = (__retres := (C_8:
+         (let jessie_<somenum> = (__retres := (C_8:
                                       ((add_real (C_7:
                                                  ((sub_real 1.0) (C_6:
-                                                                 (JC_13:
+                                                                 (JC_<somenum>:
                                                                  ((div_real_ !x2) 2.0)))))) 
                                        (C_5:
-                                       (JC_14: ((div_real_ !x4) 24.0)))))) in
+                                       (JC_<somenum>: ((div_real_ !x4) 24.0)))))) in
          void);
         (return := !__retres);
         (raise Return)

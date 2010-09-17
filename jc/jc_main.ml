@@ -410,6 +410,12 @@ let main () =
       we first have to update Jc_options.libfiles depending on the current
       pragmas
     *)
+    if !Region.some_bitwise_region then
+      begin
+        eprintf "Jessie support for unions and pointer casts is disabled@.";
+        exit 1
+      end;
+    
     Jc_options.add_to_libfiles
       (if !Region.some_bitwise_region then
          "jessie_bitvectors.why" else "jessie.why");

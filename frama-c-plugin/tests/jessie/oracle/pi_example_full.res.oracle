@@ -245,9 +245,9 @@ axiom void_P_tags :
 parameter Perimeter :
  radius:single ->
   { } single
-  { (JC_16:
-    ((JC_14: single_is_finite(result))
-    and (JC_15:
+  { (JC_<somenum>:
+    ((JC_<somenum>: single_is_finite(result))
+    and (JC_<somenum>:
         le_real(abs_real(sub_real(single_value(result),
                          mul_real(mul_real(3.141592654, 2.0),
                          single_value(radius@)))),
@@ -255,14 +255,14 @@ parameter Perimeter :
 
 parameter Perimeter_requires :
  radius:single ->
-  { (JC_4:
-    ((JC_1: single_is_finite(radius))
-    and ((JC_2: gt_real(single_value(radius), 0.0))
-        and (JC_3: le_real(single_value(radius), 3.0)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: single_is_finite(radius))
+    and ((JC_<somenum>: gt_real(single_value(radius), 0.0))
+        and (JC_<somenum>: le_real(single_value(radius), 3.0)))))}
   single
-  { (JC_16:
-    ((JC_14: single_is_finite(result))
-    and (JC_15:
+  { (JC_<somenum>:
+    ((JC_<somenum>: single_is_finite(result))
+    and (JC_<somenum>:
         le_real(abs_real(sub_real(single_value(result),
                          mul_real(mul_real(3.141592654, 2.0),
                          single_value(radius@)))),
@@ -370,10 +370,10 @@ parameter safe_int8_of_integer_ :
 
 let Perimeter_ensures_default =
  fun (radius : single) ->
-  { (JC_9:
-    ((JC_6: single_is_finite(radius))
-    and ((JC_7: gt_real(single_value(radius), 0.0))
-        and (JC_8: le_real(single_value(radius), 3.0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: single_is_finite(radius))
+    and ((JC_<somenum>: gt_real(single_value(radius), 0.0))
+        and (JC_<somenum>: le_real(single_value(radius), 3.0))))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -382,30 +382,30 @@ let Perimeter_ensures_default =
      (let r = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_7 =
-       (a := (JC_29: ((single_of_real nearest_even) 6.28))) in void);
-      (assert { (JC_30: single_is_finite(a)) }; void); void;
+       (let jessie_<somenum> =
+       (a := (JC_<somenum>: ((single_of_real nearest_even) 6.28))) in void);
+      (assert { (JC_<somenum>: single_is_finite(a)) }; void); void;
       (assert
-      { (JC_33:
-        ((JC_31: le_real(6.27, single_value(a)))
-        and (JC_32: le_real(single_value(a), 6.29)))) }; void); void;
-      (let jessie_9 =
+      { (JC_<somenum>:
+        ((JC_<somenum>: le_real(6.27, single_value(a)))
+        and (JC_<somenum>: le_real(single_value(a), 6.29)))) }; void); void;
+      (let jessie_<somenum> =
       (C_7:
       begin
-        (r := (C_6: (JC_34: (((mul_single nearest_even) !a) radius)))); !r
+        (r := (C_6: (JC_<somenum>: (((mul_single nearest_even) !a) radius)))); !r
       end) in void);
       (assert
-      { (JC_37:
-        ((JC_35:
+      { (JC_<somenum>:
+        ((JC_<somenum>:
          le_real(0.0, mul_real(single_value(a), single_value(radius))))
-        and (JC_36:
+        and (JC_<somenum>:
             le_real(mul_real(single_value(a), single_value(radius)),
             mul_real(6.29, 3.0))))) }; void); void;
-      (assert { (JC_38: single_is_finite(r)) }; void); void; (return := !r);
+      (assert { (JC_<somenum>: single_is_finite(r)) }; void); void; (return := !r);
       (raise Return) end))); absurd  end with Return -> !return end))
-  { (JC_13:
-    ((JC_11: single_is_finite(result))
-    and (JC_12:
+  { (JC_<somenum>:
+    ((JC_<somenum>: single_is_finite(result))
+    and (JC_<somenum>:
         le_real(abs_real(sub_real(single_value(result),
                          mul_real(mul_real(3.141592654, 2.0),
                          single_value(radius@)))),
@@ -413,10 +413,10 @@ let Perimeter_ensures_default =
 
 let Perimeter_safety =
  fun (radius : single) ->
-  { (JC_9:
-    ((JC_6: single_is_finite(radius))
-    and ((JC_7: gt_real(single_value(radius), 0.0))
-        and (JC_8: le_real(single_value(radius), 3.0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: single_is_finite(radius))
+    and ((JC_<somenum>: gt_real(single_value(radius), 0.0))
+        and (JC_<somenum>: le_real(single_value(radius), 3.0))))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -425,26 +425,26 @@ let Perimeter_safety =
      (let r = ref (any_single void) in
      (C_1:
      begin
-       (let jessie_2 =
-       (a := (JC_19: ((single_of_real nearest_even) 6.28))) in void);
-      [ { } unit reads a { (JC_20: single_is_finite(a)) } ]; void;
+       (let jessie_<somenum> =
+       (a := (JC_<somenum>: ((single_of_real nearest_even) 6.28))) in void);
+      [ { } unit reads a { (JC_<somenum>: single_is_finite(a)) } ]; void;
       [ { } unit reads a
-        { (JC_23:
-          ((JC_21: le_real(6.27, single_value(a)))
-          and (JC_22: le_real(single_value(a), 6.29)))) } ]; void;
-      (let jessie_4 =
+        { (JC_<somenum>:
+          ((JC_<somenum>: le_real(6.27, single_value(a)))
+          and (JC_<somenum>: le_real(single_value(a), 6.29)))) } ]; void;
+      (let jessie_<somenum> =
       (C_7:
       begin
-        (r := (C_6: (JC_24: (((mul_single nearest_even) !a) radius)))); !r
+        (r := (C_6: (JC_<somenum>: (((mul_single nearest_even) !a) radius)))); !r
       end) in void);
       [ { } unit reads a
-        { (JC_27:
-          ((JC_25:
+        { (JC_<somenum>:
+          ((JC_<somenum>:
            le_real(0.0, mul_real(single_value(a), single_value(radius))))
-          and (JC_26:
+          and (JC_<somenum>:
               le_real(mul_real(single_value(a), single_value(radius)),
               mul_real(6.29, 3.0))))) } ]; void;
-      [ { } unit reads r { (JC_28: single_is_finite(r)) } ]; void;
+      [ { } unit reads r { (JC_<somenum>: single_is_finite(r)) } ]; void;
       (return := !r); (raise Return) end))); absurd  end with Return ->
    !return end)) { true }
 

@@ -293,15 +293,15 @@ parameter char_P___string__d_mod__d_____d__1_alloc_table :
 parameter __globinit_whole_program :
  tt:unit ->
   { } unit reads char_P___string__d_mod__d_____d__1_alloc_table
-  { (JC_12:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter __globinit_whole_program_requires :
  tt:unit ->
-  { (JC_5:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table))}
   unit reads char_P___string__d_mod__d_____d__1_alloc_table
-  { (JC_12:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter alloc_bitvector_struct_char_P :
@@ -397,51 +397,51 @@ parameter alloc_struct_void_P_requires :
 parameter main :
  tt:unit ->
   { } int reads char_P___string__d_mod__d_____d__1_alloc_table
-  { (JC_44:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_37:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table))}
   int reads char_P___string__d_mod__d_____d__1_alloc_table
-  { (JC_44:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter print_mod :
  i:int ->
   n:int ->
    { } unit reads char_P___string__d_mod__d_____d__1_alloc_table
-   { (JC_30:
+   { (JC_<somenum>:
      valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter print_mod_requires :
  i:int ->
   n:int ->
-   { (JC_23:
+   { (JC_<somenum>:
      valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table))}
    unit reads char_P___string__d_mod__d_____d__1_alloc_table
-   { (JC_30:
+   { (JC_<somenum>:
      valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter printf :
  tt:unit ->
   { } int reads char_P___string__d_mod__d_____d__1_alloc_table
-  { (JC_22:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 parameter printf_requires :
  tt:unit ->
-  { (JC_13:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table))}
   int reads char_P___string__d_mod__d_____d__1_alloc_table
-  { (JC_22:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 let main_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_39:
+    and (JC_<somenum>:
         valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table))) }
   (init:
   (let return = ref (any_int void) in
@@ -452,25 +452,25 @@ let main_ensures_default =
      (let __retres = ref (any_int void) in
      (C_8:
      begin
-       (JC_53: (__globinit_whole_program void));
+       (JC_<somenum>: (__globinit_whole_program void));
       (C_9:
       begin
-        (let jessie_29 = (i_0 := (0)) in void);
+        (let jessie_<somenum> = (i_0 := (0)) in void);
        try
-        (let jessie_38 = begin
+        (let jessie_<somenum> = begin
                            (loop_3:
                            while true do
-                           { invariant (JC_55: true)  }
+                           { invariant (JC_<somenum>: true)  }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_37 = begin
-                                                 (let jessie_36 = begin
+                              (let jessie_<somenum> = begin
+                                                 (let jessie_<somenum> = begin
                                                                     (if 
                                                                     ((lt_int_ !i_0) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_30 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -478,17 +478,17 @@ let main_ensures_default =
                                                                    (C_10:
                                                                    begin
                                                                      
-                                                                    (let jessie_31 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (j := (0)) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_35 = 
+                                                                    (let jessie_<somenum> = 
                                                                     begin
                                                                       
                                                                     (loop_4:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_58:
+                                                                    (JC_<somenum>:
                                                                     true)
                                                                      }
                                                                     begin
@@ -497,17 +497,17 @@ let main_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_34 = 
+                                                                    (let jessie_<somenum> = 
                                                                     begin
                                                                       
-                                                                    (let jessie_33 = 
+                                                                    (let jessie_<somenum> = 
                                                                     begin
                                                                       
                                                                     (if 
                                                                     ((lt_int_ !j) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_32 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -515,7 +515,7 @@ let main_ensures_default =
                                                                     (C_11:
                                                                     begin
                                                                       
-                                                                    (JC_60:
+                                                                    (JC_<somenum>:
                                                                     ((print_mod !i_0) !j));
                                                                     (C_13:
                                                                     begin
@@ -534,7 +534,7 @@ let main_ensures_default =
                                                                     end in
                                                                     void)
                                                                     with
-                                                                    Loop_continue_exc jessie_5 ->
+                                                                    Loop_continue_exc jessie_<somenum> ->
                                                                     void end
                                                                     end
                                                                     done);
@@ -544,7 +544,7 @@ let main_ensures_default =
                                                                     end in
                                                                     void)
                                                                     with
-                                                                    Goto_while_1_break_exc jessie_2 ->
+                                                                    Goto_while_1_break_exc jessie_<somenum> ->
                                                                     (while_1_break:
                                                                     void) end;
                                                                     (C_15:
@@ -564,7 +564,7 @@ let main_ensures_default =
                                                end in
                               void)
                               with
-                              Loop_continue_exc jessie_7 ->
+                              Loop_continue_exc jessie_<somenum> ->
                               void end
                             end
                            done);
@@ -572,11 +572,11 @@ let main_ensures_default =
                          end in
         void)
         with
-        Goto_while_0_break_exc jessie_3 ->
+        Goto_while_0_break_exc jessie_<somenum> ->
         (while_0_break: void) end;
        (C_16:
        begin
-         (let jessie_39 = (__retres := (0)) in void);
+         (let jessie_<somenum> = (__retres := (0)) in void);
         (return := !__retres);
         (raise Return)
        end)
@@ -587,11 +587,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_41: true) }
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_39:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
   (init:
   (let return = ref (any_int void) in
@@ -602,25 +602,25 @@ let main_safety =
      (let __retres = ref (any_int void) in
      (C_8:
      begin
-       (JC_45: (__globinit_whole_program_requires void));
+       (JC_<somenum>: (__globinit_whole_program_requires void));
       (C_9:
       begin
-        (let jessie_18 = (i_0 := (0)) in void);
+        (let jessie_<somenum> = (i_0 := (0)) in void);
        try
-        (let jessie_27 = begin
+        (let jessie_<somenum> = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_47: true)  }
+                           { invariant (JC_<somenum>: true)  }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_26 = begin
-                                                 (let jessie_25 = begin
+                              (let jessie_<somenum> = begin
+                                                 (let jessie_<somenum> = begin
                                                                     (if 
                                                                     ((lt_int_ !i_0) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_19 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -628,17 +628,17 @@ let main_safety =
                                                                    (C_10:
                                                                    begin
                                                                      
-                                                                    (let jessie_20 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (j := (0)) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_24 = 
+                                                                    (let jessie_<somenum> = 
                                                                     begin
                                                                       
                                                                     (loop_2:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_50:
+                                                                    (JC_<somenum>:
                                                                     true)
                                                                      }
                                                                     begin
@@ -647,17 +647,17 @@ let main_safety =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_23 = 
+                                                                    (let jessie_<somenum> = 
                                                                     begin
                                                                       
-                                                                    (let jessie_22 = 
+                                                                    (let jessie_<somenum> = 
                                                                     begin
                                                                       
                                                                     (if 
                                                                     ((lt_int_ !j) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_21 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -665,7 +665,7 @@ let main_safety =
                                                                     (C_11:
                                                                     begin
                                                                       
-                                                                    (JC_52:
+                                                                    (JC_<somenum>:
                                                                     ((print_mod_requires !i_0) !j));
                                                                     (C_13:
                                                                     begin
@@ -684,7 +684,7 @@ let main_safety =
                                                                     end in
                                                                     void)
                                                                     with
-                                                                    Loop_continue_exc jessie_5 ->
+                                                                    Loop_continue_exc jessie_<somenum> ->
                                                                     void end
                                                                     end
                                                                     done);
@@ -694,7 +694,7 @@ let main_safety =
                                                                     end in
                                                                     void)
                                                                     with
-                                                                    Goto_while_1_break_exc jessie_2 ->
+                                                                    Goto_while_1_break_exc jessie_<somenum> ->
                                                                     (while_1_break:
                                                                     void) end;
                                                                     (C_15:
@@ -714,7 +714,7 @@ let main_safety =
                                                end in
                               void)
                               with
-                              Loop_continue_exc jessie_7 ->
+                              Loop_continue_exc jessie_<somenum> ->
                               void end
                             end
                            done);
@@ -722,11 +722,11 @@ let main_safety =
                          end in
         void)
         with
-        Goto_while_0_break_exc jessie_3 ->
+        Goto_while_0_break_exc jessie_<somenum> ->
         (while_0_break: void) end;
        (C_16:
        begin
-         (let jessie_28 = (__retres := (0)) in void);
+         (let jessie_<somenum> = (__retres := (0)) in void);
         (return := !__retres);
         (raise Return)
        end)
@@ -737,81 +737,81 @@ let main_safety =
    with
    Return ->
    !return end))
-  { (JC_43:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 let print_mod_ensures_default =
  fun (i : int) (n : int) ->
   { ((true = true)
-    and (JC_25:
+    and (JC_<somenum>:
         valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table))) }
   (init:
   try
    begin
      (let ans = ref (any_int void) in
      try
-      (let jessie_17 = (C_3:
+      (let jessie_<somenum> = (C_3:
                        begin
-                         (let jessie_13 = (ans := (0)) in void);
+                         (let jessie_<somenum> = (ans := (0)) in void);
                         (if ((eq_int_ n) (0))
                         then
                          (if ((eq_int_ i) (0))
                          then
-                          (let jessie_14 = (raise (Return_label_exc void)) in
+                          (let jessie_<somenum> = (raise (Return_label_exc void)) in
                           void)
                          else void)
                         else void);
                         (C_5:
                         begin
-                          (let jessie_15 = (ans := (C_4:
-                                                   (JC_35: ((mod_int i) n)))) in
+                          (let jessie_<somenum> = (ans := (C_4:
+                                                   (JC_<somenum>: ((mod_int i) n)))) in
                           void);
                          (C_6:
                          begin
-                           (let jessie_16 = (JC_36: (printf void)) in void);
+                           (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
                           (raise (Return_label_exc void))
                          end)
                         end)
                        end) in
       void)
       with
-      Return_label_exc jessie_1 ->
+      Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end);
     (raise Return)
    end
    with
    Return ->
    void end)
-  { (JC_27: true) }
+  { (JC_<somenum>: true) }
 
 let print_mod_safety =
  fun (i : int) (n : int) ->
-  { (JC_25:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
   (init:
   try
    begin
      (let ans = ref (any_int void) in
      try
-      (let jessie_12 = (C_3:
+      (let jessie_<somenum> = (C_3:
                        begin
-                         (let jessie_8 = (ans := (0)) in void);
+                         (let jessie_<somenum> = (ans := (0)) in void);
                         (if ((eq_int_ n) (0))
                         then
                          (if ((eq_int_ i) (0))
                          then
-                          (let jessie_9 = (raise (Return_label_exc void)) in
+                          (let jessie_<somenum> = (raise (Return_label_exc void)) in
                           void)
                          else void)
                         else void);
                         (C_5:
                         begin
-                          (let jessie_10 = (ans := (C_4:
-                                                   (JC_32: ((mod_int_ i) n)))) in
+                          (let jessie_<somenum> = (ans := (C_4:
+                                                   (JC_<somenum>: ((mod_int_ i) n)))) in
                           void);
                          (C_6:
                          begin
-                           (let jessie_11 = (JC_33: (printf_requires void)) in
+                           (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in
                            void);
                           (raise (Return_label_exc void))
                          end)
@@ -819,14 +819,14 @@ let print_mod_safety =
                        end) in
       void)
       with
-      Return_label_exc jessie_1 ->
+      Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end);
     (raise Return)
    end
    with
    Return ->
    void end)
-  { (JC_29:
+  { (JC_<somenum>:
     valid___string__d_mod__d_____d_(char_P___string__d_mod__d_____d__1_alloc_table)) }
 
 

@@ -429,7 +429,7 @@ parameter find_int_array :
     int_P_first_1_alloc_table:int_P alloc_table ->
      int_P_int_M_result_3:(int_P, int32) memory ->
       { } int_P pointer
-      { (JC_12:
+      { (JC_<somenum>:
         eq_int(integer_of_int32(select(int_P_int_M_result_3, result)),
         integer_of_int32(value@))) }
 
@@ -439,15 +439,15 @@ parameter find_int_array_requires :
    value:int32 ->
     int_P_first_1_alloc_table:int_P alloc_table ->
      int_P_int_M_result_3:(int_P, int32) memory ->
-      { (JC_4:
-        ((JC_1: gt_int(sub_pointer(last, first), (0)))
-        and ((JC_2:
+      { (JC_<somenum>:
+        ((JC_<somenum>: gt_int(sub_pointer(last, first), (0)))
+        and ((JC_<somenum>:
              le_int(offset_min(int_P_first_1_alloc_table, first), (0)))
-            and (JC_3:
+            and (JC_<somenum>:
                 ge_int(offset_max(int_P_first_1_alloc_table, first),
                 sub_int(sub_pointer(last, first), (1)))))))}
       int_P pointer
-      { (JC_12:
+      { (JC_<somenum>:
         eq_int(integer_of_int32(select(int_P_int_M_result_3, result)),
         integer_of_int32(value@))) }
 
@@ -469,7 +469,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_18: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -481,19 +481,19 @@ let f_ensures_default =
      (let l = ref (any_pointer void) in
      (C_8:
      begin
-       (let jessie_16 =
+       (let jessie_<somenum> =
        (l := (C_7:
-             (let jessie_15 = i in
-             (let jessie_14 = j in
-             (let jessie_13 = k in
-             (JC_24:
-             (((((find_int_array jessie_15) jessie_14) jessie_13) int_P_i_7_alloc_table) int_P_int_M_l_9))))))) in
+             (let jessie_<somenum> = i in
+             (let jessie_<somenum> = j in
+             (let jessie_<somenum> = k in
+             (JC_<somenum>:
+             (((((find_int_array jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) int_P_i_7_alloc_table) int_P_int_M_l_9))))))) in
        void); (raise Return) end))))))); (raise Return) end with Return ->
-   void end) { (JC_19: true) }
+   void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_18: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -505,22 +505,22 @@ let f_safety =
      (let l = ref (any_pointer void) in
      (C_8:
      begin
-       (let jessie_11 =
+       (let jessie_<somenum> =
        (l := (C_7:
-             (let jessie_10 = i in
-             (let jessie_9 = j in
-             (let jessie_8 = k in
-             (JC_23:
-             (((((find_int_array_requires jessie_10) jessie_9) jessie_8) int_P_i_7_alloc_table) int_P_int_M_l_9))))))) in
+             (let jessie_<somenum> = i in
+             (let jessie_<somenum> = j in
+             (let jessie_<somenum> = k in
+             (JC_<somenum>:
+             (((((find_int_array_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) int_P_i_7_alloc_table) int_P_int_M_l_9))))))) in
        void); (raise Return) end))))))); (raise Return) end with Return ->
    void end) { true }
 
 let find_int_array_ensures_default =
  fun (first : int_P pointer) (last : int_P pointer) (value : int32) (int_P_first_1_alloc_table : int_P alloc_table) (int_P_int_M_result_3 : (int_P, int32) memory) ->
-  { (JC_9:
-    ((JC_6: gt_int(sub_pointer(last, first), (0)))
-    and ((JC_7: le_int(offset_min(int_P_first_1_alloc_table, first), (0)))
-        and (JC_8:
+  { (JC_<somenum>:
+    ((JC_<somenum>: gt_int(sub_pointer(last, first), (0)))
+    and ((JC_<somenum>: le_int(offset_min(int_P_first_1_alloc_table, first), (0)))
+        and (JC_<somenum>:
             ge_int(offset_max(int_P_first_1_alloc_table, first),
             sub_int(sub_pointer(last, first), (1))))))) }
   (init:
@@ -530,18 +530,18 @@ let find_int_array_ensures_default =
      (let __retres = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_5 = (__retres := null) in void); (return := !__retres);
+       (let jessie_<somenum> = (__retres := null) in void); (return := !__retres);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_11:
+  { (JC_<somenum>:
     eq_int(integer_of_int32(select(int_P_int_M_result_3, result)),
     integer_of_int32(value@))) }
 
 let find_int_array_safety =
  fun (first : int_P pointer) (last : int_P pointer) (value : int32) (int_P_first_1_alloc_table : int_P alloc_table) (int_P_int_M_result_3 : (int_P, int32) memory) ->
-  { (JC_9:
-    ((JC_6: gt_int(sub_pointer(last, first), (0)))
-    and ((JC_7: le_int(offset_min(int_P_first_1_alloc_table, first), (0)))
-        and (JC_8:
+  { (JC_<somenum>:
+    ((JC_<somenum>: gt_int(sub_pointer(last, first), (0)))
+    and ((JC_<somenum>: le_int(offset_min(int_P_first_1_alloc_table, first), (0)))
+        and (JC_<somenum>:
             ge_int(offset_max(int_P_first_1_alloc_table, first),
             sub_int(sub_pointer(last, first), (1))))))) }
   (init:
@@ -551,7 +551,7 @@ let find_int_array_safety =
      (let __retres = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_2 = (__retres := null) in void); (return := !__retres);
+       (let jessie_<somenum> = (__retres := null) in void); (return := !__retres);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 

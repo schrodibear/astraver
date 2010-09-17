@@ -537,6 +537,9 @@ why3: why/Creation_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/Creation_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include Creation.depend
 
 depend: coq/Creation_why.v
@@ -2248,9 +2251,9 @@ let Creation_test1_ensures_default =
      (JC_73:
      (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
      (let tt =
-     (let jessie_95 = this in
-     (let jessie_94 = (17) in
-     (JC_74: ((cons_Creation_int jessie_95) jessie_94)))) in this))) in
+     (let jessie_<num> = this in
+     (let jessie_<num> = (17) in
+     (JC_74: ((cons_Creation_int jessie_<num>) jessie_<num>)))) in this))) in
      begin
        (return := (K_9: ((safe_acc_ !Creation_simple_val) t_1)));
       (raise Return) end); absurd  end with Return -> !return end))
@@ -2269,9 +2272,9 @@ let Creation_test1_ensures_normal =
      (JC_75:
      (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
      (let tt =
-     (let jessie_101 = this in
-     (let jessie_100 = (17) in
-     (JC_76: ((cons_Creation_int jessie_101) jessie_100)))) in this))) in
+     (let jessie_<num> = this in
+     (let jessie_<num> = (17) in
+     (JC_76: ((cons_Creation_int jessie_<num>) jessie_<num>)))) in this))) in
      begin
        (return := (K_9: ((safe_acc_ !Creation_simple_val) t_1)));
       (raise Return) end); absurd  end with Return -> !return end))
@@ -2287,16 +2290,16 @@ let Creation_test1_safety =
      (let t_1 =
      (K_10:
      (let this =
-     (let jessie_86 =
+     (let jessie_<num> =
      (JC_69:
      (((alloc_struct_Creation_requires (1)) Object_alloc_table) Object_tag_table)) in
      (JC_70:
-     (assert { ge_int(offset_max(Object_alloc_table, jessie_86), (0)) };
-     jessie_86))) in
+     (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
+     jessie_<num>))) in
      (let tt =
-     (let jessie_89 = this in
-     (let jessie_88 = (17) in
-     (JC_71: ((cons_Creation_int_requires jessie_89) jessie_88)))) in this))) in
+     (let jessie_<num> = this in
+     (let jessie_<num> = (17) in
+     (JC_71: ((cons_Creation_int_requires jessie_<num>) jessie_<num>)))) in this))) in
      begin
        (return := (K_9:
                   (JC_72:
@@ -2316,7 +2319,7 @@ let Creation_test2_ensures_default =
      (JC_91:
      (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
      (let tt_0 =
-     (let jessie_111 = this_3 in (JC_92: (cons_Creation jessie_111))) in
+     (let jessie_<num> = this_3 in (JC_92: (cons_Creation jessie_<num>))) in
      this_3))) in
      begin
        (return := (K_12: ((safe_acc_ !Creation_simple_val) t_0)));
@@ -2336,7 +2339,7 @@ let Creation_test2_ensures_normal =
      (JC_93:
      (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
      (let tt_0 =
-     (let jessie_116 = this_3 in (JC_94: (cons_Creation jessie_116))) in
+     (let jessie_<num> = this_3 in (JC_94: (cons_Creation jessie_<num>))) in
      this_3))) in
      begin
        (return := (K_12: ((safe_acc_ !Creation_simple_val) t_0)));
@@ -2353,15 +2356,15 @@ let Creation_test2_safety =
      (let t_0 =
      (K_13:
      (let this_3 =
-     (let jessie_104 =
+     (let jessie_<num> =
      (JC_87:
      (((alloc_struct_Creation_requires (1)) Object_alloc_table) Object_tag_table)) in
      (JC_88:
-     (assert { ge_int(offset_max(Object_alloc_table, jessie_104), (0)) };
-     jessie_104))) in
+     (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
+     jessie_<num>))) in
      (let tt_0 =
-     (let jessie_106 = this_3 in
-     (JC_89: (cons_Creation_requires jessie_106))) in this_3))) in
+     (let jessie_<num> = this_3 in (JC_89: (cons_Creation_requires jessie_<num>))) in
+     this_3))) in
      begin
        (return := (K_12:
                   (JC_90:
@@ -2381,10 +2384,10 @@ let Creation_test3_ensures_default =
      (JC_113:
      (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
      (let tt_1 =
-     (let jessie_130 = this_5 in
-     (let jessie_129 = (10) in
-     (let jessie_128 = (7) in
-     (JC_114: (((cons_Creation_int_int jessie_130) jessie_129) jessie_128))))) in
+     (let jessie_<num> = this_5 in
+     (let jessie_<num> = (10) in
+     (let jessie_<num> = (7) in
+     (JC_114: (((cons_Creation_int_int jessie_<num>) jessie_<num>) jessie_<num>))))) in
      this_5))) in
      begin
        (return := (K_15: ((safe_acc_ !Creation_simple_val) t)));
@@ -2404,10 +2407,10 @@ let Creation_test3_ensures_normal =
      (JC_115:
      (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
      (let tt_1 =
-     (let jessie_137 = this_5 in
-     (let jessie_136 = (10) in
-     (let jessie_135 = (7) in
-     (JC_116: (((cons_Creation_int_int jessie_137) jessie_136) jessie_135))))) in
+     (let jessie_<num> = this_5 in
+     (let jessie_<num> = (10) in
+     (let jessie_<num> = (7) in
+     (JC_116: (((cons_Creation_int_int jessie_<num>) jessie_<num>) jessie_<num>))))) in
      this_5))) in
      begin
        (return := (K_15: ((safe_acc_ !Creation_simple_val) t)));
@@ -2428,18 +2431,18 @@ let Creation_test3_safety =
      (let t =
      (K_16:
      (let this_5 =
-     (let jessie_119 =
+     (let jessie_<num> =
      (JC_109:
      (((alloc_struct_Creation_requires (1)) Object_alloc_table) Object_tag_table)) in
      (JC_110:
-     (assert { ge_int(offset_max(Object_alloc_table, jessie_119), (0)) };
-     jessie_119))) in
+     (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
+     jessie_<num>))) in
      (let tt_1 =
-     (let jessie_123 = this_5 in
-     (let jessie_122 = (10) in
-     (let jessie_121 = (7) in
+     (let jessie_<num> = this_5 in
+     (let jessie_<num> = (10) in
+     (let jessie_<num> = (7) in
      (JC_111:
-     (((cons_Creation_int_int_requires jessie_123) jessie_122) jessie_121))))) in
+     (((cons_Creation_int_int_requires jessie_<num>) jessie_<num>) jessie_<num>))))) in
      this_5))) in
      begin
        (return := (K_15:
@@ -2453,14 +2456,13 @@ let cons_Creation_ensures_default =
   (init:
   try
    begin
-     (let jessie_50 =
-     (let jessie_46 = (0) in
-     (let jessie_49 = this_2 in
-     (((safe_upd_ Creation_simple_val) jessie_49) jessie_46))) in void);
+     (let jessie_<num> = (0) in
+     (let jessie_<num> = this_2 in
+     (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
     (K_4:
-    (let jessie_52 = this_2 in
-    (let jessie_51 = (0) in
-    (JC_40: ((cons_Creation_int jessie_52) jessie_51))))); (raise Return) end
+    (let jessie_<num> = this_2 in
+    (let jessie_<num> = (0) in
+    (JC_40: ((cons_Creation_int jessie_<num>) jessie_<num>))))); (raise Return) end
    with Return -> void end) { (JC_29: true) }
 
 let cons_Creation_ensures_normal =
@@ -2469,14 +2471,13 @@ let cons_Creation_ensures_normal =
   (init:
   try
    begin
-     (let jessie_58 =
-     (let jessie_54 = (0) in
-     (let jessie_57 = this_2 in
-     (((safe_upd_ Creation_simple_val) jessie_57) jessie_54))) in void);
+     (let jessie_<num> = (0) in
+     (let jessie_<num> = this_2 in
+     (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
     (K_4:
-    (let jessie_60 = this_2 in
-    (let jessie_59 = (0) in
-    (JC_41: ((cons_Creation_int jessie_60) jessie_59))))); (raise Return) end
+    (let jessie_<num> = this_2 in
+    (let jessie_<num> = (0) in
+    (JC_41: ((cons_Creation_int jessie_<num>) jessie_<num>))))); (raise Return) end
    with Return -> void end)
   { (JC_35:
     ((JC_33: eq_int(select(Creation_simple_val, this_2), (0)))
@@ -2490,18 +2491,17 @@ let cons_Creation_int_ensures_default =
   (init:
   try
    begin
-     (let jessie_24 =
+     (let jessie_<num> =
      begin
-       (let jessie_18 =
-       (let jessie_14 = (0) in
-       (let jessie_17 = this_1 in
-       (((safe_upd_ Creation_simple_val) jessie_17) jessie_14))) in void);
+       (let jessie_<num> = (0) in
+       (let jessie_<num> = this_1 in
+       (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
       (K_2:
-      (let jessie_20 = n in
-      (let jessie_23 = this_1 in
+      (let jessie_<num> = n in
       begin
-        (((safe_upd_ Creation_simple_val) jessie_23) jessie_20); jessie_20
-      end))) end in void); (raise Return) end with Return -> void end)
+        (let jessie_<num> = this_1 in
+        (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)); jessie_<num>
+      end)) end in void); (raise Return) end with Return -> void end)
   { (JC_15: true) }
 
 let cons_Creation_int_ensures_normal =
@@ -2510,18 +2510,17 @@ let cons_Creation_int_ensures_normal =
   (init:
   try
    begin
-     (let jessie_36 =
+     (let jessie_<num> =
      begin
-       (let jessie_30 =
-       (let jessie_26 = (0) in
-       (let jessie_29 = this_1 in
-       (((safe_upd_ Creation_simple_val) jessie_29) jessie_26))) in void);
+       (let jessie_<num> = (0) in
+       (let jessie_<num> = this_1 in
+       (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
       (K_2:
-      (let jessie_32 = n in
-      (let jessie_35 = this_1 in
+      (let jessie_<num> = n in
       begin
-        (((safe_upd_ Creation_simple_val) jessie_35) jessie_32); jessie_32
-      end))) end in void); (raise Return) end with Return -> void end)
+        (let jessie_<num> = this_1 in
+        (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)); jessie_<num>
+      end)) end in void); (raise Return) end with Return -> void end)
   { (JC_21:
     ((JC_19: eq_int(select(Creation_simple_val, this_1), n))
     and (JC_20:
@@ -2534,14 +2533,13 @@ let cons_Creation_int_int_ensures_default =
   (init:
   try
    begin
-     (let jessie_74 =
-     (let jessie_70 = (0) in
-     (let jessie_73 = this_0 in
-     (((safe_upd_ Creation_simple_val) jessie_73) jessie_70))) in void);
+     (let jessie_<num> = (0) in
+     (let jessie_<num> = this_0 in
+     (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
     (K_7:
-    (let jessie_76 = this_0 in
-    (let jessie_75 = (K_6: ((add_int n_0) m)) in
-    (JC_57: ((cons_Creation_int jessie_76) jessie_75))))); (raise Return) end
+    (let jessie_<num> = this_0 in
+    (let jessie_<num> = (K_6: ((add_int n_0) m)) in
+    (JC_57: ((cons_Creation_int jessie_<num>) jessie_<num>))))); (raise Return) end
    with Return -> void end) { (JC_46: true) }
 
 let cons_Creation_int_int_ensures_normal =
@@ -2550,14 +2548,13 @@ let cons_Creation_int_int_ensures_normal =
   (init:
   try
    begin
-     (let jessie_82 =
-     (let jessie_78 = (0) in
-     (let jessie_81 = this_0 in
-     (((safe_upd_ Creation_simple_val) jessie_81) jessie_78))) in void);
+     (let jessie_<num> = (0) in
+     (let jessie_<num> = this_0 in
+     (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
     (K_7:
-    (let jessie_84 = this_0 in
-    (let jessie_83 = (K_6: ((add_int n_0) m)) in
-    (JC_58: ((cons_Creation_int jessie_84) jessie_83))))); (raise Return) end
+    (let jessie_<num> = this_0 in
+    (let jessie_<num> = (K_6: ((add_int n_0) m)) in
+    (JC_58: ((cons_Creation_int jessie_<num>) jessie_<num>))))); (raise Return) end
    with Return -> void end)
   { (JC_52:
     ((JC_50: eq_int(select(Creation_simple_val, this_0), add_int(n_0, m)))
@@ -2571,14 +2568,13 @@ let cons_Creation_int_int_safety =
   (init:
   try
    begin
-     (let jessie_66 =
-     (let jessie_62 = (0) in
-     (let jessie_65 = this_0 in
-     (((safe_upd_ Creation_simple_val) jessie_65) jessie_62))) in void);
+     (let jessie_<num> = (0) in
+     (let jessie_<num> = this_0 in
+     (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
     (K_7:
-    (let jessie_68 = this_0 in
-    (let jessie_67 = (K_6: ((add_int n_0) m)) in
-    (JC_56: ((cons_Creation_int_requires jessie_68) jessie_67)))));
+    (let jessie_<num> = this_0 in
+    (let jessie_<num> = (K_6: ((add_int n_0) m)) in
+    (JC_56: ((cons_Creation_int_requires jessie_<num>) jessie_<num>)))));
     (raise Return) end with Return -> void end) { true }
 
 let cons_Creation_int_safety =
@@ -2587,17 +2583,16 @@ let cons_Creation_int_safety =
   (init:
   try
    begin
-     (let jessie_12 =
+     (let jessie_<num> =
      begin
-       (let jessie_6 =
-       (let jessie_2 = (0) in
-       (let jessie_5 = this_1 in
-       (((safe_upd_ Creation_simple_val) jessie_5) jessie_2))) in void);
+       (let jessie_<num> = (0) in
+       (let jessie_<num> = this_1 in
+       (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
       (K_2:
-      (let jessie_8 = n in
-      (let jessie_11 = this_1 in
+      (let jessie_<num> = n in
       begin
-        (((safe_upd_ Creation_simple_val) jessie_11) jessie_8); jessie_8 end)))
+        (let jessie_<num> = this_1 in
+        (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)); jessie_<num> end))
      end in void); (raise Return) end with Return -> void end) { true }
 
 let cons_Creation_safety =
@@ -2606,14 +2601,13 @@ let cons_Creation_safety =
   (init:
   try
    begin
-     (let jessie_42 =
-     (let jessie_38 = (0) in
-     (let jessie_41 = this_2 in
-     (((safe_upd_ Creation_simple_val) jessie_41) jessie_38))) in void);
+     (let jessie_<num> = (0) in
+     (let jessie_<num> = this_2 in
+     (((safe_upd_ Creation_simple_val) jessie_<num>) jessie_<num>)));
     (K_4:
-    (let jessie_44 = this_2 in
-    (let jessie_43 = (0) in
-    (JC_39: ((cons_Creation_int_requires jessie_44) jessie_43)))));
+    (let jessie_<num> = this_2 in
+    (let jessie_<num> = (0) in
+    (JC_39: ((cons_Creation_int_requires jessie_<num>) jessie_<num>)))));
     (raise Return) end with Return -> void end) { true }
 
 let cons_TestSuperConstructor_ensures_default =
@@ -2623,9 +2617,9 @@ let cons_TestSuperConstructor_ensures_default =
   try
    begin
      (K_18:
-     (let jessie_142 = this_4 in
-     (let jessie_141 = (12) in
-     (JC_132: ((cons_Creation_int jessie_142) jessie_141))))); (raise Return)
+     (let jessie_<num> = this_4 in
+     (let jessie_<num> = (12) in
+     (JC_132: ((cons_Creation_int jessie_<num>) jessie_<num>))))); (raise Return)
    end with Return -> void end) { (JC_121: true) }
 
 let cons_TestSuperConstructor_ensures_normal =
@@ -2635,9 +2629,9 @@ let cons_TestSuperConstructor_ensures_normal =
   try
    begin
      (K_18:
-     (let jessie_144 = this_4 in
-     (let jessie_143 = (12) in
-     (JC_133: ((cons_Creation_int jessie_144) jessie_143))))); (raise Return)
+     (let jessie_<num> = this_4 in
+     (let jessie_<num> = (12) in
+     (JC_133: ((cons_Creation_int jessie_<num>) jessie_<num>))))); (raise Return)
    end with Return -> void end)
   { (JC_127:
     ((JC_125: eq_int(select(Creation_simple_val, this_4), (12)))
@@ -2652,9 +2646,9 @@ let cons_TestSuperConstructor_safety =
   try
    begin
      (K_18:
-     (let jessie_140 = this_4 in
-     (let jessie_139 = (12) in
-     (JC_131: ((cons_Creation_int_requires jessie_140) jessie_139)))));
+     (let jessie_<num> = this_4 in
+     (let jessie_<num> = (12) in
+     (JC_131: ((cons_Creation_int_requires jessie_<num>) jessie_<num>)))));
     (raise Return) end with Return -> void end) { true }
 
 
@@ -2700,7 +2694,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "812" begin = "15" end = "70"/>
+      <location file = "why/Creation.why" line = "812" begin = "15" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -5234,7 +5228,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 96, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 812, characters 15-70
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 812, characters 15-69
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

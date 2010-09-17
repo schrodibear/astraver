@@ -1,2 +1,2 @@
-File "why/union.why", line 2444, characters 8-308:
-warning: mutable u is not declared in effect; added as read
+Jessie support for unions and pointer casts is disabled
+make: *** [union.regtest] Error 1

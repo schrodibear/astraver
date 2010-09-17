@@ -135,7 +135,10 @@ let reg_decl ~in_mark ~out_mark ~name ~beh pos =
 
 let make_check ?mark ?kind pos e' =
   let mark = reg_check ?mark ?kind pos in
-  Label(mark,e')
+(*
+  eprintf "Jc_interp.make_check: adding label %s@." mark;
+*)
+  make_label mark e'
 
 let make_guarded_app ~mark kind pos f args =
   make_check ~mark ~kind pos (make_app f args)
@@ -222,11 +225,11 @@ let logic_current_rounding_mode () =
 
 let current_rounding_mode () =
   match !Jc_options.current_rounding_mode with
-    | FRMNearestEven -> Var "nearest_even"
-    | FRMDown -> Var "down"
-    | FRMUp -> Var "up"
-    | FRMToZero -> Var "to_zero"
-    | FRMNearestAway -> Var "nearest_away"
+    | FRMNearestEven -> mk_var "nearest_even"
+    | FRMDown -> mk_var "down"
+    | FRMUp -> mk_var "up"
+    | FRMToZero -> mk_var "to_zero"
+    | FRMNearestAway -> mk_var "nearest_away"
 
 let bin_op: expr_bin_op -> string = function
     (* integer *)
@@ -673,17 +676,17 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
     | JCTany, JCTany -> e'
       (* between integer/enum and real *)
     | JCTnative Treal, JCTnative Tinteger ->
-	begin match e' with
+	begin match e'.expr_node with
 	  | Cte(Prim_int n) ->
-	      Cte(Prim_real(n ^ ".0"))
-	  | _ ->
+	      { e' with expr_node = Cte(Prim_real(n ^ ".0")) }
+	  | _ -> 
 	      make_app "real_of_int" [ e' ]
 	end
     | JCTnative Treal, JCTenum ri ->
-	begin match e' with
+	begin match e'.expr_node with
 	  | Cte(Prim_int n) ->
-	      Cte(Prim_real(n ^ ".0"))
-	  | _ ->
+	      { e' with expr_node = Cte(Prim_real(n ^ ".0")) }
+	  | _ -> 
 	      make_app "real_of_int" [ make_app (logic_int_of_enum ri) [ e' ] ]
 	end
     | JCTnative Tinteger, JCTnative Treal ->
@@ -702,11 +705,11 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
     | JCTnative (Tgenfloat f), JCTnative Treal ->
 	begin
           try
-	    match e' with
+	    match e'.expr_node with
 	      | Cte (Prim_real x) ->
 		  let s = float_of_real f x in
-		  make_app ((float_format f)^"_of_real_exact")
-		  [ Cte (Prim_real s) ]
+		  make_app ((float_format f)^"_of_real_exact") 
+		  [ { e' with expr_node = Cte (Prim_real s) } ]		
 	      | _ -> raise Not_found
           with Not_found ->
 	    if check_int_overflow then
@@ -745,8 +748,8 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	in
 	let tag = tag_table_var(struct_root st1,e#region) in
         make_guarded_app ~mark DownCast pos downcast_fun
-          [ tag; e'; Var(tag_name st1) ]
-    | _ ->
+          [ tag; e'; mk_var(tag_name st1) ] 
+    | _ -> 
         Jc_typing.typing_error pos
           "can't coerce type %a to type %a"
           print_type ty_src print_type ty_dst
@@ -826,8 +829,8 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         TLet(vi.jc_var_info_final_name, t1', t2')
     | JCToffset(k,t1,st) ->
 	let ac = tderef_alloc_class ~type_safe t1 in
-        let alloc =
-	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
+        let _,alloc = 
+	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region) 
 	in
 	begin match ac with
 	  | JCalloc_root _ ->
@@ -836,7 +839,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
 		| Offset_max -> "offset_max"
               in
               let t1' = ft t1 in
-              LApp(f,[ alloc; t1' ])
+              LApp(f,[alloc; t1' ])
 	  | JCalloc_bitvector ->
               let f = match k with
 		| Offset_min -> "offset_min_bytes"
@@ -1378,10 +1381,13 @@ let assigns ~type_safe ?region_list before ef locs loc =
     (fun (mc,r) p acc ->
        let v = memory_name(mc,r) in
        let ac = alloc_class_of_mem_class mc in
+       let _,alloc = talloc_table_var ~label_in_name:false before (ac,r) in
+                 
        make_and acc
-	 (let a = LPred("not_assigns",
-                [talloc_table_var ~label_in_name:false before (ac,r);
-                 lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false before v;
+	 (let a = LPred("not_assigns", 
+                [alloc;
+                 lvar ~constant:false (* <<- CHANGE THIS *) 
+                   ~label_in_name:false before v;
                  LVar v; location_list' p]) in
 	  LNamed(reg_check loc,a))
     ) mems a
@@ -1547,21 +1553,10 @@ let destruct_pointer e =
   let ptre, off = match e # node with
     | JCEshift (e1, e2) ->
 	e1,
-(*
-<<<<<<< .working
-	(match const_int_expr e2 with
-	   | Some n -> Int_offset (Num.string_of_num n)
-           | None -> Expr_offset e2)
-    | _ -> e, Int_offset "0"
-=======
-*)
 	(match const_int_expr e2 with
 	   | Some n -> Int_offset (Num.int_of_num n)
            | None -> Expr_offset e2)
     | _ -> e, Int_offset 0
-(*
->>>>>>> .merge-right.r4285
-*)
   in
     match ptre # typ with
       | JCTpointer (_, lb, rb) -> ptre, off, lb, rb
@@ -1570,7 +1565,7 @@ let destruct_pointer e =
 let rec make_lets l e =
   match l with
     | [] -> e
-    | (tmp,a)::l -> Let(tmp,a,make_lets l e)
+    | (tmp,a)::l -> mk_expr (Let(tmp,a,make_lets l e))
 
 let old_to_pre = function
   | LabelOld -> LabelPre
@@ -1633,14 +1628,14 @@ let assumption al a' =
   let read_effects =
     local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
   in
-  BlackBox(Annot_type(LTrue, unit_type, read_effects, [], a', []))
+  mk_expr (BlackBox(Annot_type(LTrue, unit_type, read_effects, [], a', [])))
 
 let check al a' =
   let ef = List.fold_left Jc_effect.assertion empty_effects al in
   let read_effects =
     local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
   in
-  BlackBox(Annot_type(a', unit_type, read_effects, [], LTrue, []))
+  mk_expr (BlackBox(Annot_type(a', unit_type, read_effects, [], LTrue, [])))
 
 (* decreases clauses: stored in global table for later use at each call sites *)
 
@@ -1687,6 +1682,7 @@ let get_measure_for f =
     // depending on type of p and value of i
    ...
 *)
+(*
 let rec make_upd_simple mark pos e1 fi tmp2 =
   (* Temporary variables to avoid duplicating code *)
   let tmpp = tmp_var_name () in
@@ -1733,13 +1729,101 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
       make_app "safe_upd_" [ mem; Var tmp1; Var tmp2 ]
   in
   tmp1, lets, e'
+*)
+
+
+
+let rec make_upd_simple mark pos e1 fi tmp2 =
+  (* Temporary variables to avoid duplicating code *)
+  let tmpp = tmp_var_name () in
+(*
+  eprintf "make_upd_simple: tmp_var_name for tmpp is %s@." tmpp;
+*)
+  let tmpi = tmp_var_name () in
+(*
+  eprintf "make_upd_simple: tmp_var_name for tmpi is %s@." tmpi;
+*)
+  let tmp1 = tmp_var_name () in  
+(*
+  eprintf "make_upd_simple: tmp_var_name for tmp1 is %s@." tmp1;
+*)
+  (* Define memory and allocation table *)
+  let mc,_ufi_opt = deref_mem_class ~type_safe:false e1 fi in
+  let mem = match (plain_memory_var (mc,e1#region)).expr_node with
+    | Var v -> v
+    | _ -> assert false
+  in
+  let ac = alloc_class_of_mem_class mc in
+(*
+  let alloc_var = alloc_table_name (ac,e1#region) in
+*)
+  let alloc = alloc_table_var (ac,e1#region) in
+  let is_ref,talloc = talloc_table_var ~label_in_name:true LabelHere (ac,e1#region) in
+  let p,off,lb,rb = destruct_pointer e1 in
+  let p' = expr p in
+  let i' = offset off in
+  let letspi = 
+    [ (tmpp,p') ; (tmpi,i') ; 
+      (tmp1,make_app "shift" [mk_var tmpp; mk_var tmpi])] 
+  in
+  try
+    let s,b1,b2 =
+      match off, lb, rb with
+        | Int_offset s, Some lb, Some rb when bounded lb rb s ->
+            (*
+              make_app "safe_upd_" [ mem; mk_var tmp1; mk_var tmp2 ]
+            *)
+            s,true,true
+        | Int_offset s, Some lb, _ when lbounded lb s ->
+	    (*
+              make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+              [ alloc; mem; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
+            *)
+            s, true, false
+        | Int_offset s, _, Some rb when rbounded rb s ->
+	    (*
+              make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+              [ alloc; mem; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
+            *)
+            s, false, true
+              (*
+	        | Int_offset s, None, None when int_of_string s = 0 ->
+	        [ (tmp1, p') ], 
+              (*
+                make_guarded_app ~mark PointerDeref pos "upd_" 
+                [ alloc; mem ; mk_var tmp1; mk_var tmp2 ]
+              *)
+                Upd(alloc, mem , mk_var tmp1, mk_var tmp2)
+              *)
+        | Int_offset s, None, None ->
+	    (*
+              make_guarded_app ~mark PointerDeref pos "upd_" 
+              [ alloc; mem ; mk_var tmp1; mk_var tmp2 ]
+            *)
+            s, false, false
+        | _ ->
+            raise Exit
+    in
+(*    Format.eprintf "found constant update let %s = %a in (%s + %d).%s = ...@." tmpp Output.fprintf_expr p' tmpp s mem;
+*)
+    let letspi = if s = 0 then [ (tmpp,p') ] else letspi in
+    tmp1, [], 
+    mk_expr (MultiAssign(mark,pos,letspi, is_ref, talloc, alloc, tmpp, p', mem, [s, b1, b2, tmp2]))
+ with Exit ->
+   tmp1,letspi, 
+   if (safety_checking()) then
+     make_guarded_app ~mark PointerDeref pos "offset_upd_" 
+	       [ alloc; mk_var mem ; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
+   else
+     make_app "safe_upd_" [ mk_var mem; mk_var tmp1; mk_var tmp2 ]
+     
 
 and make_upd_union mark pos off e1 fi tmp2 =
   let e1' = expr e1 in
   (* Convert value assigned into bitvector *)
   let e2' = match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [Var tmp2]
-    | JCTnative Tinteger -> make_app logic_bitvector_of_integer [Var tmp2]
+    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [mk_var tmp2]
+    | JCTnative Tinteger -> make_app logic_bitvector_of_integer [mk_var tmp2]
     | JCTnative _ -> assert false (* TODO ? *)
     | JCTtype_var _ -> assert false (* TODO ? *)
     | JCTpointer (_, _, _) -> assert false (* TODO ? *)
@@ -1774,7 +1858,7 @@ and make_upd_union mark pos off e1 fi tmp2 =
       in
       let off = string_of_int off and size = string_of_int size in
       make_app "replace_bytes"
-	[ deref; Cte(Prim_int off); Cte(Prim_int size); e2' ]
+	[ deref; mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size)); e2' ]
   in
   let lets = [ (tmp1,e1'); (tmp2,e2') ] in
   let tmp1, lets', e' = make_upd_simple mark pos e1 fi tmp2 in
@@ -1784,7 +1868,7 @@ and make_upd_bytes mark pos e1 fi tmp2 =
   let e1' = expr e1 in
   (* Convert value assigned into bitvector *)
   let e2' = match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [Var tmp2]
+    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [mk_var tmp2]
     | _ty -> assert false (* TODO *)
   in
   (* Temporary variables to avoid duplicating code *)
@@ -1808,12 +1892,14 @@ and make_upd_bytes mark pos e1 fi tmp2 =
   let off = string_of_int off and size = string_of_int size in
   let e' =
     if safety_checking () then
-      make_guarded_app ~mark PointerDeref pos "upd_bytes_"
-        [ alloc; mem; Var tmp1; Cte(Prim_int off); Cte(Prim_int size);
-	  Var tmp2 ]
+      make_guarded_app ~mark PointerDeref pos "upd_bytes_" 
+        [ alloc; mem; mk_var tmp1; 
+          mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size)); 
+	  mk_var tmp2 ]
     else
       make_app "safe_upd_bytes_"
-	[ mem; Var tmp1; Cte(Prim_int off); Cte(Prim_int size); Var tmp2 ]
+	[ mem; mk_var tmp1; mk_expr (Cte(Prim_int off)); 
+          mk_expr (Cte(Prim_int size)); mk_var tmp2 ]
   in
   let lets = [ (tmp1,e1'); (tmp2,e2') ] in
   tmp1, lets, e'
@@ -1840,8 +1926,8 @@ and make_upd mark pos e1 fi e2 =
 	let write_effects =
 	  local_write_effects ~callee_reads:empty_effects ~callee_writes:ef
 	in
-	let e2' =
-	  BlackBox(Annot_type(LTrue, unit_type, [], write_effects, LTrue, []))
+	let e2' = 
+	  mk_expr(BlackBox(Annot_type(LTrue, unit_type, [], write_effects, LTrue, [])) )
 	in
 	tmp1, lets, append e1' e2'
     | JCmem_plain_union _vi, _ ->
@@ -1899,7 +1985,7 @@ and make_deref_union mark pos off e fi =
   in
   let off = string_of_int off and size = string_of_int size in
   let e' =
-    make_app "extract_bytes" [ e'; Cte(Prim_int off); Cte(Prim_int size) ]
+    make_app "extract_bytes" [ e'; mk_expr (Cte(Prim_int off)); mk_expr(Cte(Prim_int size)) ]
   in
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
@@ -1925,10 +2011,12 @@ and make_deref_bytes mark pos e fi =
   let e' =
     if safety_checking () then
       make_guarded_app ~mark PointerDeref pos "acc_bytes_"
-        [ alloc; mem; expr e; Cte(Prim_int off); Cte(Prim_int size) ]
+        [ alloc; mem; expr e; mk_expr (Cte(Prim_int off)); 
+          mk_expr (Cte(Prim_int size)) ]
     else
       make_app "safe_acc_bytes_"
-	[ mem; expr e; Cte(Prim_int off); Cte(Prim_int size) ]
+	[ mem; expr e; mk_expr (Cte(Prim_int off)); 
+          mk_expr (Cte(Prim_int size)) ]
   in
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
@@ -1974,7 +2062,7 @@ and make_deref mark pos e1 fi =
 	make_deref_bytes mark pos e1 fi
 
 and offset = function
-  | Int_offset s -> Cte (Prim_int (string_of_int s))
+  | Int_offset s -> mk_expr (Cte (Prim_int (string_of_int s)))
   | Expr_offset e ->
       coerce ~check_int_overflow:(safety_checking())
         e#mark e#pos integer_type e#typ e
@@ -1984,8 +2072,8 @@ and offset = function
 and type_assert tmp ty e =
   let offset k e1 ty tmp =
     let ac = deref_alloc_class ~type_safe:false e1 in
-    let alloc =
-      talloc_table_var ~label_in_name:false LabelHere (ac,e1#region)
+    let _,alloc = 
+      talloc_table_var ~label_in_name:false LabelHere (ac,e1#region) 
     in
     match ac with
       | JCalloc_root _ ->
@@ -2072,26 +2160,30 @@ and type_assert tmp ty e =
 	end
     | _ -> LTrue
   in
-  expr_coerce ty e, a
+  (coerce ~check_int_overflow:(safety_checking())
+    e#mark e#pos ty
+    e#typ e (expr e),
+   a)
 
 and list_type_assert vi e (lets, params) =
   let ty = vi.jc_var_info_type in
   let tmp = tmp_var_name() (* vi.jc_var_info_name *) in
   let e,a = type_assert tmp ty e in
-  (tmp, e, a) :: lets , (Var tmp) :: params
+  (tmp, e, a) :: lets , (mk_var tmp) :: params
 
 and value_assigned mark pos ty e =
     let tmp = tmp_var_name () in
     let e,a = type_assert tmp ty e in
     if a <> LTrue && safety_checking() then
-      Let(tmp,e,make_check ~mark ~kind:IndexBounds pos (Assert(`ASSERT,a,Var tmp)))
+      mk_expr (Let(tmp,e,make_check ~mark ~kind:IndexBounds pos 
+            (mk_expr (Assert(`ASSERT,a,mk_var tmp)))))
     else e
 
 and expr e =
   let infunction = get_current_function () in
   let e' = match e#node with
-    | JCEconst JCCnull -> Var "null"
-    | JCEconst c -> Cte(const c)
+    | JCEconst JCCnull -> mk_var "null"
+    | JCEconst c -> mk_expr (Cte(const c))
     | JCEvar v -> var v
     | JCEunary((`Uminus,(`Double|`Float as format)),e2) ->
         let e2' = expr e2 in
@@ -2128,12 +2220,12 @@ and expr e =
         let e1' = expr e1 in
         let e2' = expr e2 in
         (* lazy conjunction *)
-        And(e1',e2')
+        mk_expr (And(e1',e2'))
     | JCEbinary(e1,(`Blor,_),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
         (* lazy disjunction *)
-        Or(e1',e2')
+        mk_expr (Or(e1',e2'))
     | JCEbinary(e1,(#arithmetic_op as op,(`Double|`Float|`Binary80 as format)),e2) ->
 	let e1' = expr e1 in
         let e2' = expr e2 in
@@ -2166,7 +2258,7 @@ and expr e =
         let e1' = expr e1 in
         let e2' = expr e2 in
         let e3' = expr e3 in
-        If(e1',e2',e3')
+        mk_expr (If(e1',e2',e3'))
     | JCEoffset(k,e1,st) ->
 	let ac = deref_alloc_class ~type_safe:false e1 in
         let alloc = alloc_table_var (ac,e1#region) in
@@ -2183,7 +2275,7 @@ and expr e =
 		| Offset_max -> "offset_max_bytes"
               in
 	      let s = string_of_int (struct_size_in_bytes st) in
-	      make_app f [alloc; expr e1; Cte(Prim_int s)]
+	      make_app f [alloc; expr e1; mk_expr (Cte(Prim_int s))] 
 	end
     | JCEaddress(Addr_absolute,e1) ->
         make_app "absolute_address" [ expr e1 ]
@@ -2195,22 +2287,25 @@ and expr e =
         let e1' = expr e1 in
         let tag = tag_table_var (struct_root st,e1#region) in
         (* always safe *)
-        make_app "instanceof_" [ tag; e1'; Var(tag_name st) ]
+        make_app "instanceof_" [ tag; e1'; mk_var(tag_name st) ]
     | JCEcast(e1,st) ->
         if struct_of_union st then
 	  expr e1
 	else
           let e1' = expr e1 in
           let tmp = tmp_var_name () in
+(*
+          eprintf "JCEcast: tmp_var_name for tmp is %s@." tmp;
+*)
           let tag = tag_table_var (struct_root st,e1#region) in
 	  let downcast_fun =
 	    if safety_checking () then "downcast_" else "safe_downcast_"
 	  in
           let call =
             make_guarded_app e#mark DownCast e#pos downcast_fun
-	      [ tag; Var tmp; Var(tag_name st) ]
+	      [ tag; mk_var tmp; mk_var(tag_name st) ]
           in
-          Let(tmp,e1',call) (* Yannick: why a temporary here? *)
+          mk_expr (Let(tmp,e1',call)) (* Yannick: why a temporary here? *)
     | JCEbitwise_cast(e1,_st) ->
 	expr e1
     | JCErange_cast(e1,ri) ->
@@ -2247,10 +2342,10 @@ and expr e =
           let tag = plain_tag_table_var (struct_root st,e#region) in
           let mut = mutable_name pc in
           let com = committed_name pc in
-          make_app "alloc_parameter_ownership"
-            [alloc; Var mut; Var com; tag; Var (tag_name st);
-             coerce ~check_int_overflow:(safety_checking())
-	       e1#mark e1#pos integer_type
+          make_app "alloc_parameter_ownership" 
+            [alloc; mk_var mut; mk_var com; tag; mk_var (tag_name st); 
+             coerce ~check_int_overflow:(safety_checking()) 
+	       e1#mark e1#pos integer_type 
 	       e1#typ e1 e1']
 	else
           make_guarded_app e#mark
@@ -2268,7 +2363,7 @@ and expr e =
 	  let pc = pointer_class e1#typ in
 	  let com = committed_name pc in
 	  make_app "free_parameter_ownership"
-	    [alloc; Var com; e1']
+	    [alloc; mk_var com; e1']
         else
 	  let free_fun =
 	    if safety_checking () then "free_parameter"
@@ -2331,20 +2426,20 @@ and expr e =
 		if new_arg_types_assert = LTrue || not (safety_checking()) then
 		  call
 		else
-		  Assert(`ASSERT,new_arg_types_assert,call)
+		  mk_expr (Assert(`ASSERT,new_arg_types_assert,call))
               in
               let call =
 		List.fold_right
 		  (fun opt c ->
 		     match opt with
-                       | (tmp,e,_ass) -> Let(tmp,e,c))
+                       | (tmp,e,_ass) -> mk_expr (Let(tmp,e,c)))
 		  arg_types_asserts call
               in
 	      let call = append prolog call in
-	      let call =
-		if epilog = Void then call else
+	      let call = 
+		if epilog.expr_node = Void then call else 
 		  let tmp = tmp_var_name () in
-		  Let(tmp,call,append epilog (Var tmp))
+		  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
 	      in
               define_locals ~writes:locals call
 
@@ -2400,7 +2495,7 @@ and expr e =
 		match f.jc_fun_info_builtin_treatment with
 		  | TreatNothing -> args
 		  | TreatGenFloat format ->
-		      (Var (float_format format))::(current_rounding_mode ())::args
+		      (mk_var (float_format format))::(current_rounding_mode ())::args
 	      in
 	      let pre, fname, locals, prolog, epilog, new_args =
 		make_arguments
@@ -2466,11 +2561,10 @@ and expr e =
 		    LPred(r,[this_measure_why;cur_measure_why])
 		  in
 		  make_check ~mark:e#mark ~kind:VarDecr e#pos
-(* Francois mardi 29 juin 2010 : `ASSERT -> `CHECK
-   if this_measure_why = 0 and cur_measure_why = 0 then this assert is not
-   false (0>0) so all the remaining goal are trivial. *)
-		    (Assert(`CHECK,pre,call))
-
+                    (* Francois mardi 29 juin 2010 : `ASSERT -> `CHECK
+                       if this_measure_why = 0 and cur_measure_why = 0 then this assert is not
+                       false (0>0) so all the remaining goal are trivial. *)
+                    (mk_expr (Assert(`CHECK,pre,call)))
                   with Exit -> call
 		else call
 	      in
@@ -2480,7 +2574,7 @@ and expr e =
 		  call
 		else
 		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos
-		    (Assert(`ASSERT,pre,call))
+		    (mk_expr (Assert(`ASSERT,pre,call)))
 	      in
               let arg_types_assert =
 		List.fold_right
@@ -2494,26 +2588,33 @@ and expr e =
 		  call
 		else
 		  make_check ~mark:e#mark ~kind:IndexBounds e#pos
-		    (Assert(`ASSERT,arg_types_assert,call))
+		    (mk_expr (Assert(`ASSERT,arg_types_assert,call)))
               in
               let call =
 		List.fold_right
 		  (fun opt c ->
 		     match opt with
-                       | (tmp,e,_ass) -> Let(tmp,e,c))
+                       | (tmp,e,_ass) -> mk_expr (Let(tmp,e,c)))
 		  arg_types_asserts call
               in
 	      let call = append prolog call in
-	      let call =
-		if epilog = Void then call else
+	      let call = 
+		if epilog.expr_node = Void then call else 
 		  let tmp = tmp_var_name () in
-		  Let(tmp,call,append epilog (Var tmp))
+		  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
 	      in
               define_locals ~writes:locals call
 	end
     | JCEassign_var(v,e1) ->
+(*
+        begin
+          match e#mark with
+            | "" -> ()
+            | l -> Format.eprintf "met assign_var with label %s@." l
+        end;
+*)
 	let e1' = value_assigned e#mark e#pos v.jc_var_info_type e1 in
-	let e' = Assign(v.jc_var_info_final_name,e1') in
+	let e' = mk_expr (Assign(v.jc_var_info_final_name,e1')) in
 	if e#typ = Jc_pervasives.unit_type then
           begin
 (*
@@ -2532,27 +2633,38 @@ and expr e =
 	let e2' = value_assigned e#mark e#pos fi.jc_field_info_type e2 in
 	(* Define temporary variable for value assigned *)
 	let tmp2 = tmp_var_name () in
+(*
+        eprintf "JCEassign_heap: tmp_var_name for tmp2 is %s@." tmp2;
+*)
 	let v2 = Jc_pervasives.var fi.jc_field_info_type tmp2 in
 	let e2 =
 	  new expr_with ~typ:fi.jc_field_info_type ~node:(JCEvar v2) e2
 	in
 	(* Translate assignment *)
         let tmp1, lets, e' = make_upd e#mark e#pos e1 fi e2 in
-	let lets = (tmp2,e2') :: lets in
         let e' =
 	  if (safety_checking()) && !Jc_options.inv_sem = InvOwnership then
             append (assert_mutable (LVar tmp1) fi) e'
 	  else e'
 	in
-	let e' =
-	  if e#typ = Jc_pervasives.unit_type then e' else append e' (Var tmp2)
-	in
-        let e' = make_lets lets e' in
+	let lets = (tmp2,e2') :: lets in
+        let e' =
+          if e#typ = Jc_pervasives.unit_type then
+	    match e'.expr_node with
+              | MultiAssign(m,p,lets',isrefa,ta,a,tmpe,e,f,l) -> 
+                  { e' with expr_node = 
+                      MultiAssign(m,p,lets@lets',isrefa,ta,a,tmpe,e,f,l)}
+              | _ -> 
+                  make_lets lets e'
+          else
+            make_lets lets (append e' (mk_var tmp2))
+        in
         if !Jc_options.inv_sem = InvOwnership then
           append e' (assume_field_invariants fi)
         else e'
+
     | JCEblock el ->
-        List.fold_right append (List.map expr el) Void
+        List.fold_right append (List.map expr el) void
     | JCElet(v,e1,e2) ->
         let e1' = match e1 with
           | None ->
@@ -2562,22 +2674,22 @@ and expr e =
 	in
 	let e2' = expr e2 in
         if v.jc_var_info_assigned then
-	  Let_ref(v.jc_var_info_final_name,e1',e2')
+	  mk_expr (Let_ref(v.jc_var_info_final_name,e1',e2'))
         else
-	  Let(v.jc_var_info_final_name,e1',e2')
-    | JCEreturn_void -> Raise(jessie_return_exception,None)
-    | JCEreturn(ty,e1) ->
+	  mk_expr (Let(v.jc_var_info_final_name,e1',e2'))
+    | JCEreturn_void -> mk_expr (Raise(jessie_return_exception,None))
+    | JCEreturn(ty,e1) -> 
 	let e1' = value_assigned e#mark e#pos ty e1 in
-	let e' = Assign(jessie_return_variable,e1') in
-	append e' (Raise(jessie_return_exception,None))
+	let e' = mk_expr (Assign(jessie_return_variable,e1')) in
+	append e' (mk_expr (Raise(jessie_return_exception,None)))
     | JCEunpack(st,e1,as_st) ->
         let e1' = expr e1 in
         make_guarded_app e#mark Unpack e#pos
-          (unpack_name st) [ e1'; Var (tag_name as_st) ]
+          (unpack_name st) [ e1'; mk_var (tag_name as_st) ]
     | JCEpack(st,e1,from_st) ->
         let e1' = expr e1 in
         make_guarded_app e#mark Pack e#pos
-          (pack_name st) [ e1'; Var (tag_name from_st) ]
+          (pack_name st) [ e1'; mk_var (tag_name from_st) ]
     | JCEassert(b,asrt,a) ->
 (*
         Format.eprintf "assertion meet, kind %a for behaviors: %a@."
@@ -2595,15 +2707,15 @@ and expr e =
 	begin match asrt with
 	  | Aassert | Ahint ->
 	      if in_current_behavior b then
-		Assert(`ASSERT,a',Void)
+		mk_expr (Assert(`ASSERT,a',void))
 	      else if in_default_behavior b then
 		assumption [ a ] a'
               else
-                Void
+                void
 	  | Aassume ->
 	      if in_current_behavior b || in_default_behavior b then
 		assumption [ a ] a'
-	      else Void
+	      else void
           | Acheck ->
 (*
               (match b with
@@ -2611,8 +2723,8 @@ and expr e =
                  | b::_ -> Format.eprintf "check for behavior %s,...@." b#name);
 *)
               if in_current_behavior b then
-		Assert(`CHECK,a',Void)
-	      else Void
+		mk_expr (Assert(`CHECK,a',void))
+	      else void
 	end
     | JCEloop(la,e1) ->
 	let inv,assume_from_inv =
@@ -2821,8 +2933,12 @@ and expr e =
                 Some (LConst(Prim_int "0"),None)
             | _ -> None
         in
-        Label(loop_label.label_info_final_name,
-	      While(Cte(Prim_bool true), inv', loop_variant, body))
+(*
+        eprintf "Jc_interp.expr: adding loop label %s@." loop_label.label_info_final_name;
+*)
+        make_label loop_label.label_info_final_name
+	  (mk_expr (While((mk_expr (Cte(Prim_bool true)), 
+                           inv', loop_variant, body))))
 
     | JCEcontract(req,dec,vi_result,behs,e) ->
 	let r =
@@ -2855,28 +2971,28 @@ and expr e =
 	      if is_current_behavior id then
                 if r = LTrue
                 then
-                  Triple(true,LTrue,expr e,post,[])
+                  mk_expr (Triple(true,LTrue,expr e,post,[]))
                 else
                   append
-                    (BlackBox(Annot_type(LTrue,unit_type,[],[],r,[])))
-                    (Triple(true,LTrue,expr e,post,[]))
+                    (mk_expr (BlackBox(Annot_type(LTrue,unit_type,[],[],r,[]))))
+                    (mk_expr (Triple(true,LTrue,expr e,post,[])))
               else
-                BlackBox(Annot_type(r, tr_var_type vi_result, [], [], post, []))
+                (mk_expr (BlackBox(Annot_type(r, tr_var_type vi_result, [], [], post, []))))
 	  | _ -> assert false
 	end
     | JCEthrow(exc,Some e1) ->
         let e1' = expr e1 in
-        Raise(exception_name exc,Some e1')
+        mk_expr (Raise(exception_name exc,Some e1'))
     | JCEthrow(exc, None) ->
-        Raise(exception_name exc,None)
+        mk_expr (Raise(exception_name exc,None))
     | JCEtry (s, catches, _finally) ->
 (*      assert (finally.jc_statement_node = JCEblock []); (\* TODO *\) *)
         let catch (s,excs) (ei,v_opt,st) =
           if ExceptionSet.mem ei excs then
-            (Try(s,
-                 exception_name ei,
+            (mk_expr (Try(s, 
+                 exception_name ei, 
                  Option_misc.map (fun v -> v.jc_var_info_final_name) v_opt,
-                 expr st),
+                 expr st)),
              ExceptionSet.remove ei excs)
           else
             begin
@@ -2894,23 +3010,233 @@ and expr e =
         let tmp = tmp_var_name () in
         let body = pattern_list_expr expr (LVar tmp) e#region
           e#typ psl in
-        Let(tmp, expr e, body)
+        mk_expr (Let(tmp, expr e, body))
   in
   let e' =
-    if e#typ = Jc_pervasives.unit_type
-      && e#original_type <> Jc_pervasives.unit_type then
-	(* Create dummy temporary *)
-	let tmp = tmp_var_name () in
-	Let(tmp,e',Void)
-    else e'
+    (* Ideally, only labels used in logical annotations should be kept *)
+    let lab = e#mark in
+    if lab = "" then e' else 
+      begin
+        match e' with
+            (*
+              | MultiAssign _ -> assert false
+            *)
+          | _ -> 
+(*
+              if lab = "L2" then eprintf "Jc_interp.expr: adding label %s to expr %a@." lab Output.fprintf_expr e';
+*)
+              make_label e#mark e'
+      end
   in
-  (* Ideally, only labels used in logical annotations should be kept *)
-  if e#mark = "" then e' else Label(e#mark,e')
+  let e' = 
+    if e#typ = Jc_pervasives.unit_type then
+      if e#original_type <> Jc_pervasives.unit_type then
+        match e'.expr_node with
+          | MultiAssign _ -> e'
+          | _ ->
+	      (* Create dummy temporary *)
+	      let tmp = tmp_var_name () in
+	      mk_expr (Let(tmp,e',void))
+      else e'
+    else 
+      match e'.expr_node with
+        | MultiAssign _ -> assert false 
+        | _ -> e'
+  in
+(*
+  begin
+    match e' with
+      | MultiAssign _ -> eprintf "Jc_interp.expr produces MultiAssign@.";
+      | _ -> ()
+  end;
+*)
+  e'
 
-and expr_coerce ty e =
-  coerce ~check_int_overflow:(safety_checking())
-    e#mark e#pos ty
-    e#typ e (expr e)
+
+
+(*****
+
+finalization: removing MultiAssign expressions
+
+***)
+
+let make_old_style_update ~mark ~pos alloc tmpp tmpshift mem i b1 b2 tmp2 =
+  if safety_checking() then 
+    match b1,b2 with
+      | true,true ->
+          make_app "safe_upd_" [ mk_var mem; mk_var tmpshift; mk_var tmp2 ]
+      | true,false ->
+          make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+            [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte i); mk_var tmp2 ]
+      | false,true ->
+          make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+            [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte i); mk_var tmp2 ]
+      | false,false ->
+          make_guarded_app ~mark PointerDeref pos "upd_" 
+            [ alloc; mk_var mem ; mk_var tmpshift; mk_var tmp2 ]
+  else 
+    make_app "safe_upd_" [ mk_var mem; mk_var tmpshift; mk_var tmp2 ]
+
+let make_old_style_update_no_shift ~mark ~pos alloc tmpp mem b1 b2 tmp2 =
+  if safety_checking() then 
+    match b1,b2 with
+      | true,true ->
+          make_app "safe_upd_" [ mk_var mem; mk_var tmpp; mk_var tmp2 ]
+      | true,false ->
+          make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+            [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte (Prim_int "0")); mk_var tmp2 ]
+      | false,true ->
+          make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+            [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte (Prim_int "0")); mk_var tmp2 ]
+      | false,false ->
+          make_guarded_app ~mark PointerDeref pos "upd_" 
+            [ alloc; mk_var mem ; mk_var tmpp; mk_var tmp2 ]
+  else 
+    make_app "safe_upd_" [ mk_var mem; mk_var tmpp; mk_var tmp2 ]
+
+let make_not_assigns talloc mem t l =
+  let l = List.map (fun (i,_,_,_) -> i) l in
+  let l = List.sort Pervasives.compare l in
+  let rec merge l acc =
+    match l,acc with
+      | [],_ -> acc
+      | i::r, [] -> merge r [(i,i)]
+      | i::r, (a,b)::acc' ->
+          if i=b+1 then merge r ((a,i)::acc')
+          else merge r ((i,i)::acc) 
+  in
+  let i,l = match merge l [] 
+  with [] -> assert false
+    | i::l -> i,l
+  in
+  let pset_of_interval (a,b) =
+    if a=b then LApp("pset_singleton",[
+                       LApp("shift",[LVar t;
+                                     LConst (Prim_int (string_of_int a))])])
+    else LApp("pset_range",[
+                LApp("pset_singleton", [LVar t]);
+                LConst(Prim_int (string_of_int a));
+                LConst(Prim_int (string_of_int b))])
+  in      
+  let pset = List.fold_left
+    (fun acc i ->
+       LApp("pset_union",[pset_of_interval i; acc]))
+    (pset_of_interval i)
+    l
+  in
+  LPred("not_assigns",[talloc;LVarAtLabel(mem,"") ; LVar mem ; pset])
+    
+                           
+       
+  
+
+let rec finalize e =
+  match e.expr_node with
+    | Absurd | Void | Cte _ | Var _ | BlackBox _ | Assert _ | Triple _
+    | Deref _ 
+    | Raise(_, None)
+        -> e
+    | Loc (l, e1) -> {e with expr_node = Loc(l,finalize e1) }
+(*
+    | Label (l, e) -> Label(l,finalize e)
+*)
+    | Fun (_, _, _, _, _) -> assert false
+    | Try (e1, exc, arg, e2) -> 
+        {e with expr_node = Try(finalize e1, exc, arg, finalize e2)}
+    | Raise (id, Some e1) -> 
+        {e with expr_node = Raise(id, Some(finalize e1))}
+    | App (e1, e2) -> 
+        {e with expr_node = App(finalize e1, finalize e2)}
+    | Let_ref (x, e1, e2) -> 
+        {e with expr_node = Let_ref(x, finalize e1, finalize e2)}
+    | Let (x, e1, e2) -> 
+        {e with expr_node = Let(x, finalize e1, finalize e2)}
+    | Assign (x, e1) -> 
+        {e with expr_node = Assign(x, finalize e1) }
+    | Block(l) -> 
+        {e with expr_node = Block(List.map finalize l) }
+    | While (e1, inv, var, l) -> 
+        {e with expr_node = While(finalize e1, inv, var, List.map finalize l)}
+    | If (e1, e2, e3) -> 
+        {e with expr_node = If(finalize e1, finalize e2, finalize e3)}
+    | Not e1 -> 
+        {e with expr_node = Not(finalize e1)}
+    | Or (e1, e2) -> 
+        {e with expr_node = Or(finalize e1, finalize e2) }
+    | And (e1, e2) -> 
+        {e with expr_node = And(finalize e1, finalize e2) }
+    | MultiAssign(mark,pos,lets,isrefalloc,talloc,alloc,tmpe,_e,mem,l) ->
+(*
+        eprintf "finalizing a MultiAssign@.";
+*)
+        match l with
+          | [] -> assert false
+          | [(i,b1,b2,e')] -> 
+              if i=0 then
+                 make_lets lets 
+                   (make_old_style_update_no_shift ~mark ~pos alloc tmpe mem b1 b2 e')
+              else
+                let tmpshift = tmp_var_name () in
+(*
+                eprintf "Jc_interp.finalize: tmp_var_name for tmpshift is %s@." tmpshift;
+*)
+                let i = Prim_int (string_of_int i) in
+                make_lets lets 
+                  (make_lets [tmpshift,make_app "shift" [mk_var tmpe; mk_expr (Cte i)]]
+                     (make_old_style_update ~mark ~pos alloc tmpe tmpshift mem i b1 b2 e'))
+          | _ ->
+              let pre = 
+                if safety_checking() then 
+                  make_and_list
+                    (List.fold_left
+                       (fun acc (i,b1,b2,_) ->
+                          (* valid e+i *)
+                          let i = LConst (Prim_int (string_of_int i)) in
+                          (if b1 then LTrue else
+                             (* offset_min(alloc,e) <= i *)
+	                     LPred ("le_int",
+		                    [LApp("offset_min",
+                                          [talloc; LVar tmpe]);
+                                     i])) ::
+                            (if b2 then LTrue else
+                               (* i <= offset_max(alloc,e) *)
+	                       LPred ("le_int",
+		                      [i ;
+                                       LApp("offset_max",
+                                            [talloc; LVar tmpe])]))
+                          ::acc
+                       )
+                       []
+                       l)
+                else LTrue
+              in
+              let post = 
+                (* TODO ! generer le not_assigns !!!! *)
+                make_and_list
+                  (make_not_assigns talloc mem tmpe l ::
+                     List.map
+                     (fun (i,_,_,e') ->
+                        (* (e+i).f == e' *)
+                        LPred("eq",
+                              [ LApp("select",
+                                     [ LVar mem; 
+                                       LApp("shift", 
+                                            [ LVar tmpe ; LConst (Prim_int (string_of_int i))] )]);
+                                LVar e'])) l)
+              in
+              let reads = if isrefalloc then 
+                match talloc with
+                  | LVar v -> [v;mem] 
+                  | _ -> assert false
+              else
+                [mem]
+              in
+              make_lets lets 
+                (mk_expr (BlackBox (Annot_type(pre,unit_type,reads,[mem],post,[]))))
+
+
+let expr e = finalize (expr e)
+
 
 (*****************************)
 (* axioms, lemmas, goals   *)
@@ -3422,20 +3748,21 @@ let tr_fun f funpos spec body acc =
 	    let body = define_locals body in
 	    let body = match f.jc_fun_info_result.jc_var_info_type with
 	      | JCTnative Tunit ->
-		  Try(append body (Raise(jessie_return_exception,None)),
-		      jessie_return_exception, None, Void)
+		  mk_expr (Try(append body (mk_expr (Raise(jessie_return_exception,None))),
+		               jessie_return_exception, None, void))
 	      | _ ->
 		  let e' = any_value f.jc_fun_info_result.jc_var_info_type in
-		  Let_ref(jessie_return_variable, e',
-			  Try(append body Absurd,
-			      jessie_return_exception, None,
-			      Deref jessie_return_variable))
+		  mk_expr (Let_ref(jessie_return_variable, e',
+			           mk_expr (Try(append body (mk_expr Absurd),
+			                        jessie_return_exception, None,
+			                        mk_expr (Deref jessie_return_variable)))))
 	    in
 	    let body = make_label "init" body in
 	    let body =
 	      List.fold_right
-		(fun (mut_id,id) e' -> Let_ref(mut_id, plain_var id, e'))
-		list_of_refs body
+		(fun (mut_id,id) e' -> 
+                   mk_expr (Let_ref(mut_id, plain_var id, e'))) 
+		list_of_refs body 
 	    in
 	    (* FS#393: restore parameter real names *)
 	    List.iter
@@ -3462,12 +3789,12 @@ let tr_fun f funpos spec body acc =
 		if Jc_options.verify_invariants_only then acc else
                   Def(
                     newid,
-                    Fun(
+                    mk_expr (Fun(
                       params,
                       internal_requires,
                       safety_body,
                       internal_safety_post,
-                      excep_posts_for_others None excep_behaviors))
+                      excep_posts_for_others None excep_behaviors)))
 		  :: acc
 	    else acc
 	  in
@@ -3491,12 +3818,12 @@ let tr_fun f funpos spec body acc =
                      funpos;
                    Def(
                      newid,
-                     Fun(
+                     mk_expr (Fun(
 		       params,
 		       assume_in_precondition b internal_requires,
 		       normal_body,
 		       internal_post,
-		       excep_posts_for_others None excep_behaviors))
+		       excep_posts_for_others None excep_behaviors)))
 		   :: acc
 		 else acc
               ) normal_behaviors acc
@@ -3518,14 +3845,14 @@ let tr_fun f funpos spec body acc =
                           ~beh:("Exceptional behavior `" ^ id ^ "'")
                           funpos;
                         Def(newid,
-                            Fun(
+                            mk_expr (Fun(
 			      params,
 			      assume_in_precondition b internal_requires,
 			      except_body,
 			      LTrue,
 			      (exception_name exc, internal_post) ::
                                 excep_posts_for_others (Some exc)
-				excep_behaviors))
+				excep_behaviors)))
                         :: acc
 		      else acc
 		   ) bl acc

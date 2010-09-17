@@ -441,9 +441,9 @@ parameter f :
 parameter f_requires :
  x_1:int_P pointer ->
   int_P_x_2_alloc_table:int_P alloc_table ref ->
-   { (JC_3:
-     ((JC_1: le_int(offset_min(int_P_x_2_alloc_table, x_1), (0)))
-     and (JC_2: ge_int(offset_max(int_P_x_2_alloc_table, x_1), (0)))))}
+   { (JC_<somenum>:
+     ((JC_<somenum>: le_int(offset_min(int_P_x_2_alloc_table, x_1), (0)))
+     and (JC_<somenum>: ge_int(offset_max(int_P_x_2_alloc_table, x_1), (0)))))}
    unit reads int_P_x_2_alloc_table writes int_P_x_2_alloc_table { true }
 
 parameter g : int32 ref
@@ -452,7 +452,7 @@ parameter h : tt:unit -> { } unit reads g writes g { true }
 
 parameter h_requires :
  tt:unit ->
-  { (JC_15: eq_int(integer_of_int32(g), (0)))} unit reads g writes g { true }
+  { (JC_<somenum>: eq_int(integer_of_int32(g), (0)))} unit reads g writes g { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -472,58 +472,53 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_1 : int_P pointer) (int_P_x_2_alloc_table : int_P alloc_table ref) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(int_P_x_2_alloc_table, x_1), (0)))
-    and (JC_6: ge_int(offset_max(int_P_x_2_alloc_table, x_1), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_x_2_alloc_table, x_1), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_x_2_alloc_table, x_1), (0))))) }
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       ((safe_free_parameter int_P_x_2_alloc_table) x_1);
-      (assert { (JC_14: val(x_1, int_P_x_2_alloc_table@init)) }; void); void;
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_9: true) }
+     ((safe_free_parameter int_P_x_2_alloc_table) x_1);
+    (assert { (JC_<somenum>: val(x_1, int_P_x_2_alloc_table@init)) }; void); void;
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_1 : int_P pointer) (int_P_x_2_alloc_table : int_P alloc_table ref) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(int_P_x_2_alloc_table, x_1), (0)))
-    and (JC_6: ge_int(offset_max(int_P_x_2_alloc_table, x_1), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_x_2_alloc_table, x_1), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_x_2_alloc_table, x_1), (0))))) }
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       ((free_parameter int_P_x_2_alloc_table) x_1);
-      [ { } unit reads int_P_x_2_alloc_table
-        { (JC_13: val(x_1, int_P_x_2_alloc_table@init)) } ]; void;
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     ((free_parameter int_P_x_2_alloc_table) x_1);
+    [ { } unit reads int_P_x_2_alloc_table
+      { (JC_<somenum>: val(x_1, int_P_x_2_alloc_table@init)) } ]; void;
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { (JC_17: eq_int(integer_of_int32(g), (0))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(g), (0))) }
   (init:
   try
+   (C_7:
    begin
-     (C_7:
-     begin
-       (let jessie_4 = (g := (safe_int32_of_integer_ (1))) in void);
-      (assert { (JC_24: valg(g@init)) }; void); void; (raise Return) end);
-    (raise Return) end with Return -> void end) { (JC_19: true) }
+     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (1))) in void);
+    (assert { (JC_<somenum>: valg(g@init)) }; void); void; (raise Return);
+    (raise Return) end) with Return -> void end) { (JC_<somenum>: true) }
 
 let h_safety =
  fun (tt : unit) ->
-  { (JC_17: eq_int(integer_of_int32(g), (0))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(g), (0))) }
   (init:
   try
+   (C_7:
    begin
-     (C_7:
-     begin
-       (let jessie_2 = (g := (safe_int32_of_integer_ (1))) in void);
-      [ { } unit reads g { (JC_23: valg(g@init)) } ]; void; (raise Return)
-     end); (raise Return) end with Return -> void end) { true }
+     (let jessie_<somenum> = (g := (safe_int32_of_integer_ (1))) in void);
+    [ { } unit reads g { (JC_<somenum>: valg(g@init)) } ]; void; (raise Return);
+    (raise Return) end) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C labels.jessie --quiet -f labels.makefile project
@@ -542,7 +537,7 @@ why --project [...] why/labels.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/labels_po2.why">
-      <location file = "why/labels.why" line = "417" begin = "8" end = "50"/>
+      <location file = "why/labels.why" line = "415" begin = "6" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

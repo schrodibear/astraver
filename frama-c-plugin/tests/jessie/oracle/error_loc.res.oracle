@@ -304,12 +304,12 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f :
  x_0:int32 ->
   { } int32
-  { (JC_6: eq_int(integer_of_int32(result), integer_of_int32(x_0@))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(x_0@))) }
 
 parameter f_requires :
  x_0:int32 ->
   { } int32
-  { (JC_6: eq_int(integer_of_int32(result), integer_of_int32(x_0@))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(x_0@))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -329,23 +329,23 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (assert { (JC_10: gt_int(integer_of_int32(x_0), (0))) }; void); void;
+     (assert { (JC_<somenum>: gt_int(integer_of_int32(x_0), (0))) }; void); void;
     (return := x_0); (raise Return); absurd  end with Return -> !return end))
-  { (JC_5: eq_int(integer_of_int32(result), integer_of_int32(x_0@))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(x_0@))) }
 
 let f_safety =
  fun (x_0 : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     [ { } unit { (JC_9: gt_int(integer_of_int32(x_0), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: gt_int(integer_of_int32(x_0), (0))) } ]; void;
     (return := x_0); (raise Return); absurd  end with Return -> !return end))
   { true }
 

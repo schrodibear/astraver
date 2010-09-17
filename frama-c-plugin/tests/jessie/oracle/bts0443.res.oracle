@@ -415,17 +415,17 @@ parameter int_P_int_M_a_1 : (int_P, int32) memory ref
 parameter f :
  tt:unit ->
   { } unit reads int_P_a_1_alloc_table writes int_P_int_M_a_1
-  { ((JC_11: valid_a(int_P_a_1_alloc_table))
-    and (JC_9:
+  { ((JC_<somenum>: valid_a(int_P_a_1_alloc_table))
+    and (JC_<somenum>:
         not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@,
         int_P_int_M_a_1, pset_empty))) }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_2: valid_a(int_P_a_1_alloc_table))} unit reads int_P_a_1_alloc_table
+  { (JC_<somenum>: valid_a(int_P_a_1_alloc_table))} unit reads int_P_a_1_alloc_table
   writes int_P_int_M_a_1
-  { ((JC_11: valid_a(int_P_a_1_alloc_table))
-    and (JC_9:
+  { ((JC_<somenum>: valid_a(int_P_a_1_alloc_table))
+    and (JC_<somenum>:
         not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@,
         int_P_int_M_a_1, pset_empty))) }
 
@@ -447,35 +447,29 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: valid_a(int_P_a_1_alloc_table)) }
+  { (JC_<somenum>: valid_a(int_P_a_1_alloc_table)) }
   (init:
   try
+   (C_2:
    begin
-     (C_2:
-     begin
-       (let jessie_12 =
-       (let jessie_8 = (safe_int32_of_integer_ (3)) in
-       (let jessie_11 = ((shift a) (0)) in
-       (((safe_upd_ int_P_int_M_a_1) jessie_11) jessie_8))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_7:
+     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let jessie_<somenum> = a in (((safe_upd_ int_P_int_M_a_1) jessie_<somenum>) jessie_<somenum>)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>:
     not_assigns(int_P_a_1_alloc_table@, int_P_int_M_a_1@, int_P_int_M_a_1,
     pset_empty)) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: valid_a(int_P_a_1_alloc_table)) }
+  { (JC_<somenum>: valid_a(int_P_a_1_alloc_table)) }
   (init:
   try
+   (C_2:
    begin
-     (C_2:
-     begin
-       (let jessie_6 =
-       (let jessie_2 = (safe_int32_of_integer_ (3)) in
-       (let jessie_5 = ((shift a) (0)) in
-       (((safe_upd_ int_P_int_M_a_1) jessie_5) jessie_2))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_10: valid_a(int_P_a_1_alloc_table)) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let jessie_<somenum> = a in (((safe_upd_ int_P_int_M_a_1) jessie_<somenum>) jessie_<somenum>)));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: valid_a(int_P_a_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0443.jessie --quiet -f bts0443.makefile project

@@ -264,22 +264,22 @@ parameter y : int ref
 parameter g :
  x_0:int ->
   { } int reads y writes y
-  { (JC_12:
-    ((JC_9: eq_int(result, f(x_0@, y@)))
-    and ((JC_10: eq_int(result, f(x_0@, y@)))
-        and (JC_11: eq_int(result, f(x_0@, y@)))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(result, f(x_0@, y@)))
+    and ((JC_<somenum>: eq_int(result, f(x_0@, y@)))
+        and (JC_<somenum>: eq_int(result, f(x_0@, y@)))))) }
 
 parameter g_requires :
  x_0:int ->
   { } int reads y writes y
-  { (JC_12:
-    ((JC_9: eq_int(result, f(x_0@, y@)))
-    and ((JC_10: eq_int(result, f(x_0@, y@)))
-        and (JC_11: eq_int(result, f(x_0@, y@)))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(result, f(x_0@, y@)))
+    and ((JC_<somenum>: eq_int(result, f(x_0@, y@)))
+        and (JC_<somenum>: eq_int(result, f(x_0@, y@)))))) }
 
 let g_ensures_default =
  fun (x_0 : int) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -287,24 +287,22 @@ let g_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      (C_1:
+     (C_2:
+     (C_4:
      begin
-       (let jessie_9 = (tmp := !y) in void);
-      (C_2:
-      begin
-        (let jessie_11 = (y := (12)) in void);
-       (C_4:
-       begin
-         (let jessie_13 = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
-        (return := !__retres); (raise Return) end) end) end))); absurd  end
-   with Return -> !return end))
-  { (JC_8:
-    ((JC_5: eq_int(result, f(x_0@, y@)))
-    and ((JC_6: eq_int(result, f(x_0@, y@)))
-        and (JC_7: eq_int(result, f(x_0@, y@)))))) }
+       (let jessie_<somenum> = (tmp := !y) in void);
+      (let jessie_<somenum> = (y := (12)) in void);
+      (let jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
+      (return := !__retres); (raise Return) end))))); absurd  end with
+   Return -> !return end))
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(result, f(x_0@, y@)))
+    and ((JC_<somenum>: eq_int(result, f(x_0@, y@)))
+        and (JC_<somenum>: eq_int(result, f(x_0@, y@)))))) }
 
 let g_safety =
  fun (x_0 : int) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -312,16 +310,14 @@ let g_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      (C_1:
+     (C_2:
+     (C_4:
      begin
-       (let jessie_2 = (tmp := !y) in void);
-      (C_2:
-      begin
-        (let jessie_4 = (y := (12)) in void);
-       (C_4:
-       begin
-         (let jessie_6 = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
-        (return := !__retres); (raise Return) end) end) end))); absurd  end
-   with Return -> !return end)) { true }
+       (let jessie_<somenum> = (tmp := !y) in void);
+      (let jessie_<somenum> = (y := (12)) in void);
+      (let jessie_<somenum> = (__retres := (C_3: ((add_int x_0) !tmp))) in void);
+      (return := !__retres); (raise Return) end))))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C pre_and_old.jessie --quiet -f pre_and_old.makefile project

@@ -423,28 +423,28 @@ parameter coord_x_0_tab_1 : (coord, int32) memory ref
 parameter f :
  x_0:int32 ->
   { } unit reads coord_tab_1_alloc_table
-  { (JC_12: valid_tab(coord_tab_1_alloc_table)) }
+  { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 parameter f_requires :
  x_0:int32 ->
-  { (JC_3: valid_tab(coord_tab_1_alloc_table))} unit
+  { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table))} unit
   reads coord_tab_1_alloc_table
-  { (JC_12: valid_tab(coord_tab_1_alloc_table)) }
+  { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 parameter g :
  index:int32 ->
   { } unit reads coord_tab_1_alloc_table,coord_x_0_tab_1
-  { (JC_28: valid_tab(coord_tab_1_alloc_table)) }
+  { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 parameter g_requires :
  index:int32 ->
-  { (JC_17:
-    ((JC_15:
-     ((JC_13: le_int((0), integer_of_int32(index)))
-     and (JC_14: lt_int(integer_of_int32(index), (3)))))
-    and (JC_16: valid_tab(coord_tab_1_alloc_table))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: le_int((0), integer_of_int32(index)))
+     and (JC_<somenum>: lt_int(integer_of_int32(index), (3)))))
+    and (JC_<somenum>: valid_tab(coord_tab_1_alloc_table))))}
   unit reads coord_tab_1_alloc_table,coord_x_0_tab_1
-  { (JC_28: valid_tab(coord_tab_1_alloc_table)) }
+  { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -464,55 +464,51 @@ parameter safe_int8_of_integer_ :
 
 let g_ensures_default =
  fun (index : int32) ->
-  { (JC_23:
-    ((JC_21:
-     ((JC_19: le_int((0), integer_of_int32(index)))
-     and (JC_20: lt_int(integer_of_int32(index), (3)))))
-    and (JC_22: valid_tab(coord_tab_1_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: le_int((0), integer_of_int32(index)))
+     and (JC_<somenum>: lt_int(integer_of_int32(index), (3)))))
+    and (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)))) }
   (init:
   try
+   (C_4:
+   (C_6:
    begin
-     (C_4:
-     begin
-       (let jessie_3 =
-       (C_3:
-       ((safe_acc_ !coord_x_0_tab_1) (C_2:
-                                     ((shift tab) (integer_of_int32 index))))) in
-       (JC_33: (f jessie_3)));
-      (C_6:
-      begin
-        (let jessie_4 =
-        (C_5:
-        ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
-        (JC_34: (f jessie_4))); (raise Return) end) end); (raise Return) end
-   with Return -> void end) { (JC_25: true) }
+     (let jessie_<somenum> =
+     (C_3:
+     ((safe_acc_ !coord_x_0_tab_1) (C_2:
+                                   ((shift tab) (integer_of_int32 index))))) in
+     (JC_<somenum>: (f jessie_<somenum>)));
+    (let jessie_<somenum> =
+    (C_5:
+    ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
+    (JC_<somenum>: (f jessie_<somenum>))); (raise Return); (raise Return) end)) with
+   Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
  fun (index : int32) ->
-  { (JC_23:
-    ((JC_21:
-     ((JC_19: le_int((0), integer_of_int32(index)))
-     and (JC_20: lt_int(integer_of_int32(index), (3)))))
-    and (JC_22: valid_tab(coord_tab_1_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: le_int((0), integer_of_int32(index)))
+     and (JC_<somenum>: lt_int(integer_of_int32(index), (3)))))
+    and (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)))) }
   (init:
   try
+   (C_4:
+   (C_6:
    begin
-     (C_4:
-     begin
-       (let jessie_1 =
-       (C_3:
-       (JC_29:
-       ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-        (integer_of_int32 index)))) in (JC_30: (f_requires jessie_1)));
-      (C_6:
-      begin
-        (let jessie_2 =
-        (C_5:
-        (JC_31:
-        ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-         (integer_of_int32 index)))) in (JC_32: (f_requires jessie_2)));
-       (raise Return) end) end); (raise Return) end with Return -> void end)
-  { (JC_27: valid_tab(coord_tab_1_alloc_table)) }
+     (let jessie_<somenum> =
+     (C_3:
+     (JC_<somenum>:
+     ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
+      (integer_of_int32 index)))) in (JC_<somenum>: (f_requires jessie_<somenum>)));
+    (let jessie_<somenum> =
+    (C_5:
+    (JC_<somenum>:
+    ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
+     (integer_of_int32 index)))) in (JC_<somenum>: (f_requires jessie_<somenum>)));
+    (raise Return); (raise Return) end)) with Return -> void end)
+  { (JC_<somenum>: valid_tab(coord_tab_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C coord.jessie --quiet -f coord.makefile project

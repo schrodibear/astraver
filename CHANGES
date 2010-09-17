@@ -1,9 +1,27 @@
+
+(these changes only concern the trunk branch)
+
   o [Jessie] emit a warning when generating a dummy variant for
     recursive functions and loops (Frama-C bug 512)
   o [Jessie] preliminary support for \at in region computation
   o [Why] added --smtlib-v1 option (default smtlib format is v2.0)
   o [Why] added support for verit prover
-  o [Jessie] fixed bug with division by zero in expressions evaluated at
+
+
+
+
+(these changes concern the Boron branch)
+
+  o [Jessie] added support for Why3 output syntax
+  o [Jessie] improved translation of successive assignments on
+    the same memory block. As a side effect, translation of
+    array initializers from C is much better for provers.
+    Fixes Frama-C BTS0377 feature request
+  o [Jessie] disabled the experimental support for unions and pointer casts,
+    since it is too buggy for public release
+  o [WhyConfig] Alt-Ergo 0.91 not recognized as a safe prover since
+    it has soundness bugs with division
+  o [Jessie] fixed bug with division by zero in expressions evaluated at 
     compile-time
   o [Krakatoa] error message when a comment starts with /*(extra space)@
   o [WhyConfig] bug fix when detecting a prover which was removed

@@ -705,24 +705,24 @@ parameter false0 :
  tt:unit ->
   { } unit
   reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,u_zz_2_alloc_table
-  { ((JC_32:
-     ((JC_29: valid_zz(u_zz_2_alloc_table))
-     and ((JC_30: valid_x(int_P_x_3_alloc_table))
-         and (JC_31: valid_y(int_P_y_4_alloc_table)))))
-    and (JC_24: (false = true))) }
+  { ((JC_<somenum>:
+     ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+     and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+         and (JC_<somenum>: valid_y(int_P_y_4_alloc_table)))))
+    and (JC_<somenum>: (false = true))) }
 
 parameter false0_requires :
  tt:unit ->
-  { (JC_16:
-    ((JC_13: valid_zz(u_zz_2_alloc_table))
-    and ((JC_14: valid_x(int_P_x_3_alloc_table))
-        and (JC_15: valid_y(int_P_y_4_alloc_table)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table)))))}
   unit reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,u_zz_2_alloc_table
-  { ((JC_32:
-     ((JC_29: valid_zz(u_zz_2_alloc_table))
-     and ((JC_30: valid_x(int_P_x_3_alloc_table))
-         and (JC_31: valid_y(int_P_y_4_alloc_table)))))
-    and (JC_24: (false = true))) }
+  { ((JC_<somenum>:
+     ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+     and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+         and (JC_<somenum>: valid_y(int_P_y_4_alloc_table)))))
+    and (JC_<somenum>: (false = true))) }
 
 parameter v_z_1_alloc_table : v alloc_table ref
 
@@ -737,24 +737,24 @@ parameter false1 :
   { } unit
   reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,int_P_z_1_alloc_table,u_zz_2_alloc_table,v_yy_z_1,v_z_1_alloc_table
   writes int_P_int_M_z_1
-  { (JC_52:
-    ((JC_49: valid_zz(u_zz_2_alloc_table))
-    and ((JC_50: valid_x(int_P_x_3_alloc_table))
-        and (JC_51: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 parameter false1_requires :
  tt:unit ->
-  { (JC_36:
-    ((JC_33: valid_zz(u_zz_2_alloc_table))
-    and ((JC_34: valid_x(int_P_x_3_alloc_table))
-        and (JC_35: valid_y(int_P_y_4_alloc_table)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table)))))}
   unit
   reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,int_P_z_1_alloc_table,u_zz_2_alloc_table,v_yy_z_1,v_z_1_alloc_table
   writes int_P_int_M_z_1
-  { (JC_52:
-    ((JC_49: valid_zz(u_zz_2_alloc_table))
-    and ((JC_50: valid_x(int_P_x_3_alloc_table))
-        and (JC_51: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 parameter int_P_int_M_x_3 : (int_P, int32) memory ref
 
@@ -763,23 +763,23 @@ parameter false2 :
   { } unit
   reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,u_zz_2_alloc_table
   writes int_P_int_M_x_3
-  { (JC_74:
-    ((JC_71: valid_zz(u_zz_2_alloc_table))
-    and ((JC_72: valid_x(int_P_x_3_alloc_table))
-        and (JC_73: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 parameter false2_requires :
  tt:unit ->
-  { (JC_58:
-    ((JC_55: valid_zz(u_zz_2_alloc_table))
-    and ((JC_56: valid_x(int_P_x_3_alloc_table))
-        and (JC_57: valid_y(int_P_y_4_alloc_table)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table)))))}
   unit reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,u_zz_2_alloc_table
   writes int_P_int_M_x_3
-  { (JC_74:
-    ((JC_71: valid_zz(u_zz_2_alloc_table))
-    and ((JC_72: valid_x(int_P_x_3_alloc_table))
-        and (JC_73: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 parameter int_P_int_M_y_4 : (int_P, int32) memory ref
 
@@ -788,23 +788,23 @@ parameter false3 :
   { } unit
   reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,u_zz_2_alloc_table
   writes int_P_int_M_y_4
-  { (JC_95:
-    ((JC_92: valid_zz(u_zz_2_alloc_table))
-    and ((JC_93: valid_x(int_P_x_3_alloc_table))
-        and (JC_94: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 parameter false3_requires :
  tt:unit ->
-  { (JC_79:
-    ((JC_76: valid_zz(u_zz_2_alloc_table))
-    and ((JC_77: valid_x(int_P_x_3_alloc_table))
-        and (JC_78: valid_y(int_P_y_4_alloc_table)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table)))))}
   unit reads int_P_x_3_alloc_table,int_P_y_4_alloc_table,u_zz_2_alloc_table
   writes int_P_int_M_y_4
-  { (JC_95:
-    ((JC_92: valid_zz(u_zz_2_alloc_table))
-    and ((JC_93: valid_x(int_P_x_3_alloc_table))
-        and (JC_94: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -824,153 +824,152 @@ parameter safe_int8_of_integer_ :
 
 let false0_ensures_default =
  fun (tt : unit) ->
-  { (JC_21:
-    ((JC_18: valid_zz(u_zz_2_alloc_table))
-    and ((JC_19: valid_x(int_P_x_3_alloc_table))
-        and (JC_20: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_23: (false = true)) }
+  { (JC_<somenum>: (false = true)) }
 
 let false0_safety =
  fun (tt : unit) ->
-  { (JC_21:
-    ((JC_18: valid_zz(u_zz_2_alloc_table))
-    and ((JC_19: valid_x(int_P_x_3_alloc_table))
-        and (JC_20: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_28:
-    ((JC_25: valid_zz(u_zz_2_alloc_table))
-    and ((JC_26: valid_x(int_P_x_3_alloc_table))
-        and (JC_27: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 let false1_ensures_default =
  fun (tt : unit) ->
-  { (JC_41:
-    ((JC_38: valid_zz(u_zz_2_alloc_table))
-    and ((JC_39: valid_x(int_P_x_3_alloc_table))
-        and (JC_40: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
+   (C_4:
    begin
-     (C_4:
-     begin
-       (let jessie_12 =
-       (let jessie_8 = (safe_int32_of_integer_ (3)) in
-       (let jessie_11 = ((shift (C_2: ((safe_acc_ !v_yy_z_1) z))) (5)) in
-       (((safe_upd_ int_P_int_M_z_1) jessie_11) jessie_8))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_43: true) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let jessie_<somenum> = (C_2: ((safe_acc_ !v_yy_z_1) z)) in
+     (let jessie_<somenum> = (5) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (5)) in
+     (((safe_upd_ int_P_int_M_z_1) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
+    (raise Return) end) with Return -> void end) { (JC_<somenum>: true) }
 
 let false1_safety =
  fun (tt : unit) ->
-  { (JC_41:
-    ((JC_38: valid_zz(u_zz_2_alloc_table))
-    and ((JC_39: valid_x(int_P_x_3_alloc_table))
-        and (JC_40: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
+   (C_4:
    begin
-     (C_4:
-     begin
-       (let jessie_6 =
-       (let jessie_2 = (safe_int32_of_integer_ (3)) in
-       (let jessie_3 =
-       (C_2: (JC_53: (((acc_ !v_z_1_alloc_table) !v_yy_z_1) z))) in
-       (let jessie_4 = (5) in
-       (let jessie_5 = ((shift jessie_3) jessie_4) in
-       (JC_54:
-       (((((lsafe_lbound_upd_ !int_P_z_1_alloc_table) int_P_int_M_z_1) jessie_3) jessie_4) jessie_2)))))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_48:
-    ((JC_45: valid_zz(u_zz_2_alloc_table))
-    and ((JC_46: valid_x(int_P_x_3_alloc_table))
-        and (JC_47: valid_y(int_P_y_4_alloc_table))))) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+     (let jessie_<somenum> =
+     (C_2: (JC_<somenum>: (((acc_ !v_z_1_alloc_table) !v_yy_z_1) z))) in
+     (let jessie_<somenum> = (5) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (5)) in
+     (JC_<somenum>:
+     (((((lsafe_lbound_upd_ !int_P_z_1_alloc_table) int_P_int_M_z_1) jessie_<somenum>) (5)) jessie_<somenum>)))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 let false2_ensures_default =
  fun (tt : unit) ->
-  { (JC_63:
-    ((JC_60: valid_zz(u_zz_2_alloc_table))
-    and ((JC_61: valid_x(int_P_x_3_alloc_table))
-        and (JC_62: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
+   (C_7:
    begin
-     (C_7:
-     begin
-       (let jessie_24 =
-       (let jessie_20 = (safe_int32_of_integer_ (1)) in
-       (let jessie_23 = ((shift x_0) (neg_int (1))) in
-       (((safe_upd_ int_P_int_M_x_3) jessie_23) jessie_20))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_65: true) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let jessie_<somenum> = x_0 in
+     (let jessie_<somenum> = (-1) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (-1)) in
+     (((safe_upd_ int_P_int_M_x_3) jessie_<somenum>) jessie_<somenum>))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let false2_safety =
  fun (tt : unit) ->
-  { (JC_63:
-    ((JC_60: valid_zz(u_zz_2_alloc_table))
-    and ((JC_61: valid_x(int_P_x_3_alloc_table))
-        and (JC_62: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
+   (C_7:
    begin
-     (C_7:
-     begin
-       (let jessie_18 =
-       (let jessie_14 = (safe_int32_of_integer_ (1)) in
-       (let jessie_15 = x_0 in
-       (let jessie_16 = (-1) in
-       (let jessie_17 = ((shift jessie_15) jessie_16) in
-       (JC_75:
-       (((((rsafe_rbound_upd_ !int_P_x_3_alloc_table) int_P_int_M_x_3) jessie_15) jessie_16) jessie_14)))))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_70:
-    ((JC_67: valid_zz(u_zz_2_alloc_table))
-    and ((JC_68: valid_x(int_P_x_3_alloc_table))
-        and (JC_69: valid_y(int_P_y_4_alloc_table))))) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+     (let jessie_<somenum> = x_0 in
+     (let jessie_<somenum> = (-1) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (-1)) in
+     (JC_<somenum>:
+     (((((rsafe_rbound_upd_ !int_P_x_3_alloc_table) int_P_int_M_x_3) jessie_<somenum>) (-1)) jessie_<somenum>)))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 let false3_ensures_default =
  fun (tt : unit) ->
-  { (JC_84:
-    ((JC_81: valid_zz(u_zz_2_alloc_table))
-    and ((JC_82: valid_x(int_P_x_3_alloc_table))
-        and (JC_83: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
+   (C_10:
    begin
-     (C_10:
-     begin
-       (let jessie_36 =
-       (let jessie_32 = (safe_int32_of_integer_ (2)) in
-       (let jessie_35 = ((shift y) (5)) in
-       (((safe_upd_ int_P_int_M_y_4) jessie_35) jessie_32))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_86: true) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+     (let jessie_<somenum> = y in
+     (let jessie_<somenum> = (5) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (5)) in
+     (((safe_upd_ int_P_int_M_y_4) jessie_<somenum>) jessie_<somenum>))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let false3_safety =
  fun (tt : unit) ->
-  { (JC_84:
-    ((JC_81: valid_zz(u_zz_2_alloc_table))
-    and ((JC_82: valid_x(int_P_x_3_alloc_table))
-        and (JC_83: valid_y(int_P_y_4_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
   (init:
   try
+   (C_10:
    begin
-     (C_10:
-     begin
-       (let jessie_30 =
-       (let jessie_26 = (safe_int32_of_integer_ (2)) in
-       (let jessie_27 = y in
-       (let jessie_28 = (5) in
-       (let jessie_29 = ((shift jessie_27) jessie_28) in
-       (JC_96:
-       (((((lsafe_lbound_upd_ !int_P_y_4_alloc_table) int_P_int_M_y_4) jessie_27) jessie_28) jessie_26)))))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_91:
-    ((JC_88: valid_zz(u_zz_2_alloc_table))
-    and ((JC_89: valid_x(int_P_x_3_alloc_table))
-        and (JC_90: valid_y(int_P_y_4_alloc_table))))) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+     (let jessie_<somenum> = y in
+     (let jessie_<somenum> = (5) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (5)) in
+     (JC_<somenum>:
+     (((((lsafe_lbound_upd_ !int_P_y_4_alloc_table) int_P_int_M_y_4) jessie_<somenum>) (5)) jessie_<somenum>)))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_zz(u_zz_2_alloc_table))
+    and ((JC_<somenum>: valid_x(int_P_x_3_alloc_table))
+        and (JC_<somenum>: valid_y(int_P_y_4_alloc_table))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C false.jessie --quiet -f false.makefile project

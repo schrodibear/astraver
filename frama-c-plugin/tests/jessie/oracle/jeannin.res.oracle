@@ -299,9 +299,9 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter b : int32 ref
 
-parameter f : tt:unit -> { } unit writes a,b { (JC_8: (a = a@)) }
+parameter f : tt:unit -> { } unit writes a,b { (JC_<somenum>: (a = a@)) }
 
-parameter f_requires : tt:unit -> { } unit writes a,b { (JC_8: (a = a@)) }
+parameter f_requires : tt:unit -> { } unit writes a,b { (JC_<somenum>: (a = a@)) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -321,27 +321,24 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       (let jessie_4 = (a := (safe_int32_of_integer_ (1))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_6: (a = a@)) }
+     (let jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: (a = a@)) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_1:
    begin
-     (C_1:
-     begin
-       (let jessie_2 = (a := (safe_int32_of_integer_ (1))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> = (a := (safe_int32_of_integer_ (1))) in void);
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C jeannin.jessie --quiet -f jeannin.makefile project

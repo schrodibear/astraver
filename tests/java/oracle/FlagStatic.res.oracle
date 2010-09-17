@@ -1015,6 +1015,9 @@ why3: why/FlagStatic_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/FlagStatic_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include FlagStatic.depend
 
 depend: coq/FlagStatic_why.v
@@ -3509,8 +3512,8 @@ let FlagStatic_flag_ensures_default =
      (let i_3 = ref (K_59: (0)) in
      (let r_0 =
      ref (K_58:
-         (let jessie_107 = t_1 in
-         (JC_127: (java_array_length_intM jessie_107)))) in
+         (let jessie_<num> = t_1 in
+         (JC_127: (java_array_length_intM jessie_<num>)))) in
      try
       (loop_5:
       while true do
@@ -3538,64 +3541,64 @@ let FlagStatic_flag_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_130 =
+         (let jessie_<num> =
          begin
            (if (K_57: ((lt_int_ !i_3) !r_0))
            then
-            (let jessie_7 =
+            (let jessie_<num> =
             (K_56: ((safe_acc_ !intM_intP) ((shift t_1) !i_3))) in
             try
              begin
-               (if ((eq_int_ jessie_7) FlagStatic_BLUE)
+               (if ((eq_int_ jessie_<num>) FlagStatic_BLUE)
                then
-                (let jessie_118 =
+                (let jessie_<num> =
                 (K_52:
                 begin
-                  (let jessie_117 = t_1 in
-                  (let jessie_113 =
+                  (let jessie_<num> = t_1 in
+                  (let jessie_<num> =
                   (K_50:
-                  (let jessie_4 = !b_0 in
+                  (let jessie_<num> = !b_0 in
                   begin
-                    (let jessie_116 = (b_0 := ((add_int jessie_4) (1))) in
-                    void); jessie_4 end)) in
-                  (let jessie_109 =
+                    (let jessie_<num> = (b_0 := ((add_int jessie_<num>) (1))) in
+                    void); jessie_<num> end)) in
+                  (let jessie_<num> =
                   (K_51:
-                  (let jessie_5 = !i_3 in
+                  (let jessie_<num> = !i_3 in
                   begin
-                    (let jessie_112 = (i_3 := ((add_int jessie_5) (1))) in
-                    void); jessie_5 end)) in
+                    (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in
+                    void); jessie_<num> end)) in
                   (JC_140:
-                  (((FlagStatic_swap jessie_117) jessie_113) jessie_109)))));
+                  (((FlagStatic_swap jessie_<num>) jessie_<num>) jessie_<num>)))));
                  (raise (Loop_exit_exc void)) end) in void) else void);
-              (if (((eq_int_ jessie_7) FlagStatic_WHITE) || ((eq_int_ jessie_7) FlagStatic_BLUE))
+              (if (((eq_int_ jessie_<num>) FlagStatic_WHITE) || ((eq_int_ jessie_<num>) FlagStatic_BLUE))
               then
-               (let jessie_123 =
+               (let jessie_<num> =
                (K_53:
                begin
-                 (let jessie_122 =
-                 (let jessie_6 = !i_3 in
+                 (let jessie_<num> =
+                 (let jessie_<num> = !i_3 in
                  begin
-                   (let jessie_121 = (i_3 := ((add_int jessie_6) (1))) in
-                   void); jessie_6 end) in void);
+                   (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in
+                   void); jessie_<num> end) in void);
                 (raise (Loop_exit_exc void)) end) in void) else void);
-              (if (((eq_int_ jessie_7) FlagStatic_RED) || (((eq_int_ jessie_7) FlagStatic_WHITE) || 
-                                                          ((eq_int_ jessie_7) FlagStatic_BLUE)))
+              (if (((eq_int_ jessie_<num>) FlagStatic_RED) || (((eq_int_ jessie_<num>) FlagStatic_WHITE) || 
+                                                          ((eq_int_ jessie_<num>) FlagStatic_BLUE)))
               then
-               (let jessie_128 =
+               (let jessie_<num> =
                (K_55:
                begin
-                 (let jessie_127 = t_1 in
-                 (let jessie_125 =
+                 (let jessie_<num> = t_1 in
+                 (let jessie_<num> =
                  (K_54: begin   (r_0 := ((sub_int !r_0) (1))); !r_0 end) in
-                 (let jessie_124 = !i_3 in
+                 (let jessie_<num> = !i_3 in
                  (JC_141:
-                 (((FlagStatic_swap jessie_127) jessie_125) jessie_124)))));
+                 (((FlagStatic_swap jessie_<num>) jessie_<num>) jessie_<num>)))));
                 (raise (Loop_exit_exc void)) end) in void) else void) end
-             with Loop_exit_exc jessie_8 -> void end)
-           else (let jessie_129 = (raise (Loop_exit_exc void)) in void));
+             with Loop_exit_exc jessie_<num> -> void end)
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_10 -> void end end done) with
-      Loop_exit_exc jessie_9 -> void end))); (raise Return) end with
+         Loop_continue_exc jessie_<num> -> void end end done) with
+      Loop_exit_exc jessie_<num> -> void end))); (raise Return) end with
    Return -> void end) { (JC_103: true) }
 
 let FlagStatic_flag_ensures_sorts =
@@ -3609,8 +3612,8 @@ let FlagStatic_flag_ensures_sorts =
      (let i_3 = ref (K_59: (0)) in
      (let r_0 =
      ref (K_58:
-         (let jessie_134 = t_1 in
-         (JC_142: (java_array_length_intM jessie_134)))) in
+         (let jessie_<num> = t_1 in
+         (JC_142: (java_array_length_intM jessie_<num>)))) in
      try
       (loop_6:
       while true do
@@ -3638,64 +3641,64 @@ let FlagStatic_flag_ensures_sorts =
                                                  t_1),
                                          (1)), FlagStatic_RED, intM_intP)))))))))) } ];
         try
-         (let jessie_157 =
+         (let jessie_<num> =
          begin
            (if (K_57: ((lt_int_ !i_3) !r_0))
            then
-            (let jessie_7 =
+            (let jessie_<num> =
             (K_56: ((safe_acc_ !intM_intP) ((shift t_1) !i_3))) in
             try
              begin
-               (if ((eq_int_ jessie_7) FlagStatic_BLUE)
+               (if ((eq_int_ jessie_<num>) FlagStatic_BLUE)
                then
-                (let jessie_145 =
+                (let jessie_<num> =
                 (K_52:
                 begin
-                  (let jessie_144 = t_1 in
-                  (let jessie_140 =
+                  (let jessie_<num> = t_1 in
+                  (let jessie_<num> =
                   (K_50:
-                  (let jessie_4 = !b_0 in
+                  (let jessie_<num> = !b_0 in
                   begin
-                    (let jessie_143 = (b_0 := ((add_int jessie_4) (1))) in
-                    void); jessie_4 end)) in
-                  (let jessie_136 =
+                    (let jessie_<num> = (b_0 := ((add_int jessie_<num>) (1))) in
+                    void); jessie_<num> end)) in
+                  (let jessie_<num> =
                   (K_51:
-                  (let jessie_5 = !i_3 in
+                  (let jessie_<num> = !i_3 in
                   begin
-                    (let jessie_139 = (i_3 := ((add_int jessie_5) (1))) in
-                    void); jessie_5 end)) in
+                    (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in
+                    void); jessie_<num> end)) in
                   (JC_155:
-                  (((FlagStatic_swap jessie_144) jessie_140) jessie_136)))));
+                  (((FlagStatic_swap jessie_<num>) jessie_<num>) jessie_<num>)))));
                  (raise (Loop_exit_exc void)) end) in void) else void);
-              (if (((eq_int_ jessie_7) FlagStatic_WHITE) || ((eq_int_ jessie_7) FlagStatic_BLUE))
+              (if (((eq_int_ jessie_<num>) FlagStatic_WHITE) || ((eq_int_ jessie_<num>) FlagStatic_BLUE))
               then
-               (let jessie_150 =
+               (let jessie_<num> =
                (K_53:
                begin
-                 (let jessie_149 =
-                 (let jessie_6 = !i_3 in
+                 (let jessie_<num> =
+                 (let jessie_<num> = !i_3 in
                  begin
-                   (let jessie_148 = (i_3 := ((add_int jessie_6) (1))) in
-                   void); jessie_6 end) in void);
+                   (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in
+                   void); jessie_<num> end) in void);
                 (raise (Loop_exit_exc void)) end) in void) else void);
-              (if (((eq_int_ jessie_7) FlagStatic_RED) || (((eq_int_ jessie_7) FlagStatic_WHITE) || 
-                                                          ((eq_int_ jessie_7) FlagStatic_BLUE)))
+              (if (((eq_int_ jessie_<num>) FlagStatic_RED) || (((eq_int_ jessie_<num>) FlagStatic_WHITE) || 
+                                                          ((eq_int_ jessie_<num>) FlagStatic_BLUE)))
               then
-               (let jessie_155 =
+               (let jessie_<num> =
                (K_55:
                begin
-                 (let jessie_154 = t_1 in
-                 (let jessie_152 =
+                 (let jessie_<num> = t_1 in
+                 (let jessie_<num> =
                  (K_54: begin   (r_0 := ((sub_int !r_0) (1))); !r_0 end) in
-                 (let jessie_151 = !i_3 in
+                 (let jessie_<num> = !i_3 in
                  (JC_156:
-                 (((FlagStatic_swap jessie_154) jessie_152) jessie_151)))));
+                 (((FlagStatic_swap jessie_<num>) jessie_<num>) jessie_<num>)))));
                 (raise (Loop_exit_exc void)) end) in void) else void) end
-             with Loop_exit_exc jessie_8 -> void end)
-           else (let jessie_156 = (raise (Loop_exit_exc void)) in void));
+             with Loop_exit_exc jessie_<num> -> void end)
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_10 -> void end end done) with
-      Loop_exit_exc jessie_9 -> void end))); (raise Return) end with
+         Loop_continue_exc jessie_<num> -> void end end done) with
+      Loop_exit_exc jessie_<num> -> void end))); (raise Return) end with
    Return -> void end)
   { (JC_107:
     (exists b:int.
@@ -3717,10 +3720,10 @@ let FlagStatic_flag_safety =
      (let i_3 = ref (K_59: (0)) in
      (let r_0 =
      ref (K_58:
-         (let jessie_80 = t_1 in
+         (let jessie_<num> = t_1 in
          (JC_110:
-         (assert { ge_int(offset_max(Object_alloc_table, jessie_80), (-1)) };
-         (JC_109: (java_array_length_intM_requires jessie_80)))))) in
+         (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (-1)) };
+         (JC_109: (java_array_length_intM_requires jessie_<num>)))))) in
      try
       (loop_4:
       while true do
@@ -3748,66 +3751,66 @@ let FlagStatic_flag_safety =
                                                  t_1),
                                          (1)), FlagStatic_RED, intM_intP)))))))))) } ];
         try
-         (let jessie_103 =
+         (let jessie_<num> =
          begin
            (if (K_57: ((lt_int_ !i_3) !r_0))
            then
-            (let jessie_7 =
+            (let jessie_<num> =
             (K_56:
             (JC_123:
             ((((offset_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3))) in
             try
              begin
-               (if ((eq_int_ jessie_7) FlagStatic_BLUE)
+               (if ((eq_int_ jessie_<num>) FlagStatic_BLUE)
                then
-                (let jessie_91 =
+                (let jessie_<num> =
                 (K_52:
                 begin
-                  (let jessie_90 = t_1 in
-                  (let jessie_86 =
+                  (let jessie_<num> = t_1 in
+                  (let jessie_<num> =
                   (K_50:
-                  (let jessie_4 = !b_0 in
+                  (let jessie_<num> = !b_0 in
                   begin
-                    (let jessie_89 = (b_0 := ((add_int jessie_4) (1))) in
-                    void); jessie_4 end)) in
-                  (let jessie_82 =
+                    (let jessie_<num> = (b_0 := ((add_int jessie_<num>) (1))) in
+                    void); jessie_<num> end)) in
+                  (let jessie_<num> =
                   (K_51:
-                  (let jessie_5 = !i_3 in
+                  (let jessie_<num> = !i_3 in
                   begin
-                    (let jessie_85 = (i_3 := ((add_int jessie_5) (1))) in
-                    void); jessie_5 end)) in
+                    (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in
+                    void); jessie_<num> end)) in
                   (JC_124:
-                  (((FlagStatic_swap_requires jessie_90) jessie_86) jessie_82)))));
+                  (((FlagStatic_swap_requires jessie_<num>) jessie_<num>) jessie_<num>)))));
                  (raise (Loop_exit_exc void)) end) in void) else void);
-              (if (((eq_int_ jessie_7) FlagStatic_WHITE) || ((eq_int_ jessie_7) FlagStatic_BLUE))
+              (if (((eq_int_ jessie_<num>) FlagStatic_WHITE) || ((eq_int_ jessie_<num>) FlagStatic_BLUE))
               then
-               (let jessie_96 =
+               (let jessie_<num> =
                (K_53:
                begin
-                 (let jessie_95 =
-                 (let jessie_6 = !i_3 in
+                 (let jessie_<num> =
+                 (let jessie_<num> = !i_3 in
                  begin
-                   (let jessie_94 = (i_3 := ((add_int jessie_6) (1))) in
-                   void); jessie_6 end) in void);
+                   (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in
+                   void); jessie_<num> end) in void);
                 (raise (Loop_exit_exc void)) end) in void) else void);
-              (if (((eq_int_ jessie_7) FlagStatic_RED) || (((eq_int_ jessie_7) FlagStatic_WHITE) || 
-                                                          ((eq_int_ jessie_7) FlagStatic_BLUE)))
+              (if (((eq_int_ jessie_<num>) FlagStatic_RED) || (((eq_int_ jessie_<num>) FlagStatic_WHITE) || 
+                                                          ((eq_int_ jessie_<num>) FlagStatic_BLUE)))
               then
-               (let jessie_101 =
+               (let jessie_<num> =
                (K_55:
                begin
-                 (let jessie_100 = t_1 in
-                 (let jessie_98 =
+                 (let jessie_<num> = t_1 in
+                 (let jessie_<num> =
                  (K_54: begin   (r_0 := ((sub_int !r_0) (1))); !r_0 end) in
-                 (let jessie_97 = !i_3 in
+                 (let jessie_<num> = !i_3 in
                  (JC_125:
-                 (((FlagStatic_swap_requires jessie_100) jessie_98) jessie_97)))));
+                 (((FlagStatic_swap_requires jessie_<num>) jessie_<num>) jessie_<num>)))));
                 (raise (Loop_exit_exc void)) end) in void) else void) end
-             with Loop_exit_exc jessie_8 -> void end)
-           else (let jessie_102 = (raise (Loop_exit_exc void)) in void));
+             with Loop_exit_exc jessie_<num> -> void end)
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_10 -> void end end done) with
-      Loop_exit_exc jessie_9 -> void end))); (raise Return) end with
+         Loop_continue_exc jessie_<num> -> void end end done) with
+      Loop_exit_exc jessie_<num> -> void end))); (raise Return) end with
    Return -> void end) { true }
 
 let FlagStatic_isMonochrome_ensures_decides_monochromatic =
@@ -3838,23 +3841,23 @@ let FlagStatic_isMonochrome_ensures_decides_monochromatic =
                   ((le_int(i, l) and lt_int(l, k_0)) ->
                    eq_int(select(intM_intP, shift(t, l)), c_0)))))) } ];
         try
-         (let jessie_32 =
+         (let jessie_<num> =
          begin
            (if (K_17: ((lt_int_ !k_0) j))
            then
             (if (K_15:
                 ((neq_int_ (K_14: ((safe_acc_ !intM_intP) ((shift t) !k_0)))) c_0))
             then begin   (return := false); (raise Return) end else void)
-           else (let jessie_31 = (raise (Loop_exit_exc void)) in void));
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_3 ->
-         (let jessie_36 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_16:
-         (let jessie_1 = !k_0 in
+         (let jessie_<num> = !k_0 in
          begin
-           (let jessie_35 = (k_0 := ((add_int jessie_1) (1))) in void);
-          jessie_1 end)) in void) end end done) with
-      Loop_exit_exc jessie_2 -> void end); (return := true); (raise Return);
+           (let jessie_<num> = (k_0 := ((add_int jessie_<num>) (1))) in void);
+          jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (return := true); (raise Return);
     absurd  end with Return -> !return end))
   { (JC_47: ((result = true) <-> is_monochrome(t, i, j, c_0, intM_intP))) }
 
@@ -3886,23 +3889,23 @@ let FlagStatic_isMonochrome_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_23 =
+         (let jessie_<num> =
          begin
            (if (K_17: ((lt_int_ !k_0) j))
            then
             (if (K_15:
                 ((neq_int_ (K_14: ((safe_acc_ !intM_intP) ((shift t) !k_0)))) c_0))
             then begin   (return := false); (raise Return) end else void)
-           else (let jessie_22 = (raise (Loop_exit_exc void)) in void));
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_3 ->
-         (let jessie_27 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_16:
-         (let jessie_1 = !k_0 in
+         (let jessie_<num> = !k_0 in
          begin
-           (let jessie_26 = (k_0 := ((add_int jessie_1) (1))) in void);
-          jessie_1 end)) in void) end end done) with
-      Loop_exit_exc jessie_2 -> void end); (return := true); (raise Return);
+           (let jessie_<num> = (k_0 := ((add_int jessie_<num>) (1))) in void);
+          jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (return := true); (raise Return);
     absurd  end with Return -> !return end)) { (JC_43: true) }
 
 let FlagStatic_isMonochrome_safety =
@@ -3933,7 +3936,7 @@ let FlagStatic_isMonochrome_safety =
                   ((le_int(i, l) and lt_int(l, k_0)) ->
                    eq_int(select(intM_intP, shift(t, l)), c_0)))))) } ];
         try
-         (let jessie_14 =
+         (let jessie_<num> =
          begin
            (if (K_17: ((lt_int_ !k_0) j))
            then
@@ -3942,16 +3945,16 @@ let FlagStatic_isMonochrome_safety =
                            (JC_55:
                            ((((offset_acc_ !Object_alloc_table) !intM_intP) t) !k_0)))) c_0))
             then begin   (return := false); (raise Return) end else void)
-           else (let jessie_13 = (raise (Loop_exit_exc void)) in void));
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_3 ->
-         (let jessie_18 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_16:
-         (let jessie_1 = !k_0 in
+         (let jessie_<num> = !k_0 in
          begin
-           (let jessie_17 = (k_0 := ((add_int jessie_1) (1))) in void);
-          jessie_1 end)) in void) end end done) with
-      Loop_exit_exc jessie_2 -> void end); (return := true); (raise Return);
+           (let jessie_<num> = (k_0 := ((add_int jessie_<num>) (1))) in void);
+          jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (return := true); (raise Return);
     absurd  end with Return -> !return end)) { true }
 
 let FlagStatic_swap_ensures_default =
@@ -3968,18 +3971,22 @@ let FlagStatic_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_63 =
+     (let jessie_<num> =
      (let z = (K_31: ((safe_acc_ !intM_intP) ((shift t_0) i_0))) in
      (K_29:
      begin
-       (let jessie_57 =
-       (let jessie_53 = (K_28: ((safe_acc_ !intM_intP) ((shift t_0) j_0))) in
-       (let jessie_56 = ((shift t_0) i_0) in
-       (((safe_upd_ intM_intP) jessie_56) jessie_53))) in void);
+       (let jessie_<num> =
+       (let jessie_<num> = (K_28: ((safe_acc_ !intM_intP) ((shift t_0) j_0))) in
+       (let jessie_<num> = t_0 in
+       (let jessie_<num> = i_0 in
+       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
       (K_30:
-      (let jessie_59 = z in
-      (let jessie_62 = ((shift t_0) j_0) in
-      begin   (((safe_upd_ intM_intP) jessie_62) jessie_59); jessie_59 end)))
+      (let jessie_<num> = z in
+      (let jessie_<num> = t_0 in
+      (let jessie_<num> = j_0 in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      begin   (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>); jessie_<num> end)))))
      end)) in void); (raise Return) end with Return -> void end)
   { (JC_81: true) }
 
@@ -3997,18 +4004,22 @@ let FlagStatic_swap_ensures_i_j_swapped =
   (init:
   try
    begin
-     (let jessie_76 =
+     (let jessie_<num> =
      (let z = (K_31: ((safe_acc_ !intM_intP) ((shift t_0) i_0))) in
      (K_29:
      begin
-       (let jessie_70 =
-       (let jessie_66 = (K_28: ((safe_acc_ !intM_intP) ((shift t_0) j_0))) in
-       (let jessie_69 = ((shift t_0) i_0) in
-       (((safe_upd_ intM_intP) jessie_69) jessie_66))) in void);
+       (let jessie_<num> =
+       (let jessie_<num> = (K_28: ((safe_acc_ !intM_intP) ((shift t_0) j_0))) in
+       (let jessie_<num> = t_0 in
+       (let jessie_<num> = i_0 in
+       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
       (K_30:
-      (let jessie_72 = z in
-      (let jessie_75 = ((shift t_0) j_0) in
-      begin   (((safe_upd_ intM_intP) jessie_75) jessie_72); jessie_72 end)))
+      (let jessie_<num> = z in
+      (let jessie_<num> = t_0 in
+      (let jessie_<num> = j_0 in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+      begin   (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>); jessie_<num> end)))))
      end)) in void); (raise Return) end with Return -> void end)
   { (JC_89:
     ((JC_87:
@@ -4037,31 +4048,31 @@ let FlagStatic_swap_safety =
   (init:
   try
    begin
-     (let jessie_50 =
+     (let jessie_<num> =
      (let z =
      (K_31:
      (JC_95: ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) i_0))) in
      (K_29:
      begin
-       (let jessie_44 =
-       (let jessie_40 =
+       (let jessie_<num> =
+       (let jessie_<num> =
        (K_28:
        (JC_96: ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) j_0))) in
-       (let jessie_41 = t_0 in
-       (let jessie_42 = i_0 in
-       (let jessie_43 = ((shift jessie_41) jessie_42) in
+       (let jessie_<num> = t_0 in
+       (let jessie_<num> = i_0 in
+       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
        (JC_97:
-       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_41) jessie_42) jessie_40)))))) in
+       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
        void);
       (K_30:
-      (let jessie_46 = z in
-      (let jessie_47 = t_0 in
-      (let jessie_48 = j_0 in
-      (let jessie_49 = ((shift jessie_47) jessie_48) in
+      (let jessie_<num> = z in
+      (let jessie_<num> = t_0 in
+      (let jessie_<num> = j_0 in
+      (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
       begin
         (JC_98:
-        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_47) jessie_48) jessie_46));
-       jessie_46 end))))) end)) in void); (raise Return) end with Return ->
+        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
+       jessie_<num> end))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
 
 let cons_FlagStatic_ensures_default =
@@ -15754,10 +15765,10 @@ goal FlagStatic_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/FlagStatic_why.why        : .......#....###.......#....##..........................................#.... (68/0/0/8/0)
+why/FlagStatic_why.why        : .......#......#............##..........................................#.... (71/0/0/5/0)
 total   :  76
-valid   :  68 ( 89%)
+valid   :  71 ( 93%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   8 ( 11%)
+timeout :   5 (  7%)
 failure :   0 (  0%)

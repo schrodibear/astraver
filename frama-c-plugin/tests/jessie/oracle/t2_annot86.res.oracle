@@ -330,9 +330,9 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
-parameter main : tt:unit -> { } int32 { (JC_6: I_3) }
+parameter main : tt:unit -> { } int32 { (JC_<somenum>: I_3) }
 
-parameter main_requires : tt:unit -> { } int32 { (JC_6: I_3) }
+parameter main_requires : tt:unit -> { } int32 { (JC_<somenum>: I_3) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -342,7 +342,7 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -350,13 +350,13 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
-   !return end)) { (JC_5: I_3) }
+   !return end)) { (JC_<somenum>: I_3) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -364,7 +364,7 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_2 = (__retres := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 

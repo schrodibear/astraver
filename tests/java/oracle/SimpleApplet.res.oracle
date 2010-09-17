@@ -1519,6 +1519,9 @@ why3: why/SimpleApplet_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/SimpleApplet_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include SimpleApplet.depend
 
 depend: coq/SimpleApplet_why.v
@@ -8135,23 +8138,23 @@ let Card_install_ensures_default =
   try
    begin
      (K_4:
-     (let jessie_25 =
+     (let jessie_<num> =
      (let this =
      (JC_146:
      (((alloc_struct_Card (1)) Object_alloc_table) Object_tag_table)) in
-     (let tt = (let jessie_28 = this in (JC_147: (cons_Card jessie_28))) in
+     (let tt = (let jessie_<num> = this in (JC_147: (cons_Card jessie_<num>))) in
      this)) in
-     (let jessie_24 = bArray_1 in
-     (let jessie_23 =
+     (let jessie_<num> = bArray_1 in
+     (let jessie_<num> =
      (K_2:
      (safe_short_of_integer_ (integer_of_int32 (K_1:
                                                (safe_int32_of_integer_ 
                                                 ((add_int (integer_of_short bOffset_1)) (1))))))) in
-     (let jessie_22 =
+     (let jessie_<num> =
      (K_3:
      ((safe_acc_ !byteM_byteP) ((shift bArray_1) (integer_of_short bOffset_1)))) in
      (JC_148:
-     ((((Applet_register_byteA_short_byte jessie_25) jessie_24) jessie_23) jessie_22)))))));
+     ((((Applet_register_byteA_short_byte jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))));
     (raise Return) end with Return -> void end) { (JC_135: true) }
 
 let Card_install_safety =
@@ -8161,31 +8164,31 @@ let Card_install_safety =
   try
    begin
      (K_4:
-     (let jessie_18 =
+     (let jessie_<num> =
      (let this =
-     (let jessie_19 =
+     (let jessie_<num> =
      (JC_142:
      (((alloc_struct_Card_requires (1)) Object_alloc_table) Object_tag_table)) in
      (JC_143:
-     (assert { ge_int(offset_max(Object_alloc_table, jessie_19), (0)) };
-     jessie_19))) in
+     (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
+     jessie_<num>))) in
      (let tt =
-     (let jessie_21 = this in (JC_144: (cons_Card_requires jessie_21))) in
+     (let jessie_<num> = this in (JC_144: (cons_Card_requires jessie_<num>))) in
      this)) in
-     (let jessie_17 = bArray_1 in
-     (let jessie_16 =
+     (let jessie_<num> = bArray_1 in
+     (let jessie_<num> =
      (K_2:
      (JC_141:
      (short_of_integer_ (integer_of_int32 (K_1:
                                           (JC_140:
                                           (int32_of_integer_ ((add_int 
                                                                (integer_of_short bOffset_1)) (1))))))))) in
-     (let jessie_15 =
+     (let jessie_<num> =
      (K_3:
      (JC_139:
      ((((offset_acc_ !Object_alloc_table) !byteM_byteP) bArray_1) (integer_of_short bOffset_1)))) in
      (JC_145:
-     ((((Applet_register_byteA_short_byte_requires jessie_18) jessie_17) jessie_16) jessie_15)))))));
+     ((((Applet_register_byteA_short_byte_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))));
     (raise Return) end with Return -> void end) { true }
 
 let Card_process_ensures_default =
@@ -8197,11 +8200,11 @@ let Card_process_ensures_default =
   try
    begin
      (if (K_6:
-         (let jessie_36 = this_1 in
-         (JC_184: (Applet_selectingApplet jessie_36)))) then (raise Return)
+         (let jessie_<num> = this_1 in
+         (JC_184: (Applet_selectingApplet jessie_<num>)))) then (raise Return)
      else void);
     (let buf =
-    (K_12: (let jessie_38 = apdu_0 in (JC_185: (APDU_getBuffer jessie_38)))) in
+    (K_12: (let jessie_<num> = apdu_0 in (JC_185: (APDU_getBuffer jessie_<num>)))) in
     begin
       (if (K_9:
           ((neq_int_ (integer_of_byte (K_8:
@@ -8210,21 +8213,21 @@ let Card_process_ensures_default =
            (integer_of_byte Card_Card_Class)))
       then
        (K_7:
-       (let jessie_39 = ISO7816_SW_CLA_NOT_SUPPORTED in
-       (JC_186: (ISOException_throwIt jessie_39)))) else void);
-     (let jessie_1 =
+       (let jessie_<num> = ISO7816_SW_CLA_NOT_SUPPORTED in
+       (JC_186: (ISOException_throwIt jessie_<num>)))) else void);
+     (let jessie_<num> =
      (K_11:
      ((safe_acc_ !byteM_byteP) ((shift buf) (integer_of_byte ISO7816_OFFSET_INS)))) in
      try
-      (if ((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read))
-      then (let jessie_41 = (raise (Loop_exit_exc void)) in void)
+      (if ((eq_int_ (integer_of_byte jessie_<num>)) (integer_of_byte Card_Card_Ins_Read))
+      then (let jessie_<num> = (raise (Loop_exit_exc void)) in void)
       else
        (if true
        then
         (K_10:
-        (let jessie_42 = ISO7816_SW_INS_NOT_SUPPORTED in
-        (JC_187: (ISOException_throwIt jessie_42)))) else void)) with
-      Loop_exit_exc jessie_2 -> void end); (raise Return) end);
+        (let jessie_<num> = ISO7816_SW_INS_NOT_SUPPORTED in
+        (JC_187: (ISOException_throwIt jessie_<num>)))) else void)) with
+      Loop_exit_exc jessie_<num> -> void end); (raise Return) end);
     (raise Return) end with Return -> void end) { (JC_173: true) }
 
 let Card_process_safety =
@@ -8236,15 +8239,15 @@ let Card_process_safety =
   try
    begin
      (if (K_6:
-         (let jessie_29 = this_1 in
-         (JC_177: (Applet_selectingApplet_requires jessie_29))))
+         (let jessie_<num> = this_1 in
+         (JC_177: (Applet_selectingApplet_requires jessie_<num>))))
      then (raise Return) else void);
     (let buf =
     (K_12:
-    (let jessie_31 = apdu_0 in
+    (let jessie_<num> = apdu_0 in
     (JC_179:
-    (assert { ge_int(offset_max(Object_alloc_table, jessie_31), (0)) };
-    (JC_178: (APDU_getBuffer_requires jessie_31)))))) in
+    (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
+    (JC_178: (APDU_getBuffer_requires jessie_<num>)))))) in
     begin
       (if (K_9:
           ((neq_int_ (integer_of_byte (K_8:
@@ -8253,22 +8256,22 @@ let Card_process_safety =
            (integer_of_byte Card_Card_Class)))
       then
        (K_7:
-       (let jessie_32 = ISO7816_SW_CLA_NOT_SUPPORTED in
-       (JC_181: (ISOException_throwIt_requires jessie_32)))) else void);
-     (let jessie_1 =
+       (let jessie_<num> = ISO7816_SW_CLA_NOT_SUPPORTED in
+       (JC_181: (ISOException_throwIt_requires jessie_<num>)))) else void);
+     (let jessie_<num> =
      (K_11:
      (JC_182:
      ((((lsafe_lbound_acc_ !Object_alloc_table) !byteM_byteP) buf) (1)))) in
      try
-      (if ((eq_int_ (integer_of_byte jessie_1)) (integer_of_byte Card_Card_Ins_Read))
-      then (let jessie_34 = (raise (Loop_exit_exc void)) in void)
+      (if ((eq_int_ (integer_of_byte jessie_<num>)) (integer_of_byte Card_Card_Ins_Read))
+      then (let jessie_<num> = (raise (Loop_exit_exc void)) in void)
       else
        (if true
        then
         (K_10:
-        (let jessie_35 = ISO7816_SW_INS_NOT_SUPPORTED in
-        (JC_183: (ISOException_throwIt_requires jessie_35)))) else void))
-      with Loop_exit_exc jessie_2 -> void end); (raise Return) end);
+        (let jessie_<num> = ISO7816_SW_INS_NOT_SUPPORTED in
+        (JC_183: (ISOException_throwIt_requires jessie_<num>)))) else void))
+      with Loop_exit_exc jessie_<num> -> void end); (raise Return) end);
     (raise Return) end with Return -> void end)
   { (JC_175: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
 
@@ -8278,47 +8281,37 @@ let cons_APDU_ensures_default =
   (init:
   try
    begin
-     (let jessie_150 =
+     (let jessie_<num> =
      begin
-       (let jessie_102 =
-       (let jessie_98 = null in
-       (let jessie_101 = this_68 in
-       (((safe_upd_ APDU_buffer) jessie_101) jessie_98))) in void);
-      (let jessie_108 =
-      (let jessie_104 = null in
-      (let jessie_107 = this_68 in
-      (((safe_upd_ APDU_thePackedBoolean) jessie_107) jessie_104))) in void);
-      (let jessie_114 =
-      (let jessie_110 = (safe_byte_of_integer_ (0)) in
-      (let jessie_113 = this_68 in
-      (((safe_upd_ APDU_incomingFlag) jessie_113) jessie_110))) in void);
-      (let jessie_120 =
-      (let jessie_116 = (safe_byte_of_integer_ (0)) in
-      (let jessie_119 = this_68 in
-      (((safe_upd_ APDU_outgoingFlag) jessie_119) jessie_116))) in void);
-      (let jessie_126 =
-      (let jessie_122 = (safe_byte_of_integer_ (0)) in
-      (let jessie_125 = this_68 in
-      (((safe_upd_ APDU_outgoingLenSetFlag) jessie_125) jessie_122))) in
-      void);
-      (let jessie_132 =
-      (let jessie_128 = (safe_byte_of_integer_ (0)) in
-      (let jessie_131 = this_68 in
-      (((safe_upd_ APDU_lrIs256Flag) jessie_131) jessie_128))) in void);
-      (let jessie_138 =
-      (let jessie_134 = (safe_byte_of_integer_ (0)) in
-      (let jessie_137 = this_68 in
-      (((safe_upd_ APDU_sendInProgressFlag) jessie_137) jessie_134))) in
-      void);
-      (let jessie_144 =
-      (let jessie_140 = (safe_byte_of_integer_ (0)) in
-      (let jessie_143 = this_68 in
-      (((safe_upd_ APDU_noChainingFlag) jessie_143) jessie_140))) in void);
-      (let jessie_146 = (safe_byte_of_integer_ (0)) in
-      (let jessie_149 = this_68 in
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_68 in
+       (((safe_upd_ APDU_buffer) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_thePackedBoolean) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_incomingFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_outgoingFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_outgoingLenSetFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_lrIs256Flag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_sendInProgressFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_noChainingFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
       begin
-        (((safe_upd_ APDU_noGetResponseFlag) jessie_149) jessie_146);
-       jessie_146 end)) end in void); (raise Return) end with Return ->
+        (let jessie_<num> = this_68 in
+        (((safe_upd_ APDU_noGetResponseFlag) jessie_<num>) jessie_<num>));
+       jessie_<num> end) end in void); (raise Return) end with Return ->
    void end) { (JC_440: true) }
 
 let cons_APDU_safety =
@@ -8327,45 +8320,38 @@ let cons_APDU_safety =
   (init:
   try
    begin
-     (let jessie_96 =
+     (let jessie_<num> =
      begin
-       (let jessie_48 =
-       (let jessie_44 = null in
-       (let jessie_47 = this_68 in
-       (((safe_upd_ APDU_buffer) jessie_47) jessie_44))) in void);
-      (let jessie_54 =
-      (let jessie_50 = null in
-      (let jessie_53 = this_68 in
-      (((safe_upd_ APDU_thePackedBoolean) jessie_53) jessie_50))) in void);
-      (let jessie_60 =
-      (let jessie_56 = (safe_byte_of_integer_ (0)) in
-      (let jessie_59 = this_68 in
-      (((safe_upd_ APDU_incomingFlag) jessie_59) jessie_56))) in void);
-      (let jessie_66 =
-      (let jessie_62 = (safe_byte_of_integer_ (0)) in
-      (let jessie_65 = this_68 in
-      (((safe_upd_ APDU_outgoingFlag) jessie_65) jessie_62))) in void);
-      (let jessie_72 =
-      (let jessie_68 = (safe_byte_of_integer_ (0)) in
-      (let jessie_71 = this_68 in
-      (((safe_upd_ APDU_outgoingLenSetFlag) jessie_71) jessie_68))) in void);
-      (let jessie_78 =
-      (let jessie_74 = (safe_byte_of_integer_ (0)) in
-      (let jessie_77 = this_68 in
-      (((safe_upd_ APDU_lrIs256Flag) jessie_77) jessie_74))) in void);
-      (let jessie_84 =
-      (let jessie_80 = (safe_byte_of_integer_ (0)) in
-      (let jessie_83 = this_68 in
-      (((safe_upd_ APDU_sendInProgressFlag) jessie_83) jessie_80))) in void);
-      (let jessie_90 =
-      (let jessie_86 = (safe_byte_of_integer_ (0)) in
-      (let jessie_89 = this_68 in
-      (((safe_upd_ APDU_noChainingFlag) jessie_89) jessie_86))) in void);
-      (let jessie_92 = (safe_byte_of_integer_ (0)) in
-      (let jessie_95 = this_68 in
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_68 in
+       (((safe_upd_ APDU_buffer) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_thePackedBoolean) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_incomingFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_outgoingFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_outgoingLenSetFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_lrIs256Flag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_sendInProgressFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
+      (let jessie_<num> = this_68 in
+      (((safe_upd_ APDU_noChainingFlag) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = (safe_byte_of_integer_ (0)) in
       begin
-        (((safe_upd_ APDU_noGetResponseFlag) jessie_95) jessie_92); jessie_92
-      end)) end in void); (raise Return) end with Return -> void end)
+        (let jessie_<num> = this_68 in
+        (((safe_upd_ APDU_noGetResponseFlag) jessie_<num>) jessie_<num>));
+       jessie_<num> end) end in void); (raise Return) end with Return ->
+   void end)
   { (JC_442: buffer_inv(this_68, Object_alloc_table, APDU_buffer)) }
 
 let cons_Applet_ensures_default =
@@ -8374,12 +8360,12 @@ let cons_Applet_ensures_default =
   (init:
   try
    begin
-     (let jessie_14 =
-     (let jessie_10 = null in
-     (let jessie_13 = this_66 in
+     (let jessie_<num> =
+     (let jessie_<num> = null in
      begin
-       (((safe_upd_ Applet_thePrivAccess) jessie_13) jessie_10); jessie_10
-     end)) in void); (raise Return) end with Return -> void end)
+       (let jessie_<num> = this_66 in
+       (((safe_upd_ Applet_thePrivAccess) jessie_<num>) jessie_<num>)); jessie_<num>
+     end) in void); (raise Return) end with Return -> void end)
   { (JC_55: true) }
 
 let cons_Applet_safety =
@@ -8388,11 +8374,12 @@ let cons_Applet_safety =
   (init:
   try
    begin
-     (let jessie_8 =
-     (let jessie_4 = null in
-     (let jessie_7 = this_66 in
-     begin   (((safe_upd_ Applet_thePrivAccess) jessie_7) jessie_4); jessie_4
-     end)) in void); (raise Return) end with Return -> void end) { true }
+     (let jessie_<num> =
+     (let jessie_<num> = null in
+     begin
+       (let jessie_<num> = this_66 in
+       (((safe_upd_ Applet_thePrivAccess) jessie_<num>) jessie_<num>)); jessie_<num> end) in
+     void); (raise Return) end with Return -> void end) { true }
 
 let cons_CardRuntimeException_short_ensures_default =
  fun (this_72 : Object pointer) (reason : short) ->
@@ -8400,12 +8387,12 @@ let cons_CardRuntimeException_short_ensures_default =
   (init:
   try
    begin
-     (let jessie_162 =
-     (let jessie_158 = (safe_short_of_integer_ (0)) in
-     (let jessie_161 = this_72 in
+     (let jessie_<num> =
+     (let jessie_<num> = (safe_short_of_integer_ (0)) in
      begin
-       (((safe_upd_ CardRuntimeException_reason) jessie_161) jessie_158);
-      jessie_158 end)) in void); (raise Return) end with Return -> void end)
+       (let jessie_<num> = this_72 in
+       (((safe_upd_ CardRuntimeException_reason) jessie_<num>) jessie_<num>));
+      jessie_<num> end) in void); (raise Return) end with Return -> void end)
   { (JC_616: true) }
 
 let cons_CardRuntimeException_short_safety =
@@ -8414,12 +8401,12 @@ let cons_CardRuntimeException_short_safety =
   (init:
   try
    begin
-     (let jessie_156 =
-     (let jessie_152 = (safe_short_of_integer_ (0)) in
-     (let jessie_155 = this_72 in
+     (let jessie_<num> =
+     (let jessie_<num> = (safe_short_of_integer_ (0)) in
      begin
-       (((safe_upd_ CardRuntimeException_reason) jessie_155) jessie_152);
-      jessie_152 end)) in void); (raise Return) end with Return -> void end)
+       (let jessie_<num> = this_72 in
+       (((safe_upd_ CardRuntimeException_reason) jessie_<num>) jessie_<num>));
+      jessie_<num> end) in void); (raise Return) end with Return -> void end)
   { true }
 
 let cons_Card_ensures_default =
@@ -8452,12 +8439,12 @@ let cons_ISOException_short_ensures_default =
   (init:
   try
    begin
-     (let jessie_174 =
-     (let jessie_170 = null in
-     (let jessie_173 = this_73 in
+     (let jessie_<num> =
+     (let jessie_<num> = null in
      begin
-       (((safe_upd_ ISOException_theSw) jessie_173) jessie_170); jessie_170
-     end)) in void); (raise Return) end with Return -> void end)
+       (let jessie_<num> = this_73 in
+       (((safe_upd_ ISOException_theSw) jessie_<num>) jessie_<num>)); jessie_<num>
+     end) in void); (raise Return) end with Return -> void end)
   { (JC_648: true) }
 
 let cons_ISOException_short_safety =
@@ -8466,12 +8453,12 @@ let cons_ISOException_short_safety =
   (init:
   try
    begin
-     (let jessie_168 =
-     (let jessie_164 = null in
-     (let jessie_167 = this_73 in
+     (let jessie_<num> =
+     (let jessie_<num> = null in
      begin
-       (((safe_upd_ ISOException_theSw) jessie_167) jessie_164); jessie_164
-     end)) in void); (raise Return) end with Return -> void end) { true }
+       (let jessie_<num> = this_73 in
+       (((safe_upd_ ISOException_theSw) jessie_<num>) jessie_<num>)); jessie_<num>
+     end) in void); (raise Return) end with Return -> void end) { true }
 
 let cons_Object_ensures_default =
  fun (this_67 : Object pointer) ->

@@ -284,14 +284,14 @@ parameter int8_of_integer_ :
 parameter monexp :
  x_0:double ->
   { } double
-  { (JC_6:
+  { (JC_<somenum>:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x_0@)))),
     0.02097256305)) }
 
 parameter monexp_requires :
  x_0:double ->
-  { (JC_1: le_real(abs_real(double_value(x_0)), 1.0))} double
-  { (JC_6:
+  { (JC_<somenum>: le_real(abs_real(double_value(x_0)), 1.0))} double
+  { (JC_<somenum>:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x_0@)))),
     0.02097256305)) }
 
@@ -300,7 +300,7 @@ parameter safe_int8_of_integer_ :
 
 let monexp_ensures_default =
  fun (x_0 : double) ->
-  { (JC_3: le_real(abs_real(double_value(x_0)), 1.0)) }
+  { (JC_<somenum>: le_real(abs_real(double_value(x_0)), 1.0)) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -308,32 +308,32 @@ let monexp_ensures_default =
      (let __retres = ref (any_double void) in
      (C_6:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_5:
-                    (JC_21:
+                    (JC_<somenum>:
                     (((div_double_safe nearest_even) (C_4:
-                                                     (JC_18:
+                                                     (JC_<somenum>:
                                                      (((add_double_safe nearest_even) 
                                                        ((double_of_real_safe nearest_even) 1.017021247)) 
                                                       (C_3:
-                                                      (JC_17:
+                                                      (JC_<somenum>:
                                                       (((mul_double_safe nearest_even) 
                                                         ((double_of_real_safe nearest_even) 0.5175411565)) x_0))))))) 
                      (C_2:
-                     (JC_20:
+                     (JC_<somenum>:
                      (((sub_double_safe nearest_even) (double_of_real_exact 1.0)) 
                       (C_1:
-                      (JC_19:
+                      (JC_<somenum>:
                       (((mul_double_safe nearest_even) ((double_of_real_safe nearest_even) 0.4397882839)) x_0)))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_5:
+  { (JC_<somenum>:
     le_real(abs_real(sub_real(double_value(result), exp(double_value(x_0@)))),
     0.02097256305)) }
 
 let monexp_safety =
  fun (x_0 : double) ->
-  { (JC_3: le_real(abs_real(double_value(x_0)), 1.0)) }
+  { (JC_<somenum>: le_real(abs_real(double_value(x_0)), 1.0)) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -341,25 +341,25 @@ let monexp_safety =
      (let __retres = ref (any_double void) in
      (C_6:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_5:
-                    (JC_16:
+                    (JC_<somenum>:
                     (((div_double nearest_even) (C_4:
-                                                (JC_12:
+                                                (JC_<somenum>:
                                                 (((add_double nearest_even) 
-                                                  (JC_9:
+                                                  (JC_<somenum>:
                                                   ((double_of_real nearest_even) 1.017021247))) 
                                                  (C_3:
-                                                 (JC_11:
+                                                 (JC_<somenum>:
                                                  (((mul_double nearest_even) 
-                                                   (JC_10:
+                                                   (JC_<somenum>:
                                                    ((double_of_real nearest_even) 0.5175411565))) x_0))))))) 
                      (C_2:
-                     (JC_15:
+                     (JC_<somenum>:
                      (((sub_double nearest_even) (double_of_real_exact 1.0)) 
                       (C_1:
-                      (JC_14:
-                      (((mul_double nearest_even) (JC_13:
+                      (JC_<somenum>:
+                      (((mul_double nearest_even) (JC_<somenum>:
                                                   ((double_of_real nearest_even) 0.4397882839))) x_0)))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }

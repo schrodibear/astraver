@@ -236,7 +236,9 @@ let rec create_var = function
         Termtbl.find gen_table t
       with Not_found ->
         let n = Ident.string (fresh_var ()) in
+(*
         Format.eprintf "creating var for %a {%i}@." Util.print_term t (HashedTerm.hash t);
+*)
         Termtbl.replace gen_table t n;
         n
 

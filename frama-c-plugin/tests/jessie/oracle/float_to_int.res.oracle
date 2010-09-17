@@ -265,75 +265,75 @@ parameter f :
  x_0:double ->
   { } int
   { ((le_real(double_value(x_0@), 0.0) ->
-      (JC_32:
-      ((JC_27: ge_int((0), result))
-      and ((JC_28: ge_real(real_of_int(result), double_value(x_0@)))
-          and ((JC_29:
+      (JC_<somenum>:
+      ((JC_<somenum>: ge_int((0), result))
+      and ((JC_<somenum>: ge_real(real_of_int(result), double_value(x_0@)))
+          and ((JC_<somenum>:
                gt_real(double_value(x_0@), real_of_int(sub_int(result, (1)))))
-              and ((JC_30:
+              and ((JC_<somenum>:
                    ge_real(1.0,
                    sub_real(real_of_int(result), double_value(x_0@))))
-                  and (JC_31:
+                  and (JC_<somenum>:
                       ge_real(sub_real(real_of_int(result),
                               double_value(x_0@)),
                       0.0))))))))
     and ((ge_real(double_value(x_0@), 0.0) ->
-          (JC_20:
-          ((JC_15: le_int((0), result))
-          and ((JC_16: le_real(real_of_int(result), double_value(x_0@)))
-              and ((JC_17:
+          (JC_<somenum>:
+          ((JC_<somenum>: le_int((0), result))
+          and ((JC_<somenum>: le_real(real_of_int(result), double_value(x_0@)))
+              and ((JC_<somenum>:
                    lt_real(double_value(x_0@),
                    real_of_int(add_int(result, (1)))))
-                  and ((JC_18:
+                  and ((JC_<somenum>:
                        le_real(neg_real(1.0),
                        sub_real(real_of_int(result), double_value(x_0@))))
-                      and (JC_19:
+                      and (JC_<somenum>:
                           le_real(sub_real(real_of_int(result),
                                   double_value(x_0@)),
                           0.0))))))))
-        and (JC_6:
+        and (JC_<somenum>:
             le_real(abs_real(sub_real(real_of_int(result),
                              double_value(x_0@))),
             1.0)))) }
 
 parameter f_requires :
  x_0:double ->
-  { (JC_1: le_real(abs_real(double_value(x_0)), 0x1p30))} int
+  { (JC_<somenum>: le_real(abs_real(double_value(x_0)), 0x1p30))} int
   { ((le_real(double_value(x_0@), 0.0) ->
-      (JC_32:
-      ((JC_27: ge_int((0), result))
-      and ((JC_28: ge_real(real_of_int(result), double_value(x_0@)))
-          and ((JC_29:
+      (JC_<somenum>:
+      ((JC_<somenum>: ge_int((0), result))
+      and ((JC_<somenum>: ge_real(real_of_int(result), double_value(x_0@)))
+          and ((JC_<somenum>:
                gt_real(double_value(x_0@), real_of_int(sub_int(result, (1)))))
-              and ((JC_30:
+              and ((JC_<somenum>:
                    ge_real(1.0,
                    sub_real(real_of_int(result), double_value(x_0@))))
-                  and (JC_31:
+                  and (JC_<somenum>:
                       ge_real(sub_real(real_of_int(result),
                               double_value(x_0@)),
                       0.0))))))))
     and ((ge_real(double_value(x_0@), 0.0) ->
-          (JC_20:
-          ((JC_15: le_int((0), result))
-          and ((JC_16: le_real(real_of_int(result), double_value(x_0@)))
-              and ((JC_17:
+          (JC_<somenum>:
+          ((JC_<somenum>: le_int((0), result))
+          and ((JC_<somenum>: le_real(real_of_int(result), double_value(x_0@)))
+              and ((JC_<somenum>:
                    lt_real(double_value(x_0@),
                    real_of_int(add_int(result, (1)))))
-                  and ((JC_18:
+                  and ((JC_<somenum>:
                        le_real(neg_real(1.0),
                        sub_real(real_of_int(result), double_value(x_0@))))
-                      and (JC_19:
+                      and (JC_<somenum>:
                           le_real(sub_real(real_of_int(result),
                                   double_value(x_0@)),
                           0.0))))))))
-        and (JC_6:
+        and (JC_<somenum>:
             le_real(abs_real(sub_real(real_of_int(result),
                              double_value(x_0@))),
             1.0)))) }
 
 let f_ensures_default =
  fun (x_0 : double) ->
-  { (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30)) }
+  { (JC_<somenum>: le_real(abs_real(double_value(x_0)), 0x1p30)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -341,18 +341,18 @@ let f_ensures_default =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_7 =
+       (let jessie_<somenum> =
        (i := (C_2:
-             (let jessie_6 = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_6)))) in void); (return := !i);
+             (let jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_5:
+  { (JC_<somenum>:
     le_real(abs_real(sub_real(real_of_int(result), double_value(x_0@))), 1.0)) }
 
 let f_ensures_negative =
  fun (x_0 : double) ->
   { (le_real(double_value(x_0), 0.0)
-    and (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30))) }
+    and (JC_<somenum>: le_real(abs_real(double_value(x_0)), 0x1p30))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -360,27 +360,27 @@ let f_ensures_negative =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_15 =
+       (let jessie_<somenum> =
        (i := (C_2:
-             (let jessie_14 = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_14)))) in void); (return := !i);
+             (let jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_26:
-    ((JC_21: ge_int((0), result))
-    and ((JC_22: ge_real(real_of_int(result), double_value(x_0@)))
-        and ((JC_23:
+  { (JC_<somenum>:
+    ((JC_<somenum>: ge_int((0), result))
+    and ((JC_<somenum>: ge_real(real_of_int(result), double_value(x_0@)))
+        and ((JC_<somenum>:
              gt_real(double_value(x_0@), real_of_int(sub_int(result, (1)))))
-            and ((JC_24:
+            and ((JC_<somenum>:
                  ge_real(1.0,
                  sub_real(real_of_int(result), double_value(x_0@))))
-                and (JC_25:
+                and (JC_<somenum>:
                     ge_real(sub_real(real_of_int(result), double_value(x_0@)),
                     0.0))))))) }
 
 let f_ensures_positive =
  fun (x_0 : double) ->
   { (ge_real(double_value(x_0), 0.0)
-    and (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30))) }
+    and (JC_<somenum>: le_real(abs_real(double_value(x_0)), 0x1p30))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -388,26 +388,26 @@ let f_ensures_positive =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_11 =
+       (let jessie_<somenum> =
        (i := (C_2:
-             (let jessie_10 = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_10)))) in void); (return := !i);
+             (let jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_14:
-    ((JC_9: le_int((0), result))
-    and ((JC_10: le_real(real_of_int(result), double_value(x_0@)))
-        and ((JC_11:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), result))
+    and ((JC_<somenum>: le_real(real_of_int(result), double_value(x_0@)))
+        and ((JC_<somenum>:
              lt_real(double_value(x_0@), real_of_int(add_int(result, (1)))))
-            and ((JC_12:
+            and ((JC_<somenum>:
                  le_real(neg_real(1.0),
                  sub_real(real_of_int(result), double_value(x_0@))))
-                and (JC_13:
+                and (JC_<somenum>:
                     le_real(sub_real(real_of_int(result), double_value(x_0@)),
                     0.0))))))) }
 
 let f_safety =
  fun (x_0 : double) ->
-  { (JC_3: le_real(abs_real(double_value(x_0)), 0x1p30)) }
+  { (JC_<somenum>: le_real(abs_real(double_value(x_0)), 0x1p30)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -415,10 +415,10 @@ let f_safety =
      (let i = ref (any_int void) in
      (C_3:
      begin
-       (let jessie_3 =
+       (let jessie_<somenum> =
        (i := (C_2:
-             (let jessie_2 = (C_1: (double_value x_0)) in
-             (truncate_real_to_int jessie_2)))) in void); (return := !i);
+             (let jessie_<somenum> = (C_1: (double_value x_0)) in
+             (truncate_real_to_int jessie_<somenum>)))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 

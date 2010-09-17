@@ -330,12 +330,12 @@ parameter bar : tt:unit -> { } unit { true }
 parameter bar_requires : tt:unit -> { } unit { true }
 
 parameter foo :
- x:int32 -> { } int32 { (JC_7: le_int((0), integer_of_int32(result))) }
+ x:int32 -> { } int32 { (JC_<somenum>: le_int((0), integer_of_int32(result))) }
 
 parameter foo_requires :
  x:int32 ->
-  { (JC_1: le_int((0), integer_of_int32(x)))} int32
-  { (JC_7: le_int((0), integer_of_int32(result))) }
+  { (JC_<somenum>: le_int((0), integer_of_int32(x)))} int32
+  { (JC_<somenum>: le_int((0), integer_of_int32(result))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -355,19 +355,19 @@ parameter safe_int8_of_integer_ :
 
 let bar_ensures_default =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (C_3:
      begin
-       (let jessie_6 = (let jessie_5 = (safe_int32_of_integer_ (neg_int (1))) in
-                       (JC_21: (foo jessie_5))) in
+       (let jessie_<somenum> = (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (1))) in
+                       (JC_<somenum>: (foo jessie_<somenum>))) in
        void);
       (C_4:
       begin
-        (let jessie_8 = (let jessie_7 = (safe_int32_of_integer_ (neg_int (1))) in
-                        (JC_22: (foo jessie_7))) in
+        (let jessie_<somenum> = (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (1))) in
+                        (JC_<somenum>: (foo jessie_<somenum>))) in
         void);
        (raise Return)
       end)
@@ -377,23 +377,23 @@ let bar_ensures_default =
    with
    Return ->
    void end)
-  { (JC_15: true) }
+  { (JC_<somenum>: true) }
 
 let bar_safety =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (C_3:
      begin
-       (let jessie_2 = (let jessie_1 = (safe_int32_of_integer_ (neg_int (1))) in
-                       (JC_19: (foo_requires jessie_1))) in
+       (let jessie_<somenum> = (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (1))) in
+                       (JC_<somenum>: (foo_requires jessie_<somenum>))) in
        void);
       (C_4:
       begin
-        (let jessie_4 = (let jessie_3 = (safe_int32_of_integer_ (neg_int (1))) in
-                        (JC_20: (foo_requires jessie_3))) in
+        (let jessie_<somenum> = (let jessie_<somenum> = (safe_int32_of_integer_ (neg_int (1))) in
+                        (JC_<somenum>: (foo_requires jessie_<somenum>))) in
         void);
        (raise Return)
       end)

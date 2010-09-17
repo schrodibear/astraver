@@ -416,13 +416,13 @@ let myFunction_ensures_default =
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_12 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_19 = begin
+       (let jessie_<somenum> = begin
                           (loop_2:
                           while true do
                           { invariant
-                              (JC_17:
+                              (JC_<somenum>:
                               eq_int(integer_of_int32(i),
                               sub_pointer(mutable_pString,
                               mutable_pString@init)))
@@ -430,15 +430,15 @@ let myFunction_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_18 = begin
-                                                (let jessie_17 = begin
+                             (let jessie_<somenum> = begin
+                                                (let jessie_<somenum> = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i)) 
                                                                     (integer_of_int32 nbBytes))
                                                                    then void
                                                                    else
-                                                                    (let jessie_13 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -452,7 +452,7 @@ let myFunction_ensures_default =
                                                                     (C_3:
                                                                     ((safe_acc_ char_P_char_M_pString_1) !mutable_pString))))))) (0))
                                                                   then
-                                                                   (let jessie_14 = 
+                                                                   (let jessie_<somenum> = 
                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -460,7 +460,7 @@ let myFunction_ensures_default =
                                                                   else void);
                                                                   (C_6:
                                                                   begin
-                                                                    (let jessie_16 = 
+                                                                    (let jessie_<somenum> = 
                                                                     (mutable_pString := 
                                                                     (C_5:
                                                                     ((shift !mutable_pString) (1)))) in
@@ -485,7 +485,7 @@ let myFunction_ensures_default =
                                               end in
                              void)
                              with
-                             Loop_continue_exc jessie_3 ->
+                             Loop_continue_exc jessie_<somenum> ->
                              void end
                            end
                           done);
@@ -493,7 +493,7 @@ let myFunction_ensures_default =
                         end in
        void)
        with
-       Goto_while_0_break_exc jessie_1 ->
+       Goto_while_0_break_exc jessie_<somenum> ->
        (while_0_break: void) end;
       (raise Return)
      end));
@@ -502,11 +502,11 @@ let myFunction_ensures_default =
    with
    Return ->
    void end))
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let myFunction_safety =
  fun (pString : char_P pointer) (nbBytes : int32) (char_P_pString_1_alloc_table : char_P alloc_table) (char_P_char_M_pString_1 : (char_P, int8) memory) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_pString = ref pString in
   (init:
   try
@@ -514,28 +514,28 @@ let myFunction_safety =
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_4 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_11 = begin
+       (let jessie_<somenum> = begin
                           (loop_1:
                           while true do
-                          { invariant (JC_11: true)  }
+                          { invariant (JC_<somenum>: true)  }
                            begin
                              [ { } unit reads i,mutable_pString
-                               { (JC_9:
+                               { (JC_<somenum>:
                                  eq_int(integer_of_int32(i),
                                  sub_pointer(mutable_pString,
                                  mutable_pString@init))) } ];
                             try
-                             (let jessie_10 = begin
-                                                (let jessie_9 = begin
+                             (let jessie_<somenum> = begin
+                                                (let jessie_<somenum> = begin
                                                                   (if 
                                                                   ((lt_int_ 
                                                                     (integer_of_int32 !i)) 
                                                                    (integer_of_int32 nbBytes))
                                                                   then void
                                                                   else
-                                                                   (let jessie_5 = 
+                                                                   (let jessie_<somenum> = 
                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -544,14 +544,14 @@ let myFunction_safety =
                                                                  ((eq_int_ 
                                                                    (integer_of_int32 
                                                                     (C_4:
-                                                                    (JC_14:
+                                                                    (JC_<somenum>:
                                                                     (int32_of_integer_ 
                                                                     (integer_of_int8 
                                                                     (C_3:
-                                                                    (JC_13:
+                                                                    (JC_<somenum>:
                                                                     (((acc_ char_P_pString_1_alloc_table) char_P_char_M_pString_1) !mutable_pString))))))))) (0))
                                                                  then
-                                                                  (let jessie_6 = 
+                                                                  (let jessie_<somenum> = 
                                                                   (raise
                                                                    (Goto_while_0_break_exc
                                                                    void)) in
@@ -559,7 +559,7 @@ let myFunction_safety =
                                                                  else void);
                                                                  (C_6:
                                                                  begin
-                                                                   (let jessie_8 = 
+                                                                   (let jessie_<somenum> = 
                                                                    (mutable_pString := 
                                                                     (C_5:
                                                                     ((shift !mutable_pString) (1)))) in
@@ -568,7 +568,7 @@ let myFunction_safety =
                                                                   begin
                                                                     (i := 
                                                                     (C_8:
-                                                                    (JC_16:
+                                                                    (JC_<somenum>:
                                                                     (int32_of_integer_ 
                                                                     (C_7:
                                                                     ((add_int 
@@ -584,7 +584,7 @@ let myFunction_safety =
                                               end in
                              void)
                              with
-                             Loop_continue_exc jessie_3 ->
+                             Loop_continue_exc jessie_<somenum> ->
                              void end
                            end
                           done);
@@ -592,7 +592,7 @@ let myFunction_safety =
                         end in
        void)
        with
-       Goto_while_0_break_exc jessie_1 ->
+       Goto_while_0_break_exc jessie_<somenum> ->
        (while_0_break: void) end;
       (raise Return)
      end));

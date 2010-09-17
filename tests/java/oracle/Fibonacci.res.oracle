@@ -422,6 +422,9 @@ why3: why/Fibonacci_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/Fibonacci_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include Fibonacci.depend
 
 depend: coq/Fibonacci_why.v
@@ -1293,26 +1296,26 @@ let Fibonacci_Fib_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_30 =
+           (let jessie_<num> =
            begin
              (if (K_14: ((lt_int_ !i) n_0))
              then
-              (let jessie_28 =
+              (let jessie_<num> =
               begin
-                (let jessie_24 = (aux := !y) in void);
-               (let jessie_26 = (y := !x_0_0) in void);
+                (let jessie_<num> = (aux := !y) in void);
+               (let jessie_<num> = (y := !x_0_0) in void);
                (x_0_0 := (K_12: ((add_int !x_0_0) !aux))); !x_0_0 end in
               void)
-             else (let jessie_29 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_3 ->
-           (let jessie_34 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_13:
-           (let jessie_1 = !i in
+           (let jessie_<num> = !i in
            begin
-             (let jessie_33 = (i := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_2 -> void end); (return := !y); (raise Return)
+             (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !y); (raise Return)
      end))); absurd  end with Return -> !return end))
   { (JC_15: isfib(n_0, result)) }
 
@@ -1340,26 +1343,26 @@ let Fibonacci_Fib_safety =
                    and ((JC_21: isfib(add_int(i, (1)), x_0_0))
                        and (JC_22: isfib(i, y)))))) } ];
           try
-           (let jessie_14 =
+           (let jessie_<num> =
            begin
              (if (K_14: ((lt_int_ !i) n_0))
              then
-              (let jessie_12 =
+              (let jessie_<num> =
               begin
-                (let jessie_8 = (aux := !y) in void);
-               (let jessie_10 = (y := !x_0_0) in void);
+                (let jessie_<num> = (aux := !y) in void);
+               (let jessie_<num> = (y := !x_0_0) in void);
                (x_0_0 := (K_12: ((add_int !x_0_0) !aux))); !x_0_0 end in
               void)
-             else (let jessie_13 = (raise (Loop_exit_exc void)) in void));
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_3 ->
-           (let jessie_18 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_13:
-           (let jessie_1 = !i in
+           (let jessie_<num> = !i in
            begin
-             (let jessie_17 = (i := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_2 -> void end); (return := !y); (raise Return)
+             (let jessie_<num> = (i := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := !y); (raise Return)
      end))); absurd  end with Return -> !return end)) { true }
 
 let cons_Fibonacci_ensures_default =

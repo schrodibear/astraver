@@ -479,7 +479,7 @@ parameter f : tt:unit -> { } unit writes e1 { true }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_1: neq_int(integer_of_E2(e2), (2)))} unit writes e1 { true }
+  { (JC_<somenum>: neq_int(integer_of_E2(e2), (2)))} unit writes e1 { true }
 
 parameter s_0 : int16 ref
 
@@ -487,9 +487,9 @@ parameter g : tt:unit -> { } unit reads s_0 writes c { true }
 
 parameter g_requires :
  tt:unit ->
-  { (JC_12:
-    ((JC_10: le_int((0), integer_of_int16(s_0)))
-    and (JC_11: le_int(integer_of_int16(s_0), (255)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int16(s_0)))
+    and (JC_<somenum>: le_int(integer_of_int16(s_0), (255)))))}
   unit reads s_0 writes c { true }
 
 parameter li : int32 ref
@@ -559,170 +559,141 @@ parameter uint8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_3: neq_int(integer_of_E2(e2), (2))) }
+  { (JC_<somenum>: neq_int(integer_of_E2(e2), (2))) }
   (init:
   try
+   (C_2:
    begin
-     (C_2:
-     begin
-       (let jessie_4 =
-       (e1 := (C_1: (safe_E1_of_integer_ (integer_of_E2 e2)))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+     (let jessie_<somenum> =
+     (e1 := (C_1: (safe_E1_of_integer_ (integer_of_E2 e2)))) in void);
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_3: neq_int(integer_of_E2(e2), (2))) }
+  { (JC_<somenum>: neq_int(integer_of_E2(e2), (2))) }
   (init:
   try
+   (C_2:
    begin
-     (C_2:
-     begin
-       (let jessie_2 =
-       (e1 := (C_1: (JC_9: (E1_of_integer_ (integer_of_E2 e2))))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> =
+     (e1 := (C_1: (JC_<somenum>: (E1_of_integer_ (integer_of_E2 e2))))) in void);
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { (JC_16:
-    ((JC_14: le_int((0), integer_of_int16(s_0)))
-    and (JC_15: le_int(integer_of_int16(s_0), (255))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int16(s_0)))
+    and (JC_<somenum>: le_int(integer_of_int16(s_0), (255))))) }
   (init:
   try
+   (C_6:
    begin
-     (C_6:
-     begin
-       (let jessie_8 =
-       (c := (C_5: (safe_uint8_of_integer_ (integer_of_int16 !s_0)))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_18: true) }
+     (let jessie_<somenum> =
+     (c := (C_5: (safe_uint8_of_integer_ (integer_of_int16 !s_0)))) in void);
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_16:
-    ((JC_14: le_int((0), integer_of_int16(s_0)))
-    and (JC_15: le_int(integer_of_int16(s_0), (255))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((0), integer_of_int16(s_0)))
+    and (JC_<somenum>: le_int(integer_of_int16(s_0), (255))))) }
   (init:
   try
+   (C_6:
    begin
-     (C_6:
-     begin
-       (let jessie_6 =
-       (c := (C_5: (JC_22: (uint8_of_integer_ (integer_of_int16 !s_0))))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
+     (let jessie_<somenum> =
+     (c := (C_5: (JC_<somenum>: (uint8_of_integer_ (integer_of_int16 !s_0))))) in
+     void); (raise Return); (raise Return) end) with Return -> void end)
   { true }
 
 let h_ensures_default =
  fun (tt : unit) ->
-  { (JC_26: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_11:
+   (C_13:
+   (C_15:
+   (C_17:
+   (C_19:
+   (C_21:
    begin
-     (C_11:
-     begin
-       (let jessie_22 = (c := (safe_uint8_of_integer_ (10))) in void);
-      (C_13:
-      begin
-        (let jessie_24 =
-        (sc := (C_12: (safe_int8_of_integer_ (integer_of_uint8 !c)))) in
-        void);
-       (C_15:
-       begin
-         (let jessie_26 =
-         (s_0 := (C_14: (safe_int16_of_integer_ (integer_of_int8 c1)))) in
-         void);
-        (C_17:
-        begin
-          (let jessie_28 =
-          (i := (C_16: (safe_int32_of_integer_ (integer_of_int16 !s_0)))) in
-          void);
-         (C_19:
-         begin
-           (let jessie_30 = (li := (C_18: !i)) in void);
-          (C_21:
-          begin
-            (let jessie_32 =
-            (lli := (C_20: (safe_int64_of_integer_ (integer_of_int32 !li)))) in
-            void); (raise Return) end) end) end) end) end) end);
-    (raise Return) end with Return -> void end) { (JC_27: true) }
+     (let jessie_<somenum> = (c := (safe_uint8_of_integer_ (10))) in void);
+    (let jessie_<somenum> =
+    (sc := (C_12: (safe_int8_of_integer_ (integer_of_uint8 !c)))) in void);
+    (let jessie_<somenum> =
+    (s_0 := (C_14: (safe_int16_of_integer_ (integer_of_int8 c1)))) in void);
+    (let jessie_<somenum> =
+    (i := (C_16: (safe_int32_of_integer_ (integer_of_int16 !s_0)))) in void);
+    (let jessie_<somenum> = (li := (C_18: !i)) in void);
+    (let jessie_<somenum> =
+    (lli := (C_20: (safe_int64_of_integer_ (integer_of_int32 !li)))) in void);
+    (raise Return); (raise Return) end)))))) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let h_safety =
  fun (tt : unit) ->
-  { (JC_26: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_11:
+   (C_13:
+   (C_15:
+   (C_17:
+   (C_19:
+   (C_21:
    begin
-     (C_11:
-     begin
-       (let jessie_10 = (c := (safe_uint8_of_integer_ (10))) in void);
-      (C_13:
-      begin
-        (let jessie_12 =
-        (sc := (C_12: (JC_31: (int8_of_integer_ (integer_of_uint8 !c))))) in
-        void);
-       (C_15:
-       begin
-         (let jessie_14 =
-         (s_0 := (C_14: (JC_32: (int16_of_integer_ (integer_of_int8 c1))))) in
-         void);
-        (C_17:
-        begin
-          (let jessie_16 =
-          (i := (C_16: (JC_33: (int32_of_integer_ (integer_of_int16 !s_0))))) in
-          void);
-         (C_19:
-         begin
-           (let jessie_18 = (li := (C_18: !i)) in void);
-          (C_21:
-          begin
-            (let jessie_20 =
-            (lli := (C_20:
-                    (JC_34: (int64_of_integer_ (integer_of_int32 !li))))) in
-            void); (raise Return) end) end) end) end) end) end);
-    (raise Return) end with Return -> void end) { true }
+     (let jessie_<somenum> = (c := (safe_uint8_of_integer_ (10))) in void);
+    (let jessie_<somenum> =
+    (sc := (C_12: (JC_<somenum>: (int8_of_integer_ (integer_of_uint8 !c))))) in
+    void);
+    (let jessie_<somenum> =
+    (s_0 := (C_14: (JC_<somenum>: (int16_of_integer_ (integer_of_int8 c1))))) in
+    void);
+    (let jessie_<somenum> =
+    (i := (C_16: (JC_<somenum>: (int32_of_integer_ (integer_of_int16 !s_0))))) in
+    void); (let jessie_<somenum> = (li := (C_18: !i)) in void);
+    (let jessie_<somenum> =
+    (lli := (C_20: (JC_<somenum>: (int64_of_integer_ (integer_of_int32 !li))))) in
+    void); (raise Return); (raise Return) end)))))) with Return -> void end)
+  { true }
 
 let hh_ensures_default =
  fun (tt : unit) ->
-  { (JC_38: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_23:
+   (C_25:
+   (C_27:
    begin
-     (C_23:
-     begin
-       (let jessie_40 = (i := (safe_int32_of_integer_ (7))) in void);
-      (C_25:
-      begin
-        (let jessie_42 =
-        (s_0 := (C_24: (safe_int16_of_integer_ (integer_of_int32 !i)))) in
-        void);
-       (C_27:
-       begin
-         (let jessie_44 =
-         (c := (C_26: (safe_uint8_of_integer_ (integer_of_int16 !s_0)))) in
-         void); (raise Return) end) end) end); (raise Return) end with
-   Return -> void end) { (JC_39: true) }
+     (let jessie_<somenum> = (i := (safe_int32_of_integer_ (7))) in void);
+    (let jessie_<somenum> =
+    (s_0 := (C_24: (safe_int16_of_integer_ (integer_of_int32 !i)))) in void);
+    (let jessie_<somenum> =
+    (c := (C_26: (safe_uint8_of_integer_ (integer_of_int16 !s_0)))) in void);
+    (raise Return); (raise Return) end))) with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let hh_safety =
  fun (tt : unit) ->
-  { (JC_38: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_23:
+   (C_25:
+   (C_27:
    begin
-     (C_23:
-     begin
-       (let jessie_34 = (i := (safe_int32_of_integer_ (7))) in void);
-      (C_25:
-      begin
-        (let jessie_36 =
-        (s_0 := (C_24: (JC_43: (int16_of_integer_ (integer_of_int32 !i))))) in
-        void);
-       (C_27:
-       begin
-         (let jessie_38 =
-         (c := (C_26: (JC_44: (uint8_of_integer_ (integer_of_int16 !s_0))))) in
-         void); (raise Return) end) end) end); (raise Return) end with
-   Return -> void end) { true }
+     (let jessie_<somenum> = (i := (safe_int32_of_integer_ (7))) in void);
+    (let jessie_<somenum> =
+    (s_0 := (C_24: (JC_<somenum>: (int16_of_integer_ (integer_of_int32 !i))))) in
+    void);
+    (let jessie_<somenum> =
+    (c := (C_26: (JC_<somenum>: (uint8_of_integer_ (integer_of_int16 !s_0))))) in
+    void); (raise Return); (raise Return) end))) with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C overflow.jessie --quiet -f overflow.makefile project

@@ -499,7 +499,7 @@ let ctype ?bitsize ty =
            *)
           begin match unrollType (pointed_type ty) with
             | TComp(compinfo,_,_) ->
-                let min_bound = Num.num_of_string "0" in
+                let min_bound = Num.Int 0 in
                 let max_bound =
                   Num.num_of_string (Int64.to_string (reference_size ty - 1L))
                 in

@@ -279,25 +279,25 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter cosine1a :
  x_0:single ->
   { } single
-  { (JC_14:
-    ((JC_12:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0@)))),
      0x1p-24))
-    and (JC_13:
+    and (JC_<somenum>:
         le_real(single_round_error(result),
         add_real(single_round_error(x_0@), 0x3p-24))))) }
 
 parameter cosine1a_requires :
  x_0:single ->
-  { (JC_3:
-    ((JC_1: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_2: le_real(single_round_error(x_0), 0x1p-20))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(abs_real(single_exact(x_0)), 0x1p-5))
+    and (JC_<somenum>: le_real(single_round_error(x_0), 0x1p-20))))}
   single
-  { (JC_14:
-    ((JC_12:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0@)))),
      0x1p-24))
-    and (JC_13:
+    and (JC_<somenum>:
         le_real(single_round_error(result),
         add_real(single_round_error(x_0@), 0x3p-24))))) }
 
@@ -311,9 +311,9 @@ parameter safe_int8_of_integer_ :
 
 let cosine1a_ensures_default =
  fun (x_0 : single) ->
-  { (JC_7:
-    ((JC_5: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_6: le_real(single_round_error(x_0), 0x1p-20)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(abs_real(single_exact(x_0)), 0x1p-5))
+    and (JC_<somenum>: le_real(single_round_error(x_0), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -321,30 +321,30 @@ let cosine1a_ensures_default =
      (let r = ref (any_single void) in
      (C_4:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (r := (C_3:
-             (JC_22:
+             (JC_<somenum>:
              (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
               (C_2:
-              (JC_21:
+              (JC_<somenum>:
               (((mul_single_safe nearest_even) (C_1:
-                                               (JC_20:
+                                               (JC_<somenum>:
                                                (((mul_single_safe nearest_even) x_0) x_0)))) 
                (single_of_real_exact 0.5)))))))) in void); (return := !r);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_11:
-    ((JC_9:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_0@)))),
      0x1p-24))
-    and (JC_10:
+    and (JC_<somenum>:
         le_real(single_round_error(result),
         add_real(single_round_error(x_0@), 0x3p-24))))) }
 
 let cosine1a_safety =
  fun (x_0 : single) ->
-  { (JC_7:
-    ((JC_5: le_real(abs_real(single_exact(x_0)), 0x1p-5))
-    and (JC_6: le_real(single_round_error(x_0), 0x1p-20)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(abs_real(single_exact(x_0)), 0x1p-5))
+    and (JC_<somenum>: le_real(single_round_error(x_0), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -352,14 +352,14 @@ let cosine1a_safety =
      (let r = ref (any_single void) in
      (C_4:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (r := (C_3:
-             (JC_19:
+             (JC_<somenum>:
              (((sub_single nearest_even) (single_of_real_exact 1.0)) 
               (C_2:
-              (JC_18:
+              (JC_<somenum>:
               (((mul_single nearest_even) (C_1:
-                                          (JC_17:
+                                          (JC_<somenum>:
                                           (((mul_single nearest_even) x_0) x_0)))) 
                (single_of_real_exact 0.5)))))))) in void); (return := !r);
       (raise Return) end)); absurd  end with Return -> !return end)) 

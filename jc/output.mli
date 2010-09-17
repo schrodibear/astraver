@@ -119,7 +119,7 @@ type opaque = bool
 
 type assert_kind = [`ASSERT | `CHECK]
 
-type expr =
+type expr_node =
   | Cte of constant
   | Var of string
   | And of expr * expr
@@ -136,14 +136,14 @@ type expr =
   | Block of expr list
   | Assign of string * expr
   | MultiAssign of string * Loc.position * (string * expr) list * 
-      expr * string * expr * string *  
+      bool * term * expr * string * expr * string *  
       (int * bool * bool * string) list
       (* 
 
          this construction is not in Why, but a temporary construction
          used by jessie to denote "parallel updates"
          
-         [MultiAssign(mark,pos,lets,alloc,tmpe,e,f,l)] where [l]
+         [MultiAssign(mark,pos,lets,talloc,alloc,tmpe,e,f,l)] where [l]
          is a list of pair (i,b1,b2,e') for distincts i, denotes the
          parallel updates (lets) let tmpe = e in (tmpe+i).f = e'
 
@@ -163,11 +163,25 @@ type expr =
   | Triple of opaque * 
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
+(*
   | Label of string * expr
+*)
   | BlackBox of why_type
   | Absurd 
   | Loc of Lexing.position * expr
+
+and expr = 
+    { expr_labels : string list;
+      expr_node : expr_node;
+    }
+
 ;;
+
+val mk_expr : expr_node -> expr
+val mk_var : string -> expr
+val void : expr
+
+val make_block : string list -> expr list -> expr
 
 val fprintf_expr : Format.formatter -> expr -> unit
 
@@ -188,13 +202,8 @@ val make_app_e : expr -> expr list -> expr
 
 (*
 
-  [make_label l e] builds
+  [make_label l e] adds label l to e
 
-    begin label l; e end
-
-  applying simplification if [e] is already a block
-
-    
 
 *)
 

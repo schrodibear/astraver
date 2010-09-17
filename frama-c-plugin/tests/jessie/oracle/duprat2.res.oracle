@@ -318,11 +318,11 @@ parameter ftest2 :
  x_0:int32 ->
   y:int32 ->
    { } int32
-   { (JC_10:
-     ((JC_8:
+   { (JC_<somenum>:
+     ((JC_<somenum>:
       ((pcond1(integer_of_int32(x_0@)) and pcond2(integer_of_int32(y@))) ->
        eq_int(integer_of_int32(result), (1))))
-     and (JC_9:
+     and (JC_<somenum>:
          (eq_int(integer_of_int32(result), (1))
          <-> (pcond1(integer_of_int32(x_0@))
              and pcond2(integer_of_int32(y@))))))) }
@@ -331,11 +331,11 @@ parameter ftest2_requires :
  x_0:int32 ->
   y:int32 ->
    { } int32
-   { (JC_10:
-     ((JC_8:
+   { (JC_<somenum>:
+     ((JC_<somenum>:
       ((pcond1(integer_of_int32(x_0@)) and pcond2(integer_of_int32(y@))) ->
        eq_int(integer_of_int32(result), (1))))
-     and (JC_9:
+     and (JC_<somenum>:
          (eq_int(integer_of_int32(result), (1))
          <-> (pcond1(integer_of_int32(x_0@))
              and pcond2(integer_of_int32(y@))))))) }
@@ -358,7 +358,7 @@ parameter safe_int8_of_integer_ :
 
 let ftest2_ensures_default =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -367,27 +367,26 @@ let ftest2_ensures_default =
      begin
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
-        (let jessie_9 =
+        (let jessie_<somenum> =
         (if ((lt_int_ (integer_of_int32 y)) (10))
         then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
         else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
         void)
        else
-        (C_1:
-        (let jessie_11 = (tmp := (safe_int32_of_integer_ (0))) in void)));
-      (return := !tmp); (raise Return) end); absurd  end with Return ->
-   !return end))
-  { (JC_7:
-    ((JC_5:
+        (let jessie_<somenum> = (C_1: (tmp := (safe_int32_of_integer_ (0)))) in
+        void)); (return := !tmp); (raise Return) end); absurd  end with
+   Return -> !return end))
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      ((pcond1(integer_of_int32(x_0@)) and pcond2(integer_of_int32(y@))) ->
       eq_int(integer_of_int32(result), (1))))
-    and (JC_6:
+    and (JC_<somenum>:
         (eq_int(integer_of_int32(result), (1))
         <-> (pcond1(integer_of_int32(x_0@)) and pcond2(integer_of_int32(y@))))))) }
 
 let ftest2_safety =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -396,13 +395,13 @@ let ftest2_safety =
      begin
        (if ((gt_int_ (integer_of_int32 x_0)) (0))
        then
-        (let jessie_3 =
+        (let jessie_<somenum> =
         (if ((lt_int_ (integer_of_int32 y)) (10))
         then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
         else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
         void)
        else
-        (C_1: (let jessie_5 = (tmp := (safe_int32_of_integer_ (0))) in void)));
+        (let jessie_<somenum> = (C_1: (tmp := (safe_int32_of_integer_ (0)))) in void));
       (return := !tmp); (raise Return) end); absurd  end with Return ->
    !return end)) { true }
 

@@ -1853,25 +1853,25 @@ parameter main :
  tt:unit ->
   { } unit
   reads char_P___string_done_1_alloc_table,char_P_char_M___string_done_1
-  { (JC_18:
-    ((JC_16:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_done(char_P___string_done_1_alloc_table,
      char_P_char_M___string_done_1))
-    and (JC_17: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
+    and (JC_<somenum>: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_5:
-    ((JC_3:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_done(char_P___string_done_1_alloc_table,
      char_P_char_M___string_done_1))
-    and (JC_4: valid___string_done_0(char_P___string_done_1_alloc_table))))}
+    and (JC_<somenum>: valid___string_done_0(char_P___string_done_1_alloc_table))))}
   unit reads char_P___string_done_1_alloc_table,char_P_char_M___string_done_1
-  { (JC_18:
-    ((JC_16:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_done(char_P___string_done_1_alloc_table,
      char_P_char_M___string_done_1))
-    and (JC_17: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
+    and (JC_<somenum>: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1889,116 +1889,112 @@ parameter uint16_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_9:
-    ((JC_7:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_done(char_P___string_done_1_alloc_table,
      char_P_char_M___string_done_1))
-    and (JC_8: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
+    and (JC_<somenum>: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
   (init:
   try
    begin
      (let p = ref (any_pointer void) in
      (let i_27 = ref (any_int32 void) in
      (C_1:
+     (C_2:
      begin
-       (let jessie_14 = (p := __string_done) in void);
-      (C_2:
-      begin
-        (let jessie_16 = (i_27 := (safe_int32_of_integer_ (0))) in void);
-       try
-        (let jessie_21 =
-        begin
-          (loop_2:
-          while true do
-          { invariant (JC_26: true)  }
-           begin
-             [ { } unit { true } ];
-            try
-             (let jessie_20 =
-             begin
-               (let jessie_19 =
-               begin
-                 (if ((neq_int_ (integer_of_int32 (C_5:
-                                                  (safe_int32_of_integer_ 
-                                                   (integer_of_int8 (C_4:
-                                                                    ((safe_acc_ !char_P_char_M___string_done_1) 
+       (let jessie_<somenum> = (p := __string_done) in void);
+      (let jessie_<somenum> = (i_27 := (safe_int32_of_integer_ (0))) in void);
+      try
+       (let jessie_<somenum> =
+       begin
+         (loop_2:
+         while true do
+         { invariant (JC_<somenum>: true)  }
+          begin
+            [ { } unit { true } ];
+           try
+            (let jessie_<somenum> =
+            begin
+              (let jessie_<somenum> =
+              (C_8:
+              begin
+                (if ((neq_int_ (integer_of_int32 (C_5:
+                                                 (safe_int32_of_integer_ 
+                                                  (integer_of_int8 (C_4:
+                                                                   ((safe_acc_ !char_P_char_M___string_done_1) 
                                                                     (C_3:
                                                                     ((shift !p) 
                                                                     (integer_of_int32 !i_27)))))))))) (0))
-                 then void
-                 else
-                  (let jessie_17 = (raise (Goto_while_0_break_exc void)) in
-                  void));
-                (C_8:
-                begin
-                  (i_27 := (C_7:
-                           (safe_int32_of_integer_ (C_6:
-                                                   ((add_int (integer_of_int32 !i_27)) (1))))));
-                 !i_27 end) end in void); (raise (Loop_continue_exc void))
-             end in void) with Loop_continue_exc jessie_3 -> void end end
-          done); (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
-       (raise Return) end) end))); (raise Return) end with Return -> void end)
-  { (JC_11: true) }
+                then void
+                else
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                 void));
+               (i_27 := (C_7:
+                        (safe_int32_of_integer_ (C_6:
+                                                ((add_int (integer_of_int32 !i_27)) (1))))));
+               !i_27 end) in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end in void) with
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
+      (raise Return) end)))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_9:
-    ((JC_7:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_done(char_P___string_done_1_alloc_table,
      char_P_char_M___string_done_1))
-    and (JC_8: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
+    and (JC_<somenum>: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
   (init:
   try
    begin
      (let p = ref (any_pointer void) in
      (let i_27 = ref (any_int32 void) in
      (C_1:
+     (C_2:
      begin
-       (let jessie_5 = (p := __string_done) in void);
-      (C_2:
-      begin
-        (let jessie_7 = (i_27 := (safe_int32_of_integer_ (0))) in void);
-       try
-        (let jessie_12 =
-        begin
-          (loop_1:
-          while true do
-          { invariant (JC_20: true) variant (0) }
-           begin
-             [ { } unit { true } ];
-            try
-             (let jessie_11 =
-             begin
-               (let jessie_10 =
-               begin
-                 (if ((neq_int_ (integer_of_int32 (C_5:
-                                                  (JC_23:
-                                                  (int32_of_integer_ 
-                                                   (integer_of_int8 (C_4:
-                                                                    (JC_22:
+       (let jessie_<somenum> = (p := __string_done) in void);
+      (let jessie_<somenum> = (i_27 := (safe_int32_of_integer_ (0))) in void);
+      try
+       (let jessie_<somenum> =
+       begin
+         (loop_1:
+         while true do
+         { invariant (JC_<somenum>: true) variant (0) }
+          begin
+            [ { } unit { true } ];
+           try
+            (let jessie_<somenum> =
+            begin
+              (let jessie_<somenum> =
+              (C_8:
+              begin
+                (if ((neq_int_ (integer_of_int32 (C_5:
+                                                 (JC_<somenum>:
+                                                 (int32_of_integer_ (integer_of_int8 
+                                                                    (C_4:
+                                                                    (JC_<somenum>:
                                                                     ((((offset_acc_ !char_P___string_done_1_alloc_table) !char_P_char_M___string_done_1) !p) 
                                                                     (integer_of_int32 !i_27)))))))))) (0))
-                 then void
-                 else
-                  (let jessie_8 = (raise (Goto_while_0_break_exc void)) in
-                  void));
-                (C_8:
-                begin
-                  (i_27 := (C_7:
-                           (JC_24:
-                           (int32_of_integer_ (C_6:
-                                              ((add_int (integer_of_int32 !i_27)) (1)))))));
-                 !i_27 end) end in void); (raise (Loop_continue_exc void))
-             end in void) with Loop_continue_exc jessie_3 -> void end end
-          done); (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
-       (raise Return) end) end))); (raise Return) end with Return -> void end)
-  { (JC_15:
-    ((JC_13:
+                then void
+                else
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                 void));
+               (i_27 := (C_7:
+                        (JC_<somenum>:
+                        (int32_of_integer_ (C_6:
+                                           ((add_int (integer_of_int32 !i_27)) (1)))))));
+               !i_27 end) in void); (raise (Loop_continue_exc void)) end in
+            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end in void) with
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
+      (raise Return) end)))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      valid___string_done(char_P___string_done_1_alloc_table,
      char_P_char_M___string_done_1))
-    and (JC_14: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
+    and (JC_<somenum>: valid___string_done_0(char_P___string_done_1_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C string_constant.jessie --quiet -f string_constant.makefile project
@@ -2038,11 +2034,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/string_constant_po7.why">
-      <location file = "why/string_constant.why" line = "1541" begin = "45" end = "46"/>
+      <location file = "why/string_constant.why" line = "1538" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/string_constant_po8.why">
-      <location file = "why/string_constant.why" line = "1541" begin = "45" end = "46"/>
+      <location file = "why/string_constant.why" line = "1538" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

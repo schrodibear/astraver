@@ -11,7 +11,7 @@ echofilename () {
 
 mycat() {
   echofilename $1
-  cat $1
+  sed -e "s|jessie_[0-9]\+|jessie_<num>|g" $1 
 }
 
 mycatfilterdir () {

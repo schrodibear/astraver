@@ -426,36 +426,36 @@ parameter int_P_p_1_alloc_table : int_P alloc_table ref
 parameter f :
  q:int_P pointer ->
   { } unit reads int_P_p_1_alloc_table
-  { (JC_14:
-    ((JC_12: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_13: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
 
 parameter f_requires :
  q:int_P pointer ->
-  { (JC_3:
-    ((JC_1: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_2: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))))}
   unit reads int_P_p_1_alloc_table
-  { (JC_14:
-    ((JC_12: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_13: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
 
 parameter g :
  tt:unit ->
   { } unit reads int_P_p_1_alloc_table
-  { (JC_30:
-    ((JC_28: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_29: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
 
 parameter g_requires :
  tt:unit ->
-  { (JC_19:
-    ((JC_17: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_18: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0)))))}
   unit reads int_P_p_1_alloc_table
-  { (JC_30:
-    ((JC_28: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_29: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -475,29 +475,29 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (q : int_P pointer) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_6: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_11:
-    ((JC_9: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_10: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
 
 let f_safety =
  fun (q : int_P pointer) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_6: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { (JC_23:
-    ((JC_21: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_22: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
   (init:
   try
    begin
@@ -505,28 +505,25 @@ let g_ensures_default =
      (let int_P_i_3_alloc_table = ref (any_alloc_table void) in
      (let i = ref (any_pointer void) in
      (C_8:
+     (C_9:
+     (C_10:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (i := (C_7:
-             (JC_36:
+             (JC_<somenum>:
              (((alloc_struct_int_P (1)) int_P_i_3_alloc_table) int_P_i_3_tag_table)))) in
-       void);
-      (C_9:
-      begin
-        (let jessie_6 = !i in (JC_37: (f jessie_6)));
-       (C_10:
-       begin
-         ((safe_free_parameter int_P_i_3_alloc_table) !i); (raise Return) end)
-      end) end)))); (raise Return) end with Return -> void end)
-  { (JC_27:
-    ((JC_25: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_26: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+       void); (let jessie_<somenum> = !i in (JC_<somenum>: (f jessie_<somenum>)));
+      ((safe_free_parameter int_P_i_3_alloc_table) !i); (raise Return) end))))));
+    (raise Return) end with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_23:
-    ((JC_21: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
-    and (JC_22: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_p_1_alloc_table, p), (0))))) }
   (init:
   try
    begin
@@ -534,23 +531,21 @@ let g_safety =
      (let int_P_i_3_alloc_table = ref (any_alloc_table void) in
      (let i = ref (any_pointer void) in
      (C_8:
+     (C_9:
+     (C_10:
      begin
-       (let jessie_2 =
-       (i := (let jessie_1 =
+       (let jessie_<somenum> =
+       (i := (let jessie_<somenum> =
              (C_7:
-             (JC_33:
+             (JC_<somenum>:
              (((alloc_struct_int_P_requires (1)) int_P_i_3_alloc_table) int_P_i_3_tag_table))) in
-             (JC_34:
+             (JC_<somenum>:
              (assert
-             { ge_int(offset_max(int_P_i_3_alloc_table, jessie_1), (0)) };
-             jessie_1)))) in void);
-      (C_9:
-      begin
-        (let jessie_3 = !i in (JC_35: (f_requires jessie_3)));
-       (C_10:
-       begin   ((free_parameter int_P_i_3_alloc_table) !i); (raise Return)
-       end) end) end)))); (raise Return) end with Return -> void end)
-  { true }
+             { ge_int(offset_max(int_P_i_3_alloc_table, jessie_<somenum>), (0)) };
+             jessie_<somenum>)))) in void);
+      (let jessie_<somenum> = !i in (JC_<somenum>: (f_requires jessie_<somenum>)));
+      ((free_parameter int_P_i_3_alloc_table) !i); (raise Return) end))))));
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C roux2.jessie --quiet -f roux2.makefile project
@@ -565,11 +560,11 @@ why --project [...] why/roux2.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/roux2_po2.why">
-      <location file = "why/roux2.why" line = "473" begin = "15" end = "71"/>
+      <location file = "why/roux2.why" line = "472" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/roux2_po3.why">
-      <location file = "why/roux2.why" line = "479" begin = "16" end = "57"/>
+      <location file = "why/roux2.why" line = "475" begin = "7" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

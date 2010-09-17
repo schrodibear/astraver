@@ -538,12 +538,12 @@ parameter main1 :
       __anonstruct_S_1_p_1_alloc_table:__anonstruct_S_1 alloc_table ->
        { } int32 reads __anonstruct_S_1_rc_p_1
        writes __anonstruct_S_1_rc_p_1,int_P_int_M_r_2
-       { (JC_24:
-         ((JC_22:
+       { (JC_<somenum>:
+         ((JC_<somenum>:
           not_assigns(int_P_r_2_alloc_table@, int_P_int_M_r_2@,
           int_P_int_M_r_2,
           pset_deref(__anonstruct_S_1_rc_p_1, pset_singleton(p@))))
-         and (JC_23:
+         and (JC_<somenum>:
              not_assigns(__anonstruct_S_1_p_1_alloc_table@,
              __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1,
              pset_singleton(p@))))) }
@@ -555,32 +555,32 @@ parameter main1_requires :
     int_P_int_M_r_2:(int_P, int32) memory ref ->
      int_P_r_2_alloc_table:int_P alloc_table ->
       __anonstruct_S_1_p_1_alloc_table:__anonstruct_S_1 alloc_table ->
-       { (JC_7:
-         ((JC_1:
+       { (JC_<somenum>:
+         ((JC_<somenum>:
           le_int(offset_min(__anonstruct_S_1_p_1_alloc_table, p), (0)))
-         and ((JC_2:
+         and ((JC_<somenum>:
               ge_int(offset_max(__anonstruct_S_1_p_1_alloc_table, p), (0)))
-             and ((JC_3:
+             and ((JC_<somenum>:
                   le_int(offset_min(int_P_r_2_alloc_table,
                          select(__anonstruct_S_1_rc_p_1, p)),
                   (0)))
-                 and ((JC_4:
+                 and ((JC_<somenum>:
                       ge_int(offset_max(int_P_r_2_alloc_table,
                              select(__anonstruct_S_1_rc_p_1, p)),
                       (0)))
-                     and ((JC_5:
+                     and ((JC_<somenum>:
                           le_int(offset_min(int_P_r_2_alloc_table, r), (0)))
-                         and (JC_6:
+                         and (JC_<somenum>:
                              ge_int(offset_max(int_P_r_2_alloc_table, r),
                              (0)))))))))}
        int32 reads __anonstruct_S_1_rc_p_1
        writes __anonstruct_S_1_rc_p_1,int_P_int_M_r_2
-       { (JC_24:
-         ((JC_22:
+       { (JC_<somenum>:
+         ((JC_<somenum>:
           not_assigns(int_P_r_2_alloc_table@, int_P_int_M_r_2@,
           int_P_int_M_r_2,
           pset_deref(__anonstruct_S_1_rc_p_1, pset_singleton(p@))))
-         and (JC_23:
+         and (JC_<somenum>:
              not_assigns(__anonstruct_S_1_p_1_alloc_table@,
              __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1,
              pset_singleton(p@))))) }
@@ -593,21 +593,21 @@ parameter safe_int8_of_integer_ :
 
 let main1_ensures_default =
  fun (p : __anonstruct_S_1 pointer) (r : int_P pointer) (int_P_int_M_r_2 : (int_P, int32) memory ref) (__anonstruct_S_1_rc_p_1 : (__anonstruct_S_1, int_P pointer) memory ref) (__anonstruct_S_1_p_1_alloc_table : __anonstruct_S_1 alloc_table) (int_P_r_2_alloc_table : int_P alloc_table) ->
-  { (JC_15:
-    ((JC_9: le_int(offset_min(__anonstruct_S_1_p_1_alloc_table, p), (0)))
-    and ((JC_10:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(__anonstruct_S_1_p_1_alloc_table, p), (0)))
+    and ((JC_<somenum>:
          ge_int(offset_max(__anonstruct_S_1_p_1_alloc_table, p), (0)))
-        and ((JC_11:
+        and ((JC_<somenum>:
              le_int(offset_min(int_P_r_2_alloc_table,
                     select(__anonstruct_S_1_rc_p_1, p)),
              (0)))
-            and ((JC_12:
+            and ((JC_<somenum>:
                  ge_int(offset_max(int_P_r_2_alloc_table,
                         select(__anonstruct_S_1_rc_p_1, p)),
                  (0)))
-                and ((JC_13:
+                and ((JC_<somenum>:
                      le_int(offset_min(int_P_r_2_alloc_table, r), (0)))
-                    and (JC_14:
+                    and (JC_<somenum>:
                         ge_int(offset_max(int_P_r_2_alloc_table, r), (0))))))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -615,48 +615,44 @@ let main1_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
+     (C_5:
+     (C_6:
      begin
-       (let jessie_21 =
-       (let jessie_17 = r in
-       (let jessie_20 = p in
-       (((safe_upd_ __anonstruct_S_1_rc_p_1) jessie_20) jessie_17))) in void);
-      (C_5:
-      begin
-        (let jessie_27 =
-        (let jessie_23 = (safe_int32_of_integer_ (55)) in
-        (let jessie_26 = (C_3: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
-        (((safe_upd_ int_P_int_M_r_2) jessie_26) jessie_23))) in void);
-       (C_6:
-       begin
-         (let jessie_29 = (__retres := (safe_int32_of_integer_ (1))) in void);
-        (return := !__retres); (raise Return) end) end) end)); absurd  end
-   with Return -> !return end))
-  { (JC_20:
-    ((JC_18:
+       (let jessie_<somenum> = r in
+       (let jessie_<somenum> = p in
+       (((safe_upd_ __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let jessie_<somenum> = (C_3: ((safe_acc_ !__anonstruct_S_1_rc_p_1) p)) in
+      (((safe_upd_ int_P_int_M_r_2) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end)))); absurd  end with
+   Return -> !return end))
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      not_assigns(int_P_r_2_alloc_table@, int_P_int_M_r_2@, int_P_int_M_r_2,
      pset_deref(__anonstruct_S_1_rc_p_1, pset_singleton(p@))))
-    and (JC_19:
+    and (JC_<somenum>:
         not_assigns(__anonstruct_S_1_p_1_alloc_table@,
         __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1,
         pset_singleton(p@))))) }
 
 let main1_safety =
  fun (p : __anonstruct_S_1 pointer) (r : int_P pointer) (int_P_int_M_r_2 : (int_P, int32) memory ref) (__anonstruct_S_1_rc_p_1 : (__anonstruct_S_1, int_P pointer) memory ref) (__anonstruct_S_1_p_1_alloc_table : __anonstruct_S_1 alloc_table) (int_P_r_2_alloc_table : int_P alloc_table) ->
-  { (JC_15:
-    ((JC_9: le_int(offset_min(__anonstruct_S_1_p_1_alloc_table, p), (0)))
-    and ((JC_10:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(__anonstruct_S_1_p_1_alloc_table, p), (0)))
+    and ((JC_<somenum>:
          ge_int(offset_max(__anonstruct_S_1_p_1_alloc_table, p), (0)))
-        and ((JC_11:
+        and ((JC_<somenum>:
              le_int(offset_min(int_P_r_2_alloc_table,
                     select(__anonstruct_S_1_rc_p_1, p)),
              (0)))
-            and ((JC_12:
+            and ((JC_<somenum>:
                  ge_int(offset_max(int_P_r_2_alloc_table,
                         select(__anonstruct_S_1_rc_p_1, p)),
                  (0)))
-                and ((JC_13:
+                and ((JC_<somenum>:
                      le_int(offset_min(int_P_r_2_alloc_table, r), (0)))
-                    and (JC_14:
+                    and (JC_<somenum>:
                         ge_int(offset_max(int_P_r_2_alloc_table, r), (0))))))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -664,29 +660,23 @@ let main1_safety =
    begin
      (let __retres = ref (any_int32 void) in
      (C_2:
+     (C_5:
+     (C_6:
      begin
-       (let jessie_6 =
-       (let jessie_2 = r in
-       (let jessie_5 = p in
-       (JC_27:
-       ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) jessie_5) jessie_2)))) in
-       void);
-      (C_5:
-      begin
-        (let jessie_12 =
-        (let jessie_8 = (safe_int32_of_integer_ (55)) in
-        (let jessie_11 =
-        (C_3:
-        (JC_28:
-        (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
-        (JC_29:
-        ((((upd_ int_P_r_2_alloc_table) int_P_int_M_r_2) jessie_11) jessie_8)))) in
-        void);
-       (C_6:
-       begin
-         (let jessie_14 = (__retres := (safe_int32_of_integer_ (1))) in void);
-        (return := !__retres); (raise Return) end) end) end)); absurd  end
-   with Return -> !return end)) { true }
+       (let jessie_<somenum> = r in
+       (let jessie_<somenum> = p in
+       (JC_<somenum>:
+       ((((upd_ __anonstruct_S_1_p_1_alloc_table) __anonstruct_S_1_rc_p_1) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = (safe_int32_of_integer_ (55)) in
+      (let jessie_<somenum> =
+      (C_3:
+      (JC_<somenum>:
+      (((acc_ __anonstruct_S_1_p_1_alloc_table) !__anonstruct_S_1_rc_p_1) p))) in
+      (JC_<somenum>:
+      ((((upd_ int_P_r_2_alloc_table) int_P_int_M_r_2) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end)))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0160.jessie --quiet -f bts0160.makefile project

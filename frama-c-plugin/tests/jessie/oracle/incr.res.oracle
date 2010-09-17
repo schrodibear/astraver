@@ -427,17 +427,17 @@ parameter int_P_int_M_t_1 : (int_P, int32) memory ref
 parameter f :
  tt:unit ->
   { } unit reads b,int_P_t_1_alloc_table writes b,int_P_int_M_t_1
-  { ((JC_13: valid_t(int_P_t_1_alloc_table))
-    and (JC_11: eq_int(integer_of_int32(b), (1)))) }
+  { ((JC_<somenum>: valid_t(int_P_t_1_alloc_table))
+    and (JC_<somenum>: eq_int(integer_of_int32(b), (1)))) }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_4:
-    ((JC_2: eq_int(integer_of_int32(b), (0)))
-    and (JC_3: valid_t(int_P_t_1_alloc_table))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(b), (0)))
+    and (JC_<somenum>: valid_t(int_P_t_1_alloc_table))))}
   unit reads b,int_P_t_1_alloc_table writes b,int_P_int_M_t_1
-  { ((JC_13: valid_t(int_P_t_1_alloc_table))
-    and (JC_11: eq_int(integer_of_int32(b), (1)))) }
+  { ((JC_<somenum>: valid_t(int_P_t_1_alloc_table))
+    and (JC_<somenum>: eq_int(integer_of_int32(b), (1)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -457,67 +457,67 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_8:
-    ((JC_6: eq_int(integer_of_int32(b), (0)))
-    and (JC_7: valid_t(int_P_t_1_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(b), (0)))
+    and (JC_<somenum>: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_20 =
+       (let jessie_<somenum> =
        begin
-         (let jessie_14 =
+         (let jessie_<somenum> =
          (C_1:
+         (C_4:
          begin
-           (let jessie_12 = (tmp := !b) in void);
-          (C_4:
-          begin
-            (b := (C_3:
-                  (safe_int32_of_integer_ (C_2:
-                                          ((add_int (integer_of_int32 !b)) (1))))));
-           !b end) end) in void);
+           (let jessie_<somenum> = (tmp := !b) in void);
+          (b := (C_3:
+                (safe_int32_of_integer_ (C_2:
+                                        ((add_int (integer_of_int32 !b)) (1))))));
+          !b end)) in void);
         (C_6:
-        (let jessie_16 = (safe_int32_of_integer_ (1)) in
-        (let jessie_19 = ((shift t) (integer_of_int32 !tmp)) in
+        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+        (let jessie_<somenum> = t in
+        (let jessie_<somenum> = (integer_of_int32 !tmp) in
+        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
         begin
-          (((safe_upd_ int_P_int_M_t_1) jessie_19) jessie_16); jessie_16 end)))
+          (((safe_upd_ int_P_int_M_t_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum> end)))))
        end in void); (raise Return) end); (raise Return) end with Return ->
-   void end) { (JC_10: eq_int(integer_of_int32(b), (1))) }
+   void end) { (JC_<somenum>: eq_int(integer_of_int32(b), (1))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_8:
-    ((JC_6: eq_int(integer_of_int32(b), (0)))
-    and (JC_7: valid_t(int_P_t_1_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(b), (0)))
+    and (JC_<somenum>: valid_t(int_P_t_1_alloc_table)))) }
   (init:
   try
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_10 =
+       (let jessie_<somenum> =
        begin
-         (let jessie_4 =
+         (let jessie_<somenum> =
          (C_1:
+         (C_4:
          begin
-           (let jessie_2 = (tmp := !b) in void);
-          (C_4:
-          begin
-            (b := (C_3:
-                  (JC_14:
-                  (int32_of_integer_ (C_2:
-                                     ((add_int (integer_of_int32 !b)) (1)))))));
-           !b end) end) in void);
+           (let jessie_<somenum> = (tmp := !b) in void);
+          (b := (C_3:
+                (JC_<somenum>:
+                (int32_of_integer_ (C_2:
+                                   ((add_int (integer_of_int32 !b)) (1)))))));
+          !b end)) in void);
         (C_6:
-        (let jessie_6 = (safe_int32_of_integer_ (1)) in
-        (let jessie_7 = t in
-        (let jessie_8 = (integer_of_int32 !tmp) in
-        (let jessie_9 = ((shift jessie_7) jessie_8) in
+        (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+        (let jessie_<somenum> = t in
+        (let jessie_<somenum> = (integer_of_int32 !tmp) in
+        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
         begin
-          (JC_15:
-          (((((offset_upd_ !int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_7) jessie_8) jessie_6));
-         jessie_6 end))))) end in void); (raise Return) end); (raise Return)
-   end with Return -> void end) { (JC_12: valid_t(int_P_t_1_alloc_table)) }
+          (JC_<somenum>:
+          (((((offset_upd_ !int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+         jessie_<somenum> end))))) end in void); (raise Return) end); (raise Return)
+   end with Return -> void end) { (JC_<somenum>: valid_t(int_P_t_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C incr.jessie --quiet -f incr.makefile project

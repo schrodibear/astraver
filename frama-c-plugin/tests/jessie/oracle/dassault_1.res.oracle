@@ -841,10 +841,10 @@ parameter f :
  tt:unit ->
   { } int32
   reads las1_d_x_1,las1_x_1_alloc_table,las2_b_x_1,las2_b_y_2,las2_x_1_alloc_table,las2_y_2_alloc_table,las3_c_x_1,las3_c_y_2,las3_x_1_alloc_table,las3_y_2_alloc_table,las_a_x_1,las_x_1_alloc_table
-  { ((JC_18:
-     ((JC_16: valid_x(las_x_1_alloc_table))
-     and (JC_17: valid_y(las2_y_2_alloc_table))))
-    and (JC_12:
+  { ((JC_<somenum>:
+     ((JC_<somenum>: valid_x(las_x_1_alloc_table))
+     and (JC_<somenum>: valid_y(las2_y_2_alloc_table))))
+    and (JC_<somenum>:
         eq_int(integer_of_int32(result),
         add_int(integer_of_int32(select(las3_c_x_1,
                                  shift(select(las2_b_x_1,
@@ -856,15 +856,15 @@ parameter f :
 
 parameter f_requires :
  tt:unit ->
-  { (JC_5:
-    ((JC_3: valid_x(las_x_1_alloc_table))
-    and (JC_4: valid_y(las2_y_2_alloc_table))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_x(las_x_1_alloc_table))
+    and (JC_<somenum>: valid_y(las2_y_2_alloc_table))))}
   int32
   reads las1_d_x_1,las1_x_1_alloc_table,las2_b_x_1,las2_b_y_2,las2_x_1_alloc_table,las2_y_2_alloc_table,las3_c_x_1,las3_c_y_2,las3_x_1_alloc_table,las3_y_2_alloc_table,las_a_x_1,las_x_1_alloc_table
-  { ((JC_18:
-     ((JC_16: valid_x(las_x_1_alloc_table))
-     and (JC_17: valid_y(las2_y_2_alloc_table))))
-    and (JC_12:
+  { ((JC_<somenum>:
+     ((JC_<somenum>: valid_x(las_x_1_alloc_table))
+     and (JC_<somenum>: valid_y(las2_y_2_alloc_table))))
+    and (JC_<somenum>:
         eq_int(integer_of_int32(result),
         add_int(integer_of_int32(select(las3_c_x_1,
                                  shift(select(las2_b_x_1,
@@ -892,9 +892,9 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_9:
-    ((JC_7: valid_x(las_x_1_alloc_table))
-    and (JC_8: valid_y(las2_y_2_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_x(las_x_1_alloc_table))
+    and (JC_<somenum>: valid_y(las2_y_2_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -902,7 +902,7 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_8:
                     (safe_int32_of_integer_ (C_7:
                                             ((add_int (integer_of_int32 
@@ -921,7 +921,7 @@ let f_ensures_default =
                                                                   ((safe_acc_ !las2_b_y_2) y))) (1)))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_11:
+  { (JC_<somenum>:
     eq_int(integer_of_int32(result),
     add_int(integer_of_int32(select(las3_c_x_1,
                              shift(select(las2_b_x_1,
@@ -931,9 +931,9 @@ let f_ensures_default =
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_9:
-    ((JC_7: valid_x(las_x_1_alloc_table))
-    and (JC_8: valid_y(las2_y_2_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_x(las_x_1_alloc_table))
+    and (JC_<somenum>: valid_y(las2_y_2_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -941,9 +941,9 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_8:
-                    (JC_19:
+                    (JC_<somenum>:
                     (int32_of_integer_ (C_7:
                                        ((add_int (integer_of_int32 (C_6:
                                                                    ((safe_acc_ !las3_c_x_1) 
@@ -960,9 +960,9 @@ let f_safety =
                                                                    ((safe_acc_ !las2_b_y_2) y))) (1))))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_15:
-    ((JC_13: valid_x(las_x_1_alloc_table))
-    and (JC_14: valid_y(las2_y_2_alloc_table)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_x(las_x_1_alloc_table))
+    and (JC_<somenum>: valid_y(las2_y_2_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dassault_1.jessie --quiet -f dassault_1.makefile project

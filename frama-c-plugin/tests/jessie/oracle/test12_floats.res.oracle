@@ -305,30 +305,30 @@ parameter x_0 : double ref
 parameter f :
  tt:unit ->
   { } unit reads x_0,y writes x_0,y
-  { (JC_10:
-    ((JC_8: eq_real(double_value(x_0), 1.0))
-    and (JC_9: eq_real(single_value(y), 1.0)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_real(double_value(x_0), 1.0))
+    and (JC_<somenum>: eq_real(single_value(y), 1.0)))) }
 
 parameter f_requires :
  tt:unit ->
   { } unit reads x_0,y writes x_0,y
-  { (JC_10:
-    ((JC_8: eq_real(double_value(x_0), 1.0))
-    and (JC_9: eq_real(single_value(y), 1.0)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_real(double_value(x_0), 1.0))
+    and (JC_<somenum>: eq_real(single_value(y), 1.0)))) }
 
 parameter g :
  tt:unit ->
   { } unit reads x_0,y writes x_0,y
-  { (JC_42:
-    ((JC_40: eq_real(double_value(x_0), 9.0))
-    and (JC_41: eq_real(single_value(y), 9.0)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_real(double_value(x_0), 9.0))
+    and (JC_<somenum>: eq_real(single_value(y), 9.0)))) }
 
 parameter g_requires :
  tt:unit ->
   { } unit reads x_0,y writes x_0,y
-  { (JC_42:
-    ((JC_40: eq_real(double_value(x_0), 9.0))
-    and (JC_41: eq_real(single_value(y), 9.0)))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_real(double_value(x_0), 9.0))
+    and (JC_<somenum>: eq_real(single_value(y), 9.0)))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -340,217 +340,205 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_6:
+   (C_12:
    begin
-     (C_6:
-     begin
-       (let jessie_6 =
-       (x_0 := (C_5:
-               (JC_27:
-               (((add_double_safe nearest_even) (C_4:
-                                                (JC_25:
-                                                (((add_double_safe nearest_even) 
-                                                  (C_3:
-                                                  (JC_23:
-                                                  (((div_double_safe nearest_even) 
-                                                    (double_of_real_exact 1.0)) 
-                                                   (double_of_real_exact 3.0))))) 
-                                                 (C_2:
-                                                 (JC_24:
-                                                 (((div_double_safe nearest_even) 
-                                                   (double_of_real_exact 1.0)) 
-                                                  (double_of_real_exact 3.0)))))))) 
-                (C_1:
-                (JC_26:
-                (((div_double_safe nearest_even) (double_of_real_exact 1.0)) 
-                 (double_of_real_exact 3.0)))))))) in void);
-      (C_12:
-      begin
-        (let jessie_8 =
-        (y := (C_11:
-              (JC_32:
-              (((add_single_safe nearest_even) (C_10:
-                                               (JC_30:
-                                               (((add_single_safe nearest_even) 
-                                                 (C_9:
-                                                 (JC_28:
-                                                 (((div_single_safe nearest_even) 
-                                                   (single_of_real_exact 1.0)) 
-                                                  (single_of_real_exact 3.0))))) 
-                                                (C_8:
-                                                (JC_29:
-                                                (((div_single_safe nearest_even) 
-                                                  (single_of_real_exact 1.0)) 
-                                                 (single_of_real_exact 3.0)))))))) 
-               (C_7:
-               (JC_31:
-               (((div_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                (single_of_real_exact 3.0)))))))) in void); (raise Return)
-      end) end); (raise Return) end with Return -> void end)
-  { (JC_7:
-    ((JC_5: eq_real(double_value(x_0), 1.0))
-    and (JC_6: eq_real(single_value(y), 1.0)))) }
+     (let jessie_<somenum> =
+     (x_0 := (C_5:
+             (JC_<somenum>:
+             (((add_double_safe nearest_even) (C_4:
+                                              (JC_<somenum>:
+                                              (((add_double_safe nearest_even) 
+                                                (C_3:
+                                                (JC_<somenum>:
+                                                (((div_double_safe nearest_even) 
+                                                  (double_of_real_exact 1.0)) 
+                                                 (double_of_real_exact 3.0))))) 
+                                               (C_2:
+                                               (JC_<somenum>:
+                                               (((div_double_safe nearest_even) 
+                                                 (double_of_real_exact 1.0)) 
+                                                (double_of_real_exact 3.0)))))))) 
+              (C_1:
+              (JC_<somenum>:
+              (((div_double_safe nearest_even) (double_of_real_exact 1.0)) 
+               (double_of_real_exact 3.0)))))))) in void);
+    (let jessie_<somenum> =
+    (y := (C_11:
+          (JC_<somenum>:
+          (((add_single_safe nearest_even) (C_10:
+                                           (JC_<somenum>:
+                                           (((add_single_safe nearest_even) 
+                                             (C_9:
+                                             (JC_<somenum>:
+                                             (((div_single_safe nearest_even) 
+                                               (single_of_real_exact 1.0)) 
+                                              (single_of_real_exact 3.0))))) 
+                                            (C_8:
+                                            (JC_<somenum>:
+                                            (((div_single_safe nearest_even) 
+                                              (single_of_real_exact 1.0)) 
+                                             (single_of_real_exact 3.0)))))))) 
+           (C_7:
+           (JC_<somenum>:
+           (((div_single_safe nearest_even) (single_of_real_exact 1.0)) 
+            (single_of_real_exact 3.0)))))))) in void); (raise Return);
+    (raise Return) end)) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_real(double_value(x_0), 1.0))
+    and (JC_<somenum>: eq_real(single_value(y), 1.0)))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_6:
+   (C_12:
    begin
-     (C_6:
-     begin
-       (let jessie_2 =
-       (x_0 := (C_5:
-               (JC_17:
-               (((add_double nearest_even) (C_4:
-                                           (JC_15:
-                                           (((add_double nearest_even) 
-                                             (C_3:
-                                             (JC_13:
-                                             (((div_double nearest_even) 
-                                               (double_of_real_exact 1.0)) 
-                                              (double_of_real_exact 3.0))))) 
-                                            (C_2:
-                                            (JC_14:
-                                            (((div_double nearest_even) 
-                                              (double_of_real_exact 1.0)) 
-                                             (double_of_real_exact 3.0)))))))) 
-                (C_1:
-                (JC_16:
-                (((div_double nearest_even) (double_of_real_exact 1.0)) 
-                 (double_of_real_exact 3.0)))))))) in void);
-      (C_12:
-      begin
-        (let jessie_4 =
-        (y := (C_11:
-              (JC_22:
-              (((add_single nearest_even) (C_10:
-                                          (JC_20:
-                                          (((add_single nearest_even) 
-                                            (C_9:
-                                            (JC_18:
-                                            (((div_single nearest_even) 
-                                              (single_of_real_exact 1.0)) 
-                                             (single_of_real_exact 3.0))))) 
-                                           (C_8:
-                                           (JC_19:
-                                           (((div_single nearest_even) 
-                                             (single_of_real_exact 1.0)) 
-                                            (single_of_real_exact 3.0)))))))) 
-               (C_7:
-               (JC_21:
-               (((div_single nearest_even) (single_of_real_exact 1.0)) 
-                (single_of_real_exact 3.0)))))))) in void); (raise Return)
-      end) end); (raise Return) end with Return -> void end) { true }
+     (let jessie_<somenum> =
+     (x_0 := (C_5:
+             (JC_<somenum>:
+             (((add_double nearest_even) (C_4:
+                                         (JC_<somenum>:
+                                         (((add_double nearest_even) 
+                                           (C_3:
+                                           (JC_<somenum>:
+                                           (((div_double nearest_even) 
+                                             (double_of_real_exact 1.0)) 
+                                            (double_of_real_exact 3.0))))) 
+                                          (C_2:
+                                          (JC_<somenum>:
+                                          (((div_double nearest_even) 
+                                            (double_of_real_exact 1.0)) 
+                                           (double_of_real_exact 3.0)))))))) 
+              (C_1:
+              (JC_<somenum>:
+              (((div_double nearest_even) (double_of_real_exact 1.0)) 
+               (double_of_real_exact 3.0)))))))) in void);
+    (let jessie_<somenum> =
+    (y := (C_11:
+          (JC_<somenum>:
+          (((add_single nearest_even) (C_10:
+                                      (JC_<somenum>:
+                                      (((add_single nearest_even) (C_9:
+                                                                  (JC_<somenum>:
+                                                                  (((div_single nearest_even) 
+                                                                    (single_of_real_exact 1.0)) 
+                                                                   (single_of_real_exact 3.0))))) 
+                                       (C_8:
+                                       (JC_<somenum>:
+                                       (((div_single nearest_even) (single_of_real_exact 1.0)) 
+                                        (single_of_real_exact 3.0)))))))) 
+           (C_7:
+           (JC_<somenum>:
+           (((div_single nearest_even) (single_of_real_exact 1.0)) (single_of_real_exact 3.0)))))))) in
+    void); (raise Return); (raise Return) end)) with Return -> void end)
+  { true }
 
 let g_ensures_default =
  fun (tt : unit) ->
-  { (JC_36: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_21:
+   (C_27:
    begin
-     (C_21:
-     begin
-       (let jessie_14 =
-       (x_0 := (C_20:
-               (JC_59:
-               (((add_double_safe nearest_even) (C_19:
-                                                (JC_57:
-                                                (((add_double_safe nearest_even) 
-                                                  (C_18:
-                                                  (JC_55:
-                                                  (((mul_double_safe nearest_even) 
-                                                    (double_of_real_exact 1.0)) 
-                                                   (double_of_real_exact 3.0))))) 
-                                                 (C_17:
-                                                 (JC_56:
-                                                 (((mul_double_safe nearest_even) 
-                                                   (double_of_real_exact 1.0)) 
-                                                  (double_of_real_exact 3.0)))))))) 
-                (C_16:
-                (JC_58:
-                (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) 
-                 (double_of_real_exact 3.0)))))))) in void);
-      (C_27:
-      begin
-        (let jessie_16 =
-        (y := (C_26:
-              (JC_64:
-              (((add_single_safe nearest_even) (C_25:
-                                               (JC_62:
-                                               (((add_single_safe nearest_even) 
-                                                 (C_24:
-                                                 (JC_60:
-                                                 (((mul_single_safe nearest_even) 
-                                                   (single_of_real_exact 1.0)) 
-                                                  (single_of_real_exact 3.0))))) 
-                                                (C_23:
-                                                (JC_61:
-                                                (((mul_single_safe nearest_even) 
-                                                  (single_of_real_exact 1.0)) 
-                                                 (single_of_real_exact 3.0)))))))) 
-               (C_22:
-               (JC_63:
-               (((mul_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                (single_of_real_exact 3.0)))))))) in void); (raise Return)
-      end) end); (raise Return) end with Return -> void end)
-  { (JC_39:
-    ((JC_37: eq_real(double_value(x_0), 9.0))
-    and (JC_38: eq_real(single_value(y), 9.0)))) }
+     (let jessie_<somenum> =
+     (x_0 := (C_20:
+             (JC_<somenum>:
+             (((add_double_safe nearest_even) (C_19:
+                                              (JC_<somenum>:
+                                              (((add_double_safe nearest_even) 
+                                                (C_18:
+                                                (JC_<somenum>:
+                                                (((mul_double_safe nearest_even) 
+                                                  (double_of_real_exact 1.0)) 
+                                                 (double_of_real_exact 3.0))))) 
+                                               (C_17:
+                                               (JC_<somenum>:
+                                               (((mul_double_safe nearest_even) 
+                                                 (double_of_real_exact 1.0)) 
+                                                (double_of_real_exact 3.0)))))))) 
+              (C_16:
+              (JC_<somenum>:
+              (((mul_double_safe nearest_even) (double_of_real_exact 1.0)) 
+               (double_of_real_exact 3.0)))))))) in void);
+    (let jessie_<somenum> =
+    (y := (C_26:
+          (JC_<somenum>:
+          (((add_single_safe nearest_even) (C_25:
+                                           (JC_<somenum>:
+                                           (((add_single_safe nearest_even) 
+                                             (C_24:
+                                             (JC_<somenum>:
+                                             (((mul_single_safe nearest_even) 
+                                               (single_of_real_exact 1.0)) 
+                                              (single_of_real_exact 3.0))))) 
+                                            (C_23:
+                                            (JC_<somenum>:
+                                            (((mul_single_safe nearest_even) 
+                                              (single_of_real_exact 1.0)) 
+                                             (single_of_real_exact 3.0)))))))) 
+           (C_22:
+           (JC_<somenum>:
+           (((mul_single_safe nearest_even) (single_of_real_exact 1.0)) 
+            (single_of_real_exact 3.0)))))))) in void); (raise Return);
+    (raise Return) end)) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_real(double_value(x_0), 9.0))
+    and (JC_<somenum>: eq_real(single_value(y), 9.0)))) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_36: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
+   (C_21:
+   (C_27:
    begin
-     (C_21:
-     begin
-       (let jessie_10 =
-       (x_0 := (C_20:
-               (JC_49:
-               (((add_double nearest_even) (C_19:
-                                           (JC_47:
-                                           (((add_double nearest_even) 
-                                             (C_18:
-                                             (JC_45:
-                                             (((mul_double nearest_even) 
-                                               (double_of_real_exact 1.0)) 
-                                              (double_of_real_exact 3.0))))) 
-                                            (C_17:
-                                            (JC_46:
-                                            (((mul_double nearest_even) 
-                                              (double_of_real_exact 1.0)) 
-                                             (double_of_real_exact 3.0)))))))) 
-                (C_16:
-                (JC_48:
-                (((mul_double nearest_even) (double_of_real_exact 1.0)) 
-                 (double_of_real_exact 3.0)))))))) in void);
-      (C_27:
-      begin
-        (let jessie_12 =
-        (y := (C_26:
-              (JC_54:
-              (((add_single nearest_even) (C_25:
-                                          (JC_52:
-                                          (((add_single nearest_even) 
-                                            (C_24:
-                                            (JC_50:
-                                            (((mul_single nearest_even) 
-                                              (single_of_real_exact 1.0)) 
-                                             (single_of_real_exact 3.0))))) 
-                                           (C_23:
-                                           (JC_51:
-                                           (((mul_single nearest_even) 
-                                             (single_of_real_exact 1.0)) 
-                                            (single_of_real_exact 3.0)))))))) 
-               (C_22:
-               (JC_53:
-               (((mul_single nearest_even) (single_of_real_exact 1.0)) 
-                (single_of_real_exact 3.0)))))))) in void); (raise Return)
-      end) end); (raise Return) end with Return -> void end) { true }
+     (let jessie_<somenum> =
+     (x_0 := (C_20:
+             (JC_<somenum>:
+             (((add_double nearest_even) (C_19:
+                                         (JC_<somenum>:
+                                         (((add_double nearest_even) 
+                                           (C_18:
+                                           (JC_<somenum>:
+                                           (((mul_double nearest_even) 
+                                             (double_of_real_exact 1.0)) 
+                                            (double_of_real_exact 3.0))))) 
+                                          (C_17:
+                                          (JC_<somenum>:
+                                          (((mul_double nearest_even) 
+                                            (double_of_real_exact 1.0)) 
+                                           (double_of_real_exact 3.0)))))))) 
+              (C_16:
+              (JC_<somenum>:
+              (((mul_double nearest_even) (double_of_real_exact 1.0)) 
+               (double_of_real_exact 3.0)))))))) in void);
+    (let jessie_<somenum> =
+    (y := (C_26:
+          (JC_<somenum>:
+          (((add_single nearest_even) (C_25:
+                                      (JC_<somenum>:
+                                      (((add_single nearest_even) (C_24:
+                                                                  (JC_<somenum>:
+                                                                  (((mul_single nearest_even) 
+                                                                    (single_of_real_exact 1.0)) 
+                                                                   (single_of_real_exact 3.0))))) 
+                                       (C_23:
+                                       (JC_<somenum>:
+                                       (((mul_single nearest_even) (single_of_real_exact 1.0)) 
+                                        (single_of_real_exact 3.0)))))))) 
+           (C_22:
+           (JC_<somenum>:
+           (((mul_single nearest_even) (single_of_real_exact 1.0)) (single_of_real_exact 3.0)))))))) in
+    void); (raise Return); (raise Return) end)) with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C test12_floats.jessie --quiet -f test12_floats.makefile project

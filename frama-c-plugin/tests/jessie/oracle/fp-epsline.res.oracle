@@ -343,8 +343,8 @@ parameter eps_line :
    vx:double ->
     vy:double ->
      { } double
-     { ((JC_45: M22_value)
-       and (JC_43:
+     { ((JC_<somenum>: M22_value)
+       and (JC_<somenum>:
            (neq_real(double_value(result), 0.0) ->
             eq_real(double_value(result),
             real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx@),
@@ -360,23 +360,23 @@ parameter eps_line_requires :
   sy:double ->
    vx:double ->
     vy:double ->
-     { (JC_28:
-       ((JC_26:
-        ((JC_18: eq_real(double_round_error(sx), 0.0))
-        and ((JC_19: eq_real(double_round_error(sy), 0.0))
-            and ((JC_20: eq_real(double_round_error(vx), 0.0))
-                and ((JC_21: eq_real(double_round_error(vy), 0.0))
-                    and ((JC_22: le_real(abs_real(double_value(sx)), 100.0))
-                        and ((JC_23:
+     { (JC_<somenum>:
+       ((JC_<somenum>:
+        ((JC_<somenum>: eq_real(double_round_error(sx), 0.0))
+        and ((JC_<somenum>: eq_real(double_round_error(sy), 0.0))
+            and ((JC_<somenum>: eq_real(double_round_error(vx), 0.0))
+                and ((JC_<somenum>: eq_real(double_round_error(vy), 0.0))
+                    and ((JC_<somenum>: le_real(abs_real(double_value(sx)), 100.0))
+                        and ((JC_<somenum>:
                              le_real(abs_real(double_value(sy)), 100.0))
-                            and ((JC_24:
+                            and ((JC_<somenum>:
                                  le_real(abs_real(double_value(vx)), 1.0))
-                                and (JC_25:
+                                and (JC_<somenum>:
                                     le_real(abs_real(double_value(vy)), 1.0))))))))))
-       and (JC_27: M22_value)))}
+       and (JC_<somenum>: M22_value)))}
      double
-     { ((JC_45: M22_value)
-       and (JC_43:
+     { ((JC_<somenum>: M22_value)
+       and (JC_<somenum>:
            (neq_real(double_value(result), 0.0) ->
             eq_real(double_value(result),
             real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx@),
@@ -399,8 +399,8 @@ parameter sign :
  x_1:double ->
   M:double ->
    { } double
-   { ((JC_14: M22_value)
-     and (JC_12:
+   { ((JC_<somenum>: M22_value)
+     and (JC_<somenum>:
          (neq_real(double_value(result), 0.0) ->
           eq_real(double_value(result),
           real_of_int(signr(double_exact(x_1@))))))) }
@@ -408,31 +408,31 @@ parameter sign :
 parameter sign_requires :
  x_1:double ->
   M:double ->
-   { (JC_5:
-     ((JC_3: le_real(double_round_error(x_1), double_value(M)))
-     and (JC_4: M22_value)))}
+   { (JC_<somenum>:
+     ((JC_<somenum>: le_real(double_round_error(x_1), double_value(M)))
+     and (JC_<somenum>: M22_value)))}
    double
-   { ((JC_14: M22_value)
-     and (JC_12:
+   { ((JC_<somenum>: M22_value)
+     and (JC_<somenum>:
          (neq_real(double_value(result), 0.0) ->
           eq_real(double_value(result),
           real_of_int(signr(double_exact(x_1@))))))) }
 
 let eps_line_ensures_default =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
-  { (JC_40:
-    ((JC_38:
-     ((JC_30: eq_real(double_round_error(sx), 0.0))
-     and ((JC_31: eq_real(double_round_error(sy), 0.0))
-         and ((JC_32: eq_real(double_round_error(vx), 0.0))
-             and ((JC_33: eq_real(double_round_error(vy), 0.0))
-                 and ((JC_34: le_real(abs_real(double_value(sx)), 100.0))
-                     and ((JC_35: le_real(abs_real(double_value(sy)), 100.0))
-                         and ((JC_36:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: eq_real(double_round_error(sx), 0.0))
+     and ((JC_<somenum>: eq_real(double_round_error(sy), 0.0))
+         and ((JC_<somenum>: eq_real(double_round_error(vx), 0.0))
+             and ((JC_<somenum>: eq_real(double_round_error(vy), 0.0))
+                 and ((JC_<somenum>: le_real(abs_real(double_value(sx)), 100.0))
+                     and ((JC_<somenum>: le_real(abs_real(double_value(sy)), 100.0))
+                         and ((JC_<somenum>:
                               le_real(abs_real(double_value(vx)), 1.0))
-                             and (JC_37:
+                             and (JC_<somenum>:
                                  le_real(abs_real(double_value(vy)), 1.0))))))))))
-    and (JC_39: M22_value))) }
+    and (JC_<somenum>: M22_value))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -440,44 +440,40 @@ let eps_line_ensures_default =
      (let tmp = ref (any_double void) in
      (let tmp_0 = ref (any_double void) in
      (let __retres_0 = ref (any_double void) in
+     (C_21:
      begin
-       (let jessie_40 =
+       (let jessie_<somenum> =
        (C_14:
+       (C_19:
        begin
-         (let jessie_36 =
+         (let jessie_<somenum> =
          (tmp := (C_13:
-                 (let jessie_35 =
+                 (let jessie_<somenum> =
                  (C_12:
-                 (JC_57:
+                 (JC_<somenum>:
                  (((add_double_safe nearest_even) (C_11:
-                                                  (JC_55:
+                                                  (JC_<somenum>:
                                                   (((mul_double_safe nearest_even) sx) vx)))) 
-                  (C_10: (JC_56: (((mul_double_safe nearest_even) sy) vy)))))) in
-                 (let jessie_34 = M22 in
-                 (JC_58: ((sign jessie_35) jessie_34)))))) in void);
-        (C_19:
-        begin
-          (tmp_0 := (C_18:
-                    (let jessie_39 =
-                    (C_17:
-                    (JC_61:
-                    (((sub_double_safe nearest_even) (C_16:
-                                                     (JC_59:
-                                                     (((mul_double_safe nearest_even) sx) vy)))) 
-                     (C_15:
-                     (JC_60: (((mul_double_safe nearest_even) sy) vx)))))) in
-                    (let jessie_38 = M22 in
-                    (JC_62: ((sign jessie_39) jessie_38)))))); !tmp_0 end)
-       end) in void);
-      (C_21:
-      begin
-        (let jessie_42 =
-        (__retres_0 := (C_20:
-                       (JC_63:
-                       (((mul_double_safe nearest_even) !tmp) !tmp_0)))) in
-        void); (return := !__retres_0); (raise Return) end) end))); absurd 
-   end with Return -> !return end))
-  { (JC_42:
+                  (C_10: (JC_<somenum>: (((mul_double_safe nearest_even) sy) vy)))))) in
+                 (let jessie_<somenum> = M22 in
+                 (JC_<somenum>: ((sign jessie_<somenum>) jessie_<somenum>)))))) in void);
+        (tmp_0 := (C_18:
+                  (let jessie_<somenum> =
+                  (C_17:
+                  (JC_<somenum>:
+                  (((sub_double_safe nearest_even) (C_16:
+                                                   (JC_<somenum>:
+                                                   (((mul_double_safe nearest_even) sx) vy)))) 
+                   (C_15: (JC_<somenum>: (((mul_double_safe nearest_even) sy) vx)))))) in
+                  (let jessie_<somenum> = M22 in
+                  (JC_<somenum>: ((sign jessie_<somenum>) jessie_<somenum>)))))); !tmp_0 end)) in
+       void);
+      (let jessie_<somenum> =
+      (__retres_0 := (C_20:
+                     (JC_<somenum>: (((mul_double_safe nearest_even) !tmp) !tmp_0)))) in
+      void); (return := !__retres_0); (raise Return) end)))); absurd  end
+   with Return -> !return end))
+  { (JC_<somenum>:
     (neq_real(double_value(result), 0.0) ->
      eq_real(double_value(result),
      real_of_int(mul_int(signr(add_real(mul_real(double_exact(sx@),
@@ -489,19 +485,19 @@ let eps_line_ensures_default =
 
 let eps_line_safety =
  fun (sx : double) (sy : double) (vx : double) (vy : double) ->
-  { (JC_40:
-    ((JC_38:
-     ((JC_30: eq_real(double_round_error(sx), 0.0))
-     and ((JC_31: eq_real(double_round_error(sy), 0.0))
-         and ((JC_32: eq_real(double_round_error(vx), 0.0))
-             and ((JC_33: eq_real(double_round_error(vy), 0.0))
-                 and ((JC_34: le_real(abs_real(double_value(sx)), 100.0))
-                     and ((JC_35: le_real(abs_real(double_value(sy)), 100.0))
-                         and ((JC_36:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
+     ((JC_<somenum>: eq_real(double_round_error(sx), 0.0))
+     and ((JC_<somenum>: eq_real(double_round_error(sy), 0.0))
+         and ((JC_<somenum>: eq_real(double_round_error(vx), 0.0))
+             and ((JC_<somenum>: eq_real(double_round_error(vy), 0.0))
+                 and ((JC_<somenum>: le_real(abs_real(double_value(sx)), 100.0))
+                     and ((JC_<somenum>: le_real(abs_real(double_value(sy)), 100.0))
+                         and ((JC_<somenum>:
                               le_real(abs_real(double_value(vx)), 1.0))
-                             and (JC_37:
+                             and (JC_<somenum>:
                                  le_real(abs_real(double_value(vy)), 1.0))))))))))
-    and (JC_39: M22_value))) }
+    and (JC_<somenum>: M22_value))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -509,121 +505,117 @@ let eps_line_safety =
      (let tmp = ref (any_double void) in
      (let tmp_0 = ref (any_double void) in
      (let __retres_0 = ref (any_double void) in
+     (C_21:
      begin
-       (let jessie_29 =
+       (let jessie_<somenum> =
        (C_14:
+       (C_19:
        begin
-         (let jessie_25 =
+         (let jessie_<somenum> =
          (tmp := (C_13:
-                 (let jessie_24 =
+                 (let jessie_<somenum> =
                  (C_12:
-                 (JC_48:
+                 (JC_<somenum>:
                  (((add_double nearest_even) (C_11:
-                                             (JC_46:
+                                             (JC_<somenum>:
                                              (((mul_double nearest_even) sx) vx)))) 
-                  (C_10: (JC_47: (((mul_double nearest_even) sy) vy)))))) in
-                 (let jessie_23 = M22 in
-                 (JC_49: ((sign_requires jessie_24) jessie_23)))))) in void);
-        (C_19:
-        begin
-          (tmp_0 := (C_18:
-                    (let jessie_28 =
-                    (C_17:
-                    (JC_52:
-                    (((sub_double nearest_even) (C_16:
-                                                (JC_50:
-                                                (((mul_double nearest_even) sx) vy)))) 
-                     (C_15: (JC_51: (((mul_double nearest_even) sy) vx)))))) in
-                    (let jessie_27 = M22 in
-                    (JC_53: ((sign_requires jessie_28) jessie_27))))));
-         !tmp_0 end) end) in void);
-      (C_21:
-      begin
-        (let jessie_31 =
-        (__retres_0 := (C_20:
-                       (JC_54: (((mul_double nearest_even) !tmp) !tmp_0)))) in
-        void); (return := !__retres_0); (raise Return) end) end))); absurd 
-   end with Return -> !return end)) { (JC_44: M22_value) }
+                  (C_10: (JC_<somenum>: (((mul_double nearest_even) sy) vy)))))) in
+                 (let jessie_<somenum> = M22 in
+                 (JC_<somenum>: ((sign_requires jessie_<somenum>) jessie_<somenum>)))))) in void);
+        (tmp_0 := (C_18:
+                  (let jessie_<somenum> =
+                  (C_17:
+                  (JC_<somenum>:
+                  (((sub_double nearest_even) (C_16:
+                                              (JC_<somenum>:
+                                              (((mul_double nearest_even) sx) vy)))) 
+                   (C_15: (JC_<somenum>: (((mul_double nearest_even) sy) vx)))))) in
+                  (let jessie_<somenum> = M22 in
+                  (JC_<somenum>: ((sign_requires jessie_<somenum>) jessie_<somenum>)))))); !tmp_0
+       end)) in void);
+      (let jessie_<somenum> =
+      (__retres_0 := (C_20:
+                     (JC_<somenum>: (((mul_double nearest_even) !tmp) !tmp_0)))) in
+      void); (return := !__retres_0); (raise Return) end)))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: M22_value) }
 
 let sign_ensures_default =
  fun (x_1 : double) (M : double) ->
-  { (JC_9:
-    ((JC_7: le_real(double_round_error(x_1), double_value(M)))
-    and (JC_8: M22_value))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(double_round_error(x_1), double_value(M)))
+    and (JC_<somenum>: M22_value))) }
   (init:
   (let return = ref (any_double void) in
   try
    begin
      (let __retres = ref (any_double void) in
      try
-      (let jessie_20 =
+      (let jessie_<somenum> =
+      (C_7:
       begin
         (if ((ge_double x_1) M)
         then
-         (let jessie_14 =
+         (let jessie_<somenum> =
          (C_2:
          begin
-           (let jessie_13 =
+           (let jessie_<somenum> =
            (__retres := (C_1: (double_of_real_exact 1.0))) in void);
           (raise (Return_label_exc void)) end) in void) else void);
-       (if ((le_double x_1) (C_5: (JC_17: (neg_double M))))
+       (if ((le_double x_1) (C_5: (JC_<somenum>: (neg_double M))))
        then
-        (let jessie_17 =
+        (let jessie_<somenum> =
         (C_4:
         begin
-          (let jessie_16 =
+          (let jessie_<somenum> =
           (__retres := (C_3:
                        ((double_of_real_safe nearest_even) (real_of_int 
                                                             (neg_int (1)))))) in
           void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_7:
-       begin
-         (let jessie_19 = (__retres := (C_6: (double_of_real_exact 0.0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := (C_6: (double_of_real_exact 0.0))) in
+       void); (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
-  { (JC_11:
+  { (JC_<somenum>:
     (neq_real(double_value(result), 0.0) ->
      eq_real(double_value(result), real_of_int(signr(double_exact(x_1@)))))) }
 
 let sign_safety =
  fun (x_1 : double) (M : double) ->
-  { (JC_9:
-    ((JC_7: le_real(double_round_error(x_1), double_value(M)))
-    and (JC_8: M22_value))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_real(double_round_error(x_1), double_value(M)))
+    and (JC_<somenum>: M22_value))) }
   (init:
   (let return = ref (any_double void) in
   try
    begin
      (let __retres = ref (any_double void) in
      try
-      (let jessie_10 =
+      (let jessie_<somenum> =
+      (C_7:
       begin
         (if ((ge_double x_1) M)
         then
-         (let jessie_4 =
+         (let jessie_<somenum> =
          (C_2:
          begin
-           (let jessie_3 = (__retres := (C_1: (double_of_real_exact 1.0))) in
+           (let jessie_<somenum> = (__retres := (C_1: (double_of_real_exact 1.0))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (if ((le_double x_1) (C_5: (JC_15: (neg_double M))))
+       (if ((le_double x_1) (C_5: (JC_<somenum>: (neg_double M))))
        then
-        (let jessie_7 =
+        (let jessie_<somenum> =
         (C_4:
         begin
-          (let jessie_6 =
+          (let jessie_<somenum> =
           (__retres := (C_3:
-                       (JC_16:
+                       (JC_<somenum>:
                        ((double_of_real nearest_even) (real_of_int (neg_int (1))))))) in
           void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_7:
-       begin
-         (let jessie_9 = (__retres := (C_6: (double_of_real_exact 0.0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := (C_6: (double_of_real_exact 0.0))) in
+       void); (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
-    absurd  end with Return -> !return end)) { (JC_13: M22_value) }
+    absurd  end with Return -> !return end)) { (JC_<somenum>: M22_value) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-epsline.jessie --quiet -f fp-epsline.makefile project

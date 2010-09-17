@@ -94,7 +94,7 @@ let invariant_for_struct this st =
   (inv, reads)
 
 let make_assume reads assume =
-  BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
+  mk_expr (BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, [])))
 
 let fully_packed pc e =
   LPred(
@@ -580,10 +580,10 @@ let assert_mutable e fi =
 	    LConst (Prim_bool false) ])
       in
       Assert(`ASSERT,make_and sub not_committed, Void)*)
-      Assert(`ASSERT,sub, Void)
+      mk_expr (Assert(`ASSERT,sub, void))
     end
   else
-    Void
+    void
 
 (********************)
 (* Invariant axioms *)
@@ -940,7 +940,7 @@ let assume_global_invariant st =
 	   (root_name st)^" not found")
   in
   match params with
-    | [] -> Void
+    | [] -> void
     | _ ->
 	let reads = List.map fst params in
 	let params = List.map (fun (n, _) -> LVar n) params in
@@ -948,7 +948,7 @@ let assume_global_invariant st =
 	make_assume reads inv
 
 let assume_global_invariants hl =
-  List.fold_left append Void (List.map assume_global_invariant hl)
+  List.fold_left append void (List.map assume_global_invariant hl)
 
 (* Given a field that has just been modified, assume all potentially
 useful invariant for all objects that is not mutable *)

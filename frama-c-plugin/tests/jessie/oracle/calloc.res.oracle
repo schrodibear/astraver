@@ -1863,9 +1863,9 @@ parameter calloc :
   size_0:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
-    { (JC_47:
-      ((JC_45: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
-      and (JC_46:
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
+      and (JC_<somenum>:
           ge_int(offset_max(char_P_result_25_alloc_table, result),
           sub_int(mul_int(integer_of_uint32(size_0@),
                   integer_of_uint32(nmemb@)),
@@ -1876,9 +1876,9 @@ parameter calloc_requires :
   size_0:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
-    { (JC_47:
-      ((JC_45: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
-      and (JC_46:
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
+      and (JC_<somenum>:
           ge_int(offset_max(char_P_result_25_alloc_table, result),
           sub_int(mul_int(integer_of_uint32(size_0@),
                   integer_of_uint32(nmemb@)),
@@ -1893,7 +1893,7 @@ parameter f_requires :
  x_0:char_P pointer ->
   char_P_x_27_alloc_table:char_P alloc_table ->
    char_P_char_M_x_27:(char_P, int8) memory ->
-    { (JC_51: valid_string(x_0, char_P_x_27_alloc_table, char_P_char_M_x_27))}
+    { (JC_<somenum>: valid_string(x_0, char_P_x_27_alloc_table, char_P_char_M_x_27))}
     unit { true }
 
 parameter int32_of_integer_ :
@@ -1916,15 +1916,15 @@ parameter memcpy :
        char_P_char_M_src_21:(char_P, int8) memory ->
         { } char_P pointer reads char_P_char_M_dest_20
         writes char_P_char_M_dest_20
-        { (JC_24:
-          ((JC_22:
-           ((JC_19:
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
             eq_int(memcmp(dest@, src@, integer_of_uint32(n_0@),
                    char_P_char_M_src_21, char_P_char_M_dest_20),
             (0)))
-           and ((JC_20: (result = dest@))
-               and (JC_21: same_block(result, dest@)))))
-          and (JC_23:
+           and ((JC_<somenum>: (result = dest@))
+               and (JC_<somenum>: same_block(result, dest@)))))
+          and (JC_<somenum>:
               not_assigns(char_P_dest_20_alloc_table@,
               char_P_char_M_dest_20@, char_P_char_M_dest_20,
               pset_range(pset_singleton(dest@), (0),
@@ -1938,27 +1938,27 @@ parameter memcpy_requires :
      char_P_src_21_alloc_table:char_P alloc_table ->
       char_P_dest_20_alloc_table:char_P alloc_table ->
        char_P_char_M_src_21:(char_P, int8) memory ->
-        { (JC_5:
-          ((JC_1: le_int(offset_min(char_P_dest_20_alloc_table, dest), (0)))
-          and ((JC_2:
+        { (JC_<somenum>:
+          ((JC_<somenum>: le_int(offset_min(char_P_dest_20_alloc_table, dest), (0)))
+          and ((JC_<somenum>:
                ge_int(offset_max(char_P_dest_20_alloc_table, dest),
                sub_int(integer_of_uint32(n_0), (1))))
-              and ((JC_3:
+              and ((JC_<somenum>:
                    le_int(offset_min(char_P_src_21_alloc_table, src), (0)))
-                  and (JC_4:
+                  and (JC_<somenum>:
                       ge_int(offset_max(char_P_src_21_alloc_table, src),
                       sub_int(integer_of_uint32(n_0), (1))))))))}
         char_P pointer reads char_P_char_M_dest_20
         writes char_P_char_M_dest_20
-        { (JC_24:
-          ((JC_22:
-           ((JC_19:
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
             eq_int(memcmp(dest@, src@, integer_of_uint32(n_0@),
                    char_P_char_M_src_21, char_P_char_M_dest_20),
             (0)))
-           and ((JC_20: (result = dest@))
-               and (JC_21: same_block(result, dest@)))))
-          and (JC_23:
+           and ((JC_<somenum>: (result = dest@))
+               and (JC_<somenum>: same_block(result, dest@)))))
+          and (JC_<somenum>:
               not_assigns(char_P_dest_20_alloc_table@,
               char_P_char_M_dest_20@, char_P_char_M_dest_20,
               pset_range(pset_singleton(dest@), (0),
@@ -1981,16 +1981,16 @@ parameter strlen_0 :
   char_P_s_24_alloc_table:char_P alloc_table ->
    char_P_char_M_s_24:(char_P, int8) memory ->
     { } uint32
-    { (JC_33:
+    { (JC_<somenum>:
       eq_int(integer_of_uint32(result), strlen(s_2@, char_P_char_M_s_24))) }
 
 parameter strlen_0_requires :
  s_2:char_P pointer ->
   char_P_s_24_alloc_table:char_P alloc_table ->
    char_P_char_M_s_24:(char_P, int8) memory ->
-    { (JC_27: valid_string(s_2, char_P_s_24_alloc_table, char_P_char_M_s_24))}
+    { (JC_<somenum>: valid_string(s_2, char_P_s_24_alloc_table, char_P_char_M_s_24))}
     uint32
-    { (JC_33:
+    { (JC_<somenum>:
       eq_int(integer_of_uint32(result), strlen(s_2@, char_P_char_M_s_24))) }
 
 parameter uint16_of_integer_ :
@@ -2005,7 +2005,7 @@ parameter uint32_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : char_P pointer) (char_P_x_27_alloc_table : char_P alloc_table) (char_P_char_M_x_27 : (char_P, int8) memory) ->
-  { (JC_53: valid_string(x_0, char_P_x_27_alloc_table, char_P_char_M_x_27)) }
+  { (JC_<somenum>: valid_string(x_0, char_P_x_27_alloc_table, char_P_char_M_x_27)) }
   (init:
   try
    begin
@@ -2015,41 +2015,38 @@ let f_ensures_default =
      (let len = ref (any_uint32 void) in
      (let y = ref (any_pointer void) in
      (C_19:
+     (C_23:
+     (C_24:
      begin
-       (let jessie_12 =
+       (let jessie_<somenum> =
        (len := (C_18:
-               (let jessie_11 = x_0 in
-               (JC_64:
-               (((strlen_0 jessie_11) char_P_x_27_alloc_table) char_P_char_M_x_27))))) in
+               (let jessie_<somenum> = x_0 in
+               (JC_<somenum>:
+               (((strlen_0 jessie_<somenum>) char_P_x_27_alloc_table) char_P_char_M_x_27))))) in
        void);
-      (C_23:
-      begin
-        (let jessie_14 =
-        (y := (C_22:
-              (JC_65:
-              (((alloc_struct_char_P (integer_of_uint32 (C_21:
-                                                        (safe_uint32_of_integer_ 
-                                                         (C_20:
-                                                         ((add_int (integer_of_uint32 !len)) (1))))))) char_P_y_76_alloc_table) char_P_y_76_tag_table)))) in
-        void);
-       (C_24:
-       begin
-         (let jessie_18 =
-         (let jessie_17 = !y in
-         (let jessie_16 = x_0 in
-         (let jessie_15 = !len in
-         (JC_66:
-         (((((((memcpy jessie_17) jessie_16) jessie_15) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27))))) in
-         void);
-        (assert
-        { (JC_67:
-          valid_string(y, char_P_y_76_alloc_table, char_P_char_M_y_76)) };
-        void); void; (raise Return) end) end) end)))))); (raise Return) end
-   with Return -> void end) { (JC_55: true) }
+      (let jessie_<somenum> =
+      (y := (C_22:
+            (JC_<somenum>:
+            (((alloc_struct_char_P (integer_of_uint32 (C_21:
+                                                      (safe_uint32_of_integer_ 
+                                                       (C_20:
+                                                       ((add_int (integer_of_uint32 !len)) (1))))))) char_P_y_76_alloc_table) char_P_y_76_tag_table)))) in
+      void);
+      (let jessie_<somenum> =
+      (let jessie_<somenum> = !y in
+      (let jessie_<somenum> = x_0 in
+      (let jessie_<somenum> = !len in
+      (JC_<somenum>:
+      (((((((memcpy jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27))))) in
+      void);
+      (assert
+      { (JC_<somenum>: valid_string(y, char_P_y_76_alloc_table, char_P_char_M_y_76)) };
+      void); void; (raise Return) end)))))))); (raise Return) end with
+   Return -> void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_0 : char_P pointer) (char_P_x_27_alloc_table : char_P alloc_table) (char_P_char_M_x_27 : (char_P, int8) memory) ->
-  { (JC_53: valid_string(x_0, char_P_x_27_alloc_table, char_P_char_M_x_27)) }
+  { (JC_<somenum>: valid_string(x_0, char_P_x_27_alloc_table, char_P_char_M_x_27)) }
   (init:
   try
    begin
@@ -2059,39 +2056,37 @@ let f_safety =
      (let len = ref (any_uint32 void) in
      (let y = ref (any_pointer void) in
      (C_19:
+     (C_23:
+     (C_24:
      begin
-       (let jessie_3 =
+       (let jessie_<somenum> =
        (len := (C_18:
-               (let jessie_2 = x_0 in
-               (JC_59:
-               (((strlen_0_requires jessie_2) char_P_x_27_alloc_table) char_P_char_M_x_27))))) in
+               (let jessie_<somenum> = x_0 in
+               (JC_<somenum>:
+               (((strlen_0_requires jessie_<somenum>) char_P_x_27_alloc_table) char_P_char_M_x_27))))) in
        void);
-      (C_23:
-      begin
-        (let jessie_5 =
-        (y := (C_22:
-              (JC_61:
-              (((alloc_struct_char_P_requires (integer_of_uint32 (C_21:
-                                                                 (JC_60:
-                                                                 (uint32_of_integer_ 
-                                                                  (C_20:
-                                                                  ((add_int 
-                                                                    (integer_of_uint32 !len)) (1)))))))) char_P_y_76_alloc_table) char_P_y_76_tag_table)))) in
-        void);
-       (C_24:
-       begin
-         (let jessie_9 =
-         (let jessie_8 = !y in
-         (let jessie_7 = x_0 in
-         (let jessie_6 = !len in
-         (JC_62:
-         (((((((memcpy_requires jessie_8) jessie_7) jessie_6) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27))))) in
-         void);
-        [ { } unit reads char_P_char_M_y_76,char_P_y_76_alloc_table,y
-          { (JC_63:
-            valid_string(y, char_P_y_76_alloc_table, char_P_char_M_y_76)) } ];
-        void; (raise Return) end) end) end)))))); (raise Return) end with
-   Return -> void end) { true }
+      (let jessie_<somenum> =
+      (y := (C_22:
+            (JC_<somenum>:
+            (((alloc_struct_char_P_requires (integer_of_uint32 (C_21:
+                                                               (JC_<somenum>:
+                                                               (uint32_of_integer_ 
+                                                                (C_20:
+                                                                ((add_int 
+                                                                  (integer_of_uint32 !len)) (1)))))))) char_P_y_76_alloc_table) char_P_y_76_tag_table)))) in
+      void);
+      (let jessie_<somenum> =
+      (let jessie_<somenum> = !y in
+      (let jessie_<somenum> = x_0 in
+      (let jessie_<somenum> = !len in
+      (JC_<somenum>:
+      (((((((memcpy_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27))))) in
+      void);
+      [ { } unit reads char_P_char_M_y_76,char_P_y_76_alloc_table,y
+        { (JC_<somenum>:
+          valid_string(y, char_P_y_76_alloc_table, char_P_char_M_y_76)) } ];
+      void; (raise Return) end)))))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C calloc.jessie --quiet -f calloc.makefile project

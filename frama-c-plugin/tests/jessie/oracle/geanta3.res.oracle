@@ -502,14 +502,14 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f2 :
  n_0_0:int32 ->
   { } __anonenum_RESULTAT_1
-  { (JC_26:
+  { (JC_<somenum>:
     (function2_res(n_0_0@) ->
      eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
 
 parameter f2_requires :
  n_0_0:int32 ->
   { } __anonenum_RESULTAT_1
-  { (JC_26:
+  { (JC_<somenum>:
     (function2_res(n_0_0@) ->
      eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
 
@@ -531,15 +531,15 @@ parameter p1 :
      { } unit
      reads enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1
      writes enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1
-     { (JC_14:
-       ((JC_12:
+     { (JC_<somenum>:
+       ((JC_<somenum>:
         (result_0(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
                   last@),
          n_1@) ->
          eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
                                                  last@)),
          (0))))
-       and (JC_13:
+       and (JC_<somenum>:
            not_assigns(enum___anonenum_RESULTAT_1_P_last_1_alloc_table@,
            enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
            enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
@@ -550,27 +550,27 @@ parameter p1_requires :
   n_1:int32 ->
    enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1:(enum___anonenum_RESULTAT_1_P, __anonenum_RESULTAT_1) memory ref ->
     enum___anonenum_RESULTAT_1_P_last_1_alloc_table:enum___anonenum_RESULTAT_1_P alloc_table ->
-     { (JC_3:
-       ((JC_1:
+     { (JC_<somenum>:
+       ((JC_<somenum>:
         le_int(offset_min(enum___anonenum_RESULTAT_1_P_last_1_alloc_table,
                last),
         (0)))
-       and (JC_2:
+       and (JC_<somenum>:
            ge_int(offset_max(enum___anonenum_RESULTAT_1_P_last_1_alloc_table,
                   last),
            (0)))))}
      unit
      reads enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1
      writes enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1
-     { (JC_14:
-       ((JC_12:
+     { (JC_<somenum>:
+       ((JC_<somenum>:
         (result_0(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
                   last@),
          n_1@) ->
          eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
                                                  last@)),
          (0))))
-       and (JC_13:
+       and (JC_<somenum>:
            not_assigns(enum___anonenum_RESULTAT_1_P_last_1_alloc_table@,
            enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
            enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
@@ -589,7 +589,7 @@ parameter safe_int8_of_integer_ :
 
 let f2_ensures_default =
  fun (n_0_0 : int32) ->
-  { (JC_24: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any___anonenum_RESULTAT_1 void) in
   try
@@ -601,32 +601,28 @@ let f2_ensures_default =
      (let initial = (any_pointer void) in
      (let __retres = ref (any___anonenum_RESULTAT_1 void) in
      (C_12:
+     (C_13:
+     (C_15:
      begin
-       (let jessie_39 =
-       (let jessie_35 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-       (let jessie_38 = initial in
-       (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_38) jessie_35))) in
-       void);
-      (C_13:
-      begin
-        (let jessie_41 = initial in
-        (let jessie_40 = n_0_0 in
-        (JC_32:
-        ((((p1 jessie_41) jessie_40) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) enum___anonenum_RESULTAT_1_P_initial_2_alloc_table))));
-       (C_15:
-       begin
-         (let jessie_43 =
-         (__retres := (C_14:
-                      ((safe_acc_ !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial))) in
-         void); (return := !__retres); (raise Return) end) end) end)))));
-    absurd  end with Return -> !return end))
-  { (JC_25:
+       (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
+       (let jessie_<somenum> = initial in
+       (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = initial in
+      (let jessie_<somenum> = n_0_0 in
+      (JC_<somenum>:
+      ((((p1 jessie_<somenum>) jessie_<somenum>) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) enum___anonenum_RESULTAT_1_P_initial_2_alloc_table))));
+      (let jessie_<somenum> =
+      (__retres := (C_14:
+                   ((safe_acc_ !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial))) in
+      void); (return := !__retres); (raise Return) end))))))); absurd  end
+   with Return -> !return end))
+  { (JC_<somenum>:
     (function2_res(n_0_0@) ->
      eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
 
 let f2_safety =
  fun (n_0_0 : int32) ->
-  { (JC_24: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any___anonenum_RESULTAT_1 void) in
   try
@@ -638,35 +634,31 @@ let f2_safety =
      (let initial = (any_pointer void) in
      (let __retres = ref (any___anonenum_RESULTAT_1 void) in
      (C_12:
+     (C_13:
+     (C_15:
      begin
-       (let jessie_28 =
-       (let jessie_24 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-       (let jessie_27 = initial in
-       (JC_29:
-       ((((upd_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_27) jessie_24)))) in
-       void);
-      (C_13:
-      begin
-        (let jessie_30 = initial in
-        (let jessie_29 = n_0_0 in
-        (JC_30:
-        ((((p1_requires jessie_30) jessie_29) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) enum___anonenum_RESULTAT_1_P_initial_2_alloc_table))));
-       (C_15:
-       begin
-         (let jessie_32 =
-         (__retres := (C_14:
-                      (JC_31:
-                      (((acc_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial)))) in
-         void); (return := !__retres); (raise Return) end) end) end)))));
-    absurd  end with Return -> !return end)) { true }
+       (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
+       (let jessie_<somenum> = initial in
+       (JC_<somenum>:
+       ((((upd_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) jessie_<somenum>) jessie_<somenum>))));
+      (let jessie_<somenum> = initial in
+      (let jessie_<somenum> = n_0_0 in
+      (JC_<somenum>:
+      ((((p1_requires jessie_<somenum>) jessie_<somenum>) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) enum___anonenum_RESULTAT_1_P_initial_2_alloc_table))));
+      (let jessie_<somenum> =
+      (__retres := (C_14:
+                   (JC_<somenum>:
+                   (((acc_ enum___anonenum_RESULTAT_1_P_initial_2_alloc_table) !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_initial_2) initial)))) in
+      void); (return := !__retres); (raise Return) end))))))); absurd  end
+   with Return -> !return end)) { true }
 
 let p1_ensures_default =
  fun (last : enum___anonenum_RESULTAT_1_P pointer) (n_1 : int32) (enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1 : (enum___anonenum_RESULTAT_1_P, __anonenum_RESULTAT_1) memory ref) (enum___anonenum_RESULTAT_1_P_last_1_alloc_table : enum___anonenum_RESULTAT_1_P alloc_table) ->
-  { (JC_7:
-    ((JC_5:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_int(offset_min(enum___anonenum_RESULTAT_1_P_last_1_alloc_table, last),
      (0)))
-    and (JC_6:
+    and (JC_<somenum>:
         ge_int(offset_max(enum___anonenum_RESULTAT_1_P_last_1_alloc_table,
                last),
         (0))))) }
@@ -678,32 +670,32 @@ let p1_ensures_default =
                                                               (C_5:
                                                               ((safe_acc_ !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) last))))))) (0))
      then
-      (let jessie_22 =
+      (let jessie_<somenum> =
       (if ((gt_int_ (integer_of_int32 n_1)) (0))
       then
        (C_4:
-       (let jessie_13 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-       (let jessie_16 = last in
+       (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
        begin
-         (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_16) jessie_13);
-        jessie_13 end)))
+         (let jessie_<somenum> = last in
+         (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_<somenum>) jessie_<somenum>));
+        jessie_<somenum> end))
       else
        (C_2:
-       (let jessie_18 = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
-       (let jessie_21 = last in
+       (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
        begin
-         (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_21) jessie_18);
-        jessie_18 end)))) in void) else void); (raise Return); (raise Return)
+         (let jessie_<somenum> = last in
+         (((safe_upd_ enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_<somenum>) jessie_<somenum>));
+        jessie_<somenum> end))) in void) else void); (raise Return); (raise Return)
    end with Return -> void end)
-  { (JC_11:
-    ((JC_9:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      (result_0(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
                last@),
       n_1@) ->
       eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
                                               last@)),
       (0))))
-    and (JC_10:
+    and (JC_<somenum>:
         not_assigns(enum___anonenum_RESULTAT_1_P_last_1_alloc_table@,
         enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
         enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
@@ -711,11 +703,11 @@ let p1_ensures_default =
 
 let p1_safety =
  fun (last : enum___anonenum_RESULTAT_1_P pointer) (n_1 : int32) (enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1 : (enum___anonenum_RESULTAT_1_P, __anonenum_RESULTAT_1) memory ref) (enum___anonenum_RESULTAT_1_P_last_1_alloc_table : enum___anonenum_RESULTAT_1_P alloc_table) ->
-  { (JC_7:
-    ((JC_5:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_int(offset_min(enum___anonenum_RESULTAT_1_P_last_1_alloc_table, last),
      (0)))
-    and (JC_6:
+    and (JC_<somenum>:
         ge_int(offset_max(enum___anonenum_RESULTAT_1_P_last_1_alloc_table,
                last),
         (0))))) }
@@ -723,30 +715,30 @@ let p1_safety =
   try
    begin
      (if ((eq_int_ (integer_of_int32 (C_6:
-                                     (JC_18:
+                                     (JC_<somenum>:
                                      (int32_of_integer_ (integer_of___anonenum_RESULTAT_1 
                                                          (C_5:
-                                                         (JC_17:
+                                                         (JC_<somenum>:
                                                          (((acc_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) !enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) last))))))))) (0))
      then
-      (let jessie_11 =
+      (let jessie_<somenum> =
       (if ((gt_int_ (integer_of_int32 n_1)) (0))
       then
        (C_4:
-       (let jessie_2 = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
-       (let jessie_5 = last in
+       (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (0)) in
        begin
-         (JC_19:
-         ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_5) jessie_2));
-        jessie_2 end)))
+         (let jessie_<somenum> = last in
+         (JC_<somenum>:
+         ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_<somenum>) jessie_<somenum>)));
+        jessie_<somenum> end))
       else
        (C_2:
-       (let jessie_7 = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
-       (let jessie_10 = last in
+       (let jessie_<somenum> = (safe___anonenum_RESULTAT_1_of_integer_ (1)) in
        begin
-         (JC_20:
-         ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_10) jessie_7));
-        jessie_7 end)))) in void) else void); (raise Return); (raise Return)
+         (let jessie_<somenum> = last in
+         (JC_<somenum>:
+         ((((upd_ enum___anonenum_RESULTAT_1_P_last_1_alloc_table) enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1) jessie_<somenum>) jessie_<somenum>)));
+        jessie_<somenum> end))) in void) else void); (raise Return); (raise Return)
    end with Return -> void end) { true }
 
 

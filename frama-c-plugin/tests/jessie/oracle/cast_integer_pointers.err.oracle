@@ -1,1 +1,3 @@
 Warning, generating a dummy variant for loop. Please provide a real variant or set termination policy to user or never
+Jessie support for unions and pointer casts is disabled
+make: *** [cast_integer_pointers.regtest] Error 1

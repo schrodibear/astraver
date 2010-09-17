@@ -1,8 +1,8 @@
 /* Frama-C BTS 0443
 
-Status: open, major bug
+Status: closed
 
-no VC are generated, although the assigns clause is wrong
+no VC were generated, although the assigns clause is wrong
   
 */
 

@@ -430,15 +430,15 @@ parameter int_P_t_1_alloc_table : int_P alloc_table ref
 parameter main :
  tt:unit ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
-  { ((JC_9: valid_t(int_P_t_1_alloc_table))
-    and (JC_7: eq_int(integer_of_int32(result), (8)))) }
+  { ((JC_<somenum>: valid_t(int_P_t_1_alloc_table))
+    and (JC_<somenum>: eq_int(integer_of_int32(result), (8)))) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_2: valid_t(int_P_t_1_alloc_table))} int32
+  { (JC_<somenum>: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
-  { ((JC_9: valid_t(int_P_t_1_alloc_table))
-    and (JC_7: eq_int(integer_of_int32(result), (8)))) }
+  { ((JC_<somenum>: valid_t(int_P_t_1_alloc_table))
+    and (JC_<somenum>: eq_int(integer_of_int32(result), (8)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -448,7 +448,7 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: valid_t(int_P_t_1_alloc_table)) }
+  { (JC_<somenum>: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -456,7 +456,7 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_4:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_3:
                     (safe_int32_of_integer_ (C_2:
                                             ((add_int (integer_of_int32 x_0)) 
@@ -464,11 +464,11 @@ let main_ensures_default =
                                                                ((safe_acc_ !int_P_int_M_t_1) 
                                                                 ((shift t) (1)))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_6: eq_int(integer_of_int32(result), (8))) }
+   Return -> !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (8))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_4: valid_t(int_P_t_1_alloc_table)) }
+  { (JC_<somenum>: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -476,16 +476,16 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_4:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_3:
-                    (JC_10:
+                    (JC_<somenum>:
                     (int32_of_integer_ (C_2:
                                        ((add_int (integer_of_int32 x_0)) 
                                         (integer_of_int32 (C_1:
                                                           ((safe_acc_ !int_P_int_M_t_1) 
                                                            ((shift t) (1))))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_8: valid_t(int_P_t_1_alloc_table)) }
+   Return -> !return end)) { (JC_<somenum>: valid_t(int_P_t_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0284.jessie --quiet -f bts0284.makefile project

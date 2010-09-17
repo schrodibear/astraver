@@ -325,10 +325,10 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter main :
- x_0:uint8 -> { } int32 { (JC_6: ge_int(integer_of_int32(result), (0))) }
+ x_0:uint8 -> { } int32 { (JC_<somenum>: ge_int(integer_of_int32(result), (0))) }
 
 parameter main_requires :
- x_0:uint8 -> { } int32 { (JC_6: ge_int(integer_of_int32(result), (0))) }
+ x_0:uint8 -> { } int32 { (JC_<somenum>: ge_int(integer_of_int32(result), (0))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -346,7 +346,7 @@ parameter uint8_of_integer_ :
 
 let main_ensures_default =
  fun (x_0 : uint8) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -354,14 +354,14 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_1: (safe_int32_of_integer_ (integer_of_uint8 x_0)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_5: ge_int(integer_of_int32(result), (0))) }
+   Return -> !return end)) { (JC_<somenum>: ge_int(integer_of_int32(result), (0))) }
 
 let main_safety =
  fun (x_0 : uint8) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -369,8 +369,8 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_2 =
-       (__retres := (C_1: (JC_9: (int32_of_integer_ (integer_of_uint8 x_0))))) in
+       (let jessie_<somenum> =
+       (__retres := (C_1: (JC_<somenum>: (int32_of_integer_ (integer_of_uint8 x_0))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

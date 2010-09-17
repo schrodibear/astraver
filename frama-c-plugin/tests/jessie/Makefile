@@ -13,7 +13,7 @@
 PPCHOME:=$(shell (cd ../..; pwd -P))
 WHYHOME:=$(shell (cd  ../../..; pwd -P))
 FRAMAC_OPT:=$(shell ./check_opt.sh)
-FRAMAC_BYTE?=frama-c.byte
+FRAMAC_BYTE?=OCAMLRUNPARAMS=-bt frama-c.byte 
 
 JESSIEOPT=$(WHYHOME)/bin/jessie.opt
 JESSIEBYTE=$(WHYHOME)/bin/jessie.byte

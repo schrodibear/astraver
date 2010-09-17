@@ -362,7 +362,7 @@ parameter uint32_of_integer_ :
 
 let b1_ensures_default =
  fun (x_0 : uint32) (y_0 : uint32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -370,17 +370,17 @@ let b1_ensures_default =
      (let __retres = ref (any_uint32 void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
                     (safe_uint32_of_integer_ (C_1:
                                              ((bw_xor (integer_of_uint32 x_0)) 
                                               (integer_of_uint32 y_0)))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_5: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let b1_safety =
  fun (x_0 : uint32) (y_0 : uint32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -388,9 +388,9 @@ let b1_safety =
      (let __retres = ref (any_uint32 void) in
      (C_3:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
-                    (JC_9:
+                    (JC_<somenum>:
                     (uint32_of_integer_ (C_1:
                                         ((bw_xor (integer_of_uint32 x_0)) 
                                          (integer_of_uint32 y_0))))))) in
@@ -399,7 +399,7 @@ let b1_safety =
 
 let b2_ensures_default =
  fun (x_2 : uint32) (y_1 : uint32) ->
-  { (JC_13: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -407,17 +407,17 @@ let b2_ensures_default =
      (let __retres_0 = ref (any_uint32 void) in
      (C_7:
      begin
-       (let jessie_11 =
+       (let jessie_<somenum> =
        (__retres_0 := (C_6:
                       (safe_uint32_of_integer_ (C_5:
                                                ((bw_and (integer_of_uint32 x_2)) 
                                                 (integer_of_uint32 y_1)))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_14: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let b2_safety =
  fun (x_2 : uint32) (y_1 : uint32) ->
-  { (JC_13: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -425,9 +425,9 @@ let b2_safety =
      (let __retres_0 = ref (any_uint32 void) in
      (C_7:
      begin
-       (let jessie_8 =
+       (let jessie_<somenum> =
        (__retres_0 := (C_6:
-                      (JC_18:
+                      (JC_<somenum>:
                       (uint32_of_integer_ (C_5:
                                           ((bw_and (integer_of_uint32 x_2)) 
                                            (integer_of_uint32 y_1))))))) in
@@ -436,7 +436,7 @@ let b2_safety =
 
 let b3_ensures_default =
  fun (x_1 : uint32) (y : uint32) ->
-  { (JC_22: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -444,17 +444,17 @@ let b3_ensures_default =
      (let __retres_1 = ref (any_uint32 void) in
      (C_11:
      begin
-       (let jessie_17 =
+       (let jessie_<somenum> =
        (__retres_1 := (C_10:
                       (safe_uint32_of_integer_ (C_9:
                                                ((bw_or (integer_of_uint32 x_1)) 
                                                 (integer_of_uint32 y)))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_23: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let b3_safety =
  fun (x_1 : uint32) (y : uint32) ->
-  { (JC_22: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -462,9 +462,9 @@ let b3_safety =
      (let __retres_1 = ref (any_uint32 void) in
      (C_11:
      begin
-       (let jessie_14 =
+       (let jessie_<somenum> =
        (__retres_1 := (C_10:
-                      (JC_27:
+                      (JC_<somenum>:
                       (uint32_of_integer_ (C_9:
                                           ((bw_or (integer_of_uint32 x_1)) 
                                            (integer_of_uint32 y))))))) in
@@ -473,7 +473,7 @@ let b3_safety =
 
 let b4_ensures_default =
  fun (x_1_0 : uint32) ->
-  { (JC_31: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -481,16 +481,16 @@ let b4_ensures_default =
      (let __retres_2 = ref (any_uint32 void) in
      (C_15:
      begin
-       (let jessie_23 =
+       (let jessie_<somenum> =
        (__retres_2 := (C_14:
                       (safe_uint32_of_integer_ (C_13:
                                                (bw_compl (integer_of_uint32 x_1_0)))))) in
        void); (return := !__retres_2); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_32: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let b4_safety =
  fun (x_1_0 : uint32) ->
-  { (JC_31: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -498,9 +498,9 @@ let b4_safety =
      (let __retres_2 = ref (any_uint32 void) in
      (C_15:
      begin
-       (let jessie_20 =
+       (let jessie_<somenum> =
        (__retres_2 := (C_14:
-                      (JC_36:
+                      (JC_<somenum>:
                       (uint32_of_integer_ (C_13:
                                           (bw_compl (integer_of_uint32 x_1_0))))))) in
        void); (return := !__retres_2); (raise Return) end)); absurd  end with

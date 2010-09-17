@@ -406,128 +406,128 @@ parameter safe_int8_of_integer_ :
 
 let ftest6_ensures_default =
  fun (tt : unit) ->
-  { (JC_24: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     (assert { (JC_30: le_int(neg_int((2147483646)), (0))) }; void); void;
+     (assert { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_25: true) }
+  { (JC_<somenum>: true) }
 
 let ftest6_safety =
  fun (tt : unit) ->
-  { (JC_24: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     [ { } unit { (JC_29: le_int(neg_int((2147483646)), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) } ]; void;
     (raise Return); (raise Return) end with Return -> void end) { true }
 
 let ftest7_ensures_default =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     (assert { (JC_20: le_int(neg_int((2147483647)), (0))) }; void); void;
+     (assert { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_15: true) }
+  { (JC_<somenum>: true) }
 
 let ftest7_safety =
  fun (tt : unit) ->
-  { (JC_14: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     [ { } unit { (JC_19: le_int(neg_int((2147483647)), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) } ]; void;
     (raise Return); (raise Return) end with Return -> void end) { true }
 
 let ftest8_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     (assert { (JC_10: le_int(neg_int((2147483648)), (0))) }; void); void;
+     (assert { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let ftest8_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     [ { } unit { (JC_9: le_int(neg_int((2147483648)), (0))) } ]; void;
+     [ { } unit { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) } ]; void;
     (raise Return); (raise Return) end with Return -> void end) { true }
 
 let ftest_ensures_default =
  fun (n : int32) ->
-  { (JC_34: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      try
-      (let jessie_13 =
+      (let jessie_<somenum> =
       begin
-        (let jessie_2 = n in
-        (if ((eq_int_ (integer_of_int32 jessie_2)) (8))
+        (let jessie_<somenum> = n in
+        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (8))
         then
-         (let jessie_10 =
+         (let jessie_<somenum> =
          begin
-           (assert { (JC_42: le_int(neg_int((2147483648)), (0))) }; void);
+           (assert { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) }; void);
           void; (raise (Goto_switch_0_break_exc void)) end in void)
         else
-         (if ((eq_int_ (integer_of_int32 jessie_2)) (7))
+         (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (7))
          then
-          (let jessie_11 =
+          (let jessie_<somenum> =
           begin
-            (assert { (JC_43: le_int(neg_int((2147483647)), (0))) }; void);
+            (assert { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) }; void);
            void; (raise (Goto_switch_0_break_exc void)) end in void)
          else
-          (if ((eq_int_ (integer_of_int32 jessie_2)) (6))
+          (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (6))
           then
-           (let jessie_12 =
+           (let jessie_<somenum> =
            begin
-             (assert { (JC_44: le_int(neg_int((2147483646)), (0))) }; void);
+             (assert { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) }; void);
             void; (raise (Goto_switch_0_break_exc void)) end in void)
           else void)))); (raise (Goto_switch_0_break_exc void)) end in void)
-      with Goto_switch_0_break_exc jessie_1 -> (switch_0_break: void) end;
+      with Goto_switch_0_break_exc jessie_<somenum> -> (switch_0_break: void) end;
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_35: true) }
+  { (JC_<somenum>: true) }
 
 let ftest_safety =
  fun (n : int32) ->
-  { (JC_34: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      try
-      (let jessie_8 =
+      (let jessie_<somenum> =
       begin
-        (let jessie_2 = n in
-        (if ((eq_int_ (integer_of_int32 jessie_2)) (8))
+        (let jessie_<somenum> = n in
+        (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (8))
         then
-         (let jessie_5 =
+         (let jessie_<somenum> =
          begin
-           [ { } unit { (JC_39: le_int(neg_int((2147483648)), (0))) } ];
+           [ { } unit { (JC_<somenum>: le_int(neg_int((2147483648)), (0))) } ];
           void; (raise (Goto_switch_0_break_exc void)) end in void)
         else
-         (if ((eq_int_ (integer_of_int32 jessie_2)) (7))
+         (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (7))
          then
-          (let jessie_6 =
+          (let jessie_<somenum> =
           begin
-            [ { } unit { (JC_40: le_int(neg_int((2147483647)), (0))) } ];
+            [ { } unit { (JC_<somenum>: le_int(neg_int((2147483647)), (0))) } ];
            void; (raise (Goto_switch_0_break_exc void)) end in void)
          else
-          (if ((eq_int_ (integer_of_int32 jessie_2)) (6))
+          (if ((eq_int_ (integer_of_int32 jessie_<somenum>)) (6))
           then
-           (let jessie_7 =
+           (let jessie_<somenum> =
            begin
-             [ { } unit { (JC_41: le_int(neg_int((2147483646)), (0))) } ];
+             [ { } unit { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) } ];
             void; (raise (Goto_switch_0_break_exc void)) end in void)
           else void)))); (raise (Goto_switch_0_break_exc void)) end in void)
-      with Goto_switch_0_break_exc jessie_1 -> (switch_0_break: void) end;
+      with Goto_switch_0_break_exc jessie_<somenum> -> (switch_0_break: void) end;
     (raise Return); (raise Return) end with Return -> void end) { true }
 
 

@@ -637,6 +637,9 @@ why3: why/MullerTheory_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/MullerTheory_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include MullerTheory.depend
 
 depend: coq/MullerTheory_why.v
@@ -2016,40 +2019,40 @@ let MullerTheory_m_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_51 =
+           (let jessie_<num> =
            begin
              (if (K_18:
                  ((lt_int_ !i_4) (K_17:
-                                 (let jessie_45 = t_4 in
+                                 (let jessie_<num> = t_4 in
                                  (JC_77:
-                                 ((java_array_length_intM jessie_45) Object_t_4_7_alloc_table))))))
+                                 ((java_array_length_intM jessie_<num>) Object_t_4_7_alloc_table))))))
              then
               (if (K_15:
                   ((gt_int_ (K_14:
                             ((safe_acc_ intM_intP_t_4_7) ((shift t_4) !i_4)))) (0)))
               then
+               (let jessie_<num> =
                (K_13:
-               (let jessie_49 =
-               (let jessie_2 = !count in
+               (let jessie_<num> = !count in
                begin
-                 (let jessie_48 = (count := ((add_int jessie_2) (1))) in
-                 void); jessie_2 end) in void)) else void)
-             else (let jessie_50 = (raise (Loop_exit_exc void)) in void));
+                 (let jessie_<num> = (count := ((add_int jessie_<num>) (1))) in
+                 void); jessie_<num> end)) in void) else void)
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_4 ->
-           (let jessie_55 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_16:
-           (let jessie_1 = !i_4 in
+           (let jessie_<num> = !i_4 in
            begin
-             (let jessie_54 = (i_4 := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_3 -> void end);
+             (let jessie_<num> = (i_4 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end);
       (let u =
       (K_38:
       (JC_78:
       (((alloc_struct_intM !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
       begin
-        (let jessie_58 = (count := (0)) in void);
+        (let jessie_<num> = (count := (0)) in void);
        (let i_5 = ref (K_19: (0)) in
        try
         (loop_4:
@@ -2069,41 +2072,42 @@ let MullerTheory_m_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_71 =
+           (let jessie_<num> =
            begin
              (if (K_37:
                  ((lt_int_ !i_5) (K_36:
-                                 (let jessie_60 = t_4 in
+                                 (let jessie_<num> = t_4 in
                                  (JC_88:
-                                 ((java_array_length_intM jessie_60) Object_t_4_7_alloc_table))))))
+                                 ((java_array_length_intM jessie_<num>) Object_t_4_7_alloc_table))))))
              then
               (if (K_34:
                   ((gt_int_ (K_33:
                             ((safe_acc_ intM_intP_t_4_7) ((shift t_4) !i_5)))) (0)))
               then
+               (let jessie_<num> =
                (K_32:
-               (let jessie_69 =
-               (let jessie_62 =
+               (let jessie_<num> =
                (K_31: ((safe_acc_ intM_intP_t_4_7) ((shift t_4) !i_5))) in
-               (let jessie_65 =
-               ((shift u) (K_30:
-                          (let jessie_6 = !count in
-                          begin
-                            (let jessie_68 =
-                            (count := ((add_int jessie_6) (1))) in void);
-                           jessie_6 end))) in
-               (((safe_upd_ intM_intP_MullerTheory_m_9) jessie_65) jessie_62))) in
-               void)) else void)
-             else (let jessie_70 = (raise (Loop_exit_exc void)) in void));
+               (let jessie_<num> = u in
+               (let jessie_<num> =
+               (K_30:
+               (let jessie_<num> = !count in
+               begin
+                 (let jessie_<num> = (count := ((add_int jessie_<num>) (1))) in
+                 void); jessie_<num> end)) in
+               (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
+               (((safe_upd_ intM_intP_MullerTheory_m_9) jessie_<num>) jessie_<num>)))))) in
+               void) else void)
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_8 ->
-           (let jessie_75 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_35:
-           (let jessie_5 = !i_5 in
+           (let jessie_<num> = !i_5 in
            begin
-             (let jessie_74 = (i_5 := ((add_int jessie_5) (1))) in void);
-            jessie_5 end)) in void) end end done) with
-        Loop_exit_exc jessie_7 -> void end); (return := u); (raise Return)
+             (let jessie_<num> = (i_5 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := u); (raise Return)
       end) end); absurd  end with Return -> !return end)) { (JC_35: true) }
 
 let MullerTheory_m_safety =
@@ -2139,46 +2143,46 @@ let MullerTheory_m_safety =
                                num_of_pos((0), sub_int(i_4, (1)), t_4,
                                intM_intP_t_4_7)))))))) } ];
           try
-           (let jessie_17 =
+           (let jessie_<num> =
            begin
              (if (K_18:
                  ((lt_int_ !i_4) (K_17:
-                                 (let jessie_11 = t_4 in
+                                 (let jessie_<num> = t_4 in
                                  (JC_49:
                                  (assert
                                  { ge_int(offset_max(Object_t_4_7_alloc_table,
-                                          jessie_11),
+                                          jessie_<num>),
                                    (-1)) };
                                  (JC_48:
-                                 ((java_array_length_intM_requires jessie_11) Object_t_4_7_alloc_table))))))))
+                                 ((java_array_length_intM_requires jessie_<num>) Object_t_4_7_alloc_table))))))))
              then
               (if (K_15:
                   ((gt_int_ (K_14:
                             (JC_50:
                             ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_4)))) (0)))
               then
+               (let jessie_<num> =
                (K_13:
-               (let jessie_15 =
-               (let jessie_2 = !count in
+               (let jessie_<num> = !count in
                begin
-                 (let jessie_14 = (count := ((add_int jessie_2) (1))) in
-                 void); jessie_2 end) in void)) else void)
-             else (let jessie_16 = (raise (Loop_exit_exc void)) in void));
+                 (let jessie_<num> = (count := ((add_int jessie_<num>) (1))) in
+                 void); jessie_<num> end)) in void) else void)
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_4 ->
-           (let jessie_21 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_16:
-           (let jessie_1 = !i_4 in
+           (let jessie_<num> = !i_4 in
            begin
-             (let jessie_20 = (i_4 := ((add_int jessie_1) (1))) in void);
-            jessie_1 end)) in void) end end done) with
-        Loop_exit_exc jessie_3 -> void end);
+             (let jessie_<num> = (i_4 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end);
       (let u =
       (K_38:
       (JC_52:
       (((alloc_struct_intM_requires !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
       begin
-        (let jessie_24 = (count := (0)) in void);
+        (let jessie_<num> = (count := (0)) in void);
        (let i_5 = ref (K_19: (0)) in
        try
         (loop_2:
@@ -2202,51 +2206,51 @@ let MullerTheory_m_safety =
                                num_of_pos((0), sub_int(i_5, (1)), t_4,
                                intM_intP_t_4_7)))))))) } ];
           try
-           (let jessie_37 =
+           (let jessie_<num> =
            begin
              (if (K_37:
                  ((lt_int_ !i_5) (K_36:
-                                 (let jessie_26 = t_4 in
+                                 (let jessie_<num> = t_4 in
                                  (JC_63:
                                  (assert
                                  { ge_int(offset_max(Object_t_4_7_alloc_table,
-                                          jessie_26),
+                                          jessie_<num>),
                                    (-1)) };
                                  (JC_62:
-                                 ((java_array_length_intM_requires jessie_26) Object_t_4_7_alloc_table))))))))
+                                 ((java_array_length_intM_requires jessie_<num>) Object_t_4_7_alloc_table))))))))
              then
               (if (K_34:
                   ((gt_int_ (K_33:
                             (JC_64:
                             ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5)))) (0)))
               then
+               (let jessie_<num> =
                (K_32:
-               (let jessie_35 =
-               (let jessie_28 =
+               (let jessie_<num> =
                (K_31:
                (JC_65:
                ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5))) in
-               (let jessie_29 = u in
-               (let jessie_30 =
+               (let jessie_<num> = u in
+               (let jessie_<num> =
                (K_30:
-               (let jessie_6 = !count in
+               (let jessie_<num> = !count in
                begin
-                 (let jessie_34 = (count := ((add_int jessie_6) (1))) in
-                 void); jessie_6 end)) in
-               (let jessie_31 = ((shift jessie_29) jessie_30) in
+                 (let jessie_<num> = (count := ((add_int jessie_<num>) (1))) in
+                 void); jessie_<num> end)) in
+               (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
                (JC_66:
-               (((((offset_upd_ !Object_MullerTheory_m_9_alloc_table) intM_intP_MullerTheory_m_9) jessie_29) jessie_30) jessie_28)))))) in
-               void)) else void)
-             else (let jessie_36 = (raise (Loop_exit_exc void)) in void));
+               (((((offset_upd_ !Object_MullerTheory_m_9_alloc_table) intM_intP_MullerTheory_m_9) jessie_<num>) jessie_<num>) jessie_<num>))))))) in
+               void) else void)
+             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
             (raise (Loop_continue_exc void)) end in void) with
-           Loop_continue_exc jessie_8 ->
-           (let jessie_41 =
+           Loop_continue_exc jessie_<num> ->
+           (let jessie_<num> =
            (K_35:
-           (let jessie_5 = !i_5 in
+           (let jessie_<num> = !i_5 in
            begin
-             (let jessie_40 = (i_5 := ((add_int jessie_5) (1))) in void);
-            jessie_5 end)) in void) end end done) with
-        Loop_exit_exc jessie_7 -> void end); (return := u); (raise Return)
+             (let jessie_<num> = (i_5 := ((add_int jessie_<num>) (1))) in void);
+            jessie_<num> end)) in void) end end done) with
+        Loop_exit_exc jessie_<num> -> void end); (return := u); (raise Return)
       end) end); absurd  end with Return -> !return end)) { true }
 
 let cons_MullerTheory_ensures_default =
@@ -2280,7 +2284,7 @@ why --project [...] why/MullerTheory.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/MullerTheory_po32.why">
-      <location file = "why/MullerTheory.why" line = "848" begin = "35" end = "173"/>
+      <location file = "why/MullerTheory.why" line = "849" begin = "35" end = "173"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/MullerTheory_po33.why">
@@ -7574,7 +7578,7 @@ why -simplify [...] why/MullerTheory.why
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (EQ count1 (num_of_pos 0 (- i_5_0 1) t_4 intM_intP_t_4_7))))))))))))))))))))))))))))))
 
-;; MullerTheory_m_safety_po_1, File "why/MullerTheory.why", line 848, characters 35-173
+;; MullerTheory_m_safety_po_1, File "why/MullerTheory.why", line 849, characters 35-173
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)

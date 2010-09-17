@@ -398,10 +398,10 @@ parameter abs_requires :
   __anonstruct_LABS_1_y_p_1:(__anonstruct_LABS_1, gen_float) memory ref ->
    __anonstruct_LABS_1_p_1_alloc_table:__anonstruct_LABS_1 alloc_table ->
     __anonstruct_LABS_1_u_p_1:(__anonstruct_LABS_1, gen_float) memory ->
-     { (JC_3:
-       ((JC_1:
+     { (JC_<somenum>:
+       ((JC_<somenum>:
         le_int(offset_min(__anonstruct_LABS_1_p_1_alloc_table, p), (0)))
-       and (JC_2:
+       and (JC_<somenum>:
            ge_int(offset_max(__anonstruct_LABS_1_p_1_alloc_table, p), (0)))))}
      unit reads __anonstruct_LABS_1_y_p_1 writes __anonstruct_LABS_1_y_p_1
      { true }
@@ -565,10 +565,10 @@ parameter safe_int8_of_integer_ :
 let abs_ensures_default =
  fun (p : __anonstruct_LABS_1 pointer) (__anonstruct_LABS_1_y_p_1 : (__anonstruct_LABS_1, gen_float) memory ref) (__anonstruct_LABS_1_p_1_alloc_table : __anonstruct_LABS_1 alloc_table) (__anonstruct_LABS_1_u_p_1 : (__anonstruct_LABS_1, gen_float) memory) ->
   { ((true = true)
-    and (JC_7:
-        ((JC_5:
+    and (JC_<somenum>:
+        ((JC_<somenum>:
          le_int(offset_min(__anonstruct_LABS_1_p_1_alloc_table, p), (0)))
-        and (JC_6:
+        and (JC_<somenum>:
             ge_int(offset_max(__anonstruct_LABS_1_p_1_alloc_table, p), (0)))))) }
   (init:
   try
@@ -576,8 +576,8 @@ let abs_ensures_default =
      (let z = ref (any_gen_float Single) in
      (C_4:
      begin
-       (let jessie_18 = (z := (C_3:
-                              (JC_35:
+       (let jessie_<somenum> = (z := (C_3:
+                              (JC_<somenum>:
                               ((((add_gen_float_safe Single) nearest_even) 
                                 (C_2:
                                 ((safe_acc_ __anonstruct_LABS_1_u_p_1) p))) 
@@ -585,8 +585,8 @@ let abs_ensures_default =
                                ((safe_acc_ !__anonstruct_LABS_1_y_p_1) p)))))) in
        void);
       try
-       (let jessie_31 = begin
-                          (let jessie_2 = (C_13:
+       (let jessie_<somenum> = begin
+                          (let jessie_<somenum> = (C_13:
                                           (safe_int32_of_integer_ (if 
                                                                   ((lt_gen_float 
                                                                     (((gen_float_of_real_safe Single) nearest_even) 0.0)) 
@@ -595,18 +595,18 @@ let abs_ensures_default =
                                                                   then (1)
                                                                   else (0)))) in
                           begin
-                            (if (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false)
+                            (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (0)) || false)
                             then
-                             (let jessie_24 = (C_8:
+                             (let jessie_<somenum> = (C_8:
                                               begin
-                                                (let jessie_23 = (let jessie_19 = 
+                                                (let jessie_<somenum> = (let jessie_<somenum> = 
                                                                  (C_6:
-                                                                 (JC_37:
+                                                                 (JC_<somenum>:
                                                                  (((neg_gen_float_safe Single) nearest_even) 
                                                                   (C_5:
                                                                   ((safe_acc_ __anonstruct_LABS_1_u_p_1) p))))) in
-                                                                 (let jessie_22 = p in
-                                                                 (((safe_upd_ __anonstruct_LABS_1_y_p_1) jessie_22) jessie_19))) in
+                                                                 (let jessie_<somenum> = p in
+                                                                 (((safe_upd_ __anonstruct_LABS_1_y_p_1) jessie_<somenum>) jessie_<somenum>))) in
                                                 void);
                                                (raise
                                                 (Goto_switch_0_break_exc
@@ -616,15 +616,15 @@ let abs_ensures_default =
                             else void);
                            (if (true || false)
                            then
-                            (let jessie_30 = begin
+                            (let jessie_<somenum> = begin
                                                void;
                                               (C_11:
                                               begin
-                                                (let jessie_29 = (let jessie_25 = 
+                                                (let jessie_<somenum> = (let jessie_<somenum> = 
                                                                  (C_9:
                                                                  ((safe_acc_ __anonstruct_LABS_1_u_p_1) p)) in
-                                                                 (let jessie_28 = p in
-                                                                 (((safe_upd_ __anonstruct_LABS_1_y_p_1) jessie_28) jessie_25))) in
+                                                                 (let jessie_<somenum> = p in
+                                                                 (((safe_upd_ __anonstruct_LABS_1_y_p_1) jessie_<somenum>) jessie_<somenum>))) in
                                                 void);
                                                (raise
                                                 (Goto_switch_0_break_exc
@@ -638,10 +638,10 @@ let abs_ensures_default =
                         end in
        void)
        with
-       Goto_switch_0_break_exc jessie_1 ->
+       Goto_switch_0_break_exc jessie_<somenum> ->
        (switch_0_break: void) end;
       (assert
-      { (JC_38:
+      { (JC_<somenum>:
         ge_real(float_value(select(__anonstruct_LABS_1_y_p_1, p)), 0.0)) };
       void);
       void;
@@ -652,13 +652,13 @@ let abs_ensures_default =
    with
    Return ->
    void end)
-  { (JC_9: true) }
+  { (JC_<somenum>: true) }
 
 let abs_safety =
  fun (p : __anonstruct_LABS_1 pointer) (__anonstruct_LABS_1_y_p_1 : (__anonstruct_LABS_1, gen_float) memory ref) (__anonstruct_LABS_1_p_1_alloc_table : __anonstruct_LABS_1 alloc_table) (__anonstruct_LABS_1_u_p_1 : (__anonstruct_LABS_1, gen_float) memory) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(__anonstruct_LABS_1_p_1_alloc_table, p), (0)))
-    and (JC_6:
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(__anonstruct_LABS_1_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>:
         ge_int(offset_max(__anonstruct_LABS_1_p_1_alloc_table, p), (0))))) }
   (init:
   try
@@ -666,43 +666,43 @@ let abs_safety =
      (let z = ref (any_gen_float Single) in
      (C_4:
      begin
-       (let jessie_4 = (z := (C_3:
-                             (JC_18:
+       (let jessie_<somenum> = (z := (C_3:
+                             (JC_<somenum>:
                              ((((add_gen_float Single) nearest_even) 
                                (C_2:
-                               (JC_16:
+                               (JC_<somenum>:
                                (((acc_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_u_p_1) p)))) 
                               (C_1:
-                              (JC_17:
+                              (JC_<somenum>:
                               (((acc_ __anonstruct_LABS_1_p_1_alloc_table) !__anonstruct_LABS_1_y_p_1) p))))))) in
        void);
       try
-       (let jessie_17 = begin
-                          (let jessie_2 = (C_13:
-                                          (JC_24:
+       (let jessie_<somenum> = begin
+                          (let jessie_<somenum> = (C_13:
+                                          (JC_<somenum>:
                                           (int32_of_integer_ (if ((lt_gen_float 
-                                                                   (JC_22:
+                                                                   (JC_<somenum>:
                                                                    (((gen_float_of_real Single) nearest_even) 0.0))) 
                                                                   (C_12:
-                                                                  (JC_23:
+                                                                  (JC_<somenum>:
                                                                   (((acc_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_u_p_1) p))))
                                                              then (1)
                                                              else (0))))) in
                           begin
-                            (if (((eq_int_ (integer_of_int32 jessie_2)) (0)) || false)
+                            (if (((eq_int_ (integer_of_int32 jessie_<somenum>)) (0)) || false)
                             then
-                             (let jessie_10 = (C_8:
+                             (let jessie_<somenum> = (C_8:
                                               begin
-                                                (let jessie_9 = (let jessie_5 = 
+                                                (let jessie_<somenum> = (let jessie_<somenum> = 
                                                                 (C_6:
-                                                                (JC_28:
+                                                                (JC_<somenum>:
                                                                 (((neg_gen_float Single) nearest_even) 
                                                                  (C_5:
-                                                                 (JC_27:
+                                                                 (JC_<somenum>:
                                                                  (((acc_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_u_p_1) p)))))) in
-                                                                (let jessie_8 = p in
-                                                                (JC_29:
-                                                                ((((upd_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_y_p_1) jessie_8) jessie_5)))) in
+                                                                (let jessie_<somenum> = p in
+                                                                (JC_<somenum>:
+                                                                ((((upd_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_y_p_1) jessie_<somenum>) jessie_<somenum>)))) in
                                                 void);
                                                (raise
                                                 (Goto_switch_0_break_exc
@@ -712,17 +712,17 @@ let abs_safety =
                             else void);
                            (if (true || false)
                            then
-                            (let jessie_16 = begin
+                            (let jessie_<somenum> = begin
                                                void;
                                               (C_11:
                                               begin
-                                                (let jessie_15 = (let jessie_11 = 
+                                                (let jessie_<somenum> = (let jessie_<somenum> = 
                                                                  (C_9:
-                                                                 (JC_31:
+                                                                 (JC_<somenum>:
                                                                  (((acc_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_u_p_1) p))) in
-                                                                 (let jessie_14 = p in
-                                                                 (JC_32:
-                                                                 ((((upd_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_y_p_1) jessie_14) jessie_11)))) in
+                                                                 (let jessie_<somenum> = p in
+                                                                 (JC_<somenum>:
+                                                                 ((((upd_ __anonstruct_LABS_1_p_1_alloc_table) __anonstruct_LABS_1_y_p_1) jessie_<somenum>) jessie_<somenum>)))) in
                                                 void);
                                                (raise
                                                 (Goto_switch_0_break_exc
@@ -736,10 +736,10 @@ let abs_safety =
                         end in
        void)
        with
-       Goto_switch_0_break_exc jessie_1 ->
+       Goto_switch_0_break_exc jessie_<somenum> ->
        (switch_0_break: void) end;
       [ { } unit reads __anonstruct_LABS_1_y_p_1
-        { (JC_33:
+        { (JC_<somenum>:
           ge_real(float_value(select(__anonstruct_LABS_1_y_p_1, p)), 0.0)) } ];
       void;
       (raise Return)

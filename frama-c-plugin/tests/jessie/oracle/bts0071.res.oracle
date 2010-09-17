@@ -319,49 +319,42 @@ parameter safe_int8_of_integer_ :
 
 let myfun_ensures_default =
  fun (p : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_p = ref p in
   (init:
   try
+   (C_1:
+   (Mylabel:
+   (C_2:
    begin
-     (C_1:
-     begin
-       (let jessie_6 = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-      (Mylabel:
-      begin
-        void;
-       (C_2:
-       begin
-         (let jessie_8 = (mutable_p := (safe_int32_of_integer_ (2))) in void);
-        (assert
-        { (JC_10:
-          eq_int(integer_of_int32(mutable_p@Mylabel),
-          sub_int(integer_of_int32(mutable_p), (1)))) }; void); void;
-        (raise Return) end) end) end); (raise Return) end with Return ->
-   void end)) { (JC_5: true) }
+     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    void;
+    (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
+    (assert
+    { (JC_<somenum>:
+      eq_int(integer_of_int32(mutable_p@Mylabel),
+      sub_int(integer_of_int32(mutable_p), (1)))) }; void); void;
+    (raise Return); (raise Return) end))) with Return -> void end))
+  { (JC_<somenum>: true) }
 
 let myfun_safety =
  fun (p : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_p = ref p in
   (init:
   try
+   (C_1:
+   (Mylabel:
+   (C_2:
    begin
-     (C_1:
-     begin
-       (let jessie_2 = (mutable_p := (safe_int32_of_integer_ (1))) in void);
-      (Mylabel:
-      begin
-        void;
-       (C_2:
-       begin
-         (let jessie_4 = (mutable_p := (safe_int32_of_integer_ (2))) in void);
-        [ { } unit reads mutable_p
-          { (JC_9:
-            eq_int(integer_of_int32(mutable_p@Mylabel),
-            sub_int(integer_of_int32(mutable_p), (1)))) } ]; void;
-        (raise Return) end) end) end); (raise Return) end with Return ->
-   void end)) { true }
+     (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (1))) in void);
+    void;
+    (let jessie_<somenum> = (mutable_p := (safe_int32_of_integer_ (2))) in void);
+    [ { } unit reads mutable_p
+      { (JC_<somenum>:
+        eq_int(integer_of_int32(mutable_p@Mylabel),
+        sub_int(integer_of_int32(mutable_p), (1)))) } ]; void;
+    (raise Return); (raise Return) end))) with Return -> void end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0071.jessie --quiet -f bts0071.makefile project

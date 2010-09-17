@@ -718,6 +718,9 @@ why3: why/Purse_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/Purse_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include Purse.depend
 
 depend: coq/Purse_why.v
@@ -3221,13 +3224,14 @@ let Purse_credit_ensures_default =
   (init:
   try
    begin
-     (let jessie_180 =
+     (let jessie_<num> =
      (K_6:
-     (let jessie_176 =
+     (let jessie_<num> =
      ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0_0) in
-     (let jessie_179 = this_6 in
-     begin   (((safe_upd_ Purse_balance) jessie_179) jessie_176); jessie_176
-     end))) in void); (raise Return) end with Return -> void end)
+     begin
+       (let jessie_<num> = this_6 in
+       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
+     void); (raise Return) end with Return -> void end)
   { (JC_175:
     ((JC_173:
      eq_int(select(Purse_balance, this_6),
@@ -3245,13 +3249,14 @@ let Purse_credit_safety =
   (init:
   try
    begin
-     (let jessie_174 =
+     (let jessie_<num> =
      (K_6:
-     (let jessie_170 =
+     (let jessie_<num> =
      ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0_0) in
-     (let jessie_173 = this_6 in
-     begin   (((safe_upd_ Purse_balance) jessie_173) jessie_170); jessie_170
-     end))) in void); (raise Return) end with Return -> void end)
+     begin
+       (let jessie_<num> = this_6 in
+       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
+     void); (raise Return) end with Return -> void end)
   { (JC_179: balance_non_negative(this_6, Purse_balance)) }
 
 let Purse_getBalance_ensures_default =
@@ -3289,21 +3294,19 @@ let Purse_withdraw_ensures_default =
    begin
      (if (K_16: ((ge_int_ (K_15: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
-      (K_14:
-      (let jessie_197 =
-      (let jessie_193 =
+      (let jessie_<num> =
       (K_13: ((sub_int (K_12: ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-      (let jessie_196 = this_5 in
-      (((safe_upd_ Purse_balance) jessie_196) jessie_193))) in void))
+      (let jessie_<num> = this_5 in
+      (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)))
      else
-      (let jessie_202 =
+      (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
       (JC_211:
       (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
       (let tt =
-      (let jessie_201 = this in
-      (JC_212: (cons_NoCreditException jessie_201))) in this)) in
+      (let jessie_<num> = this in
+      (JC_212: (cons_NoCreditException jessie_<num>))) in this)) in
       begin
         (assert
         { (JC_213:
@@ -3331,21 +3334,19 @@ let Purse_withdraw_exsures_amount_too_large =
    begin
      (if (K_16: ((ge_int_ (K_15: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
-      (K_14:
-      (let jessie_208 =
-      (let jessie_204 =
+      (let jessie_<num> =
       (K_13: ((sub_int (K_12: ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-      (let jessie_207 = this_5 in
-      (((safe_upd_ Purse_balance) jessie_207) jessie_204))) in void))
+      (let jessie_<num> = this_5 in
+      (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)))
      else
-      (let jessie_213 =
+      (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
       (JC_214:
       (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
       (let tt =
-      (let jessie_212 = this in
-      (JC_215: (cons_NoCreditException jessie_212))) in this)) in
+      (let jessie_<num> = this in
+      (JC_215: (cons_NoCreditException jessie_<num>))) in this)) in
       begin
         [ { } unit reads Object_alloc_table
           { (JC_216:
@@ -3373,25 +3374,23 @@ let Purse_withdraw_safety =
    begin
      (if (K_16: ((ge_int_ (K_15: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
-      (K_14:
-      (let jessie_186 =
-      (let jessie_182 =
+      (let jessie_<num> =
       (K_13: ((sub_int (K_12: ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-      (let jessie_185 = this_5 in
-      (((safe_upd_ Purse_balance) jessie_185) jessie_182))) in void))
+      (let jessie_<num> = this_5 in
+      (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)))
      else
-      (let jessie_191 =
+      (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
-      (let jessie_188 =
+      (let jessie_<num> =
       (JC_207:
       (((alloc_struct_NoCreditException_requires (1)) Object_alloc_table) Object_tag_table)) in
       (JC_208:
-      (assert { ge_int(offset_max(Object_alloc_table, jessie_188), (0)) };
-      jessie_188))) in
+      (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
+      jessie_<num>))) in
       (let tt =
-      (let jessie_190 = this in
-      (JC_209: (cons_NoCreditException_requires jessie_190))) in this)) in
+      (let jessie_<num> = this in
+      (JC_209: (cons_NoCreditException_requires jessie_<num>))) in this)) in
       begin
         [ { } unit reads Object_alloc_table
           { (JC_210:
@@ -3475,17 +3474,17 @@ let cons_Purse_ensures_default =
   (init:
   try
    begin
-     (let jessie_168 =
+     (let jessie_<num> =
      begin
-       (let jessie_162 =
-       (let jessie_158 = (0) in
-       (let jessie_161 = this_7 in
-       (((safe_upd_ Purse_balance) jessie_161) jessie_158))) in void);
+       (let jessie_<num> = (0) in
+       (let jessie_<num> = this_7 in
+       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)));
       (K_3:
-      (let jessie_164 = (0) in
-      (let jessie_167 = this_7 in
-      begin   (((safe_upd_ Purse_balance) jessie_167) jessie_164); jessie_164
-      end))) end in void); (raise Return) end with Return -> void end)
+      (let jessie_<num> = (0) in
+      begin
+        (let jessie_<num> = this_7 in
+        (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end))
+     end in void); (raise Return) end with Return -> void end)
   { (JC_161:
     ((JC_159: eq_int(select(Purse_balance, this_7), (0)))
     and (JC_160:
@@ -3498,17 +3497,17 @@ let cons_Purse_safety =
   (init:
   try
    begin
-     (let jessie_156 =
+     (let jessie_<num> =
      begin
-       (let jessie_150 =
-       (let jessie_146 = (0) in
-       (let jessie_149 = this_7 in
-       (((safe_upd_ Purse_balance) jessie_149) jessie_146))) in void);
+       (let jessie_<num> = (0) in
+       (let jessie_<num> = this_7 in
+       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)));
       (K_3:
-      (let jessie_152 = (0) in
-      (let jessie_155 = this_7 in
-      begin   (((safe_upd_ Purse_balance) jessie_155) jessie_152); jessie_152
-      end))) end in void); (raise Return) end with Return -> void end)
+      (let jessie_<num> = (0) in
+      begin
+        (let jessie_<num> = this_7 in
+        (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end))
+     end in void); (raise Return) end with Return -> void end)
   { (JC_165: balance_non_negative(this_7, Purse_balance)) }
 
 let cons_Throwable_String_Throwable_ensures_default =
@@ -3519,20 +3518,18 @@ let cons_Throwable_String_Throwable_ensures_default =
   (init:
   try
    begin
-     (let jessie_108 =
+     (let jessie_<num> =
      begin
-       (let jessie_96 =
-       (let jessie_92 = null in
-       (let jessie_95 = this_19 in
-       (((safe_upd_ Throwable_backtrace) jessie_95) jessie_92))) in void);
-      (let jessie_102 =
-      (let jessie_98 = null in
-      (let jessie_101 = this_19 in
-      (((safe_upd_ Throwable_detailMessage) jessie_101) jessie_98))) in void);
-      (let jessie_104 = null in
-      (let jessie_107 = this_19 in
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_19 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_19 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
       begin
-        (((safe_upd_ Throwable_cause) jessie_107) jessie_104); jessie_104 end))
+        (let jessie_<num> = this_19 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
   { (JC_31: true) }
 
@@ -3544,21 +3541,19 @@ let cons_Throwable_String_Throwable_safety =
   (init:
   try
    begin
-     (let jessie_90 =
+     (let jessie_<num> =
      begin
-       (let jessie_78 =
-       (let jessie_74 = null in
-       (let jessie_77 = this_19 in
-       (((safe_upd_ Throwable_backtrace) jessie_77) jessie_74))) in void);
-      (let jessie_84 =
-      (let jessie_80 = null in
-      (let jessie_83 = this_19 in
-      (((safe_upd_ Throwable_detailMessage) jessie_83) jessie_80))) in void);
-      (let jessie_86 = null in
-      (let jessie_89 = this_19 in
-      begin   (((safe_upd_ Throwable_cause) jessie_89) jessie_86); jessie_86
-      end)) end in void); (raise Return) end with Return -> void end)
-  { true }
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_19 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_19 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      begin
+        (let jessie_<num> = this_19 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
+     end in void); (raise Return) end with Return -> void end) { true }
 
 let cons_Throwable_String_ensures_default =
  fun (this_18 : Object pointer) (message : Object pointer) ->
@@ -3567,20 +3562,19 @@ let cons_Throwable_String_ensures_default =
   (init:
   try
    begin
-     (let jessie_72 =
+     (let jessie_<num> =
      begin
-       (let jessie_60 =
-       (let jessie_56 = null in
-       (let jessie_59 = this_18 in
-       (((safe_upd_ Throwable_backtrace) jessie_59) jessie_56))) in void);
-      (let jessie_66 =
-      (let jessie_62 = null in
-      (let jessie_65 = this_18 in
-      (((safe_upd_ Throwable_detailMessage) jessie_65) jessie_62))) in void);
-      (let jessie_68 = null in
-      (let jessie_71 = this_18 in
-      begin   (((safe_upd_ Throwable_cause) jessie_71) jessie_68); jessie_68
-      end)) end in void); (raise Return) end with Return -> void end)
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_18 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_18 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      begin
+        (let jessie_<num> = this_18 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
+     end in void); (raise Return) end with Return -> void end)
   { (JC_23: true) }
 
 let cons_Throwable_String_safety =
@@ -3590,21 +3584,19 @@ let cons_Throwable_String_safety =
   (init:
   try
    begin
-     (let jessie_54 =
+     (let jessie_<num> =
      begin
-       (let jessie_42 =
-       (let jessie_38 = null in
-       (let jessie_41 = this_18 in
-       (((safe_upd_ Throwable_backtrace) jessie_41) jessie_38))) in void);
-      (let jessie_48 =
-      (let jessie_44 = null in
-      (let jessie_47 = this_18 in
-      (((safe_upd_ Throwable_detailMessage) jessie_47) jessie_44))) in void);
-      (let jessie_50 = null in
-      (let jessie_53 = this_18 in
-      begin   (((safe_upd_ Throwable_cause) jessie_53) jessie_50); jessie_50
-      end)) end in void); (raise Return) end with Return -> void end)
-  { true }
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_18 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_18 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      begin
+        (let jessie_<num> = this_18 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
+     end in void); (raise Return) end with Return -> void end) { true }
 
 let cons_Throwable_Throwable_ensures_default =
  fun (this_20 : Object pointer) (cause_0 : Object pointer) ->
@@ -3613,22 +3605,19 @@ let cons_Throwable_Throwable_ensures_default =
   (init:
   try
    begin
-     (let jessie_144 =
+     (let jessie_<num> =
      begin
-       (let jessie_132 =
-       (let jessie_128 = null in
-       (let jessie_131 = this_20 in
-       (((safe_upd_ Throwable_backtrace) jessie_131) jessie_128))) in void);
-      (let jessie_138 =
-      (let jessie_134 = null in
-      (let jessie_137 = this_20 in
-      (((safe_upd_ Throwable_detailMessage) jessie_137) jessie_134))) in
-      void);
-      (let jessie_140 = null in
-      (let jessie_143 = this_20 in
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_20 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_20 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
       begin
-        (((safe_upd_ Throwable_cause) jessie_143) jessie_140); jessie_140 end))
-     end in void); (raise Return) end with Return -> void end)
+        (let jessie_<num> = this_20 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end)
   { (JC_39: true) }
 
 let cons_Throwable_Throwable_safety =
@@ -3638,22 +3627,20 @@ let cons_Throwable_Throwable_safety =
   (init:
   try
    begin
-     (let jessie_126 =
+     (let jessie_<num> =
      begin
-       (let jessie_114 =
-       (let jessie_110 = null in
-       (let jessie_113 = this_20 in
-       (((safe_upd_ Throwable_backtrace) jessie_113) jessie_110))) in void);
-      (let jessie_120 =
-      (let jessie_116 = null in
-      (let jessie_119 = this_20 in
-      (((safe_upd_ Throwable_detailMessage) jessie_119) jessie_116))) in
-      void);
-      (let jessie_122 = null in
-      (let jessie_125 = this_20 in
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_20 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_20 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
       begin
-        (((safe_upd_ Throwable_cause) jessie_125) jessie_122); jessie_122 end))
-     end in void); (raise Return) end with Return -> void end) { true }
+        (let jessie_<num> = this_20 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num>
+      end) end in void); (raise Return) end with Return -> void end) 
+  { true }
 
 let cons_Throwable_ensures_default =
  fun (this_17 : Object pointer) ->
@@ -3661,20 +3648,19 @@ let cons_Throwable_ensures_default =
   (init:
   try
    begin
-     (let jessie_36 =
+     (let jessie_<num> =
      begin
-       (let jessie_24 =
-       (let jessie_20 = null in
-       (let jessie_23 = this_17 in
-       (((safe_upd_ Throwable_backtrace) jessie_23) jessie_20))) in void);
-      (let jessie_30 =
-      (let jessie_26 = null in
-      (let jessie_29 = this_17 in
-      (((safe_upd_ Throwable_detailMessage) jessie_29) jessie_26))) in void);
-      (let jessie_32 = null in
-      (let jessie_35 = this_17 in
-      begin   (((safe_upd_ Throwable_cause) jessie_35) jessie_32); jessie_32
-      end)) end in void); (raise Return) end with Return -> void end)
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_17 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_17 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      begin
+        (let jessie_<num> = this_17 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
+     end in void); (raise Return) end with Return -> void end)
   { (JC_15: true) }
 
 let cons_Throwable_safety =
@@ -3683,21 +3669,19 @@ let cons_Throwable_safety =
   (init:
   try
    begin
-     (let jessie_18 =
+     (let jessie_<num> =
      begin
-       (let jessie_6 =
-       (let jessie_2 = null in
-       (let jessie_5 = this_17 in
-       (((safe_upd_ Throwable_backtrace) jessie_5) jessie_2))) in void);
-      (let jessie_12 =
-      (let jessie_8 = null in
-      (let jessie_11 = this_17 in
-      (((safe_upd_ Throwable_detailMessage) jessie_11) jessie_8))) in void);
-      (let jessie_14 = null in
-      (let jessie_17 = this_17 in
-      begin   (((safe_upd_ Throwable_cause) jessie_17) jessie_14); jessie_14
-      end)) end in void); (raise Return) end with Return -> void end)
-  { true }
+       (let jessie_<num> = null in
+       (let jessie_<num> = this_17 in
+       (((safe_upd_ Throwable_backtrace) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      (let jessie_<num> = this_17 in
+      (((safe_upd_ Throwable_detailMessage) jessie_<num>) jessie_<num>)));
+      (let jessie_<num> = null in
+      begin
+        (let jessie_<num> = this_17 in
+        (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
+     end in void); (raise Return) end with Return -> void end) { true }
 
 
 ========== make project execution ==========
@@ -3717,7 +3701,7 @@ why --project [...] why/Purse.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po14.why">
-      <location file = "why/Purse.why" line = "1093" begin = "16" end = "71"/>
+      <location file = "why/Purse.why" line = "1089" begin = "16" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -6515,7 +6499,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1093, characters 16-71
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1089, characters 16-71
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)

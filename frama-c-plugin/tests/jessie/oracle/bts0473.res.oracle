@@ -320,42 +320,40 @@ parameter safe_int8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (let x_0 = ref (any_int32 void) in
      (C_1:
+     (C_5:
      begin
-       (let jessie_6 = (x_0 := (safe_int32_of_integer_ (2))) in void);
-      (assert { (JC_12: eq_int(integer_of_int32(x_0), (2))) }; void); void;
-      (C_5:
-      begin
-        (let jessie_8 =
-        (x_0 := (C_4:
-                (safe_int32_of_integer_ (C_3: (JC_13: ((div_int (1)) (0))))))) in
-        void); (raise Return) end) end)); (raise Return) end with Return ->
-   void end) { (JC_5: true) }
+       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
+      (assert { (JC_<somenum>: eq_int(integer_of_int32(x_0), (2))) }; void); void;
+      (let jessie_<somenum> =
+      (x_0 := (C_4:
+              (safe_int32_of_integer_ (C_3: (JC_<somenum>: ((div_int (1)) (0))))))) in
+      void); (raise Return) end))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (let x_0 = ref (any_int32 void) in
      (C_1:
+     (C_5:
      begin
-       (let jessie_2 = (x_0 := (safe_int32_of_integer_ (2))) in void);
-      [ { } unit reads x_0 { (JC_9: eq_int(integer_of_int32(x_0), (2))) } ];
+       (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (2))) in void);
+      [ { } unit reads x_0 { (JC_<somenum>: eq_int(integer_of_int32(x_0), (2))) } ];
       void;
-      (C_5:
-      begin
-        (let jessie_4 =
-        (x_0 := (C_4:
-                (JC_11:
-                (int32_of_integer_ (C_3: (JC_10: ((div_int_ (1)) (0)))))))) in
-        void); (raise Return) end) end)); (raise Return) end with Return ->
+      (let jessie_<somenum> =
+      (x_0 := (C_4:
+              (JC_<somenum>:
+              (int32_of_integer_ (C_3: (JC_<somenum>: ((div_int_ (1)) (0)))))))) in
+      void); (raise Return) end))); (raise Return) end with Return ->
    void end) { true }
 
 

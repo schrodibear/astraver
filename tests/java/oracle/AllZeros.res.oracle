@@ -438,6 +438,9 @@ why3: why/AllZeros_why3.why
 why/%_why3.why:  WHYOPT=-why3
 why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+why3ide: why/AllZeros_why3.why
+	@echo 'why3ide [...] $<' && why3ide $<
+
 -include AllZeros.depend
 
 depend: coq/AllZeros_why.v
@@ -1766,30 +1769,30 @@ let AllZeros_all_zeros_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_22 =
+         (let jessie_<num> =
          begin
            (if (K_15:
                ((lt_int_ (integer_of_int32 !k)) (K_14:
-                                                (let jessie_19 = t_0 in
+                                                (let jessie_<num> = t_0 in
                                                 (JC_70:
-                                                (java_array_length_intM jessie_19))))))
+                                                (java_array_length_intM jessie_<num>))))))
            then
             (if (K_12:
                 ((neq_int_ (integer_of_int32 (K_11:
                                              ((safe_acc_ !intM_intP) 
                                               ((shift t_0) (integer_of_int32 !k)))))) (0)))
             then begin   (return := false); (raise Return) end else void)
-           else (let jessie_21 = (raise (Loop_exit_exc void)) in void));
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_3 ->
-         (let jessie_26 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_13:
-         (let jessie_1 = !k in
+         (let jessie_<num> = !k in
          begin
-           (let jessie_25 =
-           (k := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_1)) (1)))) in
-           void); jessie_1 end)) in void) end end done) with
-      Loop_exit_exc jessie_2 -> void end); (return := true); (raise Return);
+           (let jessie_<num> =
+           (k := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
+           void); jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (return := true); (raise Return);
     absurd  end with Return -> !return end))
   { (JC_47:
     ((result = true)
@@ -1829,18 +1832,18 @@ let AllZeros_all_zeros_safety =
                                                shift(t_0, i_0))),
                        (0)))))))) } ];
         try
-         (let jessie_12 =
+         (let jessie_<num> =
          begin
            (if (K_15:
                ((lt_int_ (integer_of_int32 !k)) (K_14:
-                                                (let jessie_9 = t_0 in
+                                                (let jessie_<num> = t_0 in
                                                 (JC_59:
                                                 (assert
                                                 { ge_int(offset_max(Object_alloc_table,
-                                                         jessie_9),
+                                                         jessie_<num>),
                                                   (-1)) };
                                                 (JC_58:
-                                                (java_array_length_intM_requires jessie_9))))))))
+                                                (java_array_length_intM_requires jessie_<num>))))))))
            then
             (if (K_12:
                 ((neq_int_ (integer_of_int32 (K_11:
@@ -1848,18 +1851,18 @@ let AllZeros_all_zeros_safety =
                                              ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                               (integer_of_int32 !k)))))) (0)))
             then begin   (return := false); (raise Return) end else void)
-           else (let jessie_11 = (raise (Loop_exit_exc void)) in void));
+           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
           (raise (Loop_continue_exc void)) end in void) with
-         Loop_continue_exc jessie_3 ->
-         (let jessie_16 =
+         Loop_continue_exc jessie_<num> ->
+         (let jessie_<num> =
          (K_13:
-         (let jessie_1 = !k in
+         (let jessie_<num> = !k in
          begin
-           (let jessie_15 =
+           (let jessie_<num> =
            (k := (JC_61:
-                 (int32_of_integer_ ((add_int (integer_of_int32 jessie_1)) (1))))) in
-           void); jessie_1 end)) in void) end end done) with
-      Loop_exit_exc jessie_2 -> void end); (return := true); (raise Return);
+                 (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1))))) in
+           void); jessie_<num> end)) in void) end end done) with
+      Loop_exit_exc jessie_<num> -> void end); (return := true); (raise Return);
     absurd  end with Return -> !return end)) { true }
 
 let AllZeros_should_not_be_proved_ensures_default =
@@ -1870,9 +1873,9 @@ let AllZeros_should_not_be_proved_ensures_default =
   try
    begin
      (return := (safe_int32_of_integer_ (K_1:
-                                        (let jessie_7 = t in
+                                        (let jessie_<num> = t in
                                         (JC_42:
-                                        (java_array_length_intM jessie_7))))));
+                                        (java_array_length_intM jessie_<num>))))));
     (raise Return); absurd  end with Return -> !return end))
   { (JC_35: true) }
 
@@ -1885,14 +1888,14 @@ let AllZeros_should_not_be_proved_safety =
    begin
      (return := (JC_41:
                 (int32_of_integer_ (K_1:
-                                   (let jessie_5 = t in
+                                   (let jessie_<num> = t in
                                    (JC_40:
                                    (assert
                                    { ge_int(offset_max(Object_alloc_table,
-                                            jessie_5),
+                                            jessie_<num>),
                                      (-1)) };
                                    (JC_39:
-                                   (java_array_length_intM_requires jessie_5)))))))));
+                                   (java_array_length_intM_requires jessie_<num>)))))))));
     (raise Return); absurd  end with Return -> !return end)) { true }
 
 let cons_AllZeros_ensures_default =

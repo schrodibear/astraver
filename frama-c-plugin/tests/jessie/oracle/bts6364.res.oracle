@@ -406,7 +406,7 @@ parameter f : p1:int_P pointer -> p2:int_P pointer -> { } int8 { true }
 
 parameter f_requires :
  p1:int_P pointer ->
-  p2:int_P pointer -> { (JC_1: (not same_block(p1, p2)))} int8 { true }
+  p2:int_P pointer -> { (JC_<somenum>: (not same_block(p1, p2)))} int8 { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -426,35 +426,33 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (p1 : int_P pointer) (p2 : int_P pointer) ->
-  { (JC_3: (not same_block(p1, p2))) }
+  { (JC_<somenum>: (not same_block(p1, p2))) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      (let __retres = ref (any_int8 void) in
+     (C_2:
      begin
-       (assert { (JC_10: (p1 <> p2)) }; void); void;
-      (C_2:
-      begin
-        (let jessie_5 = (__retres := (safe_int8_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { (JC_5: true) }
+       (assert { (JC_<somenum>: (p1 <> p2)) }; void); void;
+      (let jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (p1 : int_P pointer) (p2 : int_P pointer) ->
-  { (JC_3: (not same_block(p1, p2))) }
+  { (JC_<somenum>: (not same_block(p1, p2))) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      (let __retres = ref (any_int8 void) in
+     (C_2:
      begin
-       [ { } unit { (JC_9: (p1 <> p2)) } ]; void;
-      (C_2:
-      begin
-        (let jessie_2 = (__retres := (safe_int8_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { true }
+       [ { } unit { (JC_<somenum>: (p1 <> p2)) } ]; void;
+      (let jessie_<somenum> = (__retres := (safe_int8_of_integer_ (0))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts6364.jessie --quiet -f bts6364.makefile project

@@ -294,10 +294,10 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter func1 :
- x_0:single -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (1))) }
+ x_0:single -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 parameter func1_requires :
- x_0:single -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (1))) }
+ x_0:single -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -317,38 +317,36 @@ parameter safe_int8_of_integer_ :
 
 let func1_ensures_default =
  fun (x_0 : single) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
+     (C_2:
      begin
        (if ((lt_double (C_1: ((single_to_double nearest_even) x_0))) 
             ((double_of_real_safe nearest_even) 1E-6)) then void else void);
-      (C_2:
-      begin
-        (let jessie_5 = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { (JC_5: eq_int(integer_of_int32(result), (1))) }
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 let func1_safety =
  fun (x_0 : single) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
+     (C_2:
      begin
-       (if ((lt_double (C_1: (JC_9: ((single_to_double nearest_even) x_0)))) 
-            (JC_10: ((double_of_real nearest_even) 1E-6))) then void
+       (if ((lt_double (C_1: (JC_<somenum>: ((single_to_double nearest_even) x_0)))) 
+            (JC_<somenum>: ((double_of_real nearest_even) 1E-6))) then void
        else void);
-      (C_2:
-      begin
-        (let jessie_2 = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres); (raise Return) end) end); absurd  end with
-   Return -> !return end)) { true }
+      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0367.jessie --quiet -f bts0367.makefile project

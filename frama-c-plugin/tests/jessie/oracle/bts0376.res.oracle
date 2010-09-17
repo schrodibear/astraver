@@ -353,16 +353,16 @@ parameter alloc_struct_void_P_requires :
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
 parameter always_one :
- a:uint64 -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (1))) }
+ a:uint64 -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 parameter always_one2 :
- a_0:uint32 -> { } int32 { (JC_14: eq_int(integer_of_int32(result), (1))) }
+ a_0:uint32 -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 parameter always_one2_requires :
- a_0:uint32 -> { } int32 { (JC_14: eq_int(integer_of_int32(result), (1))) }
+ a_0:uint32 -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 parameter always_one_requires :
- a:uint64 -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (1))) }
+ a:uint64 -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
@@ -406,107 +406,103 @@ parameter uint64_of_integer_ :
 
 let always_one2_ensures_default =
  fun (a_0 : uint32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_29 =
+      (let jessie_<somenum> =
+      (C_5:
       begin
         (if ((le_int_ (integer_of_uint32 a_0)) (4294967295))
         then
-         (let jessie_26 =
+         (let jessie_<somenum> =
          (C_4:
          begin
-           (let jessie_25 = (__retres_0 := (safe_int32_of_integer_ (1))) in
+           (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_5:
-       begin
-         (let jessie_28 = (__retres_0 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_2 ->
+       (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end))
-  { (JC_13: eq_int(integer_of_int32(result), (1))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 let always_one2_safety =
  fun (a_0 : uint32) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_22 =
+      (let jessie_<somenum> =
+      (C_5:
       begin
         (if ((le_int_ (integer_of_uint32 a_0)) (4294967295))
         then
-         (let jessie_19 =
+         (let jessie_<somenum> =
          (C_4:
          begin
-           (let jessie_18 = (__retres_0 := (safe_int32_of_integer_ (1))) in
+           (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_5:
-       begin
-         (let jessie_21 = (__retres_0 := (safe_int32_of_integer_ (0))) in
-         void); (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_2 ->
+       (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 
 let always_one_ensures_default =
  fun (a : uint64) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_15 =
+      (let jessie_<somenum> =
+      (C_2:
       begin
         (if ((le_int_ (integer_of_uint64 a)) (18446744073709551615))
         then
-         (let jessie_12 =
+         (let jessie_<somenum> =
          (C_1:
          begin
-           (let jessie_11 = (__retres := (safe_int32_of_integer_ (1))) in
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_2:
-       begin
-         (let jessie_14 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
-  { (JC_5: eq_int(integer_of_int32(result), (1))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
 
 let always_one_safety =
  fun (a : uint64) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_8 =
+      (let jessie_<somenum> =
+      (C_2:
       begin
         (if ((le_int_ (integer_of_uint64 a)) (18446744073709551615))
         then
-         (let jessie_5 =
+         (let jessie_<somenum> =
          (C_1:
          begin
-           (let jessie_4 = (__retres := (safe_int32_of_integer_ (1))) in
+           (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
            void); (raise (Return_label_exc void)) end) in void) else void);
-       (C_2:
-       begin
-         (let jessie_7 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (raise (Return_label_exc void)) end) end in void) with
-      Return_label_exc jessie_1 ->
+       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (raise (Return_label_exc void)) end) in void) with
+      Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { true }
 

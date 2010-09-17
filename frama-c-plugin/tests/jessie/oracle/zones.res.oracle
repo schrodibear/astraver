@@ -554,63 +554,61 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
      (C_1:
+     (C_8:
      begin
-       (let jessie_7 = (a := b) in void);
-      (C_8:
-      begin
-        (let jessie_9 =
-        (__retres := (C_7:
-                     (safe_int32_of_integer_ (C_6:
-                                             ((add_int (integer_of_int32 
-                                                        (C_5:
-                                                        ((safe_acc_ !int_P_int_M_a_4) 
-                                                         (C_4:
-                                                         ((safe_acc_ !S_x_a_1) !a)))))) 
-                                              (integer_of_int32 (C_3:
-                                                                ((safe_acc_ !int_P_int_M_b_3) 
-                                                                 (C_2:
-                                                                 ((safe_acc_ !S_y_a_1) b)))))))))) in
-        void); (return := !__retres); (raise Return) end) end)); absurd  end
-   with Return -> !return end)) { (JC_5: true) }
+       (let jessie_<somenum> = (a := b) in void);
+      (let jessie_<somenum> =
+      (__retres := (C_7:
+                   (safe_int32_of_integer_ (C_6:
+                                           ((add_int (integer_of_int32 
+                                                      (C_5:
+                                                      ((safe_acc_ !int_P_int_M_a_4) 
+                                                       (C_4:
+                                                       ((safe_acc_ !S_x_a_1) !a)))))) 
+                                            (integer_of_int32 (C_3:
+                                                              ((safe_acc_ !int_P_int_M_b_3) 
+                                                               (C_2:
+                                                               ((safe_acc_ !S_y_a_1) b)))))))))) in
+      void); (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
      (C_1:
+     (C_8:
      begin
-       (let jessie_2 = (a := b) in void);
-      (C_8:
-      begin
-        (let jessie_4 =
-        (__retres := (C_7:
-                     (JC_13:
-                     (int32_of_integer_ (C_6:
-                                        ((add_int (integer_of_int32 (C_5:
-                                                                    (JC_10:
-                                                                    (((acc_ !int_P_a_4_alloc_table) !int_P_int_M_a_4) 
-                                                                    (C_4:
-                                                                    (JC_9:
-                                                                    (((acc_ !S_a_1_alloc_table) !S_x_a_1) !a)))))))) 
-                                         (integer_of_int32 (C_3:
-                                                           (JC_12:
-                                                           (((acc_ !int_P_b_3_alloc_table) !int_P_int_M_b_3) 
-                                                            (C_2:
-                                                            (JC_11:
-                                                            (((acc_ !S_a_1_alloc_table) !S_y_a_1) b))))))))))))) in
-        void); (return := !__retres); (raise Return) end) end)); absurd  end
-   with Return -> !return end)) { true }
+       (let jessie_<somenum> = (a := b) in void);
+      (let jessie_<somenum> =
+      (__retres := (C_7:
+                   (JC_<somenum>:
+                   (int32_of_integer_ (C_6:
+                                      ((add_int (integer_of_int32 (C_5:
+                                                                  (JC_<somenum>:
+                                                                  (((acc_ !int_P_a_4_alloc_table) !int_P_int_M_a_4) 
+                                                                   (C_4:
+                                                                   (JC_<somenum>:
+                                                                   (((acc_ !S_a_1_alloc_table) !S_x_a_1) !a)))))))) 
+                                       (integer_of_int32 (C_3:
+                                                         (JC_<somenum>:
+                                                         (((acc_ !int_P_b_3_alloc_table) !int_P_int_M_b_3) 
+                                                          (C_2:
+                                                          (JC_<somenum>:
+                                                          (((acc_ !S_a_1_alloc_table) !S_y_a_1) b))))))))))))) in
+      void); (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C zones.jessie --quiet -f zones.makefile project

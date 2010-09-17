@@ -2,7 +2,6 @@
 
 Status: open
 
-no VC are generated, although the assigns clause is wrong
   
 */
 

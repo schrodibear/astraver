@@ -309,12 +309,12 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f :
  x_0:int32 ->
   { } int32
-  { (JC_6: ge_int(div_int(mul_int((4), integer_of_int32(x_0@)), (4)), (0))) }
+  { (JC_<somenum>: ge_int(div_int(mul_int((4), integer_of_int32(x_0@)), (4)), (0))) }
 
 parameter f_requires :
  x_0:int32 ->
-  { (JC_1: gt_int(integer_of_int32(x_0), (0)))} int32
-  { (JC_6: ge_int(div_int(mul_int((4), integer_of_int32(x_0@)), (4)), (0))) }
+  { (JC_<somenum>: gt_int(integer_of_int32(x_0), (0)))} int32
+  { (JC_<somenum>: ge_int(div_int(mul_int((4), integer_of_int32(x_0@)), (4)), (0))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -334,7 +334,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_0 : int32) ->
-  { (JC_3: gt_int(integer_of_int32(x_0), (0))) }
+  { (JC_<somenum>: gt_int(integer_of_int32(x_0), (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -342,18 +342,18 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
-                                            (JC_11:
+                                            (JC_<somenum>:
                                             ((div_int (10)) (integer_of_int32 x_0))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_5: ge_int(div_int(mul_int((4), integer_of_int32(x_0@)), (4)), (0))) }
+  { (JC_<somenum>: ge_int(div_int(mul_int((4), integer_of_int32(x_0@)), (4)), (0))) }
 
 let f_safety =
  fun (x_0 : int32) ->
-  { (JC_3: gt_int(integer_of_int32(x_0), (0))) }
+  { (JC_<somenum>: gt_int(integer_of_int32(x_0), (0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -361,11 +361,11 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_2:
-                    (JC_10:
+                    (JC_<somenum>:
                     (int32_of_integer_ (C_1:
-                                       (JC_9:
+                                       (JC_<somenum>:
                                        ((div_int_ (10)) (integer_of_int32 x_0)))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }

@@ -22,6 +22,8 @@ while ( <> ) {
         s|${PPCHOME}|PPCHOME|g;
         s|${WHYHOME}|WHYHOME|g;
         s|^make\[[0-9]+\]:|make:|g;
+        s|jessie_[0-9]+|jessie_<somenum>|g;
+        s|JC_[0-9]+|JC_<somenum>|g;
 	print $_;
     }
     if ( $_ =~ /Running (.*) on proof obligations/ ) {

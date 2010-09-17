@@ -285,21 +285,21 @@ parameter test_bw_and_requires : tt:unit -> { } unit { true }
 
 let test_bw_and_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     (assert { (JC_10: eq_int(bw_and((3), (1)), (1))) }; void); void;
+     (assert { (JC_<somenum>: eq_int(bw_and((3), (1)), (1))) }; void); void;
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let test_bw_and_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
-     [ { } unit { (JC_9: eq_int(bw_and((3), (1)), (1))) } ]; void;
+     [ { } unit { (JC_<somenum>: eq_int(bw_and((3), (1)), (1))) } ]; void;
     (raise Return); (raise Return) end with Return -> void end) { true }
 
 

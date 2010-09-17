@@ -325,17 +325,17 @@ parameter b1 : int32 ref
 parameter f :
  tt:unit ->
   { } int32 reads b writes b
-  { (JC_11:
-    ((JC_9: eq_int(integer_of_int32(result), integer_of_int32(b)))
-    and (JC_10:
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(b)))
+    and (JC_<somenum>:
         eq_int(integer_of_int32(b), sub_int((1), integer_of_int32(b@)))))) }
 
 parameter f_requires :
  tt:unit ->
   { } int32 reads b writes b
-  { (JC_11:
-    ((JC_9: eq_int(integer_of_int32(result), integer_of_int32(b)))
-    and (JC_10:
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(b)))
+    and (JC_<somenum>:
         eq_int(integer_of_int32(b), sub_int((1), integer_of_int32(b@)))))) }
 
 parameter int32_of_integer_ :
@@ -351,12 +351,12 @@ parameter int8_of_integer_ :
 parameter k :
  tt:unit ->
   { } unit reads b,b1 writes b,b1
-  { (JC_21: eq_int(integer_of_int32(b1), (1))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(b1), (1))) }
 
 parameter k_requires :
  tt:unit ->
   { } unit reads b,b1 writes b,b1
-  { (JC_21: eq_int(integer_of_int32(b1), (1))) }
+  { (JC_<somenum>: eq_int(integer_of_int32(b1), (1))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -366,43 +366,41 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
+   (C_3:
    begin
-     (C_3:
-     begin
-       (let jessie_5 =
-       (b := (C_2:
-             (safe_int32_of_integer_ (C_1:
-                                     ((sub_int (1)) (integer_of_int32 !b)))))) in
-       void); (return := !b); (raise Return) end); absurd  end with Return ->
+     (let jessie_<somenum> =
+     (b := (C_2:
+           (safe_int32_of_integer_ (C_1:
+                                   ((sub_int (1)) (integer_of_int32 !b)))))) in
+     void); (return := !b); (raise Return); absurd  end) with Return ->
    !return end))
-  { (JC_7:
-    ((JC_5: eq_int(integer_of_int32(result), integer_of_int32(b)))
-    and (JC_6:
+  { (JC_<somenum>:
+    ((JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(b)))
+    and (JC_<somenum>:
         eq_int(integer_of_int32(b), sub_int((1), integer_of_int32(b@)))))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
+   (C_3:
    begin
-     (C_3:
-     begin
-       (let jessie_2 =
-       (b := (C_2:
-             (JC_15:
-             (int32_of_integer_ (C_1: ((sub_int (1)) (integer_of_int32 !b))))))) in
-       void); (return := !b); (raise Return) end); absurd  end with Return ->
+     (let jessie_<somenum> =
+     (b := (C_2:
+           (JC_<somenum>:
+           (int32_of_integer_ (C_1: ((sub_int (1)) (integer_of_int32 !b))))))) in
+     void); (return := !b); (raise Return); absurd  end) with Return ->
    !return end)) { true }
 
 let k_ensures_default =
  fun (tt : unit) ->
-  { (JC_19: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -410,26 +408,24 @@ let k_ensures_default =
      (let tmp_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_16 = (b := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_22 =
+       (let jessie_<somenum> = (b := (safe_int32_of_integer_ (1))) in void);
+      (let jessie_<somenum> =
       (C_9:
+      (C_11:
+      (C_14:
       begin
-        (let jessie_18 = (tmp := (C_8: (JC_27: (f void)))) in void);
-       (C_11:
-       begin
-         (let jessie_20 = (tmp_0 := (C_10: (JC_28: (f void)))) in void);
-        (C_14:
-        begin
-          (b1 := (C_13:
-                 (safe_int32_of_integer_ (C_12:
-                                         ((add_int (integer_of_int32 !tmp)) 
-                                          (integer_of_int32 !tmp_0)))))); !b1
-        end) end) end) in void); (raise Return) end))); (raise Return) end
-   with Return -> void end) { (JC_20: eq_int(integer_of_int32(b1), (1))) }
+        (let jessie_<somenum> = (tmp := (C_8: (JC_<somenum>: (f void)))) in void);
+       (let jessie_<somenum> = (tmp_0 := (C_10: (JC_<somenum>: (f void)))) in void);
+       (b1 := (C_13:
+              (safe_int32_of_integer_ (C_12:
+                                      ((add_int (integer_of_int32 !tmp)) 
+                                       (integer_of_int32 !tmp_0)))))); !b1
+      end))) in void); (raise Return) end))); (raise Return) end with
+   Return -> void end) { (JC_<somenum>: eq_int(integer_of_int32(b1), (1))) }
 
 let k_safety =
  fun (tt : unit) ->
-  { (JC_19: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -437,23 +433,20 @@ let k_safety =
      (let tmp_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_8 = (b := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_14 =
+       (let jessie_<somenum> = (b := (safe_int32_of_integer_ (1))) in void);
+      (let jessie_<somenum> =
       (C_9:
+      (C_11:
+      (C_14:
       begin
-        (let jessie_10 = (tmp := (C_8: (JC_24: (f_requires void)))) in void);
-       (C_11:
-       begin
-         (let jessie_12 = (tmp_0 := (C_10: (JC_25: (f_requires void)))) in
-         void);
-        (C_14:
-        begin
-          (b1 := (C_13:
-                 (JC_26:
-                 (int32_of_integer_ (C_12:
-                                    ((add_int (integer_of_int32 !tmp)) 
-                                     (integer_of_int32 !tmp_0))))))); !b1 end)
-       end) end) in void); (raise Return) end))); (raise Return) end with
+        (let jessie_<somenum> = (tmp := (C_8: (JC_<somenum>: (f_requires void)))) in void);
+       (let jessie_<somenum> = (tmp_0 := (C_10: (JC_<somenum>: (f_requires void)))) in
+       void);
+       (b1 := (C_13:
+              (JC_<somenum>:
+              (int32_of_integer_ (C_12:
+                                 ((add_int (integer_of_int32 !tmp)) (integer_of_int32 !tmp_0)))))));
+       !b1 end))) in void); (raise Return) end))); (raise Return) end with
    Return -> void end) { true }
 
 

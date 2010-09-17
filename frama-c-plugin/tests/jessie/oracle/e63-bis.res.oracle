@@ -569,7 +569,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -578,110 +578,108 @@ let f_ensures_default =
      (let float_P_float_M_t_6 = (any_memory void) in
      (let t_4 = ref (any_pointer void) in
      (C_2:
+     (C_26:
      begin
-       (let jessie_4 =
+       (let jessie_<somenum> =
        (t_4 := (C_1:
-               (JC_34:
+               (JC_<somenum>:
                (((alloc_struct_float_P (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table)))) in
        void);
       (assert
-      { (JC_35:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (0)))),
         0.)) }; void); void;
       (assert
-      { (JC_36:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (1)))),
         1.)) }; void); void;
       (assert
-      { (JC_37:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (2)))),
         2.)) }; void); void;
       (assert
-      { (JC_38:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (3)))),
         3.)) }; void); void;
       (assert
-      { (JC_39:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (4)))),
         4.)) }; void); void;
       (assert
-      { (JC_40:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (5)))),
         5.)) }; void); void;
       (assert
-      { (JC_41:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (6)))),
         6.)) }; void); void;
       (assert
-      { (JC_42:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (7)))),
         7.)) }; void); void;
       (assert
-      { (JC_43:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (8)))),
         8.)) }; void); void;
       (assert
-      { (JC_44:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (9)))),
         9.)) }; void); void;
       (assert
-      { (JC_45:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (10)))),
         10.)) }; void); void;
       (assert
-      { (JC_46:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (11)))),
         11.)) }; void); void;
       (assert
-      { (JC_47:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (12)))),
         12.)) }; void); void;
       (assert
-      { (JC_48:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (13)))),
         13.)) }; void); void;
       (assert
-      { (JC_49:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (14)))),
         14.)) }; void); void;
       (assert
-      { (JC_50:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (15)))),
         15.)) }; void); void;
       (assert
-      { (JC_51:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (16)))),
         16.)) }; void); void;
       (assert
-      { (JC_52:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (17)))),
         17.)) }; void); void;
       (assert
-      { (JC_53:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (18)))),
         18.)) }; void); void;
       (assert
-      { (JC_54:
+      { (JC_<somenum>:
         eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
         19.)) }; void); void;
       (assert
-      { (JC_55: incr3(shift(t_4, (0)), (0), (4), float_P_float_M_t_6)) };
+      { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (4), float_P_float_M_t_6)) };
       void); void;
       (assert
-      { (JC_56: incr3(shift(t_4, (0)), (0), (9), float_P_float_M_t_6)) };
+      { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (9), float_P_float_M_t_6)) };
       void); void;
       (assert
-      { (JC_57: incr3(shift(t_4, (0)), (0), (19), float_P_float_M_t_6)) };
-      void); void;
-      (C_26:
-      begin
-        ((safe_free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
-      end) end))))); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+      { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (19), float_P_float_M_t_6)) };
+      void); void; ((safe_free_parameter float_P_t_6_alloc_table) !t_4);
+      (raise Return) end)))))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -690,108 +688,107 @@ let f_safety =
      (let float_P_float_M_t_6 = (any_memory void) in
      (let t_4 = ref (any_pointer void) in
      (C_2:
+     (C_26:
      begin
-       (let jessie_2 =
-       (t_4 := (let jessie_1 =
+       (let jessie_<somenum> =
+       (t_4 := (let jessie_<somenum> =
                (C_1:
-               (JC_9:
+               (JC_<somenum>:
                (((alloc_struct_float_P_requires (20)) float_P_t_6_alloc_table) float_P_t_6_tag_table))) in
-               (JC_10:
+               (JC_<somenum>:
                (assert
-               { ge_int(offset_max(float_P_t_6_alloc_table, jessie_1), (19)) };
-               jessie_1)))) in void);
+               { ge_int(offset_max(float_P_t_6_alloc_table, jessie_<somenum>), (19)) };
+               jessie_<somenum>)))) in void);
       [ { } unit reads t_4
-        { (JC_11:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (0)))),
           0.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_12:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (1)))),
           1.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_13:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (2)))),
           2.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_14:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (3)))),
           3.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_15:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (4)))),
           4.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_16:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (5)))),
           5.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_17:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (6)))),
           6.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_18:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (7)))),
           7.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_19:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (8)))),
           8.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_20:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (9)))),
           9.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_21:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (10)))),
           10.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_22:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (11)))),
           11.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_23:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (12)))),
           12.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_24:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (13)))),
           13.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_25:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (14)))),
           14.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_26:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (15)))),
           15.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_27:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (16)))),
           16.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_28:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (17)))),
           17.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_29:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (18)))),
           18.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_30:
+        { (JC_<somenum>:
           eq_real(single_value(select(float_P_float_M_t_6, shift(t_4, (19)))),
           19.)) } ]; void;
       [ { } unit reads t_4
-        { (JC_31: incr3(shift(t_4, (0)), (0), (4), float_P_float_M_t_6)) } ];
+        { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (4), float_P_float_M_t_6)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_32: incr3(shift(t_4, (0)), (0), (9), float_P_float_M_t_6)) } ];
+        { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (9), float_P_float_M_t_6)) } ];
       void;
       [ { } unit reads t_4
-        { (JC_33: incr3(shift(t_4, (0)), (0), (19), float_P_float_M_t_6)) } ];
-      void;
-      (C_26:
-      begin   ((free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
-      end) end))))); (raise Return) end with Return -> void end) { true }
+        { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (19), float_P_float_M_t_6)) } ];
+      void; ((free_parameter float_P_t_6_alloc_table) !t_4); (raise Return)
+     end)))))); (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C e63-bis.jessie --quiet -f e63-bis.makefile project
@@ -806,11 +803,11 @@ why --project [...] why/e63-bis.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "507" begin = "17" end = "76"/>
+      <location file = "why/e63-bis.why" line = "506" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "599" begin = "15" end = "60"/>
+      <location file = "why/e63-bis.why" line = "596" begin = "13" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

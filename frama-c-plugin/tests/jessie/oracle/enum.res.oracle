@@ -641,37 +641,37 @@ parameter enum_as_array_index :
   int_P_int_M_t_2:(int_P, int32) memory ref ->
    int_P_t_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_t_2 writes int_P_int_M_t_2
-    { (JC_45:
+    { (JC_<somenum>:
       eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t@, (1)))), (0))) }
 
 parameter enum_as_array_index_requires :
  t:int_P pointer ->
   int_P_int_M_t_2:(int_P, int32) memory ref ->
    int_P_t_2_alloc_table:int_P alloc_table ->
-    { (JC_38:
-      ((JC_36: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-      and (JC_37: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))}
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+      and (JC_<somenum>: ge_int(offset_max(int_P_t_2_alloc_table, t), (2)))))}
     unit reads int_P_int_M_t_2 writes int_P_int_M_t_2
-    { (JC_45:
+    { (JC_<somenum>:
       eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t@, (1)))), (0))) }
 
-parameter f : tt:unit -> { } unit { (JC_6: eq_int((4), (4))) }
+parameter f : tt:unit -> { } unit { (JC_<somenum>: eq_int((4), (4))) }
 
-parameter f_requires : tt:unit -> { } unit { (JC_6: eq_int((4), (4))) }
+parameter f_requires : tt:unit -> { } unit { (JC_<somenum>: eq_int((4), (4))) }
 
 parameter g :
  e:E ->
   { } int32
-  { (JC_18:
-    ((JC_16: le_int((1), integer_of_int32(result)))
-    and (JC_17: le_int(integer_of_int32(result), (4))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((1), integer_of_int32(result)))
+    and (JC_<somenum>: le_int(integer_of_int32(result), (4))))) }
 
 parameter g_requires :
  e:E ->
   { } int32
-  { (JC_18:
-    ((JC_16: le_int((1), integer_of_int32(result)))
-    and (JC_17: le_int(integer_of_int32(result), (4))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((1), integer_of_int32(result)))
+    and (JC_<somenum>: le_int(integer_of_int32(result), (4))))) }
 
 parameter h :
  t_0:enum___anonenum_color_1_P pointer ->
@@ -679,7 +679,7 @@ parameter h :
    enum___anonenum_color_1_P_t_0_1_alloc_table:enum___anonenum_color_1_P alloc_table ->
     { } unit reads enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
     writes enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
-    { (JC_31:
+    { (JC_<somenum>:
       (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
                                             shift(t_0@, (2)))),
        (0))
@@ -694,16 +694,16 @@ parameter h_requires :
  t_0:enum___anonenum_color_1_P pointer ->
   enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1:(enum___anonenum_color_1_P, __anonenum_color_1) memory ref ->
    enum___anonenum_color_1_P_t_0_1_alloc_table:enum___anonenum_color_1_P alloc_table ->
-    { (JC_24:
-      ((JC_22:
+    { (JC_<somenum>:
+      ((JC_<somenum>:
        le_int(offset_min(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
        (0)))
-      and (JC_23:
+      and (JC_<somenum>:
           ge_int(offset_max(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
           (9)))))}
     unit reads enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
     writes enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1
-    { (JC_31:
+    { (JC_<somenum>:
       (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
                                             shift(t_0@, (2)))),
        (0))
@@ -742,59 +742,58 @@ parameter safe_int8_of_integer_ :
 
 let enum_as_array_index_ensures_default =
  fun (t : int_P pointer) (int_P_int_M_t_2 : (int_P, int32) memory ref) (int_P_t_2_alloc_table : int_P alloc_table) ->
-  { (JC_42:
-    ((JC_40: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-    and (JC_41: ge_int(offset_max(int_P_t_2_alloc_table, t), (2))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_t_2_alloc_table, t), (2))))) }
   (init:
   try
+   (C_18:
    begin
-     (C_18:
-     begin
-       (let jessie_30 =
-       (let jessie_26 = (safe_int32_of_integer_ (0)) in
-       (let jessie_29 = (C_16: ((shift t) (1))) in
-       (((safe_upd_ int_P_int_M_t_2) jessie_29) jessie_26))) in void);
-      (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_44:
+     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let jessie_<somenum> = t in
+     (let jessie_<somenum> = (1) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+     (((safe_upd_ int_P_int_M_t_2) jessie_<somenum>) jessie_<somenum>))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>:
     eq_int(integer_of_int32(select(int_P_int_M_t_2, shift(t@, (1)))), (0))) }
 
 let enum_as_array_index_safety =
  fun (t : int_P pointer) (int_P_int_M_t_2 : (int_P, int32) memory ref) (int_P_t_2_alloc_table : int_P alloc_table) ->
-  { (JC_42:
-    ((JC_40: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-    and (JC_41: ge_int(offset_max(int_P_t_2_alloc_table, t), (2))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+    and (JC_<somenum>: ge_int(offset_max(int_P_t_2_alloc_table, t), (2))))) }
   (init:
   try
+   (C_18:
    begin
-     (C_18:
-     begin
-       (let jessie_24 =
-       (let jessie_20 = (safe_int32_of_integer_ (0)) in
-       (let jessie_21 = t in
-       (let jessie_22 = (1) in
-       (let jessie_23 = ((shift jessie_21) jessie_22) in
-       (JC_48:
-       (((((offset_upd_ int_P_t_2_alloc_table) int_P_int_M_t_2) jessie_21) jessie_22) jessie_20)))))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let jessie_<somenum> = t in
+     (let jessie_<somenum> = (1) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+     (JC_<somenum>:
+     ((((upd_ int_P_t_2_alloc_table) int_P_int_M_t_2) jessie_<somenum>) jessie_<somenum>)))))));
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_5: eq_int((4), (4))) }
+  { (JC_<somenum>: eq_int((4), (4))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
   { true }
 
 let g_ensures_default =
  fun (e : E) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -802,17 +801,17 @@ let g_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_5 =
+       (let jessie_<somenum> =
        (__retres := (C_2: (safe_int32_of_integer_ (integer_of_E e)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_15:
-    ((JC_13: le_int((1), integer_of_int32(result)))
-    and (JC_14: le_int(integer_of_int32(result), (4))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int((1), integer_of_int32(result)))
+    and (JC_<somenum>: le_int(integer_of_int32(result), (4))))) }
 
 let g_safety =
  fun (e : E) ->
-  { (JC_12: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -820,34 +819,35 @@ let g_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 =
-       (__retres := (C_2: (JC_21: (int32_of_integer_ (integer_of_E e))))) in
+       (let jessie_<somenum> =
+       (__retres := (C_2: (JC_<somenum>: (int32_of_integer_ (integer_of_E e))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let h_ensures_default =
  fun (t_0 : enum___anonenum_color_1_P pointer) (enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1 : (enum___anonenum_color_1_P, __anonenum_color_1) memory ref) (enum___anonenum_color_1_P_t_0_1_alloc_table : enum___anonenum_color_1_P alloc_table) ->
-  { (JC_28:
-    ((JC_26:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_int(offset_min(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
      (0)))
-    and (JC_27:
+    and (JC_<somenum>:
         ge_int(offset_max(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
         (9))))) }
   (init:
   try
+   (C_11:
    begin
-     (C_11:
-     begin
-       (let jessie_18 =
-       (let jessie_14 =
-       (C_8:
-       ((safe_acc_ !enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) 
-        (C_7: ((shift t_0) (0))))) in
-       (let jessie_17 = (C_9: ((shift t_0) (2))) in
-       (((safe_upd_ enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) jessie_17) jessie_14))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { (JC_30:
+     (let jessie_<somenum> =
+     (C_8:
+     ((safe_acc_ !enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) 
+      (C_7: ((shift t_0) (0))))) in
+     (let jessie_<somenum> = t_0 in
+     (let jessie_<somenum> = (2) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+     (((safe_upd_ enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) jessie_<somenum>) jessie_<somenum>))))));
+    (raise Return); (raise Return) end) with Return -> void end)
+  { (JC_<somenum>:
     (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1,
                                           shift(t_0@, (2)))),
      (0))
@@ -860,30 +860,28 @@ let h_ensures_default =
 
 let h_safety =
  fun (t_0 : enum___anonenum_color_1_P pointer) (enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1 : (enum___anonenum_color_1_P, __anonenum_color_1) memory ref) (enum___anonenum_color_1_P_t_0_1_alloc_table : enum___anonenum_color_1_P alloc_table) ->
-  { (JC_28:
-    ((JC_26:
+  { (JC_<somenum>:
+    ((JC_<somenum>:
      le_int(offset_min(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
      (0)))
-    and (JC_27:
+    and (JC_<somenum>:
         ge_int(offset_max(enum___anonenum_color_1_P_t_0_1_alloc_table, t_0),
         (9))))) }
   (init:
   try
+   (C_11:
    begin
-     (C_11:
-     begin
-       (let jessie_12 =
-       (let jessie_8 =
-       (C_8:
-       (JC_34:
-       (((acc_ enum___anonenum_color_1_P_t_0_1_alloc_table) !enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) t_0))) in
-       (let jessie_9 = t_0 in
-       (let jessie_10 = (2) in
-       (let jessie_11 = ((shift jessie_9) jessie_10) in
-       (JC_35:
-       (((((offset_upd_ enum___anonenum_color_1_P_t_0_1_alloc_table) enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) jessie_9) jessie_10) jessie_8)))))) in
-       void); (raise Return) end); (raise Return) end with Return -> void end)
-  { true }
+     (let jessie_<somenum> =
+     (C_8:
+     (JC_<somenum>:
+     (((acc_ enum___anonenum_color_1_P_t_0_1_alloc_table) !enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) t_0))) in
+     (let jessie_<somenum> = t_0 in
+     (let jessie_<somenum> = (2) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+     (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
+     (JC_<somenum>:
+     ((((upd_ enum___anonenum_color_1_P_t_0_1_alloc_table) enum___anonenum_color_1_P_enum___anonenum_color_1_M_t_0_1) jessie_<somenum>) jessie_<somenum>)))))));
+    (raise Return); (raise Return) end) with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C enum.jessie --quiet -f enum.makefile project

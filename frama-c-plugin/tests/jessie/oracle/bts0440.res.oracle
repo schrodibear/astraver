@@ -348,7 +348,7 @@ parameter safe_int8_of_integer_ :
 
 let fact_ensures_default =
  fun (n : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_n = ref n in
   (init:
   (let return = ref (any_int32 void) in
@@ -358,60 +358,57 @@ let fact_ensures_default =
      (let tmp = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_17 = (r := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (r := (safe_int32_of_integer_ (1))) in void);
       try
-       (let jessie_26 =
+       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
-         { invariant (JC_17: true)  }
+         { invariant (JC_<somenum>: true)  }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_25 =
+            (let jessie_<somenum> =
+            (before:
             begin
               (if ((gt_int_ (integer_of_int32 !mutable_n)) (0)) then void
               else
-               (let jessie_18 = (raise (Goto_while_0_break_exc void)) in
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                void));
-             (assert { (JC_19: gt_int(integer_of_int32(mutable_n), (0))) };
+             (assert { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) };
              void); void;
-             (before:
+             (let jessie_<somenum> =
+             (C_9:
              begin
-               (let jessie_24 =
+               (let jessie_<somenum> =
+               (C_3:
+               (C_6:
                begin
-                 (let jessie_22 =
-                 (C_3:
-                 begin
-                   (let jessie_20 = (tmp := !mutable_n) in void);
-                  (C_6:
-                  begin
-                    (mutable_n := (C_5:
-                                  (safe_int32_of_integer_ (C_4:
-                                                          ((sub_int (integer_of_int32 !mutable_n)) (1))))));
-                   !mutable_n end) end) in void);
-                (C_9:
-                begin
-                  (r := (C_8:
-                        (safe_int32_of_integer_ (C_7:
-                                                ((mul_int (integer_of_int32 !r)) 
-                                                 (integer_of_int32 !tmp))))));
-                 !r end) end in void);
-              (assert
-              { (JC_20:
-                eq_int(integer_of_int32(r),
-                mul_int(integer_of_int32(r@before),
-                integer_of_int32(mutable_n@before)))) }; void); void end);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+                 (let jessie_<somenum> = (tmp := !mutable_n) in void);
+                (mutable_n := (C_5:
+                              (safe_int32_of_integer_ (C_4:
+                                                      ((sub_int (integer_of_int32 !mutable_n)) (1))))));
+                !mutable_n end)) in void);
+              (r := (C_8:
+                    (safe_int32_of_integer_ (C_7:
+                                            ((mul_int (integer_of_int32 !r)) 
+                                             (integer_of_int32 !tmp)))))); !r
+             end) in void);
+             (assert
+             { (JC_<somenum>:
+               eq_int(integer_of_int32(r),
+               mul_int(integer_of_int32(r@before),
+               integer_of_int32(mutable_n@before)))) }; void); void;
+             (raise (Loop_continue_exc void)) end) in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (return := !r); (raise Return) end))); absurd  end with Return ->
-   !return end))) { (JC_5: true) }
+   !return end))) { (JC_<somenum>: true) }
 
 let fact_safety =
  fun (n : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (let mutable_n = ref n in
   (init:
   (let return = ref (any_int32 void) in
@@ -421,55 +418,52 @@ let fact_safety =
      (let tmp = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_5 = (r := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_<somenum> = (r := (safe_int32_of_integer_ (1))) in void);
       try
-       (let jessie_14 =
+       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
-         { invariant (JC_10: true) variant (0) }
+         { invariant (JC_<somenum>: true) variant (0) }
           begin
             [ { } unit { true } ];
            try
-            (let jessie_13 =
+            (let jessie_<somenum> =
+            (before:
             begin
               (if ((gt_int_ (integer_of_int32 !mutable_n)) (0)) then void
               else
-               (let jessie_6 = (raise (Goto_while_0_break_exc void)) in void));
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
              [ { } unit reads mutable_n
-               { (JC_12: gt_int(integer_of_int32(mutable_n), (0))) } ]; void;
-             (before:
+               { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) } ]; void;
+             (let jessie_<somenum> =
+             (C_9:
              begin
-               (let jessie_12 =
+               (let jessie_<somenum> =
+               (C_3:
+               (C_6:
                begin
-                 (let jessie_10 =
-                 (C_3:
-                 begin
-                   (let jessie_8 = (tmp := !mutable_n) in void);
-                  (C_6:
-                  begin
-                    (mutable_n := (C_5:
-                                  (JC_13:
-                                  (int32_of_integer_ (C_4:
-                                                     ((sub_int (integer_of_int32 !mutable_n)) (1)))))));
-                   !mutable_n end) end) in void);
-                (C_9:
-                begin
-                  (r := (C_8:
-                        (JC_14:
-                        (int32_of_integer_ (C_7:
-                                           ((mul_int (integer_of_int32 !r)) 
-                                            (integer_of_int32 !tmp))))))); !r
-                end) end in void);
-              [ { } unit reads mutable_n,r
-                { (JC_15:
-                  eq_int(integer_of_int32(r),
-                  mul_int(integer_of_int32(r@before),
-                  integer_of_int32(mutable_n@before)))) } ]; void end);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_3 -> void end end done);
+                 (let jessie_<somenum> = (tmp := !mutable_n) in void);
+                (mutable_n := (C_5:
+                              (JC_<somenum>:
+                              (int32_of_integer_ (C_4:
+                                                 ((sub_int (integer_of_int32 !mutable_n)) (1)))))));
+                !mutable_n end)) in void);
+              (r := (C_8:
+                    (JC_<somenum>:
+                    (int32_of_integer_ (C_7:
+                                       ((mul_int (integer_of_int32 !r)) 
+                                        (integer_of_int32 !tmp))))))); !r end) in
+             void);
+             [ { } unit reads mutable_n,r
+               { (JC_<somenum>:
+                 eq_int(integer_of_int32(r),
+                 mul_int(integer_of_int32(r@before),
+                 integer_of_int32(mutable_n@before)))) } ]; void;
+             (raise (Loop_continue_exc void)) end) in void) with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_1 -> (while_0_break: void) end;
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (return := !r); (raise Return) end))); absurd  end with Return ->
    !return end))) { true }
 
@@ -501,11 +495,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0440_po7.why">
-      <location file = "why/bts0440.why" line = "353" begin = "44" end = "45"/>
+      <location file = "why/bts0440.why" line = "350" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0440_po8.why">
-      <location file = "why/bts0440.why" line = "353" begin = "44" end = "45"/>
+      <location file = "why/bts0440.why" line = "350" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

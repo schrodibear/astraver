@@ -241,8 +241,9 @@ val ttag_table_var : label_in_name:bool ->
            Jc_envset.VariantOrd.t * Jc_region.RegionTable.key -> Output.term
 
 val talloc_table_var : label_in_name:bool ->
-           Jc_env.label ->
-           Jc_envset.AllocClass.t * Jc_region.RegionTable.key -> Output.term
+  Jc_env.label ->
+  Jc_envset.AllocClass.t * Jc_region.RegionTable.key -> 
+  bool * Output.term
 
 val tmemory_var : label_in_name:bool ->
            Jc_env.label ->

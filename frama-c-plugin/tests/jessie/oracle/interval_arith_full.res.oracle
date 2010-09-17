@@ -270,7 +270,7 @@ parameter add :
     yu:gen_float ->
      { } unit reads zl,zu writes zl,zu
      { ((true = true) ->
-        (JC_18:
+        (JC_<somenum>:
         (forall a_0:real.
          (forall b:real.
           ((in_interval(a_0, xl, xu) and in_interval(b, yl, yu)) ->
@@ -283,7 +283,7 @@ parameter add_requires :
     yu:gen_float ->
      { } unit reads zl,zu writes zl,zu
      { ((true = true) ->
-        (JC_18:
+        (JC_<somenum>:
         (forall a_0:real.
          (forall b:real.
           ((in_interval(a_0, xl, xu) and in_interval(b, yl, yu)) ->
@@ -401,17 +401,17 @@ let add_ensures_default =
   try
    begin
      (C_5:
-     (let jessie_5 = (zl := (C_4:
-                            (JC_30: ((((add_gen_float Double) down) xl) yl)))) in
+     (let jessie_<somenum> = (zl := (C_4:
+                            (JC_<somenum>: ((((add_gen_float Double) down) xl) yl)))) in
      void));
     (C_9:
-    (let jessie_6 = (zu := (C_8:
-                           (JC_36:
+    (let jessie_<somenum> = (zu := (C_8:
+                           (JC_<somenum>:
                            (((neg_gen_float Double) down) (C_7:
-                                                          (JC_35:
+                                                          (JC_<somenum>:
                                                           ((((sub_gen_float Double) down) 
                                                             (C_6:
-                                                            (JC_34:
+                                                            (JC_<somenum>:
                                                             (((neg_gen_float Double) down) xu)))) yu))))))) in
     void));
     (raise Return);
@@ -420,7 +420,7 @@ let add_ensures_default =
    with
    Return ->
    void end)
-  { (JC_17:
+  { (JC_<somenum>:
     (forall a_0:real.
      (forall b:real.
       ((in_interval(a_0, xl, xu) and in_interval(b, yl, yu)) ->
@@ -428,22 +428,22 @@ let add_ensures_default =
 
 let add_safety =
  fun (xl : gen_float) (xu : gen_float) (yl : gen_float) (yu : gen_float) ->
-  { (JC_16: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
      (C_5:
-     (let jessie_3 = (zl := (C_4:
-                            (JC_22: ((((add_gen_float Double) down) xl) yl)))) in
+     (let jessie_<somenum> = (zl := (C_4:
+                            (JC_<somenum>: ((((add_gen_float Double) down) xl) yl)))) in
      void));
     (C_9:
-    (let jessie_4 = (zu := (C_8:
-                           (JC_28:
+    (let jessie_<somenum> = (zu := (C_8:
+                           (JC_<somenum>:
                            (((neg_gen_float Double) down) (C_7:
-                                                          (JC_27:
+                                                          (JC_<somenum>:
                                                           ((((sub_gen_float Double) down) 
                                                             (C_6:
-                                                            (JC_26:
+                                                            (JC_<somenum>:
                                                             (((neg_gen_float Double) down) xu)))) yu))))))) in
     void));
     (raise Return);
@@ -464,8 +464,8 @@ let mul_dn_ensures_default =
      (let __retres = ref (any_gen_float Double) in
      begin
        (C_2:
-       (let jessie_2 = (__retres := (C_1:
-                                    (JC_12:
+       (let jessie_<somenum> = (__retres := (C_1:
+                                    (JC_<somenum>:
                                     ((((mul_gen_float Double) down) x) y)))) in
        void));
       (return := !__retres);
@@ -476,11 +476,11 @@ let mul_dn_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let mul_dn_safety =
  fun (x : gen_float) (y : gen_float) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_gen_float Double) in
   try
@@ -488,8 +488,8 @@ let mul_dn_safety =
      (let __retres = ref (any_gen_float Double) in
      begin
        (C_2:
-       (let jessie_1 = (__retres := (C_1:
-                                    (JC_10:
+       (let jessie_<somenum> = (__retres := (C_1:
+                                    (JC_<somenum>:
                                     ((((mul_gen_float Double) down) x) y)))) in
        void));
       (return := !__retres);

@@ -294,10 +294,10 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (5))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (5))) }
 
 parameter f_requires :
- tt:unit -> { } int32 { (JC_6: eq_int(integer_of_int32(result), (5))) }
+ tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (5))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -317,15 +317,15 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try begin   (return := x_0); (raise Return); absurd  end with Return ->
-   !return end)) { (JC_5: eq_int(integer_of_int32(result), (5))) }
+   !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (5))) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try begin   (return := x_0); (raise Return); absurd  end with Return ->

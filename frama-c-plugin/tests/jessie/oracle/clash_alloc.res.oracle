@@ -400,9 +400,9 @@ parameter f_requires :
  p:T pointer ->
   T_p_1_alloc_table:T alloc_table ->
    T_alloc_p_1:(T, int32) memory ->
-    { (JC_3:
-      ((JC_1: le_int(offset_min(T_p_1_alloc_table, p), (0)))
-      and (JC_2: ge_int(offset_max(T_p_1_alloc_table, p), (0)))))}
+    { (JC_<somenum>:
+      ((JC_<somenum>: le_int(offset_min(T_p_1_alloc_table, p), (0)))
+      and (JC_<somenum>: ge_int(offset_max(T_p_1_alloc_table, p), (0)))))}
     int32 { true }
 
 parameter int32_of_integer_ :
@@ -423,9 +423,9 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (p : T pointer) (T_p_1_alloc_table : T alloc_table) (T_alloc_p_1 : (T, int32) memory) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(T_p_1_alloc_table, p), (0)))
-    and (JC_6: ge_int(offset_max(T_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(T_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(T_p_1_alloc_table, p), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -433,15 +433,15 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_5 = (__retres := (C_1: ((safe_acc_ T_alloc_p_1) p))) in
+       (let jessie_<somenum> = (__retres := (C_1: ((safe_acc_ T_alloc_p_1) p))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_9: true) }
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (p : T pointer) (T_p_1_alloc_table : T alloc_table) (T_alloc_p_1 : (T, int32) memory) ->
-  { (JC_7:
-    ((JC_5: le_int(offset_min(T_p_1_alloc_table, p), (0)))
-    and (JC_6: ge_int(offset_max(T_p_1_alloc_table, p), (0))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(T_p_1_alloc_table, p), (0)))
+    and (JC_<somenum>: ge_int(offset_max(T_p_1_alloc_table, p), (0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -449,9 +449,9 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_2 =
+       (let jessie_<somenum> =
        (__retres := (C_1:
-                    (JC_13: (((acc_ T_p_1_alloc_table) T_alloc_p_1) p)))) in
+                    (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_alloc_p_1) p)))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

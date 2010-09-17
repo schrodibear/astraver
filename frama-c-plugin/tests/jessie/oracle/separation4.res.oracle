@@ -569,24 +569,24 @@ parameter f :
   { } unit
   reads S_b_x_1,S_b_y_2,S_x_1_alloc_table,S_y_2_alloc_table,int_P_int_M_x_1,int_P_x_1_alloc_table,int_P_y_2_alloc_table
   writes int_P_int_M_x_1,int_P_int_M_y_2
-  { ((JC_20:
-     ((JC_18: valid_x(S_x_1_alloc_table))
-     and (JC_19: valid_y(S_y_2_alloc_table))))
-    and (JC_14: p(x_0, S_b_x_1, int_P_int_M_x_1))) }
+  { ((JC_<somenum>:
+     ((JC_<somenum>: valid_x(S_x_1_alloc_table))
+     and (JC_<somenum>: valid_y(S_y_2_alloc_table))))
+    and (JC_<somenum>: p(x_0, S_b_x_1, int_P_int_M_x_1))) }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_6:
-    ((JC_3: p(x_0, S_b_x_1, int_P_int_M_x_1))
-    and ((JC_4: valid_x(S_x_1_alloc_table))
-        and (JC_5: valid_y(S_y_2_alloc_table)))))}
+  { (JC_<somenum>:
+    ((JC_<somenum>: p(x_0, S_b_x_1, int_P_int_M_x_1))
+    and ((JC_<somenum>: valid_x(S_x_1_alloc_table))
+        and (JC_<somenum>: valid_y(S_y_2_alloc_table)))))}
   unit
   reads S_b_x_1,S_b_y_2,S_x_1_alloc_table,S_y_2_alloc_table,int_P_int_M_x_1,int_P_x_1_alloc_table,int_P_y_2_alloc_table
   writes int_P_int_M_x_1,int_P_int_M_y_2
-  { ((JC_20:
-     ((JC_18: valid_x(S_x_1_alloc_table))
-     and (JC_19: valid_y(S_y_2_alloc_table))))
-    and (JC_14: p(x_0, S_b_x_1, int_P_int_M_x_1))) }
+  { ((JC_<somenum>:
+     ((JC_<somenum>: valid_x(S_x_1_alloc_table))
+     and (JC_<somenum>: valid_y(S_y_2_alloc_table))))
+    and (JC_<somenum>: p(x_0, S_b_x_1, int_P_int_M_x_1))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -606,53 +606,51 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_11:
-    ((JC_8: p(x_0, S_b_x_1, int_P_int_M_x_1))
-    and ((JC_9: valid_x(S_x_1_alloc_table))
-        and (JC_10: valid_y(S_y_2_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: p(x_0, S_b_x_1, int_P_int_M_x_1))
+    and ((JC_<somenum>: valid_x(S_x_1_alloc_table))
+        and (JC_<somenum>: valid_y(S_y_2_alloc_table))))) }
   (init:
   try
+   (C_3:
+   (C_6:
    begin
-     (C_3:
-     begin
-       (let jessie_18 =
-       (let jessie_14 = (safe_int32_of_integer_ (0)) in
-       (let jessie_17 = ((shift (C_1: ((safe_acc_ !S_b_x_1) x_0))) (0)) in
-       (((safe_upd_ int_P_int_M_x_1) jessie_17) jessie_14))) in void);
-      (C_6:
-      begin
-        (let jessie_24 =
-        (let jessie_20 = (safe_int32_of_integer_ (1)) in
-        (let jessie_23 = ((shift (C_4: ((safe_acc_ !S_b_y_2) y))) (1)) in
-        (((safe_upd_ int_P_int_M_y_2) jessie_23) jessie_20))) in void);
-       (raise Return) end) end); (raise Return) end with Return -> void end)
-  { (JC_13: p(x_0, S_b_x_1, int_P_int_M_x_1)) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let jessie_<somenum> = (C_1: ((safe_acc_ !S_b_x_1) x_0)) in
+     (((safe_upd_ int_P_int_M_x_1) jessie_<somenum>) jessie_<somenum>)));
+    (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+    (let jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
+    (let jessie_<somenum> = (1) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+    (((safe_upd_ int_P_int_M_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
+    (raise Return) end)) with Return -> void end)
+  { (JC_<somenum>: p(x_0, S_b_x_1, int_P_int_M_x_1)) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_11:
-    ((JC_8: p(x_0, S_b_x_1, int_P_int_M_x_1))
-    and ((JC_9: valid_x(S_x_1_alloc_table))
-        and (JC_10: valid_y(S_y_2_alloc_table))))) }
+  { (JC_<somenum>:
+    ((JC_<somenum>: p(x_0, S_b_x_1, int_P_int_M_x_1))
+    and ((JC_<somenum>: valid_x(S_x_1_alloc_table))
+        and (JC_<somenum>: valid_y(S_y_2_alloc_table))))) }
   (init:
   try
+   (C_3:
+   (C_6:
    begin
-     (C_3:
-     begin
-       (let jessie_6 =
-       (let jessie_2 = (safe_int32_of_integer_ (0)) in
-       (let jessie_5 = ((shift (C_1: ((safe_acc_ !S_b_x_1) x_0))) (0)) in
-       (((safe_upd_ int_P_int_M_x_1) jessie_5) jessie_2))) in void);
-      (C_6:
-      begin
-        (let jessie_12 =
-        (let jessie_8 = (safe_int32_of_integer_ (1)) in
-        (let jessie_11 = ((shift (C_4: ((safe_acc_ !S_b_y_2) y))) (1)) in
-        (((safe_upd_ int_P_int_M_y_2) jessie_11) jessie_8))) in void);
-       (raise Return) end) end); (raise Return) end with Return -> void end)
-  { (JC_17:
-    ((JC_15: valid_x(S_x_1_alloc_table))
-    and (JC_16: valid_y(S_y_2_alloc_table)))) }
+     (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+     (let jessie_<somenum> = (C_1: ((safe_acc_ !S_b_x_1) x_0)) in
+     (((safe_upd_ int_P_int_M_x_1) jessie_<somenum>) jessie_<somenum>)));
+    (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+    (let jessie_<somenum> = (C_4: ((safe_acc_ !S_b_y_2) y)) in
+    (let jessie_<somenum> = (1) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+    (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
+    (((safe_upd_ int_P_int_M_y_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
+    (raise Return) end)) with Return -> void end)
+  { (JC_<somenum>:
+    ((JC_<somenum>: valid_x(S_x_1_alloc_table))
+    and (JC_<somenum>: valid_y(S_y_2_alloc_table)))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C separation4.jessie --quiet -f separation4.makefile project

@@ -320,7 +320,7 @@ parameter f : x_3:single -> y:double -> { } unit { true }
 parameter f_requires :
  x_3:single ->
   y:double ->
-   { (JC_3: ((JC_1: single_is_finite(x_3)) and (JC_2: double_is_finite(y))))}
+   { (JC_<somenum>: ((JC_<somenum>: single_is_finite(x_3)) and (JC_<somenum>: double_is_finite(y))))}
    unit { true }
 
 parameter int8_of_integer_ :
@@ -333,14 +333,14 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (x_3 : single) (y : double) ->
-  { (JC_7: ((JC_5: single_is_finite(x_3)) and (JC_6: double_is_finite(y)))) }
+  { (JC_<somenum>: ((JC_<somenum>: single_is_finite(x_3)) and (JC_<somenum>: double_is_finite(y)))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_9: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_3 : single) (y : double) ->
-  { (JC_7: ((JC_5: single_is_finite(x_3)) and (JC_6: double_is_finite(y)))) }
+  { (JC_<somenum>: ((JC_<somenum>: single_is_finite(x_3)) and (JC_<somenum>: double_is_finite(y)))) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
   { true }

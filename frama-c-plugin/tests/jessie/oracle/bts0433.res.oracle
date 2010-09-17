@@ -316,7 +316,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (n : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -324,15 +324,15 @@ let f_ensures_default =
      then
       begin
         (assert
-        { (JC_10:
+        { (JC_<somenum>:
           lt_int(integer_of_int32(n),
           integer_of_int32(int32_of_integer((1024))))) }; void); void end
      else void); (raise Return); (raise Return) end with Return -> void end)
-  { (JC_5: true) }
+  { (JC_<somenum>: true) }
 
 let f_safety =
  fun (n : int32) ->
-  { (JC_4: true) }
+  { (JC_<somenum>: true) }
   (init:
   try
    begin
@@ -340,7 +340,7 @@ let f_safety =
      then
       begin
         [ { } unit
-          { (JC_9:
+          { (JC_<somenum>:
             lt_int(integer_of_int32(n),
             integer_of_int32(int32_of_integer((1024))))) } ]; void end
      else void); (raise Return); (raise Return) end with Return -> void end)
