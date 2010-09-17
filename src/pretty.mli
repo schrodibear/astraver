@@ -42,7 +42,7 @@ val push_or_output_decl : Logic_decl.t -> unit
 
 val reset : unit -> unit
 
-val output_file : string -> unit
+val output_file : ergo:bool -> string -> unit
 
 (* [output_files f] produces the context in file [f_ctx.why]
    and each goal in a seaparate file [f_po<i>.why] for i=1,2,... *)

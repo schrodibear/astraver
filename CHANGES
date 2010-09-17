@@ -19,10 +19,8 @@
     Fixes Frama-C BTS0377 feature request
   o [Jessie] disabled the experimental support for unions and pointer casts,
     since it is too buggy for public release
-  o [WhyConfig] Alt-Ergo 0.91 not recognized as a safe prover since
-    it has soundness bugs with division
   o [Jessie] fixed bug with division by zero in expressions evaluated at 
-    compile-time
+    compile-time (fixes Frama-C BTS0473)
   o [Krakatoa] error message when a comment starts with /*(extra space)@
   o [WhyConfig] bug fix when detecting a prover which was removed
 

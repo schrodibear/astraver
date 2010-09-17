@@ -41,6 +41,8 @@ open Logic_decl
 
 let reset = Encoding.reset
 
+let ergo = ref false
+
 let push_decl ?(ergo=false) d = 
   if ergo
   then Encoding.push ~encode_preds:false ~encode_funs:false d
@@ -96,10 +98,18 @@ let rec term fmt = function
       fprintf fmt "(%a - %a)" term t1 term t2
   | Tapp (id, [t1; t2], _) when id == t_mul_int || id == t_mul_real ->
       fprintf fmt "(%a * %a)" term t1 term t2
-  | Tapp (id, [t1; t2], _) when id == t_div_int || id == t_div_real ->
+  | Tapp (id, [t1; t2], _) when id == t_div_int ->
+      if !ergo then
+        fprintf fmt "(computer_div %a %a)" term t1 term t2
+      else
+        fprintf fmt "(%a / %a)" term t1 term t2
+  | Tapp (id, [t1; t2], _) when id == t_div_real ->
       fprintf fmt "(%a / %a)" term t1 term t2
   | Tapp (id, [t1; t2], _) when id == t_mod_int ->
-      fprintf fmt "(%a %% %a)" term t1 term t2
+      if !ergo then
+        fprintf fmt "(computer_mod %a %a)" term t1 term t2
+      else
+        fprintf fmt "(%a %% %a)" term t1 term t2
   | Tapp (id, [t1], _) when id == t_neg_int || id == t_neg_real ->
       fprintf fmt "(-%a)" term t1
   | Tapp (id, tl, _) -> 
@@ -277,7 +287,10 @@ let decl fmt d =
 
 let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
-let print_file fmt = iter (decl fmt) 
+let print_file ~ergo:b fmt = 
+  ergo := b;
+  iter (decl fmt);
+  ergo := false
 
 let print_trace fmt id expl =
   fprintf fmt "[%s]@\n" id;
@@ -290,8 +303,8 @@ let print_traces fmt =
        | Dgoal (_loc, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
        | _ -> ())
 
-let output_file f =
-  print_in_file print_file (Options.out_file f)
+let output_file ~ergo f =
+  print_in_file (print_file ~ergo) (Options.out_file f)
 (* cannot work as is, pb with temp files
   if explain_vc && not ergo then 
     print_in_file print_traces (Options.out_file (f ^ ".xpl"))

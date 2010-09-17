@@ -195,8 +195,8 @@ let output is_last fwe =
 	  (* output project, used by GWhy/Coq column *)
 	  Options.gui_project := Some(Pretty.output_project fwe)
 *)
-    | Ergo -> Pretty.output_file (fwe ^ "_why.why")  
-    | Why -> Pretty.output_file (fwe ^ "_why.why") 
+    | Ergo -> Pretty.output_file ~ergo:true (fwe ^ "_why.why")  
+    | Why -> Pretty.output_file ~ergo:false (fwe ^ "_why.why") 
     | Why3 -> Why3.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
     | WhyProject -> ignore(Pretty.output_project fwe)

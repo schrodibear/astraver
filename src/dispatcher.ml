@@ -175,7 +175,7 @@ let output_file ?encoding p (elems,o) =
     | SimplifySelect
     | GappaSelect ->
 	let f = Filename.temp_file "gwhy" "_why.why" in
-	Pretty.output_file f; f
+	Pretty.output_file ~ergo:false f; f
     | Gappa ->
 	let f = Filename.temp_file "gwhy" "_why.gappa" in
 	Gappa.output_one_file ~allowedit:false f; f
