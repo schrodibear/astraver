@@ -12,7 +12,7 @@ qsort-example.c:39:[jessie] failure: Unexpected failure.
          Called from file "src/lib/type.ml", line 764, characters 40-45
          Called from file "queue.ml", line 134, characters 6-20
          Called from file "src/kernel/boot.ml", line 36, characters 4-20
-         Called from file "src/kernel/cmdline.ml", line 655, characters 2-9
+         Called from file "src/kernel/cmdline.ml", line 660, characters 2-9
          Called from file "src/kernel/cmdline.ml", line 173, characters 4-8
          
          Plug-in jessie aborted because of internal error.
