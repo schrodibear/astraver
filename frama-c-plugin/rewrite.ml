@@ -34,6 +34,7 @@ open Cabs
 open Cil_types
 open Cil
 open Cilutil
+open Cil_datatype
 open Ast_info
 open Extlib
 
@@ -87,16 +88,16 @@ let add_default_behavior f =
 
 class renameEntities
   (add_variable : varinfo -> unit) (add_logic_variable : logic_var -> unit) =
-  let types = TypeHashtbl.create 17 in
+  let types = Typ.Hashtbl.create 17 in
   let add_field fi =
     fi.fname <- unique_name fi.fname
   in
   let add_type ty =
-    if TypeHashtbl.mem types ty then () else
+    if Typ.Hashtbl.mem types ty then () else
       let compinfo = get_struct_info ty in
       compinfo.cname <- unique_name compinfo.cname;
       List.iter add_field compinfo.cfields;
-      TypeHashtbl.add types ty ()
+      Typ.Hashtbl.add types ty ()
   in
 object
 
@@ -184,7 +185,7 @@ let rename_entities file =
     );
 
   (* preprocess of renaming logic functions  *)
-  Logic_env.LogicInfo.iter
+  Logic_env.Logic_info.iter
     (fun name _li ->
        try
 	 let x = Hashtbl.find logic_names_overloading name in
@@ -553,10 +554,10 @@ let rec destruct_pointer e = match (stripInfo e).enode with
   | _ -> None
 
 class collectCursorPointers
-  (cursor_to_base : varinfo VarinfoHashtbl.t) (* local variable to base *)
-  (formal_to_base : varinfo VarinfoHashtbl.t) (* formal variable to base *)
-  (assigned_vars : VarinfoSet.t ref) (* variable is assigned (for formals) *)
-  (ignore_vars : VarinfoSet.t ref) (* ignore info on these variables *) =
+  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t) (* local variable to base *)
+  (formal_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t) (* formal variable to base *)
+  (assigned_vars : Cil_datatype.Varinfo.Set.t ref) (* variable is assigned (for formals) *)
+  (ignore_vars : Cil_datatype.Varinfo.Set.t ref) (* ignore info on these variables *) =
 
   let curFundec : fundec ref = ref (emptyFunction "@dummy@") in
 
@@ -566,24 +567,24 @@ class collectCursorPointers
   in
   (* Variable should not be translated as base or cursor *)
   let add_ignore_vars v =
-    if not (VarinfoSet.mem v !ignore_vars) then
+    if not (Cil_datatype.Varinfo.Set.mem v !ignore_vars) then
       begin
-	ignore_vars := VarinfoSet.add v !ignore_vars; signal_change ()
+	ignore_vars := Cil_datatype.Varinfo.Set.add v !ignore_vars; signal_change ()
       end
   in
   (* Variable [v] used as cursor on base [vb] *)
   let add_cursor_to_base v vb =
     try
-      let vb2 = VarinfoHashtbl.find cursor_to_base v in
-      if not (VarinfoComparable.equal vb vb2) then add_ignore_vars v
+      let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+      if not (Cil_datatype.Varinfo.equal vb vb2) then add_ignore_vars v
     with Not_found ->
-      VarinfoHashtbl.add cursor_to_base v vb; signal_change ()
+      Cil_datatype.Varinfo.Hashtbl.add cursor_to_base v vb; signal_change ()
   in
   (* Variable [v] assigned *)
   let add_assigned_vars v =
-    if not (VarinfoSet.mem v !assigned_vars) then
+    if not (Cil_datatype.Varinfo.Set.mem v !assigned_vars) then
       begin
-	assigned_vars := VarinfoSet.add v !assigned_vars; signal_change ()
+	assigned_vars := Cil_datatype.Varinfo.Set.add v !assigned_vars; signal_change ()
       end
   in
 
@@ -595,9 +596,9 @@ class collectCursorPointers
 	  begin match destruct_pointer e1,destruct_pointer e2 with
 	    | Some(v1,_),Some(v2,_) ->
 		begin try
-		  let vb1 = VarinfoHashtbl.find cursor_to_base v1 in
-		  let vb2 = VarinfoHashtbl.find cursor_to_base v2 in
-		  if not (VarinfoComparable.equal vb1 vb2)
+		  let vb1 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v1 in
+		  let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v2 in
+		  if not (Cil_datatype.Varinfo.equal vb1 vb2)
 		    && vb1.vformal && vb2.vformal then
 		      (* One formal is an offset from the other.
 			 Choose the first one in the list of parameters
@@ -607,15 +608,15 @@ class collectCursorPointers
 			  List.fold_left
 			    (fun acc v ->
 			       match acc with Some _ -> acc | None ->
-		      		 if VarinfoComparable.equal v vb1 then
+		      		 if Cil_datatype.Varinfo.equal v vb1 then
 				   Some(vb1,vb2)
-				 else if VarinfoComparable.equal v vb2 then
+				 else if Cil_datatype.Varinfo.equal v vb2 then
 				   Some(vb2,vb1)
 				 else None
 			    ) None !curFundec.sformals
 			with None -> assert false | Some pair -> pair
 		      in
-		      VarinfoHashtbl.add formal_to_base vboff vbbase
+		      Cil_datatype.Varinfo.Hashtbl.add formal_to_base vboff vbbase
 		  else ()
 		with Not_found -> () end
 	    | _ -> ()
@@ -652,12 +653,12 @@ object
 	    match destruct_pointer e with
 	      | None -> add_ignore_vars v
 	      | Some(v2,_offset) ->
-		  if VarinfoSet.mem v2 !ignore_vars then add_ignore_vars v
+		  if Cil_datatype.Varinfo.Set.mem v2 !ignore_vars then add_ignore_vars v
 		  else try
-		    let vb2 = VarinfoHashtbl.find cursor_to_base v2 in
+		    let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v2 in
 		    try
-		      let vb = VarinfoHashtbl.find cursor_to_base v in
-		      if not (VarinfoComparable.equal vb vb2) then
+		      let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+		      if not (Cil_datatype.Varinfo.equal vb vb2) then
 			add_ignore_vars v
 		    with Not_found -> add_cursor_to_base v vb2
 		  with Not_found -> add_ignore_vars v
@@ -682,12 +683,12 @@ object
 end
 
 class rewriteCursorPointers
-  (cursor_to_base : varinfo VarinfoHashtbl.t)
-  (formal_to_base : varinfo VarinfoHashtbl.t)
-  (assigned_vars : VarinfoSet.t) =
+  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t)
+  (formal_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t)
+  (assigned_vars : Cil_datatype.Varinfo.Set.t) =
 
   (* Correspondance between cursor variables and offset variables *)
-  let cursor_to_offset : varinfo VarinfoHashtbl.t = VarinfoHashtbl.create 0 in
+  let cursor_to_offset : varinfo Cil_datatype.Varinfo.Hashtbl.t = Cil_datatype.Varinfo.Hashtbl.create 0 in
 
   (* Function [expr_offset] may raise exception [Not_found] if
    * no offset needed.
@@ -695,13 +696,13 @@ class rewriteCursorPointers
   let expr_offset v =
     let loc = Cil_const.CurrentLoc.get () in
     if v.vformal then
-      let voff = VarinfoHashtbl.find cursor_to_offset v in
+      let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
       new_exp ~loc (Lval(Var voff,NoOffset))
     else
-      let voff = VarinfoHashtbl.find cursor_to_offset v in
-      let vb = VarinfoHashtbl.find cursor_to_base v in
-      if VarinfoHashtbl.mem formal_to_base vb then
-	let voff2 = VarinfoHashtbl.find cursor_to_offset vb in
+      let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
+      let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+      if Cil_datatype.Varinfo.Hashtbl.mem formal_to_base vb then
+	let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset vb in
 	new_exp ~loc
           (BinOp(PlusA,
                  new_exp ~loc (Lval(Var voff,NoOffset)),
@@ -711,13 +712,13 @@ class rewriteCursorPointers
   in
   (* Find basis for variable [v] *)
   let var_base v =
-    if VarinfoHashtbl.mem cursor_to_offset v then
+    if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_offset v then
       if v.vformal then
-	try VarinfoHashtbl.find formal_to_base v
+	try Cil_datatype.Varinfo.Hashtbl.find formal_to_base v
 	with Not_found -> v (* self-base *)
       else
-	let vb = VarinfoHashtbl.find cursor_to_base v in
-	try VarinfoHashtbl.find formal_to_base vb
+	let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+	try Cil_datatype.Varinfo.Hashtbl.find formal_to_base vb
 	with Not_found -> vb
     else
       raise Not_found
@@ -736,7 +737,7 @@ class rewriteCursorPointers
           | Some(v1,offopt1),Some(v2,offopt2) ->
 	      let vb1 = try var_base v1 with Not_found -> v1 in
 	      let vb2 = try var_base v2 with Not_found -> v2 in
-              if VarinfoComparable.equal vb1 vb2 then
+              if Cil_datatype.Varinfo.equal vb1 vb2 then
 	        let v1offopt =
 		  try Some(expr_offset v1) with Not_found -> None in
 	        let v2offopt =
@@ -791,18 +792,18 @@ object
 
   method vfunc f =
     let local v =
-      if VarinfoHashtbl.mem cursor_to_base v && not (isArrayType v.vtype) then
+      if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v && not (isArrayType v.vtype) then
 	let name = unique_name ("__jc_off_" ^ v.vname) in
 	let voff = makeLocalVar f ~insert:true name almost_integer_type in
-	VarinfoHashtbl.add cursor_to_offset v voff
+	Cil_datatype.Varinfo.Hashtbl.add cursor_to_offset v voff
     in
     let formal v =
-      if VarinfoHashtbl.mem formal_to_base v then
+      if Cil_datatype.Varinfo.Hashtbl.mem formal_to_base v then
 	(* Formal is a cursor of another formal *)
 	begin
 	  local v; (* Create an offset variable for this formal *)
-	  let voff = VarinfoHashtbl.find cursor_to_offset v in
-	  let vb = VarinfoHashtbl.find formal_to_base v in
+	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
+	  let vb = Cil_datatype.Varinfo.Hashtbl.find formal_to_base v in
           let loc = CurrentLoc.get () in
 	  let initst =
 	    mkStmt(
@@ -817,12 +818,12 @@ object
 	  in
 	  add_pending_statement ~beginning:true initst
 	end
-      else if VarinfoHashtbl.mem cursor_to_base v
-	&& VarinfoSet.mem v assigned_vars then
+      else if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v
+	&& Cil_datatype.Varinfo.Set.mem v assigned_vars then
 	(* Formal is assigned and still a self-base, an offset is needed *)
 	begin
 	  local v; (* Create an offset variable for this formal *)
-	  let voff = VarinfoHashtbl.find cursor_to_offset v in
+	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  let initst =
 	    mkStmt(Instr(Set((Var voff,NoOffset),
 			     constant_expr 0L,
@@ -840,7 +841,7 @@ object
     | Set((Var v,NoOffset),e,loc) ->
 	if v.vformal then
 	  begin try
-	    let voff = VarinfoHashtbl.find cursor_to_offset v in
+	    let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	    (* At this point, [e] must be a pointer whose destruction through
 	     * [destruct_pointer] does not return None.
 	     *)
@@ -861,7 +862,7 @@ object
 	else
 	  (* local variable *)
 	  begin try
-	    let voff = VarinfoHashtbl.find cursor_to_offset v in
+	    let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	    (* At this point, [e] must be a pointer whose destruction through
 	     * [destruct_pointer] does not return None.
 	     *)
@@ -897,10 +898,10 @@ end
 let rewrite_cursor_pointers file =
   (* Variables to communicate between the collecting visitor and
    * the rewriting one. *)
-  let cursor_to_base = VarinfoHashtbl.create 0 in
-  let formal_to_base = VarinfoHashtbl.create 0 in
-  let assigned_vars = ref VarinfoSet.empty in
-  let ignore_vars = ref VarinfoSet.empty in
+  let cursor_to_base = Cil_datatype.Varinfo.Hashtbl.create 0 in
+  let formal_to_base = Cil_datatype.Varinfo.Hashtbl.create 0 in
+  let assigned_vars = ref Cil_datatype.Varinfo.Set.empty in
+  let ignore_vars = ref Cil_datatype.Varinfo.Set.empty in
 
   (* Collect the cursor variables and their base *)
   let visitor =
@@ -911,20 +912,20 @@ let rewrite_cursor_pointers file =
 
   (* Normalize the information *)
   let rec transitive_basis v =
-    try transitive_basis (VarinfoHashtbl.find formal_to_base v)
+    try transitive_basis (Cil_datatype.Varinfo.Hashtbl.find formal_to_base v)
     with Not_found -> v
   in
-  VarinfoHashtbl.iter
-    (fun v _ -> VarinfoHashtbl.add formal_to_base v (transitive_basis v))
+  Cil_datatype.Varinfo.Hashtbl.iter
+    (fun v _ -> Cil_datatype.Varinfo.Hashtbl.add formal_to_base v (transitive_basis v))
     formal_to_base;
-  VarinfoSet.iter
-    (fun v -> VarinfoHashtbl.remove cursor_to_base v) !ignore_vars;
-  VarinfoHashtbl.iter
-    (fun v vb -> if VarinfoSet.mem vb !ignore_vars then
-      VarinfoHashtbl.remove cursor_to_base v) cursor_to_base;
-  VarinfoHashtbl.iter
-    (fun v vb -> if VarinfoSet.mem vb !ignore_vars then
-      VarinfoHashtbl.remove formal_to_base v) formal_to_base;
+  Cil_datatype.Varinfo.Set.iter
+    (fun v -> Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) !ignore_vars;
+  Cil_datatype.Varinfo.Hashtbl.iter
+    (fun v vb -> if Cil_datatype.Varinfo.Set.mem vb !ignore_vars then
+      Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) cursor_to_base;
+  Cil_datatype.Varinfo.Hashtbl.iter
+    (fun v vb -> if Cil_datatype.Varinfo.Set.mem vb !ignore_vars then
+      Cil_datatype.Varinfo.Hashtbl.remove formal_to_base v) formal_to_base;
 
   (* Rewrite cursor variables as offsets from their base variable *)
   let visitor =
@@ -974,33 +975,33 @@ let rec destruct_integer e = match e.enode with
   | _ -> None
 
 class collectCursorIntegers
-  (cursor_to_base : varinfo VarinfoHashtbl.t) (* local variable to base *)
-  (assigned_vars : VarinfoSet.t ref) (* variable is assigned (for formals) *)
-  (ignore_vars : VarinfoSet.t ref) (* ignore info on these variables *) =
+  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t) (* local variable to base *)
+  (assigned_vars : Cil_datatype.Varinfo.Set.t ref) (* variable is assigned (for formals) *)
+  (ignore_vars : Cil_datatype.Varinfo.Set.t ref) (* ignore info on these variables *) =
 
   let candidate_var v =
     not v.vglob && (isIntegralType v.vtype && not v.vaddrof)
   in
   (* Variable should not be translated as base or cursor *)
   let add_ignore_vars v =
-    if not (VarinfoSet.mem v !ignore_vars) then
+    if not (Cil_datatype.Varinfo.Set.mem v !ignore_vars) then
       begin
-	ignore_vars := VarinfoSet.add v !ignore_vars; signal_change ()
+	ignore_vars := Cil_datatype.Varinfo.Set.add v !ignore_vars; signal_change ()
       end
   in
   (* Variable [v] used as cursor on base [vb] *)
   let add_cursor_to_base v vb =
     try
-      let vb2 = VarinfoHashtbl.find cursor_to_base v in
-      if not (VarinfoComparable.equal vb vb2) then add_ignore_vars v
+      let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+      if not (Cil_datatype.Varinfo.equal vb vb2) then add_ignore_vars v
     with Not_found ->
-      VarinfoHashtbl.add cursor_to_base v vb; signal_change ()
+      Cil_datatype.Varinfo.Hashtbl.add cursor_to_base v vb; signal_change ()
   in
   (* Variable [v] assigned *)
   let add_assigned_vars v =
-    if not (VarinfoSet.mem v !assigned_vars) then
+    if not (Cil_datatype.Varinfo.Set.mem v !assigned_vars) then
       begin
-	assigned_vars := VarinfoSet.add v !assigned_vars; signal_change ()
+	assigned_vars := Cil_datatype.Varinfo.Set.add v !assigned_vars; signal_change ()
       end
   in
 object
@@ -1026,12 +1027,12 @@ object
 	    match destruct_integer e with
 	      | None -> add_ignore_vars v
 	      | Some(v2,_offset) ->
-		  if VarinfoSet.mem v2 !ignore_vars then add_ignore_vars v
+		  if Cil_datatype.Varinfo.Set.mem v2 !ignore_vars then add_ignore_vars v
 		  else try
-		    let vb2 = VarinfoHashtbl.find cursor_to_base v2 in
+		    let vb2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v2 in
 		    try
-		      let vb = VarinfoHashtbl.find cursor_to_base v in
-		      if not (VarinfoComparable.equal vb vb2) then
+		      let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+		      if not (Cil_datatype.Varinfo.equal vb vb2) then
 			add_ignore_vars v
 		    with Not_found -> add_cursor_to_base v vb2
 		  with Not_found -> add_ignore_vars v
@@ -1051,17 +1052,17 @@ object
 end
 
 class rewriteCursorIntegers
-  (cursor_to_base : varinfo VarinfoHashtbl.t)
-  (assigned_vars : VarinfoSet.t) =
+  (cursor_to_base : varinfo Cil_datatype.Varinfo.Hashtbl.t)
+  (assigned_vars : Cil_datatype.Varinfo.Set.t) =
 
   (* Correspondance between cursor variables and offset variables *)
-  let cursor_to_offset : varinfo VarinfoHashtbl.t = VarinfoHashtbl.create 0 in
+  let cursor_to_offset : varinfo Cil_datatype.Varinfo.Hashtbl.t = Cil_datatype.Varinfo.Hashtbl.create 0 in
 
   let postaction_expr e = match e.enode with
     | Lval(Var v,NoOffset) ->
 	begin try
-	  let vb = VarinfoHashtbl.find cursor_to_base v in
-	  let voff = VarinfoHashtbl.find cursor_to_offset v in
+	  let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  new_exp ~loc:e.eloc
             (BinOp(PlusA,
                    new_exp ~loc:e.eloc (Lval(Var vb,NoOffset)),
@@ -1073,8 +1074,8 @@ class rewriteCursorIntegers
   let postaction_term t = match t.term_node with
     | TLval(TVar { lv_origin = Some v },TNoOffset) ->
 	begin try
-	  let vb = VarinfoHashtbl.find cursor_to_base v in
-	  let voff = VarinfoHashtbl.find cursor_to_offset v in
+	  let vb = Cil_datatype.Varinfo.Hashtbl.find cursor_to_base v in
+	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  let vt1 = term_of_var vb in
 	  let vt2 = term_of_var voff in
 	  let addt =
@@ -1091,18 +1092,18 @@ object
 
   method vfunc f =
     let local v =
-      if VarinfoHashtbl.mem cursor_to_base v then
+      if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v then
 	let name = unique_name ("__jc_off_" ^ v.vname) in
 	let voff = makeLocalVar f ~insert:true name almost_integer_type in
-	VarinfoHashtbl.add cursor_to_offset v voff
+	Cil_datatype.Varinfo.Hashtbl.add cursor_to_offset v voff
     in
     let formal v =
-      if VarinfoHashtbl.mem cursor_to_base v
-	&& VarinfoSet.mem v assigned_vars then
+      if Cil_datatype.Varinfo.Hashtbl.mem cursor_to_base v
+	&& Cil_datatype.Varinfo.Set.mem v assigned_vars then
 	  (* Formal is assigned and still a self-base, an offset is needed *)
 	  begin
 	  local v; (* Create an offset variable for this formal *)
-	  let voff = VarinfoHashtbl.find cursor_to_offset v in
+	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  let initst =
 	    mkStmt(Instr(Set((Var voff,NoOffset),
 			     constant_expr 0L,
@@ -1119,7 +1120,7 @@ object
   method vinst = function
     | Set((Var v,NoOffset),e,loc) ->
 	begin try
-	  let voff = VarinfoHashtbl.find cursor_to_offset v in
+	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  (* At this point, [e] must be an integer whose destruction through
 	   * [destruct_integer] does not return None.
 	   *)
@@ -1127,7 +1128,7 @@ object
 	    | None -> assert false
 	    | Some(v2,Some e) ->
 		begin try
-		  let voff2 = VarinfoHashtbl.find cursor_to_offset v2 in
+		  let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
 		  new_exp ~loc:e.eloc
                     (BinOp(PlusA,
                            new_exp ~loc:e.eloc (Lval(Var voff2,NoOffset)),
@@ -1136,7 +1137,7 @@ object
 		with Not_found -> e end
 	    | Some(v2,None) ->
 		begin try
-		  let voff2 = VarinfoHashtbl.find cursor_to_offset v2 in
+		  let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
 		  new_exp ~loc (Lval(Var voff2,NoOffset))
 		with Not_found -> constant_expr 0L end
 	  in
@@ -1161,9 +1162,9 @@ end
 let rewrite_cursor_integers file =
   (* Variables to communicate between the collecting visitor and
    * the rewriting one. *)
-  let cursor_to_base = VarinfoHashtbl.create 0 in
-  let assigned_vars = ref VarinfoSet.empty in
-  let ignore_vars = ref VarinfoSet.empty in
+  let cursor_to_base = Cil_datatype.Varinfo.Hashtbl.create 0 in
+  let assigned_vars = ref Cil_datatype.Varinfo.Set.empty in
+  let ignore_vars = ref Cil_datatype.Varinfo.Set.empty in
 
   (* Collect the cursor variables and their base *)
   let visitor =
@@ -1173,11 +1174,11 @@ let rewrite_cursor_integers file =
   visit_until_convergence visitor file;
 
   (* Normalize the information *)
-  VarinfoSet.iter
-    (fun v -> VarinfoHashtbl.remove cursor_to_base v) !ignore_vars;
-  VarinfoHashtbl.iter
-    (fun v vb -> if VarinfoSet.mem vb !ignore_vars then
-      VarinfoHashtbl.remove cursor_to_base v) cursor_to_base;
+  Cil_datatype.Varinfo.Set.iter
+    (fun v -> Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) !ignore_vars;
+  Cil_datatype.Varinfo.Hashtbl.iter
+    (fun v vb -> if Cil_datatype.Varinfo.Set.mem vb !ignore_vars then
+      Cil_datatype.Varinfo.Hashtbl.remove cursor_to_base v) cursor_to_base;
 
   (* Rewrite cursor variables as offsets from their base variable *)
   let visitor =
@@ -1197,7 +1198,7 @@ class annotateCodeStrlen(strlen : logic_info) =
 
   (* Store correspondance from temporaries to the corresponding string access *)
 
-  let temps = VarinfoHashtbl.create 17 in
+  let temps = Cil_datatype.Varinfo.Hashtbl.create 17 in
 
   (* Recognize access or test of string *)
 
@@ -1223,7 +1224,7 @@ class annotateCodeStrlen(strlen : logic_info) =
 	    | Index _
 	    | Field _ -> None
 	else if through_tmp then
-	  try Some(VarinfoHashtbl.find temps v) with Not_found -> None
+	  try Some(Cil_datatype.Varinfo.Hashtbl.find temps v) with Not_found -> None
 	else None
     | _ -> None
   in
@@ -1401,7 +1402,7 @@ object(self)
 	    destruct_string_access ~through_tmp:true ~through_cast:true e
 	  with
 	    | None -> ()
-	    | Some(v2,off) -> VarinfoHashtbl.add temps v1 (v2,off)
+	    | Some(v2,off) -> Cil_datatype.Varinfo.Hashtbl.add temps v1 (v2,off)
 	  end; s
       | _ -> s
     in
@@ -1600,21 +1601,21 @@ let rewrite_void_pointer file =
 (* Rewrite the C file for Jessie translation.                                *)
 (*****************************************************************************)
 
-(* class collectTiti (table : varinfo VarinfoHashtbl.t) = *)
+(* class collectTiti (table : varinfo Cil_datatype.Varinfo.Hashtbl.t) = *)
 (* object *)
 
 (*   inherit Visitor.generic_frama_c_visitor *)
 (*     (Cil.inplace_visit ()) (Project.current ()) as super *)
 
 (*   method vfunc f = *)
-(*     let var v = VarinfoHashtbl.add table v v in *)
+(*     let var v = Cil_datatype.Varinfo.Hashtbl.add table v v in *)
 (*     List.iter var f.sformals; *)
 (*     List.iter var f.slocals; *)
 (*     DoChildren *)
 
 (* end *)
 
-(* class rewriteTiti (table : varinfo VarinfoHashtbl.t) = *)
+(* class rewriteTiti (table : varinfo Cil_datatype.Varinfo.Hashtbl.t) = *)
 (* object *)
 
 (*   inherit Visitor.generic_frama_c_visitor *)
@@ -1622,14 +1623,14 @@ let rewrite_void_pointer file =
 
 (*   method vlval (host,_off) = match host with *)
 (*     | Var v -> *)
-(* 	begin try ignore (VarinfoHashtbl.find table v) *)
+(* 	begin try ignore (Cil_datatype.Varinfo.Hashtbl.find table v) *)
 (* 	with Not_found -> () end; DoChildren *)
 (*     | _ -> DoChildren *)
 
 (* end *)
 
 (* let rewrite_titi file = *)
-(*   let table = VarinfoHashtbl.create 17 in *)
+(*   let table = Cil_datatype.Varinfo.Hashtbl.create 17 in *)
 (*   let visitor = new collectTiti table in *)
 (*   visitFramacFile (visitor :> cilVisitor) file; *)
 (*   let visitor = new rewriteTiti table in *)
@@ -1708,6 +1709,6 @@ let rewrite file =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C . byte"
+compile-command: "make -C ."
 End:
 *)

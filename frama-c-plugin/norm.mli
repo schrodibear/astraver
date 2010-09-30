@@ -29,11 +29,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
-open Cilutil
-
-val generated_union_types : unit TypeHashtbl.t
+val generated_union_types : unit Cil_datatype.Typ.Hashtbl.t
 
 (* performs similar normalization tasks as Caduceus *)
 val normalize : Cil_types.file -> unit

@@ -304,7 +304,7 @@ Please submit `feature request' report."
 let run_and_catch_error =
   Dynamic.register
     "run_analysis"
-    (Type.func Type.unit Type.unit)
+    (Datatype.func Datatype.unit Datatype.unit)
     ~plugin:"Jessie"
     ~journalize:true
     run_and_catch_error

@@ -50,6 +50,7 @@
 open Cil_types
 open Cil
 open Cilutil
+open Cil_datatype
 open Ast_info
 open Extlib
 
@@ -70,26 +71,26 @@ open Integer
 class retypeArrayVariables =
 
   (* Variables originally of array type *)
-  let varset = ref VarinfoSet.empty in
-  let lvarset = ref LogicVarSet.empty in
+  let varset = ref Cil_datatype.Varinfo.Set.empty in
+  let lvarset = ref Cil_datatype.Logic_var.Set.empty in
 
   (* Correspondance between variables and "straw" variables, that are used to
    * replace the variable after some changes have been made on the AST,
    * so that further exploration does not change it anymore. The "straw"
    * variables are replaced by regular one before returning the modified AST.
    *)
-  let var_to_strawvar = VarinfoHashtbl.create 17 in
-  let strawvar_to_var = VarinfoHashtbl.create 17 in
-  let lvar_to_strawlvar = LogicVarHashtbl.create 17 in
-  let strawlvar_to_lvar = LogicVarHashtbl.create 17 in
+  let var_to_strawvar = Cil_datatype.Varinfo.Hashtbl.create 17 in
+  let strawvar_to_var = Cil_datatype.Varinfo.Hashtbl.create 17 in
+  let lvar_to_strawlvar = Cil_datatype.Logic_var.Hashtbl.create 17 in
+  let strawlvar_to_lvar = Cil_datatype.Logic_var.Hashtbl.create 17 in
 
   (* Variables to allocate *)
-  let allocvarset = ref VarinfoSet.empty in
-  let alloclvarset = ref LogicVarSet.empty in
+  let allocvarset = ref Cil_datatype.Varinfo.Set.empty in
+  let alloclvarset = ref Cil_datatype.Logic_var.Set.empty in
 
   (* Remember original array type even after variable modified *)
-  let var_to_array_type : typ VarinfoHashtbl.t = VarinfoHashtbl.create 0 in
-  let lvar_to_array_type = LogicVarHashtbl.create 17 in
+  let var_to_array_type : typ Cil_datatype.Varinfo.Hashtbl.t = Cil_datatype.Varinfo.Hashtbl.create 0 in
+  let lvar_to_array_type = Cil_datatype.Logic_var.Hashtbl.create 17 in
 
   (* As the rule would be reentrant, do not rely on the fact it is idempotent,
    * and rather change the variable into its "straw" counterpart, as it is
@@ -100,12 +101,12 @@ class retypeArrayVariables =
   let preaction_lval (host,off as lv) =
     match host with
       | Var v ->
-          if VarinfoSet.mem v !varset then begin
-            let strawv = VarinfoHashtbl.find var_to_strawvar v in
+          if Cil_datatype.Varinfo.Set.mem v !varset then begin
+            let strawv = Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v in
             let loc = Cil_const.CurrentLoc.get() in
             let host = Mem(mkInfo(new_exp ~loc (Lval(Var strawv,NoOffset)))) in
             let off =
-              lift_offset (VarinfoHashtbl.find var_to_array_type v) off
+              lift_offset (Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v) off
             in
             host, off
           end else
@@ -117,7 +118,7 @@ class retypeArrayVariables =
     match host with
       | Var strawv ->
           begin try
-            let v = VarinfoHashtbl.find strawvar_to_var strawv in
+            let v = Cil_datatype.Varinfo.Hashtbl.find strawvar_to_var strawv in
             Var v, off
           with Not_found -> lv end
       | Mem _ -> lv
@@ -127,9 +128,9 @@ class retypeArrayVariables =
     let loc = e.eloc in
     match e.enode with
     | StartOf(Var v,off) ->
-        if VarinfoSet.mem v !varset then begin
-          let ty = VarinfoHashtbl.find var_to_array_type v in
-          let strawv = VarinfoHashtbl.find var_to_strawvar v in
+        if Cil_datatype.Varinfo.Set.mem v !varset then begin
+          let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
+          let strawv = Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v in
           match lift_offset ty off with
             | NoOffset -> new_exp ~loc (Lval(Var strawv,NoOffset))
             | Index(ie,NoOffset) ->
@@ -144,9 +145,9 @@ class retypeArrayVariables =
                      (Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
         end else e
     | AddrOf(Var v,off) ->
-        if VarinfoSet.mem v !varset then begin
-          let ty = VarinfoHashtbl.find var_to_array_type v in
-          let strawv = VarinfoHashtbl.find var_to_strawvar v in
+        if Cil_datatype.Varinfo.Set.mem v !varset then begin
+          let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
+          let strawv = Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v in
           match lift_offset ty off with
             | Index(ie,NoOffset) ->
                 let ptrty = TPtr(element_type ty,[]) in
@@ -168,8 +169,8 @@ class retypeArrayVariables =
                     findtype (direct_element_type ty) roff
                 | Field _ -> raise Not_found
               in
-              if VarinfoSet.mem v !varset then
-                let ty = VarinfoHashtbl.find var_to_array_type v in
+              if Cil_datatype.Varinfo.Set.mem v !varset then
+                let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
                 (* Do not replace [v] by [strawv] here, as the sub-expression
                  * [e1] should be treated first. Do it right away so that
                  * the resulting AST is well-typed, which is crucial to apply
@@ -196,13 +197,13 @@ object(self)
     (Project.current ()) (Cil.inplace_visit ()) as super
 
   method vvdec v =
-    if isArrayType v.vtype && not (VarinfoSet.mem v !varset) then
+    if isArrayType v.vtype && not (Cil_datatype.Varinfo.Set.mem v !varset) then
       begin
         assert (not v.vformal);
-        VarinfoHashtbl.add var_to_array_type v v.vtype;
+        Cil_datatype.Varinfo.Hashtbl.add var_to_array_type v v.vtype;
         let elemty = element_type v.vtype in
         (* Store information that variable was originally of array type *)
-        varset := VarinfoSet.add v !varset;
+        varset := Cil_datatype.Varinfo.Set.add v !varset;
         (* Change the variable type *)
         let newty =
           if array_size v.vtype > 0L then
@@ -212,7 +213,7 @@ object(self)
                *)
               let size = constant_expr (array_size v.vtype) in
               (* Schedule for allocation *)
-              allocvarset := VarinfoSet.add v !allocvarset;
+              allocvarset := Cil_datatype.Varinfo.Set.add v !allocvarset;
               mkTRefArray(elemty,size,[]);
             end
           else
@@ -222,35 +223,35 @@ object(self)
         attach_globaction (fun () -> v.vtype <- newty);
         (* Create a "straw" variable for this variable, with the correct type *)
          let strawv = makePseudoVar newty in
-        VarinfoHashtbl.add var_to_strawvar v strawv;
-        VarinfoHashtbl.add strawvar_to_var strawv v;
+        Cil_datatype.Varinfo.Hashtbl.add var_to_strawvar v strawv;
+        Cil_datatype.Varinfo.Hashtbl.add strawvar_to_var strawv v;
       end;
     DoChildren
 
   method vlogic_var_decl lv =
-    if not (LogicVarHashtbl.mem lvar_to_strawlvar lv) &&
+    if not (Cil_datatype.Logic_var.Hashtbl.mem lvar_to_strawlvar lv) &&
       app_term_type isArrayType false lv.lv_type then
       begin
-        LogicVarHashtbl.add lvar_to_array_type lv
+        Cil_datatype.Logic_var.Hashtbl.add lvar_to_array_type lv
           (force_app_term_type (fun x -> x) lv.lv_type);
         let elemty = force_app_term_type element_type lv.lv_type in
-        lvarset := LogicVarSet.add lv !lvarset;
+        lvarset := Cil_datatype.Logic_var.Set.add lv !lvarset;
         let newty =
           if force_app_term_type array_size lv.lv_type > 0L then
             begin
               let size =
                 constant_expr (force_app_term_type array_size lv.lv_type)
-              in alloclvarset := LogicVarSet.add lv !alloclvarset;
+              in alloclvarset := Cil_datatype.Logic_var.Set.add lv !alloclvarset;
               mkTRefArray(elemty,size,[])
             end
           else TPtr(elemty,[])
         in attach_globaction (fun () -> lv.lv_type <- Ctype newty);
         let strawlv = match lv.lv_origin with
             None -> make_temp_logic_var (Ctype newty)
-          | Some v -> cvar_to_lvar (VarinfoHashtbl.find var_to_strawvar v)
+          | Some v -> cvar_to_lvar (Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v)
         in
-        LogicVarHashtbl.add lvar_to_strawlvar lv strawlv;
-        LogicVarHashtbl.add strawlvar_to_lvar strawlv lv
+        Cil_datatype.Logic_var.Hashtbl.add lvar_to_strawlvar lv strawlv;
+        Cil_datatype.Logic_var.Hashtbl.add strawlvar_to_lvar strawlv lv
       end;
       DoChildren
 
@@ -258,9 +259,9 @@ object(self)
     | GVar(v,_init,_loc) ->
         (* Make sure variable declaration is treated before definition *)
         ignore (visitFramacVarDecl (self:>frama_c_visitor) v);
-        if VarinfoSet.mem v !allocvarset then
+        if Cil_datatype.Varinfo.Set.mem v !allocvarset then
           (* Allocate memory for new reference variable *)
-          let ty = VarinfoHashtbl.find var_to_array_type v in
+          let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
           let size = array_size ty in
 (* Disabled: anyway, it is useless to generate code for that,
    a post-condition should be generated instead (bts0284)
@@ -292,8 +293,8 @@ object(self)
     List.iter (ignore $ visitFramacVarDecl (self:>frama_c_visitor)) f.sformals;
     (* Then allocate/deallocate memory for those that need it *)
     List.iter (fun v ->
-      if VarinfoSet.mem v !allocvarset then
-        let ty = VarinfoHashtbl.find var_to_array_type v in
+      if Cil_datatype.Varinfo.Set.mem v !allocvarset then
+        let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
         let elemty = element_type ty in
         let ast = mkalloc_array_statement v elemty (array_size ty) v.vdecl in
         add_pending_statement ~beginning:true ast;
@@ -337,7 +338,7 @@ let retype_array_variables file =
  *)
 class retypeLogicFunctions =
 
-  let varset = ref LogicVarSet.empty in
+  let varset = ref Cil_datatype.Logic_var.Set.empty in
   let this_name : string ref = ref "" in
   let change_this_type = ref false in  (* Should "this" change? *)
   let new_result_type = ref (Ctype voidType) in
@@ -352,7 +353,7 @@ class retypeLogicFunctions =
                       (*
           if isStructOrUnionType ty then
             begin
-              varset := LogicVarSet.add lv !varset;
+              varset := Cil_datatype.Logic_var.Set.add lv !varset;
               lv.lv_type <- Ctype(mkTRef ty);
               match lv.lv_origin with
                 | None -> ()
@@ -373,7 +374,7 @@ class retypeLogicFunctions =
           *)
           if !change_this_type && lv.lv_name = !this_name then
             var lv;
-          if LogicVarSet.mem lv !varset then
+          if Cil_datatype.Logic_var.Set.mem lv !varset then
             let tlval =
               mkterm (TLval(host,TNoOffset)) lv.lv_type
                 (Cil_const.CurrentLoc.get())
@@ -532,7 +533,7 @@ let retype_logic_functions file =
 (* Expand structure copying through parameter, return or assignment.         *)
 (*****************************************************************************)
 
-let return_vars = VarinfoHashtbl.create 17
+let return_vars = Cil_datatype.Varinfo.Hashtbl.create 17
 
 (* parameter:
  * - if function defined, add local copy variable of structure type
@@ -704,7 +705,7 @@ object
     if isStructOrUnionType rt then
       let rv = makeTempVar !curFundec rt in
       return_var := Some rv;
-      VarinfoHashtbl.add return_vars rv ()
+      Cil_datatype.Varinfo.Hashtbl.add return_vars rv ()
     else
       return_var := None;
     (* Change return type. *)
@@ -870,13 +871,13 @@ let expand_struct_assign file =
 
 class retypeStructVariables =
 
-  let varset = ref VarinfoSet.empty in
-  let lvarset = ref LogicVarSet.empty in
+  let varset = ref Cil_datatype.Varinfo.Set.empty in
+  let lvarset = ref Cil_datatype.Logic_var.Set.empty in
 
   let postaction_lval (host,off) =
     let host = match host with
       | Var v ->
-          if VarinfoSet.mem v !varset then
+          if Cil_datatype.Varinfo.Set.mem v !varset then
             Mem(mkInfo(new_exp ~loc:(Cil_const.CurrentLoc.get())
                          (Lval(Var v,NoOffset))))
           else
@@ -892,12 +893,12 @@ class retypeStructVariables =
     in
     let host = match host with
       | TVar v ->
-          if LogicVarSet.mem v !lvarset then
+          if Cil_datatype.Logic_var.Set.mem v !lvarset then
             add_deref host v
           else
             opt_app
               (fun cv ->
-                 if VarinfoSet.mem cv !varset then
+                 if Cil_datatype.Varinfo.Set.mem cv !varset then
                    add_deref host v
                  else host
               ) host v.lv_origin
@@ -914,7 +915,7 @@ object(self)
     if isStructOrUnionType v.vtype && not v.vformal then
       begin
         v.vtype <- mkTRef v.vtype "Norm.vvdec";
-        varset := VarinfoSet.add v !varset
+        varset := Cil_datatype.Varinfo.Set.add v !varset
       end;
     DoChildren
 
@@ -943,7 +944,7 @@ object(self)
     | GVar (_,_,_) as g ->
         let postaction = function
           | [GVar (v,_,_)] ->
-              if VarinfoSet.mem v !varset then
+              if Cil_datatype.Varinfo.Set.mem v !varset then
                 (* Allocate memory for new reference variable *)
 (* Disabled, see BTS 0284
                 let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
@@ -978,11 +979,11 @@ object(self)
     List.iter (ignore $ visitFramacVarDecl (self:>frama_c_visitor)) f.sformals;
     (* Then allocate/deallocate memory for those that need it *)
     List.iter (fun v ->
-      if VarinfoSet.mem v !varset then
+      if Cil_datatype.Varinfo.Set.mem v !varset then
         let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
         add_pending_statement ~beginning:true ast;
         (* do not deallocate variable used in returning a structure *)
-        if not (VarinfoHashtbl.mem return_vars v) then
+        if not (Cil_datatype.Varinfo.Hashtbl.mem return_vars v) then
           let fst = mkfree_statement v v.vdecl in
           add_pending_statement ~beginning:false fst
     ) f.slocals;
@@ -1042,9 +1043,9 @@ let retype_struct_variables file =
  *)
 class retypeAddressTaken =
 
-  let varset = ref VarinfoSet.empty in
-  let lvarset = ref LogicVarSet.empty in
-  let fieldset = ref FieldinfoSet.empty in
+  let varset = ref Cil_datatype.Varinfo.Set.empty in
+  let lvarset = ref Cil_datatype.Logic_var.Set.empty in
+  let fieldset = ref Cil_datatype.Fieldinfo.Set.empty in
 
   let retypable_var v =
     v.vaddrof
@@ -1068,13 +1069,13 @@ class retypeAddressTaken =
       begin
         v.vtype <- mkTRef v.vtype "Norm.retype_var";
         assert (isPointerType v.vtype);
-        varset := VarinfoSet.add v !varset
+        varset := Cil_datatype.Varinfo.Set.add v !varset
       end
   in
   let retype_lvar v =
     if retypable_lvar v then begin
       v.lv_type <- Ctype (force_app_term_type (fun x -> mkTRef x "Norm.retyp_lvar") v.lv_type);
-      lvarset := LogicVarSet.add v !lvarset
+      lvarset := Cil_datatype.Logic_var.Set.add v !lvarset
     end
   in
   let retype_field fi =
@@ -1082,14 +1083,14 @@ class retypeAddressTaken =
       begin
         fi.ftype <- mkTRef fi.ftype "Norm.retype_field";
         assert (isPointerType fi.ftype);
-        fieldset := FieldinfoSet.add fi !fieldset
+        fieldset := Cil_datatype.Fieldinfo.Set.add fi !fieldset
       end
   in
 
   let postaction_lval (host,off) =
     let host = match host with
       | Var v ->
-          if VarinfoSet.mem v !varset then
+          if Cil_datatype.Varinfo.Set.mem v !varset then
             begin
               assert (isPointerType v.vtype);
               Mem(mkInfo
@@ -1104,7 +1105,7 @@ class retypeAddressTaken =
      *)
     match lastOffset off with
     | Field(fi,_) ->
-        if FieldinfoSet.mem fi !fieldset then
+        if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then
           (assert (isPointerType fi.ftype);
           mkMem
             (mkInfo
@@ -1124,19 +1125,19 @@ class retypeAddressTaken =
     in
     let host = match host with
       | TVar v ->
-          if LogicVarSet.mem v !lvarset then
+          if Cil_datatype.Logic_var.Set.mem v !lvarset then
             add_deref host v.lv_type
           else
             opt_app
               (fun cv ->
-                 if VarinfoSet.mem cv !varset then
+                 if Cil_datatype.Varinfo.Set.mem cv !varset then
                    add_deref host (Ctype cv.vtype)
                  else host
               ) host v.lv_origin
       | TResult _ | TMem _ -> host
     in match lastTermOffset off with
       | TField (fi,_) ->
-          if FieldinfoSet.mem fi !fieldset then
+          if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then
             (TMem
                (Logic_utils.mk_dummy_term (TLval(host,off)) fi.ftype),TNoOffset)
           else host,off
@@ -1150,7 +1151,7 @@ class retypeAddressTaken =
     | AddrOf(_host,off) ->
         begin match lastOffset off with
           | Field(fi,_) ->
-              if FieldinfoSet.mem fi !fieldset then
+              if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then
                 (* Host should have been turned into [Mem], with NoOffset *)
                 assert false
               else
@@ -1166,7 +1167,7 @@ class retypeAddressTaken =
     | TAddrOf(_,off) ->
         begin match lastTermOffset off with
           | TField(fi,_) ->
-              if FieldinfoSet.mem fi !fieldset then assert false
+              if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then assert false
               else t
           | TIndex _ -> t
           | TNoOffset -> assert false (*unreachable*)
@@ -1224,12 +1225,12 @@ object
 
     List.iter (fun v ->
       (* allocate/deallocate locals *)
-      if VarinfoSet.mem v !varset then
+      if Cil_datatype.Varinfo.Set.mem v !varset then
         begin
           let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
           add_pending_statement ~beginning:true ast;
           (* do not deallocate variable used in returning a structure *)
-          if not (VarinfoHashtbl.mem return_vars v) then
+          if not (Cil_datatype.Varinfo.Hashtbl.mem return_vars v) then
             let fst = mkfree_statement v v.vdecl in
             add_pending_statement ~beginning:false fst
         end;
@@ -1304,7 +1305,7 @@ let retype_address_taken file =
  *)
 class retypeFields =
 
-  let field_to_array_type : typ FieldinfoHashtbl.t = FieldinfoHashtbl.create 0 in
+  let field_to_array_type : typ Cil_datatype.Fieldinfo.Hashtbl.t = Cil_datatype.Fieldinfo.Hashtbl.create 0 in
 
   let postaction_lval (host,off) =
     let rec offset_list = function
@@ -1321,7 +1322,7 @@ class retypeFields =
     let rec apply_lift_offset = function
       | Field (fi,roff) ->
           begin try
-            let ty = FieldinfoHashtbl.find field_to_array_type fi in
+            let ty = Cil_datatype.Fieldinfo.Hashtbl.find field_to_array_type fi in
             let roff = apply_lift_offset (lift_offset ty roff) in
             Field (fi,roff)
           with Not_found ->
@@ -1393,7 +1394,7 @@ object
             fi.ftype <- mkTRef fi.ftype "Norm.vglob_aux(2)"
           else if isArrayType fi.ftype then
             begin
-              FieldinfoHashtbl.replace field_to_array_type fi fi.ftype;
+              Cil_datatype.Fieldinfo.Hashtbl.replace field_to_array_type fi fi.ftype;
               if not !flatten_multi_dim_array then
                 fi.ftype <- reference_of_array fi.ftype
               else
@@ -1461,11 +1462,11 @@ let debugtab = Hashtbl.create 0
 class retypeBasePointer =
 
   (* Correspondance between a base type and its wrapper structure type *)
-  let type_wrappers : typ TypeHashtbl.t = TypeHashtbl.create 17 in
+  let type_wrappers : typ Typ.Hashtbl.t = Typ.Hashtbl.create 17 in
   (* Store which types are wrapper types *)
-  let auto_type_wrappers = ref TypeSet.empty in
+  let auto_type_wrappers = ref Typ.Set.empty in
 
-  let is_wrapper_type ty = TypeSet.mem ty !auto_type_wrappers in
+  let is_wrapper_type ty = Typ.Set.mem ty !auto_type_wrappers in
 
   let new_wrapper_for_type_no_sharing ty =
     (* Choose name t_P for the wrapper and t_M for the field *)
@@ -1476,7 +1477,7 @@ class retypeBasePointer =
       if isVoidType ty then mkStructEmpty wrapper_name
       else mkStructSingleton wrapper_name field_name ty
     in
-    let tdef = GCompTag(compinfo,locUnknown) in
+    let tdef = GCompTag(compinfo,Cil_datatype.Location.unknown) in
     let tdecl = TComp(compinfo,empty_size_cache () ,[]) in
     attach_global tdef;
     tdef, tdecl
@@ -1491,12 +1492,12 @@ object(self)
      *)
     let ty = typeRemoveAttributes ["const";"volatile"] (unrollType ty) in
     try
-      TypeHashtbl.find type_wrappers ty
+      Typ.Hashtbl.find type_wrappers ty
     with Not_found ->
       (* Construct a new wrapper for this type *)
       let wrapper_def,wrapper_type = new_wrapper_for_type_no_sharing ty in
-      TypeHashtbl.replace type_wrappers ty wrapper_type;
-      auto_type_wrappers := TypeSet.add wrapper_type !auto_type_wrappers;
+      Typ.Hashtbl.replace type_wrappers ty wrapper_type;
+      auto_type_wrappers := Typ.Set.add wrapper_type !auto_type_wrappers;
       (* Treat newly constructed type *)
       let store_current_global = !currentGlobal in
       ignore (visitFramacGlobal (self:>frama_c_visitor) wrapper_def);
@@ -1724,11 +1725,11 @@ let remove_useless_casts file =
 (* Translate union fields into structures                                    *)
 (*****************************************************************************)
 
-let generated_union_types = TypeHashtbl.create 0
+let generated_union_types = Typ.Hashtbl.create 0
 
 class translateUnions =
-  let field_to_equiv_type : typ FieldinfoHashtbl.t
-      = FieldinfoHashtbl.create 0
+  let field_to_equiv_type : typ Cil_datatype.Fieldinfo.Hashtbl.t
+      = Cil_datatype.Fieldinfo.Hashtbl.create 0
   in
   let new_field_type fi =
     let tname = unique_name (fi.fname ^ "P") in
@@ -1738,8 +1739,8 @@ class translateUnions =
       mkStructSingleton ~padding tname fname fi.ftype in
     let tdef = GCompTag (mcomp, CurrentLoc.get ()) in
     let tdecl = TComp (mcomp, empty_size_cache (), []) in
-    TypeHashtbl.add generated_union_types tdecl ();
-    FieldinfoHashtbl.add field_to_equiv_type fi tdecl;
+    Typ.Hashtbl.add generated_union_types tdecl ();
+    Cil_datatype.Fieldinfo.Hashtbl.add field_to_equiv_type fi tdecl;
     fi.ftype <- tdecl;
     tdef
   in
@@ -1747,7 +1748,7 @@ class translateUnions =
   let postaction_offset = function
     | Field(fi,off) as off' ->
         begin try
-          let ty = FieldinfoHashtbl.find field_to_equiv_type fi in
+          let ty = Cil_datatype.Fieldinfo.Hashtbl.find field_to_equiv_type fi in
           let newfi = get_unique_field ty in
           Field(fi,Field(newfi,off))
         with Not_found -> off' end
@@ -1893,6 +1894,6 @@ let normalize file =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C .. byte"
+compile-command: "make -C .."
 End:
 *)

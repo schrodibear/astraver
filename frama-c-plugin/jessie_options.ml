@@ -29,14 +29,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-
-
 include
   Plugin.Register
     (struct
        let name = "jessie"
        let shortname = "jessie"
-       let descr = "translation to jessie (experimental)"
+       let help = "translation to jessie (experimental)"
      end)
 
 module ProjectName =
@@ -44,7 +42,7 @@ module ProjectName =
     (struct
        let option_name = "-jessie-project-name"
        let arg_name = ""
-       let descr = "specify project name for Jessie analysis"
+       let help = "specify project name for Jessie analysis"
        let kind = `Tuning
      end)
 
@@ -53,7 +51,7 @@ module Behavior =
     (struct
        let option_name = "-jessie-behavior"
        let arg_name = ""
-       let descr =
+       let help =
 	 "restrict verification to a specific behavior (safety, default or a user-defined behavior)"
        let kind = `Correctness
      end)
@@ -61,14 +59,14 @@ module Behavior =
 module Analysis =
   False(struct
 	  let option_name = "-jessie"
-	  let descr = "perform C to Jessie translation"
+	  let help = "perform C to Jessie translation"
           let kind = `Tuning
 	end)
 
 module ForceAdHocNormalization =
   False(struct
           let option_name = "-jessie-adhoc-normalization"
-          let descr =
+          let help =
             "enforce code normalization in a mode suitable for Jessie plugin."
           let kind = `Tuning
         end)
@@ -108,7 +106,7 @@ module JcOpt =
 	      let option_name = "-jessie-jc-opt"
 	      let module_name = "-jessie-jc-opt"
 	      let arg_name = ""
-	      let descr = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
+	      let help = "give an option to Jc (e.g., -jessie-jc-opt=\"-trust-ai\")"
               let kind = `Tuning
 	    end)
 
@@ -118,7 +116,7 @@ module WhyOpt =
        let option_name = "-jessie-why-opt"
        let module_name = "-jessie-why-opt"
        let arg_name = ""
-       let descr = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
+       let help = "give an option to Why (e.g., -jessie-why-opt=\"-fast-wp\")"
        let kind = `Tuning
      end)
 
@@ -126,7 +124,7 @@ module GenOnly =
   False(struct
 	  let option_name = "-jessie-gen-only"
 	  let module_name = "-jessie-gen-only"
-	  let descr = "only generates jessie code (for developer use)"
+	  let help = "only generates jessie code (for developer use)"
           let kind = `Tuning
 	end)
 
@@ -136,7 +134,7 @@ module InferAnnot =
        let option_name = "-jessie-infer-annot"
        let module_name = "-jessie-infer-annot"
        let arg_name = ""
-       let descr = "infer function annotations (inv, pre, spre, wpre)"
+       let help = "infer function annotations (inv, pre, spre, wpre)"
        let kind = `Correctness
      end)
 
@@ -146,7 +144,7 @@ module CpuLimit =
        let option_name = "-jessie-cpu-limit"
        let module_name = "-jessie-cpu-limit"
        let arg_name = ""
-       let descr = "set the time limit in sec. for the analysis"
+       let help = "set the time limit in sec. for the analysis"
        let kind = `Tuning
      end)
 
@@ -157,7 +155,7 @@ module AbsDomain =
        let module_name = "-jessie-abstract-domain"
        let default = "poly"
        let arg_name = ""
-       let descr = "use specified abstract domain (box, oct or poly)"
+       let help = "use specified abstract domain (box, oct or poly)"
        let kind = `Tuning
      end)
 
@@ -168,7 +166,7 @@ module Atp =
        let module_name = "-jessie-atp"
        let default = "gui"
        let arg_name = ""
-       let descr = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
+       let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
        let kind = `Tuning
      end)
 
@@ -178,12 +176,12 @@ module HintLevel =
        let option_name = "-jessie-hint-level"
        let module_name = "-jessie-hint-level"
        let arg_name = ""
-       let descr = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
+       let help = "level of hints, i.e. assertions to help the proof (e.g. for string usage)"
        let kind = `Tuning
      end)
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make"
+compile-command: "make"
 End:
 *)

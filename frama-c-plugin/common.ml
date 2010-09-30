@@ -894,7 +894,7 @@ object(self)
   inherit Visitor.generic_frama_c_visitor
     (Project.current ()) (Cil.inplace_visit ()) as super
 
-  val known_fields = FieldinfoHashtbl.create 7
+  val known_fields = Cil_datatype.Fieldinfo.Hashtbl.create 7
 
   method vterm t =
     match t.term_node with
@@ -912,7 +912,7 @@ object(self)
     | Field(fi,_) ->
         begin
           try
-            if not (fi == FieldinfoHashtbl.find known_fields fi)
+            if not (fi == Cil_datatype.Fieldinfo.Hashtbl.find known_fields fi)
             then
 	      Jessie_options.warning ~current:true
 		"Field %s of type %s is not shared between declaration and use"
@@ -930,7 +930,7 @@ object(self)
     | TField(fi,_) ->
         begin
           try
-            if not (fi == FieldinfoHashtbl.find known_fields fi)
+            if not (fi == Cil_datatype.Fieldinfo.Hashtbl.find known_fields fi)
             then
               Jessie_options.warning ~current:true
 		"Field %s of type %s is not shared between declaration and use"
@@ -947,7 +947,7 @@ object(self)
   method vglob_aux = function
       GCompTag(c,_) ->
         List.iter
-          (fun x -> FieldinfoHashtbl.add known_fields x x) c.cfields;
+          (fun x -> Cil_datatype.Fieldinfo.Hashtbl.add known_fields x x) c.cfields;
         DoChildren
     | _ -> DoChildren
 
@@ -1063,7 +1063,7 @@ let rec lift_offset ty = function
 
 let change_idx idx1 idx siz =
   let boff =
-    Logic_utils.mk_dummy_term (TBinOp(Mult,idx1,constant_term locUnknown siz))
+    Logic_utils.mk_dummy_term (TBinOp(Mult,idx1,constant_term Cil_datatype.Location.unknown siz))
       intType
   in
   Logic_utils.mk_dummy_term (TBinOp(PlusA,boff,idx)) intType
@@ -1081,7 +1081,7 @@ let rec lift_toffset ty off =
         let subty = direct_element_type ty in
         if isArrayType subty then
           let siz = array_size subty in
-          TIndex(change_idx idx1 (constant_term locUnknown 0L) siz, TNoOffset)
+          TIndex(change_idx idx1 (constant_term Cil_datatype.Location.unknown 0L) siz, TNoOffset)
         else off
     | TIndex _ | TField _ | TNoOffset -> off
 
@@ -1105,7 +1105,7 @@ let malloc_function () =
       b_post_cond = [];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
-    Globals.Functions.replace_by_declaration spec f locUnknown;
+    Globals.Functions.replace_by_declaration spec f Cil_datatype.Location.unknown;
     f
 
 let free_function () =
@@ -1126,7 +1126,7 @@ let free_function () =
       b_assigns = [ Nothing,[] ];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
-    Globals.Functions.replace_by_declaration spec f locUnknown;
+    Globals.Functions.replace_by_declaration spec f Cil_datatype.Location.unknown;
     f
 
 let mkalloc v ty loc =

@@ -35,6 +35,7 @@
 open Cil_types
 open Cil
 open Cilutil
+open Cil_datatype
 open Ast_info
 open Extlib
 open Db_types
@@ -953,7 +954,7 @@ and terms_lval pos lv =
         else
           let repfi = Retype.FieldUnion.repr fi in
           let e,fi =
-            if FieldinfoComparable.equal fi repfi then
+            if Fieldinfo.equal fi repfi then
               e,fi
             else
               let caste =
@@ -980,7 +981,7 @@ and terms_lval pos lv =
         else
           let repfi = Retype.FieldUnion.repr fi in
           let e,fi =
-            if FieldinfoComparable.equal fi repfi then
+            if Fieldinfo.equal fi repfi then
               e,fi
             else
               let caste =
@@ -1765,7 +1766,7 @@ and lval pos = function
       else
         let repfi = Retype.FieldUnion.repr fi in
         let e,fi =
-          if FieldinfoComparable.equal fi repfi then
+          if Fieldinfo.equal fi repfi then
             e,fi
           else
             let caste =
@@ -1789,7 +1790,7 @@ and lval pos = function
       else
         let repfi = Retype.FieldUnion.repr fi in
         let e,fi =
-          if FieldinfoComparable.equal fi repfi then
+          if Fieldinfo.equal fi repfi then
             e,fi
           else
             let caste =
@@ -1928,7 +1929,7 @@ let rec instruction = function
       let lvty = typeOfLval lv in
       let call = locate (mkexpr enode pos) in
       let enode =
-        if TypeComparable.equal lvty (getReturnType v.vtype)
+        if Typ.equal lvty (getReturnType v.vtype)
           || is_malloc_function v
           || is_realloc_function v
           || is_calloc_function v
@@ -1952,7 +1953,7 @@ let rec instruction = function
   | Code_annot _ -> assert false
 
 let rec statement s =
-  let pos = get_stmtLoc s.skind in
+  let pos = Stmt.loc s in
   CurrentLoc.set pos;
 (*
   let assert_list =
@@ -2386,7 +2387,7 @@ let rec annotation is_axiomatic annot =
 let default_field_modifiers = (false,false)
 
 let global vardefs g =
-  let pos = get_globalLoc g in
+  let pos = Global.loc g in
   CurrentLoc.set pos;
   let dnodes = match g with
     | GType _ -> [] (* No typedef in Jessie *)
@@ -2411,7 +2412,7 @@ let global vardefs g =
         let fields =
           List.fold_right (fun fi acc ->
                              let repfi = Retype.FieldUnion.repr fi in
-                             if FieldinfoComparable.equal fi repfi then
+                             if Fieldinfo.equal fi repfi then
                                field fi @ acc
                              else acc
                           ) compinfo.cfields []
@@ -2421,14 +2422,14 @@ let global vardefs g =
 (*         in *)
         let ty = TComp(compinfo, empty_size_cache (), []) in
         begin try
-          let parentty = TypeHashtbl.find Retype.type_to_parent_type ty in
+          let parentty = Typ.Hashtbl.find Retype.type_to_parent_type ty in
           let parent = get_struct_name parentty in
           [
             JCDtag(compinfo.cname,[],Some (parent,[]),fields,[])
           ]
         with Not_found ->
           try
-            ignore(TypeHashtbl.find Norm.generated_union_types ty);
+            ignore(Typ.Hashtbl.find Norm.generated_union_types ty);
             [JCDtag(compinfo.cname,[],None,fields,[])]
           with Not_found ->
             let id = mkidentifier compinfo.cname pos in
@@ -2863,6 +2864,6 @@ let pragmas f =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C .. -j jessie_plugin.byte"
+compile-command: "make"
 End:
 *)
