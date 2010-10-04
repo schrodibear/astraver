@@ -4,12 +4,12 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] No code for function qsort, default assigns generated
 [kernel] No code for function assert, default assigns generated
 qsort-example.c:39:[jessie] failure: Unexpected failure.
-                  Please submit bug report (Ref. "PPCHOME/norm.ml:1147:8").
+                  Please submit bug report (Ref. "PPCHOME/norm.ml:1148:8").
 [kernel] The full backtrace is:
          Raised at file "src/kernel/log.ml", line 507, characters 30-31
          Called from file "src/kernel/log.ml", line 501, characters 2-9
          Re-raised at file "src/kernel/log.ml", line 504, characters 8-9
-         Called from file "src/lib/type.ml", line 764, characters 40-45
+         Called from file "src/type/type.ml", line 551, characters 39-44
          Called from file "queue.ml", line 134, characters 6-20
          Called from file "src/kernel/boot.ml", line 36, characters 4-20
          Called from file "src/kernel/cmdline.ml", line 660, characters 2-9
