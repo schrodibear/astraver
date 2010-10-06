@@ -48,18 +48,18 @@ behavior default:
    }
 }
 
-float Perimeter2(float radius_1)
-  requires (C_12 : ((C_13 : (0.0 <= (radius_1 :> real))) &&
-                     (C_14 : ((radius_1 :> real) <= 3.1392))));
+float Perimeter2(float radius_0)
+  requires (C_12 : ((C_13 : (0.0 <= (radius_0 :> real))) &&
+                     (C_14 : ((radius_0 :> real) <= 3.1392))));
 behavior default:
   ensures (C_11 : (\real_abs(((\result :> real) -
                                ((3.141592654 * 2.0) *
-                                 (\at(radius_1,Old) :> real)))) <=
+                                 (\at(radius_0,Old) :> real)))) <=
                     0.01));
 {  
    (var float __retres_0);
    
-   {  (C_10 : (__retres_0 = (C_9 : ((6.28 :> float) * radius_1))));
+   {  (C_10 : (__retres_0 = (C_9 : ((6.28 :> float) * radius_0))));
       
       (return __retres_0)
    }
@@ -73,30 +73,30 @@ lemma le_mul :
         ((((0.0 <= x) && (x <= y)) && ((0.0 <= z) && (z <= t))) ==>
           ((x * z) <= (y * t)))))))
 
-float Perimeter3(float radius_0)
-  requires (C_20 : ((C_21 : (0.0 <= (radius_0 :> real))) &&
-                     (C_22 : ((radius_0 :> real) <= 3.0))));
+float Perimeter3(float radius_1)
+  requires (C_20 : ((C_21 : (0.0 <= (radius_1 :> real))) &&
+                     (C_22 : ((radius_1 :> real) <= 3.0))));
 behavior default:
   ensures (C_19 : (\real_abs(((\result :> real) -
-                               ((\pi * 2.0) * (\at(radius_0,Old) :> real)))) <=
+                               ((\pi * 2.0) * (\at(radius_1,Old) :> real)))) <=
                     0.01));
 {  
    (var float r);
    
-   {  (C_16 : (r = (C_15 : ((6.28 :> float) * radius_0))));
+   {  (C_16 : (r = (C_15 : ((6.28 :> float) * radius_1))));
       
       {  
          (assert for default: (C_17 : (\real_abs(((r :> real) -
                                                    (6.28 *
-                                                     (radius_0 :> real)))) <=
+                                                     (radius_1 :> real)))) <=
                                         0x1p-19)));
          ()
       };
       
       {  
-         (assert for default: (C_18 : (\real_abs(((6.28 * (radius_0 :> real)) -
+         (assert for default: (C_18 : (\real_abs(((6.28 * (radius_1 :> real)) -
                                                    ((\pi * 2.0) *
-                                                     (radius_0 :> real)))) <=
+                                                     (radius_1 :> real)))) <=
                                         0x1p-4)));
          ()
       };
@@ -281,43 +281,43 @@ parameter Perimeter1_requires :
     0.01)) }
 
 parameter Perimeter2 :
- radius_1:single ->
+ radius_0:single ->
   { } single
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
                      mul_real(mul_real(3.141592654, 2.0),
-                     single_value(radius_1@)))),
+                     single_value(radius_0@)))),
     0.01)) }
 
 parameter Perimeter2_requires :
- radius_1:single ->
+ radius_0:single ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_real(0.0, single_value(radius_1)))
-    and (JC_<somenum>: le_real(single_value(radius_1), 3.1392))))}
+    ((JC_<somenum>: le_real(0.0, single_value(radius_0)))
+    and (JC_<somenum>: le_real(single_value(radius_0), 3.1392))))}
   single
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
                      mul_real(mul_real(3.141592654, 2.0),
-                     single_value(radius_1@)))),
+                     single_value(radius_0@)))),
     0.01)) }
 
 parameter Perimeter3 :
- radius_0:single ->
+ radius_1:single ->
   { } single
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(mul_real(pi, 2.0), single_value(radius_0@)))),
+                     mul_real(mul_real(pi, 2.0), single_value(radius_1@)))),
     0.01)) }
 
 parameter Perimeter3_requires :
- radius_0:single ->
+ radius_1:single ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_real(0.0, single_value(radius_0)))
-    and (JC_<somenum>: le_real(single_value(radius_0), 3.0))))}
+    ((JC_<somenum>: le_real(0.0, single_value(radius_1)))
+    and (JC_<somenum>: le_real(single_value(radius_1), 3.0))))}
   single
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(mul_real(pi, 2.0), single_value(radius_0@)))),
+                     mul_real(mul_real(pi, 2.0), single_value(radius_1@)))),
     0.01)) }
 
 parameter alloc_bitvector_struct_char_P :
@@ -483,10 +483,10 @@ let Perimeter1_safety =
    Return -> !return end)) { true }
 
 let Perimeter2_ensures_default =
- fun (radius_1 : single) ->
+ fun (radius_0 : single) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_real(0.0, single_value(radius_1)))
-    and (JC_<somenum>: le_real(single_value(radius_1), 3.1392)))) }
+    ((JC_<somenum>: le_real(0.0, single_value(radius_0)))
+    and (JC_<somenum>: le_real(single_value(radius_0), 3.1392)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -497,20 +497,20 @@ let Perimeter2_ensures_default =
        (let jessie_<somenum> =
        (__retres_0 := (C_9:
                       (JC_<somenum>:
-                      (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_1)))) in
+                      (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_0)))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
                      mul_real(mul_real(3.141592654, 2.0),
-                     single_value(radius_1@)))),
+                     single_value(radius_0@)))),
     0.01)) }
 
 let Perimeter2_safety =
- fun (radius_1 : single) ->
+ fun (radius_0 : single) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_real(0.0, single_value(radius_1)))
-    and (JC_<somenum>: le_real(single_value(radius_1), 3.1392)))) }
+    ((JC_<somenum>: le_real(0.0, single_value(radius_0)))
+    and (JC_<somenum>: le_real(single_value(radius_0), 3.1392)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -522,15 +522,15 @@ let Perimeter2_safety =
        (__retres_0 := (C_9:
                       (JC_<somenum>:
                       (((mul_single nearest_even) (JC_<somenum>:
-                                                  ((single_of_real nearest_even) 6.28))) radius_1)))) in
+                                                  ((single_of_real nearest_even) 6.28))) radius_0)))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let Perimeter3_ensures_default =
- fun (radius_0 : single) ->
+ fun (radius_1 : single) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_real(0.0, single_value(radius_0)))
-    and (JC_<somenum>: le_real(single_value(radius_0), 3.0)))) }
+    ((JC_<somenum>: le_real(0.0, single_value(radius_1)))
+    and (JC_<somenum>: le_real(single_value(radius_1), 3.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -541,29 +541,29 @@ let Perimeter3_ensures_default =
        (let jessie_<somenum> =
        (r := (C_15:
              (JC_<somenum>:
-             (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_0)))) in
+             (((mul_single_safe nearest_even) ((single_of_real_safe nearest_even) 6.28)) radius_1)))) in
        void);
       (assert
       { (JC_<somenum>:
         le_real(abs_real(sub_real(single_value(r),
-                         mul_real(6.28, single_value(radius_0)))),
+                         mul_real(6.28, single_value(radius_1)))),
         0x1p-19)) }; void); void;
       (assert
       { (JC_<somenum>:
-        le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_0)),
-                         mul_real(mul_real(pi, 2.0), single_value(radius_0)))),
+        le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_1)),
+                         mul_real(mul_real(pi, 2.0), single_value(radius_1)))),
         0x1p-4)) }; void); void; (return := !r); (raise Return) end)); 
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(mul_real(pi, 2.0), single_value(radius_0@)))),
+                     mul_real(mul_real(pi, 2.0), single_value(radius_1@)))),
     0.01)) }
 
 let Perimeter3_safety =
- fun (radius_0 : single) ->
+ fun (radius_1 : single) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_real(0.0, single_value(radius_0)))
-    and (JC_<somenum>: le_real(single_value(radius_0), 3.0)))) }
+    ((JC_<somenum>: le_real(0.0, single_value(radius_1)))
+    and (JC_<somenum>: le_real(single_value(radius_1), 3.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -575,18 +575,18 @@ let Perimeter3_safety =
        (r := (C_15:
              (JC_<somenum>:
              (((mul_single nearest_even) (JC_<somenum>:
-                                         ((single_of_real nearest_even) 6.28))) radius_0)))) in
+                                         ((single_of_real nearest_even) 6.28))) radius_1)))) in
        void);
       [ { } unit reads r
         { (JC_<somenum>:
           le_real(abs_real(sub_real(single_value(r),
-                           mul_real(6.28, single_value(radius_0)))),
+                           mul_real(6.28, single_value(radius_1)))),
           0x1p-19)) } ]; void;
       [ { } unit
         { (JC_<somenum>:
-          le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_0)),
+          le_real(abs_real(sub_real(mul_real(6.28, single_value(radius_1)),
                            mul_real(mul_real(pi, 2.0),
-                           single_value(radius_0)))),
+                           single_value(radius_1)))),
           0x1p-4)) } ]; void; (return := !r); (raise Return) end)); absurd 
    end with Return -> !return end)) { true }
 

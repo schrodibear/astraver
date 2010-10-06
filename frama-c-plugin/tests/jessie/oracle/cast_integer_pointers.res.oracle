@@ -472,29 +472,29 @@ behavior default:
    }
 }
 
-int32 uchar_ptr(unsigned_char_P[..] p_0)
-  requires (C_28 : ((C_29 : (\offset_min(p_0) <= 0)) &&
-                     (C_30 : (\offset_max(p_0) >= 0))));
+int32 uchar_ptr(unsigned_char_P[..] p_1)
+  requires (C_28 : ((C_29 : (\offset_min(p_1) <= 0)) &&
+                     (C_30 : (\offset_max(p_1) >= 0))));
 behavior default:
   ensures (C_27 : true);
 {  
    (var int32 __retres_0);
    
-   {  (C_26 : (__retres_0 = (C_25 : ((C_24 : p_0.unsigned_char_M) :> int32))));
+   {  (C_26 : (__retres_0 = (C_25 : ((C_24 : p_1.unsigned_char_M) :> int32))));
       
       (return __retres_0)
    }
 }
 
-int32 schar_ptr(signed_char_P[..] p_1)
-  requires (C_35 : ((C_36 : (\offset_min(p_1) <= 0)) &&
-                     (C_37 : (\offset_max(p_1) >= 0))));
+int32 schar_ptr(signed_char_P[..] p_0)
+  requires (C_35 : ((C_36 : (\offset_min(p_0) <= 0)) &&
+                     (C_37 : (\offset_max(p_0) >= 0))));
 behavior default:
   ensures (C_34 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_33 : (__retres_1 = (C_32 : ((C_31 : p_1.signed_char_M) :> int32))));
+   {  (C_33 : (__retres_1 = (C_32 : ((C_31 : p_0.signed_char_M) :> int32))));
       
       (return __retres_1)
    }

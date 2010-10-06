@@ -31,49 +31,49 @@ tag void_P = {
 
 type void_P = [void_P]
 
-uint32 b1(uint32 x_0, uint32 y_0)
+uint32 b1(uint32 x, uint32 y)
 behavior default:
   ensures (C_4 : true);
 {  
    (var uint32 __retres);
    
-   {  (C_3 : (__retres = (C_2 : ((C_1 : (x_0 ^ y_0)) :> uint32))));
+   {  (C_3 : (__retres = (C_2 : ((C_1 : (x ^ y)) :> uint32))));
       
       (return __retres)
    }
 }
 
-uint32 b2(uint32 x_2, uint32 y_1)
+uint32 b2(uint32 x_0, uint32 y_0)
 behavior default:
   ensures (C_8 : true);
 {  
    (var uint32 __retres_0);
    
-   {  (C_7 : (__retres_0 = (C_6 : ((C_5 : (x_2 & y_1)) :> uint32))));
+   {  (C_7 : (__retres_0 = (C_6 : ((C_5 : (x_0 & y_0)) :> uint32))));
       
       (return __retres_0)
    }
 }
 
-uint32 b3(uint32 x, uint32 y)
+uint32 b3(uint32 x_1, uint32 y_1)
 behavior default:
   ensures (C_12 : true);
 {  
    (var uint32 __retres_1);
    
-   {  (C_11 : (__retres_1 = (C_10 : ((C_9 : (x | y)) :> uint32))));
+   {  (C_11 : (__retres_1 = (C_10 : ((C_9 : (x_1 | y_1)) :> uint32))));
       
       (return __retres_1)
    }
 }
 
-uint32 b4(uint32 x_1)
+uint32 b4(uint32 x_2)
 behavior default:
   ensures (C_16 : true);
 {  
    (var uint32 __retres_2);
    
-   {  (C_15 : (__retres_2 = (C_14 : ((C_13 : (~ x_1)) :> uint32))));
+   {  (C_15 : (__retres_2 = (C_14 : ((C_13 : (~ x_2)) :> uint32))));
       
       (return __retres_2)
    }
@@ -328,21 +328,21 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
 
-parameter b1 : x_0:uint32 -> y_0:uint32 -> { } uint32 { true }
+parameter b1 : x_0:uint32 -> y:uint32 -> { } uint32 { true }
 
-parameter b1_requires : x_0:uint32 -> y_0:uint32 -> { } uint32 { true }
+parameter b1_requires : x_0:uint32 -> y:uint32 -> { } uint32 { true }
 
-parameter b2 : x_2:uint32 -> y_1:uint32 -> { } uint32 { true }
+parameter b2 : x_0_0:uint32 -> y_0:uint32 -> { } uint32 { true }
 
-parameter b2_requires : x_2:uint32 -> y_1:uint32 -> { } uint32 { true }
+parameter b2_requires : x_0_0:uint32 -> y_0:uint32 -> { } uint32 { true }
 
-parameter b3 : x_1:uint32 -> y:uint32 -> { } uint32 { true }
+parameter b3 : x_1:uint32 -> y_1:uint32 -> { } uint32 { true }
 
-parameter b3_requires : x_1:uint32 -> y:uint32 -> { } uint32 { true }
+parameter b3_requires : x_1:uint32 -> y_1:uint32 -> { } uint32 { true }
 
-parameter b4 : x_1_0:uint32 -> { } uint32 { true }
+parameter b4 : x_2:uint32 -> { } uint32 { true }
 
-parameter b4_requires : x_1_0:uint32 -> { } uint32 { true }
+parameter b4_requires : x_2:uint32 -> { } uint32 { true }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -361,7 +361,7 @@ parameter uint32_of_integer_ :
   { eq_int(integer_of_uint32(result), x) }
 
 let b1_ensures_default =
- fun (x_0 : uint32) (y_0 : uint32) ->
+ fun (x_0 : uint32) (y : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -374,12 +374,12 @@ let b1_ensures_default =
        (__retres := (C_2:
                     (safe_uint32_of_integer_ (C_1:
                                              ((bw_xor (integer_of_uint32 x_0)) 
-                                              (integer_of_uint32 y_0)))))) in
+                                              (integer_of_uint32 y)))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b1_safety =
- fun (x_0 : uint32) (y_0 : uint32) ->
+ fun (x_0 : uint32) (y : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -393,12 +393,12 @@ let b1_safety =
                     (JC_<somenum>:
                     (uint32_of_integer_ (C_1:
                                         ((bw_xor (integer_of_uint32 x_0)) 
-                                         (integer_of_uint32 y_0))))))) in
-       void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { true }
+                                         (integer_of_uint32 y))))))) in void);
+      (return := !__retres); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 let b2_ensures_default =
- fun (x_2 : uint32) (y_1 : uint32) ->
+ fun (x_0_0 : uint32) (y_0 : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -410,13 +410,13 @@ let b2_ensures_default =
        (let jessie_<somenum> =
        (__retres_0 := (C_6:
                       (safe_uint32_of_integer_ (C_5:
-                                               ((bw_and (integer_of_uint32 x_2)) 
-                                                (integer_of_uint32 y_1)))))) in
+                                               ((bw_and (integer_of_uint32 x_0_0)) 
+                                                (integer_of_uint32 y_0)))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b2_safety =
- fun (x_2 : uint32) (y_1 : uint32) ->
+ fun (x_0_0 : uint32) (y_0 : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -429,13 +429,13 @@ let b2_safety =
        (__retres_0 := (C_6:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_5:
-                                          ((bw_and (integer_of_uint32 x_2)) 
-                                           (integer_of_uint32 y_1))))))) in
+                                          ((bw_and (integer_of_uint32 x_0_0)) 
+                                           (integer_of_uint32 y_0))))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let b3_ensures_default =
- fun (x_1 : uint32) (y : uint32) ->
+ fun (x_1 : uint32) (y_1 : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -448,12 +448,12 @@ let b3_ensures_default =
        (__retres_1 := (C_10:
                       (safe_uint32_of_integer_ (C_9:
                                                ((bw_or (integer_of_uint32 x_1)) 
-                                                (integer_of_uint32 y)))))) in
+                                                (integer_of_uint32 y_1)))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b3_safety =
- fun (x_1 : uint32) (y : uint32) ->
+ fun (x_1 : uint32) (y_1 : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -467,12 +467,12 @@ let b3_safety =
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_9:
                                           ((bw_or (integer_of_uint32 x_1)) 
-                                           (integer_of_uint32 y))))))) in
+                                           (integer_of_uint32 y_1))))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 
 let b4_ensures_default =
- fun (x_1_0 : uint32) ->
+ fun (x_2 : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -484,12 +484,12 @@ let b4_ensures_default =
        (let jessie_<somenum> =
        (__retres_2 := (C_14:
                       (safe_uint32_of_integer_ (C_13:
-                                               (bw_compl (integer_of_uint32 x_1_0)))))) in
+                                               (bw_compl (integer_of_uint32 x_2)))))) in
        void); (return := !__retres_2); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let b4_safety =
- fun (x_1_0 : uint32) ->
+ fun (x_2 : uint32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_uint32 void) in
@@ -502,7 +502,7 @@ let b4_safety =
        (__retres_2 := (C_14:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_13:
-                                          (bw_compl (integer_of_uint32 x_1_0))))))) in
+                                          (bw_compl (integer_of_uint32 x_2))))))) in
        void); (return := !__retres_2); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

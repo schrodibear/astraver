@@ -37,16 +37,16 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit f(int_P[..] x_0, int_P[..] y_0)
-  requires (C_6 : (((C_8 : (\offset_min(x_0) <= 0)) &&
-                     (C_9 : (\offset_max(x_0) >= 0))) &&
-                    ((C_11 : (\offset_min(y_0) <= 0)) &&
-                      (C_12 : (\offset_max(y_0) >= 0)))));
+unit f(int_P[..] x, int_P[..] y)
+  requires (C_6 : (((C_8 : (\offset_min(x) <= 0)) &&
+                     (C_9 : (\offset_max(x) >= 0))) &&
+                    ((C_11 : (\offset_min(y) <= 0)) &&
+                      (C_12 : (\offset_max(y) >= 0)))));
 behavior default:
-  ensures (C_3 : ((C_4 : (\at(x_0,Old).int_M == 0)) &&
-                   (C_5 : (\at(y_0,Old).int_M == \old(y_0.int_M)))));
+  ensures (C_3 : ((C_4 : (\at(x,Old).int_M == 0)) &&
+                   (C_5 : (\at(y,Old).int_M == \old(y.int_M)))));
 {  
-   {  (C_2 : ((C_1 : x_0.int_M) = 0));
+   {  (C_2 : ((C_1 : x.int_M) = 0));
       
       (return ())
    }
@@ -99,17 +99,17 @@ behavior values:
    }
 }
 
-unit h(int_P[..] x, int_P[..] y)
-  requires (C_48 : (((C_50 : (\offset_min(x) <= 0)) &&
-                      (C_51 : (\offset_max(x) >= 0))) &&
-                     ((C_53 : (\offset_min(y) <= 0)) &&
-                       (C_54 : (\offset_max(y) >= 0)))));
+unit h(int_P[..] x_0, int_P[..] y_0)
+  requires (C_48 : (((C_50 : (\offset_min(x_0) <= 0)) &&
+                      (C_51 : (\offset_max(x_0) >= 0))) &&
+                     ((C_53 : (\offset_min(y_0) <= 0)) &&
+                       (C_54 : (\offset_max(y_0) >= 0)))));
 behavior default:
-  ensures (C_45 : ((C_46 : (\at(x,Old).int_M == 0)) &&
-                    (C_47 : (\at(y,Old).int_M == 1))));
+  ensures (C_45 : ((C_46 : (\at(x_0,Old).int_M == 0)) &&
+                    (C_47 : (\at(y_0,Old).int_M == 1))));
 {  
-   {  (C_42 : ((C_41 : x.int_M) = 0));
-      (C_44 : ((C_43 : y.int_M) = 1));
+   {  (C_42 : ((C_41 : x_0.int_M) = 0));
+      (C_44 : ((C_43 : y_0.int_M) = 1));
       
       (return ())
    }
@@ -511,177 +511,177 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
  x_0:int_P pointer ->
-  y_0:int_P pointer ->
-   int_P_int_M_x_0_1:(int_P, int32) memory ref ->
-    int_P_y_0_2_alloc_table:int_P alloc_table ->
-     int_P_x_0_1_alloc_table:int_P alloc_table ->
-      int_P_int_M_y_0_2:(int_P, int32) memory ->
-       { } unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
+  y:int_P pointer ->
+   int_P_int_M_x_1:(int_P, int32) memory ref ->
+    int_P_y_2_alloc_table:int_P alloc_table ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
+      int_P_int_M_y_2:(int_P, int32) memory ->
+       { } unit reads int_P_int_M_x_1 writes int_P_int_M_x_1
        { (JC_<somenum>:
          ((JC_<somenum>:
-          eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
+          eq_int(integer_of_int32(select(int_P_int_M_x_1, x_0@)), (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0@)),
-             integer_of_int32(select(int_P_int_M_y_0_2@, y_0@)))))) }
+             eq_int(integer_of_int32(select(int_P_int_M_y_2, y@)),
+             integer_of_int32(select(int_P_int_M_y_2@, y@)))))) }
 
 parameter f_requires :
  x_0:int_P pointer ->
-  y_0:int_P pointer ->
-   int_P_int_M_x_0_1:(int_P, int32) memory ref ->
-    int_P_y_0_2_alloc_table:int_P alloc_table ->
-     int_P_x_0_1_alloc_table:int_P alloc_table ->
-      int_P_int_M_y_0_2:(int_P, int32) memory ->
+  y:int_P pointer ->
+   int_P_int_M_x_1:(int_P, int32) memory ref ->
+    int_P_y_2_alloc_table:int_P alloc_table ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
+      int_P_int_M_y_2:(int_P, int32) memory ->
        { (JC_<somenum>:
-         ((JC_<somenum>: le_int(offset_min(int_P_x_0_1_alloc_table, x_0), (0)))
-         and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_1_alloc_table, x_0), (0)))
-             and ((JC_<somenum>:
-                  le_int(offset_min(int_P_y_0_2_alloc_table, y_0), (0)))
+         ((JC_<somenum>: le_int(offset_min(int_P_x_1_alloc_table, x_0), (0)))
+         and ((JC_<somenum>: ge_int(offset_max(int_P_x_1_alloc_table, x_0), (0)))
+             and ((JC_<somenum>: le_int(offset_min(int_P_y_2_alloc_table, y), (0)))
                  and (JC_<somenum>:
-                     ge_int(offset_max(int_P_y_0_2_alloc_table, y_0), (0)))))))}
-       unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
+                     ge_int(offset_max(int_P_y_2_alloc_table, y), (0)))))))}
+       unit reads int_P_int_M_x_1 writes int_P_int_M_x_1
        { (JC_<somenum>:
          ((JC_<somenum>:
-          eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
+          eq_int(integer_of_int32(select(int_P_int_M_x_1, x_0@)), (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0@)),
-             integer_of_int32(select(int_P_int_M_y_0_2@, y_0@)))))) }
+             eq_int(integer_of_int32(select(int_P_int_M_y_2, y@)),
+             integer_of_int32(select(int_P_int_M_y_2@, y@)))))) }
 
 parameter f_requires_specialized :
  x_0:int_P pointer ->
-  y_0:int_P pointer ->
-   int_P_int_M_x_0_1:(int_P, int32) memory ref ->
-    int_P_y_0_2_alloc_table:int_P alloc_table ->
-     int_P_x_0_1_alloc_table:int_P alloc_table ->
+  y:int_P pointer ->
+   int_P_int_M_x_1:(int_P, int32) memory ref ->
+    int_P_y_2_alloc_table:int_P alloc_table ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
       { (JC_<somenum>:
-        ((JC_<somenum>: le_int(offset_min(int_P_x_0_1_alloc_table, x_0), (0)))
-        and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_1_alloc_table, x_0), (0)))
-            and ((JC_<somenum>:
-                 le_int(offset_min(int_P_y_0_2_alloc_table, y_0), (0)))
-                and (JC_<somenum>:
-                    ge_int(offset_max(int_P_y_0_2_alloc_table, y_0), (0)))))))}
-      unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
+        ((JC_<somenum>: le_int(offset_min(int_P_x_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: ge_int(offset_max(int_P_x_1_alloc_table, x_0), (0)))
+            and ((JC_<somenum>: le_int(offset_min(int_P_y_2_alloc_table, y), (0)))
+                and (JC_<somenum>: ge_int(offset_max(int_P_y_2_alloc_table, y), (0)))))))}
+      unit reads int_P_int_M_x_1 writes int_P_int_M_x_1
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_1, x_0@)), (0)))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0@)),
-            integer_of_int32(select(int_P_int_M_x_0_1@, y_0@)))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_1, y@)),
+            integer_of_int32(select(int_P_int_M_x_1@, y@)))))) }
 
 parameter f_specialized :
  x_0:int_P pointer ->
-  y_0:int_P pointer ->
-   int_P_int_M_x_0_1:(int_P, int32) memory ref ->
-    int_P_y_0_2_alloc_table:int_P alloc_table ->
-     int_P_x_0_1_alloc_table:int_P alloc_table ->
-      { } unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
+  y:int_P pointer ->
+   int_P_int_M_x_1:(int_P, int32) memory ref ->
+    int_P_y_2_alloc_table:int_P alloc_table ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
+      { } unit reads int_P_int_M_x_1 writes int_P_int_M_x_1
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_1, x_0@)), (0)))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0@)),
-            integer_of_int32(select(int_P_int_M_x_0_1@, y_0@)))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_1, y@)),
+            integer_of_int32(select(int_P_int_M_x_1@, y@)))))) }
 
 parameter f_specialized_1 :
  x_0:int_P pointer ->
-  y_0:int_P pointer ->
-   int_P_int_M_x_0_1:(int_P, int32) memory ref ->
-    int_P_y_0_2_alloc_table:int_P alloc_table ->
-     int_P_x_0_1_alloc_table:int_P alloc_table ->
-      { } unit reads int_P_int_M_x_0_1 writes int_P_int_M_x_0_1
+  y:int_P pointer ->
+   int_P_int_M_x_1:(int_P, int32) memory ref ->
+    int_P_y_2_alloc_table:int_P alloc_table ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
+      { } unit reads int_P_int_M_x_1 writes int_P_int_M_x_1
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_1, x_0@)), (0)))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(int_P_int_M_x_0_1, y_0@)),
-            integer_of_int32(select(int_P_int_M_x_0_1@, y_0@)))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_1, y@)),
+            integer_of_int32(select(int_P_int_M_x_1@, y@)))))) }
 
 parameter g : tt:unit -> { } unit { true }
 
 parameter g_requires : tt:unit -> { } unit { true }
 
 parameter h :
- x_1:int_P pointer ->
-  y:int_P pointer ->
-   int_P_int_M_y_4:(int_P, int32) memory ref ->
-    int_P_int_M_x_3:(int_P, int32) memory ref ->
-     int_P_y_4_alloc_table:int_P alloc_table ->
-      int_P_x_3_alloc_table:int_P alloc_table ->
-       { } unit reads int_P_int_M_x_3,int_P_int_M_y_4
-       writes int_P_int_M_x_3,int_P_int_M_y_4
+ x_0_0:int_P pointer ->
+  y_0:int_P pointer ->
+   int_P_int_M_y_0_4:(int_P, int32) memory ref ->
+    int_P_int_M_x_0_3:(int_P, int32) memory ref ->
+     int_P_y_0_4_alloc_table:int_P alloc_table ->
+      int_P_x_0_3_alloc_table:int_P alloc_table ->
+       { } unit reads int_P_int_M_x_0_3,int_P_int_M_y_0_4
+       writes int_P_int_M_x_0_3,int_P_int_M_y_0_4
        { (JC_<somenum>:
          ((JC_<somenum>:
-          eq_int(integer_of_int32(select(int_P_int_M_x_3, x_1@)), (0)))
+          eq_int(integer_of_int32(select(int_P_int_M_x_0_3, x_0_0@)), (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int32(select(int_P_int_M_y_4, y@)), (1))))) }
+             eq_int(integer_of_int32(select(int_P_int_M_y_0_4, y_0@)), (1))))) }
 
 parameter h_requires :
- x_1:int_P pointer ->
-  y:int_P pointer ->
-   int_P_int_M_y_4:(int_P, int32) memory ref ->
-    int_P_int_M_x_3:(int_P, int32) memory ref ->
-     int_P_y_4_alloc_table:int_P alloc_table ->
-      int_P_x_3_alloc_table:int_P alloc_table ->
+ x_0_0:int_P pointer ->
+  y_0:int_P pointer ->
+   int_P_int_M_y_0_4:(int_P, int32) memory ref ->
+    int_P_int_M_x_0_3:(int_P, int32) memory ref ->
+     int_P_y_0_4_alloc_table:int_P alloc_table ->
+      int_P_x_0_3_alloc_table:int_P alloc_table ->
        { (JC_<somenum>:
-         ((JC_<somenum>: le_int(offset_min(int_P_x_3_alloc_table, x_1), (0)))
-         and ((JC_<somenum>: ge_int(offset_max(int_P_x_3_alloc_table, x_1), (0)))
-             and ((JC_<somenum>: le_int(offset_min(int_P_y_4_alloc_table, y), (0)))
+         ((JC_<somenum>: le_int(offset_min(int_P_x_0_3_alloc_table, x_0_0), (0)))
+         and ((JC_<somenum>:
+              ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (0)))
+             and ((JC_<somenum>:
+                  le_int(offset_min(int_P_y_0_4_alloc_table, y_0), (0)))
                  and (JC_<somenum>:
-                     ge_int(offset_max(int_P_y_4_alloc_table, y), (0)))))))}
-       unit reads int_P_int_M_x_3,int_P_int_M_y_4
-       writes int_P_int_M_x_3,int_P_int_M_y_4
+                     ge_int(offset_max(int_P_y_0_4_alloc_table, y_0), (0)))))))}
+       unit reads int_P_int_M_x_0_3,int_P_int_M_y_0_4
+       writes int_P_int_M_x_0_3,int_P_int_M_y_0_4
        { (JC_<somenum>:
          ((JC_<somenum>:
-          eq_int(integer_of_int32(select(int_P_int_M_x_3, x_1@)), (0)))
+          eq_int(integer_of_int32(select(int_P_int_M_x_0_3, x_0_0@)), (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int32(select(int_P_int_M_y_4, y@)), (1))))) }
+             eq_int(integer_of_int32(select(int_P_int_M_y_0_4, y_0@)), (1))))) }
 
 parameter h_requires_specialized :
- x_1:int_P pointer ->
-  y:int_P pointer ->
-   int_P_int_M_x_3:(int_P, int32) memory ref ->
-    int_P_y_4_alloc_table:int_P alloc_table ->
-     int_P_x_3_alloc_table:int_P alloc_table ->
+ x_0_0:int_P pointer ->
+  y_0:int_P pointer ->
+   int_P_int_M_x_0_3:(int_P, int32) memory ref ->
+    int_P_y_0_4_alloc_table:int_P alloc_table ->
+     int_P_x_0_3_alloc_table:int_P alloc_table ->
       { (JC_<somenum>:
-        ((JC_<somenum>: le_int(offset_min(int_P_x_3_alloc_table, x_1), (0)))
-        and ((JC_<somenum>: ge_int(offset_max(int_P_x_3_alloc_table, x_1), (0)))
-            and ((JC_<somenum>: le_int(offset_min(int_P_y_4_alloc_table, y), (0)))
+        ((JC_<somenum>: le_int(offset_min(int_P_x_0_3_alloc_table, x_0_0), (0)))
+        and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (0)))
+            and ((JC_<somenum>:
+                 le_int(offset_min(int_P_y_0_4_alloc_table, y_0), (0)))
                 and (JC_<somenum>:
-                    ge_int(offset_max(int_P_y_4_alloc_table, y), (0)))))))}
-      unit reads int_P_int_M_x_3,int_P_int_M_x_3
-      writes int_P_int_M_x_3,int_P_int_M_x_3
+                    ge_int(offset_max(int_P_y_0_4_alloc_table, y_0), (0)))))))}
+      unit reads int_P_int_M_x_0_3,int_P_int_M_x_0_3
+      writes int_P_int_M_x_0_3,int_P_int_M_x_0_3
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_3, x_1@)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_0_3, x_0_0@)), (0)))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(int_P_int_M_x_3, y@)), (1))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_0_3, y_0@)), (1))))) }
 
 parameter h_specialized :
- x_1:int_P pointer ->
-  y:int_P pointer ->
-   int_P_int_M_x_3:(int_P, int32) memory ref ->
-    int_P_y_4_alloc_table:int_P alloc_table ->
-     int_P_x_3_alloc_table:int_P alloc_table ->
-      { } unit reads int_P_int_M_x_3,int_P_int_M_x_3
-      writes int_P_int_M_x_3,int_P_int_M_x_3
+ x_0_0:int_P pointer ->
+  y_0:int_P pointer ->
+   int_P_int_M_x_0_3:(int_P, int32) memory ref ->
+    int_P_y_0_4_alloc_table:int_P alloc_table ->
+     int_P_x_0_3_alloc_table:int_P alloc_table ->
+      { } unit reads int_P_int_M_x_0_3,int_P_int_M_x_0_3
+      writes int_P_int_M_x_0_3,int_P_int_M_x_0_3
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_3, x_1@)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_0_3, x_0_0@)), (0)))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(int_P_int_M_x_3, y@)), (1))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_0_3, y_0@)), (1))))) }
 
 parameter h_specialized_1 :
- x_1:int_P pointer ->
-  y:int_P pointer ->
-   int_P_int_M_x_3:(int_P, int32) memory ref ->
-    int_P_y_4_alloc_table:int_P alloc_table ->
-     int_P_x_3_alloc_table:int_P alloc_table ->
-      { } unit reads int_P_int_M_x_3,int_P_int_M_x_3
-      writes int_P_int_M_x_3,int_P_int_M_x_3
+ x_0_0:int_P pointer ->
+  y_0:int_P pointer ->
+   int_P_int_M_x_0_3:(int_P, int32) memory ref ->
+    int_P_y_0_4_alloc_table:int_P alloc_table ->
+     int_P_x_0_3_alloc_table:int_P alloc_table ->
+      { } unit reads int_P_int_M_x_0_3,int_P_int_M_x_0_3
+      writes int_P_int_M_x_0_3,int_P_int_M_x_0_3
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_3, x_1@)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_0_3, x_0_0@)), (0)))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(int_P_int_M_x_3, y@)), (1))))) }
+            eq_int(integer_of_int32(select(int_P_int_M_x_0_3, y_0@)), (1))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -704,35 +704,33 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let f_ensures_default =
- fun (x_0 : int_P pointer) (y_0 : int_P pointer) (int_P_int_M_x_0_1 : (int_P, int32) memory ref) (int_P_x_0_1_alloc_table : int_P alloc_table) (int_P_y_0_2_alloc_table : int_P alloc_table) (int_P_int_M_y_0_2 : (int_P, int32) memory) ->
+ fun (x_0 : int_P pointer) (y : int_P pointer) (int_P_int_M_x_1 : (int_P, int32) memory ref) (int_P_x_1_alloc_table : int_P alloc_table) (int_P_y_2_alloc_table : int_P alloc_table) (int_P_int_M_y_2 : (int_P, int32) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(int_P_x_0_1_alloc_table, x_0), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_1_alloc_table, x_0), (0)))
-        and ((JC_<somenum>: le_int(offset_min(int_P_y_0_2_alloc_table, y_0), (0)))
-            and (JC_<somenum>:
-                ge_int(offset_max(int_P_y_0_2_alloc_table, y_0), (0))))))) }
+    ((JC_<somenum>: le_int(offset_min(int_P_x_1_alloc_table, x_0), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(int_P_x_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: le_int(offset_min(int_P_y_2_alloc_table, y), (0)))
+            and (JC_<somenum>: ge_int(offset_max(int_P_y_2_alloc_table, y), (0))))))) }
   (init:
   try
    (C_2:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = x_0 in
-     (((safe_upd_ int_P_int_M_x_0_1) jessie_<somenum>) jessie_<somenum>))); (raise Return);
+     (((safe_upd_ int_P_int_M_x_1) jessie_<somenum>) jessie_<somenum>))); (raise Return);
     (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_x_0_1, x_0@)), (0)))
+    ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_x_1, x_0@)), (0)))
     and (JC_<somenum>:
-        eq_int(integer_of_int32(select(int_P_int_M_y_0_2, y_0@)),
-        integer_of_int32(select(int_P_int_M_y_0_2@, y_0@)))))) }
+        eq_int(integer_of_int32(select(int_P_int_M_y_2, y@)),
+        integer_of_int32(select(int_P_int_M_y_2@, y@)))))) }
 
 let f_safety =
- fun (x_0 : int_P pointer) (y_0 : int_P pointer) (int_P_int_M_x_0_1 : (int_P, int32) memory ref) (int_P_x_0_1_alloc_table : int_P alloc_table) (int_P_y_0_2_alloc_table : int_P alloc_table) (int_P_int_M_y_0_2 : (int_P, int32) memory) ->
+ fun (x_0 : int_P pointer) (y : int_P pointer) (int_P_int_M_x_1 : (int_P, int32) memory ref) (int_P_x_1_alloc_table : int_P alloc_table) (int_P_y_2_alloc_table : int_P alloc_table) (int_P_int_M_y_2 : (int_P, int32) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(int_P_x_0_1_alloc_table, x_0), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_1_alloc_table, x_0), (0)))
-        and ((JC_<somenum>: le_int(offset_min(int_P_y_0_2_alloc_table, y_0), (0)))
-            and (JC_<somenum>:
-                ge_int(offset_max(int_P_y_0_2_alloc_table, y_0), (0))))))) }
+    ((JC_<somenum>: le_int(offset_min(int_P_x_1_alloc_table, x_0), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(int_P_x_1_alloc_table, x_0), (0)))
+        and ((JC_<somenum>: le_int(offset_min(int_P_y_2_alloc_table, y), (0)))
+            and (JC_<somenum>: ge_int(offset_max(int_P_y_2_alloc_table, y), (0))))))) }
   (init:
   try
    (C_2:
@@ -740,7 +738,7 @@ let f_safety =
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
      (let jessie_<somenum> = x_0 in
      (JC_<somenum>:
-     ((((upd_ int_P_x_0_1_alloc_table) int_P_int_M_x_0_1) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ int_P_x_1_alloc_table) int_P_int_M_x_1) jessie_<somenum>) jessie_<somenum>))));
     (raise Return); (raise Return) end) with Return -> void end) { true }
 
 let g_ensures_default =
@@ -758,7 +756,7 @@ let g_ensures_default =
      (let int_P_a_7_alloc_table = ref (any_alloc_table void) in
      (let int_P_y_1_6_alloc_table = ref (any_alloc_table void) in
      (let int_P_x_1_5_alloc_table = ref (any_alloc_table void) in
-     (let x_1_0 = ref (any_pointer void) in
+     (let x_1 = ref (any_pointer void) in
      (let y_1 = ref (any_pointer void) in
      (let a = ref (any_pointer void) in
      (C_14:
@@ -773,9 +771,9 @@ let g_ensures_default =
      (C_38:
      begin
        (let jessie_<somenum> =
-       (x_1_0 := (C_13:
-                 (JC_<somenum>:
-                 (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
+       (x_1 := (C_13:
+               (JC_<somenum>:
+               (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
        void);
       (let jessie_<somenum> =
       (y_1 := (C_15:
@@ -788,12 +786,12 @@ let g_ensures_default =
             (((alloc_struct_int_P (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table)))) in
       void);
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !x_1_0 in
+      (let jessie_<somenum> = !x_1 in
       (((safe_upd_ int_P_int_M_x_1_5) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
       (let jessie_<somenum> = !y_1 in
       (((safe_upd_ int_P_int_M_y_1_6) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !x_1_0 in
+      (let jessie_<somenum> = !x_1 in
       (let jessie_<somenum> = !y_1 in
       (JC_<somenum>:
       ((((((f jessie_<somenum>) jessie_<somenum>) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
@@ -817,7 +815,7 @@ let g_ensures_default =
       (let jessie_<somenum> = (C_31: ((shift !a) (1))) in
       (JC_<somenum>:
       (((((f_specialized jessie_<somenum>) jessie_<somenum>) int_P_int_M_a_7) !int_P_a_7_alloc_table) !int_P_a_7_alloc_table))));
-      void; ((safe_free_parameter int_P_x_1_5_alloc_table) !x_1_0);
+      void; ((safe_free_parameter int_P_x_1_5_alloc_table) !x_1);
       ((safe_free_parameter int_P_y_1_6_alloc_table) !y_1);
       ((safe_free_parameter int_P_a_7_alloc_table) !a); (raise Return) end))))))))))))))))))))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
@@ -837,7 +835,7 @@ let g_ensures_values =
      (let int_P_a_7_alloc_table = ref (any_alloc_table void) in
      (let int_P_y_1_6_alloc_table = ref (any_alloc_table void) in
      (let int_P_x_1_5_alloc_table = ref (any_alloc_table void) in
-     (let x_1_0 = ref (any_pointer void) in
+     (let x_1 = ref (any_pointer void) in
      (let y_1 = ref (any_pointer void) in
      (let a = ref (any_pointer void) in
      (C_14:
@@ -852,9 +850,9 @@ let g_ensures_values =
      (C_38:
      begin
        (let jessie_<somenum> =
-       (x_1_0 := (C_13:
-                 (JC_<somenum>:
-                 (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
+       (x_1 := (C_13:
+               (JC_<somenum>:
+               (((alloc_struct_int_P (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table)))) in
        void);
       (let jessie_<somenum> =
       (y_1 := (C_15:
@@ -867,19 +865,19 @@ let g_ensures_values =
             (((alloc_struct_int_P (2)) int_P_a_7_alloc_table) int_P_a_7_tag_table)))) in
       void);
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !x_1_0 in
+      (let jessie_<somenum> = !x_1 in
       (((safe_upd_ int_P_int_M_x_1_5) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
       (let jessie_<somenum> = !y_1 in
       (((safe_upd_ int_P_int_M_y_1_6) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !x_1_0 in
+      (let jessie_<somenum> = !x_1 in
       (let jessie_<somenum> = !y_1 in
       (JC_<somenum>:
       ((((((f jessie_<somenum>) jessie_<somenum>) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
       (assert
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(int_P_int_M_x_1_5, x_1_0)), (0)))
+         eq_int(integer_of_int32(select(int_P_int_M_x_1_5, x_1)), (0)))
         and (JC_<somenum>:
             eq_int(integer_of_int32(select(int_P_int_M_y_1_6, y_1)), (1))))) };
       void); void;
@@ -910,7 +908,7 @@ let g_ensures_values =
         and (JC_<somenum>:
             eq_int(integer_of_int32(select(int_P_int_M_a_7, shift(a, (1)))),
             (1))))) }; void); void;
-      ((safe_free_parameter int_P_x_1_5_alloc_table) !x_1_0);
+      ((safe_free_parameter int_P_x_1_5_alloc_table) !x_1);
       ((safe_free_parameter int_P_y_1_6_alloc_table) !y_1);
       ((safe_free_parameter int_P_a_7_alloc_table) !a); (raise Return) end))))))))))))))))))))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
@@ -930,7 +928,7 @@ let g_safety =
      (let int_P_a_7_alloc_table = ref (any_alloc_table void) in
      (let int_P_y_1_6_alloc_table = ref (any_alloc_table void) in
      (let int_P_x_1_5_alloc_table = ref (any_alloc_table void) in
-     (let x_1_0 = ref (any_pointer void) in
+     (let x_1 = ref (any_pointer void) in
      (let y_1 = ref (any_pointer void) in
      (let a = ref (any_pointer void) in
      (C_14:
@@ -945,14 +943,14 @@ let g_safety =
      (C_38:
      begin
        (let jessie_<somenum> =
-       (x_1_0 := (let jessie_<somenum> =
-                 (C_13:
-                 (JC_<somenum>:
-                 (((alloc_struct_int_P_requires (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table))) in
-                 (JC_<somenum>:
-                 (assert
-                 { ge_int(offset_max(int_P_x_1_5_alloc_table, jessie_<somenum>),
-                   (0)) }; jessie_<somenum>)))) in void);
+       (x_1 := (let jessie_<somenum> =
+               (C_13:
+               (JC_<somenum>:
+               (((alloc_struct_int_P_requires (1)) int_P_x_1_5_alloc_table) int_P_x_1_5_tag_table))) in
+               (JC_<somenum>:
+               (assert
+               { ge_int(offset_max(int_P_x_1_5_alloc_table, jessie_<somenum>), (0)) };
+               jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
       (y_1 := (let jessie_<somenum> =
               (C_15:
@@ -972,12 +970,12 @@ let g_safety =
             { ge_int(offset_max(int_P_a_7_alloc_table, jessie_<somenum>), (1)) };
             jessie_<somenum>)))) in void);
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !x_1_0 in
+      (let jessie_<somenum> = !x_1 in
       (((safe_upd_ int_P_int_M_x_1_5) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
       (let jessie_<somenum> = !y_1 in
       (((safe_upd_ int_P_int_M_y_1_6) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = !x_1_0 in
+      (let jessie_<somenum> = !x_1 in
       (let jessie_<somenum> = !y_1 in
       (JC_<somenum>:
       ((((((f_requires jessie_<somenum>) jessie_<somenum>) int_P_int_M_x_1_5) !int_P_y_1_6_alloc_table) !int_P_x_1_5_alloc_table) !int_P_int_M_y_1_6))));
@@ -1005,54 +1003,58 @@ let g_safety =
         pset_singleton(a)) };
       (JC_<somenum>:
       (((((f_requires_specialized jessie_<somenum>) jessie_<somenum>) int_P_int_M_a_7) !int_P_a_7_alloc_table) !int_P_a_7_alloc_table))))));
-      void; ((free_parameter int_P_x_1_5_alloc_table) !x_1_0);
+      void; ((free_parameter int_P_x_1_5_alloc_table) !x_1);
       ((free_parameter int_P_y_1_6_alloc_table) !y_1);
       ((free_parameter int_P_a_7_alloc_table) !a); (raise Return) end))))))))))))))))))))));
     (raise Return) end with Return -> void end) { true }
 
 let h_ensures_default =
- fun (x_1 : int_P pointer) (y : int_P pointer) (int_P_int_M_x_3 : (int_P, int32) memory ref) (int_P_int_M_y_4 : (int_P, int32) memory ref) (int_P_x_3_alloc_table : int_P alloc_table) (int_P_y_4_alloc_table : int_P alloc_table) ->
+ fun (x_0_0 : int_P pointer) (y_0 : int_P pointer) (int_P_int_M_x_0_3 : (int_P, int32) memory ref) (int_P_int_M_y_0_4 : (int_P, int32) memory ref) (int_P_x_0_3_alloc_table : int_P alloc_table) (int_P_y_0_4_alloc_table : int_P alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(int_P_x_3_alloc_table, x_1), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(int_P_x_3_alloc_table, x_1), (0)))
-        and ((JC_<somenum>: le_int(offset_min(int_P_y_4_alloc_table, y), (0)))
-            and (JC_<somenum>: ge_int(offset_max(int_P_y_4_alloc_table, y), (0))))))) }
+    ((JC_<somenum>: le_int(offset_min(int_P_x_0_3_alloc_table, x_0_0), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (0)))
+        and ((JC_<somenum>: le_int(offset_min(int_P_y_0_4_alloc_table, y_0), (0)))
+            and (JC_<somenum>:
+                ge_int(offset_max(int_P_y_0_4_alloc_table, y_0), (0))))))) }
   (init:
   try
    (C_42:
    (C_44:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = x_1 in
-     (((safe_upd_ int_P_int_M_x_3) jessie_<somenum>) jessie_<somenum>)));
+     (let jessie_<somenum> = x_0_0 in
+     (((safe_upd_ int_P_int_M_x_0_3) jessie_<somenum>) jessie_<somenum>)));
     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-    (let jessie_<somenum> = y in
-    (((safe_upd_ int_P_int_M_y_4) jessie_<somenum>) jessie_<somenum>))); (raise Return);
-    (raise Return) end)) with Return -> void end)
+    (let jessie_<somenum> = y_0 in
+    (((safe_upd_ int_P_int_M_y_0_4) jessie_<somenum>) jessie_<somenum>)));
+    (raise Return); (raise Return) end)) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_x_3, x_1@)), (0)))
-    and (JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_y_4, y@)), (1))))) }
+    ((JC_<somenum>:
+     eq_int(integer_of_int32(select(int_P_int_M_x_0_3, x_0_0@)), (0)))
+    and (JC_<somenum>:
+        eq_int(integer_of_int32(select(int_P_int_M_y_0_4, y_0@)), (1))))) }
 
 let h_safety =
- fun (x_1 : int_P pointer) (y : int_P pointer) (int_P_int_M_x_3 : (int_P, int32) memory ref) (int_P_int_M_y_4 : (int_P, int32) memory ref) (int_P_x_3_alloc_table : int_P alloc_table) (int_P_y_4_alloc_table : int_P alloc_table) ->
+ fun (x_0_0 : int_P pointer) (y_0 : int_P pointer) (int_P_int_M_x_0_3 : (int_P, int32) memory ref) (int_P_int_M_y_0_4 : (int_P, int32) memory ref) (int_P_x_0_3_alloc_table : int_P alloc_table) (int_P_y_0_4_alloc_table : int_P alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(int_P_x_3_alloc_table, x_1), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(int_P_x_3_alloc_table, x_1), (0)))
-        and ((JC_<somenum>: le_int(offset_min(int_P_y_4_alloc_table, y), (0)))
-            and (JC_<somenum>: ge_int(offset_max(int_P_y_4_alloc_table, y), (0))))))) }
+    ((JC_<somenum>: le_int(offset_min(int_P_x_0_3_alloc_table, x_0_0), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(int_P_x_0_3_alloc_table, x_0_0), (0)))
+        and ((JC_<somenum>: le_int(offset_min(int_P_y_0_4_alloc_table, y_0), (0)))
+            and (JC_<somenum>:
+                ge_int(offset_max(int_P_y_0_4_alloc_table, y_0), (0))))))) }
   (init:
   try
    (C_42:
    (C_44:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-     (let jessie_<somenum> = x_1 in
+     (let jessie_<somenum> = x_0_0 in
      (JC_<somenum>:
-     ((((upd_ int_P_x_3_alloc_table) int_P_int_M_x_3) jessie_<somenum>) jessie_<somenum>))));
+     ((((upd_ int_P_x_0_3_alloc_table) int_P_int_M_x_0_3) jessie_<somenum>) jessie_<somenum>))));
     (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-    (let jessie_<somenum> = y in
+    (let jessie_<somenum> = y_0 in
     (JC_<somenum>:
-    ((((upd_ int_P_y_4_alloc_table) int_P_int_M_y_4) jessie_<somenum>) jessie_<somenum>))));
+    ((((upd_ int_P_y_0_4_alloc_table) int_P_int_M_y_0_4) jessie_<somenum>) jessie_<somenum>))));
     (raise Return); (raise Return) end)) with Return -> void end) { true }
 
 let k_ensures_default =
@@ -1338,7 +1340,7 @@ why --project [...] why/separation.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po37.why">
-      <location file = "why/separation.why" line = "1105" begin = "17" end = "95"/>
+      <location file = "why/separation.why" line = "1107" begin = "17" end = "95"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po38.why">
@@ -1347,7 +1349,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po39.why">
-      <location file = "why/separation.why" line = "1114" begin = "16" end = "77"/>
+      <location file = "why/separation.why" line = "1116" begin = "16" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po40.why">
@@ -1356,7 +1358,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po41.why">
-      <location file = "why/separation.why" line = "1123" begin = "16" end = "77"/>
+      <location file = "why/separation.why" line = "1125" begin = "16" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po42.why">
@@ -1380,7 +1382,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po46.why">
-      <location file = "why/separation.why" line = "1155" begin = "8" end = "93"/>
+      <location file = "why/separation.why" line = "1157" begin = "8" end = "93"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po47.why">
@@ -1404,17 +1406,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po51.why">
-      <location file = "why/separation.why" line = "1159" begin = "13" end = "59"/>
+      <location file = "why/separation.why" line = "1161" begin = "13" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po52.why">
-      <location file = "why/separation.why" line = "1160" begin = "7" end = "53"/>
+      <location file = "why/separation.why" line = "1162" begin = "7" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po53.why">
-      <location file = "why/separation.why" line = "1161" begin = "7" end = "53"/>
+      <location file = "why/separation.why" line = "1163" begin = "7" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1442,22 +1444,22 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/separation_po28.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po29.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "105" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po30.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "106" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "106" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po31.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "106" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "106" begin = "15" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1482,7 +1484,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po9.why">
-      <location file = "why/separation.why" line = "790" begin = "19" end = "97"/>
+      <location file = "why/separation.why" line = "788" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po10.why">
@@ -1491,7 +1493,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po11.why">
-      <location file = "why/separation.why" line = "799" begin = "16" end = "75"/>
+      <location file = "why/separation.why" line = "797" begin = "16" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po12.why">
@@ -1500,7 +1502,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/separation_po13.why">
-      <location file = "why/separation.why" line = "808" begin = "14" end = "71"/>
+      <location file = "why/separation.why" line = "806" begin = "14" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po14.why">
@@ -1524,7 +1526,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po18.why">
-      <location file = "why/separation.why" line = "840" begin = "8" end = "89"/>
+      <location file = "why/separation.why" line = "838" begin = "8" end = "89"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/separation_po19.why">
@@ -1548,17 +1550,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/separation_po23.why">
-      <location file = "why/separation.why" line = "844" begin = "13" end = "60"/>
+      <location file = "why/separation.why" line = "842" begin = "13" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po24.why">
-      <location file = "why/separation.why" line = "845" begin = "7" end = "52"/>
+      <location file = "why/separation.why" line = "843" begin = "7" end = "52"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/separation_po25.why">
-      <location file = "why/separation.why" line = "846" begin = "7" end = "48"/>
+      <location file = "why/separation.why" line = "844" begin = "7" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1586,12 +1588,12 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/separation_po2.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "43" begin = "14" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "43" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/separation_po3.why">
-      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "43" begin = "14" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/separation.jessie/separation.jc" line = "43" begin = "14" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

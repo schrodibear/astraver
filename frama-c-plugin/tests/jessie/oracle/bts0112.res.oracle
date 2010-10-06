@@ -128,39 +128,33 @@ predicate temporary_is_exact_int_mat_bounded_by{L}(double_P[..] X_1,
           ((min_0 <= ((X_1 + ((i_1 * LDX_1) + j_1)).double_M :> real)) &&
             (((X_1 + ((i_1 * LDX_1) + j_1)).double_M :> real) <= max_0)))))))
 
-unit DGEMM_NEG(int32 N_0, int32 M, int32 K_0, int32 p_1, double_P[..] A_0,
-               int32 LDA_0, double_P[..] X, int32 LDX, double_P[..] Y,
-               int32 LDY)
-  requires (C_62 : (((((((C_68 : (2 <= p_1)) &&
-                          (C_69 : ((((p_1 - 1) * (p_1 - 1)) * M) <= max_int))) &&
-                         (C_70 : (\base_block(Y) != \base_block(A_0)))) &&
+unit DGEMM_NEG(int32 N, int32 M, int32 K, int32 p, double_P[..] A, int32 LDA,
+               double_P[..] X, int32 LDX, double_P[..] Y, int32 LDY)
+  requires (C_62 : (((((((C_68 : (2 <= p)) &&
+                          (C_69 : ((((p - 1) * (p - 1)) * M) <= max_int))) &&
+                         (C_70 : (\base_block(Y) != \base_block(A)))) &&
                         (C_71 : (\forall integer i_2;
                                   (\forall integer j_2;
                                     (((0 <= i_2) &&
-                                       (i_2 <=
-                                         ((((N_0 - 1) * LDY) + K_0) - 1))) ==>
+                                       (i_2 <= ((((N - 1) * LDY) + K) - 1))) ==>
                                       (((0 <= j_2) &&
-                                         (j_2 <=
-                                           ((((M - 1) * LDX) + K_0) - 1))) ==>
+                                         (j_2 <= ((((M - 1) * LDX) + K) - 1))) ==>
                                         ((Y + i_2) != (X + j_2)))))))) &&
-                       (C_72 : is_exact_int_mat_bounded_by{Here}(Y, LDY, N_0,
-                                                                 K_0, 0,
-                                                                 (p_1 - 1)))) &&
-                      (C_73 : is_exact_int_mat_bounded_by{Here}(A_0, LDA_0,
-                                                                N_0, M, 0,
-                                                                (p_1 - 1)))) &&
-                     (C_74 : is_exact_int_mat_bounded_by{Here}(X, LDX, M,
-                                                               K_0, 0,
-                                                               (p_1 - 1)))));
+                       (C_72 : is_exact_int_mat_bounded_by{Here}(Y, LDY, N,
+                                                                 K, 0,
+                                                                 (p - 1)))) &&
+                      (C_73 : is_exact_int_mat_bounded_by{Here}(A, LDA, N, M,
+                                                                0, (p - 1)))) &&
+                     (C_74 : is_exact_int_mat_bounded_by{Here}(X, LDX, M, K,
+                                                               0, (p - 1)))));
 behavior default:
-  assigns (Y + [0..((((N_0 - 1) * LDY) + K_0) - 1)]).double_M;
+  assigns (Y + [0..((((N - 1) * LDY) + K) - 1)]).double_M;
   ensures (C_61 : is_exact_int_mat_bounded_by{Here}(\at(Y,Old), \at(LDY,Old),
-                                                    \at(N_0,Old),
-                                                    \at(K_0,Old),
-                                                    (((1 - \at(p_1,Old)) *
-                                                       (\at(p_1,Old) - 1)) *
+                                                    \at(N,Old), \at(K,Old),
+                                                    (((1 - \at(p,Old)) *
+                                                       (\at(p,Old) - 1)) *
                                                       \at(M,Old)),
-                                                    (\at(p_1,Old) - 1)));
+                                                    (\at(p,Old) - 1)));
 {  
    (var int32 i);
    
@@ -173,16 +167,16 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_2 : (((C_4 : (0 <= i)) && (C_5 : (i <= N_0))) &&
+           invariant (C_2 : (((C_4 : (0 <= i)) && (C_5 : (i <= N))) &&
                               (C_6 : is_exact_int_mat_bounded_by{Here}(
-                              Y, LDY, i, K_0, (((1 - p_1) * (p_1 - 1)) * M),
-                              (p_1 - 1)))));
+                              Y, LDY, i, K, (((1 - p) * (p - 1)) * M),
+                              (p - 1)))));
          behavior default:
            
-           assigns (Y + [0..((((i - 1) * LDY) + K_0) - 1)]).double_M;
+           assigns (Y + [0..((((i - 1) * LDY) + K) - 1)]).double_M;
          while (true)
          {  
-            {  (if (i < N_0) then () else 
+            {  (if (i < N) then () else 
                (goto while_0_break));
                (C_7 : (k = 0));
                
@@ -190,17 +184,16 @@ behavior default:
                   loop 
                   behavior default:
                     invariant (C_8 : (((C_10 : (0 <= k)) &&
-                                        (C_11 : (k <= K_0))) &&
+                                        (C_11 : (k <= K))) &&
                                        (C_12 : temporary_is_exact_int_mat_bounded_by{Here}(
-                                       Y, LDY, i, K_0, k,
-                                       (((1 - p_1) * (p_1 - 1)) * M),
-                                       (p_1 - 1)))));
+                                       Y, LDY, i, K, k,
+                                       (((1 - p) * (p - 1)) * M), (p - 1)))));
                   behavior default:
                     
                     assigns (Y + [(i * LDY)..((i * LDY) + (k - 1))]).double_M;
                   while (true)
                   {  
-                     {  (if (k < K_0) then () else 
+                     {  (if (k < K) then () else 
                         (goto while_1_break));
                         (C_13 : (j = 0));
                         
@@ -219,15 +212,15 @@ behavior default:
                                                                  ((i * LDY) +
                                                                    k)).double_M :> real) ==
                                                                v_2)))) &&
-                                                  (C_23 : ((((1 - p_1) *
-                                                              (p_1 - 1)) *
+                                                  (C_23 : ((((1 - p) *
+                                                              (p - 1)) *
                                                              j) <=
                                                             ((Y +
                                                                ((i * LDY) +
                                                                  k)).double_M :> real)))) &&
                                                  (C_24 : (((Y +
                                                              ((i * LDY) + k)).double_M :> real) <=
-                                                           (p_1 - 1)))));
+                                                           (p - 1)))));
                            behavior default:
                              
                              assigns (Y + ((i * LDY) + k)).double_M;
@@ -249,13 +242,13 @@ behavior default:
                                                                     (i *
                                                                     LDY)) :> int32)) +
                                                                     k)) :> int32)))).double_M) -
-                                           (C_37 : ((C_36 : (C_35 : (A_0 +
+                                           (C_37 : ((C_36 : (C_35 : (A +
                                                                     (C_34 : (
                                                                     (C_33 : 
                                                                     ((C_32 : (
                                                                     (C_31 : 
                                                                     (i *
-                                                                    LDA_0)) :> int32)) +
+                                                                    LDA)) :> int32)) +
                                                                     j)) :> int32)))).double_M) *
                                                      (C_30 : (C_29 : 
                                                              (X +
@@ -292,26 +285,26 @@ behavior default:
   ensures (C_75 : true);
 ;
 
-unit DREMM(int32 N_1, int32 K_1, int32 p_2, double_P[..] X_0, int32 LDX_0)
-  requires (C_125 : is_exact_int_mat{Here}(X_0, LDX_0, N_1, K_1));
+unit DREMM(int32 N_0, int32 K_0, int32 p_0, double_P[..] X_0, int32 LDX_0)
+  requires (C_125 : is_exact_int_mat{Here}(X_0, LDX_0, N_0, K_0));
 behavior default:
-  assigns (X_0 + [0..((((N_1 - 1) * LDX_0) + K_1) - 1)]).double_M;
+  assigns (X_0 + [0..((((N_0 - 1) * LDX_0) + K_0) - 1)]).double_M;
   ensures (C_122 : ((C_123 : is_exact_int_mat_bounded_by{Here}(\at(X_0,Old),
                                                                \at(LDX_0,Old),
-                                                               \at(N_1,Old),
-                                                               \at(K_1,Old),
+                                                               \at(N_0,Old),
+                                                               \at(K_0,Old),
                                                                0,
-                                                               (\at(p_2,Old) -
+                                                               (\at(p_0,Old) -
                                                                  1))) &&
                      (C_124 : (\forall integer i_3;
                                 (\forall integer j_3;
-                                  ((((0 <= i_3) && (i_3 < \at(N_1,Old))) &&
-                                     ((0 <= j_3) && (j_3 < \at(K_1,Old)))) ==>
+                                  ((((0 <= i_3) && (i_3 < \at(N_0,Old))) &&
+                                     ((0 <= j_3) && (j_3 < \at(K_0,Old)))) ==>
                                     (\exists integer d;
                                       (((\at(X_0,Old) +
                                           ((i_3 * \at(LDX_0,Old)) + j_3)).double_M :> real) ==
                                         ((\old((X_0 + ((i_3 * LDX_0) + j_3)).double_M) :> real) +
-                                          (d * \at(p_2,Old)))))))))));
+                                          (d * \at(p_0,Old)))))))))));
 {  
    (var int32 i_0);
    
@@ -323,7 +316,7 @@ behavior default:
          loop 
          while (true)
          {  
-            {  (if (i_0 < N_1) then () else 
+            {  (if (i_0 < N_0) then () else 
                (goto while_3_break));
                (C_77 : (k_0 = 0));
                
@@ -331,7 +324,7 @@ behavior default:
                   loop 
                   while (true)
                   {  
-                     {  (if (k_0 < K_1) then () else 
+                     {  (if (k_0 < K_0) then () else 
                         (goto while_4_break));
                         
                         {  (C_93 : (let __cil_tmp = (C_84 : fmod())
@@ -373,7 +366,7 @@ behavior default:
                                                                    (i_0 *
                                                                     LDX_0)) :> int32)) +
                                                                     k_0)) :> int32)))).double_M) +
-                                                                 (C_94 : (p_2 :> double)))))) else ())
+                                                                 (C_94 : (p_0 :> double)))))) else ())
                         };
                         (C_118 : (k_0 = (C_117 : ((C_116 : (k_0 + 1)) :> int32))))
                      }
@@ -390,26 +383,26 @@ behavior default:
    }
 }
 
-unit DTRSM(int32 N_3, int32 K_2, double_P[..] A_1, int32 LDA_1,
+unit DTRSM(int32 N_1, int32 K_1, double_P[..] A_0, int32 LDA_0,
            double_P[..] X_1, int32 LDX_1)
-  requires (C_170 : (((C_172 : (N_3 <= 55)) &&
+  requires (C_170 : (((C_172 : (N_1 <= 55)) &&
                        (C_173 : is_exact_int_mat_bounded_by{Here}(X_1, LDX_1,
-                                                                  N_3, K_2,
+                                                                  N_1, K_1,
                                                                   0,
                                                                   (l_pmax(
-                                                                    N_3) -
+                                                                    N_1) -
                                                                     1)))) &&
-                      (C_174 : is_exact_int_mat_bounded_by{Here}(A_1, LDA_1,
-                                                                 N_3, N_3, 0,
+                      (C_174 : is_exact_int_mat_bounded_by{Here}(A_0, LDA_0,
+                                                                 N_1, N_1, 0,
                                                                  (l_pmax(
-                                                                   N_3) -
+                                                                   N_1) -
                                                                    1)))));
 behavior default:
-  assigns (X_1 + [0..((((N_3 - 1) * LDX_1) + K_2) - 1)]).double_M;
+  assigns (X_1 + [0..((((N_1 - 1) * LDX_1) + K_1) - 1)]).double_M;
   ensures (C_169 : is_exact_int_mat_bounded_by{Here}(\at(X_1,Old),
                                                      \at(LDX_1,Old),
-                                                     \at(N_3,Old),
-                                                     \at(K_2,Old),
+                                                     \at(N_1,Old),
+                                                     \at(K_1,Old),
                                                      (- max_int), max_int));
 {  
    (var int32 i_1);
@@ -418,7 +411,7 @@ behavior default:
    
    (var int32 k_1);
    
-   {  (C_128 : (i_1 = (C_127 : ((C_126 : (N_3 - 2)) :> int32))));
+   {  (C_128 : (i_1 = (C_127 : ((C_126 : (N_1 - 2)) :> int32))));
       
       {  
          loop 
@@ -432,7 +425,7 @@ behavior default:
                   loop 
                   while (true)
                   {  
-                     {  (if (j_0 < N_3) then () else 
+                     {  (if (j_0 < N_1) then () else 
                         (goto while_6_break));
                         (C_132 : (k_1 = 0));
                         
@@ -440,7 +433,7 @@ behavior default:
                            loop 
                            while (true)
                            {  
-                              {  (if (k_1 < K_2) then () else 
+                              {  (if (k_1 < K_1) then () else 
                                  (goto while_7_break));
                                  (C_159 : ((C_158 : (C_157 : (X_1 +
                                                                (C_156 : (
@@ -459,13 +452,13 @@ behavior default:
                                                                   LDX_1)) :> int32)) +
                                                                  k_1)) :> int32)))).double_M) -
                                             (C_145 : ((C_144 : (C_143 : 
-                                                               (A_1 +
+                                                               (A_0 +
                                                                  (C_142 : (
                                                                  (C_141 : 
                                                                  ((C_140 : (
                                                                   (C_139 : 
                                                                   (i_1 *
-                                                                    LDA_1)) :> int32)) +
+                                                                    LDA_0)) :> int32)) +
                                                                    j_0)) :> int32)))).double_M) *
                                                        (C_138 : (C_137 : 
                                                                 (X_1 +
@@ -496,13 +489,13 @@ behavior default:
    }
 }
 
-int32 Nmax(int32 p)
-  requires (C_207 : (2 <= p));
+int32 Nmax(int32 p_2)
+  requires (C_207 : (2 <= p_2));
 behavior default:
-  ensures (C_202 : (((C_204 : delay(\result, \at(p,Old))) &&
+  ensures (C_202 : (((C_204 : delay(\result, \at(p_2,Old))) &&
                       (C_205 : (\forall integer q;
                                  (((1 <= q) && (q <= \result)) <==>
-                                   delay(q, \at(p,Old)))))) &&
+                                   delay(q, \at(p_2,Old)))))) &&
                      (C_206 : (\result <= 55))));
 {  
    (var double pp);
@@ -523,7 +516,7 @@ behavior default:
                                                                  ((C_185 : (
                                                                   (C_184 : (
                                                                   (C_183 : 
-                                                                  (p -
+                                                                  (p_2 -
                                                                     1)) :> int32)) :> double)) *
                                                                    (C_182 : 
                                                                    (pp +
@@ -534,10 +527,10 @@ behavior default:
                      0) then () else 
                (goto while_8_break));
                
-               {  (C_193 : (pp = (C_192 : (pp * (C_191 : (p :> double))))));
+               {  (C_193 : (pp = (C_192 : (pp * (C_191 : (p_2 :> double))))));
                   (C_198 : (p2 = (C_197 : (p2 *
                                             (C_196 : ((C_195 : ((C_194 : 
-                                                                (p -
+                                                                (p_2 -
                                                                   2)) :> int32)) :> double))))))
                };
                (C_201 : (N_4 = (C_200 : ((C_199 : (N_4 + 1)) :> int32))))
@@ -550,9 +543,9 @@ behavior default:
    }
 }
 
-int32 pmax(int32 N_2)
+int32 pmax(int32 N_3)
 behavior default:
-  ensures (C_217 : (\result == l_pmax(\at(N_2,Old))));
+  ensures (C_217 : (\result == l_pmax(\at(N_3,Old))));
 {  
    (var int32 p_3);
    
@@ -570,7 +563,7 @@ behavior default:
                {  (C_210 : (tmp = (C_209 : Nmax(p_3))));
                   ()
                };
-               (if (N_2 <= tmp) then () else 
+               (if (N_3 <= tmp) then () else 
                (goto while_9_break));
                (C_213 : (p_3 = (C_212 : ((C_211 : (p_3 + 1)) :> int32))))
             }
@@ -583,23 +576,26 @@ behavior default:
    }
 }
 
-unit LZ_TRSM(int32 N, int32 K, int32 p_0, double_P[..] A, int32 LDA,
+unit LZ_TRSM(int32 N_2, int32 K_2, int32 p_1, double_P[..] A_1, int32 LDA_1,
              double_P[..] B, int32 LDB)
-  requires (C_246 : (((((C_250 : (2 <= p_0)) &&
-                         (C_251 : ((((p_0 - 1) * (p_0 - 1)) * N) <= max_int))) &&
-                        (C_252 : (\base_block(B) != \base_block(A)))) &&
-                       (C_253 : is_exact_int_mat_bounded_by{Here}(A, LDA, N,
-                                                                  N, 0,
-                                                                  (p_0 - 1)))) &&
-                      (C_254 : is_exact_int_mat_bounded_by{Here}(B, LDB, N,
-                                                                 K, 0,
-                                                                 (p_0 - 1)))));
+  requires (C_246 : (((((C_250 : (2 <= p_1)) &&
+                         (C_251 : ((((p_1 - 1) * (p_1 - 1)) * N_2) <=
+                                    max_int))) &&
+                        (C_252 : (\base_block(B) != \base_block(A_1)))) &&
+                       (C_253 : is_exact_int_mat_bounded_by{Here}(A_1, LDA_1,
+                                                                  N_2, N_2,
+                                                                  0,
+                                                                  (p_1 - 1)))) &&
+                      (C_254 : is_exact_int_mat_bounded_by{Here}(B, LDB, N_2,
+                                                                 K_2, 0,
+                                                                 (p_1 - 1)))));
 behavior default:
-  assigns (B + [0..((((N - 1) * LDB) + K) - 1)]).double_M;
+  assigns (B + [0..((((N_2 - 1) * LDB) + K_2) - 1)]).double_M;
   ensures (C_245 : is_exact_int_mat_bounded_by{Here}(\at(B,Old),
                                                      \at(LDB,Old),
-                                                     \at(N,Old), \at(K,Old),
-                                                     0, (\at(p_0,Old) - 1)));
+                                                     \at(N_2,Old),
+                                                     \at(K_2,Old), 0,
+                                                     (\at(p_1,Old) - 1)));
 {  
    (var int32 P);
    
@@ -608,36 +604,36 @@ behavior default:
    (var int32 tmp_0);
    
    {  
-      {  (C_219 : (tmp_0 = (C_218 : Nmax(p_0))));
+      {  (C_219 : (tmp_0 = (C_218 : Nmax(p_1))));
          ()
       };
-      (if (N <= tmp_0) then 
+      (if (N_2 <= tmp_0) then 
       {  
          {  
-            (assert for default: (C_242 : (N <= 55)));
+            (assert for default: (C_242 : (N_2 <= 55)));
             ()
          };
-         (C_243 : DTRSM(N, K, A, LDA, B, LDB));
-         (C_244 : DREMM(N, K, p_0, B, LDB))
+         (C_243 : DTRSM(N_2, K_2, A_1, LDA_1, B, LDB));
+         (C_244 : DREMM(N_2, K_2, p_1, B, LDB))
       } else 
-      {  (C_222 : (P = (C_221 : ((C_220 : (N / 2)) :> int32))));
-         (C_225 : (G = (C_224 : ((C_223 : (N - P)) :> int32))));
-         (C_234 : LZ_TRSM(G, K, p_0,
-                          (C_230 : (A +
+      {  (C_222 : (P = (C_221 : ((C_220 : (N_2 / 2)) :> int32))));
+         (C_225 : (G = (C_224 : ((C_223 : (N_2 - P)) :> int32))));
+         (C_234 : LZ_TRSM(G, K_2, p_1,
+                          (C_230 : (A_1 +
                                      (C_229 : ((C_228 : (P *
                                                           (C_227 : ((C_226 : 
-                                                                    (LDA +
+                                                                    (LDA_1 +
                                                                     1)) :> int32)))) :> int32)))),
-                          LDA,
+                          LDA_1,
                           (C_233 : (B +
                                      (C_232 : ((C_231 : (P * LDB)) :> int32)))),
                           LDB));
-         (C_239 : DGEMM_NEG(P, G, K, p_0, (C_235 : (A + P)), LDA,
+         (C_239 : DGEMM_NEG(P, G, K_2, p_1, (C_235 : (A_1 + P)), LDA_1,
                             (C_238 : (B +
                                        (C_237 : ((C_236 : (P * LDB)) :> int32)))),
                             LDB, B, LDB));
-         (C_240 : DREMM(P, K, p_0, B, LDB));
-         (C_241 : LZ_TRSM(P, K, p_0, A, LDA, B, LDB))
+         (C_240 : DREMM(P, K_2, p_1, B, LDB));
+         (C_241 : LZ_TRSM(P, K_2, p_1, A_1, LDA_1, B, LDB))
       });
       
       (return ())
@@ -1023,12 +1019,12 @@ axiom void_P_tags :
    instanceof(void_P_tag_table, x, void_P_tag)))
 
 parameter DGEMM_NEG :
- N_0_0:int32 ->
+ N_2:int32 ->
   M_2:int32 ->
-   K_0:int32 ->
-    p_1:int32 ->
-     A_0:double_P pointer ->
-      LDA_0:int32 ->
+   K:int32 ->
+    p_0:int32 ->
+     A:double_P pointer ->
+      LDA:int32 ->
        X_2:double_P pointer ->
         LDX_2:int32 ->
          Y:double_P pointer ->
@@ -1036,37 +1032,37 @@ parameter DGEMM_NEG :
            double_P_double_M_Y_6:(double_P, double) memory ref ->
             double_P_Y_6_alloc_table:double_P alloc_table ->
              double_P_X_5_alloc_table:double_P alloc_table ->
-              double_P_A_0_4_alloc_table:double_P alloc_table ->
+              double_P_A_4_alloc_table:double_P alloc_table ->
                double_P_double_M_X_5:(double_P, double) memory ->
-                double_P_double_M_A_0_4:(double_P, double) memory ->
+                double_P_double_M_A_4:(double_P, double) memory ->
                  { } unit reads double_P_double_M_Y_6
                  writes double_P_double_M_Y_6
                  { (JC_<somenum>:
                    ((JC_<somenum>:
                     is_exact_int_mat_bounded_by(Y@, integer_of_int32(LDY@),
-                    integer_of_int32(N_0_0@), integer_of_int32(K_0@),
-                    mul_int(mul_int(sub_int((1), integer_of_int32(p_1@)),
-                            sub_int(integer_of_int32(p_1@), (1))),
+                    integer_of_int32(N_2@), integer_of_int32(K@),
+                    mul_int(mul_int(sub_int((1), integer_of_int32(p_0@)),
+                            sub_int(integer_of_int32(p_0@), (1))),
                     integer_of_int32(M_2@)),
-                    sub_int(integer_of_int32(p_1@), (1)),
+                    sub_int(integer_of_int32(p_0@), (1)),
                     double_P_Y_6_alloc_table, double_P_double_M_Y_6))
                    and (JC_<somenum>:
                        not_assigns(double_P_Y_6_alloc_table@,
                        double_P_double_M_Y_6@, double_P_double_M_Y_6,
                        pset_range(pset_singleton(Y@), (0),
-                       sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@),
+                       sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@),
                                                (1)),
                                        integer_of_int32(LDY@)),
-                               integer_of_int32(K_0@)),
+                               integer_of_int32(K@)),
                        (1))))))) }
 
 parameter DGEMM_NEG_requires :
- N_0_0:int32 ->
+ N_2:int32 ->
   M_2:int32 ->
-   K_0:int32 ->
-    p_1:int32 ->
-     A_0:double_P pointer ->
-      LDA_0:int32 ->
+   K:int32 ->
+    p_0:int32 ->
+     A:double_P pointer ->
+      LDA:int32 ->
        X_2:double_P pointer ->
         LDX_2:int32 ->
          Y:double_P pointer ->
@@ -1074,28 +1070,28 @@ parameter DGEMM_NEG_requires :
            double_P_double_M_Y_6:(double_P, double) memory ref ->
             double_P_Y_6_alloc_table:double_P alloc_table ->
              double_P_X_5_alloc_table:double_P alloc_table ->
-              double_P_A_0_4_alloc_table:double_P alloc_table ->
+              double_P_A_4_alloc_table:double_P alloc_table ->
                double_P_double_M_X_5:(double_P, double) memory ->
-                double_P_double_M_A_0_4:(double_P, double) memory ->
+                double_P_double_M_A_4:(double_P, double) memory ->
                  { (JC_<somenum>:
-                   ((JC_<somenum>: le_int((2), integer_of_int32(p_1)))
+                   ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
                    and ((JC_<somenum>:
-                        le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1),
+                        le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0),
                                                (1)),
-                                       sub_int(integer_of_int32(p_1), (1))),
+                                       sub_int(integer_of_int32(p_0), (1))),
                                integer_of_int32(M_2)),
                         max_int))
-                       and ((JC_<somenum>: (not same_block(Y, A_0)))
+                       and ((JC_<somenum>: (not same_block(Y, A)))
                            and ((JC_<somenum>:
                                 (forall i_2:int.
                                  (forall j_2:int.
                                   ((le_int((0), i_2)
                                    and le_int(i_2,
                                        sub_int(add_int(mul_int(sub_int(
-                                                               integer_of_int32(N_0_0),
+                                                               integer_of_int32(N_2),
                                                                (1)),
                                                        integer_of_int32(LDY)),
-                                               integer_of_int32(K_0)),
+                                               integer_of_int32(K)),
                                        (1)))) ->
                                    ((le_int((0), j_2)
                                     and le_int(j_2,
@@ -1103,31 +1099,31 @@ parameter DGEMM_NEG_requires :
                                                                 integer_of_int32(M_2),
                                                                 (1)),
                                                         integer_of_int32(LDX_2)),
-                                                integer_of_int32(K_0)),
+                                                integer_of_int32(K)),
                                         (1)))) ->
                                     (shift(Y, i_2) <> shift(X_2, j_2)))))))
                                and ((JC_<somenum>:
                                     is_exact_int_mat_bounded_by(Y,
                                     integer_of_int32(LDY),
-                                    integer_of_int32(N_0_0),
-                                    integer_of_int32(K_0), (0),
-                                    sub_int(integer_of_int32(p_1), (1)),
+                                    integer_of_int32(N_2),
+                                    integer_of_int32(K), (0),
+                                    sub_int(integer_of_int32(p_0), (1)),
                                     double_P_Y_6_alloc_table,
                                     double_P_double_M_Y_6))
                                    and ((JC_<somenum>:
-                                        is_exact_int_mat_bounded_by(A_0,
-                                        integer_of_int32(LDA_0),
-                                        integer_of_int32(N_0_0),
+                                        is_exact_int_mat_bounded_by(A,
+                                        integer_of_int32(LDA),
+                                        integer_of_int32(N_2),
                                         integer_of_int32(M_2), (0),
-                                        sub_int(integer_of_int32(p_1), (1)),
-                                        double_P_A_0_4_alloc_table,
-                                        double_P_double_M_A_0_4))
+                                        sub_int(integer_of_int32(p_0), (1)),
+                                        double_P_A_4_alloc_table,
+                                        double_P_double_M_A_4))
                                        and (JC_<somenum>:
                                            is_exact_int_mat_bounded_by(X_2,
                                            integer_of_int32(LDX_2),
                                            integer_of_int32(M_2),
-                                           integer_of_int32(K_0), (0),
-                                           sub_int(integer_of_int32(p_1),
+                                           integer_of_int32(K), (0),
+                                           sub_int(integer_of_int32(p_0),
                                            (1)), double_P_X_5_alloc_table,
                                            double_P_double_M_X_5)))))))))}
                  unit reads double_P_double_M_Y_6
@@ -1135,26 +1131,26 @@ parameter DGEMM_NEG_requires :
                  { (JC_<somenum>:
                    ((JC_<somenum>:
                     is_exact_int_mat_bounded_by(Y@, integer_of_int32(LDY@),
-                    integer_of_int32(N_0_0@), integer_of_int32(K_0@),
-                    mul_int(mul_int(sub_int((1), integer_of_int32(p_1@)),
-                            sub_int(integer_of_int32(p_1@), (1))),
+                    integer_of_int32(N_2@), integer_of_int32(K@),
+                    mul_int(mul_int(sub_int((1), integer_of_int32(p_0@)),
+                            sub_int(integer_of_int32(p_0@), (1))),
                     integer_of_int32(M_2@)),
-                    sub_int(integer_of_int32(p_1@), (1)),
+                    sub_int(integer_of_int32(p_0@), (1)),
                     double_P_Y_6_alloc_table, double_P_double_M_Y_6))
                    and (JC_<somenum>:
                        not_assigns(double_P_Y_6_alloc_table@,
                        double_P_double_M_Y_6@, double_P_double_M_Y_6,
                        pset_range(pset_singleton(Y@), (0),
-                       sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@),
+                       sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@),
                                                (1)),
                                        integer_of_int32(LDY@)),
-                               integer_of_int32(K_0@)),
+                               integer_of_int32(K@)),
                        (1))))))) }
 
 parameter DREMM :
- N_1_0:int32 ->
-  K_1:int32 ->
-   p_2:int32 ->
+ N_0_0:int32 ->
+  K_0:int32 ->
+   p_0_0:int32 ->
     X_0_0:double_P pointer ->
      LDX_0_0:int32 ->
       double_P_double_M_X_0_7:(double_P, double) memory ref ->
@@ -1164,16 +1160,16 @@ parameter DREMM :
           ((JC_<somenum>:
            ((JC_<somenum>:
             is_exact_int_mat_bounded_by(X_0_0@, integer_of_int32(LDX_0_0@),
-            integer_of_int32(N_1_0@), integer_of_int32(K_1@), (0),
-            sub_int(integer_of_int32(p_2@), (1)), double_P_X_0_7_alloc_table,
-            double_P_double_M_X_0_7))
+            integer_of_int32(N_0_0@), integer_of_int32(K_0@), (0),
+            sub_int(integer_of_int32(p_0_0@), (1)),
+            double_P_X_0_7_alloc_table, double_P_double_M_X_0_7))
            and (JC_<somenum>:
                (forall i_3_0:int.
                 (forall j_3_0:int.
                  ((le_int((0), i_3_0)
-                  and (lt_int(i_3_0, integer_of_int32(N_1_0@))
+                  and (lt_int(i_3_0, integer_of_int32(N_0_0@))
                       and (le_int((0), j_3_0)
-                          and lt_int(j_3_0, integer_of_int32(K_1@))))) ->
+                          and lt_int(j_3_0, integer_of_int32(K_0@))))) ->
                   (exists d:int.
                    eq_real(double_value(select(double_P_double_M_X_0_7,
                                         shift(X_0_0@,
@@ -1185,43 +1181,43 @@ parameter DREMM :
                                          add_int(mul_int(i_3_0@,
                                                  integer_of_int32(LDX_0_0@)),
                                          j_3_0@)))),
-                   real_of_int(mul_int(d, integer_of_int32(p_2@))))))))))))
+                   real_of_int(mul_int(d, integer_of_int32(p_0_0@))))))))))))
           and (JC_<somenum>:
               not_assigns(double_P_X_0_7_alloc_table@,
               double_P_double_M_X_0_7@, double_P_double_M_X_0_7,
               pset_range(pset_singleton(X_0_0@), (0),
-              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@), (1)),
+              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
                               integer_of_int32(LDX_0_0@)),
-                      integer_of_int32(K_1@)),
+                      integer_of_int32(K_0@)),
               (1))))))) }
 
 parameter DREMM_requires :
- N_1_0:int32 ->
-  K_1:int32 ->
-   p_2:int32 ->
+ N_0_0:int32 ->
+  K_0:int32 ->
+   p_0_0:int32 ->
     X_0_0:double_P pointer ->
      LDX_0_0:int32 ->
       double_P_double_M_X_0_7:(double_P, double) memory ref ->
        double_P_X_0_7_alloc_table:double_P alloc_table ->
         { (JC_<somenum>:
           is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
-          integer_of_int32(N_1_0), integer_of_int32(K_1),
+          integer_of_int32(N_0_0), integer_of_int32(K_0),
           double_P_X_0_7_alloc_table, double_P_double_M_X_0_7))}
         unit reads double_P_double_M_X_0_7 writes double_P_double_M_X_0_7
         { (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
             is_exact_int_mat_bounded_by(X_0_0@, integer_of_int32(LDX_0_0@),
-            integer_of_int32(N_1_0@), integer_of_int32(K_1@), (0),
-            sub_int(integer_of_int32(p_2@), (1)), double_P_X_0_7_alloc_table,
-            double_P_double_M_X_0_7))
+            integer_of_int32(N_0_0@), integer_of_int32(K_0@), (0),
+            sub_int(integer_of_int32(p_0_0@), (1)),
+            double_P_X_0_7_alloc_table, double_P_double_M_X_0_7))
            and (JC_<somenum>:
                (forall i_3_0:int.
                 (forall j_3_0:int.
                  ((le_int((0), i_3_0)
-                  and (lt_int(i_3_0, integer_of_int32(N_1_0@))
+                  and (lt_int(i_3_0, integer_of_int32(N_0_0@))
                       and (le_int((0), j_3_0)
-                          and lt_int(j_3_0, integer_of_int32(K_1@))))) ->
+                          and lt_int(j_3_0, integer_of_int32(K_0@))))) ->
                   (exists d:int.
                    eq_real(double_value(select(double_P_double_M_X_0_7,
                                         shift(X_0_0@,
@@ -1233,186 +1229,188 @@ parameter DREMM_requires :
                                          add_int(mul_int(i_3_0@,
                                                  integer_of_int32(LDX_0_0@)),
                                          j_3_0@)))),
-                   real_of_int(mul_int(d, integer_of_int32(p_2@))))))))))))
+                   real_of_int(mul_int(d, integer_of_int32(p_0_0@))))))))))))
           and (JC_<somenum>:
               not_assigns(double_P_X_0_7_alloc_table@,
               double_P_double_M_X_0_7@, double_P_double_M_X_0_7,
               pset_range(pset_singleton(X_0_0@), (0),
-              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@), (1)),
+              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
                               integer_of_int32(LDX_0_0@)),
-                      integer_of_int32(K_1@)),
+                      integer_of_int32(K_0@)),
               (1))))))) }
 
 parameter DTRSM :
- N_3:int32 ->
-  K_2:int32 ->
-   A_1:double_P pointer ->
-    LDA_1:int32 ->
+ N_1_0:int32 ->
+  K_1:int32 ->
+   A_0:double_P pointer ->
+    LDA_0:int32 ->
      X_1_0:double_P pointer ->
       LDX_1_0:int32 ->
        double_P_double_M_X_1_9:(double_P, double) memory ref ->
         double_P_X_1_9_alloc_table:double_P alloc_table ->
-         double_P_A_1_8_alloc_table:double_P alloc_table ->
-          double_P_double_M_A_1_8:(double_P, double) memory ->
+         double_P_A_0_8_alloc_table:double_P alloc_table ->
+          double_P_double_M_A_0_8:(double_P, double) memory ->
            { } unit reads double_P_double_M_X_1_9
            writes double_P_double_M_X_1_9
            { (JC_<somenum>:
              ((JC_<somenum>:
               is_exact_int_mat_bounded_by(X_1_0@, integer_of_int32(LDX_1_0@),
-              integer_of_int32(N_3@), integer_of_int32(K_2@),
+              integer_of_int32(N_1_0@), integer_of_int32(K_1@),
               neg_int(max_int), max_int, double_P_X_1_9_alloc_table,
               double_P_double_M_X_1_9))
              and (JC_<somenum>:
                  not_assigns(double_P_X_1_9_alloc_table@,
                  double_P_double_M_X_1_9@, double_P_double_M_X_1_9,
                  pset_range(pset_singleton(X_1_0@), (0),
-                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_3@), (1)),
+                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@),
+                                         (1)),
                                  integer_of_int32(LDX_1_0@)),
-                         integer_of_int32(K_2@)),
+                         integer_of_int32(K_1@)),
                  (1))))))) }
 
 parameter DTRSM_requires :
- N_3:int32 ->
-  K_2:int32 ->
-   A_1:double_P pointer ->
-    LDA_1:int32 ->
+ N_1_0:int32 ->
+  K_1:int32 ->
+   A_0:double_P pointer ->
+    LDA_0:int32 ->
      X_1_0:double_P pointer ->
       LDX_1_0:int32 ->
        double_P_double_M_X_1_9:(double_P, double) memory ref ->
         double_P_X_1_9_alloc_table:double_P alloc_table ->
-         double_P_A_1_8_alloc_table:double_P alloc_table ->
-          double_P_double_M_A_1_8:(double_P, double) memory ->
+         double_P_A_0_8_alloc_table:double_P alloc_table ->
+          double_P_double_M_A_0_8:(double_P, double) memory ->
            { (JC_<somenum>:
-             ((JC_<somenum>: le_int(integer_of_int32(N_3), (55)))
+             ((JC_<somenum>: le_int(integer_of_int32(N_1_0), (55)))
              and ((JC_<somenum>:
                   is_exact_int_mat_bounded_by(X_1_0,
-                  integer_of_int32(LDX_1_0), integer_of_int32(N_3),
-                  integer_of_int32(K_2), (0),
-                  sub_int(l_pmax(integer_of_int32(N_3)), (1)),
+                  integer_of_int32(LDX_1_0), integer_of_int32(N_1_0),
+                  integer_of_int32(K_1), (0),
+                  sub_int(l_pmax(integer_of_int32(N_1_0)), (1)),
                   double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
                  and (JC_<somenum>:
-                     is_exact_int_mat_bounded_by(A_1,
-                     integer_of_int32(LDA_1), integer_of_int32(N_3),
-                     integer_of_int32(N_3), (0),
-                     sub_int(l_pmax(integer_of_int32(N_3)), (1)),
-                     double_P_A_1_8_alloc_table, double_P_double_M_A_1_8)))))}
+                     is_exact_int_mat_bounded_by(A_0,
+                     integer_of_int32(LDA_0), integer_of_int32(N_1_0),
+                     integer_of_int32(N_1_0), (0),
+                     sub_int(l_pmax(integer_of_int32(N_1_0)), (1)),
+                     double_P_A_0_8_alloc_table, double_P_double_M_A_0_8)))))}
            unit reads double_P_double_M_X_1_9 writes double_P_double_M_X_1_9
            { (JC_<somenum>:
              ((JC_<somenum>:
               is_exact_int_mat_bounded_by(X_1_0@, integer_of_int32(LDX_1_0@),
-              integer_of_int32(N_3@), integer_of_int32(K_2@),
+              integer_of_int32(N_1_0@), integer_of_int32(K_1@),
               neg_int(max_int), max_int, double_P_X_1_9_alloc_table,
               double_P_double_M_X_1_9))
              and (JC_<somenum>:
                  not_assigns(double_P_X_1_9_alloc_table@,
                  double_P_double_M_X_1_9@, double_P_double_M_X_1_9,
                  pset_range(pset_singleton(X_1_0@), (0),
-                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_3@), (1)),
+                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@),
+                                         (1)),
                                  integer_of_int32(LDX_1_0@)),
-                         integer_of_int32(K_2@)),
+                         integer_of_int32(K_1@)),
                  (1))))))) }
 
 parameter LZ_TRSM :
- N_4:int32 ->
-  K:int32 ->
-   p_0_0:int32 ->
-    A:double_P pointer ->
-     LDA:int32 ->
+ N_2_0:int32 ->
+  K_2:int32 ->
+   p_1:int32 ->
+    A_1:double_P pointer ->
+     LDA_1:int32 ->
       B:double_P pointer ->
        LDB:int32 ->
         double_P_double_M_B_11:(double_P, double) memory ref ->
          double_P_B_11_alloc_table:double_P alloc_table ->
-          double_P_A_10_alloc_table:double_P alloc_table ->
-           double_P_double_M_A_10:(double_P, double) memory ->
+          double_P_A_1_10_alloc_table:double_P alloc_table ->
+           double_P_double_M_A_1_10:(double_P, double) memory ->
             { } unit reads double_P_double_M_B_11
             writes double_P_double_M_B_11
             { (JC_<somenum>:
               ((JC_<somenum>:
                is_exact_int_mat_bounded_by(B@, integer_of_int32(LDB@),
-               integer_of_int32(N_4@), integer_of_int32(K@), (0),
-               sub_int(integer_of_int32(p_0_0@), (1)),
+               integer_of_int32(N_2_0@), integer_of_int32(K_2@), (0),
+               sub_int(integer_of_int32(p_1@), (1)),
                double_P_B_11_alloc_table, double_P_double_M_B_11))
               and (JC_<somenum>:
                   not_assigns(double_P_B_11_alloc_table@,
                   double_P_double_M_B_11@, double_P_double_M_B_11,
                   pset_range(pset_singleton(B@), (0),
-                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_4@),
+                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0@),
                                           (1)),
                                   integer_of_int32(LDB@)),
-                          integer_of_int32(K@)),
+                          integer_of_int32(K_2@)),
                   (1))))))) }
 
 parameter LZ_TRSM_requires :
- N_4:int32 ->
-  K:int32 ->
-   p_0_0:int32 ->
-    A:double_P pointer ->
-     LDA:int32 ->
+ N_2_0:int32 ->
+  K_2:int32 ->
+   p_1:int32 ->
+    A_1:double_P pointer ->
+     LDA_1:int32 ->
       B:double_P pointer ->
        LDB:int32 ->
         double_P_double_M_B_11:(double_P, double) memory ref ->
          double_P_B_11_alloc_table:double_P alloc_table ->
-          double_P_A_10_alloc_table:double_P alloc_table ->
-           double_P_double_M_A_10:(double_P, double) memory ->
+          double_P_A_1_10_alloc_table:double_P alloc_table ->
+           double_P_double_M_A_1_10:(double_P, double) memory ->
             { (JC_<somenum>:
-              ((JC_<somenum>: le_int((2), integer_of_int32(p_0_0)))
+              ((JC_<somenum>: le_int((2), integer_of_int32(p_1)))
               and ((JC_<somenum>:
-                   le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0_0),
-                                          (1)),
-                                  sub_int(integer_of_int32(p_0_0), (1))),
-                          integer_of_int32(N_4)),
+                   le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
+                                  sub_int(integer_of_int32(p_1), (1))),
+                          integer_of_int32(N_2_0)),
                    max_int))
-                  and ((JC_<somenum>: (not same_block(B, A)))
+                  and ((JC_<somenum>: (not same_block(B, A_1)))
                       and ((JC_<somenum>:
-                           is_exact_int_mat_bounded_by(A,
-                           integer_of_int32(LDA), integer_of_int32(N_4),
-                           integer_of_int32(N_4), (0),
-                           sub_int(integer_of_int32(p_0_0), (1)),
-                           double_P_A_10_alloc_table, double_P_double_M_A_10))
+                           is_exact_int_mat_bounded_by(A_1,
+                           integer_of_int32(LDA_1), integer_of_int32(N_2_0),
+                           integer_of_int32(N_2_0), (0),
+                           sub_int(integer_of_int32(p_1), (1)),
+                           double_P_A_1_10_alloc_table,
+                           double_P_double_M_A_1_10))
                           and (JC_<somenum>:
                               is_exact_int_mat_bounded_by(B,
-                              integer_of_int32(LDB), integer_of_int32(N_4),
-                              integer_of_int32(K), (0),
-                              sub_int(integer_of_int32(p_0_0), (1)),
+                              integer_of_int32(LDB), integer_of_int32(N_2_0),
+                              integer_of_int32(K_2), (0),
+                              sub_int(integer_of_int32(p_1), (1)),
                               double_P_B_11_alloc_table,
                               double_P_double_M_B_11)))))))}
             unit reads double_P_double_M_B_11 writes double_P_double_M_B_11
             { (JC_<somenum>:
               ((JC_<somenum>:
                is_exact_int_mat_bounded_by(B@, integer_of_int32(LDB@),
-               integer_of_int32(N_4@), integer_of_int32(K@), (0),
-               sub_int(integer_of_int32(p_0_0@), (1)),
+               integer_of_int32(N_2_0@), integer_of_int32(K_2@), (0),
+               sub_int(integer_of_int32(p_1@), (1)),
                double_P_B_11_alloc_table, double_P_double_M_B_11))
               and (JC_<somenum>:
                   not_assigns(double_P_B_11_alloc_table@,
                   double_P_double_M_B_11@, double_P_double_M_B_11,
                   pset_range(pset_singleton(B@), (0),
-                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_4@),
+                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0@),
                                           (1)),
                                   integer_of_int32(LDB@)),
-                          integer_of_int32(K@)),
+                          integer_of_int32(K_2@)),
                   (1))))))) }
 
 parameter Nmax :
- p_0:int32 ->
+ p_2:int32 ->
   { } int32
   { (JC_<somenum>:
-    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_0@)))
+    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2@)))
     and ((JC_<somenum>:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
-          <-> delay(q, integer_of_int32(p_0@)))))
+          <-> delay(q, integer_of_int32(p_2@)))))
         and (JC_<somenum>: le_int(integer_of_int32(result), (55)))))) }
 
 parameter Nmax_requires :
- p_0:int32 ->
-  { (JC_<somenum>: le_int((2), integer_of_int32(p_0)))} int32
+ p_2:int32 ->
+  { (JC_<somenum>: le_int((2), integer_of_int32(p_2)))} int32
   { (JC_<somenum>:
-    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_0@)))
+    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2@)))
     and ((JC_<somenum>:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
-          <-> delay(q, integer_of_int32(p_0@)))))
+          <-> delay(q, integer_of_int32(p_2@)))))
         and (JC_<somenum>: le_int(integer_of_int32(result), (55)))))) }
 
 parameter alloc_bitvector_struct_char_P :
@@ -1569,16 +1567,16 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter pmax :
- N_2:int32 ->
+ N_3:int32 ->
   { } int32
   { (JC_<somenum>:
-    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_2@)))) }
+    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3@)))) }
 
 parameter pmax_requires :
- N_2:int32 ->
+ N_3:int32 ->
   { } int32
   { (JC_<somenum>:
-    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_2@)))) }
+    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3@)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1587,48 +1585,48 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let DGEMM_NEG_ensures_default =
- fun (N_0_0 : int32) (M_2 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, double) memory ref) (double_P_A_0_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_0_4 : (double_P, double) memory) (double_P_double_M_X_5 : (double_P, double) memory) ->
+ fun (N_2 : int32) (M_2 : int32) (K : int32) (p_0 : int32) (A : double_P pointer) (LDA : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, double) memory ref) (double_P_A_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_4 : (double_P, double) memory) (double_P_double_M_X_5 : (double_P, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int((2), integer_of_int32(p_1)))
+    ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
     and ((JC_<somenum>:
-         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
-                        sub_int(integer_of_int32(p_1), (1))),
+         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0), (1)),
+                        sub_int(integer_of_int32(p_0), (1))),
                 integer_of_int32(M_2)),
          max_int))
-        and ((JC_<somenum>: (not same_block(Y, A_0)))
+        and ((JC_<somenum>: (not same_block(Y, A)))
             and ((JC_<somenum>:
                  (forall i_2:int.
                   (forall j_2:int.
                    ((le_int((0), i_2)
                     and le_int(i_2,
-                        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0),
+                        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
                                                 (1)),
                                         integer_of_int32(LDY)),
-                                integer_of_int32(K_0)),
+                                integer_of_int32(K)),
                         (1)))) ->
                     ((le_int((0), j_2)
                      and le_int(j_2,
                          sub_int(add_int(mul_int(sub_int(integer_of_int32(M_2),
                                                  (1)),
                                          integer_of_int32(LDX_2)),
-                                 integer_of_int32(K_0)),
+                                 integer_of_int32(K)),
                          (1)))) -> (shift(Y, i_2) <> shift(X_2, j_2)))))))
                 and ((JC_<somenum>:
                      is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
-                     integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
-                     sub_int(integer_of_int32(p_1), (1)),
+                     integer_of_int32(N_2), integer_of_int32(K), (0),
+                     sub_int(integer_of_int32(p_0), (1)),
                      double_P_Y_6_alloc_table, double_P_double_M_Y_6))
                     and ((JC_<somenum>:
-                         is_exact_int_mat_bounded_by(A_0,
-                         integer_of_int32(LDA_0), integer_of_int32(N_0_0),
+                         is_exact_int_mat_bounded_by(A,
+                         integer_of_int32(LDA), integer_of_int32(N_2),
                          integer_of_int32(M_2), (0),
-                         sub_int(integer_of_int32(p_1), (1)),
-                         double_P_A_0_4_alloc_table, double_P_double_M_A_0_4))
+                         sub_int(integer_of_int32(p_0), (1)),
+                         double_P_A_4_alloc_table, double_P_double_M_A_4))
                         and (JC_<somenum>:
                             is_exact_int_mat_bounded_by(X_2,
                             integer_of_int32(LDX_2), integer_of_int32(M_2),
-                            integer_of_int32(K_0), (0),
-                            sub_int(integer_of_int32(p_1), (1)),
+                            integer_of_int32(K), (0),
+                            sub_int(integer_of_int32(p_0), (1)),
                             double_P_X_5_alloc_table, double_P_double_M_X_5))))))))) }
   (init:
   try
@@ -1648,14 +1646,14 @@ let DGEMM_NEG_ensures_default =
              ((JC_<somenum>:
               ((JC_<somenum>: le_int((0), integer_of_int32(i_3)))
               and ((JC_<somenum>:
-                   le_int(integer_of_int32(i_3), integer_of_int32(N_0_0)))
+                   le_int(integer_of_int32(i_3), integer_of_int32(N_2)))
                   and (JC_<somenum>:
                       is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
-                      integer_of_int32(i_3), integer_of_int32(K_0),
-                      mul_int(mul_int(sub_int((1), integer_of_int32(p_1)),
-                              sub_int(integer_of_int32(p_1), (1))),
+                      integer_of_int32(i_3), integer_of_int32(K),
+                      mul_int(mul_int(sub_int((1), integer_of_int32(p_0)),
+                              sub_int(integer_of_int32(p_0), (1))),
                       integer_of_int32(M_2)),
-                      sub_int(integer_of_int32(p_1), (1)),
+                      sub_int(integer_of_int32(p_0), (1)),
                       double_P_Y_6_alloc_table, double_P_double_M_Y_6)))))
              and ((JC_<somenum>:
                   not_assigns(double_P_Y_6_alloc_table@loop_4,
@@ -1663,16 +1661,16 @@ let DGEMM_NEG_ensures_default =
                   pset_range(pset_singleton(Y), (0),
                   sub_int(add_int(mul_int(sub_int(integer_of_int32(i_3), (1)),
                                   integer_of_int32(LDY)),
-                          integer_of_int32(K_0)),
+                          integer_of_int32(K)),
                   (1)))))
                  and (JC_<somenum>:
                      not_assigns(double_P_Y_6_alloc_table@init,
                      double_P_double_M_Y_6@init, double_P_double_M_Y_6,
                      pset_range(pset_singleton(Y@init), (0),
-                     sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@init),
+                     sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@init),
                                              (1)),
                                      integer_of_int32(LDY@init)),
-                             integer_of_int32(K_0@init)),
+                             integer_of_int32(K@init)),
                      (1)))))))  }
           begin
             [ { } unit { true } ];
@@ -1683,7 +1681,7 @@ let DGEMM_NEG_ensures_default =
               (C_7:
               (C_60:
               begin
-                (if ((lt_int_ (integer_of_int32 !i_3)) (integer_of_int32 N_0_0))
+                (if ((lt_int_ (integer_of_int32 !i_3)) (integer_of_int32 N_2))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
@@ -1700,16 +1698,16 @@ let DGEMM_NEG_ensures_default =
                        ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
                        and ((JC_<somenum>:
                             le_int(integer_of_int32(k_0),
-                            integer_of_int32(K_0)))
+                            integer_of_int32(K)))
                            and (JC_<somenum>:
                                temporary_is_exact_int_mat_bounded_by(Y,
                                integer_of_int32(LDY), integer_of_int32(i_3),
-                               integer_of_int32(K_0), integer_of_int32(k_0),
+                               integer_of_int32(K), integer_of_int32(k_0),
                                mul_int(mul_int(sub_int((1),
-                                               integer_of_int32(p_1)),
-                                       sub_int(integer_of_int32(p_1), (1))),
+                                               integer_of_int32(p_0)),
+                                       sub_int(integer_of_int32(p_0), (1))),
                                integer_of_int32(M_2)),
-                               sub_int(integer_of_int32(p_1), (1)),
+                               sub_int(integer_of_int32(p_0), (1)),
                                double_P_Y_6_alloc_table,
                                double_P_double_M_Y_6)))))
                       and ((JC_<somenum>:
@@ -1727,10 +1725,10 @@ let DGEMM_NEG_ensures_default =
                               double_P_double_M_Y_6@init,
                               double_P_double_M_Y_6,
                               pset_range(pset_singleton(Y@init), (0),
-                              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@init),
+                              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@init),
                                                       (1)),
                                               integer_of_int32(LDY@init)),
-                                      integer_of_int32(K_0@init)),
+                                      integer_of_int32(K@init)),
                               (1)))))))  }
                    begin
                      [ { } unit { true } ];
@@ -1741,7 +1739,7 @@ let DGEMM_NEG_ensures_default =
                        (C_13:
                        (C_57:
                        begin
-                         (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 K_0))
+                         (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 K))
                          then void
                          else
                           (let jessie_<somenum> =
@@ -1782,9 +1780,9 @@ let DGEMM_NEG_ensures_default =
                                                  le_real(real_of_int(
                                                          mul_int(mul_int(
                                                                  sub_int((1),
-                                                                 integer_of_int32(p_1)),
+                                                                 integer_of_int32(p_0)),
                                                                  sub_int(
-                                                                 integer_of_int32(p_1),
+                                                                 integer_of_int32(p_0),
                                                                  (1))),
                                                          integer_of_int32(j_3))),
                                                  double_value(select(double_P_double_M_Y_6,
@@ -1803,7 +1801,7 @@ let DGEMM_NEG_ensures_default =
                                                                     integer_of_int32(LDY)),
                                                             integer_of_int32(k_0))))),
                                                     real_of_int(sub_int(
-                                                                integer_of_int32(p_1),
+                                                                integer_of_int32(p_0),
                                                                 (1)))))))))))
                                and ((JC_<somenum>:
                                     not_assigns(double_P_Y_6_alloc_table@loop_6,
@@ -1823,10 +1821,10 @@ let DGEMM_NEG_ensures_default =
                                        pset_range(pset_singleton(Y@init),
                                        (0),
                                        sub_int(add_int(mul_int(sub_int(
-                                                               integer_of_int32(N_0_0@init),
+                                                               integer_of_int32(N_2@init),
                                                                (1)),
                                                        integer_of_int32(LDY@init)),
-                                               integer_of_int32(K_0@init)),
+                                               integer_of_int32(K@init)),
                                        (1)))))))  }
                             begin
                               [ { } unit { true } ];
@@ -1867,9 +1865,9 @@ let DGEMM_NEG_ensures_default =
                                   (C_37:
                                   (JC_<somenum>:
                                   (((mul_double_safe nearest_even) (C_36:
-                                                                   ((safe_acc_ double_P_double_M_A_0_4) 
+                                                                   ((safe_acc_ double_P_double_M_A_4) 
                                                                     (C_35:
-                                                                    ((shift A_0) 
+                                                                    ((shift A) 
                                                                     (integer_of_int32 
                                                                     (C_34:
                                                                     (safe_int32_of_integer_ 
@@ -1881,7 +1879,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (C_31:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_3)) 
-                                                                    (integer_of_int32 LDA_0))))))) 
+                                                                    (integer_of_int32 LDA))))))) 
                                                                     (integer_of_int32 !j_3))))))))))) 
                                    (C_30:
                                    ((safe_acc_ double_P_double_M_X_5) 
@@ -1944,63 +1942,63 @@ let DGEMM_NEG_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      is_exact_int_mat_bounded_by(Y@, integer_of_int32(LDY@),
-     integer_of_int32(N_0_0@), integer_of_int32(K_0@),
-     mul_int(mul_int(sub_int((1), integer_of_int32(p_1@)),
-             sub_int(integer_of_int32(p_1@), (1))),
-     integer_of_int32(M_2@)), sub_int(integer_of_int32(p_1@), (1)),
+     integer_of_int32(N_2@), integer_of_int32(K@),
+     mul_int(mul_int(sub_int((1), integer_of_int32(p_0@)),
+             sub_int(integer_of_int32(p_0@), (1))),
+     integer_of_int32(M_2@)), sub_int(integer_of_int32(p_0@), (1)),
      double_P_Y_6_alloc_table, double_P_double_M_Y_6))
     and (JC_<somenum>:
         not_assigns(double_P_Y_6_alloc_table@, double_P_double_M_Y_6@,
         double_P_double_M_Y_6,
         pset_range(pset_singleton(Y@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@), (1)),
                         integer_of_int32(LDY@)),
-                integer_of_int32(K_0@)),
+                integer_of_int32(K@)),
         (1))))))) }
 
 let DGEMM_NEG_safety =
- fun (N_0_0 : int32) (M_2 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, double) memory ref) (double_P_A_0_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_0_4 : (double_P, double) memory) (double_P_double_M_X_5 : (double_P, double) memory) ->
+ fun (N_2 : int32) (M_2 : int32) (K : int32) (p_0 : int32) (A : double_P pointer) (LDA : int32) (X_2 : double_P pointer) (LDX_2 : int32) (Y : double_P pointer) (LDY : int32) (double_P_double_M_Y_6 : (double_P, double) memory ref) (double_P_A_4_alloc_table : double_P alloc_table) (double_P_X_5_alloc_table : double_P alloc_table) (double_P_Y_6_alloc_table : double_P alloc_table) (double_P_double_M_A_4 : (double_P, double) memory) (double_P_double_M_X_5 : (double_P, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int((2), integer_of_int32(p_1)))
+    ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
     and ((JC_<somenum>:
-         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
-                        sub_int(integer_of_int32(p_1), (1))),
+         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0), (1)),
+                        sub_int(integer_of_int32(p_0), (1))),
                 integer_of_int32(M_2)),
          max_int))
-        and ((JC_<somenum>: (not same_block(Y, A_0)))
+        and ((JC_<somenum>: (not same_block(Y, A)))
             and ((JC_<somenum>:
                  (forall i_2:int.
                   (forall j_2:int.
                    ((le_int((0), i_2)
                     and le_int(i_2,
-                        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0),
+                        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
                                                 (1)),
                                         integer_of_int32(LDY)),
-                                integer_of_int32(K_0)),
+                                integer_of_int32(K)),
                         (1)))) ->
                     ((le_int((0), j_2)
                      and le_int(j_2,
                          sub_int(add_int(mul_int(sub_int(integer_of_int32(M_2),
                                                  (1)),
                                          integer_of_int32(LDX_2)),
-                                 integer_of_int32(K_0)),
+                                 integer_of_int32(K)),
                          (1)))) -> (shift(Y, i_2) <> shift(X_2, j_2)))))))
                 and ((JC_<somenum>:
                      is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
-                     integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
-                     sub_int(integer_of_int32(p_1), (1)),
+                     integer_of_int32(N_2), integer_of_int32(K), (0),
+                     sub_int(integer_of_int32(p_0), (1)),
                      double_P_Y_6_alloc_table, double_P_double_M_Y_6))
                     and ((JC_<somenum>:
-                         is_exact_int_mat_bounded_by(A_0,
-                         integer_of_int32(LDA_0), integer_of_int32(N_0_0),
+                         is_exact_int_mat_bounded_by(A,
+                         integer_of_int32(LDA), integer_of_int32(N_2),
                          integer_of_int32(M_2), (0),
-                         sub_int(integer_of_int32(p_1), (1)),
-                         double_P_A_0_4_alloc_table, double_P_double_M_A_0_4))
+                         sub_int(integer_of_int32(p_0), (1)),
+                         double_P_A_4_alloc_table, double_P_double_M_A_4))
                         and (JC_<somenum>:
                             is_exact_int_mat_bounded_by(X_2,
                             integer_of_int32(LDX_2), integer_of_int32(M_2),
-                            integer_of_int32(K_0), (0),
-                            sub_int(integer_of_int32(p_1), (1)),
+                            integer_of_int32(K), (0),
+                            sub_int(integer_of_int32(p_0), (1)),
                             double_P_X_5_alloc_table, double_P_double_M_X_5))))))))) }
   (init:
   try
@@ -2022,14 +2020,14 @@ let DGEMM_NEG_safety =
               { (JC_<somenum>:
                 ((JC_<somenum>: le_int((0), integer_of_int32(i_3)))
                 and ((JC_<somenum>:
-                     le_int(integer_of_int32(i_3), integer_of_int32(N_0_0)))
+                     le_int(integer_of_int32(i_3), integer_of_int32(N_2)))
                     and (JC_<somenum>:
                         is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
-                        integer_of_int32(i_3), integer_of_int32(K_0),
-                        mul_int(mul_int(sub_int((1), integer_of_int32(p_1)),
-                                sub_int(integer_of_int32(p_1), (1))),
+                        integer_of_int32(i_3), integer_of_int32(K),
+                        mul_int(mul_int(sub_int((1), integer_of_int32(p_0)),
+                                sub_int(integer_of_int32(p_0), (1))),
                         integer_of_int32(M_2)),
-                        sub_int(integer_of_int32(p_1), (1)),
+                        sub_int(integer_of_int32(p_0), (1)),
                         double_P_Y_6_alloc_table, double_P_double_M_Y_6))))) } ];
            try
             (let jessie_<somenum> =
@@ -2038,7 +2036,7 @@ let DGEMM_NEG_safety =
               (C_7:
               (C_60:
               begin
-                (if ((lt_int_ (integer_of_int32 !i_3)) (integer_of_int32 N_0_0))
+                (if ((lt_int_ (integer_of_int32 !i_3)) (integer_of_int32 N_2))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
@@ -2057,18 +2055,17 @@ let DGEMM_NEG_safety =
                          ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
                          and ((JC_<somenum>:
                               le_int(integer_of_int32(k_0),
-                              integer_of_int32(K_0)))
+                              integer_of_int32(K)))
                              and (JC_<somenum>:
                                  temporary_is_exact_int_mat_bounded_by(Y,
                                  integer_of_int32(LDY),
-                                 integer_of_int32(i_3),
-                                 integer_of_int32(K_0),
+                                 integer_of_int32(i_3), integer_of_int32(K),
                                  integer_of_int32(k_0),
                                  mul_int(mul_int(sub_int((1),
-                                                 integer_of_int32(p_1)),
-                                         sub_int(integer_of_int32(p_1), (1))),
+                                                 integer_of_int32(p_0)),
+                                         sub_int(integer_of_int32(p_0), (1))),
                                  integer_of_int32(M_2)),
-                                 sub_int(integer_of_int32(p_1), (1)),
+                                 sub_int(integer_of_int32(p_0), (1)),
                                  double_P_Y_6_alloc_table,
                                  double_P_double_M_Y_6))))) } ];
                     try
@@ -2078,7 +2075,7 @@ let DGEMM_NEG_safety =
                        (C_13:
                        (C_57:
                        begin
-                         (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 K_0))
+                         (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 K))
                          then void
                          else
                           (let jessie_<somenum> =
@@ -2122,9 +2119,9 @@ let DGEMM_NEG_safety =
                                                    le_real(real_of_int(
                                                            mul_int(mul_int(
                                                                    sub_int((1),
-                                                                   integer_of_int32(p_1)),
+                                                                   integer_of_int32(p_0)),
                                                                    sub_int(
-                                                                   integer_of_int32(p_1),
+                                                                   integer_of_int32(p_0),
                                                                    (1))),
                                                            integer_of_int32(j_3))),
                                                    double_value(select(double_P_double_M_Y_6,
@@ -2144,7 +2141,7 @@ let DGEMM_NEG_safety =
                                                               integer_of_int32(LDY)),
                                                               integer_of_int32(k_0))))),
                                                       real_of_int(sub_int(
-                                                                  integer_of_int32(p_1),
+                                                                  integer_of_int32(p_0),
                                                                   (1))))))))))) } ];
                              try
                               (let jessie_<somenum> =
@@ -2185,7 +2182,7 @@ let DGEMM_NEG_safety =
                                   (JC_<somenum>:
                                   (((mul_double nearest_even) (C_36:
                                                               (JC_<somenum>:
-                                                              ((((offset_acc_ double_P_A_0_4_alloc_table) double_P_double_M_A_0_4) A_0) 
+                                                              ((((offset_acc_ double_P_A_4_alloc_table) double_P_double_M_A_4) A) 
                                                                (integer_of_int32 
                                                                 (C_34:
                                                                 (JC_<somenum>:
@@ -2199,7 +2196,7 @@ let DGEMM_NEG_safety =
                                                                     (C_31:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_3)) 
-                                                                    (integer_of_int32 LDA_0)))))))) 
+                                                                    (integer_of_int32 LDA)))))))) 
                                                                   (integer_of_int32 !j_3))))))))))) 
                                    (C_30:
                                    (JC_<somenum>:
@@ -2269,10 +2266,10 @@ let DGEMM_NEG_safety =
   { true }
 
 let DREMM_ensures_default =
- fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, double) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
+ fun (N_0_0 : int32) (K_0 : int32) (p_0_0 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, double) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
   { (JC_<somenum>:
     is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
-    integer_of_int32(N_1_0), integer_of_int32(K_1),
+    integer_of_int32(N_0_0), integer_of_int32(K_0),
     double_P_X_0_7_alloc_table, double_P_double_M_X_0_7)) }
   (init:
   try
@@ -2292,10 +2289,10 @@ let DREMM_ensures_default =
              not_assigns(double_P_X_0_7_alloc_table@init,
              double_P_double_M_X_0_7@init, double_P_double_M_X_0_7,
              pset_range(pset_singleton(X_0_0@init), (0),
-             sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
+             sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@init),
                                      (1)),
                              integer_of_int32(LDX_0_0@init)),
-                     integer_of_int32(K_1@init)),
+                     integer_of_int32(K_0@init)),
              (1)))))  }
           begin
             [ { } unit { true } ];
@@ -2306,7 +2303,7 @@ let DREMM_ensures_default =
               (C_77:
               (C_121:
               begin
-                (if ((lt_int_ (integer_of_int32 !i_0_0)) (integer_of_int32 N_1_0))
+                (if ((lt_int_ (integer_of_int32 !i_0_0)) (integer_of_int32 N_0_0))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_3_break_exc void)) in
@@ -2323,10 +2320,10 @@ let DREMM_ensures_default =
                       not_assigns(double_P_X_0_7_alloc_table@init,
                       double_P_double_M_X_0_7@init, double_P_double_M_X_0_7,
                       pset_range(pset_singleton(X_0_0@init), (0),
-                      sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
+                      sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@init),
                                               (1)),
                                       integer_of_int32(LDX_0_0@init)),
-                              integer_of_int32(K_1@init)),
+                              integer_of_int32(K_0@init)),
                       (1)))))  }
                    begin
                      [ { } unit { true } ];
@@ -2337,7 +2334,7 @@ let DREMM_ensures_default =
                        (C_93:
                        (C_118:
                        begin
-                         (if ((lt_int_ (integer_of_int32 !k_0_0)) (integer_of_int32 K_1))
+                         (if ((lt_int_ (integer_of_int32 !k_0_0)) (integer_of_int32 K_0))
                          then void
                          else
                           (let jessie_<somenum> =
@@ -2407,7 +2404,7 @@ let DREMM_ensures_default =
                                                                (integer_of_int32 !k_0_0))))))))))) 
                           (C_94:
                           ((double_of_real_safe nearest_even) (real_of_int 
-                                                               (integer_of_int32 p_2))))))) in
+                                                               (integer_of_int32 p_0_0))))))) in
                          (let jessie_<somenum> = X_0_0 in
                          (let jessie_<somenum> =
                          (integer_of_int32 (C_105:
@@ -2444,16 +2441,16 @@ let DREMM_ensures_default =
     ((JC_<somenum>:
      ((JC_<somenum>:
       is_exact_int_mat_bounded_by(X_0_0@, integer_of_int32(LDX_0_0@),
-      integer_of_int32(N_1_0@), integer_of_int32(K_1@), (0),
-      sub_int(integer_of_int32(p_2@), (1)), double_P_X_0_7_alloc_table,
+      integer_of_int32(N_0_0@), integer_of_int32(K_0@), (0),
+      sub_int(integer_of_int32(p_0_0@), (1)), double_P_X_0_7_alloc_table,
       double_P_double_M_X_0_7))
      and (JC_<somenum>:
          (forall i_3_0:int.
           (forall j_3_0:int.
            ((le_int((0), i_3_0)
-            and (lt_int(i_3_0, integer_of_int32(N_1_0@))
+            and (lt_int(i_3_0, integer_of_int32(N_0_0@))
                 and (le_int((0), j_3_0)
-                    and lt_int(j_3_0, integer_of_int32(K_1@))))) ->
+                    and lt_int(j_3_0, integer_of_int32(K_0@))))) ->
             (exists d:int.
              eq_real(double_value(select(double_P_double_M_X_0_7,
                                   shift(X_0_0@,
@@ -2465,21 +2462,21 @@ let DREMM_ensures_default =
                                    add_int(mul_int(i_3_0@,
                                            integer_of_int32(LDX_0_0@)),
                                    j_3_0@)))),
-             real_of_int(mul_int(d, integer_of_int32(p_2@))))))))))))
+             real_of_int(mul_int(d, integer_of_int32(p_0_0@))))))))))))
     and (JC_<somenum>:
         not_assigns(double_P_X_0_7_alloc_table@, double_P_double_M_X_0_7@,
         double_P_double_M_X_0_7,
         pset_range(pset_singleton(X_0_0@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@), (1)),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
                         integer_of_int32(LDX_0_0@)),
-                integer_of_int32(K_1@)),
+                integer_of_int32(K_0@)),
         (1))))))) }
 
 let DREMM_safety =
- fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, double) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
+ fun (N_0_0 : int32) (K_0 : int32) (p_0_0 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, double) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
   { (JC_<somenum>:
     is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
-    integer_of_int32(N_1_0), integer_of_int32(K_1),
+    integer_of_int32(N_0_0), integer_of_int32(K_0),
     double_P_X_0_7_alloc_table, double_P_double_M_X_0_7)) }
   (init:
   try
@@ -2504,7 +2501,7 @@ let DREMM_safety =
               (C_77:
               (C_121:
               begin
-                (if ((lt_int_ (integer_of_int32 !i_0_0)) (integer_of_int32 N_1_0))
+                (if ((lt_int_ (integer_of_int32 !i_0_0)) (integer_of_int32 N_0_0))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_3_break_exc void)) in
@@ -2526,7 +2523,7 @@ let DREMM_safety =
                        (C_93:
                        (C_118:
                        begin
-                         (if ((lt_int_ (integer_of_int32 !k_0_0)) (integer_of_int32 K_1))
+                         (if ((lt_int_ (integer_of_int32 !k_0_0)) (integer_of_int32 K_0))
                          then void
                          else
                           (let jessie_<somenum> =
@@ -2603,7 +2600,7 @@ let DREMM_safety =
                           (C_94:
                           (JC_<somenum>:
                           ((double_of_real nearest_even) (real_of_int 
-                                                          (integer_of_int32 p_2)))))))) in
+                                                          (integer_of_int32 p_0_0)))))))) in
                          (let jessie_<somenum> = X_0_0 in
                          (let jessie_<somenum> =
                          (integer_of_int32 (C_105:
@@ -2644,19 +2641,19 @@ let DREMM_safety =
   { true }
 
 let DTRSM_ensures_default =
- fun (N_3 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, double) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, double) memory) ->
+ fun (N_1_0 : int32) (K_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, double) memory ref) (double_P_A_0_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_0_8 : (double_P, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(integer_of_int32(N_3), (55)))
+    ((JC_<somenum>: le_int(integer_of_int32(N_1_0), (55)))
     and ((JC_<somenum>:
          is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
-         integer_of_int32(N_3), integer_of_int32(K_2), (0),
-         sub_int(l_pmax(integer_of_int32(N_3)), (1)),
+         integer_of_int32(N_1_0), integer_of_int32(K_1), (0),
+         sub_int(l_pmax(integer_of_int32(N_1_0)), (1)),
          double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
         and (JC_<somenum>:
-            is_exact_int_mat_bounded_by(A_1, integer_of_int32(LDA_1),
-            integer_of_int32(N_3), integer_of_int32(N_3), (0),
-            sub_int(l_pmax(integer_of_int32(N_3)), (1)),
-            double_P_A_1_8_alloc_table, double_P_double_M_A_1_8))))) }
+            is_exact_int_mat_bounded_by(A_0, integer_of_int32(LDA_0),
+            integer_of_int32(N_1_0), integer_of_int32(N_1_0), (0),
+            sub_int(l_pmax(integer_of_int32(N_1_0)), (1)),
+            double_P_A_0_8_alloc_table, double_P_double_M_A_0_8))))) }
   (init:
   try
    begin
@@ -2668,7 +2665,7 @@ let DTRSM_ensures_default =
        (let jessie_<somenum> =
        (i_1_0 := (C_127:
                  (safe_int32_of_integer_ (C_126:
-                                         ((sub_int (integer_of_int32 N_3)) (2)))))) in
+                                         ((sub_int (integer_of_int32 N_1_0)) (2)))))) in
        void);
       try
        (let jessie_<somenum> =
@@ -2680,9 +2677,10 @@ let DTRSM_ensures_default =
              not_assigns(double_P_X_1_9_alloc_table@init,
              double_P_double_M_X_1_9@init, double_P_double_M_X_1_9,
              pset_range(pset_singleton(X_1_0@init), (0),
-             sub_int(add_int(mul_int(sub_int(integer_of_int32(N_3@init), (1)),
+             sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
+                                     (1)),
                              integer_of_int32(LDX_1_0@init)),
-                     integer_of_int32(K_2@init)),
+                     integer_of_int32(K_1@init)),
              (1)))))  }
           begin
             [ { } unit { true } ];
@@ -2712,10 +2710,10 @@ let DTRSM_ensures_default =
                       not_assigns(double_P_X_1_9_alloc_table@init,
                       double_P_double_M_X_1_9@init, double_P_double_M_X_1_9,
                       pset_range(pset_singleton(X_1_0@init), (0),
-                      sub_int(add_int(mul_int(sub_int(integer_of_int32(N_3@init),
+                      sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
                                               (1)),
                                       integer_of_int32(LDX_1_0@init)),
-                              integer_of_int32(K_2@init)),
+                              integer_of_int32(K_1@init)),
                       (1)))))  }
                    begin
                      [ { } unit { true } ];
@@ -2726,7 +2724,7 @@ let DTRSM_ensures_default =
                        (C_132:
                        (C_165:
                        begin
-                         (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 N_3))
+                         (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 N_1_0))
                          then void
                          else
                           (let jessie_<somenum> =
@@ -2744,10 +2742,10 @@ let DTRSM_ensures_default =
                                double_P_double_M_X_1_9@init,
                                double_P_double_M_X_1_9,
                                pset_range(pset_singleton(X_1_0@init), (0),
-                               sub_int(add_int(mul_int(sub_int(integer_of_int32(N_3@init),
+                               sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
                                                        (1)),
                                                integer_of_int32(LDX_1_0@init)),
-                                       integer_of_int32(K_2@init)),
+                                       integer_of_int32(K_1@init)),
                                (1)))))  }
                             begin
                               [ { } unit { true } ];
@@ -2759,7 +2757,7 @@ let DTRSM_ensures_default =
                                 (C_162:
                                 begin
                                   (if ((lt_int_ (integer_of_int32 !k_1)) 
-                                       (integer_of_int32 K_2)) then void
+                                       (integer_of_int32 K_1)) then void
                                   else
                                    (let jessie_<somenum> =
                                    (raise (Goto_while_7_break_exc void)) in
@@ -2788,9 +2786,9 @@ let DTRSM_ensures_default =
                                   (C_145:
                                   (JC_<somenum>:
                                   (((mul_double_safe nearest_even) (C_144:
-                                                                   ((safe_acc_ double_P_double_M_A_1_8) 
+                                                                   ((safe_acc_ double_P_double_M_A_0_8) 
                                                                     (C_143:
-                                                                    ((shift A_1) 
+                                                                    ((shift A_0) 
                                                                     (integer_of_int32 
                                                                     (C_142:
                                                                     (safe_int32_of_integer_ 
@@ -2802,7 +2800,7 @@ let DTRSM_ensures_default =
                                                                     (C_139:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_1_0)) 
-                                                                    (integer_of_int32 LDA_1))))))) 
+                                                                    (integer_of_int32 LDA_0))))))) 
                                                                     (integer_of_int32 !j_0_0))))))))))) 
                                    (C_138:
                                    ((safe_acc_ !double_P_double_M_X_1_9) 
@@ -2866,31 +2864,31 @@ let DTRSM_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      is_exact_int_mat_bounded_by(X_1_0@, integer_of_int32(LDX_1_0@),
-     integer_of_int32(N_3@), integer_of_int32(K_2@), neg_int(max_int),
+     integer_of_int32(N_1_0@), integer_of_int32(K_1@), neg_int(max_int),
      max_int, double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
     and (JC_<somenum>:
         not_assigns(double_P_X_1_9_alloc_table@, double_P_double_M_X_1_9@,
         double_P_double_M_X_1_9,
         pset_range(pset_singleton(X_1_0@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_3@), (1)),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@), (1)),
                         integer_of_int32(LDX_1_0@)),
-                integer_of_int32(K_2@)),
+                integer_of_int32(K_1@)),
         (1))))))) }
 
 let DTRSM_safety =
- fun (N_3 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, double) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, double) memory) ->
+ fun (N_1_0 : int32) (K_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, double) memory ref) (double_P_A_0_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_0_8 : (double_P, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(integer_of_int32(N_3), (55)))
+    ((JC_<somenum>: le_int(integer_of_int32(N_1_0), (55)))
     and ((JC_<somenum>:
          is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
-         integer_of_int32(N_3), integer_of_int32(K_2), (0),
-         sub_int(l_pmax(integer_of_int32(N_3)), (1)),
+         integer_of_int32(N_1_0), integer_of_int32(K_1), (0),
+         sub_int(l_pmax(integer_of_int32(N_1_0)), (1)),
          double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
         and (JC_<somenum>:
-            is_exact_int_mat_bounded_by(A_1, integer_of_int32(LDA_1),
-            integer_of_int32(N_3), integer_of_int32(N_3), (0),
-            sub_int(l_pmax(integer_of_int32(N_3)), (1)),
-            double_P_A_1_8_alloc_table, double_P_double_M_A_1_8))))) }
+            is_exact_int_mat_bounded_by(A_0, integer_of_int32(LDA_0),
+            integer_of_int32(N_1_0), integer_of_int32(N_1_0), (0),
+            sub_int(l_pmax(integer_of_int32(N_1_0)), (1)),
+            double_P_A_0_8_alloc_table, double_P_double_M_A_0_8))))) }
   (init:
   try
    begin
@@ -2903,7 +2901,7 @@ let DTRSM_safety =
        (i_1_0 := (C_127:
                  (JC_<somenum>:
                  (int32_of_integer_ (C_126:
-                                    ((sub_int (integer_of_int32 N_3)) (2))))))) in
+                                    ((sub_int (integer_of_int32 N_1_0)) (2))))))) in
        void);
       try
        (let jessie_<somenum> =
@@ -2945,7 +2943,7 @@ let DTRSM_safety =
                        (C_132:
                        (C_165:
                        begin
-                         (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 N_3))
+                         (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 N_1_0))
                          then void
                          else
                           (let jessie_<somenum> =
@@ -2968,7 +2966,7 @@ let DTRSM_safety =
                                 (C_162:
                                 begin
                                   (if ((lt_int_ (integer_of_int32 !k_1)) 
-                                       (integer_of_int32 K_2)) then void
+                                       (integer_of_int32 K_1)) then void
                                   else
                                    (let jessie_<somenum> =
                                    (raise (Goto_while_7_break_exc void)) in
@@ -2999,7 +2997,7 @@ let DTRSM_safety =
                                   (JC_<somenum>:
                                   (((mul_double nearest_even) (C_144:
                                                               (JC_<somenum>:
-                                                              ((((offset_acc_ double_P_A_1_8_alloc_table) double_P_double_M_A_1_8) A_1) 
+                                                              ((((offset_acc_ double_P_A_0_8_alloc_table) double_P_double_M_A_0_8) A_0) 
                                                                (integer_of_int32 
                                                                 (C_142:
                                                                 (JC_<somenum>:
@@ -3013,7 +3011,7 @@ let DTRSM_safety =
                                                                     (C_139:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_1_0)) 
-                                                                    (integer_of_int32 LDA_1)))))))) 
+                                                                    (integer_of_int32 LDA_0)))))))) 
                                                                   (integer_of_int32 !j_0_0))))))))))) 
                                    (C_138:
                                    (JC_<somenum>:
@@ -3084,24 +3082,24 @@ let DTRSM_safety =
   { true }
 
 let LZ_TRSM_ensures_default =
- fun (N_4 : int32) (K : int32) (p_0_0 : int32) (A : double_P pointer) (LDA : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, double) memory ref) (double_P_A_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_10 : (double_P, double) memory) ->
+ fun (N_2_0 : int32) (K_2 : int32) (p_1 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, double) memory ref) (double_P_A_1_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_1_10 : (double_P, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int((2), integer_of_int32(p_0_0)))
+    ((JC_<somenum>: le_int((2), integer_of_int32(p_1)))
     and ((JC_<somenum>:
-         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0_0), (1)),
-                        sub_int(integer_of_int32(p_0_0), (1))),
-                integer_of_int32(N_4)),
+         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
+                        sub_int(integer_of_int32(p_1), (1))),
+                integer_of_int32(N_2_0)),
          max_int))
-        and ((JC_<somenum>: (not same_block(B, A)))
+        and ((JC_<somenum>: (not same_block(B, A_1)))
             and ((JC_<somenum>:
-                 is_exact_int_mat_bounded_by(A, integer_of_int32(LDA),
-                 integer_of_int32(N_4), integer_of_int32(N_4), (0),
-                 sub_int(integer_of_int32(p_0_0), (1)),
-                 double_P_A_10_alloc_table, double_P_double_M_A_10))
+                 is_exact_int_mat_bounded_by(A_1, integer_of_int32(LDA_1),
+                 integer_of_int32(N_2_0), integer_of_int32(N_2_0), (0),
+                 sub_int(integer_of_int32(p_1), (1)),
+                 double_P_A_1_10_alloc_table, double_P_double_M_A_1_10))
                 and (JC_<somenum>:
                     is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
-                    integer_of_int32(N_4), integer_of_int32(K), (0),
-                    sub_int(integer_of_int32(p_0_0), (1)),
+                    integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
+                    sub_int(integer_of_int32(p_1), (1)),
                     double_P_B_11_alloc_table, double_P_double_M_B_11))))))) }
   (init:
   try
@@ -3113,26 +3111,26 @@ let LZ_TRSM_ensures_default =
      begin
        (let jessie_<somenum> =
        (tmp_0 := (C_218:
-                 (let jessie_<somenum> = p_0_0 in (JC_<somenum>: (Nmax jessie_<somenum>))))) in
+                 (let jessie_<somenum> = p_1 in (JC_<somenum>: (Nmax jessie_<somenum>))))) in
        void); void;
-      (if ((le_int_ (integer_of_int32 N_4)) (integer_of_int32 !tmp_0))
+      (if ((le_int_ (integer_of_int32 N_2_0)) (integer_of_int32 !tmp_0))
       then
        (C_243:
        begin
-         (assert { (JC_<somenum>: le_int(integer_of_int32(N_4), (55))) }; void);
+         (assert { (JC_<somenum>: le_int(integer_of_int32(N_2_0), (55))) }; void);
         void;
-        (let jessie_<somenum> = N_4 in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = A in
-        (let jessie_<somenum> = LDA in
+        (let jessie_<somenum> = N_2_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = A_1 in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        ((((((((((DTRSM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))));
+        ((((((((((DTRSM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) double_P_double_M_A_1_10))))))));
         (C_244:
-        (let jessie_<somenum> = N_4 in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
+        (let jessie_<somenum> = N_2_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
@@ -3149,29 +3147,29 @@ let LZ_TRSM_ensures_default =
          (P := (C_221:
                (safe_int32_of_integer_ (C_220:
                                        (JC_<somenum>:
-                                       ((div_int (integer_of_int32 N_4)) (2))))))) in
+                                       ((div_int (integer_of_int32 N_2_0)) (2))))))) in
          void);
         (let jessie_<somenum> =
         (G := (C_224:
               (safe_int32_of_integer_ (C_223:
-                                      ((sub_int (integer_of_int32 N_4)) 
+                                      ((sub_int (integer_of_int32 N_2_0)) 
                                        (integer_of_int32 !P)))))) in void);
         (let jessie_<somenum> = !G in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
         (let jessie_<somenum> =
         (C_230:
-        ((shift A) (integer_of_int32 (C_229:
-                                     (safe_int32_of_integer_ (C_228:
-                                                             ((mul_int 
-                                                               (integer_of_int32 !P)) 
-                                                              (integer_of_int32 
-                                                               (C_227:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_226:
-                                                                ((add_int 
-                                                                  (integer_of_int32 LDA)) (1))))))))))))) in
-        (let jessie_<somenum> = LDA in
+        ((shift A_1) (integer_of_int32 (C_229:
+                                       (safe_int32_of_integer_ (C_228:
+                                                               ((mul_int 
+                                                                 (integer_of_int32 !P)) 
+                                                                (integer_of_int32 
+                                                                 (C_227:
+                                                                 (safe_int32_of_integer_ 
+                                                                  (C_226:
+                                                                  ((add_int 
+                                                                    (integer_of_int32 LDA_1)) (1))))))))))))) in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> =
         (C_233:
         ((shift B) (integer_of_int32 (C_232:
@@ -3181,13 +3179,13 @@ let LZ_TRSM_ensures_default =
                                                               (integer_of_int32 LDB)))))))) in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        (((((((((((LZ_TRSM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10)))))))));
+        (((((((((((LZ_TRSM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) double_P_double_M_A_1_10)))))))));
         (let jessie_<somenum> = !P in
         (let jessie_<somenum> = !G in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
-        (let jessie_<somenum> = (C_235: ((shift A) (integer_of_int32 !P))) in
-        (let jessie_<somenum> = LDA in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
+        (let jessie_<somenum> = (C_235: ((shift A_1) (integer_of_int32 !P))) in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> =
         (C_238:
         ((shift B) (integer_of_int32 (C_237:
@@ -3199,60 +3197,60 @@ let LZ_TRSM_ensures_default =
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        ((((((((((((((((DGEMM_NEG jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_10))))))))))));
+        ((((((((((((((((DGEMM_NEG jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_1_10))))))))))));
         (let jessie_<somenum> = !P in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
         (((((((DREMM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table)))))));
         (C_241:
         (let jessie_<somenum> = !P in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
-        (let jessie_<somenum> = A in
-        (let jessie_<somenum> = LDA in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
+        (let jessie_<somenum> = A_1 in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        (((((((((((LZ_TRSM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))))))
+        (((((((((((LZ_TRSM jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) double_P_double_M_A_1_10))))))))))
        end)))))); (raise Return) end)))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      is_exact_int_mat_bounded_by(B@, integer_of_int32(LDB@),
-     integer_of_int32(N_4@), integer_of_int32(K@), (0),
-     sub_int(integer_of_int32(p_0_0@), (1)), double_P_B_11_alloc_table,
+     integer_of_int32(N_2_0@), integer_of_int32(K_2@), (0),
+     sub_int(integer_of_int32(p_1@), (1)), double_P_B_11_alloc_table,
      double_P_double_M_B_11))
     and (JC_<somenum>:
         not_assigns(double_P_B_11_alloc_table@, double_P_double_M_B_11@,
         double_P_double_M_B_11,
         pset_range(pset_singleton(B@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_4@), (1)),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0@), (1)),
                         integer_of_int32(LDB@)),
-                integer_of_int32(K@)),
+                integer_of_int32(K_2@)),
         (1))))))) }
 
 let LZ_TRSM_safety =
- fun (N_4 : int32) (K : int32) (p_0_0 : int32) (A : double_P pointer) (LDA : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, double) memory ref) (double_P_A_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_10 : (double_P, double) memory) ->
+ fun (N_2_0 : int32) (K_2 : int32) (p_1 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, double) memory ref) (double_P_A_1_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_1_10 : (double_P, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int((2), integer_of_int32(p_0_0)))
+    ((JC_<somenum>: le_int((2), integer_of_int32(p_1)))
     and ((JC_<somenum>:
-         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0_0), (1)),
-                        sub_int(integer_of_int32(p_0_0), (1))),
-                integer_of_int32(N_4)),
+         le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
+                        sub_int(integer_of_int32(p_1), (1))),
+                integer_of_int32(N_2_0)),
          max_int))
-        and ((JC_<somenum>: (not same_block(B, A)))
+        and ((JC_<somenum>: (not same_block(B, A_1)))
             and ((JC_<somenum>:
-                 is_exact_int_mat_bounded_by(A, integer_of_int32(LDA),
-                 integer_of_int32(N_4), integer_of_int32(N_4), (0),
-                 sub_int(integer_of_int32(p_0_0), (1)),
-                 double_P_A_10_alloc_table, double_P_double_M_A_10))
+                 is_exact_int_mat_bounded_by(A_1, integer_of_int32(LDA_1),
+                 integer_of_int32(N_2_0), integer_of_int32(N_2_0), (0),
+                 sub_int(integer_of_int32(p_1), (1)),
+                 double_P_A_1_10_alloc_table, double_P_double_M_A_1_10))
                 and (JC_<somenum>:
                     is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
-                    integer_of_int32(N_4), integer_of_int32(K), (0),
-                    sub_int(integer_of_int32(p_0_0), (1)),
+                    integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
+                    sub_int(integer_of_int32(p_1), (1)),
                     double_P_B_11_alloc_table, double_P_double_M_B_11))))))) }
   (init:
   try
@@ -3264,26 +3262,26 @@ let LZ_TRSM_safety =
      begin
        (let jessie_<somenum> =
        (tmp_0 := (C_218:
-                 (let jessie_<somenum> = p_0_0 in
+                 (let jessie_<somenum> = p_1 in
                  (JC_<somenum>: (Nmax_requires jessie_<somenum>))))) in void); void;
-      (if ((le_int_ (integer_of_int32 N_4)) (integer_of_int32 !tmp_0))
+      (if ((le_int_ (integer_of_int32 N_2_0)) (integer_of_int32 !tmp_0))
       then
        (C_243:
        begin
-         [ { } unit { (JC_<somenum>: le_int(integer_of_int32(N_4), (55))) } ];
+         [ { } unit { (JC_<somenum>: le_int(integer_of_int32(N_2_0), (55))) } ];
         void;
-        (let jessie_<somenum> = N_4 in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = A in
-        (let jessie_<somenum> = LDA in
+        (let jessie_<somenum> = N_2_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = A_1 in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        ((((((((((DTRSM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))));
+        ((((((((((DTRSM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) double_P_double_M_A_1_10))))))));
         (C_244:
-        (let jessie_<somenum> = N_4 in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
+        (let jessie_<somenum> = N_2_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
@@ -3301,31 +3299,31 @@ let LZ_TRSM_safety =
                (JC_<somenum>:
                (int32_of_integer_ (C_220:
                                   (JC_<somenum>:
-                                  ((div_int_ (integer_of_int32 N_4)) (2)))))))) in
+                                  ((div_int_ (integer_of_int32 N_2_0)) (2)))))))) in
          void);
         (let jessie_<somenum> =
         (G := (C_224:
               (JC_<somenum>:
               (int32_of_integer_ (C_223:
-                                 ((sub_int (integer_of_int32 N_4)) (integer_of_int32 !P))))))) in
-        void);
+                                 ((sub_int (integer_of_int32 N_2_0)) 
+                                  (integer_of_int32 !P))))))) in void);
         (let jessie_<somenum> = !G in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
         (let jessie_<somenum> =
         (C_230:
-        ((shift A) (integer_of_int32 (C_229:
-                                     (JC_<somenum>:
-                                     (int32_of_integer_ (C_228:
-                                                        ((mul_int (integer_of_int32 !P)) 
-                                                         (integer_of_int32 
-                                                          (C_227:
-                                                          (JC_<somenum>:
-                                                          (int32_of_integer_ 
-                                                           (C_226:
-                                                           ((add_int 
-                                                             (integer_of_int32 LDA)) (1))))))))))))))) in
-        (let jessie_<somenum> = LDA in
+        ((shift A_1) (integer_of_int32 (C_229:
+                                       (JC_<somenum>:
+                                       (int32_of_integer_ (C_228:
+                                                          ((mul_int (integer_of_int32 !P)) 
+                                                           (integer_of_int32 
+                                                            (C_227:
+                                                            (JC_<somenum>:
+                                                            (int32_of_integer_ 
+                                                             (C_226:
+                                                             ((add_int 
+                                                               (integer_of_int32 LDA_1)) (1))))))))))))))) in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> =
         (C_233:
         ((shift B) (integer_of_int32 (C_232:
@@ -3337,13 +3335,13 @@ let LZ_TRSM_safety =
         (JC_<somenum>:
         (check { zwf_zero((0), (0)) };
         (JC_<somenum>:
-        (((((((((((LZ_TRSM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10)))))))))));
+        (((((((((((LZ_TRSM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) double_P_double_M_A_1_10)))))))))));
         (let jessie_<somenum> = !P in
         (let jessie_<somenum> = !G in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
-        (let jessie_<somenum> = (C_235: ((shift A) (integer_of_int32 !P))) in
-        (let jessie_<somenum> = LDA in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
+        (let jessie_<somenum> = (C_235: ((shift A_1) (integer_of_int32 !P))) in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> =
         (C_238:
         ((shift B) (integer_of_int32 (C_237:
@@ -3355,39 +3353,39 @@ let LZ_TRSM_safety =
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        ((((((((((((((((DGEMM_NEG_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_10))))))))))));
+        ((((((((((((((((DGEMM_NEG_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_1_10))))))))))));
         (let jessie_<somenum> = !P in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
         (((((((DREMM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table)))))));
         (C_241:
         (let jessie_<somenum> = !P in
-        (let jessie_<somenum> = K in
-        (let jessie_<somenum> = p_0_0 in
-        (let jessie_<somenum> = A in
-        (let jessie_<somenum> = LDA in
+        (let jessie_<somenum> = K_2 in
+        (let jessie_<somenum> = p_1 in
+        (let jessie_<somenum> = A_1 in
+        (let jessie_<somenum> = LDA_1 in
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
         (check { zwf_zero((0), (0)) };
         (JC_<somenum>:
-        (((((((((((LZ_TRSM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_10_alloc_table) double_P_double_M_A_10))))))))))))
+        (((((((((((LZ_TRSM_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_1_10_alloc_table) double_P_double_M_A_1_10))))))))))))
        end)))))); (raise Return) end)))); (raise Return) end with Return ->
    void end) { true }
 
 let Nmax_ensures_default =
- fun (p_0 : int32) ->
-  { (JC_<somenum>: le_int((2), integer_of_int32(p_0))) }
+ fun (p_2 : int32) ->
+  { (JC_<somenum>: le_int((2), integer_of_int32(p_2))) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let pp = ref (any_double void) in
      (let p2_0 = ref (any_double void) in
-     (let N_4_0 = ref (any_int32 void) in
+     (let N_4 = ref (any_int32 void) in
      (C_176:
      (C_178:
      (C_179:
@@ -3395,7 +3393,7 @@ let Nmax_ensures_default =
        (let jessie_<somenum> = (pp := (C_175: (double_of_real_exact 1.0))) in void);
       (let jessie_<somenum> = (p2_0 := (C_177: (double_of_real_exact 1.0))) in
       void);
-      (let jessie_<somenum> = (N_4_0 := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_<somenum> = (N_4 := (safe_int32_of_integer_ (0))) in void);
       try
        (let jessie_<somenum> =
        begin
@@ -3431,7 +3429,7 @@ let Nmax_ensures_default =
                                                                     (safe_int32_of_integer_ 
                                                                     (C_183:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 p_0)) (1)))))))))) 
+                                                                    (integer_of_int32 p_2)) (1)))))))))) 
                                                                     (C_182:
                                                                     (JC_<somenum>:
                                                                     (((add_double_safe nearest_even) !pp) !p2_0))))))) 
@@ -3456,7 +3454,7 @@ let Nmax_ensures_default =
                         (((mul_double_safe nearest_even) !pp) (C_191:
                                                               ((double_of_real_safe nearest_even) 
                                                                (real_of_int 
-                                                                (integer_of_int32 p_0)))))))) in
+                                                                (integer_of_int32 p_2)))))))) in
                  void);
                 (p2_0 := (C_197:
                          (JC_<somenum>:
@@ -3468,35 +3466,35 @@ let Nmax_ensures_default =
                                                                     (safe_int32_of_integer_ 
                                                                     (C_194:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 p_0)) (2)))))))))))));
+                                                                    (integer_of_int32 p_2)) (2)))))))))))));
                 !p2_0 end)) in void);
-               (N_4_0 := (C_200:
-                         (safe_int32_of_integer_ (C_199:
-                                                 ((add_int (integer_of_int32 !N_4_0)) (1))))));
-               !N_4_0 end) in void); (raise (Loop_continue_exc void)) end in
+               (N_4 := (C_200:
+                       (safe_int32_of_integer_ (C_199:
+                                               ((add_int (integer_of_int32 !N_4)) (1))))));
+               !N_4 end) in void); (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_8_break_exc void)) end in void) with
        Goto_while_8_break_exc jessie_<somenum> -> (while_8_break: void) end;
-      (return := !N_4_0); (raise Return) end)))))); absurd  end with
-   Return -> !return end))
+      (return := !N_4); (raise Return) end)))))); absurd  end with Return ->
+   !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_0@)))
+    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2@)))
     and ((JC_<somenum>:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
-          <-> delay(q, integer_of_int32(p_0@)))))
+          <-> delay(q, integer_of_int32(p_2@)))))
         and (JC_<somenum>: le_int(integer_of_int32(result), (55)))))) }
 
 let Nmax_safety =
- fun (p_0 : int32) ->
-  { (JC_<somenum>: le_int((2), integer_of_int32(p_0))) }
+ fun (p_2 : int32) ->
+  { (JC_<somenum>: le_int((2), integer_of_int32(p_2))) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let pp = ref (any_double void) in
      (let p2_0 = ref (any_double void) in
-     (let N_4_0 = ref (any_int32 void) in
+     (let N_4 = ref (any_int32 void) in
      (C_176:
      (C_178:
      (C_179:
@@ -3504,7 +3502,7 @@ let Nmax_safety =
        (let jessie_<somenum> = (pp := (C_175: (double_of_real_exact 1.0))) in void);
       (let jessie_<somenum> = (p2_0 := (C_177: (double_of_real_exact 1.0))) in
       void);
-      (let jessie_<somenum> = (N_4_0 := (safe_int32_of_integer_ (0))) in void);
+      (let jessie_<somenum> = (N_4 := (safe_int32_of_integer_ (0))) in void);
       try
        (let jessie_<somenum> =
        begin
@@ -3545,7 +3543,7 @@ let Nmax_safety =
                                                                     (int32_of_integer_ 
                                                                     (C_183:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 p_0)) (1)))))))))))) 
+                                                                    (integer_of_int32 p_2)) (1)))))))))))) 
                                                                     (C_182:
                                                                     (JC_<somenum>:
                                                                     (((add_double nearest_even) !pp) !p2_0))))))) 
@@ -3571,7 +3569,7 @@ let Nmax_safety =
                                                          (JC_<somenum>:
                                                          ((double_of_real nearest_even) 
                                                           (real_of_int 
-                                                           (integer_of_int32 p_0))))))))) in
+                                                           (integer_of_int32 p_2))))))))) in
                  void);
                 (p2_0 := (C_197:
                          (JC_<somenum>:
@@ -3585,21 +3583,21 @@ let Nmax_safety =
                                                                (int32_of_integer_ 
                                                                 (C_194:
                                                                 ((sub_int 
-                                                                  (integer_of_int32 p_0)) (2)))))))))))))));
+                                                                  (integer_of_int32 p_2)) (2)))))))))))))));
                 !p2_0 end)) in void);
-               (N_4_0 := (C_200:
-                         (JC_<somenum>:
-                         (int32_of_integer_ (C_199:
-                                            ((add_int (integer_of_int32 !N_4_0)) (1)))))));
-               !N_4_0 end) in void); (raise (Loop_continue_exc void)) end in
+               (N_4 := (C_200:
+                       (JC_<somenum>:
+                       (int32_of_integer_ (C_199:
+                                          ((add_int (integer_of_int32 !N_4)) (1)))))));
+               !N_4 end) in void); (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_8_break_exc void)) end in void) with
        Goto_while_8_break_exc jessie_<somenum> -> (while_8_break: void) end;
-      (return := !N_4_0); (raise Return) end)))))); absurd  end with
-   Return -> !return end)) { true }
+      (return := !N_4); (raise Return) end)))))); absurd  end with Return ->
+   !return end)) { true }
 
 let pmax_ensures_default =
- fun (N_2 : int32) ->
+ fun (N_3 : int32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -3631,7 +3629,7 @@ let pmax_ensures_default =
                 (tmp := (C_209:
                         (let jessie_<somenum> = !p_3 in
                         (JC_<somenum>: (Nmax jessie_<somenum>))))) in void); void;
-               (if ((le_int_ (integer_of_int32 N_2)) (integer_of_int32 !tmp))
+               (if ((le_int_ (integer_of_int32 N_3)) (integer_of_int32 !tmp))
                then void
                else
                 (let jessie_<somenum> = (raise (Goto_while_9_break_exc void)) in
@@ -3650,10 +3648,10 @@ let pmax_ensures_default =
       void); (return := !__retres); (raise Return) end))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_2@)))) }
+    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3@)))) }
 
 let pmax_safety =
- fun (N_2 : int32) ->
+ fun (N_3 : int32) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -3686,7 +3684,7 @@ let pmax_safety =
                         (let jessie_<somenum> = !p_3 in
                         (JC_<somenum>: (Nmax_requires jessie_<somenum>))))) in void);
                void;
-               (if ((le_int_ (integer_of_int32 N_2)) (integer_of_int32 !tmp))
+               (if ((le_int_ (integer_of_int32 N_3)) (integer_of_int32 !tmp))
                then void
                else
                 (let jessie_<somenum> = (raise (Goto_while_9_break_exc void)) in
@@ -3730,11 +3728,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po239.why">
-      <location file = "why/bts0112.why" line = "3028" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "3030" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po240.why">
-      <location file = "why/bts0112.why" line = "3028" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "3030" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po241.why">
@@ -3854,11 +3852,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po233.why">
-      <location file = "why/bts0112.why" line = "2867" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "2869" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po234.why">
-      <location file = "why/bts0112.why" line = "2867" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "2869" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3894,22 +3892,22 @@ text = "ArithOverflow"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po170.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "612" begin = "18" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "608" begin = "18" end = "53"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po171.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "612" begin = "18" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "608" begin = "18" end = "53"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po172.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "612" begin = "18" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "608" begin = "18" end = "53"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po173.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "609" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -3969,35 +3967,35 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po185.why">
-      <location file = "why/bts0112.why" line = "2692" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2694" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po186.why">
-      <location file = "why/bts0112.why" line = "2692" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2694" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po187.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "580"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po188.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "580"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po189.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "580"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po190.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "580"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po191.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "617" begin = "18" end = "572"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "613" begin = "18" end = "580"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4012,75 +4010,75 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po194.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po195.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po196.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po197.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po198.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po199.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po200.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "623" begin = "18" end = "237"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po201.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "631" begin = "18" end = "42"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "627" begin = "18" end = "44"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po202.why">
-      <location file = "why/bts0112.why" line = "2729" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2731" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po203.why">
-      <location file = "why/bts0112.why" line = "2729" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2731" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po204.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po205.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po206.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po207.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po208.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "632" begin = "18" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "628" begin = "18" end = "58"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4244,12 +4242,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po152.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "437" begin = "43" end = "2660"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "430" begin = "43" end = "2660"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0112_po153.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "437" begin = "43" end = "2660"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "430" begin = "43" end = "2660"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -4264,11 +4262,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po156.why">
-      <location file = "why/bts0112.why" line = "2314" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "2316" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po157.why">
-      <location file = "why/bts0112.why" line = "2314" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "2316" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po158.why">
@@ -4282,11 +4280,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po160.why">
-      <location file = "why/bts0112.why" line = "2292" begin = "54" end = "55"/>
+      <location file = "why/bts0112.why" line = "2294" begin = "54" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po161.why">
-      <location file = "why/bts0112.why" line = "2292" begin = "54" end = "55"/>
+      <location file = "why/bts0112.why" line = "2294" begin = "54" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po162.why">
@@ -4300,29 +4298,29 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po164.why">
-      <location file = "why/bts0112.why" line = "2267" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "2269" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po165.why">
-      <location file = "why/bts0112.why" line = "2267" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "2269" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0112_po118.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "416" begin = "9" end = "3916"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "409" begin = "9" end = "3916"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po119.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "432" begin = "27" end = "3039"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "425" begin = "27" end = "3039"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po120.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "424" begin = "18" end = "3517"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "417" begin = "18" end = "3517"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po121.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "416" begin = "9" end = "3916"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "409" begin = "9" end = "3916"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po122.why">
@@ -4484,11 +4482,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po112.why">
-      <location file = "why/bts0112.why" line = "1873" begin = "54" end = "55"/>
+      <location file = "why/bts0112.why" line = "1874" begin = "54" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po113.why">
-      <location file = "why/bts0112.why" line = "1873" begin = "54" end = "55"/>
+      <location file = "why/bts0112.why" line = "1874" begin = "54" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po114.why">
@@ -4502,25 +4500,25 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po116.why">
-      <location file = "why/bts0112.why" line = "1851" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "1852" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po117.why">
-      <location file = "why/bts0112.why" line = "1851" begin = "45" end = "46"/>
+      <location file = "why/bts0112.why" line = "1852" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0112_po77.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "315" begin = "9" end = "3830"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "308" begin = "9" end = "3830"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po78.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "323" begin = "18" end = "3470"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "316" begin = "18" end = "3470"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po79.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "315" begin = "9" end = "3830"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "308" begin = "9" end = "3830"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po80.why">
@@ -4661,12 +4659,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po63.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "230" begin = "42" end = "2415"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "223" begin = "42" end = "2411"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0112_po64.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "230" begin = "42" end = "2415"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "223" begin = "42" end = "2411"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -4681,11 +4679,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po67.why">
-      <location file = "why/bts0112.why" line = "1447" begin = "62" end = "63"/>
+      <location file = "why/bts0112.why" line = "1448" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po68.why">
-      <location file = "why/bts0112.why" line = "1447" begin = "62" end = "63"/>
+      <location file = "why/bts0112.why" line = "1448" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po69.why">
@@ -4699,11 +4697,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po71.why">
-      <location file = "why/bts0112.why" line = "1407" begin = "53" end = "54"/>
+      <location file = "why/bts0112.why" line = "1409" begin = "53" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po72.why">
-      <location file = "why/bts0112.why" line = "1407" begin = "53" end = "54"/>
+      <location file = "why/bts0112.why" line = "1409" begin = "53" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po73.why">
@@ -4717,11 +4715,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po75.why">
-      <location file = "why/bts0112.why" line = "1373" begin = "44" end = "45"/>
+      <location file = "why/bts0112.why" line = "1375" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po76.why">
-      <location file = "why/bts0112.why" line = "1373" begin = "44" end = "45"/>
+      <location file = "why/bts0112.why" line = "1375" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -4739,11 +4737,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "160" begin = "9" end = "6291"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "160" begin = "9" end = "6291"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po6.why">
@@ -4759,11 +4757,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "176" begin = "18" end = "5554"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "176" begin = "18" end = "5554"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po11.why">
@@ -4791,11 +4789,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "193" begin = "27" end = "4569"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "193" begin = "27" end = "4569"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0112_po19.why">
@@ -4823,11 +4821,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po25.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "193" begin = "27" end = "4569"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "200" begin = "27" end = "4579"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "193" begin = "27" end = "4569"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po27.why">
@@ -4843,11 +4841,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "176" begin = "18" end = "5554"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "182" begin = "18" end = "5615"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "176" begin = "18" end = "5554"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po32.why">
@@ -4863,11 +4861,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "160" begin = "9" end = "6291"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "166" begin = "9" end = "6366"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "160" begin = "9" end = "6291"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0112_po37.why">

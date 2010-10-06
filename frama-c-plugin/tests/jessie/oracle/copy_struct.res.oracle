@@ -45,54 +45,54 @@ tag T = {
 
 type T = [T]
 
-unit f(T[..] p_0, T[..] q)
-  requires (C_28 : (((C_30 : (\offset_min(p_0) <= 0)) &&
-                      (C_31 : (\offset_max(p_0) >= 0))) &&
+unit f(T[..] p, T[..] q)
+  requires (C_28 : (((C_30 : (\offset_min(p) <= 0)) &&
+                      (C_31 : (\offset_max(p) >= 0))) &&
                      ((C_33 : (\offset_min(q) <= 0)) &&
                        (C_34 : (\offset_max(q) >= 0)))));
 behavior default:
-  ensures (C_21 : (((C_23 : (\at(p_0,Old).a.i == \at(q,Old).a.i)) &&
-                     (C_24 : (\at(p_0,Old).a.j == \at(q,Old).a.j))) &&
-                    ((C_26 : (\at(p_0,Old).b.i == \at(q,Old).b.i)) &&
-                      (C_27 : (\at(p_0,Old).b.j == \at(q,Old).b.j)))));
+  ensures (C_21 : (((C_23 : (\at(p,Old).a.i == \at(q,Old).a.i)) &&
+                     (C_24 : (\at(p,Old).a.j == \at(q,Old).a.j))) &&
+                    ((C_26 : (\at(p,Old).b.i == \at(q,Old).b.i)) &&
+                      (C_27 : (\at(p,Old).b.j == \at(q,Old).b.j)))));
 {  
    {  
-      {  (C_5 : ((C_4 : (C_3 : q.a).i) = (C_2 : (C_1 : p_0.a).i)));
-         (C_10 : ((C_9 : (C_8 : q.a).j) = (C_7 : (C_6 : p_0.a).j)));
-         (C_15 : ((C_14 : (C_13 : q.b).i) = (C_12 : (C_11 : p_0.b).i)));
-         (C_20 : ((C_19 : (C_18 : q.b).j) = (C_17 : (C_16 : p_0.b).j)))
+      {  (C_5 : ((C_4 : (C_3 : q.a).i) = (C_2 : (C_1 : p.a).i)));
+         (C_10 : ((C_9 : (C_8 : q.a).j) = (C_7 : (C_6 : p.a).j)));
+         (C_15 : ((C_14 : (C_13 : q.b).i) = (C_12 : (C_11 : p.b).i)));
+         (C_20 : ((C_19 : (C_18 : q.b).j) = (C_17 : (C_16 : p.b).j)))
       };
       
       (return ())
    }
 }
 
-T[0] id(T[0] v_p_2)
+T[0] id(T[0] v_p_1)
 behavior default:
-  ensures (C_80 : (((C_82 : (\result.a.i == \at(v_p_2.a.i,Old))) &&
-                     (C_83 : (\result.a.j == \at(v_p_2.a.j,Old)))) &&
-                    ((C_85 : (\result.b.i == \at(v_p_2.b.i,Old))) &&
-                      (C_86 : (\result.b.j == \at(v_p_2.b.j,Old))))));
+  ensures (C_80 : (((C_82 : (\result.a.i == \at(v_p_1.a.i,Old))) &&
+                     (C_83 : (\result.a.j == \at(v_p_1.a.j,Old)))) &&
+                    ((C_85 : (\result.b.i == \at(v_p_1.b.i,Old))) &&
+                      (C_86 : (\result.b.j == \at(v_p_1.b.j,Old))))));
 {  
-   (var T[0] p_2);
+   (var T[0] p_1);
    
    (var T[0] __cil_tmp);
    
-   {  (C_36 : (p_2 = (C_35 : (new T[1]))));
+   {  (C_36 : (p_1 = (C_35 : (new T[1]))));
       (C_38 : (__cil_tmp = (C_37 : (new T[1]))));
       
-      {  (C_43 : ((C_42 : (C_41 : p_2.a).i) = (C_40 : (C_39 : v_p_2.a).i)));
-         (C_48 : ((C_47 : (C_46 : p_2.a).j) = (C_45 : (C_44 : v_p_2.a).j)));
-         (C_53 : ((C_52 : (C_51 : p_2.b).i) = (C_50 : (C_49 : v_p_2.b).i)));
-         (C_58 : ((C_57 : (C_56 : p_2.b).j) = (C_55 : (C_54 : v_p_2.b).j)))
+      {  (C_43 : ((C_42 : (C_41 : p_1.a).i) = (C_40 : (C_39 : v_p_1.a).i)));
+         (C_48 : ((C_47 : (C_46 : p_1.a).j) = (C_45 : (C_44 : v_p_1.a).j)));
+         (C_53 : ((C_52 : (C_51 : p_1.b).i) = (C_50 : (C_49 : v_p_1.b).i)));
+         (C_58 : ((C_57 : (C_56 : p_1.b).j) = (C_55 : (C_54 : v_p_1.b).j)))
       };
       
-      {  (C_63 : ((C_62 : (C_61 : __cil_tmp.a).i) = (C_60 : (C_59 : p_2.a).i)));
-         (C_68 : ((C_67 : (C_66 : __cil_tmp.a).j) = (C_65 : (C_64 : p_2.a).j)));
-         (C_73 : ((C_72 : (C_71 : __cil_tmp.b).i) = (C_70 : (C_69 : p_2.b).i)));
-         (C_78 : ((C_77 : (C_76 : __cil_tmp.b).j) = (C_75 : (C_74 : p_2.b).j)));
+      {  (C_63 : ((C_62 : (C_61 : __cil_tmp.a).i) = (C_60 : (C_59 : p_1.a).i)));
+         (C_68 : ((C_67 : (C_66 : __cil_tmp.a).j) = (C_65 : (C_64 : p_1.a).j)));
+         (C_73 : ((C_72 : (C_71 : __cil_tmp.b).i) = (C_70 : (C_69 : p_1.b).i)));
+         (C_78 : ((C_77 : (C_76 : __cil_tmp.b).j) = (C_75 : (C_74 : p_1.b).j)));
          
-         {  (C_79 : (free(p_2)));
+         {  (C_79 : (free(p_1)));
             
             (return __cil_tmp)
          }
@@ -100,14 +100,14 @@ behavior default:
    }
 }
 
-T[0] idp(T[..] p)
-  requires (C_139 : ((C_140 : (\offset_min(p) <= 0)) &&
-                      (C_141 : (\offset_max(p) >= 0))));
+T[0] idp(T[..] p_2)
+  requires (C_139 : ((C_140 : (\offset_min(p_2) <= 0)) &&
+                      (C_141 : (\offset_max(p_2) >= 0))));
 behavior default:
-  ensures (C_132 : (((C_134 : (\result.a.i == \at(p,Old).a.i)) &&
-                      (C_135 : (\result.a.j == \at(p,Old).a.j))) &&
-                     ((C_137 : (\result.b.i == \at(p,Old).b.i)) &&
-                       (C_138 : (\result.b.j == \at(p,Old).b.j)))));
+  ensures (C_132 : (((C_134 : (\result.a.i == \at(p_2,Old).a.i)) &&
+                      (C_135 : (\result.a.j == \at(p_2,Old).a.j))) &&
+                     ((C_137 : (\result.b.i == \at(p_2,Old).b.i)) &&
+                       (C_138 : (\result.b.j == \at(p_2,Old).b.j)))));
 {  
    (var T[0] __retres);
    
@@ -116,10 +116,10 @@ behavior default:
    {  (C_88 : (__retres = (C_87 : (new T[1]))));
       (C_90 : (__cil_tmp = (C_89 : (new T[1]))));
       
-      {  (C_95 : ((C_94 : (C_93 : __retres.a).i) = (C_92 : (C_91 : p.a).i)));
-         (C_100 : ((C_99 : (C_98 : __retres.a).j) = (C_97 : (C_96 : p.a).j)));
-         (C_105 : ((C_104 : (C_103 : __retres.b).i) = (C_102 : (C_101 : p.b).i)));
-         (C_110 : ((C_109 : (C_108 : __retres.b).j) = (C_107 : (C_106 : p.b).j)))
+      {  (C_95 : ((C_94 : (C_93 : __retres.a).i) = (C_92 : (C_91 : p_2.a).i)));
+         (C_100 : ((C_99 : (C_98 : __retres.a).j) = (C_97 : (C_96 : p_2.a).j)));
+         (C_105 : ((C_104 : (C_103 : __retres.b).i) = (C_102 : (C_101 : p_2.b).i)));
+         (C_110 : ((C_109 : (C_108 : __retres.b).j) = (C_107 : (C_106 : p_2.b).j)))
       };
       
       {  (C_115 : ((C_114 : (C_113 : __cil_tmp.a).i) = (C_112 : (C_111 : __retres.a).i)));
@@ -135,9 +135,9 @@ behavior default:
    }
 }
 
-unit g(T[..] p_1)
-  requires (C_210 : ((C_211 : (\offset_min(p_1) <= 0)) &&
-                      (C_212 : (\offset_max(p_1) >= 0))));
+unit g(T[..] p_0)
+  requires (C_210 : ((C_211 : (\offset_min(p_0) <= 0)) &&
+                      (C_212 : (\offset_max(p_0) >= 0))));
 behavior default:
   ensures (C_209 : true);
 {  
@@ -152,7 +152,7 @@ behavior default:
    {  (C_143 : (copy = (C_142 : (new T[1]))));
       (C_145 : (copy2 = (C_144 : (new T[1]))));
       
-      {  (C_147 : (__cil_tmp = (C_146 : id(p_1))));
+      {  (C_147 : (__cil_tmp = (C_146 : id(p_0))));
          
          {  (C_152 : ((C_151 : (C_150 : copy.a).i) = (C_149 : (C_148 : __cil_tmp.a).i)));
             (C_157 : ((C_156 : (C_155 : copy.a).j) = (C_154 : (C_153 : __cil_tmp.a).j)));
@@ -162,7 +162,7 @@ behavior default:
          (C_168 : (free(__cil_tmp)))
       };
       
-      {  (C_170 : (__cil_tmp_8 = (C_169 : idp(p_1))));
+      {  (C_170 : (__cil_tmp_8 = (C_169 : idp(p_0))));
          
          {  (C_175 : ((C_174 : (C_173 : copy2.a).i) = (C_172 : (C_171 : __cil_tmp_8.a).i)));
             (C_180 : ((C_179 : (C_178 : copy2.a).j) = (C_177 : (C_176 : __cil_tmp_8.a).j)));
@@ -174,16 +174,16 @@ behavior default:
       (C_194 : ((C_193 : (C_192 : copy2.a).i) = 0));
       
       {  
-         (assert for default: (C_195 : (p_1.a.i == copy.a.i)));
+         (assert for default: (C_195 : (p_0.a.i == copy.a.i)));
          ()
       };
       (C_198 : ((C_197 : (C_196 : copy.a).j) = 1));
       
       {  
-         (assert for default: (C_199 : (p_1.a.j == copy2.a.j)));
+         (assert for default: (C_199 : (p_0.a.j == copy2.a.j)));
          ()
       };
-      (C_202 : ((C_201 : (C_200 : p_1.b).i) = 0));
+      (C_202 : ((C_201 : (C_200 : p_0.b).i) = 0));
       
       {  
          (assert for default: (C_203 : (copy.b.i == copy2.b.i)));
@@ -191,7 +191,7 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_204 : ((C_205 : (p_1.b.j == copy.b.j)) &&
+         (assert for default: (C_204 : ((C_205 : (p_0.b.j == copy.b.j)) &&
                                          (C_206 : (copy.b.j == copy2.b.j)))));
          ()
       };
@@ -660,60 +660,59 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
- p_0:T pointer ->
+ p:T pointer ->
   q:T pointer ->
    S_j_q_2:(S, int32) memory ref ->
     S_i_q_2:(S, int32) memory ref ->
      T_q_2_alloc_table:T alloc_table ->
-      T_p_0_1_alloc_table:T alloc_table ->
+      T_p_1_alloc_table:T alloc_table ->
        S_q_2_alloc_table:S alloc_table ->
-        S_p_0_1_alloc_table:S alloc_table ->
+        S_p_1_alloc_table:S alloc_table ->
          T_b_q_2:(T, S pointer) memory ->
-          T_b_p_0_1:(T, S pointer) memory ->
+          T_b_p_1:(T, S pointer) memory ->
            T_a_q_2:(T, S pointer) memory ->
-            T_a_p_0_1:(T, S pointer) memory ->
-             S_j_p_0_1:(S, int32) memory ->
-              S_i_p_0_1:(S, int32) memory ->
+            T_a_p_1:(T, S pointer) memory ->
+             S_j_p_1:(S, int32) memory ->
+              S_i_p_1:(S, int32) memory ->
                { } unit reads S_i_q_2,S_j_q_2 writes S_i_q_2,S_j_q_2
                { (JC_<somenum>:
                  ((JC_<somenum>:
-                  eq_int(integer_of_int32(select(S_i_p_0_1,
-                                          select(T_a_p_0_1, p_0@))),
+                  eq_int(integer_of_int32(select(S_i_p_1,
+                                          select(T_a_p_1, p@))),
                   integer_of_int32(select(S_i_q_2, select(T_a_q_2, q@)))))
                  and ((JC_<somenum>:
-                      eq_int(integer_of_int32(select(S_j_p_0_1,
-                                              select(T_a_p_0_1, p_0@))),
+                      eq_int(integer_of_int32(select(S_j_p_1,
+                                              select(T_a_p_1, p@))),
                       integer_of_int32(select(S_j_q_2, select(T_a_q_2, q@)))))
                      and ((JC_<somenum>:
-                          eq_int(integer_of_int32(select(S_i_p_0_1,
-                                                  select(T_b_p_0_1, p_0@))),
+                          eq_int(integer_of_int32(select(S_i_p_1,
+                                                  select(T_b_p_1, p@))),
                           integer_of_int32(select(S_i_q_2,
                                            select(T_b_q_2, q@)))))
                          and (JC_<somenum>:
-                             eq_int(integer_of_int32(select(S_j_p_0_1,
-                                                     select(T_b_p_0_1, p_0@))),
+                             eq_int(integer_of_int32(select(S_j_p_1,
+                                                     select(T_b_p_1, p@))),
                              integer_of_int32(select(S_j_q_2,
                                               select(T_b_q_2, q@))))))))) }
 
 parameter f_requires :
- p_0:T pointer ->
+ p:T pointer ->
   q:T pointer ->
    S_j_q_2:(S, int32) memory ref ->
     S_i_q_2:(S, int32) memory ref ->
      T_q_2_alloc_table:T alloc_table ->
-      T_p_0_1_alloc_table:T alloc_table ->
+      T_p_1_alloc_table:T alloc_table ->
        S_q_2_alloc_table:S alloc_table ->
-        S_p_0_1_alloc_table:S alloc_table ->
+        S_p_1_alloc_table:S alloc_table ->
          T_b_q_2:(T, S pointer) memory ->
-          T_b_p_0_1:(T, S pointer) memory ->
+          T_b_p_1:(T, S pointer) memory ->
            T_a_q_2:(T, S pointer) memory ->
-            T_a_p_0_1:(T, S pointer) memory ->
-             S_j_p_0_1:(S, int32) memory ->
-              S_i_p_0_1:(S, int32) memory ->
+            T_a_p_1:(T, S pointer) memory ->
+             S_j_p_1:(S, int32) memory ->
+              S_i_p_1:(S, int32) memory ->
                { (JC_<somenum>:
-                 ((JC_<somenum>: le_int(offset_min(T_p_0_1_alloc_table, p_0), (0)))
-                 and ((JC_<somenum>:
-                      ge_int(offset_max(T_p_0_1_alloc_table, p_0), (0)))
+                 ((JC_<somenum>: le_int(offset_min(T_p_1_alloc_table, p), (0)))
+                 and ((JC_<somenum>: ge_int(offset_max(T_p_1_alloc_table, p), (0)))
                      and ((JC_<somenum>:
                           le_int(offset_min(T_q_2_alloc_table, q), (0)))
                          and (JC_<somenum>:
@@ -721,49 +720,49 @@ parameter f_requires :
                unit reads S_i_q_2,S_j_q_2 writes S_i_q_2,S_j_q_2
                { (JC_<somenum>:
                  ((JC_<somenum>:
-                  eq_int(integer_of_int32(select(S_i_p_0_1,
-                                          select(T_a_p_0_1, p_0@))),
+                  eq_int(integer_of_int32(select(S_i_p_1,
+                                          select(T_a_p_1, p@))),
                   integer_of_int32(select(S_i_q_2, select(T_a_q_2, q@)))))
                  and ((JC_<somenum>:
-                      eq_int(integer_of_int32(select(S_j_p_0_1,
-                                              select(T_a_p_0_1, p_0@))),
+                      eq_int(integer_of_int32(select(S_j_p_1,
+                                              select(T_a_p_1, p@))),
                       integer_of_int32(select(S_j_q_2, select(T_a_q_2, q@)))))
                      and ((JC_<somenum>:
-                          eq_int(integer_of_int32(select(S_i_p_0_1,
-                                                  select(T_b_p_0_1, p_0@))),
+                          eq_int(integer_of_int32(select(S_i_p_1,
+                                                  select(T_b_p_1, p@))),
                           integer_of_int32(select(S_i_q_2,
                                            select(T_b_q_2, q@)))))
                          and (JC_<somenum>:
-                             eq_int(integer_of_int32(select(S_j_p_0_1,
-                                                     select(T_b_p_0_1, p_0@))),
+                             eq_int(integer_of_int32(select(S_j_p_1,
+                                                     select(T_b_p_1, p@))),
                              integer_of_int32(select(S_j_q_2,
                                               select(T_b_q_2, q@))))))))) }
 
 parameter g :
- p_1:T pointer ->
-  S_i_p_1_9:(S, int32) memory ref ->
-   T_p_1_9_alloc_table:T alloc_table ->
-    S_p_1_9_alloc_table:S alloc_table ->
-     T_b_p_1_9:(T, S pointer) memory ->
-      T_a_p_1_9:(T, S pointer) memory ->
-       S_j_p_1_9:(S, int32) memory ->
-        { } unit reads S_i_p_1_9 writes S_i_p_1_9 { true }
+ p_0:T pointer ->
+  S_i_p_0_9:(S, int32) memory ref ->
+   T_p_0_9_alloc_table:T alloc_table ->
+    S_p_0_9_alloc_table:S alloc_table ->
+     T_b_p_0_9:(T, S pointer) memory ->
+      T_a_p_0_9:(T, S pointer) memory ->
+       S_j_p_0_9:(S, int32) memory ->
+        { } unit reads S_i_p_0_9 writes S_i_p_0_9 { true }
 
 parameter g_requires :
- p_1:T pointer ->
-  S_i_p_1_9:(S, int32) memory ref ->
-   T_p_1_9_alloc_table:T alloc_table ->
-    S_p_1_9_alloc_table:S alloc_table ->
-     T_b_p_1_9:(T, S pointer) memory ->
-      T_a_p_1_9:(T, S pointer) memory ->
-       S_j_p_1_9:(S, int32) memory ->
+ p_0:T pointer ->
+  S_i_p_0_9:(S, int32) memory ref ->
+   T_p_0_9_alloc_table:T alloc_table ->
+    S_p_0_9_alloc_table:S alloc_table ->
+     T_b_p_0_9:(T, S pointer) memory ->
+      T_a_p_0_9:(T, S pointer) memory ->
+       S_j_p_0_9:(S, int32) memory ->
         { (JC_<somenum>:
-          ((JC_<somenum>: le_int(offset_min(T_p_1_9_alloc_table, p_1), (0)))
-          and (JC_<somenum>: ge_int(offset_max(T_p_1_9_alloc_table, p_1), (0)))))}
-        unit reads S_i_p_1_9 writes S_i_p_1_9 { true }
+          ((JC_<somenum>: le_int(offset_min(T_p_0_9_alloc_table, p_0), (0)))
+          and (JC_<somenum>: ge_int(offset_max(T_p_0_9_alloc_table, p_0), (0)))))}
+        unit reads S_i_p_0_9 writes S_i_p_0_9 { true }
 
 parameter id :
- v_p_2:T pointer ->
+ v_p_1:T pointer ->
   T_result_4_alloc_table:T alloc_table ref ->
    S_result_4_alloc_table:S alloc_table ref ->
     T_result_4_tag_table:T tag_table ref ->
@@ -772,12 +771,12 @@ parameter id :
        T_a_result_4:(T, S pointer) memory ref ->
         S_j_result_4:(S, int32) memory ref ->
          S_i_result_4:(S, int32) memory ref ->
-          T_v_p_2_3_alloc_table:T alloc_table ->
-           S_v_p_2_3_alloc_table:S alloc_table ->
-            T_b_v_p_2_3:(T, S pointer) memory ->
-             T_a_v_p_2_3:(T, S pointer) memory ->
-              S_j_v_p_2_3:(S, int32) memory ->
-               S_i_v_p_2_3:(S, int32) memory ->
+          T_v_p_1_3_alloc_table:T alloc_table ->
+           S_v_p_1_3_alloc_table:S alloc_table ->
+            T_b_v_p_1_3:(T, S pointer) memory ->
+             T_a_v_p_1_3:(T, S pointer) memory ->
+              S_j_v_p_1_3:(S, int32) memory ->
+               S_i_v_p_1_3:(S, int32) memory ->
                 { } T pointer
                 reads S_i_result_4,S_j_result_4,S_result_4_alloc_table,T_a_result_4,T_b_result_4,T_result_4_alloc_table
                 writes S_i_result_4,S_j_result_4,S_result_4_alloc_table,S_result_4_tag_table,T_a_result_4,T_b_result_4,T_result_4_alloc_table,T_result_4_tag_table
@@ -785,28 +784,28 @@ parameter id :
                   ((JC_<somenum>:
                    eq_int(integer_of_int32(select(S_i_result_4,
                                            select(T_a_result_4, result))),
-                   integer_of_int32(select(S_i_v_p_2_3@,
-                                    select(T_a_v_p_2_3@, v_p_2@)))))
+                   integer_of_int32(select(S_i_v_p_1_3@,
+                                    select(T_a_v_p_1_3@, v_p_1@)))))
                   and ((JC_<somenum>:
                        eq_int(integer_of_int32(select(S_j_result_4,
                                                select(T_a_result_4, result))),
-                       integer_of_int32(select(S_j_v_p_2_3@,
-                                        select(T_a_v_p_2_3@, v_p_2@)))))
+                       integer_of_int32(select(S_j_v_p_1_3@,
+                                        select(T_a_v_p_1_3@, v_p_1@)))))
                       and ((JC_<somenum>:
                            eq_int(integer_of_int32(select(S_i_result_4,
                                                    select(T_b_result_4,
                                                    result))),
-                           integer_of_int32(select(S_i_v_p_2_3@,
-                                            select(T_b_v_p_2_3@, v_p_2@)))))
+                           integer_of_int32(select(S_i_v_p_1_3@,
+                                            select(T_b_v_p_1_3@, v_p_1@)))))
                           and (JC_<somenum>:
                               eq_int(integer_of_int32(select(S_j_result_4,
                                                       select(T_b_result_4,
                                                       result))),
-                              integer_of_int32(select(S_j_v_p_2_3@,
-                                               select(T_b_v_p_2_3@, v_p_2@))))))))) }
+                              integer_of_int32(select(S_j_v_p_1_3@,
+                                               select(T_b_v_p_1_3@, v_p_1@))))))))) }
 
 parameter id_requires :
- v_p_2:T pointer ->
+ v_p_1:T pointer ->
   T_result_4_alloc_table:T alloc_table ref ->
    S_result_4_alloc_table:S alloc_table ref ->
     T_result_4_tag_table:T tag_table ref ->
@@ -815,12 +814,12 @@ parameter id_requires :
        T_a_result_4:(T, S pointer) memory ref ->
         S_j_result_4:(S, int32) memory ref ->
          S_i_result_4:(S, int32) memory ref ->
-          T_v_p_2_3_alloc_table:T alloc_table ->
-           S_v_p_2_3_alloc_table:S alloc_table ->
-            T_b_v_p_2_3:(T, S pointer) memory ->
-             T_a_v_p_2_3:(T, S pointer) memory ->
-              S_j_v_p_2_3:(S, int32) memory ->
-               S_i_v_p_2_3:(S, int32) memory ->
+          T_v_p_1_3_alloc_table:T alloc_table ->
+           S_v_p_1_3_alloc_table:S alloc_table ->
+            T_b_v_p_1_3:(T, S pointer) memory ->
+             T_a_v_p_1_3:(T, S pointer) memory ->
+              S_j_v_p_1_3:(S, int32) memory ->
+               S_i_v_p_1_3:(S, int32) memory ->
                 { } T pointer
                 reads S_i_result_4,S_j_result_4,S_result_4_alloc_table,T_a_result_4,T_b_result_4,T_result_4_alloc_table
                 writes S_i_result_4,S_j_result_4,S_result_4_alloc_table,S_result_4_tag_table,T_a_result_4,T_b_result_4,T_result_4_alloc_table,T_result_4_tag_table
@@ -828,28 +827,28 @@ parameter id_requires :
                   ((JC_<somenum>:
                    eq_int(integer_of_int32(select(S_i_result_4,
                                            select(T_a_result_4, result))),
-                   integer_of_int32(select(S_i_v_p_2_3@,
-                                    select(T_a_v_p_2_3@, v_p_2@)))))
+                   integer_of_int32(select(S_i_v_p_1_3@,
+                                    select(T_a_v_p_1_3@, v_p_1@)))))
                   and ((JC_<somenum>:
                        eq_int(integer_of_int32(select(S_j_result_4,
                                                select(T_a_result_4, result))),
-                       integer_of_int32(select(S_j_v_p_2_3@,
-                                        select(T_a_v_p_2_3@, v_p_2@)))))
+                       integer_of_int32(select(S_j_v_p_1_3@,
+                                        select(T_a_v_p_1_3@, v_p_1@)))))
                       and ((JC_<somenum>:
                            eq_int(integer_of_int32(select(S_i_result_4,
                                                    select(T_b_result_4,
                                                    result))),
-                           integer_of_int32(select(S_i_v_p_2_3@,
-                                            select(T_b_v_p_2_3@, v_p_2@)))))
+                           integer_of_int32(select(S_i_v_p_1_3@,
+                                            select(T_b_v_p_1_3@, v_p_1@)))))
                           and (JC_<somenum>:
                               eq_int(integer_of_int32(select(S_j_result_4,
                                                       select(T_b_result_4,
                                                       result))),
-                              integer_of_int32(select(S_j_v_p_2_3@,
-                                               select(T_b_v_p_2_3@, v_p_2@))))))))) }
+                              integer_of_int32(select(S_j_v_p_1_3@,
+                                               select(T_b_v_p_1_3@, v_p_1@))))))))) }
 
 parameter idp :
- p:T pointer ->
+ p_2:T pointer ->
   T_result_7_alloc_table:T alloc_table ref ->
    S_result_7_alloc_table:S alloc_table ref ->
     T_result_7_tag_table:T tag_table ref ->
@@ -858,12 +857,12 @@ parameter idp :
        T_a_result_7:(T, S pointer) memory ref ->
         S_j_result_7:(S, int32) memory ref ->
          S_i_result_7:(S, int32) memory ref ->
-          T_p_6_alloc_table:T alloc_table ->
-           S_p_6_alloc_table:S alloc_table ->
-            T_b_p_6:(T, S pointer) memory ->
-             T_a_p_6:(T, S pointer) memory ->
-              S_j_p_6:(S, int32) memory ->
-               S_i_p_6:(S, int32) memory ->
+          T_p_2_6_alloc_table:T alloc_table ->
+           S_p_2_6_alloc_table:S alloc_table ->
+            T_b_p_2_6:(T, S pointer) memory ->
+             T_a_p_2_6:(T, S pointer) memory ->
+              S_j_p_2_6:(S, int32) memory ->
+               S_i_p_2_6:(S, int32) memory ->
                 { } T pointer
                 reads S_i_result_7,S_j_result_7,S_result_7_alloc_table,T_a_result_7,T_b_result_7,T_result_7_alloc_table
                 writes S_i_result_7,S_j_result_7,S_result_7_alloc_table,S_result_7_tag_table,T_a_result_7,T_b_result_7,T_result_7_alloc_table,T_result_7_tag_table
@@ -871,26 +870,28 @@ parameter idp :
                   ((JC_<somenum>:
                    eq_int(integer_of_int32(select(S_i_result_7,
                                            select(T_a_result_7, result))),
-                   integer_of_int32(select(S_i_p_6, select(T_a_p_6, p@)))))
+                   integer_of_int32(select(S_i_p_2_6,
+                                    select(T_a_p_2_6, p_2@)))))
                   and ((JC_<somenum>:
                        eq_int(integer_of_int32(select(S_j_result_7,
                                                select(T_a_result_7, result))),
-                       integer_of_int32(select(S_j_p_6, select(T_a_p_6, p@)))))
+                       integer_of_int32(select(S_j_p_2_6,
+                                        select(T_a_p_2_6, p_2@)))))
                       and ((JC_<somenum>:
                            eq_int(integer_of_int32(select(S_i_result_7,
                                                    select(T_b_result_7,
                                                    result))),
-                           integer_of_int32(select(S_i_p_6,
-                                            select(T_b_p_6, p@)))))
+                           integer_of_int32(select(S_i_p_2_6,
+                                            select(T_b_p_2_6, p_2@)))))
                           and (JC_<somenum>:
                               eq_int(integer_of_int32(select(S_j_result_7,
                                                       select(T_b_result_7,
                                                       result))),
-                              integer_of_int32(select(S_j_p_6,
-                                               select(T_b_p_6, p@))))))))) }
+                              integer_of_int32(select(S_j_p_2_6,
+                                               select(T_b_p_2_6, p_2@))))))))) }
 
 parameter idp_requires :
- p:T pointer ->
+ p_2:T pointer ->
   T_result_7_alloc_table:T alloc_table ref ->
    S_result_7_alloc_table:S alloc_table ref ->
     T_result_7_tag_table:T tag_table ref ->
@@ -899,15 +900,16 @@ parameter idp_requires :
        T_a_result_7:(T, S pointer) memory ref ->
         S_j_result_7:(S, int32) memory ref ->
          S_i_result_7:(S, int32) memory ref ->
-          T_p_6_alloc_table:T alloc_table ->
-           S_p_6_alloc_table:S alloc_table ->
-            T_b_p_6:(T, S pointer) memory ->
-             T_a_p_6:(T, S pointer) memory ->
-              S_j_p_6:(S, int32) memory ->
-               S_i_p_6:(S, int32) memory ->
+          T_p_2_6_alloc_table:T alloc_table ->
+           S_p_2_6_alloc_table:S alloc_table ->
+            T_b_p_2_6:(T, S pointer) memory ->
+             T_a_p_2_6:(T, S pointer) memory ->
+              S_j_p_2_6:(S, int32) memory ->
+               S_i_p_2_6:(S, int32) memory ->
                 { (JC_<somenum>:
-                  ((JC_<somenum>: le_int(offset_min(T_p_6_alloc_table, p), (0)))
-                  and (JC_<somenum>: ge_int(offset_max(T_p_6_alloc_table, p), (0)))))}
+                  ((JC_<somenum>: le_int(offset_min(T_p_2_6_alloc_table, p_2), (0)))
+                  and (JC_<somenum>:
+                      ge_int(offset_max(T_p_2_6_alloc_table, p_2), (0)))))}
                 T pointer
                 reads S_i_result_7,S_j_result_7,S_result_7_alloc_table,T_a_result_7,T_b_result_7,T_result_7_alloc_table
                 writes S_i_result_7,S_j_result_7,S_result_7_alloc_table,S_result_7_tag_table,T_a_result_7,T_b_result_7,T_result_7_alloc_table,T_result_7_tag_table
@@ -915,23 +917,25 @@ parameter idp_requires :
                   ((JC_<somenum>:
                    eq_int(integer_of_int32(select(S_i_result_7,
                                            select(T_a_result_7, result))),
-                   integer_of_int32(select(S_i_p_6, select(T_a_p_6, p@)))))
+                   integer_of_int32(select(S_i_p_2_6,
+                                    select(T_a_p_2_6, p_2@)))))
                   and ((JC_<somenum>:
                        eq_int(integer_of_int32(select(S_j_result_7,
                                                select(T_a_result_7, result))),
-                       integer_of_int32(select(S_j_p_6, select(T_a_p_6, p@)))))
+                       integer_of_int32(select(S_j_p_2_6,
+                                        select(T_a_p_2_6, p_2@)))))
                       and ((JC_<somenum>:
                            eq_int(integer_of_int32(select(S_i_result_7,
                                                    select(T_b_result_7,
                                                    result))),
-                           integer_of_int32(select(S_i_p_6,
-                                            select(T_b_p_6, p@)))))
+                           integer_of_int32(select(S_i_p_2_6,
+                                            select(T_b_p_2_6, p_2@)))))
                           and (JC_<somenum>:
                               eq_int(integer_of_int32(select(S_j_result_7,
                                                       select(T_b_result_7,
                                                       result))),
-                              integer_of_int32(select(S_j_p_6,
-                                               select(T_b_p_6, p@))))))))) }
+                              integer_of_int32(select(S_j_p_2_6,
+                                               select(T_b_p_2_6, p_2@))))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -950,10 +954,10 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let f_ensures_default =
- fun (p_0 : T pointer) (q : T pointer) (S_i_q_2 : (S, int32) memory ref) (S_j_q_2 : (S, int32) memory ref) (S_p_0_1_alloc_table : S alloc_table) (S_q_2_alloc_table : S alloc_table) (T_p_0_1_alloc_table : T alloc_table) (T_q_2_alloc_table : T alloc_table) (S_i_p_0_1 : (S, int32) memory) (S_j_p_0_1 : (S, int32) memory) (T_a_p_0_1 : (T, S pointer) memory) (T_a_q_2 : (T, S pointer) memory) (T_b_p_0_1 : (T, S pointer) memory) (T_b_q_2 : (T, S pointer) memory) ->
+ fun (p : T pointer) (q : T pointer) (S_i_q_2 : (S, int32) memory ref) (S_j_q_2 : (S, int32) memory ref) (S_p_1_alloc_table : S alloc_table) (S_q_2_alloc_table : S alloc_table) (T_p_1_alloc_table : T alloc_table) (T_q_2_alloc_table : T alloc_table) (S_i_p_1 : (S, int32) memory) (S_j_p_1 : (S, int32) memory) (T_a_p_1 : (T, S pointer) memory) (T_a_q_2 : (T, S pointer) memory) (T_b_p_1 : (T, S pointer) memory) (T_b_q_2 : (T, S pointer) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(T_p_0_1_alloc_table, p_0), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(T_p_0_1_alloc_table, p_0), (0)))
+    ((JC_<somenum>: le_int(offset_min(T_p_1_alloc_table, p), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(T_p_1_alloc_table, p), (0)))
         and ((JC_<somenum>: le_int(offset_min(T_q_2_alloc_table, q), (0)))
             and (JC_<somenum>: ge_int(offset_max(T_q_2_alloc_table, q), (0))))))) }
   (init:
@@ -965,45 +969,43 @@ let f_ensures_default =
      (C_15:
      begin
        (let jessie_<somenum> =
-       (C_2: ((safe_acc_ S_i_p_0_1) (C_1: ((safe_acc_ T_a_p_0_1) p_0)))) in
+       (C_2: ((safe_acc_ S_i_p_1) (C_1: ((safe_acc_ T_a_p_1) p)))) in
        (let jessie_<somenum> = (C_3: ((safe_acc_ T_a_q_2) q)) in
        (((safe_upd_ S_i_q_2) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
-      (C_7: ((safe_acc_ S_j_p_0_1) (C_6: ((safe_acc_ T_a_p_0_1) p_0)))) in
+      (C_7: ((safe_acc_ S_j_p_1) (C_6: ((safe_acc_ T_a_p_1) p)))) in
       (let jessie_<somenum> = (C_8: ((safe_acc_ T_a_q_2) q)) in
       (((safe_upd_ S_j_q_2) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
-      (C_12: ((safe_acc_ S_i_p_0_1) (C_11: ((safe_acc_ T_b_p_0_1) p_0)))) in
+      (C_12: ((safe_acc_ S_i_p_1) (C_11: ((safe_acc_ T_b_p_1) p)))) in
       (let jessie_<somenum> = (C_13: ((safe_acc_ T_b_q_2) q)) in
       (((safe_upd_ S_i_q_2) jessie_<somenum>) jessie_<somenum>)));
       (C_20:
       (let jessie_<somenum> =
-      (C_17: ((safe_acc_ S_j_p_0_1) (C_16: ((safe_acc_ T_b_p_0_1) p_0)))) in
+      (C_17: ((safe_acc_ S_j_p_1) (C_16: ((safe_acc_ T_b_p_1) p)))) in
       begin
         (let jessie_<somenum> = (C_18: ((safe_acc_ T_b_q_2) q)) in
         (((safe_upd_ S_j_q_2) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end)) end))) in
      void); (raise Return); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(select(S_i_p_0_1, select(T_a_p_0_1, p_0@))),
+     eq_int(integer_of_int32(select(S_i_p_1, select(T_a_p_1, p@))),
      integer_of_int32(select(S_i_q_2, select(T_a_q_2, q@)))))
     and ((JC_<somenum>:
-         eq_int(integer_of_int32(select(S_j_p_0_1, select(T_a_p_0_1, p_0@))),
+         eq_int(integer_of_int32(select(S_j_p_1, select(T_a_p_1, p@))),
          integer_of_int32(select(S_j_q_2, select(T_a_q_2, q@)))))
         and ((JC_<somenum>:
-             eq_int(integer_of_int32(select(S_i_p_0_1,
-                                     select(T_b_p_0_1, p_0@))),
+             eq_int(integer_of_int32(select(S_i_p_1, select(T_b_p_1, p@))),
              integer_of_int32(select(S_i_q_2, select(T_b_q_2, q@)))))
             and (JC_<somenum>:
-                eq_int(integer_of_int32(select(S_j_p_0_1,
-                                        select(T_b_p_0_1, p_0@))),
+                eq_int(integer_of_int32(select(S_j_p_1, select(T_b_p_1, p@))),
                 integer_of_int32(select(S_j_q_2, select(T_b_q_2, q@))))))))) }
 
 let f_safety =
- fun (p_0 : T pointer) (q : T pointer) (S_i_q_2 : (S, int32) memory ref) (S_j_q_2 : (S, int32) memory ref) (S_p_0_1_alloc_table : S alloc_table) (S_q_2_alloc_table : S alloc_table) (T_p_0_1_alloc_table : T alloc_table) (T_q_2_alloc_table : T alloc_table) (S_i_p_0_1 : (S, int32) memory) (S_j_p_0_1 : (S, int32) memory) (T_a_p_0_1 : (T, S pointer) memory) (T_a_q_2 : (T, S pointer) memory) (T_b_p_0_1 : (T, S pointer) memory) (T_b_q_2 : (T, S pointer) memory) ->
+ fun (p : T pointer) (q : T pointer) (S_i_q_2 : (S, int32) memory ref) (S_j_q_2 : (S, int32) memory ref) (S_p_1_alloc_table : S alloc_table) (S_q_2_alloc_table : S alloc_table) (T_p_1_alloc_table : T alloc_table) (T_q_2_alloc_table : T alloc_table) (S_i_p_1 : (S, int32) memory) (S_j_p_1 : (S, int32) memory) (T_a_p_1 : (T, S pointer) memory) (T_a_q_2 : (T, S pointer) memory) (T_b_p_1 : (T, S pointer) memory) (T_b_q_2 : (T, S pointer) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(T_p_0_1_alloc_table, p_0), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(T_p_0_1_alloc_table, p_0), (0)))
+    ((JC_<somenum>: le_int(offset_min(T_p_1_alloc_table, p), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(T_p_1_alloc_table, p), (0)))
         and ((JC_<somenum>: le_int(offset_min(T_q_2_alloc_table, q), (0)))
             and (JC_<somenum>: ge_int(offset_max(T_q_2_alloc_table, q), (0))))))) }
   (init:
@@ -1016,34 +1018,30 @@ let f_safety =
      begin
        (let jessie_<somenum> =
        (C_2:
-       ((safe_acc_ S_i_p_0_1) (C_1:
-                              (JC_<somenum>:
-                              (((acc_ T_p_0_1_alloc_table) T_a_p_0_1) p_0))))) in
+       ((safe_acc_ S_i_p_1) (C_1:
+                            (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_a_p_1) p))))) in
        (let jessie_<somenum> =
        (C_3: (JC_<somenum>: (((acc_ T_q_2_alloc_table) T_a_q_2) q))) in
        (((safe_upd_ S_i_q_2) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_7:
-      ((safe_acc_ S_j_p_0_1) (C_6:
-                             (JC_<somenum>:
-                             (((acc_ T_p_0_1_alloc_table) T_a_p_0_1) p_0))))) in
+      ((safe_acc_ S_j_p_1) (C_6:
+                           (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_a_p_1) p))))) in
       (let jessie_<somenum> =
       (C_8: (JC_<somenum>: (((acc_ T_q_2_alloc_table) T_a_q_2) q))) in
       (((safe_upd_ S_j_q_2) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_12:
-      ((safe_acc_ S_i_p_0_1) (C_11:
-                             (JC_<somenum>:
-                             (((acc_ T_p_0_1_alloc_table) T_b_p_0_1) p_0))))) in
+      ((safe_acc_ S_i_p_1) (C_11:
+                           (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_b_p_1) p))))) in
       (let jessie_<somenum> =
       (C_13: (JC_<somenum>: (((acc_ T_q_2_alloc_table) T_b_q_2) q))) in
       (((safe_upd_ S_i_q_2) jessie_<somenum>) jessie_<somenum>)));
       (C_20:
       (let jessie_<somenum> =
       (C_17:
-      ((safe_acc_ S_j_p_0_1) (C_16:
-                             (JC_<somenum>:
-                             (((acc_ T_p_0_1_alloc_table) T_b_p_0_1) p_0))))) in
+      ((safe_acc_ S_j_p_1) (C_16:
+                           (JC_<somenum>: (((acc_ T_p_1_alloc_table) T_b_p_1) p))))) in
       begin
         (let jessie_<somenum> =
         (C_18: (JC_<somenum>: (((acc_ T_q_2_alloc_table) T_b_q_2) q))) in
@@ -1052,10 +1050,10 @@ let f_safety =
   { true }
 
 let g_ensures_default =
- fun (p_1 : T pointer) (S_i_p_1_9 : (S, int32) memory ref) (S_p_1_9_alloc_table : S alloc_table) (T_p_1_9_alloc_table : T alloc_table) (S_j_p_1_9 : (S, int32) memory) (T_a_p_1_9 : (T, S pointer) memory) (T_b_p_1_9 : (T, S pointer) memory) ->
+ fun (p_0 : T pointer) (S_i_p_0_9 : (S, int32) memory ref) (S_p_0_9_alloc_table : S alloc_table) (T_p_0_9_alloc_table : T alloc_table) (S_j_p_0_9 : (S, int32) memory) (T_a_p_0_9 : (T, S pointer) memory) (T_b_p_0_9 : (T, S pointer) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(T_p_1_9_alloc_table, p_1), (0)))
-    and (JC_<somenum>: ge_int(offset_max(T_p_1_9_alloc_table, p_1), (0))))) }
+    ((JC_<somenum>: le_int(offset_min(T_p_0_9_alloc_table, p_0), (0)))
+    and (JC_<somenum>: ge_int(offset_max(T_p_0_9_alloc_table, p_0), (0))))) }
   (init:
   try
    begin
@@ -1117,9 +1115,9 @@ let g_ensures_default =
       void);
       (let jessie_<somenum> =
       (__cil_tmp_1 := (C_146:
-                      (let jessie_<somenum> = p_1 in
+                      (let jessie_<somenum> = p_0 in
                       (JC_<somenum>:
-                      (((((((((((((((id jessie_<somenum>) T___cil_tmp_20_alloc_table) S___cil_tmp_20_alloc_table) T___cil_tmp_20_tag_table) S___cil_tmp_20_tag_table) T_b___cil_tmp_20) T_a___cil_tmp_20) S_j___cil_tmp_20) S_i___cil_tmp_20) T_p_1_9_alloc_table) S_p_1_9_alloc_table) T_b_p_1_9) T_a_p_1_9) S_j_p_1_9) !S_i_p_1_9))))) in
+                      (((((((((((((((id jessie_<somenum>) T___cil_tmp_20_alloc_table) S___cil_tmp_20_alloc_table) T___cil_tmp_20_tag_table) S___cil_tmp_20_tag_table) T_b___cil_tmp_20) T_a___cil_tmp_20) S_j___cil_tmp_20) S_i___cil_tmp_20) T_p_0_9_alloc_table) S_p_0_9_alloc_table) T_b_p_0_9) T_a_p_0_9) S_j_p_0_9) !S_i_p_0_9))))) in
       void);
       (let jessie_<somenum> =
       (C_152:
@@ -1157,9 +1155,9 @@ let g_ensures_default =
       ((safe_free_parameter T___cil_tmp_20_alloc_table) !__cil_tmp_1));
       (let jessie_<somenum> =
       (__cil_tmp_8 := (C_169:
-                      (let jessie_<somenum> = p_1 in
+                      (let jessie_<somenum> = p_0 in
                       (JC_<somenum>:
-                      (((((((((((((((idp jessie_<somenum>) T___cil_tmp_8_21_alloc_table) S___cil_tmp_8_21_alloc_table) T___cil_tmp_8_21_tag_table) S___cil_tmp_8_21_tag_table) T_b___cil_tmp_8_21) T_a___cil_tmp_8_21) S_j___cil_tmp_8_21) S_i___cil_tmp_8_21) T_p_1_9_alloc_table) S_p_1_9_alloc_table) T_b_p_1_9) T_a_p_1_9) S_j_p_1_9) !S_i_p_1_9))))) in
+                      (((((((((((((((idp jessie_<somenum>) T___cil_tmp_8_21_alloc_table) S___cil_tmp_8_21_alloc_table) T___cil_tmp_8_21_tag_table) S___cil_tmp_8_21_tag_table) T_b___cil_tmp_8_21) T_a___cil_tmp_8_21) S_j___cil_tmp_8_21) S_i___cil_tmp_8_21) T_p_0_9_alloc_table) S_p_0_9_alloc_table) T_b_p_0_9) T_a_p_0_9) S_j_p_0_9) !S_i_p_0_9))))) in
       void);
       (let jessie_<somenum> =
       (C_175:
@@ -1200,7 +1198,7 @@ let g_ensures_default =
       (((safe_upd_ S_i_copy2_19) jessie_<somenum>) jessie_<somenum>)));
       (assert
       { (JC_<somenum>:
-        eq_int(integer_of_int32(select(S_i_p_1_9, select(T_a_p_1_9, p_1))),
+        eq_int(integer_of_int32(select(S_i_p_0_9, select(T_a_p_0_9, p_0))),
         integer_of_int32(select(S_i_copy_18, select(T_a_copy_18, copy))))) };
       void); void;
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
@@ -1208,12 +1206,12 @@ let g_ensures_default =
       (((safe_upd_ S_j_copy_18) jessie_<somenum>) jessie_<somenum>)));
       (assert
       { (JC_<somenum>:
-        eq_int(integer_of_int32(select(S_j_p_1_9, select(T_a_p_1_9, p_1))),
+        eq_int(integer_of_int32(select(S_j_p_0_9, select(T_a_p_0_9, p_0))),
         integer_of_int32(select(S_j_copy2_19, select(T_a_copy2_19, copy2))))) };
       void); void;
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = (C_200: ((safe_acc_ T_b_p_1_9) p_1)) in
-      (((safe_upd_ S_i_p_1_9) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> = (C_200: ((safe_acc_ T_b_p_0_9) p_0)) in
+      (((safe_upd_ S_i_p_0_9) jessie_<somenum>) jessie_<somenum>)));
       (assert
       { (JC_<somenum>:
         eq_int(integer_of_int32(select(S_i_copy_18,
@@ -1223,7 +1221,7 @@ let g_ensures_default =
       (assert
       { (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(S_j_p_1_9, select(T_b_p_1_9, p_1))),
+         eq_int(integer_of_int32(select(S_j_p_0_9, select(T_b_p_0_9, p_0))),
          integer_of_int32(select(S_j_copy_18, select(T_b_copy_18, copy)))))
         and (JC_<somenum>:
             eq_int(integer_of_int32(select(S_j_copy_18,
@@ -1236,10 +1234,10 @@ let g_ensures_default =
    with Return -> void end) { (JC_<somenum>: true) }
 
 let g_safety =
- fun (p_1 : T pointer) (S_i_p_1_9 : (S, int32) memory ref) (S_p_1_9_alloc_table : S alloc_table) (T_p_1_9_alloc_table : T alloc_table) (S_j_p_1_9 : (S, int32) memory) (T_a_p_1_9 : (T, S pointer) memory) (T_b_p_1_9 : (T, S pointer) memory) ->
+ fun (p_0 : T pointer) (S_i_p_0_9 : (S, int32) memory ref) (S_p_0_9_alloc_table : S alloc_table) (T_p_0_9_alloc_table : T alloc_table) (S_j_p_0_9 : (S, int32) memory) (T_a_p_0_9 : (T, S pointer) memory) (T_b_p_0_9 : (T, S pointer) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(T_p_1_9_alloc_table, p_1), (0)))
-    and (JC_<somenum>: ge_int(offset_max(T_p_1_9_alloc_table, p_1), (0))))) }
+    ((JC_<somenum>: le_int(offset_min(T_p_0_9_alloc_table, p_0), (0)))
+    and (JC_<somenum>: ge_int(offset_max(T_p_0_9_alloc_table, p_0), (0))))) }
   (init:
   try
    begin
@@ -1309,16 +1307,16 @@ let g_safety =
                 jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
       (__cil_tmp_1 := (C_146:
-                      (let jessie_<somenum> = p_1 in
+                      (let jessie_<somenum> = p_0 in
                       (JC_<somenum>:
                       (assert
-                      { (le_int(offset_min(T_p_1_9_alloc_table, jessie_<somenum>),
+                      { (le_int(offset_min(T_p_0_9_alloc_table, jessie_<somenum>),
                          (0))
-                        and ge_int(offset_max(T_p_1_9_alloc_table,
+                        and ge_int(offset_max(T_p_0_9_alloc_table,
                                    jessie_<somenum>),
                             (0))) };
                       (JC_<somenum>:
-                      (((((((((((((((id_requires jessie_<somenum>) T___cil_tmp_20_alloc_table) S___cil_tmp_20_alloc_table) T___cil_tmp_20_tag_table) S___cil_tmp_20_tag_table) T_b___cil_tmp_20) T_a___cil_tmp_20) S_j___cil_tmp_20) S_i___cil_tmp_20) T_p_1_9_alloc_table) S_p_1_9_alloc_table) T_b_p_1_9) T_a_p_1_9) S_j_p_1_9) !S_i_p_1_9))))))) in
+                      (((((((((((((((id_requires jessie_<somenum>) T___cil_tmp_20_alloc_table) S___cil_tmp_20_alloc_table) T___cil_tmp_20_tag_table) S___cil_tmp_20_tag_table) T_b___cil_tmp_20) T_a___cil_tmp_20) S_j___cil_tmp_20) S_i___cil_tmp_20) T_p_0_9_alloc_table) S_p_0_9_alloc_table) T_b_p_0_9) T_a_p_0_9) S_j_p_0_9) !S_i_p_0_9))))))) in
       void);
       (let jessie_<somenum> =
       (C_152:
@@ -1355,9 +1353,9 @@ let g_safety =
       (C_168: ((free_parameter T___cil_tmp_20_alloc_table) !__cil_tmp_1));
       (let jessie_<somenum> =
       (__cil_tmp_8 := (C_169:
-                      (let jessie_<somenum> = p_1 in
+                      (let jessie_<somenum> = p_0 in
                       (JC_<somenum>:
-                      (((((((((((((((idp_requires jessie_<somenum>) T___cil_tmp_8_21_alloc_table) S___cil_tmp_8_21_alloc_table) T___cil_tmp_8_21_tag_table) S___cil_tmp_8_21_tag_table) T_b___cil_tmp_8_21) T_a___cil_tmp_8_21) S_j___cil_tmp_8_21) S_i___cil_tmp_8_21) T_p_1_9_alloc_table) S_p_1_9_alloc_table) T_b_p_1_9) T_a_p_1_9) S_j_p_1_9) !S_i_p_1_9))))) in
+                      (((((((((((((((idp_requires jessie_<somenum>) T___cil_tmp_8_21_alloc_table) S___cil_tmp_8_21_alloc_table) T___cil_tmp_8_21_tag_table) S___cil_tmp_8_21_tag_table) T_b___cil_tmp_8_21) T_a___cil_tmp_8_21) S_j___cil_tmp_8_21) S_i___cil_tmp_8_21) T_p_0_9_alloc_table) S_p_0_9_alloc_table) T_b_p_0_9) T_a_p_0_9) S_j_p_0_9) !S_i_p_0_9))))) in
       void);
       (let jessie_<somenum> =
       (C_175:
@@ -1395,9 +1393,9 @@ let g_safety =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (let jessie_<somenum> = (C_192: ((safe_acc_ !T_a_copy2_19) !copy2)) in
       (((safe_upd_ S_i_copy2_19) jessie_<somenum>) jessie_<somenum>)));
-      [ { } unit reads S_i_copy_18,S_i_p_1_9,T_a_copy_18,copy
+      [ { } unit reads S_i_copy_18,S_i_p_0_9,T_a_copy_18,copy
         { (JC_<somenum>:
-          eq_int(integer_of_int32(select(S_i_p_1_9, select(T_a_p_1_9, p_1))),
+          eq_int(integer_of_int32(select(S_i_p_0_9, select(T_a_p_0_9, p_0))),
           integer_of_int32(select(S_i_copy_18, select(T_a_copy_18, copy))))) } ];
       void;
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
@@ -1405,13 +1403,13 @@ let g_safety =
       (((safe_upd_ S_j_copy_18) jessie_<somenum>) jessie_<somenum>)));
       [ { } unit reads S_j_copy2_19,T_a_copy2_19,copy2
         { (JC_<somenum>:
-          eq_int(integer_of_int32(select(S_j_p_1_9, select(T_a_p_1_9, p_1))),
+          eq_int(integer_of_int32(select(S_j_p_0_9, select(T_a_p_0_9, p_0))),
           integer_of_int32(select(S_j_copy2_19, select(T_a_copy2_19, copy2))))) } ];
       void;
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (let jessie_<somenum> =
-      (C_200: (JC_<somenum>: (((acc_ T_p_1_9_alloc_table) T_b_p_1_9) p_1))) in
-      (((safe_upd_ S_i_p_1_9) jessie_<somenum>) jessie_<somenum>)));
+      (C_200: (JC_<somenum>: (((acc_ T_p_0_9_alloc_table) T_b_p_0_9) p_0))) in
+      (((safe_upd_ S_i_p_0_9) jessie_<somenum>) jessie_<somenum>)));
       [ { } unit
         reads S_i_copy2_19,S_i_copy_18,T_b_copy2_19,T_b_copy_18,copy,copy2
         { (JC_<somenum>:
@@ -1423,7 +1421,7 @@ let g_safety =
         reads S_j_copy2_19,S_j_copy_18,T_b_copy2_19,T_b_copy_18,copy,copy2
         { (JC_<somenum>:
           ((JC_<somenum>:
-           eq_int(integer_of_int32(select(S_j_p_1_9, select(T_b_p_1_9, p_1))),
+           eq_int(integer_of_int32(select(S_j_p_0_9, select(T_b_p_0_9, p_0))),
            integer_of_int32(select(S_j_copy_18, select(T_b_copy_18, copy)))))
           and (JC_<somenum>:
               eq_int(integer_of_int32(select(S_j_copy_18,
@@ -1435,22 +1433,22 @@ let g_safety =
     (raise Return) end with Return -> void end) { true }
 
 let id_ensures_default =
- fun (v_p_2 : T pointer) (S_result_4_alloc_table : S alloc_table ref) (T_result_4_alloc_table : T alloc_table ref) (T_result_4_tag_table : T tag_table ref) (S_result_4_tag_table : S tag_table ref) (S_i_result_4 : (S, int32) memory ref) (S_j_result_4 : (S, int32) memory ref) (T_a_result_4 : (T, S pointer) memory ref) (T_b_result_4 : (T, S pointer) memory ref) (S_v_p_2_3_alloc_table : S alloc_table) (T_v_p_2_3_alloc_table : T alloc_table) (S_i_v_p_2_3 : (S, int32) memory) (S_j_v_p_2_3 : (S, int32) memory) (T_a_v_p_2_3 : (T, S pointer) memory) (T_b_v_p_2_3 : (T, S pointer) memory) ->
-  { valid_struct_T(v_p_2, (0), (0), S_v_p_2_3_alloc_table,
-    T_v_p_2_3_alloc_table, T_a_v_p_2_3, T_b_v_p_2_3) }
+ fun (v_p_1 : T pointer) (S_result_4_alloc_table : S alloc_table ref) (T_result_4_alloc_table : T alloc_table ref) (T_result_4_tag_table : T tag_table ref) (S_result_4_tag_table : S tag_table ref) (S_i_result_4 : (S, int32) memory ref) (S_j_result_4 : (S, int32) memory ref) (T_a_result_4 : (T, S pointer) memory ref) (T_b_result_4 : (T, S pointer) memory ref) (S_v_p_1_3_alloc_table : S alloc_table) (T_v_p_1_3_alloc_table : T alloc_table) (S_i_v_p_1_3 : (S, int32) memory) (S_j_v_p_1_3 : (S, int32) memory) (T_a_v_p_1_3 : (T, S pointer) memory) (T_b_v_p_1_3 : (T, S pointer) memory) ->
+  { valid_struct_T(v_p_1, (0), (0), S_v_p_1_3_alloc_table,
+    T_v_p_1_3_alloc_table, T_a_v_p_1_3, T_b_v_p_1_3) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
-     (let T_b_p_2_10 = ref (any_memory void) in
-     (let T_a_p_2_10 = ref (any_memory void) in
-     (let S_j_p_2_10 = ref (any_memory void) in
-     (let S_i_p_2_10 = ref (any_memory void) in
-     (let S_p_2_10_tag_table = ref (any_tag_table void) in
-     (let T_p_2_10_tag_table = ref (any_tag_table void) in
-     (let T_p_2_10_alloc_table = ref (any_alloc_table void) in
-     (let S_p_2_10_alloc_table = ref (any_alloc_table void) in
-     (let p_2 = ref (any_pointer void) in
+     (let T_b_p_1_10 = ref (any_memory void) in
+     (let T_a_p_1_10 = ref (any_memory void) in
+     (let S_j_p_1_10 = ref (any_memory void) in
+     (let S_i_p_1_10 = ref (any_memory void) in
+     (let S_p_1_10_tag_table = ref (any_tag_table void) in
+     (let T_p_1_10_tag_table = ref (any_tag_table void) in
+     (let T_p_1_10_alloc_table = ref (any_alloc_table void) in
+     (let S_p_1_10_alloc_table = ref (any_alloc_table void) in
+     (let p_1 = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
      (C_36:
      (C_38:
@@ -1461,9 +1459,9 @@ let id_ensures_default =
      (C_79:
      begin
        (let jessie_<somenum> =
-       (p_2 := (C_35:
+       (p_1 := (C_35:
                (JC_<somenum>:
-               ((((((alloc_struct_T (1)) S_p_2_10_alloc_table) T_p_2_10_alloc_table) T_p_2_10_tag_table) !T_a_p_2_10) !T_b_p_2_10)))) in
+               ((((((alloc_struct_T (1)) S_p_1_10_alloc_table) T_p_1_10_alloc_table) T_p_1_10_tag_table) !T_a_p_1_10) !T_b_p_1_10)))) in
        void);
       (let jessie_<somenum> =
       (__cil_tmp := (C_37:
@@ -1477,87 +1475,87 @@ let id_ensures_default =
       begin
         (let jessie_<somenum> =
         (C_40:
-        ((safe_acc_ S_i_v_p_2_3) (C_39: ((safe_acc_ T_a_v_p_2_3) v_p_2)))) in
-        (let jessie_<somenum> = (C_41: ((safe_acc_ !T_a_p_2_10) !p_2)) in
-        (((safe_upd_ S_i_p_2_10) jessie_<somenum>) jessie_<somenum>)));
+        ((safe_acc_ S_i_v_p_1_3) (C_39: ((safe_acc_ T_a_v_p_1_3) v_p_1)))) in
+        (let jessie_<somenum> = (C_41: ((safe_acc_ !T_a_p_1_10) !p_1)) in
+        (((safe_upd_ S_i_p_1_10) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_45:
-       ((safe_acc_ S_j_v_p_2_3) (C_44: ((safe_acc_ T_a_v_p_2_3) v_p_2)))) in
-       (let jessie_<somenum> = (C_46: ((safe_acc_ !T_a_p_2_10) !p_2)) in
-       (((safe_upd_ S_j_p_2_10) jessie_<somenum>) jessie_<somenum>)));
+       ((safe_acc_ S_j_v_p_1_3) (C_44: ((safe_acc_ T_a_v_p_1_3) v_p_1)))) in
+       (let jessie_<somenum> = (C_46: ((safe_acc_ !T_a_p_1_10) !p_1)) in
+       (((safe_upd_ S_j_p_1_10) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_50:
-       ((safe_acc_ S_i_v_p_2_3) (C_49: ((safe_acc_ T_b_v_p_2_3) v_p_2)))) in
-       (let jessie_<somenum> = (C_51: ((safe_acc_ !T_b_p_2_10) !p_2)) in
-       (((safe_upd_ S_i_p_2_10) jessie_<somenum>) jessie_<somenum>)));
+       ((safe_acc_ S_i_v_p_1_3) (C_49: ((safe_acc_ T_b_v_p_1_3) v_p_1)))) in
+       (let jessie_<somenum> = (C_51: ((safe_acc_ !T_b_p_1_10) !p_1)) in
+       (((safe_upd_ S_i_p_1_10) jessie_<somenum>) jessie_<somenum>)));
        (C_58:
        (let jessie_<somenum> =
        (C_55:
-       ((safe_acc_ S_j_v_p_2_3) (C_54: ((safe_acc_ T_b_v_p_2_3) v_p_2)))) in
+       ((safe_acc_ S_j_v_p_1_3) (C_54: ((safe_acc_ T_b_v_p_1_3) v_p_1)))) in
        begin
-         (let jessie_<somenum> = (C_56: ((safe_acc_ !T_b_p_2_10) !p_2)) in
-         (((safe_upd_ S_j_p_2_10) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+         (let jessie_<somenum> = (C_56: ((safe_acc_ !T_b_p_1_10) !p_1)) in
+         (((safe_upd_ S_j_p_1_10) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
       end))) in void);
       (let jessie_<somenum> =
       (C_60:
-      ((safe_acc_ !S_i_p_2_10) (C_59: ((safe_acc_ !T_a_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_i_p_1_10) (C_59: ((safe_acc_ !T_a_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_61: ((safe_acc_ !T_a_result_4) !__cil_tmp)) in
       (((safe_upd_ S_i_result_4) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_65:
-      ((safe_acc_ !S_j_p_2_10) (C_64: ((safe_acc_ !T_a_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_j_p_1_10) (C_64: ((safe_acc_ !T_a_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_66: ((safe_acc_ !T_a_result_4) !__cil_tmp)) in
       (((safe_upd_ S_j_result_4) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_70:
-      ((safe_acc_ !S_i_p_2_10) (C_69: ((safe_acc_ !T_b_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_i_p_1_10) (C_69: ((safe_acc_ !T_b_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_71: ((safe_acc_ !T_b_result_4) !__cil_tmp)) in
       (((safe_upd_ S_i_result_4) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_75:
-      ((safe_acc_ !S_j_p_2_10) (C_74: ((safe_acc_ !T_b_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_j_p_1_10) (C_74: ((safe_acc_ !T_b_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_76: ((safe_acc_ !T_b_result_4) !__cil_tmp)) in
       (((safe_upd_ S_j_result_4) jessie_<somenum>) jessie_<somenum>)));
-      ((safe_free_parameter T_p_2_10_alloc_table) !p_2);
+      ((safe_free_parameter T_p_1_10_alloc_table) !p_1);
       (return := !__cil_tmp); (raise Return) end))))))))))))))))); absurd 
    end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      eq_int(integer_of_int32(select(S_i_result_4,
                              select(T_a_result_4, result))),
-     integer_of_int32(select(S_i_v_p_2_3@, select(T_a_v_p_2_3@, v_p_2@)))))
+     integer_of_int32(select(S_i_v_p_1_3@, select(T_a_v_p_1_3@, v_p_1@)))))
     and ((JC_<somenum>:
          eq_int(integer_of_int32(select(S_j_result_4,
                                  select(T_a_result_4, result))),
-         integer_of_int32(select(S_j_v_p_2_3@, select(T_a_v_p_2_3@, v_p_2@)))))
+         integer_of_int32(select(S_j_v_p_1_3@, select(T_a_v_p_1_3@, v_p_1@)))))
         and ((JC_<somenum>:
              eq_int(integer_of_int32(select(S_i_result_4,
                                      select(T_b_result_4, result))),
-             integer_of_int32(select(S_i_v_p_2_3@,
-                              select(T_b_v_p_2_3@, v_p_2@)))))
+             integer_of_int32(select(S_i_v_p_1_3@,
+                              select(T_b_v_p_1_3@, v_p_1@)))))
             and (JC_<somenum>:
                 eq_int(integer_of_int32(select(S_j_result_4,
                                         select(T_b_result_4, result))),
-                integer_of_int32(select(S_j_v_p_2_3@,
-                                 select(T_b_v_p_2_3@, v_p_2@))))))))) }
+                integer_of_int32(select(S_j_v_p_1_3@,
+                                 select(T_b_v_p_1_3@, v_p_1@))))))))) }
 
 let id_safety =
- fun (v_p_2 : T pointer) (S_result_4_alloc_table : S alloc_table ref) (T_result_4_alloc_table : T alloc_table ref) (T_result_4_tag_table : T tag_table ref) (S_result_4_tag_table : S tag_table ref) (S_i_result_4 : (S, int32) memory ref) (S_j_result_4 : (S, int32) memory ref) (T_a_result_4 : (T, S pointer) memory ref) (T_b_result_4 : (T, S pointer) memory ref) (S_v_p_2_3_alloc_table : S alloc_table) (T_v_p_2_3_alloc_table : T alloc_table) (S_i_v_p_2_3 : (S, int32) memory) (S_j_v_p_2_3 : (S, int32) memory) (T_a_v_p_2_3 : (T, S pointer) memory) (T_b_v_p_2_3 : (T, S pointer) memory) ->
-  { valid_struct_T(v_p_2, (0), (0), S_v_p_2_3_alloc_table,
-    T_v_p_2_3_alloc_table, T_a_v_p_2_3, T_b_v_p_2_3) }
+ fun (v_p_1 : T pointer) (S_result_4_alloc_table : S alloc_table ref) (T_result_4_alloc_table : T alloc_table ref) (T_result_4_tag_table : T tag_table ref) (S_result_4_tag_table : S tag_table ref) (S_i_result_4 : (S, int32) memory ref) (S_j_result_4 : (S, int32) memory ref) (T_a_result_4 : (T, S pointer) memory ref) (T_b_result_4 : (T, S pointer) memory ref) (S_v_p_1_3_alloc_table : S alloc_table) (T_v_p_1_3_alloc_table : T alloc_table) (S_i_v_p_1_3 : (S, int32) memory) (S_j_v_p_1_3 : (S, int32) memory) (T_a_v_p_1_3 : (T, S pointer) memory) (T_b_v_p_1_3 : (T, S pointer) memory) ->
+  { valid_struct_T(v_p_1, (0), (0), S_v_p_1_3_alloc_table,
+    T_v_p_1_3_alloc_table, T_a_v_p_1_3, T_b_v_p_1_3) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
-     (let T_b_p_2_10 = ref (any_memory void) in
-     (let T_a_p_2_10 = ref (any_memory void) in
-     (let S_j_p_2_10 = ref (any_memory void) in
-     (let S_i_p_2_10 = ref (any_memory void) in
-     (let S_p_2_10_tag_table = ref (any_tag_table void) in
-     (let T_p_2_10_tag_table = ref (any_tag_table void) in
-     (let T_p_2_10_alloc_table = ref (any_alloc_table void) in
-     (let S_p_2_10_alloc_table = ref (any_alloc_table void) in
-     (let p_2 = ref (any_pointer void) in
+     (let T_b_p_1_10 = ref (any_memory void) in
+     (let T_a_p_1_10 = ref (any_memory void) in
+     (let S_j_p_1_10 = ref (any_memory void) in
+     (let S_i_p_1_10 = ref (any_memory void) in
+     (let S_p_1_10_tag_table = ref (any_tag_table void) in
+     (let T_p_1_10_tag_table = ref (any_tag_table void) in
+     (let T_p_1_10_alloc_table = ref (any_alloc_table void) in
+     (let S_p_1_10_alloc_table = ref (any_alloc_table void) in
+     (let p_1 = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
      (C_36:
      (C_38:
@@ -1568,13 +1566,13 @@ let id_safety =
      (C_79:
      begin
        (let jessie_<somenum> =
-       (p_2 := (let jessie_<somenum> =
+       (p_1 := (let jessie_<somenum> =
                (C_35:
                (JC_<somenum>:
-               ((((((alloc_struct_T_requires (1)) S_p_2_10_alloc_table) T_p_2_10_alloc_table) T_p_2_10_tag_table) !T_a_p_2_10) !T_b_p_2_10))) in
+               ((((((alloc_struct_T_requires (1)) S_p_1_10_alloc_table) T_p_1_10_alloc_table) T_p_1_10_tag_table) !T_a_p_1_10) !T_b_p_1_10))) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(T_p_2_10_alloc_table, jessie_<somenum>), (0)) };
+               { ge_int(offset_max(T_p_1_10_alloc_table, jessie_<somenum>), (0)) };
                jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
       (__cil_tmp := (let jessie_<somenum> =
@@ -1592,56 +1590,56 @@ let id_safety =
       begin
         (let jessie_<somenum> =
         (C_40:
-        ((safe_acc_ S_i_v_p_2_3) (C_39: ((safe_acc_ T_a_v_p_2_3) v_p_2)))) in
-        (let jessie_<somenum> = (C_41: ((safe_acc_ !T_a_p_2_10) !p_2)) in
-        (((safe_upd_ S_i_p_2_10) jessie_<somenum>) jessie_<somenum>)));
+        ((safe_acc_ S_i_v_p_1_3) (C_39: ((safe_acc_ T_a_v_p_1_3) v_p_1)))) in
+        (let jessie_<somenum> = (C_41: ((safe_acc_ !T_a_p_1_10) !p_1)) in
+        (((safe_upd_ S_i_p_1_10) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_45:
-       ((safe_acc_ S_j_v_p_2_3) (C_44: ((safe_acc_ T_a_v_p_2_3) v_p_2)))) in
-       (let jessie_<somenum> = (C_46: ((safe_acc_ !T_a_p_2_10) !p_2)) in
-       (((safe_upd_ S_j_p_2_10) jessie_<somenum>) jessie_<somenum>)));
+       ((safe_acc_ S_j_v_p_1_3) (C_44: ((safe_acc_ T_a_v_p_1_3) v_p_1)))) in
+       (let jessie_<somenum> = (C_46: ((safe_acc_ !T_a_p_1_10) !p_1)) in
+       (((safe_upd_ S_j_p_1_10) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_50:
-       ((safe_acc_ S_i_v_p_2_3) (C_49: ((safe_acc_ T_b_v_p_2_3) v_p_2)))) in
-       (let jessie_<somenum> = (C_51: ((safe_acc_ !T_b_p_2_10) !p_2)) in
-       (((safe_upd_ S_i_p_2_10) jessie_<somenum>) jessie_<somenum>)));
+       ((safe_acc_ S_i_v_p_1_3) (C_49: ((safe_acc_ T_b_v_p_1_3) v_p_1)))) in
+       (let jessie_<somenum> = (C_51: ((safe_acc_ !T_b_p_1_10) !p_1)) in
+       (((safe_upd_ S_i_p_1_10) jessie_<somenum>) jessie_<somenum>)));
        (C_58:
        (let jessie_<somenum> =
        (C_55:
-       ((safe_acc_ S_j_v_p_2_3) (C_54: ((safe_acc_ T_b_v_p_2_3) v_p_2)))) in
+       ((safe_acc_ S_j_v_p_1_3) (C_54: ((safe_acc_ T_b_v_p_1_3) v_p_1)))) in
        begin
-         (let jessie_<somenum> = (C_56: ((safe_acc_ !T_b_p_2_10) !p_2)) in
-         (((safe_upd_ S_j_p_2_10) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end)) end))) in
+         (let jessie_<somenum> = (C_56: ((safe_acc_ !T_b_p_1_10) !p_1)) in
+         (((safe_upd_ S_j_p_1_10) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end)) end))) in
       void);
       (let jessie_<somenum> =
       (C_60:
-      ((safe_acc_ !S_i_p_2_10) (C_59: ((safe_acc_ !T_a_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_i_p_1_10) (C_59: ((safe_acc_ !T_a_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_61: ((safe_acc_ !T_a_result_4) !__cil_tmp)) in
       (((safe_upd_ S_i_result_4) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_65:
-      ((safe_acc_ !S_j_p_2_10) (C_64: ((safe_acc_ !T_a_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_j_p_1_10) (C_64: ((safe_acc_ !T_a_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_66: ((safe_acc_ !T_a_result_4) !__cil_tmp)) in
       (((safe_upd_ S_j_result_4) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_70:
-      ((safe_acc_ !S_i_p_2_10) (C_69: ((safe_acc_ !T_b_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_i_p_1_10) (C_69: ((safe_acc_ !T_b_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_71: ((safe_acc_ !T_b_result_4) !__cil_tmp)) in
       (((safe_upd_ S_i_result_4) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (C_75:
-      ((safe_acc_ !S_j_p_2_10) (C_74: ((safe_acc_ !T_b_p_2_10) !p_2)))) in
+      ((safe_acc_ !S_j_p_1_10) (C_74: ((safe_acc_ !T_b_p_1_10) !p_1)))) in
       (let jessie_<somenum> = (C_76: ((safe_acc_ !T_b_result_4) !__cil_tmp)) in
       (((safe_upd_ S_j_result_4) jessie_<somenum>) jessie_<somenum>)));
-      ((free_parameter T_p_2_10_alloc_table) !p_2); (return := !__cil_tmp);
+      ((free_parameter T_p_1_10_alloc_table) !p_1); (return := !__cil_tmp);
       (raise Return) end))))))))))))))))); absurd  end with Return ->
    !return end)) { true }
 
 let idp_ensures_default =
- fun (p : T pointer) (S_result_7_alloc_table : S alloc_table ref) (T_result_7_alloc_table : T alloc_table ref) (T_result_7_tag_table : T tag_table ref) (S_result_7_tag_table : S tag_table ref) (S_i_result_7 : (S, int32) memory ref) (S_j_result_7 : (S, int32) memory ref) (T_a_result_7 : (T, S pointer) memory ref) (T_b_result_7 : (T, S pointer) memory ref) (S_p_6_alloc_table : S alloc_table) (T_p_6_alloc_table : T alloc_table) (S_i_p_6 : (S, int32) memory) (S_j_p_6 : (S, int32) memory) (T_a_p_6 : (T, S pointer) memory) (T_b_p_6 : (T, S pointer) memory) ->
+ fun (p_2 : T pointer) (S_result_7_alloc_table : S alloc_table ref) (T_result_7_alloc_table : T alloc_table ref) (T_result_7_tag_table : T tag_table ref) (S_result_7_tag_table : S tag_table ref) (S_i_result_7 : (S, int32) memory ref) (S_j_result_7 : (S, int32) memory ref) (T_a_result_7 : (T, S pointer) memory ref) (T_b_result_7 : (T, S pointer) memory ref) (S_p_2_6_alloc_table : S alloc_table) (T_p_2_6_alloc_table : T alloc_table) (S_i_p_2_6 : (S, int32) memory) (S_j_p_2_6 : (S, int32) memory) (T_a_p_2_6 : (T, S pointer) memory) (T_b_p_2_6 : (T, S pointer) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(T_p_6_alloc_table, p), (0)))
-    and (JC_<somenum>: ge_int(offset_max(T_p_6_alloc_table, p), (0))))) }
+    ((JC_<somenum>: le_int(offset_min(T_p_2_6_alloc_table, p_2), (0)))
+    and (JC_<somenum>: ge_int(offset_max(T_p_2_6_alloc_table, p_2), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -1680,20 +1678,20 @@ let idp_ensures_default =
       (C_105:
       begin
         (let jessie_<somenum> =
-        (C_92: ((safe_acc_ S_i_p_6) (C_91: ((safe_acc_ T_a_p_6) p)))) in
+        (C_92: ((safe_acc_ S_i_p_2_6) (C_91: ((safe_acc_ T_a_p_2_6) p_2)))) in
         (let jessie_<somenum> = (C_93: ((safe_acc_ !T_a___retres_14) !__retres)) in
         (((safe_upd_ S_i___retres_14) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
-       (C_97: ((safe_acc_ S_j_p_6) (C_96: ((safe_acc_ T_a_p_6) p)))) in
+       (C_97: ((safe_acc_ S_j_p_2_6) (C_96: ((safe_acc_ T_a_p_2_6) p_2)))) in
        (let jessie_<somenum> = (C_98: ((safe_acc_ !T_a___retres_14) !__retres)) in
        (((safe_upd_ S_j___retres_14) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
-       (C_102: ((safe_acc_ S_i_p_6) (C_101: ((safe_acc_ T_b_p_6) p)))) in
+       (C_102: ((safe_acc_ S_i_p_2_6) (C_101: ((safe_acc_ T_b_p_2_6) p_2)))) in
        (let jessie_<somenum> = (C_103: ((safe_acc_ !T_b___retres_14) !__retres)) in
        (((safe_upd_ S_i___retres_14) jessie_<somenum>) jessie_<somenum>)));
        (C_110:
        (let jessie_<somenum> =
-       (C_107: ((safe_acc_ S_j_p_6) (C_106: ((safe_acc_ T_b_p_6) p)))) in
+       (C_107: ((safe_acc_ S_j_p_2_6) (C_106: ((safe_acc_ T_b_p_2_6) p_2)))) in
        begin
          (let jessie_<somenum> =
          (C_108: ((safe_acc_ !T_b___retres_14) !__retres)) in
@@ -1730,25 +1728,25 @@ let idp_ensures_default =
     ((JC_<somenum>:
      eq_int(integer_of_int32(select(S_i_result_7,
                              select(T_a_result_7, result))),
-     integer_of_int32(select(S_i_p_6, select(T_a_p_6, p@)))))
+     integer_of_int32(select(S_i_p_2_6, select(T_a_p_2_6, p_2@)))))
     and ((JC_<somenum>:
          eq_int(integer_of_int32(select(S_j_result_7,
                                  select(T_a_result_7, result))),
-         integer_of_int32(select(S_j_p_6, select(T_a_p_6, p@)))))
+         integer_of_int32(select(S_j_p_2_6, select(T_a_p_2_6, p_2@)))))
         and ((JC_<somenum>:
              eq_int(integer_of_int32(select(S_i_result_7,
                                      select(T_b_result_7, result))),
-             integer_of_int32(select(S_i_p_6, select(T_b_p_6, p@)))))
+             integer_of_int32(select(S_i_p_2_6, select(T_b_p_2_6, p_2@)))))
             and (JC_<somenum>:
                 eq_int(integer_of_int32(select(S_j_result_7,
                                         select(T_b_result_7, result))),
-                integer_of_int32(select(S_j_p_6, select(T_b_p_6, p@))))))))) }
+                integer_of_int32(select(S_j_p_2_6, select(T_b_p_2_6, p_2@))))))))) }
 
 let idp_safety =
- fun (p : T pointer) (S_result_7_alloc_table : S alloc_table ref) (T_result_7_alloc_table : T alloc_table ref) (T_result_7_tag_table : T tag_table ref) (S_result_7_tag_table : S tag_table ref) (S_i_result_7 : (S, int32) memory ref) (S_j_result_7 : (S, int32) memory ref) (T_a_result_7 : (T, S pointer) memory ref) (T_b_result_7 : (T, S pointer) memory ref) (S_p_6_alloc_table : S alloc_table) (T_p_6_alloc_table : T alloc_table) (S_i_p_6 : (S, int32) memory) (S_j_p_6 : (S, int32) memory) (T_a_p_6 : (T, S pointer) memory) (T_b_p_6 : (T, S pointer) memory) ->
+ fun (p_2 : T pointer) (S_result_7_alloc_table : S alloc_table ref) (T_result_7_alloc_table : T alloc_table ref) (T_result_7_tag_table : T tag_table ref) (S_result_7_tag_table : S tag_table ref) (S_i_result_7 : (S, int32) memory ref) (S_j_result_7 : (S, int32) memory ref) (T_a_result_7 : (T, S pointer) memory ref) (T_b_result_7 : (T, S pointer) memory ref) (S_p_2_6_alloc_table : S alloc_table) (T_p_2_6_alloc_table : T alloc_table) (S_i_p_2_6 : (S, int32) memory) (S_j_p_2_6 : (S, int32) memory) (T_a_p_2_6 : (T, S pointer) memory) (T_b_p_2_6 : (T, S pointer) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(T_p_6_alloc_table, p), (0)))
-    and (JC_<somenum>: ge_int(offset_max(T_p_6_alloc_table, p), (0))))) }
+    ((JC_<somenum>: le_int(offset_min(T_p_2_6_alloc_table, p_2), (0)))
+    and (JC_<somenum>: ge_int(offset_max(T_p_2_6_alloc_table, p_2), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -1797,27 +1795,31 @@ let idp_safety =
       begin
         (let jessie_<somenum> =
         (C_92:
-        ((safe_acc_ S_i_p_6) (C_91:
-                             (JC_<somenum>: (((acc_ T_p_6_alloc_table) T_a_p_6) p))))) in
+        ((safe_acc_ S_i_p_2_6) (C_91:
+                               (JC_<somenum>:
+                               (((acc_ T_p_2_6_alloc_table) T_a_p_2_6) p_2))))) in
         (let jessie_<somenum> = (C_93: ((safe_acc_ !T_a___retres_14) !__retres)) in
         (((safe_upd_ S_i___retres_14) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_97:
-       ((safe_acc_ S_j_p_6) (C_96:
-                            (JC_<somenum>: (((acc_ T_p_6_alloc_table) T_a_p_6) p))))) in
+       ((safe_acc_ S_j_p_2_6) (C_96:
+                              (JC_<somenum>:
+                              (((acc_ T_p_2_6_alloc_table) T_a_p_2_6) p_2))))) in
        (let jessie_<somenum> = (C_98: ((safe_acc_ !T_a___retres_14) !__retres)) in
        (((safe_upd_ S_j___retres_14) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_102:
-       ((safe_acc_ S_i_p_6) (C_101:
-                            (JC_<somenum>: (((acc_ T_p_6_alloc_table) T_b_p_6) p))))) in
+       ((safe_acc_ S_i_p_2_6) (C_101:
+                              (JC_<somenum>:
+                              (((acc_ T_p_2_6_alloc_table) T_b_p_2_6) p_2))))) in
        (let jessie_<somenum> = (C_103: ((safe_acc_ !T_b___retres_14) !__retres)) in
        (((safe_upd_ S_i___retres_14) jessie_<somenum>) jessie_<somenum>)));
        (C_110:
        (let jessie_<somenum> =
        (C_107:
-       ((safe_acc_ S_j_p_6) (C_106:
-                            (JC_<somenum>: (((acc_ T_p_6_alloc_table) T_b_p_6) p))))) in
+       ((safe_acc_ S_j_p_2_6) (C_106:
+                              (JC_<somenum>:
+                              (((acc_ T_p_2_6_alloc_table) T_b_p_2_6) p_2))))) in
        begin
          (let jessie_<somenum> =
          (C_108: ((safe_acc_ !T_b___retres_14) !__retres)) in
@@ -1864,7 +1866,7 @@ why --project [...] why/copy_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po54.why">
-      <location file = "why/copy_struct.why" line = "1575" begin = "22" end = "135"/>
+      <location file = "why/copy_struct.why" line = "1573" begin = "22" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po55.why">
@@ -1873,7 +1875,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po56.why">
-      <location file = "why/copy_struct.why" line = "1585" begin = "24" end = "107"/>
+      <location file = "why/copy_struct.why" line = "1583" begin = "24" end = "107"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po57.why">
@@ -1917,7 +1919,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_struct_po65.why">
-      <location file = "why/copy_struct.why" line = "1644" begin = "7" end = "59"/>
+      <location file = "why/copy_struct.why" line = "1646" begin = "7" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1950,7 +1952,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po45.why">
-      <location file = "why/copy_struct.why" line = "1371" begin = "17" end = "73"/>
+      <location file = "why/copy_struct.why" line = "1369" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po46.why">
@@ -1959,11 +1961,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po47.why">
-      <location file = "why/copy_struct.why" line = "1380" begin = "22" end = "102"/>
+      <location file = "why/copy_struct.why" line = "1378" begin = "22" end = "102"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po48.why">
-      <location file = "why/copy_struct.why" line = "1430" begin = "7" end = "49"/>
+      <location file = "why/copy_struct.why" line = "1428" begin = "7" end = "49"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1996,7 +1998,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po27.why">
-      <location file = "why/copy_struct.why" line = "1093" begin = "18" end = "76"/>
+      <location file = "why/copy_struct.why" line = "1091" begin = "18" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po28.why">
@@ -2005,19 +2007,19 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/copy_struct_po29.why">
-      <location file = "why/copy_struct.why" line = "1102" begin = "18" end = "77"/>
+      <location file = "why/copy_struct.why" line = "1100" begin = "18" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po30.why">
-      <location file = "why/copy_struct.why" line = "1109" begin = "24" end = "255"/>
+      <location file = "why/copy_struct.why" line = "1107" begin = "24" end = "255"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po31.why">
-      <location file = "why/copy_struct.why" line = "1109" begin = "24" end = "255"/>
+      <location file = "why/copy_struct.why" line = "1107" begin = "24" end = "255"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/copy_struct_po32.why">
-      <location file = "why/copy_struct.why" line = "1149" begin = "15" end = "71"/>
+      <location file = "why/copy_struct.why" line = "1147" begin = "15" end = "71"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2032,7 +2034,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/copy_struct_po35.why">
-      <location file = "why/copy_struct.why" line = "1188" begin = "15" end = "73"/>
+      <location file = "why/copy_struct.why" line = "1186" begin = "15" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2047,12 +2049,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_struct_po38.why">
-      <location file = "why/copy_struct.why" line = "1227" begin = "7" end = "51"/>
+      <location file = "why/copy_struct.why" line = "1225" begin = "7" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/copy_struct_po39.why">
-      <location file = "why/copy_struct.why" line = "1228" begin = "7" end = "53"/>
+      <location file = "why/copy_struct.why" line = "1226" begin = "7" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

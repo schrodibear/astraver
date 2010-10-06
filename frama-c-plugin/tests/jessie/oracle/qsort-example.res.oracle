@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only qsort-example.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD qsort-example.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function qsort, default assigns generated
 [kernel] No code for function assert, default assigns generated
+[kernel] No code for function qsort, default assigns generated
 qsort-example.c:39:[jessie] failure: Unexpected failure.
                   Please submit bug report (Ref. "PPCHOME/norm.ml:1148:8").
 [kernel] The full backtrace is:

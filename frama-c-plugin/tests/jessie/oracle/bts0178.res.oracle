@@ -51,16 +51,16 @@ behavior default:
    }
 }
 
-unit f(int_P[..] vector, int32 size_0)
+unit f(int_P[..] vector, int32 size)
 behavior default:
   ensures (C_15 : true);
 {  
    (var int32 i);
    
    {  (C_9 : (i = 0));
-      (if (i < size_0) then (C_14 : g((C_10 : (vector + i)),
-                                      (C_13 : (vector +
-                                                (C_12 : ((C_11 : (i + 1)) :> int32)))))) else ());
+      (if (i < size) then (C_14 : g((C_10 : (vector + i)),
+                                    (C_13 : (vector +
+                                              (C_12 : ((C_11 : (i + 1)) :> int32)))))) else ());
       
       (return ())
    }
@@ -415,14 +415,14 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter f :
  vector:int_P pointer ->
-  size_0:int32 ->
+  size:int32 ->
    int_P_int_M_vector_3:(int_P, int32) memory ref ->
     int_P_vector_3_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_vector_3 writes int_P_int_M_vector_3 { true }
 
 parameter f_requires :
  vector:int_P pointer ->
-  size_0:int32 ->
+  size:int32 ->
    int_P_int_M_vector_3:(int_P, int32) memory ref ->
     int_P_vector_3_alloc_table:int_P alloc_table ->
      { } unit reads int_P_int_M_vector_3 writes int_P_int_M_vector_3 { true }
@@ -482,7 +482,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let f_ensures_default =
- fun (vector : int_P pointer) (size_0 : int32) (int_P_int_M_vector_3 : (int_P, int32) memory ref) (int_P_vector_3_alloc_table : int_P alloc_table) ->
+ fun (vector : int_P pointer) (size : int32) (int_P_int_M_vector_3 : (int_P, int32) memory ref) (int_P_vector_3_alloc_table : int_P alloc_table) ->
   { (JC_<somenum>: true) }
   (init:
   try
@@ -491,7 +491,7 @@ let f_ensures_default =
      (C_9:
      begin
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-      (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 size_0))
+      (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 size))
       then
        (C_14:
        (let jessie_<somenum> = (C_10: ((shift vector) (integer_of_int32 !i))) in
@@ -507,7 +507,7 @@ let f_ensures_default =
    void end) { (JC_<somenum>: true) }
 
 let f_safety =
- fun (vector : int_P pointer) (size_0 : int32) (int_P_int_M_vector_3 : (int_P, int32) memory ref) (int_P_vector_3_alloc_table : int_P alloc_table) ->
+ fun (vector : int_P pointer) (size : int32) (int_P_int_M_vector_3 : (int_P, int32) memory ref) (int_P_vector_3_alloc_table : int_P alloc_table) ->
   { (JC_<somenum>: true) }
   (init:
   try
@@ -516,7 +516,7 @@ let f_safety =
      (C_9:
      begin
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-      (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 size_0))
+      (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 size))
       then
        (C_14:
        (let jessie_<somenum> = (C_10: ((shift vector) (integer_of_int32 !i))) in

@@ -454,7 +454,7 @@ behavior default:
   ensures (C_1 : false);
 ;
 
-int32 ntz(uint32 x_6)
+int32 ntz(uint32 x_1)
 behavior default:
   ensures (C_42 : true);
 {  
@@ -462,36 +462,36 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (if (x_6 == 0) then 
+   {  (if (x_1 == 0) then 
       {  (C_2 : (__retres = 32));
          
          (goto return_label)
       } else ());
       (C_3 : (n = 1));
-      (if ((C_11 : ((C_10 : (x_6 & 65535)) :> uint32)) == 0) then 
+      (if ((C_11 : ((C_10 : (x_1 & 65535)) :> uint32)) == 0) then 
       {  (C_6 : (n = (C_5 : ((C_4 : (n + 16)) :> int32))));
-         (C_9 : (x_6 = (C_8 : ((C_7 : (x_6 / 65536)) :> uint32))))
+         (C_9 : (x_1 = (C_8 : ((C_7 : (x_1 / 65536)) :> uint32))))
       } else ());
-      (if ((C_19 : ((C_18 : (x_6 & 255)) :> uint32)) == 0) then 
+      (if ((C_19 : ((C_18 : (x_1 & 255)) :> uint32)) == 0) then 
       {  (C_14 : (n = (C_13 : ((C_12 : (n + 8)) :> int32))));
-         (C_17 : (x_6 = (C_16 : ((C_15 : (x_6 / 256)) :> uint32))))
+         (C_17 : (x_1 = (C_16 : ((C_15 : (x_1 / 256)) :> uint32))))
       } else ());
-      (if ((C_27 : ((C_26 : (x_6 & 15)) :> uint32)) == 0) then 
+      (if ((C_27 : ((C_26 : (x_1 & 15)) :> uint32)) == 0) then 
       {  (C_22 : (n = (C_21 : ((C_20 : (n + 4)) :> int32))));
-         (C_25 : (x_6 = (C_24 : ((C_23 : (x_6 / 16)) :> uint32))))
+         (C_25 : (x_1 = (C_24 : ((C_23 : (x_1 / 16)) :> uint32))))
       } else ());
-      (if ((C_35 : ((C_34 : (x_6 & 3)) :> uint32)) == 0) then 
+      (if ((C_35 : ((C_34 : (x_1 & 3)) :> uint32)) == 0) then 
       {  (C_30 : (n = (C_29 : ((C_28 : (n + 2)) :> int32))));
-         (C_33 : (x_6 = (C_32 : ((C_31 : (x_6 / 4)) :> uint32))))
+         (C_33 : (x_1 = (C_32 : ((C_31 : (x_1 / 4)) :> uint32))))
       } else ());
       (C_41 : (__retres = (C_40 : ((C_39 : ((C_38 : (n :> uint32)) -
-                                             (C_37 : ((C_36 : (x_6 & 1)) :> uint32)))) :> int32))));
+                                             (C_37 : ((C_36 : (x_1 & 1)) :> uint32)))) :> int32))));
       (return_label : 
       (return __retres))
    }
 }
 
-int32 nlz(uint32 x)
+int32 nlz(uint32 x_0)
 behavior default:
   ensures (C_73 : true);
 {  
@@ -499,67 +499,67 @@ behavior default:
    
    (var int32 __retres_0);
    
-   {  (if (x == 0) then 
+   {  (if (x_0 == 0) then 
       {  (C_43 : (__retres_0 = 32));
          
          (goto return_label)
       } else ());
       (C_44 : (n_0 = 0));
-      (if (x <= 65535) then 
+      (if (x_0 <= 65535) then 
       {  (C_47 : (n_0 = (C_46 : ((C_45 : (n_0 + 16)) :> int32))));
-         (C_50 : (x = (C_49 : ((C_48 : (x * 65536)) :> uint32))))
+         (C_50 : (x_0 = (C_49 : ((C_48 : (x_0 * 65536)) :> uint32))))
       } else ());
-      (if (x <= 16777215) then 
+      (if (x_0 <= 16777215) then 
       {  (C_53 : (n_0 = (C_52 : ((C_51 : (n_0 + 8)) :> int32))));
-         (C_56 : (x = (C_55 : ((C_54 : (x * 256)) :> uint32))))
+         (C_56 : (x_0 = (C_55 : ((C_54 : (x_0 * 256)) :> uint32))))
       } else ());
-      (if (x <= 268435455) then 
+      (if (x_0 <= 268435455) then 
       {  (C_59 : (n_0 = (C_58 : ((C_57 : (n_0 + 4)) :> int32))));
-         (C_62 : (x = (C_61 : ((C_60 : (x * 16)) :> uint32))))
+         (C_62 : (x_0 = (C_61 : ((C_60 : (x_0 * 16)) :> uint32))))
       } else ());
-      (if (x <= 1073741823) then 
+      (if (x_0 <= 1073741823) then 
       {  (C_65 : (n_0 = (C_64 : ((C_63 : (n_0 + 2)) :> int32))));
-         (C_68 : (x = (C_67 : ((C_66 : (x * 4)) :> uint32))))
+         (C_68 : (x_0 = (C_67 : ((C_66 : (x_0 * 4)) :> uint32))))
       } else ());
-      (if (x <= 2147483647) then (C_71 : (n_0 = (C_70 : ((C_69 : (n_0 + 1)) :> int32)))) else ());
+      (if (x_0 <= 2147483647) then (C_71 : (n_0 = (C_70 : ((C_69 : (n_0 + 1)) :> int32)))) else ());
       (C_72 : (__retres_0 = n_0));
       (return_label : 
       (return __retres_0))
    }
 }
 
-int32 pop(uint32 x_3)
+int32 pop(uint32 x_2)
 behavior default:
   ensures (C_110 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_80 : (x_3 = (C_79 : ((C_78 : (x_3 -
+   {  (C_80 : (x_2 = (C_79 : ((C_78 : (x_2 -
                                         (C_77 : ((C_76 : ((C_75 : ((C_74 : 
-                                                                   (x_3 /
+                                                                   (x_2 /
                                                                     2)) :> uint32)) &
                                                            1431655765)) :> uint32)))) :> uint32))));
-      (C_89 : (x_3 = (C_88 : ((C_87 : ((C_86 : ((C_85 : (x_3 & 858993459)) :> uint32)) +
+      (C_89 : (x_2 = (C_88 : ((C_87 : ((C_86 : ((C_85 : (x_2 & 858993459)) :> uint32)) +
                                         (C_84 : ((C_83 : ((C_82 : ((C_81 : 
-                                                                   (x_3 /
+                                                                   (x_2 /
                                                                     4)) :> uint32)) &
                                                            858993459)) :> uint32)))) :> uint32))));
-      (C_96 : (x_3 = (C_95 : ((C_94 : ((C_93 : ((C_92 : (x_3 +
+      (C_96 : (x_2 = (C_95 : ((C_94 : ((C_93 : ((C_92 : (x_2 +
                                                           (C_91 : ((C_90 : 
-                                                                   (x_3 /
+                                                                   (x_2 /
                                                                     16)) :> uint32)))) :> uint32)) &
                                         252645135)) :> uint32))));
-      (C_101 : (x_3 = (C_100 : ((C_99 : (x_3 +
-                                          (C_98 : ((C_97 : (x_3 * 256)) :> uint32)))) :> uint32))));
-      (C_106 : (x_3 = (C_105 : ((C_104 : (x_3 +
-                                           (C_103 : ((C_102 : (x_3 * 65536)) :> uint32)))) :> uint32))));
-      (C_109 : (__retres_1 = (C_108 : ((C_107 : (x_3 / 16777216)) :> int32))));
+      (C_101 : (x_2 = (C_100 : ((C_99 : (x_2 +
+                                          (C_98 : ((C_97 : (x_2 * 256)) :> uint32)))) :> uint32))));
+      (C_106 : (x_2 = (C_105 : ((C_104 : (x_2 +
+                                           (C_103 : ((C_102 : (x_2 * 65536)) :> uint32)))) :> uint32))));
+      (C_109 : (__retres_1 = (C_108 : ((C_107 : (x_2 / 16777216)) :> int32))));
       
       (return __retres_1)
    }
 }
 
-uint32 snoob(uint32 x_5)
+uint32 snoob(uint32 x_3)
 behavior default:
   ensures (C_130 : true);
 {  
@@ -571,10 +571,10 @@ behavior default:
    
    (var uint32 __retres_2);
    
-   {  (C_115 : (smallest = (C_114 : ((C_113 : (x_5 &
-                                                (C_112 : ((C_111 : (- x_5)) :> uint32)))) :> uint32))));
-      (C_118 : (ripple = (C_117 : ((C_116 : (x_5 + smallest)) :> uint32))));
-      (C_121 : (ones = (C_120 : ((C_119 : (x_5 ^ ripple)) :> uint32))));
+   {  (C_115 : (smallest = (C_114 : ((C_113 : (x_3 &
+                                                (C_112 : ((C_111 : (- x_3)) :> uint32)))) :> uint32))));
+      (C_118 : (ripple = (C_117 : ((C_116 : (x_3 + smallest)) :> uint32))));
+      (C_121 : (ones = (C_120 : ((C_119 : (x_3 ^ ripple)) :> uint32))));
       (C_126 : (ones = (C_125 : ((C_124 : ((C_123 : ((C_122 : (ones / 4)) :> uint32)) /
                                             smallest)) :> uint32))));
       (C_129 : (__retres_2 = (C_128 : ((C_127 : (ripple | ones)) :> uint32))));
@@ -583,7 +583,7 @@ behavior default:
    }
 }
 
-uint32 snoob1(uint32 x_0)
+uint32 snoob1(uint32 x_4)
 behavior default:
   ensures (C_153 : true);
 {  
@@ -597,12 +597,12 @@ behavior default:
    
    (var uint32 __retres_3);
    
-   {  (C_135 : (smallest_0 = (C_134 : ((C_133 : (x_0 &
-                                                  (C_132 : ((C_131 : (- x_0)) :> uint32)))) :> uint32))));
-      (C_138 : (ripple_0 = (C_137 : ((C_136 : (x_0 + smallest_0)) :> uint32))));
-      (C_141 : (ones_0 = (C_140 : ((C_139 : (x_0 ^ ripple_0)) :> uint32))));
+   {  (C_135 : (smallest_0 = (C_134 : ((C_133 : (x_4 &
+                                                  (C_132 : ((C_131 : (- x_4)) :> uint32)))) :> uint32))));
+      (C_138 : (ripple_0 = (C_137 : ((C_136 : (x_4 + smallest_0)) :> uint32))));
+      (C_141 : (ones_0 = (C_140 : ((C_139 : (x_4 ^ ripple_0)) :> uint32))));
       
-      {  (C_143 : (tmp = (C_142 : ntz(x_0))));
+      {  (C_143 : (tmp = (C_142 : ntz(x_4))));
          
          {  
             (assert for default: (C_144 : ((2 + tmp) < 32)));
@@ -618,7 +618,7 @@ behavior default:
    }
 }
 
-uint32 snoob2(uint32 x_4)
+uint32 snoob2(uint32 x_5)
 behavior default:
   ensures (C_176 : true);
 {  
@@ -632,10 +632,10 @@ behavior default:
    
    (var uint32 __retres_4);
    
-   {  (C_158 : (smallest_1 = (C_157 : ((C_156 : (x_4 &
-                                                  (C_155 : ((C_154 : (- x_4)) :> uint32)))) :> uint32))));
-      (C_161 : (ripple_1 = (C_160 : ((C_159 : (x_4 + smallest_1)) :> uint32))));
-      (C_164 : (ones_1 = (C_163 : ((C_162 : (x_4 ^ ripple_1)) :> uint32))));
+   {  (C_158 : (smallest_1 = (C_157 : ((C_156 : (x_5 &
+                                                  (C_155 : ((C_154 : (- x_5)) :> uint32)))) :> uint32))));
+      (C_161 : (ripple_1 = (C_160 : ((C_159 : (x_5 + smallest_1)) :> uint32))));
+      (C_164 : (ones_1 = (C_163 : ((C_162 : (x_5 ^ ripple_1)) :> uint32))));
       
       {  (C_166 : (tmp_0 = (C_165 : nlz(smallest_1))));
          
@@ -653,7 +653,7 @@ behavior default:
    }
 }
 
-uint32 snoob3(uint32 x_1)
+uint32 snoob3(uint32 x_6)
 behavior default:
   ensures (C_203 : true);
 {  
@@ -667,10 +667,10 @@ behavior default:
    
    (var uint32 __retres_5);
    
-   {  (C_181 : (smallest_2 = (C_180 : ((C_179 : (x_1 &
-                                                  (C_178 : ((C_177 : (- x_1)) :> uint32)))) :> uint32))));
-      (C_184 : (ripple_2 = (C_183 : ((C_182 : (x_1 + smallest_2)) :> uint32))));
-      (C_187 : (ones_2 = (C_186 : ((C_185 : (x_1 ^ ripple_2)) :> uint32))));
+   {  (C_181 : (smallest_2 = (C_180 : ((C_179 : (x_6 &
+                                                  (C_178 : ((C_177 : (- x_6)) :> uint32)))) :> uint32))));
+      (C_184 : (ripple_2 = (C_183 : ((C_182 : (x_6 + smallest_2)) :> uint32))));
+      (C_187 : (ones_2 = (C_186 : ((C_185 : (x_6 ^ ripple_2)) :> uint32))));
       
       {  (C_189 : (tmp_1 = (C_188 : pop(ones_2))));
          
@@ -695,7 +695,7 @@ behavior default:
    }
 }
 
-uint32 next_set_of_n_elements(uint32 x_7)
+uint32 next_set_of_n_elements(uint32 x)
 behavior default:
   ensures (C_228 : true);
 {  
@@ -709,14 +709,14 @@ behavior default:
    
    (var uint32 __retres_6);
    
-   {  (if (x_7 == 0) then 
+   {  (if (x == 0) then 
       {  (C_204 : (__retres_6 = 0));
          
          (goto return_label)
       } else ());
-      (C_209 : (smallest_3 = (C_208 : ((C_207 : (x_7 &
-                                                  (C_206 : ((C_205 : (- x_7)) :> uint32)))) :> uint32))));
-      (C_212 : (ripple_3 = (C_211 : ((C_210 : (x_7 + smallest_3)) :> uint32))));
+      (C_209 : (smallest_3 = (C_208 : ((C_207 : (x &
+                                                  (C_206 : ((C_205 : (- x)) :> uint32)))) :> uint32))));
+      (C_212 : (ripple_3 = (C_211 : ((C_210 : (x + smallest_3)) :> uint32))));
       (C_217 : (new_smallest = (C_216 : ((C_215 : (ripple_3 &
                                                     (C_214 : ((C_213 : 
                                                               (- ripple_3)) :> uint32)))) :> uint32))));
@@ -732,7 +732,7 @@ behavior default:
    }
 }
 
-int32 snoob4(int32 x_2)
+int32 snoob4(int32 x_7)
 behavior default:
   ensures (C_252 : true);
 {  
@@ -740,27 +740,27 @@ behavior default:
    
    (var int32 __retres_7);
    
-   {  (C_235 : (y = (C_234 : ((C_233 : (x_2 +
-                                         (C_232 : ((C_231 : (x_2 &
+   {  (C_235 : (y = (C_234 : ((C_233 : (x_7 +
+                                         (C_232 : ((C_231 : (x_7 &
                                                               (C_230 : (
                                                               (C_229 : 
-                                                              (- x_2)) :> int32)))) :> int32)))) :> int32))));
-      (C_240 : (x_2 = (C_239 : ((C_238 : (x_2 &
+                                                              (- x_7)) :> int32)))) :> int32)))) :> int32))));
+      (C_240 : (x_7 = (C_239 : ((C_238 : (x_7 &
                                            (C_237 : ((C_236 : (~ y)) :> int32)))) :> int32))));
       
       {  
          loop 
          while (true)
          {  
-            {  (if ((C_242 : ((C_241 : (x_2 & 1)) :> int32)) == 0) then () else 
+            {  (if ((C_242 : ((C_241 : (x_7 & 1)) :> int32)) == 0) then () else 
                (goto while_0_break));
-               (C_245 : (x_2 = (C_244 : ((C_243 : (x_2 / 2)) :> int32))))
+               (C_245 : (x_7 = (C_244 : ((C_243 : (x_7 / 2)) :> int32))))
             }
          };
          (while_0_break : ())
       };
-      (C_248 : (x_2 = (C_247 : ((C_246 : (x_2 / 2)) :> int32))));
-      (C_251 : (__retres_7 = (C_250 : ((C_249 : (y | x_2)) :> int32))));
+      (C_248 : (x_7 = (C_247 : ((C_246 : (x_7 / 2)) :> int32))));
+      (C_251 : (__retres_7 = (C_250 : ((C_249 : (y | x_7)) :> int32))));
       
       (return __retres_7)
    }
@@ -2791,7 +2791,7 @@ parameter nlz_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter ntz :
- x_6:uint32 ->
+ x_1:uint32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -2817,7 +2817,7 @@ parameter ntz :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter ntz_requires :
- x_6:uint32 ->
+ x_1:uint32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -2864,7 +2864,7 @@ parameter ntz_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter pop :
- x_3:uint32 ->
+ x_2:uint32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -2890,7 +2890,7 @@ parameter pop :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter pop_requires :
- x_3:uint32 ->
+ x_2:uint32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3022,7 +3022,7 @@ parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
 parameter snoob :
- x_5:uint32 ->
+ x_3:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -3048,7 +3048,7 @@ parameter snoob :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob1 :
- x_0_0:uint32 ->
+ x_4:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -3074,7 +3074,7 @@ parameter snoob1 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob1_requires :
- x_0_0:uint32 ->
+ x_4:uint32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3121,7 +3121,7 @@ parameter snoob1_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob2 :
- x_4:uint32 ->
+ x_5:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -3147,7 +3147,7 @@ parameter snoob2 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob2_requires :
- x_4:uint32 ->
+ x_5:uint32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3194,7 +3194,7 @@ parameter snoob2_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob3 :
- x_1:uint32 ->
+ x_6:uint32 ->
   { } uint32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -3220,7 +3220,7 @@ parameter snoob3 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob3_requires :
- x_1:uint32 ->
+ x_6:uint32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3267,7 +3267,7 @@ parameter snoob3_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob4 :
- x_2:int32 ->
+ x_7_0:int32 ->
   { } int32
   reads char_P___string_Argument_must_be_an_integer_from_1_to_7___3_alloc_table,char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table,char_P___string_n____d__2_alloc_table,char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,char_P_char_M___string_Argument_must_be_an_integer_from_1_to_7___3,char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4,char_P_char_M___string_n____d__2,char_P_char_M___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1
   { (JC_<somenum>:
@@ -3293,7 +3293,7 @@ parameter snoob4 :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob4_requires :
- x_2:int32 ->
+ x_7_0:int32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -3340,7 +3340,7 @@ parameter snoob4_requires :
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 parameter snoob_requires :
- x_5:uint32 ->
+ x_3:uint32 ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4317,7 +4317,7 @@ let nlz_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let ntz_ensures_default =
- fun (x_6 : uint32) ->
+ fun (x_1 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4339,7 +4339,7 @@ let ntz_ensures_default =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_<somenum>:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_6 = ref x_6 in
+  (let mutable_x_1 = ref x_1 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4351,7 +4351,7 @@ let ntz_ensures_default =
       (C_3:
       (C_41:
       begin
-        (if ((eq_int_ (integer_of_uint32 !mutable_x_6)) (0))
+        (if ((eq_int_ (integer_of_uint32 !mutable_x_1)) (0))
         then
          (let jessie_<somenum> =
          (C_2:
@@ -4362,7 +4362,7 @@ let ntz_ensures_default =
        (if ((eq_int_ (integer_of_uint32 (C_11:
                                         (safe_uint32_of_integer_ (C_10:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_6)) (65535))))))) (0))
+                                                                   (integer_of_uint32 !mutable_x_1)) (65535))))))) (0))
        then
         (let jessie_<somenum> =
         (C_6:
@@ -4373,15 +4373,15 @@ let ntz_ensures_default =
                    (safe_int32_of_integer_ (C_4:
                                            ((add_int (integer_of_int32 !n_14)) (16)))))) in
           void);
-         (mutable_x_6 := (C_8:
+         (mutable_x_1 := (C_8:
                          (safe_uint32_of_integer_ (C_7:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_uint32 !mutable_x_6)) (65536)))))));
-         !mutable_x_6 end)) in void) else void);
+                                                  ((div_int (integer_of_uint32 !mutable_x_1)) (65536)))))));
+         !mutable_x_1 end)) in void) else void);
        (if ((eq_int_ (integer_of_uint32 (C_19:
                                         (safe_uint32_of_integer_ (C_18:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_6)) (255))))))) (0))
+                                                                   (integer_of_uint32 !mutable_x_1)) (255))))))) (0))
        then
         (let jessie_<somenum> =
         (C_14:
@@ -4392,15 +4392,15 @@ let ntz_ensures_default =
                    (safe_int32_of_integer_ (C_12:
                                            ((add_int (integer_of_int32 !n_14)) (8)))))) in
           void);
-         (mutable_x_6 := (C_16:
+         (mutable_x_1 := (C_16:
                          (safe_uint32_of_integer_ (C_15:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_uint32 !mutable_x_6)) (256)))))));
-         !mutable_x_6 end)) in void) else void);
+                                                  ((div_int (integer_of_uint32 !mutable_x_1)) (256)))))));
+         !mutable_x_1 end)) in void) else void);
        (if ((eq_int_ (integer_of_uint32 (C_27:
                                         (safe_uint32_of_integer_ (C_26:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_6)) (15))))))) (0))
+                                                                   (integer_of_uint32 !mutable_x_1)) (15))))))) (0))
        then
         (let jessie_<somenum> =
         (C_22:
@@ -4411,15 +4411,15 @@ let ntz_ensures_default =
                    (safe_int32_of_integer_ (C_20:
                                            ((add_int (integer_of_int32 !n_14)) (4)))))) in
           void);
-         (mutable_x_6 := (C_24:
+         (mutable_x_1 := (C_24:
                          (safe_uint32_of_integer_ (C_23:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_uint32 !mutable_x_6)) (16)))))));
-         !mutable_x_6 end)) in void) else void);
+                                                  ((div_int (integer_of_uint32 !mutable_x_1)) (16)))))));
+         !mutable_x_1 end)) in void) else void);
        (if ((eq_int_ (integer_of_uint32 (C_35:
                                         (safe_uint32_of_integer_ (C_34:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_6)) (3))))))) (0))
+                                                                   (integer_of_uint32 !mutable_x_1)) (3))))))) (0))
        then
         (let jessie_<somenum> =
         (C_30:
@@ -4430,11 +4430,11 @@ let ntz_ensures_default =
                    (safe_int32_of_integer_ (C_28:
                                            ((add_int (integer_of_int32 !n_14)) (2)))))) in
           void);
-         (mutable_x_6 := (C_32:
+         (mutable_x_1 := (C_32:
                          (safe_uint32_of_integer_ (C_31:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_uint32 !mutable_x_6)) (4)))))));
-         !mutable_x_6 end)) in void) else void);
+                                                  ((div_int (integer_of_uint32 !mutable_x_1)) (4)))))));
+         !mutable_x_1 end)) in void) else void);
        (let jessie_<somenum> =
        (__retres := (C_40:
                     (safe_int32_of_integer_ (C_39:
@@ -4446,14 +4446,14 @@ let ntz_ensures_default =
                                                                 (safe_uint32_of_integer_ 
                                                                  (C_36:
                                                                  ((bw_and 
-                                                                   (integer_of_uint32 !mutable_x_6)) (1))))))))))) in
+                                                                   (integer_of_uint32 !mutable_x_1)) (1))))))))))) in
        void); (raise (Return_label_exc void)) end)) in void) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
 
 let ntz_safety =
- fun (x_6 : uint32) ->
+ fun (x_1 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4475,7 +4475,7 @@ let ntz_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_<somenum>:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_6 = ref x_6 in
+  (let mutable_x_1 = ref x_1 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4487,7 +4487,7 @@ let ntz_safety =
       (C_3:
       (C_41:
       begin
-        (if ((eq_int_ (integer_of_uint32 !mutable_x_6)) (0))
+        (if ((eq_int_ (integer_of_uint32 !mutable_x_1)) (0))
         then
          (let jessie_<somenum> =
          (C_2:
@@ -4499,7 +4499,7 @@ let ntz_safety =
                                         (JC_<somenum>:
                                         (uint32_of_integer_ (C_10:
                                                             ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_6)) (65535)))))))) (0))
+                                                              (integer_of_uint32 !mutable_x_1)) (65535)))))))) (0))
        then
         (let jessie_<somenum> =
         (C_6:
@@ -4511,17 +4511,17 @@ let ntz_safety =
                    (int32_of_integer_ (C_4:
                                       ((add_int (integer_of_int32 !n_14)) (16))))))) in
           void);
-         (mutable_x_6 := (C_8:
+         (mutable_x_1 := (C_8:
                          (JC_<somenum>:
                          (uint32_of_integer_ (C_7:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_uint32 !mutable_x_6)) (65536))))))));
-         !mutable_x_6 end)) in void) else void);
+                                             ((div_int_ (integer_of_uint32 !mutable_x_1)) (65536))))))));
+         !mutable_x_1 end)) in void) else void);
        (if ((eq_int_ (integer_of_uint32 (C_19:
                                         (JC_<somenum>:
                                         (uint32_of_integer_ (C_18:
                                                             ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_6)) (255)))))))) (0))
+                                                              (integer_of_uint32 !mutable_x_1)) (255)))))))) (0))
        then
         (let jessie_<somenum> =
         (C_14:
@@ -4533,17 +4533,17 @@ let ntz_safety =
                    (int32_of_integer_ (C_12:
                                       ((add_int (integer_of_int32 !n_14)) (8))))))) in
           void);
-         (mutable_x_6 := (C_16:
+         (mutable_x_1 := (C_16:
                          (JC_<somenum>:
                          (uint32_of_integer_ (C_15:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_uint32 !mutable_x_6)) (256))))))));
-         !mutable_x_6 end)) in void) else void);
+                                             ((div_int_ (integer_of_uint32 !mutable_x_1)) (256))))))));
+         !mutable_x_1 end)) in void) else void);
        (if ((eq_int_ (integer_of_uint32 (C_27:
                                         (JC_<somenum>:
                                         (uint32_of_integer_ (C_26:
                                                             ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_6)) (15)))))))) (0))
+                                                              (integer_of_uint32 !mutable_x_1)) (15)))))))) (0))
        then
         (let jessie_<somenum> =
         (C_22:
@@ -4555,17 +4555,17 @@ let ntz_safety =
                    (int32_of_integer_ (C_20:
                                       ((add_int (integer_of_int32 !n_14)) (4))))))) in
           void);
-         (mutable_x_6 := (C_24:
+         (mutable_x_1 := (C_24:
                          (JC_<somenum>:
                          (uint32_of_integer_ (C_23:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_uint32 !mutable_x_6)) (16))))))));
-         !mutable_x_6 end)) in void) else void);
+                                             ((div_int_ (integer_of_uint32 !mutable_x_1)) (16))))))));
+         !mutable_x_1 end)) in void) else void);
        (if ((eq_int_ (integer_of_uint32 (C_35:
                                         (JC_<somenum>:
                                         (uint32_of_integer_ (C_34:
                                                             ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_6)) (3)))))))) (0))
+                                                              (integer_of_uint32 !mutable_x_1)) (3)))))))) (0))
        then
         (let jessie_<somenum> =
         (C_30:
@@ -4577,12 +4577,12 @@ let ntz_safety =
                    (int32_of_integer_ (C_28:
                                       ((add_int (integer_of_int32 !n_14)) (2))))))) in
           void);
-         (mutable_x_6 := (C_32:
+         (mutable_x_1 := (C_32:
                          (JC_<somenum>:
                          (uint32_of_integer_ (C_31:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_uint32 !mutable_x_6)) (4))))))));
-         !mutable_x_6 end)) in void) else void);
+                                             ((div_int_ (integer_of_uint32 !mutable_x_1)) (4))))))));
+         !mutable_x_1 end)) in void) else void);
        (let jessie_<somenum> =
        (__retres := (C_40:
                     (JC_<somenum>:
@@ -4596,7 +4596,7 @@ let ntz_safety =
                                                            (uint32_of_integer_ 
                                                             (C_36:
                                                             ((bw_and 
-                                                              (integer_of_uint32 !mutable_x_6)) (1))))))))))))) in
+                                                              (integer_of_uint32 !mutable_x_1)) (1))))))))))))) in
        void); (raise (Return_label_exc void)) end)) in void) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
@@ -4624,7 +4624,7 @@ let ntz_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let pop_ensures_default =
- fun (x_3 : uint32) ->
+ fun (x_2 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4646,7 +4646,7 @@ let pop_ensures_default =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_<somenum>:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_3 = ref x_3 in
+  (let mutable_x_2 = ref x_2 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4660,9 +4660,9 @@ let pop_ensures_default =
      (C_109:
      begin
        (let jessie_<somenum> =
-       (mutable_x_3 := (C_79:
+       (mutable_x_2 := (C_79:
                        (safe_uint32_of_integer_ (C_78:
-                                                ((sub_int (integer_of_uint32 !mutable_x_3)) 
+                                                ((sub_int (integer_of_uint32 !mutable_x_2)) 
                                                  (integer_of_uint32 (C_77:
                                                                     (safe_uint32_of_integer_ 
                                                                     (C_76:
@@ -4673,16 +4673,16 @@ let pop_ensures_default =
                                                                     (C_74:
                                                                     (JC_<somenum>:
                                                                     ((div_int 
-                                                                    (integer_of_uint32 !mutable_x_3)) (2)))))))) (1431655765))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_2)) (2)))))))) (1431655765))))))))))) in
        void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_88:
+      (mutable_x_2 := (C_88:
                       (safe_uint32_of_integer_ (C_87:
                                                ((add_int (integer_of_uint32 
                                                           (C_86:
                                                           (safe_uint32_of_integer_ 
                                                            (C_85:
-                                                           ((bw_and (integer_of_uint32 !mutable_x_3)) (858993459))))))) 
+                                                           ((bw_and (integer_of_uint32 !mutable_x_2)) (858993459))))))) 
                                                 (integer_of_uint32 (C_84:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_83:
@@ -4693,54 +4693,54 @@ let pop_ensures_default =
                                                                     (C_81:
                                                                     (JC_<somenum>:
                                                                     ((div_int 
-                                                                    (integer_of_uint32 !mutable_x_3)) (4)))))))) (858993459))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_2)) (4)))))))) (858993459))))))))))) in
       void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_95:
+      (mutable_x_2 := (C_95:
                       (safe_uint32_of_integer_ (C_94:
                                                ((bw_and (integer_of_uint32 
                                                          (C_93:
                                                          (safe_uint32_of_integer_ 
                                                           (C_92:
-                                                          ((add_int (integer_of_uint32 !mutable_x_3)) 
+                                                          ((add_int (integer_of_uint32 !mutable_x_2)) 
                                                            (integer_of_uint32 
                                                             (C_91:
                                                             (safe_uint32_of_integer_ 
                                                              (C_90:
                                                              (JC_<somenum>:
                                                              ((div_int 
-                                                               (integer_of_uint32 !mutable_x_3)) (16))))))))))))) (252645135)))))) in
+                                                               (integer_of_uint32 !mutable_x_2)) (16))))))))))))) (252645135)))))) in
       void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_100:
+      (mutable_x_2 := (C_100:
                       (safe_uint32_of_integer_ (C_99:
-                                               ((add_int (integer_of_uint32 !mutable_x_3)) 
+                                               ((add_int (integer_of_uint32 !mutable_x_2)) 
                                                 (integer_of_uint32 (C_98:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_97:
                                                                     ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_3)) (256))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_2)) (256))))))))))) in
       void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_105:
+      (mutable_x_2 := (C_105:
                       (safe_uint32_of_integer_ (C_104:
-                                               ((add_int (integer_of_uint32 !mutable_x_3)) 
+                                               ((add_int (integer_of_uint32 !mutable_x_2)) 
                                                 (integer_of_uint32 (C_103:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_102:
                                                                     ((mul_int 
-                                                                    (integer_of_uint32 !mutable_x_3)) (65536))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_2)) (65536))))))))))) in
       void);
       (let jessie_<somenum> =
       (__retres_1 := (C_108:
                      (safe_int32_of_integer_ (C_107:
                                              (JC_<somenum>:
-                                             ((div_int (integer_of_uint32 !mutable_x_3)) (16777216))))))) in
+                                             ((div_int (integer_of_uint32 !mutable_x_2)) (16777216))))))) in
       void); (return := !__retres_1); (raise Return) end))))))); absurd  end
    with Return -> !return end))) { (JC_<somenum>: true) }
 
 let pop_safety =
- fun (x_3 : uint32) ->
+ fun (x_2 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4762,7 +4762,7 @@ let pop_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_<somenum>:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_3 = ref x_3 in
+  (let mutable_x_2 = ref x_2 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4776,10 +4776,10 @@ let pop_safety =
      (C_109:
      begin
        (let jessie_<somenum> =
-       (mutable_x_3 := (C_79:
+       (mutable_x_2 := (C_79:
                        (JC_<somenum>:
                        (uint32_of_integer_ (C_78:
-                                           ((sub_int (integer_of_uint32 !mutable_x_3)) 
+                                           ((sub_int (integer_of_uint32 !mutable_x_2)) 
                                             (integer_of_uint32 (C_77:
                                                                (JC_<somenum>:
                                                                (uint32_of_integer_ 
@@ -4792,10 +4792,10 @@ let pop_safety =
                                                                     (C_74:
                                                                     (JC_<somenum>:
                                                                     ((div_int_ 
-                                                                    (integer_of_uint32 !mutable_x_3)) (2))))))))) (1431655765))))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_2)) (2))))))))) (1431655765))))))))))))) in
        void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_88:
+      (mutable_x_2 := (C_88:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_87:
                                           ((add_int (integer_of_uint32 
@@ -4803,7 +4803,7 @@ let pop_safety =
                                                      (JC_<somenum>:
                                                      (uint32_of_integer_ 
                                                       (C_85:
-                                                      ((bw_and (integer_of_uint32 !mutable_x_3)) (858993459)))))))) 
+                                                      ((bw_and (integer_of_uint32 !mutable_x_2)) (858993459)))))))) 
                                            (integer_of_uint32 (C_84:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
@@ -4816,10 +4816,10 @@ let pop_safety =
                                                                    (C_81:
                                                                    (JC_<somenum>:
                                                                    ((div_int_ 
-                                                                    (integer_of_uint32 !mutable_x_3)) (4))))))))) (858993459))))))))))))) in
+                                                                    (integer_of_uint32 !mutable_x_2)) (4))))))))) (858993459))))))))))))) in
       void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_95:
+      (mutable_x_2 := (C_95:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_94:
                                           ((bw_and (integer_of_uint32 
@@ -4827,45 +4827,45 @@ let pop_safety =
                                                     (JC_<somenum>:
                                                     (uint32_of_integer_ 
                                                      (C_92:
-                                                     ((add_int (integer_of_uint32 !mutable_x_3)) 
+                                                     ((add_int (integer_of_uint32 !mutable_x_2)) 
                                                       (integer_of_uint32 
                                                        (C_91:
                                                        (JC_<somenum>:
                                                        (uint32_of_integer_ 
                                                         (C_90:
                                                         (JC_<somenum>:
-                                                        ((div_int_ (integer_of_uint32 !mutable_x_3)) (16))))))))))))))) (252645135))))))) in
+                                                        ((div_int_ (integer_of_uint32 !mutable_x_2)) (16))))))))))))))) (252645135))))))) in
       void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_100:
+      (mutable_x_2 := (C_100:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_99:
-                                          ((add_int (integer_of_uint32 !mutable_x_3)) 
+                                          ((add_int (integer_of_uint32 !mutable_x_2)) 
                                            (integer_of_uint32 (C_98:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
                                                                (C_97:
                                                                ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_3)) (256))))))))))))) in
+                                                                 (integer_of_uint32 !mutable_x_2)) (256))))))))))))) in
       void);
       (let jessie_<somenum> =
-      (mutable_x_3 := (C_105:
+      (mutable_x_2 := (C_105:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_104:
-                                          ((add_int (integer_of_uint32 !mutable_x_3)) 
+                                          ((add_int (integer_of_uint32 !mutable_x_2)) 
                                            (integer_of_uint32 (C_103:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
                                                                (C_102:
                                                                ((mul_int 
-                                                                 (integer_of_uint32 !mutable_x_3)) (65536))))))))))))) in
+                                                                 (integer_of_uint32 !mutable_x_2)) (65536))))))))))))) in
       void);
       (let jessie_<somenum> =
       (__retres_1 := (C_108:
                      (JC_<somenum>:
                      (int32_of_integer_ (C_107:
                                         (JC_<somenum>:
-                                        ((div_int_ (integer_of_uint32 !mutable_x_3)) (16777216)))))))) in
+                                        ((div_int_ (integer_of_uint32 !mutable_x_2)) (16777216)))))))) in
       void); (return := !__retres_1); (raise Return) end))))))); absurd  end
    with Return -> !return end)))
   { (JC_<somenum>:
@@ -4891,7 +4891,7 @@ let pop_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob1_ensures_default =
- fun (x_0_0 : uint32) ->
+ fun (x_4 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -4930,23 +4930,23 @@ let snoob1_ensures_default =
        (let jessie_<somenum> =
        (smallest_0 := (C_134:
                       (safe_uint32_of_integer_ (C_133:
-                                               ((bw_and (integer_of_uint32 x_0_0)) 
+                                               ((bw_and (integer_of_uint32 x_4)) 
                                                 (integer_of_uint32 (C_132:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_131:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x_0_0))))))))))) in
+                                                                    (integer_of_uint32 x_4))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple_0 := (C_137:
                    (safe_uint32_of_integer_ (C_136:
-                                            ((add_int (integer_of_uint32 x_0_0)) 
+                                            ((add_int (integer_of_uint32 x_4)) 
                                              (integer_of_uint32 !smallest_0)))))) in
       void);
       (let jessie_<somenum> =
       (ones_0 := (C_140:
                  (safe_uint32_of_integer_ (C_139:
-                                          ((bw_xor (integer_of_uint32 x_0_0)) 
+                                          ((bw_xor (integer_of_uint32 x_4)) 
                                            (integer_of_uint32 !ripple_0)))))) in
       void);
       (let jessie_<somenum> =
@@ -4954,8 +4954,7 @@ let snoob1_ensures_default =
       (C_149:
       begin
         (let jessie_<somenum> =
-        (tmp := (C_142:
-                (let jessie_<somenum> = x_0_0 in (JC_<somenum>: (ntz jessie_<somenum>))))) in
+        (tmp := (C_142: (let jessie_<somenum> = x_4 in (JC_<somenum>: (ntz jessie_<somenum>))))) in
         void);
        (assert
        { (JC_<somenum>: lt_int(add_int((2), integer_of_int32(tmp)), (32))) }; void);
@@ -4977,7 +4976,7 @@ let snoob1_ensures_default =
    end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob1_safety =
- fun (x_0_0 : uint32) ->
+ fun (x_4 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5017,26 +5016,26 @@ let snoob1_safety =
        (smallest_0 := (C_134:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_133:
-                                          ((bw_and (integer_of_uint32 x_0_0)) 
+                                          ((bw_and (integer_of_uint32 x_4)) 
                                            (integer_of_uint32 (C_132:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
                                                                (C_131:
                                                                (neg_int 
-                                                                (integer_of_uint32 x_0_0))))))))))))) in
+                                                                (integer_of_uint32 x_4))))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple_0 := (C_137:
                    (JC_<somenum>:
                    (uint32_of_integer_ (C_136:
-                                       ((add_int (integer_of_uint32 x_0_0)) 
+                                       ((add_int (integer_of_uint32 x_4)) 
                                         (integer_of_uint32 !smallest_0))))))) in
       void);
       (let jessie_<somenum> =
       (ones_0 := (C_140:
                  (JC_<somenum>:
                  (uint32_of_integer_ (C_139:
-                                     ((bw_xor (integer_of_uint32 x_0_0)) 
+                                     ((bw_xor (integer_of_uint32 x_4)) 
                                       (integer_of_uint32 !ripple_0))))))) in
       void);
       (let jessie_<somenum> =
@@ -5045,8 +5044,8 @@ let snoob1_safety =
       begin
         (let jessie_<somenum> =
         (tmp := (C_142:
-                (let jessie_<somenum> = x_0_0 in
-                (JC_<somenum>: (ntz_requires jessie_<somenum>))))) in void);
+                (let jessie_<somenum> = x_4 in (JC_<somenum>: (ntz_requires jessie_<somenum>))))) in
+        void);
        [ { } unit reads tmp
          { (JC_<somenum>: lt_int(add_int((2), integer_of_int32(tmp)), (32))) } ];
        (ones_0 := (C_148:
@@ -5091,7 +5090,7 @@ let snoob1_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob2_ensures_default =
- fun (x_4 : uint32) ->
+ fun (x_5 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5130,23 +5129,23 @@ let snoob2_ensures_default =
        (let jessie_<somenum> =
        (smallest_1 := (C_157:
                       (safe_uint32_of_integer_ (C_156:
-                                               ((bw_and (integer_of_uint32 x_4)) 
+                                               ((bw_and (integer_of_uint32 x_5)) 
                                                 (integer_of_uint32 (C_155:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_154:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x_4))))))))))) in
+                                                                    (integer_of_uint32 x_5))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple_1 := (C_160:
                    (safe_uint32_of_integer_ (C_159:
-                                            ((add_int (integer_of_uint32 x_4)) 
+                                            ((add_int (integer_of_uint32 x_5)) 
                                              (integer_of_uint32 !smallest_1)))))) in
       void);
       (let jessie_<somenum> =
       (ones_1 := (C_163:
                  (safe_uint32_of_integer_ (C_162:
-                                          ((bw_xor (integer_of_uint32 x_4)) 
+                                          ((bw_xor (integer_of_uint32 x_5)) 
                                            (integer_of_uint32 !ripple_1)))))) in
       void);
       (let jessie_<somenum> =
@@ -5178,7 +5177,7 @@ let snoob2_ensures_default =
    end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob2_safety =
- fun (x_4 : uint32) ->
+ fun (x_5 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5218,26 +5217,26 @@ let snoob2_safety =
        (smallest_1 := (C_157:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_156:
-                                          ((bw_and (integer_of_uint32 x_4)) 
+                                          ((bw_and (integer_of_uint32 x_5)) 
                                            (integer_of_uint32 (C_155:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
                                                                (C_154:
                                                                (neg_int 
-                                                                (integer_of_uint32 x_4))))))))))))) in
+                                                                (integer_of_uint32 x_5))))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple_1 := (C_160:
                    (JC_<somenum>:
                    (uint32_of_integer_ (C_159:
-                                       ((add_int (integer_of_uint32 x_4)) 
+                                       ((add_int (integer_of_uint32 x_5)) 
                                         (integer_of_uint32 !smallest_1))))))) in
       void);
       (let jessie_<somenum> =
       (ones_1 := (C_163:
                  (JC_<somenum>:
                  (uint32_of_integer_ (C_162:
-                                     ((bw_xor (integer_of_uint32 x_4)) 
+                                     ((bw_xor (integer_of_uint32 x_5)) 
                                       (integer_of_uint32 !ripple_1))))))) in
       void);
       (let jessie_<somenum> =
@@ -5292,7 +5291,7 @@ let snoob2_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob3_ensures_default =
- fun (x_1 : uint32) ->
+ fun (x_6 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5331,23 +5330,23 @@ let snoob3_ensures_default =
        (let jessie_<somenum> =
        (smallest_2 := (C_180:
                       (safe_uint32_of_integer_ (C_179:
-                                               ((bw_and (integer_of_uint32 x_1)) 
+                                               ((bw_and (integer_of_uint32 x_6)) 
                                                 (integer_of_uint32 (C_178:
                                                                    (safe_uint32_of_integer_ 
                                                                     (C_177:
                                                                     (neg_int 
-                                                                    (integer_of_uint32 x_1))))))))))) in
+                                                                    (integer_of_uint32 x_6))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple_2 := (C_183:
                    (safe_uint32_of_integer_ (C_182:
-                                            ((add_int (integer_of_uint32 x_1)) 
+                                            ((add_int (integer_of_uint32 x_6)) 
                                              (integer_of_uint32 !smallest_2)))))) in
       void);
       (let jessie_<somenum> =
       (ones_2 := (C_186:
                  (safe_uint32_of_integer_ (C_185:
-                                          ((bw_xor (integer_of_uint32 x_1)) 
+                                          ((bw_xor (integer_of_uint32 x_6)) 
                                            (integer_of_uint32 !ripple_2)))))) in
       void);
       (let jessie_<somenum> =
@@ -5390,7 +5389,7 @@ let snoob3_ensures_default =
    end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob3_safety =
- fun (x_1 : uint32) ->
+ fun (x_6 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5430,26 +5429,26 @@ let snoob3_safety =
        (smallest_2 := (C_180:
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_179:
-                                          ((bw_and (integer_of_uint32 x_1)) 
+                                          ((bw_and (integer_of_uint32 x_6)) 
                                            (integer_of_uint32 (C_178:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
                                                                (C_177:
                                                                (neg_int 
-                                                                (integer_of_uint32 x_1))))))))))))) in
+                                                                (integer_of_uint32 x_6))))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple_2 := (C_183:
                    (JC_<somenum>:
                    (uint32_of_integer_ (C_182:
-                                       ((add_int (integer_of_uint32 x_1)) 
+                                       ((add_int (integer_of_uint32 x_6)) 
                                         (integer_of_uint32 !smallest_2))))))) in
       void);
       (let jessie_<somenum> =
       (ones_2 := (C_186:
                  (JC_<somenum>:
                  (uint32_of_integer_ (C_185:
-                                     ((bw_xor (integer_of_uint32 x_1)) 
+                                     ((bw_xor (integer_of_uint32 x_6)) 
                                       (integer_of_uint32 !ripple_2))))))) in
       void);
       (let jessie_<somenum> =
@@ -5515,7 +5514,7 @@ let snoob3_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob4_ensures_default =
- fun (x_2 : int32) ->
+ fun (x_7_0 : int32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5537,7 +5536,7 @@ let snoob4_ensures_default =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_<somenum>:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_2 = ref x_2 in
+  (let mutable_x_7_0 = ref x_7_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5552,27 +5551,27 @@ let snoob4_ensures_default =
        (let jessie_<somenum> =
        (y := (C_234:
              (safe_int32_of_integer_ (C_233:
-                                     ((add_int (integer_of_int32 !mutable_x_2)) 
+                                     ((add_int (integer_of_int32 !mutable_x_7_0)) 
                                       (integer_of_int32 (C_232:
                                                         (safe_int32_of_integer_ 
                                                          (C_231:
-                                                         ((bw_and (integer_of_int32 !mutable_x_2)) 
+                                                         ((bw_and (integer_of_int32 !mutable_x_7_0)) 
                                                           (integer_of_int32 
                                                            (C_230:
                                                            (safe_int32_of_integer_ 
                                                             (C_229:
                                                             (neg_int 
-                                                             (integer_of_int32 !mutable_x_2)))))))))))))))) in
+                                                             (integer_of_int32 !mutable_x_7_0)))))))))))))))) in
        void);
       (let jessie_<somenum> =
-      (mutable_x_2 := (C_239:
-                      (safe_int32_of_integer_ (C_238:
-                                              ((bw_and (integer_of_int32 !mutable_x_2)) 
-                                               (integer_of_int32 (C_237:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_236:
-                                                                  (bw_compl 
-                                                                   (integer_of_int32 !y))))))))))) in
+      (mutable_x_7_0 := (C_239:
+                        (safe_int32_of_integer_ (C_238:
+                                                ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                                 (integer_of_int32 (C_237:
+                                                                   (safe_int32_of_integer_ 
+                                                                    (C_236:
+                                                                    (bw_compl 
+                                                                    (integer_of_int32 !y))))))))))) in
       void);
       try
        (let jessie_<somenum> =
@@ -5591,35 +5590,35 @@ let snoob4_ensures_default =
                 (if ((eq_int_ (integer_of_int32 (C_242:
                                                 (safe_int32_of_integer_ 
                                                  (C_241:
-                                                 ((bw_and (integer_of_int32 !mutable_x_2)) (1))))))) (0))
+                                                 ((bw_and (integer_of_int32 !mutable_x_7_0)) (1))))))) (0))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
-               (mutable_x_2 := (C_244:
-                               (safe_int32_of_integer_ (C_243:
-                                                       (JC_<somenum>:
-                                                       ((div_int (integer_of_int32 !mutable_x_2)) (2)))))));
-               !mutable_x_2 end) in void); (raise (Loop_continue_exc void))
+               (mutable_x_7_0 := (C_244:
+                                 (safe_int32_of_integer_ (C_243:
+                                                         (JC_<somenum>:
+                                                         ((div_int (integer_of_int32 !mutable_x_7_0)) (2)))))));
+               !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
             end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (let jessie_<somenum> =
-      (mutable_x_2 := (C_247:
-                      (safe_int32_of_integer_ (C_246:
-                                              (JC_<somenum>:
-                                              ((div_int (integer_of_int32 !mutable_x_2)) (2))))))) in
+      (mutable_x_7_0 := (C_247:
+                        (safe_int32_of_integer_ (C_246:
+                                                (JC_<somenum>:
+                                                ((div_int (integer_of_int32 !mutable_x_7_0)) (2))))))) in
       void);
       (let jessie_<somenum> =
       (__retres_7 := (C_250:
                      (safe_int32_of_integer_ (C_249:
                                              ((bw_or (integer_of_int32 !y)) 
-                                              (integer_of_int32 !mutable_x_2)))))) in
+                                              (integer_of_int32 !mutable_x_7_0)))))) in
       void); (return := !__retres_7); (raise Return) end)))))); absurd  end
    with Return -> !return end))) { (JC_<somenum>: true) }
 
 let snoob4_safety =
- fun (x_2 : int32) ->
+ fun (x_7_0 : int32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5641,7 +5640,7 @@ let snoob4_safety =
                              char_P_char_M___string_Need_exactly_one_argument__an_integer_from_1_to_7___4))
                             and (JC_<somenum>:
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
-  (let mutable_x_2 = ref x_2 in
+  (let mutable_x_7_0 = ref x_7_0 in
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -5657,30 +5656,30 @@ let snoob4_safety =
        (y := (C_234:
              (JC_<somenum>:
              (int32_of_integer_ (C_233:
-                                ((add_int (integer_of_int32 !mutable_x_2)) 
+                                ((add_int (integer_of_int32 !mutable_x_7_0)) 
                                  (integer_of_int32 (C_232:
                                                    (JC_<somenum>:
                                                    (int32_of_integer_ 
                                                     (C_231:
-                                                    ((bw_and (integer_of_int32 !mutable_x_2)) 
+                                                    ((bw_and (integer_of_int32 !mutable_x_7_0)) 
                                                      (integer_of_int32 
                                                       (C_230:
                                                       (JC_<somenum>:
                                                       (int32_of_integer_ 
                                                        (C_229:
-                                                       (neg_int (integer_of_int32 !mutable_x_2))))))))))))))))))) in
+                                                       (neg_int (integer_of_int32 !mutable_x_7_0))))))))))))))))))) in
        void);
       (let jessie_<somenum> =
-      (mutable_x_2 := (C_239:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_238:
-                                         ((bw_and (integer_of_int32 !mutable_x_2)) 
-                                          (integer_of_int32 (C_237:
-                                                            (JC_<somenum>:
-                                                            (int32_of_integer_ 
-                                                             (C_236:
-                                                             (bw_compl 
-                                                              (integer_of_int32 !y))))))))))))) in
+      (mutable_x_7_0 := (C_239:
+                        (JC_<somenum>:
+                        (int32_of_integer_ (C_238:
+                                           ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                            (integer_of_int32 (C_237:
+                                                              (JC_<somenum>:
+                                                              (int32_of_integer_ 
+                                                               (C_236:
+                                                               (bw_compl 
+                                                                (integer_of_int32 !y))))))))))))) in
       void);
       try
        (let jessie_<somenum> =
@@ -5700,33 +5699,33 @@ let snoob4_safety =
                                                 (JC_<somenum>:
                                                 (int32_of_integer_ (C_241:
                                                                    ((bw_and 
-                                                                    (integer_of_int32 !mutable_x_2)) (1)))))))) (0))
+                                                                    (integer_of_int32 !mutable_x_7_0)) (1)))))))) (0))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void));
-               (mutable_x_2 := (C_244:
-                               (JC_<somenum>:
-                               (int32_of_integer_ (C_243:
-                                                  (JC_<somenum>:
-                                                  ((div_int_ (integer_of_int32 !mutable_x_2)) (2))))))));
-               !mutable_x_2 end) in void); (raise (Loop_continue_exc void))
+               (mutable_x_7_0 := (C_244:
+                                 (JC_<somenum>:
+                                 (int32_of_integer_ (C_243:
+                                                    (JC_<somenum>:
+                                                    ((div_int_ (integer_of_int32 !mutable_x_7_0)) (2))))))));
+               !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
             end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (let jessie_<somenum> =
-      (mutable_x_2 := (C_247:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_246:
-                                         (JC_<somenum>:
-                                         ((div_int_ (integer_of_int32 !mutable_x_2)) (2)))))))) in
+      (mutable_x_7_0 := (C_247:
+                        (JC_<somenum>:
+                        (int32_of_integer_ (C_246:
+                                           (JC_<somenum>:
+                                           ((div_int_ (integer_of_int32 !mutable_x_7_0)) (2)))))))) in
       void);
       (let jessie_<somenum> =
       (__retres_7 := (C_250:
                      (JC_<somenum>:
                      (int32_of_integer_ (C_249:
                                         ((bw_or (integer_of_int32 !y)) 
-                                         (integer_of_int32 !mutable_x_2))))))) in
+                                         (integer_of_int32 !mutable_x_7_0))))))) in
       void); (return := !__retres_7); (raise Return) end)))))); absurd  end
    with Return -> !return end)))
   { (JC_<somenum>:
@@ -5752,7 +5751,7 @@ let snoob4_safety =
                                 valid___string_Need_exactly_one_argument__an_integer_from_1_to_7___0(char_P___string_Need_exactly_one_argument__an_integer_from_1_to_7___4_alloc_table)))))))))) }
 
 let snoob_ensures_default =
- fun (x_5 : uint32) ->
+ fun (x_3 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5791,23 +5790,23 @@ let snoob_ensures_default =
        (let jessie_<somenum> =
        (smallest := (C_114:
                     (safe_uint32_of_integer_ (C_113:
-                                             ((bw_and (integer_of_uint32 x_5)) 
+                                             ((bw_and (integer_of_uint32 x_3)) 
                                               (integer_of_uint32 (C_112:
                                                                  (safe_uint32_of_integer_ 
                                                                   (C_111:
                                                                   (neg_int 
-                                                                   (integer_of_uint32 x_5))))))))))) in
+                                                                   (integer_of_uint32 x_3))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple := (C_117:
                  (safe_uint32_of_integer_ (C_116:
-                                          ((add_int (integer_of_uint32 x_5)) 
+                                          ((add_int (integer_of_uint32 x_3)) 
                                            (integer_of_uint32 !smallest)))))) in
       void);
       (let jessie_<somenum> =
       (ones := (C_120:
                (safe_uint32_of_integer_ (C_119:
-                                        ((bw_xor (integer_of_uint32 x_5)) 
+                                        ((bw_xor (integer_of_uint32 x_3)) 
                                          (integer_of_uint32 !ripple)))))) in
       void);
       (let jessie_<somenum> =
@@ -5831,7 +5830,7 @@ let snoob_ensures_default =
    end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let snoob_safety =
- fun (x_5 : uint32) ->
+ fun (x_3 : uint32) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -5871,26 +5870,26 @@ let snoob_safety =
        (smallest := (C_114:
                     (JC_<somenum>:
                     (uint32_of_integer_ (C_113:
-                                        ((bw_and (integer_of_uint32 x_5)) 
+                                        ((bw_and (integer_of_uint32 x_3)) 
                                          (integer_of_uint32 (C_112:
                                                             (JC_<somenum>:
                                                             (uint32_of_integer_ 
                                                              (C_111:
                                                              (neg_int 
-                                                              (integer_of_uint32 x_5))))))))))))) in
+                                                              (integer_of_uint32 x_3))))))))))))) in
        void);
       (let jessie_<somenum> =
       (ripple := (C_117:
                  (JC_<somenum>:
                  (uint32_of_integer_ (C_116:
-                                     ((add_int (integer_of_uint32 x_5)) 
+                                     ((add_int (integer_of_uint32 x_3)) 
                                       (integer_of_uint32 !smallest))))))) in
       void);
       (let jessie_<somenum> =
       (ones := (C_120:
                (JC_<somenum>:
                (uint32_of_integer_ (C_119:
-                                   ((bw_xor (integer_of_uint32 x_5)) 
+                                   ((bw_xor (integer_of_uint32 x_3)) 
                                     (integer_of_uint32 !ripple))))))) in
       void);
       (let jessie_<somenum> =
@@ -6020,11 +6019,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po352.why">
-      <location file = "why/hd_snoob.why" line = "4831" begin = "45" end = "46"/>
+      <location file = "why/hd_snoob.why" line = "4830" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po353.why">
-      <location file = "why/hd_snoob.why" line = "4831" begin = "45" end = "46"/>
+      <location file = "why/hd_snoob.why" line = "4830" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po354.why">

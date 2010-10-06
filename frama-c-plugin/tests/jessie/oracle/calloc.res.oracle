@@ -413,12 +413,12 @@ behavior default:
   ensures (C_13 : (\result == strlen{Here}(\at(s,Old))));
 ;
 
-char_P[..] calloc(uint32 nmemb, uint32 size_0)
+char_P[..] calloc(uint32 nmemb, uint32 size)
 behavior default:
   assigns \nothing;
   ensures (C_15 : ((C_16 : (\offset_min(\result) <= 0)) &&
                     (C_17 : (\offset_max(\result) >=
-                              ((\at(size_0,Old) * \at(nmemb,Old)) - 1)))));
+                              ((\at(size,Old) * \at(nmemb,Old)) - 1)))));
 ;
 
 unit f(char_P[..] x)
@@ -1860,27 +1860,27 @@ parameter any_uint32 : unit -> { } uint32 { true }
 
 parameter calloc :
  nmemb:uint32 ->
-  size_0:uint32 ->
+  size:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
     { (JC_<somenum>:
       ((JC_<somenum>: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
       and (JC_<somenum>:
           ge_int(offset_max(char_P_result_25_alloc_table, result),
-          sub_int(mul_int(integer_of_uint32(size_0@),
+          sub_int(mul_int(integer_of_uint32(size@),
                   integer_of_uint32(nmemb@)),
           (1)))))) }
 
 parameter calloc_requires :
  nmemb:uint32 ->
-  size_0:uint32 ->
+  size:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
     { (JC_<somenum>:
       ((JC_<somenum>: le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
       and (JC_<somenum>:
           ge_int(offset_max(char_P_result_25_alloc_table, result),
-          sub_int(mul_int(integer_of_uint32(size_0@),
+          sub_int(mul_int(integer_of_uint32(size@),
                   integer_of_uint32(nmemb@)),
           (1)))))) }
 
