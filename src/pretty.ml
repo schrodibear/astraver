@@ -51,7 +51,10 @@ let push_decl ?(ergo=false) d =
 
 let iter = Encoding.iter
 
-let ident = Ident.print
+let ident fmt id = 
+  let s = Ident.string id in
+  let s = if s = "farray" then "why__farray" else s in (* Alt-ergo keyword *)
+  pp_print_string fmt s
 
 let type_vars = Hashtbl.create 17
 
@@ -98,18 +101,20 @@ let rec term fmt = function
       fprintf fmt "(%a - %a)" term t1 term t2
   | Tapp (id, [t1; t2], _) when id == t_mul_int || id == t_mul_real ->
       fprintf fmt "(%a * %a)" term t1 term t2
+(*
   | Tapp (id, [t1; t2], _) when id == t_div_int ->
       if !ergo then
-        fprintf fmt "(computer_div %a %a)" term t1 term t2
+        fprintf fmt "computer_div(%a,%a)" term t1 term t2
       else
         fprintf fmt "(%a / %a)" term t1 term t2
-  | Tapp (id, [t1; t2], _) when id == t_div_real ->
-      fprintf fmt "(%a / %a)" term t1 term t2
+*)
+(*
   | Tapp (id, [t1; t2], _) when id == t_mod_int ->
       if !ergo then
-        fprintf fmt "(computer_mod %a %a)" term t1 term t2
+        fprintf fmt "computer_mod(%a,%a)" term t1 term t2
       else
         fprintf fmt "(%a %% %a)" term t1 term t2
+*)
   | Tapp (id, [t1], _) when id == t_neg_int || id == t_neg_real ->
       fprintf fmt "(-%a)" term t1
   | Tapp (id, tl, _) -> 

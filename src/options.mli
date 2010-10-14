@@ -93,7 +93,9 @@ val prune_context : bool
 val prune_get_depths : bool
 val pruning_hyp_considere_arith_comparison_as_special_predicate : bool
 (* FIN de Heuristiques en test *)
+(*
 val modulo : bool
+*)
 
 val get_smtlib_v1: unit -> bool
 val set_smtlib_v1: bool -> unit

@@ -631,7 +631,7 @@ let logic_label lab =
     }
   in
   match lab with
-    | LogicLabel s -> label_name s
+    | LogicLabel(_,s) -> label_name s
     | StmtLabel sref ->
         let labels = filter_out is_case_label !sref.labels in
         assert (not (labels = []));

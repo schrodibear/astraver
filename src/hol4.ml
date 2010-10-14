@@ -104,8 +104,10 @@ let prefix_id id =
   else if id == t_add_int then "int_add"
   else if id == t_sub_int then "int_sub"
   else if id == t_mul_int then "int_mul"
+(*
   else if id == t_div_int then assert false (* TODO *)
   else if id == t_mod_int then assert false (* TODO *)
+*)
   else if id == t_neg_int then "int_neg"
   (* real ops *)
   else if id == t_add_real then "real_add"

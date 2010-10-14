@@ -564,38 +564,42 @@ axiom char_P_tags :
 goal div2_1 :
  (forall i_10:int32.
   (le_int((0), integer_of_int32(i_10)) ->
-   (le_int((0), div_int(integer_of_int32(i_10), (2)))
-   and le_int(div_int(integer_of_int32(i_10), (2)), integer_of_int32(i_10)))))
+   (le_int((0), computer_div(integer_of_int32(i_10), (2)))
+   and le_int(computer_div(integer_of_int32(i_10), (2)),
+       integer_of_int32(i_10)))))
 
 axiom div2_1_as_axiom :
  (forall i_10:int32.
   (le_int((0), integer_of_int32(i_10)) ->
-   (le_int((0), div_int(integer_of_int32(i_10), (2)))
-   and le_int(div_int(integer_of_int32(i_10), (2)), integer_of_int32(i_10)))))
+   (le_int((0), computer_div(integer_of_int32(i_10), (2)))
+   and le_int(computer_div(integer_of_int32(i_10), (2)),
+       integer_of_int32(i_10)))))
 
 goal div2_2 :
  (forall i_11:int32.
   (lt_int((0), integer_of_int32(i_11)) ->
-   (le_int((0), div_int(integer_of_int32(i_11), (2)))
-   and lt_int(div_int(integer_of_int32(i_11), (2)), integer_of_int32(i_11)))))
+   (le_int((0), computer_div(integer_of_int32(i_11), (2)))
+   and lt_int(computer_div(integer_of_int32(i_11), (2)),
+       integer_of_int32(i_11)))))
 
 axiom div2_2_as_axiom :
  (forall i_11:int32.
   (lt_int((0), integer_of_int32(i_11)) ->
-   (le_int((0), div_int(integer_of_int32(i_11), (2)))
-   and lt_int(div_int(integer_of_int32(i_11), (2)), integer_of_int32(i_11)))))
+   (le_int((0), computer_div(integer_of_int32(i_11), (2)))
+   and lt_int(computer_div(integer_of_int32(i_11), (2)),
+       integer_of_int32(i_11)))))
 
 goal div2_3 :
  (forall i_12:int32.
   (le_int((0), integer_of_int32(i_12)) ->
    lt_int(sub_int(integer_of_int32(i_12), (1)),
-   add_int(mul_int((2), div_int(integer_of_int32(i_12), (2))), (1)))))
+   add_int(mul_int((2), computer_div(integer_of_int32(i_12), (2))), (1)))))
 
 axiom div2_3_as_axiom :
  (forall i_12:int32.
   (le_int((0), integer_of_int32(i_12)) ->
    lt_int(sub_int(integer_of_int32(i_12), (1)),
-   add_int(mul_int((2), div_int(integer_of_int32(i_12), (2))), (1)))))
+   add_int(mul_int((2), computer_div(integer_of_int32(i_12), (2))), (1)))))
 
 goal div2_4 :
  (forall i_13:int32.
@@ -603,7 +607,7 @@ goal div2_4 :
    (le_int((0), integer_of_int32(i_13)) ->
     (le_int((0), integer_of_int32(k_0)) ->
      (neq_int(integer_of_int32(k_0),
-      div_int(sub_int(integer_of_int32(i_13), (1)), (2))) ->
+      computer_div(sub_int(integer_of_int32(i_13), (1)), (2))) ->
       neq_int(add_int(mul_int((2), integer_of_int32(k_0)), (1)),
       integer_of_int32(i_13)))))))
 
@@ -613,7 +617,7 @@ axiom div2_4_as_axiom :
    (le_int((0), integer_of_int32(i_13)) ->
     (le_int((0), integer_of_int32(k_0)) ->
      (neq_int(integer_of_int32(k_0),
-      div_int(sub_int(integer_of_int32(i_13), (1)), (2))) ->
+      computer_div(sub_int(integer_of_int32(i_13), (1)), (2))) ->
       neq_int(add_int(mul_int((2), integer_of_int32(k_0)), (1)),
       integer_of_int32(i_13)))))))
 
@@ -623,7 +627,7 @@ goal div2_5 :
    (le_int((0), integer_of_int32(i_14)) ->
     (le_int((0), integer_of_int32(k_1)) ->
      (neq_int(integer_of_int32(k_1),
-      div_int(sub_int(integer_of_int32(i_14), (1)), (2))) ->
+      computer_div(sub_int(integer_of_int32(i_14), (1)), (2))) ->
       neq_int(add_int(mul_int((2), integer_of_int32(k_1)), (2)),
       integer_of_int32(i_14)))))))
 
@@ -633,7 +637,7 @@ axiom div2_5_as_axiom :
    (le_int((0), integer_of_int32(i_14)) ->
     (le_int((0), integer_of_int32(k_1)) ->
      (neq_int(integer_of_int32(k_1),
-      div_int(sub_int(integer_of_int32(i_14), (1)), (2))) ->
+      computer_div(sub_int(integer_of_int32(i_14), (1)), (2))) ->
       neq_int(add_int(mul_int((2), integer_of_int32(k_1)), (2)),
       integer_of_int32(i_14)))))))
 
@@ -1131,7 +1135,7 @@ let heapsort_ensures_default =
        (i_0_0 := (C_55:
                  (safe_uint32_of_integer_ (C_54:
                                           (JC_<somenum>:
-                                          ((div_int (integer_of_uint32 n)) (2))))))) in
+                                          ((computer_div (integer_of_uint32 n)) (2))))))) in
        void);
        try
         (let jessie_<somenum> =
@@ -1318,7 +1322,7 @@ let heapsort_safety =
                  (JC_<somenum>:
                  (uint32_of_integer_ (C_54:
                                      (JC_<somenum>:
-                                     ((div_int_ (integer_of_uint32 n)) (2)))))))) in
+                                     ((computer_div_ (integer_of_uint32 n)) (2)))))))) in
        void);
        try
         (let jessie_<somenum> =
@@ -1532,15 +1536,14 @@ let sift_down_ensures_default =
                                 integer_of_uint32(high), int_P_int_M_a_0_5)))
                               and (JC_<somenum>:
                                   (le_int(integer_of_uint32(low),
-                                   div_int(sub_int(integer_of_uint32(i_15),
-                                           (1)),
+                                   computer_div(sub_int(integer_of_uint32(i_15),
+                                                (1)),
                                    (2))) ->
                                    ge_int(integer_of_int32(select(int_P_int_M_a_0_5,
                                                            shift(a_0_0,
-                                                           div_int(sub_int(
-                                                                   integer_of_uint32(i_15),
-                                                                   (1)),
-                                                           (2))))),
+                                                           computer_div(
+                                                           sub_int(integer_of_uint32(i_15),
+                                                           (1)), (2))))),
                                    integer_of_int32(v_0))))))))))
              and ((JC_<somenum>:
                   not_assigns(int_P_a_0_5_alloc_table@loop_2,
@@ -1711,12 +1714,12 @@ let sift_down_safety =
                                   integer_of_uint32(high), int_P_int_M_a_0_5)))
                                 and (JC_<somenum>:
                                     (le_int(integer_of_uint32(low),
-                                     div_int(sub_int(integer_of_uint32(i_15),
-                                             (1)),
+                                     computer_div(sub_int(integer_of_uint32(i_15),
+                                                  (1)),
                                      (2))) ->
                                      ge_int(integer_of_int32(select(int_P_int_M_a_0_5,
                                                              shift(a_0_0,
-                                                             div_int(
+                                                             computer_div(
                                                              sub_int(
                                                              integer_of_uint32(i_15),
                                                              (1)), (2))))),
@@ -2196,11 +2199,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "976" begin = "20" end = "54"/>
+      <location file = "why/heapsort.why" line = "980" begin = "20" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "976" begin = "20" end = "54"/>
+      <location file = "why/heapsort.why" line = "980" begin = "20" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2289,11 +2292,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "1043" begin = "20" end = "55"/>
+      <location file = "why/heapsort.why" line = "1047" begin = "20" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "1043" begin = "20" end = "55"/>
+      <location file = "why/heapsort.why" line = "1047" begin = "20" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2414,10 +2417,6 @@ logic add_int : int, int -> int
 logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
 
 logic neg_int : int -> int
 
@@ -2677,6 +2676,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 
@@ -3447,35 +3486,36 @@ axiom char_P_tags:
 axiom div2_1_as_axiom:
   (forall i_10:int32.
     ((0 <= integer_of_int32(i_10)) ->
-     ((0 <= (integer_of_int32(i_10) / 2)) and
-      ((integer_of_int32(i_10) / 2) <= integer_of_int32(i_10)))))
+     ((0 <= computer_div(integer_of_int32(i_10), 2)) and
+      (computer_div(integer_of_int32(i_10), 2) <= integer_of_int32(i_10)))))
 
 axiom div2_2_as_axiom:
   (forall i_11:int32.
     ((0 < integer_of_int32(i_11)) ->
-     ((0 <= (integer_of_int32(i_11) / 2)) and
-      ((integer_of_int32(i_11) / 2) < integer_of_int32(i_11)))))
+     ((0 <= computer_div(integer_of_int32(i_11), 2)) and
+      (computer_div(integer_of_int32(i_11), 2) < integer_of_int32(i_11)))))
 
 axiom div2_3_as_axiom:
   (forall i_12:int32.
     ((0 <= integer_of_int32(i_12)) ->
-     ((integer_of_int32(i_12) - 1) < ((2 * (integer_of_int32(i_12) / 2)) + 1))))
+     ((integer_of_int32(i_12) - 1) < ((2 * computer_div(integer_of_int32(i_12),
+     2)) + 1))))
 
 axiom div2_4_as_axiom:
   (forall i_13:int32.
     (forall k_0:int32.
       ((0 <= integer_of_int32(i_13)) ->
        ((0 <= integer_of_int32(k_0)) ->
-        ((integer_of_int32(k_0) <> ((integer_of_int32(i_13) - 1) / 2)) ->
-         (((2 * integer_of_int32(k_0)) + 1) <> integer_of_int32(i_13)))))))
+        ((integer_of_int32(k_0) <> computer_div((integer_of_int32(i_13) - 1),
+         2)) -> (((2 * integer_of_int32(k_0)) + 1) <> integer_of_int32(i_13)))))))
 
 axiom div2_5_as_axiom:
   (forall i_14:int32.
     (forall k_1:int32.
       ((0 <= integer_of_int32(i_14)) ->
        ((0 <= integer_of_int32(k_1)) ->
-        ((integer_of_int32(k_1) <> ((integer_of_int32(i_14) - 1) / 2)) ->
-         (((2 * integer_of_int32(k_1)) + 2) <> integer_of_int32(i_14)))))))
+        ((integer_of_int32(k_1) <> computer_div((integer_of_int32(i_14) - 1),
+         2)) -> (((2 * integer_of_int32(k_1)) + 2) <> integer_of_int32(i_14)))))))
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))

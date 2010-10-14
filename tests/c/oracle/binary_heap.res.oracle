@@ -15,4 +15,4 @@ int extract_min(heap u);
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/binary_heap.c"
 tests/c/binary_heap.c:6:[kernel] user error: syntax error
 [kernel] user error: skipping file "tests/c/binary_heap.c" that has errors.
-[kernel] Frama-C aborted because of an invalid user input.
+[kernel] Frama-C aborted because of invalid user input.

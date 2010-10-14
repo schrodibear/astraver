@@ -179,7 +179,7 @@ byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.
 
 .PHONY: check
 
-WHYLIBS=lib/why/bool.why lib/why/integer.why \
+WHYLIBS=lib/why/bool.why lib/why/integer.why lib/why/divisions.why \
 	lib/why/real.why lib/why/arrays.why \
 	lib/why/jessie.why lib/why/jessie_bitvectors.why \
 	lib/why/mybag.why \
@@ -825,6 +825,8 @@ install-lib: $(JCLIB)
 	cd lib; cp -rf javacard_api $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/why/images
 	cp -f lib/images/*.png $(LIBDIR)/why/images
+	mkdir -p $(LIBDIR)/why/emacs
+	cp -f lib/emacs/why.el $(LIBDIR)/why/emacs
 #	remove CVS directories
 	find $(LIBDIR) -name CVS | xargs $(RM) -r
 
@@ -1069,8 +1071,9 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	tests/regtest.sh \
 	tests/java/*.java tests/java/coq/*.v \
 	tests/java/result/README tests/java/oracle/*.oracle \
-	tests/c/*.c tests/c/coq/*.v \
+	tests/c/*.c tests/c/*/coq/*.v \
 	tests/c/result/README tests/c/oracle/*.oracle \
+	lib/emacs/why.el \
 	lib/coq*/*.v \
 	lib/pvs/pvscontext.el lib/pvs/*.pvs lib/pvs/*.prf \
 	lib/mizar/why.miz lib/mizar/dict/why.voc \

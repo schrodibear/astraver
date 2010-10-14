@@ -371,7 +371,7 @@ class replaceStringConstants =
     let p = Pand(predicate v.vdecl pstring,predicate v.vdecl psize) in
     let globinv =
       Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
-    globinv.l_labels <- [ LogicLabel "Here" ];
+    globinv.l_labels <- [ LogicLabel (None, "Here") ];
     globinv.l_body <- LBpred (predicate v.vdecl p);
     attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
     attach_global (GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl));

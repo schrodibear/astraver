@@ -4529,7 +4529,7 @@ let div0_safe_ensures_default =
            (__retres_2 := (C_16:
                           (safe_int32_of_integer_ (C_15:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_int32 x_0)) 
+                                                  ((computer_div (integer_of_int32 x_0)) 
                                                    (integer_of_int32 y))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -4565,7 +4565,7 @@ let div0_safe_pos_ensures_default =
            (__retres_3 := (C_22:
                           (safe_int32_of_integer_ (C_21:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_int32 x_0_0)) 
+                                                  ((computer_div (integer_of_int32 x_0_0)) 
                                                    (integer_of_int32 y_0))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -4602,7 +4602,7 @@ let div0_safe_pos_safety =
                           (JC_<somenum>:
                           (int32_of_integer_ (C_21:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_int32 x_0_0)) 
+                                             ((computer_div_ (integer_of_int32 x_0_0)) 
                                               (integer_of_int32 y_0)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -4642,7 +4642,7 @@ let div0_safe_safety =
                           (JC_<somenum>:
                           (int32_of_integer_ (C_15:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_int32 x_0)) 
+                                             ((computer_div_ (integer_of_int32 x_0)) 
                                               (integer_of_int32 y)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -4670,7 +4670,7 @@ let div0_unsafe_ensures_default =
        (__retres_0 := (C_6:
                       (safe_int32_of_integer_ (C_5:
                                               (JC_<somenum>:
-                                              ((div_int (integer_of_int32 x_1)) 
+                                              ((computer_div (integer_of_int32 x_1)) 
                                                (integer_of_int32 y_1))))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
@@ -4692,7 +4692,7 @@ let div0_unsafe_pos_ensures_default =
        (__retres_1 := (C_11:
                       (safe_int32_of_integer_ (C_10:
                                               (JC_<somenum>:
-                                              ((div_int (integer_of_int32 x_2)) 
+                                              ((computer_div (integer_of_int32 x_2)) 
                                                (integer_of_int32 y_2))))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
@@ -4715,7 +4715,7 @@ let div0_unsafe_pos_safety =
                       (JC_<somenum>:
                       (int32_of_integer_ (C_10:
                                          (JC_<somenum>:
-                                         ((div_int_ (integer_of_int32 x_2)) 
+                                         ((computer_div_ (integer_of_int32 x_2)) 
                                           (integer_of_int32 y_2)))))))) in
        void); (return := !__retres_1); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -4741,7 +4741,7 @@ let div0_unsafe_safety =
                       (JC_<somenum>:
                       (int32_of_integer_ (C_5:
                                          (JC_<somenum>:
-                                         ((div_int_ (integer_of_int32 x_1)) 
+                                         ((computer_div_ (integer_of_int32 x_1)) 
                                           (integer_of_int32 y_1)))))))) in
        void); (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -4765,7 +4765,7 @@ let div0_wrong_ensures_default =
        (__retres := (C_2:
                     (safe_int32_of_integer_ (C_1:
                                             (JC_<somenum>:
-                                            ((div_int (integer_of_int32 x_3)) (0))))))) in
+                                            ((computer_div (integer_of_int32 x_3)) (0))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -4786,7 +4786,7 @@ let div0_wrong_safety =
                     (JC_<somenum>:
                     (int32_of_integer_ (C_1:
                                        (JC_<somenum>:
-                                       ((div_int_ (integer_of_int32 x_3)) (0)))))))) in
+                                       ((computer_div_ (integer_of_int32 x_3)) (0)))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
@@ -5091,7 +5091,7 @@ let mod0_safe_ensures_default =
            (__retres_9 := (C_52:
                           (safe_int32_of_integer_ (C_51:
                                                   (JC_<somenum>:
-                                                  ((mod_int (integer_of_int32 x_7)) 
+                                                  ((computer_mod (integer_of_int32 x_7)) 
                                                    (integer_of_int32 y_4))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -5128,7 +5128,7 @@ let mod0_safe_safety =
                           (JC_<somenum>:
                           (int32_of_integer_ (C_51:
                                              (JC_<somenum>:
-                                             ((mod_int_ (integer_of_int32 x_7)) 
+                                             ((computer_mod_ (integer_of_int32 x_7)) 
                                               (integer_of_int32 y_4)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -5156,7 +5156,7 @@ let mod0_unsafe_ensures_default =
        (__retres_8 := (C_47:
                       (safe_int32_of_integer_ (C_46:
                                               (JC_<somenum>:
-                                              ((mod_int (integer_of_int32 x_8)) 
+                                              ((computer_mod (integer_of_int32 x_8)) 
                                                (integer_of_int32 y_5))))))) in
        void); (return := !__retres_8); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
@@ -5179,7 +5179,7 @@ let mod0_unsafe_safety =
                       (JC_<somenum>:
                       (int32_of_integer_ (C_46:
                                          (JC_<somenum>:
-                                         ((mod_int_ (integer_of_int32 x_8)) 
+                                         ((computer_mod_ (integer_of_int32 x_8)) 
                                           (integer_of_int32 y_5)))))))) in
        void); (return := !__retres_8); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -5203,7 +5203,7 @@ let mod0_wrong_ensures_default =
        (__retres_7 := (C_43:
                       (safe_int32_of_integer_ (C_42:
                                               (JC_<somenum>:
-                                              ((mod_int (integer_of_int32 x_9)) (0))))))) in
+                                              ((computer_mod (integer_of_int32 x_9)) (0))))))) in
        void); (return := !__retres_7); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -5224,7 +5224,7 @@ let mod0_wrong_safety =
                       (JC_<somenum>:
                       (int32_of_integer_ (C_42:
                                          (JC_<somenum>:
-                                         ((mod_int_ (integer_of_int32 x_9)) (0)))))))) in
+                                         ((computer_mod_ (integer_of_int32 x_9)) (0)))))))) in
        void); (return := !__retres_7); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
@@ -7104,7 +7104,7 @@ let shift_right_signed_wrong_2_ensures_default =
         (__retres_19 := (C_121:
                         (safe_int32_of_integer_ (C_120:
                                                 (JC_<somenum>:
-                                                ((div_int (integer_of_int32 x_31)) (4294967296)))))));
+                                                ((computer_div (integer_of_int32 x_31)) (4294967296)))))));
         !__retres_19 end) in void); (return := !__retres_19); (raise Return)
      end); absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7127,7 +7127,7 @@ let shift_right_signed_wrong_2_safety =
                         (JC_<somenum>:
                         (int32_of_integer_ (C_120:
                                            (JC_<somenum>:
-                                           ((div_int_ (integer_of_int32 x_31)) (4294967296))))))));
+                                           ((computer_div_ (integer_of_int32 x_31)) (4294967296))))))));
         !__retres_19 end) in void); (return := !__retres_19); (raise Return)
      end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -7281,7 +7281,7 @@ let shift_right_unsigned_wrong_ensures_default =
         (__retres_22 := (C_142:
                         (safe_uint32_of_integer_ (C_141:
                                                  (JC_<somenum>:
-                                                 ((div_int (integer_of_uint32 x_34)) (4294967296)))))));
+                                                 ((computer_div (integer_of_uint32 x_34)) (4294967296)))))));
         !__retres_22 end) in void); (return := !__retres_22); (raise Return)
      end); absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7304,7 +7304,7 @@ let shift_right_unsigned_wrong_safety =
                         (JC_<somenum>:
                         (uint32_of_integer_ (C_141:
                                             (JC_<somenum>:
-                                            ((div_int_ (integer_of_uint32 x_34)) (4294967296))))))));
+                                            ((computer_div_ (integer_of_uint32 x_34)) (4294967296))))))));
         !__retres_22 end) in void); (return := !__retres_22); (raise Return)
      end); absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -7610,7 +7610,7 @@ let udiv0_safe_ensures_default =
            (__retres_6 := (C_37:
                           (safe_uint32_of_integer_ (C_36:
                                                    (JC_<somenum>:
-                                                   ((div_int (integer_of_uint32 x_38)) 
+                                                   ((computer_div (integer_of_uint32 x_38)) 
                                                     (integer_of_uint32 y_26))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -7647,7 +7647,7 @@ let udiv0_safe_safety =
                           (JC_<somenum>:
                           (uint32_of_integer_ (C_36:
                                               (JC_<somenum>:
-                                              ((div_int_ (integer_of_uint32 x_38)) 
+                                              ((computer_div_ (integer_of_uint32 x_38)) 
                                                (integer_of_uint32 y_26)))))))) in
            void); (raise (Return_label_exc void)) end) in void));
        (raise (Return_label_exc void)) end in void) with
@@ -7675,7 +7675,7 @@ let udiv0_unsafe_ensures_default =
        (__retres_5 := (C_32:
                       (safe_uint32_of_integer_ (C_31:
                                                (JC_<somenum>:
-                                               ((div_int (integer_of_uint32 x_39)) 
+                                               ((computer_div (integer_of_uint32 x_39)) 
                                                 (integer_of_uint32 y_27))))))) in
        void); (return := !__retres_5); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
@@ -7698,7 +7698,7 @@ let udiv0_unsafe_safety =
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_31:
                                           (JC_<somenum>:
-                                          ((div_int_ (integer_of_uint32 x_39)) 
+                                          ((computer_div_ (integer_of_uint32 x_39)) 
                                            (integer_of_uint32 y_27)))))))) in
        void); (return := !__retres_5); (raise Return) end)); absurd  end with
    Return -> !return end))
@@ -7722,7 +7722,7 @@ let udiv0_wrong_ensures_default =
        (__retres_4 := (C_28:
                       (safe_uint32_of_integer_ (C_27:
                                                (JC_<somenum>:
-                                               ((div_int (integer_of_uint32 x_40)) (0))))))) in
+                                               ((computer_div (integer_of_uint32 x_40)) (0))))))) in
        void); (return := !__retres_4); (raise Return) end)); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7743,7 +7743,7 @@ let udiv0_wrong_safety =
                       (JC_<somenum>:
                       (uint32_of_integer_ (C_27:
                                           (JC_<somenum>:
-                                          ((div_int_ (integer_of_uint32 x_40)) (0)))))))) in
+                                          ((computer_div_ (integer_of_uint32 x_40)) (0)))))))) in
        void); (return := !__retres_4); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
@@ -9136,10 +9136,6 @@ logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
 
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
-
 logic neg_int : int -> int
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
@@ -9398,6 +9394,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 

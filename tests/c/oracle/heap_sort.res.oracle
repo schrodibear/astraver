@@ -97,14 +97,15 @@ behavior default:
 ;
 
 unit heap_sort(int_P[..] arr, uint32 len)
-  requires (C_29 : (len >= 0));
+  requires (C_33 : (len >= 0));
   requires (C_30 : ((C_31 : (\offset_min(arr) <= 0)) &&
                      (C_32 : (\offset_max(arr) >= (len - 1)))));
 behavior default:
-  ensures (C_33 : (\forall integer i;
+  ensures (C_29 : (\forall integer i;
                     (\forall integer j;
-                      (((0 <= i) && ((i <= j) && (j < len))) ==>
-                        ((arr + i).int_M <= (arr + j).int_M)))));
+                      (((0 <= i) && ((i <= j) && (j < \at(len,Old)))) ==>
+                        ((\at(arr,Old) + i).int_M <=
+                          (\at(arr,Old) + j).int_M)))));
 {  
    (var uint32 i);
    
@@ -116,8 +117,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_7 : ((C_8 : (0 <= i)) && (C_9 : (i <= len))));
-         variant (C_10 : (len - i));
+           invariant (C_8 : ((C_9 : (0 <= i)) && (C_10 : (i <= len))));
+         variant (C_7 : (len - i));
          while (true)
          {  
             {  (if (i < len) then () else 
@@ -133,8 +134,8 @@ behavior default:
       {  
          loop 
          behavior default:
-           invariant (C_18 : ((C_19 : (0 <= i)) && (C_20 : (i <= len))));
-         variant (C_21 : (len - i));
+           invariant (C_19 : ((C_20 : (0 <= i)) && (C_21 : (i <= len))));
+         variant (C_18 : (len - i));
          while (true)
          {  
             {  (if (i < len) then () else 
@@ -212,63 +213,63 @@ end = 9
 
 [C_10]
 file = "HOME/tests/c/heap_sort.c"
-line = 14
-begin = 19
-end = 26
+line = 13
+begin = 26
+end = 34
 
 [C_11]
-file = "HOME/tests/c/heap_sort.c"
-line = 16
-begin = 28
-end = 34
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [C_12]
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 28
-end = 34
+begin = 37
+end = 43
 
 [C_13]
 file = "HOME/tests/c/heap_sort.c"
 line = 16
 begin = 28
-end = 34
+end = 44
 
 [C_14]
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [C_15]
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [C_16]
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [C_17]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 2
-end = 5
+begin = 11
+end = 12
 
 [C_18]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
-begin = 21
-end = 34
+line = 18
+begin = 19
+end = 26
 
 [C_19]
 file = "HOME/tests/c/heap_sort.c"
 line = 17
 begin = 21
-end = 27
+end = 34
 
 [heap_sort]
 name = "Function heap_sort"
@@ -298,98 +299,98 @@ end = -1
 [C_4]
 file = "HOME/tests/c/heap_sort.c"
 line = 12
-begin = 2
-end = 6
+begin = 11
+end = 22
 
 [C_20]
+file = "HOME/tests/c/heap_sort.c"
+line = 17
+begin = 21
+end = 27
+
+[C_5]
+file = "HOME/tests/c/heap_sort.c"
+line = 12
+begin = 11
+end = 22
+
+[C_21]
 file = "HOME/tests/c/heap_sort.c"
 line = 17
 begin = 26
 end = 34
 
-[C_5]
-file = "HOME/tests/c/heap_sort.c"
-line = 12
-begin = 2
-end = 6
-
-[C_21]
-file = "HOME/tests/c/heap_sort.c"
-line = 18
-begin = 19
-end = 26
-
 [C_6]
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 2
-end = 5
+begin = 11
+end = 12
 
 [C_22]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 28
-end = 31
+begin = 37
+end = 51
 
 [C_7]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
-begin = 21
-end = 34
+line = 14
+begin = 19
+end = 26
 
 [C_23]
-file = "HOME/tests/c/heap_sort.c"
-line = 20
-begin = 28
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [C_8]
 file = "HOME/tests/c/heap_sort.c"
 line = 13
 begin = 21
-end = 27
+end = 34
 
 [C_24]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 28
-end = 31
+begin = 37
+end = 51
 
 [C_9]
 file = "HOME/tests/c/heap_sort.c"
 line = 13
-begin = 26
-end = 34
+begin = 21
+end = 27
 
 [C_25]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 28
-end = 31
+begin = 37
+end = 51
 
 [C_26]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [C_27]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [C_28]
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [C_29]
 file = "HOME/tests/c/heap_sort.c"
-line = 5
-begin = 13
-end = 21
+line = 8
+begin = 12
+end = 71
 
 [C_30]
 file = "HOME/tests/c/heap_sort.c"
@@ -411,9 +412,9 @@ end = 38
 
 [C_33]
 file = "HOME/tests/c/heap_sort.c"
-line = 8
-begin = 12
-end = 71
+line = 5
+begin = 13
+end = 21
 
 [C_34]
 file = "HOME/tests/c/heap_sort.c"
@@ -467,7 +468,7 @@ end = 5
 file = "HOME/tests/c/heap_sort.c"
 line = 27
 begin = 2
-end = 11
+end = 18
 
 [C_43]
 file = "HOME/tests/c/heap_sort.c"
@@ -676,7 +677,7 @@ clean:
 [JC_90]
 kind = IndexBounds
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 121
+line = 122
 begin = 15
 end = 46
 
@@ -691,7 +692,7 @@ end = 9
 [JC_91]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 125
+line = 126
 begin = 14
 end = 33
 
@@ -765,8 +766,8 @@ end = 57
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
 line = 12
-begin = 2
-end = 6
+begin = 11
+end = 22
 
 [JC_98]
 file = "HOME/tests/c/heap_sort.c"
@@ -789,7 +790,7 @@ end = 15
 [JC_100]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 125
+line = 126
 begin = 14
 end = 33
 
@@ -926,13 +927,13 @@ end = 14
 
 [JC_50]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 78
+line = 79
 begin = 9
 end = 428
 
 [JC_51]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 78
+line = 79
 begin = 9
 end = 428
 
@@ -940,13 +941,13 @@ end = 428
 kind = PointerDeref
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 28
-end = 34
+begin = 37
+end = 43
 
 [JC_53]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 86
+line = 87
 begin = 23
 end = 67
 
@@ -954,8 +955,8 @@ end = 67
 kind = ArithOverflow
 file = "HOME/tests/c/heap_sort.c"
 line = 16
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [JC_55]
 file = "HOME/tests/c/heap_sort.c"
@@ -989,13 +990,13 @@ end = -1
 
 [JC_60]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 96
 begin = 9
 end = 509
 
 [JC_61]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 96
 begin = 9
 end = 509
 
@@ -1003,8 +1004,8 @@ end = 509
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 28
-end = 31
+begin = 37
+end = 51
 
 [JC_10]
 file = "HOME/"
@@ -1015,7 +1016,7 @@ end = -1
 [JC_63]
 kind = PointerDeref
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 103
+line = 104
 begin = 24
 end = 144
 
@@ -1029,8 +1030,8 @@ end = 11
 kind = ArithOverflow
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 2
-end = 5
+begin = 23
+end = 26
 
 [JC_12]
 file = "HOME/"
@@ -1054,8 +1055,8 @@ end = 11
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
 line = 12
-begin = 2
-end = 6
+begin = 11
+end = 22
 
 [JC_14]
 file = "HOME/"
@@ -1119,13 +1120,13 @@ end = -1
 
 [JC_71]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 78
+line = 79
 begin = 9
 end = 428
 
 [JC_72]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 78
+line = 79
 begin = 9
 end = 428
 
@@ -1138,7 +1139,7 @@ end = -1
 [JC_73]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 86
+line = 87
 begin = 23
 end = 67
 
@@ -1198,7 +1199,7 @@ end = -1
 
 [JC_78]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 96
 begin = 9
 end = 509
 
@@ -1210,7 +1211,7 @@ end = 18
 
 [JC_79]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 96
 begin = 9
 end = 509
 
@@ -1236,8 +1237,8 @@ end = -1
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
 line = 20
-begin = 28
-end = 31
+begin = 37
+end = 51
 
 [JC_81]
 file = "HOME/tests/c/heap_sort.c"
@@ -1849,9 +1850,9 @@ parameter heap_sort :
        (forall i:int.
         (forall j:int.
          ((le_int((0), i)
-          and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
-          le_int(integer_of_int32(select(int_P_int_M_arr_5, shift(arr, i))),
-          integer_of_int32(select(int_P_int_M_arr_5, shift(arr, j)))))))) }
+          and (le_int(i, j) and lt_int(j, integer_of_uint32(len@)))) ->
+          le_int(integer_of_int32(select(int_P_int_M_arr_5, shift(arr@, i))),
+          integer_of_int32(select(int_P_int_M_arr_5, shift(arr@, j)))))))) }
 
 parameter heap_sort_requires :
  arr:int_P pointer ->
@@ -1869,9 +1870,9 @@ parameter heap_sort_requires :
        (forall i:int.
         (forall j:int.
          ((le_int((0), i)
-          and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
-          le_int(integer_of_int32(select(int_P_int_M_arr_5, shift(arr, i))),
-          integer_of_int32(select(int_P_int_M_arr_5, shift(arr, j)))))))) }
+          and (le_int(i, j) and lt_int(j, integer_of_uint32(len@)))) ->
+          le_int(integer_of_int32(select(int_P_int_M_arr_5, shift(arr@, i))),
+          integer_of_int32(select(int_P_int_M_arr_5, shift(arr@, j)))))))) }
 
 parameter insert :
  u_0:Heap pointer ->
@@ -2030,9 +2031,9 @@ let heap_sort_ensures_default =
     (forall i:int.
      (forall j:int.
       ((le_int((0), i)
-       and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
-       le_int(integer_of_int32(select(int_P_int_M_arr_5, shift(arr, i))),
-       integer_of_int32(select(int_P_int_M_arr_5, shift(arr, j)))))))) }
+       and (le_int(i, j) and lt_int(j, integer_of_uint32(len@)))) ->
+       le_int(integer_of_int32(select(int_P_int_M_arr_5, shift(arr@, i))),
+       integer_of_int32(select(int_P_int_M_arr_5, shift(arr@, j)))))))) }
 
 let heap_sort_safety =
  fun (arr : int_P pointer) (len : uint32) (int_P_int_M_arr_5 : (int_P, int32) memory ref) (int_P_arr_5_alloc_table : int_P alloc_table) ->
@@ -2328,10 +2329,6 @@ logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
 
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
-
 logic neg_int : int -> int
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
@@ -2590,6 +2587,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 

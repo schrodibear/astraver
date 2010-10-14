@@ -37,4 +37,4 @@ void buildMaze(uint n) {
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/maze.c"
 tests/c/maze.c:3:[kernel] user error: syntax error
 [kernel] user error: skipping file "tests/c/maze.c" that has errors.
-[kernel] Frama-C aborted because of an invalid user input.
+[kernel] Frama-C aborted because of invalid user input.

@@ -152,8 +152,10 @@ let t_neg = create "%neg"
 let t_add_int = create "add_int"
 let t_sub_int = create "sub_int"
 let t_mul_int = create "mul_int"
+(*
 let t_div_int = create "div_int"
 let t_mod_int = create "mod_int"
+*)
 let t_neg_int = create "neg_int"
 let t_abs_int = create "abs_int"
 
@@ -326,8 +328,10 @@ let is_relation_ id =
   is_bool_comparison_ id || is_unit_comparison_ id
 
 let is_int_arith_binop id =
-  id == t_add_int || id == t_sub_int || id == t_mul_int || id == t_div_int ||
-  id == t_mod_int
+  id == t_add_int || id == t_sub_int || id == t_mul_int 
+(* disabled (confusion math_div / computer_div
+  || id == t_div_int || id == t_mod_int
+*)
 
 let is_real_arith_binop id =
   id == t_add_real || id == t_sub_real || id == t_mul_real || 

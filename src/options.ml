@@ -82,7 +82,9 @@ let prune_coarse_pred_comp_ = ref false
 let prune_get_depths_ = ref false
 let pruning_hyp_considere_arith_comparison_as_special_predicate_ = ref true
 (* FIN de Heuristiques en test *)
+(*
 let modulo_ = ref false
+*)
 let smtlib_v1_ = ref false
 
 let phantom_types = Hashtbl.create 17
@@ -303,10 +305,13 @@ Coq-specific options:
   --coq-fp-model <Module>
               sets the Coq model for floating-point arithmetic
 
+<<<<<<< .working
 SMT-lib-specific options:
   --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
   --smtlib-v1          uses SMT-lib 1.2 syntax (defaults is 2.0)
 
+=======
+>>>>>>> .merge-right.r4418
 Monoinst-specific options
   --monoinstworldgen <builtin|complete|goal|premises>
 
@@ -349,6 +354,13 @@ Misc options:
                  built-in name `integer' instead for integers
 ";
   flush stderr
+
+(*
+
+SMT-lib-specific options:
+  --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
+*)
+
 
 let files =
   let filesq = ref [] in
@@ -541,8 +553,10 @@ let files =
 	pruning_hyp_considere_arith_comparison_as_special_predicate_ := false ; parse args
 (* FIN de Heuristiques en test *)
 
+(*
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
+*)
     | ("-smtlib-v1" | "--smtlib-v1") :: args ->
         smtlib_v1_:=true; parse args
     | ("-exp" | "--exp") :: s :: args ->
@@ -657,7 +671,9 @@ let prune_coarse_pred_comp = !prune_coarse_pred_comp_
 let prune_get_depths = !prune_get_depths_
 let pruning_hyp_considere_arith_comparison_as_special_predicate= !pruning_hyp_considere_arith_comparison_as_special_predicate_
 (* FIN de Heuristiques en test *)
+(*
 let modulo = !modulo_
+*)
 
 let get_smtlib_v1 () = !smtlib_v1_
 let set_smtlib_v1 f = smtlib_v1_:=f

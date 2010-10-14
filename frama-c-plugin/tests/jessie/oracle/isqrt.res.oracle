@@ -1982,7 +1982,7 @@ let isqrt_ensures_default =
          (x1 := (C_11:
                 (safe_uint32_of_integer_ (C_10:
                                          (JC_<somenum>:
-                                         ((div_int (integer_of_uint32 !x1)) (65536)))))));
+                                         ((computer_div (integer_of_uint32 !x1)) (65536)))))));
          !x1 end)) in void) else void);
        (if ((gt_int_ (integer_of_uint32 !x1)) (255))
        then
@@ -1998,7 +1998,7 @@ let isqrt_ensures_default =
          (x1 := (C_17:
                 (safe_uint32_of_integer_ (C_16:
                                          (JC_<somenum>:
-                                         ((div_int (integer_of_uint32 !x1)) (256)))))));
+                                         ((computer_div (integer_of_uint32 !x1)) (256)))))));
          !x1 end)) in void) else void);
        (if ((gt_int_ (integer_of_uint32 !x1)) (15))
        then
@@ -2014,7 +2014,7 @@ let isqrt_ensures_default =
          (x1 := (C_23:
                 (safe_uint32_of_integer_ (C_22:
                                          (JC_<somenum>:
-                                         ((div_int (integer_of_uint32 !x1)) (16)))))));
+                                         ((computer_div (integer_of_uint32 !x1)) (16)))))));
          !x1 end)) in void) else void);
        (if ((gt_int_ (integer_of_uint32 !x1)) (3))
        then
@@ -2043,21 +2043,20 @@ let isqrt_ensures_default =
         (g1 := (C_41:
                (safe_int32_of_integer_ (C_40:
                                        (JC_<somenum>:
-                                       ((div_int (integer_of_uint32 (C_39:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_38:
-                                                                    ((add_int 
-                                                                    (integer_of_uint32 
-                                                                    (C_37:
-                                                                    (safe_uint32_of_integer_ 
+                                       ((computer_div (integer_of_uint32 
+                                                       (C_39:
+                                                       (safe_uint32_of_integer_ 
+                                                        (C_38:
+                                                        ((add_int (integer_of_uint32 
+                                                                   (C_37:
+                                                                   (safe_uint32_of_integer_ 
                                                                     (integer_of_int32 !g0))))) 
-                                                                    (integer_of_uint32 
-                                                                    (C_36:
-                                                                    (safe_uint32_of_integer_ 
-                                                                    (C_35:
-                                                                    ((lsr 
-                                                                    (integer_of_uint32 x_0)) 
-                                                                    (integer_of_int32 !s_33)))))))))))) (2)))))));
+                                                         (integer_of_uint32 
+                                                          (C_36:
+                                                          (safe_uint32_of_integer_ 
+                                                           (C_35:
+                                                           ((lsr (integer_of_uint32 x_0)) 
+                                                            (integer_of_int32 !s_33)))))))))))) (2)))))));
         !g1 end) in void);
        try
         (let jessie_<somenum> =
@@ -2082,26 +2081,26 @@ let isqrt_ensures_default =
                 (g1 := (C_51:
                        (safe_int32_of_integer_ (C_50:
                                                (JC_<somenum>:
-                                               ((div_int (integer_of_uint32 
-                                                          (C_49:
-                                                          (safe_uint32_of_integer_ 
-                                                           (C_48:
-                                                           ((add_int 
-                                                             (integer_of_uint32 
-                                                              (C_47:
-                                                              (safe_uint32_of_integer_ 
-                                                               (integer_of_int32 !g0))))) 
-                                                            (integer_of_uint32 
-                                                             (C_46:
-                                                             (safe_uint32_of_integer_ 
-                                                              (C_45:
-                                                              (JC_<somenum>:
-                                                              ((div_int 
-                                                                (integer_of_uint32 x_0)) 
-                                                               (integer_of_uint32 
-                                                                (C_44:
-                                                                (safe_uint32_of_integer_ 
-                                                                 (integer_of_int32 !g0)))))))))))))))) (2)))))));
+                                               ((computer_div (integer_of_uint32 
+                                                               (C_49:
+                                                               (safe_uint32_of_integer_ 
+                                                                (C_48:
+                                                                ((add_int 
+                                                                  (integer_of_uint32 
+                                                                   (C_47:
+                                                                   (safe_uint32_of_integer_ 
+                                                                    (integer_of_int32 !g0))))) 
+                                                                 (integer_of_uint32 
+                                                                  (C_46:
+                                                                  (safe_uint32_of_integer_ 
+                                                                   (C_45:
+                                                                   (JC_<somenum>:
+                                                                   ((computer_div 
+                                                                    (integer_of_uint32 x_0)) 
+                                                                    (integer_of_uint32 
+                                                                    (C_44:
+                                                                    (safe_uint32_of_integer_ 
+                                                                    (integer_of_int32 !g0)))))))))))))))) (2)))))));
                 !g1 end)) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
@@ -2162,7 +2161,7 @@ let isqrt_safety =
                 (JC_<somenum>:
                 (uint32_of_integer_ (C_10:
                                     (JC_<somenum>:
-                                    ((div_int_ (integer_of_uint32 !x1)) (65536))))))));
+                                    ((computer_div_ (integer_of_uint32 !x1)) (65536))))))));
          !x1 end)) in void) else void);
        (if ((gt_int_ (integer_of_uint32 !x1)) (255))
        then
@@ -2180,7 +2179,7 @@ let isqrt_safety =
                 (JC_<somenum>:
                 (uint32_of_integer_ (C_16:
                                     (JC_<somenum>:
-                                    ((div_int_ (integer_of_uint32 !x1)) (256))))))));
+                                    ((computer_div_ (integer_of_uint32 !x1)) (256))))))));
          !x1 end)) in void) else void);
        (if ((gt_int_ (integer_of_uint32 !x1)) (15))
        then
@@ -2198,7 +2197,7 @@ let isqrt_safety =
                 (JC_<somenum>:
                 (uint32_of_integer_ (C_22:
                                     (JC_<somenum>:
-                                    ((div_int_ (integer_of_uint32 !x1)) (16))))))));
+                                    ((computer_div_ (integer_of_uint32 !x1)) (16))))))));
          !x1 end)) in void) else void);
        (if ((gt_int_ (integer_of_uint32 !x1)) (3))
        then
@@ -2232,24 +2231,23 @@ let isqrt_safety =
                (JC_<somenum>:
                (int32_of_integer_ (C_40:
                                   (JC_<somenum>:
-                                  ((div_int_ (integer_of_uint32 (C_39:
-                                                                (JC_<somenum>:
-                                                                (uint32_of_integer_ 
-                                                                 (C_38:
-                                                                 ((add_int 
-                                                                   (integer_of_uint32 
-                                                                    (C_37:
-                                                                    (JC_<somenum>:
-                                                                    (uint32_of_integer_ 
-                                                                    (integer_of_int32 !g0)))))) 
-                                                                  (integer_of_uint32 
-                                                                   (C_36:
-                                                                   (JC_<somenum>:
-                                                                   (uint32_of_integer_ 
-                                                                    (C_35:
-                                                                    ((lsr 
-                                                                    (integer_of_uint32 x_0)) 
-                                                                    (integer_of_int32 !s_33)))))))))))))) (2))))))));
+                                  ((computer_div_ (integer_of_uint32 
+                                                   (C_39:
+                                                   (JC_<somenum>:
+                                                   (uint32_of_integer_ 
+                                                    (C_38:
+                                                    ((add_int (integer_of_uint32 
+                                                               (C_37:
+                                                               (JC_<somenum>:
+                                                               (uint32_of_integer_ 
+                                                                (integer_of_int32 !g0)))))) 
+                                                     (integer_of_uint32 
+                                                      (C_36:
+                                                      (JC_<somenum>:
+                                                      (uint32_of_integer_ 
+                                                       (C_35:
+                                                       ((lsr (integer_of_uint32 x_0)) 
+                                                        (integer_of_int32 !s_33)))))))))))))) (2))))))));
         !g1 end) in void);
        try
         (let jessie_<somenum> =
@@ -2275,29 +2273,30 @@ let isqrt_safety =
                        (JC_<somenum>:
                        (int32_of_integer_ (C_50:
                                           (JC_<somenum>:
-                                          ((div_int_ (integer_of_uint32 
-                                                      (C_49:
-                                                      (JC_<somenum>:
-                                                      (uint32_of_integer_ 
-                                                       (C_48:
-                                                       ((add_int (integer_of_uint32 
-                                                                  (C_47:
-                                                                  (JC_<somenum>:
-                                                                  (uint32_of_integer_ 
-                                                                   (integer_of_int32 !g0)))))) 
-                                                        (integer_of_uint32 
-                                                         (C_46:
-                                                         (JC_<somenum>:
-                                                         (uint32_of_integer_ 
-                                                          (C_45:
-                                                          (JC_<somenum>:
-                                                          ((div_int_ 
-                                                            (integer_of_uint32 x_0)) 
-                                                           (integer_of_uint32 
-                                                            (C_44:
-                                                            (JC_<somenum>:
-                                                            (uint32_of_integer_ 
-                                                             (integer_of_int32 !g0))))))))))))))))))) (2))))))));
+                                          ((computer_div_ (integer_of_uint32 
+                                                           (C_49:
+                                                           (JC_<somenum>:
+                                                           (uint32_of_integer_ 
+                                                            (C_48:
+                                                            ((add_int 
+                                                              (integer_of_uint32 
+                                                               (C_47:
+                                                               (JC_<somenum>:
+                                                               (uint32_of_integer_ 
+                                                                (integer_of_int32 !g0)))))) 
+                                                             (integer_of_uint32 
+                                                              (C_46:
+                                                              (JC_<somenum>:
+                                                              (uint32_of_integer_ 
+                                                               (C_45:
+                                                               (JC_<somenum>:
+                                                               ((computer_div_ 
+                                                                 (integer_of_uint32 x_0)) 
+                                                                (integer_of_uint32 
+                                                                 (C_44:
+                                                                 (JC_<somenum>:
+                                                                 (uint32_of_integer_ 
+                                                                  (integer_of_int32 !g0))))))))))))))))))) (2))))))));
                 !g1 end)) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
          (raise (Goto_while_0_break_exc void)) end in void) with
@@ -2546,11 +2545,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/isqrt_po50.why">
-      <location file = "why/isqrt.why" line = "1785" begin = "45" end = "46"/>
+      <location file = "why/isqrt.why" line = "1783" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/isqrt_po51.why">
-      <location file = "why/isqrt.why" line = "1785" begin = "45" end = "46"/>
+      <location file = "why/isqrt.why" line = "1783" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2599,10 +2598,6 @@ logic add_int : int, int -> int
 logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
 
 logic neg_int : int -> int
 
@@ -2862,6 +2857,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 

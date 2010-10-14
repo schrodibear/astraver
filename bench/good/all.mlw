@@ -1,4 +1,6 @@
 
+include "integer.why"
+include "divisions.why"
 include "arrays.why"
 
 (* Unitary (typing) tests *)
@@ -55,8 +57,12 @@ let ar2 = -1
 let ar3 = 1+1
 let ar4 = 1-1
 let ar5 = 1*1
-let ar6 = 1/1
-let ar7 = 1%1
+let ar6 = math_div 1 1
+let ar7 = math_mod 1 1
+let ar8 = computer_div 1 1
+let ar9 = computer_mod 1 1
+let ar10 = computer_div_ 1 1
+let ar11 = computer_mod_ 1 1
 
 (* assignements *)
 let a1 () = v4 := 1

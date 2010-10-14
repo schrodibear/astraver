@@ -93,10 +93,12 @@ let arith_kernel =
 	   Env.empty_scheme (Function ([PTint; PTint], PTint))))::
   (Dlogic (loc, Ident.t_mul_int,
 	   Env.empty_scheme (Function ([PTint; PTint], PTint))))::
+(*
   (Dlogic (loc, Ident.t_div_int,
 	   Env.empty_scheme (Function ([PTint; PTint], PTint))))::
   (Dlogic (loc, Ident.t_mod_int,
 	   Env.empty_scheme (Function ([PTint; PTint], PTint))))::
+*)
   (Dlogic (loc, Ident.t_neg_int,
 	   Env.empty_scheme (Function ([PTint], PTint))))::
   (Dlogic (loc, Ident.t_lt_int,

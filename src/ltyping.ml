@@ -150,8 +150,10 @@ let int_arith = function
   | PPadd -> t_add_int
   | PPsub -> t_sub_int
   | PPmul -> t_mul_int
+(* disabled (confusion math_div / computer_div)
   | PPdiv -> t_div_int
   | PPmod -> t_mod_int
+*)
   | _ -> assert false
 
 let real_arith = function

@@ -5,8 +5,14 @@ VO=$(ML:.mlw=_valid.vo)
 
 all: heap.vo Inftree.vo $(VO)
 
+gwhy: swap.mlw downheap.mlw heapsort.mlw $(WHYBIN)
+	gwhy-bin $^
+
 $(V): $(ML) $(WHY)
 	$(WHY) $(WHYOPTIONS) $(ML)
+
+heapsort_why.v: swap.mlw downheap.mlw heapsort.mlw $(WHYBIN)
+	$(WHY) --coq-v8 $^
 
 heapsort_why.sx: swap.mlw downheap.mlw heapsort.mlw $(WHYBIN)
 	$(WHY) --simplify $^

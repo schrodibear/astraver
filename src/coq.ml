@@ -100,8 +100,10 @@ let prefix_id id =
   else if id == t_add_int then "Zplus"
   else if id == t_sub_int then "Zminus"
   else if id == t_mul_int then "Zmult"
+(*
   else if id == t_div_int then "Zdiv"
   else if id == t_mod_int then "Zmod"
+*)
   else if id == t_neg_int then "Zopp"
   (* real ops *)
   else if id == t_add_real then "Rplus"
@@ -166,10 +168,12 @@ let print_term_v7 fmt t =
   and print2 fmt = function
     | Tapp (id, [a;b], _) when id == t_mul_int ->
 	openz fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closez fmt
+(*
     | Tapp (id, [a;b], _) when id == t_div_int ->
 	fprintf fmt "(@[Zdiv %a@ %a@])" print3 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "(@[Zmod %a@ %a@])" print3 a print3 b
+*)
     | t ->
 	print3 fmt t
   and print3 fmt = function
@@ -197,7 +201,11 @@ let print_term_v7 fmt t =
     | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [a; b; c], _) when id == if_then_else ->
-	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print0 a print0 b print0 c
+	(* was print0 instead of print3, was wrong because printed
+	     if_then_else (x < y) y-x x-y
+	   missing parentheses
+	*)
+	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print3 a print3 b print3 c
     | Tapp (id, tl, _) when id == t_zwf_zero ->
 	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
     | Tapp (id, tl, _) when is_relation id || is_arith id ->
@@ -459,10 +467,12 @@ let print_term_v8 fmt t =
   and print2 fmt = function
     | Tapp (id, [a;b], _) when id == t_mul_int ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
+(*
     | Tapp (id, [a;b], _) when id == t_div_int ->
 	fprintf fmt "(@[Zdiv %a@ %a@])" print3 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "(@[Zmod %a@ %a@])" print3 a print3 b
+*)
     | t ->
 	print3 fmt t
   and print3 fmt = function

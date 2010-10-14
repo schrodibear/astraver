@@ -112,8 +112,10 @@ let prefix_id id =
   else if id == t_add_int then "int_add"
   else if id == t_sub_int then "int_sub"
   else if id == t_mul_int then "int_mul"
+(*
   else if id == t_div_int then assert false (* TODO *)
   else if id == t_mod_int then assert false (* TODO *)
+*)
   else if id == t_neg_int then "int_neg"
   (* real ops *)
   else if id == t_add_real then "real_add"
@@ -142,10 +144,12 @@ let rec print_term fmt t =
   and print2 fmt = function
     | Tapp (id, [a; b], _) when id == t_mul_int || id == t_mul_real ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a; b], _) when id == t_div_int || id == t_div_real ->
+    | Tapp (id, [a; b], _) when (* id == t_div_int || *) id == t_div_real ->
 	fprintf fmt "%a /@ %a" print2 a print3 b
+(*
     | Tapp (id, [a; b], _) when id == t_mod_int ->
 	fprintf fmt "%a mod %a" print2 a print3 b
+*)
     | t -> 
 	print3 fmt t
   and print3 fmt = function

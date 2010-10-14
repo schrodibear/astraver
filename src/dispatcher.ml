@@ -171,7 +171,9 @@ let output_file ?encoding p (elems,o) =
 	let f = Filename.temp_file "gwhy" "_why.smt" in
 	Smtlib.output_file f; f
     | Ergo
-    | ErgoSelect
+    | ErgoSelect ->
+	let f = Filename.temp_file "gwhy" "_why.why" in
+	Pretty.output_file ~ergo:true f; f
     | SimplifySelect
     | GappaSelect ->
 	let f = Filename.temp_file "gwhy" "_why.why" in

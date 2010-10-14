@@ -80,8 +80,10 @@ let prefix id =
   else if id == t_add_int then "+"
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
+(*
   else if id == t_div_int then "int_div"
   else if id == t_mod_int then "int_mod"
+*)
   else if id == t_neg_int then assert false
   (* real ops *)
   else if id == t_add_real then "add_real"

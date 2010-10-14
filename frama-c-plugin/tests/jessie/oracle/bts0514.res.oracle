@@ -711,29 +711,29 @@ let interpolationSearch_ensures_default =
                (offset := (C_36:
                           (safe_int32_of_integer_ (C_35:
                                                   (JC_<somenum>:
-                                                  ((div_int (integer_of_int64 
-                                                             (C_34:
-                                                             (safe_int64_of_integer_ 
-                                                              (C_33:
-                                                              ((mul_int 
-                                                                (integer_of_int64 
-                                                                 (C_32:
-                                                                 (safe_int64_of_integer_ 
-                                                                  (C_31:
-                                                                  ((sub_int 
+                                                  ((computer_div (integer_of_int64 
+                                                                  (C_34:
+                                                                  (safe_int64_of_integer_ 
+                                                                   (C_33:
+                                                                   ((mul_int 
+                                                                    (integer_of_int64 
+                                                                    (C_32:
+                                                                    (safe_int64_of_integer_ 
+                                                                    (C_31:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !size_0)) (1))))))) 
-                                                               (integer_of_int64 
-                                                                (C_30:
-                                                                (safe_int64_of_integer_ 
-                                                                 (C_29:
-                                                                 ((sub_int 
-                                                                   (integer_of_int64 
+                                                                    (integer_of_int64 
+                                                                    (C_30:
+                                                                    (safe_int64_of_integer_ 
+                                                                    (C_29:
+                                                                    ((sub_int 
+                                                                    (integer_of_int64 
                                                                     (C_28:
                                                                     (safe_int64_of_integer_ 
                                                                     (integer_of_int32 key))))) 
-                                                                  (integer_of_int64 
-                                                                   (C_27:
-                                                                   (safe_int64_of_integer_ 
+                                                                    (integer_of_int64 
+                                                                    (C_27:
+                                                                    (safe_int64_of_integer_ 
                                                                     (integer_of_int32 !min))))))))))))))) 
                                                    (integer_of_int64 
                                                     (C_26:
@@ -955,34 +955,35 @@ let interpolationSearch_safety =
                           (JC_<somenum>:
                           (int32_of_integer_ (C_35:
                                              (JC_<somenum>:
-                                             ((div_int_ (integer_of_int64 
-                                                         (C_34:
-                                                         (JC_<somenum>:
-                                                         (int64_of_integer_ 
-                                                          (C_33:
-                                                          ((mul_int (integer_of_int64 
-                                                                    (C_32:
+                                             ((computer_div_ (integer_of_int64 
+                                                              (C_34:
+                                                              (JC_<somenum>:
+                                                              (int64_of_integer_ 
+                                                               (C_33:
+                                                               ((mul_int 
+                                                                 (integer_of_int64 
+                                                                  (C_32:
+                                                                  (JC_<somenum>:
+                                                                  (int64_of_integer_ 
+                                                                   (C_31:
+                                                                   ((sub_int 
+                                                                    (integer_of_int32 !size_0)) (1)))))))) 
+                                                                (integer_of_int64 
+                                                                 (C_30:
+                                                                 (JC_<somenum>:
+                                                                 (int64_of_integer_ 
+                                                                  (C_29:
+                                                                  ((sub_int 
+                                                                    (integer_of_int64 
+                                                                    (C_28:
                                                                     (JC_<somenum>:
                                                                     (int64_of_integer_ 
-                                                                    (C_31:
-                                                                    ((sub_int 
-                                                                    (integer_of_int32 !size_0)) (1)))))))) 
-                                                           (integer_of_int64 
-                                                            (C_30:
-                                                            (JC_<somenum>:
-                                                            (int64_of_integer_ 
-                                                             (C_29:
-                                                             ((sub_int 
-                                                               (integer_of_int64 
-                                                                (C_28:
-                                                                (JC_<somenum>:
-                                                                (int64_of_integer_ 
-                                                                 (integer_of_int32 key)))))) 
-                                                              (integer_of_int64 
-                                                               (C_27:
-                                                               (JC_<somenum>:
-                                                               (int64_of_integer_ 
-                                                                (integer_of_int32 !min)))))))))))))))))) 
+                                                                    (integer_of_int32 key)))))) 
+                                                                   (integer_of_int64 
+                                                                    (C_27:
+                                                                    (JC_<somenum>:
+                                                                    (int64_of_integer_ 
+                                                                    (integer_of_int32 !min)))))))))))))))))) 
                                               (integer_of_int64 (C_26:
                                                                 (JC_<somenum>:
                                                                 (int64_of_integer_ 
@@ -1236,7 +1237,7 @@ why --project [...] why/bts0514.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0514_po59.why">
-      <location file = "why/bts0514.why" line = "1016" begin = "16" end = "74"/>
+      <location file = "why/bts0514.why" line = "1017" begin = "16" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0514_po60.why">
@@ -1260,7 +1261,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0514_po64.why">
-      <location file = "why/bts0514.why" line = "1053" begin = "14" end = "57"/>
+      <location file = "why/bts0514.why" line = "1054" begin = "14" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1575,10 +1576,6 @@ logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
 
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
-
 logic neg_int : int -> int
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
@@ -1837,6 +1834,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 

@@ -317,7 +317,7 @@ let opt_variant m fmt = function
 
 let is_binop id = 
   id == t_add || id == t_sub || id == t_mul || id == t_div
-  || id == t_mod_int || id == t_eq || id == t_neq
+  (* || id == t_mod_int *) || id == t_eq || id == t_neq
   || id == t_lt || id == t_le || id == t_gt || id == t_ge
 
 let binop id = 
@@ -325,7 +325,9 @@ let binop id =
   else if id == t_sub then "-"
   else if id == t_mul then "*"
   else if id == t_div then "/"
+(*
   else if id == t_mod_int then "%"
+*)
   else if id == t_eq then "="
   else if id == t_neq then "<>"
   else if id == t_lt then "<"

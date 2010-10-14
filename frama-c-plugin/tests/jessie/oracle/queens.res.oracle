@@ -1485,7 +1485,8 @@ let t1_ensures_default =
                           (C_16: ((mul_int (C_15: ((add_int b_1) !d))) (2))) in
                           (let jessie_<somenum> =
                           (C_18:
-                          (JC_<somenum>: ((div_int (C_17: ((add_int c) !d))) (2)))) in
+                          (JC_<somenum>:
+                          ((computer_div (C_17: ((add_int c) !d))) (2)))) in
                           (JC_<somenum>: (((t1 jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
                   void); (f := (C_21: ((add_int !f) !tmp))); !f end)) in
                  void); (e := (C_23: ((sub_int !e) !d))); !e end)) in void);
@@ -1558,7 +1559,8 @@ let t1_safety =
                           (C_16: ((mul_int (C_15: ((add_int b_1) !d))) (2))) in
                           (let jessie_<somenum> =
                           (C_18:
-                          (JC_<somenum>: ((div_int_ (C_17: ((add_int c) !d))) (2)))) in
+                          (JC_<somenum>:
+                          ((computer_div_ (C_17: ((add_int c) !d))) (2)))) in
                           (JC_<somenum>:
                           (check
                           { zwf_zero((JC_<somenum> : card(iset(jessie_<somenum>))),
@@ -1730,7 +1732,7 @@ let t3_ensures_default =
                               (let jessie_<somenum> =
                               (C_69:
                               (JC_<somenum>:
-                              ((div_int (C_68: ((add_int c_0) !d_0))) (2)))) in
+                              ((computer_div (C_68: ((add_int c_0) !d_0))) (2)))) in
                               (JC_<somenum>:
                               (((t3 jessie_<somenum>) jessie_<somenum>) jessie_<somenum>))))))) in
                     void); (f_0 := (C_72: ((add_int !f_0) !tmp_0))); !f_0 end)) in
@@ -1909,7 +1911,7 @@ let t3_safety =
                               (let jessie_<somenum> =
                               (C_69:
                               (JC_<somenum>:
-                              ((div_int_ (C_68: ((add_int c_0) !d_0))) (2)))) in
+                              ((computer_div_ (C_68: ((add_int c_0) !d_0))) (2)))) in
                               (JC_<somenum>:
                               (check
                               { zwf_zero((JC_<somenum> : card(iset(jessie_<somenum>))),
@@ -2005,11 +2007,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1412" begin = "32" end = "136"/>
+      <location file = "why/queens.why" line = "1414" begin = "32" end = "136"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1412" begin = "32" end = "136"/>
+      <location file = "why/queens.why" line = "1414" begin = "32" end = "136"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2218,11 +2220,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1061" begin = "28" end = "124"/>
+      <location file = "why/queens.why" line = "1063" begin = "28" end = "124"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1061" begin = "28" end = "124"/>
+      <location file = "why/queens.why" line = "1063" begin = "28" end = "124"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po32.why">
@@ -2374,10 +2376,6 @@ logic add_int : int, int -> int
 logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
 
 logic neg_int : int -> int
 
@@ -2637,6 +2635,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 

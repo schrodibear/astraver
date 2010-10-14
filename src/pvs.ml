@@ -172,10 +172,12 @@ let print_term fmt t =
 	fprintf fmt "@[<hov 2>%a *@ %a@]" print2 a print3 b
     | Tapp (id, [a;b], _) when id == t_div_real ->
 	fprintf fmt "@[<hov 2>%a /@ %a@]" print2 a print3 b
+(*
     | Tapp (id, [a;b], _) when id == t_div_int ->
 	fprintf fmt "(@[div(%a,%a)@])" print0 a print0 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "(@[mod(%a,%a)@])" print0 a print0 b
+*)
     | t ->
 	print3 fmt t
   and print3 fmt = function

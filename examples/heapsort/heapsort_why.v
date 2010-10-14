@@ -263,11 +263,1401 @@ Proof.
 Save.
 
 
-(*Why axiom*) Lemma div2_1 :
-  (forall (n:Z), (0 < n -> 0 <= ((Zdiv n 2)) /\ ((Zdiv n 2)) < n)).
 Admitted.
 
-(*Why axiom*) Lemma div2_2 :
-  (forall (n:Z), (n - 1) <= (2 * ((Zdiv n 2))) /\ (2 * ((Zdiv n 2))) <= n).
 Admitted.
+
+(*Why logic*) Definition lt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition le_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition gt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition ge_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition eq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition neq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why axiom*) Lemma lt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((lt_int_bool x y) = true <-> x < y))).
+Admitted.
+
+(*Why axiom*) Lemma le_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((le_int_bool x y) = true <-> x <= y))).
+Admitted.
+
+(*Why axiom*) Lemma gt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((gt_int_bool x y) = true <-> x > y))).
+Admitted.
+
+(*Why axiom*) Lemma ge_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((ge_int_bool x y) = true <-> x >= y))).
+Admitted.
+
+(*Why axiom*) Lemma eq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((eq_int_bool x y) = true <-> x = y))).
+Admitted.
+
+(*Why axiom*) Lemma neq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((neq_int_bool x y) = true <-> x <> y))).
+Admitted.
+
+(*Why logic*) Definition abs_int : Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma abs_int_pos :
+  (forall (x:Z), (x >= 0 -> (abs_int x) = x)).
+Admitted.
+
+(*Why axiom*) Lemma abs_int_neg :
+  (forall (x:Z), (x <= 0 -> (abs_int x) = (Zopp x))).
+Admitted.
+
+(*Why logic*) Definition int_max : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition int_min : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma int_max_is_ge :
+  (forall (x:Z), (forall (y:Z), (int_max x y) >= x /\ (int_max x y) >= y)).
+Admitted.
+
+(*Why axiom*) Lemma int_max_is_some :
+  (forall (x:Z), (forall (y:Z), (int_max x y) = x \/ (int_max x y) = y)).
+Admitted.
+
+(*Why axiom*) Lemma int_min_is_le :
+  (forall (x:Z), (forall (y:Z), (int_min x y) <= x /\ (int_min x y) <= y)).
+Admitted.
+
+(*Why axiom*) Lemma int_min_is_some :
+  (forall (x:Z), (forall (y:Z), (int_min x y) = x \/ (int_min x y) = y)).
+Admitted.
+
+(*Why logic*) Definition computer_div : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition computer_mod : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition math_div : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition math_mod : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma math_div_mod :
+  (forall (x:Z),
+   (forall (y:Z), (y <> 0 -> x = (y * (math_div x y) + (math_mod x y))))).
+Admitted.
+
+(*Why axiom*) Lemma math_mod_bound :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> 0 <= (math_mod x y) /\ (math_mod x y) < (abs_int y)))).
+Admitted.
+
+(*Why axiom*) Lemma computer_div_mod :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> x = (y * (computer_div x y) + (computer_mod x y))))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_bound :
+  (forall (x:Z),
+   (forall (y:Z), (y <> 0 -> (abs_int (computer_mod x y)) < (abs_int y)))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_sign_pos :
+  (forall (x:Z),
+   (forall (y:Z), (x >= 0 /\ y <> 0 -> (computer_mod x y) >= 0))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_sign_neg :
+  (forall (x:Z),
+   (forall (y:Z), (x <= 0 /\ y <> 0 -> (computer_mod x y) <= 0))).
+Admitted.
+
+(*Why axiom*) Lemma computer_rounds_toward_zero :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> (abs_int ((computer_div x y) * y)) <= (abs_int x)))).
+Admitted.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_1 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  (-1) <= ((computer_div result 2) - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_2 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  ((computer_div result 2) - 1) <= ((array_length t) - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_3 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (i: Z),
+  forall (HW_3: ((computer_div result 2) - 1 + 1) <= i /\ i <=
+                ((array_length t) - 1)),
+  (heap t ((array_length t) - 1) i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_4 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  (permutation t t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 32, characters 8-43: *)
+(*Why goal*) Lemma heapsort_po_5 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  0 <= k.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 32, characters 8-43: *)
+(*Why goal*) Lemma heapsort_po_6 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  k <= (result0 - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 32, characters 8-43: *)
+(*Why goal*) Lemma heapsort_po_7 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  (result0 - 1) < (array_length t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 32, characters 8-43: *)
+(*Why goal*) Lemma heapsort_po_8 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (i: Z),
+  forall (HW_7: (k + 1) <= i /\ i <= (result0 - 1)),
+  (heap t0 (result0 - 1) i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_9 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_8: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+                (array_length t0) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= (result0 - 1) ->
+                  (heap t0 (result0 - 1) i)))),
+  forall (t1: (array Z)),
+  forall (HW_9: (permutation t1 t0) /\
+                (forall (i:Z),
+                 (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
+                (forall (i:Z),
+                 (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/
+                  (result0 - 1) < i /\ i < (array_length t1) ->
+                  (access t1 i) = (access t0 i))) /\
+                (forall (v:Z),
+                 ((inftree t0 (result0 - 1) v k) ->
+                  (inftree t1 (result0 - 1) v k)))),
+  forall (k0: Z),
+  forall (HW_10: k0 = (k - 1)),
+  (-1) <= k0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_10 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_8: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+                (array_length t0) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= (result0 - 1) ->
+                  (heap t0 (result0 - 1) i)))),
+  forall (t1: (array Z)),
+  forall (HW_9: (permutation t1 t0) /\
+                (forall (i:Z),
+                 (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
+                (forall (i:Z),
+                 (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/
+                  (result0 - 1) < i /\ i < (array_length t1) ->
+                  (access t1 i) = (access t0 i))) /\
+                (forall (v:Z),
+                 ((inftree t0 (result0 - 1) v k) ->
+                  (inftree t1 (result0 - 1) v k)))),
+  forall (k0: Z),
+  forall (HW_10: k0 = (k - 1)),
+  k0 <= ((array_length t1) - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_11 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_8: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+                (array_length t0) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= (result0 - 1) ->
+                  (heap t0 (result0 - 1) i)))),
+  forall (t1: (array Z)),
+  forall (HW_9: (permutation t1 t0) /\
+                (forall (i:Z),
+                 (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
+                (forall (i:Z),
+                 (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/
+                  (result0 - 1) < i /\ i < (array_length t1) ->
+                  (access t1 i) = (access t0 i))) /\
+                (forall (v:Z),
+                 ((inftree t0 (result0 - 1) v k) ->
+                  (inftree t1 (result0 - 1) v k)))),
+  forall (k0: Z),
+  forall (HW_10: k0 = (k - 1)),
+  forall (i: Z),
+  forall (HW_11: (k0 + 1) <= i /\ i <= ((array_length t1) - 1)),
+  (heap t1 ((array_length t1) - 1) i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 27, characters 20-209: *)
+(*Why goal*) Lemma heapsort_po_12 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_8: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+                (array_length t0) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= (result0 - 1) ->
+                  (heap t0 (result0 - 1) i)))),
+  forall (t1: (array Z)),
+  forall (HW_9: (permutation t1 t0) /\
+                (forall (i:Z),
+                 (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
+                (forall (i:Z),
+                 (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/
+                  (result0 - 1) < i /\ i < (array_length t1) ->
+                  (access t1 i) = (access t0 i))) /\
+                (forall (v:Z),
+                 ((inftree t0 (result0 - 1) v k) ->
+                  (inftree t1 (result0 - 1) v k)))),
+  forall (k0: Z),
+  forall (HW_10: k0 = (k - 1)),
+  (permutation t1 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 31, characters 18-21: *)
+(*Why goal*) Lemma heapsort_po_13 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_8: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+                (array_length t0) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= (result0 - 1) ->
+                  (heap t0 (result0 - 1) i)))),
+  forall (t1: (array Z)),
+  forall (HW_9: (permutation t1 t0) /\
+                (forall (i:Z),
+                 (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
+                (forall (i:Z),
+                 (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/
+                  (result0 - 1) < i /\ i < (array_length t1) ->
+                  (access t1 i) = (access t0 i))) /\
+                (forall (v:Z),
+                 ((inftree t0 (result0 - 1) v k) ->
+                  (inftree t1 (result0 - 1) v k)))),
+  forall (k0: Z),
+  forall (HW_10: k0 = (k - 1)),
+  0 <= (k + 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 31, characters 18-21: *)
+(*Why goal*) Lemma heapsort_po_14 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_5: k >= 0),
+  forall (result0: Z),
+  forall (HW_6: result0 = (array_length t0)),
+  forall (HW_8: (0 <= k /\ k <= (result0 - 1)) /\ (result0 - 1) <
+                (array_length t0) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= (result0 - 1) ->
+                  (heap t0 (result0 - 1) i)))),
+  forall (t1: (array Z)),
+  forall (HW_9: (permutation t1 t0) /\
+                (forall (i:Z),
+                 (k <= i /\ i <= (result0 - 1) -> (heap t1 (result0 - 1) i))) /\
+                (forall (i:Z),
+                 (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/
+                  (result0 - 1) < i /\ i < (array_length t1) ->
+                  (access t1 i) = (access t0 i))) /\
+                (forall (v:Z),
+                 ((inftree t0 (result0 - 1) v k) ->
+                  (inftree t1 (result0 - 1) v k)))),
+  forall (k0: Z),
+  forall (HW_10: k0 = (k - 1)),
+  (k0 + 1) < (k + 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 35, characters 8-66: *)
+(*Why goal*) Lemma heapsort_po_15 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  (heap t0 ((array_length t0) - 1) 0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 35, characters 8-66: *)
+(*Why goal*) Lemma heapsort_po_16 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  (permutation t0 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_17 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  0 <= (result0 - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_18 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  (result0 - 1) <= ((array_length t0) - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_19 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (i: Z),
+  forall (HW_14: 0 <= i /\ i <= (result0 - 1)),
+  (heap t0 (result0 - 1) i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_20 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (HW_15: (result0 - 1 + 1) <= ((array_length t0) - 1)),
+  (access t0 0) <= (access t0 (result0 - 1 + 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_21 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (HW_16: (result0 - 1 + 1) <= ((array_length t0) - 1)),
+  (sorted_array t0 (result0 - 1 + 1) ((array_length t0) - 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_22 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  (permutation t0 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 47, characters 9-20: *)
+(*Why goal*) Lemma heapsort_po_23 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  0 <= 0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 47, characters 9-20: *)
+(*Why goal*) Lemma heapsort_po_24 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  0 < (array_length t1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 47, characters 9-20: *)
+(*Why goal*) Lemma heapsort_po_25 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  0 <= k0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 47, characters 9-20: *)
+(*Why goal*) Lemma heapsort_po_26 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  k0 < (array_length t1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 48, characters 9-28: *)
+(*Why goal*) Lemma heapsort_po_27 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  0 <= 0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 48, characters 9-28: *)
+(*Why goal*) Lemma heapsort_po_28 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  0 <= (k0 - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 48, characters 9-28: *)
+(*Why goal*) Lemma heapsort_po_29 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  (k0 - 1) < (array_length t2).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 48, characters 9-28: *)
+(*Why goal*) Lemma heapsort_po_30 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (i: Z),
+  forall (HW_21: (0 + 1) <= i /\ i <= (k0 - 1)),
+  (heap t2 (k0 - 1) i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_31 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  0 <= k1.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_32 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  k1 <= ((array_length t3) - 1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_33 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  forall (i: Z),
+  forall (HW_25: 0 <= i /\ i <= k1),
+  (heap t3 k1 i).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_34 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  forall (HW_26: (k1 + 1) <= ((array_length t3) - 1)),
+  (access t3 0) <= (access t3 (k1 + 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_35 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  forall (HW_27: (k1 + 1) <= ((array_length t3) - 1)),
+  (sorted_array t3 (k1 + 1) ((array_length t3) - 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 40, characters 20-289: *)
+(*Why goal*) Lemma heapsort_po_36 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  (permutation t3 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 46, characters 18-19: *)
+(*Why goal*) Lemma heapsort_po_37 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  0 <= k0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 46, characters 18-19: *)
+(*Why goal*) Lemma heapsort_po_38 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_18: k0 >= 1),
+  forall (HW_19: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k0 /\ k0 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (HW_20: (exchange t2 t1 0 k0)),
+  forall (HW_22: (0 <= 0 /\ 0 <= (k0 - 1)) /\ (k0 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k0 - 1) -> (heap t2 (k0 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (HW_23: (permutation t3 t2) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i <= (k0 - 1) -> (heap t3 (k0 - 1) i))) /\
+                 (forall (i:Z),
+                  (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k0 - 1) <
+                   i /\ i < (array_length t3) -> (access t3 i) =
+                   (access t2 i))) /\
+                 (forall (v:Z),
+                  ((inftree t2 (k0 - 1) v 0) -> (inftree t3 (k0 - 1) v 0)))),
+  forall (k1: Z),
+  forall (HW_24: k1 = (k0 - 1)),
+  k1 < k0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 52, characters 6-66: *)
+(*Why goal*) Lemma heapsort_po_39 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_28: k0 < 1),
+  (sorted_array t1 0 ((array_length t1) - 1)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "heapsort.mlw", line 52, characters 6-66: *)
+(*Why goal*) Lemma heapsort_po_40 : 
+  forall (t: (array Z)),
+  forall (HW_1: 1 <= (array_length t)),
+  forall (result: Z),
+  forall (HW_2: result = (array_length t)),
+  forall (k: Z),
+  forall (t0: (array Z)),
+  forall (HW_4: ((-1) <= k /\ k <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permutation t0 t)),
+  forall (HW_12: k < 0),
+  forall (result0: Z),
+  forall (HW_13: result0 = (array_length t0)),
+  forall (k0: Z),
+  forall (t1: (array Z)),
+  forall (HW_17: (0 <= k0 /\ k0 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k0 -> (heap t1 k0 i))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k0 + 1)))) /\
+                 (((k0 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k0 + 1) ((array_length t1) - 1)))) /\
+                 (permutation t1 t)),
+  forall (HW_28: k0 < 1),
+  (permutation t1 t).
+Proof.
+(* FILL PROOF HERE *)
+Save.
 

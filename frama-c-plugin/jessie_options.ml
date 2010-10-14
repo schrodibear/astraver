@@ -34,7 +34,7 @@ include
     (struct
        let name = "jessie"
        let shortname = "jessie"
-       let help = "translation to jessie (experimental)"
+       let help = "translation to Why/Jessie"
      end)
 
 module ProjectName =

@@ -102,7 +102,9 @@ let infix id =
   else if id == t_add_int then "why__add_int"
   else if id == t_sub_int then "why__sub_int"
   else if id == t_mul_int then "why__mul_int"
+(*
   else if id == t_div_int then "why__div_int"
+*)
   (* real ops *)
   else if id == t_add_real then "why__add_real"
   else if id == t_sub_real then "why__sub_real"
@@ -146,8 +148,10 @@ let rec print_term fmt = function
 	fmt c
   | Tderef _ -> 
       assert false
+(*
   | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
       fprintf fmt "@[(%a %a)@]" ident id print_terms tl
+*)
   | Tapp (id, [a], _) when id == t_sqrt_real || id == t_int_of_real ->
       fprintf fmt "@[(%a %a)@]" ident id print_term a
   | Tapp (id, [a], _) when id == t_real_of_int ->

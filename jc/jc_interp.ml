@@ -243,9 +243,9 @@ let bin_op: expr_bin_op -> string = function
   | `Bsub, `Integer -> "sub_int"
   | `Bmul, `Integer -> "mul_int"
   | `Bdiv, `Integer ->
-      if safety_checking () then "div_int_" else "div_int"
+      if safety_checking () then "computer_div_" else "computer_div"
   | `Bmod, `Integer ->
-      if safety_checking () then "mod_int_" else "mod_int"
+      if safety_checking () then "computer_mod_" else "computer_mod"
       (* pointer *)
   | `Beq, `Pointer ->
       if safety_checking () then "eq_pointer" else "safe_eq_pointer"
@@ -310,8 +310,8 @@ let term_bin_op: term_bin_op -> string = function
   | `Badd, `Integer -> "add_int"
   | `Bsub, `Integer -> "sub_int"
   | `Bmul, `Integer -> "mul_int"
-  | `Bdiv, `Integer -> "div_int"
-  | `Bmod, `Integer -> "mod_int"
+  | `Bdiv, `Integer -> "computer_div"
+  | `Bmod, `Integer -> "computer_mod"
       (* pointer *)
   | `Beq, `Pointer -> "eq_pointer_bool"
   | `Bneq, `Pointer -> "neq_pointer_bool"
@@ -679,14 +679,14 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	begin match e'.expr_node with
 	  | Cte(Prim_int n) ->
 	      { e' with expr_node = Cte(Prim_real(n ^ ".0")) }
-	  | _ -> 
+	  | _ ->
 	      make_app "real_of_int" [ e' ]
 	end
     | JCTnative Treal, JCTenum ri ->
 	begin match e'.expr_node with
 	  | Cte(Prim_int n) ->
 	      { e' with expr_node = Cte(Prim_real(n ^ ".0")) }
-	  | _ -> 
+	  | _ ->
 	      make_app "real_of_int" [ make_app (logic_int_of_enum ri) [ e' ] ]
 	end
     | JCTnative Tinteger, JCTnative Treal ->
@@ -708,8 +708,8 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	    match e'.expr_node with
 	      | Cte (Prim_real x) ->
 		  let s = float_of_real f x in
-		  make_app ((float_format f)^"_of_real_exact") 
-		  [ { e' with expr_node = Cte (Prim_real s) } ]		
+		  make_app ((float_format f)^"_of_real_exact")
+		  [ { e' with expr_node = Cte (Prim_real s) } ]
 	      | _ -> raise Not_found
           with Not_found ->
 	    if check_int_overflow then
@@ -748,8 +748,8 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	in
 	let tag = tag_table_var(struct_root st1,e#region) in
         make_guarded_app ~mark DownCast pos downcast_fun
-          [ tag; e'; mk_var(tag_name st1) ] 
-    | _ -> 
+          [ tag; e'; mk_var(tag_name st1) ]
+    | _ ->
         Jc_typing.typing_error pos
           "can't coerce type %a to type %a"
           print_type ty_src print_type ty_dst
@@ -829,8 +829,8 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
         TLet(vi.jc_var_info_final_name, t1', t2')
     | JCToffset(k,t1,st) ->
 	let ac = tderef_alloc_class ~type_safe t1 in
-        let _,alloc = 
-	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region) 
+        let _,alloc =
+	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
 	in
 	begin match ac with
 	  | JCalloc_root _ ->
@@ -1382,11 +1382,11 @@ let assigns ~type_safe ?region_list before ef locs loc =
        let v = memory_name(mc,r) in
        let ac = alloc_class_of_mem_class mc in
        let _,alloc = talloc_table_var ~label_in_name:false before (ac,r) in
-                 
+
        make_and acc
-	 (let a = LPred("not_assigns", 
+	 (let a = LPred("not_assigns",
                 [alloc;
-                 lvar ~constant:false (* <<- CHANGE THIS *) 
+                 lvar ~constant:false (* <<- CHANGE THIS *)
                    ~label_in_name:false before v;
                  LVar v; location_list' p]) in
 	  LNamed(reg_check loc,a))
@@ -1743,7 +1743,7 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
 (*
   eprintf "make_upd_simple: tmp_var_name for tmpi is %s@." tmpi;
 *)
-  let tmp1 = tmp_var_name () in  
+  let tmp1 = tmp_var_name () in
 (*
   eprintf "make_upd_simple: tmp_var_name for tmp1 is %s@." tmp1;
 *)
@@ -1762,9 +1762,9 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
   let p,off,lb,rb = destruct_pointer e1 in
   let p' = expr p in
   let i' = offset off in
-  let letspi = 
-    [ (tmpp,p') ; (tmpi,i') ; 
-      (tmp1,make_app "shift" [mk_var tmpp; mk_var tmpi])] 
+  let letspi =
+    [ (tmpp,p') ; (tmpi,i') ;
+      (tmp1,make_app "shift" [mk_var tmpp; mk_var tmpi])]
   in
   try
     let s,b1,b2 =
@@ -1776,28 +1776,28 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
             s,true,true
         | Int_offset s, Some lb, _ when lbounded lb s ->
 	    (*
-              make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+              make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_"
               [ alloc; mem; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
             *)
             s, true, false
         | Int_offset s, _, Some rb when rbounded rb s ->
 	    (*
-              make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+              make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_"
               [ alloc; mem; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
             *)
             s, false, true
               (*
 	        | Int_offset s, None, None when int_of_string s = 0 ->
-	        [ (tmp1, p') ], 
+	        [ (tmp1, p') ],
               (*
-                make_guarded_app ~mark PointerDeref pos "upd_" 
+                make_guarded_app ~mark PointerDeref pos "upd_"
                 [ alloc; mem ; mk_var tmp1; mk_var tmp2 ]
               *)
                 Upd(alloc, mem , mk_var tmp1, mk_var tmp2)
               *)
         | Int_offset s, None, None ->
 	    (*
-              make_guarded_app ~mark PointerDeref pos "upd_" 
+              make_guarded_app ~mark PointerDeref pos "upd_"
               [ alloc; mem ; mk_var tmp1; mk_var tmp2 ]
             *)
             s, false, false
@@ -1807,16 +1807,16 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
 (*    Format.eprintf "found constant update let %s = %a in (%s + %d).%s = ...@." tmpp Output.fprintf_expr p' tmpp s mem;
 *)
     let letspi = if s = 0 then [ (tmpp,p') ] else letspi in
-    tmp1, [], 
+    tmp1, [],
     mk_expr (MultiAssign(mark,pos,letspi, is_ref, talloc, alloc, tmpp, p', mem, [s, b1, b2, tmp2]))
  with Exit ->
-   tmp1,letspi, 
+   tmp1,letspi,
    if (safety_checking()) then
-     make_guarded_app ~mark PointerDeref pos "offset_upd_" 
+     make_guarded_app ~mark PointerDeref pos "offset_upd_"
 	       [ alloc; mk_var mem ; mk_var tmpp; mk_var tmpi; mk_var tmp2 ]
    else
      make_app "safe_upd_" [ mk_var mem; mk_var tmp1; mk_var tmp2 ]
-     
+
 
 and make_upd_union mark pos off e1 fi tmp2 =
   let e1' = expr e1 in
@@ -1892,13 +1892,13 @@ and make_upd_bytes mark pos e1 fi tmp2 =
   let off = string_of_int off and size = string_of_int size in
   let e' =
     if safety_checking () then
-      make_guarded_app ~mark PointerDeref pos "upd_bytes_" 
-        [ alloc; mem; mk_var tmp1; 
-          mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size)); 
+      make_guarded_app ~mark PointerDeref pos "upd_bytes_"
+        [ alloc; mem; mk_var tmp1;
+          mk_expr (Cte(Prim_int off)); mk_expr (Cte(Prim_int size));
 	  mk_var tmp2 ]
     else
       make_app "safe_upd_bytes_"
-	[ mem; mk_var tmp1; mk_expr (Cte(Prim_int off)); 
+	[ mem; mk_var tmp1; mk_expr (Cte(Prim_int off));
           mk_expr (Cte(Prim_int size)); mk_var tmp2 ]
   in
   let lets = [ (tmp1,e1'); (tmp2,e2') ] in
@@ -1926,7 +1926,7 @@ and make_upd mark pos e1 fi e2 =
 	let write_effects =
 	  local_write_effects ~callee_reads:empty_effects ~callee_writes:ef
 	in
-	let e2' = 
+	let e2' =
 	  mk_expr(BlackBox(Annot_type(LTrue, unit_type, [], write_effects, LTrue, [])) )
 	in
 	tmp1, lets, append e1' e2'
@@ -2011,11 +2011,11 @@ and make_deref_bytes mark pos e fi =
   let e' =
     if safety_checking () then
       make_guarded_app ~mark PointerDeref pos "acc_bytes_"
-        [ alloc; mem; expr e; mk_expr (Cte(Prim_int off)); 
+        [ alloc; mem; expr e; mk_expr (Cte(Prim_int off));
           mk_expr (Cte(Prim_int size)) ]
     else
       make_app "safe_acc_bytes_"
-	[ mem; expr e; mk_expr (Cte(Prim_int off)); 
+	[ mem; expr e; mk_expr (Cte(Prim_int off));
           mk_expr (Cte(Prim_int size)) ]
   in
   (* Convert bitvector into appropriate type *)
@@ -2072,8 +2072,8 @@ and offset = function
 and type_assert tmp ty e =
   let offset k e1 ty tmp =
     let ac = deref_alloc_class ~type_safe:false e1 in
-    let _,alloc = 
-      talloc_table_var ~label_in_name:false LabelHere (ac,e1#region) 
+    let _,alloc =
+      talloc_table_var ~label_in_name:false LabelHere (ac,e1#region)
     in
     match ac with
       | JCalloc_root _ ->
@@ -2175,7 +2175,7 @@ and value_assigned mark pos ty e =
     let tmp = tmp_var_name () in
     let e,a = type_assert tmp ty e in
     if a <> LTrue && safety_checking() then
-      mk_expr (Let(tmp,e,make_check ~mark ~kind:IndexBounds pos 
+      mk_expr (Let(tmp,e,make_check ~mark ~kind:IndexBounds pos
             (mk_expr (Assert(`ASSERT,a,mk_var tmp)))))
     else e
 
@@ -2275,7 +2275,7 @@ and expr e =
 		| Offset_max -> "offset_max_bytes"
               in
 	      let s = string_of_int (struct_size_in_bytes st) in
-	      make_app f [alloc; expr e1; mk_expr (Cte(Prim_int s))] 
+	      make_app f [alloc; expr e1; mk_expr (Cte(Prim_int s))]
 	end
     | JCEaddress(Addr_absolute,e1) ->
         make_app "absolute_address" [ expr e1 ]
@@ -2342,10 +2342,10 @@ and expr e =
           let tag = plain_tag_table_var (struct_root st,e#region) in
           let mut = mutable_name pc in
           let com = committed_name pc in
-          make_app "alloc_parameter_ownership" 
-            [alloc; mk_var mut; mk_var com; tag; mk_var (tag_name st); 
-             coerce ~check_int_overflow:(safety_checking()) 
-	       e1#mark e1#pos integer_type 
+          make_app "alloc_parameter_ownership"
+            [alloc; mk_var mut; mk_var com; tag; mk_var (tag_name st);
+             coerce ~check_int_overflow:(safety_checking())
+	       e1#mark e1#pos integer_type
 	       e1#typ e1 e1']
 	else
           make_guarded_app e#mark
@@ -2436,8 +2436,8 @@ and expr e =
 		  arg_types_asserts call
               in
 	      let call = append prolog call in
-	      let call = 
-		if epilog.expr_node = Void then call else 
+	      let call =
+		if epilog.expr_node = Void then call else
 		  let tmp = tmp_var_name () in
 		  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
 	      in
@@ -2598,8 +2598,8 @@ and expr e =
 		  arg_types_asserts call
               in
 	      let call = append prolog call in
-	      let call = 
-		if epilog.expr_node = Void then call else 
+	      let call =
+		if epilog.expr_node = Void then call else
 		  let tmp = tmp_var_name () in
 		  mk_expr (Let(tmp,call,append epilog (mk_var tmp)))
 	      in
@@ -2651,10 +2651,10 @@ and expr e =
         let e' =
           if e#typ = Jc_pervasives.unit_type then
 	    match e'.expr_node with
-              | MultiAssign(m,p,lets',isrefa,ta,a,tmpe,e,f,l) -> 
-                  { e' with expr_node = 
+              | MultiAssign(m,p,lets',isrefa,ta,a,tmpe,e,f,l) ->
+                  { e' with expr_node =
                       MultiAssign(m,p,lets@lets',isrefa,ta,a,tmpe,e,f,l)}
-              | _ -> 
+              | _ ->
                   make_lets lets e'
           else
             make_lets lets (append e' (mk_var tmp2))
@@ -2678,7 +2678,7 @@ and expr e =
         else
 	  mk_expr (Let(v.jc_var_info_final_name,e1',e2'))
     | JCEreturn_void -> mk_expr (Raise(jessie_return_exception,None))
-    | JCEreturn(ty,e1) -> 
+    | JCEreturn(ty,e1) ->
 	let e1' = value_assigned e#mark e#pos ty e1 in
 	let e' = mk_expr (Assign(jessie_return_variable,e1')) in
 	append e' (mk_expr (Raise(jessie_return_exception,None)))
@@ -2937,7 +2937,7 @@ and expr e =
         eprintf "Jc_interp.expr: adding loop label %s@." loop_label.label_info_final_name;
 *)
         make_label loop_label.label_info_final_name
-	  (mk_expr (While((mk_expr (Cte(Prim_bool true)), 
+	  (mk_expr (While((mk_expr (Cte(Prim_bool true)),
                            inv', loop_variant, body))))
 
     | JCEcontract(req,dec,vi_result,behs,e) ->
@@ -2989,8 +2989,8 @@ and expr e =
 (*      assert (finally.jc_statement_node = JCEblock []); (\* TODO *\) *)
         let catch (s,excs) (ei,v_opt,st) =
           if ExceptionSet.mem ei excs then
-            (mk_expr (Try(s, 
-                 exception_name ei, 
+            (mk_expr (Try(s,
+                 exception_name ei,
                  Option_misc.map (fun v -> v.jc_var_info_final_name) v_opt,
                  expr st)),
              ExceptionSet.remove ei excs)
@@ -3015,20 +3015,20 @@ and expr e =
   let e' =
     (* Ideally, only labels used in logical annotations should be kept *)
     let lab = e#mark in
-    if lab = "" then e' else 
+    if lab = "" then e' else
       begin
         match e' with
             (*
               | MultiAssign _ -> assert false
             *)
-          | _ -> 
+          | _ ->
 (*
               if lab = "L2" then eprintf "Jc_interp.expr: adding label %s to expr %a@." lab Output.fprintf_expr e';
 *)
               make_label e#mark e'
       end
   in
-  let e' = 
+  let e' =
     if e#typ = Jc_pervasives.unit_type then
       if e#original_type <> Jc_pervasives.unit_type then
         match e'.expr_node with
@@ -3038,9 +3038,9 @@ and expr e =
 	      let tmp = tmp_var_name () in
 	      mk_expr (Let(tmp,e',void))
       else e'
-    else 
+    else
       match e'.expr_node with
-        | MultiAssign _ -> assert false 
+        | MultiAssign _ -> assert false
         | _ -> e'
   in
 (*
@@ -3061,37 +3061,37 @@ finalization: removing MultiAssign expressions
 ***)
 
 let make_old_style_update ~mark ~pos alloc tmpp tmpshift mem i b1 b2 tmp2 =
-  if safety_checking() then 
+  if safety_checking() then
     match b1,b2 with
       | true,true ->
           make_app "safe_upd_" [ mk_var mem; mk_var tmpshift; mk_var tmp2 ]
       | true,false ->
-          make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+          make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_"
             [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte i); mk_var tmp2 ]
       | false,true ->
-          make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+          make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_"
             [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte i); mk_var tmp2 ]
       | false,false ->
-          make_guarded_app ~mark PointerDeref pos "upd_" 
+          make_guarded_app ~mark PointerDeref pos "upd_"
             [ alloc; mk_var mem ; mk_var tmpshift; mk_var tmp2 ]
-  else 
+  else
     make_app "safe_upd_" [ mk_var mem; mk_var tmpshift; mk_var tmp2 ]
 
 let make_old_style_update_no_shift ~mark ~pos alloc tmpp mem b1 b2 tmp2 =
-  if safety_checking() then 
+  if safety_checking() then
     match b1,b2 with
       | true,true ->
           make_app "safe_upd_" [ mk_var mem; mk_var tmpp; mk_var tmp2 ]
       | true,false ->
-          make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+          make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_"
             [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte (Prim_int "0")); mk_var tmp2 ]
       | false,true ->
-          make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+          make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_"
             [ alloc; mk_var mem; mk_var tmpp; mk_expr (Cte (Prim_int "0")); mk_var tmp2 ]
       | false,false ->
-          make_guarded_app ~mark PointerDeref pos "upd_" 
+          make_guarded_app ~mark PointerDeref pos "upd_"
             [ alloc; mk_var mem ; mk_var tmpp; mk_var tmp2 ]
-  else 
+  else
     make_app "safe_upd_" [ mk_var mem; mk_var tmpp; mk_var tmp2 ]
 
 let make_not_assigns talloc mem t l =
@@ -3103,9 +3103,9 @@ let make_not_assigns talloc mem t l =
       | i::r, [] -> merge r [(i,i)]
       | i::r, (a,b)::acc' ->
           if i=b+1 then merge r ((a,i)::acc')
-          else merge r ((i,i)::acc) 
+          else merge r ((i,i)::acc)
   in
-  let i,l = match merge l [] 
+  let i,l = match merge l []
   with [] -> assert false
     | i::l -> i,l
   in
@@ -3117,7 +3117,7 @@ let make_not_assigns talloc mem t l =
                 LApp("pset_singleton", [LVar t]);
                 LConst(Prim_int (string_of_int a));
                 LConst(Prim_int (string_of_int b))])
-  in      
+  in
   let pset = List.fold_left
     (fun acc i ->
        LApp("pset_union",[pset_of_interval i; acc]))
@@ -3125,15 +3125,15 @@ let make_not_assigns talloc mem t l =
     l
   in
   LPred("not_assigns",[talloc;LVarAtLabel(mem,"") ; LVar mem ; pset])
-    
-                           
-       
-  
+
+
+
+
 
 let rec finalize e =
   match e.expr_node with
     | Absurd | Void | Cte _ | Var _ | BlackBox _ | Assert _ | Triple _
-    | Deref _ 
+    | Deref _
     | Raise(_, None)
         -> e
     | Loc (l, e1) -> {e with expr_node = Loc(l,finalize e1) }
@@ -3141,29 +3141,29 @@ let rec finalize e =
     | Label (l, e) -> Label(l,finalize e)
 *)
     | Fun (_, _, _, _, _) -> assert false
-    | Try (e1, exc, arg, e2) -> 
+    | Try (e1, exc, arg, e2) ->
         {e with expr_node = Try(finalize e1, exc, arg, finalize e2)}
-    | Raise (id, Some e1) -> 
+    | Raise (id, Some e1) ->
         {e with expr_node = Raise(id, Some(finalize e1))}
-    | App (e1, e2) -> 
+    | App (e1, e2) ->
         {e with expr_node = App(finalize e1, finalize e2)}
-    | Let_ref (x, e1, e2) -> 
+    | Let_ref (x, e1, e2) ->
         {e with expr_node = Let_ref(x, finalize e1, finalize e2)}
-    | Let (x, e1, e2) -> 
+    | Let (x, e1, e2) ->
         {e with expr_node = Let(x, finalize e1, finalize e2)}
-    | Assign (x, e1) -> 
+    | Assign (x, e1) ->
         {e with expr_node = Assign(x, finalize e1) }
-    | Block(l) -> 
+    | Block(l) ->
         {e with expr_node = Block(List.map finalize l) }
-    | While (e1, inv, var, l) -> 
+    | While (e1, inv, var, l) ->
         {e with expr_node = While(finalize e1, inv, var, List.map finalize l)}
-    | If (e1, e2, e3) -> 
+    | If (e1, e2, e3) ->
         {e with expr_node = If(finalize e1, finalize e2, finalize e3)}
-    | Not e1 -> 
+    | Not e1 ->
         {e with expr_node = Not(finalize e1)}
-    | Or (e1, e2) -> 
+    | Or (e1, e2) ->
         {e with expr_node = Or(finalize e1, finalize e2) }
-    | And (e1, e2) -> 
+    | And (e1, e2) ->
         {e with expr_node = And(finalize e1, finalize e2) }
     | MultiAssign(mark,pos,lets,isrefalloc,talloc,alloc,tmpe,_e,mem,l) ->
 (*
@@ -3171,9 +3171,9 @@ let rec finalize e =
 *)
         match l with
           | [] -> assert false
-          | [(i,b1,b2,e')] -> 
+          | [(i,b1,b2,e')] ->
               if i=0 then
-                 make_lets lets 
+                 make_lets lets
                    (make_old_style_update_no_shift ~mark ~pos alloc tmpe mem b1 b2 e')
               else
                 let tmpshift = tmp_var_name () in
@@ -3181,12 +3181,12 @@ let rec finalize e =
                 eprintf "Jc_interp.finalize: tmp_var_name for tmpshift is %s@." tmpshift;
 *)
                 let i = Prim_int (string_of_int i) in
-                make_lets lets 
+                make_lets lets
                   (make_lets [tmpshift,make_app "shift" [mk_var tmpe; mk_expr (Cte i)]]
                      (make_old_style_update ~mark ~pos alloc tmpe tmpshift mem i b1 b2 e'))
           | _ ->
-              let pre = 
-                if safety_checking() then 
+              let pre =
+                if safety_checking() then
                   make_and_list
                     (List.fold_left
                        (fun acc (i,b1,b2,_) ->
@@ -3210,7 +3210,7 @@ let rec finalize e =
                        l)
                 else LTrue
               in
-              let post = 
+              let post =
                 (* TODO ! generer le not_assigns !!!! *)
                 make_and_list
                   (make_not_assigns talloc mem tmpe l ::
@@ -3219,19 +3219,19 @@ let rec finalize e =
                         (* (e+i).f == e' *)
                         LPred("eq",
                               [ LApp("select",
-                                     [ LVar mem; 
-                                       LApp("shift", 
+                                     [ LVar mem;
+                                       LApp("shift",
                                             [ LVar tmpe ; LConst (Prim_int (string_of_int i))] )]);
                                 LVar e'])) l)
               in
-              let reads = if isrefalloc then 
+              let reads = if isrefalloc then
                 match talloc with
-                  | LVar v -> [v;mem] 
+                  | LVar v -> [v;mem]
                   | _ -> assert false
               else
                 [mem]
               in
-              make_lets lets 
+              make_lets lets
                 (mk_expr (BlackBox (Annot_type(pre,unit_type,reads,[mem],post,[]))))
 
 
@@ -3760,9 +3760,9 @@ let tr_fun f funpos spec body acc =
 	    let body = make_label "init" body in
 	    let body =
 	      List.fold_right
-		(fun (mut_id,id) e' -> 
-                   mk_expr (Let_ref(mut_id, plain_var id, e'))) 
-		list_of_refs body 
+		(fun (mut_id,id) e' ->
+                   mk_expr (Let_ref(mut_id, plain_var id, e')))
+		list_of_refs body
 	    in
 	    (* FS#393: restore parameter real names *)
 	    List.iter

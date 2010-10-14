@@ -8,6 +8,131 @@ Require Import Omega.
 
 
 
+(*Why logic*) Definition lt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition le_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition gt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition ge_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition eq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition neq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why axiom*) Lemma lt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((lt_int_bool x y) = true <-> x < y))).
+Admitted.
+
+(*Why axiom*) Lemma le_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((le_int_bool x y) = true <-> x <= y))).
+Admitted.
+
+(*Why axiom*) Lemma gt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((gt_int_bool x y) = true <-> x > y))).
+Admitted.
+
+(*Why axiom*) Lemma ge_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((ge_int_bool x y) = true <-> x >= y))).
+Admitted.
+
+(*Why axiom*) Lemma eq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((eq_int_bool x y) = true <-> x = y))).
+Admitted.
+
+(*Why axiom*) Lemma neq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((neq_int_bool x y) = true <-> x <> y))).
+Admitted.
+
+(*Why logic*) Definition abs_int : Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma abs_int_pos :
+  (forall (x:Z), (x >= 0 -> (abs_int x) = x)).
+Admitted.
+
+(*Why axiom*) Lemma abs_int_neg :
+  (forall (x:Z), (x <= 0 -> (abs_int x) = (Zopp x))).
+Admitted.
+
+(*Why logic*) Definition int_max : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition int_min : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma int_max_is_ge :
+  (forall (x:Z), (forall (y:Z), (int_max x y) >= x /\ (int_max x y) >= y)).
+Admitted.
+
+(*Why axiom*) Lemma int_max_is_some :
+  (forall (x:Z), (forall (y:Z), (int_max x y) = x \/ (int_max x y) = y)).
+Admitted.
+
+(*Why axiom*) Lemma int_min_is_le :
+  (forall (x:Z), (forall (y:Z), (int_min x y) <= x /\ (int_min x y) <= y)).
+Admitted.
+
+(*Why axiom*) Lemma int_min_is_some :
+  (forall (x:Z), (forall (y:Z), (int_min x y) = x \/ (int_min x y) = y)).
+Admitted.
+
+(*Why logic*) Definition computer_div : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition computer_mod : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition math_div : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition math_mod : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma math_div_mod :
+  (forall (x:Z),
+   (forall (y:Z), (y <> 0 -> x = (y * (math_div x y) + (math_mod x y))))).
+Admitted.
+
+(*Why axiom*) Lemma math_mod_bound :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> 0 <= (math_mod x y) /\ (math_mod x y) < (abs_int y)))).
+Admitted.
+
+(*Why axiom*) Lemma computer_div_mod :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> x = (y * (computer_div x y) + (computer_mod x y))))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_bound :
+  (forall (x:Z),
+   (forall (y:Z), (y <> 0 -> (abs_int (computer_mod x y)) < (abs_int y)))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_sign_pos :
+  (forall (x:Z),
+   (forall (y:Z), (x >= 0 /\ y <> 0 -> (computer_mod x y) >= 0))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_sign_neg :
+  (forall (x:Z),
+   (forall (y:Z), (x <= 0 /\ y <> 0 -> (computer_mod x y) <= 0))).
+Admitted.
+
+(*Why axiom*) Lemma computer_rounds_toward_zero :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> (abs_int ((computer_div x y) * y)) <= (abs_int x)))).
+Admitted.
+
 (*Why type*) Definition farray: Set ->Set.
 Admitted.
 
@@ -223,7 +348,7 @@ Admitted.
 
 
 
-(* Why obligation from file "all.mlw", line 34, characters 13-22: *)
+(* Why obligation from file "all.mlw", line 36, characters 13-22: *)
 (*Why goal*) Lemma p2_po_1 : 
   ~False.
 Proof.
@@ -232,7 +357,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 35, characters 13-26: *)
+(* Why obligation from file "all.mlw", line 37, characters 13-26: *)
 (*Why goal*) Lemma p3_po_1 : 
   (True /\ True).
 Proof.
@@ -241,7 +366,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 36, characters 13-26: *)
+(* Why obligation from file "all.mlw", line 38, characters 13-26: *)
 (*Why goal*) Lemma p4_po_1 : 
   (True \/ False).
 Proof.
@@ -250,7 +375,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 37, characters 13-31: *)
+(* Why obligation from file "all.mlw", line 39, characters 13-31: *)
 (*Why goal*) Lemma p5_po_1 : 
   (False \/ ~False).
 Proof.
@@ -259,7 +384,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 38, characters 13-30: *)
+(* Why obligation from file "all.mlw", line 40, characters 13-30: *)
 (*Why goal*) Lemma p6_po_1 : 
   ((True -> ~False)).
 Proof.
@@ -270,7 +395,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 40, characters 13-39: *)
+(* Why obligation from file "all.mlw", line 42, characters 13-39: *)
 (*Why goal*) Lemma p8_po_1 : 
   (True /\ (forall (x:Z), x = x)).
 Proof.
@@ -280,56 +405,19 @@ Save.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(* Why obligation from file "all.mlw", line 58, characters 10-13: *)
-(*Why goal*) Lemma ar6_po_1 : 
+(* Why obligation from file "all.mlw", line 64, characters 11-28: *)
+(*Why goal*) Lemma ar10_po_1 : 
   1 <> 0.
 Proof.
-intuition.
+omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+(* Why obligation from file "all.mlw", line 65, characters 11-28: *)
+(*Why goal*) Lemma ar11_po_1 : 
+  1 <> 0.
+Proof.
+omega.
+Save.
 
 (* Why obligation from file ".", line 0, characters 0-0: *)
 (*Why goal*) Lemma c2_po_1 : 
@@ -339,7 +427,7 @@ Proof.
 destruct v1; intuition.
 Save.
 
-(* Why obligation from file "all.mlw", line 101, characters 40-45: *)
+(* Why obligation from file "all.mlw", line 107, characters 40-45: *)
 (*Why goal*) Lemma arr1_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
@@ -350,7 +438,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 102, characters 40-47: *)
+(* Why obligation from file "all.mlw", line 108, characters 40-47: *)
 (*Why goal*) Lemma arr2_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 4),
@@ -361,7 +449,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 103, characters 51-58: *)
+(* Why obligation from file "all.mlw", line 109, characters 51-58: *)
 (*Why goal*) Lemma arr3_po_1 : 
   forall (v4: Z),
   forall (v6: (array Z)),
@@ -373,7 +461,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 104, characters 58-63: *)
+(* Why obligation from file "all.mlw", line 110, characters 58-63: *)
 (*Why goal*) Lemma arr4_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -383,7 +471,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "all.mlw", line 104, characters 55-64: *)
+(* Why obligation from file "all.mlw", line 110, characters 55-64: *)
 (*Why goal*) Lemma arr4_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -395,7 +483,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "all.mlw", line 106, characters 40-50: *)
+(* Why obligation from file "all.mlw", line 112, characters 40-50: *)
 (*Why goal*) Lemma arr5_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 1),
@@ -406,7 +494,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 107, characters 40-54: *)
+(* Why obligation from file "all.mlw", line 113, characters 40-54: *)
 (*Why goal*) Lemma arr6_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 4),
@@ -417,7 +505,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 108, characters 58-63: *)
+(* Why obligation from file "all.mlw", line 114, characters 58-63: *)
 (*Why goal*) Lemma arr7_po_1 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -430,7 +518,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 108, characters 55-69: *)
+(* Why obligation from file "all.mlw", line 114, characters 55-69: *)
 (*Why goal*) Lemma arr7_po_2 : 
   forall (v6: (array Z)),
   forall (HW_1: (array_length v6) >= 10 /\ (access v6 0) = 9),
@@ -442,7 +530,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "all.mlw", line 113, characters 48-54: *)
+(* Why obligation from file "all.mlw", line 119, characters 48-54: *)
 (*Why goal*) Lemma fc3_po_1 : 
   0 >= 0.
 Proof.
@@ -453,7 +541,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", line 121, characters 51-59: *)
+(* Why obligation from file "all.mlw", line 127, characters 51-59: *)
 (*Why goal*) Lemma an2_po_1 : 
   forall (v4: Z),
   forall (HW_1: v4 >= 0),

@@ -205,14 +205,16 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
 goal mean_1 :
  (forall x_2:int32.
   (le_int((0), integer_of_int32(x_2)) ->
-   (le_int((0), div_int(integer_of_int32(x_2), (2)))
-   and le_int(div_int(integer_of_int32(x_2), (2)), integer_of_int32(x_2)))))
+   (le_int((0), computer_div(integer_of_int32(x_2), (2)))
+   and le_int(computer_div(integer_of_int32(x_2), (2)),
+       integer_of_int32(x_2)))))
 
 axiom mean_1_as_axiom :
  (forall x_2:int32.
   (le_int((0), integer_of_int32(x_2)) ->
-   (le_int((0), div_int(integer_of_int32(x_2), (2)))
-   and le_int(div_int(integer_of_int32(x_2), (2)), integer_of_int32(x_2)))))
+   (le_int((0), computer_div(integer_of_int32(x_2), (2)))
+   and le_int(computer_div(integer_of_int32(x_2), (2)),
+       integer_of_int32(x_2)))))
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
@@ -529,7 +531,7 @@ let mean2_ensures_default =
                                                                 (safe_int32_of_integer_ 
                                                                  (C_32:
                                                                  (JC_<somenum>:
-                                                                 ((div_int 
+                                                                 ((computer_div 
                                                                    (integer_of_int32 
                                                                     (C_31:
                                                                     (safe_int32_of_integer_ 
@@ -576,7 +578,7 @@ let mean2_safety =
                                                            (int32_of_integer_ 
                                                             (C_32:
                                                             (JC_<somenum>:
-                                                            ((div_int_ 
+                                                            ((computer_div_ 
                                                               (integer_of_int32 
                                                                (C_31:
                                                                (JC_<somenum>:
@@ -608,7 +610,7 @@ let mean_ensures_default =
                                                                (safe_int32_of_integer_ 
                                                                 (C_3:
                                                                 (JC_<somenum>:
-                                                                ((div_int 
+                                                                ((computer_div 
                                                                   (integer_of_int32 
                                                                    (C_2:
                                                                    (safe_int32_of_integer_ 
@@ -641,7 +643,7 @@ let mean_safety =
                                                           (int32_of_integer_ 
                                                            (C_3:
                                                            (JC_<somenum>:
-                                                           ((div_int_ 
+                                                           ((computer_div_ 
                                                              (integer_of_int32 
                                                               (C_2:
                                                               (JC_<somenum>:
@@ -667,11 +669,12 @@ let umean_ensures_default =
        { (JC_<somenum>:
          ((JC_<somenum>:
           le_int((0),
-          div_int(sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)),
+          computer_div(sub_int(integer_of_uint32(r_0),
+                       integer_of_uint32(l_0)),
           (2))))
          and (JC_<somenum>:
-             le_int(div_int(sub_int(integer_of_uint32(r_0),
-                            integer_of_uint32(l_0)),
+             le_int(computer_div(sub_int(integer_of_uint32(r_0),
+                                 integer_of_uint32(l_0)),
                     (2)),
              sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) };
        void); void;
@@ -683,7 +686,7 @@ let umean_ensures_default =
                                                                   (safe_uint32_of_integer_ 
                                                                    (C_17:
                                                                    (JC_<somenum>:
-                                                                   ((div_int 
+                                                                   ((computer_div 
                                                                     (integer_of_uint32 
                                                                     (C_16:
                                                                     (safe_uint32_of_integer_ 
@@ -708,11 +711,12 @@ let umean_safety =
          { (JC_<somenum>:
            ((JC_<somenum>:
             le_int((0),
-            div_int(sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)),
+            computer_div(sub_int(integer_of_uint32(r_0),
+                         integer_of_uint32(l_0)),
             (2))))
            and (JC_<somenum>:
-               le_int(div_int(sub_int(integer_of_uint32(r_0),
-                              integer_of_uint32(l_0)),
+               le_int(computer_div(sub_int(integer_of_uint32(r_0),
+                                   integer_of_uint32(l_0)),
                       (2)),
                sub_int(integer_of_uint32(r_0), integer_of_uint32(l_0)))))) } ];
       void;
@@ -726,7 +730,7 @@ let umean_safety =
                                                              (uint32_of_integer_ 
                                                               (C_17:
                                                               (JC_<somenum>:
-                                                              ((div_int_ 
+                                                              ((computer_div_ 
                                                                 (integer_of_uint32 
                                                                  (C_16:
                                                                  (JC_<somenum>:
@@ -908,10 +912,6 @@ logic add_int : int, int -> int
 logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
 
 logic neg_int : int -> int
 
@@ -1171,6 +1171,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 
@@ -1848,8 +1888,8 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
 axiom mean_1_as_axiom:
   (forall x_2:int32.
     ((0 <= integer_of_int32(x_2)) ->
-     ((0 <= (integer_of_int32(x_2) / 2)) and
-      ((integer_of_int32(x_2) / 2) <= integer_of_int32(x_2)))))
+     ((0 <= computer_div(integer_of_int32(x_2), 2)) and
+      (computer_div(integer_of_int32(x_2), 2) <= integer_of_int32(x_2)))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.

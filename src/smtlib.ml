@@ -62,9 +62,11 @@ let prefix id =
   else if id == t_add_int then "+"
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
+(*
   else if id == t_div_int then "div_int"
   else if id == t_mod_int then
     if Options.modulo then "%" else "modulo"
+*)
   else if id == t_neg_int then
     if Options.get_smtlib_v1() then "~" else "-"
   (* real ops *)
@@ -393,10 +395,12 @@ let output_file ?logic fname =
   end;
   fprintf fmt "  :extrasorts (Unit)@\n";
   fprintf fmt "  :extrafuns ((tt Unit))@\n";
+(*
   fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
   if not modulo then begin
     fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
   end;
+*)
   iter (output_elem fmt);
 
   (* end of smtlib file *)

@@ -2691,10 +2691,6 @@ logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
 
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
-
 logic neg_int : int -> int
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
@@ -2953,6 +2949,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 
@@ -3708,10 +3744,10 @@ predicate mul_single_post(m: mode, x: single, y: single, res: single) =
     (single_model(res) = (single_model(x) * single_model(y)))))
 
 predicate div_single_post(m: mode, x: single, y: single, res: single) =
-  ((single_value(res) = round_single(m,
-   (single_value(x) / single_value(y)))) and
-   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
-    (single_model(res) = (single_model(x) / single_model(y)))))
+  ((single_value(res) = round_single(m, div_real(single_value(x),
+   single_value(y)))) and
+   ((single_exact(res) = div_real(single_exact(x), single_exact(y))) and
+    (single_model(res) = div_real(single_model(x), single_model(y)))))
 
 predicate sqrt_single_post(m: mode, x: single, res: single) =
   ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
@@ -3751,10 +3787,10 @@ predicate mul_double_post(m: mode, x: double, y: double, res: double) =
     (double_model(res) = (double_model(x) * double_model(y)))))
 
 predicate div_double_post(m: mode, x: double, y: double, res: double) =
-  ((double_value(res) = round_double(m,
-   (double_value(x) / double_value(y)))) and
-   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
-    (double_model(res) = (double_model(x) / double_model(y)))))
+  ((double_value(res) = round_double(m, div_real(double_value(x),
+   double_value(y)))) and
+   ((double_exact(res) = div_real(double_exact(x), double_exact(y))) and
+    (double_model(res) = div_real(double_model(x), double_model(y)))))
 
 predicate sqrt_double_post(m: mode, x: double, res: double) =
   ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
@@ -3815,7 +3851,7 @@ axiom div_bounds_as_axiom:
   (forall a_1:real.
     (forall b_1:real.
       (((0.0 < b_1) and ((0.0 <= a_1) and (a_1 <= b_1))) ->
-       ((0.0 <= (a_1 / b_1)) and ((a_1 / b_1) <= 1.0)))))
+       ((0.0 <= div_real(a_1, b_1)) and (div_real(a_1, b_1) <= 1.0)))))
 
 logic double_P_tag : double_P tag_id
 
@@ -3935,8 +3971,8 @@ axiom round_div_as_axiom:
   (forall a_2:real.
     (forall b_2:real.
       (((0.0 < b_2) and ((0.0 <= a_2) and (a_2 <= b_2))) ->
-       ((0.0 <= round_double(nearest_even, (a_2 / b_2))) and
-        (round_double(nearest_even, (a_2 / b_2)) <= 1.0)))))
+       ((0.0 <= round_double(nearest_even, div_real(a_2, b_2))) and
+        (round_double(nearest_even, div_real(a_2, b_2)) <= 1.0)))))
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

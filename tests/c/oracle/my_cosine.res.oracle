@@ -80,10 +80,10 @@ tag void_P = {
 
 type void_P = [void_P]
 
-float my_cos1(float x_1)
-  requires (C_6 : (\real_abs((x_1 :> real)) <= 0x1p-5));
+float my_cos1(float x)
+  requires (C_7 : (\real_abs((x :> real)) <= 0x1p-5));
 behavior default:
-  ensures (C_7 : (\real_abs(((\result :> real) - \cos((x_1 :> real)))) <=
+  ensures (C_6 : (\real_abs(((\result :> real) - \cos((\at(x,Old) :> real)))) <=
                    0x1p-23));
 {  
    (var float __retres);
@@ -91,36 +91,36 @@ behavior default:
    {  
       {  
          (assert for default: (C_1 : (\real_abs(((1.0 -
-                                                   (((x_1 :> real) *
-                                                      (x_1 :> real)) *
+                                                   (((x :> real) *
+                                                      (x :> real)) *
                                                      0.5)) -
-                                                  \cos((x_1 :> real)))) <=
+                                                  \cos((x :> real)))) <=
                                        0x1p-24)));
          ()
       };
       (C_5 : (__retres = (C_4 : ((1.0 :> float) -
-                                  (C_3 : ((C_2 : (x_1 * x_1)) *
-                                           (0.5 :> float)))))));
+                                  (C_3 : ((C_2 : (x * x)) * (0.5 :> float)))))));
       
       (return __retres)
    }
 }
 
-float my_cos2(float x)
-  requires (C_13 : ((C_14 : (\real_abs((x :> real)) <= 0x1p-5)) &&
-                     (C_15 : (\single_round_error(x) == 0.0))));
+float my_cos2(float x_0)
+  requires (C_14 : ((C_15 : (\real_abs((x_0 :> real)) <= 0x1p-5)) &&
+                     (C_16 : (\single_round_error(x_0) == 0.0))));
 behavior default:
-  ensures (C_16 : (\real_abs(((\result :> real) - \cos((x :> real)))) <=
+  ensures (C_13 : (\real_abs(((\result :> real) -
+                               \cos((\at(x_0,Old) :> real)))) <=
                     0x1p-23));
 {  
    (var float r);
    
    {  (C_11 : (r = (C_10 : ((1.0 :> float) -
-                             (C_9 : ((C_8 : (x * x)) * (0.5 :> float)))))));
+                             (C_9 : ((C_8 : (x_0 * x_0)) * (0.5 :> float)))))));
       
       {  
          (assert for default: (C_12 : (\real_abs((\single_exact(r) -
-                                                   \cos((x :> real)))) <=
+                                                   \cos((x_0 :> real)))) <=
                                         0x1p-24)));
          ()
       };
@@ -129,25 +129,25 @@ behavior default:
    }
 }
 
-float my_cos3(float x_2)
-  requires (C_22 : ((C_23 : (\real_abs(\single_exact(x_2)) <= 0x1p-5)) &&
-                     (C_24 : (\single_round_error(x_2) <= 0x1p-20))));
+float my_cos3(float x_1)
+  requires (C_25 : ((C_26 : (\real_abs(\single_exact(x_1)) <= 0x1p-5)) &&
+                     (C_27 : (\single_round_error(x_1) <= 0x1p-20))));
 behavior default:
-  ensures (C_25 : ((C_26 : (\real_abs((\single_exact(\result) -
-                                        \cos(\single_exact(x_2)))) <=
+  ensures (C_22 : ((C_23 : (\real_abs((\single_exact(\result) -
+                                        \cos(\single_exact(\at(x_1,Old))))) <=
                              0x1p-24)) &&
-                    (C_27 : (\single_round_error(\result) <=
-                              (\single_round_error(x_2) + 0x3p-24)))));
+                    (C_24 : (\single_round_error(\result) <=
+                              (\single_round_error(\at(x_1,Old)) + 0x3p-24)))));
 {  
    (var float r_0);
    
    {  (C_20 : (r_0 = (C_19 : ((1.0 :> float) -
-                               (C_18 : ((C_17 : (x_2 * x_2)) *
+                               (C_18 : ((C_17 : (x_1 * x_1)) *
                                          (0.5 :> float)))))));
       
       {  
          (assert for default: (C_21 : (\real_abs((\single_exact(r_0) -
-                                                   \cos(\single_exact(x_2)))) <=
+                                                   \cos(\single_exact(x_1)))) <=
                                         0x1p-24)));
          ()
       };
@@ -156,10 +156,11 @@ behavior default:
    }
 }
 
-float my_cos4(float x_0)
-  requires (C_33 : (\real_abs((x_0 :> real)) <= 0.07));
+float my_cos4(float x_2)
+  requires (C_34 : (\real_abs((x_2 :> real)) <= 0.07));
 behavior default:
-  ensures (C_34 : (\real_abs(((\result :> real) - \cos((x_0 :> real)))) <=
+  ensures (C_33 : (\real_abs(((\result :> real) -
+                               \cos((\at(x_2,Old) :> real)))) <=
                     0x1p-20));
 {  
    (var float __retres_0);
@@ -167,15 +168,15 @@ behavior default:
    {  
       {  
          (assert for default: (C_28 : (\real_abs(((1.0 -
-                                                    (((x_0 :> real) *
-                                                       (x_0 :> real)) *
+                                                    (((x_2 :> real) *
+                                                       (x_2 :> real)) *
                                                       0.5)) -
-                                                   \cos((x_0 :> real)))) <=
+                                                   \cos((x_2 :> real)))) <=
                                         0x0.Fp-20)));
          ()
       };
       (C_32 : (__retres_0 = (C_31 : ((1.0 :> float) -
-                                      (C_30 : ((C_29 : (x_0 * x_0)) *
+                                      (C_30 : ((C_29 : (x_2 * x_2)) *
                                                 (0.5 :> float)))))));
       
       (return __retres_0)
@@ -185,8 +186,8 @@ behavior default:
 [C_10]
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 12
+end = 31
 
 [C_11]
 file = "HOME/tests/c/my_cosine.c"
@@ -202,45 +203,45 @@ end = 49
 
 [C_13]
 file = "HOME/tests/c/my_cosine.c"
-line = 12
-begin = 13
-end = 64
+line = 14
+begin = 12
+end = 46
 
 [C_14]
 file = "HOME/tests/c/my_cosine.c"
 line = 12
 begin = 13
-end = 30
+end = 64
 
 [C_15]
+file = "HOME/tests/c/my_cosine.c"
+line = 12
+begin = 13
+end = 30
+
+[C_16]
 file = "HOME/tests/c/my_cosine.c"
 line = 13
 begin = 11
 end = 33
 
-[C_16]
-file = "HOME/tests/c/my_cosine.c"
-line = 14
-begin = 12
-end = 46
-
 [C_17]
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 19
+end = 24
 
 [C_18]
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 19
+end = 31
 
 [C_19]
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 12
+end = 31
 
 [C_1]
 file = "HOME/tests/c/my_cosine.c"
@@ -251,20 +252,20 @@ end = 53
 [C_2]
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 16
+end = 21
 
 [C_3]
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 16
+end = 28
 
 [C_4]
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 9
+end = 28
 
 [C_20]
 file = "HOME/tests/c/my_cosine.c"
@@ -276,7 +277,7 @@ end = 7
 file = "HOME/tests/c/my_cosine.c"
 line = 9
 begin = 2
-end = 8
+end = 29
 
 [C_21]
 file = "HOME/tests/c/my_cosine.c"
@@ -286,63 +287,63 @@ end = 57
 
 [C_6]
 file = "HOME/tests/c/my_cosine.c"
-line = 4
-begin = 13
-end = 30
-
-[C_22]
-file = "HOME/tests/c/my_cosine.c"
-line = 23
-begin = 13
-end = 76
-
-[C_7]
-file = "HOME/tests/c/my_cosine.c"
 line = 5
 begin = 12
 end = 46
 
-[C_23]
-file = "HOME/tests/c/my_cosine.c"
-line = 23
-begin = 13
-end = 38
-
-[C_8]
-file = "HOME/tests/c/my_cosine.c"
-line = 17
-begin = 2
-end = 7
-
-[C_24]
-file = "HOME/tests/c/my_cosine.c"
-line = 24
-begin = 11
-end = 37
-
-[C_9]
-file = "HOME/tests/c/my_cosine.c"
-line = 17
-begin = 2
-end = 7
-
-[C_25]
+[C_22]
 file = "HOME/tests/c/my_cosine.c"
 line = 25
 begin = 12
 end = 124
 
-[C_26]
+[C_7]
+file = "HOME/tests/c/my_cosine.c"
+line = 4
+begin = 13
+end = 30
+
+[C_23]
 file = "HOME/tests/c/my_cosine.c"
 line = 25
 begin = 12
 end = 62
 
-[C_27]
+[C_8]
+file = "HOME/tests/c/my_cosine.c"
+line = 17
+begin = 19
+end = 24
+
+[C_24]
 file = "HOME/tests/c/my_cosine.c"
 line = 26
 begin = 11
 end = 61
+
+[C_9]
+file = "HOME/tests/c/my_cosine.c"
+line = 17
+begin = 19
+end = 31
+
+[C_25]
+file = "HOME/tests/c/my_cosine.c"
+line = 23
+begin = 13
+end = 76
+
+[C_26]
+file = "HOME/tests/c/my_cosine.c"
+line = 23
+begin = 13
+end = 38
+
+[C_27]
+file = "HOME/tests/c/my_cosine.c"
+line = 24
+begin = 11
+end = 37
 
 [C_28]
 file = "HOME/tests/c/my_cosine.c"
@@ -353,38 +354,38 @@ end = 55
 [C_29]
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 16
+end = 21
 
 [C_30]
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 16
+end = 28
 
 [C_31]
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 9
+end = 28
 
 [C_32]
 file = "HOME/tests/c/my_cosine.c"
 line = 39
 begin = 2
-end = 8
+end = 29
 
 [C_33]
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 13
-end = 28
-
-[C_34]
 file = "HOME/tests/c/my_cosine.c"
 line = 35
 begin = 12
 end = 46
+
+[C_34]
+file = "HOME/tests/c/my_cosine.c"
+line = 34
+begin = 13
+end = 28
 
 [my_cos1]
 name = "Function my_cos1"
@@ -730,8 +731,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 19
+end = 24
 
 [my_cos4_safety]
 name = "Function my_cos4"
@@ -745,15 +746,15 @@ end = 13
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 19
+end = 31
 
 [JC_55]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 12
+end = 31
 
 [JC_56]
 file = "HOME/tests/c/my_cosine.c"
@@ -765,22 +766,22 @@ end = 57
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 19
+end = 24
 
 [JC_58]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 19
+end = 31
 
 [JC_59]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 29
-begin = 2
-end = 7
+begin = 12
+end = 31
 
 [JC_60]
 file = "HOME/tests/c/my_cosine.c"
@@ -804,8 +805,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 16
+end = 21
 
 [JC_63]
 file = "HOME/tests/c/my_cosine.c"
@@ -817,8 +818,8 @@ end = 28
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 16
+end = 28
 
 [JC_64]
 file = "HOME/"
@@ -830,8 +831,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 9
+end = 28
 
 [JC_65]
 file = "HOME/tests/c/my_cosine.c"
@@ -855,8 +856,8 @@ end = 46
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 16
+end = 21
 
 [JC_67]
 file = "HOME/"
@@ -868,8 +869,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 16
+end = 28
 
 [JC_68]
 file = "HOME/"
@@ -881,8 +882,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 9
-begin = 2
-end = 8
+begin = 9
+end = 28
 
 [JC_69]
 file = "HOME/tests/c/my_cosine.c"
@@ -928,8 +929,8 @@ end = 13
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 16
+end = 21
 
 [my_cos3_ensures_default]
 name = "Function my_cos3"
@@ -943,15 +944,15 @@ end = 13
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 16
+end = 28
 
 [JC_72]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 9
+end = 28
 
 [JC_20]
 file = "HOME/"
@@ -975,8 +976,8 @@ end = 30
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 16
+end = 21
 
 [JC_22]
 file = "HOME/tests/c/my_cosine.c"
@@ -988,8 +989,8 @@ end = 33
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 16
+end = 28
 
 [JC_23]
 file = "HOME/tests/c/my_cosine.c"
@@ -1001,8 +1002,8 @@ end = 64
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 39
-begin = 2
-end = 8
+begin = 9
+end = 28
 
 [JC_24]
 file = "HOME/"
@@ -1038,8 +1039,8 @@ end = -1
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 19
+end = 24
 
 [my_cos2_safety]
 name = "Function my_cos2"
@@ -1053,15 +1054,15 @@ end = 13
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 19
+end = 31
 
 [JC_31]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 12
+end = 31
 
 [JC_32]
 file = "HOME/tests/c/my_cosine.c"
@@ -1073,22 +1074,22 @@ end = 49
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 19
+end = 24
 
 [JC_34]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 19
+end = 31
 
 [JC_35]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
 line = 17
-begin = 2
-end = 7
+begin = 12
+end = 31
 
 [JC_36]
 file = "HOME/tests/c/my_cosine.c"
@@ -1357,81 +1358,83 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter my_cos1 :
- x_1:single ->
+ x_0:single ->
   { } single
   { (JC_6:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
     0x1p-23)) }
 
 parameter my_cos1_requires :
- x_1:single ->
-  { (JC_1: le_real(abs_real(single_value(x_1)), 0x1p-5))} single
+ x_0:single ->
+  { (JC_1: le_real(abs_real(single_value(x_0)), 0x1p-5))} single
   { (JC_6:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
     0x1p-23)) }
 
 parameter my_cos2 :
- x_0:single ->
+ x_0_0:single ->
   { } single
   { (JC_26:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
+    le_real(abs_real(sub_real(single_value(result),
+                     cos(single_value(x_0_0@)))),
     0x1p-23)) }
 
 parameter my_cos2_requires :
- x_0:single ->
+ x_0_0:single ->
   { (JC_19:
-    ((JC_17: le_real(abs_real(single_value(x_0)), 0x1p-5))
-    and (JC_18: eq_real(single_round_error(x_0), 0.0))))}
+    ((JC_17: le_real(abs_real(single_value(x_0_0)), 0x1p-5))
+    and (JC_18: eq_real(single_round_error(x_0_0), 0.0))))}
   single
   { (JC_26:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
+    le_real(abs_real(sub_real(single_value(result),
+                     cos(single_value(x_0_0@)))),
     0x1p-23)) }
 
 parameter my_cos3 :
- x_2:single ->
+ x_1:single ->
   { } single
   { (JC_50:
     ((JC_48:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1@)))),
      0x1p-24))
     and (JC_49:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_2), 0x3p-24))))) }
+        add_real(single_round_error(x_1@), 0x3p-24))))) }
 
 parameter my_cos3_requires :
- x_2:single ->
+ x_1:single ->
   { (JC_39:
-    ((JC_37: le_real(abs_real(single_exact(x_2)), 0x1p-5))
-    and (JC_38: le_real(single_round_error(x_2), 0x1p-20))))}
+    ((JC_37: le_real(abs_real(single_exact(x_1)), 0x1p-5))
+    and (JC_38: le_real(single_round_error(x_1), 0x1p-20))))}
   single
   { (JC_50:
     ((JC_48:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1@)))),
      0x1p-24))
     and (JC_49:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_2), 0x3p-24))))) }
+        add_real(single_round_error(x_1@), 0x3p-24))))) }
 
 parameter my_cos4 :
- x_0_0:single ->
+ x_2:single ->
   { } single
   { (JC_66:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2@)))),
     0x1p-20)) }
 
 parameter my_cos4_requires :
- x_0_0:single ->
-  { (JC_61: le_real(abs_real(single_value(x_0_0)), 0.07))} single
+ x_2:single ->
+  { (JC_61: le_real(abs_real(single_value(x_2)), 0.07))} single
   { (JC_66:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2@)))),
     0x1p-20)) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let my_cos1_ensures_default =
- fun (x_1 : single) ->
-  { (JC_3: le_real(abs_real(single_value(x_1)), 0x1p-5)) }
+ fun (x_0 : single) ->
+  { (JC_3: le_real(abs_real(single_value(x_0)), 0x1p-5)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1442,10 +1445,10 @@ let my_cos1_ensures_default =
        (assert
        { (JC_13:
          le_real(abs_real(sub_real(sub_real(1.0,
-                                   mul_real(mul_real(single_value(x_1),
-                                            single_value(x_1)),
+                                   mul_real(mul_real(single_value(x_0),
+                                            single_value(x_0)),
                                    0.5)),
-                          cos(single_value(x_1)))),
+                          cos(single_value(x_0)))),
          0x1p-24)) }; void); void;
       (let jessie_<num> =
       (__retres := (C_4:
@@ -1455,17 +1458,17 @@ let my_cos1_ensures_default =
                     (JC_15:
                     (((mul_single_safe nearest_even) (C_2:
                                                      (JC_14:
-                                                     (((mul_single_safe nearest_even) x_1) x_1)))) 
+                                                     (((mul_single_safe nearest_even) x_0) x_0)))) 
                      (single_of_real_exact 0.5)))))))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_5:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_1)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
     0x1p-23)) }
 
 let my_cos1_safety =
- fun (x_1 : single) ->
-  { (JC_3: le_real(abs_real(single_value(x_1)), 0x1p-5)) }
+ fun (x_0 : single) ->
+  { (JC_3: le_real(abs_real(single_value(x_0)), 0x1p-5)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1476,10 +1479,10 @@ let my_cos1_safety =
        [ { } unit
          { (JC_9:
            le_real(abs_real(sub_real(sub_real(1.0,
-                                     mul_real(mul_real(single_value(x_1),
-                                              single_value(x_1)),
+                                     mul_real(mul_real(single_value(x_0),
+                                              single_value(x_0)),
                                      0.5)),
-                            cos(single_value(x_1)))),
+                            cos(single_value(x_0)))),
            0x1p-24)) } ]; void;
       (let jessie_<num> =
       (__retres := (C_4:
@@ -1489,16 +1492,16 @@ let my_cos1_safety =
                     (JC_11:
                     (((mul_single nearest_even) (C_2:
                                                 (JC_10:
-                                                (((mul_single nearest_even) x_1) x_1)))) 
+                                                (((mul_single nearest_even) x_0) x_0)))) 
                      (single_of_real_exact 0.5)))))))) in void);
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
 let my_cos2_ensures_default =
- fun (x_0 : single) ->
+ fun (x_0_0 : single) ->
   { (JC_23:
-    ((JC_21: le_real(abs_real(single_value(x_0)), 0x1p-5))
-    and (JC_22: eq_real(single_round_error(x_0), 0.0)))) }
+    ((JC_21: le_real(abs_real(single_value(x_0_0)), 0x1p-5))
+    and (JC_22: eq_real(single_round_error(x_0_0), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1514,22 +1517,23 @@ let my_cos2_ensures_default =
               (JC_34:
               (((mul_single_safe nearest_even) (C_8:
                                                (JC_33:
-                                               (((mul_single_safe nearest_even) x_0) x_0)))) 
+                                               (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
                (single_of_real_exact 0.5)))))))) in void);
       (assert
       { (JC_36:
-        le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0)))),
+        le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0_0)))),
         0x1p-24)) }; void); void; (return := !r); (raise Return) end));
     absurd  end with Return -> !return end))
   { (JC_25:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
+    le_real(abs_real(sub_real(single_value(result),
+                     cos(single_value(x_0_0@)))),
     0x1p-23)) }
 
 let my_cos2_safety =
- fun (x_0 : single) ->
+ fun (x_0_0 : single) ->
   { (JC_23:
-    ((JC_21: le_real(abs_real(single_value(x_0)), 0x1p-5))
-    and (JC_22: eq_real(single_round_error(x_0), 0.0)))) }
+    ((JC_21: le_real(abs_real(single_value(x_0_0)), 0x1p-5))
+    and (JC_22: eq_real(single_round_error(x_0_0), 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1545,19 +1549,20 @@ let my_cos2_safety =
               (JC_30:
               (((mul_single nearest_even) (C_8:
                                           (JC_29:
-                                          (((mul_single nearest_even) x_0) x_0)))) 
+                                          (((mul_single nearest_even) x_0_0) x_0_0)))) 
                (single_of_real_exact 0.5)))))))) in void);
       [ { } unit reads r
         { (JC_32:
-          le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0)))),
+          le_real(abs_real(sub_real(single_exact(r),
+                           cos(single_value(x_0_0)))),
           0x1p-24)) } ]; void; (return := !r); (raise Return) end)); 
     absurd  end with Return -> !return end)) { true }
 
 let my_cos3_ensures_default =
- fun (x_2 : single) ->
+ fun (x_1 : single) ->
   { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_2)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_2), 0x1p-20)))) }
+    ((JC_41: le_real(abs_real(single_exact(x_1)), 0x1p-5))
+    and (JC_42: le_real(single_round_error(x_1), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1573,26 +1578,26 @@ let my_cos3_ensures_default =
                 (JC_58:
                 (((mul_single_safe nearest_even) (C_17:
                                                  (JC_57:
-                                                 (((mul_single_safe nearest_even) x_2) x_2)))) 
+                                                 (((mul_single_safe nearest_even) x_1) x_1)))) 
                  (single_of_real_exact 0.5)))))))) in void);
       (assert
       { (JC_60:
-        le_real(abs_real(sub_real(single_exact(r_0), cos(single_exact(x_2)))),
+        le_real(abs_real(sub_real(single_exact(r_0), cos(single_exact(x_1)))),
         0x1p-24)) }; void); void; (return := !r_0); (raise Return) end));
     absurd  end with Return -> !return end))
   { (JC_47:
     ((JC_45:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_2)))),
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1@)))),
      0x1p-24))
     and (JC_46:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_2), 0x3p-24))))) }
+        add_real(single_round_error(x_1@), 0x3p-24))))) }
 
 let my_cos3_safety =
- fun (x_2 : single) ->
+ fun (x_1 : single) ->
   { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_2)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_2), 0x1p-20)))) }
+    ((JC_41: le_real(abs_real(single_exact(x_1)), 0x1p-5))
+    and (JC_42: le_real(single_round_error(x_1), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1608,18 +1613,18 @@ let my_cos3_safety =
                 (JC_54:
                 (((mul_single nearest_even) (C_17:
                                             (JC_53:
-                                            (((mul_single nearest_even) x_2) x_2)))) 
+                                            (((mul_single nearest_even) x_1) x_1)))) 
                  (single_of_real_exact 0.5)))))))) in void);
       [ { } unit reads r_0
         { (JC_56:
           le_real(abs_real(sub_real(single_exact(r_0),
-                           cos(single_exact(x_2)))),
+                           cos(single_exact(x_1)))),
           0x1p-24)) } ]; void; (return := !r_0); (raise Return) end)); 
     absurd  end with Return -> !return end)) { true }
 
 let my_cos4_ensures_default =
- fun (x_0_0 : single) ->
-  { (JC_63: le_real(abs_real(single_value(x_0_0)), 0.07)) }
+ fun (x_2 : single) ->
+  { (JC_63: le_real(abs_real(single_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1630,10 +1635,10 @@ let my_cos4_ensures_default =
        (assert
        { (JC_73:
          le_real(abs_real(sub_real(sub_real(1.0,
-                                   mul_real(mul_real(single_value(x_0_0),
-                                            single_value(x_0_0)),
+                                   mul_real(mul_real(single_value(x_2),
+                                            single_value(x_2)),
                                    0.5)),
-                          cos(single_value(x_0_0)))),
+                          cos(single_value(x_2)))),
          0x0.Fp-20)) }; void); void;
       (let jessie_<num> =
       (__retres_0 := (C_31:
@@ -1643,17 +1648,17 @@ let my_cos4_ensures_default =
                       (JC_75:
                       (((mul_single_safe nearest_even) (C_29:
                                                        (JC_74:
-                                                       (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
+                                                       (((mul_single_safe nearest_even) x_2) x_2)))) 
                        (single_of_real_exact 0.5)))))))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_65:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2@)))),
     0x1p-20)) }
 
 let my_cos4_safety =
- fun (x_0_0 : single) ->
-  { (JC_63: le_real(abs_real(single_value(x_0_0)), 0.07)) }
+ fun (x_2 : single) ->
+  { (JC_63: le_real(abs_real(single_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
@@ -1664,10 +1669,10 @@ let my_cos4_safety =
        [ { } unit
          { (JC_69:
            le_real(abs_real(sub_real(sub_real(1.0,
-                                     mul_real(mul_real(single_value(x_0_0),
-                                              single_value(x_0_0)),
+                                     mul_real(mul_real(single_value(x_2),
+                                              single_value(x_2)),
                                      0.5)),
-                            cos(single_value(x_0_0)))),
+                            cos(single_value(x_2)))),
            0x0.Fp-20)) } ]; void;
       (let jessie_<num> =
       (__retres_0 := (C_31:
@@ -1677,7 +1682,7 @@ let my_cos4_safety =
                       (JC_71:
                       (((mul_single nearest_even) (C_29:
                                                   (JC_70:
-                                                  (((mul_single nearest_even) x_0_0) x_0_0)))) 
+                                                  (((mul_single nearest_even) x_2) x_2)))) 
                        (single_of_real_exact 0.5)))))))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
@@ -1711,10 +1716,6 @@ logic add_int : int, int -> int
 logic sub_int : int, int -> int
 
 logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
 
 logic neg_int : int -> int
 
@@ -1974,6 +1975,46 @@ axiom prod_pos:
        (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
 
 axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
+logic computer_div : int, int -> int
+
+logic computer_mod : int, int -> int
+
+logic math_div : int, int -> int
+
+logic math_mod : int, int -> int
+
+axiom math_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * math_div(x, y)) + math_mod(x, y))))))
+
+axiom math_mod_bound:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> ((0 <= math_mod(x, y)) and (math_mod(x, y) < abs_int(y))))))
+
+axiom computer_div_mod:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_mod_bound:
+  (forall x:int.
+    (forall y:int. ((y <> 0) -> (abs_int(computer_mod(x, y)) < abs_int(y)))))
+
+axiom computer_mod_sign_pos:
+  (forall x:int.
+    (forall y:int. (((x >= 0) and (y <> 0)) -> (computer_mod(x, y) >= 0))))
+
+axiom computer_mod_sign_neg:
+  (forall x:int.
+    (forall y:int. (((x <= 0) and (y <> 0)) -> (computer_mod(x, y) <= 0))))
+
+axiom computer_rounds_toward_zero:
+  (forall x:int.
+    (forall y:int.
+      ((y <> 0) -> (abs_int((computer_div(x, y) * y)) <= abs_int(x)))))
 
 type 't alloc_table
 
@@ -2799,10 +2840,10 @@ predicate mul_single_post(m: mode, x: single, y: single, res: single) =
     (single_model(res) = (single_model(x) * single_model(y)))))
 
 predicate div_single_post(m: mode, x: single, y: single, res: single) =
-  ((single_value(res) = round_single(m,
-   (single_value(x) / single_value(y)))) and
-   ((single_exact(res) = (single_exact(x) / single_exact(y))) and
-    (single_model(res) = (single_model(x) / single_model(y)))))
+  ((single_value(res) = round_single(m, div_real(single_value(x),
+   single_value(y)))) and
+   ((single_exact(res) = div_real(single_exact(x), single_exact(y))) and
+    (single_model(res) = div_real(single_model(x), single_model(y)))))
 
 predicate sqrt_single_post(m: mode, x: single, res: single) =
   ((single_value(res) = round_single(m, sqrt_real(single_value(x)))) and
@@ -2842,10 +2883,10 @@ predicate mul_double_post(m: mode, x: double, y: double, res: double) =
     (double_model(res) = (double_model(x) * double_model(y)))))
 
 predicate div_double_post(m: mode, x: double, y: double, res: double) =
-  ((double_value(res) = round_double(m,
-   (double_value(x) / double_value(y)))) and
-   ((double_exact(res) = (double_exact(x) / double_exact(y))) and
-    (double_model(res) = (double_model(x) / double_model(y)))))
+  ((double_value(res) = round_double(m, div_real(double_value(x),
+   double_value(y)))) and
+   ((double_exact(res) = div_real(double_exact(x), double_exact(y))) and
+    (double_model(res) = div_real(double_model(x), double_model(y)))))
 
 predicate sqrt_double_post(m: mode, x: double, res: double) =
   ((double_value(res) = round_double(m, sqrt_real(double_value(x)))) and
@@ -2995,24 +3036,24 @@ axiom void_P_tags:
       x, void_P_tag)))
 
 goal my_cos1_ensures_default_po_1:
-  forall x_1:single.
-  ("JC_3": (abs_real(single_value(x_1)) <= 0x1.p-5)) ->
+  forall x_0:single.
+  ("JC_3": (abs_real(single_value(x_0)) <= 0x1.p-5)) ->
   ("JC_13":
   ("JC_13":
-  (abs_real(((1.0 - ((single_value(x_1) * single_value(x_1)) * 0.5)) - cos(single_value(x_1)))) <= 0x1.p-24)))
+  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24)))
 
 goal my_cos1_ensures_default_po_2:
-  forall x_1:single.
-  ("JC_3": (abs_real(single_value(x_1)) <= 0x1.p-5)) ->
+  forall x_0:single.
+  ("JC_3": (abs_real(single_value(x_0)) <= 0x1.p-5)) ->
   ("JC_13":
-  (abs_real(((1.0 - ((single_value(x_1) * single_value(x_1)) * 0.5)) - cos(single_value(x_1)))) <= 0x1.p-24)) ->
+  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
   (no_overflow_single(nearest_even,
-   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
-   x_1, x_1, result0)) ->
+   (single_value(x_0) * single_value(x_0))) and mul_single_post(nearest_even,
+   x_0, x_0, result0)) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
@@ -3029,30 +3070,30 @@ goal my_cos1_ensures_default_po_2:
   forall return:single.
   (return = __retres) ->
   ("JC_5":
-  (abs_real((single_value(return) - cos(single_value(x_1)))) <= 0x1.p-23))
+  (abs_real((single_value(return) - cos(single_value(x_0)))) <= 0x1.p-23))
 
 goal my_cos1_safety_po_1:
-  forall x_1:single.
-  ("JC_3": (abs_real(single_value(x_1)) <= 0x1.p-5)) ->
+  forall x_0:single.
+  ("JC_3": (abs_real(single_value(x_0)) <= 0x1.p-5)) ->
   ("JC_9":
-  (abs_real(((1.0 - ((single_value(x_1) * single_value(x_1)) * 0.5)) - cos(single_value(x_1)))) <= 0x1.p-24)) ->
+  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even, (single_value(x_1) * single_value(x_1)))
+  no_overflow_single(nearest_even, (single_value(x_0) * single_value(x_0)))
 
 goal my_cos1_safety_po_2:
-  forall x_1:single.
-  ("JC_3": (abs_real(single_value(x_1)) <= 0x1.p-5)) ->
+  forall x_0:single.
+  ("JC_3": (abs_real(single_value(x_0)) <= 0x1.p-5)) ->
   ("JC_9":
-  (abs_real(((1.0 - ((single_value(x_1) * single_value(x_1)) * 0.5)) - cos(single_value(x_1)))) <= 0x1.p-24)) ->
+  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   no_overflow_single(nearest_even,
-  (single_value(x_1) * single_value(x_1))) ->
+  (single_value(x_0) * single_value(x_0))) ->
   forall result0:single.
-  mul_single_post(nearest_even, x_1, x_1, result0) ->
+  mul_single_post(nearest_even, x_0, x_0, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
@@ -3060,17 +3101,17 @@ goal my_cos1_safety_po_2:
   (single_value(result0) * single_value(result1)))
 
 goal my_cos1_safety_po_3:
-  forall x_1:single.
-  ("JC_3": (abs_real(single_value(x_1)) <= 0x1.p-5)) ->
+  forall x_0:single.
+  ("JC_3": (abs_real(single_value(x_0)) <= 0x1.p-5)) ->
   ("JC_9":
-  (abs_real(((1.0 - ((single_value(x_1) * single_value(x_1)) * 0.5)) - cos(single_value(x_1)))) <= 0x1.p-24)) ->
+  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   no_overflow_single(nearest_even,
-  (single_value(x_1) * single_value(x_1))) ->
+  (single_value(x_0) * single_value(x_0))) ->
   forall result0:single.
-  mul_single_post(nearest_even, x_1, x_1, result0) ->
+  mul_single_post(nearest_even, x_0, x_0, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
@@ -3082,275 +3123,10 @@ goal my_cos1_safety_po_3:
   (single_value(result) - single_value(result2)))
 
 goal my_cos2_ensures_default_po_1:
-  forall x_0:single.
-  ("JC_23":
-  (("JC_21": (abs_real(single_value(x_0)) <= 0x1.p-5)) and
-   ("JC_22": (single_round_error(x_0) = 0.0)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_0) * single_value(x_0))) and mul_single_post(nearest_even,
-   x_0, x_0, result0)) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
-  forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
-  forall r:single.
-  (r = result3) ->
-  ("JC_36":
-  ("JC_36":
-  (abs_real((single_exact(r) - cos(single_value(x_0)))) <= 0x1.p-24)))
-
-goal my_cos2_ensures_default_po_2:
-  forall x_0:single.
-  ("JC_23":
-  (("JC_21": (abs_real(single_value(x_0)) <= 0x1.p-5)) and
-   ("JC_22": (single_round_error(x_0) = 0.0)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_0) * single_value(x_0))) and mul_single_post(nearest_even,
-   x_0, x_0, result0)) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
-  forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
-  forall r:single.
-  (r = result3) ->
-  ("JC_36":
-  (abs_real((single_exact(r) - cos(single_value(x_0)))) <= 0x1.p-24)) ->
-  forall return:single.
-  (return = r) ->
-  ("JC_25":
-  (abs_real((single_value(return) - cos(single_value(x_0)))) <= 0x1.p-23))
-
-goal my_cos2_safety_po_1:
-  forall x_0:single.
-  ("JC_23":
-  (("JC_21": (abs_real(single_value(x_0)) <= 0x1.p-5)) and
-   ("JC_22": (single_round_error(x_0) = 0.0)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even, (single_value(x_0) * single_value(x_0)))
-
-goal my_cos2_safety_po_2:
-  forall x_0:single.
-  ("JC_23":
-  (("JC_21": (abs_real(single_value(x_0)) <= 0x1.p-5)) and
-   ("JC_22": (single_round_error(x_0) = 0.0)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even,
-  (single_value(x_0) * single_value(x_0))) ->
-  forall result0:single.
-  mul_single_post(nearest_even, x_0, x_0, result0) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  no_overflow_single(nearest_even,
-  (single_value(result0) * single_value(result1)))
-
-goal my_cos2_safety_po_3:
-  forall x_0:single.
-  ("JC_23":
-  (("JC_21": (abs_real(single_value(x_0)) <= 0x1.p-5)) and
-   ("JC_22": (single_round_error(x_0) = 0.0)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even,
-  (single_value(x_0) * single_value(x_0))) ->
-  forall result0:single.
-  mul_single_post(nearest_even, x_0, x_0, result0) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  no_overflow_single(nearest_even,
-  (single_value(result0) * single_value(result1))) ->
-  forall result2:single.
-  mul_single_post(nearest_even, result0, result1, result2) ->
-  no_overflow_single(nearest_even,
-  (single_value(result) - single_value(result2)))
-
-goal my_cos3_ensures_default_po_1:
-  forall x_2:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_2)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_2) <= 0x1.p-20)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_2) * single_value(x_2))) and mul_single_post(nearest_even,
-   x_2, x_2, result0)) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
-  forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
-  forall r_0:single.
-  (r_0 = result3) ->
-  ("JC_60":
-  ("JC_60":
-  (abs_real((single_exact(r_0) - cos(single_exact(x_2)))) <= 0x1.p-24)))
-
-goal my_cos3_ensures_default_po_2:
-  forall x_2:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_2)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_2) <= 0x1.p-20)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_2) * single_value(x_2))) and mul_single_post(nearest_even,
-   x_2, x_2, result0)) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
-  forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
-  forall r_0:single.
-  (r_0 = result3) ->
-  ("JC_60":
-  (abs_real((single_exact(r_0) - cos(single_exact(x_2)))) <= 0x1.p-24)) ->
-  forall return:single.
-  (return = r_0) ->
-  ("JC_47":
-  ("JC_45":
-  ("JC_45":
-  (abs_real((single_exact(return) - cos(single_exact(x_2)))) <= 0x1.p-24))))
-
-goal my_cos3_ensures_default_po_3:
-  forall x_2:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_2)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_2) <= 0x1.p-20)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_2) * single_value(x_2))) and mul_single_post(nearest_even,
-   x_2, x_2, result0)) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
-  forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
-  forall r_0:single.
-  (r_0 = result3) ->
-  ("JC_60":
-  (abs_real((single_exact(r_0) - cos(single_exact(x_2)))) <= 0x1.p-24)) ->
-  forall return:single.
-  (return = r_0) ->
-  ("JC_47":
-  ("JC_46":
-  ("JC_46":
-  (single_round_error(return) <= (single_round_error(x_2) + 0x3.p-24)))))
-
-goal my_cos3_safety_po_1:
-  forall x_2:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_2)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_2) <= 0x1.p-20)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even, (single_value(x_2) * single_value(x_2)))
-
-goal my_cos3_safety_po_2:
-  forall x_2:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_2)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_2) <= 0x1.p-20)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even,
-  (single_value(x_2) * single_value(x_2))) ->
-  forall result0:single.
-  mul_single_post(nearest_even, x_2, x_2, result0) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  no_overflow_single(nearest_even,
-  (single_value(result0) * single_value(result1)))
-
-goal my_cos3_safety_po_3:
-  forall x_2:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_2)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_2) <= 0x1.p-20)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  no_overflow_single(nearest_even,
-  (single_value(x_2) * single_value(x_2))) ->
-  forall result0:single.
-  mul_single_post(nearest_even, x_2, x_2, result0) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  no_overflow_single(nearest_even,
-  (single_value(result0) * single_value(result1))) ->
-  forall result2:single.
-  mul_single_post(nearest_even, result0, result1, result2) ->
-  no_overflow_single(nearest_even,
-  (single_value(result) - single_value(result2)))
-
-goal my_cos4_ensures_default_po_1:
   forall x_0_0:single.
-  ("JC_63": (abs_real(single_value(x_0_0)) <= 0.07)) ->
-  ("JC_73":
-  ("JC_73":
-  (abs_real(((1.0 - ((single_value(x_0_0) * single_value(x_0_0)) * 0.5)) - cos(single_value(x_0_0)))) <= 0x0.Fp-20)))
-
-goal my_cos4_ensures_default_po_2:
-  forall x_0_0:single.
-  ("JC_63": (abs_real(single_value(x_0_0)) <= 0.07)) ->
-  ("JC_73":
-  (abs_real(((1.0 - ((single_value(x_0_0) * single_value(x_0_0)) * 0.5)) - cos(single_value(x_0_0)))) <= 0x0.Fp-20)) ->
+  ("JC_23":
+  (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
+   ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3369,29 +3145,60 @@ goal my_cos4_ensures_default_po_2:
   (no_overflow_single(nearest_even,
    (single_value(result) - single_value(result2))) and
    sub_single_post(nearest_even, result, result2, result3)) ->
-  forall __retres_0:single.
-  (__retres_0 = result3) ->
-  forall return:single.
-  (return = __retres_0) ->
-  ("JC_65":
-  (abs_real((single_value(return) - cos(single_value(x_0_0)))) <= 0x1.p-20))
+  forall r:single.
+  (r = result3) ->
+  ("JC_36":
+  ("JC_36":
+  (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24)))
 
-goal my_cos4_safety_po_1:
+goal my_cos2_ensures_default_po_2:
   forall x_0_0:single.
-  ("JC_63": (abs_real(single_value(x_0_0)) <= 0.07)) ->
-  ("JC_69":
-  (abs_real(((1.0 - ((single_value(x_0_0) * single_value(x_0_0)) * 0.5)) - cos(single_value(x_0_0)))) <= 0x0.Fp-20)) ->
+  ("JC_23":
+  (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
+   ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  forall result0:single.
+  (no_overflow_single(nearest_even,
+   (single_value(x_0_0) * single_value(x_0_0))) and
+   mul_single_post(nearest_even, x_0_0, x_0_0, result0)) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  forall result2:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result0) * single_value(result1))) and
+   mul_single_post(nearest_even, result0, result1, result2)) ->
+  forall result3:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result) - single_value(result2))) and
+   sub_single_post(nearest_even, result, result2, result3)) ->
+  forall r:single.
+  (r = result3) ->
+  ("JC_36":
+  (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24)) ->
+  forall return:single.
+  (return = r) ->
+  ("JC_25":
+  (abs_real((single_value(return) - cos(single_value(x_0_0)))) <= 0x1.p-23))
+
+goal my_cos2_safety_po_1:
+  forall x_0_0:single.
+  ("JC_23":
+  (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
+   ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   no_overflow_single(nearest_even,
   (single_value(x_0_0) * single_value(x_0_0)))
 
-goal my_cos4_safety_po_2:
+goal my_cos2_safety_po_2:
   forall x_0_0:single.
-  ("JC_63": (abs_real(single_value(x_0_0)) <= 0.07)) ->
-  ("JC_69":
-  (abs_real(((1.0 - ((single_value(x_0_0) * single_value(x_0_0)) * 0.5)) - cos(single_value(x_0_0)))) <= 0x0.Fp-20)) ->
+  ("JC_23":
+  (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
+   ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3405,11 +3212,11 @@ goal my_cos4_safety_po_2:
   no_overflow_single(nearest_even,
   (single_value(result0) * single_value(result1)))
 
-goal my_cos4_safety_po_3:
+goal my_cos2_safety_po_3:
   forall x_0_0:single.
-  ("JC_63": (abs_real(single_value(x_0_0)) <= 0.07)) ->
-  ("JC_69":
-  (abs_real(((1.0 - ((single_value(x_0_0) * single_value(x_0_0)) * 0.5)) - cos(single_value(x_0_0)))) <= 0x0.Fp-20)) ->
+  ("JC_23":
+  (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
+   ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3427,13 +3234,247 @@ goal my_cos4_safety_po_3:
   no_overflow_single(nearest_even,
   (single_value(result) - single_value(result2)))
 
+goal my_cos3_ensures_default_po_1:
+  forall x_1:single.
+  ("JC_43":
+  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  forall result0:single.
+  (no_overflow_single(nearest_even,
+   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
+   x_1, x_1, result0)) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  forall result2:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result0) * single_value(result1))) and
+   mul_single_post(nearest_even, result0, result1, result2)) ->
+  forall result3:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result) - single_value(result2))) and
+   sub_single_post(nearest_even, result, result2, result3)) ->
+  forall r_0:single.
+  (r_0 = result3) ->
+  ("JC_60":
+  ("JC_60":
+  (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24)))
+
+goal my_cos3_ensures_default_po_2:
+  forall x_1:single.
+  ("JC_43":
+  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  forall result0:single.
+  (no_overflow_single(nearest_even,
+   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
+   x_1, x_1, result0)) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  forall result2:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result0) * single_value(result1))) and
+   mul_single_post(nearest_even, result0, result1, result2)) ->
+  forall result3:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result) - single_value(result2))) and
+   sub_single_post(nearest_even, result, result2, result3)) ->
+  forall r_0:single.
+  (r_0 = result3) ->
+  ("JC_60":
+  (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24)) ->
+  forall return:single.
+  (return = r_0) ->
+  ("JC_47":
+  ("JC_45":
+  ("JC_45":
+  (abs_real((single_exact(return) - cos(single_exact(x_1)))) <= 0x1.p-24))))
+
+goal my_cos3_ensures_default_po_3:
+  forall x_1:single.
+  ("JC_43":
+  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  forall result0:single.
+  (no_overflow_single(nearest_even,
+   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
+   x_1, x_1, result0)) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  forall result2:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result0) * single_value(result1))) and
+   mul_single_post(nearest_even, result0, result1, result2)) ->
+  forall result3:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result) - single_value(result2))) and
+   sub_single_post(nearest_even, result, result2, result3)) ->
+  forall r_0:single.
+  (r_0 = result3) ->
+  ("JC_60":
+  (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24)) ->
+  forall return:single.
+  (return = r_0) ->
+  ("JC_47":
+  ("JC_46":
+  ("JC_46":
+  (single_round_error(return) <= (single_round_error(x_1) + 0x3.p-24)))))
+
+goal my_cos3_safety_po_1:
+  forall x_1:single.
+  ("JC_43":
+  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  no_overflow_single(nearest_even, (single_value(x_1) * single_value(x_1)))
+
+goal my_cos3_safety_po_2:
+  forall x_1:single.
+  ("JC_43":
+  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  no_overflow_single(nearest_even,
+  (single_value(x_1) * single_value(x_1))) ->
+  forall result0:single.
+  mul_single_post(nearest_even, x_1, x_1, result0) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  no_overflow_single(nearest_even,
+  (single_value(result0) * single_value(result1)))
+
+goal my_cos3_safety_po_3:
+  forall x_1:single.
+  ("JC_43":
+  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  no_overflow_single(nearest_even,
+  (single_value(x_1) * single_value(x_1))) ->
+  forall result0:single.
+  mul_single_post(nearest_even, x_1, x_1, result0) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  no_overflow_single(nearest_even,
+  (single_value(result0) * single_value(result1))) ->
+  forall result2:single.
+  mul_single_post(nearest_even, result0, result1, result2) ->
+  no_overflow_single(nearest_even,
+  (single_value(result) - single_value(result2)))
+
+goal my_cos4_ensures_default_po_1:
+  forall x_2:single.
+  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_73":
+  ("JC_73":
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)))
+
+goal my_cos4_ensures_default_po_2:
+  forall x_2:single.
+  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_73":
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  forall result0:single.
+  (no_overflow_single(nearest_even,
+   (single_value(x_2) * single_value(x_2))) and mul_single_post(nearest_even,
+   x_2, x_2, result0)) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  forall result2:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result0) * single_value(result1))) and
+   mul_single_post(nearest_even, result0, result1, result2)) ->
+  forall result3:single.
+  (no_overflow_single(nearest_even,
+   (single_value(result) - single_value(result2))) and
+   sub_single_post(nearest_even, result, result2, result3)) ->
+  forall __retres_0:single.
+  (__retres_0 = result3) ->
+  forall return:single.
+  (return = __retres_0) ->
+  ("JC_65":
+  (abs_real((single_value(return) - cos(single_value(x_2)))) <= 0x1.p-20))
+
+goal my_cos4_safety_po_1:
+  forall x_2:single.
+  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_69":
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  no_overflow_single(nearest_even, (single_value(x_2) * single_value(x_2)))
+
+goal my_cos4_safety_po_2:
+  forall x_2:single.
+  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_69":
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  no_overflow_single(nearest_even,
+  (single_value(x_2) * single_value(x_2))) ->
+  forall result0:single.
+  mul_single_post(nearest_even, x_2, x_2, result0) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  no_overflow_single(nearest_even,
+  (single_value(result0) * single_value(result1)))
+
+goal my_cos4_safety_po_3:
+  forall x_2:single.
+  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_69":
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  no_overflow_single(nearest_even,
+  (single_value(x_2) * single_value(x_2))) ->
+  forall result0:single.
+  mul_single_post(nearest_even, x_2, x_2, result0) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  no_overflow_single(nearest_even,
+  (single_value(result0) * single_value(result1))) ->
+  forall result2:single.
+  mul_single_post(nearest_even, result0, result1, result2) ->
+  no_overflow_single(nearest_even,
+  (single_value(result) - single_value(result2)))
+
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/my_cosine_why.why         : ?#?.###?.##.#?.#?#?.# (5/0/6/10/0)
+why/my_cosine_why.why         : ???.#?#?.##.#?.#?#?.# (5/0/8/8/0)
 total   :  21
 valid   :   5 ( 24%)
 invalid :   0 (  0%)
-unknown :   6 ( 29%)
-timeout :  10 ( 48%)
+unknown :   8 ( 38%)
+timeout :   8 ( 38%)
 failure :   0 (  0%)

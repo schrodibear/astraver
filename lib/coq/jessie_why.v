@@ -356,6 +356,56 @@ Admitted.
   (forall (x:R), (eq (Rabs (Ropp x)) (Rabs x))).
 Admitted.
 
+(*Why logic*) Definition computer_div : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition computer_mod : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition math_div : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition math_mod : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma math_div_mod :
+  (forall (x:Z),
+   (forall (y:Z), (y <> 0 -> x = (y * (math_div x y) + (math_mod x y))))).
+Admitted.
+
+(*Why axiom*) Lemma math_mod_bound :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> 0 <= (math_mod x y) /\ (math_mod x y) < (abs_int y)))).
+Admitted.
+
+(*Why axiom*) Lemma computer_div_mod :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> x = (y * (computer_div x y) + (computer_mod x y))))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_bound :
+  (forall (x:Z),
+   (forall (y:Z), (y <> 0 -> (abs_int (computer_mod x y)) < (abs_int y)))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_sign_pos :
+  (forall (x:Z),
+   (forall (y:Z), (x >= 0 /\ y <> 0 -> (computer_mod x y) >= 0))).
+Admitted.
+
+(*Why axiom*) Lemma computer_mod_sign_neg :
+  (forall (x:Z),
+   (forall (y:Z), (x <= 0 /\ y <> 0 -> (computer_mod x y) <= 0))).
+Admitted.
+
+(*Why axiom*) Lemma computer_rounds_toward_zero :
+  (forall (x:Z),
+   (forall (y:Z),
+    (y <> 0 -> (abs_int ((computer_div x y) * y)) <= (abs_int x)))).
+Admitted.
+
 (*Why type*) Definition alloc_table: Set ->Set.
 Admitted.
 

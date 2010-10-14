@@ -112,14 +112,16 @@ let rec pure_type fmt = function
 
 
 
+let t_computer_div = Ident.create "computer_div"
+let t_computer_mod = Ident.create "computer_mod"
 
 let builtins_table =  
     [
       t_add_int , "Int.(+)";
       t_sub_int , "Int.(-)";
       t_mul_int , "Int.(*)";
-      t_div_int , "ComputerDivision.div";
-      t_mod_int , "ComputerDivision.mod";
+      t_computer_div , "ComputerDivision.div";
+      t_computer_mod , "ComputerDivision.mod";
       t_neg_int , "Int.(-_)";
       t_add_real , "Real.(+)";
       t_sub_real , "Real.(-)";

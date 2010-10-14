@@ -278,7 +278,7 @@ object(self)
           in
           let globinv =
 	    Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
-          globinv.l_labels <- [ LogicLabel "Here" ];
+          globinv.l_labels <- [ LogicLabel(None,"Here") ];
           globinv.l_body <- LBpred (predicate v.vdecl p);
           attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
           ChangeTo [g;GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl)]
@@ -960,7 +960,7 @@ object(self)
                 let globinv =
 		  Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname))
 		in
-                globinv.l_labels <- [ LogicLabel "Here" ];
+                globinv.l_labels <- [ LogicLabel(None, "Here") ];
                 globinv.l_body <- LBpred (predicate v.vdecl p);
                 attach_globaction
 		  (fun () -> Logic_utils.add_logic_function globinv);

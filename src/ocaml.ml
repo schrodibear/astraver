@@ -114,8 +114,10 @@ let infix id =
   if id == t_add_int then "+" 
   else if id == t_sub_int then "-" 
   else if id == t_mul_int then "*"
+(*
   else if id == t_div_int then "/"
   else if id == t_mod_int then "mod"
+*)
   else if id == t_add_real then "+." 
   else if id == t_sub_real then "-." 
   else if id == t_mul_real then "*."
@@ -185,7 +187,7 @@ and exprd fmt = function
   | Lam (bl, p, e) ->
       fprintf fmt "@[<hov 2>(fun %a ->@ %a)@]" binder_ids bl expr_pre (p,e)
   | AppTerm ({desc=AppTerm ({desc=Var id}, t1, _)}, t2, _) 
-    when is_poly id || id == t_mod_int ->
+    when is_poly id (* || id == t_mod_int *) ->
       fprintf fmt "@[<hov 2>(%a %s@ %a)@]" 
       expression t1 (infix id) expression t2
   | AppTerm (e, t, _) ->

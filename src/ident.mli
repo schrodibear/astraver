@@ -133,8 +133,10 @@ val t_neg : t
 val t_add_int : t
 val t_sub_int : t
 val t_mul_int : t
+(* disabled (confusion math_div / computer_div)
 val t_div_int : t
 val t_mod_int : t
+*)
 val t_neg_int : t
 val t_abs_int : t
 

@@ -1,54 +1,7 @@
 include "bool.why"
 include "integer.why"
 include "real.why"
-
-
-(****************************************************************************)
-(* division and modulo                                                      *)
-(****************************************************************************)
-
-(*
-axiom div_int_euclid:
-  forall i:int. forall j:int [i/j].
-    i>=0 and j>0 -> (i-j+1 <= j*(i/j) and j*(i/j) <= i)
-*)
-
-
-(* division *)
-
-(* TODO: check we are talking about mod and div as in C or Ada, not math ones 
-   disabled for the moment.
-   one option should be to have both math_div, math_mod and ada_div, ada_mod
-
-*)
-
-(*
-axiom div_positive_by_positive:
-  forall a:int. forall b:int. 0 <= a and 0 < b -> 0 <= (a/b) and (a/b) <= a
-
-axiom div_negative_by_positive:
-  forall a:int. forall b:int. a <= 0 and 0 < b -> a <= (a/b) and (a/b) <= 0
-
-axiom div_positive_by_negative:
-  forall a:int. forall b:int. 0 <= a and b < 0 -> -a <= (a/b) and (a/b) <= 0
-
-axiom div_negative_by_negative:
-  forall a:int. forall b:int. a <= 0 and b < 0 -> 0 <= (a/b) and (a/b) <= -a
-
-(* modulo *)
-
-axiom mod_positive_by_positive:
-  forall a:int. forall b:int. 0 <= a and 0 < b -> 0 <= (a%b) and (a%b) < b
-
-axiom mod_negative_by_positive:
-  forall a:int. forall b:int. a <= 0 and 0 < b -> 0 <= (a%b) and (a%b) < b
-
-axiom mod_positive_by_negative:
-  forall a:int. forall b:int. 0 <= a and b < 0 -> b < (a%b) and (a%b) <= 0
-
-axiom mod_negative_by_negative:
-  forall a:int. forall b:int. a <= 0 and b < 0 -> b < (a%b) and (a%b) <= 0
-*)
+include "divisions.why"
 
 (*****************************************************************************)
 (* pointers, allocation, validity                                            *)

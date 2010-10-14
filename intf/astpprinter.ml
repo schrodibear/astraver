@@ -51,10 +51,12 @@ let print_term fmt t =
   and print2 fmt = function
     | Tapp (id, [a;b], _) when id == t_mul_int || id == t_mul_real ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a;b], _) when id == t_div_int || id == t_div_real ->
+    | Tapp (id, [a;b], _) when (* id == t_div_int || *) id == t_div_real ->
 	fprintf fmt "@[%a /@ %a@]" print2 a print3 b
+(*
     | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "@[%a@ %%@ %a@]" print2 a print3 b
+*)
     | t ->
 	print3 fmt t
   and print3 fmt = function

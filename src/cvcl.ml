@@ -63,7 +63,9 @@ let infix id =
   else if id == t_add_int then "+"
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
+(*
   else if id == t_div_int then "/"
+*)
   (* real ops *)
   else if id == t_add_real then "+"
   else if id == t_sub_real then "-"
@@ -108,8 +110,10 @@ let rec print_term fmt = function
 	"(%s / %s)" fmt c
   | Tderef _ -> 
       assert false
+(*
   | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
       fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
+*)
   | Tapp (id, [a], _) when id == t_sqrt_real || id == t_int_of_real ->
       fprintf fmt "@[%a(%a)@]" Ident.print id print_term a
   | Tapp (id, [a], _) when id == t_real_of_int ->

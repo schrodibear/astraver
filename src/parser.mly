@@ -624,8 +624,10 @@ expr:
    { bin_op (loc_i 2, Ident.t_mul) $1 $3 }
 | expr SLASH expr
    { bin_op (loc_i 2, Ident.t_div) $1 $3 }
+/* disabled (confusion math_div / computer_div
 | expr PERCENT expr
    { bin_op (loc_i 2, Ident.t_mod_int) $1 $3 }
+*/
 | MINUS expr %prec uminus
    { un_op (loc_i 1, Ident.t_neg) $2 }
 | expr SEMICOLON expr

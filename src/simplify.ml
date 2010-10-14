@@ -104,8 +104,10 @@ let () =
       t_add_int, "+";
       t_sub_int, "-";
       t_mul_int, "*";
+(*
       t_div_int, "int_div";
       t_mod_int, "int_mod";
+*)
       (* real ops *)
       t_add_real, "real_add";
       t_sub_real, "real_sub";

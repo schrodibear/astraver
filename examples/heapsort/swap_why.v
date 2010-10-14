@@ -4,26 +4,6 @@
 Require Import Why.
 Require Import Omega.
 
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
 
 (*Why type*) Definition farray: Set ->Set.
 Admitted.
@@ -55,12 +35,15 @@ Admitted.
 Admitted.
 Implicit Arguments array_length.
 
+
+
+
 (*Why predicate*) Definition sorted_array  (t:(array Z)) (i:Z) (j:Z)
   := (forall (k1:Z),
       (forall (k2:Z),
        ((i <= k1 /\ k1 <= k2) /\ k2 <= j -> (access t k1) <= (access t k2)))).
 
-(*Why predicate*) Definition exchange (A84:Set) (a1:(array A84)) (a2:(array A84)) (i:Z) (j:Z)
+(*Why predicate*) Definition exchange (A86:Set) (a1:(array A86)) (a2:(array A86)) (i:Z) (j:Z)
   := (array_length a1) = (array_length a2) /\
      (access a1 i) = (access a2 j) /\ (access a2 i) = (access a1 j) /\
      (forall (k:Z), (k <> i /\ k <> j -> (access a1 k) = (access a2 k))).
@@ -136,7 +119,7 @@ Admitted.
         (forall (i:Z), (i < l \/ u < i -> (access a2 i) = (access a1 i))))))))).
 Admitted.
 
-(*Why predicate*) Definition permutation (A93:Set) (a1:(array A93)) (a2:(array A93))
+(*Why predicate*) Definition permutation (A95:Set) (a1:(array A95)) (a2:(array A95))
   := (permut a1 a2 0 ((array_length a1) - 1)).
 Implicit Arguments permutation.
 
@@ -155,4 +138,121 @@ Admitted.
      (forall (u:Z),
       ((permut a1 a2 l u) -> (array_length a1) = (array_length a2)))))).
 Admitted.
+
+(* Why obligation from file "swap.mlw", line 7, characters 13-17: *)
+(*Why goal*) Lemma swap_po_1 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  0 <= i.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "swap.mlw", line 7, characters 13-17: *)
+(*Why goal*) Lemma swap_po_2 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  i < (array_length t).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "swap.mlw", line 9, characters 15-19: *)
+(*Why goal*) Lemma swap_po_3 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  0 <= j.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "swap.mlw", line 9, characters 15-19: *)
+(*Why goal*) Lemma swap_po_4 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  j < (array_length t).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "swap.mlw", line 10, characters 7-16: *)
+(*Why goal*) Lemma swap_po_5 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  forall (HW_6: 0 <= i /\ i < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_7: t0 = (update t i result0)),
+  j < (array_length t0).
+Proof.
+intuition; subst.
+rewrite array_length_update; auto.
+Save.
+
+(* Why obligation from file "swap.mlw", line 12, characters 6-27: *)
+(*Why goal*) Lemma swap_po_6 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (HW_1: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (HW_2: 0 <= i /\ i < (array_length t)),
+  forall (result: Z),
+  forall (HW_3: result = (access t i)),
+  forall (HW_4: 0 <= j /\ j < (array_length t)),
+  forall (result0: Z),
+  forall (HW_5: result0 = (access t j)),
+  forall (HW_6: 0 <= i /\ i < (array_length t)),
+  forall (t0: (array Z)),
+  forall (HW_7: t0 = (update t i result0)),
+  forall (HW_8: 0 <= j /\ j < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (HW_9: t1 = (update t0 j result)),
+  (exchange t1 t i j).
+Proof.
+unfold exchange; intros.
+assert (h: i=j \/ i<>j) by omega.
+destruct h.
+(* case i=j *)
+subst.
+repeat rewrite array_length_update; auto.
+repeat rewrite access_update; auto.
+intuition.
+repeat rewrite access_update_neq; auto.
+(* case i <> j *)
+subst.
+repeat rewrite array_length_update; auto.
+rewrite access_update; auto.
+rewrite access_update_neq; auto.
+rewrite access_update; auto.
+intuition.
+repeat rewrite access_update_neq; auto.
+Save.
+
 
