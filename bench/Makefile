@@ -4,7 +4,7 @@ BWHY=WHYLIB=../lib ../bin/why.byte
 GWHY=WHYLIB=../lib ../bin/gwhy.opt
 
 all:
-	./bench "../bin/why.opt --coq-v8 --valid"
+	./bench "../bin/why.opt --coq-v8"
 
 tc:
 	./bench "../bin/why.opt -tc"
@@ -42,11 +42,12 @@ harvey:
 	../bin/why-dp.opt test_why.rv
 
 simplify:
-	../bin/why.opt --simplify -d -V test.mlw
+	../bin/why.opt --simplify --simplify-triggers -d -V test.mlw
 	Simplify test_why.sx
 
 yices:
-	../bin/why.opt --smtlib --encoding sstrat test.mlw
+#	../bin/why.opt --smtlib --encoding sstrat test.mlw
+	../bin/why.opt --smtlib --encoding monoinst test.mlw
 	../bin/why-dp.opt test_why.smt
 
 ergo:
