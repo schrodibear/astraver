@@ -18,120 +18,66 @@ Proof. repeat split; discriminate. Qed.
 
 Inductive float_format : Set :=  Single | Double.
 
+Definition format_prec b :=
+  match b with
+  | Single => 24%Z
+  | Double => 53%Z
+  end.
+
+Definition format_emin b :=
+  match b with
+  | Single => (-149)%Z
+  | Double => (-1074)%Z
+  end.
+
 Record gen_float : Set := mk_gen_float {
-   val        : float;
-   format     : Fbound;
-   Hcan       : Fcanonic radix format val;
+   val        : R;
+   format     : float_format;
+   Hcan       : FLT_format radix2 (format_emin format) (format_prec format) val;
    f_to_exact : R;
    f_to_model : R
  }.
 
+Definition round_float (b:float_format) (m:mode) (r:R) :=
+  round radix2 (FLT_exp (format_emin b) (format_prec b)) (
+    match m with
+    | nearest_even => rndNE
+    | to_zero      => rndZR
+    | up           => rndUP
+    | down         => rndDN
+    | nearest_away => rndNA
+    end) r.
 
-Definition b_of_float_format (b:float_format) :=
- match b with 
-  | Single => bsingle
-  | Double => bdouble
- end.
-
-Definition prec_of_float_format (b:float_format) :=
- match b with 
-  | Single => 24
-  | Double => 53
- end.
-
-
-Lemma prec_of_float_format_gt_1: forall b, 1 < prec_of_float_format b.
-intros b; case b; auto with zarith.
+Lemma gen_float_of_real_logic_aux :
+  forall (b : float_format) (m : mode) x,
+  FLT_format radix2 (format_emin b) (format_prec b) (round_float b m x).
+Proof.
+intros b m x.
+apply <- FLT_format_generic.
+apply generic_format_round.
+apply FLT_exp_correct.
+now case b.
+now case b.
 Qed.
-
-Lemma vNum_b_of_float_format: forall b, 
- Zpos (vNum (b_of_float_format b)) = Zpower_nat radix (prec_of_float_format b).
-intros b; case b.
-simpl (b_of_float_format Single); simpl (prec_of_float_format Single).
-apply psGivesBound.
-simpl (b_of_float_format Double); simpl (prec_of_float_format Double).
-apply pdGivesBound.
-Qed.
-
-
-Hint Resolve prec_of_float_format_gt_1 vNum_b_of_float_format : float.
-
-
-
-Definition round_float_f (b:float_format) (m:mode) (r:R) := match m with
-  |  nearest_even => RND_EvenClosest (b_of_float_format b) radix (prec_of_float_format b) r
-  |  to_zero      => RND_Zero        (b_of_float_format b) radix (prec_of_float_format b) r
-  |  up           => RND_Max         (b_of_float_format b) radix (prec_of_float_format b) r
-  |  down         => RND_Min         (b_of_float_format b) radix (prec_of_float_format b) r
-  |  neares_away  => RND_ClosestUp   (b_of_float_format b) radix (prec_of_float_format b) r
-  end.
-
-Definition round_float (b:float_format) (m:mode) (r:R) := FtoRradix (round_float_f b m r).
-
-
-Lemma round_float_f_roundedMode: forall b m, exists P, 
-   RoundedModeP (b_of_float_format b) radix P /\ forall r, P r (round_float_f b m r).
-intros.
-unfold round_float_f; case m.
-exists (EvenClosest (b_of_float_format b) radix (prec_of_float_format b)); split.
-apply EvenClosestRoundedModeP; auto with float zarith.
-intros; apply RND_EvenClosest_correct; auto with zarith float.
-exists (ToZeroP (b_of_float_format b) radix); split.
-apply ToZeroRoundedModeP with (prec_of_float_format b); auto with float zarith.
-intros; apply RND_Zero_correct; auto with zarith float.
-exists (isMax (b_of_float_format b) radix); split.
-apply MaxRoundedModeP with (prec_of_float_format b); auto with float zarith.
-intros; apply RND_Max_correct; auto with zarith float.
-exists (isMin (b_of_float_format b) radix); split.
-apply MinRoundedModeP with (prec_of_float_format b); auto with float zarith.
-intros; apply RND_Min_correct; auto with zarith float.
-exists (Closest (b_of_float_format b) radix); split.
-apply ClosestRoundedModeP with (prec_of_float_format b); auto with float zarith.
-intros; apply RND_ClosestUp_correct; auto with zarith float.
-Qed.
-
-
-
-Lemma Fcanonic_gen_float_of_real_logic_aux: forall b m r,
-  Fcanonic radix (b_of_float_format b) (round_float_f b m r).
-intros.
-unfold round_float_f; case m.
-apply RND_EvenClosest_canonic; auto with zarith float.
-apply RND_Zero_canonic; auto with zarith float.
-apply RND_Max_canonic; auto with zarith float.
-apply RND_Min_canonic; auto with zarith float.
-apply RND_ClosestUp_canonic; auto with zarith float.
-Qed.
-
-
-
 
 Definition gen_float_of_real_logic (b:float_format) (m:mode) (r:R) := mk_gen_float
-  (round_float_f b m r)
-  (b_of_float_format b)
-  (Fcanonic_gen_float_of_real_logic_aux b m r)
-  r
-  r.
+  (round_float b m r) b (gen_float_of_real_logic_aux b m r) r r.
 
-
-
-(*Why logic*) Definition float_value := fun f => FtoRradix (val f).
+(*Why logic*) Definition float_value := val.
 
 (*Why logic*) Definition exact_value := f_to_exact.
 
 (*Why logic*) Definition model_value := f_to_model.
 
-
 Definition max_gen_float_f (f : float_format) :=
 match f with 
-| Single => Float 16777215 104
+| Single => Float radix2 16777215 104
 	    (* ((2-powerRZ 2 (-23))*powerRZ 2 127)%R *)
-                  
-| Double => Float 9007199254740991 971
+| Double => Float radix2 9007199254740991 971
  	    (* (2 - 2 ^ (-52)) * 2 ^ 1023 = 2 ^ 1024 - 2 ^ 971 = (2^53 - 1) * 2^ 971 *)
-                  
 end.
 
+(*
 Lemma max_gen_float_f_bounded: forall b, Fbounded (b_of_float_format b) (max_gen_float_f b).
 intros; split.
 rewrite vNum_b_of_float_format.
@@ -144,8 +90,9 @@ simpl (Fnum (max_gen_float_f Double)).
 auto with zarith.
 case b; simpl; auto with zarith.
 Qed.
+*)
 
-(*Why logic*) Definition max_gen_float := fun b => FtoRradix (max_gen_float_f b).
+(*Why logic*) Definition max_gen_float := fun b => F2R (max_gen_float_f b).
 
 (* Coq is too bad with computations !
 (*Why axiom*) Lemma max_single :
@@ -160,6 +107,7 @@ Admitted.
 (*Why predicate*) Definition no_overflow  (f:float_format) (m:mode) (x:R)
   := (Rle (Rabs (round_float f m x)) (max_gen_float f)).
 
+(*
 (*Why axiom*) Lemma bounded_real_no_overflow :
   (forall (f:float_format),
    (forall (m:mode),
@@ -217,6 +165,7 @@ apply RoundedModeProjectorIdemEq with (4:=H1) (precision:=prec_of_float_format f
 elim (round_float_f_roundedMode f m2); intros P2 (H1',H2').
 apply RoundedModeBounded with radix P2 x; auto.
 Qed.
+*)
 
 (*Why axiom*) Lemma prod_pos :
   (forall (x:R),
@@ -234,6 +183,7 @@ Qed.
 exact Rabs_Ropp.
 Qed.
 
+(*
 (*Why axiom*) Lemma a1 :
   (forall (f:float_format),
    (forall (m:mode),
@@ -256,7 +206,7 @@ Qed.
     (forall (x:R), (eq (model_value (gen_float_of_real_logic f m x)) x)))).
 intros; reflexivity.
 Qed.
-
+*)
 
 
 (*Why predicate*) Definition gen_float_of_real_post  (f:float_format) (m:mode) (x:R) (res:gen_float)

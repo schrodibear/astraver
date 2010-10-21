@@ -376,13 +376,13 @@ else
 	AC_MSG_CHECKING(Coq floating-point library)
  	case $COQVERSION in
 	   8.2*|trunk)
- 	      if test -f "$COQLIB/user-contrib/AllFloat.vo" || test -f "$COQLIB/user-contrib/Float/AllFloat.vo"; then
+	      if test -f "$COQLIB/user-contrib/Flocq/Core/Fcore.vo"; then
 	        AC_MSG_RESULT(yes)
 	  	WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/JessieFloats.vo lib/coq/floats_strict.vo"
 		COQFLOATSMSG=yes
 	      else
 	        AC_MSG_RESULT(no)
-	        COQFLOATSMSG="no (Coq library AllFloat.vo not found)"
+	        COQFLOATSMSG="no (Coq library Flocq/Core/Fcore.vo not found)"
 	      fi
 	      AC_MSG_CHECKING(Coq Gappa library)
  	      if test -f "$COQLIB/user-contrib/Gappa/Gappa_tactic.vo"; then
@@ -535,7 +535,7 @@ if test "$COQ" = "yes" ; then
       echo "                         : (Jessie Coq proofs disabled, requires >= 8.1)"
    fi
    echo "    Lib                  : $COQLIB"
-   echo "    Floats               : $COQFLOATSMSG"
+   echo "    Flocq                : $COQFLOATSMSG"
    echo "    Gappa                : $COQGAPPAMSG"
 fi
 echo "PVS support              : $PVS"
