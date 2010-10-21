@@ -510,22 +510,3 @@ Theorem two_no_round: forall (m:mode), double_value (round_double_logic m (Z2R 2
 intros.
 now rewrite small_int_no_round.
 Qed.
-
-(*
-Theorem max_single_pos: (0 < max_single)%R.
-unfold max_single.
-apply Rle_lt_trans with (0*powerRZ radix 127)%R;[right; ring|apply Rmult_lt_compat_r; auto with real zarith].
-apply Rplus_lt_reg_r with (powerRZ radix (-23)); ring_simplify.
-apply Rlt_le_trans with (powerRZ radix 1); auto with real zarith.
-apply Rlt_powerRZ; unfold radix; simpl; auto with real zarith.
-Qed.
-
-
-Theorem max_double_pos: (0 < max_double)%R.
-unfold max_double.
-apply Rle_lt_trans with (0*powerRZ radix 1023)%R;[right; ring|apply Rmult_lt_compat_r; auto with real zarith].
-apply Rplus_lt_reg_r with (powerRZ radix (-52)); ring_simplify.
-apply Rlt_le_trans with (powerRZ radix 1); auto with real zarith.
-apply Rlt_powerRZ; unfold radix; simpl; auto with real zarith.
-Qed.
-*)
