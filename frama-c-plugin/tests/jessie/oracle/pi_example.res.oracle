@@ -443,7 +443,7 @@ let Perimeter1_ensures_default =
                                                          ((double_of_real_safe nearest_even) 3.14)) 
                                                         (double_of_real_exact 2.0))))) 
                                                       (C_1:
-                                                      ((single_to_double nearest_even) radius)))))))) in
+                                                      (single_to_double radius)))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
@@ -477,8 +477,7 @@ let Perimeter1_safety =
                                                          ((double_of_real nearest_even) 3.14))) 
                                                         (double_of_real_exact 2.0))))) 
                                                       (C_1:
-                                                      (JC_<somenum>:
-                                                      ((single_to_double nearest_even) radius)))))))))) in
+                                                      (single_to_double radius))))))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

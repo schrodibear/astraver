@@ -1688,7 +1688,7 @@ let F6_ensures_default =
                                                  (((mul_double_safe nearest_even) 
                                                    ((double_of_real_safe nearest_even) 511.5)) 
                                                   (C_37:
-                                                  ((single_to_double nearest_even) !G20)))))))) in
+                                                  (single_to_double !G20)))))))) in
         void);
         (let jessie_<somenum> =
         (V11 := (C_43:
@@ -1697,7 +1697,7 @@ let F6_ensures_default =
                                                  (((mul_double_safe nearest_even) 
                                                    ((double_of_real_safe nearest_even) 511.5)) 
                                                   (C_41:
-                                                  ((single_to_double nearest_even) !G20)))))))) in
+                                                  (single_to_double !G20)))))))) in
         void);
         (let jessie_<somenum> =
         (V12 := (C_45:
@@ -1758,7 +1758,7 @@ let F6_ensures_default =
                                                   (JC_<somenum>:
                                                   (((add_double_safe nearest_even) 
                                                     (C_71:
-                                                    ((single_to_double nearest_even) !G16))) 
+                                                    (single_to_double !G16))) 
                                                    (double_of_real_exact 1.0)))))))))) in
         void);
         (let jessie_<somenum> =
@@ -1774,10 +1774,10 @@ let F6_ensures_default =
                                                    (JC_<somenum>:
                                                    (((sub_double_safe nearest_even) 
                                                      (C_79:
-                                                     ((single_to_double nearest_even) !G16))) 
+                                                     (single_to_double !G16))) 
                                                     (double_of_real_exact 1.0))))) 
                                                   (C_78:
-                                                  ((single_to_double nearest_even) !G21)))))))) in
+                                                  (single_to_double !G21)))))))) in
         void);
         (let jessie_<somenum> =
         (G22 := (C_85:
@@ -1928,8 +1928,7 @@ let F6_safety =
                                                    (JC_<somenum>:
                                                    ((double_of_real nearest_even) 511.5))) 
                                                   (C_37:
-                                                  (JC_<somenum>:
-                                                  ((single_to_double nearest_even) !G20)))))))))) in
+                                                  (single_to_double !G20))))))))) in
         void);
         (let jessie_<somenum> =
         (V11 := (C_43:
@@ -1940,8 +1939,7 @@ let F6_safety =
                                                    (JC_<somenum>:
                                                    ((double_of_real nearest_even) 511.5))) 
                                                   (C_41:
-                                                  (JC_<somenum>:
-                                                  ((single_to_double nearest_even) !G20)))))))))) in
+                                                  (single_to_double !G20))))))))) in
         void);
         (let jessie_<somenum> =
         (V12 := (C_45:
@@ -2016,8 +2014,7 @@ let F6_safety =
                                                   (JC_<somenum>:
                                                   (((add_double nearest_even) 
                                                     (C_71:
-                                                    (JC_<somenum>:
-                                                    ((single_to_double nearest_even) !G16)))) 
+                                                    (single_to_double !G16))) 
                                                    (double_of_real_exact 1.0))))))))))) in
         void);
         (let jessie_<somenum> =
@@ -2033,12 +2030,10 @@ let F6_safety =
                                                    (JC_<somenum>:
                                                    (((sub_double nearest_even) 
                                                      (C_79:
-                                                     (JC_<somenum>:
-                                                     ((single_to_double nearest_even) !G16)))) 
+                                                     (single_to_double !G16))) 
                                                     (double_of_real_exact 1.0))))) 
                                                   (C_78:
-                                                  (JC_<somenum>:
-                                                  ((single_to_double nearest_even) !G21)))))))))) in
+                                                  (single_to_double !G21))))))))) in
         void);
         (let jessie_<somenum> =
         (G22 := (C_85:
@@ -2213,9 +2208,7 @@ let F7_ensures_default =
                            (((mul_single_safe nearest_even) !V32) !V29))))))) in
                   void);
                   (let jessie_<somenum> =
-                  (if ((ge_double (C_137:
-                                  ((single_to_double nearest_even) !V27))) 
-                       (double_of_real_exact 0.0))
+                  (if ((ge_double (C_137: (single_to_double !V27))) (double_of_real_exact 0.0))
                   then
                    (C_136:
                    begin
@@ -2278,8 +2271,7 @@ let F7_ensures_default =
                     (JC_<somenum>: (((mul_single_safe nearest_even) !V32) !V29))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((ge_double (C_180: ((single_to_double nearest_even) !V27))) 
-                (double_of_real_exact 0.0))
+           (if ((ge_double (C_180: (single_to_double !V27))) (double_of_real_exact 0.0))
            then
             (C_179:
             begin
@@ -2292,9 +2284,9 @@ let F7_ensures_default =
                                                          (((mul_double_safe nearest_even) 
                                                            (double_of_real_exact 2.0)) 
                                                           (C_175:
-                                                          ((single_to_double nearest_even) !V30)))))) 
+                                                          (single_to_double !V30)))))) 
                                                         (C_174:
-                                                        ((single_to_double nearest_even) !V27))))))));
+                                                        (single_to_double !V27))))))));
              !V30 end)
            else
             (C_173:
@@ -2308,9 +2300,9 @@ let F7_ensures_default =
                                                          (((mul_double_safe nearest_even) 
                                                            (double_of_real_exact 2.0)) 
                                                           (C_169:
-                                                          ((single_to_double nearest_even) !V30)))))) 
+                                                          (single_to_double !V30)))))) 
                                                         (C_168:
-                                                        ((single_to_double nearest_even) !V27))))))));
+                                                        (single_to_double !V27))))))));
              !V30 end)) in void);
            (let jessie_<somenum> =
            (V30 := (C_183:
@@ -2328,12 +2320,11 @@ let F7_ensures_default =
                                                     (JC_<somenum>:
                                                     (((mul_double_safe nearest_even) 
                                                       (C_185:
-                                                      ((single_to_double nearest_even) !V30))) 
+                                                      (single_to_double !V30))) 
                                                      (double_of_real_exact 64.0))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((le_double (C_195: ((single_to_double nearest_even) !V30))) 
-                (double_of_real_exact 65535.0))
+           (if ((le_double (C_195: (single_to_double !V30))) (double_of_real_exact 65535.0))
            then
             (C_194:
             (let jessie_<somenum> =
@@ -2540,10 +2531,7 @@ let F7_safety =
                            (JC_<somenum>: (((mul_single nearest_even) !V32) !V29))))))) in
                   void);
                   (let jessie_<somenum> =
-                  (if ((ge_double (C_137:
-                                  (JC_<somenum>:
-                                  ((single_to_double nearest_even) !V27)))) 
-                       (double_of_real_exact 0.0))
+                  (if ((ge_double (C_137: (single_to_double !V27))) (double_of_real_exact 0.0))
                   then
                    (C_136:
                    begin
@@ -2608,9 +2596,7 @@ let F7_safety =
                     (JC_<somenum>: (((mul_single nearest_even) !V32) !V29))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((ge_double (C_180:
-                           (JC_<somenum>: ((single_to_double nearest_even) !V27)))) 
-                (double_of_real_exact 0.0))
+           (if ((ge_double (C_180: (single_to_double !V27))) (double_of_real_exact 0.0))
            then
             (C_179:
             begin
@@ -2624,11 +2610,9 @@ let F7_safety =
                                                          (((mul_double nearest_even) 
                                                            (double_of_real_exact 2.0)) 
                                                           (C_175:
-                                                          (JC_<somenum>:
-                                                          ((single_to_double nearest_even) !V30))))))) 
+                                                          (single_to_double !V30)))))) 
                                                         (C_174:
-                                                        (JC_<somenum>:
-                                                        ((single_to_double nearest_even) !V27))))))))));
+                                                        (single_to_double !V27)))))))));
              !V30 end)
            else
             (C_173:
@@ -2643,11 +2627,9 @@ let F7_safety =
                                                          (((mul_double nearest_even) 
                                                            (double_of_real_exact 2.0)) 
                                                           (C_169:
-                                                          (JC_<somenum>:
-                                                          ((single_to_double nearest_even) !V30))))))) 
+                                                          (single_to_double !V30)))))) 
                                                         (C_168:
-                                                        (JC_<somenum>:
-                                                        ((single_to_double nearest_even) !V27))))))))));
+                                                        (single_to_double !V27)))))))));
              !V30 end)) in void);
            (let jessie_<somenum> =
            (V30 := (C_183:
@@ -2666,14 +2648,11 @@ let F7_safety =
                                                     (JC_<somenum>:
                                                     (((mul_double nearest_even) 
                                                       (C_185:
-                                                      (JC_<somenum>:
-                                                      ((single_to_double nearest_even) !V30)))) 
+                                                      (single_to_double !V30))) 
                                                      (double_of_real_exact 64.0)))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((le_double (C_195:
-                           (JC_<somenum>: ((single_to_double nearest_even) !V30)))) 
-                (double_of_real_exact 65535.0))
+           (if ((le_double (C_195: (single_to_double !V30))) (double_of_real_exact 65535.0))
            then
             (C_194:
             (let jessie_<somenum> =
@@ -3014,11 +2993,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po191.why">
-      <location file = "why/renamed1.why" line = "2411" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2390" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po192.why">
-      <location file = "why/renamed1.why" line = "2411" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2390" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po193.why">
@@ -3147,11 +3126,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po128.why">
-      <location file = "why/renamed1.why" line = "2038" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2029" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po129.why">
-      <location file = "why/renamed1.why" line = "2038" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2029" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po130.why">
