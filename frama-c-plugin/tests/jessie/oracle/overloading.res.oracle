@@ -1425,16 +1425,14 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : mode, single -> double
+logic single_to_double : single -> double
 
 logic double_to_single : mode, double -> single
 
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall s:single. (double_value(single_to_double(m,
-      s)) = single_value(s))))
-
 axiom single_to_double_val:
+  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
+
+axiom double_to_single_val:
   (forall m:mode.
     (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
       double_value(d)))))
