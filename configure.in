@@ -389,9 +389,6 @@ else
 	        AC_MSG_RESULT(yes)
 	  	WHYFLOATS="$WHYFLOATS lib/coq/JessieGappa.vo"
 		COQGAPPAMSG=yes
-		if test "$COQFLOATSMSG" = "yes"; then
-		  WHYFLOATS="$WHYFLOATS lib/coq/Why2Gappa.vo"
-		fi
 	      else
 	        AC_MSG_RESULT(no)
 	        COQGAPPAMSG="no (Coq library Gappa_tactic.vo not found)"

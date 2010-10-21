@@ -2,25 +2,19 @@
 (* formalization of the full model *)
 
 Require Export Reals.
+Require Import Fcore.
 Require Export Gappa_tactic.
 
 Inductive float_format : Set :=  Single | Double.
 
 Definition max_float2 (f : float_format) :=
 match f with 
-| Single => Float2 16777215 104
-| Double => Float2 9007199254740991 971
+| Single => Float2 16777215 104         (* (2 - 2^(-23)) * 2^127 *)
+| Double => Float2 9007199254740991 971 (* (2 - 2^(-52)) * 2^1023 *)
 end.
 
 Definition max_gen_float (f : float_format) :=
-match f with 
-| Single => (16777215*powerRZ 2 104)%R
-	    (* ((2-powerRZ 2 (-23))*powerRZ 2 127)%R *)
-                  
-| Double => (9007199254740991 * powerRZ 2 971)%R
- 	    (* (2 - 2 ^ (-52)) * 2 ^ 1023 = 2 ^ 1024 - 2 ^ 971 = (2^53 - 1) * 2^ 971 *)
-                  
-end.
+  float2R (max_float2 f).
 
 Definition min_float2 (f : float_format) :=
 match f with 
@@ -29,10 +23,7 @@ match f with
 end.
 
 Definition min_gen_float (f:float_format) :=
- match f with 
-  | Single => powerRZ 2 (-149)
-  | Double => powerRZ 2 (-1074)
- end.
+  float2R (min_float2 f).
 
 Inductive mode : Set := 
    nearest_even 
@@ -43,11 +34,11 @@ Inductive mode : Set :=
 
 Definition round_mode (m:mode) :=
   match m with 
-  | nearest_even => roundNE
-  | to_zero => roundZR
-  | up => roundUP
-  | down => roundDN
-  | nearest_away => roundNA
+  | nearest_even => rndNE
+  | to_zero => rndZR
+  | up => rndUP
+  | down => rndDN
+  | nearest_away => rndNA
   end.
 
 
@@ -119,14 +110,13 @@ Save.
 
 
 Record gen_float : Set := mk_gen_float {
-   genf : float2;
    float_class : Float_class;
    float_sign : sign;
-   sign_invariant: float_class = Finite -> (float2R genf <> 0)%R -> 
-                          same_sign_real_bool float_sign (float2R genf);
-   float_value := float2R genf;
+   float_value : R;
    exact_value : R;
-   model_value : R
+   model_value : R;
+   sign_invariant: float_class = Finite -> (float_value <> 0)%R -> 
+                          same_sign_real_bool float_sign float_value
 }.
 
 
@@ -221,12 +211,10 @@ Lemma exists_product_sign: forall x y, exists z, product_sign z x y.
 Proof.
 intros; unfold product_sign.
 case (same_sign_dec x y); intro.
-exists (mk_gen_float (Float2 2 3) Infinite Positive exists_positive_float
- 1%R 1%R);split;
+exists (mk_gen_float Infinite Positive (float2R (Float2 2 3)) R1 R1 exists_positive_float);split;
 intro;[auto | unfold same_sign, diff_sign in *;rewrite H in H0;
 contradiction H0; trivial].
-exists (mk_gen_float (Float2 2 3) Infinite Negative exists_negative_float 
-1%R 1%R);split;
+exists (mk_gen_float Infinite Negative (float2R (Float2 2 3)) R1 R1 exists_negative_float);split;
 intro; [unfold same_sign, diff_sign in *;rewrite H0 in H;
 contradiction H; trivial | auto].
 Save.
@@ -247,7 +235,7 @@ intros;destruct H.
 assert (float_value x <> 0)%R;auto with real.
 generalize (sign_invariant x H H1);intro.
 unfold float_value in *.
-apply (same_sign_real_bool_correct2 (float_sign x) (genf x) H2);trivial.
+apply (same_sign_real_bool_correct2 (float_sign x) (float_value x) H2);trivial.
 Save.
 
 
@@ -258,7 +246,7 @@ Proof.
 intros; destruct H;destruct H0.
 generalize (sign_invariant x H H0);intro.
 unfold float_value in *.
-apply (same_sign_real_bool_correct2 (float_sign x) (genf x) H2);trivial.
+apply (same_sign_real_bool_correct2 (float_sign x) (float_value x) H2);trivial.
 Save.
 
 Lemma finite_sign_pos1: forall x:gen_float,
@@ -269,7 +257,7 @@ intros;destruct H.
 assert (float_value x <> 0)%R;auto with real.
 generalize (sign_invariant x H H1);intro.
 unfold float_value in *.
-apply (same_sign_real_bool_correct3 (float_sign x) (genf x) H2);trivial.
+apply (same_sign_real_bool_correct3 (float_sign x) (float_value x) H2);trivial.
 Save.
 
 Lemma finite_sign_pos2: forall x:gen_float,
@@ -279,7 +267,7 @@ Proof.
 intros; destruct H;destruct H0.
 generalize (sign_invariant x H H0);intro.
 unfold float_value in *.
-apply (same_sign_real_bool_correct3 (float_sign x) (genf x) H2);trivial.
+apply (same_sign_real_bool_correct3 (float_sign x) (float_value x) H2);trivial.
 Save.
 
 
@@ -378,8 +366,8 @@ Definition gen_set_model (x:gen_float) (r:R) :=
 
 Definition round_float (f : float_format) (m : mode) (x:R) :=
 match f with
-| Single => gappa_rounding (rounding_float (round_mode m) 24 149) x
-| Double => gappa_rounding (rounding_float (round_mode m) 53 1074) x
+| Single => rounding_float (round_mode m) 24 (-149) x
+| Double => rounding_float (round_mode m) 53 (-1074) x
 end.
 
 Definition no_overflow (f : float_format) (m : mode) (x:R) :=
@@ -595,86 +583,86 @@ Lemma positive_constant : forall f m x,
             (min_gen_float f <= x <= max_gen_float f)%R -> 
             no_overflow f m x  /\ (round_float f m x > 0)%R.
 Proof.
-intros;split.
-apply bounded_real_no_overflow;destruct H.
-assert (x >= 0)%R.
-apply Rge_trans with (min_gen_float f).
-apply Rle_ge;trivial.
-case f; unfold min_gen_float;apply Rle_ge;apply powerRZ_le;auto with real.
-rewrite Rabs_right;trivial.
-assert (round_float f m x >= min_gen_float f)%R.
-rewrite <- (round_of_min_gen f m);apply Rle_ge.
-destruct f;unfold round_float; destruct H;
-apply Gappa_round.round_extension_monotone;trivial.
-apply Rge_gt_trans with (min_gen_float f);trivial.
-case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
+intros F m x (Bx1,Bx2).
+split.
+apply bounded_real_no_overflow.
+rewrite Rabs_pos_eq.
+exact Bx2.
+apply Rle_trans with (2 := Bx1).
+unfold min_gen_float, min_float2.
+case F ; unfold float2R ; rewrite F2R_bpow ; apply bpow_ge_0.
+apply Rlt_gt.
+apply Rlt_le_trans with (min_gen_float F).
+unfold min_gen_float, min_float2.
+case F ; unfold float2R ; rewrite F2R_bpow ; apply bpow_gt_0.
+rewrite <- round_of_min_gen with F m.
+revert Bx1.
+case F ; apply round_monotone ; now apply FLT_exp_correct.
 Save.
 
 Lemma negative_constant : forall f m x, 
             (Ropp (max_gen_float f) <= x <= Ropp (min_gen_float f))%R -> 
             no_overflow f m x  /\ (round_float f m x < 0)%R.
 Proof.
-intros;split.
-apply bounded_real_no_overflow;destruct H.
-assert (x < 0)%R.
-apply Rle_lt_trans with (Ropp (min_gen_float f));trivial.
-rewrite <- Ropp_0;apply Ropp_gt_lt_contravar.
-case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
-rewrite Rabs_left;trivial.
-rewrite <- (Ropp_involutive (max_gen_float f)).
-apply Ropp_le_contravar;trivial.
-assert (round_float f m x <= - min_gen_float f)%R.
-rewrite <- (round_of_opp_min_gen f m).
-destruct f;unfold round_float; destruct H;
-apply Gappa_round.round_extension_monotone;trivial.
-apply Rle_lt_trans with (Ropp (min_gen_float f));trivial.
-rewrite <- Ropp_0;apply Ropp_gt_lt_contravar.
-case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
+intros F m x (Bx1,Bx2).
+split.
+apply bounded_real_no_overflow.
+rewrite Rabs_left1.
+apply Ropp_le_cancel.
+now rewrite Ropp_involutive.
+apply Rle_trans with (1 := Bx2).
+apply Rge_le.
+apply Ropp_0_le_ge_contravar.
+unfold min_gen_float, min_float2.
+case F ; unfold float2R ; rewrite F2R_bpow ; apply bpow_ge_0.
+apply Rle_lt_trans with (- min_gen_float F)%R.
+rewrite <- round_of_opp_min_gen with F m.
+revert Bx2.
+case F ; apply round_monotone ; now apply FLT_exp_correct.
+apply Ropp_lt_gt_0_contravar.
+unfold min_gen_float, min_float2.
+case F ; unfold float2R ; rewrite F2R_bpow ; apply bpow_gt_0.
 Save.
 
 Lemma round_increasing: forall f m x y,
       (x <= y)%R -> (round_float f m x <= round_float f m y)%R.
 Proof.
-intros;case f;case m;unfold round_float;
-apply Gappa_round.round_extension_monotone;trivial.
+intros F m x y.
+case F ; apply round_monotone ; now apply FLT_exp_correct.
 Save.
 
 Lemma round_greater_min: forall f m x, 
             (Rabs x >= min_gen_float f)%R ->
             (Rabs (round_float f m x) >= min_gen_float f)%R.
 Proof.
-intros.
-case (Rge_dec x 0);intro.
-rewrite (Rabs_right x r) in H.
-assert (round_float f m x >= 0)%R.
-apply Rge_trans with (min_gen_float f)%R.
-rewrite <- (round_of_min_gen f m); apply Rle_ge;destruct f;
-unfold round_float;apply Gappa_round.round_extension_monotone;
-apply Rge_le;trivial.
-case f; unfold min_gen_float;apply Rle_ge;apply powerRZ_le;auto with real.
-rewrite Rabs_right;trivial.
-rewrite <- (round_of_min_gen f m);apply Rle_ge.
-destruct f;unfold round_float;apply Gappa_round.round_extension_monotone;
-apply Rge_le;trivial.
-assert (x < 0)%R by (apply Rnot_ge_lt;trivial).
-rewrite (Rabs_left x H0) in H.
-assert (round_float f m x < 0)%R.
-apply Rle_lt_trans with (- min_gen_float f)%R.
-rewrite <- (round_of_opp_min_gen f m);destruct f;unfold round_float;
-apply Gappa_round.round_extension_monotone;
-rewrite <- (Ropp_involutive x).
-apply (Ropp_le_contravar (Ropp x) (min_gen_float Single));apply Rge_le;trivial.
-apply (Ropp_le_contravar (Ropp x) (min_gen_float Double));apply Rge_le;trivial.
-rewrite <- Ropp_0;apply Ropp_gt_lt_contravar.
-case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
-rewrite Rabs_left;trivial.
-rewrite <- (Ropp_involutive (min_gen_float f)).
-apply (Ropp_le_ge_contravar (round_float f m x) (- min_gen_float f)).
-rewrite <- (round_of_opp_min_gen f m).
-destruct f;unfold round_float;apply Gappa_round.round_extension_monotone;
-rewrite <- (Ropp_involutive x).
-apply (Ropp_ge_le_contravar (Ropp x) (min_gen_float Single));trivial.
-apply (Ropp_ge_le_contravar (Ropp x) (min_gen_float Double));trivial.
+intros F m x Bx.
+apply Rle_ge.
+unfold Rabs in Bx.
+destruct (Rcase_abs x) as [Hx|Hx].
+assert (min_gen_float F <= - round_float F m x)%R.
+apply Ropp_le_cancel.
+rewrite Ropp_involutive.
+rewrite <- round_of_opp_min_gen with F m.
+apply round_increasing.
+apply Ropp_le_cancel.
+rewrite Ropp_involutive.
+now apply Rge_le.
+rewrite Rabs_left1.
+exact H.
+apply Ropp_le_cancel.
+rewrite Ropp_0.
+apply Rle_trans with (2 := H).
+unfold min_gen_float, min_float2.
+case F ; unfold float2R ; rewrite F2R_bpow ; apply bpow_ge_0.
+assert (min_gen_float F <= round_float F m x)%R.
+rewrite <- round_of_min_gen with F m.
+apply round_increasing.
+now apply Rge_le.
+rewrite Rabs_pos_eq.
+exact H.
+apply Rle_trans with (2 := H).
+unfold min_gen_float, min_float2.
+case F ; unfold float2R ; rewrite F2R_bpow ; apply bpow_ge_0.
 Save.
 
 
@@ -729,26 +717,23 @@ Axiom a4: forall f m x,
              model_value (gen_float_of_real_logic f m x) = x.
 
 Axiom genf_of_real_single: forall m x,
-                              genf (gen_float_of_real_logic Single m x) =
+                              float_value (gen_float_of_real_logic Single m x) =
                               (rounding_float (round_mode m) 24 149) x.
 
 Axiom genf_of_real_double: forall m x,
-                              genf (gen_float_of_real_logic Double m x) =
+                              float_value (gen_float_of_real_logic Double m x) =
                               (rounding_float (round_mode m) 53 1074) x.
 
 Lemma gen_float_of_zero: forall f m, 
              float_class  (gen_float_of_real_logic f m 0) = Finite /\         
              float_value (gen_float_of_real_logic f m 0)=0%R.
 Proof.
-intros; replace 0%R with (round_float f m 0).
-rewrite round_of_zero at 1 2.
-apply (a1 f m 0);case f;unfold no_overflow, max_gen_float;
-rewrite round_of_zero;rewrite Rabs_R0.
-rewrite <- (Rmult_0_r 16777215);apply Rmult_le_compat_l;auto with real.
-admit. (*(0 <= 16777215)%R*)
-rewrite <- (Rmult_0_r 9007199254740991);apply Rmult_le_compat_l;auto with real.
-admit. (*(0 <= 9007199254740991)%R*)
-apply round_of_zero.
+intros F m.
+rewrite <- (round_of_zero F m) at 3.
+apply a1.
+unfold no_overflow, max_gen_float, max_float2.
+rewrite round_of_zero, Rabs_R0.
+case F ; now apply F2R_ge_0_compat.
 Save.
 
 Lemma finite_gen_float_of_real_logic: forall f m x,
@@ -961,35 +946,43 @@ Save.
 
 
 Definition is_gen_zero (x:gen_float) := 
-               float_class x =Finite /\ Fnum (genf x) = 0%Z.
+               float_class x =Finite /\ float_value x = R0.
 
 Lemma is_gen_zero_dec: forall x:gen_float, 
             float_class x =Finite -> is_gen_zero x \/ ~ is_gen_zero x.
 Proof.
-intros; unfold is_gen_zero; destruct (Fnum (genf x));auto; right;
-intro;destruct H0; discriminate H1.
+intros x Hx.
+unfold is_gen_zero.
+destruct (Req_dec (float_value x) 0) as [Zx|Zx].
+left. now split.
+right.
+intros (_,H).
+now apply Zx.
 Qed.
 
 Lemma is_gen_zero_correct1: forall x:gen_float,
             is_gen_zero x -> float_value x =0%R.
 Proof.
-intros; unfold float_value, is_gen_zero in *.
-assert (genf x=Float2 (Fnum (genf x)) (Fexp (genf x))) by 
-(destruct (genf x);auto); rewrite H0;destruct H;rewrite H1.
-apply Gappa_dyadic.float2_zero.
+now intros x (_,H).
 Save.
 
 
 Lemma zero_Fexp1: forall x:float2,
-            Fexp x = 0%Z -> float2R x= Gappa_integer.Z2R (Fnum x).
+            Fexp x = 0%Z -> float2R x = Z2R (Fnum x).
 Proof.
-intros; unfold float2R; rewrite H; simpl; auto.
+intros x Ex.
+unfold float2R.
+rewrite Ex.
+apply Rmult_1_r.
 Save.
+
 Lemma zero_Fexp2: forall z:Z, 
-             float2R (Float2 z 0) = Gappa_integer.Z2R z.
+             float2R (Float2 z 0) = Z2R z.
 Proof.
-intros; unfold float2R; simpl;auto.
+intros z.
+now apply zero_Fexp1.
 Save.
+
 Lemma Fnum_: forall m e, Fnum (Float2 m e)= m.
 Proof.
 auto.
@@ -999,9 +992,11 @@ Proof.
 auto.
 Save.
 Lemma real_zero_integer: forall m:Z, 
-            Gappa_integer.Z2R m=0%R -> m=0%Z.
+            Z2R m=0%R -> m=0%Z.
 Proof.
-Admitted.
+intros m Hm.
+now apply eq_Z2R.
+Save.
 
 Lemma zero_Fnum_float2: forall x:float2, 
             Fnum x = 0%Z <-> float2R x = 0%R.
@@ -1015,8 +1010,8 @@ Admitted.
 Lemma is_gen_zero_correct2: forall x:gen_float,
             float_class x =Finite -> float_value x =0%R -> is_gen_zero x.
 Proof.
-intros;unfold is_gen_zero, float_value in *;intuition.
-apply (zero_Fnum_float2 (genf x));trivial.
+intros x Cx Vx.
+now split.
 Save.
 
 
@@ -1042,32 +1037,6 @@ Admitted.
 Lemma pos_Fnum_float2: forall x:float2, 
              (Fnum x > 0)%Z <-> (float2R x > 0)%R.
 Admitted.
-
-Lemma neg_Fnum_gen1: forall x, float_class x = Finite -> 
-            (Fnum (genf x) < 0)%Z -> float_sign x = Negative.
-Proof.
-intros; apply finite_sign_neg1;unfold float_value in *.
-split; [trivial | apply (neg_Fnum_float2 (genf x));trivial].
-Save.
-Lemma neg_Fnum_gen2: forall x, float_class x = Finite -> 
-            float_value x <> 0%R -> float_sign x = Negative ->
-            (Fnum (genf x) < 0)%Z.
-Proof.
-intros;apply (neg_Fnum_float2 (genf x));apply finite_sign_neg2;auto.
-Save.
-
-Lemma pos_Fnum_gen1: forall x, float_class x = Finite -> 
-            (Fnum (genf x) > 0)%Z -> float_sign x = Positive.
-Proof.
-intros; apply finite_sign_pos1;unfold float_value in *.
-split; [trivial | apply (pos_Fnum_float2 (genf x));trivial].
-Save.
-Lemma pos_Fnum_gen2: forall x, float_class x = Finite -> 
-            float_value x <> 0%R -> float_sign x = Positive ->
-            (Fnum (genf x) > 0)%Z.
-Proof.
-intros;apply (pos_Fnum_float2 (genf x));apply finite_sign_pos2;auto.
-Save.
 
 Lemma zero_is_gen_zero: forall f m,
 is_gen_zero (gen_float_of_real_logic f m 0).
