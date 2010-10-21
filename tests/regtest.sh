@@ -82,7 +82,7 @@ case $1 in
 	echo "========== frama-c -jessie execution =========="
 	rm -f $f.jc
 	rm -f $f.cloc
-	frama-c -jessie -jessie-gen-only $1 || exit 1
+	FRAMAC_PLUGIN=$DIR/frama-c-plugin frama-c -jessie -jessie-gen-only $1 || exit 1
 	mycat $f.jc 
 	mycatfilterdir $f.cloc
 	echo "========== jessie execution =========="
