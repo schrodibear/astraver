@@ -842,11 +842,10 @@ install-coq-v7:
 	cp -f $(VO7) $(LIBDIR)/why/coq7
 install-coq-v8 install-coq-v8.1:
 	if test -w $(COQLIB) ; then \
-	 mkdir -p $(COQLIB)/user-contrib ; \
-	 cp -f $(V8FILES) $(COQLIB)/user-contrib ; \
-	 cp -f $(VO8) $(COQLIB)/user-contrib ; \
+	  mkdir -p $(COQLIB)/user-contrib/Why ; \
+	  cp -f $(VO8) $(COQLIB)/user-contrib/Why ; \
 	else \
-	echo "Cannot copy to Coq standard library. Add $(LIBDIR)/why/coq to Coq include path." ;\
+	  echo "Cannot copy to Coq standard library. Add \"-R $(LIBDIR)/why/coq Why\" to Coq options." ;\
 	mkdir -p $(LIBDIR)/why/coq ;\
 	cp -f $(VO8) $(V8FILES) $(LIBDIR)/why/coq ;\
 	fi
@@ -1003,7 +1002,7 @@ apidoc: $(OCAMLDOCSRC)
 	$(CAMLP4) pr_o.cmo -impl $< > $@
 
 lib/coq/%.vo: lib/coq/%.v
-	$(COQC8) -I lib/coq $<
+	$(COQC8) -R lib/coq Why $<
 
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -I lib/coq-v7 $<

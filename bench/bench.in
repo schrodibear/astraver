@@ -6,7 +6,7 @@ export WHYLIB=../lib
 
 pgm=$1
 option=$2
-coqc="coqc -I ../lib/coq"
+coqc="@COQC@ -R ../lib/coq Why"
 
 pvstc () {
     context=`dirname $1`
