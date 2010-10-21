@@ -384,19 +384,9 @@ else
 	        AC_MSG_RESULT(no)
 	        COQFLOATSMSG="no (Coq library Flocq/Core/Fcore.vo not found)"
 	      fi
-	      AC_MSG_CHECKING(Coq Gappa library)
- 	      if test -f "$COQLIB/user-contrib/Gappa/Gappa_tactic.vo"; then
-	        AC_MSG_RESULT(yes)
-	  	WHYFLOATS="$WHYFLOATS lib/coq/JessieGappa.vo"
-		COQGAPPAMSG=yes
-	      else
-	        AC_MSG_RESULT(no)
-	        COQGAPPAMSG="no (Coq library Gappa_tactic.vo not found)"
-	      fi
 	      ;;
 	   *)
 	      COQFLOATSMSG="no (requires Coq version >= 8.2)"
-	      COQGAPPAMSG="no (requires Coq version >= 8.2)"
 	      ;;
            esac
 	;;
@@ -536,7 +526,6 @@ if test "$COQ" = "yes" ; then
    fi
    echo "    Lib                  : $COQLIB"
    echo "    Flocq                : $COQFLOATSMSG"
-   echo "    Gappa                : $COQGAPPAMSG"
 fi
 echo "PVS support              : $PVS"
 if test "$PVS" = "yes" ; then
