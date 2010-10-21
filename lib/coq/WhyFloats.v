@@ -110,9 +110,39 @@ Definition abs_single (m:mode) (f:single) :=
   mk_single _ (Rabs (single_exact f)) (Rabs (single_model f))
     (abs_sd_aux (-149) 24 (refl_equal _) (single_value f) (single_value_in_format f)).
 
-(*
-Definition max_single := ((2-powerRZ radix (-23))*powerRZ radix 127)%R.
-*)
+Definition any_single := round_single_logic nearest_even 0%R.
+
+Definition max_single := F2R (Float radix2 16777215 104).
+
+Definition no_overflow_single (m:mode) (x:R) := (Rabs (round_single m x) <= max_single)%R.
+
+Theorem bounded_real_no_overflow_single :
+  forall m x,
+  (Rabs x <= max_single)%R ->
+  no_overflow_single m x.
+Proof.
+intros m x Hx.
+apply Rabs_le.
+assert (generic_format radix2 (FLT_exp (-149) 24) max_single).
+apply generic_format_canonic_exponent.
+unfold canonic_exponent.
+rewrite ln_beta_F2R. 2: easy.
+rewrite (ln_beta_unique _ _ 24).
+easy.
+rewrite <- Z2R_abs, <- 2!Z2R_Zpower ; try easy.
+split.
+now apply Z2R_le.
+now apply Z2R_lt.
+generalize (Rabs_le_inv _ _ Hx).
+split.
+erewrite <- round_generic with (x := Ropp max_single).
+apply round_monotone with (2 := proj1 H0).
+now apply FLT_exp_correct.
+now apply generic_format_opp.
+rewrite <- round_generic with (rnd := rnd_of_mode m) (1 := H).
+apply round_monotone with (2 := proj2 H0).
+now apply FLT_exp_correct.
+Qed.
 
 (** Double precision *)
 
@@ -166,9 +196,39 @@ Definition abs_double (m:mode) (f:double) :=
   mk_double _ (Rabs (double_exact f)) (Rabs (double_model f))
     (abs_sd_aux (-1074) 53 (refl_equal _) (double_value f) (double_value_in_format f)).
 
-(*
-Definition max_double := ((2-powerRZ radix (-52))*powerRZ radix 1023)%R.
-*)
+Definition any_double := round_double_logic nearest_even 0%R.
+
+Definition max_double := F2R (Float radix2 9007199254740991 971).
+
+Definition no_overflow_double (m:mode) (x:R) := (Rabs (round_double m x) <= max_double)%R.
+
+Theorem bounded_real_no_overflow_double :
+  forall m x,
+  (Rabs x <= max_double)%R ->
+  no_overflow_double m x.
+Proof.
+intros m x Hx.
+apply Rabs_le.
+assert (generic_format radix2 (FLT_exp (-1074) 53) max_double).
+apply generic_format_canonic_exponent.
+unfold canonic_exponent.
+rewrite ln_beta_F2R. 2: easy.
+rewrite (ln_beta_unique _ _ 53).
+easy.
+rewrite <- Z2R_abs, <- 2!Z2R_Zpower ; try easy.
+split.
+now apply Z2R_le.
+now apply Z2R_lt.
+generalize (Rabs_le_inv _ _ Hx).
+split.
+erewrite <- round_generic with (x := Ropp max_double).
+apply round_monotone with (2 := proj1 H0).
+now apply FLT_exp_correct.
+now apply generic_format_opp.
+rewrite <- round_generic with (rnd := rnd_of_mode m) (1 := H).
+apply round_monotone with (2 := proj2 H0).
+now apply FLT_exp_correct.
+Qed.
 
 (** Quad precision *)
 
