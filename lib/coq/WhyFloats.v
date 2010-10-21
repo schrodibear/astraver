@@ -181,6 +181,25 @@ rewrite round_down_single_neg.
 now rewrite Ropp_involutive.
 Qed.
 
+Theorem round_single_down_le :
+  forall x,
+  (round_single down x <= x)%R.
+Proof.
+intros x.
+eapply round_DN_pt.
+now apply FLT_exp_correct.
+Qed.
+
+Theorem round_up_single_ge :
+  forall x,
+  (round_single up x >= x)%R.
+Proof.
+intros x.
+apply Rle_ge.
+eapply round_UP_pt.
+now apply FLT_exp_correct.
+Qed.
+
 (** Double precision *)
 
 Record double : Set := mk_double {
@@ -302,6 +321,25 @@ intros x.
 pattern x at 2 ; rewrite <- Ropp_involutive.
 rewrite round_down_double_neg.
 now rewrite Ropp_involutive.
+Qed.
+
+Theorem round_double_down_le :
+  forall x,
+  (round_double down x <= x)%R.
+Proof.
+intros x.
+eapply round_DN_pt.
+now apply FLT_exp_correct.
+Qed.
+
+Theorem round_up_double_ge :
+  forall x,
+  (round_double up x >= x)%R.
+Proof.
+intros x.
+apply Rle_ge.
+eapply round_UP_pt.
+now apply FLT_exp_correct.
 Qed.
 
 (** Quad precision *)
