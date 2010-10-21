@@ -163,6 +163,24 @@ apply generic_format_round.
 now apply FLT_exp_correct.
 Qed.
 
+Theorem round_down_single_neg :
+  forall x,
+  round_single down (-x) = Ropp (round_single up x).
+Proof.
+intros x.
+apply round_opp.
+Qed.
+
+Theorem round_up_single_neg :
+  forall x,
+  round_single up (-x) = Ropp (round_single down x).
+Proof.
+intros x.
+pattern x at 2 ; rewrite <- Ropp_involutive.
+rewrite round_down_single_neg.
+now rewrite Ropp_involutive.
+Qed.
+
 (** Double precision *)
 
 Record double : Set := mk_double {
@@ -266,6 +284,24 @@ intros m1 m2 x.
 apply round_generic.
 apply generic_format_round.
 now apply FLT_exp_correct.
+Qed.
+
+Theorem round_down_double_neg :
+  forall x,
+  round_double down (-x) = Ropp (round_double up x).
+Proof.
+intros x.
+apply round_opp.
+Qed.
+
+Theorem round_up_double_neg :
+  forall x,
+  round_double up (-x) = Ropp (round_double down x).
+Proof.
+intros x.
+pattern x at 2 ; rewrite <- Ropp_involutive.
+rewrite round_down_double_neg.
+now rewrite Ropp_involutive.
 Qed.
 
 (** Quad precision *)
