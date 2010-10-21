@@ -153,6 +153,16 @@ apply round_monotone with (2 := Hxy).
 now apply FLT_exp_correct.
 Qed.
 
+Theorem round_single_idempotent :
+  forall m1 m2 x,
+  round_single m1 (round_single m2 x) = round_single m2 x.
+Proof.
+intros m1 m2 x.
+apply round_generic.
+apply generic_format_round.
+now apply FLT_exp_correct.
+Qed.
+
 (** Double precision *)
 
 Record double : Set := mk_double {
@@ -245,6 +255,16 @@ Theorem round_double_monotonic :
 Proof.
 intros m x y Hxy.
 apply round_monotone with (2 := Hxy).
+now apply FLT_exp_correct.
+Qed.
+
+Theorem round_double_idempotent :
+  forall m1 m2 x,
+  round_double m1 (round_double m2 x) = round_double m2 x.
+Proof.
+intros m1 m2 x.
+apply round_generic.
+apply generic_format_round.
 now apply FLT_exp_correct.
 Qed.
 
