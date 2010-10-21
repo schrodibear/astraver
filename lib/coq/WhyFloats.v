@@ -144,6 +144,15 @@ apply round_monotone with (2 := proj2 H0).
 now apply FLT_exp_correct.
 Qed.
 
+Theorem round_single_monotonic :
+  forall m x y, (x <= y)%R ->
+  (round_single m x <= round_single m y)%R.
+Proof.
+intros m x y Hxy.
+apply round_monotone with (2 := Hxy).
+now apply FLT_exp_correct.
+Qed.
+
 (** Double precision *)
 
 Record double : Set := mk_double {
@@ -227,6 +236,15 @@ now apply FLT_exp_correct.
 now apply generic_format_opp.
 rewrite <- round_generic with (rnd := rnd_of_mode m) (1 := H).
 apply round_monotone with (2 := proj2 H0).
+now apply FLT_exp_correct.
+Qed.
+
+Theorem round_double_monotonic :
+  forall m x y, (x <= y)%R ->
+  (round_double m x <= round_double m y)%R.
+Proof.
+intros m x y Hxy.
+apply round_monotone with (2 := Hxy).
 now apply FLT_exp_correct.
 Qed.
 
