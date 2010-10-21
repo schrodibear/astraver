@@ -414,6 +414,22 @@ Definition single_to_double (f:single) :=
 Definition double_to_single (m:mode) (d:double) :=
  r_to_s_aux m (double_value d) (double_exact d) (double_model d).
 
+Theorem single_to_double_val :
+  forall f,
+  double_value (single_to_double f) = single_value f.
+Proof.
+intros f.
+apply refl_equal.
+Qed.
+
+Theorem double_to_single_val :
+  forall m f,
+  single_value (double_to_single m f) = round_single m (double_value f).
+Proof.
+intros m f.
+apply refl_equal.
+Qed.
+
 Definition single_of_double (m:mode) (d:double) := round_single m (double_value d).
 
 Definition quad_of_single : single -> quad.
