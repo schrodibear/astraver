@@ -695,7 +695,15 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
         coerce ~check_int_overflow mark pos ty_dst (JCTnative Treal) e
           (coerce ~check_int_overflow mark pos (JCTnative Treal) ty_src e e')
     | JCTnative (Tgenfloat f1), JCTnative (Tgenfloat f2) ->
-        if check_int_overflow then
+        let enlarge =
+          match f2, f1 with
+          | `Float, _ -> true
+          | _, `Float -> false
+          | `Double, _ -> true
+          | _, _ -> false in
+        if enlarge then
+          make_app ((float_format f2)^"_to_"^(float_format f1)) [ e' ]
+        else if check_int_overflow then
           make_guarded_app ~mark FPoverflow pos
             ((float_format f2)^"_to_"^(float_format f1))
             [current_rounding_mode () ; e' ]
