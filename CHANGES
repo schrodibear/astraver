@@ -1,6 +1,8 @@
 
 (these changes only concern the trunk branch)
 
+  o [Coq output] removed dependencies on Float and Gappa libraries,
+    added dependency on Flocq library
   o [Jessie] emit a warning when generating a dummy variant for
     recursive functions and loops (Frama-C bug 512)
   o [Jessie] preliminary support for \at in region computation
