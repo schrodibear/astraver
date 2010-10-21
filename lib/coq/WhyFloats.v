@@ -1,6 +1,6 @@
 
 (* Why model for floating-point numbers
-   Implements the file lib/why/floats.why *)
+   Implements the file lib/why/floats_common.why *)
 
 Require Export Reals.
 Require Export Fcore.
@@ -61,56 +61,54 @@ Definition rnd_of_mode (m:mode) :=
 (** Single precision *)
 
 Record single : Set := mk_single {
-   sf         : R;
-   Hcansf     : FLT_format radix2 (-149) 24 sf;
-   s_to_exact : R;
-   s_to_model : R
- }.
+  single_value : R;
+  single_exact : R;
+  single_model : R;
+  single_value_in_format : FLT_format radix2 (-149) 24 single_value
+}.
 
-Definition s_to_r (f:single) := sf f.
+Definition single_round_error (f:single) :=
+  Rabs (single_exact f - single_value f).
 
-Definition single_round_error (f:single):= 
-    (Rabs ((s_to_exact f) - (s_to_r f))).
-
-Definition single_total_error (f:single):= 
-    (Rabs ((s_to_model f) - (s_to_r f))).
+Definition single_total_error (f:single) :=
+  Rabs (single_model f - single_value f).
 
 Definition single_set_model (f:single) (r:R) :=
-      mk_single (sf f) (Hcansf f) (s_to_exact f) r.
+  mk_single (single_value f) (single_exact f) r (single_value_in_format f).
 
 Definition r_to_s_aux (m:mode) (r r1 r2:R) :=
-  mk_single _ (r_to_sd_aux (-149) 24 (refl_equal _) (rnd_of_mode m) r) r1 r2.
+  mk_single _ r1 r2 (r_to_sd_aux (-149) 24 (refl_equal _) (rnd_of_mode m) r).
 
-Definition r_to_s (m:mode) (r:R) := r_to_s_aux m r r r.
+Definition round_single_logic (m:mode) (r:R) := r_to_s_aux m r r r.
 
+Definition round_single (m:mode) (r:R) := round radix2 (FLT_exp (-149) 24) (rnd_of_mode m) r.
 
 Definition add_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (sf f1+sf f2) 
-                  (s_to_exact f1+s_to_exact f2) (s_to_model f1+s_to_model f2).
+  r_to_s_aux m (single_value f1 + single_value f2)
+    (single_exact f1 + single_exact f2) (single_model f1 + single_model f2).
 
 Definition sub_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (sf f1-sf f2) 
-                  (s_to_exact f1-s_to_exact f2) (s_to_model f1-s_to_model f2).
+  r_to_s_aux m (single_value f1 - single_value f2)
+    (single_exact f1 - single_exact f2) (single_model f1 - single_model f2).
 
 Definition mul_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (sf f1*sf f2) 
-                  (s_to_exact f1*s_to_exact f2) (s_to_model f1*s_to_model f2).
+  r_to_s_aux m (single_value f1 * single_value f2)
+    (single_exact f1 * single_exact f2) (single_model f1 * single_model f2).
 
 Definition div_single (m:mode) (f1 f2:single) :=
-     r_to_s_aux m (sf f1/sf f2) 
-                  (s_to_exact f1/s_to_exact f2) (s_to_model f1/s_to_model f2).
+  r_to_s_aux m (single_value f1 / single_value f2)
+    (single_exact f1 / single_exact f2) (single_model f1 / single_model f2).
 
 Definition sqrt_single (m:mode) (f:single) :=
-     r_to_s_aux m (sqrt (sf f))
-                  (sqrt(s_to_exact f)) (sqrt(s_to_model f)).
+  r_to_s_aux m (sqrt (single_value f)) (sqrt (single_exact f)) (sqrt (single_model f)).
 
 Definition neg_single (m:mode) (f:single) :=
-   mk_single _ (neg_sd_aux (-149) 24 (refl_equal _) (sf f) (Hcansf f))
-         (-(s_to_exact f)) (-(s_to_model f)).
+  mk_single _ (- single_exact f) (- single_model f)
+    (neg_sd_aux (-149) 24 (refl_equal _) (single_value f) (single_value_in_format f)).
 
 Definition abs_single (m:mode) (f:single) :=
-   mk_single _ (abs_sd_aux (-149) 24 (refl_equal _) (sf f) (Hcansf f))
-         (Rabs (s_to_exact f)) (Rabs (s_to_model f)).
+  mk_single _ (Rabs (single_exact f)) (Rabs (single_model f))
+    (abs_sd_aux (-149) 24 (refl_equal _) (single_value f) (single_value_in_format f)).
 
 (*
 Definition max_single := ((2-powerRZ radix (-23))*powerRZ radix 127)%R.
@@ -119,56 +117,54 @@ Definition max_single := ((2-powerRZ radix (-23))*powerRZ radix 127)%R.
 (** Double precision *)
 
 Record double : Set := mk_double {
-   df         : R;
-   Hcandf     : FLT_format radix2 (-1074) 53 df;
-   d_to_exact : R;
-   d_to_model : R
- }.
+  double_value : R;
+  double_exact : R;
+  double_model : R;
+  double_value_in_format : FLT_format radix2 (-1074) 53 double_value
+}.
 
+Definition double_round_error (f:double) :=
+  Rabs (double_exact f - double_value f).
 
-Definition d_to_r (f:double) := df f.
-
-Definition double_round_error (f:double):= 
-    (Rabs ((d_to_exact f) - (d_to_r f))).
-
-Definition double_total_error (f:double):= 
-    (Rabs ((d_to_model f) - (d_to_r f))).
+Definition double_total_error (f:double) :=
+  Rabs (double_model f - double_value f).
 
 Definition double_set_model (f:double) (r:R) :=
-      mk_double (df f) (Hcandf f) (d_to_exact f) r.
+  mk_double (double_value f) (double_exact f) r (double_value_in_format f).
 
 Definition r_to_d_aux (m:mode) (r r1 r2:R) :=
-  mk_double _ (r_to_sd_aux (-1074) 53 (refl_equal _) (rnd_of_mode m) r) r1 r2.
+  mk_double _ r1 r2 (r_to_sd_aux (-1074) 53 (refl_equal _) (rnd_of_mode m) r).
 
-Definition r_to_d (m:mode) (r:R) := r_to_d_aux m r r r.
+Definition round_double_logic (m:mode) (r:R) := r_to_d_aux m r r r.
+
+Definition round_double (m:mode) (r:R) := round radix2 (FLT_exp (-1074) 53) (rnd_of_mode m) r.
 
 Definition add_double (m:mode) (f1 f2:double) :=
-     r_to_d_aux m (df f1+df f2) 
-                  (d_to_exact f1+d_to_exact f2) (d_to_model f1+d_to_model f2).
+  r_to_d_aux m (double_value f1 + double_value f2)
+    (double_exact f1 + double_exact f2) (double_model f1 + double_model f2).
 
 Definition sub_double (m:mode) (f1 f2:double) :=
-     r_to_d_aux m (df f1-df f2) 
-                  (d_to_exact f1-d_to_exact f2) (d_to_model f1-d_to_model f2).
+  r_to_d_aux m (double_value f1 - double_value f2)
+    (double_exact f1 - double_exact f2) (double_model f1 - double_model f2).
 
 Definition mul_double (m:mode) (f1 f2:double) :=
-     r_to_d_aux m (df f1*df f2) 
-                  (d_to_exact f1*d_to_exact f2) (d_to_model f1*d_to_model f2).
+  r_to_d_aux m (double_value f1 * double_value f2)
+    (double_exact f1 * double_exact f2) (double_model f1 * double_model f2).
 
 Definition div_double (m:mode) (f1 f2:double) :=
-     r_to_d_aux m (df f1/df f2) 
-                  (d_to_exact f1/d_to_exact f2) (d_to_model f1/d_to_model f2).
+  r_to_d_aux m (double_value f1 / double_value f2)
+    (double_exact f1 / double_exact f2) (double_model f1 / double_model f2).
 
 Definition sqrt_double (m:mode) (f:double) :=
-     r_to_d_aux m (sqrt (df f))
-                  (sqrt(d_to_exact f)) (sqrt(d_to_model f)).
+  r_to_d_aux m (sqrt (double_value f)) (sqrt (double_exact f)) (sqrt (double_model f)).
 
 Definition neg_double (m:mode) (f:double) :=
-   mk_double _ (neg_sd_aux (-1074) 53 (refl_equal _) (df f) (Hcandf f))
-         (-(d_to_exact f)) (-(d_to_model f)).
+  mk_double _ (- double_exact f) (- double_model f)
+    (neg_sd_aux (-1074) 53 (refl_equal _) (double_value f) (double_value_in_format f)).
 
 Definition abs_double (m:mode) (f:double) :=
-   mk_double _ (abs_sd_aux (-1074) 53 (refl_equal _) (df f) (Hcandf f))
-         (Rabs (d_to_exact f)) (Rabs (d_to_model f)).
+  mk_double _ (Rabs (double_exact f)) (Rabs (double_model f))
+    (abs_sd_aux (-1074) 53 (refl_equal _) (double_value f) (double_value_in_format f)).
 
 (*
 Definition max_double := ((2-powerRZ radix (-52))*powerRZ radix 1023)%R.
@@ -227,11 +223,10 @@ Admitted.
 
 (** Jumping from one format to another *)
 
-Lemma double_of_single_aux: forall f:single, 
-  FLT_format radix2 (-1074) 53 (sf f).
+Lemma single_to_double_aux: forall f:single, 
+  FLT_format radix2 (-1074) 53 (single_value f).
 Proof.
-intros (f,((m,e),(H1,(H2,H3))),f1,f2). simpl.
-unfold FLT_format.
+intros (f,f1,f2,((m,e),(H1,(H2,H3)))). simpl.
 eexists ; repeat split.
 eexact H1.
 apply Zlt_le_trans with (1 := H2).
@@ -241,11 +236,13 @@ now apply bpow_le.
 now apply Zle_trans with (2 := H3).
 Qed.
 
-Definition double_of_single (f:single) :=
-   mk_double _ (double_of_single_aux f)
-         (s_to_exact f) (s_to_model f).
+Definition single_to_double (f:single) :=
+  mk_double _ (single_exact f) (single_model f) (single_to_double_aux f).
 
-Definition single_of_double (m:mode) (d:double) := r_to_s m (df d).
+Definition double_to_single (m:mode) (d:double) :=
+ r_to_s_aux m (double_value d) (double_exact d) (double_model d).
+
+Definition single_of_double (m:mode) (d:double) := round_single m (double_value d).
 
 Definition quad_of_single : single -> quad.
 Admitted.
@@ -263,7 +260,7 @@ Admitted.
 (** Small integers, like 1 or 2, do not suffer from rounding *)
 
 Theorem small_int_no_round: forall (m:mode), forall (z:Z), 
-  (Zabs z <= Zpower_nat 2 53)%Z -> (d_to_r (r_to_d m (Z2R z))= Z2R z)%R.
+  (Zabs z <= Zpower_nat 2 53)%Z -> (double_value (round_double_logic m (Z2R z))= Z2R z)%R.
 Proof.
 intros m z Hz.
 simpl.
@@ -311,17 +308,17 @@ rewrite (Z2R_Zpower_nat radix2).
 now apply generic_format_bpow.
 Qed.
 
-Theorem zero_no_round: forall (m:mode), d_to_r (r_to_d m (Z2R 0)) = 0%R.
+Theorem zero_no_round: forall (m:mode), double_value (round_double_logic m (Z2R 0)) = 0%R.
 intros.
 now rewrite small_int_no_round.
 Qed.
 
-Theorem one_no_round: forall (m:mode), d_to_r (r_to_d m (Z2R 1)) = 1%R.
+Theorem one_no_round: forall (m:mode), double_value (round_double_logic m (Z2R 1)) = 1%R.
 intros.
 now rewrite small_int_no_round.
 Qed.
 
-Theorem two_no_round: forall (m:mode), d_to_r (r_to_d m (Z2R 2)) = 2%R.
+Theorem two_no_round: forall (m:mode), double_value (round_double_logic m (Z2R 2)) = 2%R.
 intros.
 now rewrite small_int_no_round.
 Qed.
