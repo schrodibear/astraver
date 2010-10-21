@@ -49,6 +49,15 @@ now apply <- Zlt_is_lt_bool.
 now apply <- Zlt_is_lt_bool.
 Qed.
 
+Definition rnd_of_mode (m:mode) :=
+  match m with
+  |  nearest_even => rndNE
+  |  to_zero      => rndZR
+  |  up           => rndUP
+  |  down         => rndDN
+  |  nearest_away => rndNA
+  end.
+
 (** Single precision *)
 
 Record single : Set := mk_single {
@@ -69,15 +78,8 @@ Definition single_total_error (f:single):=
 Definition single_set_model (f:single) (r:R) :=
       mk_single (sf f) (Hcansf f) (s_to_exact f) r.
 
-Definition r_to_s_aux2 := r_to_sd_aux (-149) 24 (refl_equal _).
-
-Definition r_to_s_aux (m:mode) (r r1 r2:R) := match m with
-  |  nearest_even => mk_single _ (r_to_s_aux2 rndNE r) r1 r2
-  |  to_zero      => mk_single _ (r_to_s_aux2 rndZR r) r1 r2
-  |  up           => mk_single _ (r_to_s_aux2 rndUP r) r1 r2
-  |  down         => mk_single _ (r_to_s_aux2 rndDN r) r1 r2
-  |  nearest_away => mk_single _ (r_to_s_aux2 rndNA r) r1 r2
-  end.
+Definition r_to_s_aux (m:mode) (r r1 r2:R) :=
+  mk_single _ (r_to_sd_aux (-149) 24 (refl_equal _) (rnd_of_mode m) r) r1 r2.
 
 Definition r_to_s (m:mode) (r:R) := r_to_s_aux m r r r.
 
@@ -135,15 +137,8 @@ Definition double_total_error (f:double):=
 Definition double_set_model (f:double) (r:R) :=
       mk_double (df f) (Hcandf f) (d_to_exact f) r.
 
-Definition r_to_d_aux2 := r_to_sd_aux (-1074) 53 (refl_equal _).
-
-Definition r_to_d_aux (m:mode) (r r1 r2:R) := match m with
-  |  nearest_even => mk_double _ (r_to_d_aux2 rndNE r) r1 r2
-  |  to_zero      => mk_double _ (r_to_d_aux2 rndZR r) r1 r2
-  |  up           => mk_double _ (r_to_d_aux2 rndUP r) r1 r2
-  |  down         => mk_double _ (r_to_d_aux2 rndDN r) r1 r2
-  |  nearest_away => mk_double _ (r_to_d_aux2 rndNA r) r1 r2
-  end.
+Definition r_to_d_aux (m:mode) (r r1 r2:R) :=
+  mk_double _ (r_to_sd_aux (-1074) 53 (refl_equal _) (rnd_of_mode m) r) r1 r2.
 
 Definition r_to_d (m:mode) (r:R) := r_to_d_aux m r r r.
 
@@ -271,8 +266,7 @@ Theorem small_int_no_round: forall (m:mode), forall (z:Z),
   (Zabs z <= Zpower_nat 2 53)%Z -> (d_to_r (r_to_d m (Z2R z))= Z2R z)%R.
 Proof.
 intros m z Hz.
-assert (forall r, round radix2 (FLT_exp (-1074) 53) r (Z2R z) = Z2R z).
-intros r.
+simpl.
 destruct (Z_eq_dec z 0) as [Zz|Zz].
 rewrite Zz.
 apply round_0.
@@ -315,7 +309,6 @@ rewrite Z2R_opp.
 apply generic_format_opp.
 rewrite (Z2R_Zpower_nat radix2).
 now apply generic_format_bpow.
-case m ; exact (H _).
 Qed.
 
 Theorem zero_no_round: forall (m:mode), d_to_r (r_to_d m (Z2R 0)) = 0%R.
