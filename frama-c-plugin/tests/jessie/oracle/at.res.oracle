@@ -38,8 +38,7 @@ behavior default:
   ensures (C_12 : (x == ((2 + \old(x)) + \at(y,Old))));
 {  
    {  (C_3 : (x = (C_2 : ((C_1 : (x + y)) :> int32))));
-      (L1 : ());
-      (C_6 : (x = (C_5 : ((C_4 : (x + 1)) :> int32))));
+      (L1 : (C_6 : (x = (C_5 : ((C_4 : (x + 1)) :> int32)))));
       (L2 : ());
       (C_9 : (x = (C_8 : ((C_7 : (x + 1)) :> int32))));
       
@@ -346,7 +345,6 @@ let f_ensures_default =
   try
    (C_3:
    (L1:
-   (C_6:
    (L2:
    (C_9:
    begin
@@ -355,11 +353,11 @@ let f_ensures_default =
              (safe_int32_of_integer_ (C_1:
                                      ((add_int (integer_of_int32 !x_0)) 
                                       (integer_of_int32 y)))))) in void);
-    void;
     (let jessie_<somenum> =
+    (C_6:
     (x_0 := (C_5:
             (safe_int32_of_integer_ (C_4:
-                                    ((add_int (integer_of_int32 !x_0)) (1)))))) in
+                                    ((add_int (integer_of_int32 !x_0)) (1))))))) in
     void); void;
     (let jessie_<somenum> =
     (x_0 := (C_8:
@@ -375,7 +373,7 @@ let f_ensures_default =
     { (JC_<somenum>:
       eq_int(integer_of_int32(x_0@L2),
       add_int(add_int((1), integer_of_int32(x_0@init)), integer_of_int32(y)))) };
-    void); void; (return := !x_0); (raise Return); absurd  end))))) with
+    void); void; (return := !x_0); (raise Return); absurd  end)))) with
    Return -> !return end))
   { (JC_<somenum>:
     eq_int(integer_of_int32(x_0),
@@ -389,7 +387,6 @@ let f_safety =
   try
    (C_3:
    (L1:
-   (C_6:
    (L2:
    (C_9:
    begin
@@ -398,11 +395,12 @@ let f_safety =
              (JC_<somenum>:
              (int32_of_integer_ (C_1:
                                 ((add_int (integer_of_int32 !x_0)) (integer_of_int32 y))))))) in
-     void); void;
+     void);
     (let jessie_<somenum> =
+    (C_6:
     (x_0 := (C_5:
             (JC_<somenum>:
-            (int32_of_integer_ (C_4: ((add_int (integer_of_int32 !x_0)) (1))))))) in
+            (int32_of_integer_ (C_4: ((add_int (integer_of_int32 !x_0)) (1)))))))) in
     void); void;
     (let jessie_<somenum> =
     (x_0 := (C_8:
@@ -418,7 +416,7 @@ let f_safety =
         eq_int(integer_of_int32(x_0@L2),
         add_int(add_int((1), integer_of_int32(x_0@init)),
         integer_of_int32(y)))) } ]; void; (return := !x_0); (raise Return);
-    absurd  end))))) with Return -> !return end)) { true }
+    absurd  end)))) with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C at.jessie --quiet -f at.makefile project

@@ -414,20 +414,16 @@ behavior default:
          while (true)
          {  
             {  
-               {  
-                  {  (C_1 : (tmp_0 = s2));
-                     (C_3 : (s2 = (C_2 : (s2 + 1))))
-                  };
+               {  (C_1 : (tmp_0 = s2));
+                  (C_3 : (s2 = (C_2 : (s2 + 1))));
                   ()
                };
                (if ((C_7 : ((C_6 : s1.char_M) :> int32)) ==
                      (C_5 : ((C_4 : tmp_0.char_M) :> int32))) then () else 
                (goto while_0_break));
                
-               {  
-                  {  (C_8 : (tmp = s1));
-                     (C_10 : (s1 = (C_9 : (s1 + 1))))
-                  };
+               {  (C_8 : (tmp = s1));
+                  (C_10 : (s1 = (C_9 : (s1 + 1))));
                   ()
                };
                (if ((C_13 : ((C_12 : tmp.char_M) :> int32)) == 0) then 

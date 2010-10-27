@@ -54,10 +54,8 @@ behavior default:
                      ()
                   };
                   (before : 
-                  {  
-                     {  (C_3 : (tmp = n));
-                        (C_6 : (n = (C_5 : ((C_4 : (n - 1)) :> int32))))
-                     };
+                  {  (C_3 : (tmp = n));
+                     (C_6 : (n = (C_5 : ((C_4 : (n - 1)) :> int32))));
                      (C_9 : (r = (C_8 : ((C_7 : (r * tmp)) :> int32))))
                   });
                   
@@ -378,22 +376,21 @@ let fact_ensures_default =
              (assert { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) };
              void); void;
              (let jessie_<somenum> =
+             (C_3:
+             (C_6:
              (C_9:
              begin
-               (let jessie_<somenum> =
-               (C_3:
-               (C_6:
-               begin
-                 (let jessie_<somenum> = (tmp := !mutable_n) in void);
-                (mutable_n := (C_5:
-                              (safe_int32_of_integer_ (C_4:
-                                                      ((sub_int (integer_of_int32 !mutable_n)) (1))))));
-                !mutable_n end)) in void);
+               (let jessie_<somenum> = (tmp := !mutable_n) in void);
+              (let jessie_<somenum> =
+              (mutable_n := (C_5:
+                            (safe_int32_of_integer_ (C_4:
+                                                    ((sub_int (integer_of_int32 !mutable_n)) (1)))))) in
+              void);
               (r := (C_8:
                     (safe_int32_of_integer_ (C_7:
                                             ((mul_int (integer_of_int32 !r)) 
                                              (integer_of_int32 !tmp)))))); !r
-             end) in void);
+             end))) in void);
              (assert
              { (JC_<somenum>:
                eq_int(integer_of_int32(r),
@@ -437,23 +434,22 @@ let fact_safety =
              [ { } unit reads mutable_n
                { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) } ]; void;
              (let jessie_<somenum> =
+             (C_3:
+             (C_6:
              (C_9:
              begin
-               (let jessie_<somenum> =
-               (C_3:
-               (C_6:
-               begin
-                 (let jessie_<somenum> = (tmp := !mutable_n) in void);
-                (mutable_n := (C_5:
-                              (JC_<somenum>:
-                              (int32_of_integer_ (C_4:
-                                                 ((sub_int (integer_of_int32 !mutable_n)) (1)))))));
-                !mutable_n end)) in void);
+               (let jessie_<somenum> = (tmp := !mutable_n) in void);
+              (let jessie_<somenum> =
+              (mutable_n := (C_5:
+                            (JC_<somenum>:
+                            (int32_of_integer_ (C_4:
+                                               ((sub_int (integer_of_int32 !mutable_n)) (1))))))) in
+              void);
               (r := (C_8:
                     (JC_<somenum>:
                     (int32_of_integer_ (C_7:
                                        ((mul_int (integer_of_int32 !r)) 
-                                        (integer_of_int32 !tmp))))))); !r end) in
+                                        (integer_of_int32 !tmp))))))); !r end))) in
              void);
              [ { } unit reads mutable_n,r
                { (JC_<somenum>:
@@ -495,11 +491,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0440_po7.why">
-      <location file = "why/bts0440.why" line = "350" begin = "44" end = "45"/>
+      <location file = "why/bts0440.why" line = "349" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0440_po8.why">
-      <location file = "why/bts0440.why" line = "350" begin = "44" end = "45"/>
+      <location file = "why/bts0440.why" line = "349" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

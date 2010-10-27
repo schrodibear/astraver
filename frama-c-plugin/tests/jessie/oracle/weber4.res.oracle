@@ -74,10 +74,8 @@ behavior is_empty:
             {  (if (first != last) then () else 
                (goto while_0_break));
                
-               {  
-                  {  (C_6 : (tmp = first));
-                     (C_8 : (first = (C_7 : (first + 1))))
-                  };
+               {  (C_6 : (tmp = first));
+                  (C_8 : (first = (C_7 : (first + 1))));
                   (C_10 : ((C_9 : tmp.int_M) = value))
                }
             }
@@ -534,24 +532,22 @@ let fill_int_array_ensures_default =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_6:
+              (C_8:
               begin
                 (if ((safe_neq_pointer !mutable_first) last) then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                 void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
                (let jessie_<somenum> =
-               (C_6:
-               (C_8:
-               begin
-                 (let jessie_<somenum> = (tmp := !mutable_first) in void);
-                (mutable_first := (C_7: ((shift !mutable_first) (1))));
-                !mutable_first end)) in void);
+               (mutable_first := (C_7: ((shift !mutable_first) (1)))) in
+               void);
                (C_10:
                (let jessie_<somenum> = value in
                begin
                  (let jessie_<somenum> = !tmp in
                  (((safe_upd_ int_P_int_M_first_1) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end)) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -601,24 +597,22 @@ let fill_int_array_ensures_is_empty =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_6:
+              (C_8:
               begin
                 (if ((safe_neq_pointer !mutable_first) last) then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                 void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
                (let jessie_<somenum> =
-               (C_6:
-               (C_8:
-               begin
-                 (let jessie_<somenum> = (tmp := !mutable_first) in void);
-                (mutable_first := (C_7: ((shift !mutable_first) (1))));
-                !mutable_first end)) in void);
+               (mutable_first := (C_7: ((shift !mutable_first) (1)))) in
+               void);
                (C_10:
                (let jessie_<somenum> = value in
                begin
                  (let jessie_<somenum> = !tmp in
                  (((safe_upd_ int_P_int_M_first_1) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end)) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -668,24 +662,22 @@ let fill_int_array_ensures_is_not_empty =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_6:
+              (C_8:
               begin
                 (if ((safe_neq_pointer !mutable_first) last) then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                 void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
                (let jessie_<somenum> =
-               (C_6:
-               (C_8:
-               begin
-                 (let jessie_<somenum> = (tmp := !mutable_first) in void);
-                (mutable_first := (C_7: ((shift !mutable_first) (1))));
-                !mutable_first end)) in void);
+               (mutable_first := (C_7: ((shift !mutable_first) (1)))) in
+               void);
                (C_10:
                (let jessie_<somenum> = value in
                begin
                  (let jessie_<somenum> = !tmp in
                  (((safe_upd_ int_P_int_M_first_1) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end)) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -738,25 +730,23 @@ let fill_int_array_safety =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_6:
+              (C_8:
               begin
                 (if ((neq_pointer !mutable_first) last) then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                 void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
                (let jessie_<somenum> =
-               (C_6:
-               (C_8:
-               begin
-                 (let jessie_<somenum> = (tmp := !mutable_first) in void);
-                (mutable_first := (C_7: ((shift !mutable_first) (1))));
-                !mutable_first end)) in void);
+               (mutable_first := (C_7: ((shift !mutable_first) (1)))) in
+               void);
                (C_10:
                (let jessie_<somenum> = value in
                begin
                  (let jessie_<somenum> = !tmp in
                  (JC_<somenum>:
                  ((((upd_ int_P_first_1_alloc_table) int_P_int_M_first_1) jessie_<somenum>) jessie_<somenum>)));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end)) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -772,26 +762,26 @@ why --project [...] why/weber4.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber4_po8.why">
-      <location file = "why/weber4.why" line = "651" begin = "21" end = "54"/>
+      <location file = "why/weber4.why" line = "647" begin = "21" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/weber4_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "75" begin = "27" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "73" begin = "27" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber4_po10.why">
-      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "75" begin = "27" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "73" begin = "27" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber4_po11.why">
-      <location file = "why/weber4.why" line = "632" begin = "44" end = "45"/>
+      <location file = "why/weber4.why" line = "626" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber4_po12.why">
-      <location file = "why/weber4.why" line = "632" begin = "44" end = "45"/>
+      <location file = "why/weber4.why" line = "626" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

@@ -65,10 +65,8 @@ behavior default:
          while (true)
          {  
             {  
-               {  
-                  {  (C_6 : (tmp = i));
-                     (C_9 : (i = (C_8 : ((C_7 : (i - 1)) :> int32))))
-                  };
+               {  (C_6 : (tmp = i));
+                  (C_9 : (i = (C_8 : ((C_7 : (i - 1)) :> int32))));
                   ()
                };
                (if (tmp > 0) then () else 
@@ -540,16 +538,15 @@ let copy_ensures_default =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_6:
+              (C_9:
               begin
-                (let jessie_<somenum> =
-                (C_6:
-                (C_9:
-                begin
-                  (let jessie_<somenum> = (tmp := !i) in void);
-                 (i := (C_8:
-                       (safe_int32_of_integer_ (C_7:
-                                               ((sub_int (integer_of_int32 !i)) (1))))));
-                 !i end)) in void); void;
+                (let jessie_<somenum> = (tmp := !i) in void);
+               (let jessie_<somenum> =
+               (i := (C_8:
+                     (safe_int32_of_integer_ (C_7:
+                                             ((sub_int (integer_of_int32 !i)) (1)))))) in
+               void); void;
                (if ((gt_int_ (integer_of_int32 !tmp)) (0)) then void
                else
                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
@@ -564,7 +561,7 @@ let copy_ensures_default =
                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                begin
                  (((safe_upd_ int_P_int_M_t2_2) jessie_<somenum>) jessie_<somenum>);
-                jessie_<somenum> end))))) end in void);
+                jessie_<somenum> end))))) end)) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -619,17 +616,16 @@ let copy_safety =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_6:
+              (C_9:
               begin
-                (let jessie_<somenum> =
-                (C_6:
-                (C_9:
-                begin
-                  (let jessie_<somenum> = (tmp := !i) in void);
-                 (i := (C_8:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_7:
-                                          ((sub_int (integer_of_int32 !i)) (1)))))));
-                 !i end)) in void); void;
+                (let jessie_<somenum> = (tmp := !i) in void);
+               (let jessie_<somenum> =
+               (i := (C_8:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_7:
+                                        ((sub_int (integer_of_int32 !i)) (1))))))) in
+               void); void;
                (if ((gt_int_ (integer_of_int32 !tmp)) (0)) then void
                else
                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
@@ -646,7 +642,7 @@ let copy_safety =
                begin
                  (JC_<somenum>:
                  (((((offset_upd_ int_P_t2_2_alloc_table) int_P_int_M_t2_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end))))) end in void);
+                jessie_<somenum> end))))) end)) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_0_break_exc void)) end in void) with
@@ -682,21 +678,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_po10.why">
-      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "71" begin = "27" end = "284"/>
+      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "69" begin = "27" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_po11.why">
-      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "71" begin = "27" end = "284"/>
+      <location file = "PPCHOME/tests/jessie/copy.jessie/copy.jc" line = "69" begin = "27" end = "284"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/copy_po12.why">
-      <location file = "why/copy.why" line = "515" begin = "43" end = "72"/>
+      <location file = "why/copy.why" line = "514" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/copy_po13.why">
-      <location file = "why/copy.why" line = "515" begin = "43" end = "72"/>
+      <location file = "why/copy.why" line = "514" begin = "43" end = "72"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

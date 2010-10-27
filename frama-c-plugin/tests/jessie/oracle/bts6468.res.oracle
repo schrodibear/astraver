@@ -70,15 +70,11 @@ behavior default:
          while (true)
          {  
             {  
-               {  
-                  {  (C_5 : (tmp = dest));
-                     (C_7 : (dest = (C_6 : (dest + 1))))
-                  };
-                  
-                  {  (C_8 : (tmp_1 = src));
-                     (C_10 : (src = (C_9 : (src + 1))));
-                     (C_12 : (tmp_0 = (C_11 : tmp_1.char_M)))
-                  };
+               {  (C_5 : (tmp = dest));
+                  (C_7 : (dest = (C_6 : (dest + 1))));
+                  (C_8 : (tmp_1 = src));
+                  (C_10 : (src = (C_9 : (src + 1))));
+                  (C_12 : (tmp_0 = (C_11 : tmp_1.char_M)));
                   (C_14 : ((C_13 : tmp.char_M) = tmp_0))
                };
                (if (tmp_0 != 0) then () else 
@@ -561,30 +557,27 @@ let strcat_ensures_default =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_5:
+              (C_7:
+              (C_8:
+              (C_10:
+              (C_12:
               begin
-                (let jessie_<somenum> =
-                (C_5:
-                (C_7:
-                begin
-                  (let jessie_<somenum> = (tmp := !mutable_dest) in void);
-                 (mutable_dest := (C_6: ((shift !mutable_dest) (1))));
-                 !mutable_dest end)) in void);
+                (let jessie_<somenum> = (tmp := !mutable_dest) in void);
                (let jessie_<somenum> =
-               (C_8:
-               (C_10:
-               (C_12:
-               begin
-                 (let jessie_<somenum> = (tmp_1 := !mutable_src) in void);
-                (let jessie_<somenum> =
-                (mutable_src := (C_9: ((shift !mutable_src) (1)))) in void);
-                (tmp_0 := (C_11: ((safe_acc_ char_P_char_M_src_3) !tmp_1)));
-                !tmp_0 end))) in void);
+               (mutable_dest := (C_6: ((shift !mutable_dest) (1)))) in void);
+               (let jessie_<somenum> = (tmp_1 := !mutable_src) in void);
+               (let jessie_<somenum> =
+               (mutable_src := (C_9: ((shift !mutable_src) (1)))) in void);
+               (let jessie_<somenum> =
+               (tmp_0 := (C_11: ((safe_acc_ char_P_char_M_src_3) !tmp_1))) in
+               void);
                (C_14:
                (let jessie_<somenum> = !tmp_0 in
                begin
                  (let jessie_<somenum> = !tmp in
                  (((safe_upd_ char_P_char_M_dest_2) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end))))) in void);
              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
              else
               (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in void));
@@ -649,33 +642,30 @@ let strcat_safety =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_5:
+              (C_7:
+              (C_8:
+              (C_10:
+              (C_12:
               begin
-                (let jessie_<somenum> =
-                (C_5:
-                (C_7:
-                begin
-                  (let jessie_<somenum> = (tmp := !mutable_dest) in void);
-                 (mutable_dest := (C_6: ((shift !mutable_dest) (1))));
-                 !mutable_dest end)) in void);
+                (let jessie_<somenum> = (tmp := !mutable_dest) in void);
                (let jessie_<somenum> =
-               (C_8:
-               (C_10:
-               (C_12:
-               begin
-                 (let jessie_<somenum> = (tmp_1 := !mutable_src) in void);
-                (let jessie_<somenum> =
-                (mutable_src := (C_9: ((shift !mutable_src) (1)))) in void);
-                (tmp_0 := (C_11:
-                          (JC_<somenum>:
-                          (((acc_ char_P_src_3_alloc_table) char_P_char_M_src_3) !tmp_1))));
-                !tmp_0 end))) in void);
+               (mutable_dest := (C_6: ((shift !mutable_dest) (1)))) in void);
+               (let jessie_<somenum> = (tmp_1 := !mutable_src) in void);
+               (let jessie_<somenum> =
+               (mutable_src := (C_9: ((shift !mutable_src) (1)))) in void);
+               (let jessie_<somenum> =
+               (tmp_0 := (C_11:
+                         (JC_<somenum>:
+                         (((acc_ char_P_src_3_alloc_table) char_P_char_M_src_3) !tmp_1)))) in
+               void);
                (C_14:
                (let jessie_<somenum> = !tmp_0 in
                begin
                  (let jessie_<somenum> = !tmp in
                  (JC_<somenum>:
                  ((((upd_ char_P_dest_2_alloc_table) char_P_char_M_dest_2) jessie_<somenum>) jessie_<somenum>)));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end))))) in void);
              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
              else
               (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in void));
@@ -715,12 +705,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts6468_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "76" begin = "27" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "72" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts6468_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "76" begin = "27" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/bts6468.jessie/bts6468.jc" line = "72" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

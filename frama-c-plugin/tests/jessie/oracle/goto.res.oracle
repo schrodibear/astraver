@@ -79,8 +79,7 @@ behavior default:
 {  
    {  (if (x_1 == 0) then 
       (goto l1) else ());
-      (l2 : ());
-      (C_13 : (x_1 = (C_12 : ((C_11 : (x_1 + 1)) :> int32))));
+      (l2 : (C_13 : (x_1 = (C_12 : ((C_11 : (x_1 + 1)) :> int32)))));
       (l1 : 
       (return x_1))
    }
@@ -556,16 +555,15 @@ let f4_ensures_default =
      try
       (let jessie_<somenum> =
       (l2:
-      (C_13:
       begin
         (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (0))
         then (let jessie_<somenum> = (raise (Goto_l1_exc void)) in void) else void);
-       void;
        (let jessie_<somenum> =
+       (C_13:
        (mutable_x_1 := (C_12:
                        (safe_int32_of_integer_ (C_11:
-                                               ((add_int (integer_of_int32 !mutable_x_1)) (1)))))) in
-       void); (raise (Goto_l1_exc void)) end)) in void) with
+                                               ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
+       void); (raise (Goto_l1_exc void)) end) in void) with
       Goto_l1_exc jessie_<somenum> ->
       (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
     absurd  end with Return -> !return end)))
@@ -584,17 +582,16 @@ let f4_safety =
      try
       (let jessie_<somenum> =
       (l2:
-      (C_13:
       begin
         (if ((eq_int_ (integer_of_int32 !mutable_x_1)) (0))
         then (let jessie_<somenum> = (raise (Goto_l1_exc void)) in void) else void);
-       void;
        (let jessie_<somenum> =
+       (C_13:
        (mutable_x_1 := (C_12:
                        (JC_<somenum>:
                        (int32_of_integer_ (C_11:
-                                          ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
-       void); (raise (Goto_l1_exc void)) end)) in void) with
+                                          ((add_int (integer_of_int32 !mutable_x_1)) (1)))))))) in
+       void); (raise (Goto_l1_exc void)) end) in void) with
       Goto_l1_exc jessie_<somenum> ->
       (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
     absurd  end with Return -> !return end))) { true }

@@ -144,10 +144,8 @@ behavior default:
                (goto while_1_break));
                
                {  (if ((C_46 : (C_45 : (t + i)).int_M) > 0) then 
-                  {  
-                     {  (C_36 : (tmp_0 = count));
-                        (C_39 : (count = (C_38 : ((C_37 : (count + 1)) :> int32))))
-                     };
+                  {  (C_36 : (tmp_0 = count));
+                     (C_39 : (count = (C_38 : ((C_37 : (count + 1)) :> int32))));
                      (C_44 : ((C_43 : (C_42 : (u + tmp_0)).int_M) = (C_41 : 
                                                                     (C_40 : 
                                                                     (t +
@@ -762,16 +760,15 @@ let m_ensures_default =
                                                 ((shift t_0) (integer_of_int32 !i_4))))))) (0))
                then
                 (let jessie_<somenum> =
+                (C_36:
+                (C_39:
                 begin
-                  (let jessie_<somenum> =
-                  (C_36:
-                  (C_39:
-                  begin
-                    (let jessie_<somenum> = (tmp_0 := !count) in void);
-                   (count := (C_38:
-                             (safe_int32_of_integer_ (C_37:
-                                                     ((add_int (integer_of_int32 !count)) (1))))));
-                   !count end)) in void);
+                  (let jessie_<somenum> = (tmp_0 := !count) in void);
+                 (let jessie_<somenum> =
+                 (count := (C_38:
+                           (safe_int32_of_integer_ (C_37:
+                                                   ((add_int (integer_of_int32 !count)) (1)))))) in
+                 void);
                  (C_44:
                  (let jessie_<somenum> =
                  (C_41:
@@ -782,7 +779,7 @@ let m_ensures_default =
                  (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                  begin
                    (((safe_upd_ int_P_int_M_u_7) jessie_<somenum>) jessie_<somenum>);
-                  jessie_<somenum> end))))) end in void) else void);
+                  jessie_<somenum> end))))) end)) in void) else void);
                (i_4 := (C_48:
                        (safe_int32_of_integer_ (C_47:
                                                ((add_int (integer_of_int32 !i_4)) (1))))));
@@ -920,17 +917,16 @@ let m_safety =
                                                 (integer_of_int32 !i_4)))))) (0))
                then
                 (let jessie_<somenum> =
+                (C_36:
+                (C_39:
                 begin
-                  (let jessie_<somenum> =
-                  (C_36:
-                  (C_39:
-                  begin
-                    (let jessie_<somenum> = (tmp_0 := !count) in void);
-                   (count := (C_38:
-                             (JC_<somenum>:
-                             (int32_of_integer_ (C_37:
-                                                ((add_int (integer_of_int32 !count)) (1)))))));
-                   !count end)) in void);
+                  (let jessie_<somenum> = (tmp_0 := !count) in void);
+                 (let jessie_<somenum> =
+                 (count := (C_38:
+                           (JC_<somenum>:
+                           (int32_of_integer_ (C_37:
+                                              ((add_int (integer_of_int32 !count)) (1))))))) in
+                 void);
                  (C_44:
                  (let jessie_<somenum> =
                  (C_41:
@@ -943,7 +939,7 @@ let m_safety =
                  begin
                    (JC_<somenum>:
                    (((((offset_upd_ !int_P_u_7_alloc_table) int_P_int_M_u_7) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-                  jessie_<somenum> end))))) end in void) else void);
+                  jessie_<somenum> end))))) end)) in void) else void);
                (i_4 := (C_48:
                        (JC_<somenum>:
                        (int32_of_integer_ (C_47:
@@ -1046,12 +1042,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po37.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "144" begin = "30" end = "305"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "142" begin = "30" end = "305"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po38.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "144" begin = "30" end = "305"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "142" begin = "30" end = "305"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

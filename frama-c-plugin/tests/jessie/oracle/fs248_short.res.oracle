@@ -53,8 +53,10 @@ behavior default:
    
    {  (C_6 : ((C_5 : x_0.char_M) = (C_4 : ((C_3 : ((C_2 : ((C_1 : x_0.char_M) :> int32)) +
                                                     1)) :> int8))));
-      (C_7 : (tmp = x_0));
-      (C_9 : (x_0 = (C_8 : (x_0 + 1))));
+      
+      {  (C_7 : (tmp = x_0));
+         (C_9 : (x_0 = (C_8 : (x_0 + 1))))
+      };
       (C_15 : ((C_14 : x_0.char_M) = (C_13 : ((C_12 : ((C_11 : ((C_10 : x_0.char_M) :> int32)) +
                                                         1)) :> int8))));
       (C_20 : ((C_19 : y_0.int_M) = (C_18 : ((C_17 : ((C_16 : y_0.int_M) + 1)) :> int32))));
@@ -1054,8 +1056,6 @@ let f_ensures_default =
    begin
      (let tmp = ref (any_pointer void) in
      (C_6:
-     (C_7:
-     (C_9:
      (C_15:
      (C_20:
      begin
@@ -1069,9 +1069,13 @@ let f_ensures_default =
                                                             ((safe_acc_ !char_P_char_M_x_0_11) !mutable_x_0_0))))))) (1))))) in
        (let jessie_<somenum> = !mutable_x_0_0 in
        (((safe_upd_ char_P_char_M_x_0_11) jessie_<somenum>) jessie_<somenum>)));
-      (let jessie_<somenum> = (tmp := !mutable_x_0_0) in void);
       (let jessie_<somenum> =
-      (mutable_x_0_0 := (C_8: ((shift !mutable_x_0_0) (1)))) in void);
+      (C_7:
+      (C_9:
+      begin
+        (let jessie_<somenum> = (tmp := !mutable_x_0_0) in void);
+       (mutable_x_0_0 := (C_8: ((shift !mutable_x_0_0) (1)))); !mutable_x_0_0
+      end)) in void);
       (let jessie_<somenum> =
       (C_13:
       (safe_int8_of_integer_ (C_12:
@@ -1089,7 +1093,7 @@ let f_ensures_default =
                                                           ((safe_acc_ !int_P_int_M_y_0_12) y_0)))) (1))))) in
       (let jessie_<somenum> = y_0 in
       (((safe_upd_ int_P_int_M_y_0_12) jessie_<somenum>) jessie_<somenum>)));
-      (raise Return) end)))))); (raise Return) end with Return -> void end))
+      (raise Return) end)))); (raise Return) end with Return -> void end))
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -1107,8 +1111,6 @@ let f_safety =
    begin
      (let tmp = ref (any_pointer void) in
      (C_6:
-     (C_7:
-     (C_9:
      (C_15:
      (C_20:
      begin
@@ -1126,9 +1128,13 @@ let f_safety =
        (let jessie_<somenum> = !mutable_x_0_0 in
        (JC_<somenum>:
        ((((upd_ char_P_x_0_11_alloc_table) char_P_char_M_x_0_11) jessie_<somenum>) jessie_<somenum>))));
-      (let jessie_<somenum> = (tmp := !mutable_x_0_0) in void);
       (let jessie_<somenum> =
-      (mutable_x_0_0 := (C_8: ((shift !mutable_x_0_0) (1)))) in void);
+      (C_7:
+      (C_9:
+      begin
+        (let jessie_<somenum> = (tmp := !mutable_x_0_0) in void);
+       (mutable_x_0_0 := (C_8: ((shift !mutable_x_0_0) (1)))); !mutable_x_0_0
+      end)) in void);
       (let jessie_<somenum> =
       (C_13:
       (JC_<somenum>:
@@ -1153,7 +1159,7 @@ let f_safety =
       (let jessie_<somenum> = y_0 in
       (JC_<somenum>:
       ((((upd_ int_P_y_0_12_alloc_table) int_P_int_M_y_0_12) jessie_<somenum>) jessie_<somenum>))));
-      (raise Return) end)))))); (raise Return) end with Return -> void end))
+      (raise Return) end)))); (raise Return) end with Return -> void end))
   { (JC_<somenum>:
     ((JC_<somenum>: valid_p(int_P_p_1_alloc_table))
     and ((JC_<somenum>: valid_q(int_P_q_2_alloc_table))
@@ -1651,7 +1657,7 @@ why --project [...] why/fs248_short.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fs248_short_po50.why">
-      <location file = "why/fs248_short.why" line = "1184" begin = "18" end = "74"/>
+      <location file = "why/fs248_short.why" line = "1188" begin = "18" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs248_short_po51.why">
@@ -1660,16 +1666,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fs248_short_po52.why">
-      <location file = "why/fs248_short.why" line = "1193" begin = "17" end = "73"/>
+      <location file = "why/fs248_short.why" line = "1197" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs248_short_po53.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "185" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "187" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po54.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "185" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "187" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1744,12 +1750,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po69.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "208" begin = "18" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "210" begin = "18" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po70.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "208" begin = "18" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "210" begin = "18" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1774,12 +1780,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po75.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "221" begin = "16" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "223" begin = "16" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po76.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "221" begin = "16" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "223" begin = "16" end = "41"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1794,7 +1800,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po79.why">
-      <location file = "why/fs248_short.why" line = "1361" begin = "11" end = "35"/>
+      <location file = "why/fs248_short.why" line = "1365" begin = "11" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1809,7 +1815,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po82.why">
-      <location file = "why/fs248_short.why" line = "1374" begin = "43" end = "69"/>
+      <location file = "why/fs248_short.why" line = "1378" begin = "43" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1824,12 +1830,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po85.why">
-      <location file = "why/fs248_short.why" line = "1376" begin = "7" end = "50"/>
+      <location file = "why/fs248_short.why" line = "1380" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/fs248_short_po86.why">
-      <location file = "why/fs248_short.why" line = "1377" begin = "7" end = "50"/>
+      <location file = "why/fs248_short.why" line = "1381" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1889,12 +1895,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po7.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "66" begin = "15" end = "172"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "68" begin = "15" end = "172"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po8.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "66" begin = "15" end = "172"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "68" begin = "15" end = "172"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1929,12 +1935,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po15.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "69" begin = "15" end = "166"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "71" begin = "15" end = "166"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po16.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "69" begin = "15" end = "166"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "71" begin = "15" end = "166"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2034,12 +2040,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po36.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "52" begin = "15" end = "166"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "54" begin = "15" end = "166"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po37.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "52" begin = "15" end = "166"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "54" begin = "15" end = "166"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2064,12 +2070,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po42.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "54" begin = "15" end = "89"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "56" begin = "15" end = "89"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po43.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "54" begin = "15" end = "89"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "56" begin = "15" end = "89"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -91,8 +91,7 @@ behavior default:
                      (goto __Cont)
                   } else ())
                };
-               (__Cont : ());
-               (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
+               (__Cont : (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32)))))
             }
          };
          (while_1_break : ())
@@ -126,8 +125,7 @@ behavior default:
                      (goto __Cont)
                   } else ())
                };
-               (__Cont : ());
-               (C_26 : (i_0 = (C_25 : ((C_24 : (i_0 + 1)) :> int32))))
+               (__Cont : (C_26 : (i_0 = (C_25 : ((C_24 : (i_0 + 1)) :> int32)))))
             }
          };
          (while_2_break : ())
@@ -577,10 +575,9 @@ let f2_ensures_default =
                (__Cont:
                (C_16:
                begin
-                 void;
-                (i := (C_15:
-                      (safe_int32_of_integer_ (C_14:
-                                              ((add_int (integer_of_int32 !i)) (1))))));
+                 (i := (C_15:
+                       (safe_int32_of_integer_ (C_14:
+                                               ((add_int (integer_of_int32 !i)) (1))))));
                 !i end)) in void) end; (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
@@ -633,11 +630,10 @@ let f2_safety =
                (__Cont:
                (C_16:
                begin
-                 void;
-                (i := (C_15:
-                      (JC_<somenum>:
-                      (int32_of_integer_ (C_14:
-                                         ((add_int (integer_of_int32 !i)) (1)))))));
+                 (i := (C_15:
+                       (JC_<somenum>:
+                       (int32_of_integer_ (C_14:
+                                          ((add_int (integer_of_int32 !i)) (1)))))));
                 !i end)) in void) end; (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_1_break_exc void)) end in void) with
@@ -690,10 +686,9 @@ let f3_ensures_default =
                (__Cont:
                (C_26:
                begin
-                 void;
-                (i_0 := (C_25:
-                        (safe_int32_of_integer_ (C_24:
-                                                ((add_int (integer_of_int32 !i_0)) (1))))));
+                 (i_0 := (C_25:
+                         (safe_int32_of_integer_ (C_24:
+                                                 ((add_int (integer_of_int32 !i_0)) (1))))));
                 !i_0 end)) in void) end; (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_2_break_exc void)) end in void) with
@@ -747,11 +742,10 @@ let f3_safety =
                (__Cont:
                (C_26:
                begin
-                 void;
-                (i_0 := (C_25:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_24:
-                                           ((add_int (integer_of_int32 !i_0)) (1)))))));
+                 (i_0 := (C_25:
+                         (JC_<somenum>:
+                         (int32_of_integer_ (C_24:
+                                            ((add_int (integer_of_int32 !i_0)) (1)))))));
                 !i_0 end)) in void) end; (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
         (raise (Goto_while_2_break_exc void)) end in void) with

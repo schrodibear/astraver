@@ -50,10 +50,8 @@ behavior default:
    {  (C_2 : (b = (C_1 : (new int_P[10]))));
       (C_3 : (j = 3));
       (M : 
-      {  
-         {  (C_4 : (tmp = j));
-            (C_7 : (j = (C_6 : ((C_5 : (j + 1)) :> int32))))
-         };
+      {  (C_4 : (tmp = j));
+         (C_7 : (j = (C_6 : ((C_5 : (j + 1)) :> int32))));
          (C_9 : ((C_8 : (b + tmp).int_M) = 3))
       });
       
@@ -459,23 +457,22 @@ let ftest_ensures_default =
              (((alloc_struct_int_P (10)) int_P_b_1_alloc_table) int_P_b_1_tag_table)))) in
        void); (let jessie_<somenum> = (j := (safe_int32_of_integer_ (3))) in void);
       (let jessie_<somenum> =
+      (C_4:
+      (C_7:
       begin
-        (let jessie_<somenum> =
-        (C_4:
-        (C_7:
-        begin
-          (let jessie_<somenum> = (tmp := !j) in void);
-         (j := (C_6:
-               (safe_int32_of_integer_ (C_5:
-                                       ((add_int (integer_of_int32 !j)) (1))))));
-         !j end)) in void);
+        (let jessie_<somenum> = (tmp := !j) in void);
+       (let jessie_<somenum> =
+       (j := (C_6:
+             (safe_int32_of_integer_ (C_5:
+                                     ((add_int (integer_of_int32 !j)) (1)))))) in
+       void);
        (C_9:
        (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
        (let jessie_<somenum> = !b in
        (let jessie_<somenum> = (integer_of_int32 !tmp) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        begin   (((safe_upd_ int_P_int_M_b_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
-       end))))) end in void);
+       end))))) end)) in void);
       (assert
       { (JC_<somenum>:
         eq_int(integer_of_int32(j), add_int(integer_of_int32(j@M), (1)))) };
@@ -511,17 +508,15 @@ let ftest_safety =
              jessie_<somenum>)))) in void);
       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (3))) in void);
       (let jessie_<somenum> =
+      (C_4:
+      (C_7:
       begin
-        (let jessie_<somenum> =
-        (C_4:
-        (C_7:
-        begin
-          (let jessie_<somenum> = (tmp := !j) in void);
-         (j := (C_6:
-               (JC_<somenum>:
-               (int32_of_integer_ (C_5:
-                                  ((add_int (integer_of_int32 !j)) (1)))))));
-         !j end)) in void);
+        (let jessie_<somenum> = (tmp := !j) in void);
+       (let jessie_<somenum> =
+       (j := (C_6:
+             (JC_<somenum>:
+             (int32_of_integer_ (C_5: ((add_int (integer_of_int32 !j)) (1))))))) in
+       void);
        (C_9:
        (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
        (let jessie_<somenum> = !b in
@@ -530,7 +525,7 @@ let ftest_safety =
        begin
          (JC_<somenum>:
          (((((offset_upd_ !int_P_b_1_alloc_table) int_P_int_M_b_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-        jessie_<somenum> end))))) end in void);
+        jessie_<somenum> end))))) end)) in void);
       [ { } unit reads j
         { (JC_<somenum>:
           eq_int(integer_of_int32(j), add_int(integer_of_int32(j@M), (1)))) } ];
@@ -550,7 +545,7 @@ why --project [...] why/bts0361.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0361_po3.why">
-      <location file = "why/bts0361.why" line = "439" begin = "15" end = "71"/>
+      <location file = "why/bts0361.why" line = "438" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0361_po4.why">
@@ -564,17 +559,17 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0361_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0361.jessie/bts0361.jc" line = "51" begin = "17" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/bts0361.jessie/bts0361.jc" line = "49" begin = "17" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0361_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0361.jessie/bts0361.jc" line = "51" begin = "17" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/bts0361.jessie/bts0361.jc" line = "49" begin = "17" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0361_po8.why">
-      <location file = "why/bts0361.why" line = "466" begin = "13" end = "54"/>
+      <location file = "why/bts0361.why" line = "463" begin = "13" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

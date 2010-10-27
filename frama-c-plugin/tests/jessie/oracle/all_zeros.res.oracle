@@ -104,10 +104,8 @@ behavior default:
          while (true)
          {  (if (k < n_1) then 
             {  
-               {  
-                  {  (C_27 : (tmp = k));
-                     (C_30 : (k = (C_29 : ((C_28 : (k + 1)) :> int32))))
-                  };
+               {  (C_27 : (tmp = k));
+                  (C_30 : (k = (C_29 : ((C_28 : (k + 1)) :> int32))));
                   ()
                };
                (if ((C_32 : (C_31 : (t_1 + tmp)).int_M) != 0) then 
@@ -834,23 +832,22 @@ let all_zeros_1_ensures_default =
             begin
               (if ((lt_int_ (integer_of_int32 !k)) (integer_of_int32 n_1))
               then
+               (C_27:
+               (C_30:
                begin
-                 (let jessie_<somenum> =
-                 (C_27:
-                 (C_30:
-                 begin
-                   (let jessie_<somenum> = (tmp := !k) in void);
-                  (k := (C_29:
-                        (safe_int32_of_integer_ (C_28:
-                                                ((add_int (integer_of_int32 !k)) (1))))));
-                  !k end)) in void); void;
+                 (let jessie_<somenum> = (tmp := !k) in void);
+                (let jessie_<somenum> =
+                (k := (C_29:
+                      (safe_int32_of_integer_ (C_28:
+                                              ((add_int (integer_of_int32 !k)) (1)))))) in
+                void); void;
                 (if ((neq_int_ (integer_of_int32 (C_32:
                                                  ((safe_acc_ int_P_int_M_t_1_2) 
                                                   (C_31:
                                                   ((shift t_1) (integer_of_int32 !tmp))))))) (0))
                 then
                  (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-                 void) else void) end
+                 void) else void) end))
               else
                (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
                void)); (raise (Loop_continue_exc void)) end in void) with
@@ -916,24 +913,23 @@ let all_zeros_1_safety =
             begin
               (if ((lt_int_ (integer_of_int32 !k)) (integer_of_int32 n_1))
               then
+               (C_27:
+               (C_30:
                begin
-                 (let jessie_<somenum> =
-                 (C_27:
-                 (C_30:
-                 begin
-                   (let jessie_<somenum> = (tmp := !k) in void);
-                  (k := (C_29:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_28:
-                                           ((add_int (integer_of_int32 !k)) (1)))))));
-                  !k end)) in void); void;
+                 (let jessie_<somenum> = (tmp := !k) in void);
+                (let jessie_<somenum> =
+                (k := (C_29:
+                      (JC_<somenum>:
+                      (int32_of_integer_ (C_28:
+                                         ((add_int (integer_of_int32 !k)) (1))))))) in
+                void); void;
                 (if ((neq_int_ (integer_of_int32 (C_32:
                                                  (JC_<somenum>:
                                                  ((((offset_acc_ int_P_t_1_2_alloc_table) int_P_int_M_t_1_2) t_1) 
                                                   (integer_of_int32 !tmp)))))) (0))
                 then
                  (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-                 void) else void) end
+                 void) else void) end))
               else
                (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
                void)); (raise (Loop_continue_exc void)) end in void) with
@@ -1269,11 +1265,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/all_zeros_po43.why">
-      <location file = "why/all_zeros.why" line = "879" begin = "20" end = "57"/>
+      <location file = "why/all_zeros.why" line = "877" begin = "20" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po44.why">
-      <location file = "why/all_zeros.why" line = "879" begin = "20" end = "57"/>
+      <location file = "why/all_zeros.why" line = "877" begin = "20" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/all_zeros_po45.why">

@@ -428,15 +428,11 @@ behavior default:
             while (true)
             {  
                {  
-                  {  
-                     {  (C_2 : (tmp = curseur));
-                        (C_4 : (curseur = (C_3 : (curseur + 1))))
-                     };
-                     
-                     {  (C_5 : (tmp_1 = source));
-                        (C_7 : (source = (C_6 : (source + 1))));
-                        (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)))
-                     };
+                  {  (C_2 : (tmp = curseur));
+                     (C_4 : (curseur = (C_3 : (curseur + 1))));
+                     (C_5 : (tmp_1 = source));
+                     (C_7 : (source = (C_6 : (source + 1))));
+                     (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)));
                      (C_11 : ((C_10 : tmp.char_M) = tmp_0))
                   };
                   (if (tmp_0 != 0) then 
@@ -462,11 +458,9 @@ behavior default:
                {  
                   {  
                      {  
-                        {  
-                           {  (C_20 : (tmp_2 = destination_0));
-                              (C_22 : (destination_0 = (C_21 : (destination_0 +
-                                                                 1))))
-                           };
+                        {  (C_20 : (tmp_2 = destination_0));
+                           (C_22 : (destination_0 = (C_21 : (destination_0 +
+                                                              1))));
                            (C_24 : ((C_23 : tmp_2.char_M) = 0))
                         }
                      };
@@ -2472,32 +2466,29 @@ let strncpy_ensures_default =
                (let jessie_<somenum> =
                begin
                  (let jessie_<somenum> =
+                 (C_2:
+                 (C_4:
+                 (C_5:
+                 (C_7:
+                 (C_9:
                  begin
-                   (let jessie_<somenum> =
-                   (C_2:
-                   (C_4:
-                   begin
-                     (let jessie_<somenum> = (tmp := !curseur) in void);
-                    (curseur := (C_3: ((shift !curseur) (1)))); !curseur end)) in
-                   void);
+                   (let jessie_<somenum> = (tmp := !curseur) in void);
                   (let jessie_<somenum> =
-                  (C_5:
-                  (C_7:
-                  (C_9:
-                  begin
-                    (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
-                   (let jessie_<somenum> =
-                   (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
-                   void);
-                   (tmp_0 := (C_8:
-                             ((safe_acc_ char_P_char_M_source_22) !tmp_1)));
-                   !tmp_0 end))) in void);
+                  (curseur := (C_3: ((shift !curseur) (1)))) in void);
+                  (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
+                  (let jessie_<somenum> =
+                  (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
+                  void);
+                  (let jessie_<somenum> =
+                  (tmp_0 := (C_8:
+                            ((safe_acc_ char_P_char_M_source_22) !tmp_1))) in
+                  void);
                   (C_11:
                   (let jessie_<somenum> = !tmp_0 in
                   begin
                     (let jessie_<somenum> = !tmp in
                     (((safe_upd_ char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>));
-                   jessie_<somenum> end)) end in void);
+                   jessie_<somenum> end)) end))))) in void);
                 (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
                 then
                  (C_14:
@@ -2549,22 +2540,21 @@ let strncpy_ensures_default =
                  (C_27:
                  begin
                    (let jessie_<somenum> =
+                   (C_20:
+                   (C_22:
                    begin
-                     (let jessie_<somenum> =
-                     (C_20:
-                     (C_22:
-                     begin
-                       (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
-                       void);
-                      (mutable_destination_0 := (C_21:
-                                                ((shift !mutable_destination_0) (1))));
-                      !mutable_destination_0 end)) in void);
+                     (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
+                     void);
+                    (let jessie_<somenum> =
+                    (mutable_destination_0 := (C_21:
+                                              ((shift !mutable_destination_0) (1)))) in
+                    void);
                     (C_24:
                     (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
                     begin
                       (let jessie_<somenum> = !tmp_2 in
                       (((safe_upd_ char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>));
-                     jessie_<somenum> end)) end in void);
+                     jessie_<somenum> end)) end)) in void);
                   (let jessie_<somenum> =
                   (mutable_taille_0 := (C_26:
                                        (safe_uint32_of_integer_ (C_25:
@@ -2617,34 +2607,31 @@ let strncpy_safety =
                (let jessie_<somenum> =
                begin
                  (let jessie_<somenum> =
+                 (C_2:
+                 (C_4:
+                 (C_5:
+                 (C_7:
+                 (C_9:
                  begin
-                   (let jessie_<somenum> =
-                   (C_2:
-                   (C_4:
-                   begin
-                     (let jessie_<somenum> = (tmp := !curseur) in void);
-                    (curseur := (C_3: ((shift !curseur) (1)))); !curseur end)) in
-                   void);
+                   (let jessie_<somenum> = (tmp := !curseur) in void);
                   (let jessie_<somenum> =
-                  (C_5:
-                  (C_7:
-                  (C_9:
-                  begin
-                    (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
-                   (let jessie_<somenum> =
-                   (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
-                   void);
-                   (tmp_0 := (C_8:
-                             (JC_<somenum>:
-                             (((acc_ char_P_source_22_alloc_table) char_P_char_M_source_22) !tmp_1))));
-                   !tmp_0 end))) in void);
+                  (curseur := (C_3: ((shift !curseur) (1)))) in void);
+                  (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
+                  (let jessie_<somenum> =
+                  (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
+                  void);
+                  (let jessie_<somenum> =
+                  (tmp_0 := (C_8:
+                            (JC_<somenum>:
+                            (((acc_ char_P_source_22_alloc_table) char_P_char_M_source_22) !tmp_1)))) in
+                  void);
                   (C_11:
                   (let jessie_<somenum> = !tmp_0 in
                   begin
                     (let jessie_<somenum> = !tmp in
                     (JC_<somenum>:
                     ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
-                   jessie_<somenum> end)) end in void);
+                   jessie_<somenum> end)) end))))) in void);
                 (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
                 then
                  (C_14:
@@ -2700,23 +2687,22 @@ let strncpy_safety =
                  (C_27:
                  begin
                    (let jessie_<somenum> =
+                   (C_20:
+                   (C_22:
                    begin
-                     (let jessie_<somenum> =
-                     (C_20:
-                     (C_22:
-                     begin
-                       (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
-                       void);
-                      (mutable_destination_0 := (C_21:
-                                                ((shift !mutable_destination_0) (1))));
-                      !mutable_destination_0 end)) in void);
+                     (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
+                     void);
+                    (let jessie_<somenum> =
+                    (mutable_destination_0 := (C_21:
+                                              ((shift !mutable_destination_0) (1)))) in
+                    void);
                     (C_24:
                     (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
                     begin
                       (let jessie_<somenum> = !tmp_2 in
                       (JC_<somenum>:
                       ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
-                     jessie_<somenum> end)) end in void);
+                     jessie_<somenum> end)) end)) in void);
                   (let jessie_<somenum> =
                   (mutable_taille_0 := (C_26:
                                        (JC_<somenum>:
@@ -2754,12 +2740,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po12.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "434" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "430" begin = "30" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po13.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "434" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "430" begin = "30" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2804,12 +2790,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po22.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "464" begin = "36" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "458" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po23.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "464" begin = "36" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "458" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2849,7 +2835,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po9.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "505" begin = "14" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "499" begin = "14" end = "67"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

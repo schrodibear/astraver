@@ -408,8 +408,11 @@ behavior default:
          loop 
          while (true)
          {  
-            {  (C_2 : (tmp = s));
-               (C_4 : (s = (C_3 : (s + 1))));
+            {  
+               {  (C_2 : (tmp = s));
+                  (C_4 : (s = (C_3 : (s + 1))));
+                  ()
+               };
                (if ((C_5 : tmp.char_M) != 0) then () else 
                (goto while_0_break))
             }
@@ -1916,6 +1919,7 @@ let strlen_ensures_default =
             begin
               (let jessie_<somenum> = (tmp := !s_32) in void);
              (let jessie_<somenum> = (s_32 := (C_3: ((shift !s_32) (1)))) in void);
+             void;
              (if ((neq_int_ (integer_of_int8 (C_5:
                                              ((safe_acc_ char_P_char_M_org_20) !tmp)))) (0))
              then void
@@ -1965,6 +1969,7 @@ let strlen_safety =
             begin
               (let jessie_<somenum> = (tmp := !s_32) in void);
              (let jessie_<somenum> = (s_32 := (C_3: ((shift !s_32) (1)))) in void);
+             void;
              (if ((neq_int_ (integer_of_int8 (C_5:
                                              (JC_<somenum>:
                                              (((acc_ char_P_org_20_alloc_table) char_P_char_M_org_20) !tmp))))) (0))
@@ -2002,15 +2007,15 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strlen_po3.why">
-      <location file = "why/minix3_strlen.why" line = "1533" begin = "44" end = "45"/>
+      <location file = "why/minix3_strlen.why" line = "1534" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po4.why">
-      <location file = "why/minix3_strlen.why" line = "1533" begin = "44" end = "45"/>
+      <location file = "why/minix3_strlen.why" line = "1534" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po5.why">
-      <location file = "why/minix3_strlen.why" line = "1558" begin = "46" end = "70"/>
+      <location file = "why/minix3_strlen.why" line = "1560" begin = "46" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

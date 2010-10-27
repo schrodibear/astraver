@@ -409,15 +409,11 @@ behavior default:
          while (true)
          {  
             {  
-               {  
-                  {  (C_2 : (tmp = s1));
-                     (C_4 : (s1 = (C_3 : (s1 + 1))))
-                  };
-                  
-                  {  (C_5 : (tmp_1 = s2));
-                     (C_7 : (s2 = (C_6 : (s2 + 1))));
-                     (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)))
-                  };
+               {  (C_2 : (tmp = s1));
+                  (C_4 : (s1 = (C_3 : (s1 + 1))));
+                  (C_5 : (tmp_1 = s2));
+                  (C_7 : (s2 = (C_6 : (s2 + 1))));
+                  (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)));
                   (C_11 : ((C_10 : tmp.char_M) = tmp_0))
                };
                (if (tmp_0 != 0) then () else 
@@ -1898,30 +1894,26 @@ let strcpy_ensures_default =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_2:
+              (C_4:
+              (C_5:
+              (C_7:
+              (C_9:
               begin
-                (let jessie_<somenum> =
-                (C_2:
-                (C_4:
-                begin
-                  (let jessie_<somenum> = (tmp := !s1_15) in void);
-                 (s1_15 := (C_3: ((shift !s1_15) (1)))); !s1_15 end)) in
-                void);
+                (let jessie_<somenum> = (tmp := !s1_15) in void);
+               (let jessie_<somenum> = (s1_15 := (C_3: ((shift !s1_15) (1)))) in
+               void); (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
                (let jessie_<somenum> =
-               (C_5:
-               (C_7:
-               (C_9:
-               begin
-                 (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
-                (let jessie_<somenum> =
-                (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
-                (tmp_0 := (C_8: ((safe_acc_ char_P_char_M_s2_21) !tmp_1)));
-                !tmp_0 end))) in void);
+               (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
+               (let jessie_<somenum> =
+               (tmp_0 := (C_8: ((safe_acc_ char_P_char_M_s2_21) !tmp_1))) in
+               void);
                (C_11:
                (let jessie_<somenum> = !tmp_0 in
                begin
                  (let jessie_<somenum> = !tmp in
                  (((safe_upd_ char_P_char_M_ret_20) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end))))) in void);
              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
              else
               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
@@ -1959,33 +1951,29 @@ let strcpy_safety =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
+              (C_2:
+              (C_4:
+              (C_5:
+              (C_7:
+              (C_9:
               begin
-                (let jessie_<somenum> =
-                (C_2:
-                (C_4:
-                begin
-                  (let jessie_<somenum> = (tmp := !s1_15) in void);
-                 (s1_15 := (C_3: ((shift !s1_15) (1)))); !s1_15 end)) in
-                void);
+                (let jessie_<somenum> = (tmp := !s1_15) in void);
+               (let jessie_<somenum> = (s1_15 := (C_3: ((shift !s1_15) (1)))) in
+               void); (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
                (let jessie_<somenum> =
-               (C_5:
-               (C_7:
-               (C_9:
-               begin
-                 (let jessie_<somenum> = (tmp_1 := !mutable_s2_2) in void);
-                (let jessie_<somenum> =
-                (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
-                (tmp_0 := (C_8:
-                          (JC_<somenum>:
-                          (((acc_ char_P_s2_21_alloc_table) char_P_char_M_s2_21) !tmp_1))));
-                !tmp_0 end))) in void);
+               (mutable_s2_2 := (C_6: ((shift !mutable_s2_2) (1)))) in void);
+               (let jessie_<somenum> =
+               (tmp_0 := (C_8:
+                         (JC_<somenum>:
+                         (((acc_ char_P_s2_21_alloc_table) char_P_char_M_s2_21) !tmp_1)))) in
+               void);
                (C_11:
                (let jessie_<somenum> = !tmp_0 in
                begin
                  (let jessie_<somenum> = !tmp in
                  (JC_<somenum>:
                  ((((upd_ char_P_ret_20_alloc_table) char_P_char_M_ret_20) jessie_<somenum>) jessie_<somenum>)));
-                jessie_<somenum> end)) end in void);
+                jessie_<somenum> end)) end))))) in void);
              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
              else
               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
@@ -2014,21 +2002,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po3.why">
-      <location file = "PPCHOME/tests/jessie/minix3_strcpy.jessie/minix3_strcpy.jc" line = "415" begin = "27" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strcpy.jessie/minix3_strcpy.jc" line = "411" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po4.why">
-      <location file = "PPCHOME/tests/jessie/minix3_strcpy.jessie/minix3_strcpy.jc" line = "415" begin = "27" end = "54"/>
+      <location file = "PPCHOME/tests/jessie/minix3_strcpy.jessie/minix3_strcpy.jc" line = "411" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po5.why">
-      <location file = "why/minix3_strcpy.why" line = "1522" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1518" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strcpy_po6.why">
-      <location file = "why/minix3_strcpy.why" line = "1522" begin = "44" end = "45"/>
+      <location file = "why/minix3_strcpy.why" line = "1518" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

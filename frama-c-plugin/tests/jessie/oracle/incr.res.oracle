@@ -52,10 +52,8 @@ behavior default:
    (var int32 tmp);
    
    {  
-      {  
-         {  (C_1 : (tmp = b));
-            (C_4 : (b = (C_3 : ((C_2 : (b + 1)) :> int32))))
-         };
+      {  (C_1 : (tmp = b));
+         (C_4 : (b = (C_3 : ((C_2 : (b + 1)) :> int32))));
          (C_6 : ((C_5 : (t + tmp).int_M) = 1))
       };
       
@@ -466,16 +464,15 @@ let f_ensures_default =
      (let tmp = ref (any_int32 void) in
      begin
        (let jessie_<somenum> =
+       (C_1:
+       (C_4:
        begin
-         (let jessie_<somenum> =
-         (C_1:
-         (C_4:
-         begin
-           (let jessie_<somenum> = (tmp := !b) in void);
-          (b := (C_3:
-                (safe_int32_of_integer_ (C_2:
-                                        ((add_int (integer_of_int32 !b)) (1))))));
-          !b end)) in void);
+         (let jessie_<somenum> = (tmp := !b) in void);
+        (let jessie_<somenum> =
+        (b := (C_3:
+              (safe_int32_of_integer_ (C_2:
+                                      ((add_int (integer_of_int32 !b)) (1)))))) in
+        void);
         (C_6:
         (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
         (let jessie_<somenum> = t in
@@ -483,7 +480,7 @@ let f_ensures_default =
         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
         begin
           (((safe_upd_ int_P_int_M_t_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum> end)))))
-       end in void); (raise Return) end); (raise Return) end with Return ->
+       end)) in void); (raise Return) end); (raise Return) end with Return ->
    void end) { (JC_<somenum>: eq_int(integer_of_int32(b), (1))) }
 
 let f_safety =
@@ -497,17 +494,15 @@ let f_safety =
      (let tmp = ref (any_int32 void) in
      begin
        (let jessie_<somenum> =
+       (C_1:
+       (C_4:
        begin
-         (let jessie_<somenum> =
-         (C_1:
-         (C_4:
-         begin
-           (let jessie_<somenum> = (tmp := !b) in void);
-          (b := (C_3:
-                (JC_<somenum>:
-                (int32_of_integer_ (C_2:
-                                   ((add_int (integer_of_int32 !b)) (1)))))));
-          !b end)) in void);
+         (let jessie_<somenum> = (tmp := !b) in void);
+        (let jessie_<somenum> =
+        (b := (C_3:
+              (JC_<somenum>:
+              (int32_of_integer_ (C_2: ((add_int (integer_of_int32 !b)) (1))))))) in
+        void);
         (C_6:
         (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
         (let jessie_<somenum> = t in
@@ -516,8 +511,9 @@ let f_safety =
         begin
           (JC_<somenum>:
           (((((offset_upd_ !int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-         jessie_<somenum> end))))) end in void); (raise Return) end); (raise Return)
-   end with Return -> void end) { (JC_<somenum>: valid_t(int_P_t_1_alloc_table)) }
+         jessie_<somenum> end))))) end)) in void); (raise Return) end);
+    (raise Return) end with Return -> void end)
+  { (JC_<somenum>: valid_t(int_P_t_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C incr.jessie --quiet -f incr.makefile project
@@ -537,12 +533,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/incr_po4.why">
-      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "53" begin = "17" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "51" begin = "17" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/incr_po5.why">
-      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "53" begin = "17" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/incr.jessie/incr.jc" line = "51" begin = "17" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

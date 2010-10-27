@@ -44,8 +44,10 @@ behavior default:
    (var int32 tmp);
    
    {  (C_1 : (u = z));
-      (C_2 : (tmp = u));
-      (C_5 : (u = (C_4 : ((C_3 : (u + 1)) :> int32))));
+      
+      {  (C_2 : (tmp = u));
+         (C_5 : (u = (C_4 : ((C_3 : (u + 1)) :> int32))))
+      };
       
       (return tmp)
    }
@@ -366,17 +368,18 @@ let f_ensures_default =
      (let u = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
      (C_1:
-     (C_2:
-     (C_5:
      begin
        (let jessie_<somenum> = (u := z) in void);
-      (let jessie_<somenum> = (tmp := !u) in void);
       (let jessie_<somenum> =
-      (u := (C_4:
-            (safe_int32_of_integer_ (C_3:
-                                    ((add_int (integer_of_int32 !u)) (1)))))) in
-      void); (return := !tmp); (raise Return) end))))); absurd  end with
-   Return -> !return end))
+      (C_2:
+      (C_5:
+      begin
+        (let jessie_<somenum> = (tmp := !u) in void);
+       (u := (C_4:
+             (safe_int32_of_integer_ (C_3:
+                                     ((add_int (integer_of_int32 !u)) (1))))));
+       !u end)) in void); (return := !tmp); (raise Return) end))); absurd 
+   end with Return -> !return end))
   { (JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(z@))) }
 
 let f_safety =
@@ -389,17 +392,18 @@ let f_safety =
      (let u = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
      (C_1:
-     (C_2:
-     (C_5:
      begin
        (let jessie_<somenum> = (u := z) in void);
-      (let jessie_<somenum> = (tmp := !u) in void);
       (let jessie_<somenum> =
-      (u := (C_4:
-            (JC_<somenum>:
-            (int32_of_integer_ (C_3: ((add_int (integer_of_int32 !u)) (1))))))) in
-      void); (return := !tmp); (raise Return) end))))); absurd  end with
-   Return -> !return end)) { true }
+      (C_2:
+      (C_5:
+      begin
+        (let jessie_<somenum> = (tmp := !u) in void);
+       (u := (C_4:
+             (JC_<somenum>:
+             (int32_of_integer_ (C_3: ((add_int (integer_of_int32 !u)) (1)))))));
+       !u end)) in void); (return := !tmp); (raise Return) end))); absurd 
+   end with Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
