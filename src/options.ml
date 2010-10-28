@@ -85,7 +85,6 @@ let pruning_hyp_considere_arith_comparison_as_special_predicate_ = ref true
 (*
 let modulo_ = ref false
 *)
-let smtlib_v1_ = ref false
 
 let phantom_types = Hashtbl.create 17
 
@@ -305,13 +304,6 @@ Coq-specific options:
   --coq-fp-model <Module>
               sets the Coq model for floating-point arithmetic
 
-<<<<<<< .working
-SMT-lib-specific options:
-  --modulo           uses %% in SMT-lib output (instead of uninterpreted symb)
-  --smtlib-v1          uses SMT-lib 1.2 syntax (defaults is 2.0)
-
-=======
->>>>>>> .merge-right.r4418
 Monoinst-specific options
   --monoinstworldgen <builtin|complete|goal|premises>
 
@@ -557,8 +549,6 @@ let files =
     | ("-modulo" | "--modulo") :: args ->
 	 modulo_ := true ; parse args
 *)
-    | ("-smtlib-v1" | "--smtlib-v1") :: args ->
-        smtlib_v1_:=true; parse args
     | ("-exp" | "--exp") :: s :: args ->
 	(match s with
 	     "goal" -> defExpanding_ := Goal
@@ -674,9 +664,6 @@ let pruning_hyp_considere_arith_comparison_as_special_predicate= !pruning_hyp_co
 (*
 let modulo = !modulo_
 *)
-
-let get_smtlib_v1 () = !smtlib_v1_
-let set_smtlib_v1 f = smtlib_v1_:=f
 
 let defExpanding = !defExpanding_
 let explain_vc = !explain_vc

@@ -162,11 +162,7 @@ let output_file ?encoding p (elems,o) =
 	Smtlib.output_file ~logic:"AUFLIRA" f; f
     | VeriT ->
         let f = Filename.temp_file "gwhy" "_why.smt" in
-        let old_smtlib_version = Options.get_smtlib_v1 () in
-        Options.set_smtlib_v1 true;
-        Smtlib.output_file ~logic:"AUFLIRA" f;
-        Options.set_smtlib_v1 old_smtlib_version;
-        f
+        Smtlib.output_file ~logic:"AUFLIRA" f; f
     | Z3 ->
 	let f = Filename.temp_file "gwhy" "_why.smt" in
 	Smtlib.output_file f; f

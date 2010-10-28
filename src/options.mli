@@ -97,9 +97,6 @@ val pruning_hyp_considere_arith_comparison_as_special_predicate : bool
 val modulo : bool
 *)
 
-val get_smtlib_v1: unit -> bool
-val set_smtlib_v1: bool -> unit
-
 val phantom_types : (string,unit) Hashtbl.t
 
 type expanding = All | Goal | NoExpanding
